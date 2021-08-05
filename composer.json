@@ -1,9 +1,9 @@
 {
-    "name": "laravel/laravel",
+    "name": "fresns/fresns",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "description": "Cross-platform general-purpose multiple content forms social network service software",
+    "keywords": ["fresns", "sns"],
+    "license": "Apache-2.0",
     "require": {
         "php": "^7.3|^8.0",
         "fideloper/proxy": "^4.4",
@@ -13,7 +13,6 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.0",
         "rap2hpoutre/laravel-log-viewer": "^1.7"
-
     },
     "require-dev": {
         "facade/ignition": "^2.5",

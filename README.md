@@ -18,6 +18,12 @@ Fresns 是一款基于 PHP Laravel 8 框架和 MySQL 8 数据库而开发的社�
 
 [https://fresns.cn/guide/install.html](https://fresns.cn/guide/install.html)
 
+## 插件示例
+
+测试插件仓库 [https://gitee.com/fresns/tests](https://gitee.com/fresns/tests)
+
+第三方开发的「独立部署版控制面板」和配套的「API 插件」 [https://gitee.com/jyq/fresns-control-panel](https://gitee.com/jyq/fresns-control-panel)
+
 ## 加入我们
 
 Fresns 的开源社区正在急速增长中，如果你认可我们的开源软件，有兴趣为 Fresns 的发展做贡献，竭诚欢迎[加入我们](https://fresns.cn/community/join.html)一起开发完善。无论是[报告错误](https://fresns.cn/guide/feedback.html)或是 Pull Request 开发，那怕是修改一个错别字也是对我们莫大的帮助。
