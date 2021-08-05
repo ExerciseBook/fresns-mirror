@@ -39,4 +39,4 @@ Fresns 的开源社区正在急速增长中，如果你认可我们的开源软�
 - 电子邮箱：[jarvis.okay@gmail.com](mailto:jarvis.okay@gmail.com)
 - QQ 群：[5980111](https://qm.qq.com/cgi-bin/qm/qr?k=R2pfcPUd4Nyc87AKdkuHP9yJ0MhddUaz&jump_from=webapi)
 - Telegram 群：[https://t.me/fresns_zh](https://t.me/fresns_zh)
-- 微信群：<img src="https://tangjie.me/media/wechat/fresns.jpg" alt="Fresns WeChat" width="300" style="vertical-align:text-top;">
+- 微信群：[点击查看加群二维码](https://tangjie.me/media/wechat/fresns.jpg)
