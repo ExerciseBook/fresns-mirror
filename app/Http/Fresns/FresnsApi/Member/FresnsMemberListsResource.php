@@ -128,12 +128,21 @@ class FresnsMemberListsResource extends BaseAdminResource
             $iconsArr[] = $item;
         }
 
+
+        if(empty($this->avatar_file_url) && empty($this->avatar_file_id)){
+            $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
+            $memberAvatar = ApiFileHelper::getImageSignUrl($defaultAvatar);
+        } else {
+            $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($this->avatar_file_id, $this->avatar_file_url);
+        }
+
+
         // 默认字段
         $default = [
             'mid' => $this->uuid,
             'mname' => $this->name,
             'nickname' => $this->nickname,
-            'avatar' => ApiFileHelper::getImageSignUrlByFileIdUrl($this->avatar_file_id, $this->avatar_file_url),
+            'avatar' => $memberAvatar,
             'decorate' => ApiFileHelper::getImageSignUrlByFileIdUrl($this->decorate_file_id, $this->decorate_file_url),
             'gender' => $this->gender,
             'birthday' => DateHelper::asiaShanghaiToTimezone($this->birthday),
