@@ -265,7 +265,7 @@
         })
         
         var unikey = $(this).attr('unikey');
-        $(".delete-btn").attr('unikey', unikey);
+        $(".btn-danger").attr('unikey', unikey);
     })
     $('#confirmDele .btn-close').on('click', function() {
         $('#confirmDele').removeClass('show');
@@ -283,6 +283,7 @@
     // 卸载
     $(".btn-danger").click(function(){
         var unikey = $(this).attr('unikey');
+        // console.log(unikey);
         var clear_plugin_data = $('#is-delete-data').is(':checked') ? 1 : 0;
         $.ajax({
              async: false,    //设置为同步

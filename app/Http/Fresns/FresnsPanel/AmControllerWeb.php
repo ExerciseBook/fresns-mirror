@@ -828,6 +828,7 @@ class AmControllerWeb extends BaseFrontendController
         $uniKey = $request->input('unikey');
         // 插件配置
         $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
+        // dd($pluginConfig);
         $type = $pluginConfig->type;
         if ($type == PluginConst::PLUGIN_TYPE_THEME) {
             // todo 
@@ -841,7 +842,8 @@ class AmControllerWeb extends BaseFrontendController
             $info = PluginHelper::uninstallByUniKey($uniKey);
             InstallHelper::freshSystem();
             // 删除插件数据
-            FresnsPlugin::where('unikey', $uniKey)->delete();
+            // FresnsPlugin::where('unikey', $uniKey)->delete();
+            DB::table('plugins')->where('unikey', $uniKey)->delete();
             $this->success($info);
         } else {
             // 获取安装类

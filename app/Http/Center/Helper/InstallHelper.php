@@ -182,7 +182,9 @@ class InstallHelper
 
     // 公共方法
     public static function copyPluginDirectory($srcPath, $destPath){
+        LogService::Info('srcPath',$srcPath);
         if(!empty($srcPath) || is_dir($srcPath)){
+            LogService::Info('destPath',$destPath);
             FileHelper::assetDir($destPath);
             File::copyDirectory($srcPath, $destPath);
         }
@@ -228,10 +230,11 @@ class InstallHelper
 
         // extension 信息
         $extensionViewPath = PluginHelper::extensionViewPath($uniKey);
-
+        LogService::info('extensionViewPath',$extensionViewPath);
         // 主题模版
         if($type == PluginConst::PLUGIN_TYPE_THEME){
             $frameworkThemePath = PluginHelper::frameworkThemePath($uniKey);
+            LogService::info('frameworkThemePath',$frameworkThemePath);
             self::copyPluginDirectory($extensionViewPath, $frameworkThemePath);
         }else{
             // 其他
