@@ -7,6 +7,7 @@
     <meta name="author" content="Fresns" />
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <title>Fresns Console</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/console.css">
@@ -265,7 +266,7 @@
 
 @include('common.footer')
 
-<script>
+    <script>
     // 重置key
     $(".redictKey").click(function(){
         var id = $(this).attr('data-id');
@@ -274,74 +275,47 @@
         $('#confirmReset .app_id').text(app);
         $('#confirmReset .modal-title').text(name);
         $(".reset-key-btn").attr('data_app', app);
-        $('#confirmReset').addClass('show');
-        $('#confirmReset').css({
-            'display': 'block'
-        })   
     })
-    $('#confirmReset .btn-close,#confirmReset .btn-secondary').on('click', function() {
-            $('#confirmReset').removeClass('show');
-            $('#confirmReset').css({
-                'display': 'none'
-            })
+    $(".reset-key-btn").click(function() {
+        var data_id = $(this).attr('data-id');
+        $.ajax({
+            async: false,    //设置为同步
+            type: "post",
+            url: "/resetKey",
+            data: {'data_id':data_id},
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
+                window.location.reload();
+            }
         })
-        $(".reset-key-btn").click(function() {
-            var data_id = $(this).attr('data-id');          
-            
-            $.ajax({
-                async: false,    //设置为同步
-                type: "post",
-                url: "/resetKey",
-                data: {'data_id':data_id},
-                beforeSend: function (request) {
-                        return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                    },
-                success: function (data) {
-                    window.location.reload();
-                }
-            });
-         });
+    });
+
     // 提交创建
     $(".submitKey").click(function(){
         var platformId = $("#key_platform").find("option:selected").val();
-        // if(platformId == '选择密钥应用平台'){
-        //     // alert("选择密钥应用平台");
-        //     alert("@lang('fresns.addKeyPlatformChooseOption')！");
-        //     return false;
-        // }
         var keyName = $(".keyName").val();
-        // if(!keyName){
-        //     // alert("请填写名称");
-        //     alert("@lang('fresns.addKeyName')!");
-        //     return false;
-        // }
         var type = $(".keyType input:radio:checked").val();
         var plugin = $("#key_plugin").find("option:selected").val();
-        // if(type == 2){
-        //     if(!plugin || plugin == "选择密钥用于哪个插件"){
-        //         // alert("请选择插件");
-        //         alert("@lang('fresns.addKeyTypePlugin')!");
-        //         return false;
-        //     }
-        // }
         var enAbleStatus = $('input[name="inlineRadioOptions"]:checked').val()
         $.ajax({
-             async: false,    //设置为同步
-             type: "post",
-             url: "/submitKey",
-             data: {'platformId':platformId,'keyName':keyName,'type':type,'plugin':plugin,'enAbleStatus':enAbleStatus},
-             beforeSend: function (request) {
-                     return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                 },
-             success: function (data) {
+            async: false,    //设置为同步
+            type: "post",
+            url: "/submitKey",
+            data: {'platformId':platformId,'keyName':keyName,'type':type,'plugin':plugin,'enAbleStatus':enAbleStatus},
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
                 if(data.code == 0){
                     window.location.reload();
                 }else{
                     alert(data.message)
                 }
-             }
-         });
-    })
+            }
+        })
+    });
 
     // 切换启用状态
     $(".enableStatus").click(function(){
@@ -353,55 +327,45 @@
             var status = 1;
         }
         $.ajax({
-             async: false,    //设置为同步
-             type: "post",
-             url: "/enableStatus",
-             data: {'data_id':data_id,is_enable:status},
-             beforeSend: function (request) {
-                     return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                 },
-             success: function (data) {
-               
-             }
-         });
-    })
+            async: false,    //设置为同步
+            type: "post",
+            url: "/enableStatus",
+            data: {'data_id':data_id,is_enable:status},
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
+            }
+        })
+    });
 
+    // 删除 key
     $('.delKey').on('click', function() {
-            var id = $(this).attr('data-id');
-            var name = $(this).attr('data_name');
-            var app = $(this).attr('data_app');
-            $('#confirmDele .app_id').text(app);
-            $('#confirmDele .modal-title').text(name);
-            $('#confirmDele').addClass('show');
-            $('#confirmDele').css({
-                'display': 'block'
-            })
-            var id = $(this).attr('data-id');
-            $(".delete-btn").attr('data-id', id);
-        })
-        $('#confirmDele .btn-close,#confirmDele .btn-secondary').on('click', function() {
-            $('#confirmDele').removeClass('show');
-            $('#confirmDele').css({
-                'display': 'none'
-            })
-        })
-        $(".delete-btn").click(function() {
-            var id = $(this).attr('data-id');
-            $.ajax({
-             async: false,    //设置为同步
-             type: "post",
-             url: "/delKey",
-             data: {'data_id':id,is_enable:status},
-             beforeSend: function (request) {
-                     return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                 },
-             success: function (data) {
+        var id = $(this).attr('data-id');
+        var name = $(this).attr('data_name');
+        var app = $(this).attr('data_app');
+        $('#confirmDele .app_id').text(app);
+        $('#confirmDele .modal-title').text(name);
+        var id = $(this).attr('data-id');
+        $(".delete-btn").attr('data-id', id);
+    });
+    $(".delete-btn").click(function() {
+        var id = $(this).attr('data-id');
+        $.ajax({
+            async: false,    //设置为同步
+            type: "post",
+            url: "/delKey",
+            data: {'data_id':id,is_enable:status},
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
                 // that.parents('tr').remove();
                 window.location.reload();
-             }
-         });
-
+            }
         })
+    });
+
     // 编辑回显
     $(".update_data").click(function(){
         var data_id = $(this).attr('data_id');
@@ -420,10 +384,8 @@
         $(".keyStatus input:radio[value="+data_status+"]").attr('checked',true);
         if(type == 2){
             $(".keyTypeUpdate input:radio").eq(1).prop('checked',true);
-            $(".pluginUnikey").addClass('show');
             $("#key_plugin_update").val(plugin_unikey)
         }else{
-            $(".pluginUnikey").removeClass('show');
             $("#key_plugin_update").val("")
             $(".keyTypeUpdate input:radio").eq(0).prop('checked',true);
         }
@@ -433,42 +395,28 @@
     $(".updateKey").click(function(){
         var id = $("#key_name_update").attr('data_id');
         var platformId = $("#key_platform_update").find("option:selected").val();
-        // if(platformId == '选择密钥应用平台'){
-        //     alert("选择密钥应用平台");
-        //     return false;
-        // }
         var keyName = $("#key_name_update").val();
-        // if(!keyName){
-        //     alert("请填写名称");
-        //     return false;
-        // }
         var type = $(".keyTypeUpdate input:radio:checked").val();
         var plugin = $("#key_plugin_update").find("option:selected").val();
-        // if(type == 2){
-        //     if(!plugin || plugin == "选择密钥用于哪个插件"){
-        //         alert("请选择插件");
-        //         return false;
-        //     }
-        // }
         var enAbleStatus = $('.keyStatus input[name="updInlineRadioOptions"]:checked').val();
         $.ajax({
-             async: false,    //设置为同步
-             type: "post",
-             url: "/updateKey",
-             data: {'id':id,'platformId':platformId,'keyName':keyName,'type':type,'plugin':plugin,'enAbleStatus':enAbleStatus},
-             beforeSend: function (request) {
-                     return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                 },
-             success: function (data) {
+            async: false,    //设置为同步
+            type: "post",
+            url: "/updateKey",
+            data: {'id':id,'platformId':platformId,'keyName':keyName,'type':type,'plugin':plugin,'enAbleStatus':enAbleStatus},
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
                 if(data.code == 0){
                     window.location.reload();
                 }else{
                     alert(data.message)
                 }
-             }
-         });
+            }
+        });
     })
-</script>
+    </script>
 
 </body>
 </html>

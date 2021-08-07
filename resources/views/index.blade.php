@@ -7,6 +7,7 @@
     <meta name="author" content="Fresns" />
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <title>Fresns Console</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/console.css">
@@ -48,8 +49,8 @@
 
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/jquery-3.6.0.min.js"></script>
-    <script src="/assets/js/console.js"></script>
     <script src="/assets/js/base64.js"></script>
+    <script src="/assets/js/console.js"></script>
 
     <script>
         $(document).ready(function(){

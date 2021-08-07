@@ -7,6 +7,7 @@
     <meta name="author" content="Fresns" />
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <title>Fresns Console</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/console.css">
@@ -71,7 +72,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Name</h5>
-                    <button type="button" id="deleteClose" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
@@ -95,84 +96,69 @@
     $(".btn_enable1").click(function(){
         var id = $(this).attr('data_id');
         $.ajax({
-             async: false,    //设置为同步
-             type: "post",
-             url: "/enableUnikeyStatus",
-             data: {'data_id':id,'is_enable':0},
-             beforeSend: function (request) {
-                     return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                 },
-             success: function (data) {
+            async: false,    //设置为同步
+            type: "post",
+            url: "/enableUnikeyStatus",
+            data: {'data_id':id,'is_enable':0},
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
                 if(data.code == 0){
                     window.location.reload();
                 }else{
                     alert(data.message)
                 }
-             }
-         });
-    })
+            }
+        })
+    });
+
     $(".btn_enable2").click(function(){
         var id = $(this).attr('data_id');
         $.ajax({
-             async: false,    //设置为同步
-             type: "post",
-             url: "/enableUnikeyStatus",
-             data: {'data_id':id,'is_enable':1},
-             beforeSend: function (request) {
-                     return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                 },
-             success: function (data) {
+            async: false,    //设置为同步
+            type: "post",
+            url: "/enableUnikeyStatus",
+            data: {'data_id':id,'is_enable':1},
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
                 if(data.code == 0){
                     window.location.reload();
                 }else{
                     alert(data.message)
                 }
-             }
-         });
-    })
+            }
+        })
+    });
+
+    // 卸载
     $('.uninstallUnikey').on('click', function() {
         var name = $(this).attr('data-name');
         $('#confirmDele .modal-title').text(name);
-        $('#confirmDele').addClass('show');
-        $('#confirmDele').css({
-            'display': 'block'
-        })
-        
         var unikey = $(this).attr('unikey');
-        $(".delete-btn").attr('unikey', unikey);
-    })
-    $('#confirmDele .btn-close').on('click', function() {
-        $('#confirmDele').removeClass('show');
-        $('#confirmDele').css({
-            'display': 'none'
-        })
-    })
-    $('#confirmDele .btn-secondary').on('click', function() {
-        $('#confirmDele').removeClass('show');
-        $('#confirmDele').css({
-            'display': 'none'
-        })
-    })
-    // 卸载
+        $(".btn-danger").attr('unikey', unikey);
+    });
     $(".btn-danger").click(function(){
         var unikey = $(this).attr('unikey');
         var clear_plugin_data = $('#is-delete-data').is(':checked') ? 1 : 0;
         $.ajax({
-             async: false,    //设置为同步
-             type: "post",
-             url: "/uninstall",
-             data: {'unikey':unikey,'clear_plugin_data': clear_plugin_data},
-             beforeSend: function (request) {
-                     return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                 },
-             success: function (data) {
+            async: false,    //设置为同步
+            type: "post",
+            url: "/uninstall",
+            data: {'unikey':unikey,'clear_plugin_data': clear_plugin_data},
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
                 if(data.code == 0){
                     window.location.reload();
                 }else{
                     alert(data.message)
                 }
-             }
-         });
+            }
+        })
     })
 </script>
 

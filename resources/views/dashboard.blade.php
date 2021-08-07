@@ -7,6 +7,7 @@
     <meta name="author" content="Fresns" />
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <title>Fresns Console</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/console.css">
@@ -197,30 +198,24 @@
             var remoteVision = $(this).attr('data_new_vision');
             var dirName = unikey;
             $.ajax({
-             async: false,    //设置为同步
-             type: "post",
-             url: "/localInstall",
-             data: {'dirName':unikey},
-             beforeSend: function (request) {
-                     return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                 },
-             success: function (data) {
-                if(data.code == 0){
-                    window.location.reload();
-                }else{
-                    alert(data.message);
+                async: false,    //设置为同步
+                type: "post",
+                url: "/localInstall",
+                data: {'dirName':unikey},
+                beforeSend: function (request) {
+                    return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+                },
+                success: function (data) {
+                    if(data.code == 0){
+                        window.location.reload();
+                    }else{
+                        alert(data.message);
+                    }
                 }
-             }
-         });
-        })
-        $('#upgrade .btn-close').on('click', function() {
-            $('#upgrade').removeClass('show');
-            $('#upgrade').css({
-                'display': 'none'
             })
         })
-       
     </script>
 
 </body>
+
 </html>

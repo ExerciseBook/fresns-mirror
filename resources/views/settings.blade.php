@@ -6,6 +6,7 @@
     <meta name="author" content="Fresns" />
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <title>Fresns Console</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/console.css">
@@ -119,7 +120,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">@lang('fresns.confirmDelete')?</h5>
-                    <button type="button" id="deleteClose" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>UID: <span class="app_id">uid</span></p>
@@ -143,96 +144,30 @@
             // document.execCommand("copy");
             try {
                 if (document.execCommand("Copy", "false", null)) {
-                    alert("@lang('fresns.copyConsoleUrlSuccess')！");
+                    alert("@lang('fresns.copyConsoleUrlSuccess')!");
                 } else {
-                    alert("复制失败！");
+                    alert("@lang('fresns.copyConsoleUrlWarning')");
                 }
             } catch (err) {
-                alert("复制错误！");
+                alert("@lang('fresns.copyConsoleUrlWarning')");
             }
+        });
 
-        })
+        //控制台设置
         $('.safe-entrance').bind('input propertychange', function() {
             var entrance = $(this).val();
             var address = $('.backend-address').val();
             var text = address+'/fresns/' + entrance;
             $('#copy_info').text(text);
             $('#input_textarea').text(text);
-        })
+        });
         $('.backend-address').bind('input propertychange', function() {
             var entrance = $(this).val();
             var address = $('.safe-entrance').val();
             var text = entrance+'/fresns/' + address;
             $('#copy_info').text(text);
             $('#input_textarea').text(text);
-        })
-        // 提交创建
-        $("#folderInstall-button").click(function() {
-            var account = $('.account').val();
-            $.ajax({
-                async: false, //设置为同步
-                type: "post",
-                url: "/addAdmin",
-                data: {
-                    'account': account
-                },
-                beforeSend: function(request) {
-                    return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                },
-                success: function(data) {
-                    if (data.code == 0) {
-                        // window.location.reload();
-                    } else {
-                        alert(data.message)
-                    }
-                }
-            });
-
-        })
-        $('.delete').on('click', function() {
-            $('#confirmDele').addClass('show');
-            $('#confirmDele').css({
-                'display': 'block'
-            })
-            
-            var uuid = $(this).attr('data-uuid');
-            $('#confirmDele .app_id').text(uuid);
-            $(".btn-danger").attr('data-uuid', uuid);
-        })
-        $('#confirmDele .btn-secondary').on('click', function() {
-            $('#confirmDele').removeClass('show');
-            $('#confirmDele').css({
-                'display': 'none'
-            })
-        })
-        $('#deleteClose').click(function(){
-            $('#confirmDele').removeClass('show');
-            $('#confirmDele').css({
-                'display': 'none'
-            })
-        })
-        $(".btn-danger").click(function() {
-            var uuid = $(this).attr('data-uuid');
-            $.ajax({
-                async: false, //设置为同步
-                type: "post",
-                url: "/delAdmin",
-                data: {
-                    'uuid': uuid
-                },
-                beforeSend: function(request) {
-                    return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                },
-                success: function(data) {
-                    if (data.code == 0) {
-                        window.location.reload();
-                    } else {
-                        alert(data.message)
-                    }
-                }
-            });
-
-        })
+        });
 
         //保存设置
         $("#submit").click(function() {
@@ -258,9 +193,58 @@
                         alert(data.message)
                     }
                 }
-            });
+            })
+        });
 
+        //系统管理员
+        $("#folderInstall-button").click(function() {
+            var account = $('.account').val();
+            $.ajax({
+                async: false, //设置为同步
+                type: "post",
+                url: "/addAdmin",
+                data: {
+                    'account': account
+                },
+                beforeSend: function(request) {
+                    return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+                },
+                success: function(data) {
+                    if (data.code == 0) {
+                        // window.location.reload();
+                    } else {
+                        alert(data.message)
+                    }
+                }
+            })
+        });
+
+        $('.delete').on('click', function() {
+            var uuid = $(this).attr('data-uuid');
+            $('#confirmDele .app_id').text(uuid);
+            $(".btn-danger").attr('data-uuid', uuid);
         })
+        $(".btn-danger").click(function() {
+            var uuid = $(this).attr('data-uuid');
+            $.ajax({
+                async: false, //设置为同步
+                type: "post",
+                url: "/delAdmin",
+                data: {
+                    'uuid': uuid
+                },
+                beforeSend: function(request) {
+                    return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+                },
+                success: function(data) {
+                    if (data.code == 0) {
+                        window.location.reload();
+                    } else {
+                        alert(data.message)
+                    }
+                }
+            })
+        });
     </script>
 
 </body>
