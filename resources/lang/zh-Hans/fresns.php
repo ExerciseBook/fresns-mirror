@@ -72,6 +72,7 @@ return [
     'consoleUrlName' => '控制台入口网址',
     'copyConsoleUrl' => '复制',
     'copyConsoleUrlSuccess' => '复制成功',
+    'copyConsoleUrlWarning' => '复制失败',
     'siteDomain' => '主站地址',
     'siteDomainInfo' => '主网站运行地址（集成部署或独立部署），结尾不带 /',
     'consoleSettingBtn' => '保存设置',

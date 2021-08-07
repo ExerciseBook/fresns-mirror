@@ -72,6 +72,7 @@ return [
     'consoleUrlName' => 'URL de la console',
     'copyConsoleUrl' => 'Copier',
     'copyConsoleUrlSuccess' => 'Succès de la reproduction',
+    'copyConsoleUrlWarning' => 'Échec de la copie',
     'siteDomain' => 'Domaine du site',
     'siteDomainInfo' => 'Adresse d\'exécution du site principal (déploiement intégré ou autonome) sans / à la fin',
     'consoleSettingBtn' => 'Sauvegarder les paramètres',

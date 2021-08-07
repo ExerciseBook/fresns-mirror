@@ -72,6 +72,7 @@ return [
     'consoleUrlName' => 'コンソールのURL',
     'copyConsoleUrl' => 'コピー',
     'copyConsoleUrlSuccess' => 'コピー成功',
+    'copyConsoleUrlWarning' => 'コピー失敗',
     'siteDomain' => 'サイトドメイン',
     'siteDomainInfo' => 'メインサイトの実行アドレス（統合型またはスタンドアロン型の展開）なし／最後に',
     'consoleSettingBtn' => '設定の保存',

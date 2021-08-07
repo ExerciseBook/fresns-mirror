@@ -72,6 +72,7 @@ return [
     'consoleUrlName' => 'URL консоли',
     'copyConsoleUrl' => 'Копировать',
     'copyConsoleUrlSuccess' => 'Успех размножения',
+    'copyConsoleUrlWarning' => 'Сбой копирования',
     'siteDomain' => 'Домен сайта',
     'siteDomainInfo' => 'Адрес запуска основного сайта (интегрированное или автономное развертывание) без / в конце',
     'consoleSettingBtn' => 'Сохранить настройки',

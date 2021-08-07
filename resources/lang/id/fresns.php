@@ -72,6 +72,7 @@ return [
     'consoleUrlName' => 'URL konsol',
     'copyConsoleUrl' => 'Salinan',
     'copyConsoleUrlSuccess' => 'Salin berhasil',
+    'copyConsoleUrlWarning' => 'Penyalinan gagal',
     'siteDomain' => 'Domain Situs',
     'siteDomainInfo' => 'Alamat menjalankan situs web utama (penyebaran terintegrasi atau penerapan independen), tanpa / di akhir',
     'consoleSettingBtn' => 'Simpan Pengaturan',

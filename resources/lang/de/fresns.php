@@ -72,6 +72,7 @@ return [
     'consoleUrlName' => 'Konsolen-URL',
     'copyConsoleUrl' => 'Kopieren',
     'copyConsoleUrlSuccess' => 'Reproduktionserfolg',
+    'copyConsoleUrlWarning' => 'Fehler beim Kopieren',
     'siteDomain' => 'Site-Domäne',
     'siteDomainInfo' => 'Hauptstandort-Laufadresse (integrierter oder eigenständiger Einsatz) ohne / am Ende',
     'consoleSettingBtn' => 'Einstellungen speichern',

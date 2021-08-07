@@ -72,6 +72,7 @@ return [
     'consoleUrlName' => '콘솔 URL',
     'copyConsoleUrl' => '부',
     'copyConsoleUrlSuccess' => '성공적으로 복사',
+    'copyConsoleUrlWarning' => '복사 실패',
     'siteDomain' => '사이트 도메인',
     'siteDomainInfo' => '메인 웹 사이트 실행 주소 (통합 배포 또는 독립 배포), 끝에 / 없음',
     'consoleSettingBtn' => '설정 저장',

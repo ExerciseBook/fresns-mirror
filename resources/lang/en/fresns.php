@@ -72,6 +72,7 @@ return [
     'consoleUrlName' => 'Console URL',
     'copyConsoleUrl' => 'Copy',
     'copyConsoleUrlSuccess' => 'Copy Success',
+    'copyConsoleUrlWarning' => 'Copy Failure',
     'siteDomain' => 'Site Domain',
     'siteDomainInfo' => 'Main site running address (integrated deployment or standalone deployment) without / at the end',
     'consoleSettingBtn' => 'Save Settings',

@@ -72,6 +72,7 @@ return [
     'consoleUrlName' => 'कंसोल यूआरएल',
     'copyConsoleUrl' => 'प्रतिलिपि',
     'copyConsoleUrlSuccess' => 'सफलतापूर्वक कॉपी करें',
+    'copyConsoleUrlWarning' => 'कॉपी विफल',
     'siteDomain' => 'साइट डोमेन',
     'siteDomainInfo' => 'मुख्य वेबसाइट चलाने का पता (एकीकृत परिनियोजन या स्वतंत्र परिनियोजन), बिना / अंत में',
     'consoleSettingBtn' => 'सेटिंग्स सेव करें',
