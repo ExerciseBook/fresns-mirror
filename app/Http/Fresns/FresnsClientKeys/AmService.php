@@ -9,8 +9,6 @@
 namespace App\Http\Fresns\FresnsClientKeys;
 
 use App\Base\Services\BaseAdminService;
-
-// use App\Plugins\Tweet\TweetConfigs\TweetConfigs;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 
 class AmService extends BaseAdminService

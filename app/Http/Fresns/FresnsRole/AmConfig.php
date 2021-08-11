@@ -10,8 +10,6 @@ namespace App\Http\Fresns\FresnsRole;
 
 // 配置
 use App\Base\Config\BaseConfig;
-
-// use App\Plugins\Tweet\TweetFiles\TweetFilesConfig;
 use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
 use Illuminate\Validation\Rule;
 

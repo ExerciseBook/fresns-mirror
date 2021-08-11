@@ -15,13 +15,6 @@ use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
 use Illuminate\Http\Request;
 use App\Http\Share\Common\ValidateService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
-use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIconsConfig;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsConfig;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\Fresns\FresnsMemberStats\FresnsMemberStatsConfig;
-use App\Http\Fresns\FresnsNotifies\FresnsNotifiesConfig;
 use App\Http\Fresns\FresnsVerifyCodes\FresnsVerifyCodes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +24,6 @@ use App\Http\Fresns\FresnsCmds\FresnsCmdService;
 use App\Http\Fresns\FresnsCmds\FresnsPlugin;
 use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
-use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
@@ -40,16 +32,12 @@ use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\Fresns\FresnsSessionTokens\FresnsSessionTokensConfig;
-use App\Http\Fresns\FresnsUserConnects\FresnsUserConnectsConfig;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
-use App\Http\Fresns\FresnsUserWalletLogs\FresnsUserWalletLogsConfig;
 use App\Http\Fresns\FresnsUserWalletLogs\FresnsUserWalletLogsService;
 use App\Http\Fresns\FresnsUserWallets\FresnsUserWallets;
-use App\Http\Fresns\FresnsUserWallets\FresnsUserWalletsConfig;
 use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Share\Common\LogService;
 
 class AmControllerApi extends FresnsBaseApiController
 {
@@ -258,7 +246,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $input = [
                     'item_key' => 'user_counts',
                     'item_value' => 1,
-                    'item_tag' => 'common',
+                    'item_tag' => 'stats',
                     'item_type' => 'number'
                 ];
                 FresnsConfigs::insert($input);
@@ -270,7 +258,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $input = [
                     'item_key' => 'member_counts',
                     'item_value' => 1,
-                    'item_tag' => 'common',
+                    'item_tag' => 'stats',
                     'item_type' => 'number'
                 ];
                 FresnsConfigs::insert($input);

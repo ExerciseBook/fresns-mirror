@@ -7,14 +7,12 @@
 
 namespace App\Http\Share\AmGlobal;
 
-// use App\Http\Share\FresnsUsers\ShareUsers;
 
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\Fresns\FresnsCmds\FresnsCrontablPlugin;
 use App\Http\Fresns\FresnsCmds\FresnsCrontabPluginConfig;
-use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
 use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
 use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
@@ -191,8 +189,8 @@ class AmService
 
             $lang['language_status'] = empty($languageStatus) ? null : boolval($languageStatus);
             $lang['default_language'] = $default;
-            $lang['languages'] = $langSettingsArr;
-            if(!empty($lang['language_status']) || !empty($lang['default_language']) || !empty($lang['languages'])){
+            $lang['language_menus'] = $langSettingsArr;
+            if(!empty($lang['language_status']) || !empty($lang['default_language']) || !empty($lang['language_menus'])){
                 $map['language'] = $lang;
             }
 

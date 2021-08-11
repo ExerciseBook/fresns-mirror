@@ -337,6 +337,23 @@ class AmControllerApi extends FresnsBaseApiController
                 $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
             }
         }
+        //  请求接口时查询配置表键名‘post_detail_service’（有值，将请求转述给插件，由插件处理
+        $post_detail_config = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_DETAIL_SERVICE);
+        if($post_detail_config){
+            $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
+                $pluginClass = PluginHelper::findPluginClass($post_detail_config);
+                if (empty($pluginClass)) {
+                    LogService::error("未找到插件类");
+                    $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
+                }
+                $input = [
+                    'type' => 'postDetail',
+                    'header' => $this->getHeader($request->header()),
+                    'body' => $request->all(),
+                ];
+                $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
+                $this->success($resp['output']);
+        }
         $mid = GlobalService::getGlobalKey('member_id');
         $langTag = $this->langTag;
         $id = $request->input('pid');
@@ -362,6 +379,8 @@ class AmControllerApi extends FresnsBaseApiController
         $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
             4)->pluck('shield_id')->where('deleted_at', null)->toArray();
         $query = DB::table('posts as p');
+        // dump($noPostHashtags);
+        // dump($commentShields);
         $query = $query->select('p.*')
             ->leftJoin("post_appends as append", 'p.id', '=', 'append.post_id')
             // ->whereNotIn('p.group_id',$noGroupArr)
@@ -375,7 +394,10 @@ class AmControllerApi extends FresnsBaseApiController
         if (!empty($noGroupArr)) {
             // dump($noGroupArr);
             // $query->whereNotIn('post.group_id',$noGroupArr);
-            $postIdArr = FresnsPosts::whereNotIn('group_id', $noGroupArr)->pluck('id')->toArray();
+            $postgroupIdArr = FresnsPosts::whereNotIn('group_id', $noGroupArr)->pluck('id')->toArray();
+            $noPostgroupIdArr = FresnsPosts::where('group_id',NULL)->pluck('id')->toArray();
+            // dd($postIdArr);
+            $postIdArr = array_merge($postgroupIdArr,$noPostgroupIdArr);
             // dd($postIdArr);
             $query->whereIn('p.id', $postIdArr);
         }
@@ -403,9 +425,6 @@ class AmControllerApi extends FresnsBaseApiController
         $data = [];
         $data['list'] = FresnsPostResourceDetail::collection($item->items())->toArray($item->items());
 
-        // $FresnsPostsService = new FresnsPostsService();
-        // $FresnsPostsService->setResource(FresnsPostResourceDetail::class);
-        // $data = $FresnsPostsService->searchData();
         $post = Fresnsposts::where('uuid', $id)->first();
         $seoPost['seoInfo'] = [];
         if (!$langTag) {
@@ -487,7 +506,7 @@ class AmControllerApi extends FresnsBaseApiController
         }
         $langTag = $this->langTag;
         $FresnsHashtagsService = new FresnsHashtagsService();
-        $FresnsHashtagsService->setResource(FresnsHashtagsResource1::class);
+        $FresnsHashtagsService->setResource(FresnsHashtagsResourceDetail::class);
         $data = $FresnsHashtagsService->searchData();
         $data = [
             // 'pagination' => $data['pagination'],
@@ -551,7 +570,7 @@ class AmControllerApi extends FresnsBaseApiController
             if (empty($member_id)) {
                 $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
             }
-        }
+        }        
         // 屏蔽的目标字段
         $memberShieldsTable = FresnsMemberShieldsConfig::CFG_TABLE;
         $commentTable = FresnsCommentsConfig::CFG_TABLE;
@@ -1278,7 +1297,7 @@ class AmControllerApi extends FresnsBaseApiController
                     // dd($pluginClass);
                     if (empty($pluginClass)) {
                         LogService::error("未找到插件类");
-                        $this->errorInfo('30001', "未找到插件类");
+                        $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
                     }
                     $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
                     $pluginClass = PluginHelper::findPluginClass($pluginUnikey);

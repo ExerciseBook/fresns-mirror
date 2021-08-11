@@ -10,9 +10,8 @@ namespace App\Http\Fresns\FresnsUserConnects;
 
 // 配置
 use App\Base\Config\BaseConfig;
-use App\Plugins\Tweet\TweetFiles\TweetFilesConfig;
 use Illuminate\Validation\Rule;
-
+use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
 class AmConfig extends BaseConfig
 {
     // 主表
@@ -41,7 +40,7 @@ class AmConfig extends BaseConfig
     public function storeRule()
     {
         $table = self::CFG_TABLE;
-        $assetFileTable = TweetFilesConfig::CFG_TABLE;
+        $assetFileTable = FresnsFilesConfig::CFG_TABLE;
 
 
         $rule = [
@@ -74,7 +73,7 @@ class AmConfig extends BaseConfig
     {
         $id = request()->input('id');
         $table = self::CFG_TABLE;
-        $assetFileTable = TweetFilesConfig::CFG_TABLE;
+        $assetFileTable = FresnsFilesConfig::CFG_TABLE;
 
 
         $rule = [

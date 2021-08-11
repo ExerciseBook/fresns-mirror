@@ -8,21 +8,16 @@
 
 namespace App\Http\Fresns\FresnsApi\Editor\service;
 
-use App\Http\Center\Base\BasePluginConfig;
+
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsPostAppends\FresnsPostAppends;
 use App\Http\Fresns\FresnsPosts\FresnsPosts;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\Fresns\FresnsExtends\FresnsExtendsConfig;
-use App\Http\Fresns\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
 use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
@@ -30,18 +25,13 @@ use App\Http\Fresns\FresnsExtends\FresnsExtends;
 use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
 use App\Http\Fresns\FresnsComments\FresnsComments;
 use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppends;
-use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
 use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
 use App\Http\Fresns\FresnsFileAppends\FresnsFileAppends;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsPostAllows\FresnsPostAllowsConfig;
-
-// use App\Http\Services\LogService;
 use App\Http\Share\Common\LogService;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Share\AmGlobal\GlobalService;
-use App\Plugins\AliOss\PluginConfig;
-use App\Helpers\StrHelper;
 use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
 
 class CommentPostLogService
@@ -422,7 +412,19 @@ class CommentPostLogService
         $allowJson = $request->input('allowJson') ?? null;
         $locationJson = $request->input('locationJson') ?? null;
         $filesJson = $request->input('filesJson') ?? null;
-        $extendsJson = $request->input('extendsJson') ?? null;
+        // $extendsJson = $request->input('extendsJson') ?? null;
+        $extends_json = json_decode($request->input('extendsJson'), true);
+        $extends = [];
+        if($extends_json){
+            $arr = [];
+            foreach($extends_json as $v){
+                $arr['eid'] = $v['eid'];
+                $arr['rankNum'] = $v['rankNum'] ?? 9;
+                $arr['canDelete'] = $v['canDelete'] ?? true;
+                $extends[] = $arr;
+            }
+        }
+        $extendsJson = json_encode($extends);
         $content= self::stopWords($content);
         // dd($type);
         $input = [
@@ -463,8 +465,20 @@ class CommentPostLogService
         $plugin_unikey = $request->input('pluginUnikey');
         $locationJson = $request->input('locationJson');
         $filesJson = $request->input('filesJson');
-        $extendsJson = $request->input('extendsJson');
+        // $extendsJson = $request->input('extendsJson');
+        $extends_json = json_decode($request->input('extendsJson'), true);
         $content= self::stopWords($content);
+        $extends = [];
+        if($extends_json){
+            $arr = [];
+            foreach($extends_json as $v){
+                $arr['eid'] = $v['eid'];
+                $arr['rankNum'] = $v['rankNum'] ?? 9;
+                $arr['canDelete'] = $v['canDelete'] ?? true;
+                $extends[] = $arr;
+            }
+        }
+        $extendsJson = json_encode($extends);
         $input = [
             'type' => $type,
             'content' => trim($content),
@@ -727,18 +741,6 @@ class CommentPostLogService
 
         $file['file_size'] = $input['file_size'];
         FresnsFileAppends::insert($input);
-
-        LogService::info("上传本地时间", ($t2 - $t1));
-        $cmd = PluginConfig::PLG_CMD_UPLOAD_FILE;
-        $input = [];
-        $input['fid'] = json_encode([$file['uuid']]);
-        $input['mode'] = 1;
-
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
-            return false;
-        }
 
         return [$retId];
     }

@@ -21,4 +21,10 @@ class AmConfig
     const QUERY_TYPE_SQL_QUERY = 'sql_query'; // 原生SQL查询
     const OBJECT_DEFAIL = 1;
     const OBJECT_SUCCESS = 2;
+
+    //不受特殊规则影响的api
+    const URI_NOT_IN_RULE = [
+        '/api/fresns/editor/publish',
+        '/api/fresns/editor/submit',
+    ];
 }

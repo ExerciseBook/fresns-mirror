@@ -46,17 +46,16 @@ use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
 use App\Http\Fresns\FresnsFileLogs\FresnsFileLogsConfig;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesService;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsMemberStats\FresnsMemberStats;
 use App\Http\Fresns\FresnsPostMembers\FresnsPostMembersConfig;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
-use App\Http\Fresns\FresnsSessionTokens\FresnsSessionTokensConfig;
 use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
 use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Share\Common\LogService;
 
 class AmControllerApi extends FresnsBaseApiController
 {
@@ -298,6 +297,18 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         $this->success();
+    }
+
+    //获取用户角色
+    public function memberRoles(Request $request)
+    {
+        $page = $request->input('page',1);
+        $pageSize = $request->input('pageSize',30);
+        $fresnsMemberRolesService = new FresnsMemberRolesService();
+        $request->offsetSet('currentPage', $page);
+        $request->offsetSet('pageSize', $pageSize);
+        $data = $fresnsMemberRolesService->searchData();
+        $this->success($data);
     }
 
     public function memberMark(Request $request)

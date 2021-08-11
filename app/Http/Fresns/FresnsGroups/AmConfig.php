@@ -10,12 +10,8 @@ namespace App\Http\Fresns\FresnsGroups;
 
 // 配置
 use App\Base\Config\BaseConfig;
-
-// use App\Http\Config\AssetFileConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-
-// use App\Plugins\Tweet\TweetFiles\TweetFilesConfig;
 use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
 
 class AmConfig extends BaseConfig

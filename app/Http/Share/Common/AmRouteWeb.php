@@ -14,5 +14,3 @@ Route::get('/', function () {
 Route::get('log3', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('clearLog', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
-// clearLog
-Route::get('/clearLog3', '\App\Plugins\Share\Area\AmControllerApi@clearLog3')->name('admin.area.clearLog3');

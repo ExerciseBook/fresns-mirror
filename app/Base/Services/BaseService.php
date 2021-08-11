@@ -10,13 +10,9 @@ namespace App\Base\Services;
 
 use App\Base\Config\BaseConfig;
 use App\Base\Models\BaseQuery;
-use App\Helpers\CommonHelper;
-use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Share\ShareUsers\ShareUsersService;
+
 use App\Traits\HookServiceTrait;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
+
 
 class BaseService
 {

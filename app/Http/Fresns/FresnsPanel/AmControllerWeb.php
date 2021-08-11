@@ -15,7 +15,6 @@ use App\Http\Share\Common\LogService;
 use Illuminate\Http\Request;
 use App\Helpers\StrHelper;
 use App\Http\Fresns\FresnsPanel\Resource\PluginResource;
-use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsComments\FresnsComments;
@@ -23,9 +22,7 @@ use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
 use App\Http\Fresns\FresnsPosts\FresnsPosts;
 
-// use App\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use App\Http\Fresns\FresnsPanel\Resource\KeysResource;
 use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeys;
 use App\Http\Center\Helper\InstallHelper;
@@ -39,13 +36,10 @@ use App\Http\Fresns\FresnsPlugin\FresnsPluginService as FresnsPluginFresnsPlugin
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Share\Common\ErrorCodeService;
 use App\Http\Auth\User;
-use App\Helpers\FileHelper;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
-use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Share\Common\ValidateService;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
@@ -69,7 +63,7 @@ class AmControllerWeb extends BaseFrontendController
             'lang' => $lang,
             'location' => 'action',
             'choose' => 'index',
-            'title' => '首页',
+            'title' => 'Home',
         ];
 
         // dd($data);
@@ -252,7 +246,7 @@ class AmControllerWeb extends BaseFrontendController
             'lang' => $lang,
             'choose' => 'settings',
             'location' => 'settings',
-            'title' => '设置',
+            'title' => 'Settings',
             'user_arr' => $userArr,
             'backend_url' => $backend_url,
             'admin_path' => $admin_path,
@@ -290,9 +284,9 @@ class AmControllerWeb extends BaseFrontendController
         } else {
             $input = [
                 'item_key' => FresnsConfigsConfig::BACKEND_DOMAIN,
-                'item_tag' => 'common',
+                'item_tag' => 'backends',
                 'item_value' => $backend_url,
-                'item_type' => 'text',
+                'item_type' => 'string',
             ];
 
             FresnsConfigs::insert($input);
@@ -303,9 +297,9 @@ class AmControllerWeb extends BaseFrontendController
         } else {
             $input = [
                 'item_key' => FresnsConfigsConfig::BACKEND_PATH,
-                'item_tag' => 'common',
+                'item_tag' => 'backends',
                 'item_value' => $admin_path,
-                'item_type' => 'text',
+                'item_type' => 'string',
 
             ];
             FresnsConfigs::insert($input);
@@ -316,9 +310,9 @@ class AmControllerWeb extends BaseFrontendController
         } else {
             $input = [
                 'item_key' => FresnsConfigsConfig::SITE_DOMAIN,
-                'item_tag' => 'common',
+                'item_tag' => 'sites',
                 'item_value' => $site_url,
-                'item_type' => 'text',
+                'item_type' => 'string',
             ];
             FresnsConfigs::insert($input);
         }
@@ -355,6 +349,10 @@ class AmControllerWeb extends BaseFrontendController
     public function delAdmin(Request $request)
     {
         $uuid = $request->input('uuid');
+        $user = Auth::user();
+        if($uuid == $user['uuid']){
+            $this->error(ErrorCodeService::DELETE_ADMIN);
+        }
         FresnsUsers::where('uuid', $uuid)->update(['user_type' => AmConfig::USER_TYPE_USER]);
 
         $this->success();
@@ -382,7 +380,7 @@ class AmControllerWeb extends BaseFrontendController
             'lang' => $lang,
             'choose' => 'admins',
             'location' => $pluginArr,
-            'title' => '首页',
+            'title' => 'Admins',
             'lang_desc' => AmService::getLanguage($lang),
 
         ];
@@ -412,7 +410,7 @@ class AmControllerWeb extends BaseFrontendController
             'lang' => $lang,
             'choose' => 'apps',
             'location' => $pluginArr,
-            'title' => '首页',
+            'title' => 'Apps',
             'lang_desc' => AmService::getLanguage($lang),
 
         ];
@@ -530,7 +528,7 @@ class AmControllerWeb extends BaseFrontendController
             'location' => 'dashboard',
             'choose' => 'dashboard',
             'newVisionPlugin' => $newVision,
-            'title' => '首页',
+            'title' => 'Dashboard',
             'total' => $total,
             'notice_arr' => $noticeArr,
             'lang_desc' => AmService::getLanguage($langTag),
@@ -551,7 +549,7 @@ class AmControllerWeb extends BaseFrontendController
             'lang' => $lang,
             'choose' => 'iframe',
             'location' => $url,
-            'title' => '首页',
+            'title' => 'Setting',
             'lang_desc' => AmService::getLanguage($lang),
 
         ];
@@ -605,7 +603,7 @@ class AmControllerWeb extends BaseFrontendController
             'choose' => 'keys',
             'platform' => $platforms,
             'plugin' => $plugin,
-            'title' => '密钥',
+            'title' => 'Keys',
             'lang_desc' => AmService::getLanguage($lang),
 
         ];
@@ -677,7 +675,7 @@ class AmControllerWeb extends BaseFrontendController
             'enableCount' => $enableCount,
             'data' => $pluginList,
             'page' => $current,
-            'title' => '首页',
+            'title' => 'Plugins',
             'choose' => 'plugins',
             'totalPage' => $totalPage,
             'lang_desc' => AmService::getLanguage($lang),
@@ -720,7 +718,7 @@ class AmControllerWeb extends BaseFrontendController
             'choose' => 'websites',
             'websitePluginArr' => $websitePluginArr,
             'subjectPluginArr' => $subjectPluginArr,
-            'title' => '首页',
+            'title' => 'Websites',
             'lang_desc' => AmService::getLanguage($lang),
 
         ];
@@ -840,6 +838,7 @@ class AmControllerWeb extends BaseFrontendController
                 $this->error(ErrorCodeService::PLUGIN_ENABLE_ERROR);
             }
             $info = PluginHelper::uninstallByUniKey($uniKey);
+            // $info = $installer->uninstall();
             InstallHelper::freshSystem();
             // 删除插件数据
             // FresnsPlugin::where('unikey', $uniKey)->delete();
@@ -996,7 +995,7 @@ class AmControllerWeb extends BaseFrontendController
     // 更新插件
     public function uploadPlugin(Request $request)
     {
-        $dowmLoadUrl = "http://download.myfriends973.com/TestEngine_V2_app_store.zip";
+        $dowmLoadUrl = "https://apps.fresns.cn/releases/fresns.zip";
     }
 
     // 插件启用禁用
@@ -1021,9 +1020,9 @@ class AmControllerWeb extends BaseFrontendController
             } else {
                 $input = [
                     'item_key' => $websiteUnikey.'_Pc',
-                    'item_tag' => 'common',
+                    'item_tag' => 'themes',
                     'item_value' => $subjectUnikeyPc,
-                    'item_type' => 'select',
+                    'item_type' => 'plugin',
 
                 ];
                 FresnsConfigs::insert($input);
@@ -1039,9 +1038,9 @@ class AmControllerWeb extends BaseFrontendController
             } else {
                 $input = [
                     'item_key' => $websiteUnikey.'_Mobile',
-                    'item_tag' => 'common',
+                    'item_tag' => 'themes',
                     'item_value' => $subjectUnikeyMobile,
-                    'item_type' => 'select',
+                    'item_type' => 'plugin',
                 ];
                 FresnsConfigs::insert($input);
             }

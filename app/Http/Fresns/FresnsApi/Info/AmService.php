@@ -12,9 +12,8 @@ use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\Fresns\FresnsExtends\FresnsExtends;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
-use App\Plugins\Tweet\TweetPluginUsages\TweetPluginUsagesService;
-use App\Plugins\Tweet\TweetPluginUsages\TweetPluginUsagesConfig;
-use App\Plugins\Tweet\TweetLanguages\TweetLanguages;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
+use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 
 class AmService
 {
@@ -24,27 +23,21 @@ class AmService
             return "";
         }
         $langTag = ApiLanguageHelper::getLangTagByHeader();
-        // $languageArr = TweetConfigService::getLanguageStatus();
-        // $default_language = TweetPluginUsagesService::getDefaultLanguage();
-        // if(empty($langTag)){
-        //     $langTag = $default_language;
-        // }
-        // 留空则输出默认语言内容，查询不到默认语言则输出第一条
-        // dd($default_language);
+         
         $input = [
             'lang_tag' => $langTag,
             'table_field' => $field,
             'table_id' => $id,
-            'table_name' => TweetPluginUsagesConfig::CFG_TABLE,
+            'table_name' => FresnsPluginUsagesConfig::CFG_TABLE,
         ];
-        $name = TweetLanguages::where($input)->first();
+        $name = FresnsLanguages::where($input)->first();
         if (!$name) {
             $input = [
                 'table_field' => $field,
                 'table_id' => $id,
-                'table_name' => TweetPluginUsagesConfig::CFG_TABLE,
+                'table_name' => FresnsPluginUsagesConfig::CFG_TABLE,
             ];
-            $name = TweetLanguages::where($input)->first();
+            $name = FresnsLanguages::where($input)->first();
         }
         return $name;
     }

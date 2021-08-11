@@ -11,8 +11,6 @@ namespace App\Http\Fresns\FresnsPlugin;
 // 配置
 use App\Base\Config\BaseConfig;
 use App\Http\Config\AssetFileConfig;
-
-// use App\Plugins\Tweet\TweetFiles\TweetFilesConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
@@ -66,23 +64,21 @@ class AmConfig extends BaseConfig
     // model 使用 - 表单映射
     const FORM_FIELDS_MAP = [
         'id' => 'id',
-        'name' => 'name',
         'is_enable' => 'is_enable',
-        'type' => 'type',
-        'author' => 'author',
-        'more_json' => 'more_json',
         'unikey' => 'unikey',
+        'name' => 'name',
+        'type' => 'type',
+        'image' => 'image',
         'description' => 'description',
         'version' => 'version',
         'version_int' => 'version_int',
-        'scene' => 'scene',
-        'access_path' => 'access_path',
-        'has_pay' => 'has_pay',
-        'image' => 'image',
+        'author' => 'author',
         'author_link' => 'author_link',
-        'setting_path' => 'setting_path',
+        'scene' => 'scene',
         'plugin_domain' => 'plugin_domain',
-        'developer' => 'developer',
+        'access_path' => 'access_path',
+        'setting_path' => 'setting_path',
+        'more_json' => 'more_json',
         'is_upgrade' => 'is_upgrade',
         'upgrade_version' => 'upgrade_version',
         'upgrade_version_int' => 'upgrade_version_int',

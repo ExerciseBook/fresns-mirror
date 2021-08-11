@@ -24,6 +24,7 @@ class AmConfig extends BaseConfig
     const CHECK_CONTENT = 'check_content';
     const COMMENT_EDITOR_WORD_COUNT = 'post_editor_word_count';
     const COMMENT_EDITOR_BRIEF_COUNT = 'post_editor_brief_count';
+    const WEB_PROPORTION = 'web_proportion';
     const HASHTAG_SHOW = 'hashtag_show';
     const POST_COUNTS = 'post_counts';
     const HASHTAG_COUNTS = 'hashtag_counts';

@@ -12,8 +12,6 @@ use App\Base\Checkers\BaseChecker;
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseChecker;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Models\Common\ConfigGroup;
-
-// use App\Plugins\Tweet\TweetUsers\TweetUsers;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Share\Common\ErrorCodeService;
 

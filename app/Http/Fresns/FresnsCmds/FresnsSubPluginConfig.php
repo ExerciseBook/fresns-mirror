@@ -8,17 +8,17 @@
 
 namespace App\Http\Fresns\FresnsCmds;
 
-// use App\Plugins\Center\Base\BasePluginConfig;
 use Illuminate\Validation\Rule;
 use App\Http\Center\Base\BasePluginConfig;
 
 class FresnsSubPluginConfig extends BasePluginConfig
 {
 
-    const SUB_ADD_TABLE_PLUGINS = 'sub_plugins';
+    const SUB_ADD_TABLE_PLUGINS = 'subscribe_plugins';
     const SUBSCRITE_TYPE2 = 2;
     const SUBSCRITE_TYPE3 = 3;
     const SUBSCRITE_TYPE4 = 4;
+    const SUBSCRITE_TYPE5 = 5;
     // 扫描指定的订阅信息
     public const PLG_CMD_SUB_ADD_TABLE = 'plg_cmd_sub_add_table';
 

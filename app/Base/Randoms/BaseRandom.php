@@ -10,13 +10,9 @@ namespace App\Base\Randoms;
 
 // 随机数据
 use App\Base\Models\BaseModel;
-use App\Helpers\DBHelper;
 use App\Helpers\RandomHelper;
 use App\Helpers\SearchHelper;
 use App\Http\Share\Common\LogService;
-use App\Plugins\Crm\Models\CrmUser;
-use App\Traits\RandomTrait;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Faker\Generator;
 use Illuminate\Support\Facades\DB;
 

@@ -11,8 +11,6 @@ namespace App\Http\Fresns\FresnsConfigs;
 // 配置
 use App\Base\Config\BaseConfig;
 use App\Http\Config\AssetFileConfig;
-
-// use App\Plugins\Tweet\TweetFiles\TweetFilesConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
@@ -29,11 +27,10 @@ class AmConfig extends BaseConfig
         'item_key_no' => ['field' => 'item_key', 'op' => '<>'],
         'item_keys' => ['field' => 'item_key', 'op' => 'IN'],
         'item_tag' => ['field' => 'item_tag', 'op' => '='],
-
     ];
 
     //新增订阅
-    const SUB_PLUGINS = 'sub_plugins';
+    const SUB_PLUGINS = 'subscribe_plugins';
 
     //站点设置
     const SITE_SETTING = 'site_setting';
@@ -47,16 +44,16 @@ class AmConfig extends BaseConfig
     //七大洲编号
     const CONTINENTS = 'continents';
     //地图服务商
-    const MAP = 'map';
+    const MAP = 'maps';
     //语言代码
     const LANGUAGE_CODES = 'language_codes';
     //地区编码
     const AREAS = 'areas_codes';
 
     //语言设置
-    const LANG_SETTINGS = 'languages';
+    const LANG_SETTINGS = 'language_menus';
     //多语言相关配置
-    const LANGUAGE = 'language';
+    const LANGUAGE = 'language_menus';
     //是否开启多语言
     const LANGUAGE_STATUS = 'language_status';
     //默认
@@ -69,13 +66,13 @@ class AmConfig extends BaseConfig
     const NICKNAME_EDIT = 'nickname_edit';
 
     //存储配置
-    const STORAGE = 'imageStorage';
+    const STORAGE = 'storageImages';
 
-    const VIDEO_STORAGE = 'videoStorage';
+    const VIDEO_STORAGE = 'storageVideos';
 
-    const AUDIO_STORAGE = 'audioStorage';
+    const AUDIO_STORAGE = 'storageAudios';
     
-    const DOC_STORAGE = 'docStorage';
+    const DOC_STORAGE = 'storageDocs';
 
     //控制台域名
     const BACKEND_DOMAIN = 'backend_domain';
@@ -85,9 +82,6 @@ class AmConfig extends BaseConfig
 
     //站点域名
     const SITE_DOMAIN = 'site_domain';
-
-
-
 
     const LENGTHUNITS_OPTION = [
         ['key' => 'km', 'text' => '公里 km'],

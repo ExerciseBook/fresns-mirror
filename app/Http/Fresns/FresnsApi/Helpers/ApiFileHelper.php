@@ -8,7 +8,6 @@
 
 namespace App\Http\Fresns\FresnsApi\Helpers;
 
-use App\Http\Center\Helper\PluginHelper as HelperPluginHelper;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Fresns\FresnsCmds\FresnsPlugin as FresnsCmdsFresnsPlugin;
 use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
@@ -20,8 +19,6 @@ use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
-use App\Http\Share\Common\LogService;
-use App\Plugins\AliOss\PluginConfig;
 
 class ApiFileHelper
 {
@@ -221,47 +218,6 @@ class ApiFileHelper
         return $files;
     }
 
-    //获取防盗链
-    public static function signUrl($ossUrl, $replaceUrl = "http://ff973002.oss-cn-beijing.aliyuncs.com/", $timeout = 60)
-    {
-        $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
-
-        $pluginUniKey = $unikey;
-        $pluginClass = HelperPluginHelper::findPluginClass($pluginUniKey);
-
-        if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
-            return false;
-        }
-
-        $isPlugin = HelperPluginHelper::pluginCanUse($pluginUniKey);
-
-        if ($isPlugin == false) {
-            LogService::error("未找到插件类");
-            return false;
-        }
-        $cmd = PluginConfig::PLG_CMD_ANTI_LINK;
-        $input = [];
-        $input['url'] = $ossUrl;
-        $input['replaceUrl'] = $replaceUrl;
-        $input['timeout'] = $timeout;
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
-            return false;
-        }
-
-        $output = $resp['output'];
-
-        $data = [
-            'oss_url' => $output['oss_url'],
-            'signed_url' => $output['signed_url'],
-            'final_url' => $output['final_url'],
-        ];
-
-        return $data;
-    }
-
     //获取单个图片的防盗链
     public static function getImageSignUrl($url)
     {
@@ -283,60 +239,6 @@ class ApiFileHelper
         return $singUrl;
     }
 
-     //获取单个视频的防盗链
-     public static function getVideoSignUrl($url)
-     {
-         //判断是否开启防盗链
-         $imageStatus = ApiConfigHelper::getConfigByItemKey('video_url_status');
-         if ($imageStatus == true && !empty($url)) {
-             $imagesBucketDomain = ApiConfigHelper::getConfigByItemKey('video_bucket_domain');
-             if(!strstr($imagesBucketDomain,$url)){
-                $url = $imagesBucketDomain . $url;
-             }
-             $url = str_replace($imagesBucketDomain.'/', '', $url);
-             $data = self::signUrl($url, $imagesBucketDomain);
-             $singUrl = $data['signed_url'];
-         } else {
-             $singUrl = $url;
-         }
-         return $singUrl;
-     }
-     //获取单个音频的防盗链
-     public static function getAudioSignUrl($url)
-     {
-         //判断是否开启防盗链
-         $imageStatus = ApiConfigHelper::getConfigByItemKey('audios_url_status');
-         if ($imageStatus == true && !empty($url)) {
-             $imagesBucketDomain = ApiConfigHelper::getConfigByItemKey('audios_bucket_domain');
-             if(!strstr($imagesBucketDomain,$url)){
-                $url = $imagesBucketDomain . $url;
-             }
-             $url = str_replace($imagesBucketDomain.'/', '', $url);
-             $data = self::signUrl($url, $imagesBucketDomain);
-             $singUrl = $data['signed_url'];
-         } else {
-             $singUrl = $url;
-         }
-         return $singUrl;
-     }
-     //获取单个文档的防盗链
-     public static function getDocsSignUrl($url)
-     {
-         //判断是否开启防盗链
-         $imageStatus = ApiConfigHelper::getConfigByItemKey('docs_url_status');
-         if ($imageStatus == true && !empty($url)) {
-             $imagesBucketDomain = ApiConfigHelper::getConfigByItemKey('docs_bucket_domain');
-             if(!strstr($imagesBucketDomain,$url)){
-                $url = $imagesBucketDomain . $url;
-             }
-             $url = str_replace($imagesBucketDomain.'/', '', $url);
-             $data = self::signUrl($url, $imagesBucketDomain);
-             $singUrl = $data['signed_url'];
-         } else {
-             $singUrl = $url;
-         }
-         return $singUrl;
-     }
     //通过文件id获取图片防盗链
     public static function getImageSignUrlByFileId($fileId)
     {
@@ -401,7 +303,7 @@ class ApiFileHelper
             $uri = $access_path;
         }
         if (empty($plugin['plugin_url'])) {
-            $url = $bucketDomain.$uri;
+            $url = $bucketDomain . $uri;
         } else {
             $url = $plugin['plugin_domain'].$uri;
         }
@@ -413,30 +315,52 @@ class ApiFileHelper
     public static function getMoreJsonSignUrl($moreJson){
         if($moreJson){
             foreach($moreJson as &$m){
-                if(isset($m['imageRatioUrl'])){
-                    $m['imageRatioUrl'] = self::getImageSignUrl($m['imageRatioUrl']);
-                    // dd($m['imageRatioUrl']);
-                }
-                if(isset($m['imageSquareUrl'])){
-                    $m['imageSquareUrl'] = self::getImageSignUrl($m['imageSquareUrl']);
-                }
-                if(isset($m['imageBigUrl'])){
-                    $m['imageBigUrl'] = self::getImageSignUrl($m['imageBigUrl']);
-                }
-                if(isset($m['videoCover'])){
-                    $m['videoCover'] = self::getVideoSignUrl($m['videoCover']);
-                }
-                if(isset($m['videoGif'])){
-                    $m['videoGif'] = self::getVideoSignUrl($m['videoGif']);
-                }
-                if(isset($m['videoUrl'])){
-                    $m['videoUrl'] = self::getVideoSignUrl($m['videoUrl']);
-                }
-                if(isset($m['audioUrl'])){
-                    $m['audioUrl'] = self::getAudioSignUrl($m['audioUrl']);
-                }
-                if(isset($m['docUrl'])){
-                    $m['docUrl'] = self::getDocsSignUrl($m['docUrl']);
+                if($m['fid']){
+                    if(isset($m['imageRatioUrl'])){
+                            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
+                            $input['fid'] = $m['fid'];
+        
+                            $resp = PluginRpcHelper::call(FresnsCmdsFresnsPlugin::class, $cmd, $input);
+                            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                                return false;
+                            }
+                            $m['imageRatioUrl'] = $resp['output']['imageRatioUrl'];
+                            $m['imageSquareUrl'] = $resp['output']['imageSquareUrl'];
+                            $m['imageBigUrl'] = $resp['output']['imageBigUrl'];
+                    }
+                    if(isset($m['videoCover'])){
+                        // $m['videoCover'] = self::getVideoSignUrl($m['videoCover']);
+                        $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_VIDEO;
+                        $input['fid'] = $m['fid'];
+
+                        $resp = PluginRpcHelper::call(FresnsCmdsFresnsPlugin::class, $cmd, $input);
+                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                            return false;
+                        }
+                        $m['videoGif'] = $resp['output']['videoGif'];
+                        $m['videoUrl'] = $resp['output']['videoUrl'];
+                    }
+                    if(isset($m['audioUrl'])){
+                        $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_AUDIO;
+                        $input['fid'] = $m['fid'];
+
+                        $resp = PluginRpcHelper::call(FresnsCmdsFresnsPlugin::class, $cmd, $input);
+                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                            return false;
+                        }
+                        $m['audioUrl'] = $resp['output']['audioUrl'];
+                    }
+                    if(isset($m['docUrl'])){
+                        $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
+                        $input['fid'] = $m['fid'];
+
+                        $resp = PluginRpcHelper::call(FresnsCmdsFresnsPlugin::class, $cmd, $input);
+                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                            return false;
+                        }
+                        $m['docUrl'] = $resp['output']['docUrl'];
+                        // $m['docUrl'] = self::getDocsSignUrl($m['docUrl']);
+                    }
                 }
             }
         }

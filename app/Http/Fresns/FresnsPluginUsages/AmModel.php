@@ -9,10 +9,6 @@
 namespace App\Http\Fresns\FresnsPluginUsages;
 
 use App\Base\Models\BaseAdminModel;
-
-// use App\Plugins\Tweet\TweetLanguages\AmModel as TweetLanguagesModel;
-// use App\Plugins\Tweet\TweetFiles\TweetFiles;
-// use App\Plugins\Tweet\TweetLanguages\TweetLanguagesService;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsLanguages\AmModel as FresnsLanguagesModel;

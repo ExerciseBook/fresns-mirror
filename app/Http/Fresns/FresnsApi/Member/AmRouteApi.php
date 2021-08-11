@@ -14,6 +14,8 @@ Route::group(['prefix' => 'fresns/member', 'namespace' => '\App\Http\Fresns\Fres
     Route::post('/edit', 'AmControllerApi@memberEdit')->name('admin.member.edit');
     // 成员操作标记内容
     Route::post('/mark', 'AmControllerApi@memberMark')->name('admin.member.memberMark');
+    //获取用户角色
+    Route::post('/roles', 'AmControllerApi@memberRoles')->name('admin.member.memberRoles');
     //成员操作删除内容
     Route::post('/delete', 'AmControllerApi@memberDelete')->name('admin.member.memberDelete');
     //获取成员

@@ -14,10 +14,7 @@ use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
-use App\Plugins\Tweet\TweetLanguages\TweetLanguagesService;
-use App\Plugins\Tweet\TweetPlugin\TweetPlugin;
-use App\Plugins\Tweet\TweetPluginUsages\TweetPluginUsages;
-use App\Plugins\Tweet\TweetPluginUsages\TweetPluginUsagesConfig;
+
 
 class AmService extends BaseAdminService
 {

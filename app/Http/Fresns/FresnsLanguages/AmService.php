@@ -63,12 +63,13 @@ class AmService extends BaseAdminService
     public static function getLanguageByTableId($table, $field, $tableId, $langTag = null)
     {
 
-        if (empty($langTag)) {
-            $langTag = ApiLanguageHelper::getLangTagByHeader();
-        }
         $lang_content = FresnsLanguages::where('table_name', $table)->where('table_field', $field)->where('table_id',
+        $tableId)->where('lang_tag', $langTag)->value('lang_content');
+        if(empty($lang_content)){
+            $langTag = ApiLanguageHelper::getLangTagByHeader();
+            $lang_content = FresnsLanguages::where('table_name', $table)->where('table_field', $field)->where('table_id',
             $tableId)->where('lang_tag', $langTag)->value('lang_content');
-
+        }
         return $lang_content;
     }
 
@@ -76,7 +77,11 @@ class AmService extends BaseAdminService
     {
         $lang_content = FresnsLanguages::where('table_name', $table)->where('table_field', $field)->where('table_key',
             $tableKey)->where('lang_tag', $langTag)->value('lang_content');
-
+        if(empty($lang_content)){
+            $langTag = ApiLanguageHelper::getLangTagByHeader();
+            $lang_content = FresnsLanguages::where('table_name', $table)->where('table_field', $field)->where('table_key',
+            $tableKey)->where('lang_tag', $langTag)->value('lang_content');
+        }
         return $lang_content;
     }
 

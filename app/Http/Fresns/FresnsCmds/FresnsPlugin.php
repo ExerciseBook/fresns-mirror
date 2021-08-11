@@ -11,7 +11,6 @@ namespace App\Http\Fresns\FresnsCmds;
 use App\Helpers\SignHelper;
 use App\Helpers\StrHelper;
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\Center\Base\FresnsCode;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsVerifyCodes\FresnsVerifyCodes;
@@ -22,10 +21,7 @@ use App\Http\Share\Common\LogService;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
-use App\Http\Fresns\FresnsApi\Editor\FresnsApiEditorChecker;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
-use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\Fresns\FresnsComments\FresnsComments;
@@ -39,7 +35,6 @@ use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\Fresns\FresnsSessionTokens\FresnsSessionTokensConfig;
 use App\Http\Share\Common\ErrorCodeService;
 use App\Http\Share\Common\ValidateService;
-use App\Plugins\TestPlugin\PluginConfig;
 use Illuminate\Support\Facades\Request;
 use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
 use App\Http\Fresns\FresnsExtends\FresnsExtendsConfig;
@@ -62,8 +57,9 @@ use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
 use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeys;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
-use App\Plugins\AliOss\PluginConfig as AliOssPluginConfig;
-use App\Plugins\TestPlugin\Plugin;
+use App\Http\Fresns\FresnsUserWalletLogs\FresnsUserWalletLogs;
+use App\Http\Fresns\FresnsUserWallets\FresnsUserWallets;
+
 class FresnsPlugin extends BasePlugin
 {
     // 构造函数
@@ -102,7 +98,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
         LogService::info("插件处理开始: ", $input);
-        $cmd = PluginConfig::PLG_CMD_SEND_CODE;
+        $cmd = FresnsPluginConfig::PLG_CMD_SEND_CODE;
         // 准备参数
         $account = $input['account'];
         $template = $input['template'];
@@ -129,7 +125,7 @@ class FresnsPlugin extends BasePlugin
             ];
         }
         // dd($input);
-        $resp = PluginRpcHelper::call(Plugin::class, $cmd, $input);
+        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
         
         
         // // todo 执行验证码发送（手机）
@@ -255,7 +251,7 @@ class FresnsPlugin extends BasePlugin
         }
         // $pluginUniKey = 'TestPlugin';
         // 执行上传
-        $cmd = PluginConfig::PLG_CMD_SEND_EMAIL;
+        $cmd = FresnsPluginConfig::PLG_CMD_SEND_EMAIL;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         // dd($pluginClass);
         if (empty($pluginClass)) {
@@ -290,8 +286,9 @@ class FresnsPlugin extends BasePlugin
         }
         // $pluginUniKey = 'TestPlugin';
         // 执行上传
-        $cmd = PluginConfig::PLG_CMD_SEND_EMAIL;
+        $cmd = FresnsPluginConfig::PLG_CMD_SEND_SMS;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+        // dd($pluginClass);
         if (empty($pluginClass)) {
             LogService::error("未找到插件类");
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
@@ -330,7 +327,7 @@ class FresnsPlugin extends BasePlugin
         // $pluginUniKey = 'TestPlugin';
         // 执行上传
         // $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
-        $cmd = PluginConfig::PLG_CMD_SEND_WECHAT;
+        $cmd = FresnsPluginConfig::PLG_CMD_SEND_WECHAT;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error("未找到插件类");
@@ -374,8 +371,9 @@ class FresnsPlugin extends BasePlugin
         }
         // $pluginUniKey = 'TestPlugin';
         // 执行上传
-        $cmd = PluginConfig::PLG_CMD_SEND_IOS;
+        $cmd = FresnsPluginConfig::PLG_CMD_SEND_IOS;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+        // dd($pluginClass);
         if (empty($pluginClass)) {
             LogService::error("未找到插件类");
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
@@ -391,7 +389,6 @@ class FresnsPlugin extends BasePlugin
             'linkUrl' => $linkUrl,
         ];
         $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-        // dd($resp);
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
             return $this->pluginError($resp['code']);
         }
@@ -416,8 +413,9 @@ class FresnsPlugin extends BasePlugin
         }
         // $pluginUniKey = 'TestPlugin';
         // 执行上传
-        $cmd = PluginConfig::PLG_CMD_SEND_ANDROID;
+        $cmd = FresnsPluginConfig::PLG_CMD_SEND_ANDROID;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+        // dd($pluginClass);
         if (empty($pluginClass)) {
             LogService::error("未找到插件类");
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
@@ -678,7 +676,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
         }
 
-        $cmd = AliOssPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
+        $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
         $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
 
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
@@ -922,7 +920,7 @@ class FresnsPlugin extends BasePlugin
         }
 
         if($pluginClass){
-            $cmd = AliOssPluginConfig::PLG_CMD_UPLOAD_FILE;
+            $cmd = FresnsPluginConfig::PLG_CMD_UPLOAD_FILE;
             // dd($cmd);
             $input = [];
             $input['fid'] = json_encode($fidArr);
@@ -1032,7 +1030,7 @@ class FresnsPlugin extends BasePlugin
             }
 
             $url = str_replace($imagesBucketDomain.'/', '', $url);
-            $cmd = AliOssPluginConfig::PLG_CMD_ANTI_LINK;
+            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
             $input = [];
             $input['url'] = $url;
             $input['replaceUrl'] = $imagesBucketDomain;
@@ -1154,7 +1152,7 @@ class FresnsPlugin extends BasePlugin
                 $videoCover = $videosBucketDomain . $videoCover;
              }
             $videoCover = str_replace($videosBucketDomain.'/', '', $videoCover);
-            $cmd = AliOssPluginConfig::PLG_CMD_ANTI_LINK;
+            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_VIDEO;
             $input = [];
             $input['url'] = $videoCover;
             $input['replaceUrl'] = $videosBucketDomain;
@@ -1244,7 +1242,7 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
             $url = str_replace($bucketDomain.'/', '', $url);
-            $cmd = AliOssPluginConfig::PLG_CMD_ANTI_LINK;
+            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_AUDIO;
             $input = [];
             $input['url'] = $url;
             $input['replaceUrl'] = $bucketDomain;
@@ -1307,7 +1305,7 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
             $url = str_replace($bucketDomain.'/', '', $url);
-            $cmd = AliOssPluginConfig::PLG_CMD_ANTI_LINK;
+            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
             $input = [];
             $input['url'] = $url;
             $input['replaceUrl'] = $bucketDomain;
@@ -1859,6 +1857,91 @@ class FresnsPlugin extends BasePlugin
         
 
         return $this->pluginSuccess();
+
+    }
+
+    public function plgCmdWalletIncreaseHandler($input)
+    {
+        $type = $input['type'];
+        $uid = $input['uid'];
+        $mid = $input['mid'] ?? null;
+        $amount = $input['amount'];
+        $transactionAmount = $input['transactionAmount'];
+        $systemFee = $input['systemFee'];
+        $originUid = $input['originUid'] ?? null;
+        $originMid = $input['originMid'] ?? null;
+        $originName = $input['originName'];
+        $originId = $input['originId'] ?? null;
+
+        $userId = FresnsUsers::where('uuid',$uid)->value('id');
+        $memberId = null;
+        if(!empty($uid)){
+            $memberId = FresnsMembers::where('uuid',$mid)->value('id');
+        }
+
+        $originUserId = null;
+        if($originUid){
+            $originUserId = FresnsUsers::where('uuid',$originUid)->value('id');
+        }
+
+        $originMemberId = null;
+        if($originMid){
+            $originMemberId = FresnsMembers::where('uuid',$originMid)->value('id');
+        }
+
+        //交易前需要查询用户的最后一条交易记录的期末余额值（is_enable=1），比对当前用户的钱包余额，不一致返回状态码。如果查询不到交易记录，默认期末余额为 0 值。
+        $userWallets = FresnsUserWallets::where('user_id',$userId)->where('is_enable',1)->first();
+        if(empty($userWallets)){
+            return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
+        }
+
+        $balance = $userWallets['balance'] ?? 0;
+        $closingBalance = FresnsUserWalletLogs::where('user_id',$userId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
+        $closingBalance = $closingBalance ?? 0;
+
+        if($balance !== $closingBalance){
+            return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
+        }
+
+        //添加到钱包log
+        $input = [
+            'user_id' => $userId,
+            'member_id' => $memberId,
+            'object_type' => 1,
+            'amount' => $amount,
+            'transaction_amount' => $transactionAmount,
+            'system_fee' => $systemFee,
+            'object_user_id' => $originUserId,
+            'object_member_id' => $originMemberId,
+            'object_name' => $originName,
+            'object_id' => $originId,
+            'opening_balance' => $balance,
+            'closing_balance' => $balance + $transactionAmount,
+        ];
+
+        FresnsUserWalletLogs::insert($input);
+        //更新用户钱包
+        $userWalletsInput = [
+            'balance' => $balance + $transactionAmount
+        ];
+        FresnsUserWallets::where('user_id',$userId)->update($userWalletsInput);
+
+        return $this->pluginSuccess();
+
+    }
+
+    public function plgCmdWalletDecreaseHandler($input)
+    {
+        $type = $input['type'];
+        $uid = $input['uid'];
+        $mid = $input['mid'] ?? null;
+        $amount = $input['amount'];
+        $transactionAmount = $input['transactionAmount'];
+        $systemFee = $input['systemFee'];
+        $originUid = $input['originUid'] ?? null;
+        $originMid = $input['originMid'] ?? null;
+        $originName = $input['originName'];
+        $originId = $input['originId'] ?? null;
 
     }
 }

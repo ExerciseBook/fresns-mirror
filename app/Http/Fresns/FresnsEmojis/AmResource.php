@@ -9,8 +9,6 @@
 namespace App\Http\Fresns\FresnsEmojis;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Plugins\Tweet\TweetFiles\TweetFilesService;
-use App\Plugins\Tweet\TweetLanguages\TweetLanguagesService;
 
 class AmResource extends BaseAdminResource
 {
@@ -24,13 +22,7 @@ class AmResource extends BaseAdminResource
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
 
-        $count = 0;
-        if ($this->parent_id < 0) {
-            $count = AmModel::where('parent_id', $this->id)->count();
-        }
-
-        $langArr = TweetLanguagesService::getLanguages(AmConfig::CFG_TABLE, 'name', $this->id);
-
+       
         // 默认字段
         $default = [
             'key' => $this->id,
@@ -39,9 +31,6 @@ class AmResource extends BaseAdminResource
             'disabled' => false,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'count' => $count,
-            'image_file_url' => TweetFilesService::getImageSignUrlByFileIdUrl($this->image_file_id,$this->image_file_url),
-            'lang_json_arr' => $langArr,
             'nickname' => $this->nickname,
             'more_json' => $this->more_json,
             'more_json_decode' => json_decode($this->more_json, true),

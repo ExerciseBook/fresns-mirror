@@ -13,14 +13,10 @@ use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-
-// use App\Plugins\Tweet\TweetConfigs\TweetConfigsConfig;
 use App\Http\Fresns\FresnsHashtags\FresnsHashtagsConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
 use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
-
-// use App\Plugins\Tweet\TweetPluginUsages\TweetPluginUsagesService;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
@@ -29,7 +25,7 @@ use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
 use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 
-class FresnsHashtagsResource1 extends BaseAdminResource
+class FresnsHashtagsResourceDetail extends BaseAdminResource
 {
 
     public function toArray($request)

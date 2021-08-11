@@ -11,7 +11,6 @@ namespace App\Http\Fresns\FresnsApi\Editor;
 use App\Base\Checkers\BaseChecker;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-use App\Plugins\Tweet\TweetUsers\TweetUsersConfig;
 use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
 use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
@@ -20,7 +19,6 @@ use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
 use App\Http\Fresns\FresnsPosts\FresnsPosts;
 use App\Http\Fresns\FresnsComments\FresnsComments;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesService;
@@ -29,7 +27,9 @@ use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
 use App\Helpers\StrHelper;
 use App\Http\Fresns\FresnsGroups\FresnsGroupsService;
 use App\Http\Fresns\FresnsExtends\FresnsExtends;
+use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
 use App\Http\Share\Common\LogService;
+use Illuminate\Support\Facades\Request;
 
 // 业务检查, 比如金额，状态等
 class AmChecker extends BaseChecker
@@ -94,6 +94,7 @@ class AmChecker extends BaseChecker
     const POSTS_LOG_CHECK_PARAMS_ERROR = 30132;
     const EXTENDS_UUID_ERROR = 30133;
     const CONTENT_COUNT_ERROR = 30134;
+    const EXTENDS_EID_ERROR = 30138;
 
     public $codeMap = [
         self::POST_LOGS_EXISTS => '帖子不存在',
@@ -155,6 +156,7 @@ class AmChecker extends BaseChecker
         self::POSTS_LOG_CHECK_PARAMS_ERROR => '内容、文件、扩展内容，三种不可全部为空，至少其中一个有值',
         self::EXTENDS_UUID_ERROR => '存在未知扩展',
         self::CONTENT_COUNT_ERROR => '内容字数过多',
+        self::EXTENDS_EID_ERROR => 'extendsJson eid必填',
     ];
 
     /**
@@ -169,9 +171,11 @@ class AmChecker extends BaseChecker
      */
     public static function checkPermission($type, $update_type, $userId, $memberId, $typeId = null)
     {
-
+        $uri = Request::getRequestUri();
+        
+        $uriRuleArr = AmConfig::URI_NOT_IN_RULE;
         //校验用户,成员状态
-        $user = DB::table(TweetUsersConfig::CFG_TABLE)->where('id', $userId)->first();
+        $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('id', $userId)->first();
         $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $memberId)->first();
         // dump($user);
         // dd($member);
@@ -183,6 +187,9 @@ class AmChecker extends BaseChecker
             case 1:
                 switch ($update_type) {
                     case 1:
+                        //校验角色权限
+                        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
+                        
                         //全局校验
                         //发布帖子校验邮箱，手机号，实名制
                         $post_email_verify = ApiConfigHelper::getConfigByItemKey('post_email_verify');
@@ -205,6 +212,23 @@ class AmChecker extends BaseChecker
                         }
                         // dd(1);
                         $post_limit_status = ApiConfigHelper::getConfigByItemKey('post_limit_status');
+
+                        //如果成员主角色是白名单角色，则不受该权限要求
+                        if(in_array($uri,$uriRuleArr)){
+                            if($post_limit_status == true){
+                                if(!empty($roleId)){
+                                    //获取白名单
+                                    $post_limit_whitelist = ApiConfigHelper::getConfigByItemKey('post_limit_whitelist');
+                                    if(!empty($post_limit_whitelist)){
+                                        $post_limit_whitelist_arr = json_decode($post_limit_whitelist,true);
+                                        if(in_array($roleId,$post_limit_whitelist_arr)){
+                                            $post_limit_status = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
                         //校验特殊规则-开放时间
                         if ($post_limit_status === true) {
                             $post_limit_rule = ApiConfigHelper::getConfigByItemKey('post_limit_rule');
@@ -260,8 +284,7 @@ class AmChecker extends BaseChecker
                             }
 
                         }
-                        //全局校验通过，校验角色权限
-                        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
+                        
                         if (empty($roleId)) {
                             return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
                         }
@@ -400,6 +423,8 @@ class AmChecker extends BaseChecker
             default:
                 switch ($update_type) {
                     case 1:
+                        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
+
                         //发布评论校验邮箱，手机号，实名制
                         $comment_email_verify = ApiConfigHelper::getConfigByItemKey('comment_email_verify');
                         if ($comment_email_verify == true) {
@@ -421,6 +446,21 @@ class AmChecker extends BaseChecker
                         }
 
                         $comment_limit_status = ApiConfigHelper::getConfigByItemKey('comment_limit_status');
+                        //如果成员主角色是白名单角色，则不受该权限要求
+                        if(in_array($uri,$uriRuleArr)){
+                            if($comment_limit_status == true){
+                                if(!empty($roleId)){
+                                    //获取白名单
+                                    $comment_limit_whitelist = ApiConfigHelper::getConfigByItemKey('comment_limit_whitelist');
+                                    if(!empty($comment_limit_whitelist)){
+                                        $comment_limit_whitelist_arr = json_decode($comment_limit_whitelist,true);
+                                        if(in_array($roleId,$comment_limit_whitelist_arr)){
+                                            $comment_limit_status = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         //校验特殊规则-开放时间
                         if ($comment_limit_status == true) {
                             $comment_limit_rule = ApiConfigHelper::getConfigByItemKey('comment_limit_rule');
@@ -472,7 +512,6 @@ class AmChecker extends BaseChecker
                             }
                         }
                         //全局校验通过，校验角色权限
-                        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
                         if (empty($roleId)) {
                             return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
                         }
@@ -752,6 +791,16 @@ class AmChecker extends BaseChecker
             $extendsJsonStatus = StrHelper::isJson($extendsJson);
             if (!$extendsJsonStatus) {
                 return self::checkInfo(self::EXTENDS_JSON_ERROR);
+            }
+            $extends = json_decode($extendsJson,true);
+            foreach($extends as $e){
+                if(!isset($e['eid'])){
+                    return self::checkInfo(self::EXTENDS_EID_ERROR);
+                }else{
+                    if(empty($e['eid'])){
+                        return self::checkInfo(self::EXTENDS_EID_ERROR);
+                    }
+                }
             }
         }
         // dd($gid);

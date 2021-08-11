@@ -54,6 +54,9 @@ Route::group(['prefix' => 'fresns/info', 'namespace' => '\App\Http\Fresns\Fresns
     Route::post('/linkDoc', 'AmControllerApi@linkDoc')->name('admin.info.linkDoc');
     //fid命令字插件删除物理文件
     Route::post('/deleteFid', 'AmControllerApi@deleteFid')->name('admin.info.deleteFid');
-
+    //钱包收入交易
+    Route::post('/walletIncrease', 'AmControllerApi@walletIncrease')->name('admin.info.walletIncrease');
+    //钱包支付交易
+    Route::post('/walletDecrease', 'AmControllerApi@walletDecrease')->name('admin.info.walletDecrease');
 
 });

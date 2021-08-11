@@ -3,7 +3,6 @@
 namespace App\Http\Fresns\FresnsMembers;
 
 use App\Base\Models\BaseAdminModel;
-use App\Plugins\Tweet\TweetLanguages\TweetLanguagesService;
 
 class AmModel extends BaseAdminModel
 {
@@ -21,23 +20,6 @@ class AmModel extends BaseAdminModel
         return AmConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
-    // hook-添加之后
-    public function hookStoreAfter($id)
-    {
-        $langJson = request()->input('lang_json');
-        if ($langJson) {
-            TweetLanguagesService::addLanguages($langJson, AmConfig::CFG_TABLE, 'name', $id);
-
-        }
-    }
-
-    public function hookUpdateAfter($id)
-    {
-        $langJson = request()->input('lang_json');
-        if ($langJson) {
-            TweetLanguagesService::addLanguages($langJson, AmConfig::CFG_TABLE, 'name', $id);
-        }
-    }
 
     // 搜索排序字段
     public function initOrderByFields()

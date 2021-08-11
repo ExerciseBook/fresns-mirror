@@ -37,15 +37,15 @@ Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\Fresns\FresnsApi\C
 
     // 内容互动记录[列表]
     Route::post('/content/members', 'AmControllerApi@content_members')->name('admin.content.content_members');
-    Route::post('/group/testCmd', 'AmControllerApi@testCmd')->name('admin.content.testCmd');
-    Route::post('/group/checkVerify', 'AmControllerApi@checkVerify')->name('admin.content.checkVerify');
-    Route::post('/group/cmdSubmit', 'AmControllerApi@cmdSubmit')->name('admin.content.cmdSubmit');
-    Route::post('/group/sendEmail', 'AmControllerApi@sendEmail')->name('admin.content.sendEmail');
-    Route::post('/group/sendPhone', 'AmControllerApi@sendPhone')->name('admin.content.sendPhone');
-    Route::post('/group/sendSmsPlg', 'AmControllerApi@sendSmsPlg')->name('admin.content.sendSmsPlg');
-    Route::post('/group/checkSms', 'AmControllerApi@checkSms')->name('admin.content.checkSms');
-    Route::post('/group/pushIos', 'AmControllerApi@pushIos')->name('admin.content.pushIos');
-    Route::post('/group/pushAndroid', 'AmControllerApi@pushAndroid')->name('admin.content.pushAndroid');
-    Route::post('/group/sendWechat', 'AmControllerApi@sendWechat')->name('admin.content.sendWechat');
-    Route::post('/group/submitDrast', 'AmControllerApi@submitDrast')->name('admin.content.submitDrast');
+    // Route::post('/group/testCmd', 'AmControllerApi@testCmd')->name('admin.content.testCmd');
+    // Route::post('/group/checkVerify', 'AmControllerApi@checkVerify')->name('admin.content.checkVerify');
+    // Route::post('/group/cmdSubmit', 'AmControllerApi@cmdSubmit')->name('admin.content.cmdSubmit');
+    // Route::post('/group/sendEmail', 'AmControllerApi@sendEmail')->name('admin.content.sendEmail');
+    // Route::post('/group/sendPhone', 'AmControllerApi@sendPhone')->name('admin.content.sendPhone');
+    // Route::post('/group/sendSmsPlg', 'AmControllerApi@sendSmsPlg')->name('admin.content.sendSmsPlg');
+    // Route::post('/group/checkSms', 'AmControllerApi@checkSms')->name('admin.content.checkSms');
+    // Route::post('/group/pushIos', 'AmControllerApi@pushIos')->name('admin.content.pushIos');
+    // Route::post('/group/pushAndroid', 'AmControllerApi@pushAndroid')->name('admin.content.pushAndroid');
+    // Route::post('/group/sendWechat', 'AmControllerApi@sendWechat')->name('admin.content.sendWechat');
+    // Route::post('/group/submitDrast', 'AmControllerApi@submitDrast')->name('admin.content.submitDrast');
 });

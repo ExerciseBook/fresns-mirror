@@ -9,7 +9,6 @@
 namespace App\Http\Fresns\FresnsMembers;
 
 use App\Base\Services\BaseAdminService;
-use App\Plugins\Tweet\TweetConfigs\TweetConfigService;
 
 class AmService extends BaseAdminService
 {
@@ -20,18 +19,5 @@ class AmService extends BaseAdminService
         $this->resourceDetail = AmResourceDetail::class;
     }
 
-    public function common()
-    {
-        $common = parent::common();
-        $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
-
-        return $common;
-    }
-
-    public function update($id)
-    {
-        parent::update($id);
-        $this->model->hookUpdateAfter($id);
-    }
 
 }

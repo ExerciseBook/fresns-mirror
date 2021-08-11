@@ -97,7 +97,10 @@ class AmModel extends BaseAdminModel
         if (!empty($noGroupArr)) {
             // dump($noGroupArr);
             // $query->whereNotIn('post.group_id',$noGroupArr);
-            $postIdArr = FresnsPosts::whereNotIn('group_id', $noGroupArr)->pluck('id')->toArray();
+            $postgroupIdArr = FresnsPosts::whereNotIn('group_id', $noGroupArr)->pluck('id')->toArray();
+            $noPostgroupIdArr = FresnsPosts::where('group_id',NULL)->pluck('id')->toArray();
+            // dd($postIdArr);
+            $postIdArr = array_merge($postgroupIdArr,$noPostgroupIdArr);
             // dump($postIdArr);
             $query->whereIn('post.id', $postIdArr);
         }

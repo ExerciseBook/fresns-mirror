@@ -9,34 +9,15 @@
 namespace App\Http\Fresns\FresnsMemberRoles;
 
 use App\Base\Services\BaseAdminService;
-use App\Plugins\Tweet\TweetConfigs\TweetConfigService;
-
 class AmService extends BaseAdminService
 {
+    protected $needCommon = false;
+
     public function __construct()
     {
         $this->model = new AmModel();
         $this->resource = AmResource::class;
         $this->resourceDetail = AmResourceDetail::class;
-    }
-
-    public function common()
-    {
-        $common = parent::common();
-        $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
-        $common['typeOption'] = AmConfig::TYPE_OPTION;
-        // 语言
-        $languageArr = TweetConfigService::getLanguageStatus();
-        $common['languagesOption'] = $languageArr['languagesOption'];
-        $option = AmModel::staticBuildSelectOptions('id', 'name');
-        $common['memberOption'] = $option;
-        return $common;
-    }
-
-    public function update($id)
-    {
-        parent::update($id);
-        $this->model->hookUpdateAfter($id);
     }
 
     //获取权限的map

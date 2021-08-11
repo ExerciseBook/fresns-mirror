@@ -8,7 +8,6 @@
 
 namespace App\Http\Fresns\FresnsCmds;
 
-// use App\Plugins\Center\Base\BasePluginConfig;
 use Illuminate\Validation\Rule;
 use App\Http\Center\Base\BasePluginConfig;
 
@@ -74,6 +73,10 @@ class FresnsPluginConfig extends BasePluginConfig
 
     // 删除正式内容
     public const PLG_CMD_DELETE_CONTENT = 'plg_cmd_delete_content';
+    //钱包收入交易
+    public const PLG_CMD_WALLET_INCREASE = 'plg_cmd_wallet_increase';
+    //钱包支出交易
+    public const PLG_CMD_WALLET_DECREASE = 'plg_cmd_wallet_decrease';
     // 插件命令字回调映射
     const PLG_CMD_HANDLE_MAP = [
         self::PLG_CMD_DEFAULT => 'defaultHandler',
@@ -99,6 +102,8 @@ class FresnsPluginConfig extends BasePluginConfig
         self::PLG_CMD_GET_TOKEN => 'plgCmdGetTokenHandler',
         self::PLG_CMD_GET_ACCESS_PATH => 'plgCmdGetAccessPathHandler',
         self::PLG_CMD_VERIFY_SIGN => 'plgCmdVerifySignHandler',
+        self::PLG_CMD_WALLET_INCREASE => 'plgCmdWalletIncreaseHandler',
+        self::PLG_CMD_WALLET_DECREASE => 'plgCmdWalletDecreaseHandler',
     ];
 
     // 发送验证码
@@ -407,6 +412,34 @@ class FresnsPluginConfig extends BasePluginConfig
             'appId' => 'required',
             'timestamp' => 'required',
             'sign' => 'required',
+        ];
+
+        return $rule;
+    }
+
+    public function plgCmdWalletIncreaseHandlerRule()
+    {
+        $rule = [
+            'type' => "required|in:1,2,3",
+            'uid' => 'required',
+            'amount' => 'required|numeric',
+            'transactionAmount' => 'required|numeric',
+            'systemFee' => 'required|numeric',
+            'originName' => 'required',
+        ];
+
+        return $rule;
+    }
+
+    public function plgCmdWalletDecreaseHandlerRule()
+    {
+        $rule = [
+            'type' => "required|in:4,5,6",
+            'uid' => 'required',
+            'amount' => 'required|numeric',
+            'transactionAmount' => 'required|numeric',
+            'systemFee' => 'required|numeric',
+            'originName' => 'required',
         ];
 
         return $rule;

@@ -17,9 +17,9 @@ class FresnsCrontabPluginConfig extends BasePluginConfig
     //取消定时任务
     public const DELETE_CRONTAB_PLUGIN_ITEM = 'delete_crontab_plugin_item';
     //新增 订阅信息
-    public const ADD_SUB_TABLE_PLUGIN_ITEM = 'add_sub_table_plugin_item';
+    public const ADD_SUB_PLUGIN_ITEM = 'add_sub_plugin_item';
     //删除 订阅信息
-    public const DELETE_SUB_TABLE_PLUGIN_ITEM = 'delete_sub_table_plugin_item';
+    public const DELETE_SUB_PLUGIN_ITEM = 'delete_sub_plugin_item';
     // 每隔 10 分钟执行一次用户角色过期时间检测
     public const PLG_CMD_CRONTAB_CHECK_ROLE_EXPIRED = 'plg_cmd_crontab_check_role_expired';
     // 注销或删除任务
@@ -27,8 +27,8 @@ class FresnsCrontabPluginConfig extends BasePluginConfig
 
     // 插件命令字回调映射
     const PLG_CMD_HANDLE_MAP = [
-        self::ADD_SUB_TABLE_PLUGIN_ITEM => 'addSubTablePluginItemHandler',
-        self::DELETE_SUB_TABLE_PLUGIN_ITEM => 'deleteSubTablePluginItemHandler',
+        self::ADD_SUB_PLUGIN_ITEM => 'addSubPluginItemHandler',
+        self::DELETE_SUB_PLUGIN_ITEM => 'deleteSubTablePluginItemHandler',
         self::PLG_CMD_CRONTAB_CHECK_ROLE_EXPIRED => 'crontabCheckRoleExpiredHandler',
         self::PLG_CMD_CRONTAB_CHECK_DELETE_USER => 'crontabCheckDeleteUserHandler',
         self::ADD_CRONTAB_PLUGIN_ITEM => 'addCrontabPluginItemHandler',
@@ -37,7 +37,7 @@ class FresnsCrontabPluginConfig extends BasePluginConfig
     ];
 
     // 新增订阅信息
-    public function addSubTablePluginItemHandlerRule()
+    public function addSubPluginItemHandlerRule()
     {
         $rule = [
             'sub_table_plugin_item' => 'required',
@@ -47,7 +47,7 @@ class FresnsCrontabPluginConfig extends BasePluginConfig
     }
 
     // 新增订阅信息
-    public function deleteSubTablePluginItemHandlerRule()
+    public function deleteSubPluginItemHandlerRule()
     {
         $rule = [
             'sub_table_plugin_item' => 'required',

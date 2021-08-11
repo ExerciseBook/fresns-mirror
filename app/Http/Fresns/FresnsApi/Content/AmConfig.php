@@ -56,6 +56,7 @@ class AmConfig
     const SITE_MODEL = 'site_mode';
     const SITE_DOMAIN = 'site_domain';
     const PRIVATE = 'private';
+    const POST_DETAIL_SERVICE = 'post_detail_service';
     // 查询模式
     const QUERY_TYPE_DB_QUERY = 'db_query';  // 支持join配置的查询
     const QUERY_TYPE_SQL_QUERY = 'sql_query'; // 原生SQL查询

@@ -8,8 +8,7 @@
 
 namespace App\Helpers;
 
-use App\Plugins\Tweet\TweetLanguages\TweetLanguagesService;
-use Illuminate\Database\Connectors\ConnectionFactory;
+
 use Illuminate\Support\Facades\DB;
 
 class FresnsConfig

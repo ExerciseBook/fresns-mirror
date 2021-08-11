@@ -13,8 +13,6 @@ use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
-
-// use App\Plugins\Tweet\TweetMembers\TweetMembers;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 
 class FresnsMemberLikesResource extends BaseAdminResource

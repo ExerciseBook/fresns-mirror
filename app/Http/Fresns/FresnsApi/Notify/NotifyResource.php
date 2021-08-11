@@ -10,8 +10,6 @@ namespace App\Http\Fresns\FresnsApi\Notify;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Fresns\FresnsNotifies\FresnsNotifiesConfig;
-
-// use App\Plugins\Tweet\TweetMembers\TweetMembers;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;

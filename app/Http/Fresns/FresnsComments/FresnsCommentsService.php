@@ -17,8 +17,6 @@ use App\Helpers\StrHelper;
 use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\Fresns\FresnsComments\FresnsComments;
-
-// use App\Plugins\Tweet\TweetFiles\TweetFiles;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsMemberStats\FresnsMemberStats;
 use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
@@ -36,7 +34,9 @@ use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
 use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
 use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
 use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinks;
-
+use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
+use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
+use App\Http\Center\Helper\PluginRpcHelper;
 class FresnsCommentsService extends AmService
 {
     public function getCommentPreviewList($comment_id, $limit, $mid)
@@ -412,7 +412,7 @@ class FresnsCommentsService extends AmService
                         'linked_id' => $commentId,
                         'extend_id' => $extend['id'],
                         'plugin_unikey' => $extend['plugin_unikey'] ?? "",
-                        'rank_num' => $e['rankNum'] ?? "",
+                        'rank_num' => $e['rankNum'] ?? 9,
                     ];
                     Db::table('extend_linkeds')->insert($input);
                 }
@@ -447,6 +447,15 @@ class FresnsCommentsService extends AmService
     // 入库后执行相应操作
     public function afterStoreToDb($commentId, $draftId)
     {
+        // 调用插件订阅命令字
+        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $input = [
+            'tableName' => FresnsCommentsConfig::CFG_TABLE,
+            'insertId' => $commentId,
+        ];
+        LogService::info('table_input',$input);
+        // dd($input);
+        PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftComment = FresnsCommentLogs::find($draftId);
         $content = $this->stopWords($draftComment['content']);
         // 草稿更新为已发布
@@ -468,6 +477,15 @@ class FresnsCommentsService extends AmService
     // 入库后执行相应操作（编辑）
     public function afterUpdateToDb($commentId, $draftId)
     {
+        // 调用插件订阅命令字
+        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $input = [
+            'tableName' => FresnsCommentsConfig::CFG_TABLE,
+            'insertId' => $commentId,
+        ];
+        LogService::info('table_input',$input);
+        // dd($input);
+        PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftComment = FresnsCommentLogs::find($draftId);
         $content = $this->stopWords($draftComment['content']);
         // 草稿更新为已发布

@@ -19,11 +19,7 @@ use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsLanguages\AmModel as FresnsLanguagesModel;
 use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsPostAllows\FresnsPostAllowsConfig;
-
-// use App\Plugins\Tweet\TweetMembers\TweetMembers;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
-
-// use App\Plugins\Tweet\TweetMemberRoles\TweetMemberRoles;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\Fresns\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
@@ -42,6 +38,9 @@ use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
 use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
 use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinks;
+use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
+use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
+use App\Http\Center\Helper\PluginRpcHelper;
 header("Content-Type:text/html;charset=utf-8");
 
 class FresnsPostsService extends AmService
@@ -286,11 +285,13 @@ class FresnsPostsService extends AmService
         $allowPluginUnikey = null;
         $allowBtnName = null;
         $proportion = null;
+        $web_proportion = ApiConfigHelper::getConfigByItemKey(AmConfig::WEB_PROPORTION) ?? 30;
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
             $allowBtnName = $allosJsonDecode['btnName'] ?? null;
-            $proportion = $allosJsonDecode['proportion'] ?? null;
+            $proportion = $allosJsonDecode['proportion'] ?? $web_proportion;
+            $proportion = empty($proportion) ? $web_proportion : $proportion;
             // 权限多语言入库
             if ($allosJsonDecode['btnName']) {
                 $btnNameArr = $allosJsonDecode['btnName'];
@@ -375,8 +376,8 @@ class FresnsPostsService extends AmService
                         'linked_type' => 1,
                         'linked_id' => $postId,
                         'extend_id' => $extend['id'],
-                        'plugin_unikey' => $extend['plugin_unikey'],
-                        'rank_num' => $e['rankNum'],
+                        'plugin_unikey' => $extend['plugin_unikey'] ?? "",
+                        'rank_num' => $e['rankNum'] ?? 9,
                     ];
                     Db::table('extend_linkeds')->insert($input);
                 }
@@ -513,11 +514,13 @@ class FresnsPostsService extends AmService
         $allowPluginUnikey = "";
         $allowBtnName = null;
         $proportion = null;
+        $web_proportion = ApiConfigHelper::getConfigByItemKey(AmConfig::WEB_PROPORTION) ?? 30;
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
             $allowBtnName = $allosJsonDecode['btnName'] ?? null;
-            $proportion = $allosJsonDecode['proportion'] ?? null;
+            $proportion = $allosJsonDecode['proportion'] ?? $web_proportion;
+            $proportion = empty($proportion) ? $web_proportion : $proportion;
             // 权限多语言入库
             if ($allosJsonDecode['btnName']) {
                 $btnNameArr = $allosJsonDecode['btnName'];
@@ -663,6 +666,15 @@ class FresnsPostsService extends AmService
     // 入库后执行相应操作
     public function afterStoreToDb($postId, $draftId)
     {
+        // 调用插件订阅命令字
+        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $input = [
+            'tableName' => FresnsPostsConfig::CFG_TABLE,
+            'insertId' => $postId,
+        ];
+        LogService::info('table_input',$input);
+        // dd($input);
+        PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $this->stopWords($draftPost['content']);
         // 草稿更新为已发布
@@ -684,6 +696,15 @@ class FresnsPostsService extends AmService
     // 入库后执行相应操作(编辑)
     public function afterUpdateToDb($postId, $draftId)
     {
+        // 调用插件订阅命令字
+        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $input = [
+            'tableName' => FresnsPostsConfig::CFG_TABLE,
+            'insertId' => $postId,
+        ];
+        LogService::info('table_input',$input);
+        // dd($input);
+        PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $this->stopWords($draftPost['content']);
         // 草稿更新为已发布
@@ -869,7 +890,17 @@ class FresnsPostsService extends AmService
         if($draftPost['allow_json']){
             $allow_json = json_decode($draftPost['allow_json'],true);
             if($allow_json['isAllow'] == 1){
-                $proportionCount = (mb_strlen(trim($draftPost['content'])) * $allow_json['proportion']) / 100;
+                $web_proportion = ApiConfigHelper::getConfigByItemKey(AmConfig::WEB_PROPORTION) ?? 30;
+                if(!isset($allow_json['proportion'])){
+                    $proportion = $web_proportion;
+                }else{
+                    if(empty($allow_json['proportion'])){
+                        $proportion = $web_proportion;
+                    }else{
+                        $proportion = $allow_json['proportion'];
+                    }
+                }
+                $proportionCount = (mb_strlen(trim($draftPost['content'])) * $proportion) / 100;
                 // 获取帖子的上线字数
                 // $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
                 // 获取帖子的摘要字数

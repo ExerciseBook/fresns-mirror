@@ -47,9 +47,11 @@ class FresnsSubPlugin extends BasePlugin
         $subscribeArr = "";
         if ($subscribe) {
             $subscribeInfo = json_decode($subscribe['item_value'], true);
-            foreach ($subscribeInfo as $s) {
-                if ($tableName == $s['subscribe_table_name']) {
-                    $subscribeArr = $s;
+            if($subscribeInfo){
+                foreach ($subscribeInfo as $s) {
+                    if ($tableName == $s['subscribe_table_name']) {
+                        $subscribeArr = $s;
+                    }
                 }
             }
         }
@@ -64,6 +66,11 @@ class FresnsSubPlugin extends BasePlugin
             }
             // 订阅类型为3， 则执行 subscribe_plugin_unikey 的 subscribe_plugin_cmd
             if ($subscribeArr['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE3) {
+                $cmd = $subscribeArr['subscribe_plugin_cmd'];
+                $unikey = $subscribeArr['subscribe_plugin_unikey'];
+            }
+            // 订阅类型为5， 则执行 subscribe_plugin_unikey 的 subscribe_plugin_cmd
+            if ($subscribeArr['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE5) {
                 $cmd = $subscribeArr['subscribe_plugin_cmd'];
                 $unikey = $subscribeArr['subscribe_plugin_unikey'];
             }

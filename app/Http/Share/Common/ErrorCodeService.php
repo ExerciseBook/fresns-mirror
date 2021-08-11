@@ -67,9 +67,37 @@ class ErrorCodeService
     CONST COMMENTS_SUBMIT_ERROR = 30054;
     CONST COMMENTS_UPDATE_ERROR = 30055;
     CONST UID_EXIST_ERROR = 30056;
+    CONST GROUP_EXISTS = 30057;
+    CONST GROUP_TYPE_ERROR = 30058;
+    CONST TITLE_ERROR = 30059;
+    CONST POST_STATUS_2_ERROR = 30060;
+    CONST POST_STATUS_3_ERROR = 30061;
+    CONST COMMENT_STATUS_2_ERROR = 30062;
+    CONST COMMENT_STATUS_3_ERROR = 30063;
+    CONST POST_SUBMIT_STATUS2_ERROR = 30064;
+    CONST POST_SUBMIT_STATUS3_ERROR = 30065;
+    CONST COMMENT_SUBMIT_STATUS2_ERROR = 30066;
+    CONST COMMENT_SUBMIT_STATUS3_ERROR = 30067;
+    CONST POST_CONTENT_WORDS_ERROR = 30068;
+    CONST COMMENT_CONTENT_WORDS_ERROR = 30069;
+    CONST MEMBER_EXPIRED_LOGS_ERROR = 30070;
+    CONST COMMENT_PID_ERROR = 30071;
+    CONST COMMENT_PARENT_ERROR = 30072;
+    CONST TYPE_ERROR = 30073;
+    CONST EMAIL_ERROR = 30074;
+    CONST EMAIL_REGEX_ERROR = 30075;
+    CONST PHONE_REGEX_ERROR = 30076;
+    CONST PHONE_ERROR = 30077;
+    CONST EMAIL_EXIST_ERROR = 30078;
+    CONST PHONE_EXIST_ERROR = 30079;
+    CONST EMAIL_BAND_ERROR = 30080;
+    CONST PHONE_BAND_ERROR = 30081;
+    CONST COUNTRY_CODE_ERROR = 30082;
     CONST MEMBER_ROLE_ERROR = 30083;
+    CONST TEAMPLAPE_ERROR = 30087;
     CONST MEMBER_ME_ERROR = 30089;
     CONST MEMBER_EXPIRED_ERROR = 30091;
+    CONST FILE_OR_FILEINFO_ERROR = 30092;
     CONST HEADER_EXSIT_MEMBER = 30093;
 
     CONST HEADER_IS_ENABLE_ERROR = 30094;
@@ -107,49 +135,26 @@ class ErrorCodeService
     CONST MEMBER_EXPIRED_AT_ERROR = 30124;
     CONST MEMBER_UPLOAD_FILES_SIZE_ERROR = 30125;
     CONST UPLOAD_FILES_SUFFIX_ERROR = 30126;
+    CONST POST_GROUP_ALLOW_ERROR = 30127;
+    CONST POST_COMMENTS_POSTS_ERROR = 30128;
+    CONST POST_COMMENTS_ALLOW_ERROR = 30129;
+    CONST COMMENTS_LOG_EXIST_ERROR = 30130;
+    CONST POSTS_LOG_EXIST_ERROR = 30131;
+    CONST POSTS_LOG_CHECK_PARAMS_ERROR = 30132;
+    CONST EXTENDS_UUID_ERROR = 30133;
+    CONST CONTENT_COUNT_ERROR = 30134;
 
     CONST DELETE_FILES_ERROR = 30135;
     CONST DELETE_EXTEND_ERROR = 30136;
     CONST FILES_INFO_ERROR = 30137;
-
-
-    // CONST HEADER_ERROR_ = 30096;
-    // CONST HEADER_ERROR_UID = 30097;
-    // CONST HEADER_ERROR_UID = 30098;
-
-
+    CONST EXTENDS_EID_ERROR = 30138;
+    CONST USER_WALLETS_ERROR = 30139;
+    CONST BALANCE_CLOSING_BALANCE_ERROR = 30140;
+    
 
 
     // 面板错误码
     CONST CODE_LOGIN_ERROR = 30200;
-    // CONST CODE_FILE_UPLOAD_ERROR = 30201;
-    // CONST PARAMS_IDS_INVALID = 30202;
-    // CONST PERMISSION_NOT_EXIST = 30203;
-    // CONST NOT_IMPLEMENTS  = 30204;
-    // CONST CATEGORY_IDS_INVALID = 30205;
-    // CONST TAG_IDS_INVALID = 30206;
-    // CONST TOPIC_IDS_INVALID = 30207;
-    // CONST CODE_PHONE_LOGIN_ERROR = 30209;
-    // CONST CODE_REGISTER_PASSWORD_ERROR = 30210;
-    // CONST CODE_EMAIL_LOGIN_ERROR = 30211;
-    // CONST CODE_IS_EMAIL = 30212;
-    // CONST CODE_SMS_ERROR = 30213;
-    // // CONST PASSWORD_INVALID = 30021;
-    // CONST ACCOUNT_NAME = 30214;
-    // CONST ACCOUNT_LOGIN_NAME = 30215;
-    // CONST CODE_PHONE_UPDATE = 30216;
-    // CONST CODE_LOG_IN_ERROR = 30217;
-    // CONST CODE_SEND_SMS_ERROR = 30218;
-    // CONST FORGET_NAME_ERROR = 30219;
-    // CONST CODE_SEND_SMS_TIME_ERROR = 30220;
-    // CONST CODE_PHONE_CODE_ERROR = 30221;
-    // CONST CODE_EMAIL_CODE_ERROR = 30222;
-    // CONST CODE_LOGIN_ERROR_USER = 30223;
-    // CONST TABLE_NOT_EXIST = 30224;
-
-    // CONST EMAIL_LOGIN_ERROR = 31118;
-    // CONST EMAIL_ACTIVE_ERROR = 30229;
-
     CONST DOWMLOAD_ERROR = 30201;
     CONST FILES_JSON_ERROR = 30202;
     CONST PLUGIN_ENABLE_ERROR = 30203;
@@ -166,6 +171,7 @@ class ErrorCodeService
     CONST PLUGIN_PLAT_ERROR = 30214;
     CONST DELETE_PACK_ERROR = 30215;
     CONST REPEAT_PARTNER_ERROR = 30216;
+    CONST DELETE_ADMIN = 30217;
 
 
 
@@ -208,13 +214,41 @@ class ErrorCodeService
         self::DELETED_NOTIFY_ERROR          => '只能删除自己的消息',
         self::DIALOG_ERROR                  => '非自己的会话',
         self::DIALOG_OR_MESSAGE_ERROR       => '会话和消息只能传其一',
+        // self::GROUP_EXISTS       => '小组不存在',
+        self::GROUP_TYPE_ERROR       => '小组分类不可发帖',
+        self::TITLE_ERROR       => '标题过长(应小于255)',
+        self::POST_STATUS_2_ERROR       => '帖子审核中不可编辑',
+        self::POST_STATUS_3_ERROR       => '帖子已正式发表不可编辑',
+        self::COMMENT_STATUS_2_ERROR       => '评论审核中不可编辑',
+        self::COMMENT_STATUS_3_ERROR       => '评论已正式发表不可编辑',
+        self::POST_SUBMIT_STATUS2_ERROR       => '处于审核状态的帖子不可提交',
+        self::POST_SUBMIT_STATUS3_ERROR       => '处于发布状态的帖子不可提交',
+        self::COMMENT_SUBMIT_STATUS2_ERROR       => '处于审核状态的评论不可提交',
+        self::COMMENT_SUBMIT_STATUS3_ERROR       => '处于发布状态的评论不可提交',
+        self::POST_CONTENT_WORDS_ERROR       => '帖子内容里存在违规内容',
+        self::COMMENT_CONTENT_WORDS_ERROR       => '评论内容里存在违规内容',
+        self::MEMBER_EXPIRED_LOGS_ERROR       => '成员已过期，不能发送私信',
+        self::COMMENT_PID_ERROR       => 'pid required',
+        self::COMMENT_PARENT_ERROR       => '一级评论才能产生草稿',
+        self::TYPE_ERROR       => 'type过长',
+        self::EMAIL_ERROR       => '邮箱已被注册',
+        self::EMAIL_REGEX_ERROR       => '邮箱格式不正确',
+        self::PHONE_REGEX_ERROR       => '手机号格式不正确',
+        self::PHONE_ERROR       => '手机号已被注册',
+        self::EMAIL_EXIST_ERROR       => '邮箱不存在',
+        self::PHONE_EXIST_ERROR       => '手机号不存在',
+        self::EMAIL_BAND_ERROR       => '已绑定邮箱',
+        self::PHONE_BAND_ERROR       => '已绑定手机',
+        self::COUNTRY_CODE_ERROR       => '手机区号错误',
         self::MEMBER_ROLE_ERROR             => '该成员无发送消息权限',
+        self::TEAMPLAPE_ERROR             => '模板不存在',
         self::MEMBER_ME_ERROR            => '自己不能给自己发送信息',
         self::FILE_OR_MESSAGE_ERROR             => '文件和消息只能传其一',
         self::MEMBER_ERROR             => '对方已注销',
         self::MEMBER_FOLLOW_ERROR             => '需关注对方才能发送消息',
         self::VERIFIED_ERROR             => '需认证才能给对方发消息',
         self::MEMBER_EXPIRED_ERROR             => '成员已过期，不能发送私信',
+        self::FILE_OR_FILEINFO_ERROR             => '文件和文件信息只能传其一',
         self::FILES_ERROR             => '文件不存在',
         self::DIALOG_WORD_ERROR             => '存在屏蔽字，禁止发送',
         self::POST_REMOKE_ERROR             => '审核中的帖子才能撤回',
@@ -237,6 +271,7 @@ class ErrorCodeService
         self::COMMENTS_SUBMIT_ERROR             => '不允许发布评论',
         self::COMMENTS_UPDATE_ERROR             => '不允许编辑评论',
         self::UID_EXIST_ERROR             => '用户不存在',
+        self::GROUP_EXISTS             => '小组不存在',
         self::HEADER_EXSIT_MEMBER        => '成员不存在',
         self::HEADER_IS_ENABLE_ERROR        => '未启用',
         self::HEADER_TYPE_ERROR        => '输入类型错误',
@@ -272,34 +307,24 @@ class ErrorCodeService
         self::MEMBER_UPLOAD_FILES_SIZE_ERROR        => '角色权限文件超过上传大小',
         self::UPLOAD_FILES_SUFFIX_ERROR        => '文件后缀错误',
         self::LOGIN_ERROR        => '登录错误达到次数限制',
+        self::POST_GROUP_ALLOW_ERROR        => '无小组发帖权限',
+        self::POST_COMMENTS_POSTS_ERROR        => '评论异常，未找到帖子信息',
+        self::POST_COMMENTS_ALLOW_ERROR        => '无小组评论权限',
+        self::COMMENTS_LOG_EXIST_ERROR        => '评论异常，草稿表对应的评论未找到',
+        self::POSTS_LOG_EXIST_ERROR        => '帖子异常，草稿表对应的帖子未找到',
+        self::POSTS_LOG_CHECK_PARAMS_ERROR        => '内容、文件、扩展内容，三种不可全部为空，至少其中一个有值',
+        self::EXTENDS_UUID_ERROR        => '存在未知扩展',
+        self::CONTENT_COUNT_ERROR        => '内容字数过多',
         self::DELETE_FILES_ERROR        => 'files在使用',
         self::DELETE_EXTEND_ERROR        => 'extend在使用',
         self::FILES_INFO_ERROR        => '请输入正确的fileInfo格式',
+        self::EXTENDS_EID_ERROR        => 'extendsJson eid必填',
+        self::USER_WALLETS_ERROR        => '用户钱包不存在',
+        self::BALANCE_CLOSING_BALANCE_ERROR        => '期末余额和钱包额度不匹配',
 
 
         self::CODE_LOGIN_ERROR                => '用户名或密码错误',
-        // self::CODE_FILE_UPLOAD_ERROR          => 'file upload error',
-        // self::PARAMS_IDS_INVALID              => 'id(s) params invalid',
-        // self::PERMISSION_NOT_EXIST            => 'permission not exist',
-        // self::NOT_IMPLEMENTS                  => 'not implements',
-        // self::CATEGORY_IDS_INVALID            => 'category id(s) invalid',
-        // self::TAG_IDS_INVALID                 => 'tag id(s) invalid',
-        // self::TOPIC_IDS_INVALID               => 'topic id(s) invalid',
         self::CODE_CAPTCHA_ERROR              => '图片验证码错误',
-        // self::CODE_PHONE_LOGIN_ERROR          => '该手机号已被注册',
-        // self::CODE_REGISTER_PASSWORD_ERROR    => '两次输入密码不一致',
-        // self::CODE_EMAIL_LOGIN_ERROR          => '该邮箱已被注册',
-        // self::CODE_IS_EMAIL                   => '邮箱格式不对',
-        // self::CODE_SMS_ERROR                  => '短信验证码错误',
-        // self::ACCOUNT_NAME                    => '该昵称已被注册',
-        // self::CODE_PHONE_UPDATE               => '请输入原手机号',
-        // self::CODE_LOG_IN_ERROR               => '请先登录',
-        // self::CODE_SEND_SMS_ERROR             => '短信发送错误',
-        // self::FORGET_NAME_ERROR               => '用户名或邮箱错误',
-        // self::CODE_SEND_SMS_TIME_ERROR        => '验证码已过期，请重新获取',
-        // self::ACCOUNT_LOGIN_NAME              => '该用户名已被注册',
-        // self::TABLE_NOT_EXIST                 => '数据表不存在',
-        // self::EMAIL_ACTIVE_ERROR => '请先去邮箱激活',
         self::ACCOUNT_ERROR        => '账号必填',
         self::ADMIN_ACCOUNT_ERROR        => '邮箱或手机号找不到',
         self::BACKEND_PATH_ERROR        => '入口已被占用',
@@ -308,6 +333,7 @@ class ErrorCodeService
         self::PLUGIN_PLAT_ERROR        => '请选择插件',
         self::DELETE_PACK_ERROR        => '有部分删除无权限',
         self::REPEAT_PARTNER_ERROR        => '无需重复添加',
+        self::DELETE_ADMIN        => '不允许删除自己',
 
 
         self::DOWMLOAD_ERROR => '请下载或安装启用插件',

@@ -9,7 +9,6 @@
 namespace App\Http\Fresns\FresnsEmojis;
 
 use App\Base\Services\BaseAdminService;
-use App\Plugins\Tweet\TweetConfigs\TweetConfigService;
 
 class AmService extends BaseAdminService
 {
@@ -20,21 +19,6 @@ class AmService extends BaseAdminService
         $this->model = new AmModel();
         $this->resource = AmResource::class;
         $this->resourceDetail = AmResourceDetail::class;
-    }
-
-    public function common()
-    {
-        $common = parent::common();
-        $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
-        $languageArr = TweetConfigService::getLanguageStatus();
-        $common['languagesOption'] = $languageArr['languagesOption'];
-        return $common;
-    }
-
-    public function update($id)
-    {
-        parent::update($id);
-        $this->model->hookUpdateAfter($id);
     }
 
 }

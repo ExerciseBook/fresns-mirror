@@ -9,13 +9,10 @@
 namespace App\Http\Fresns\FresnsApi\Notify;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Plugins\Tweet\TweetMembers\TweetMembers;
 use App\Http\Fresns\FresnsDialogs\FresnsDialogs;
 use App\Http\Fresns\FresnsDialogs\FresnsDialogsConfig;
 use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessages;
 use Illuminate\Support\Facades\DB;
-
-// use App\Plugins\Tweet\TweetMembers\TweetMembersConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
 use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
@@ -48,7 +45,6 @@ class DialogsResource extends BaseAdminResource
             $member_id = $this->a_member_id;
             $status = $this->b_status;
         }
-        // $memberInfo = TweetMembers::find($member_id);
         $memberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $member_id)->first();
         // dd($memberInfo);
         $member = [];

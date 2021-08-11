@@ -9,8 +9,6 @@
 namespace App\Http\Fresns\FresnsMembers;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Plugins\Tweet\TweetConfigs\TweetConfigService;
-use App\Plugins\Tweet\TweetLanguages\TweetLanguagesService;
 
 class AmResource extends BaseAdminResource
 {

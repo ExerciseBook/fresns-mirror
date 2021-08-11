@@ -9,7 +9,6 @@
 namespace App\Http\Fresns\FresnsMemberRoles;
 
 use App\Base\Models\BaseAdminModel;
-use App\Plugins\Tweet\TweetLanguages\TweetLanguagesService;
 
 class AmModel extends BaseAdminModel
 {
@@ -30,20 +29,10 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-        $langJson = request()->input('lang_json');
-        if ($langJson) {
-            TweetLanguagesService::addLanguages($langJson, AmConfig::CFG_TABLE, 'name', $id);
-
-        }
+        
     }
 
-    public function hookUpdateAfter($id)
-    {
-        $langJson = request()->input('lang_json');
-        if ($langJson) {
-            TweetLanguagesService::addLanguages($langJson, AmConfig::CFG_TABLE, 'name', $id);
-        }
-    }
+    
 
 }
 

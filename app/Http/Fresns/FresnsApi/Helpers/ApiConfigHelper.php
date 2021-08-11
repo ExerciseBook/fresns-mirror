@@ -220,12 +220,12 @@ class ApiConfigHelper
         $language = self::getConfigsLanguageList();
         $distanceUnits = '';
         // 获取默认语言的距离单位
-        foreach ($language['languages'] as $f) {
+        foreach ($language['language_menus'] as $f) {
             if ($f['langTag'] == $language['default_language']) {
                 $distanceUnits = $f['lengthUnits'];
             }
         }
-        foreach ($language['languages'] as $v) {
+        foreach ($language['language_menus'] as $v) {
             if ($v['langTag'] = $langTag) {
                 if (!empty($v['lengthUnits'])) {
                     $distanceUnits = $v['lengthUnits'];

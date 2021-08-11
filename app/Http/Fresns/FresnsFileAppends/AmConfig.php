@@ -11,8 +11,6 @@ namespace App\Http\Fresns\FresnsFileAppends;
 // 配置
 use App\Base\Config\BaseConfig;
 use App\Http\Config\AssetFileConfig;
-
-// use App\Plugins\Tweet\TweetFiles\TweetFilesConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;

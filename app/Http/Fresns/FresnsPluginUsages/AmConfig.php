@@ -46,7 +46,7 @@ class AmConfig extends BaseConfig
         ['key' => 'en', 'text' => '英文', 'nickname' => 'en-US'],
     ];
     const LANGUAGE_CODES = 'language_codes';
-    const LANG_SETTINGS = 'languages';
+    const LANG_SETTINGS = 'language_menus';
     const DEFAULT_LANGUAGE = 'default_language';
     // scene(应用场景)
     const SCONE_OPTION = [

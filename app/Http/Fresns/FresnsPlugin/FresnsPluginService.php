@@ -20,14 +20,13 @@ class FresnsPluginService extends AmService
         if (empty($plugin)) {
             return '';
         }
-
-        $url = '/functions?pm={parameter}&t={token}&lang={langtag}&open={target}';
+        $uri = $plugin['access_path'];
         if (empty($plugin['plugin_domain'])) {
             $domain = $plugin['plugin_domain'];
         } else {
             $domain = ApiConfigHelper::getConfigByItemKey('backend_domain');
         }
-        $url = $domain.$url;
+        $url = $domain . $uri;
         return $url;
     }
 }

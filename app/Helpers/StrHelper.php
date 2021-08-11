@@ -8,8 +8,6 @@
 
 namespace App\Helpers;
 
-use App\Http\Share\Common\LogService;
-use App\Plugins\Share\Area\Area;
 use Illuminate\Support\Str;
 
 class StrHelper

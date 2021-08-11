@@ -366,7 +366,11 @@ class InstallHelper
     }
 
     public static function freshSystem(){
-        system('composer dump-autoload');
+        try{
+            system('composer dump-autoload');
+        }catch(\Exception $e){
+            LogService::warning("composer error : ", $e->getMessage());
+        }
      //   Artisan::call("dump-autoload");
         Artisan::call('optimize'); // It does the same things as composer dump-autoload
         Artisan::call('route:clear'); // It does the same things as composer dump-autoload

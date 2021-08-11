@@ -9,10 +9,7 @@
 namespace App\Http\Fresns\FresnsApi\Notify;
 
 use App\Base\Checkers\BaseChecker;
-
 use App\Http\Models\Common\ConfigGroup;
-
-// use App\Plugins\Tweet\TweetUsers\TweetUsers;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;

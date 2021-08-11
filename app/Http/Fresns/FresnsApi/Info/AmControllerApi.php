@@ -19,7 +19,6 @@ use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
 use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
 use App\Http\Fresns\FresnsPosts\FresnsPosts;
-use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\Fresns\FresnsEmojis\FresnsEmojisService;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
 use App\Http\Share\Common\ValidateService;
@@ -47,8 +46,6 @@ use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Fresns\FresnsNotifies\FresnsNotifies;
 use App\Http\Fresns\FresnsDialogs\FresnsDialogs;
 use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessages;
-use App\Plugins\TestPlugin\PluginConfig;
-use App\Http\Center\Helper\PluginHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 
 class AmControllerApi extends FresnsBaseApiController
@@ -705,7 +702,7 @@ class AmControllerApi extends FresnsBaseApiController
         $field = $request->input('field');
         switch ($type) {
             case 1:
-                $cmd = FresnsCrontabPluginConfig::ADD_SUB_TABLE_PLUGIN_ITEM;
+                $cmd = FresnsCrontabPluginConfig::ADD_SUB_PLUGIN_ITEM;
                 $input['sub_table_plugin_item'] = json_decode($field, true);
                 $resp = PluginRpcHelper::call(FresnsCrontablPlugin::class, $cmd, $input);
                 if (PluginRpcHelper::isErrorPluginResp($resp)) {
@@ -713,7 +710,7 @@ class AmControllerApi extends FresnsBaseApiController
                 }
                 break;
             case 2:
-                $cmd = FresnsCrontabPluginConfig::DELETE_SUB_TABLE_PLUGIN_ITEM;
+                $cmd = FresnsCrontabPluginConfig::DELETE_SUB_PLUGIN_ITEM;
                 $input['sub_table_plugin_item'] = json_decode($field, true);
                 $resp = PluginRpcHelper::call(FresnsCrontablPlugin::class, $cmd, $input);
                 if (PluginRpcHelper::isErrorPluginResp($resp)) {
@@ -1027,11 +1024,72 @@ class AmControllerApi extends FresnsBaseApiController
 
     }
 
-    public function updateConfigs()
+    public function walletIncrease(Request $request)
     {
+        $type = $request->input('type');
+        $uid = $request->input('uid');
+        $mid = $request->input('mid');
+        $amount = $request->input('amount');
+        $transactionAmount = $request->input('transactionAmount');
+        $systemFee = $request->input('systemFee');
+        $originUid = $request->input('originUid');
+        $originMid = $request->input('originMid');
+        $originName = $request->input('originName');
+        $originId = $request->input('originId');
 
-        $configsDev = DB::table('configs_dev')->whereIn('item_key', AmConfig::CONFIGS_ITEM_KEY)->get()->toArray();
-        dd($configsDev);
+        $input['type'] = $type;
+        $input['uid'] = $uid;
+        $input['mid'] = $mid;
+        $input['amount'] = $amount;
+        $input['transactionAmount'] = $transactionAmount;
+        $input['systemFee'] = $systemFee;
+        $input['originUid'] = $originUid;
+        $input['originMid'] = $originMid;
+        $input['originName'] = $originName;
+        $input['originId'] = $originId;
+
+        $cmd = FresnsPluginConfig::PLG_CMD_WALLET_INCREASE;
+
+        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $this->errorCheckInfo($resp);
+        }
+
+        $this->success($resp);
+    }
+
+    public function walletDecrease(Request $request)
+    {
+        $type = $request->input('type');
+        $uid = $request->input('uid');
+        $mid = $request->input('mid');
+        $amount = $request->input('amount');
+        $transactionAmount = $request->input('transactionAmount');
+        $systemFee = $request->input('systemFee');
+        $originUid = $request->input('originUid');
+        $originMid = $request->input('originMid');
+        $originName = $request->input('originName');
+        $originId = $request->input('originId');
+
+        $input['type'] = $type;
+        $input['uid'] = $uid;
+        $input['mid'] = $mid;
+        $input['amount'] = $amount;
+        $input['transactionAmount'] = $transactionAmount;
+        $input['systemFee'] = $systemFee;
+        $input['originUid'] = $originUid;
+        $input['originMid'] = $originMid;
+        $input['originName'] = $originName;
+        $input['originId'] = $originId;
+
+        $cmd = FresnsPluginConfig::PLG_CMD_WALLET_DECREASE;
+
+        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $this->errorCheckInfo($resp);
+        }
+
+        $this->success($resp);
     }
 
 }

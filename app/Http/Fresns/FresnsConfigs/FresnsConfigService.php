@@ -66,7 +66,7 @@ class FresnsConfigService extends AmService
             $input = [
                 'item_key' => $key,
                 'item_value' => 1,
-                'item_tag' => 'stat',
+                'item_tag' => 'stats',
             ];
             AmModel::insert($input);
         } else {

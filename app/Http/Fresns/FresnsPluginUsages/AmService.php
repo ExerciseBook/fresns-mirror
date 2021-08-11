@@ -65,24 +65,26 @@ class AmService extends BaseAdminService
     // 获取后台设置默认语言code
     public static function getDefaultLanguage()
     {
-        $lang_code = FresnsConfigs::where('item_key', AmConfig::LANG_SETTINGS)->first(['item_value']);
-        if (!$lang_code) {
-            return "";
-        }
-        // dd($lang_code);
-        $lang_code_arr = json_decode($lang_code['item_value'], true);
-        $default = FresnsConfigs::where('item_key', AmConfig::DEFAULT_LANGUAGE)->first(['item_value']);
-        // dd($default['item_value']);
+        $languageArr = FresnsConfigService::getLanguageStatus();
+        $code = $languageArr['default_language'];
+        // $lang_code = FresnsConfigs::where('item_key', AmConfig::LANG_SETTINGS)->first(['item_value']);
+        // if (!$lang_code) {
+        //     return "";
+        // }
+        // // dd($lang_code);
+        // $lang_code_arr = json_decode($lang_code['item_value'], true);
+        // $default = FresnsConfigs::where('item_key', AmConfig::DEFAULT_LANGUAGE)->first(['item_value']);
+        // // dd($default['item_value']);
 
-        // $default = json_decode($default['item_value'],true);
-        $code = "";
-        // dd($lang_code_arr);
-        foreach ($lang_code_arr as $v) {
-            // dd($v);
-            if ($default['item_value'] == $v['langTag']) {
-                $code = $v['langTag'];
-            }
-        }
+        // // $default = json_decode($default['item_value'],true);
+        // $code = "";
+        // // dd($lang_code_arr);
+        // foreach ($lang_code_arr as $v) {
+        //     // dd($v);
+        //     if ($default['item_value'] == $v['langTag']) {
+        //         $code = $v['langTag'];
+        //     }
+        // }
         // dd($code);
         return $code;
     }

@@ -11,10 +11,8 @@ namespace App\Http\Fresns\FresnsCmds;
 use App\Http\Center\Base\BasePlugin;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsDialogs\FresnsDialogsConfig;
 use App\Http\Fresns\FresnsFileAppends\FresnsFileAppendsConfig;
 use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
@@ -29,9 +27,10 @@ use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
 use App\Http\Fresns\FresnsMemberStats\FresnsMemberStatsConfig;
 use App\Http\Fresns\FresnsNotifies\FresnsNotifiesConfig;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadgesConfig;
-use App\Http\Fresns\FresnsPostLogs\FresnsPostLogsConfig;
 use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
+use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
+use App\Http\Fresns\FresnsSessionTokens\FresnsSessionTokensConfig;
 use App\Http\Fresns\FresnsUserConnects\FresnsUserConnectsConfig;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
 use App\Http\Fresns\FresnsUserWalletLogs\FresnsUserWalletLogsConfig;
@@ -54,7 +53,7 @@ class FresnsCrontablPlugin extends BasePlugin
     }
 
     //新增订阅信息
-    protected function addSubTablePluginItemHandler($input)
+    protected function addSubPluginItemHandler($input)
     {
         $item = $input['sub_table_plugin_item'];
         $config = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->first();
@@ -74,9 +73,8 @@ class FresnsCrontablPlugin extends BasePlugin
         } else {
             $input = [
                 'item_key' => FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS,
+                'item_tag' => 'sites',
                 'item_type' => 'plugin',
-                'item_tag' => 'siteset',
-                'html_tag' => 'select',
                 'item_value' => json_encode($item)
             ];
             FresnsConfigs::insert($input);
@@ -87,7 +85,7 @@ class FresnsCrontablPlugin extends BasePlugin
     }
 
     //删除订阅信息
-    protected function deleteSubTablePluginItemHandler($input)
+    protected function deleteSubPluginItemHandler($input)
     {
         $item = $input['sub_table_plugin_item'];
         $config = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->first();
@@ -137,9 +135,6 @@ class FresnsCrontablPlugin extends BasePlugin
         } else {
             $input = [
                 'item_key' => 'crontab_plugins',
-                'item_type' => 'plugin',
-                'item_tag' => 'siteset',
-                'html_tag' => 'select',
                 'item_value' => json_encode($item)
             ];
             FresnsConfigs::insert($input);
@@ -250,7 +245,7 @@ class FresnsCrontablPlugin extends BasePlugin
                     continue;
                 }
 
-                //判断当前是何种注销方式 1-软注销 2-硬注销
+                //判断当前是何种注销方式 2-软注销 3-硬注销
                 if ($deleteAccount == 2) {
                     $isEmail = strstr($v->email, 'deleted#');
                     $isPhone = strstr($v->phone, 'deleted#');
@@ -367,7 +362,8 @@ class FresnsCrontablPlugin extends BasePlugin
         DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->whereIn('member_id', $memberIdArr)->delete();
         DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('shield_type', 1)->whereIn('shield_id',
             $memberIdArr)->delete();
-
+        DB::table(FresnsSessionLogsConfig::CFG_TABLE)->where('user_id',$id)->delete();
+        DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id',$id)->delete();
         $fileIdArr = DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('user_id', $id)->pluck('file_id')->toArray();
         $fileUuIdArr = DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('user_id', $id)->pluck('uuid')->toArray();
         $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
@@ -416,5 +412,7 @@ class FresnsCrontablPlugin extends BasePlugin
             DB::table(FresnsDialogsConfig::CFG_TABLE)->whereIn('a_member_id', $memberIdArr)->orWhere('b_member_id',
                 $memberIdArr)->update($DialogsInput);
         }
+
+
     }
 }
