@@ -24,6 +24,12 @@ Fresns 是一款基于 PHP Laravel 8 框架和 MySQL 8 数据库而开发的社�
 
 第三方开发的「独立部署版控制面板」和配套的「API 插件」 [https://gitee.com/jyq/fresns-control-panel](https://gitee.com/jyq/fresns-control-panel)
 
+## 开发说明
+
+请使用 Composer 2.1.2，因为 2.1.5 有一个 bug 还没修复，会影响插件安装。
+
+[https://github.com/composer/composer/issues/10022](https://github.com/composer/composer/issues/10022)
+
 ## 加入我们
 
 Fresns 的开源社区正在急速增长中，如果你认可我们的开源软件，有兴趣为 Fresns 的发展做贡献，竭诚欢迎[加入我们](https://fresns.cn/community/join.html)一起开发完善。无论是[报告错误](https://fresns.cn/guide/feedback.html)或是 Pull Request 开发，那怕是修改一个错别字也是对我们莫大的帮助。
