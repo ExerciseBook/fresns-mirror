@@ -22,12 +22,13 @@
             </div>
         </nav>
     </header>
+
     <main class="container">
         <div class="card mx-auto my-5">
             <div class="card-body p-5">
                 <h3 class="card-title">Fresns {{$status}}</h3>
                 <p>{{$msg}}</p>
-
+                <!--.env APP_DEBUG=true-->
                 @if(env('APP_DEBUG') && true)
                 <div class="fs-9 mt-4 overflow-auto">
                     <table class="table table-hover">
@@ -54,11 +55,16 @@
                     </table>
                 </div>
                 @endif
-
+                <!--Debug End-->
             </div>
         </div>
     </main>
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+
+    <footer>
+        <div class="text-center pt-5">
+            <p class="my-5 text-muted">&copy; 2021 Fresns</p>
+        </div>
+    </footer>
 </body>
 
 </html>

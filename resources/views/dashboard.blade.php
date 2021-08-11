@@ -19,7 +19,7 @@
 
     <main>
         <div class="container-lg">
-            <!--欢迎内容-->
+            <!--Welcome-->
             <div class="card mt-4 mb-4 p-2 p-lg-4">
                 <div class="card-body">
                     <h1 class="fs-3 fw-normal">@lang('fresns.welcome')</h1>
@@ -61,9 +61,10 @@
                     </div>
                 </div>
             </div>
-            <!--两栏信息-->
+
+            <!--Two-Columns-->
             <div class="row">
-                <!--动态-->
+                <!--News-->
                 <div class="col-md mb-4">
                     <div class="card">
                         <div class="card-header">@lang('fresns.news')</div>
@@ -76,9 +77,9 @@
                         </div>
                     </div>
                 </div>
-                <!--安装和更新-->
+                <!--Manage-->
                 <div class="col-md">
-                    <!--安装-->
+                    <!--Installs-->
                     <div class="card mb-4">
                         <div class="card-header">@lang('fresns.installs')</div>
                         <div class="card-body">
@@ -87,7 +88,7 @@
                             <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#codeInstall">@lang('fresns.codeInstall')</button>
                         </div>
                     </div>
-                    <!--更新-->
+                    <!--Updates-->
                     <div class="card">
                         <div class="card-header">@lang('fresns.updates')</div>
                         @if(empty($newVisionPlugin))
@@ -100,7 +101,7 @@
                                 @foreach ($newVisionPlugin as $item)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div><i class="bi bi-sliders"></i> {{$item['name']}} <span class="badge bg-secondary">{{$item['version']}}</span> to <span class="badge bg-danger">{{$item['newVision']}}</span></div>
-                                        <div><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#upgrade" id="updatePlugin" data_unikey="{{$item['unikey']}}"  data_local_vision = "{{$item['version_int']}}" data_new_vision_int = "{{$item['newVisionInt']}}" data_new_vision = "{{$item['newVision']}}">@lang('fresns.updateBtn')</button></div>
+                                        <div><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#upgrade" id="updatePlugin" data_unikey="{{$item['unikey']}}" data_local_vision="{{$item['version_int']}}" data_new_vision_int="{{$item['newVisionInt']}}" data_new_vision="{{$item['newVision']}}">@lang('fresns.updateBtn')</button></div>
                                     </li>
                                 @endforeach
                             </ul>
@@ -112,7 +113,7 @@
         </div>
     </main>
     
-    <!-- 本地安装 Modal -->
+    <!--localInstall Modal-->
     <div class="modal fade" id="localInstall" tabindex="-1" aria-labelledby="localInstall" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -134,7 +135,7 @@
         </div>
     </div>
 
-    <!-- 远程安装 Modal -->
+    <!--codeInstall Modal-->
     <div class="modal fade" id="codeInstall" tabindex="-1" aria-labelledby="codeInstall" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -156,15 +157,14 @@
         </div>
     </div>
 
-    <!-- 安装或升级 Modal -->
+    <!--Action Modal-->
     <div class="modal fade" id="upgrade" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"><i class="bi bi-laptop"></i>
                         @lang('fresns.localInstall')
-                        <!--
-                            远程安装标题
+                        <!--远程安装标题
                             @lang('fresns.codeInstall')
                         -->
                         <!--升级时样式
@@ -178,43 +178,14 @@
                     <p><i class="spinner-border spinner-border-sm me-2 step1"></i>@lang('fresns.localInstallStep1')</p>
                     <p><i class="bi bi-hourglass text-secondary me-2 step2"></i>@lang('fresns.localInstallStep2')</p>
                     <p><i class="bi bi-hourglass text-secondary me-2 step3"></i>@lang('fresns.localInstallStep3')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step4" role="status"></i>@lang('fresns.localInstallStep4')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step4"></i>@lang('fresns.localInstallStep4')</p>
                     <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.localInstallStep5')</p>
-                    {{-- <p><i class="bi bi-hourglass text-secondary me-2"></i>@lang('fresns.codeInstallStep6')</p> --}}
                 </div>
             </div>
         </div>
     </div>
 
 @include('common.footer')
-
-    <script src="/assets/js/console.js"></script>
-    <script>
-        $("#updatePlugin").click(function(){
-            var unikey = $(this).attr('data_unikey');
-            // var downloadUrl = $(this).attr('data_download_url');
-            var localVision = $(this).attr('data_local_vision');
-            var remoteVisionInt = $(this).attr('data_new_vision_int');
-            var remoteVision = $(this).attr('data_new_vision');
-            var dirName = unikey;
-            $.ajax({
-                async: false,    //设置为同步
-                type: "post",
-                url: "/localInstall",
-                data: {'dirName':unikey},
-                beforeSend: function (request) {
-                    return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-                },
-                success: function (data) {
-                    if(data.code == 0){
-                        window.location.reload();
-                    }else{
-                        alert(data.message);
-                    }
-                }
-            })
-        })
-    </script>
 
 </body>
 

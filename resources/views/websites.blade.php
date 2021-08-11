@@ -13,11 +13,14 @@
 </head>
 
 <body>
-    @include('common.header')
+
+@include('common.header')
 
     <main>
         <div class="container-lg p-0 p-lg-3">
             <div class="bg-white shadow-sm mt-4 mt-lg-2 p-3 p-lg-5">
+
+                <!--Engines-->
                 <h3>@lang('fresns.enginesTitle')</h3>
                 <p class="text-secondary">@lang('fresns.enginesIntro')</p>
                 <div class="table-responsive">
@@ -50,33 +53,30 @@
                                                 @if (empty($item['websitePcPlugin']))
                                                     @lang('fresns.enginesTableThemePcNull')
                                                 @else
-                                                    {{ $item['websitePcPlugin'] }}
+                                                    {{$item['websitePcPlugin']}}
                                                 @endif
-                                                {{-- {{ empty($item['websitePcPlugin']) ? "@lang('fresns.enginesTableThemePcNull')" : $item['websitePcPlugin'] }} --}}
                                             </span>
                                             <span class="badge bg-light text-dark"><i class="bi bi-phone"></i>
                                                 @if (empty($item['websiteMobilePlugin']))
                                                     @lang('fresns.enginesTableThemePcNull')
                                                 @else
-                                                    {{ $item['websiteMobilePlugin'] }}
+                                                    {{$item['websiteMobilePlugin']}}
                                                 @endif
-                                                {{-- {{ empty($item['websiteMobilePlugin']) ? "@lang('fresns.enginesTableThemePcNull')" : $item['websiteMobilePlugin'] }} --}}
                                             </span>                                   
                                         </td>
                                         <td class="text-end">
                                             @if ($item['is_enable'] == 1)
-                                                <button type="button" class="btn btn-outline-success btn-sm btn_enable1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.deactivateInfo')" data_id = "{{$item['id']}}">@lang('fresns.deactivate')</button> 
-                                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#themeSetting" id = "linkSubject" unikey = "{{$item['unikey']}}" subectUnikeyPc = "{{$item['websitePc']}}" subectUnikeyMobile = "{{$item['websiteMobile']}}">@lang('fresns.enginesTableOptionsTheme')</button>
+                                                <button type="button" class="btn btn-outline-success btn-sm btn_enable1" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.deactivateInfo')" data_id="{{$item['id']}}">@lang('fresns.deactivate')</button> 
+                                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#themeSetting" id="linkSubject" unikey="{{$item['unikey']}}" subectUnikeyPc="{{$item['websitePc']}}" subectUnikeyMobile="{{$item['websiteMobile']}}">@lang('fresns.enginesTableOptionsTheme')</button>
                                                 @if ($item['setting_path'] == '')
                                                     <a href="#" class="btn btn-primary btn-sm disabled">@lang('fresns.setting')</a>
                                                 @else
-                                                    <a href="/fresns/iframe?url={{$item['setting_path']}}" class="btn btn-primary btn-sm"  title="@lang('fresns.settingInfo')" data-bs-toggle="tooltip" data-bs-placement="top">@lang('fresns.setting')</a>
+                                                    <a href="/fresns/iframe?url={{$item['setting_path']}}?lang={{$lang}}" class="btn btn-primary btn-sm"  title="@lang('fresns.settingInfo')" data-bs-toggle="tooltip" data-bs-placement="top">@lang('fresns.setting')</a>
                                                 @endif
                                             @else
-                                                <button type="button" class="btn btn-outline-secondary btn-sm btn_enable2" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.activateInfo')" data_id = "{{$item['id']}}">@lang('fresns.activate')</button>
-                                                <button type="button" class="btn btn-outline-danger btn-sm  uninstallUnikey" data-name="{{$item['name']}}" unikey = "{{$item['unikey']}}">@lang('fresns.uninstall')</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm btn_enable2" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.activateInfo')" data_id="{{$item['id']}}">@lang('fresns.activate')</button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm uninstallUnikey" data-bs-toggle="modal" data-bs-target="#confirmDele" data-name="{{$item['name']}}" unikey="{{$item['unikey']}}" title="@lang('fresns.uninstallInfo')">@lang('fresns.uninstall')</button>
                                             @endif
-                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -84,11 +84,11 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!--Themes-->
                 <h3 class="mt-5">@lang('fresns.themesTitle')</h3>
                 <p class="text-secondary">@lang('fresns.themesIntro')</p>
-                <!--主题 开始-->
                 <div class="row">
-                    <!--主题列表 开始-->
                     @if(empty($subjectPluginArr))
                         <div class="p-5 text-center">
                             <i class="bi bi-view-list"></i> @lang('fresns.themesNull')
@@ -112,11 +112,11 @@
                                         @if ($item['setting_path'] == '')
                                             <a href="#" class="btn btn-primary btn-sm disabled">@lang('fresns.setting')</a>
                                         @else
-                                            <a href="/fresns/iframe?url=/themes/{{$item['unikey']}}/functions.php" class="btn btn-primary btn-sm"  title="@lang('fresns.settingInfo')" data-bs-toggle="tooltip" data-bs-placement="top">@lang('fresns.setting')</a>
+                                            <a href="/fresns/iframe?url=/themes/{{$item['unikey']}}/functions.php?lang={{$lang}}" class="btn btn-primary btn-sm"  title="@lang('fresns.settingInfo')" data-bs-toggle="tooltip" data-bs-placement="top">@lang('fresns.setting')</a>
                                         @endif
                                     @else
                                         <button type="button" class="btn btn-outline-secondary btn-sm btn_enable2" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.activateInfo')" data_id="{{$item['id']}}">@lang('fresns.activate')</button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm uninstallUnikey" data-name="{{$item['name']}}" unikey="{{$item['unikey']}}" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.uninstallInfo')">@lang('fresns.uninstall')</button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm uninstallUnikey" data-bs-toggle="modal" data-bs-target="#confirmDele" data-name="{{$item['name']}}" unikey="{{$item['unikey']}}" title="@lang('fresns.uninstallInfo')">@lang('fresns.uninstall')</button>
                                     @endif
                                     </div>
                                 </div>
@@ -125,14 +125,13 @@
                         </div>
                         @endforeach
                     @endif
-                    <!--主题列表 结束-->
                 </div>
-                <!--主题结束-->
+                <!--End-->
             </div>
         </div>
     </main>
 
-    <!-- Modal -->
+    <!--Engine Themes Setting Modal-->
     <div class="modal fade" id="themeSetting" tabindex="-1" aria-labelledby="themeSetting" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -142,7 +141,6 @@
                     <input type="hidden" id = 'updateWebsite' value="">
                 </div>
                 <div class="modal-body">
-                    <!--网站设置 开始-->
                     <form>
                         <div class="form-floating mb-3">
                             <select class="form-select subectUnikeyPc" id="PCTheme" aria-label="Floating label select example">
@@ -166,12 +164,12 @@
                             <button type="button" class="btn btn-primary updateSubject">@lang('fresns.consoleSettingBtn')</button>
                         </div>
                     </form>
-                    <!--网站设置 结束-->
                 </div>
             </div>
         </div>
     </div>
 
+    <!--Uninstall Modal-->
     <div class="modal fade" id="confirmDele" tabindex="-1" aria-labelledby="confirmDele" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -197,12 +195,12 @@
 
 @include('common.footer')
 
-    <script src="/assets/js/console.js"></script>
-    <script>
+<script>
+    //Deactivate
     $(".btn_enable1").click(function(){
         var id = $(this).attr('data_id');
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/enableUnikeyStatus",
             data: {'data_id':id,'is_enable':0},
@@ -219,10 +217,11 @@
         })
     });
 
+    //Activate
     $(".btn_enable2").click(function(){
         var id = $(this).attr('data_id');
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/enableUnikeyStatus",
             data: {'data_id':id,'is_enable':1},
@@ -239,7 +238,7 @@
         })
     });
 
-    // 卸载
+    //Uninstall
     $('.uninstallUnikey').on('click', function() {
         var name = $(this).attr('data-name');
         $('#confirmDele .modal-title').text(name);
@@ -248,10 +247,9 @@
     });
     $(".btn-danger").click(function(){
         var unikey = $(this).attr('unikey');
-        // console.log(unikey);
         var clear_plugin_data = $('#is-delete-data').is(':checked') ? 1 : 0;
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/uninstall",
             data: {'unikey':unikey,'clear_plugin_data': clear_plugin_data},
@@ -268,6 +266,7 @@
         })
     });
 
+    //Engine Themes Setting
     $("#linkSubject").click(function(){
         var unikey = $(this).attr('unikey');
         var subectUnikeyPc = $(this).attr('subectUnikeyPc');

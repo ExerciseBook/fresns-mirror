@@ -48,7 +48,7 @@
                                             @if ($item['setting_path'] == '')
                                                 <a href="#" class="btn btn-primary btn-sm disabled">@lang('fresns.setting')</a>
                                             @else
-                                                <a href="/fresns/iframe?url={{$item['setting_path']}}" class="btn btn-primary btn-sm"  title="@lang('fresns.settingInfo')" data-bs-toggle="tooltip" data-bs-placement="top">@lang('fresns.setting')</a>
+                                                <a href="/fresns/iframe?url={{$item['setting_path']}}?lang={{$lang}}" class="btn btn-primary btn-sm"  title="@lang('fresns.settingInfo')" data-bs-toggle="tooltip" data-bs-placement="top">@lang('fresns.setting')</a>
                                             @endif
                                         @else
                                             <button type="button" class="btn btn-outline-secondary btn-sm btn_enable2" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.activateInfo')" data_id="{{$item['id']}}">@lang('fresns.activate')</button>
@@ -67,6 +67,7 @@
         </div>
     </main>
 
+    <!--Uninstall Modal-->
     <div class="modal fade" id="confirmDele" tabindex="-1" aria-labelledby="confirmDele" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -93,10 +94,11 @@
 @include('common.footer')
 
 <script>
+    //Deactivate
     $(".btn_enable1").click(function(){
         var id = $(this).attr('data_id');
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/enableUnikeyStatus",
             data: {'data_id':id,'is_enable':0},
@@ -113,10 +115,11 @@
         })
     });
 
+    //Activate
     $(".btn_enable2").click(function(){
         var id = $(this).attr('data_id');
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/enableUnikeyStatus",
             data: {'data_id':id,'is_enable':1},
@@ -133,7 +136,7 @@
         })
     });
 
-    // 卸载
+    //Uninstall
     $('.uninstallUnikey').on('click', function() {
         var name = $(this).attr('data-name');
         $('#confirmDele .modal-title').text(name);
@@ -144,7 +147,7 @@
         var unikey = $(this).attr('unikey');
         var clear_plugin_data = $('#is-delete-data').is(':checked') ? 1 : 0;
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/uninstall",
             data: {'unikey':unikey,'clear_plugin_data': clear_plugin_data},

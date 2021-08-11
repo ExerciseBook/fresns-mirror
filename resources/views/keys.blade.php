@@ -79,11 +79,12 @@
                         @endif
                     </table>
                 </div>
+                <!--Key List End-->
             </div>
         </div>
     </main>
 
-    <!-- Modal -->
+    <!--Create Modal-->
     <div class="modal fade" id="createKey" tabindex="-1" aria-labelledby="createKeyLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -92,7 +93,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!--创建密钥表单 开始-->
                     <form>
                         <div class="input-group mb-3">
                             <span class="input-group-text">@lang('fresns.keyFormPlatform')</span>
@@ -120,7 +120,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--类型设置 开始-->
+                        <!--keyType Select-->
                         <div class="input-group mb-3 collapse" id="key_plugin_setting">
                             <span class="input-group-text">@lang('fresns.keyFormTypePlugin')<i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.keyFormTypePluginInfo')"></i></span>
                             <select class="form-select" id="key_plugin">
@@ -130,7 +130,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <!--类型设置 结束-->
+                        <!--keyType Select End-->
                         <div class="input-group mb-3">
                             <span class="input-group-text">@lang('fresns.keyFormStatus')</span>
                             <div class="form-control bg-white">
@@ -144,16 +144,16 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="text-center">
                             <div type="submit" class="btn btn-primary submitKey">@lang('fresns.addKeyBtn')</div>
                         </div>
                     </form>
-                    <!--创建密钥表单 结束-->
                 </div>
             </div>
         </div>
     </div>
+
+    <!--Edit Modal-->
     <div class="modal fade" id="editKey" tabindex="-1" aria-labelledby="editKeyLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -162,7 +162,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!--编辑密钥表单 开始-->
                     <form>
                         <div class="input-group mb-3">
                             <span class="input-group-text">@lang('fresns.keyFormPlatform')</span>
@@ -175,24 +174,23 @@
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text">@lang('fresns.keyFormName')</span>
-                            <input type="text" class="form-control keyName" id="key_name_update" data_id = "">
-                            <input type="hidden" class = "update__value_id">
+                            <input type="text" class="form-control keyName" id="key_name_update">
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text">@lang('fresns.keyFormType')</span>
                             <div class="form-control bg-white keyTypeUpdate">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="key_type" id="fresns_key" value="1" data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting"  checked>
-                                    <label class="form-check-label" for="fresns_key">@lang('fresns.keyTypeFresns')</label>
+                                    <input class="form-check-input" type="radio" name="key_type" id="fresns_key_edit" value="1" data-bs-toggle="collapse" data-bs-target="#edit_key_plugin_setting.show" aria-expanded="false" aria-controls="edit_key_plugin_setting">
+                                    <label class="form-check-label" for="fresns_key_edit">@lang('fresns.keyTypeFresns')</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="key_type" id="plugin_key" value="2" data-bs-toggle="collapse" data-bs-target="#key_plugin_setting:not(.show)" aria-expanded="false" aria-controls="key_plugin_setting">
-                                    <label class="form-check-label" for="plugin_key">@lang('fresns.keyTypePlugin')</label>
+                                    <input class="form-check-input" type="radio" name="key_type" id="plugin_key_edit" value="2" data-bs-toggle="collapse" data-bs-target="#edit_key_plugin_setting:not(.show)" aria-expanded="false" aria-controls="edit_key_plugin_setting">
+                                    <label class="form-check-label" for="plugin_key_edit">@lang('fresns.keyTypePlugin')</label>
                                 </div>
                             </div>
                         </div>
-                        <!--类型设置 开始-->
-                        <div class="input-group mb-3 collapse pluginUnikey" id="key_plugin_setting">
+                        <!--keyType Select-->
+                        <div class="input-group mb-3 collapse" id="edit_key_plugin_setting">
                             <span class="input-group-text">@lang('fresns.keyFormTypePlugin')<i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.keyFormTypePluginInfo')"></i></span>
                             <select class="form-select" id="key_plugin_update">
                                 <option selected disabled>@lang('fresns.keyFormTypePluginChooseOption')</option>
@@ -201,7 +199,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <!--类型设置 结束-->
+                        <!--keyType Select End-->
                         <div class="input-group mb-3">
                             <span class="input-group-text">@lang('fresns.keyFormStatus')</span>
                             <div class="form-control bg-white keyStatus">
@@ -215,18 +213,16 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="text-center">
                             <div type="submit" class="btn btn-primary updateKey">@lang('fresns.editKeyBtn')</div>
                         </div>
                     </form>
-                    <!--编辑密钥表单 结束-->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Reset Modal -->
+    <!--Reset Modal-->
     <div class="modal fade" id="confirmReset" tabindex="-1" aria-labelledby="confirmReset" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -235,7 +231,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>App ID: <span class="app_id">32</span></p>
+                    <p>App ID: <span class="app_id">1234567890</span></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary reset-key-btn" >@lang('fresns.keysTableOptionReset')</button>
@@ -245,7 +241,7 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
+    <!--Delete Modal-->
     <div class="modal fade" id="confirmDele" tabindex="-1" aria-labelledby="confirmDele" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -254,7 +250,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>App ID: <span class="app_id">32</span></p>
+                    <p>App ID: <span class="app_id">1234567890</span></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger delete-btn" >@lang('fresns.confirmDelete')</button>
@@ -266,8 +262,8 @@
 
 @include('common.footer')
 
-    <script>
-    // 重置key
+<script>
+    //Reset Secret
     $(".redictKey").click(function(){
         var id = $(this).attr('data-id');
         var name = $(this).attr('data_name');
@@ -275,11 +271,12 @@
         $('#confirmReset .app_id').text(app);
         $('#confirmReset .modal-title').text(name);
         $(".reset-key-btn").attr('data_app', app);
+        $(".reset-key-btn").attr('data-id', id);
     })
     $(".reset-key-btn").click(function() {
         var data_id = $(this).attr('data-id');
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/resetKey",
             data: {'data_id':data_id},
@@ -292,7 +289,7 @@
         })
     });
 
-    // 提交创建
+    //Create Key
     $(".submitKey").click(function(){
         var platformId = $("#key_platform").find("option:selected").val();
         var keyName = $(".keyName").val();
@@ -300,7 +297,7 @@
         var plugin = $("#key_plugin").find("option:selected").val();
         var enAbleStatus = $('input[name="inlineRadioOptions"]:checked').val()
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/submitKey",
             data: {'platformId':platformId,'keyName':keyName,'type':type,'plugin':plugin,'enAbleStatus':enAbleStatus},
@@ -317,29 +314,7 @@
         })
     });
 
-    // 切换启用状态
-    $(".enableStatus").click(function(){
-        var is_enable = $(this).find(".form-check-input");
-        var data_id = is_enable.attr("data-id");
-        // console.log(data_id)
-        var status = 0;
-        if(is_enable.is(":checked")){
-            var status = 1;
-        }
-        $.ajax({
-            async: false,    //设置为同步
-            type: "post",
-            url: "/enableStatus",
-            data: {'data_id':data_id,is_enable:status},
-            beforeSend: function (request) {
-                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-            },
-            success: function (data) {
-            }
-        })
-    });
-
-    // 删除 key
+    //Delete Key
     $('.delKey').on('click', function() {
         var id = $(this).attr('data-id');
         var name = $(this).attr('data_name');
@@ -352,7 +327,7 @@
     $(".delete-btn").click(function() {
         var id = $(this).attr('data-id');
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/delKey",
             data: {'data_id':id,is_enable:status},
@@ -360,16 +335,14 @@
                 return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
             },
             success: function (data) {
-                // that.parents('tr').remove();
                 window.location.reload();
             }
         })
     });
 
-    // 编辑回显
+    //Edit Key
     $(".update_data").click(function(){
         var data_id = $(this).attr('data_id');
-        // console.log(data_id)
         var name = $(this).attr('data_name');
         var data_status = $(this).attr('data_status');
         if(!data_status){
@@ -384,14 +357,16 @@
         $(".keyStatus input:radio[value="+data_status+"]").attr('checked',true);
         if(type == 2){
             $(".keyTypeUpdate input:radio").eq(1).prop('checked',true);
+            $("#edit_key_plugin_setting").addClass('show');
             $("#key_plugin_update").val(plugin_unikey)
         }else{
-            $("#key_plugin_update").val("")
             $(".keyTypeUpdate input:radio").eq(0).prop('checked',true);
+            $("#edit_key_plugin_setting").removeClass('show');
+            $("#key_plugin_update").val("")
         }
     })
 
-    // 提交编辑
+    //Submit Edit
     $(".updateKey").click(function(){
         var id = $("#key_name_update").attr('data_id');
         var platformId = $("#key_platform_update").find("option:selected").val();
@@ -400,7 +375,7 @@
         var plugin = $("#key_plugin_update").find("option:selected").val();
         var enAbleStatus = $('.keyStatus input[name="updInlineRadioOptions"]:checked').val();
         $.ajax({
-            async: false,    //设置为同步
+            async: false,
             type: "post",
             url: "/updateKey",
             data: {'id':id,'platformId':platformId,'keyName':keyName,'type':type,'plugin':plugin,'enAbleStatus':enAbleStatus},
@@ -416,7 +391,7 @@
             }
         });
     })
-    </script>
+</script>
 
 </body>
 </html>

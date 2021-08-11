@@ -22,6 +22,7 @@
             </div>
         </nav>
     </header>
+    
     <main class="container">
         <div class="card mx-auto my-5" style="max-width:800px;">
             <div class="card-body p-5">
@@ -30,7 +31,12 @@
             </div>
         </div>
     </main>
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+
+    <footer>
+        <div class="text-center pt-5">
+            <p class="my-5 text-muted">&copy; 2021 Fresns</p>
+        </div>
+    </footer>
 </body>
 
 </html>

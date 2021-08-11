@@ -53,6 +53,7 @@
     <script src="/assets/js/console.js"></script>
 
     <script>
+        //lang
         $(document).ready(function(){
             var val = getQueryVariable("lang"); 
             $('.form-select option[value="'+val+'"]').prop("selected","selected");
@@ -74,9 +75,9 @@
                     return(false);
                 }
         });
-        // 提交创建
-        var isLogin = false;
 
+        //login
+        var isLogin = false;
         function checkData(){
             var result = true;
             if(isLogin){return}
@@ -89,7 +90,7 @@
             $('#password').val(password)
             console.log(password)
             $.ajax({
-                async: false,    //设置为同步
+                async: false,
                 type: "post",
                 url: "/checkLogin",
                 data: {'account':account,'password':password,'lang':lang},
@@ -107,7 +108,6 @@
                     }
                 }
             });
-
             return result
         }
     </script>

@@ -100,7 +100,7 @@ return [
     'keysTableEnableStatus' => '启用状态',
     'keysTableOptions' => '操作',
     'keysTableOptionEdit' => '编辑',
-    'keysTableOptionReset' => '重置 Key',
+    'keysTableOptionReset' => '重置 Secret',
     'keysTableOptionDelete' => '删除',
     'addKey' => '新建密钥',
     'addKeyTitle' => '创建密钥',
