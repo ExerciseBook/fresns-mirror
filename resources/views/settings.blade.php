@@ -47,7 +47,7 @@
                             </div>
                             <button id="submit" class="btn btn-primary">@lang('fresns.consoleSettingBtn')</button>
                         </form>
-                        <input type="text" id="console_url" style="opacity:0;width:0;height:0;">{{ $path }}</input>
+                        <textarea id="console_url" style="opacity: 0;width: 0;height:0;">{{ $path }}</textarea>
                     </div>
 
                     <!--Admin Setting-->
