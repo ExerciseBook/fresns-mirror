@@ -31,32 +31,4 @@ Route::group(['prefix' => 'fresns/info', 'namespace' => '\App\Http\Fresns\Fresns
     Route::post('/summary', 'AmControllerApi@summary')->name('admin.info.summary');
 
 
-    Route::post('/testPlugin', 'AmControllerApi@testPlugin')->name('admin.info.testPlugin');
-    //将configs内的数据更新
-    Route::post('/updateConfigs', 'AmControllerApi@updateConfigs')->name('admin.info.updateConfigs');
-    //创建交互凭证
-    Route::post('/createSessionToken', 'AmControllerApi@createSessionToken')->name('admin.info.createSessionToken');
-    //校验交互凭证
-    Route::post('/checkSessionToken', 'AmControllerApi@checkSessionToken')->name('admin.info.checkSessionToken');
-    //上传交互日志
-    Route::post('/uploadSessionLog', 'AmControllerApi@uploadSessionLog')->name('admin.info.uploadSessionLog');
-    //获取上传凭证
-    Route::post('/getUploadToken', 'AmControllerApi@getUploadToken')->name('admin.info.getUploadToken');
-    //上传文件
-    Route::post('/uploadFile', 'AmControllerApi@uploadFile')->name('admin.info.uploadFile');
-    //图片索要防盗链
-    Route::post('/linkImage', 'AmControllerApi@linkImage')->name('admin.info.linkImage');
-    //视频
-    Route::post('/linkVideo', 'AmControllerApi@linkVideo')->name('admin.info.linkVideo');
-    //音频
-    Route::post('/linkAudio', 'AmControllerApi@linkAudio')->name('admin.info.linkAudio');
-    //文档
-    Route::post('/linkDoc', 'AmControllerApi@linkDoc')->name('admin.info.linkDoc');
-    //fid命令字插件删除物理文件
-    Route::post('/deleteFid', 'AmControllerApi@deleteFid')->name('admin.info.deleteFid');
-    //钱包收入交易
-    Route::post('/walletIncrease', 'AmControllerApi@walletIncrease')->name('admin.info.walletIncrease');
-    //钱包支付交易
-    Route::post('/walletDecrease', 'AmControllerApi@walletDecrease')->name('admin.info.walletDecrease');
-
 });
