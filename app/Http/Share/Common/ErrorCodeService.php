@@ -150,6 +150,7 @@ class ErrorCodeService
     CONST EXTENDS_EID_ERROR = 30138;
     CONST USER_WALLETS_ERROR = 30139;
     CONST BALANCE_CLOSING_BALANCE_ERROR = 30140;
+    CONST USER_BALANCE_ERROR = 30141;
     
 
 
@@ -172,6 +173,7 @@ class ErrorCodeService
     CONST DELETE_PACK_ERROR = 30215;
     CONST REPEAT_PARTNER_ERROR = 30216;
     CONST DELETE_ADMIN = 30217;
+    CONST LANGUAGE_SETTING_ERROR = 30218;
 
 
 
@@ -321,6 +323,7 @@ class ErrorCodeService
         self::EXTENDS_EID_ERROR        => 'extendsJson eid必填',
         self::USER_WALLETS_ERROR        => '用户钱包不存在',
         self::BALANCE_CLOSING_BALANCE_ERROR        => '期末余额和钱包额度不匹配',
+        self::USER_BALANCE_ERROR        => '钱包余额不正确',
 
 
         self::CODE_LOGIN_ERROR                => '用户名或密码错误',
@@ -334,6 +337,7 @@ class ErrorCodeService
         self::DELETE_PACK_ERROR        => '有部分删除无权限',
         self::REPEAT_PARTNER_ERROR        => '无需重复添加',
         self::DELETE_ADMIN        => '不允许删除自己',
+        self::LANGUAGE_SETTING_ERROR        => '已存在，不可重复配置该语言',
 
 
         self::DOWMLOAD_ERROR => '请下载或安装启用插件',

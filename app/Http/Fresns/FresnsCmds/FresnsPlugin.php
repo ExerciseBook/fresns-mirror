@@ -1874,19 +1874,95 @@ class FresnsPlugin extends BasePlugin
         $originId = $input['originId'] ?? null;
 
         $userId = FresnsUsers::where('uuid',$uid)->value('id');
+        if(empty($userId)){
+            return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
+        }
         $memberId = null;
-        if(!empty($uid)){
-            $memberId = FresnsMembers::where('uuid',$mid)->value('id');
+        if(!empty($mid)){
+            //如果有传mid则校验是否属于uid
+            $member = FresnsMembers::where('uuid',$mid)->first();
+            if(empty($member)){
+                return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
+            }
+            if($member['user_id'] !== $userId){
+                return $this->pluginError(ErrorCodeService::CODE_FAIL);
+            }
+            $memberId = $member['id'];
         }
 
         $originUserId = null;
         if($originUid){
             $originUserId = FresnsUsers::where('uuid',$originUid)->value('id');
+            if(empty($originUserId)){
+                return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
+            }
         }
 
         $originMemberId = null;
         if($originMid){
-            $originMemberId = FresnsMembers::where('uuid',$originMid)->value('id');
+            $originMember = FresnsMembers::where('uuid',$originMid)->first();
+            if(empty($originMember)){
+                return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
+            }
+            if($originMember['user_id'] !== $userId){
+                return $this->pluginError(ErrorCodeService::CODE_FAIL);
+            }
+            $originMemberId = $originMember['id'];
+        }
+
+        //如果有关联方，给对方也生成一条交易记录 user_wallet_logs 表，并以 amount 的参数减对方余额 user_wallets > balance
+        if($originUserId){
+            $originUserWallets = FresnsUserWallets::where('user_id',$originUserId)->where('is_enable',1)->first();
+            if(empty($originUserWallets)){
+                return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
+            }
+
+            $originUserBalance = $originUserWallets['balance'] ?? 0;
+            $originUserClosingBalance = FresnsUserWalletLogs::where('user_id',$originUserId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
+            $originUserClosingBalance = $originUserClosingBalance ?? 0;
+
+            if($originUserBalance !== $originUserClosingBalance){
+                return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
+            }
+
+            if($amount - $originUserBalance < 0){
+                return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
+            }
+
+            switch ($type) {
+                case 1:
+                    $decreaseType = 4;
+                    break;
+                case 2:
+                    $decreaseType = 5;
+                    break;
+                default:
+                    $decreaseType = 6;
+                    break;
+            }
+            //添加一条对方支出钱包日志
+            $input = [
+                'user_id' => $originUserId,
+                'member_id' => $originMemberId,
+                'object_type' => $decreaseType,
+                'amount' => $amount,
+                'transaction_amount' => $transactionAmount,
+                'system_fee' => $systemFee,
+                'object_user_id' => $userId,
+                'object_member_id' => $memberId,
+                'object_name' => $originName,
+                'object_id' => $originId,
+                'opening_balance' => $originUserBalance,
+                'closing_balance' => $amount - $originUserBalance,
+            ];
+
+            FresnsUserWalletLogs::insert($input);
+            //更新用户钱包
+            $originWalletsInput = [
+                'balance' => $amount - $originUserBalance
+            ];
+            FresnsUserWallets::where('user_id',$originUserId)->update($originWalletsInput);
+
         }
 
         //交易前需要查询用户的最后一条交易记录的期末余额值（is_enable=1），比对当前用户的钱包余额，不一致返回状态码。如果查询不到交易记录，默认期末余额为 0 值。
@@ -1907,7 +1983,7 @@ class FresnsPlugin extends BasePlugin
         $input = [
             'user_id' => $userId,
             'member_id' => $memberId,
-            'object_type' => 1,
+            'object_type' => $type,
             'amount' => $amount,
             'transaction_amount' => $transactionAmount,
             'system_fee' => $systemFee,
@@ -1926,6 +2002,8 @@ class FresnsPlugin extends BasePlugin
         ];
         FresnsUserWallets::where('user_id',$userId)->update($userWalletsInput);
 
+        
+
         return $this->pluginSuccess();
 
     }
@@ -1942,6 +2020,134 @@ class FresnsPlugin extends BasePlugin
         $originMid = $input['originMid'] ?? null;
         $originName = $input['originName'];
         $originId = $input['originId'] ?? null;
+
+        $userId = FresnsUsers::where('uuid',$uid)->value('id');
+        if(empty($userId)){
+            return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
+        }
+        $memberId = null;
+        if(!empty($mid)){
+            //如果有传mid则校验是否属于uid
+            $member = FresnsMembers::where('uuid',$mid)->first();
+            if(empty($member)){
+                return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
+            }
+            if($member['user_id'] !== $userId){
+                return $this->pluginError(ErrorCodeService::CODE_FAIL);
+            }
+            $memberId = $member['id'];
+        }
+
+        $originUserId = null;
+        if($originUid){
+            $originUserId = FresnsUsers::where('uuid',$originUid)->value('id');
+            if(empty($originUserId)){
+                return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
+            }
+        }
+
+        $originMemberId = null;
+        if($originMid){
+            $originMember = FresnsMembers::where('uuid',$originMid)->first();
+            if(empty($originMember)){
+                return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
+            }
+            if($originMember['user_id'] !== $userId){
+                return $this->pluginError(ErrorCodeService::CODE_FAIL);
+            }
+            $originMemberId = $originMember['id'];
+        }
+
+        $userWallets = FresnsUserWallets::where('user_id',$userId)->where('is_enable',1)->first();
+        if(empty($userWallets)){
+            return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
+        }
+
+        $balance = $userWallets['balance'] ?? 0;
+        $userClosingBalance = FresnsUserWalletLogs::where('user_id',$userId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
+        $userClosingBalance = $userClosingBalance ?? 0;
+
+        if($balance !== $userClosingBalance){
+            return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
+        }
+
+        if($amount - $balance < 0){
+            return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
+        }
+
+        //添加到钱包log
+        $input = [
+            'user_id' => $userId,
+            'member_id' => $memberId,
+            'object_type' => $type,
+            'amount' => $amount,
+            'transaction_amount' => $transactionAmount,
+            'system_fee' => $systemFee,
+            'object_user_id' => $originUserId,
+            'object_member_id' => $originMemberId,
+            'object_name' => $originName,
+            'object_id' => $originId,
+            'opening_balance' => $balance,
+            'closing_balance' => $amount - $balance,
+        ];
+
+        FresnsUserWalletLogs::insert($input);
+        //更新用户钱包
+        $userWalletsInput = [
+            'balance' => $amount - $balance
+        ];
+        FresnsUserWallets::where('user_id',$userId)->update($userWalletsInput);
+
+        if($originUserId){
+            $originUserWallets = FresnsUserWallets::where('user_id',$originUserId)->where('is_enable',1)->first();
+            if(empty($originUserWallets)){
+                return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
+            }
+
+            $originBalance = $originUserWallets['balance'] ?? 0;
+            $originClosingBalance = FresnsUserWalletLogs::where('user_id',$originUserId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
+            $originClosingBalance = $originClosingBalance ?? 0;
+
+            if($originBalance !== $originClosingBalance){
+                return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
+            }
+
+            switch ($type) {
+                case 4:
+                    $decreaseType = 1;
+                    break;
+                case 5:
+                    $decreaseType = 2;
+                    break;
+                default:
+                    $decreaseType = 3;
+                    break;
+            }
+            //添加一条对方收入钱包日志
+            $input = [
+                'user_id' => $originUserId,
+                'member_id' => $originMemberId,
+                'object_type' => $decreaseType,
+                'amount' => $amount,
+                'transaction_amount' => $transactionAmount,
+                'system_fee' => $systemFee,
+                'object_user_id' => $userId,
+                'object_member_id' => $memberId,
+                'object_name' => $originName,
+                'object_id' => $originId,
+                'opening_balance' => $originBalance,
+                'closing_balance' => $originBalance + $transactionAmount,
+            ];
+
+            FresnsUserWalletLogs::insert($input);
+            //更新用户钱包
+            $originWalletsInput = [
+                'balance' => $originBalance + $transactionAmount
+            ];
+            FresnsUserWallets::where('user_id',$originUserId)->update($originWalletsInput);
+        }
+
+        return $this->pluginSuccess();
 
     }
 }
