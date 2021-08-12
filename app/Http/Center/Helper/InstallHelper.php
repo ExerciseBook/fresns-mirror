@@ -366,32 +366,8 @@ class InstallHelper
     }
 
     public static function freshSystem(){
-        try{
-            system('composer dump-autoload');
-        }catch(\Exception $e){
-            LogService::warning("composer error : ", $e->getMessage());
-        }
-     //   Artisan::call("dump-autoload");
-        Artisan::call('optimize'); // It does the same things as composer dump-autoload
-        Artisan::call('route:clear'); // It does the same things as composer dump-autoload
-
-        // 删除缓存文件
-
-        $deleteDir = implode(DIRECTORY_SEPARATOR, [base_path(), 'bootstrap', 'cache']);
-        $deleteFileArr = [
-            'config.php',
-            'packages.php',
-            'services.php',
-            'config.php',
-            'route.php',
-        ];
-
-        foreach ($deleteFileArr as $file){
-            $deleteFile =  implode(DIRECTORY_SEPARATOR, [$deleteDir, $file]);
-            if(is_file($deleteFile)){
-                File::delete($deleteFile);
-            }
-        }
-
+        //system('composer dump-autoload');
+        Artisan::call("clear-compiled");// Remove the compiled class file
+        Artisan::call('optimize:clear'); //Remove the cached bootstrap files
     }
 }
