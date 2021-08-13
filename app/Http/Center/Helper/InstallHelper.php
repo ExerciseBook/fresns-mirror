@@ -15,6 +15,7 @@ use App\Http\Share\Common\LogService;
 use App\Http\Center\Base\BaseInstaller;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Composer;
 
 class InstallHelper
 {
@@ -366,8 +367,23 @@ class InstallHelper
     }
 
     public static function freshSystem(){
-        //system('composer dump-autoload');
+        $composer = app('composer');
+        $composer->dumpAutoloads();
+        
         Artisan::call("clear-compiled");// Remove the compiled class file
-        Artisan::call('optimize:clear'); //Remove the cached bootstrap files
+        // 删除缓存文件
+        $deleteDir = implode(DIRECTORY_SEPARATOR, [base_path(), 'bootstrap', 'cache']);
+        $deleteFileArr = [
+            'config.php',
+            'packages.php',
+            'services.php',
+            'route.php',
+        ];
+        foreach ($deleteFileArr as $file){
+            $deleteFile =  implode(DIRECTORY_SEPARATOR, [$deleteDir, $file]);
+            if(is_file($deleteFile)){
+                File::delete($deleteFile);
+            }
+        }
     }
 }
