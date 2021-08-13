@@ -1,10 +1,13 @@
-//dashboard.blade
+//install extensions
 $(".installLocal").click(function(){
     var dirName = $(".installDirName").val();
     $('#upgrade').addClass('show');
+    $('#upgrade').css({
+        'display': 'block'
+    });
     var isAdd = true;
     $.ajax({
-        async: false,    //设置为同步
+        async: false,
         type: "post",
         url: "/localInstall",
         data: {'dirName':dirName},
@@ -52,21 +55,16 @@ $(".installLocal").click(function(){
     })
 });
 
-//websites.blade
-// 设置主题
-$(".updateSubject").click(function(){
-    var websiteUnikey = $("#updateWebsite").val();
-    if(!websiteUnikey){
-        alert("插件未知");
-        return ;
-    }
-    var pluginPc = $(".subectUnikeyPc").find("option:selected").val();
-    var pluginMobile = $(".subectUnikeyMobile").find("option:selected").val();
+//down extensions
+$(".update_plugin").click(function(){
+    var unikey = $(this).attr('unikey');
+    var dirName = unikey;
+    var downloadUrl = "https://cdn.fresns.cn/extensions/plugin_v1.0.0.zip";
     $.ajax({
         async: false,    //设置为同步
-        type: "post",
-        url: "/websiteLinkSubject",
-        data: {'websiteUnikey':websiteUnikey,'subjectUnikeyPc':pluginPc,'subjectUnikeyMobile':pluginMobile},
+        type: "get",
+        url: "/api/fresns/plugin/upgrade",
+        data: {'unikey':unikey,'dirName':dirName,'downloadUrl':downloadUrl,"localVision":1,'remoteVisionInt':2,'remoteVision':'2.0.0'},
         beforeSend: function (request) {
             return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
         },
@@ -78,20 +76,48 @@ $(".updateSubject").click(function(){
             }
         }
     })
-    // console.log(plugin);
-    // console.log(websiteUnikey);
 });
 
-// 远程更新插件
-$(".update_plugin").click(function(){
-    var unikey = $(this).attr('unikey');
+//update extensions
+$("#updatePlugin").click(function(){
+    var unikey = $(this).attr('data_unikey');
+    // var downloadUrl = $(this).attr('data_download_url');
+    var localVision = $(this).attr('data_local_vision');
+    var remoteVisionInt = $(this).attr('data_new_vision_int');
+    var remoteVision = $(this).attr('data_new_vision');
     var dirName = unikey;
-    var downloadUrl = "https://cdn.fresns.cn/extensions/plugin_v1.0.0.zip";
     $.ajax({
         async: false,    //设置为同步
-        type: "get",
-        url: "/api/fresns/plugin/upgrade",
-        data: {'unikey':unikey,'dirName':dirName,'downloadUrl':downloadUrl,"localVision":1,'remoteVisionInt':2,'remoteVision':'2.0.0'},
+        type: "post",
+        url: "/localInstall",
+        data: {'dirName':unikey},
+        beforeSend: function (request) {
+            return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+        },
+        success: function (data) {
+            if(data.code == 0){
+                window.location.reload();
+            }else{
+                alert(data.message);
+            }
+        }
+    })
+});
+
+//themes setting
+$(".updateSubject").click(function(){
+    var websiteUnikey = $("#updateWebsite").val();
+    if(!websiteUnikey){
+        alert("插件未知");
+        return ;
+    }
+    var pluginPc = $(".subectUnikeyPc").find("option:selected").val();
+    var pluginMobile = $(".subectUnikeyMobile").find("option:selected").val();
+    $.ajax({
+        async: false,
+        type: "post",
+        url: "/websiteLinkSubject",
+        data: {'websiteUnikey':websiteUnikey,'subjectUnikeyPc':pluginPc,'subjectUnikeyMobile':pluginMobile},
         beforeSend: function (request) {
             return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
         },
