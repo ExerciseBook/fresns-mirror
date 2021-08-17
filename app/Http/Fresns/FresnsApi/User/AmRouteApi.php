@@ -19,8 +19,6 @@ Route::group(['prefix' => 'fresns/user', 'namespace' => '\App\Http\Fresns\Fresns
     Route::post('/delete', 'AmControllerApi@userDelete')->name('admin.user.userDelete');
     //恢复
     Route::post('/restore', 'AmControllerApi@restore')->name('admin.user.userRestore');
-    //硬删除
-    Route::get('/destroy', 'AmControllerApi@userDestroy')->name('admin.user.userDestroy');
     //重置密码
     Route::post('/reset', 'AmControllerApi@userReset')->name('admin.user.userReset');
     //用户基本信息

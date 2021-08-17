@@ -139,7 +139,7 @@ class FresnsGroupResourceDetail extends BaseAdminResource
         if ($parentGroup) {
             $parentInfo['gid'] = $parentGroup['uuid'] ?? "";
             $pname = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
-            $parentInfo['pname'] = $pname == null ? "" : $pname['lang_content'];
+            $parentInfo['gname'] = $pname == null ? "" : $pname['lang_content'];
             $parentInfo['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($parentGroup['cover_file_id'],
                 $parentGroup['cover_file_url']);
         }

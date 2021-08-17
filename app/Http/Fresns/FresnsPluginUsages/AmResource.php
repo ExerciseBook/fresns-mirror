@@ -11,8 +11,8 @@ namespace App\Http\Fresns\FresnsPluginUsages;
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
-use App\Http\Fresns\FresnsRole\FresnsRole;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 
 class AmResource extends BaseAdminResource
 {
@@ -72,7 +72,7 @@ class AmResource extends BaseAdminResource
         // dd($nameArr);
         // 角色
         $user_rolesArr = explode(',', $this->member_roles);
-        $roleInfo = FresnsRole::whereIn('id', $user_rolesArr)->pluck('name')->toArray();
+        $roleInfo = FresnsMemberRoles::whereIn('id', $user_rolesArr)->pluck('name')->toArray();
         $roleNames = implode(',', $roleInfo);
         // $user_roles_arr = explode(',',$this->user_roles);
         // 应用场景

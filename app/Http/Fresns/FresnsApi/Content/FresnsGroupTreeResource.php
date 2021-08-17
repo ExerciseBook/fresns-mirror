@@ -135,7 +135,7 @@ class FresnsGroupTreeResource extends BaseAdminResource
                 $arr['essenceCount'] = $c['essence_count'];
                 // 小组管理员列表
                 // dump($c['permission']);
-                $arr['adminMemberArr'] = FresnsGroupsService::adminData($c['permission']);
+                $arr['admins'] = FresnsGroupsService::adminData($c['permission']);
                 // $permissionArr = json_decode($c['permission'],true);
                 // // dd($permissionArr);
                 // $admin_member = $permissionArr['admin_members'];

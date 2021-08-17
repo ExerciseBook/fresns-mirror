@@ -17,6 +17,7 @@ use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
 use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Share\AmGlobal\GlobalService;
 
 class DialogsMessageResource extends BaseAdminResource
@@ -47,15 +48,15 @@ class DialogsMessageResource extends BaseAdminResource
             $sendMid = "";
             $sendDeactivate = false;
         }
-
+        $sendMemberInfo = FresnsMembers::find($sendMid);
 
         if ($this->message_text) {
             $messageArr['messageId'] = $this->id;
-            $messageArr['isMe'] = $this->send_member_id == $mid ? true : false;
-            $messageArr['type'] = "文本消息";
+            $messageArr['isMe'] = $this->send_member_id == $mid ? 1 : 2;
+            $messageArr['type'] = 1;
             $messageArr['content'] = $this->message_text;
             $messageArr['sendDeactivate'] = $sendDeactivate;
-            $messageArr['sendMid'] = $sendMid;
+            $messageArr['sendMid'] = $sendMemberInfo['uuid'] ?? "";
             $messageArr['sendAvatar'] = $memberInfo->avatar_file_url ?? "";
 
             // 为空用默认头像

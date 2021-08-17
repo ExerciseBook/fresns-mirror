@@ -69,7 +69,7 @@ class DialogsResource extends BaseAdminResource
             }
             if ($memberInfo->deleted_at == null) {
                 $member['deactivate'] = true;
-                $member['mid'] = $member_id;
+                $member['mid'] = $memberInfo->uuid;
                 $member['mname'] = $memberInfo->name;
                 $member['nickname'] = $memberInfo->nickname;
                 $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);

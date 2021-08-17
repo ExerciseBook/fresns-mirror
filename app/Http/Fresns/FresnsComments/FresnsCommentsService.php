@@ -149,15 +149,17 @@ class FresnsCommentsService extends AmService
             foreach ($comments as $c) {
                 $reply = [];
                 if ($c['parent_id'] != $comment_id) {
-                    $parentMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id',
-                        $c['member_id'])->first();
-                    $reply['cid'] = $c['uuid'] ?? "";
-                    $reply['anonymous'] = $c['is_anonymous'];
+                    $parentCommentInfo = FresnsComments::find($c['parent_id']);
+                    if($parentCommentInfo){
+                        $parentMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id',$parentCommentInfo['member_id'])->first();
+                    }
+                    $reply['cid'] = $parentCommentInfo['uuid'] ?? "";
+                    $reply['anonymous'] = $parentCommentInfo['is_anonymous'];
                     $reply['deactivate'] = false;
                     $reply['mid'] = "";
                     $reply['mname'] = "";
                     $reply['nickname'] = "";
-                    if ($c['is_anonymous'] == 0) {
+                    if ($parentCommentInfo['is_anonymous'] == 0) {
                         if ($parentMemberInfo->deleted_at == null) {
                             $reply['deactivate'] = true;
                             $reply['mid'] = $parentMemberInfo->uuid ?? "";

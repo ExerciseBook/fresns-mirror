@@ -20,7 +20,7 @@ Route::group(['prefix' => 'fresns/info', 'namespace' => '\App\Http\Fresns\Fresns
     Route::post('/inputtips', 'AmControllerApi@infoInputtips')->name('admin.info.infoInputtips');
 
     // 扩展配置信息
-    Route::post('/expands', 'AmControllerApi@expands')->name('admin.info.expands');
+    Route::post('/extensions', 'AmControllerApi@extensions')->name('admin.info.extensions');
     //下载内容文件
     Route::post('/downloadFile', 'AmControllerApi@downloadFile')->name('admin.info.downloadFile');
 
@@ -28,7 +28,7 @@ Route::group(['prefix' => 'fresns/info', 'namespace' => '\App\Http\Fresns\Fresns
     Route::post('/sendVerifyCode', 'AmControllerApi@sendVerifyCode')->name('admin.info.sendVerifyCode');
 
     // 全局摘要信息
-    Route::post('/summary', 'AmControllerApi@summary')->name('admin.info.summary');
+    Route::post('/overview', 'AmControllerApi@overview')->name('admin.info.overview');
 
 
 });

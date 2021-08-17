@@ -176,7 +176,7 @@ class FresnsPostResourceDetail extends BaseAdminResource
             4)->where('shield_id', $this->id)->count();
         $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_SETTING);
         $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_GROUP_SETTING);
-        $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::GROUP_FOLLOW);
+        $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_POST_SETTING);
         $PostName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
                 AmConfig::POST_NAME) ?? "帖子";
         $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
@@ -191,13 +191,13 @@ class FresnsPostResourceDetail extends BaseAdminResource
         $shieldCount = $this->shield_count;
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
-        $time = $this->created_at;
-        $timeFormat = DateHelper::format_date(strtotime($time));
-        $timeFormat = str_replace("前", 'ago', $timeFormat);
-        $editTime = $this->latest_edit_at == null ? $this->updated_at : $this->latest_edit_at;
+        $time = DateHelper::asiaShanghaiToTimezone($this->created_at);
+        $timeFormat = DateHelper::format_date_langTag(strtotime($time));
+        // $timeFormat = str_replace("前", 'ago', $timeFormat);
+        $editTime =  DateHelper::asiaShanghaiToTimezone($this->latest_edit_at);
         // dd($editTime);
-        $editTimeFormat = DateHelper::format_date(strtotime($editTime));
-        $editTimeFormat = str_replace("前", 'ago', $editTimeFormat);
+        $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
+        // $editTimeFormat = str_replace("前", 'ago', $editTimeFormat);
         $canDelete = $append['can_delete'];
         $allowStatus = $this->is_allow;
         // 多语言 副表allow_btn_name
@@ -220,7 +220,9 @@ class FresnsPostResourceDetail extends BaseAdminResource
         $member['nickname'] = "";
         $member['nicknameColor'] = "";
         $member['roleName'] = "";
+        $member['roleNameDisplay'] = "";
         $member['roleIcon'] = "";
+        $member['roleIconDisplay'] = "";
         $member['avatar'] = $memberInfo->avatar_file_url ?? "";
         // 为空用默认头像
         if (empty($member['avatar_file_url'])) {
@@ -272,7 +274,9 @@ class FresnsPostResourceDetail extends BaseAdminResource
                 }
 
                 $member['roleName'] = $roleName;
+                $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? "";
                 $member['roleIcon'] = $memberRole['icon_file_url'] ?? "";
+                $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? "";
                 // $member['avatar'] = $member['avatar'];
 
                 // $member['decorate'] = $memberInfo->decorate_file_url ?? "";
@@ -297,7 +301,9 @@ class FresnsPostResourceDetail extends BaseAdminResource
                     $iconName = $iconName == null ? "" : $iconName['lang_content'];
                     $icons['name'] = $iconName;
                 }
-
+                if(empty($icons['name']) && empty($icons['icon'])){
+                    $icons = [];
+                }
                 $member['icons'] = $icons;
             }
         }
@@ -629,7 +635,7 @@ class FresnsPostResourceDetail extends BaseAdminResource
             // 'shareIcon' => $shareIcon,
             // 'commentIcon' => $commentIcon,
             // 'moreIcon' => $moreIcon,
-            'PostName' => $PostName,
+            'postName' => $PostName,
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,
             'likeStatus' => $likeStatus,
@@ -669,7 +675,7 @@ class FresnsPostResourceDetail extends BaseAdminResource
             'group' => $group,
             'manages' => $manages,
             'editStatus' => $editStatus,
-            'seoInfo' => $seoInfo
+            // 'seoInfo' => $seoInfo
 
         ];
         // 合并

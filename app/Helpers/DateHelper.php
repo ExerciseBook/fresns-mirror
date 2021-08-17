@@ -9,7 +9,8 @@
 namespace App\Helpers;
 
 use Carbon\Carbon;
-
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 class DateHelper
 {
     CONST DEFAULT_FORMATTER = "Y-m-d";
@@ -201,5 +202,50 @@ class DateHelper
         }
 
         return $time;
+    }
+
+    // 毫秒
+    public static function format_date_langTag($time)
+    {
+        if(empty($time)){
+            return $time;
+        }
+        $langTag = request()->header('langTag');
+        $language = ApiConfigHelper::getConfigByItemKey('language_menus');
+        $langTag = ApiLanguageHelper::getLangTagByHeader();
+        $langInfo = [];
+        foreach($language as $l){
+            if($l['langTag'] == $langTag){
+                $langInfo = $l;
+            }
+        }
+        // dd($langInfo);
+        if(empty($langInfo)){
+            return "";
+        }
+        $t=time()-$time;
+	    $f=array(
+	        '2592000'=>'month',
+	        '86400'=>'day',
+	        '3600'=>'hour',
+	        '60'=>'minute',
+	    );
+	    foreach ($f as $k=>$v)    {
+	        if (0 !=$c=floor($t/(int)$k)) {
+                // return $c.$v.'前';
+                if($v == 'minute'){
+                     return str_replace('{n}',$c,$langInfo['timeFormatMinute']);
+                }
+                if($v == 'hour'){
+                     return str_replace('{n}',$c,$langInfo['timeFormatHour']);
+                }
+                if($v == 'day'){
+                     return str_replace('{n}',$c,$langInfo['timeFormatDay']);
+                }
+                if($v == 'month'){
+                     return str_replace('{n}',$c,$langInfo['timeFormatMonth']);
+                }
+	        }
+	    }
     }
 }

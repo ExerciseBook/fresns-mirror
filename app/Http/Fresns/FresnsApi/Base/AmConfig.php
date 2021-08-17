@@ -78,7 +78,7 @@ class AmConfig
     //公开模式 public uid 必传
     const PUBLIC_UID_URI_ARR = [
         '/api/fresns/info/downloadFile',
-        '/api/fresns/info/summary',
+        '/api/fresns/info/overview',
         '/api/fresns/user/logout',
         '/api/fresns/user/delete',
         '/api/fresns/user/restore',
@@ -114,7 +114,7 @@ class AmConfig
     //公开模式mid必传
     const PUBLIC_MID_URI_ARR = [
         '/api/fresns/info/downloadFile',
-        '/api/fresns/info/summary',
+        '/api/fresns/info/overview',
         '/api/fresns/member/edit',
         '/api/fresns/member/mark',
         '/api/fresns/member/delete',
@@ -142,7 +142,7 @@ class AmConfig
     //公开模式public token必传
     const PUBLIC_TOKEN_URI_ARR = [
         '/api/fresns/info/downloadFile',
-        '/api/fresns/info/summary',
+        '/api/fresns/info/overview',
         '/api/fresns/user/logout',
         '/api/fresns/user/delete',
         '/api/fresns/user/restore',
@@ -197,7 +197,7 @@ class AmConfig
     //私有模式private uid必传
     const PRIVATE_UID_URI_ARR = [
         '/api/fresns/info/extensions',
-        '/api/fresns/info/summary',
+        '/api/fresns/info/overview',
         '/api/fresns/info/emojis',
         '/api/fresns/info/stopWords',
         '/api/fresns/info/inputtips',
@@ -252,7 +252,7 @@ class AmConfig
     //私有模式 private mid 必传
     const PRIVATE_MID_URI_ARR = [
         '/api/fresns/info/extensions',
-        '/api/fresns/info/summary',
+        '/api/fresns/info/overview',
         '/api/fresns/info/emojis',
         '/api/fresns/info/stopWords',
         '/api/fresns/info/inputtips',
@@ -299,7 +299,7 @@ class AmConfig
 
     //私有模式 private token 必传
     const PRIVATE_TOKEN_URI_ARR = [
-        '/api/fresns/info/summary',
+        '/api/fresns/info/overview',
         '/api/fresns/info/extensions',
         '/api/fresns/info/emojis',
         '/api/fresns/info/stopWords',

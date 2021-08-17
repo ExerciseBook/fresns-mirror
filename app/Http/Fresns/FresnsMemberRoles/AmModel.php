@@ -32,7 +32,14 @@ class AmModel extends BaseAdminModel
         
     }
 
-    
+    // 搜索排序字段
+    public function initOrderByFields()
+    {
+        $orderByFields = [
+            'rank_num' => 'ASC',
+        ];
+        return $orderByFields;
+    }
 
 }
 

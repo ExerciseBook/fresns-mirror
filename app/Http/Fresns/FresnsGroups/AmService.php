@@ -9,15 +9,10 @@
 namespace App\Http\Fresns\FresnsGroups;
 
 use App\Base\Services\BaseAdminService;
-use App\Base\Services\BaseCategoryService;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsRole\FresnsRole;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsApi\Base\FresnsBaseService;
 use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
 class AmService extends BaseAdminService
 {
@@ -41,7 +36,7 @@ class AmService extends BaseAdminService
         // 小组管理员common
         $common['memberOption'] = FresnsMembers::buildSelectTreeDataByNoRankNum('id', 'name', ['is_enable' => 1]);
         // 角色权限common
-        $common['roleOption'] = FresnsRole::buildSelectTreeData('id', 'name', []);
+        $common['roleOption'] = FresnsMemberRoles::buildSelectTreeData('id', 'name', []);
         // 语言
         $languageArr = FresnsConfigService::getLanguageStatus();
         $common['language_status'] = $languageArr['language_status'];

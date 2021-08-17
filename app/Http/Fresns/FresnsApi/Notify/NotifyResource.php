@@ -16,7 +16,8 @@ use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
 use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsComments\FresnsComments;
 class NotifyResource extends BaseAdminResource
 {
 
@@ -32,6 +33,11 @@ class NotifyResource extends BaseAdminResource
         $type = $this->source_type;
         $class = $this->source_class;
         $sourceId = $this->source_id;
+        if($class == 1){
+           $data = FresnsPosts::find($sourceId);
+        }else{
+           $data = FresnsComments::find($sourceId);
+        }
         // $member = FresnsMembers::find($this->source_mid);
         $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $this->source_mid)->first();
         $sourceMember = [];
@@ -53,9 +59,10 @@ class NotifyResource extends BaseAdminResource
                 $avatar = $deactivateAvatar;
             }
             $avatar = ApiFileHelper::getImageSignUrl($avatar);
+            $member = FresnsMembers::find($this->source_mid);
             $sourceMember = [
                 [
-                    'mid' => $this->source_mid,
+                    'mid' => $member['uuid'] ?? "",
                     'mname' => $member->name ?? "",
                     'nickname' => $member->nickname ?? "",
                     'avatar' => $avatar,
@@ -75,10 +82,10 @@ class NotifyResource extends BaseAdminResource
         $status = $this->status;
         // 默认字段
         $default = [
-            'messageId' => $messageId,
+            'nitifyId' => $messageId,
             'type' => $type,
             'class' => $class,
-            'sourceId' => $sourceId,
+            'sourceUuId' => $data['uuid'] ?? "",
             'sourceMember' => $sourceMember,
             'sourceBrief' => $sourceBrief,
             'status' => $status,

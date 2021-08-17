@@ -13,7 +13,8 @@ use App\Http\Fresns\FresnsApi\Base\FresnsBaseConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
-
+use App\Http\Share\Common\LogService;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
 class ApiConfigHelper
 {
     //获取系统配置信息
@@ -218,20 +219,24 @@ class ApiConfigHelper
     public static function distanceUnits($langTag)
     {
         $language = self::getConfigsLanguageList();
+        $languageArr = FresnsConfigService::getLanguageStatus();
+        LogService::Info('language',$language);
         $distanceUnits = '';
         // 获取默认语言的距离单位
-        foreach ($language['language_menus'] as $f) {
-            if ($f['langTag'] == $language['default_language']) {
+        $language_menus = json_decode($language['language_menus'],true);
+        foreach ($language_menus as $f) {
+            if ($f['langTag'] == $languageArr['default_language']) {
                 $distanceUnits = $f['lengthUnits'];
             }
         }
-        foreach ($language['language_menus'] as $v) {
-            if ($v['langTag'] = $langTag) {
+        foreach ($language_menus as $v) {
+            if ($v['langTag'] == $langTag) {
                 if (!empty($v['lengthUnits'])) {
                     $distanceUnits = $v['lengthUnits'];
                 }
             }
         }
+        
         return $distanceUnits;
     }
 }

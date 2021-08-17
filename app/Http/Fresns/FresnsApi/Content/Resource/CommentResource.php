@@ -126,6 +126,7 @@ class CommentResource extends BaseAdminResource
         $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type',5)->where('shield_id', $this->id)->count();
         // 查询 member_shields 表，该评论的作者是否被我屏蔽。输出 0.未屏蔽 1.已屏蔽"
         // $shieldMemberStatus = FresnsMemberShields::where('member_id',$mid)->where('shield_type',1)->where('shield_id',$this->member_id)->count();
+        $postAuthorLikeStatus = FresnsMemberLikes::where('member_id',$posts['member_id'])->where('like_type',5)->where('like_id',$this->id)->count();
         $shieldMemberStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id',
             $mid)->where('shield_type', 1)->where('shield_id', $this->member_id)->count();
         $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_COMMENT_SETTING);
@@ -138,15 +139,15 @@ class CommentResource extends BaseAdminResource
         $likeCount = $this->like_count;
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
-        $time = $this->created_at;
-        $timeFormat = DateHelper::format_date(strtotime($time));
-        $timeFormat = str_replace("前", 'ago', $timeFormat);
+        $time = DateHelper::asiaShanghaiToTimezone($this->created_at);
+        $timeFormat = DateHelper::format_date_langTag(strtotime($time));
+        // $timeFormat = str_replace("前", 'ago', $timeFormat);
         // $timeFormat = $this->release_at;
-        $editTime = $this->latest_edit_at;
+        $editTime = DateHelper::asiaShanghaiToTimezone($this->latest_edit_at);
         $editTimeFormat = "";
         if ($editTime) {
-            $editTimeFormat = DateHelper::format_date(strtotime($editTime));
-            $editTimeFormat = str_replace("前", 'ago', $editTimeFormat);
+            $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
+            // $editTimeFormat = str_replace("前", 'ago', $editTimeFormat);
         }
         $member = [];
         // dd($memberInfo);
@@ -157,7 +158,9 @@ class CommentResource extends BaseAdminResource
         $member['nickname'] = "";
         $member['nicknameColor'] = "";
         $member['roleName'] = "";
+        $member['roleNameDisplay'] = "";
         $member['roleIcon'] = "";
+        $member['roleIconDisplay'] = "";
         $member['avatar'] = $memberInfo->avatar_file_url ?? "";
         // 为空用默认头像
         if (empty($member['avatar'])) {
@@ -207,7 +210,9 @@ class CommentResource extends BaseAdminResource
                         $roleName = $roleName == null ? "" : $roleName['lang_content'];
                     }
                     $member['roleName'] = $roleName;
+                    $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? "";
                     $member['roleIcon'] = $memberRole['icon_file_url'] ?? "";
+                    $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? "";
                     // $member['avatar'] = $member['avatar'];
 
                     $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id,$memberInfo->decorate_file_url);
@@ -229,7 +234,9 @@ class CommentResource extends BaseAdminResource
                         $iconName = $iconName == null ? "" : $iconName['lang_content'];
                         $icons['name'] = $iconName;
                     }
-
+                    if(empty($icons['name']) && empty($icons['icon'])){
+                        $icons = [];
+                    }
                     $member['icons'] = $icons;
                 }
             }
@@ -551,6 +558,7 @@ class CommentResource extends BaseAdminResource
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,
             'likeStatus' => $likeStatus,
+            'postAuthorLikeStatus' => $postAuthorLikeStatus,
             'followSetting' => $followSetting,
             'followName' => $followName,
             'followStatus' => $followStatus,

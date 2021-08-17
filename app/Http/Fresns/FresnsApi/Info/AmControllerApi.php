@@ -155,7 +155,6 @@ class AmControllerApi extends FresnsBaseApiController
         $input['deviceInfo'] = $request->header('deviceInfo');
         $input['uid'] = $this->uid;
         $input['mid'] = $this->mid;
-        $input['moreJson'] = $request->input('moreJson');
 
         $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
 
@@ -215,8 +214,13 @@ class AmControllerApi extends FresnsBaseApiController
                         $followStatus = 1;
                     }
                     $item['followStatus'] = $followStatus;
-                    $item['image'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['avatar_file_id'],
-                        $v['avatar_file_url']);
+                    if(empty($v['avatar_file_url']) && empty($v['avatar_file_id'])){
+                        $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
+                        $memberAvatar = ApiFileHelper::getImageSignUrl($defaultAvatar);
+                    } else {
+                        $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($v['avatar_file_id'],$v['avatar_file_url']);
+                    }
+                    $item['image'] = $memberAvatar;
                     $item['title'] = '';
                     $item['titleColor'] = '';
                     $item['descPrimary'] = '';
@@ -348,7 +352,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // 扩展配置信息
-    public function expands(Request $request)
+    public function extensions(Request $request)
     {
         $mid = GlobalService::getGlobalKey('member_id');
 
@@ -401,7 +405,7 @@ class AmControllerApi extends FresnsBaseApiController
         $request->offsetSet('pageSize', $pageSize);
         // dd($pageSize);
         $TweetPluginUsagesService = new FresnsPluginUsagesService();
-        $TweetPluginUsagesService->setResource(TweetPluginUsagesResource::class);
+        $TweetPluginUsagesService->setResource(FresnsPluginUsagesResource::class);
         $list = $TweetPluginUsagesService->searchData();
         $data = [
             'pagination' => $list['pagination'],
@@ -646,7 +650,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // 全局摘要信息
-    public function summary(Request $request)
+    public function overview(Request $request)
     {
         $member_id = GlobalService::getGlobalKey('member_id');
         #消息未读数

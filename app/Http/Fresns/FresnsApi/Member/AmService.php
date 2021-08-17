@@ -9,9 +9,11 @@
 namespace App\Http\Fresns\FresnsApi\Member;
 
 use App\Helpers\DateHelper;
-use App\Helpers\StrHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
+use App\Http\Fresns\FresnsComments\FresnsComments;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
@@ -19,6 +21,7 @@ use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIcons;
 use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIconsConfig;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
@@ -29,6 +32,8 @@ use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadgesService;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
+use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
 use Illuminate\Support\Facades\DB;
 
@@ -37,8 +42,12 @@ class AmService
     public function common($mid, $langTag, $isMe)
     {
         $seoInfoArr = DB::table('seo')->where('linked_type', 1)->where('linked_id', $mid)->where('deleted_at',
-            null)->get(['title', 'keywords', 'description'])->toArray();
-
+            null)->where('lang_tag',$langTag)->get(['title', 'keywords', 'description'])->first();
+        if(empty($seoInfoArr)){
+            $defaultLangTag = ApiLanguageHelper::getDefaultLanguage();
+            $seoInfoArr = DB::table('seo')->where('linked_type', 1)->where('linked_id', $mid)->where('deleted_at',
+            null)->where('lang_tag',$defaultLangTag)->get(['title', 'keywords', 'description'])->first();
+        }
         $data['seoInfo'] = $seoInfoArr;
         //manages
         // plugin_usages > type=5 + scene 字段包含 3
@@ -122,6 +131,7 @@ class AmService
             }
         }
         $data['profiles'] = $profiles;
+
         return $data;
     }
 
@@ -180,12 +190,20 @@ class AmService
             $data['mname'] = $member['name'];
             $data['nickname'] = $member['nickname'];
             $roleIdArr = FresnsMemberRoleRels::where('member_id', $member['id'])->pluck('role_id')->toArray();
-            $memberRole = FresnsMemberRoles::whereIn('id', $roleIdArr)->first();
+            $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($member['id']);
+            $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
+            $data['nicknameColor'] = '';
+            $data['roleName'] = '';
+            $data['roleNameDisplay'] = '';
+            $data['roleIcon'] = '';
+            $data['roleIconDisplay'] = '';
             if ($memberRole) {
                 $data['nicknameColor'] = $memberRole['nickname_color'];
                 $data['roleName'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE,
                     'name', $memberRole['id'], $langTag);
-                $data['roleIcon'] = $memberRole['icon_file_url'];
+                $data['roleNameDisplay'] = $memberRole['is_display_name'];
+                $data['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'],$memberRole['icon_file_url']);
+                $data['roleIconDisplay'] = $memberRole['icon_display_icon'];
             }
             $users = DB::table(FresnsUsersConfig::CFG_TABLE)->where('id', $member['user_id'])->first();
 
@@ -228,7 +246,7 @@ class AmService
                     $v['id'], $langTag);
                 $item['icon'] = $v['icon_file_url'];
                 $item['nicknameColor'] = $v['nickname_color'];
-                $item['permission'] = $v['permission'];
+                $item['permission'] = json_decode($v['permission'],true);
                 $rolesArr[] = $item;
             }
             $data['roles'] = $rolesArr;
@@ -307,6 +325,12 @@ class AmService
                 $iconsArr[] = $item;
             }
             $data['icons'] = $iconsArr;
+            $data['draftCount'] = null;
+            if ($isMe == true) {
+                $draftCount['posts'] = FresnsPostLogs::whereIn('status',[1,4])->count();
+                $draftCount['comments'] = FresnsCommentLogs::whereIn('status',[1,4])->count();
+                $data['draftCount'] = $draftCount;
+            }    
             $data['memberName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
                 'item_value', 'member_name', $langTag);
             $data['memberIdName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
@@ -317,7 +341,7 @@ class AmService
                 'item_value', 'member_nickname_name', $langTag);
             $data['memberRoleName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
                 'item_value', 'member_role_name', $langTag);
-            $data['followSetting'] = ApiConfigHelper::getConfigByItemKey('follow_member_name');
+            $data['followSetting'] = ApiConfigHelper::getConfigByItemKey('follow_member_setting');
             $data['followName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
                 'item_value', 'follow_member_name', $langTag);
             if ($isMe == false) {
@@ -363,10 +387,7 @@ class AmService
                 }
                 $data['shieldStatus'] = $isShields;
             }
-            if ($isMe == true) {
-                $data['featureExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, 7, $langTag);
-                $data['dataExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, 8, $langTag);
-            }
+            
             if ($isMe = false) {
                 $unikeyArr = FresnsPluginBadges::where('member_id', $mid)->pluck('plugin_unikey')->toArray();
                 $managesArr = FresnsPluginUsages::whereIn('plugin_unikey', $unikeyArr)->get()->toArray();

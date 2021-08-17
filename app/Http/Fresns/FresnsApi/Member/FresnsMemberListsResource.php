@@ -18,7 +18,7 @@ use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIcons;
 use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIconsConfig;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
@@ -30,17 +30,21 @@ class FresnsMemberListsResource extends BaseAdminResource
     {
         $langTag = request()->input('langTag');
         $mid = request()->input('mid');
-        $roleIdArr = FresnsMemberRoleRels::where('member_id', $this->id)->pluck('role_id')->toArray();
-        $memberRole = FresnsMemberRoles::whereIn('id', $roleIdArr)->first();
-        $nicknameColor = null;
-        $roleName = null;
-        $roleIcon = null;
+        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($this->id);
+        $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
+        $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
+        $nicknameColor = '';
+        $roleName = '';
+        $roleNameDisplay = '';
+        $roleIcon = '';
+        $roleIconDisplay = '';
         if ($memberRole) {
             $nicknameColor = $memberRole['nickname_color'];
-            $roleName = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name',
-                $memberRole['id'], $langTag);
-            $roleIcon = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'],
-                $memberRole['icon_file_url']);
+            $roleName = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE,
+                'name', $memberRole['id'], $langTag);
+            $roleNameDisplay = $memberRole['is_display_name'];
+            $roleIcon = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'],$memberRole['icon_file_url']);
+            $roleIconDisplay = $memberRole['icon_display_icon'];
         }
         $follows = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id',
             $this->id)->first();
@@ -142,12 +146,17 @@ class FresnsMemberListsResource extends BaseAdminResource
             'mid' => $this->uuid,
             'mname' => $this->name,
             'nickname' => $this->nickname,
+            'nicknameColor' => $nicknameColor,
+            'roleName' => $roleName,
+            'roleNameDisplay' => $roleNameDisplay,
+            'roleIcon' => $roleIcon,
+            'roleIconDisplay' => $roleIconDisplay,
             'avatar' => $memberAvatar,
             'decorate' => ApiFileHelper::getImageSignUrlByFileIdUrl($this->decorate_file_id, $this->decorate_file_url),
             'gender' => $this->gender,
             'birthday' => DateHelper::asiaShanghaiToTimezone($this->birthday),
             'bio' => $this->bio,
-            'followSetting' => ApiConfigHelper::getConfigByItemKey('follow_member_name'),
+            'followSetting' => ApiConfigHelper::getConfigByItemKey('follow_member_setting'),
             'followName' => FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value',
                 'follow_member_name', $langTag),
             'followStatus' => $isFollows,
@@ -166,15 +175,6 @@ class FresnsMemberListsResource extends BaseAdminResource
             'icons' => $iconsArr,
         ];
 
-        if ($nicknameColor) {
-            $default['nickname_color'] = $nicknameColor;
-        }
-        if ($roleName) {
-            $default['roleName'] = $roleName;
-        }
-        if ($roleIcon) {
-            $default['roleIcon'] = $roleIcon;
-        }
 
         return $default;
     }

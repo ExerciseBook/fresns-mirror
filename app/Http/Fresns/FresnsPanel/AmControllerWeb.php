@@ -25,10 +25,9 @@ use App\Http\Fresns\FresnsPosts\FresnsPosts;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Fresns\FresnsPanel\Resource\KeysResource;
 use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeys;
+use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeysService;
 use App\Http\Center\Helper\InstallHelper;
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\Fresns\FresnsClientKeys\FresnsClientKeys;
-use App\Http\Fresns\FresnsClientKeys\FresnsClientKeysService;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
@@ -563,11 +562,11 @@ class AmControllerWeb extends BaseFrontendController
         $pageSize = $request->input('pageSize', 10);
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
-        $FresnsClientKeysService = new FresnsClientKeysService();
-        $keyLists = $FresnsClientKeysService->searchData();
+        $FresnsSessionKeysService = new FresnsSessionKeysService();
+        $keyLists = $FresnsSessionKeysService->searchData();
         $pluginArr = KeysResource::collection($keyLists['list'])->toArray($keyLists['list']);
         // 获取密钥数据
-        $clientData = FresnsClientKeys::getByStaticWithCond()->toArray();
+        $clientData = FresnsSessionKeys::getByStaticWithCond()->toArray();
         $platforms = FresnsConfigs::where("item_key", "platforms")->first(["item_value"]);
         // // 平台配置数据
         $platforms = json_decode($platforms['item_value'], true);
@@ -731,7 +730,7 @@ class AmControllerWeb extends BaseFrontendController
     {
         $id = $request->input('data_id');
         $app_secret = strtolower(StrHelper::randString(32));
-        FresnsClientKeys::where('id', $id)->update(['app_secret' => $app_secret]);
+        FresnsSessionKeys::where('id', $id)->update(['app_secret' => $app_secret]);
         $this->success();
     }
 
@@ -765,7 +764,7 @@ class AmControllerWeb extends BaseFrontendController
             'app_secret' => $app_secret,
             'is_enable' => $enAbleStatus,
         ];
-        (new FresnsClientKeys())->store($input);
+        (new FresnsSessionKeys())->store($input);
         $this->success();
     }
 
@@ -797,7 +796,7 @@ class AmControllerWeb extends BaseFrontendController
             'plugin_unikey' => $plugin,
             'is_enable' => $enAbleStatus,
         ];
-        FresnsClientKeys::where('id', $id)->update($input);
+        FresnsSessionKeys::where('id', $id)->update($input);
         $this->success();
     }
 
@@ -806,7 +805,7 @@ class AmControllerWeb extends BaseFrontendController
     {
         $id = $request->input('data_id');
         $is_enable = $request->input('is_enable');
-        FresnsClientKeys::where('id', $id)->update(['is_enable' => $is_enable]);
+        FresnsSessionKeys::where('id', $id)->update(['is_enable' => $is_enable]);
         $this->success();
     }
 
@@ -814,7 +813,7 @@ class AmControllerWeb extends BaseFrontendController
     public function delKey(Request $request)
     {
         $id = $request->input('data_id');
-        FresnsClientKeys::where('id', $id)->delete();
+        FresnsSessionKeys::where('id', $id)->delete();
         $this->success();
     }
 
@@ -1057,7 +1056,7 @@ class AmControllerWeb extends BaseFrontendController
         $request->offsetSet('pageSize', $pageSize);
         // request()->offsetSet('pageSize',5);
 
-        $cmsPostService = new FresnsClientKeysService();
+        $cmsPostService = new FresnsSessionKeysService();
         $data = $cmsPostService->searchData();
         $postArr = KeysResource::collection($data['list'])->toArray($data['list']);
 

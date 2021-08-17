@@ -43,12 +43,15 @@ class PostLogResourceDetail extends BaseAdminResource
                     $arr['position'] = $extendsInfo['position'] ?? "";
                     $arr['content'] = $extendsInfo['text_content'] ?? "";
                     if ($extendsInfo['frame'] == 1) {
-                        $arr['files'] = $extendsInfo['text_files'];
+                        $arr['files'] = json_decode($extendsInfo['text_files'],true);
+                        if($arr['files']){
+                           $arr['files'] = ApiFileHelper::getMoreJsonSignUrl($arr['files']);
+                        }
                     }
-                    $arr['cover'] = $extendsInfo['cover_file_url'] ?? "";
-                    if($arr['cover']){
-                        $arr['cover'] =  ApiFileHelper::getImageSignUrlByFileIdUrl($extendsInfo['cover_file_id'], $extendsInfo['cover_file_url']);
-                    }
+                    // $arr['cover'] = $extendsInfo['cover_file_url'] ?? "";
+                    // if($arr['cover']){
+                    $arr['cover'] =  ApiFileHelper::getImageSignUrlByFileIdUrl($extendsInfo['cover_file_id'], $extendsInfo['cover_file_url']);
+                    // }
                     $title = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'title', $extendsInfo['id']);
                     $title = $title == null ? "" : $title['lang_content'];
                     $arr['title'] = $title;
@@ -69,11 +72,18 @@ class PostLogResourceDetail extends BaseAdminResource
                     $arr['target'] = $extendsInfo['extend_target'] ?? "";
                     $arr['value'] = $extendsInfo['extend_value'] ?? "";
                     $arr['support'] = $extendsInfo['extend_support'] ?? "";
-                    $arr['moreJson'] = ApiFileHelper::getMoreJsonSignUrl($extendsInfo['moreJson'] ) ?? "";
+                    $arr['moreJson'] = ApiFileHelper::getMoreJsonSignUrl($extendsInfo['moreJson'] ) ?? [];
                     $extends[] = $arr;
                 }
             }
         }
+        $files_decode = json_decode($this->files_json,true);
+        $files = [];
+        // dump($files_decode);
+        if($files_decode){
+            $files = ApiFileHelper::getMoreJsonSignUrl($files_decode);
+        }
+
         $default = [
             'id' => $this->id,
             'pid' => $postInfo['uuid'] ?? "",
@@ -87,7 +97,7 @@ class PostLogResourceDetail extends BaseAdminResource
             'allow' => json_decode($this->allow_json, true) ?? [],
             'commentSetting' => json_decode($this->comment_set_json, true) ?? [],
             'location' => json_decode($this->location_json, true) ?? [],
-            'files' => json_decode($this->files_json, true) ?? [],
+            'files' => $files,
             'extends' => $extends,
         ];
         return $default;

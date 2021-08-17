@@ -15,7 +15,7 @@ class AmConfig
     const GROUP_SHIELD_NAME = 'shield_group_name';
     const POST_LIKE_NAME = 'like_post_name';
     const POST_FOLLOW_NAME = 'follow_post_name';
-    const POST_SHIELD_NAME = 'post_shield_name';
+    const POST_SHIELD_NAME = 'shield_post_name';
     const HASHTAG_FOLLOW_NAME = 'hashtag_follow_name';
     const HASHTAG_LIKE_NAME = 'hashtag_like_name';
     const HASHTAG_SHIELD_NAME = 'hashtag_shield_name';
@@ -27,6 +27,7 @@ class AmConfig
     const POST_HOT = 'post_hot';
     const GROUP_FOLLOW = 'group_follow';
     const FOLLOW_GROUP_SETTING = 'follow_group_setting';
+    const FOLLOW_POST_SETTING = 'follow_post_setting';
     const LIKE_GROUP_SETTING = 'like_group_setting';
     const SHIELD_SETTING = 'shield_group_setting';
     const FOLLOW_COMMENT_SETTING = 'follow_comment_setting';
@@ -47,6 +48,7 @@ class AmConfig
     const HASHTAG_NAME = 'hashtag_name';
     const FOLLOW_HASHTAG_NAME = 'follow_hashtag_name';
     const LIKE_HASHTAG_SETTING = 'like_hashtag_setting';
+    const LIKE_HASHTAG_NAME = 'like_hashtag_name';
     const FOLLOW_HASHTAG_SETTING = 'follow_hashtag_setting';
     const SHIELD_HASHTAG_SETTING = 'shield_hashtag_setting';
     const DEFAULT_AVATAR = 'default_avatar';

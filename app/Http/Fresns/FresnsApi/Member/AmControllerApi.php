@@ -9,7 +9,6 @@
 namespace App\Http\Fresns\FresnsApi\Member;
 
 use App\Helpers\DateHelper;
-use App\Helpers\StrHelper;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
 use Illuminate\Http\Request;
@@ -35,9 +34,9 @@ use App\Http\Fresns\FresnsApi\Content\FresnsGroupResource;
 use App\Http\Fresns\FresnsHashtags\FresnsHashtagsService;
 use App\Http\Fresns\FresnsApi\Content\FresnsHashtagsResource;
 use App\Http\Fresns\FresnsPosts\FresnsPostsService;
-use App\Http\Fresns\FresnsApi\Content\Resource\FresnsPostResource1;
+use App\Http\Fresns\FresnsApi\Content\Resource\FresnsMarkPostResource;
 use App\Http\Fresns\FresnsComments\FresnsCommentsService;
-use App\Http\Fresns\FresnsApi\Content\Resource\CommentResource1;
+use App\Http\Fresns\FresnsApi\Content\Resource\CommentMarkResource;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsCmds\FresnsPlugin;
 use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
@@ -302,6 +301,14 @@ class AmControllerApi extends FresnsBaseApiController
     //获取用户角色
     public function memberRoles(Request $request)
     {
+        // 校验参数
+        $rule = [
+            'type' => 'in:1,2,3',
+            'pageSize' => 'numeric',
+            'page' => 'numeric',
+        ];
+
+        ValidateService::validateRule($request, $rule);
         $page = $request->input('page',1);
         $pageSize = $request->input('pageSize',30);
         $fresnsMemberRolesService = new FresnsMemberRolesService();
@@ -790,7 +797,7 @@ class AmControllerApi extends FresnsBaseApiController
             $isMe = true;
         }
 
-        $data['common'] = $this->service->common($viewMid, $langTag, $isMe);
+        $data['common'] = $this->service->common($viewMid, $langTag, $isMe,$mid);
         $data['detail'] = $this->service->getMemberDetail($mid, $viewMid, $isMe, $langTag);
 
         $this->success($data);
@@ -1175,7 +1182,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $request->offsetSet('ids', $postIds);
                 $request->offsetSet('currentPage', $page);
                 $request->offsetSet('pageSize', $pageSize);
-                $FresnsPostsService->setResource(FresnsPostResource1::class);
+                $FresnsPostsService->setResource(FresnsMarkPostResource::class);
                 $data = $FresnsPostsService->searchData();
                 break;
             default:
@@ -1185,7 +1192,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $request->offsetSet('ids', $commentIds);
                 $request->offsetSet('currentPage', $page);
                 $request->offsetSet('pageSize', $pageSize);
-                $FresnsCommentsService->setResource(CommentResource1::class);
+                $FresnsCommentsService->setResource(CommentMarkResource::class);
                 $data = $FresnsCommentsService->searchData();
                 break;
         }

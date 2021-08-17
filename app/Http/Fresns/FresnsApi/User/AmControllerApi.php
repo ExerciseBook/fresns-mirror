@@ -213,8 +213,9 @@ class AmControllerApi extends FresnsBaseApiController
                 break;
         }
 
+        $userUuid = ApiCommonHelper::createUuid();
         $input['api_token'] = StrHelper::createToken();
-        $input['uuid'] = ApiCommonHelper::createUuid();
+        $input['uuid'] = $userUuid;
         $input['last_login_at'] = date('Y-m-d H:i:s');
         if ($password) {
             $input['password'] = StrHelper::createPassword($password);
@@ -223,21 +224,18 @@ class AmControllerApi extends FresnsBaseApiController
         $uid = FresnsUsers::insertGetId($input);
         FresnsCmdService::addSubTablePluginItem(FresnsUsersConfig::CFG_TABLE, $uid);
 
+        
         $memberInput = [
             'user_id' => $uid,
             'name' => StrHelper::createToken(rand(6, 8)),
             'nickname' => $nickname,
             'uuid' => ApiCommonHelper::createMemberUuid()
         ];
-        if ($password) {
-            $memberInput['password'] = StrHelper::createPassword($password);
-        }
 
         $mid = FresnsMembers::insertGetId($memberInput);
         FresnsCmdService::addSubTablePluginItem(FresnsMembersConfig::CFG_TABLE, $mid);
 
         $langTag = $this->langTag;
-        $data = $this->service->getUserInfo($uid, $langTag, $mid);
 
         if ($type == 1) {
             //初始成员配置表键值 user_counts和配置表键值 member_counts都加1，非初始成员member_counts加1
@@ -284,13 +282,31 @@ class AmControllerApi extends FresnsBaseApiController
         $defaultRoleId = ApiConfigHelper::getConfigByItemKey('default_role');
         $memberRoleRelsInput = [
             'member_id' => $mid,
-            'role_id' => $defaultRoleId
+            'role_id' => $defaultRoleId,
+            'type' => 2,
         ];
         FresnsMemberRoleRels::insert($memberRoleRelsInput);
 
         $sessionId = GlobalService::getGlobalSessionKey('session_log_id');
         if ($sessionId) {
             FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $uid, $mid, $uid);
+        }
+
+        $data = $this->service->getUserInfo($uid, $langTag, $mid);
+        if ($data) {
+            
+            $cmd = FresnsPluginConfig::PLG_CMD_CREATE_SESSION_TOKEN;
+            $input['uid'] = $userUuid;
+            $input['platform'] = $request->header('platform');
+            $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                $this->errorCheckInfo($resp);
+            }
+
+            $token = $resp['output']['token'] ?? '';
+
+            $data['token'] = $token;
+            $data['tokenExpiredTime'] = '';
         }
 
         $this->success($data);

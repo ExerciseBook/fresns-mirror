@@ -645,13 +645,13 @@ class FresnsPlugin extends BasePlugin
         $file['file_type'] = $type;
         $paramsExist = false;
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_2) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::VIDEO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id', 'videos_secret_key', 'videos_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
 
             $paramsExist = ValidateService::validParamExist($configMapInDB,
@@ -659,13 +659,13 @@ class FresnsPlugin extends BasePlugin
         }
 
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_3) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::AUDIO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_4) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::DOC_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
@@ -764,13 +764,13 @@ class FresnsPlugin extends BasePlugin
         $file['file_type'] = $type;
         $paramsExist = false;
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_2) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::VIDEO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id','videos_secret_key','videos_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
 
             $paramsExist = ValidateService::validParamExist($configMapInDB,
@@ -778,13 +778,13 @@ class FresnsPlugin extends BasePlugin
         }
 
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_3) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::AUDIO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id','audios_secret_key','audios_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_4) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::DOC_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id','docs_secret_key','docs_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
@@ -1020,7 +1020,7 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
@@ -1028,70 +1028,24 @@ class FresnsPlugin extends BasePlugin
                 LogService::error("插件信息未配置");
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
-
-            $url = str_replace($imagesBucketDomain.'/', '', $url);
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
             $input = [];
-            $input['url'] = $url;
-            $input['replaceUrl'] = $imagesBucketDomain;
-            $input['timeout'] = $timeout;
+            $input['fid'] = $fid;
             $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
             if (PluginRpcHelper::isErrorPluginResp($resp)) {
                 return $this->pluginError($resp['code']);
             }
             $output = $resp['output'];
-            $imageDefaultUrl = $output['signed_url'];
-
-            $imageRatioUrl = str_replace($imagesBucketDomain.'/', '', $imageRatioUrl);
-            $input = [];
-            $input['url'] = $imageRatioUrl;
-            $input['replaceUrl'] = $imagesBucketDomain;
-            $input['timeout'] = $timeout;
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
-                return $this->pluginError($resp['code']);
-            }
-            $output = $resp['output'];
-
-            $imageRatioUrl = $output['signed_url'];
-
-            $imageSquareUrl = str_replace($imagesBucketDomain.'/', '', $imageSquareUrl);
-            $input = [];
-            $input['url'] = $imageSquareUrl;
-            $input['replaceUrl'] = $imagesBucketDomain;
-            $input['timeout'] = $timeout;
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
-                return $this->pluginError($resp['code']);
-            }
-            $output = $resp['output'];
-
-            $imageSquareUrl = $output['signed_url'];
-
-            $imageBigUrl = str_replace($imagesBucketDomain.'/', '', $imageBigUrl);
-            $input = [];
-            $input['url'] = $imageBigUrl;
-            $input['replaceUrl'] = $imagesBucketDomain;
-            $input['timeout'] = $timeout;
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
-                return $this->pluginError($resp['code']);
-            }
-            $output = $resp['output'];
-
-            $imageBigUrl = $output['signed_url'];
+            $imageDefaultUrl = $output['imageDefaultUrl'] ?? '';
+            $imageRatioUrl = $output['imageRatioUrl'] ?? '';
+            $imageSquareUrl = $output['imageSquareUrl'] ?? '';
+            $imageBigUrl = $output['imageBigUrl'] ?? '';
         } else {
             $imageDefaultUrl = $url;
             $imageRatioUrl = $imageRatioUrl;
             $imageSquareUrl = $imageSquareUrl;
             $imageBigUrl = $imageBigUrl;
         }
-
-
         $item['imageDefaultUrl'] = $imageDefaultUrl;
         $item['imageRatioUrl'] = $imageRatioUrl;
         $item['imageSquareUrl'] = $imageSquareUrl;
@@ -1138,7 +1092,7 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::VIDEO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id','videos_secret_key','videos_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
 
             $paramsExist = ValidateService::validParamExist($configMapInDB,
@@ -1148,49 +1102,19 @@ class FresnsPlugin extends BasePlugin
                 LogService::error("插件信息未配置");
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
-            if(!strstr($videosBucketDomain,$videoCover)){
-                $videoCover = $videosBucketDomain . $videoCover;
-             }
-            $videoCover = str_replace($videosBucketDomain.'/', '', $videoCover);
+
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_VIDEO;
             $input = [];
-            $input['url'] = $videoCover;
-            $input['replaceUrl'] = $videosBucketDomain;
-            $input['timeout'] = $timeout;
+            $input['fid'] = $fid;
             $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
 
             if (PluginRpcHelper::isErrorPluginResp($resp)) {
                 return $this->pluginError($resp['code']);
             }
             $output = $resp['output'];
-            $videoCover = $output['signed_url'];
-
-            if(!strstr($videosBucketDomain,$videoGif)){
-                $videoGif = $videosBucketDomain . $videoGif;
-             }
-            $videoGif = str_replace($videosBucketDomain.'/', '', $videoGif);
-            $input = [];
-            $input['url'] = $videoGif;
-            $input['replaceUrl'] = $videosBucketDomain;
-            $input['timeout'] = $timeout;
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
-                return $this->pluginError($resp['code']);
-            }
-            $output = $resp['output'];
-            $videoGif = $output['signed_url'];
-
-            $videoUrl = str_replace($videosBucketDomain.'/', '', $videoUrl);
-            $input = [];
-            $input['url'] = $videoUrl;
-            $input['replaceUrl'] = $videosBucketDomain;
-            $input['timeout'] = $timeout;
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
-                return $this->pluginError($resp['code']);
-            }
-            $output = $resp['output'];
-            $videoUrl = $output['signed_url'];
+            $videoCover = $output['videoCover'] ?? '';
+            $videoGif = $output['videoGif'] ?? '';
+            $videoUrl = $output['videoUrl'] ?? '';
         }
 
         $item['videoCover'] = $videoCover;
@@ -1208,12 +1132,9 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::NO_RECORD);
         }
 
-        
-
         //判断是否开启防盗链
         $urlStatus = ApiConfigHelper::getConfigByItemKey('audios_url_status');
         $bucketDomain = ApiConfigHelper::getConfigByItemKey('audios_bucket_domain');
-        $timeout = ApiConfigHelper::getConfigByItemKey('audios_url_expire');
         $url = $bucketDomain.$files['file_path'];
         if ($urlStatus == true) {
             $unikey = ApiConfigHelper::getConfigByItemKey('audios_service');
@@ -1233,7 +1154,7 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::AUDIO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id','audios_secret_key','audios_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
@@ -1241,19 +1162,17 @@ class FresnsPlugin extends BasePlugin
                 LogService::error("插件信息未配置");
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
-            $url = str_replace($bucketDomain.'/', '', $url);
+
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_AUDIO;
             $input = [];
-            $input['url'] = $url;
-            $input['replaceUrl'] = $bucketDomain;
-            $input['timeout'] = $timeout;
+            $input['fid'] = $fid;
             $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
 
             if (PluginRpcHelper::isErrorPluginResp($resp)) {
                 return $this->pluginError($resp['code']);
             }
             $output = $resp['output'];
-            $singUrl = $output['signed_url'];
+            $singUrl = $output['singUrl'] ?? '';
         } else {
             $singUrl = $url;
         }
@@ -1296,7 +1215,7 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::DOC_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id','docs_secret_key','docs_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
@@ -1304,19 +1223,17 @@ class FresnsPlugin extends BasePlugin
                 LogService::error("插件信息未配置");
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
-            $url = str_replace($bucketDomain.'/', '', $url);
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
             $input = [];
-            $input['url'] = $url;
-            $input['replaceUrl'] = $bucketDomain;
-            $input['timeout'] = $timeout;
+            $input['fid'] = $fid;
+           
             $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
 
             if (PluginRpcHelper::isErrorPluginResp($resp)) {
                 return $this->pluginError($resp['code']);
             }
             $output = $resp['output'];
-            $singUrl = $output['signed_url'];
+            $singUrl = $output['singUrl'] ?? '';
         } else {
             $singUrl = $url;
         }
@@ -1684,13 +1601,13 @@ class FresnsPlugin extends BasePlugin
         $file['file_type'] = $type;
         $paramsExist = false;
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_2) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::VIDEO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id','videos_secret_key','videos_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
 
             $paramsExist = ValidateService::validParamExist($configMapInDB,
@@ -1698,13 +1615,13 @@ class FresnsPlugin extends BasePlugin
         }
 
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_3) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::AUDIO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id','audios_secret_key','audios_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_4) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::DOC_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id','docs_secret_key','docs_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
@@ -1764,13 +1681,13 @@ class FresnsPlugin extends BasePlugin
         $file['file_type'] = $type;
         $paramsExist = false;
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_2) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::VIDEO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id','videos_secret_key','videos_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
 
             $paramsExist = ValidateService::validParamExist($configMapInDB,
@@ -1778,13 +1695,13 @@ class FresnsPlugin extends BasePlugin
         }
 
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_3) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::AUDIO_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id','audios_secret_key','audios_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_4) {
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::DOC_STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id','docs_secret_key','docs_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
@@ -1841,7 +1758,8 @@ class FresnsPlugin extends BasePlugin
             $dataMap['token'] = $token;
         }
         $dataMap['sign'] = $sign;
-
+        //todo 签名验证时效配置
+        //签名验证时效配置
         LogService::info("验签信息: ", $dataMap);
         $signKey = FresnsSessionKeys::where('app_id', $appId)->value('app_secret');
 

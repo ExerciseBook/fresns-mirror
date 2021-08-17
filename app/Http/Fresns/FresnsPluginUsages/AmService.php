@@ -10,10 +10,9 @@ namespace App\Http\Fresns\FresnsPluginUsages;
 
 use App\Base\Services\BaseAdminService;
 use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
-use App\Http\Fresns\FresnsRole\FresnsRole;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 
 class AmService extends BaseAdminService
 {
@@ -51,7 +50,7 @@ class AmService extends BaseAdminService
         // 插件
         $common['plugOption'] = FresnsPlugin::staticBuildSelectOptions2('unikey', 'name', []);
         // 角色
-        $common['roleOption'] = FresnsRole::buildSelectTreeData('id', 'name', []);
+        $common['roleOption'] = FresnsMemberRoles::buildSelectTreeData('id', 'name', []);
 
         // 数据服务商插件
         $common['restfulPlugin'] = FresnsPlugin::where('scene', 'like', "%restful%")->get([

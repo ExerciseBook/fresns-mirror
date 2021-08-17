@@ -32,20 +32,5 @@ Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\Fresns\FresnsApi\C
     // 获取扩展内容
     Route::post('/extend/lists', 'AmControllerApi@extendsLists')->name('admin.content.extendsLists');
 
-    //下载内容附近【单个】
-    Route::post('/content/download', 'AmControllerApi@contentDownload')->name('admin.content.contentDownload');
 
-    // 内容互动记录[列表]
-    Route::post('/content/members', 'AmControllerApi@content_members')->name('admin.content.content_members');
-    // Route::post('/group/testCmd', 'AmControllerApi@testCmd')->name('admin.content.testCmd');
-    // Route::post('/group/checkVerify', 'AmControllerApi@checkVerify')->name('admin.content.checkVerify');
-    // Route::post('/group/cmdSubmit', 'AmControllerApi@cmdSubmit')->name('admin.content.cmdSubmit');
-    // Route::post('/group/sendEmail', 'AmControllerApi@sendEmail')->name('admin.content.sendEmail');
-    // Route::post('/group/sendPhone', 'AmControllerApi@sendPhone')->name('admin.content.sendPhone');
-    // Route::post('/group/sendSmsPlg', 'AmControllerApi@sendSmsPlg')->name('admin.content.sendSmsPlg');
-    // Route::post('/group/checkSms', 'AmControllerApi@checkSms')->name('admin.content.checkSms');
-    // Route::post('/group/pushIos', 'AmControllerApi@pushIos')->name('admin.content.pushIos');
-    // Route::post('/group/pushAndroid', 'AmControllerApi@pushAndroid')->name('admin.content.pushAndroid');
-    // Route::post('/group/sendWechat', 'AmControllerApi@sendWechat')->name('admin.content.sendWechat');
-    // Route::post('/group/submitDrast', 'AmControllerApi@submitDrast')->name('admin.content.submitDrast');
 });

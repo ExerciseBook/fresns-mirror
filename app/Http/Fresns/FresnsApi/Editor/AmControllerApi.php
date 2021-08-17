@@ -537,14 +537,14 @@ class AmControllerApi extends FresnsBaseApiController
             $file['file_type'] = $request->input('type', 1);
             $paramsExist = false;
             if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
-                $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::STORAGE)->pluck('item_value',
+                $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
                     'item_key')->toArray();
                 $paramsExist = ValidateService::validParamExist($configMapInDB,
                     ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
 
             }
             if ($file['file_type'] == FileSceneConfig::FILE_TYPE_2) {
-                $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::VIDEO_STORAGE)->pluck('item_value',
+                $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id', 'videos_secret_key', 'videos_bucket_domain'])->pluck('item_value',
                     'item_key')->toArray();
 
                 $paramsExist = ValidateService::validParamExist($configMapInDB,
@@ -552,13 +552,13 @@ class AmControllerApi extends FresnsBaseApiController
             }
 
             if ($file['file_type'] == FileSceneConfig::FILE_TYPE_3) {
-                $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::AUDIO_STORAGE)->pluck('item_value',
+                $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain'])->pluck('item_value',
                     'item_key')->toArray();
                 $paramsExist = ValidateService::validParamExist($configMapInDB,
                     ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
             }
             if ($file['file_type'] == FileSceneConfig::FILE_TYPE_4) {
-                $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::DOC_STORAGE)->pluck('item_value',
+                $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain'])->pluck('item_value',
                     'item_key')->toArray();
                 $paramsExist = ValidateService::validParamExist($configMapInDB,
                     ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
@@ -728,19 +728,7 @@ class AmControllerApi extends FresnsBaseApiController
 
         ];
         ValidateService::validateRule($request, $rule);
-
-        $memberId = GlobalService::getGlobalKey('member_id');
-        $mode = $request->input('mode');
-        $type = $request->input('type');
-        $input['type'] = $type;
-        $input['scene'] = $request->input('scene');
-        $input['mode'] = $request->input('mode');
-
-        // $checker = AmChecker::checkUploadPermission($memberId, $type);
-        // if ($checker !== true) {
-        //     $this->error($checker);
-        // }
-
+       
         $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
         $input['type'] = $request->input('type');
         $input['mode'] = $request->input('mode');
@@ -816,7 +804,7 @@ class AmControllerApi extends FresnsBaseApiController
 
             $paramsExist = false;
 
-            $configMapInDB = FresnsConfigs::where('item_tag', FresnsConfigsConfig::STORAGE)->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);

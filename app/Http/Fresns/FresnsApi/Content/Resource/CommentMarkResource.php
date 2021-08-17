@@ -49,7 +49,7 @@ use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
 use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
 
-class CommentResource1 extends BaseAdminResource
+class CommentMarkResource extends BaseAdminResource
 {
     public function toArray($request)
     {
@@ -115,15 +115,15 @@ class CommentResource1 extends BaseAdminResource
         $likeCount = $this->like_count;
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
-        $time = $this->created_at;
-        $timeFormat = DateHelper::format_date(strtotime($time));
-        $timeFormat = str_replace("前", 'ago', $timeFormat);
+        $time = DateHelper::asiaShanghaiToTimezone($this->created_at);
+        $timeFormat = DateHelper::format_date_langTag(strtotime($time));
+        // $timeFormat = str_replace("前", 'ago', $timeFormat);
         // $timeFormat = $this->created_at;
-        $editTime = $this->latest_edit_at;
+        $editTime = DateHelper::asiaShanghaiToTimezone($this->latest_edit_at);
         $editTimeFormat = "";
         if ($editTime) {
-            $editTimeFormat = DateHelper::format_date(strtotime($editTime));
-            $editTimeFormat = str_replace("前", 'ago', $editTimeFormat);
+            $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
+            // $editTimeFormat = str_replace("前", 'ago', $editTimeFormat);
         }
         // 是否关注
         // $followStatus = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',5)->where('follow_id',$this->id)->count();
@@ -164,7 +164,9 @@ class CommentResource1 extends BaseAdminResource
         $member['nickname'] = "";
         $member['nicknameColor'] = "";
         $member['roleName'] = "";
+        $member['roleNameDisplay'] = "";
         $member['roleIcon'] = "";
+        $member['roleIconDisplay'] = "";
         $member['avatar'] = $memberInfo->avatar_file_url ?? "";
         // 为空用默认头像
         if (empty($member['avatar'])) {
@@ -214,7 +216,9 @@ class CommentResource1 extends BaseAdminResource
                         $roleName = $roleName == null ? "" : $roleName['lang_content'];
                     }
                     $member['roleName'] = $roleName;
+                    $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? "";
                     $member['roleIcon'] = $memberRole['icon_file_url'] ?? "";
+                    $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? "";
                     // $member['avatar'] = $member['avatar'];
 
                     // $member['decorate'] = $memberInfo->decorate_file_url ?? "";
@@ -238,7 +242,9 @@ class CommentResource1 extends BaseAdminResource
                         $iconName = $iconName == null ? "" : $iconName['lang_content'];
                         $icons['name'] = $iconName;
                     }
-
+                    if(empty($icons['name']) && empty($icons['icon'])){
+                        $icons = [];
+                    }
                     $member['icons'] = $icons;
                 }
             }

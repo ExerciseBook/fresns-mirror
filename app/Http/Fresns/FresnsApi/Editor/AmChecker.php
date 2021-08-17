@@ -691,9 +691,21 @@ class AmChecker extends BaseChecker
     public static function checkAudit($type, $mid,$content)
     {
         $isCheck = false;
+        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($mid);
         //全局配置只有开启特殊规则时才会审核
         if ($type == 1) {
             $post_limit_status = ApiConfigHelper::getConfigByItemKey('post_limit_status');
+            if($post_limit_status == true && $roleId > 0){
+                //获取白名单
+                $post_limit_whitelist = ApiConfigHelper::getConfigByItemKey('post_limit_whitelist');
+                if(!empty($post_limit_whitelist)){
+                    $post_limit_whitelist_arr = json_decode($post_limit_whitelist,true);
+                    if(in_array($roleId,$post_limit_whitelist_arr)){
+                        $post_limit_status = false;
+                    }
+                }
+            }
+           
             if ($post_limit_status == true) {
                 $isCheck = true;
             }
@@ -703,6 +715,17 @@ class AmChecker extends BaseChecker
             }
         } else {
             $comment_limit_status = ApiConfigHelper::getConfigByItemKey('comment_limit_status');
+            if($comment_limit_status == true && $roleId > 0){
+                //获取白名单
+                $comment_limit_whitelist = ApiConfigHelper::getConfigByItemKey('comment_limit_whitelist');
+                if(!empty($comment_limit_whitelist)){
+                    $comment_limit_whitelist_arr = json_decode($comment_limit_whitelist,true);
+                    if(in_array($roleId,$comment_limit_whitelist_arr)){
+                        $comment_limit_status = false;
+                    }
+                }
+            }
+            
             if ($comment_limit_status == true) {
                 $isCheck = true;
             }
@@ -712,7 +735,7 @@ class AmChecker extends BaseChecker
             }
         }
 
-        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($mid);
+        
 
         if ($roleId) {
             $permission = FresnsMemberRoles::where('id', $roleId)->value('permission');

@@ -14,6 +14,7 @@ use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Center\Base\BasePluginConfig;
+use App\Http\Share\Common\LogService;
 
 /**
  * Class FresnsCrontabPlugin
@@ -47,6 +48,7 @@ class FresnsSubPlugin extends BasePlugin
         $subscribeArr = "";
         if ($subscribe) {
             $subscribeInfo = json_decode($subscribe['item_value'], true);
+            LogService::Info('subscribeInfo',$subscribeInfo);
             if($subscribeInfo){
                 foreach ($subscribeInfo as $s) {
                     if ($tableName == $s['subscribe_table_name']) {
@@ -100,19 +102,23 @@ class FresnsSubPlugin extends BasePlugin
         $subscribe = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->where('is_enable',
             1)->first();
         if (!empty($subscribe)) {
-            foreach ($subscribe as $s) {
-                // 订阅类型为4
-                if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE4) {
-                    $cmd = $s['subscribe_plugin_cmd'];
-                    $unikey = $s['subscribe_plugin_unikey'];
-                    $pluginClass = PluginHelper::findPluginClass($unikey);
-                    $input = [];
-                    $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-                    if (PluginRpcHelper::isErrorPluginResp($resp)) {
-                        return $this->pluginError($resp);
+            $subscribeInfo = json_decode($subscribe['item_value'], true);
+            if($subscribeInfo){
+                foreach ($subscribe as $s) {
+                    // 订阅类型为4
+                    if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE4) {
+                        $cmd = $s['subscribe_plugin_cmd'];
+                        $unikey = $s['subscribe_plugin_unikey'];
+                        $pluginClass = PluginHelper::findPluginClass($unikey);
+                        $input = [];
+                        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
+                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                            return $this->pluginError($resp);
+                        }
                     }
                 }
             }
+            
         }
         return $this->pluginSuccess();
     }

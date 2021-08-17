@@ -48,7 +48,8 @@ class FresnsHashtagsService extends FresnsBaseService
                 $common['seoInfo'] = $seoInfo;
             }
         }
-
+        $common['seoInfo'] = (Object)$common['seoInfo'];
+        
         return $common;
     }
 }

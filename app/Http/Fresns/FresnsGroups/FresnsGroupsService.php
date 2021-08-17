@@ -98,6 +98,9 @@ class FresnsGroupsService extends FresnsBaseService
             }
         }
         $common['extensions'] = $extends;
+        $common['seoInfo'] = (Object)$common['seoInfo'];
+        $common['extensions'] = (Object)$common['extensions'];
+
         return $common;
         // $extends = [];
         // $seoGroup['extends'] = $extends;

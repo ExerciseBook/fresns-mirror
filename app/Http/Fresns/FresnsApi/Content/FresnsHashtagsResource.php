@@ -66,7 +66,7 @@ class FresnsHashtagsResource extends BaseAdminResource
         $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
                 AmConfig::FOLLOW_HASHTAG_NAME) ?? "收藏";
         $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::LIKE_HASHTAG_SETTING) ?? "点赞";
+                AmConfig::LIKE_HASHTAG_NAME) ?? "点赞";
         $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
                 AmConfig::SHIELD_HASHTAG_NAME) ?? "不喜欢";
         // 默认字段

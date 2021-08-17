@@ -19,6 +19,7 @@ use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
 
 class ApiFileHelper
 {
@@ -30,7 +31,7 @@ class ApiFileHelper
 
         $fileArr['messageId'] = $messageInfo['id'];
         $fileArr['isMe'] = $messageInfo['send_member_id'] == $mid ? true : false;
-        $fileArr['type'] = "附件消息";
+        $fileArr['type'] = 2;
         $file = [];
         if ($fileInfo) {
             $file['fileId'] = $file_id;
@@ -101,8 +102,9 @@ class ApiFileHelper
             $sendMid = "";
             $sendDeactivate = false;
         }
+        $sendMemberInfo = FresnsMembers::find($sendMid);
         $fileArr['sendDeactivate'] = $sendDeactivate;
-        $fileArr['sendMid'] = $sendMid;
+        $fileArr['sendMid'] = $sendMemberInfo['uuid'] ?? "";
         $fileArr['sendAvatar'] = $memberInfo->avatar_file_url;
         // 为空用默认头像
         if (empty($memberInfo->avatar_file_url)) {
@@ -313,9 +315,12 @@ class ApiFileHelper
 
     // 获取more_json防盗链
     public static function getMoreJsonSignUrl($moreJson){
+        // dump($moreJson);
         if($moreJson){
             foreach($moreJson as &$m){
+                $m['moreJson'] = empty($m['moreJson']) ? [] : $m['moreJson'];
                 if($m['fid']){
+                    // dump($m);
                     if(isset($m['imageRatioUrl'])){
                             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
                             $input['fid'] = $m['fid'];
@@ -324,6 +329,7 @@ class ApiFileHelper
                             if (PluginRpcHelper::isErrorPluginResp($resp)) {
                                 return false;
                             }
+                            // dd($resp);
                             $m['imageRatioUrl'] = $resp['output']['imageRatioUrl'];
                             $m['imageSquareUrl'] = $resp['output']['imageSquareUrl'];
                             $m['imageBigUrl'] = $resp['output']['imageBigUrl'];
@@ -337,6 +343,7 @@ class ApiFileHelper
                         if (PluginRpcHelper::isErrorPluginResp($resp)) {
                             return false;
                         }
+                        $m['videoCover'] = $resp['output']['videoCover'];
                         $m['videoGif'] = $resp['output']['videoGif'];
                         $m['videoUrl'] = $resp['output']['videoUrl'];
                     }
@@ -364,6 +371,7 @@ class ApiFileHelper
                 }
             }
         }
+
         return $moreJson;
     }
 }

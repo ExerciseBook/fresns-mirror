@@ -12,8 +12,6 @@ $appName = env('APP_NAME');
 // dd($appName);
 if ($appName == 'fresns') {
     Route::group(['prefix' => '/fresns', 'namespace' => '\App\Http\Fresns\FresnsApi\Notify'], function () {
-        // 获取未读数
-        Route::post('/notify/unread', 'AmControllerApi@unread')->name('tweet.AmControllerApi.unread');
         // 获取消息列表
         Route::post('/notify/lists', 'AmControllerApi@lists')->name('tweet.AmControllerApi.lists');
         // 更新阅读状态

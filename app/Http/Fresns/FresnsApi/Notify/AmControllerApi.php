@@ -43,39 +43,39 @@ class AmControllerApi extends FresnsBaseApiController
     //     $this->initData();
     // }
     // 获取未读数
-    public function unread(Request $request)
-    {
-        $member_id = GlobalService::getGlobalKey('member_id');
-        //    dd($member_id);
-        // 系统
-        $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_1)->where('status', AmConfig::NO_READ)->count();
-        // 关注
-        $follow_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_2)->where('status', AmConfig::NO_READ)->count();
-        // 点赞
-        $like_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_3)->where('status', AmConfig::NO_READ)->count();
-        // 评论
-        $comment_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_4)->where('status', AmConfig::NO_READ)->count();
-        // 提及（艾特）
-        $mention_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_5)->where('status', AmConfig::NO_READ)->count();
-        // 推荐
-        $recommend_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_6)->where('status', AmConfig::NO_READ)->count();
+    // public function unread(Request $request)
+    // {
+    //     $member_id = GlobalService::getGlobalKey('member_id');
+    //     //    dd($member_id);
+    //     // 系统
+    //     $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
+    //         AmConfig::SOURCE_TYPE_1)->where('status', AmConfig::NO_READ)->count();
+    //     // 关注
+    //     $follow_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
+    //         AmConfig::SOURCE_TYPE_2)->where('status', AmConfig::NO_READ)->count();
+    //     // 点赞
+    //     $like_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
+    //         AmConfig::SOURCE_TYPE_3)->where('status', AmConfig::NO_READ)->count();
+    //     // 评论
+    //     $comment_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
+    //         AmConfig::SOURCE_TYPE_4)->where('status', AmConfig::NO_READ)->count();
+    //     // 提及（艾特）
+    //     $mention_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
+    //         AmConfig::SOURCE_TYPE_5)->where('status', AmConfig::NO_READ)->count();
+    //     // 推荐
+    //     $recommend_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
+    //         AmConfig::SOURCE_TYPE_6)->where('status', AmConfig::NO_READ)->count();
 
-        $data = [
-            'system' => $system_count,
-            'follow' => $follow_count,
-            'like' => $like_count,
-            'comment' => $comment_count,
-            'mention' => $mention_count,
-            'recommend' => $recommend_count,
-        ];
-        $this->success($data);
-    }
+    //     $data = [
+    //         'system' => $system_count,
+    //         'follow' => $follow_count,
+    //         'like' => $like_count,
+    //         'comment' => $comment_count,
+    //         'mention' => $mention_count,
+    //         'recommend' => $recommend_count,
+    //     ];
+    //     $this->success($data);
+    // }
 
     // 获取消息列表
     public function lists(Request $request)
@@ -107,7 +107,7 @@ class AmControllerApi extends FresnsBaseApiController
         $list = $FresnsNotifiesService->searchData();
         $data = [
             'pagination' => $list['pagination'],
-            'detail' => $list['list'],
+            'list' => $list['list'],
         ];
         $this->success($data);
     }
@@ -140,7 +140,7 @@ class AmControllerApi extends FresnsBaseApiController
     public function delete(Request $request)
     {
         $rule = [
-            'messageId' => 'required|array',
+            'notifyId' => 'required|array',
         ];
         ValidateService::validateRule($request, $rule);
         $uid = $this->uid;
@@ -153,7 +153,7 @@ class AmControllerApi extends FresnsBaseApiController
             $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
         }
         $member_id = GlobalService::getGlobalKey('member_id');
-        $idArr = $request->input('messageId');
+        $idArr = $request->input('notifyId');
         $result = self::isExsitMember($idArr, FresnsNotifiesConfig::CFG_TABLE, 'member_id', $member_id);
         // dd($result);
         if (!$result) {
@@ -192,7 +192,7 @@ class AmControllerApi extends FresnsBaseApiController
         $list = $FresnsDialogsService->searchData();
         $data = [
             'pagination' => $list['pagination'],
-            'detail' => $list['list'],
+            'list' => $list['list'],
         ];
         $this->success($data);
     }
@@ -263,7 +263,7 @@ class AmControllerApi extends FresnsBaseApiController
         if ($memberInfo) {
             if ($memberInfo->deleted_at == null) {
                 $member['deactivate'] = true;
-                $member['mid'] = $member_id;
+                $member['mid'] = $memberInfo->uuid;
                 $member['mname'] = $memberInfo->name;
                 $member['nickname'] = $memberInfo->nickname;
                 // $member['decorate'] = $memberInfo->decorate_file_url;
@@ -290,7 +290,7 @@ class AmControllerApi extends FresnsBaseApiController
             'pagination' => $list['pagination'],
             'dialogId' => $dialogId,
             'member' => $member,
-            'lists' => $list['list'],
+            'list' => $list['list'],
 
         ];
         $this->success($data);

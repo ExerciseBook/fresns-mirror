@@ -85,7 +85,7 @@ class BaseCategoryService extends BaseService
     {
         $this->hookListTreeBefore();
 
-        $topCategoryArr = $this->model->where('parent_id', NULL)->where($this->cond)->orderBy('rank_num')->get();
+        $topCategoryArr = $this->model->where('parent_id', NULL)->where($this->cond)->get();
         // dd($topCategoryArr);
         foreach ($topCategoryArr as &$category){
             $category['key'] = $category->id;

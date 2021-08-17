@@ -10,14 +10,14 @@ namespace App\Http\Fresns\FresnsPanel\Resource;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
-use App\Http\Fresns\FresnsClientKeys\FresnsClientKeysConfig;
+use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeysConfig;
 class KeysResource extends BaseAdminResource
 {
 
     public function toArray($request)
     {
         // form 字段
-        $formMap = FresnsClientKeysConfig::FORM_FIELDS_MAP;
+        $formMap = FresnsSessionKeysConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;

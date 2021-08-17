@@ -78,7 +78,7 @@ class FresnsExtendsResource extends BaseAdminResource
             'descSecondaryColor' => $this->desc_secondary_color,
             'btnName' => $this->btn_name,
             'btnColor' => $this->btn_color,
-            'moreJson' => [],
+            'moreJson' => {},
             'sourceContent' => $sourceContent,
         ];
         // 合并

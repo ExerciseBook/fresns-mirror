@@ -10,8 +10,8 @@ namespace App\Http\Fresns\FresnsPluginUsages;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
-use App\Http\Fresns\FresnsRole\FresnsRole;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 
 class AmResourceDetail extends BaseAdminResource
 {
@@ -46,7 +46,7 @@ class AmResourceDetail extends BaseAdminResource
         $roleNames = "";
         if ($this->member_roles) {
             $user_rolesArr = explode(',', $this->member_roles);
-            $roleInfo = FresnsRole::whereIn('id', $user_rolesArr)->pluck('name')->toArray();
+            $roleInfo = FresnsMemberRoles::whereIn('id', $user_rolesArr)->pluck('name')->toArray();
             $roleNames = implode(',', $roleInfo);
         }
 

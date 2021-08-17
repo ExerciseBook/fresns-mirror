@@ -16,7 +16,9 @@ use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
 use App\Http\Fresns\FresnsPlugin\FresnsPluginService;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadgesService;
@@ -102,21 +104,20 @@ class AmService
             $item['mid'] = $v->uuid;
             $item['mname'] = $v->name;
             $item['nickname'] = $v->nickname;
-            $roleId = FresnsMemberRoleRels::where('member_id', $v->id)->where('type',
-                AmConfig::MEMBER_ROLE_REL_TYPE_2)->value('role_id');
-            $roles = FresnsMemberRoles::where('id', $roleId)->first();
-            if (!empty($roles['nickname_color'])) {
-                $item['nicknameColor'] = $roles['nickname_color'];
-            }
-            if (!empty($roles)) {
-                if ($roles['is_display_name'] == 1) {
-                    $item['roleName'] = $roles['name'];
-                }
-            }
-            if (!empty($roles)) {
-                if ($roles['is_display_icon'] == 1) {
-                    $item['roleIcon'] = $roles['icon_file_url'];
-                }
+            $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($v->id);
+            $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
+            $item['nicknameColor'] = '';
+            $item['roleName'] = '';
+            $item['roleNameDisplay'] = '';
+            $item['roleIcon'] = '';
+            $item['roleIconDisplay'] = '';
+            if ($memberRole) {
+                $item['nicknameColor'] = $memberRole['nickname_color'];
+                $item['roleName'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE,
+                    'name', $memberRole['id'], $langTag);
+                $item['roleNameDisplay'] = $memberRole['is_display_name'];
+                $item['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'],$memberRole['icon_file_url']);
+                $item['roleIconDisplay'] = $memberRole['icon_display_icon'];
             }
 
             $isPassword = false;
