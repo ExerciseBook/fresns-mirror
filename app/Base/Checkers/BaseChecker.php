@@ -8,8 +8,8 @@
 
 namespace App\Base\Checkers;
 
-// 业务检查, 比如金额，状态等
-// 都用静态方法即可
+//业务检查，比如状态
+//都用静态方法即可
 use App\Traits\CodeTrait;
 
 class BaseChecker

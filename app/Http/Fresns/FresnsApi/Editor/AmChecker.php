@@ -31,7 +31,7 @@ use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
 use App\Http\Share\Common\LogService;
 use Illuminate\Support\Facades\Request;
 
-// 业务检查, 比如金额，状态等
+//业务检查，比如状态
 class AmChecker extends BaseChecker
 {
     // 错误码

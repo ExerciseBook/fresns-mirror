@@ -18,7 +18,7 @@ use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
 
-// 业务检查, 比如金额，状态等
+//业务检查，比如状态
 class AmChecker extends BaseChecker
 {
     // 错误码

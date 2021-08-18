@@ -14,7 +14,7 @@ use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
 use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
 
-// 业务检查, 比如金额，状态等
+//业务检查，比如状态
 class AmChecker extends FresnsBaseChecker
 {
     /**

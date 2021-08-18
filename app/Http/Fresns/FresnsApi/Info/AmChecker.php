@@ -15,7 +15,7 @@ use App\Http\Models\Common\ConfigGroup;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Share\Common\ErrorCodeService;
 
-// 业务检查, 比如金额，状态等
+//业务检查，比如状态
 class AmChecker extends FresnsBaseChecker
 {
     // 错误码

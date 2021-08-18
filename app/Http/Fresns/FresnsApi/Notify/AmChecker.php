@@ -22,7 +22,7 @@ use App\Http\Share\Common\LogService;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesService;
 
-// 业务检查, 比如金额，状态等
+//业务检查，比如状态
 class AmChecker extends BaseChecker
 {
     // 错误码
