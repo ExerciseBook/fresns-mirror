@@ -23,10 +23,6 @@ class AmResource extends BaseAdminResource
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
 
-        $itemValueArr = json_decode($this->item_value, true);
-        if ($this->item_key == AmConfig::LANG_SETTINGS) {
-            $itemValueArr = ArrayHelper::arraySort($itemValueArr, 'rankNum', SORT_ASC);
-        }
 
         // 默认字段
         $default = [
@@ -40,7 +36,6 @@ class AmResource extends BaseAdminResource
             'nickname' => $this->nickname,
             'more_json' => $this->more_json,
             'more_json_decode' => json_decode($this->more_json, true),
-            'item_value_decode' => $itemValueArr,
         ];
 
         // 合并

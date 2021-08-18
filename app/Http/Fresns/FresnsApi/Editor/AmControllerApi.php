@@ -437,7 +437,7 @@ class AmControllerApi extends FresnsBaseApiController
                     $createdCheck = AmChecker::checkPermission(1, 1, $user_id, $mid);
                     if (is_array($createdCheck)) {
                         FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
-                        return $this->errorCheckInfo($checkInfo);
+                        return $this->errorCheckInfo($createdCheck);
                     }
                 } else {
                     // 验证新增权限

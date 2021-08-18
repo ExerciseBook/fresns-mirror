@@ -1758,8 +1758,14 @@ class FresnsPlugin extends BasePlugin
             $dataMap['token'] = $token;
         }
         $dataMap['sign'] = $sign;
-        //todo 签名验证时效配置
+
         //签名验证时效配置
+        $min = 5; //过期时效，单位：分钟
+        $expiredMin = $min * 60;
+        $now = time();
+        if($now - $timestamp > $expiredMin){
+            return $this->pluginError(ErrorCodeService::SING_EXPIRED_ERROR);
+        }
         LogService::info("验签信息: ", $dataMap);
         $signKey = FresnsSessionKeys::where('app_id', $appId)->value('app_secret');
 

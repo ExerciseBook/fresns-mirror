@@ -151,6 +151,7 @@ class ErrorCodeService
     CONST USER_WALLETS_ERROR = 30139;
     CONST BALANCE_CLOSING_BALANCE_ERROR = 30140;
     CONST USER_BALANCE_ERROR = 30141;
+    CONST SING_EXPIRED_ERROR = 30142;
     
 
 
@@ -324,6 +325,7 @@ class ErrorCodeService
         self::USER_WALLETS_ERROR        => '用户钱包不存在',
         self::BALANCE_CLOSING_BALANCE_ERROR        => '期末余额和钱包额度不匹配',
         self::USER_BALANCE_ERROR        => '钱包余额不正确',
+        self::SING_EXPIRED_ERROR        => '签名已过期',
 
 
         self::CODE_LOGIN_ERROR                => '用户名或密码错误',

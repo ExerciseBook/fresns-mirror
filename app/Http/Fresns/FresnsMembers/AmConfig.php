@@ -10,10 +10,7 @@ namespace App\Http\Fresns\FresnsMembers;
 
 // 配置
 use App\Base\Config\BaseConfig;
-use App\Http\Config\AssetFileConfig;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
-use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
+ 
 
 class AmConfig extends BaseConfig
 {
@@ -29,9 +26,7 @@ class AmConfig extends BaseConfig
     const FORM_FIELDS_MAP = [
         'id' => 'id',
         'name' => 'name',
-        'nickname' => 'nickname',
         'is_enable' => 'is_enable',
-        'remark' => 'remark',
         'type' => 'type',
         'icon_file_id' => 'icon_file_id',
         'icon_file_url' => 'icon_file_url',
@@ -48,50 +43,6 @@ class AmConfig extends BaseConfig
         ['key' => 3, 'text' => '用户运营类'],
     ];
 
-    // 新增规则
-    public function storeRule()
-    {
-        $table = self::CFG_TABLE;
-        $assetFileTable = FresnsFilesConfig::CFG_TABLE;
-
-
-        $rule = [
-            'rank_num' => 'numeric',
-            'is_enable' => Rule::in(BaseConfig::ENABLE_VALUE_ARR),
-            'file_id' => Rule::exists($assetFileTable, 'id')->where(function ($query) {
-                $query->where('deleted_at', null);
-            }),
-            'file_url' => "url",
-            'more_json' => "json",
-        ];
-
-        return $rule;
-    }
-
-    // 更新规则
-    public function updateRule()
-    {
-        $id = request()->input('id');
-        $table = self::CFG_TABLE;
-        $assetFileTable = FresnsFilesConfig::CFG_TABLE;
-
-
-        $rule = [
-            'id' => [
-                'required',
-                Rule::exists($table)->where(function ($query) {
-                    $query->where('deleted_at', null);
-                })
-            ],
-            'rank_num' => 'numeric',
-            'file_id' => Rule::exists($assetFileTable, 'id')->where(function ($query) {
-                $query->where('deleted_at', null);
-            }),
-            'file_url' => "url",
-            'more_json' => "json",
-        ];
-
-        return $rule;
-    }
+     
 
 }
