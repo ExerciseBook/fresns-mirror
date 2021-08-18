@@ -10,7 +10,7 @@ namespace App\Http\Fresns\FresnsUserWalletLogs;
 
 use App\Base\Checkers\BaseChecker;
 
-// 业务检查, 比如金额，状态等
+//业务检查，比如状态
 class AmChecker extends BaseChecker
 {
 
