@@ -15,7 +15,7 @@
         "php": "^7.3|^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.54",
+        "laravel/framework": "^8.55",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.0",
         "rap2hpoutre/laravel-log-viewer": "^1.7"
