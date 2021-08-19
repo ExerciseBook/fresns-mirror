@@ -10,7 +10,7 @@
 namespace App\Http\Fresns\FresnsFileAppends;
 
 
-class TweetFileAppendsService extends AmService
+class FresnsFileAppendsService extends AmService
 {
 
 }
