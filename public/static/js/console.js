@@ -9,7 +9,7 @@ $(".installLocal").click(function(){
     $.ajax({
         async: false,
         type: "post",
-        url: "/localInstall",
+        url: "/fresns/localInstall",
         data: {'dirName':dirName},
         beforeSend: function (request) {
             return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
@@ -61,9 +61,9 @@ $(".update_plugin").click(function(){
     var dirName = unikey;
     var downloadUrl = "https://cdn.fresns.cn/extensions/plugin_v1.0.0.zip";
     $.ajax({
-        async: false,    //设置为同步
+        async: false,
         type: "get",
-        url: "/api/fresns/plugin/upgrade",
+        url: "https://apps.fresns.cn/api/extensions/upgrade",
         data: {'unikey':unikey,'dirName':dirName,'downloadUrl':downloadUrl,"localVision":1,'remoteVisionInt':2,'remoteVision':'2.0.0'},
         beforeSend: function (request) {
             return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
@@ -87,9 +87,9 @@ $("#updatePlugin").click(function(){
     var remoteVision = $(this).attr('data_new_vision');
     var dirName = unikey;
     $.ajax({
-        async: false,    //设置为同步
+        async: false,
         type: "post",
-        url: "/localInstall",
+        url: "/fresns/localInstall",
         data: {'dirName':unikey},
         beforeSend: function (request) {
             return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
@@ -104,7 +104,15 @@ $("#updatePlugin").click(function(){
     })
 });
 
-//themes setting
+//Engine Themes Setting
+$("#linkSubject").click(function(){
+    var unikey = $(this).attr('unikey');
+    var subectUnikeyPc = $(this).attr('subectUnikeyPc');
+    var subectUnikeyMobile = $(this).attr('subectUnikeyMobile');
+    $("#updateWebsite").val(unikey);
+    $(".subectUnikeyPc").val(subectUnikeyPc);
+    $(".subectUnikeyMobile").val(subectUnikeyMobile);
+});
 $(".updateSubject").click(function(){
     var websiteUnikey = $("#updateWebsite").val();
     if(!websiteUnikey){
@@ -116,7 +124,7 @@ $(".updateSubject").click(function(){
     $.ajax({
         async: false,
         type: "post",
-        url: "/websiteLinkSubject",
+        url: "/fresns/websiteLinkSubject",
         data: {'websiteUnikey':websiteUnikey,'subjectUnikeyPc':pluginPc,'subjectUnikeyMobile':pluginMobile},
         beforeSend: function (request) {
             return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
@@ -129,4 +137,100 @@ $(".updateSubject").click(function(){
             }
         }
     })
+});
+
+//Deactivate
+$(".btn_enable1").click(function(){
+    var id = $(this).attr('data_id');
+    $.ajax({
+        async: false,
+        type: "post",
+        url: "/fresns/enableUnikeyStatus",
+        data: {'data_id':id,'is_enable':0},
+        beforeSend: function (request) {
+            return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+        },
+        success: function (data) {
+            if(data.code == 0){
+                window.location.reload();
+            }else{
+                alert(data.message)
+            }
+        }
+    })
+});
+
+//Activate
+$(".btn_enable2").click(function(){
+    var id = $(this).attr('data_id');
+    $.ajax({
+        async: false,
+        type: "post",
+        url: "/fresns/enableUnikeyStatus",
+        data: {'data_id':id,'is_enable':1},
+        beforeSend: function (request) {
+            return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+        },
+        success: function (data) {
+            if(data.code == 0){
+                window.location.reload();
+            }else{
+                alert(data.message)
+            }
+        }
+    })
+});
+
+//Uninstall
+$('.uninstallUnikey').on('click', function() {
+    var name = $(this).attr('data-name');
+    $('#confirmUninstall .modal-title').text(name);
+    var unikey = $(this).attr('unikey');
+    $(".btn-danger").attr('unikey', unikey);
+});
+$(".btn-danger").click(function(){
+    var unikey = $(this).attr('unikey');
+    var clear_plugin_data = $('#is-delete-data').is(':checked') ? 1 : 0;
+    $.ajax({
+        async: false,
+        type: "post",
+        url: "/fresns/uninstall",
+        data: {'unikey':unikey,'clear_plugin_data': clear_plugin_data},
+        beforeSend: function (request) {
+            return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+        },
+        success: function (data) {
+            if(data.code == 0){
+                window.location.reload();
+            }else{
+                alert(data.message)
+            }
+        }
+    })
+});
+
+//Plugin List Tab
+$(".pluginList li").click(function(){
+    var type = $(this).find('a').attr('data-type');
+    $(".pluginList").find('li a').removeClass('active');
+    $(this).find('a').addClass('active');
+    if(type == 2){
+        $(".pluginLists").show();
+        return;
+    }
+    $(".pluginLists").each(function(){
+        var that = $(this);
+        var enableStatus = that.attr('isEnable');
+        if(type != enableStatus){
+            that.hide();
+        }else{
+            that.show();
+        }
+    })
+});
+
+//Bootstrap Tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
 });

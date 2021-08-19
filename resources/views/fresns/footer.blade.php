@@ -1,19 +1,12 @@
 <footer>
     <div class="copyright text-center">
-        <p class="mt-5 mb-5 text-muted">&copy; 2021 Fresns</p>
+        <p class="mt-5 mb-5 text-muted">Powered by Fresns</p>
     </div>
 </footer>
 
-<script src="/assets/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/js/jquery-3.6.0.min.js"></script>
-<script src="/assets/js/console.js"></script>
-<script>
-    /* Bootstrap Tooltips */
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-</script>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/jquery-3.6.0.min.js"></script>
+<script src="/static/js/console.js"></script>
 
 <script>
     $(function () {

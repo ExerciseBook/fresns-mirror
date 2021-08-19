@@ -1,21 +1,4 @@
-<!doctype html>
-<html lang="{{ $lang }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="author" content="Fresns" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title>Fresns Console</title>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
-    <link rel="stylesheet" href="/assets/css/console.css">
-</head>
-
-<body>
-
-@include('common.header')
+@include('fresns.header')
 
     <main>
         <div class="container-lg p-0 p-lg-3">
@@ -70,8 +53,8 @@
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-outline-success btn-sm update_data" data-bs-toggle="modal" data-bs-target="#editKey" data_id="{{$item['id']}}" data_platform="{{$item['platform_id']}}" data_name="{{$item['name']}}" data_type="{{$item['type']}}" data_plugin="{{$item['plugin_unikey']}}" data_status="{{$item['is_enable']}}">@lang('fresns.keysTableOptionEdit')</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm redictKey" data-bs-toggle="modal" data-bs-target="#confirmReset" data_name="{{$item['name']}}" data_app="{{$item['app_id']}}" data-id="{{$item['id']}}">@lang('fresns.keysTableOptionReset')</button>
-                                        <button type="button" class="btn btn-link text-danger fs-7 fresns-link delKey" data-bs-toggle="modal" data-bs-target="#confirmDele" data_name="{{$item['name']}}" data_app="{{$item['app_id']}}" data-id="{{$item['id']}}">@lang('fresns.keysTableOptionDelete')</button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm resetKey" data-bs-toggle="modal" data-bs-target="#confirmReset" data_name="{{$item['name']}}" data_app="{{$item['app_id']}}" data-id="{{$item['id']}}">@lang('fresns.keysTableOptionReset')</button>
+                                        <button type="button" class="btn btn-link text-danger fs-7 fresns-link deleteKey" data-bs-toggle="modal" data-bs-target="#confirmDelete" data_name="{{$item['name']}}" data_app="{{$item['app_id']}}" data-id="{{$item['id']}}">@lang('fresns.keysTableOptionDelete')</button>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -242,7 +225,7 @@
     </div>
 
     <!--Delete Modal-->
-    <div class="modal fade" id="confirmDele" tabindex="-1" aria-labelledby="confirmDele" aria-hidden="true">
+    <div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="confirmDelete" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -260,35 +243,9 @@
         </div>
     </div>
 
-@include('common.footer')
+@include('fresns.footer')
 
 <script>
-    //Reset Secret
-    $(".redictKey").click(function(){
-        var id = $(this).attr('data-id');
-        var name = $(this).attr('data_name');
-        var app = $(this).attr('data_app');
-        $('#confirmReset .app_id').text(app);
-        $('#confirmReset .modal-title').text(name);
-        $(".reset-key-btn").attr('data_app', app);
-        $(".reset-key-btn").attr('data-id', id);
-    })
-    $(".reset-key-btn").click(function() {
-        var data_id = $(this).attr('data-id');
-        $.ajax({
-            async: false,
-            type: "post",
-            url: "/resetKey",
-            data: {'data_id':data_id},
-            beforeSend: function (request) {
-                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-            },
-            success: function (data) {
-                window.location.reload();
-            }
-        })
-    });
-
     //Create Key
     $(".submitKey").click(function(){
         var platformId = $("#key_platform").find("option:selected").val();
@@ -299,7 +256,7 @@
         $.ajax({
             async: false,
             type: "post",
-            url: "/submitKey",
+            url: "/fresns/submitKey",
             data: {'platformId':platformId,'keyName':keyName,'type':type,'plugin':plugin,'enAbleStatus':enAbleStatus},
             beforeSend: function (request) {
                 return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
@@ -315,12 +272,12 @@
     });
 
     //Delete Key
-    $('.delKey').on('click', function() {
+    $('.deleteKey').on('click', function() {
         var id = $(this).attr('data-id');
         var name = $(this).attr('data_name');
         var app = $(this).attr('data_app');
-        $('#confirmDele .app_id').text(app);
-        $('#confirmDele .modal-title').text(name);
+        $('#confirmDelete .app_id').text(app);
+        $('#confirmDelete .modal-title').text(name);
         var id = $(this).attr('data-id');
         $(".delete-btn").attr('data-id', id);
     });
@@ -329,7 +286,7 @@
         $.ajax({
             async: false,
             type: "post",
-            url: "/delKey",
+            url: "/fresns/delKey",
             data: {'data_id':id,is_enable:status},
             beforeSend: function (request) {
                 return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
@@ -366,6 +323,32 @@
         }
     })
 
+    //Reset Secret
+    $(".resetKey").click(function(){
+        var id = $(this).attr('data-id');
+        var name = $(this).attr('data_name');
+        var app = $(this).attr('data_app');
+        $('#confirmReset .app_id').text(app);
+        $('#confirmReset .modal-title').text(name);
+        $(".reset-key-btn").attr('data_app', app);
+        $(".reset-key-btn").attr('data-id', id);
+    })
+    $(".reset-key-btn").click(function() {
+        var data_id = $(this).attr('data-id');
+        $.ajax({
+            async: false,
+            type: "post",
+            url: "/fresns/resetKey",
+            data: {'data_id':data_id},
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
+                window.location.reload();
+            }
+        })
+    });
+
     //Submit Edit
     $(".updateKey").click(function(){
         var id = $("#key_name_update").attr('data_id');
@@ -377,7 +360,7 @@
         $.ajax({
             async: false,
             type: "post",
-            url: "/updateKey",
+            url: "/fresns/updateKey",
             data: {'id':id,'platformId':platformId,'keyName':keyName,'type':type,'plugin':plugin,'enAbleStatus':enAbleStatus},
             beforeSend: function (request) {
                 return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");

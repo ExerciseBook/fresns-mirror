@@ -1,20 +1,4 @@
-<!doctype html>
-<html lang="{{ $lang }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="author" content="Fresns" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title>Fresns Console</title>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
-    <link rel="stylesheet" href="/assets/css/console.css">
-</head>
-
-<body>
-
-@include('common.header')
+@include('fresns.header')
 
     <main>
         <div class="container-lg p-0 p-lg-3">
@@ -73,7 +57,7 @@
                                             <span class="badge bg-light text-dark"><i class="bi bi-phone"></i> {{ $v['phone_desc'] ?? "@lang('fresns.air')" }}</span>
                                         </td>
                                         <td class="text-end">
-                                            <button type="button" class="btn btn-link btn-sm text-danger fresns-link delete" data-bs-toggle="modal" data-bs-target="#confirmDele" data-uuid="{{ $v['uuid'] }}">@lang('fresns.deleteSystemAdmin')</button>
+                                            <button type="button" class="btn btn-link btn-sm text-danger fresns-link delete" data-bs-toggle="modal" data-bs-target="#confirmDelete" data-uuid="{{ $v['uuid'] }}">@lang('fresns.deleteSystemAdmin')</button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -111,7 +95,7 @@
     </div>
 
     <!--Delete Admin Modal-->
-    <div class="modal fade" id="confirmDele" tabindex="-1" aria-labelledby="confirmDele" aria-hidden="true">
+    <div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="confirmDelete" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -129,7 +113,7 @@
         </div>
     </div>
 
-@include('common.footer')
+@include('fresns.footer')
 
     <script>
         //Console Setting
@@ -148,7 +132,6 @@
                 alert("@lang('fresns.copyConsoleUrlWarning')");
             }
         });
-
         $('.safe-entrance').bind('input propertychange', function() {
             var entrance = $(this).val();
             var address = $('.backend-address').val();
@@ -171,7 +154,7 @@
             $.ajax({
                 async: false,
                 type: "post",
-                url: "/updateSetting",
+                url: "/fresns/updateSetting",
                 data: {
                     'admin_path': admin_path,
                     'backend_url': backend_url,
@@ -196,7 +179,7 @@
             $.ajax({
                 async: false,
                 type: "post",
-                url: "/addAdmin",
+                url: "/fresns/addAdmin",
                 data: {
                     'account': account
                 },
@@ -215,7 +198,7 @@
 
         $('.delete').on('click', function() {
             var uuid = $(this).attr('data-uuid');
-            $('#confirmDele .app_id').text(uuid);
+            $('#confirmDelete .app_id').text(uuid);
             $(".btn-danger").attr('data-uuid', uuid);
         })
         $(".btn-danger").click(function() {
@@ -223,7 +206,7 @@
             $.ajax({
                 async: false,
                 type: "post",
-                url: "/delAdmin",
+                url: "/fresns/delAdmin",
                 data: {
                     'uuid': uuid
                 },

@@ -1,20 +1,4 @@
-<!doctype html>
-<html lang="{{ $lang }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="author" content="Fresns" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title>Fresns Console</title>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
-    <link rel="stylesheet" href="/assets/css/console.css">
-</head>
-
-<body>
-
-@include('common.header')
+@include('fresns.header')
 
     <main>
         <div class="container-lg p-0 p-lg-3">
@@ -75,7 +59,7 @@
                                                 @endif
                                             @else
                                                 <button type="button" class="btn btn-outline-secondary btn-sm btn_enable2" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.activateInfo')" data_id="{{$item['id']}}">@lang('fresns.activate')</button>
-                                                <button type="button" class="btn btn-outline-danger btn-sm uninstallUnikey" data-bs-toggle="modal" data-bs-target="#confirmDele" data-name="{{$item['name']}}" unikey="{{$item['unikey']}}" title="@lang('fresns.uninstallInfo')">@lang('fresns.uninstall')</button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm uninstallUnikey" data-bs-toggle="modal" data-bs-target="#confirmUninstall" data-name="{{$item['name']}}" unikey="{{$item['unikey']}}" title="@lang('fresns.uninstallInfo')">@lang('fresns.uninstall')</button>
                                             @endif
                                         </td>
                                     </tr>
@@ -116,7 +100,7 @@
                                         @endif
                                     @else
                                         <button type="button" class="btn btn-outline-secondary btn-sm btn_enable2" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.activateInfo')" data_id="{{$item['id']}}">@lang('fresns.activate')</button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm uninstallUnikey" data-bs-toggle="modal" data-bs-target="#confirmDele" data-name="{{$item['name']}}" unikey="{{$item['unikey']}}" title="@lang('fresns.uninstallInfo')">@lang('fresns.uninstall')</button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm uninstallUnikey" data-bs-toggle="modal" data-bs-target="#confirmUninstall" data-name="{{$item['name']}}" unikey="{{$item['unikey']}}" title="@lang('fresns.uninstallInfo')">@lang('fresns.uninstall')</button>
                                     @endif
                                     </div>
                                 </div>
@@ -170,7 +154,7 @@
     </div>
 
     <!--Uninstall Modal-->
-    <div class="modal fade" id="confirmDele" tabindex="-1" aria-labelledby="confirmDele" style="display: none;" aria-hidden="true">
+    <div class="modal fade" id="confirmUninstall" tabindex="-1" aria-labelledby="confirmUninstall" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -193,89 +177,7 @@
         </div>
     </div>
 
-@include('common.footer')
-
-<script>
-    //Deactivate
-    $(".btn_enable1").click(function(){
-        var id = $(this).attr('data_id');
-        $.ajax({
-            async: false,
-            type: "post",
-            url: "/enableUnikeyStatus",
-            data: {'data_id':id,'is_enable':0},
-            beforeSend: function (request) {
-                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-            },
-            success: function (data) {
-                if(data.code == 0){
-                    window.location.reload();
-                }else{
-                    alert(data.message)
-                }
-            }
-        })
-    });
-
-    //Activate
-    $(".btn_enable2").click(function(){
-        var id = $(this).attr('data_id');
-        $.ajax({
-            async: false,
-            type: "post",
-            url: "/enableUnikeyStatus",
-            data: {'data_id':id,'is_enable':1},
-            beforeSend: function (request) {
-                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-            },
-            success: function (data) {
-                if(data.code == 0){
-                    window.location.reload();
-                }else{
-                    alert(data.message)
-                }
-            }
-        })
-    });
-
-    //Uninstall
-    $('.uninstallUnikey').on('click', function() {
-        var name = $(this).attr('data-name');
-        $('#confirmDele .modal-title').text(name);
-        var unikey = $(this).attr('unikey');
-        $(".btn-danger").attr('unikey', unikey);
-    });
-    $(".btn-danger").click(function(){
-        var unikey = $(this).attr('unikey');
-        var clear_plugin_data = $('#is-delete-data').is(':checked') ? 1 : 0;
-        $.ajax({
-            async: false,
-            type: "post",
-            url: "/uninstall",
-            data: {'unikey':unikey,'clear_plugin_data': clear_plugin_data},
-            beforeSend: function (request) {
-                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-            },
-            success: function (data) {
-                if(data.code == 0){
-                    window.location.reload();
-                }else{
-                    alert(data.message)
-                }
-            }
-        })
-    });
-
-    //Engine Themes Setting
-    $("#linkSubject").click(function(){
-        var unikey = $(this).attr('unikey');
-        var subectUnikeyPc = $(this).attr('subectUnikeyPc');
-        var subectUnikeyMobile = $(this).attr('subectUnikeyMobile');
-        $("#updateWebsite").val(unikey);
-        $(".subectUnikeyPc").val(subectUnikeyPc);
-        $(".subectUnikeyMobile").val(subectUnikeyMobile);
-    })
-</script>
+@include('fresns.footer')
 
 </body>
 </html>

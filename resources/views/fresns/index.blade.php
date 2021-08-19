@@ -8,15 +8,15 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <title>Fresns Console</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
-    <link rel="stylesheet" href="/assets/css/console.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/console.css">
 </head>
 
 <body>
     <main class="form-signin text-center">
-        <form class="p-3" action="/loginAcc" method="POST">
-            <img class="my-5" src="/assets/images/fresns-icon.png" alt="Fresns" width="72" height="72">
+        <form class="p-3" action="/fresns/loginAcc" method="POST">
+            <img class="my-5" src="/static/images/fresns-icon.png" alt="Fresns" width="72" height="72">
             <h1 class="h3 mb-3 fw-normal">@lang('fresns.language')</h1>
             <select class="form-select mb-5" id="form-select">
                 <option value="en">English</option>
@@ -43,17 +43,15 @@
             </div>
             <input type="text" style="display:none;" id="lang" name="lang">
             <button class="w-100 btn btn-lg btn-primary mt-4" onclick="return checkData()" >@lang('fresns.enter')</button>
-            <p class="mt-5 mb-5 text-muted">&copy; 2021 Fresns</p>
+            <p class="mt-5 mb-5 text-muted">Powered by Fresns</p>
         </form>
     </main>
 
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/jquery-3.6.0.min.js"></script>
-    <script src="/assets/js/base64.js"></script>
-    <script src="/assets/js/console.js"></script>
-
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/base64.js"></script>
     <script>
-        //lang
+        //language
         $(document).ready(function(){
             var val = getQueryVariable("lang"); 
             $('.form-select option[value="'+val+'"]').prop("selected","selected");
@@ -75,7 +73,6 @@
                     return(false);
                 }
         });
-
         //login
         var isLogin = false;
         function checkData(){
@@ -84,7 +81,6 @@
             var account = $('#account').val();
             var password = $('#password').val();
             var lang = $('.form-select option:selected').val();
-
             isLogin = false;
             password = Base64.encode(password);
             $('#password').val(password)
@@ -92,7 +88,7 @@
             $.ajax({
                 async: false,
                 type: "post",
-                url: "/checkLogin",
+                url: "/fresns/checkLogin",
                 data: {'account':account,'password':password,'lang':lang},
                 beforeSend: function (request) {
                         return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
@@ -111,6 +107,6 @@
             return result
         }
     </script>
+    
 </body>
-
 </html>

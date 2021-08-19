@@ -1,7 +1,24 @@
+<!doctype html>
+<html lang="{{ $lang }}">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Fresns" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fresns Console</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/console.css">
+</head>
+
+<body>
+
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#7952b3;">
         <div class="container-lg">
-            <a class="navbar-brand" href="/fresns/dashboard"><img src="/assets/images/fresns-logo-white.png" height="40"></a>
+            <a class="navbar-brand" href="/fresns/dashboard"><img src="/static/images/fresns-logo-white.png" height="40"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
