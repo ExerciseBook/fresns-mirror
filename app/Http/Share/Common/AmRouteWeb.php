@@ -7,7 +7,7 @@
 
 // 设置web路由 - db替换，没有的话为默认路由
 Route::get('/', function () {
-    return view('welcome');
+    return view('commons.welcome');
 });
 
 // 查看日志

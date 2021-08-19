@@ -89,7 +89,7 @@ class Handler extends ExceptionHandler
             //  dd($newTraceMsgArr);
             LogService::warning("error", $exception);
 
-            return response()->view('common.error', [
+            return response()->view('commons.error', [
                 "status"  => $statusCode,
                 "msg" => $msg,
                 "traceMsgArr" => $newTraceMsgArr

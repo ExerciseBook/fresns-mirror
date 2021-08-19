@@ -66,7 +66,7 @@ class AmControllerWeb extends BaseFrontendController
         ];
 
         // dd($data);
-        return $this->display('index', $data);
+        return $this->display('fresns/index', $data);
     }
 
     public function loginIndex()
@@ -76,7 +76,7 @@ class AmControllerWeb extends BaseFrontendController
             'lang' => $lang,
         ];
 
-        return $this->display('login', $data);
+        return $this->display('fresns/login', $data);
 
     }
 
@@ -254,7 +254,7 @@ class AmControllerWeb extends BaseFrontendController
             'lang_desc' => AmService::getLanguage($lang),
         ];
 
-        return $this->display('settings', $data);
+        return $this->display('fresns/settings', $data);
     }
 
     public function updateSetting(Request $request)
@@ -384,7 +384,7 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
 
-        return $this->display('admins', $data);
+        return $this->display('fresns/admins', $data);
     }
 
     public function apps(Request $request)
@@ -414,34 +414,13 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
 
-        return $this->display('apps', $data);
+        return $this->display('fresns/apps', $data);
     }
 
     public function dashboard(Request $request)
     {
         $userId = Auth::id();
         $langTag = Cache::get('lang_tag_' . $userId);
-
-        // $plugins = app()->call('App\Http\Center\Market\RemoteController@index');
-        // //插入plugin表
-        // if($plugins){
-        //     foreach($plugins as $plugin){
-        //         // dd($plugin);
-        //         $pluginCount = FresnsPlugin::where('unikey',$plugin['uniKey'])->where('type',AmConfig::PLUGINS_TYPE)->count();
-        //         if($pluginCount == 0){
-        //             $input = [
-        //                 'unikey' => $plugin['uniKey'],
-        //                 'name' => $plugin['name'],
-        //                 'type' => AmConfig::PLUGINS_TYPE,
-        //                 'description' => $plugin['description'],
-        //                 'version' => $plugin['version'],
-        //                 'version_int' => $plugin['versionInt'],
-        //                 'is_enable' => AmConfig::ENABLE_FALSE
-        //             ];
-        //             (new FresnsPlugin())->store($input);
-        //         }
-        //     }
-        // }
         $FresnsPluginService = new FresnsPluginFresnsPluginService();
         $request->offsetSet('type', AmConfig::PLUGINS_TYPE);
         $pluginList = $FresnsPluginService->searchData();
@@ -484,7 +463,6 @@ class AmControllerWeb extends BaseFrontendController
         $plugin1 = FresnsPlugin::where('type', 1)->count();
         $keysCount = FresnsSessionKeys::count();
 
-
         $total['member_count'] = $memberCount;
         $total['user_count'] = $userCount;
         $total['group_count'] = $groupCount;
@@ -521,7 +499,6 @@ class AmControllerWeb extends BaseFrontendController
         }
 
         // dd($newVision);
-
         $data = [
             'lang' => $langTag,
             'location' => 'dashboard',
@@ -534,7 +511,7 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
 
-        return $this->display('dashboard', $data);
+        return $this->display('fresns/dashboard', $data);
     }
 
     public function iframe(Request $request)
@@ -553,7 +530,7 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
         // dd($data);
-        return $this->display('iframe', $data);
+        return $this->display('fresns/iframe', $data);
     }
 
     public function keys(Request $request)
@@ -575,20 +552,6 @@ class AmControllerWeb extends BaseFrontendController
             ['type','!=',5]
         ];
         $plugin = FresnsPlugin::getByStaticWithCond($cond)->toArray();
-        // // dd($platforms);
-        // // 平台编号名称
-        // if($clientData){
-        //     foreach($clientData as &$c){
-        //         $c['platformName'] = "";
-        //         foreach($platforms as $p){
-        //             if($c['platform_id'] == $p['id']){
-        //                 $c['platformName'] = $p['name'];
-        //             }
-        //         }
-        //         $c['typeName'] = $c['type'] == 1 ? "主程API" : "插件API";
-        //     }
-        // }
-        // dd($clientData);
 
         $userId = Auth::id();
         $lang = Cache::get('lang_tag_' . $userId);
@@ -607,32 +570,11 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
         // dd($data);
-        return $this->display('keys', $data);
+        return $this->display('fresns/keys', $data);
     }
 
     public function plugins(Request $request)
     {
-        // $plugins = app()->call('App\Http\Center\Market\RemoteController@index');
-        // dump($plugins);
-        //插入plugin表
-        // if($plugins){
-        //     foreach($plugins as $plugin){
-        //         // dd($plugin);
-        //         $pluginCount = FresnsPlugin::where('unikey',$plugin['uniKey'])->where('type',AmConfig::PLUGINS_TYPE)->count();
-        //         if($pluginCount == 0){
-        //             $input = [
-        //                 'unikey' => $plugin['uniKey'],
-        //                 'name' => $plugin['name'],
-        //                 'type' => AmConfig::PLUGINS_TYPE,
-        //                 'description' => $plugin['description'],
-        //                 'version' => $plugin['version'],
-        //                 'version_int' => $plugin['versionInt'],
-        //                 'is_enable' => AmConfig::ENABLE_FALSE
-        //             ];
-        //             (new FresnsPlugin())->store($input);
-        //         }
-        //     }
-        // }
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 20);
         $FresnsPluginService = new FresnsPluginFresnsPluginService();
@@ -681,7 +623,7 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
         // dd($data);
-        return $this->display('plugins', $data);
+        return $this->display('fresns/plugins', $data);
     }
 
     public function websites(Request $request)
@@ -722,7 +664,7 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
 
-        return $this->display('websites', $data);
+        return $this->display('fresns/websites', $data);
     }
 
     // 重置密钥

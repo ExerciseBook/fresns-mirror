@@ -25,7 +25,14 @@ class AmConfig extends BaseConfig
     // model 使用 - 表单映射
     const FORM_FIELDS_MAP = [
         'id' => 'id',
-         
+        'name' => 'name',
+        'type' => 'type',
+        'platform_id' => 'platform_id',
+        'plugin_unikey' => 'plugin_unikey',
+        'app_id' => 'app_id',
+        'app_secret' => 'app_secret',
+        'is_enable' => 'is_enable',
+
     ];
 
      
