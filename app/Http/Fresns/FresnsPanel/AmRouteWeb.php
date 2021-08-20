@@ -13,7 +13,7 @@ use App\Http\Share\AmGlobal\GlobalService;
 
 $appName = env('APP_NAME');
 
-if ($appName == 'fresns') {
+if ($appName == 'Fresns') {
     GlobalService::loadGlobalData();
     $adminPath = ApiConfigHelper::getConfigByItemKey(FresnsConfigsConfig::BACKEND_PATH) ?? 'admin';
 
