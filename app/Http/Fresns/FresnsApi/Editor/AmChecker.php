@@ -23,7 +23,7 @@ use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesService;
 use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Helpers\StrHelper;
 use App\Http\Fresns\FresnsGroups\FresnsGroupsService;
 use App\Http\Fresns\FresnsExtends\FresnsExtends;
@@ -707,7 +707,10 @@ class AmChecker extends BaseChecker
             }
            
             if ($post_limit_status == true) {
-                $isCheck = true;
+                $post_limit_rule = ApiConfigHelper::getConfigByItemKey('post_limit_rule');
+                if($post_limit_rule == 1){
+                    $isCheck = true;
+                }
             }
             $contentStopWord = self::stopWords($content);
             if($contentStopWord == 4){
@@ -727,7 +730,10 @@ class AmChecker extends BaseChecker
             }
             
             if ($comment_limit_status == true) {
-                $isCheck = true;
+                $comment_limit_rule = ApiConfigHelper::getConfigByItemKey('comment_limit_rule');
+                if($comment_limit_rule == 1){
+                    $isCheck = true;
+                }
             }
             $contentStopWord = self::stopWords($content);
             if($contentStopWord == 4){
@@ -832,7 +838,7 @@ class AmChecker extends BaseChecker
         // pluginUnikey
         $pluginUnikey = $request->input('pluginUnikey');
         if ($pluginUnikey) {
-            $pluginCount = FresnsPlugin::Where('unikey', $pluginUnikey)->where('is_enable', 1)->count();
+            $pluginCount = FresnsPlugins::Where('unikey', $pluginUnikey)->where('is_enable', 1)->count();
             if ($pluginCount == 0) {
                 return self::checkInfo(self::PLUGIN_ERROR);
             }

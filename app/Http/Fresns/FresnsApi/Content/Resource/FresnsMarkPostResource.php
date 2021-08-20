@@ -22,7 +22,7 @@ use App\Http\Fresns\FresnsComments\FresnsComments;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsApi\Info\AmService;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsApi\Content\AmConfig;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
@@ -520,7 +520,7 @@ class FresnsMarkPostResource extends BaseAdminResource
         // dd($TweetPluginUsages['plugin_unikey']);
         if ($TweetPluginUsages) {
             $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
-            $plugin = FresnsPlugin::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
+            $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
             // dd($plugin);
             $name = AmService::getlanguageField('name', $TweetPluginUsages['id']);
             $manages['name'] = $name == null ? "" : $name['lang_content'];

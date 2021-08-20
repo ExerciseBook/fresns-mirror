@@ -30,8 +30,8 @@ use App\Http\Center\Helper\InstallHelper;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
-use App\Http\Fresns\FresnsPlugin\FresnsPluginService as FresnsPluginFresnsPluginService;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
+use App\Http\Fresns\FresnsPlugins\FresnsPluginsService as FresnsPluginFresnsPluginsService;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Share\Common\ErrorCodeService;
 use App\Http\Auth\User;
@@ -361,11 +361,11 @@ class AmControllerWeb extends BaseFrontendController
     {
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 50);
-        $FresnsPluginService = new FresnsPluginFresnsPluginService();
+        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
         $request->offsetSet('type', AmConfig::PLUGIN_TYPE4);
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
-        $pluginList = $FresnsPluginService->searchData();
+        $pluginList = $FresnsPluginsService->searchData();
         $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
 
         $userId = Auth::id();
@@ -392,11 +392,11 @@ class AmControllerWeb extends BaseFrontendController
         // 类型为控制面板的插件
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 50);
-        $FresnsPluginService = new FresnsPluginFresnsPluginService();
+        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
         $request->offsetSet('type', AmConfig::PLUGIN_TYPE3);
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
-        $pluginList = $FresnsPluginService->searchData();
+        $pluginList = $FresnsPluginsService->searchData();
         $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
         // $pluginList = FresnsPlugin::where('type',AmConfig::PLUGIN_TYPE3)->get();
         // dd($pluginArr);
@@ -421,9 +421,9 @@ class AmControllerWeb extends BaseFrontendController
     {
         $userId = Auth::id();
         $langTag = Cache::get('lang_tag_' . $userId);
-        $FresnsPluginService = new FresnsPluginFresnsPluginService();
+        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
         $request->offsetSet('type', AmConfig::PLUGINS_TYPE);
-        $pluginList = $FresnsPluginService->searchData();
+        $pluginList = $FresnsPluginsService->searchData();
         $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
         // dd($pluginArr);
         $newVision = [];
@@ -453,14 +453,14 @@ class AmControllerWeb extends BaseFrontendController
         //评论总数
         $commentCount = FresnsComments::count();
         //控制面板
-        $plugin5 = FresnsPlugin::where('type', 5)->count();
+        $plugin5 = FresnsPlugins::where('type', 5)->count();
         //网站主题
-        $plugin4 = FresnsPlugin::where('type', 4)->count();
+        $plugin4 = FresnsPlugins::where('type', 4)->count();
         //移动应用
-        $plugin3 = FresnsPlugin::where('type', 3)->count();
+        $plugin3 = FresnsPlugins::where('type', 3)->count();
         //扩展插件
-        $plugin2 = FresnsPlugin::where('type', 2)->count();
-        $plugin1 = FresnsPlugin::where('type', 1)->count();
+        $plugin2 = FresnsPlugins::where('type', 2)->count();
+        $plugin1 = FresnsPlugins::where('type', 1)->count();
         $keysCount = FresnsSessionKeys::count();
 
         $total['member_count'] = $memberCount;
@@ -499,6 +499,7 @@ class AmControllerWeb extends BaseFrontendController
         }
 
         // dd($newVision);
+
         $data = [
             'lang' => $langTag,
             'location' => 'dashboard',
@@ -551,7 +552,21 @@ class AmControllerWeb extends BaseFrontendController
         $cond = [
             ['type','!=',5]
         ];
-        $plugin = FresnsPlugin::getByStaticWithCond($cond)->toArray();
+        $plugin = FresnsPlugins::getByStaticWithCond($cond)->toArray();
+        // // dd($platforms);
+        // // 平台编号名称
+        // if($clientData){
+        //     foreach($clientData as &$c){
+        //         $c['platformName'] = "";
+        //         foreach($platforms as $p){
+        //             if($c['platform_id'] == $p['id']){
+        //                 $c['platformName'] = $p['name'];
+        //             }
+        //         }
+        //         $c['typeName'] = $c['type'] == 1 ? "主程API" : "插件API";
+        //     }
+        // }
+        // dd($pluginArr);
 
         $userId = Auth::id();
         $lang = Cache::get('lang_tag_' . $userId);
@@ -575,13 +590,34 @@ class AmControllerWeb extends BaseFrontendController
 
     public function plugins(Request $request)
     {
+        // $plugins = app()->call('App\Http\Center\Market\RemoteController@index');
+        // dump($plugins);
+        //插入plugin表
+        // if($plugins){
+        //     foreach($plugins as $plugin){
+        //         // dd($plugin);
+        //         $pluginCount = FresnsPlugin::where('unikey',$plugin['uniKey'])->where('type',AmConfig::PLUGINS_TYPE)->count();
+        //         if($pluginCount == 0){
+        //             $input = [
+        //                 'unikey' => $plugin['uniKey'],
+        //                 'name' => $plugin['name'],
+        //                 'type' => AmConfig::PLUGINS_TYPE,
+        //                 'description' => $plugin['description'],
+        //                 'version' => $plugin['version'],
+        //                 'version_int' => $plugin['versionInt'],
+        //                 'is_enable' => AmConfig::ENABLE_FALSE
+        //             ];
+        //             (new FresnsPlugin())->store($input);
+        //         }
+        //     }
+        // }
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 20);
-        $FresnsPluginService = new FresnsPluginFresnsPluginService();
+        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
         $request->offsetSet('type', AmConfig::PLUGINS_TYPE);
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
-        $pluginList = $FresnsPluginService->searchData();
+        $pluginList = $FresnsPluginsService->searchData();
         // dd($pluginList);
         $enableCount = 0;
         $unEnableCount = 0;
@@ -631,10 +667,10 @@ class AmControllerWeb extends BaseFrontendController
         // 插件表类型为网站引擎
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 50);
-        $FresnsPluginService = new FresnsPluginFresnsPluginService();
+        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
-        $pluginList = $FresnsPluginService->searchData();
+        $pluginList = $FresnsPluginsService->searchData();
         $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
         $websitePluginArr = [];
         $subjectPluginArr = [];
@@ -771,7 +807,7 @@ class AmControllerWeb extends BaseFrontendController
         $type = $pluginConfig->type;
         if ($type == PluginConst::PLUGIN_TYPE_THEME) {
             // todo 
-            $plugin = FresnsPlugin::where('unikey', $uniKey)->first();
+            $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
             if (!$plugin) {
                 $this->error(ErrorCodeService::PLUGIN_UNIKEY_ERROR);
             }
@@ -793,7 +829,7 @@ class AmControllerWeb extends BaseFrontendController
             }
         }
 
-        $plugin = FresnsPlugin::where('unikey', $uniKey)->first();
+        $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
         if (!$plugin) {
             $this->error(ErrorCodeService::PLUGIN_UNIKEY_ERROR);
         }
@@ -921,14 +957,14 @@ class AmControllerWeb extends BaseFrontendController
             'access_path' => $pluginConfig->accessPath,
             'setting_path' => $pluginConfig->settingPath,
         ];
-        $plugin = FresnsPlugin::where('unikey', $uniKey)->first();
+        $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
         // dump($plugin);
         if (empty($plugin)) {
             // dump($input);
-            $res = (new FresnsPlugin())->store($input);
+            $res = (new FresnsPlugins())->store($input);
             // dd($res);
         } else {
-            FresnsPlugin::where('unikey', $uniKey)->update($input);
+            FresnsPlugins::where('unikey', $uniKey)->update($input);
         }
         $this->success($info);
     }
@@ -944,7 +980,7 @@ class AmControllerWeb extends BaseFrontendController
     {
         $id = $request->input('data_id');
         $is_enable = $request->input('is_enable');
-        FresnsPlugin::where('id', $id)->update(['is_enable' => $is_enable]);
+        FresnsPlugins::where('id', $id)->update(['is_enable' => $is_enable]);
         $this->success();
     }
 

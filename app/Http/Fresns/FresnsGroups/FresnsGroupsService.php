@@ -18,7 +18,7 @@ use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin as pluginUnikey;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins as pluginUnikey;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\Fresns\FresnsApi\Info\AmService as InfoService;
 use App\Http\Share\AmGlobal\GlobalService;

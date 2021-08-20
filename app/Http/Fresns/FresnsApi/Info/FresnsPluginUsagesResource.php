@@ -12,7 +12,7 @@ use App\Base\Resources\BaseAdminResource;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 
 class FresnsPluginUsagesResource extends BaseAdminResource
@@ -32,7 +32,7 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         $type = $this->type;
         $plugin = $this->plugin_unikey;
         // $name = $name['lang_content'];
-        $pluginInfo = FresnsPlugin::where('unikey', $plugin)->first();
+        $pluginInfo = FresnsPlugins::where('unikey', $plugin)->first();
         // $icon = $this->icon_file_url;
         $icon = ApiFileHelper::getImageSignUrlByFileIdUrl($this->icon_file_id, $this->icon_file_url);
 

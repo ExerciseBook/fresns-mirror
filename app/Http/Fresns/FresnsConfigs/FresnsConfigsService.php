@@ -11,7 +11,7 @@ namespace App\Http\Fresns\FresnsConfigs;
 
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 
-class FresnsConfigService extends AmService
+class FresnsConfigsService extends AmService
 {
     //是否启用多语言
     public static function getLanguageStatus()

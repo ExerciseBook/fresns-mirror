@@ -52,7 +52,7 @@ class FresnsBaseApiController extends BaseApiController
     public $checkHeader = true;
 
     //是否开启签名验证: true 开启，false 关闭
-    public $checkSign = true;
+    public $checkSign = false;
 
     public function __construct()
     {

@@ -32,7 +32,7 @@
                                 @foreach ($location as $item)
                                     <tr class="pluginLists" isEnable="{{$item['is_enable'] == 1 ? 1 :0}}">
                                         <td class="py-3">
-                                            <img src="/views/{{$item['unikey']}}/fresns.png" class="me-2" width="44" height="44">
+                                            <img src="/assets/{{$item['unikey']}}/fresns.png" class="me-2" width="44" height="44">
                                             <span class="fs-6">{{$item['name']}}</span>
                                             <span class="badge bg-secondary plugin-version">{{$item['version']}}</span>
                                             @if($item['is_upgrade'] == 1)

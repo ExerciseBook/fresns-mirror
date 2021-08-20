@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\Fresns\FresnsCodeMessage;
+namespace App\Http\Fresns\FresnsCodeMessages;
 
 use App\Base\Randoms\BaseRandom;
 use Faker\Generator;

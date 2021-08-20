@@ -9,8 +9,8 @@
 namespace App\Http\Fresns\FresnsPluginUsages;
 
 use App\Base\Services\BaseAdminService;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 
@@ -38,7 +38,7 @@ class AmService extends BaseAdminService
 
         $common['isGroupAdminOption'] = AmCOnfig::IS_GROUP_ADMIN_OPTION;
         // 语言
-        $languageArr = FresnsConfigService::getLanguageStatus();
+        $languageArr = FresnsConfigsService::getLanguageStatus();
         $common['language_status'] = $languageArr['language_status'];
         $common['default_language'] = $languageArr['default_language'];
         $common['multilingualoption'] = $languageArr['languagesOption'];
@@ -48,12 +48,12 @@ class AmService extends BaseAdminService
         $common['editerNumberTips'] = AmConfig::EDITER_NUMBER_TIPS;
         $common['isAdminTips'] = AmConfig::IS_ADMIN_TIPS;
         // 插件
-        $common['plugOption'] = FresnsPlugin::staticBuildSelectOptions2('unikey', 'name', []);
+        $common['plugOption'] = FresnsPlugins::staticBuildSelectOptions2('unikey', 'name', []);
         // 角色
         $common['roleOption'] = FresnsMemberRoles::buildSelectTreeData('id', 'name', []);
 
         // 数据服务商插件
-        $common['restfulPlugin'] = FresnsPlugin::where('scene', 'like', "%restful%")->get([
+        $common['restfulPlugin'] = FresnsPlugins::where('scene', 'like', "%restful%")->get([
             'unikey as key',
             'name as text'
         ]);
@@ -64,7 +64,7 @@ class AmService extends BaseAdminService
     // 获取后台设置默认语言code
     public static function getDefaultLanguage()
     {
-        $languageArr = FresnsConfigService::getLanguageStatus();
+        $languageArr = FresnsConfigsService::getLanguageStatus();
         $code = $languageArr['default_language'];
         // $lang_code = FresnsConfigs::where('item_key', AmConfig::LANG_SETTINGS)->first(['item_value']);
         // if (!$lang_code) {

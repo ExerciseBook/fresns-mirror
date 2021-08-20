@@ -12,9 +12,9 @@ use App\Helpers\StrHelper;
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Share\Common\LogService;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
 class ApiConfigHelper
 {
     //获取系统配置信息
@@ -157,7 +157,7 @@ class ApiConfigHelper
         //有值则是 plugin_domain + access_path 字段内容拼接成完整 URL；
         //无值则是拿配置表 backend_domain 键值 + 插件表 access_path 字段拼接成完整 URL
         if ($data['itemType'] == 'plugin') {
-            $plugin = FresnsPlugin::where('unikey', $item['itemValue'])->first();
+            $plugin = FresnsPlugins::where('unikey', $item['itemValue'])->first();
             if ($plugin) {
                 if (!empty($plugin['plugin_domain'])) {
                     $domain = $plugin['plugin_domain'];
@@ -172,7 +172,7 @@ class ApiConfigHelper
 
         if ($data['itemType'] == 'plugins') {
             $unikeyArr = explode(',', $item['itemValue']);
-            $pluginArr = FresnsPlugin::whereIn('unikey', $unikeyArr)->get([
+            $pluginArr = FresnsPlugins::whereIn('unikey', $unikeyArr)->get([
                 'unikey',
                 'plugin_domain',
                 'access_path'
@@ -219,7 +219,7 @@ class ApiConfigHelper
     public static function distanceUnits($langTag)
     {
         $language = self::getConfigsLanguageList();
-        $languageArr = FresnsConfigService::getLanguageStatus();
+        $languageArr = FresnsConfigsService::getLanguageStatus();
         LogService::Info('language',$language);
         $distanceUnits = '';
         // 获取默认语言的距离单位

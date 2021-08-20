@@ -30,7 +30,7 @@ use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsFileAppends\FresnsFileAppends;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin as FresnsPluginFresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins as FresnsPluginFresnsPlugin;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\Fresns\FresnsSessionTokens\FresnsSessionTokensConfig;
 use App\Http\Share\Common\ErrorCodeService;
@@ -1814,6 +1814,21 @@ class FresnsPlugin extends BasePlugin
             $memberId = $member['id'];
         }
 
+        //交易前需要查询用户的最后一条交易记录的期末余额值（is_enable=1），比对当前用户的钱包余额，不一致返回状态码。如果查询不到交易记录，默认期末余额为 0 值。
+        $userWallets = FresnsUserWallets::where('user_id',$userId)->where('is_enable',1)->first();
+        if(empty($userWallets)){
+            return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
+        }
+
+        $balance = $userWallets['balance'] ?? 0;
+        $closingBalance = FresnsUserWalletLogs::where('user_id',$userId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
+        $closingBalance = $closingBalance ?? 0;
+
+        if($balance !== $closingBalance){
+            return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
+        }
+
+        
         $originUserId = null;
         if($originUid){
             $originUserId = FresnsUsers::where('uuid',$originUid)->value('id');
@@ -1838,18 +1853,22 @@ class FresnsPlugin extends BasePlugin
         if($originUserId){
             $originUserWallets = FresnsUserWallets::where('user_id',$originUserId)->where('is_enable',1)->first();
             if(empty($originUserWallets)){
-                return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
+                return $this->pluginError(ErrorCodeService::TO_USER_WALLETS_ERROR);
             }
 
             $originUserBalance = $originUserWallets['balance'] ?? 0;
             $originUserClosingBalance = FresnsUserWalletLogs::where('user_id',$originUserId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
             $originUserClosingBalance = $originUserClosingBalance ?? 0;
 
-            if($originUserBalance !== $originUserClosingBalance){
-                return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
+            if($originUserBalance < $amount){
+                return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
             }
 
-            if($amount - $originUserBalance < 0){
+            if($originUserBalance !== $originUserClosingBalance){
+                return $this->pluginError(ErrorCodeService::TO_BALANCE_CLOSING_BALANCE_ERROR);
+            }
+
+            if($originUserBalance - $amount < 0){
                 return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
             }
 
@@ -1877,31 +1896,19 @@ class FresnsPlugin extends BasePlugin
                 'object_name' => $originName,
                 'object_id' => $originId,
                 'opening_balance' => $originUserBalance,
-                'closing_balance' => $amount - $originUserBalance,
+                'closing_balance' => $originUserBalance - $amount,
             ];
 
             FresnsUserWalletLogs::insert($input);
             //更新用户钱包
             $originWalletsInput = [
-                'balance' => $amount - $originUserBalance
+                'balance' => $originUserBalance - $amount
             ];
             FresnsUserWallets::where('user_id',$originUserId)->update($originWalletsInput);
 
         }
 
-        //交易前需要查询用户的最后一条交易记录的期末余额值（is_enable=1），比对当前用户的钱包余额，不一致返回状态码。如果查询不到交易记录，默认期末余额为 0 值。
-        $userWallets = FresnsUserWallets::where('user_id',$userId)->where('is_enable',1)->first();
-        if(empty($userWallets)){
-            return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
-        }
-
-        $balance = $userWallets['balance'] ?? 0;
-        $closingBalance = FresnsUserWalletLogs::where('user_id',$userId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
-        $closingBalance = $closingBalance ?? 0;
-
-        if($balance !== $closingBalance){
-            return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
-        }
+        
 
         //添加到钱包log
         $input = [
@@ -1986,46 +1993,23 @@ class FresnsPlugin extends BasePlugin
         if(empty($userWallets)){
             return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
         }
-
+        
         $balance = $userWallets['balance'] ?? 0;
         $userClosingBalance = FresnsUserWalletLogs::where('user_id',$userId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
         $userClosingBalance = $userClosingBalance ?? 0;
-
+        
         if($balance !== $userClosingBalance){
             return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
         }
 
-        if($amount - $balance < 0){
-            return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
-        }
-
-        //添加到钱包log
-        $input = [
-            'user_id' => $userId,
-            'member_id' => $memberId,
-            'object_type' => $type,
-            'amount' => $amount,
-            'transaction_amount' => $transactionAmount,
-            'system_fee' => $systemFee,
-            'object_user_id' => $originUserId,
-            'object_member_id' => $originMemberId,
-            'object_name' => $originName,
-            'object_id' => $originId,
-            'opening_balance' => $balance,
-            'closing_balance' => $amount - $balance,
-        ];
-
-        FresnsUserWalletLogs::insert($input);
-        //更新用户钱包
-        $userWalletsInput = [
-            'balance' => $amount - $balance
-        ];
-        FresnsUserWallets::where('user_id',$userId)->update($userWalletsInput);
-
         if($originUserId){
             $originUserWallets = FresnsUserWallets::where('user_id',$originUserId)->where('is_enable',1)->first();
             if(empty($originUserWallets)){
-                return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
+                return $this->pluginError(ErrorCodeService::TO_USER_WALLETS_ERROR);
+            }
+
+            if($balance < $amount){
+                return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
             }
 
             $originBalance = $originUserWallets['balance'] ?? 0;
@@ -2033,7 +2017,12 @@ class FresnsPlugin extends BasePlugin
             $originClosingBalance = $originClosingBalance ?? 0;
 
             if($originBalance !== $originClosingBalance){
-                return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
+                return $this->pluginError(ErrorCodeService::TO_BALANCE_CLOSING_BALANCE_ERROR);
+            }
+
+
+            if($balance - $amount < 0){
+                return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
             }
 
             switch ($type) {
@@ -2070,6 +2059,37 @@ class FresnsPlugin extends BasePlugin
             ];
             FresnsUserWallets::where('user_id',$originUserId)->update($originWalletsInput);
         }
+
+
+        if($balance - $amount < 0){
+            return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
+        }
+
+
+        //添加到钱包log
+        $input = [
+            'user_id' => $userId,
+            'member_id' => $memberId,
+            'object_type' => $type,
+            'amount' => $amount,
+            'transaction_amount' => $transactionAmount,
+            'system_fee' => $systemFee,
+            'object_user_id' => $originUserId,
+            'object_member_id' => $originMemberId,
+            'object_name' => $originName,
+            'object_id' => $originId,
+            'opening_balance' => $balance,
+            'closing_balance' => $balance - $amount,
+        ];
+
+        FresnsUserWalletLogs::insert($input);
+        //更新用户钱包
+        $userWalletsInput = [
+            'balance' => $balance - $amount
+        ];
+        FresnsUserWallets::where('user_id',$userId)->update($userWalletsInput);
+
+        
 
         return $this->pluginSuccess();
 

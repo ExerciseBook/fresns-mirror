@@ -21,7 +21,7 @@ class AmConfig extends BaseConfig
     const ADDED_SEARCHABLE_FIELDS = [
         'type' => ['field' => 'source_type', 'op' => '='],
         'member_id' => ['field' => 'member_id', 'op' => '='],
-        'source_mid' => ['field' => 'source_mid', 'op' => '='],
+        'source_member_id' => ['field' => 'source_member_id', 'op' => '='],
     ];
 
     // model 使用 - 表单映射

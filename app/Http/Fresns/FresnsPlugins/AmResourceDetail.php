@@ -6,11 +6,12 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\Fresns\FresnsCodeMessage;
+namespace App\Http\Fresns\FresnsPlugins;
+
 
 use App\Base\Resources\BaseAdminResource;
 
-class AmResource extends BaseAdminResource
+class AmResourceDetail extends BaseAdminResource
 {
 
     public function toArray($request)

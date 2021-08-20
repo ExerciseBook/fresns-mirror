@@ -405,28 +405,6 @@ class AmControllerApi extends FresnsBaseApiController
             FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
             return $this->errorCheckInfo($checkInfo);
         }
-        // 是否需要审核
-        if($type == 1){
-            $draft = FresnsPostLogs::find($draftId);
-        }else{
-            $draft = FresnsCommentLogs::find($draftId);
-        }
-        $checkAudit = AmChecker::checkAudit($type, $mid ,$draft['content']);
-        if ($checkAudit) {
-            // 修改草稿状态为待审核 status，录入提交审核时间 submit_at，其他不动，待审核通过后再操作。
-            if ($type == 1) {
-                FresnsPostLogs::where('id', $draftId)->update([
-                    'status' => 2,
-                    'submit_at' => date('Y-m-d H:i:s', time())
-                ]);
-            } else {
-                FresnsCommentLogs::where('id', $draftId)->update([
-                    'status' => 2,
-                    'submit_at' => date('Y-m-d H:i:s', time())
-                ]);
-            }
-            $this->success();
-        }
         switch ($type) {
             case 1:
                 // 判断是更新还是新增
@@ -447,6 +425,29 @@ class AmControllerApi extends FresnsBaseApiController
                         return $this->errorCheckInfo($createdCheck);
                     }
                 }
+                // 是否需要审核
+                if($type == 1){
+                    $draft = FresnsPostLogs::find($draftId);
+                }else{
+                    $draft = FresnsCommentLogs::find($draftId);
+                }
+                $checkAudit = AmChecker::checkAudit($type, $mid ,$draft['content']);
+                if ($checkAudit) {
+                    // 修改草稿状态为待审核 status，录入提交审核时间 submit_at，其他不动，待审核通过后再操作。
+                    if ($type == 1) {
+                        FresnsPostLogs::where('id', $draftId)->update([
+                            'status' => 2,
+                            'submit_at' => date('Y-m-d H:i:s', time())
+                        ]);
+                    } else {
+                        FresnsCommentLogs::where('id', $draftId)->update([
+                            'status' => 2,
+                            'submit_at' => date('Y-m-d H:i:s', time())
+                        ]);
+                    }
+                    $this->success();
+                }
+                // 调用发布
                 $result = $FresnsPostsService->releaseByDraft($draftId, $logsId);
                 break;
             case 2:
@@ -467,6 +468,28 @@ class AmControllerApi extends FresnsBaseApiController
                         FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
                         return $this->errorCheckInfo($createdCheck);
                     }
+                }
+                // 是否需要审核
+                if($type == 1){
+                    $draft = FresnsPostLogs::find($draftId);
+                }else{
+                    $draft = FresnsCommentLogs::find($draftId);
+                }
+                $checkAudit = AmChecker::checkAudit($type, $mid ,$draft['content']);
+                if ($checkAudit) {
+                    // 修改草稿状态为待审核 status，录入提交审核时间 submit_at，其他不动，待审核通过后再操作。
+                    if ($type == 1) {
+                        FresnsPostLogs::where('id', $draftId)->update([
+                            'status' => 2,
+                            'submit_at' => date('Y-m-d H:i:s', time())
+                        ]);
+                    } else {
+                        FresnsCommentLogs::where('id', $draftId)->update([
+                            'status' => 2,
+                            'submit_at' => date('Y-m-d H:i:s', time())
+                        ]);
+                    }
+                    $this->success();
                 }
                 $result = $fresnsCommentService->releaseByDraft($draftId, 0, $logsId);
 

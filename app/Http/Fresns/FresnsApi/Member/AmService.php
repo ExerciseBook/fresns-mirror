@@ -27,7 +27,7 @@ use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
 use App\Http\Fresns\FresnsMemberStats\FresnsMemberStats;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadgesService;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
@@ -398,7 +398,7 @@ class AmService
                     $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE,
                         'name', $v['id'], $langTag);
                     $item['icon'] = $v['icon_file_url'];
-                    $plugins = FresnsPlugin::where('unikey', $v['plugin_unikey'])->first();
+                    $plugins = FresnsPlugins::where('unikey', $v['plugin_unikey'])->first();
                     $item['url'] = $plugins['access_path'].$v['parameter'];
 
                     $expandsArr[] = $item;

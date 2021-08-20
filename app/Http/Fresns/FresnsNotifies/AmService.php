@@ -84,7 +84,7 @@ class AmService extends BaseAdminService
             'source_brief' => $source_brief,
             'source_id' => $source_id,
             'source_class' => $source_class,
-            'source_mid' => $member_id
+            'source_member_id' => $member_id
         ];
         FresnsNotifies::insert($input);
     }

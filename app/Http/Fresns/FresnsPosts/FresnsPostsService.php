@@ -749,7 +749,7 @@ class FresnsPostsService extends AmService
                         'source_id' => $postId,
                         'source_brief' => $postInfo['content'],
                         'member_id' => $memberInfo['id'],
-                        'source_mid' => $postInfo['member_id'],
+                        'source_member_id' => $postInfo['member_id'],
                         'source_type' => 5,
                         'source_class' => 1,
                     ];

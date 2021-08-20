@@ -18,7 +18,7 @@ use App\Http\Center\Base\PluginConst;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 class PluginHelper
 {
     // 获取插件json文件
@@ -294,7 +294,7 @@ class PluginHelper
             LogService::info('info',"未找到插件类");
             return false;
         }
-        $plugin = FresnsPlugin::where('unikey',$uniKey)->where('is_enable',1)->first();
+        $plugin = FresnsPlugins::where('unikey',$uniKey)->where('is_enable',1)->first();
         if(empty($plugin)){
             LogService::info('info',"插件未启用");
             return false;

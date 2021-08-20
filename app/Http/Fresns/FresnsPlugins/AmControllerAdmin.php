@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\Fresns\FresnsPlugin;
+namespace App\Http\Fresns\FresnsPlugins;
 
 use App\Base\Controllers\BaseAdminController;
 use Illuminate\Http\Request;
@@ -29,7 +29,7 @@ class AmControllerAdmin extends BaseAdminController
         if ($plugins) {
             foreach ($plugins as $plugin) {
                 // dd($plugin);
-                $pluginCount = FresnsPlugin::where('unikey', $plugin['uniKey'])->where('type',
+                $pluginCount = FresnsPlugins::where('unikey', $plugin['uniKey'])->where('type',
                     AmConfig::PLUGINS_TYPE)->count();
                 if ($pluginCount == 0) {
                     $input = [
@@ -41,7 +41,7 @@ class AmControllerAdmin extends BaseAdminController
                         'version_int' => $plugin['versionInt'],
                         'is_enable' => AmConfig::ENABLE_FALSE
                     ];
-                    (new FresnsPlugin())->store($input);
+                    (new FresnsPlugins())->store($input);
                 }
             }
         }
@@ -55,7 +55,7 @@ class AmControllerAdmin extends BaseAdminController
         $id = $request->input('id');
         $localPlugin = PluginHelper::getPluginJsonFileArr();
         // dump($localPlugin);
-        $plugin = FresnsPlugin::find($id);
+        $plugin = FresnsPlugins::find($id);
         // 是否下载
         $isDownload = AmConfig::NO_DOWNLOAD;
         if ($localPlugin) {

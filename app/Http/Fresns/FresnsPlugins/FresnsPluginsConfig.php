@@ -7,10 +7,11 @@
  */
 
 // 系统解耦, 快捷方式入口
-namespace App\Http\Fresns\FresnsPlugin;
+namespace App\Http\Fresns\FresnsPlugins;
 
-class FresnsPlugin extends AmModel
+
+class FresnsPluginsConfig extends AmConfig
 {
 
-}
 
+}

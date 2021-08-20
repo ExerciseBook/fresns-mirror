@@ -16,7 +16,7 @@ use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
 use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsFileAppends\FresnsFileAppends;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
@@ -292,7 +292,7 @@ class ApiFileHelper
     {
         $bucketDomain = ApiConfigHelper::getConfigByItemKey(AmConfig::BACKEND_DOMAIN);
         $pluginUsages = FresnsPluginUsages::find($pluginUsagesid);
-        $plugin = FresnsPlugin::where('unikey', $pluginUnikey)->first();
+        $plugin = FresnsPlugins::where('unikey', $pluginUnikey)->first();
         $url = "";
         if (!$plugin || !$pluginUsages) {
             return $url;

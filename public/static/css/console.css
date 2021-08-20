@@ -58,13 +58,11 @@ body {
     border: none;
     width: 100%;
     height: calc(100% - 66px);
-    margin-top: 66px;
 }
 
 @media (min-width: 992px) {
     .iframe-preview {
         height: calc(100% - 89px);
-        margin-top: 89px;
     }
 }
 

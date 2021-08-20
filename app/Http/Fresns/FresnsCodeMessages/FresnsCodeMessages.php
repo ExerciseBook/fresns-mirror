@@ -7,9 +7,10 @@
  */
 
 // 系统解耦, 快捷方式入口
-namespace App\Http\Fresns\FresnsCodeMessage;
+namespace App\Http\Fresns\FresnsCodeMessages;
 
-class FresnsCodeMessageService extends AmService
+class FresnsCodeMessages extends AmModel
 {
 
 }
+

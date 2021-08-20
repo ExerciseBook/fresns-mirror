@@ -8,7 +8,7 @@
 
 namespace App\Http\Center\Base;
 
-use App\Http\Fresns\FresnsCodeMessage\FresnsCodeMessageService;
+use App\Http\Fresns\FresnsCodeMessages\FresnsCodeMessagesService;
 use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Share\Common\ErrorCodeService;
 
@@ -47,7 +47,7 @@ trait PluginTrait
         // $pluginConfig = $m->pluginConfig; // 获取 unikey 方法 1
         $uniKey = $this->pluginConfig->uniKey; // 获取 unikey 方法 2
         $langTag = GlobalService::getGlobalKey('langTag');
-        $message = FresnsCodeMessageService::getCodeMessage($uniKey,$langTag,$code);
+        $message = FresnsCodeMessagesService::getCodeMessage($uniKey,$langTag,$code);
         if(empty($message)){
             $message = $msg;
         }
@@ -65,7 +65,7 @@ trait PluginTrait
      // $pluginConfig = $m->pluginConfig; // 获取 unikey 方法 1
         $uniKey = $this->pluginConfig->uniKey; // 获取 unikey 方法 2
         $langTag = GlobalService::getGlobalKey('langTag');
-        $message = FresnsCodeMessageService::getCodeMessage($uniKey,$langTag,$code);
+        $message = FresnsCodeMessagesService::getCodeMessage($uniKey,$langTag,$code);
         if(empty($message)){
             $message = ErrorCodeService::getMsg($code,$data) ?? "插件检查异常[{$code}]";
         }

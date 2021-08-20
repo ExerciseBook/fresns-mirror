@@ -11,7 +11,7 @@ namespace App\Http\Center\Base;
 use App\Base\Controllers\BaseController;
 use App\Http\Center\Helper\InstallHelper;
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Http\Share\Common\ValidateService;
@@ -107,7 +107,7 @@ class PluginController extends BaseController
 
         $info = PluginHelper::uninstallByUniKey($uniKey);
         // 删除插件数据
-        FresnsPlugin::where('unikey',$uniKey)->delete();
+        FresnsPlugins::where('unikey',$uniKey)->delete();
 
         $this->success($info);
     }
@@ -147,7 +147,7 @@ class PluginController extends BaseController
         }
         $info = $installer->upgrade();
         // 更新至最新版本
-        FresnsPlugin::where('unikey',$unikey)->update(['version_int' => $remoteVisionInt,'version' => $remoteVision]);
+        FresnsPlugins::where('unikey',$unikey)->update(['version_int' => $remoteVisionInt,'version' => $remoteVision]);
 
         $this->success($info);
     }

@@ -57,7 +57,7 @@ use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\Fresns\FresnsApi\Info\AmService;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin as pluginUnikey;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins as pluginUnikey;
 use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Share\Common\ErrorCodeService;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;

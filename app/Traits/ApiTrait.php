@@ -8,8 +8,8 @@
 namespace App\Traits;
 
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\Fresns\FresnsCodeMessage\FresnsCodeMessageConfig;
-use App\Http\Fresns\FresnsCodeMessage\FresnsCodeMessageService;
+use App\Http\Fresns\FresnsCodeMessages\FresnsCodeMessagesConfig;
+use App\Http\Fresns\FresnsCodeMessages\FresnsCodeMessagesService;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Share\Common\LogService;
@@ -30,9 +30,9 @@ trait ApiTrait
         if($sessionLogId){
             FresnsSessionLogsService::updateSessionLogs($sessionLogId,2);
         }
-        $plugin = FresnsCodeMessageConfig::ERROR_CODE_DEFAULT_PLUGIN;
+        $plugin = FresnsCodeMessagesConfig::ERROR_CODE_DEFAULT_PLUGIN;
         $langTag = ApiLanguageHelper::getLangTag();
-        $message = FresnsCodeMessageService::getCodeMessage($plugin,$langTag,ErrorCodeService::CODE_OK);
+        $message = FresnsCodeMessagesService::getCodeMessage($plugin,$langTag,ErrorCodeService::CODE_OK);
         if(empty($message)){
             $message = ErrorCodeService::getMsg($this->errorCode);
         }
@@ -48,10 +48,10 @@ trait ApiTrait
         if($sessionLogId){
             FresnsSessionLogsService::updateSessionLogs($sessionLogId,1);
         }
-        $plugin = FresnsCodeMessageConfig::ERROR_CODE_DEFAULT_PLUGIN;
+        $plugin = FresnsCodeMessagesConfig::ERROR_CODE_DEFAULT_PLUGIN;
         $langTag = ApiLanguageHelper::getLangTag();
 
-        $message = FresnsCodeMessageService::getCodeMessage($plugin,$langTag,$code);
+        $message = FresnsCodeMessagesService::getCodeMessage($plugin,$langTag,$code);
         if(empty($message)){
             $message = ErrorCodeService::getMsg($code, $data);
         }
@@ -68,10 +68,10 @@ trait ApiTrait
         if($sessionLogId){
             FresnsSessionLogsService::updateSessionLogs($sessionLogId,1);
         }
-        $plugin = FresnsCodeMessageConfig::ERROR_CODE_DEFAULT_PLUGIN;
+        $plugin = FresnsCodeMessagesConfig::ERROR_CODE_DEFAULT_PLUGIN;
         $langTag = ApiLanguageHelper::getLangTag();
 
-        $message = FresnsCodeMessageService::getCodeMessage($plugin,$langTag,$code);
+        $message = FresnsCodeMessagesService::getCodeMessage($plugin,$langTag,$code);
         if(empty($message)){
             $message = empty($msg) ?  ErrorCodeService::getMsg($code, $data) : $msg;
         }
@@ -88,10 +88,10 @@ trait ApiTrait
             FresnsSessionLogsService::updateSessionLogs($sessionLogId,1);
         }
         // dd($checkInfo);
-        $plugin = FresnsCodeMessageConfig::ERROR_CODE_DEFAULT_PLUGIN;
+        $plugin = FresnsCodeMessagesConfig::ERROR_CODE_DEFAULT_PLUGIN;
         $langTag = ApiLanguageHelper::getLangTag();
 
-        $message = FresnsCodeMessageService::getCodeMessage($plugin,$langTag,$checkInfo['code']);
+        $message = FresnsCodeMessagesService::getCodeMessage($plugin,$langTag,$checkInfo['code']);
         if(empty($message)){
             $message = $checkInfo['msg'] ?? $checkInfo['message'];
         }
@@ -109,10 +109,10 @@ trait ApiTrait
 
 
     public function exceptionError($code, $data = [], $header = []){
-        $plugin = FresnsCodeMessageConfig::ERROR_CODE_DEFAULT_PLUGIN;
+        $plugin = FresnsCodeMessagesConfig::ERROR_CODE_DEFAULT_PLUGIN;
         $langTag = ApiLanguageHelper::getLangTag();
 
-        $message = FresnsCodeMessageService::getCodeMessage($plugin,$langTag,$code);
+        $message = FresnsCodeMessagesService::getCodeMessage($plugin,$langTag,$code);
         if(empty($message)){
             $message = ErrorCodeService::getMsg($code);
         }

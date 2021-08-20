@@ -7,11 +7,9 @@
  */
 
 // 系统解耦, 快捷方式入口
-namespace App\Http\Fresns\FresnsPlugin;
+namespace App\Http\Fresns\FresnsCodeMessages;
 
-
-class FresnsPluginConfig extends AmConfig
+class FresnsCodeMessagesService extends AmService
 {
-
 
 }

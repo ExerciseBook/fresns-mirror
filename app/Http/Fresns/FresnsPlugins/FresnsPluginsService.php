@@ -7,16 +7,16 @@
  */
 
 // 系统解耦, 快捷方式入口
-namespace App\Http\Fresns\FresnsPlugin;
+namespace App\Http\Fresns\FresnsPlugins;
 
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 
-class FresnsPluginService extends AmService
+class FresnsPluginsService extends AmService
 {
     //通过unikey获取插件url
     public static function getPluginUrlByUnikey($unikey)
     {
-        $plugin = FresnsPlugin::where('unikey', $unikey)->first();
+        $plugin = FresnsPlugins::where('unikey', $unikey)->first();
         if (empty($plugin)) {
             return '';
         }

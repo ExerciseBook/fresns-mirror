@@ -152,6 +152,8 @@ class ErrorCodeService
     CONST BALANCE_CLOSING_BALANCE_ERROR = 30140;
     CONST USER_BALANCE_ERROR = 30141;
     CONST SING_EXPIRED_ERROR = 30142;
+    CONST TO_USER_WALLETS_ERROR = 30143;
+    CONST TO_BALANCE_CLOSING_BALANCE_ERROR = 30144;
     
 
 
@@ -324,8 +326,10 @@ class ErrorCodeService
         self::EXTENDS_EID_ERROR        => 'extendsJson eid必填',
         self::USER_WALLETS_ERROR        => '用户钱包不存在',
         self::BALANCE_CLOSING_BALANCE_ERROR        => '期末余额和钱包额度不匹配',
-        self::USER_BALANCE_ERROR        => '钱包余额不正确',
+        self::USER_BALANCE_ERROR        => '钱包余额不允许支付',
         self::SING_EXPIRED_ERROR        => '签名已过期',
+        self::TO_USER_WALLETS_ERROR        => '对方钱包不存在',
+        self::TO_BALANCE_CLOSING_BALANCE_ERROR        => '对方期末余额和钱包额度不匹配',
 
 
         self::CODE_LOGIN_ERROR                => '用户名或密码错误',

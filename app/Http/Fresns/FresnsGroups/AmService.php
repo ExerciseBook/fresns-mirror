@@ -10,10 +10,10 @@ namespace App\Http\Fresns\FresnsGroups;
 
 use App\Base\Services\BaseAdminService;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 class AmService extends BaseAdminService
 {
     public function __construct()
@@ -38,7 +38,7 @@ class AmService extends BaseAdminService
         // 角色权限common
         $common['roleOption'] = FresnsMemberRoles::buildSelectTreeData('id', 'name', []);
         // 语言
-        $languageArr = FresnsConfigService::getLanguageStatus();
+        $languageArr = FresnsConfigsService::getLanguageStatus();
         $common['language_status'] = $languageArr['language_status'];
         $common['default_language'] = $languageArr['default_language'];
         $common['multilingualoption'] = $languageArr['languagesOption'];
@@ -46,7 +46,7 @@ class AmService extends BaseAdminService
         $common['groupOption'] = FresnsGroups::buildSelectTreeData('id', 'name', ['is_enable' => 1]);
         $common['oneGroupOption'] = FresnsGroups::staticBuildSelectOptions('id','name',['parent_id'=>NULL]);
         // 插件
-        $common['plugOption'] = FresnsPlugin::staticBuildSelectOptions2('unikey', 'name', []);
+        $common['plugOption'] = FresnsPlugins::staticBuildSelectOptions2('unikey', 'name', []);
         return $common;
     }
 
@@ -107,7 +107,7 @@ class AmService extends BaseAdminService
 
     public static function getLangaugeArr($table, $table_field, $item)
     {
-        $languageArr = FresnsConfigService::getLanguageStatus();
+        $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
         // dd($multilingual);
         $nameArr = [];

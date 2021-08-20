@@ -11,7 +11,7 @@ namespace App\Http\Fresns\FresnsPluginBadges;
 
 use App\Base\Services\BaseAdminService;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
 
@@ -44,7 +44,7 @@ class AmService extends BaseAdminService
             $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name',
                 $v['id'], $langTag);
             $item['icon'] = $v['icon_file_url'];
-            $plugins = FresnsPlugin::where('unikey', $v['plugin_unikey'])->first();
+            $plugins = FresnsPlugins::where('unikey', $v['plugin_unikey'])->first();
             $item['url'] = $plugins['access_path'].$v['parameter'];
             $badges = FresnsPluginBadges::where('member_id', $member_id)->where('plugin_unikey',
                 $v['plugin_unikey'])->first();

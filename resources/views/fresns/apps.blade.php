@@ -17,7 +17,7 @@
                             <div class="col-sm-6 col-xl-3 mb-4">
                                 <div class="card">
                                     <div class="position-relative">
-                                        <img src="/views/{{$item['unikey']}}/fresns.png" class="card-img-top" alt="{{$item['name']}}">
+                                        <img src="/assets/{{$item['unikey']}}/fresns.png" class="card-img-top" alt="{{$item['name']}}">
                                         @if ($item['is_upgrade'] == 1)
                                             <div class="position-absolute top-0 start-100 translate-middle"><a href="/fresns/dashboard" unikey="{{$item['unikey']}}" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.newVersionInfo')"><span class="badge rounded-pill bg-danger">@lang('fresns.newVersion')</span></a></div>
                                         @endif

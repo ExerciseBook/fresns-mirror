@@ -82,7 +82,7 @@
                         <div class="col-sm-6 col-xl-3 mb-4">
                             <div class="card">
                                 <div class="position-relative">
-                                    <img src="/themes/{{$item['unikey']}}/fresns.png" class="card-img-top" alt="{{$item['name']}}">
+                                    <img src="/assets/{{$item['unikey']}}/fresns.png" class="card-img-top" alt="{{$item['name']}}">
                                     @if ($item['is_upgrade'] == 1)
                                         <div class="position-absolute top-0 start-100 translate-middle"><a href="/fresns/dashboard" unikey="{{$item['unikey']}}" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.newVersionInfo')"><span class="badge rounded-pill bg-danger">@lang('fresns.newVersion')</span></a></div>
                                     @endif
@@ -96,7 +96,7 @@
                                         @if ($item['setting_path'] == '')
                                             <a href="#" class="btn btn-primary btn-sm disabled">@lang('fresns.setting')</a>
                                         @else
-                                            <a href="/fresns/iframe?url=/themes/{{$item['unikey']}}/functions.php?lang={{$lang}}" class="btn btn-primary btn-sm"  title="@lang('fresns.settingInfo')" data-bs-toggle="tooltip" data-bs-placement="top">@lang('fresns.setting')</a>
+                                            <a href="/fresns/iframe?url=/fresns/functions?theme={{$item['unikey']}}&lang={{$lang}}" class="btn btn-primary btn-sm"  title="@lang('fresns.settingInfo')" data-bs-toggle="tooltip" data-bs-placement="top">@lang('fresns.setting')</a>
                                         @endif
                                     @else
                                         <button type="button" class="btn btn-outline-secondary btn-sm btn_enable2" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('fresns.activateInfo')" data_id="{{$item['id']}}">@lang('fresns.activate')</button>

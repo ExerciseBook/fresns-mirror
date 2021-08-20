@@ -12,8 +12,8 @@ use App\Base\Resources\BaseAdminResource;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsCmds\FresnsPlugin;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin as TweetPlugin;
-use App\Http\Fresns\FresnsPlugin\FresnsPluginConfig;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins as TweetPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPluginsConfig;
 
 class PluginResource extends BaseAdminResource
 {
@@ -21,7 +21,7 @@ class PluginResource extends BaseAdminResource
     public function toArray($request)
     {
         // form 字段
-        $formMap = FresnsPluginConfig::FORM_FIELDS_MAP;
+        $formMap = FresnsPluginsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
@@ -30,10 +30,10 @@ class PluginResource extends BaseAdminResource
         // $doloadPlugin = PluginHelper::getPluginJsonFileArr();
         $pluginConfig = PluginHelper::findPluginConfigClass($this->unikey);
         // dump($pluginConfig);
-        $isDownload = FresnsPluginConfig::NO_DOWNLOAD;
+        $isDownload = FresnsPluginsConfig::NO_DOWNLOAD;
         if ($pluginConfig) {
             if ($pluginConfig->uniKey == $this->unikey) {
-                $isDownload = FresnsPluginConfig::DOWNLOAD;
+                $isDownload = FresnsPluginsConfig::DOWNLOAD;
             }
         }
         // 插件目录下的json文件
@@ -51,7 +51,7 @@ class PluginResource extends BaseAdminResource
 
         // }
         // 是否有新版本
-        $isNewVision = FresnsPluginConfig::NO_NEWVISION;
+        $isNewVision = FresnsPluginsConfig::NO_NEWVISION;
         // 获取远程的插件版本
         // $localPlugin = PluginHelper::getPluginJsonFileArrByDirName($this->unikey);
         // // dd($localPlugin);

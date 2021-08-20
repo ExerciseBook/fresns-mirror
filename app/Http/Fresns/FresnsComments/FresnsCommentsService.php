@@ -531,7 +531,7 @@ class FresnsCommentsService extends AmService
                         'source_id' => $commentId,
                         'source_brief' => $commentInfo['content'],
                         'member_id' => $memberInfo['id'],
-                        'source_mid' => $commentInfo['member_id'],
+                        'source_member_id' => $commentInfo['member_id'],
                         'source_type' => 5,
                         'source_class' => 2,
                     ];
@@ -599,7 +599,7 @@ class FresnsCommentsService extends AmService
                 'source_id' => $commentId,
                 'source_brief' => $draftComment['content'],
                 'member_id' => $postInfo['member_id'],
-                'source_mid' => $draftComment['member_id'],
+                'source_member_id' => $draftComment['member_id'],
                 'source_type' => 4,
                 'source_class' => 1,
             ];
@@ -612,7 +612,7 @@ class FresnsCommentsService extends AmService
                 'source_id' => $commentId,
                 'source_brief' => $draftComment['content'],
                 'member_id' => $postInfo['member_id'],
-                'source_mid' => $draftComment['member_id'],
+                'source_member_id' => $draftComment['member_id'],
                 'source_type' => 4,
                 'source_class' => 2,
             ];

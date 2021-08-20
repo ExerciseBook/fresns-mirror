@@ -10,7 +10,7 @@ namespace App\Http\Fresns\FresnsPluginUsages;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 
 class AmResourceDetail extends BaseAdminResource
@@ -25,7 +25,7 @@ class AmResourceDetail extends BaseAdminResource
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
         // 语言名称
-        $languageArr = FresnsConfigService::getLanguageStatus();
+        $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
         // dd($multilingual);
         $nameArr = [];

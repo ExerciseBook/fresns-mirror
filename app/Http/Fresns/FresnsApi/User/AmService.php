@@ -20,7 +20,7 @@ use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-use App\Http\Fresns\FresnsPlugin\FresnsPluginService;
+use App\Http\Fresns\FresnsPlugins\FresnsPluginsService;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadgesService;
 use App\Http\Fresns\FresnsUserConnects\FresnsUserConnectsConfig;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
@@ -48,8 +48,7 @@ class AmService
         $data['email'] = ApiCommonHelper::encryptEmail($email) ?? '';
         //配置表 account_prove_service 关联的插件，插件 URL
         $proveSupportUnikey = ApiConfigHelper::getConfigByItemKey('account_prove_service');
-        $proveSupportUnikey = 'AliOss';
-        $proveSupportUrl = FresnsPluginService::getPluginUrlByUnikey($proveSupportUnikey);
+        $proveSupportUrl = FresnsPluginsService::getPluginUrlByUnikey($proveSupportUnikey);
         $data['proveSupport'] = $proveSupportUrl;
         $data['verifyStatus'] = $users->prove_verify ?? '';
         $data['realname'] = ApiCommonHelper::encryptName($users->prove_realname) ?? '';

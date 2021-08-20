@@ -9,7 +9,7 @@
 namespace App\Http\Fresns\FresnsGroups;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 
 class AmResource extends BaseAdminResource
@@ -25,7 +25,7 @@ class AmResource extends BaseAdminResource
         }
         // 语言名称
         // dd(123);
-        $languageArr = FresnsConfigService::getLanguageStatus();
+        $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
         // dd($multilingual);
         $nameArr = [];

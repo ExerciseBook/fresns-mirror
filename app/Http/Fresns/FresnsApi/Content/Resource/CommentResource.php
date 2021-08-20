@@ -21,7 +21,7 @@ use App\Http\Fresns\FresnsComments\FresnsComments;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsApi\Info\AmService;
-use App\Http\Fresns\FresnsPlugin\FresnsPlugin;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
 use App\Http\Fresns\FresnsPosts\FresnsPosts;
 use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppends;
@@ -466,7 +466,7 @@ class CommentResource extends BaseAdminResource
         // dd($TweetPluginUsages['plugin_unikey']);
         if ($TweetPluginUsages) {
             $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
-            $plugin = FresnsPlugin::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
+            $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
             $name = AmService::getlanguageField('name', $TweetPluginUsages['id']);
             $manages['name'] = $name == null ? "" : $name['lang_content'];
             // $manages['icon'] = $TweetPluginUsages['icon_file_url'];

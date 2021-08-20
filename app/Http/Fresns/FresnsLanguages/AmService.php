@@ -11,7 +11,7 @@ namespace App\Http\Fresns\FresnsLanguages;
 
 use App\Base\Services\BaseAdminService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigService;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
 
 class AmService extends BaseAdminService
 {
@@ -112,7 +112,7 @@ class AmService extends BaseAdminService
     //获取表数据
     public static function getLanguages($tableName, $tableField, $tableId)
     {
-        $languageArr = FresnsConfigService::getLanguageStatus();
+        $languageArr = FresnsConfigsService::getLanguageStatus();
         $languagesOption = $languageArr['languagesOption'];
 
         //查询对应的语言
