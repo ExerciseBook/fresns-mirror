@@ -23,6 +23,4 @@ class AmConfig
     const PASSWORD_LOWERCASE_LETTERS = 2; //小写字母
     const PASSWORD_CAPITAL_LETTERS = 4; //大写字母
     const PASSWORD_SYMBOL = 3; //符号
-
-
 }

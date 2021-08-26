@@ -10,7 +10,8 @@ namespace App\Traits;
 trait CodeTrait
 {
     //
-    public static function checkInfo($code){
+    public static function checkInfo($code)
+    {
         $c = get_called_class();
         $m = new $c;
         $codeMap = $m->getCodeMap();
@@ -22,8 +23,8 @@ trait CodeTrait
         return $data;
     }
 
-    public function getCodeMap(){
+    public function getCodeMap()
+    {
         return $this->codeMap;
     }
-
 }

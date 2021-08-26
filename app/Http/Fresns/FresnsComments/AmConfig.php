@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsComments;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -60,6 +59,4 @@ class AmConfig extends BaseConfig
         'latest_comment_at' => 'latest_comment_at',
         'is_enable' => 'is_enable',
     ];
-
-     
 }

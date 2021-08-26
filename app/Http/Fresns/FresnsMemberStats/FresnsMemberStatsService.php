@@ -7,9 +7,9 @@
  */
 
 // 系统解耦, 快捷方式入口
+
 namespace App\Http\Fresns\FresnsMemberStats;
 
 class FresnsMemberStatsService extends AmService
 {
-
 }

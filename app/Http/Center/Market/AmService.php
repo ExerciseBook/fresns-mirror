@@ -14,11 +14,9 @@ use Illuminate\Support\Str;
 class AmService
 {
     /**
-     * 获取插件的json文件信息
+     * 获取插件的json文件信息.
      */
-    public static function getPluginJsonFileArr(){
-
-
+    public static function getPluginJsonFileArr()
+    {
     }
-
 }

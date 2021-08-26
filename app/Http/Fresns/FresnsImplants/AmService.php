@@ -24,6 +24,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
@@ -39,7 +40,7 @@ class AmService extends BaseAdminService
             foreach ($data as &$v) {
                 $name = ApiLanguageHelper::getLanguages(AmConfig::CFG_TABLE, 'name', $v['id']);
                 $v['template'] = $v['implant_template'];
-                $v['name'] = $name == null ? "" : $name['lang_content'];
+                $v['name'] = $name == null ? '' : $name['lang_content'];
                 $v['position'] = $v['position'];
                 $v['pageType'] = $v['type'];
                 $v['pageTarget'] = $v['target'];
@@ -57,6 +58,7 @@ class AmService extends BaseAdminService
                 unset($v['support']);
             }
         }
+
         return $data;
     }
 }

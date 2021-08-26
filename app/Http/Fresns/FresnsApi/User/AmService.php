@@ -20,8 +20,8 @@ use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-use App\Http\Fresns\FresnsPlugins\FresnsPluginsService;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadgesService;
+use App\Http\Fresns\FresnsPlugins\FresnsPluginsService;
 use App\Http\Fresns\FresnsUserConnects\FresnsUserConnectsConfig;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
 use App\Http\Fresns\FresnsUserWallets\FresnsUserWallets;
@@ -62,7 +62,7 @@ class AmService
 
         $connectsArr = DB::table(FresnsUserConnectsConfig::CFG_TABLE)->where('user_id', $uid)->get([
             'connect_id',
-            'is_enable'
+            'is_enable',
         ])->toArray();
         $itemArr = [];
         if ($connectsArr) {
@@ -77,17 +77,17 @@ class AmService
         $data['connects'] = $itemArr;
         //钱包
         $userWallets = FresnsUserWallets::where('user_id', $uid)->first();
-        $wallets['status'] = $userWallets['is_enable'] ?? "";
-        $wallets['balance'] = $userWallets['balance'] ?? "";
-        $wallets['freezeAmount'] = $userWallets['freeze_amount'] ?? "";
-        $wallets['bankName'] = $userWallets['bank_name'] ?? "";
-        $wallets['swiftCode'] = $userWallets['swift_code'] ?? "";
-        $wallets['bankAddress'] = $userWallets['bank_address'] ?? "";
-        $wallets['bankAccount'] = "";
-        if (!empty($userWallets)) {
+        $wallets['status'] = $userWallets['is_enable'] ?? '';
+        $wallets['balance'] = $userWallets['balance'] ?? '';
+        $wallets['freezeAmount'] = $userWallets['freeze_amount'] ?? '';
+        $wallets['bankName'] = $userWallets['bank_name'] ?? '';
+        $wallets['swiftCode'] = $userWallets['swift_code'] ?? '';
+        $wallets['bankAddress'] = $userWallets['bank_address'] ?? '';
+        $wallets['bankAccount'] = '';
+        if (! empty($userWallets)) {
             $wallets['bankAccount'] = ApiCommonHelper::encryptIdNumber($userWallets['bank_account'], 4, -2);
         }
-        $wallets['bankStatus'] = $userWallets['bank_status'] ?? "";
+        $wallets['bankStatus'] = $userWallets['bank_status'] ?? '';
 
         $wallets['payExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, AmConfig::PLUGIN_USAGERS_TYPE_1,
             $langTag);
@@ -115,22 +115,22 @@ class AmService
                 $item['roleName'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE,
                     'name', $memberRole['id'], $langTag);
                 $item['roleNameDisplay'] = $memberRole['is_display_name'];
-                $item['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'],$memberRole['icon_file_url']);
+                $item['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
                 $item['roleIconDisplay'] = $memberRole['icon_display_icon'];
             }
 
             $isPassword = false;
-            if (!empty($v->password)) {
+            if (! empty($v->password)) {
                 $isPassword = true;
             }
             $item['password'] = $isPassword;
 
-            if(empty($users->deleted_at)){
-                if(empty($v->avatar_file_url) && empty($v->avatar_file_id)){
+            if (empty($users->deleted_at)) {
+                if (empty($v->avatar_file_url) && empty($v->avatar_file_id)) {
                     $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
                     $memberAvatar = ApiFileHelper::getImageSignUrl($defaultAvatar);
                 } else {
-                    $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($v->avatar_file_id,$v->avatar_file_url);
+                    $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($v->avatar_file_id, $v->avatar_file_url);
                 }
             } else {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey('deactivate_avatar');

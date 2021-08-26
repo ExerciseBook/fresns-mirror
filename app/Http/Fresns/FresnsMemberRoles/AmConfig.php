@@ -42,7 +42,4 @@ class AmConfig extends BaseConfig
         'nickname_color' => 'nickname_color',
         'permission' => 'permission',
     ];
-
-     
-
 }

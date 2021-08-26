@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsEmojis;
 
 // 配置
 use App\Base\Config\BaseConfig;
-  
 
 class AmConfig extends BaseConfig
 {
@@ -19,7 +18,7 @@ class AmConfig extends BaseConfig
 
     // 主表额外搜索字段
     const ADDED_SEARCHABLE_FIELDS = [
-        'parent_id' => ['field' => 'parent_id', 'op' => '=']
+        'parent_id' => ['field' => 'parent_id', 'op' => '='],
     ];
 
     //表情小组
@@ -39,7 +38,4 @@ class AmConfig extends BaseConfig
         'type' => 'type',
         'parent_id' => 'parent_id',
     ];
-
-     
-
 }

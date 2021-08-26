@@ -9,19 +9,18 @@
 namespace App\Http\Fresns\FresnsApi\Notify;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsDialogs\FresnsDialogs;
-use App\Http\Fresns\FresnsDialogs\FresnsDialogsConfig;
-use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessages;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-use App\Http\Share\AmGlobal\GlobalService;
+use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
-use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessages;
+use App\Http\Fresns\FresnsDialogs\FresnsDialogs;
+use App\Http\Fresns\FresnsDialogs\FresnsDialogsConfig;
+use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
+use App\Http\Share\AmGlobal\GlobalService;
+use Illuminate\Support\Facades\DB;
 
 class DialogsResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // dd(1);
@@ -49,13 +48,13 @@ class DialogsResource extends BaseAdminResource
         // dd($memberInfo);
         $member = [];
         $member['deactivate'] = false;
-        $member['mid'] = "";
-        $member['mname'] = "";
-        $member['nickname'] = "";
-        $member['avatar'] = $memberInfo->avatar_file_url ?? "";
-        $member['decorate'] = "";
-        $member['verifiedStatus'] = "";
-        $member['verifiedIcon'] = "";
+        $member['mid'] = '';
+        $member['mname'] = '';
+        $member['nickname'] = '';
+        $member['avatar'] = $memberInfo->avatar_file_url ?? '';
+        $member['decorate'] = '';
+        $member['verifiedStatus'] = '';
+        $member['verifiedIcon'] = '';
         // 为空用默认头像
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
@@ -109,4 +108,3 @@ class DialogsResource extends BaseAdminResource
         return $arr;
     }
 }
-

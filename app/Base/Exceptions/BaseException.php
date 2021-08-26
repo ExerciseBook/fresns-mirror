@@ -10,5 +10,4 @@ namespace App\Base\Exceptions;
 
 class BaseException extends \Exception
 {
-
 }

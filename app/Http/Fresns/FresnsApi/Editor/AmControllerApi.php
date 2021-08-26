@@ -10,41 +10,40 @@ namespace App\Http\Fresns\FresnsApi\Editor;
 
 use App\Helpers\DateHelper;
 use App\Helpers\StrHelper;
-use App\Http\Share\Common\LogService;
-use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
-use Illuminate\Http\Request;
-use App\Http\Share\Common\ValidateService;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsPosts\FresnsPosts;
-use App\Http\Center\Scene\FileSceneService;
-use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
-use App\Http\Fresns\FresnsApi\Editor\Service\CommentPostLogService;
-use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
-use App\Http\Fresns\FresnsComments\FresnsComments;
-use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogsService;
-use App\Http\Fresns\FresnsApi\Editor\Resource\PostLogResourceDetail;
-use App\Http\Fresns\FresnsApi\Editor\Resource\CommentResourceDetail;
-use App\Http\Fresns\FresnsPostLogs\FresnsPostLogsService;
-use App\Http\Fresns\FresnsApi\Editor\Resource\PostLogResource;
-use App\Http\Fresns\FresnsApi\Editor\Resource\CommentLogResource;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
-use App\Http\Fresns\FresnsPosts\FresnsPostsService;
-use App\Http\Fresns\FresnsComments\FresnsCommentsService;
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Scene\FileSceneConfig;
+use App\Http\Center\Scene\FileSceneService;
+use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
+use App\Http\Fresns\FresnsApi\Editor\Resource\CommentLogResource;
+use App\Http\Fresns\FresnsApi\Editor\Resource\CommentResourceDetail;
+use App\Http\Fresns\FresnsApi\Editor\Resource\PostLogResource;
+use App\Http\Fresns\FresnsApi\Editor\Resource\PostLogResourceDetail;
+use App\Http\Fresns\FresnsApi\Editor\Service\CommentPostLogService;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsCmds\FresnsPlugin as FresnsCmdsFresnsPlugin;
 use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
-use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
+use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
+use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogsService;
+use App\Http\Fresns\FresnsComments\FresnsComments;
+use App\Http\Fresns\FresnsComments\FresnsCommentsService;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
+use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
+use App\Http\Fresns\FresnsPostLogs\FresnsPostLogsService;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsPosts\FresnsPostsService;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
+use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
+use App\Http\Share\AmGlobal\GlobalService;
+use App\Http\Share\Common\ErrorCodeService;
+use App\Http\Share\Common\LogService;
+use App\Http\Share\Common\ValidateService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AmControllerApi extends FresnsBaseApiController
 {
-
     public function __construct()
     {
         $this->service = new AmService();
@@ -56,9 +55,8 @@ class AmControllerApi extends FresnsBaseApiController
     // 创建新草稿
     public function create(Request $request)
     {
-
         $rule = [
-            'type' => "required|in:1,2",
+            'type' => 'required|in:1,2',
         ];
         ValidateService::validateRule($request, $rule);
         $type = $request->input('type');
@@ -69,11 +67,11 @@ class AmControllerApi extends FresnsBaseApiController
         // dd($platform);
         if ($deviceInfo) {
             if ($type == 1) {
-                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), "创建帖子草稿", $user_id,
-                    $mid,null,'创建新草稿');
+                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), '创建帖子草稿', $user_id,
+                    $mid, null, '创建新草稿');
             } else {
-                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), "创建评论草稿",
-                    $user_id, $mid,null,'创建新草稿');
+                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), '创建评论草稿',
+                    $user_id, $mid, null, '创建新草稿');
             }
         }
 
@@ -82,15 +80,16 @@ class AmControllerApi extends FresnsBaseApiController
         // dd($checkInfo);
         if (is_array($checkInfo)) {
             FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
             return $this->errorCheckInfo($checkInfo);
         }
 
         // 	1.帖子 / 2.评论
         $type = $request->input('type');
         // 为空代表创建空白草稿，有值代表编辑现有内容
-        $uuid = $request->input('uuid', "");
+        $uuid = $request->input('uuid', '');
         // 2.评论专用，表示该帖子下的评论
-        $pid = $request->input('pid', "");
+        $pid = $request->input('pid', '');
         switch ($type) {
             case '1':
                 // uuid=空，创建空白草稿，不做数量检查，帖子草稿可以有多个。
@@ -99,13 +98,14 @@ class AmControllerApi extends FresnsBaseApiController
                     $createdCheck = AmChecker::checkPermission($type, 1, $user_id, $mid);
                     if (is_array($createdCheck)) {
                         FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
                         return $this->errorCheckInfo($createdCheck);
                     }
 
                     // dd($createdCheck);
                     $postInput = [
                         'member_id' => $mid,
-                        'platform_id' => $platform
+                        'platform_id' => $platform,
                     ];
                     $postLogId = DB::table('post_logs')->insertGetId($postInput);
                 } else {
@@ -114,18 +114,18 @@ class AmControllerApi extends FresnsBaseApiController
                      * 存在，该 ID 不可再创建新草稿，相当于同一篇帖子只能有一篇正在编辑的草稿，直接返回当前草稿详情。
                      * 不存在，获取该帖子现有内容创建草稿。
                      */
-
                     $postInfo = FresnsPosts::where('uuid', $uuid)->first();
                     // 验证编辑权限
                     $createdCheck = AmChecker::checkPermission($type, 2, $user_id, $mid, $postInfo['id']);
                     // dd($createdCheck);
                     if (is_array($createdCheck)) {
                         FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
                         return $this->errorCheckInfo($createdCheck);
                     }
                     $postLog = FresnsPostLogs::where('post_id', $postInfo['id'])->where('member_id',
                         $mid)->where('status', '!=', 3)->first();
-                    if (!$postLog) {
+                    if (! $postLog) {
                         $postLogId = CommentPostLogService::postLogInsert($uuid, $mid);
                     } else {
                         $postLogId = $postLog['id'];
@@ -133,7 +133,7 @@ class AmControllerApi extends FresnsBaseApiController
                 }
                 FresnsSessionLogs::where('id', $logsId)->update([
                     'object_result' => AmConfig::OBJECT_SUCCESS,
-                    'object_order_id' => $postLogId
+                    'object_order_id' => $postLogId,
                 ]);
                 // dd($postLogId);
                 $FresnsPostLogsService = new FresnsPostLogsService();
@@ -175,12 +175,11 @@ class AmControllerApi extends FresnsBaseApiController
                         $commentLogInput = [
                             'member_id' => $mid,
                             'post_id' => $postInfo['id'],
-                            'platform_id' => $platform
+                            'platform_id' => $platform,
                         ];
                         $commentLogId = DB::table('comment_logs')->insertGetId($commentLogInput);
                     }
                 } else {
-
                     $commentInfo = FresnsComments::where('uuid', $uuid)->first();
                     // 验证编辑权限
                     $createdCheck = AmChecker::checkPermission($type, 2, $user_id, $mid, $commentInfo['id']);
@@ -196,7 +195,7 @@ class AmControllerApi extends FresnsBaseApiController
                     // }
                     $commentLog = FresnsCommentLogs::where('comment_id', $commentInfo['id'])->where('member_id',
                         $mid)->where('status', '!=', 3)->first();
-                    if (!$commentLog) {
+                    if (! $commentLog) {
                         $commentLogId = CommentPostLogService::commentLogInsert($uuid, $mid);
                     } else {
                         $commentLogId = $commentLog['id'];
@@ -204,7 +203,7 @@ class AmControllerApi extends FresnsBaseApiController
                 }
                 FresnsSessionLogs::where('id', $logsId)->update([
                     'object_result' => AmConfig::OBJECT_SUCCESS,
-                    'object_order_id' => $commentLogId
+                    'object_order_id' => $commentLogId,
                 ]);
                 $FresnsCommentLogsService = new FresnsCommentLogsService();
                 $request->offsetSet('id', $commentLogId);
@@ -214,7 +213,7 @@ class AmControllerApi extends FresnsBaseApiController
                 break;
         }
         $data = [
-            'detail' => $list['list']
+            'detail' => $list['list'],
         ];
         $this->success($data);
     }
@@ -223,10 +222,9 @@ class AmControllerApi extends FresnsBaseApiController
     public function detail(Request $request)
     {
         $rule = [
-            'type' => "required|in:1,2",
+            'type' => 'required|in:1,2',
         ];
         ValidateService::validateRule($request, $rule);
-
 
         $mid = GlobalService::getGlobalKey('member_id');
         $type = $request->input('type');
@@ -251,7 +249,7 @@ class AmControllerApi extends FresnsBaseApiController
                 break;
         }
         $data = [
-            'detail' => $list['list']
+            'detail' => $list['list'],
         ];
         $this->success($data);
     }
@@ -260,19 +258,18 @@ class AmControllerApi extends FresnsBaseApiController
     public function lists(Request $request)
     {
         $rule = [
-            'type' => "required|in:1,2",
-            'status' => "required|in:1,2,4",
-            'class' => "in:1,2",
+            'type' => 'required|in:1,2',
+            'status' => 'required|in:1,2,4',
+            'class' => 'in:1,2',
         ];
         ValidateService::validateRule($request, $rule);
-
 
         $mid = GlobalService::getGlobalKey('member_id');
         $type = $request->input('type');
         $status = $request->input('status');
         $class = $request->input('class');
         if ($type == 1) {
-            if (!empty($class)) {
+            if (! empty($class)) {
                 if ($class == 1) {
                     $idArr = FresnsPostLogs::where('post_id', null)->pluck('id')->toArray();
                 } else {
@@ -299,10 +296,10 @@ class AmControllerApi extends FresnsBaseApiController
             // dd($request);
             $FresnsPostLogsService->setResource(PostLogResource::class);
             $list = $FresnsPostLogsService->searchData();
-            // dd(1);
+        // dd(1);
         } else {
             // $request->offsetSet('queryType', AmConfig::QUERY_TYPE_SQL_QUERY);
-            if (!empty($class)) {
+            if (! empty($class)) {
                 if ($class == 1) {
                     $idArr = FresnsCommentLogs::where('comment_id', null)->pluck('id')->toArray();
                 } else {
@@ -340,11 +337,11 @@ class AmControllerApi extends FresnsBaseApiController
     public function update(Request $request)
     {
         $rule = [
-            'logType' => "required|in:1,2",
-            'logId' => "required",
-            'isMarkdown' => "in:0,1",
-            'isAnonymous' => "in:0,1",
-            'isPluginEdit' => "in:0,1",
+            'logType' => 'required|in:1,2',
+            'logId' => 'required',
+            'isMarkdown' => 'in:0,1',
+            'isAnonymous' => 'in:0,1',
+            'isPluginEdit' => 'in:0,1',
             'fileJson' => 'json',
             'extendsJson' => 'json',
             'locationJson' => 'json',
@@ -376,8 +373,8 @@ class AmControllerApi extends FresnsBaseApiController
     public function submit(Request $request)
     {
         $rule = [
-            'type' => "required|in:1,2",
-            'logId' => "required",
+            'type' => 'required|in:1,2',
+            'logId' => 'required',
         ];
         ValidateService::validateRule($request, $rule);
         $deviceInfo = $request->header('deviceInfo');
@@ -389,11 +386,11 @@ class AmControllerApi extends FresnsBaseApiController
         $user_id = GlobalService::getGlobalKey('user_id');
         if ($deviceInfo) {
             if ($type == 1) {
-                $logsId = FresnsSessionLogsService::addSessionLogs("App\Http\Fresns\FresnsPosts", "发表帖子内容", $user_id,
-                    $mid,null,'提交内容正式发表');
+                $logsId = FresnsSessionLogsService::addSessionLogs("App\Http\Fresns\FresnsPosts", '发表帖子内容', $user_id,
+                    $mid, null, '提交内容正式发表');
             } else {
-                $logsId = FresnsSessionLogsService::addSessionLogs("App\Http\Fresns\FresnsComments", "发表评论内容", $user_id,
-                    $mid,null,'提交内容正式发表');
+                $logsId = FresnsSessionLogsService::addSessionLogs("App\Http\Fresns\FresnsComments", '发表评论内容', $user_id,
+                    $mid, null, '提交内容正式发表');
             }
         }
         $type = $request->input('type');
@@ -403,6 +400,7 @@ class AmControllerApi extends FresnsBaseApiController
         $checkInfo = AmChecker::checkSubmit($mid);
         if (is_array($checkInfo)) {
             FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
             return $this->errorCheckInfo($checkInfo);
         }
         switch ($type) {
@@ -410,11 +408,12 @@ class AmControllerApi extends FresnsBaseApiController
                 // 判断是更新还是新增
                 $draftPost = FresnsPostLogs::find($draftId);
                 // $this->sendAtMessages(10,$draftId);
-                if (!$draftPost['post_id']) {
+                if (! $draftPost['post_id']) {
                     // 验证新增权限
                     $createdCheck = AmChecker::checkPermission(1, 1, $user_id, $mid);
                     if (is_array($createdCheck)) {
                         FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
                         return $this->errorCheckInfo($createdCheck);
                     }
                 } else {
@@ -422,27 +421,28 @@ class AmControllerApi extends FresnsBaseApiController
                     $createdCheck = AmChecker::checkPermission(1, 2, $user_id, $mid, $draftPost['post_id']);
                     if (is_array($createdCheck)) {
                         FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
                         return $this->errorCheckInfo($createdCheck);
                     }
                 }
                 // 是否需要审核
-                if($type == 1){
+                if ($type == 1) {
                     $draft = FresnsPostLogs::find($draftId);
-                }else{
+                } else {
                     $draft = FresnsCommentLogs::find($draftId);
                 }
-                $checkAudit = AmChecker::checkAudit($type, $mid ,$draft['content']);
+                $checkAudit = AmChecker::checkAudit($type, $mid, $draft['content']);
                 if ($checkAudit) {
                     // 修改草稿状态为待审核 status，录入提交审核时间 submit_at，其他不动，待审核通过后再操作。
                     if ($type == 1) {
                         FresnsPostLogs::where('id', $draftId)->update([
                             'status' => 2,
-                            'submit_at' => date('Y-m-d H:i:s', time())
+                            'submit_at' => date('Y-m-d H:i:s', time()),
                         ]);
                     } else {
                         FresnsCommentLogs::where('id', $draftId)->update([
                             'status' => 2,
-                            'submit_at' => date('Y-m-d H:i:s', time())
+                            'submit_at' => date('Y-m-d H:i:s', time()),
                         ]);
                     }
                     $this->success();
@@ -454,11 +454,12 @@ class AmControllerApi extends FresnsBaseApiController
                 // 判断是更新还是新增
                 $draftComment = FresnsCommentLogs::find($draftId);
                 // $this->sendAtMessages(10,$draftId);
-                if (!$draftComment['comment_id']) {
+                if (! $draftComment['comment_id']) {
                     // 验证新增权限
                     $createdCheck = AmChecker::checkPermission(2, 1, $user_id, $mid);
                     if (is_array($createdCheck)) {
                         FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
                         return $this->errorCheckInfo($createdCheck);
                     }
                 } else {
@@ -466,27 +467,28 @@ class AmControllerApi extends FresnsBaseApiController
                     $createdCheck = AmChecker::checkPermission(2, 2, $user_id, $mid, $draftComment['comment_id']);
                     if (is_array($createdCheck)) {
                         FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
                         return $this->errorCheckInfo($createdCheck);
                     }
                 }
                 // 是否需要审核
-                if($type == 1){
+                if ($type == 1) {
                     $draft = FresnsPostLogs::find($draftId);
-                }else{
+                } else {
                     $draft = FresnsCommentLogs::find($draftId);
                 }
-                $checkAudit = AmChecker::checkAudit($type, $mid ,$draft['content']);
+                $checkAudit = AmChecker::checkAudit($type, $mid, $draft['content']);
                 if ($checkAudit) {
                     // 修改草稿状态为待审核 status，录入提交审核时间 submit_at，其他不动，待审核通过后再操作。
                     if ($type == 1) {
                         FresnsPostLogs::where('id', $draftId)->update([
                             'status' => 2,
-                            'submit_at' => date('Y-m-d H:i:s', time())
+                            'submit_at' => date('Y-m-d H:i:s', time()),
                         ]);
                     } else {
                         FresnsCommentLogs::where('id', $draftId)->update([
                             'status' => 2,
-                            'submit_at' => date('Y-m-d H:i:s', time())
+                            'submit_at' => date('Y-m-d H:i:s', time()),
                         ]);
                     }
                     $this->success();
@@ -502,11 +504,11 @@ class AmControllerApi extends FresnsBaseApiController
     public function upload(Request $request)
     {
         $rule = [
-            'type' => "required|in:1,2,3,4",
-            'tableType' => "required",
-            'tableName' => "required",
-            'tableField' => "required",
-            'mode' => "required|in:1,2",
+            'type' => 'required|in:1,2,3,4',
+            'tableType' => 'required',
+            'tableName' => 'required',
+            'tableField' => 'required',
+            'mode' => 'required|in:1,2',
         ];
         ValidateService::validateRule($request, $rule);
         $type = $request->input('type');
@@ -516,9 +518,9 @@ class AmControllerApi extends FresnsBaseApiController
         if ($mode == 2) {
             if (empty($tableId) && empty($tableKey)) {
                 $input = [
-                    '参数错误：' => 'tableId或tableKey至少填一项'
+                    '参数错误：' => 'tableId或tableKey至少填一项',
                 ];
-                $this->error(ErrorCodeService::CODE_PARAM_ERROR,$input);
+                $this->error(ErrorCodeService::CODE_PARAM_ERROR, $input);
             }
         }
 
@@ -547,13 +549,13 @@ class AmControllerApi extends FresnsBaseApiController
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
             if (empty($pluginClass)) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
                 $this->error(ErrorCodeService::FILE_SALE_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
                 $this->error(ErrorCodeService::DOWMLOAD_ERROR);
             }
 
@@ -564,7 +566,6 @@ class AmControllerApi extends FresnsBaseApiController
                     'item_key')->toArray();
                 $paramsExist = ValidateService::validParamExist($configMapInDB,
                     ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
-
             }
             if ($file['file_type'] == FileSceneConfig::FILE_TYPE_2) {
                 $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id', 'videos_secret_key', 'videos_bucket_domain'])->pluck('item_value',
@@ -588,7 +589,7 @@ class AmControllerApi extends FresnsBaseApiController
             }
 
             if ($paramsExist == false) {
-                LogService::error("插件信息未配置");
+                LogService::error('插件信息未配置');
                 $this->error(ErrorCodeService::FILE_SALE_ERROR);
             }
 
@@ -597,7 +598,7 @@ class AmControllerApi extends FresnsBaseApiController
             $options['table_type'] = $request->input('tableType');
             $storePath = FileSceneService::getEditorPath($options);
 
-            if (!$storePath) {
+            if (! $storePath) {
                 $this->error(ErrorCodeService::CODE_FAIL);
             }
 
@@ -616,12 +617,11 @@ class AmControllerApi extends FresnsBaseApiController
                 $this->error($checker);
             }
 
-            LogService::info("文件存储本地成功 ", $file);
-
-        }  else {
+            LogService::info('文件存储本地成功 ', $file);
+        } else {
             $fileInfo = $request->input('fileInfo');
             $isJson = StrHelper::isJson($fileInfo);
-            if($isJson == false){
+            if ($isJson == false) {
                 $this->error(ErrorCodeService::FILES_INFO_ERROR);
             }
         }
@@ -654,9 +654,9 @@ class AmControllerApi extends FresnsBaseApiController
     public function delete(Request $request)
     {
         $rule = [
-            'type' => "required|in:1,2",
-            'logId' => "required",
-            'deleteType' => "required|in:1,2,3",
+            'type' => 'required|in:1,2',
+            'logId' => 'required',
+            'deleteType' => 'required|in:1,2,3',
 
         ];
         ValidateService::validateRule($request, $rule);
@@ -671,7 +671,7 @@ class AmControllerApi extends FresnsBaseApiController
         switch ($type) {
             case 1:
                 $logs = FresnsPostLogs::where('id', $logId)->first();
-                
+
                 break;
             default:
                 $logs = FresnsCommentLogs::where('id', $logId)->first();
@@ -681,12 +681,9 @@ class AmControllerApi extends FresnsBaseApiController
         if (empty($logs)) {
             if ($type == 1) {
                 $this->error(ErrorCodeService::DELETE_FILE_ERROR);
-
             } else {
                 $this->error(ErrorCodeService::DELETE_COMMENT_ERROR);
-
             }
-
         }
 
         if ($logs['member_id'] != $mid) {
@@ -695,19 +692,19 @@ class AmControllerApi extends FresnsBaseApiController
 
         if ($deleteType == 2 || $deleteType == 3) {
             $rule = [
-                'deleteUuid' => "required",
+                'deleteUuid' => 'required',
             ];
             ValidateService::validateRule($request, $rule);
             $deleteUuid = $request->input('deleteUuid');
             if ($deleteType == 2) {
                 $filesJson = json_decode($logs['files_json'], true);
                 $filesIdArr = [];
-                if (!empty($filesJson)) {
+                if (! empty($filesJson)) {
                     foreach ($filesJson as $v) {
                         $filesIdArr[] = $v['fid'];
                     }
                 }
-                if (!in_array($deleteUuid, $filesIdArr)) {
+                if (! in_array($deleteUuid, $filesIdArr)) {
                     $this->error(ErrorCodeService::FILES_ERROR);
                 }
             }
@@ -715,17 +712,16 @@ class AmControllerApi extends FresnsBaseApiController
             if ($deleteType == 3) {
                 $extendsJson = json_decode($logs['extends_json'], true);
                 $eidArr = [];
-                if (!empty($extendsJson)) {
+                if (! empty($extendsJson)) {
                     foreach ($extendsJson as $v) {
                         $eidArr[] = $v['eid'];
                     }
                 }
 
-                if (!in_array($deleteUuid, $eidArr)) {
+                if (! in_array($deleteUuid, $eidArr)) {
                     $this->error(ErrorCodeService::EXTEND_ERROR);
                 }
             }
-
         }
 
         if ($logs['status'] == 3) {
@@ -734,7 +730,7 @@ class AmControllerApi extends FresnsBaseApiController
 
         $checkDelete = $this->service->deletePostComment($uid, $mid, $logs, $type);
 
-        if($checkDelete !== true){
+        if ($checkDelete !== true) {
             $this->error($checkDelete);
         }
 
@@ -745,13 +741,13 @@ class AmControllerApi extends FresnsBaseApiController
     public function uploadToken(Request $request)
     {
         $rule = [
-            'type' => "required|in:1,2,3,4",
-            'mode' => "required|in:1,2",
-            'scene' => "required|numeric|in:1,2,3,4,5,6,7,8,9,10,11",
+            'type' => 'required|in:1,2,3,4',
+            'mode' => 'required|in:1,2',
+            'scene' => 'required|numeric|in:1,2,3,4,5,6,7,8,9,10,11',
 
         ];
         ValidateService::validateRule($request, $rule);
-       
+
         $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
         $input['type'] = $request->input('type');
         $input['mode'] = $request->input('mode');
@@ -774,10 +770,10 @@ class AmControllerApi extends FresnsBaseApiController
     public function publish(Request $request)
     {
         $rule = [
-            'type' => "required|in:1,2",
-            'content' => "required",
-            'isMarkdown' => "required|in:0,1",
-            'content' => "required",
+            'type' => 'required|in:1,2',
+            'content' => 'required',
+            'isMarkdown' => 'required|in:0,1',
+            'content' => 'required',
             'isAnonymous' => 'required | in:0,1',
         ];
         ValidateService::validateRule($request, $rule);
@@ -790,14 +786,14 @@ class AmControllerApi extends FresnsBaseApiController
         $logsId = 0;
         if ($deviceInfo) {
             if ($type == 1) {
-                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), "发表帖子内容", $uid,
-                    $member_id,null,'快速发表');
+                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), '发表帖子内容', $uid,
+                    $member_id, null, '快速发表');
             } else {
-                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), "发表评论内容", $uid,
-                    $member_id,null,'快速发表');
+                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), '发表评论内容', $uid,
+                    $member_id, null, '快速发表');
             }
         }
-        LogService::Info('logsId',$logsId);
+        LogService::Info('logsId', $logsId);
         $commentCid = $request->input('commentCid');
         $file = request()->file('file');
 
@@ -805,62 +801,61 @@ class AmControllerApi extends FresnsBaseApiController
         $checkInfo = AmChecker::checkPublish($member_id);
         if (is_array($checkInfo)) {
             FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
             return $this->errorCheckInfo($checkInfo);
         }
-        if (!empty($file)) {
+        if (! empty($file)) {
             $pluginUniKey = ApiConfigHelper::getConfigByItemKey('images_service');
             // 执行上传
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
             if (empty($pluginClass)) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
                 FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
                 $this->error(ErrorCodeService::FILE_SALE_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
                 $this->error(ErrorCodeService::DOWMLOAD_ERROR);
             }
 
-
             $paramsExist = false;
 
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
 
             if ($paramsExist == false) {
-                LogService::error("插件信息未配置");
+                LogService::error('插件信息未配置');
                 FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
                 $this->error(ErrorCodeService::FILE_SALE_ERROR);
             }
         }
         // dd($platform);
 
-
         // 如果是私有模式，当过期后 members > expired_at，该接口不可请求。
         $checker = AmChecker::checkPermission($type, 1, $uid, $member_id);
         if (is_array($checker)) {
             FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
             return $this->errorCheckInfo($checker);
         }
         // dd($checker);
         $FresnsPostsService = new FresnsPostsService();
         $fresnsCommentService = new FresnsCommentsService();
         // 是否需要审核
-        $checkAudit = AmChecker::checkAudit($type, $member_id,$request->input('content'));
+        $checkAudit = AmChecker::checkAudit($type, $member_id, $request->input('content'));
 
         switch ($type) {
-            case 1 :
+            case 1:
                 $draftId = CommentPostLogService::publishCreatedPost($request);
-                if($checkAudit){
-
+                if ($checkAudit) {
                     FresnsPostLogs::where('id', $draftId)->update([
                         'status' => 2,
-                        'submit_at' => date('Y-m-d H:i:s', time())
+                        'submit_at' => date('Y-m-d H:i:s', time()),
                     ]);
                     $this->success();
                 }
@@ -876,10 +871,10 @@ class AmControllerApi extends FresnsBaseApiController
                     $commentCid = 0;
                 }
                 $draftId = CommentPostLogService::publishCreatedComment($request);
-                if($checkAudit){
+                if ($checkAudit) {
                     FresnsCommentLogs::where('id', $draftId)->update([
                         'status' => 2,
-                        'submit_at' => date('Y-m-d H:i:s', time())
+                        'submit_at' => date('Y-m-d H:i:s', time()),
                     ]);
                     $this->success();
                 }
@@ -893,11 +888,10 @@ class AmControllerApi extends FresnsBaseApiController
     public function revoke(Request $request)
     {
         $rule = [
-            'type' => "required|in:1,2",
-            'logId' => "required",
+            'type' => 'required|in:1,2',
+            'logId' => 'required',
         ];
         ValidateService::validateRule($request, $rule);
-
 
         $type = $request->input('type');
         $logId = $request->input('logId');
@@ -905,7 +899,7 @@ class AmControllerApi extends FresnsBaseApiController
         // 帖子
         if ($type == 1) {
             $postLogs = FresnsPostLogs::find($logId);
-            if (!$postLogs) {
+            if (! $postLogs) {
                 $this->error(ErrorCodeService::POSTS_LOGS_EXISTS_ERROR);
             }
             if ($postLogs['status'] != 2) {
@@ -916,7 +910,7 @@ class AmControllerApi extends FresnsBaseApiController
         } else {
             // 评论
             $commentLogs = FresnsCommentLogs::find($logId);
-            if (!$commentLogs) {
+            if (! $commentLogs) {
                 $this->error(ErrorCodeService::COMMENT_LOGS_EXISTS_ERROR);
             }
             if ($commentLogs['status'] != 2) {

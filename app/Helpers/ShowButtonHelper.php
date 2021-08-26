@@ -17,7 +17,8 @@ class ShowButtonHelper
     public $showButtonsArr = [];
 
     // 添加showButtons
-    public function addShowButtonInfo($showBtnKey, $show = true){
+    public function addShowButtonInfo($showBtnKey, $show = true)
+    {
         $showButton = [
             'key'    => $showBtnKey,
             'name'   => $this->showButtonsNameMap[$showBtnKey] ?? '未知名称',
@@ -26,19 +27,23 @@ class ShowButtonHelper
         ];
 
         $this->showButtonsArr[] = $showButton;
+
         return $showButton;
     }
 
-    public function getShowButtonsArr(){
+    public function getShowButtonsArr()
+    {
         return $this->showButtonsArr;
     }
 
-    public function setShowButtonNameMap($nameMap){
+    public function setShowButtonNameMap($nameMap)
+    {
         $this->showButtonsNameMap = $nameMap;
     }
 
     // 是否显示button
-    public static function isShowButton($showButtonArr, $key){
+    public static function isShowButton($showButtonArr, $key)
+    {
         $res = true;
         $info = [
             'show_button_result' => $res,
@@ -46,24 +51,25 @@ class ShowButtonHelper
             'show_button_arr' => $showButtonArr,
         ];
 
-        foreach ($showButtonArr as $showButton){
+        foreach ($showButtonArr as $showButton) {
             $showButtonKey = $showButton['key'] ?? '';
-            if($showButtonKey == $key){
+            if ($showButtonKey == $key) {
                 $res = $showButton['show'] ?? true;
                 $info['show_button_result'] = $res;
                 break;
             }
         }
 
-        LogService::info("isShowButton 匹配结果", $info);
+        LogService::info('isShowButton 匹配结果', $info);
 
         return $res;
     }
 
     // 获取某个文件的showButton
-    public static function isShowFileItemButton($fileArr, $fileId, $key){
-        foreach ($fileArr as $fileItem){
-            if($fileItem['id'] == $fileId){
+    public static function isShowFileItemButton($fileArr, $fileId, $key)
+    {
+        foreach ($fileArr as $fileItem) {
+            if ($fileItem['id'] == $fileId) {
                 return self::isShowButton($fileItem['show_button_arr'], $key);
             }
         }
@@ -71,5 +77,4 @@ class ShowButtonHelper
 
         return true;
     }
-
 }

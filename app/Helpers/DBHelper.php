@@ -19,8 +19,8 @@ use Illuminate\Support\Str;
 class DBHelper
 {
     // 多库， 检查是否有table
-    public static function hasTable($tableName){
-
+    public static function hasTable($tableName)
+    {
         $inMysql = Schema::connection(BaseConfig::MYSQL_CONNECTION)->hasTable($tableName);
         $inMysqlHelper = Schema::connection(BaseConfig::MYSQL_CONNECTION_HELPER)->hasTable($tableName);
 
@@ -28,25 +28,26 @@ class DBHelper
     }
 
     // 多库， 检查是否有table
-    public static function hasTableInCurrentDB($tableName){
+    public static function hasTableInCurrentDB($tableName)
+    {
         $inMysql = Schema::connection(BaseConfig::MYSQL_CONNECTION)->hasTable($tableName);
 
         return $inMysql;
     }
 
-
     // 多库， 获取connection
-    public static function getConnectionName($tableName){
-
+    public static function getConnectionName($tableName)
+    {
         $inMysqlHelper = Schema::connection(BaseConfig::MYSQL_CONNECTION_HELPER)->hasTable($tableName);
-        if($inMysqlHelper){
+        if ($inMysqlHelper) {
             return BaseConfig::MYSQL_CONNECTION_HELPER;
         }
 
         return BaseConfig::MYSQL_CONNECTION;
     }
 
-    public static function compareDb($conn1, $conn2){
+    public static function compareDb($conn1, $conn2)
+    {
 
         // 获取数据表
         $table1Arr = self::getAllTables($conn1);
@@ -61,23 +62,21 @@ class DBHelper
         $diffTableFieldArr = [];
         $sameTableArr = array_intersect($table1Arr, $table2Arr);
 
-        foreach ($sameTableArr as $table){
-
-            $table = env("DB_PREFIX") .  $table;
+        foreach ($sameTableArr as $table) {
+            $table = env('DB_PREFIX').$table;
 
             $conn1TableColumnMap = self::getTableColumnInfoMap($conn1, $table);
             $conn2TableColumnMap = self::getTableColumnInfoMap($conn2, $table);
 
             $result = self::compare2TableColumnMapInfo($conn1TableColumnMap, $conn2TableColumnMap);
 
-            LogService::info("conn1TableColumnMap: ", $conn1TableColumnMap);
-            LogService::info("conn2TableColumnMap: ", $conn2TableColumnMap);
+            LogService::info('conn1TableColumnMap: ', $conn1TableColumnMap);
+            LogService::info('conn2TableColumnMap: ', $conn2TableColumnMap);
 
-        //    dd($result);
-            if(!empty($result)){
+            //    dd($result);
+            if (! empty($result)) {
                 $diffTableFieldArr[$table] = $result;
             }
-
         }
 
         $data = [];
@@ -87,8 +86,9 @@ class DBHelper
         return $data;
     }
 
-    public static function getAllTables($conn){
-        $sql = "SHOW TABLES";
+    public static function getAllTables($conn)
+    {
+        $sql = 'SHOW TABLES';
         $tablesResult = DB::connection($conn)->select($sql);
 
         $dbName = DB::connection($conn)->getDatabaseName();
@@ -96,25 +96,27 @@ class DBHelper
         $tables = array_column($tablesResult, "Tables_in_{$dbName}");
 
         $tableArr = [];
-        foreach ($tables as $tableName){
-            $tableArr[] = str_replace(env("DB_PREFIX"), '', $tableName);
+        foreach ($tables as $tableName) {
+            $tableArr[] = str_replace(env('DB_PREFIX'), '', $tableName);
         }
 
         return $tableArr;
     }
 
-
-    public static function getTableColumns($conn, $table){
+    public static function getTableColumns($conn, $table)
+    {
         $sql = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = '{$table}'";
         $queryResult = DB::connection($conn)->select($sql);
+
         return $queryResult;
     }
 
-    public static function getTableColumnInfoMap($conn, $table){
+    public static function getTableColumnInfoMap($conn, $table)
+    {
         $sql = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = '{$table}'";
         $queryResult = DB::connection($conn)->select($sql);
         $columnNameMap = [];
-        foreach ($queryResult as $columnInfo){
+        foreach ($queryResult as $columnInfo) {
             $columnName = $columnInfo->COLUMN_NAME;
             $columnDataType = $columnInfo->DATA_TYPE;
             $columnNameMap[$columnName] = $columnDataType;
@@ -124,17 +126,18 @@ class DBHelper
     }
 
     // 比较两个表的信息
-    public static function compare2TableColumnMapInfo($map1, $map2){
+    public static function compare2TableColumnMapInfo($map1, $map2)
+    {
 
         //
         $diffArr = [];
-        foreach ($map1 as $columnName => $columnType){
+        foreach ($map1 as $columnName => $columnType) {
             $columnType1 = $columnType;
             $columnType2 = $map2[$columnName] ?? '';
 
             $compareStr = "{$columnName} : {$columnType1} - {$columnType2}";
-        //    LogService::info($compareStr);
-            if($columnType1 != $columnType2){
+            //    LogService::info($compareStr);
+            if ($columnType1 != $columnType2) {
                 $item = [];
                 $item['column'] = $columnName;
                 $item['columnType1'] = $columnType1;
@@ -144,13 +147,13 @@ class DBHelper
             }
         }
 
-        foreach ($map2 as $columnName => $columnType){
+        foreach ($map2 as $columnName => $columnType) {
             $columnType1 = $map1[$columnName] ?? '';
             $columnType2 = $columnType;
 
             $compareStr = "{$columnName} : {$columnType1} - {$columnType2}";
-         //   LogService::info($compareStr);
-            if($columnType1 != $columnType2){
+            //   LogService::info($compareStr);
+            if ($columnType1 != $columnType2) {
                 $item = [];
                 $item['column'] = $columnName;
                 $item['columnType1'] = $columnType1;
@@ -159,26 +162,28 @@ class DBHelper
                 $diffArr[] = $item;
             }
         }
+
         return $diffArr;
     }
 
-    public static function tableMarkdown($conn = 'mysql'){
+    public static function tableMarkdown($conn = 'mysql')
+    {
         $totalSqlArr = [];
-        if(intval(request()->input('adjust')) == 1){
+        if (intval(request()->input('adjust')) == 1) {
             $totalSqlArr = self::adjustTableFieldOrder($conn);
         }
-     //   dd(123);
+        //   dd(123);
         $tableArr = self::getAllTables($conn);
 
-        foreach ($tableArr as $table){
-            $realTable = env("DB_PREFIX") .  $table;
+        foreach ($tableArr as $table) {
+            $realTable = env('DB_PREFIX').$table;
 
-            if($table == 'aa_template'){
+            if ($table == 'aa_template') {
                 $realTable = $table;
-               // continue;
+                // continue;
             }
 
-           // dd($realTable);
+            // dd($realTable);
 
             // 查询表信息
             $sql = "SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = '{$realTable}'";
@@ -190,36 +195,36 @@ class DBHelper
             $queryResult = DB::connection($conn)->select($sql);
 
             //  dd($realTable);
-          //  dd($queryResult);
+            //  dd($queryResult);
             // ### 多媒体表 *media*
 
             $markdownArr = [
                 "### {$tableComment} *{$table}*",
-                "|  字段名  |  字段类型  |  字段注释  |  默认值  |  可空  |  备注  |",
-                "|  ---  |  ---  |  --- |  ---  |  ---  |  ---  |"
+                '|  字段名  |  字段类型  |  字段注释  |  默认值  |  可空  |  备注  |',
+                '|  ---  |  ---  |  --- |  ---  |  ---  |  ---  |',
             ];
 
-          //  dd($queryResult);
+            //  dd($queryResult);
 
-            foreach ($queryResult as $columnInfo){
+            foreach ($queryResult as $columnInfo) {
                 $item = [];
-                $commentArr = explode("#", $columnInfo->COLUMN_COMMENT);
+                $commentArr = explode('#', $columnInfo->COLUMN_COMMENT);
                 $item[] = $columnInfo->COLUMN_NAME;
-              //  $item[] = $columnInfo->DATA_TYPE;
-              //  $item[] = $columnInfo->COLUMN_TYPE . "(". $columnInfo->CHARACTER_MAXIMUM_LENGTH . ")";
+                //  $item[] = $columnInfo->DATA_TYPE;
+                //  $item[] = $columnInfo->COLUMN_TYPE . "(". $columnInfo->CHARACTER_MAXIMUM_LENGTH . ")";
                 $dataType = $columnInfo->DATA_TYPE;
                 $columnType = $columnInfo->COLUMN_TYPE;
-                if($dataType == 'bigint'){
-                    $columnType = "bigint(" . $columnInfo->NUMERIC_PRECISION . ") unsigned";
+                if ($dataType == 'bigint') {
+                    $columnType = 'bigint('.$columnInfo->NUMERIC_PRECISION.') unsigned';
                 }
-                if($dataType == 'int'){
-                    $columnType = "int(" . $columnInfo->NUMERIC_PRECISION . ") unsigned";
+                if ($dataType == 'int') {
+                    $columnType = 'int('.$columnInfo->NUMERIC_PRECISION.') unsigned';
                 }
-                if($dataType == 'tinyint'){
-                    if(!Str::contains($columnType, "(")){
-                       // $precision = "tinyint(" . $columnInfo->NUMERIC_PRECISION . ")";
-                        $precision = "tinyint(1)";
-                        $columnType = str_replace("tinyint", $precision, $columnType);
+                if ($dataType == 'tinyint') {
+                    if (! Str::contains($columnType, '(')) {
+                        // $precision = "tinyint(" . $columnInfo->NUMERIC_PRECISION . ")";
+                        $precision = 'tinyint(1)';
+                        $columnType = str_replace('tinyint', $precision, $columnType);
                     }
                 }
                 $item[] = $columnType;
@@ -228,8 +233,8 @@ class DBHelper
                 $item[] = $columnInfo->IS_NULLABLE;
                 $item[] = $commentArr[1] ?? '';
 
-                $str = implode(" | ", $item);
-                $str = "| " . $str . " |";
+                $str = implode(' | ', $item);
+                $str = '| '.$str.' |';
                 $markdownArr[] = $str;
             }
             $markdownStrArr[] = implode("\n", $markdownArr);
@@ -239,27 +244,28 @@ class DBHelper
 
         // 准备数据
 
-        $d = date("YmdHis", time());
+        $d = date('YmdHis', time());
         $fileName = "table_markdown_{$d}.txt";
-        $filePath = base_path() . "/storage/app/public/export/{$fileName}";
+        $filePath = base_path()."/storage/app/public/export/{$fileName}";
 
         // 写入
         file_put_contents($filePath, $finalStr);
 
         $domain = CommonHelper::domain();
-        $url = $domain . "/storage/export/$fileName";
+        $url = $domain."/storage/export/$fileName";
         $info = [];
         $info['file_url'] = $url;
         $info['table_count'] = count($tableArr);
         $info['table_arr'] = $tableArr;
         $info['total_sql_arr'] = $totalSqlArrStr ?? '';
-        $info['total_sql_arr_str'] = implode(" ", $totalSqlArr);
+        $info['total_sql_arr_str'] = implode(' ', $totalSqlArr);
+
         return $info;
     }
 
-
     // 调整表格字段顺序
-    public static function adjustTableFieldOrder($conn = 'mysql'){
+    public static function adjustTableFieldOrder($conn = 'mysql')
+    {
         $tableArr = self::getAllTables($conn);
 
         $fieldOrderArr = [
@@ -296,10 +302,9 @@ class DBHelper
         ];
 
         $totalSqlArr = [];
-        foreach ($tableArr as $idx => $table){
-
-            $realTable = env("DB_PREFIX") .  $table;
-            if($table == 'aa_template'){
+        foreach ($tableArr as $idx => $table) {
+            $realTable = env('DB_PREFIX').$table;
+            if ($table == 'aa_template') {
                 $realTable = $table;
                 // continue;
             }
@@ -311,12 +316,12 @@ class DBHelper
             $columnNameArr = [];
             $modifyColumnSqlArr = [];
             $typeSqlArr = [];
-            foreach ($queryResult as $columnInfo){
+            foreach ($queryResult as $columnInfo) {
                 $columnName = $columnInfo->COLUMN_NAME;
                 $columnNameArr[] = $columnInfo->COLUMN_NAME;
 
                 // 更新字段类型
-                if(in_array($columnName, array_keys($fieldLengthMap))){
+                if (in_array($columnName, array_keys($fieldLengthMap))) {
                     // ALTER TABLE address MODIFY COLUMN city bigint(20);
                     $type = $fieldLengthMap[$columnName];
                     $sql = "ALTER TABLE `{$realTable}` MODIFY COLUMN `{$columnName}` {$type};";
@@ -325,17 +330,16 @@ class DBHelper
                 }
             }
 
-            $modifyColumnSqlArrStr = implode(" ", $modifyColumnSqlArr);
-         //   DB::connection($conn)->getPdo()->exec($modifyColumnSqlArrStr);
-           // dd(123);
-
+            $modifyColumnSqlArrStr = implode(' ', $modifyColumnSqlArr);
+            //   DB::connection($conn)->getPdo()->exec($modifyColumnSqlArrStr);
+            // dd(123);
 
             // 当前表最后一列
             $afterColumn = end($columnNameArr);
 
             $finalFieldOrderArr = [];
-            foreach ($fieldOrderArr as $field){
-                if(in_array($field, $columnNameArr)){
+            foreach ($fieldOrderArr as $field) {
+                if (in_array($field, $columnNameArr)) {
                     $finalFieldOrderArr[] = $field;
                 }
             }
@@ -343,34 +347,32 @@ class DBHelper
             // ALTER TABLE `aa_template` MODIFY `remark` text AFTER `is_enable`
             // 获取最终的sql语句
             $sqlArr = [];
-            foreach ($finalFieldOrderArr as $idx => $field){
-                foreach ($queryResult as $columnInfo){
+            foreach ($finalFieldOrderArr as $idx => $field) {
+                foreach ($queryResult as $columnInfo) {
                     $columnName = $columnInfo->COLUMN_NAME;
-                    if($columnName == $field){
+                    if ($columnName == $field) {
                         $sql = "ALTER TABLE `{$realTable}` MODIFY `{$columnName}` {$columnInfo->COLUMN_TYPE} AFTER `{$afterColumn}`;";
                         $afterColumn = $columnName;
                         $sqlArr[] = $sql;
                         $totalSqlArr[] = $sql;
                         break;
                     }
-
                 }
             }
 
             // sql 执行顺序
-            foreach ($typeSqlArr as $typeSql){
+            foreach ($typeSqlArr as $typeSql) {
                 $totalSqlArr[] = $typeSql;
             }
 
             // 执行
-            $sqlArrStr = implode(" ", $sqlArr);
+            $sqlArrStr = implode(' ', $sqlArr);
             DB::connection($conn)->getPdo()->exec($sqlArrStr);
         }
 
-        $totalSqlArrStr = implode(" ", $totalSqlArr);
-      //  dd($totalSqlArrStr);
+        $totalSqlArrStr = implode(' ', $totalSqlArr);
+        //  dd($totalSqlArrStr);
         DB::connection($conn)->getPdo()->exec($totalSqlArrStr);
-
 
         return $totalSqlArr;
     }
@@ -380,7 +382,7 @@ class DBHelper
     {
         try {
             if (empty($multipleData)) {
-                throw new \Exception("数据不能为空");
+                throw new \Exception('数据不能为空');
             }
 
             $firstRow = current($multipleData);
@@ -391,18 +393,18 @@ class DBHelper
             unset($updateColumn[0]);
 
             // 拼接sql语句
-            $updateSql = "UPDATE " . $tableName . " SET ";
+            $updateSql = 'UPDATE '.$tableName.' SET ';
             $sets = [];
             $bindings = [];
 
             foreach ($updateColumn as $uColumn) {
-                $setSql = "`" . $uColumn . "` = CASE ";
+                $setSql = '`'.$uColumn.'` = CASE ';
                 foreach ($multipleData as $data) {
-                    $setSql .= "WHEN `" . $referenceColumn . "` = ? THEN ? ";
+                    $setSql .= 'WHEN `'.$referenceColumn.'` = ? THEN ? ';
                     $bindings[] = $data[$referenceColumn];
                     $bindings[] = $data[$uColumn];
                 }
-                $setSql .= "ELSE `" . $uColumn . "` END ";
+                $setSql .= 'ELSE `'.$uColumn.'` END ';
                 $sets[] = $setSql;
             }
 
@@ -410,14 +412,14 @@ class DBHelper
             $whereIn = collect($multipleData)->pluck($referenceColumn)->values()->all();
             $bindings = array_merge($bindings, $whereIn);
             $whereIn = rtrim(str_repeat('?,', count($whereIn)), ',');
-            $updateSql = rtrim($updateSql, ", ") . " WHERE `" . $referenceColumn . "` IN (" . $whereIn . ")";
+            $updateSql = rtrim($updateSql, ', ').' WHERE `'.$referenceColumn.'` IN ('.$whereIn.')';
 
             // 传入预处理sql语句和对应绑定数据
             $ret = DB::update($updateSql, $bindings);
+
             return $ret;
         } catch (\Exception $e) {
             return false;
         }
     }
-
 }

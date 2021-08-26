@@ -12,5 +12,4 @@ use App\Base\Controllers\BaseController;
 
 class BasePluginApiController extends BaseController
 {
-
 }

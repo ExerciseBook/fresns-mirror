@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsHashtags;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -52,6 +51,4 @@ class AmConfig extends BaseConfig
         'essence_count' => 'essence_count',
         'is_enable' => 'is_enable',
     ];
-
-    
 }

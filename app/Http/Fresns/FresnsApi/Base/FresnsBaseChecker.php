@@ -10,5 +10,4 @@ namespace App\Http\Fresns\FresnsApi\Base;
 
 class FresnsBaseChecker extends AmChecker
 {
-
 }

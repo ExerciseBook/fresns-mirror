@@ -9,18 +9,18 @@
 namespace App\Http\Fresns\FresnsGroups;
 
 use App\Base\Controllers\BaseAdminController;
-use Illuminate\Http\Request;
-use App\Http\Share\Common\ValidateService;
 use App\Helpers\CommonHelper;
 use App\Helpers\StrHelper;
+use App\Http\Share\Common\ValidateService;
+use Illuminate\Http\Request;
 
 class AmControllerAdmin extends BaseAdminController
 {
-
     public function __construct()
     {
         $this->service = new AmService();
     }
+
     // public function index(Request $request)
     // {
 
@@ -39,15 +39,15 @@ class AmControllerAdmin extends BaseAdminController
         // $uuid = rand(10000000,99999999);
         $uuid = strtolower(StrHelper::randString(8));
         $parent_id = $request->input('parent_id');
-        if (!$parent_id) {
+        if (! $parent_id) {
             $request->offsetSet('type', 1);
         } else {
-            $admin_members = $request->input('admin_members', "");
+            $admin_members = $request->input('admin_members', '');
             $publish_post = $request->input('publish_post');
-            $publish_post_roles = $request->input('publish_post_roles', "");
+            $publish_post_roles = $request->input('publish_post_roles', '');
             $publish_post_review = $request->input('publish_post_review');
             $publish_comment = $request->input('publish_comment');
-            $publish_comment_roles = $request->input('publish_comment_roles', "");
+            $publish_comment_roles = $request->input('publish_comment_roles', '');
             $publish_comment_review = $request->input('publish_comment_review');
             if ($admin_members) {
                 $admin_members = explode(',', $admin_members);
@@ -95,7 +95,7 @@ class AmControllerAdmin extends BaseAdminController
         }
         $id = $request->input('id');
         // permission参数组装
-        $admin_members = $request->input('admin_members', "");
+        $admin_members = $request->input('admin_members', '');
         $publish_post = $request->input('publish_post');
         $publish_post_roles = $request->input('publish_post_roles');
         $publish_post_review = $request->input('publish_post_review');
@@ -137,7 +137,6 @@ class AmControllerAdmin extends BaseAdminController
 
     public function index2(Request $request)
     {
-
         parent::index($request);
     }
 
@@ -152,27 +151,29 @@ class AmControllerAdmin extends BaseAdminController
         $id = $request->input('id');
         $count = FresnsGroups::where('parent_id', $id)->count();
         if ($count > 0) {
-            $this->errorInfo(3001, "存在下级分组，不能删除");
+            $this->errorInfo(3001, '存在下级分组，不能删除');
         }
         FresnsGroups::where('id', $id)->delete();
         $this->success();
     }
 
     // 移动小组
-    public function moveByGroups(Request $request){
+    public function moveByGroups(Request $request)
+    {
         $id = $request->input('group_id');
         $moveGroupId = $request->input('moveGroupId');
         $groupInfo = FresnsGroups::find($id);
-        if($groupInfo['type'] == 1){
-            $this->errorInfo(3001, "小组分类不可移动");
+        if ($groupInfo['type'] == 1) {
+            $this->errorInfo(3001, '小组分类不可移动');
         }
         $pGroupInfo = FresnsGroups::find($moveGroupId);
-        if($pGroupInfo['type'] == 2){
-            $this->errorInfo(3001, "只可移动到小组分类下面");
+        if ($pGroupInfo['type'] == 2) {
+            $this->errorInfo(3001, '只可移动到小组分类下面');
         }
-        FresnsGroups::where('id',$id)->update(['parent_id' => $moveGroupId]);
+        FresnsGroups::where('id', $id)->update(['parent_id' => $moveGroupId]);
         $this->success();
     }
+
     // 验证规则
     public function rules($ruleType)
     {

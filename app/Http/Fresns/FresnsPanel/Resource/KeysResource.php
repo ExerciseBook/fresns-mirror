@@ -11,9 +11,9 @@ namespace App\Http\Fresns\FresnsPanel\Resource;
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeysConfig;
+
 class KeysResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -22,16 +22,16 @@ class KeysResource extends BaseAdminResource
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        $platforms = FresnsConfigs::where("item_key", "platforms")->first(["item_value"]);
+        $platforms = FresnsConfigs::where('item_key', 'platforms')->first(['item_value']);
         // 平台配置数据
         $platforms = json_decode($platforms['item_value'], true);
-        $platformName = "";
+        $platformName = '';
         foreach ($platforms as $p) {
             if ($this->platform_id == $p['id']) {
                 $platformName = $p['name'];
             }
         }
-        $typeName = $this->type == 1 ? "主程API" : "插件API";
+        $typeName = $this->type == 1 ? '主程API' : '插件API';
         // dd($author);
         // 默认字段
         $default = [
@@ -53,4 +53,3 @@ class KeysResource extends BaseAdminResource
         return $arr;
     }
 }
-

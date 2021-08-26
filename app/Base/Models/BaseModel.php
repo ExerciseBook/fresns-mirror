@@ -9,6 +9,10 @@
 namespace App\Base\Models;
 
 use App\Base\Config\BaseConfig;
+use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
+use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
+use App\Http\Share\Common\LogService;
 use App\Traits\HookModelTrait;
 use App\Traits\QueryTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -16,10 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
-use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
-use App\Http\Center\Helper\PluginRpcHelper;
-use App\Http\Share\Common\LogService;
+
 class BaseModel extends Model
 {
     use SoftDeletes;
@@ -54,6 +55,7 @@ class BaseModel extends Model
         $searchableFields = BaseConfig::DEFAULT_SEARCHABLE_FIELDS;
         $searchableFields = array_merge($searchableFields, $this->getAddedSearchableFields());
         $searchableFields = array_merge($searchableFields, $this->getAppendSearchableFields());
+
         return $searchableFields;
     }
 
@@ -83,6 +85,7 @@ class BaseModel extends Model
             'id' => 'DESC',
             // 'updated_at'    => 'DESC',
         ];
+
         return $orderByFields;
     }
 
@@ -98,9 +101,10 @@ class BaseModel extends Model
             'tableName' => $this->table,
             'insertId' => $id,
         ];
-        LogService::info('table_input',$input);
+        LogService::info('table_input', $input);
         // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+
         return $id;
     }
 
@@ -108,6 +112,7 @@ class BaseModel extends Model
     public function batchStore($inputArr)
     {
         $rs = DB::table($this->table)->insert($inputArr);
+
         return $rs;
     }
 
@@ -120,7 +125,6 @@ class BaseModel extends Model
     // 更新
     public function updateItem($id, $upInput)
     {
-
         self::where('id', $id)->update($upInput);
         //   $this->hookUpdateAfter($id);
     }
@@ -128,11 +132,9 @@ class BaseModel extends Model
     // 更新后的操作, 如更新附表, 计算属性等
     public function updateItemAfter($id)
     {
-
         if (in_array('hookUpdateAfter', get_class_methods($this))) {
             $this->hookUpdateAfter($id);
         }
-
     }
 
     // 已存在则更新，不存在则创建
@@ -141,6 +143,7 @@ class BaseModel extends Model
         $c = get_called_class();
         $m = new $c;
         $m->updateOrCreate($cond, $input);
+
         return true;
     }
 
@@ -155,26 +158,29 @@ class BaseModel extends Model
     }
 
     // 软删除恢复
-    public static function restoreItem($id){
+    public static function restoreItem($id)
+    {
         self::withTrashed()->find($id)->restore();
     }
 
     // 恢复多个
-    public static function batchRestore($cond){
+    public static function batchRestore($cond)
+    {
         self::withTrashed()->where($cond)->restore();
     }
 
     // 强制删除
-    public static function forceDeleteItem($id){
+    public static function forceDeleteItem($id)
+    {
         self::withTrashed()->find($id)->forceDelete();
     }
-
 
     // 查询-单个
     public static function find($id)
     {
         $c = get_called_class();
         $m = new $c;
+
         return $m->findById($id);
     }
 
@@ -183,6 +189,7 @@ class BaseModel extends Model
     {
         $c = get_called_class();
         $m = new $c;
+
         return $m->findByField($field, $value);
     }
 
@@ -191,6 +198,7 @@ class BaseModel extends Model
     {
         $c = get_called_class();
         $m = new $c;
+
         return $m->findByField($field, $value);
     }
 
@@ -199,13 +207,14 @@ class BaseModel extends Model
     {
         $c = get_called_class();
         $m = new $c;
+
         return $m->findByCond($cond);
     }
 
     // 查询-单个
     public function findById($id)
     {
-        return self::where("id", $id)->first();
+        return self::where('id', $id)->first();
     }
 
     // 查询-单个-字段条件
@@ -261,6 +270,7 @@ class BaseModel extends Model
     {
         $c = get_called_class();
         $m = new $c;
+
         return self::where($cond)->get($column);
     }
 
@@ -268,6 +278,7 @@ class BaseModel extends Model
     {
         $c = get_called_class();
         $m = new $c;
+
         return self::where($cond)->orderBy('rank_num')->get($column)->toArray();
     }
 
@@ -281,6 +292,7 @@ class BaseModel extends Model
     {
         $c = get_called_class();
         $m = new $c;
+
         return $m->getByCondKVMap($k, $v, $cond);
     }
 
@@ -293,10 +305,8 @@ class BaseModel extends Model
     //多条件搜索
     public static function getMultipleCond($map, $column = ['*'])
     {
-
         $query = self::query();
         foreach ($map as $dataArr) {
-
             $condition = key($dataArr);
             $field = key($dataArr[$condition]);
             $value = current($dataArr[$condition]);
@@ -306,18 +316,18 @@ class BaseModel extends Model
                     $query = $query->where($field, $value);
                     break;
                 case 'LIKE':
-                    $query = $query->whereRaw($field . ' LIKE ?', ["%" . $value . "%"]);
+                    $query = $query->whereRaw($field.' LIKE ?', ['%'.$value.'%']);
                     break;
-                case 'IN' :
-                    if (!is_array($value)) {
+                case 'IN':
+                    if (! is_array($value)) {
                         $value = explode(',', $value);
                     }
                     $query = $query->whereIn($field, $value);
                     break;
-                case '>=' :
+                case '>=':
                     $query = $query->where($field, '>=', $value);
                     break;
-                case '<=' :
+                case '<=':
                     $query = $query->where($field, '<=', $value);
                     break;
             }
@@ -329,10 +339,8 @@ class BaseModel extends Model
     //多条件搜索 分页数据
     public static function getMultipleCondPage($map, $page_param, $column = ['*'])
     {
-
         $query = self::query();
         foreach ($map as $dataArr) {
-
             $condition = key($dataArr);
             $field = key($dataArr[$condition]);
             $value = current($dataArr[$condition]);
@@ -342,21 +350,21 @@ class BaseModel extends Model
                     $query = $query->where($field, $value);
                     break;
                 case 'LIKE':
-                    $query = $query->whereRaw($field . ' LIKE ?', ["%" . $value . "%"]);
+                    $query = $query->whereRaw($field.' LIKE ?', ['%'.$value.'%']);
                     break;
-                case 'IN' :
-                    if (!is_array($value)) {
+                case 'IN':
+                    if (! is_array($value)) {
                         $value = explode(',', $value);
                     }
                     $query = $query->whereIn($field, $value);
                     break;
-                case '>=' :
+                case '>=':
                     $query = $query->where($field, '>=', $value);
                     break;
-                case '<=' :
+                case '<=':
                     $query = $query->where($field, '<=', $value);
                     break;
-                case '!=' :
+                case '!=':
                     $query = $query->where($field, '!=', $value);
                     break;
             }
@@ -374,6 +382,7 @@ class BaseModel extends Model
             'list' => $result['data'],
             'pagination' => $pageInfo,
         ];
+
         return $data;
     }
 
@@ -382,10 +391,10 @@ class BaseModel extends Model
     {
         try {
             if (empty($multipleData)) {
-                throw new \Exception("数据不能为空");
+                throw new \Exception('数据不能为空');
             }
 
-            $tableName = DB::getTablePrefix() . $this->getTable(); // 表名
+            $tableName = DB::getTablePrefix().$this->getTable(); // 表名
             $firstRow = current($multipleData);
             $updateColumn = array_keys($firstRow);
 
@@ -394,18 +403,18 @@ class BaseModel extends Model
             unset($updateColumn[0]);
 
             // 拼接sql语句
-            $updateSql = "UPDATE " . $tableName . " SET ";
+            $updateSql = 'UPDATE '.$tableName.' SET ';
             $sets = [];
             $bindings = [];
 
             foreach ($updateColumn as $uColumn) {
-                $setSql = "`" . $uColumn . "` = CASE ";
+                $setSql = '`'.$uColumn.'` = CASE ';
                 foreach ($multipleData as $data) {
-                    $setSql .= "WHEN `" . $referenceColumn . "` = ? THEN ? ";
+                    $setSql .= 'WHEN `'.$referenceColumn.'` = ? THEN ? ';
                     $bindings[] = $data[$referenceColumn];
                     $bindings[] = $data[$uColumn];
                 }
-                $setSql .= "ELSE `" . $uColumn . "` END ";
+                $setSql .= 'ELSE `'.$uColumn.'` END ';
                 $sets[] = $setSql;
             }
 
@@ -413,10 +422,11 @@ class BaseModel extends Model
             $whereIn = collect($multipleData)->pluck($referenceColumn)->values()->all();
             $bindings = array_merge($bindings, $whereIn);
             $whereIn = rtrim(str_repeat('?,', count($whereIn)), ',');
-            $updateSql = rtrim($updateSql, ", ") . " WHERE `" . $referenceColumn . "` IN (" . $whereIn . ")";
+            $updateSql = rtrim($updateSql, ', ').' WHERE `'.$referenceColumn.'` IN ('.$whereIn.')';
 
             // 传入预处理sql语句和对应绑定数据
             $ret = DB::update($updateSql, $bindings);
+
             return $ret;
         } catch (\Exception $e) {
             return false;
@@ -424,44 +434,50 @@ class BaseModel extends Model
     }
 
     // 静态方法
-    public static function staticBuildSelectOptions($key = 'id', $text = 'name', $cond = [],$price = 'price')
+    public static function staticBuildSelectOptions($key = 'id', $text = 'name', $cond = [], $price = 'price')
     {
         $c = get_called_class();
         $m = new $c;
-        return $m->buildSelectOptions($key, $text, $cond,$price);
+
+        return $m->buildSelectOptions($key, $text, $cond, $price);
     }
 
     // 组件下拉框选择
-    public function buildSelectOptions($key = 'id', $text = 'name', $cond = [],$price = 'price')
+    public function buildSelectOptions($key = 'id', $text = 'name', $cond = [], $price = 'price')
     {
-        if (Schema::hasColumn('users', 'rank_num')){
+        if (Schema::hasColumn('users', 'rank_num')) {
             $items = self::where($cond)->orderBy('rank_num', 'ASC')->get();
         } else {
             $items = self::where($cond)->get();
-
         }
         $newItemArr = [];
         foreach ($items as $item) {
             $it = [];
             $it['key'] = $item->$key;
             $it['text'] = $item->$text;
-            if (!empty($item->login_name)) $it['text'] .= '[' . $item->login_name . ']';
+            if (! empty($item->login_name)) {
+                $it['text'] .= '['.$item->login_name.']';
+            }
             //$it['login_name']  = $item->login_name;
             //   $it['name']  = $item->name;
-            if($price == 'show_price'){
+            if ($price == 'show_price') {
                 $it['price'] = $item->price_sale;
             }
             $newItemArr[] = $it;
         }
+
         return $newItemArr;
     }
-     // 静态方法
-    public static function staticBuildSelectOptions2($key = 'id', $text = 'name', $cond = [],$price = 'price')
+
+    // 静态方法
+    public static function staticBuildSelectOptions2($key = 'id', $text = 'name', $cond = [], $price = 'price')
     {
         $c = get_called_class();
         $m = new $c;
-        return $m->buildSelectOptions2($key, $text, $cond,$price);
+
+        return $m->buildSelectOptions2($key, $text, $cond, $price);
     }
+
     public function buildSelectOptions2($key = 'id', $text = 'name', $cond = [])
     {
         $items = self::where($cond)->get();
@@ -470,13 +486,17 @@ class BaseModel extends Model
             $it = [];
             $it['key'] = $item->$key;
             $it['text'] = $item->$text;
-            if (!empty($item->login_name)) $it['text'] .= '[' . $item->login_name . ']';
+            if (! empty($item->login_name)) {
+                $it['text'] .= '['.$item->login_name.']';
+            }
             //$it['login_name']  = $item->login_name;
             //   $it['name']  = $item->name;
             $newItemArr[] = $it;
         }
+
         return $newItemArr;
     }
+
     //组建下拉框数组查询
     public static function getBuildSelectOptions($key = 'id', $text = 'name', $fieldValue, $fieldName = 'id')
     {
@@ -489,6 +509,7 @@ class BaseModel extends Model
             //   $it['name']  = $item->name;
             $newItemArr[] = $it;
         }
+
         return $newItemArr;
     }
 
@@ -504,23 +525,26 @@ class BaseModel extends Model
             $it['title'] = $item->$text;
             $newItemArr[] = $it;
         }
+
         return $newItemArr;
     }
 
     public static function buildSelectTreeDataByNoRankNum($key = 'id', $text = 'name', $cond = [])
-        {
-            $items = self::where($cond)->get();
-            $newItemArr = [];
-            foreach ($items as $item) {
-                $it = [];
-                $it['key'] = $item->$key;
-                $it['value'] = $item->$key;
-                $it['name'] = $item->$text;
-                $it['title'] = $item->$text;
-                $newItemArr[] = $it;
-            }
-            return $newItemArr;
+    {
+        $items = self::where($cond)->get();
+        $newItemArr = [];
+        foreach ($items as $item) {
+            $it = [];
+            $it['key'] = $item->$key;
+            $it['value'] = $item->$key;
+            $it['name'] = $item->$text;
+            $it['title'] = $item->$text;
+            $newItemArr[] = $it;
         }
+
+        return $newItemArr;
+    }
+
     public function buildCheckboxOptions($label = 'name', $value = 'id')
     {
         $items = self::all();
@@ -531,6 +555,7 @@ class BaseModel extends Model
             $it['value'] = $item->$value;
             $newItemArr[] = $it;
         }
+
         return $newItemArr;
     }
 
@@ -543,7 +568,6 @@ class BaseModel extends Model
     // 是否可编辑
     public function canUpdate($idArr)
     {
-
     }
 
     public function getDates()
@@ -560,7 +584,6 @@ class BaseModel extends Model
     //
     public function convertFormRequestToInput()
     {
-
         $req = request();
         $fieldMap = $this->formFieldsMap();
 
@@ -571,8 +594,7 @@ class BaseModel extends Model
                     $input[$tbField] = $srcValue;
                 }
 
-
-                if ($srcValue === false || !empty($req->input($inputField, ''))) {
+                if ($srcValue === false || ! empty($req->input($inputField, ''))) {
                     $input[$tbField] = $req->input($inputField);
                 }
             }
@@ -581,7 +603,7 @@ class BaseModel extends Model
         // 创建用户ID create_user_id
         if (Schema::hasColumn($this->table, 'create_user_id')) {
             $user = Auth::user();
-            $input['create_user_id'] = $user->id ?? NULL;
+            $input['create_user_id'] = $user->id ?? null;
         }
 
         return $input;
@@ -593,7 +615,7 @@ class BaseModel extends Model
         if (Schema::hasColumn($this->table, 'delete_user_id')) {
             $user = Auth::user();
             $up = [];
-            $up['delete_user_id'] = $user->id ?? NULL;
+            $up['delete_user_id'] = $user->id ?? null;
             DB::table($this->table)->whereIn('id', $idArr)->update($up);
         }
     }
@@ -605,7 +627,6 @@ class BaseModel extends Model
         return parent::getTable();
     }
 
-
     // 返回数据表
     public static function staticGetConnectionName()
     {
@@ -615,14 +636,12 @@ class BaseModel extends Model
     // 刷新，计算item
     public function computeItem($id)
     {
-
         return $id;
     }
 
     // 清除表数据
     protected function clearData()
     {
-
     }
 
     // 获取原生SQL查询
@@ -637,5 +656,4 @@ class BaseModel extends Model
         return $this->getConnection()->getSchemaBuilder()
             ->getColumnListing($this->getTable());
     }
-
 }

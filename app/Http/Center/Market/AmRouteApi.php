@@ -10,7 +10,7 @@
 
 // 插件基础操作
 // Route::group(['prefix' => 'fresns', 'middleware' => 'auth:api', 'namespace' => '\App\Http\Center\Base'], function(){
-Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\Center\Base'], function(){
+Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\Center\Base'], function () {
 
     // 生成插件json描述文件
     Route::get('/plugin/genDescJson', 'PluginController@genDescJson')->name('fresns.plugin.genDescJson');
@@ -29,11 +29,10 @@ Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\Center\Base'], fun
 
     // 生成插件json描述文件
     Route::get('/plugin/index', 'IndexController@index')->name('fresns.plugin.index');
-
 });
 
 // 插件后台操作
-Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\Center\Market'], function(){
+Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\Center\Market'], function () {
 
     // 测试
     Route::get('/test/truncatedString', 'TestController@truncatedString')->name('fresns.market.truncatedString');

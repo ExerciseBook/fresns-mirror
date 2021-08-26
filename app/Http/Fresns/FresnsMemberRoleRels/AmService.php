@@ -24,6 +24,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
@@ -36,7 +37,7 @@ class AmService extends BaseAdminService
         if (empty($roleRels)) {
             return $roleId;
         }
-        if (!empty($roleRels['expired_at'])) {
+        if (! empty($roleRels['expired_at'])) {
             if ($roleTime > $roleRels['expired_at']) {
                 if (empty($roleRels['restore_role_id'])) {
                     $roleId = ApiConfigHelper::getConfigByItemKey('default_role');
@@ -46,12 +47,10 @@ class AmService extends BaseAdminService
             } else {
                 $roleId = $roleRels['role_id'];
             }
-
         } else {
             $roleId = $roleRels['role_id'];
         }
 
         return $roleId;
     }
-
 }

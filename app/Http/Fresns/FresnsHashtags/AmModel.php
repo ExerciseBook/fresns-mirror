@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsHashtags;
 
 use App\Base\Models\BaseAdminModel;
 
-
 class AmModel extends BaseAdminModel
 {
     protected $table = AmConfig::CFG_TABLE;
@@ -30,21 +29,21 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
 
     // 搜索排序字段
     public function initOrderByFields()
     {
-        $sortType = request()->input('sortType', "");
+        $sortType = request()->input('sortType', '');
         $sortWay = request()->input('sortDirection', 2);
-        $sortWayType = $sortWay == 2 ? "DESC" : "ASC";
+        $sortWayType = $sortWay == 2 ? 'DESC' : 'ASC';
         switch ($sortType) {
             case 'view':
                 $orderByFields = [
                     'view_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'like':
@@ -52,6 +51,7 @@ class AmModel extends BaseAdminModel
                     'like_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'follow':
@@ -59,6 +59,7 @@ class AmModel extends BaseAdminModel
                     'follow_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'shield':
@@ -66,6 +67,7 @@ class AmModel extends BaseAdminModel
                     'shield_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'post':
@@ -73,6 +75,7 @@ class AmModel extends BaseAdminModel
                     'post_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'essence':
@@ -80,6 +83,7 @@ class AmModel extends BaseAdminModel
                     'essence_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'time':
@@ -87,6 +91,7 @@ class AmModel extends BaseAdminModel
                     'created_at' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
 
@@ -95,9 +100,9 @@ class AmModel extends BaseAdminModel
                     'created_at' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
         }
     }
 }
-

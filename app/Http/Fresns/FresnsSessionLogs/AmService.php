@@ -27,6 +27,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
@@ -57,7 +58,7 @@ class AmService extends BaseAdminService
         } else {
             $objectName = Request::getRequestUri();
         }
-        
+
         $input = [
             'platform_id' => $platform_id,
             'version' => $version,
@@ -75,7 +76,6 @@ class AmService extends BaseAdminService
 
         $id = FresnsSessionLogs::insertGetId($input);
         FresnsCmdService::addSubTablePluginItem(FresnsSessionLogsConfig::CFG_TABLE, $id);
-
 
         return $id;
     }
@@ -97,10 +97,10 @@ class AmService extends BaseAdminService
     }
 
     //控制台添加日志
-    public static function addConsoleSessionLogs($objectType,$objectAction,$userId = null)
+    public static function addConsoleSessionLogs($objectType, $objectAction, $userId = null)
     {
         $fresnsVersion = ApiConfigHelper::getConfigByItemKey('fresns_version');
-        
+
         $input = [
             'platform_id' => '1',
             'version' => $fresnsVersion ?? 1,
@@ -117,8 +117,6 @@ class AmService extends BaseAdminService
 
         $id = FresnsSessionLogs::insertGetId($input);
 
-
         return $id;
     }
-
 }

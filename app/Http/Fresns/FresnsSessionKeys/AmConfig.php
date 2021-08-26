@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsSessionKeys;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -34,6 +33,4 @@ class AmConfig extends BaseConfig
         'is_enable' => 'is_enable',
 
     ];
-
-     
 }

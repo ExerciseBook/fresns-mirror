@@ -20,8 +20,8 @@ class ApiLanguageHelper
     public static function getLanguages($table, $table_field, $table_id)
     {
         // dd(1);
-        if (!$table_id) {
-            return "";
+        if (! $table_id) {
+            return '';
         }
         $langTag = ApiLanguageHelper::getLangTagByHeader();
         // $languageArr = TweetConfigService::getLanguageStatus();
@@ -39,7 +39,7 @@ class ApiLanguageHelper
             'table_name' => $table,
         ];
         $name = FresnsLanguages::where($input)->first();
-        if (!$name) {
+        if (! $name) {
             $input = [
                 'table_field' => $table_field,
                 'table_id' => $table_id,
@@ -47,14 +47,15 @@ class ApiLanguageHelper
             ];
             $name = FresnsLanguages::where($input)->first();
         }
+
         return $name;
     }
 
     // table_key
     public static function getLanguagesByItemKey($table, $table_field, $table_key)
     {
-        if (!$table_key) {
-            return "";
+        if (! $table_key) {
+            return '';
         }
         $langTag = ApiLanguageHelper::getLangTagByHeader();
         // $languageArr = TweetConfigService::getLanguageStatus();
@@ -73,7 +74,7 @@ class ApiLanguageHelper
         ];
         // dump($input);
         $name = FresnsLanguages::where($input)->first();
-        if (!$name) {
+        if (! $name) {
             $input = [
                 // 'table_field' => 'item_key',
                 'table_key' => $table_key,
@@ -82,7 +83,8 @@ class ApiLanguageHelper
             $name = FresnsLanguages::where($input)->first();
         }
         // dump($name);
-        $content = $name['lang_content'] ?? "";
+        $content = $name['lang_content'] ?? '';
+
         return $content;
     }
 
@@ -90,9 +92,10 @@ class ApiLanguageHelper
     public static function getDefaultLanguage()
     {
         $defaultLanguage = ApiConfigHelper::getConfigByItemKey(FresnsConfigsConfig::DEFAULT_LANGUAGE);
-        if(empty($defaultLanguage)){
+        if (empty($defaultLanguage)) {
             $defaultLanguage = FresnsConfigs::where('item_key', FresnsConfigsConfig::DEFAULT_LANGUAGE)->value('item_value');
         }
+
         return $defaultLanguage;
     }
 
@@ -101,10 +104,10 @@ class ApiLanguageHelper
     {
         $langTagHeader = request()->header('langTag');
         $langTag = null;
-        if (!empty($langTagHeader)) {
+        if (! empty($langTagHeader)) {
             //如果不为空则去查询是否存在该语言
             $langSetting = FresnsConfigs::where('item_key', FresnsConfigsConfig::LANG_SETTINGS)->value('item_value');
-            if (!empty($langSetting)) {
+            if (! empty($langSetting)) {
                 $langSettingArr = json_decode($langSetting, true);
                 foreach ($langSettingArr as $v) {
                     if ($v['langTag'] == $langTagHeader) {
@@ -120,7 +123,6 @@ class ApiLanguageHelper
         }
 
         return $langTag;
-
     }
 
     //api接口使用
@@ -173,8 +175,8 @@ class ApiLanguageHelper
     // 获取多语言
     public static function getAllLanguages($table, $table_field, $table_id)
     {
-        if (!$table_id) {
-            return "";
+        if (! $table_id) {
+            return '';
         }
 
         // dd($default_language);
@@ -184,20 +186,20 @@ class ApiLanguageHelper
             'table_name' => $table,
         ];
         $info = FresnsLanguages::where($input)->get();
+
         return $info;
     }
 
     public static function getLangTag()
     {
         $isControlApi = request()->input('is_control_api');
-        if($isControlApi == 1){
+        if ($isControlApi == 1) {
             $userId = Auth::id();
-            $langTag = request()->input('lang',Cache::get('lang_tag_' . $userId));
-
+            $langTag = request()->input('lang', Cache::get('lang_tag_'.$userId));
         } else {
             $langTag = ApiLanguageHelper::getLangTagByHeader();
         }
-        
+
         return $langTag;
     }
 }

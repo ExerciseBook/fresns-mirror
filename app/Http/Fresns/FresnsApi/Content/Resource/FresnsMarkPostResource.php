@@ -9,47 +9,47 @@
 namespace App\Http\Fresns\FresnsApi\Content\Resource;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
-use App\Http\Fresns\FresnsPostAppends\FresnsPostAppends;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
-use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIcons;
-use App\Http\Fresns\FresnsComments\FresnsComments;
-use App\Http\Fresns\FresnsGroups\FresnsGroups;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
-use App\Http\Fresns\FresnsApi\Info\AmService;
-use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
+use App\Helpers\DateHelper;
 use App\Http\Fresns\FresnsApi\Content\AmConfig;
-use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
-use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsPostAllows\FresnsPostAllowsConfig;
-use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\Fresns\FresnsApi\Info\AmService;
+use App\Http\Fresns\FresnsComments\FresnsComments;
+use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
-use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIconsConfig;
-use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesConfig;
+use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinksConfig;
+use App\Http\Fresns\FresnsEmojis\FresnsEmojis;
+use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
 use App\Http\Fresns\FresnsExtends\FresnsExtends;
 use App\Http\Fresns\FresnsExtends\FresnsExtendsConfig;
+use App\Http\Fresns\FresnsFiles\FresnsFiles;
+use App\Http\Fresns\FresnsGroups\FresnsGroups;
+use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
+use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
+use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIcons;
+use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIconsConfig;
+use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
+use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesConfig;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-use Illuminate\Support\Carbon;
-use App\Helpers\DateHelper;
-use App\Http\Fresns\FresnsEmojis\FresnsEmojis;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\Fresns\FresnsPostAllows\FresnsPostAllowsConfig;
+use App\Http\Fresns\FresnsPostAppends\FresnsPostAppends;
+use App\Http\Fresns\FresnsPostAppends\FresnsPostAppendsConfig;
+use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
 use App\Http\Fresns\FresnsPosts\FresnsPostsService;
 use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
-use App\Http\Fresns\FresnsPostAppends\FresnsPostAppendsConfig;
-use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinksConfig;
-use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class FresnsMarkPostResource extends BaseAdminResource
 {
@@ -70,7 +70,7 @@ class FresnsMarkPostResource extends BaseAdminResource
         $roleRels = FresnsMemberRoleRels::where('member_id', $this->member_id)->where('type', 2)->first();
         // 成员角色表
         $memberRole = [];
-        if (!empty($roleRels)) {
+        if (! empty($roleRels)) {
             $memberRole = FresnsMemberRoles::find($roleRels['role_id']);
         }
         // 成员图标
@@ -79,7 +79,7 @@ class FresnsMarkPostResource extends BaseAdminResource
         // 评论
         // $comments = FresnsComments::where('post_id',$this->id)->where('parent_id',0)->orderby('like_count','Desc')->first();
         $comments = DB::table('comments as c')->select('c.*')
-            ->leftJoin("members as m", 'c.member_id', '=', 'm.id')
+            ->leftJoin('members as m', 'c.member_id', '=', 'm.id')
             ->where('c.post_id', $this->id)
             ->where('m.deleted_at', null)
             ->where('c.deleted_at', null)
@@ -108,18 +108,18 @@ class FresnsMarkPostResource extends BaseAdminResource
             $memberCount = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $this->id)->where('type',
                 1)->where('object_id', $mid)->count();
             $memberoleCount = 0;
-            if (!empty($roleRels)) {
+            if (! empty($roleRels)) {
                 $memberoleCount = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id',
                     $this->id)->where('type', 2)->where('object_id', $roleRels['role_id'])->count();
             }
-            // 有阅读权限    
+            // 有阅读权限
             if ($memberCount > 0 || $memberoleCount > 0) {
                 $allowStatus = 1;
                 $allowProportion = 100;
                 $noAllow = 1;
             } else {
                 $allowProportion = $append['allow_proportion'];
-                if (!$allowProportion) {
+                if (! $allowProportion) {
                     $allowProportion = ApiConfigHelper::getConfigByItemKey(AmConfig::SNS_PROPORTION);
                 }
                 // dd($allowProportion);
@@ -143,13 +143,13 @@ class FresnsMarkPostResource extends BaseAdminResource
         $sticky = $this->sticky_status;
         $essence = $this->essence_status;
         $more_json_decode = json_decode($this->more_json, true);
-        $labelImg = $more_json_decode['labelImg'] ?? "";
-        $titleIcon = $more_json_decode['titleIcon'] ?? "";
-        $likeIcon = $more_json_decode['likeIcon'] ?? "";
-        $followIcon = $more_json_decode['followIcon'] ?? "";
-        $commentIcon = $more_json_decode['commentIcon'] ?? "";
-        $shareIcon = $more_json_decode['shareIcon'] ?? "";
-        $moreIcon = $more_json_decode['moreIcon'] ?? "";
+        $labelImg = $more_json_decode['labelImg'] ?? '';
+        $titleIcon = $more_json_decode['titleIcon'] ?? '';
+        $likeIcon = $more_json_decode['likeIcon'] ?? '';
+        $followIcon = $more_json_decode['followIcon'] ?? '';
+        $commentIcon = $more_json_decode['commentIcon'] ?? '';
+        $shareIcon = $more_json_decode['shareIcon'] ?? '';
+        $moreIcon = $more_json_decode['moreIcon'] ?? '';
         // 是否关注
         // $followStatus = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',4)->where('follow_id',$this->id)->count();
         $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type',
@@ -166,13 +166,13 @@ class FresnsMarkPostResource extends BaseAdminResource
         $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_GROUP_SETTING);
         $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_POST_SETTING);
         $PostName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::POST_NAME) ?? "帖子";
+                AmConfig::POST_NAME) ?? '帖子';
         $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::POST_FOLLOW_NAME) ?? "加入";
+                AmConfig::POST_FOLLOW_NAME) ?? '加入';
         $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::POST_LIKE_NAME) ?? "点赞";
+                AmConfig::POST_LIKE_NAME) ?? '点赞';
         $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::POST_SHIELD_NAME) ?? "屏蔽";
+                AmConfig::POST_SHIELD_NAME) ?? '屏蔽';
         $viewCount = $this->view_count;
         $likeCount = $this->like_count;
         $followCount = $this->follow_count;
@@ -189,21 +189,21 @@ class FresnsMarkPostResource extends BaseAdminResource
         $allowStatus = $this->is_allow;
         // 多语言 副表allow_btn_name
         $allowBtnName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
-        $allowBtnName = $allowBtnName == null ? "" : $allowBtnName['lang_content'];
+        $allowBtnName = $allowBtnName == null ? '' : $allowBtnName['lang_content'];
         $allowBtnUrl = $append['allow_plugin_unikey'];
         $member = [];
         // dd($memberInfo);
         $member['deactivate'] = false;
         // $member['isAuthor'] = "";
-        $member['mid'] = "";
-        $member['mname'] = "";
-        $member['nickname'] = "";
-        $member['nicknameColor'] = "";
-        $member['roleName'] = "";
-        $member['roleNameDisplay'] = "";
-        $member['roleIcon'] = "";
-        $member['roleIconDisplay'] = "";
-        $member['avatar'] = $memberInfo->avatar_file_url ?? "";
+        $member['mid'] = '';
+        $member['mname'] = '';
+        $member['nickname'] = '';
+        $member['nicknameColor'] = '';
+        $member['roleName'] = '';
+        $member['roleNameDisplay'] = '';
+        $member['roleIcon'] = '';
+        $member['roleIconDisplay'] = '';
+        $member['avatar'] = $memberInfo->avatar_file_url ?? '';
         // 为空用默认头像
         if (empty($member['avatar_file_url'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
@@ -213,7 +213,6 @@ class FresnsMarkPostResource extends BaseAdminResource
         if ($this->is_anonymous == 1) {
             $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::ANONYMOUS_AVATAR);
             $member['avatar'] = $anonymousAvatar;
-
         }
         // 已注销头像 deactivate_avatar 键值"
         if ($memberInfo) {
@@ -226,14 +225,14 @@ class FresnsMarkPostResource extends BaseAdminResource
             $member['avatar'] = $deactivateAvatar;
         }
         $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
-        $member['decorate'] = "";
-        $member['gender'] = "";
-        $member['bio'] = "";
-        $member['verifiedStatus'] = "";
-        $member['verifiedIcon'] = "";
+        $member['decorate'] = '';
+        $member['gender'] = '';
+        $member['bio'] = '';
+        $member['verifiedStatus'] = '';
+        $member['verifiedIcon'] = '';
         $icons = [];
-        $icons['icon'] = "";
-        $icons['name'] = "";
+        $icons['icon'] = '';
+        $icons['name'] = '';
         $member['icons'] = $icons;
         // dd($member['avatar']);
         if ($this->is_anonymous == 0) {
@@ -241,45 +240,45 @@ class FresnsMarkPostResource extends BaseAdminResource
                 $member['anonymous'] = $this->is_anonymous;
                 $member['deactivate'] = true;
                 // $member['isAuthor'] = $this->member_id == $mid ? true :false;
-                $member['mid'] = $memberInfo->uuid ?? "";
-                $member['mname'] = $memberInfo->name ?? "";
-                $member['nickname'] = $memberInfo->nickname ?? "";
-                $member['nicknameColor'] = $memberRole['nickname_color'] ?? "";
+                $member['mid'] = $memberInfo->uuid ?? '';
+                $member['mname'] = $memberInfo->name ?? '';
+                $member['nickname'] = $memberInfo->nickname ?? '';
+                $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
                 // "roleName": "主角色的值，如果为不显示则不输出 member_roles > name 多语言",
-                $roleName = "";
-                if (!empty($memberRole)) {
+                $roleName = '';
+                if (! empty($memberRole)) {
                     $roleName = ApiLanguageHelper::getLanguages(FresnsMemberRolesConfig::CFG_TABLE, 'name',
                         $memberRole['id']);
-                    $roleName = $roleName == null ? "" : $roleName['lang_content'];
+                    $roleName = $roleName == null ? '' : $roleName['lang_content'];
                 }
 
                 $member['roleName'] = $roleName;
-                $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? "";
-                $member['roleIcon'] = $memberRole['icon_file_url'] ?? "";
-                $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? "";
+                $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? '';
+                $member['roleIcon'] = $memberRole['icon_file_url'] ?? '';
+                $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? '';
                 // $member['avatar'] = $member['avatar'];
 
                 // $member['decorate'] = $memberInfo->decorate_file_url ?? "";
                 $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id,
                     $memberInfo->decorate_file_url);
-                $member['gender'] = $memberInfo->gender ?? "";
-                $member['bio'] = $memberInfo->bio ?? "";
-                $member['verifiedStatus'] = $memberInfo->verified_status ?? "";
+                $member['gender'] = $memberInfo->gender ?? '';
+                $member['bio'] = $memberInfo->bio ?? '';
+                $member['verifiedStatus'] = $memberInfo->verified_status ?? '';
                 // $member['verifiedIcon'] = $memberInfo->verified_file_url ?? "";
                 $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id,
                     $memberInfo->verified_file_url);
                 $icons = [];
                 $icons['icon'] = $memberIcon['icon_file_url'] ?? '';
-                if($icons['icon']){
-                    $icons['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberIcon['icon_file_id'],$memberIcon['icon_file_url']);
+                if ($icons['icon']) {
+                    $icons['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberIcon['icon_file_id'], $memberIcon['icon_file_url']);
                 }
                 // 多语言 icon  name
                 $iconName = ApiLanguageHelper::getLanguages(FresnsMemberIconsConfig::CFG_TABLE, 'name',
                     $memberIcon['id'] ?? '');
-                $iconName = $iconName == null ? "" : $iconName['lang_content'];
+                $iconName = $iconName == null ? '' : $iconName['lang_content'];
                 $icons['name'] = $iconName;
                 $member['icons'] = $icons;
-                if(empty($icons['name']) && empty($icons['icon'])){
+                if (empty($icons['name']) && empty($icons['icon'])) {
                     $icons = [];
                 }
                 $member['icons'] = $icons;
@@ -289,19 +288,19 @@ class FresnsMarkPostResource extends BaseAdminResource
         $postHotStatus = $postHotStatus == null ? 0 : $postHotStatus;
         $comment = [];
         // dump($comments);
-        if ($postHotStatus != 0 && !empty($comments)) {
+        if ($postHotStatus != 0 && ! empty($comments)) {
             // 查询评论人员信息
             // if(!empty($comments)){
             $commentMemberInfo = FresnsMembers::find($comments->member_id);
             $comment['status'] = $postHotStatus;
-            $comment['anonymous'] = $comments->is_anonymous ?? "";
+            $comment['anonymous'] = $comments->is_anonymous ?? '';
             // 该条评论的作者是不是帖子作者自己
             $commentStatus = $this->member_id == $comments->member_id ? true : false;
             if ($comments->is_anonymous == 0) {
                 $comment['isAuthor'] = $commentStatus;
-                $comment['mid'] = $commentMemberInfo['id'] ?? "";
-                $comment['mname'] = $commentMemberInfo['name'] ?? "";
-                $comment['nickname'] = $commentMemberInfo['nickname'] ?? "";
+                $comment['mid'] = $commentMemberInfo['id'] ?? '';
+                $comment['mname'] = $commentMemberInfo['name'] ?? '';
+                $comment['nickname'] = $commentMemberInfo['nickname'] ?? '';
             }
             // 为空用默认头像
             if (empty($commentStatus['avatar'])) {
@@ -314,10 +313,10 @@ class FresnsMarkPostResource extends BaseAdminResource
                 $comment['avatar'] = $anonymousAvatar;
             }
             $comment['avatar'] = ApiFileHelper::getImageSignUrl($comment['avatar']);
-            $comment['cid'] = $comments->uuid ?? "";
+            $comment['cid'] = $comments->uuid ?? '';
             // $comment['content'] = $comments['content'];
             $comment['content'] = self::getContentView(($comments->content), ($comments->id), 2);
-            $comment['likeCount'] = $comments->like_count ?? "";
+            $comment['likeCount'] = $comments->like_count ?? '';
             $attachedQuantity = [];
             $attachedQuantity['image'] = FresnsFiles::where('file_type', 2)->where('table_name',
                 FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
@@ -353,15 +352,15 @@ class FresnsMarkPostResource extends BaseAdminResource
         $location['scale'] = $append['map_scale'];
         $location['poi'] = $append['map_poi'];
         $location['poiId'] = $append['map_poi_id'];
-        $location['distance'] = "";
-        $longitude = request()->input('longitude', "");
-        $latitude = request()->input('latitude', "");
+        $location['distance'] = '';
+        $longitude = request()->input('longitude', '');
+        $latitude = request()->input('latitude', '');
         // dd(1);
         if ($longitude && $latitude && $this->map_latitude && $this->map_longitude) {
             // 获取单位
             $langTag = $request->header('langTag');
             $distanceUnits = $request->input('lengthUnits');
-            if (!$distanceUnits) {
+            if (! $distanceUnits) {
                 // 距离
                 $languages = ApiConfigHelper::distanceUnits($langTag);
                 $distanceUnits = empty($languages) ? 'km' : $languages;
@@ -406,77 +405,77 @@ class FresnsMarkPostResource extends BaseAdminResource
                 $files = ApiFileHelper::getMoreJsonSignUrl($more_json['files']);
             }
             // $extends = $more_json_decode['extends'];
-            // extends 
+            // extends
             // $extendsInfo = FresnsExtends::where('post_id',$this->id)->first();
-            if (!empty($extendsInfo)) {
+            if (! empty($extendsInfo)) {
                 $extends = [];
                 foreach ($extendsInfo as $e) {
                     $arr = [];
-                    $arr['eid'] = $e['uuid'] ?? "";
-                    $arr['plugin'] = $e['plugin_unikey'] ?? "";
-                    $arr['frame'] = $e['frame'] ?? "";
-                    $arr['position'] = $e['position'] ?? "";
-                    $arr['content'] = $e['text_content'] ?? "";
+                    $arr['eid'] = $e['uuid'] ?? '';
+                    $arr['plugin'] = $e['plugin_unikey'] ?? '';
+                    $arr['frame'] = $e['frame'] ?? '';
+                    $arr['position'] = $e['position'] ?? '';
+                    $arr['content'] = $e['text_content'] ?? '';
                     // $arr['files'] = ApiFileHelper::getFileInfoByTable(FresnsPostsConfig::CFG_TABLE,$this->id);
                     if ($arr['frame'] == 1) {
                         $arr['files'] = $e['text_files'];
                     }
-                    $arr['cover'] = $e['cover_file_url'] ?? "";
-                    if($arr['cover']){
-                        $arr['cover'] =  ApiFileHelper::getImageSignUrlByFileIdUrl($e['cover_file_id'], $e['cover_file_url']);
+                    $arr['cover'] = $e['cover_file_url'] ?? '';
+                    if ($arr['cover']) {
+                        $arr['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($e['cover_file_id'], $e['cover_file_url']);
                     }
-                    $arr['title'] = "";
-                    if (!empty($e)) {
+                    $arr['title'] = '';
+                    if (! empty($e)) {
                         $title = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'title', $e['id']);
-                        $title = $title == null ? "" : $title['lang_content'];
+                        $title = $title == null ? '' : $title['lang_content'];
                         $arr['title'] = $title;
                     }
 
-                    $arr['titleColor'] = $e['title_color'] ?? "";
-                    $arr['descPrimary'] = "";
-                    if (!empty($e)) {
+                    $arr['titleColor'] = $e['title_color'] ?? '';
+                    $arr['descPrimary'] = '';
+                    if (! empty($e)) {
                         $descPrimary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'desc_primary',
                             $e['id']);
-                        $descPrimary = $descPrimary == null ? "" : $descPrimary['lang_content'];
+                        $descPrimary = $descPrimary == null ? '' : $descPrimary['lang_content'];
                         $arr['descPrimary'] = $descPrimary;
                     }
-                    $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? "";
-                    $arr['descSecondary'] = "";
-                    if (!empty($e)) {
+                    $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
+                    $arr['descSecondary'] = '';
+                    if (! empty($e)) {
                         $descSecondary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE,
                             'desc_secondary', $e['id']);
-                        $descSecondary = $descSecondary == null ? "" : $descSecondary['lang_content'];
+                        $descSecondary = $descSecondary == null ? '' : $descSecondary['lang_content'];
                         $arr['descSecondary'] = $descSecondary;
                     }
 
-                    $arr['descSecondaryColor'] = $e['desc_secondary_color'] ?? "";
-                    $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? "";
-                    $arr['btnName'] = "";
-                    if (!empty($e)) {
+                    $arr['descSecondaryColor'] = $e['desc_secondary_color'] ?? '';
+                    $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
+                    $arr['btnName'] = '';
+                    if (! empty($e)) {
                         $btnName = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'btn_name',
                             $e['id']);
-                        $btnName = $btnName == null ? "" : $btnName['lang_content'];
+                        $btnName = $btnName == null ? '' : $btnName['lang_content'];
                         $arr['btnName'] = $btnName;
                     }
-                    $arr['btnColor'] = $e['btn_color'] ?? "";
-                    $arr['type'] = $e['extend_type'] ?? "";
-                    $arr['target'] = $e['extend_target'] ?? "";
-                    $arr['value'] = $e['extend_value'] ?? "";
-                    $arr['support'] = $e['extend_support'] ?? "";
-                    $arr['moreJson'] = ApiFileHelper::getMoreJsonSignUrl($e['moreJson'] ) ?? "";
+                    $arr['btnColor'] = $e['btn_color'] ?? '';
+                    $arr['type'] = $e['extend_type'] ?? '';
+                    $arr['target'] = $e['extend_target'] ?? '';
+                    $arr['value'] = $e['extend_value'] ?? '';
+                    $arr['support'] = $e['extend_support'] ?? '';
+                    $arr['moreJson'] = ApiFileHelper::getMoreJsonSignUrl($e['moreJson']) ?? '';
                     $extends[] = $arr;
                 }
             }
         }
         $group = [];
         if ($groupInfo) {
-            $group['gid'] = $groupInfo['uuid'] ?? "";
+            $group['gid'] = $groupInfo['uuid'] ?? '';
             $name = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->group_id);
-            $group['gname'] = $name == null ? "" : $name['lang_content'];
-            $group['cover'] = $groupInfo['cover_file_url'] ?? "";
+            $group['gname'] = $name == null ? '' : $name['lang_content'];
+            $group['cover'] = $groupInfo['cover_file_url'] ?? '';
             $group['allow'] = true;
             // 当前请求接口的成员，是否拥有该小组评论权限
-            $permission = $groupInfo['permission'] ?? "";
+            $permission = $groupInfo['permission'] ?? '';
             $permissionArr = json_decode($permission, true);
             // dd($permissionArr);
             if ($permissionArr) {
@@ -506,47 +505,46 @@ class FresnsMarkPostResource extends BaseAdminResource
                     }
                 }
             }
-
         }
         $manages = [];
-        #
+        //
         /**1、当 plugin_usages > scene 应用场景不包含「帖子」的插件，不输出。
          * 2、当 plugin_usages > is_group_admin 为小组管理员专用，则判断接口请求的成员是否为管理员。
          * 2.1、当 posts > group_id 为空时，代表帖子无小组，小组管理员专用插件无效不输出。
          * 2.2、根据 posts > group_id 和 groups > admin_members 查询该字段中是否含有该成员的 mid，无则不输出。
          */
-        #
-        $TweetPluginUsages = FresnsPluginUsages::where('type', 5)->where('scene', 'like', "%1%")->first();
+        //
+        $TweetPluginUsages = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%1%')->first();
         // dd($TweetPluginUsages['plugin_unikey']);
         if ($TweetPluginUsages) {
             $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
             $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
             // dd($plugin);
             $name = AmService::getlanguageField('name', $TweetPluginUsages['id']);
-            $manages['name'] = $name == null ? "" : $name['lang_content'];
-            $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'],$TweetPluginUsages['icon_file_url']);
-            $manages['url'] = ApiFileHelper::getPluginUsagesUrl($TweetPluginUsages['plugin_unikey'],$TweetPluginUsages['id']);
+            $manages['name'] = $name == null ? '' : $name['lang_content'];
+            $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
+            $manages['url'] = ApiFileHelper::getPluginUsagesUrl($TweetPluginUsages['plugin_unikey'], $TweetPluginUsages['id']);
 
             // 是否管理员专用
             if ($TweetPluginUsages['is_group_admin'] != 0) {
                 // 查询登录用户是否为管理员
                 // $roleRels = FresnsMemberRoleRels::where('member_id',$mid)->where('type',2)->pluck('role_id')->toArray();
                 // $roles = FresnsMemberRoles::whereIn('id',$roleRels)->where('type',1)->count();
-                if (!$this->group_id) {
+                if (! $this->group_id) {
                     $manages = [];
                 } else {
                     $groupInfo = FresnsGroups::find($this->group_id);
-                    if (!$groupInfo) {
+                    if (! $groupInfo) {
                         $manages = [];
                     } else {
                         $permission = json_decode($groupInfo['permission'], true);
                         // dump($permission);
                         // dump($mid);
                         if (isset($permission['admin_members'])) {
-                            if (!is_array($permission['admin_members'])) {
+                            if (! is_array($permission['admin_members'])) {
                                 $manages = [];
                             } else {
-                                if (!in_array($mid, $permission['admin_members'])) {
+                                if (! in_array($mid, $permission['admin_members'])) {
                                     $manages = [];
                                 }
                             }
@@ -565,7 +563,7 @@ class FresnsMarkPostResource extends BaseAdminResource
                     $pluMemberRoleArr = explode(',', $TweetPluginUsages['member_roles']);
                     // dump($mroleRels);
                     // dd($pluMemberRoleArr);
-                    if (!in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
+                    if (! in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
                         $manages = [];
                     }
                 }
@@ -587,18 +585,17 @@ class FresnsMarkPostResource extends BaseAdminResource
             }
             // 帖子置顶后编辑权限
             if ($this->sticky_status != 0) {
-                if (!$editSticky) {
+                if (! $editSticky) {
                     $postEdit = false;
                 }
             }
 
             // 帖子加精后编辑权限
             if ($this->essence_status != 0) {
-                if (!$editEssence) {
+                if (! $editEssence) {
                     $postEdit = false;
                 }
             }
-
         }
         $editStatus['canEdit'] = $postEdit;
         // dd($postEdit);
@@ -667,7 +664,6 @@ class FresnsMarkPostResource extends BaseAdminResource
 
     public function GetDistance($lat1, $lng1, $lat2, $lng2, $distanceUnits)
     {
-
         $EARTH_RADIUS = 6378.137;
 
         $radLat1 = $this->rad($lat1);
@@ -676,7 +672,7 @@ class FresnsMarkPostResource extends BaseAdminResource
         $b = $this->rad($lng1) - $this->rad($lng2);
         $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2)));
         $s = $s * $EARTH_RADIUS;
-        // $unitCounts = 
+        // $unitCounts =
         // 1 千米(km)=0.621371192237 英里(mi)
         if ($distanceUnits == 'mi') {
             $s = round($s * 10000 * 0.62);
@@ -703,7 +699,7 @@ class FresnsMarkPostResource extends BaseAdminResource
         $timeStr = $carbon->diffForHumans(Carbon::now());
         // dd($timeStr);
         $timeStr = DateHelper::format_date(strtotime($time));
-        $timeStr = str_replace("前", 'ago', $timeStr);
+        $timeStr = str_replace('前', 'ago', $timeStr);
         dd($timeStr);
         // 小于60分钟
         if ($minutesInt < 60) {
@@ -725,7 +721,7 @@ class FresnsMarkPostResource extends BaseAdminResource
                 $domainLinked = DB::table(FresnsDomainLinksConfig::CFG_TABLE)->where('link_url',
                     $h)->where('linked_type', $postType)->where('linked_id', $postId)->first();
                 $title = $h;
-                if (!empty($domainLinked)) {
+                if (! empty($domainLinked)) {
                     if ($domainLinked->link_title) {
                         $title = $domainLinked->link_title;
                     }
@@ -756,11 +752,11 @@ class FresnsMarkPostResource extends BaseAdminResource
         if ($member[0]) {
             foreach ($member[0] as $m) {
                 // $h = trim($h);
-                $mname = trim(str_replace("@", '', $m));
+                $mname = trim(str_replace('@', '', $m));
                 $trimName = trim($m);
-                $memberInfo = FresnsMembers::where('name',$mname)->first();
-                if($memberInfo){
-                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_DOMAIN) . "/$mname";
+                $memberInfo = FresnsMembers::where('name', $mname)->first();
+                if ($memberInfo) {
+                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_DOMAIN)."/$mname";
                     $content = str_replace($m, "<a href='{$jumpUrl}'>{$memberInfo['nickname']}</a> ", $content);
                 }
             }
@@ -768,19 +764,19 @@ class FresnsMarkPostResource extends BaseAdminResource
 
         // 找话题
         // 当前后台话题的显示模式
-        $hashtagShow = ApiConfigHelper::getConfigByItemKey("hashtag_show") ?? 2;
+        $hashtagShow = ApiConfigHelper::getConfigByItemKey('hashtag_show') ?? 2;
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $content, $singlePoundMatches);
         } else {
-            preg_match_all("/#.*?#/", $content, $singlePoundMatches);
+            preg_match_all('/#.*?#/', $content, $singlePoundMatches);
         }
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
                 // 获取话题huri
-                $hashTags = trim(str_replace("#", '', $s));
-                $hashtagsInfo = FresnsHashtags::where('name',$hashTags)->first();
-                if($hashtagsInfo){
-                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_DOMAIN) . "/hashtag/{$hashtagsInfo['slug']}";
+                $hashTags = trim(str_replace('#', '', $s));
+                $hashtagsInfo = FresnsHashtags::where('name', $hashTags)->first();
+                if ($hashtagsInfo) {
+                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
                     $content = str_replace($s, "<a href='{$jumpUrl}'>$s</a>", $content);
                 }
             }
@@ -789,4 +785,3 @@ class FresnsMarkPostResource extends BaseAdminResource
         return $content;
     }
 }
-

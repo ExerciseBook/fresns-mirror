@@ -8,14 +8,13 @@
 
 namespace App\Base\Models;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class BaseExport  implements FromCollection, WithMapping, WithHeadings
+class BaseExport implements FromCollection, WithMapping, WithHeadings
 {
-
     use Exportable;
 
     protected $invoices;
@@ -35,7 +34,7 @@ class BaseExport  implements FromCollection, WithMapping, WithHeadings
     // 表头
     public function headings(): array
     {
-        return ['ID', "Name", "创建时间"];
+        return ['ID', 'Name', '创建时间'];
     }
 
     // 导出的字段

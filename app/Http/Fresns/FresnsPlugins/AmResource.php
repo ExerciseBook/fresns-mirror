@@ -13,7 +13,6 @@ use App\Http\Center\Helper\PluginHelper;
 
 class AmResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -36,9 +35,9 @@ class AmResource extends BaseAdminResource
         }
         // 是否有新版本
         $isNewVision = AmConfig::NO_NEWVISION;
-        $newVisionInt = "";
-        $newVision = "";
-        $author = "";
+        $newVisionInt = '';
+        $newVision = '';
+        $author = '';
         // 获取远程的插件版本
         $plugins = app()->call('App\Http\Center\Market\RemoteController@index');
         if ($plugins) {
@@ -79,4 +78,3 @@ class AmResource extends BaseAdminResource
         return $arr;
     }
 }
-

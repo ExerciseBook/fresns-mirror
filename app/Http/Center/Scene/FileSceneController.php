@@ -8,22 +8,17 @@
 
 namespace App\Http\Center\Scene;
 
-
 use App\Http\Center\Base\BaseSceneController;
-
 use Illuminate\Http\Request;
 
 /**
  * 文件上传
- * 处理文件上传
+ * 处理文件上传.
  */
 class FileSceneController extends BaseSceneController
 {
-
     // 上传文件
-    public function uploadFile(Request $request){
-        
+    public function uploadFile(Request $request)
+    {
     }
-
-
 }

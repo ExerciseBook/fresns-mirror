@@ -29,7 +29,6 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-        
     }
 
     // 搜索排序字段
@@ -38,8 +37,7 @@ class AmModel extends BaseAdminModel
         $orderByFields = [
             'rank_num' => 'ASC',
         ];
+
         return $orderByFields;
     }
-
 }
-

@@ -42,13 +42,13 @@ class ValidateService
         (new self)->error(ErrorCodeService::CODE_PARAM_ERROR, $data);
     }
 
-
     // 校验服务规则
     public static function validateServerRule($params, $rule)
     {
         self::$validator = \Validator::make($params, $rule);
         if (self::$validator->fails()) {
-            $info =  self::$validator->errors();
+            $info = self::$validator->errors();
+
             return $info;
         }
 
@@ -64,7 +64,7 @@ class ValidateService
     // 检查id是否存在表中
     public static function existInTable($idArr, $table)
     {
-        if (!is_array($idArr)) {
+        if (! is_array($idArr)) {
             return false;
         }
 
@@ -74,9 +74,9 @@ class ValidateService
         $conn = DBHelper::getConnectionName($table);
 
         $queryCount = DB::connection($conn)->table($table)->whereIn('id', $idArr)->count();
+
         return count($idArr) === $queryCount;
     }
-
 
     // 检查id是否存在表中
     public static function idsStrExistInTable($idStr, $table)
@@ -88,6 +88,7 @@ class ValidateService
         }
 
         $queryCount = DB::table($table)->whereIn('id', $idArr)->count();
+
         return count($idArr) === $queryCount;
     }
 
@@ -95,18 +96,15 @@ class ValidateService
     public static function validParamExist($params, $checkParamsArr)
     {
         foreach ($checkParamsArr as $v) {
-
-            if (!isset($params[$v]) || $params[$v] == '') {
-
+            if (! isset($params[$v]) || $params[$v] == '') {
                 LogService::error("参数校验失败 [$v] ", $params);
-                LogService::error("校验字段为: ", $checkParamsArr);
+                LogService::error('校验字段为: ', $checkParamsArr);
+
                 return false;
 //                (new self)->error(ErrorCodeService::CODE_EXCEPTION, $data);
             }
-
         }
 
         return true;
     }
-
 }

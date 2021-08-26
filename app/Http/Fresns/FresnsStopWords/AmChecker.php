@@ -13,6 +13,4 @@ use App\Base\Checkers\BaseChecker;
 //业务检查，比如状态
 class AmChecker extends BaseChecker
 {
-
-
 }

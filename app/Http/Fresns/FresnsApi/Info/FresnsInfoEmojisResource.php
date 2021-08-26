@@ -18,14 +18,13 @@ use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 
 class FresnsInfoEmojisResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         $emojisArr = FresnsEmojis::where('is_enable', 1)->where('parent_id', $this->id)->get([
             'code',
             'image_file_url',
             'name',
-            'image_file_id'
+            'image_file_id',
         ])->toArray();
         $itemArr = [];
         foreach ($emojisArr as $v) {
@@ -46,8 +45,6 @@ class FresnsInfoEmojisResource extends BaseAdminResource
             'emoji' => $itemArr,
         ];
 
-
         return $default;
     }
 }
-

@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsGroups;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -91,11 +90,8 @@ class AmConfig extends BaseConfig
         ['key' => 2, 'text' => '不可发现（只有成员能找到这个小组）'],
     ];
     const PUBLISH_POST = [
-        ['key' => 1 , 'text' => '所有人'],
-        ['key' => 2 , 'text' => '仅关注了小组的成员'],
-        ['key' => 3 , 'text' => '仅指定的角色成员'],
+        ['key' => 1, 'text' => '所有人'],
+        ['key' => 2, 'text' => '仅关注了小组的成员'],
+        ['key' => 3, 'text' => '仅指定的角色成员'],
     ];
-
-     
-
 }

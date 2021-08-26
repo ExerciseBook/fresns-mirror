@@ -10,20 +10,20 @@ namespace App\Http\Fresns\FresnsApi\Info;
 
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\Fresns\FresnsExtends\FresnsExtends;
+use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
-use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 
 class AmService
 {
     public static function getlanguageField($field, $id)
     {
-        if (!$id) {
-            return "";
+        if (! $id) {
+            return '';
         }
         $langTag = ApiLanguageHelper::getLangTagByHeader();
-         
+
         $input = [
             'lang_tag' => $langTag,
             'table_field' => $field,
@@ -31,7 +31,7 @@ class AmService
             'table_name' => FresnsPluginUsagesConfig::CFG_TABLE,
         ];
         $name = FresnsLanguages::where($input)->first();
-        if (!$name) {
+        if (! $name) {
             $input = [
                 'table_field' => $field,
                 'table_id' => $id,
@@ -39,6 +39,7 @@ class AmService
             ];
             $name = FresnsLanguages::where($input)->first();
         }
+
         return $name;
     }
 

@@ -43,7 +43,7 @@ class FresnsMemberListsResource extends BaseAdminResource
             $roleName = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE,
                 'name', $memberRole['id'], $langTag);
             $roleNameDisplay = $memberRole['is_display_name'];
-            $roleIcon = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'],$memberRole['icon_file_url']);
+            $roleIcon = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
             $roleIconDisplay = $memberRole['icon_display_icon'];
         }
         $follows = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id',
@@ -87,7 +87,7 @@ class FresnsMemberListsResource extends BaseAdminResource
         $stats['extcredits1Name'] = ApiConfigHelper::getConfigByItemKey('extcredits1_name');
         $stats['extcredits1Unit'] = ApiConfigHelper::getConfigByItemKey('extcredits1_unit');
         // if($stats['extcredits1Status'] == 3){
-        $stats['extcredits1'] = $memberStats['extcredits1'] ?? "";
+        $stats['extcredits1'] = $memberStats['extcredits1'] ?? '';
         // }
         $stats['extcredits2Status'] = ApiConfigHelper::getConfigByItemKey('extcredits2_status');
         $stats['extcredits2Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
@@ -95,7 +95,7 @@ class FresnsMemberListsResource extends BaseAdminResource
         $stats['extcredits2Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
             'item_value', 'extcredits2_unit', $langTag);
         // if($stats['extcredits2Status'] == 3){
-        $stats['extcredits2'] = $memberStats['extcredits2'] ?? "";
+        $stats['extcredits2'] = $memberStats['extcredits2'] ?? '';
         // }
         $stats['extcredits3Status'] = ApiConfigHelper::getConfigByItemKey('extcredits3_status');
         $stats['extcredits3Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
@@ -103,7 +103,7 @@ class FresnsMemberListsResource extends BaseAdminResource
         $stats['extcredits3Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
             'item_value', 'extcredits3_unit', $langTag);
         // if($stats['extcredits3Status'] == 3){
-        $stats['extcredits3'] = $memberStats['extcredits3'] ?? "";
+        $stats['extcredits3'] = $memberStats['extcredits3'] ?? '';
         // }
         $stats['extcredits4Status'] = ApiConfigHelper::getConfigByItemKey('extcredits4_status');
         $stats['extcredits4Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
@@ -111,7 +111,7 @@ class FresnsMemberListsResource extends BaseAdminResource
         $stats['extcredits4Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
             'item_value', 'extcredits4_unit', $langTag);
         // if($stats['extcredits4Status'] == 3){
-        $stats['extcredits4'] = $memberStats['extcredits4'] ?? "";
+        $stats['extcredits4'] = $memberStats['extcredits4'] ?? '';
         // }
         $stats['extcredits5Status'] = ApiConfigHelper::getConfigByItemKey('extcredits5_status');
         $stats['extcredits5Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
@@ -119,7 +119,7 @@ class FresnsMemberListsResource extends BaseAdminResource
         $stats['extcredits5Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
             'item_value', 'extcredits5_unit', $langTag);
         // if($stats['extcredits5Status'] == 3){
-        $stats['extcredits5'] = $memberStats['extcredits5'] ?? "";
+        $stats['extcredits5'] = $memberStats['extcredits5'] ?? '';
         // }
 
         $memberIconsArr = FresnsMemberIcons::where('member_id', $this->id)->get()->toArray();
@@ -132,14 +132,12 @@ class FresnsMemberListsResource extends BaseAdminResource
             $iconsArr[] = $item;
         }
 
-
-        if(empty($this->avatar_file_url) && empty($this->avatar_file_id)){
+        if (empty($this->avatar_file_url) && empty($this->avatar_file_id)) {
             $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
             $memberAvatar = ApiFileHelper::getImageSignUrl($defaultAvatar);
         } else {
             $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($this->avatar_file_id, $this->avatar_file_url);
         }
-
 
         // 默认字段
         $default = [
@@ -174,7 +172,6 @@ class FresnsMemberListsResource extends BaseAdminResource
             'stats' => $stats,
             'icons' => $iconsArr,
         ];
-
 
         return $default;
     }

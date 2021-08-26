@@ -8,7 +8,6 @@
 
 namespace App\Http\Fresns\FresnsLanguages;
 
-
 use App\Base\Services\BaseAdminService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
@@ -26,6 +25,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
@@ -41,7 +41,6 @@ class AmService extends BaseAdminService
                 $areaCode = null;
                 $langCode = $langTag;
             }
-
         } else {
             $tagArr = explode('-', $langTag);
             if (count($tagArr) == 2) {
@@ -62,14 +61,14 @@ class AmService extends BaseAdminService
     //获取对应的多语言
     public static function getLanguageByTableId($table, $field, $tableId, $langTag = null)
     {
-
         $lang_content = FresnsLanguages::where('table_name', $table)->where('table_field', $field)->where('table_id',
         $tableId)->where('lang_tag', $langTag)->value('lang_content');
-        if(empty($lang_content)){
+        if (empty($lang_content)) {
             $langTag = ApiLanguageHelper::getDefaultLanguage();
             $lang_content = FresnsLanguages::where('table_name', $table)->where('table_field', $field)->where('table_id',
             $tableId)->where('lang_tag', $langTag)->value('lang_content');
         }
+
         return $lang_content;
     }
 
@@ -77,11 +76,12 @@ class AmService extends BaseAdminService
     {
         $lang_content = FresnsLanguages::where('table_name', $table)->where('table_field', $field)->where('table_key',
             $tableKey)->where('lang_tag', $langTag)->value('lang_content');
-        if(empty($lang_content)){
+        if (empty($lang_content)) {
             $langTag = ApiLanguageHelper::getDefaultLanguage();
             $lang_content = FresnsLanguages::where('table_name', $table)->where('table_field', $field)->where('table_key',
             $tableKey)->where('lang_tag', $langTag)->value('lang_content');
         }
+
         return $lang_content;
     }
 
@@ -135,5 +135,4 @@ class AmService extends BaseAdminService
 
         return $languageArr;
     }
-
 }

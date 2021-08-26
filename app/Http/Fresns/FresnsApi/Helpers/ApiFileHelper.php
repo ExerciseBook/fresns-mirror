@@ -9,17 +9,17 @@
 namespace App\Http\Fresns\FresnsApi\Helpers;
 
 use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
 use App\Http\Fresns\FresnsCmds\FresnsPlugin as FresnsCmdsFresnsPlugin;
 use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
 use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessages;
-use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsFileAppends\FresnsFileAppends;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
 use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
-use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use Illuminate\Support\Facades\DB;
 
 class ApiFileHelper
 {
@@ -38,13 +38,13 @@ class ApiFileHelper
             $file['fileType'] = $fileInfo['file_type'];
             $file['fileName'] = $fileInfo['file_name'];
             $file['fileExtension'] = $fileInfo['file_extension'];
-            $file['fileSize'] = $fileAppend['file_extension'] ?? "";
-            $file['imageWidth'] = $fileAppend['image_width'] ?? "";
-            $file['imageHeight'] = $fileAppend['image_height'] ?? "";
+            $file['fileSize'] = $fileAppend['file_extension'] ?? '';
+            $file['imageWidth'] = $fileAppend['image_width'] ?? '';
+            $file['imageHeight'] = $fileAppend['image_height'] ?? '';
             // 图片类型
-            $file['imageThumbUrl'] = "";
-            $file['imageSquareUrl'] = "";
-            $file['imageBigUrl'] = "";
+            $file['imageThumbUrl'] = '';
+            $file['imageSquareUrl'] = '';
+            $file['imageBigUrl'] = '';
             // $img_setting = ApiConfigHelper::getConfigByKey(AmConfig::IMG_SETTING);
             // dd($img_setting);
             $imagesHost = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
@@ -53,7 +53,7 @@ class ApiFileHelper
             $imagesBig = ApiConfigHelper::getConfigByItemKey('images_thumb_big');
             // 图片类型
             if ($fileInfo['file_type'] == 1) {
-                $file['imageLong'] = $fileAppend['image_is_long'] ?? "";
+                $file['imageLong'] = $fileAppend['image_is_long'] ?? '';
                 $file['imageThumbUrl'] = $imagesHost.$fileInfo['file_path'].$imagesRatio;
                 $file['imageSquareUrl'] = $imagesRatio.$fileInfo['file_path'].$imagesSquare;
                 $file['imageBigUrl'] = $imagesSquare.$fileInfo['file_path'].$imagesBig;
@@ -99,12 +99,12 @@ class ApiFileHelper
         $sendDeactivate = true;
         $sendMid = $messageInfo['send_member_id'];
         if (($memberInfo->deleted_at != null)) {
-            $sendMid = "";
+            $sendMid = '';
             $sendDeactivate = false;
         }
         $sendMemberInfo = FresnsMembers::find($sendMid);
         $fileArr['sendDeactivate'] = $sendDeactivate;
-        $fileArr['sendMid'] = $sendMemberInfo['uuid'] ?? "";
+        $fileArr['sendMid'] = $sendMemberInfo['uuid'] ?? '';
         $fileArr['sendAvatar'] = $memberInfo->avatar_file_url;
         // 为空用默认头像
         if (empty($memberInfo->avatar_file_url)) {
@@ -122,6 +122,7 @@ class ApiFileHelper
             $fileArr['sendAvatar'] = $deactivateAvatar;
         }
         $fileArr['sendTime'] = $messageInfo['created_at'];
+
         return $fileArr;
     }
 
@@ -141,14 +142,14 @@ class ApiFileHelper
                 $file['type'] = $v['file_type'];
                 $file['name'] = $v['file_name'];
                 $file['extension'] = $v['file_extension'];
-                $file['fileSize'] = $fileAppend['file_extension'] ?? "";
-                $file['imageWidth'] = $fileAppend['image_width'] ?? "";
-                $file['imageHeight'] = $fileAppend['image_height'] ?? "";
+                $file['fileSize'] = $fileAppend['file_extension'] ?? '';
+                $file['imageWidth'] = $fileAppend['image_width'] ?? '';
+                $file['imageHeight'] = $fileAppend['image_height'] ?? '';
                 $img_setting = ApiConfigHelper::getConfigByKey(AmConfig::IMG_SETTING);
                 // dd($img_setting);
                 // 图片类型
                 if ($v['file_type'] == 1) {
-                    $file['imageLong'] = $fileAppend['image_is_long'] ?? "";
+                    $file['imageLong'] = $fileAppend['image_is_long'] ?? '';
                     $file['imageThumbUrl'] = $img_setting['images_bucket_domain'].$v['file_path'].$img_setting['images_thumb_ratio'];
                     $file['imageSquareUrl'] = $img_setting['images_bucket_domain'].$v['file_path'].$img_setting['images_thumb_square'];
                     $file['imageBigUrl'] = $img_setting['images_bucket_domain'].$v['file_path'].$img_setting['images_thumb_big'];
@@ -167,7 +168,7 @@ class ApiFileHelper
                     $file['videoGif'] = $fileAppend['video_gif'];
                     $file['videoUrl'] = $video_setting['videos_bucket_domain'].$v['file_path'];
                 }
-                // 音频类型          
+                // 音频类型
                 // $file['audioTime'] = "";
                 // $file['audioUrl'] = "";
                 $audio_setting = ApiConfigHelper::getConfigByKey(AmConfig::AUDIO_SETTING);
@@ -188,6 +189,7 @@ class ApiFileHelper
                 $result[] = $file;
             }
         }
+
         return $result;
     }
 
@@ -207,9 +209,9 @@ class ApiFileHelper
                 $file['imageRatioUrl'] = $imagesHost.$f['file_path'].$imagesRatio;
                 $file['imageSquareUrl'] = $imagesHost.$f['file_path'].$imagesSquare;
                 $file['imageBigUrl'] = $imagesHost.$f['file_path'].$imagesBig;
-                $file['imageRatioUrl'] = self::getImageSignUrl($file['imageRatioUrl'] );
-                $file['imageSquareUrl'] = self::getImageSignUrl($file['imageSquareUrl'] );
-                $file['imageBigUrl'] = self::getImageSignUrl($file['imageBigUrl'] );
+                $file['imageRatioUrl'] = self::getImageSignUrl($file['imageRatioUrl']);
+                $file['imageSquareUrl'] = self::getImageSignUrl($file['imageSquareUrl']);
+                $file['imageBigUrl'] = self::getImageSignUrl($file['imageBigUrl']);
                 // $file['imageThumbUrl'] = $img_setting['images_bucket_domain'].$f['file_path'].$img_setting['images_thumb_ratio'];
                 // $file['imageSquareUrl'] = $img_setting['images_bucket_domain'].$f['file_path'].$img_setting['images_thumb_square'];
                 // $file['imageBigUrl'] = $img_setting['images_bucket_domain'].$f['file_path'].$img_setting['images_thumb_big'];
@@ -224,10 +226,10 @@ class ApiFileHelper
     public static function getImageSignUrl($url)
     {
         //判断是否是id，如果是id则去数据库查询，如果不是id则直接返回
-        if(!is_numeric($url)){
+        if (! is_numeric($url)) {
             $singUrl = $url;
         } else {
-            $uuid = FresnsFiles::where('id',$url)->value('uuid');
+            $uuid = FresnsFiles::where('id', $url)->value('uuid');
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
             $input['fid'] = $uuid;
 
@@ -237,14 +239,14 @@ class ApiFileHelper
             }
             $singUrl = $resp['output']['imageDefaultUrl'];
         }
-        
+
         return $singUrl;
     }
 
     //通过文件id获取图片防盗链
     public static function getImageSignUrlByFileId($fileId)
     {
-        $uuid = FresnsFiles::where('id',$fileId)->value('uuid');
+        $uuid = FresnsFiles::where('id', $fileId)->value('uuid');
         $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
         $input['fid'] = $uuid;
 
@@ -263,7 +265,7 @@ class ApiFileHelper
      * 2、键值为 false 代表未开启，直接输出 file_url 字段。
      * 3、键值为 true 代表开启，则需要特殊处理，判断 file_id 是否有值。
      * 3.1、无值则直接输出 file_url 字段。
-     * 3.2、有值，则代表是文件 ID，任 ID 跟插件索要 URL 信息（插件配置为 images_service 键名）
+     * 3.2、有值，则代表是文件 ID，任 ID 跟插件索要 URL 信息（插件配置为 images_service 键名）.
      */
     public static function getImageSignUrlByFileIdUrl($fileId, $fileUrl)
     {
@@ -273,7 +275,7 @@ class ApiFileHelper
             if (empty($fileId)) {
                 return $fileUrl;
             }
-            $uuid = FresnsFiles::where('id',$fileId)->value('uuid');
+            $uuid = FresnsFiles::where('id', $fileId)->value('uuid');
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
             $input['fid'] = $uuid;
 
@@ -281,6 +283,7 @@ class ApiFileHelper
             if (PluginRpcHelper::isErrorPluginResp($resp)) {
                 return false;
             }
+
             return $resp['output']['imageDefaultUrl'];
         } else {
             return $fileUrl;
@@ -293,8 +296,8 @@ class ApiFileHelper
         $bucketDomain = ApiConfigHelper::getConfigByItemKey(AmConfig::BACKEND_DOMAIN);
         $pluginUsages = FresnsPluginUsages::find($pluginUsagesid);
         $plugin = FresnsPlugins::where('unikey', $pluginUnikey)->first();
-        $url = "";
-        if (!$plugin || !$pluginUsages) {
+        $url = '';
+        if (! $plugin || ! $pluginUsages) {
             return $url;
         }
         $access_path = $plugin['access_path'];
@@ -305,36 +308,38 @@ class ApiFileHelper
             $uri = $access_path;
         }
         if (empty($plugin['plugin_url'])) {
-            $url = $bucketDomain . $uri;
+            $url = $bucketDomain.$uri;
         } else {
             $url = $plugin['plugin_domain'].$uri;
         }
         $url = self::getImageSignUrl($url);
+
         return $url;
     }
 
     // 获取more_json防盗链
-    public static function getMoreJsonSignUrl($moreJson){
+    public static function getMoreJsonSignUrl($moreJson)
+    {
         // dump($moreJson);
-        if($moreJson){
-            foreach($moreJson as &$m){
+        if ($moreJson) {
+            foreach ($moreJson as &$m) {
                 $m['moreJson'] = empty($m['moreJson']) ? [] : $m['moreJson'];
-                if($m['fid']){
+                if ($m['fid']) {
                     // dump($m);
-                    if(isset($m['imageRatioUrl'])){
-                            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
-                            $input['fid'] = $m['fid'];
-        
-                            $resp = PluginRpcHelper::call(FresnsCmdsFresnsPlugin::class, $cmd, $input);
-                            if (PluginRpcHelper::isErrorPluginResp($resp)) {
-                                return false;
-                            }
-                            // dd($resp);
-                            $m['imageRatioUrl'] = $resp['output']['imageRatioUrl'];
-                            $m['imageSquareUrl'] = $resp['output']['imageSquareUrl'];
-                            $m['imageBigUrl'] = $resp['output']['imageBigUrl'];
+                    if (isset($m['imageRatioUrl'])) {
+                        $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
+                        $input['fid'] = $m['fid'];
+
+                        $resp = PluginRpcHelper::call(FresnsCmdsFresnsPlugin::class, $cmd, $input);
+                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                            return false;
+                        }
+                        // dd($resp);
+                        $m['imageRatioUrl'] = $resp['output']['imageRatioUrl'];
+                        $m['imageSquareUrl'] = $resp['output']['imageSquareUrl'];
+                        $m['imageBigUrl'] = $resp['output']['imageBigUrl'];
                     }
-                    if(isset($m['videoCover'])){
+                    if (isset($m['videoCover'])) {
                         // $m['videoCover'] = self::getVideoSignUrl($m['videoCover']);
                         $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_VIDEO;
                         $input['fid'] = $m['fid'];
@@ -347,7 +352,7 @@ class ApiFileHelper
                         $m['videoGif'] = $resp['output']['videoGif'];
                         $m['videoUrl'] = $resp['output']['videoUrl'];
                     }
-                    if(isset($m['audioUrl'])){
+                    if (isset($m['audioUrl'])) {
                         $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_AUDIO;
                         $input['fid'] = $m['fid'];
 
@@ -357,7 +362,7 @@ class ApiFileHelper
                         }
                         $m['audioUrl'] = $resp['output']['audioUrl'];
                     }
-                    if(isset($m['docUrl'])){
+                    if (isset($m['docUrl'])) {
                         $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
                         $input['fid'] = $m['fid'];
 

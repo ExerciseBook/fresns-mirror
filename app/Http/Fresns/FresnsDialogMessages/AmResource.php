@@ -13,7 +13,6 @@ use App\Http\Fresns\FresnsApi\Base\FresnsBaseService;
 
 class AmResource extends FresnsBaseService
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -43,4 +42,3 @@ class AmResource extends FresnsBaseService
         return $arr;
     }
 }
-

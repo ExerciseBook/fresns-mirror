@@ -7,10 +7,9 @@
  */
 
 // 系统解耦, 快捷方式入口
-namespace App\Http\Fresns\FresnsEmojis;
 
+namespace App\Http\Fresns\FresnsEmojis;
 
 class FresnsEmojisService extends AmService
 {
-
 }

@@ -31,6 +31,4 @@ Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\Fresns\FresnsApi\C
     Route::post('/post/nearbys', 'AmControllerApi@postNearbys')->name('admin.content.postNearbys');
     // 获取扩展内容
     Route::post('/extend/lists', 'AmControllerApi@extendsLists')->name('admin.content.extendsLists');
-
-
 });

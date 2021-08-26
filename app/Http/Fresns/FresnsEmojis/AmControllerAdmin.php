@@ -12,12 +12,10 @@ use App\Base\Controllers\BaseAdminController;
 
 class AmControllerAdmin extends BaseAdminController
 {
-
     public function __construct()
     {
         $this->service = new AmService();
     }
-
 
     // 验证规则
     public function rules($ruleType)

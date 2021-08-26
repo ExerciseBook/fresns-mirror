@@ -14,7 +14,6 @@ use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 
 class AmResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -34,12 +33,12 @@ class AmResource extends BaseAdminResource
                 'table_name' => AmConfig::CFG_TABLE,
                 'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
                 'table_id' => $this->id,
-                'lang_tag' => $v['key']
+                'lang_tag' => $v['key'],
             ];
             // dd($input);
             $name = FresnsLanguages::where($input)->first();
-            $v['lang_content'] = $name['lang_content'] ?? "";
-            $nameArr[] = $v;;
+            $v['lang_content'] = $name['lang_content'] ?? '';
+            $nameArr[] = $v;
         }
 
         $descriptionArr = [];
@@ -48,12 +47,12 @@ class AmResource extends BaseAdminResource
                 'table_name' => AmConfig::CFG_TABLE,
                 'table_field' => AmConfig::FORM_FIELDS_MAP['description'],
                 'table_id' => $this->id,
-                'lang_tag' => $v['key']
+                'lang_tag' => $v['key'],
             ];
             // dd($input);
             $name = FresnsLanguages::where($input)->first();
-            $v['lang_content'] = $name['lang_content'] ?? "";
-            $descriptionArr[] = $v;;
+            $v['lang_content'] = $name['lang_content'] ?? '';
+            $descriptionArr[] = $v;
         }
         $permission_decode = json_decode($this->permission, true);
         $publish_post = $permission_decode['publish_post'] ?? 1;
@@ -83,4 +82,3 @@ class AmResource extends BaseAdminResource
         return $arr;
     }
 }
-

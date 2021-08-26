@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsConfigs;
 
 use App\Base\Models\BaseAdminModel;
 
-
 class AmModel extends BaseAdminModel
 {
     protected $table = AmConfig::CFG_TABLE;
@@ -30,7 +29,6 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
 
     // 搜索排序字段
@@ -40,7 +38,7 @@ class AmModel extends BaseAdminModel
             'id' => 'ASC',
             // 'updated_at'    => 'DESC',
         ];
+
         return $orderByFields;
     }
 }
-

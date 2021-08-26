@@ -7,10 +7,9 @@
  */
 
 // 系统解耦, 快捷方式入口
-namespace App\Http\Fresns\FresnsFileAppends;
 
+namespace App\Http\Fresns\FresnsFileAppends;
 
 class FresnsFileAppendsService extends AmService
 {
-
 }

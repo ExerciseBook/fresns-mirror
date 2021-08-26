@@ -8,11 +8,9 @@
 
 namespace App\Http\Fresns\FresnsApi\Base;
 
-
 use App\Base\Services\BaseAdminService;
 
 class FresnsBaseService extends BaseAdminService
 {
     public $needCommon = false;
-
 }

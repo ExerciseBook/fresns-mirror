@@ -7,6 +7,7 @@
  */
 
 // 系统解耦, 快捷方式入口
+
 namespace App\Http\Fresns\FresnsHashtags;
 
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseService;
@@ -33,7 +34,7 @@ class FresnsHashtagsService extends FresnsBaseService
         $mid = request()->header('mid');
         $group = FresnsHashtags::where('slug', $id)->first();
         $common['seoInfo'] = [];
-        if (!$langTag) {
+        if (! $langTag) {
             $langTag = FresnsPluginUsagesService::getDefaultLanguage();
         }
         // $seo = null;
@@ -48,8 +49,8 @@ class FresnsHashtagsService extends FresnsBaseService
                 $common['seoInfo'] = $seoInfo;
             }
         }
-        $common['seoInfo'] = (Object)$common['seoInfo'];
-        
+        $common['seoInfo'] = (object) $common['seoInfo'];
+
         return $common;
     }
 }

@@ -9,15 +9,14 @@
 namespace App\Http\Fresns\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 
 class FresnsPostMembersResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // dd(1);
@@ -44,4 +43,3 @@ class FresnsPostMembersResource extends BaseAdminResource
         return $arr;
     }
 }
-

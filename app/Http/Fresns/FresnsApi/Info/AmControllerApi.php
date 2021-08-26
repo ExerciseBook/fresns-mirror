@@ -9,44 +9,44 @@
 namespace App\Http\Fresns\FresnsApi\Info;
 
 use App\Helpers\DateHelper;
+use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use Illuminate\Http\Request;
+use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\Fresns\FresnsCmds\FresnsCrontablPlugin;
+use App\Http\Fresns\FresnsCmds\FresnsCrontabPluginConfig;
+use App\Http\Fresns\FresnsCmds\FresnsPlugin;
+use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
+use App\Http\Fresns\FresnsComments\FresnsComments;
+use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
+use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessages;
+use App\Http\Fresns\FresnsDialogs\FresnsDialogs;
+use App\Http\Fresns\FresnsEmojis\FresnsEmojisConfig;
+use App\Http\Fresns\FresnsEmojis\FresnsEmojisService;
 use App\Http\Fresns\FresnsExtends\FresnsExtends;
 use App\Http\Fresns\FresnsExtends\FresnsExtendsConfig;
+use App\Http\Fresns\FresnsFileLogs\FresnsFileLogs;
+use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
 use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
-use App\Http\Fresns\FresnsPosts\FresnsPosts;
-use App\Http\Fresns\FresnsEmojis\FresnsEmojisService;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
-use App\Http\Share\Common\ValidateService;
-use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
-use App\Http\Fresns\FresnsCmds\FresnsPlugin;
-use App\Http\Center\Helper\PluginRpcHelper;
-use App\Http\Fresns\FresnsCmds\FresnsCrontablPlugin;
-use App\Http\Fresns\FresnsCmds\FresnsCrontabPluginConfig;
-use App\Http\Fresns\FresnsComments\FresnsComments;
-use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
-use App\Http\Fresns\FresnsEmojis\FresnsEmojisConfig;
-use App\Http\Fresns\FresnsFileLogs\FresnsFileLogs;
-use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsNotifies\FresnsNotifies;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
 use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
 use App\Http\Fresns\FresnsStopWords\FresnsStopWordsService;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
-use Illuminate\Support\Facades\DB;
-use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Fresns\FresnsNotifies\FresnsNotifies;
-use App\Http\Fresns\FresnsDialogs\FresnsDialogs;
-use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessages;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\Share\Common\ErrorCodeService;
+use App\Http\Share\Common\ValidateService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AmControllerApi extends FresnsBaseApiController
 {
@@ -54,7 +54,6 @@ class AmControllerApi extends FresnsBaseApiController
     {
         $this->service = new AmService();
         parent::__construct();
-
     }
 
     //系统配置信息
@@ -66,19 +65,18 @@ class AmControllerApi extends FresnsBaseApiController
         if (empty($itemTag) && empty($itemKey)) {
             $data = ApiConfigHelper::getConfigsListsApi();
         } else {
-            if (!empty($itemTag)) {
+            if (! empty($itemTag)) {
                 $itemTagArr = explode(',', $itemTag);
                 foreach ($itemTagArr as $v) {
                     $data = array_merge($data, ApiConfigHelper::getConfigByKeyApi($v));
                 }
             }
-            if (!empty($itemKey)) {
+            if (! empty($itemKey)) {
                 $itemKeyArr = explode(',', $itemKey);
                 foreach ($itemKeyArr as $v) {
                     $data = array_merge($data, ApiConfigHelper::getConfigByItemKeyApi($v));
                 }
             }
-
         }
 
         $item = [];
@@ -139,12 +137,11 @@ class AmControllerApi extends FresnsBaseApiController
         ];
         ValidateService::validateRule($request, $rule);
 
-
         $langTag = ApiLanguageHelper::getLangTagByHeader();
 
         $cmd = FresnsPluginConfig::PLG_CMD_UPLOAD_SESSION_LOG;
         $input['platform'] = $request->header('platform');
-        $input['version'] =  $request->header('version');
+        $input['version'] = $request->header('version');
         $input['versionInt'] = $request->header('versionInt');
         $input['objectName'] = $request->input('objectName');
         $input['objectAction'] = $request->input('objectAction');
@@ -172,7 +169,7 @@ class AmControllerApi extends FresnsBaseApiController
      * 3.话题名 hashtags > name
      * 4.帖子标题 posts > title
      * 5.扩展内容标题 extends > title
-     * 成员名,话题,帖子,不涉及多语言表
+     * 成员名,话题,帖子,不涉及多语言表.
      */
     public function infoInputtips(Request $request)
     {
@@ -188,7 +185,6 @@ class AmControllerApi extends FresnsBaseApiController
         $langTag = ApiLanguageHelper::getLangTagByHeader();
         $mid = GlobalService::getGlobalKey('member_id');
         $data = [];
-
 
         $followIdArr = [];
         if ($mid && $queryType != 5) {
@@ -214,11 +210,11 @@ class AmControllerApi extends FresnsBaseApiController
                         $followStatus = 1;
                     }
                     $item['followStatus'] = $followStatus;
-                    if(empty($v['avatar_file_url']) && empty($v['avatar_file_id'])){
+                    if (empty($v['avatar_file_url']) && empty($v['avatar_file_id'])) {
                         $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
                         $memberAvatar = ApiFileHelper::getImageSignUrl($defaultAvatar);
                     } else {
-                        $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($v['avatar_file_id'],$v['avatar_file_url']);
+                        $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($v['avatar_file_id'], $v['avatar_file_url']);
                     }
                     $item['image'] = $memberAvatar;
                     $item['title'] = '';
@@ -344,7 +340,7 @@ class AmControllerApi extends FresnsBaseApiController
                 }
                 break;
             default:
-                # code...
+                // code...
                 break;
         }
 
@@ -360,9 +356,9 @@ class AmControllerApi extends FresnsBaseApiController
             'type' => [
                 'required',
                 'numeric',
-                "in:3,4,9",
+                'in:3,4,9',
             ],
-            'scene' => 'in:1,2,3'
+            'scene' => 'in:1,2,3',
         ];
         $type = $request->input('type');
         $scene = $request->input('scene');
@@ -375,7 +371,7 @@ class AmControllerApi extends FresnsBaseApiController
         //     }
         // }
         // 当 plugin_usages > member_roles 字段有值时，需要判断当前接口请求的成员是否在符合条件的角色当中，如果不在，则不输出。如果字段有值，接口又无成员参数，则默认当无权用户。
-        if (!$mid) {
+        if (! $mid) {
             $idArr = FresnsPluginUsages::where('member_roles', null)->pluck('id')->toArray();
             $request->offsetSet('ids', implode(',', $idArr));
         } else {
@@ -421,17 +417,17 @@ class AmControllerApi extends FresnsBaseApiController
             'type' => [
                 'required',
                 'numeric',
-                "in:1,2",
+                'in:1,2',
             ],
             'useType' => [
                 'required',
                 'numeric',
-                "in:1,2,3,4,5",
+                'in:1,2,3,4,5',
             ],
             'template' => [
                 'required',
                 'numeric',
-                "in:1,2,3,4,5,6,7",
+                'in:1,2,3,4,5,6,7',
             ],
             // 'account' => 'required'
         ];
@@ -544,7 +540,6 @@ class AmControllerApi extends FresnsBaseApiController
         $uid = GlobalService::getGlobalKey('user_id');
         $mid = GlobalService::getGlobalKey('member_id');
 
-
         //校验内容是否存在
         $type = $request->input('type');
         $uuid = $request->input('uuid');
@@ -564,7 +559,7 @@ class AmControllerApi extends FresnsBaseApiController
                     $this->error(ErrorCodeService::FILES_ERROR);
                 }
                 //帖子附件需要判断帖子是否开启了权限功能 posts > is_allow
-                if (!empty($typeData)) {
+                if (! empty($typeData)) {
                     if ($typeData['is_allow'] != FresnsPostsConfig::IS_ALLOW_1) {
                         $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
                     }
@@ -573,7 +568,6 @@ class AmControllerApi extends FresnsBaseApiController
                 $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type',
                     2)->where('object_id', $mid)->count();
                 if (empty($count)) {
-
                     $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
                 }
                 break;
@@ -616,7 +610,7 @@ class AmControllerApi extends FresnsBaseApiController
             'user_id' => $uid,
             'member_id' => $mid,
             'object_type' => $type,
-            'object_id' => $files['table_id']
+            'object_id' => $files['table_id'],
         ];
         FresnsFileLogs::insert($input);
         $data = [];
@@ -653,7 +647,7 @@ class AmControllerApi extends FresnsBaseApiController
     public function overview(Request $request)
     {
         $member_id = GlobalService::getGlobalKey('member_id');
-        #消息未读数
+        //消息未读数
         // 系统
         $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
             AmConfig::SOURCE_TYPE_1)->where('status', AmConfig::NO_READ)->count();
@@ -699,6 +693,4 @@ class AmControllerApi extends FresnsBaseApiController
         ];
         $this->success($data);
     }
-
 }
-

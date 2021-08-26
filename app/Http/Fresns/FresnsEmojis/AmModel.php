@@ -29,9 +29,5 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-       
     }
-
-
 }
-

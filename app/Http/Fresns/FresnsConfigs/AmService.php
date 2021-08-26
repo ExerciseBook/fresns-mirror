@@ -18,5 +18,4 @@ class AmService extends BaseAdminService
         $this->resource = AmResource::class;
         $this->resourceDetail = AmResourceDetail::class;
     }
-
 }

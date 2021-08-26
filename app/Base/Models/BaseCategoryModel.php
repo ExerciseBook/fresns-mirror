@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Schema;
 // 场景3：判断c1 和 c2 是否有层级关系
 class BaseCategoryModel extends BaseModel
 {
-
     public $pageSize = BaseConfig::DEFAULT_ALL_IN_ONE_PAGE_SIZE;
 
     // 插入完成之后做的操作
@@ -37,7 +36,7 @@ class BaseCategoryModel extends BaseModel
         } else {
             // 创建的并非根目录
             $category->level = $category->parent->level + 1; // 将层级设为父类层级+1
-            $category->path = $category->parent->path . $category->parent_id . '-'; // 将path值设为父类path+父类id
+            $category->path = $category->parent->path.$category->parent_id.'-'; // 将path值设为父类path+父类id
         }
 
         $category->save();
@@ -60,7 +59,6 @@ class BaseCategoryModel extends BaseModel
     // 获取所有子节点
     public function getAllChildren()
     {
-
         $result = [];
         $children = $this->children;
 
@@ -80,7 +78,7 @@ class BaseCategoryModel extends BaseModel
     }
 
     /**
-     * 获取所有祖先分类id
+     * 获取所有祖先分类id.
      * @date 2019-04-21
      */
     public function getPathIdsAttribute()
@@ -88,11 +86,12 @@ class BaseCategoryModel extends BaseModel
         $path = trim($this->path, '-'); // 过滤两端的 -
         $path = explode('-', $path); // 以 - 为分隔符切割为数组
         $path = array_filter($path); // 过滤空值元素
+
         return $path;
     }
 
     /**
-     * 获取所有祖先分类且按层级正序排列
+     * 获取所有祖先分类且按层级正序排列.
      * @date 2019-04-21
      */
     public function getAncestorsAttribute()
@@ -104,7 +103,7 @@ class BaseCategoryModel extends BaseModel
     }
 
     /**
-     * 获取所有祖先类目名称以及当前类目的名称
+     * 获取所有祖先类目名称以及当前类目的名称.
      * @date 2019-04-21
      */
     public function getFullNameAttribute()
@@ -116,11 +115,12 @@ class BaseCategoryModel extends BaseModel
     }
 
     // 获取childrenIds
-    public function getAllChildrenIds(&$childrenIdArr){
+    public function getAllChildrenIds(&$childrenIdArr)
+    {
         $children = $this->getAllChildren();
-        foreach ($children as $child){
+        foreach ($children as $child) {
             $childrenIdArr[] = $child->id;
-            if(!empty($child->children)){
+            if (! empty($child->children)) {
                 $this->getAllChildrenIds($childrenIdArr);
             }
         }
@@ -134,11 +134,11 @@ class BaseCategoryModel extends BaseModel
 
         // 先要获取所有待删除的 id
         $allChildrenIds = [];
-        foreach($idArr as $id){
+        foreach ($idArr as $id) {
             $category = $currModel->find($id);
-            $allChildren  = $category->getAllChildren();
+            $allChildren = $category->getAllChildren();
 
-         //   dd($allChildren);
+            //   dd($allChildren);
 
             $allChildrenArr = CommonHelper::objectToArray($allChildren);
             TreeHelper::getAllIdsInTreeData($allChildrenArr, $allChildrenIds);
@@ -147,7 +147,7 @@ class BaseCategoryModel extends BaseModel
         $allNeedDestroyIdArr = array_unique(array_merge($idArr, $allChildrenIds));
 
         // 逐个删除
-        foreach ($allNeedDestroyIdArr as $id){
+        foreach ($allNeedDestroyIdArr as $id) {
             $this->hookDestroyItemBefore($id);
 
             // 执行删除

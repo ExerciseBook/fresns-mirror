@@ -9,18 +9,18 @@
 namespace App\Http\Fresns\FresnsApi\Notify;
 
 use App\Base\Checkers\BaseChecker;
-use App\Http\Models\Common\ConfigGroup;
-use App\Http\Fresns\FresnsUsers\FresnsUsers;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
-use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Share\Common\LogService;
+use App\Http\Fresns\FresnsFiles\FresnsFiles;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesService;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsUsers\FresnsUsers;
+use App\Http\Models\Common\ConfigGroup;
+use App\Http\Share\Common\LogService;
 
 //业务检查，比如状态
 class AmChecker extends BaseChecker
@@ -53,7 +53,7 @@ class AmChecker extends BaseChecker
         // 键名 dialog_status 关闭了总站私信功能，全员不可发送。
         $dialogStatus = ApiConfigHelper::getConfigByItemKey(AmConfig::DIALOG_STATUS);
         // dd($dialogStatus);
-        if (!$dialogStatus) {
+        if (! $dialogStatus) {
             return self::checkInfo(self::DIALOG_ERROR);
         }
         // 如果是私有模式，当过期后 members > expired_at ，不允许发送消息。
@@ -63,6 +63,7 @@ class AmChecker extends BaseChecker
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
                 LogService::info('私有模式有效期过期', $memberInfo);
+
                 return self::checkInfo(self::MEMBER_EXPIRED_ERROR);
             }
         }
@@ -75,16 +76,16 @@ class AmChecker extends BaseChecker
         }
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
         // dd($memberRole);
-        if (!empty($memberRole)) {
+        if (! empty($memberRole)) {
             $permission = $memberRole['permission'];
             $permissionArr = json_decode($permission, true);
-            if (!empty($permissionArr)) {
+            if (! empty($permissionArr)) {
                 $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
                 if (empty($permissionMap)) {
                     return self::checkInfo(self::MEMBER_ROLE_ERROR);
                 }
             }
-            if (!isset($permissionMap['dialog'])) {
+            if (! isset($permissionMap['dialog'])) {
                 return self::checkInfo(self::MEMBER_ROLE_ERROR);
             }
             if ($permissionMap['dialog'] == false) {
@@ -129,7 +130,7 @@ class AmChecker extends BaseChecker
         // 如果对方已经注销（members > deleted_at），不可以发送。
         $recvMid = request()->input('recvMid');
         $recvMidInfo = FresnsMembers::where('uuid', $recvMid)->first();
-        if (!$recvMidInfo) {
+        if (! $recvMidInfo) {
             // $this->error(ErrorCodeService::MEMBER_ERROR);
             return self::checkInfo(self::MEMBER_ERROR);
         }
@@ -167,5 +168,4 @@ class AmChecker extends BaseChecker
             return self::checkInfo(self::FILE_OR_MESSAGE_ERROR);
         }
     }
-
 }

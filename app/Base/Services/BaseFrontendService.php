@@ -10,5 +10,4 @@ namespace App\Base\Services;
 
 class BaseFrontendService extends BaseService
 {
-
 }

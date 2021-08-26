@@ -105,17 +105,16 @@ class FresnsApiCode extends ErrorCodeService
         self::NOTIFY_ERROR => '只能删除自己的信息',
     ];
 
-
     public static function getMsg($code, $data = [])
     {
-        if (!isset(self::$CODE_MSG_MAP[$code])) {
+        if (! isset(self::$CODE_MSG_MAP[$code])) {
             return 'unknown code';
         }
 
         // 关于参数错误的信息具体化
         try {
             if ($code == self::CODE_PARAM_ERROR) {
-                $data = (array)$data;
+                $data = (array) $data;
                 foreach ($data as $key => $messageBag) {
                     foreach ($messageBag as $k => $infoArr) {
                         if (count($infoArr) > 0) {
@@ -125,10 +124,9 @@ class FresnsApiCode extends ErrorCodeService
                 }
             }
         } catch (\Exception $e) {
-            LogService::warning("get error msg missing ", $data);
+            LogService::warning('get error msg missing ', $data);
         }
 
         return self::$CODE_MSG_MAP[$code];
     }
-
 }

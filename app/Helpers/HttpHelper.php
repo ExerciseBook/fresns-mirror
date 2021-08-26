@@ -6,7 +6,6 @@
  * Released under the Apache-2.0 License.
  */
 
-
 namespace App\Helpers;
 
 use App\Http\Share\Common\LogService;
@@ -23,41 +22,40 @@ class HttpHelper
      * @param bool $useJson
      * @return mixed|array
      */
-    public static function postFetch($url, $postFields = [],$header = [])
+    public static function postFetch($url, $postFields = [], $header = [])
     {
         $postFields = json_encode($postFields);
 
-
-        $ch = curl_init ();
+        $ch = curl_init();
         $content = ['Content-Type: application/json; charset=utf-8'];
-        if($header){
-            $content = array_merge($content,$header);
+        if ($header) {
+            $content = array_merge($content, $header);
         }
 
-		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_HTTPHEADER, $content);
-		curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4); //若果报错 name lookup timed out 报错时添加这一行代码
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt( $ch, CURLOPT_POST, 1 );
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, $postFields);
-        curl_setopt( $ch, CURLOPT_TIMEOUT,60);
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0);
-        $ret = curl_exec ( $ch );
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $content);
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4); //若果报错 name lookup timed out 报错时添加这一行代码
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        $ret = curl_exec($ch);
 
         if (false == $ret) {
-            $result = curl_error(  $ch);
+            $result = curl_error($ch);
         } else {
-            $rsp = curl_getinfo( $ch, CURLINFO_HTTP_CODE);
+            $rsp = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if (200 != $rsp) {
-                $result = "请求状态 ". $rsp . " " . curl_error($ch);
+                $result = '请求状态 '.$rsp.' '.curl_error($ch);
             } else {
                 $result = $ret;
             }
         }
-        curl_close ( $ch );
+        curl_close($ch);
 
-		return $result;
+        return $result;
     }
 
     public static function getFetch($url, $postData = [], $method = 'GET', $useJson = true)
@@ -67,7 +65,7 @@ class HttpHelper
         try {
             return json_decode($client->request($method, $url, [$useJson ? 'json' : 'form_params' => $postData])->getBody()->getContents(), true);
         } catch (RequestException $e) {
-            Log::error("RequestException:" . $e->getCode() . ',' . $e->getMessage());
+            Log::error('RequestException:'.$e->getCode().','.$e->getMessage());
         }
     }
 
@@ -81,31 +79,30 @@ class HttpHelper
      */
     public static function post($url, $dataArr = [], $header = [])
     {
-
         $postFields = json_encode($dataArr);
-        $ch = curl_init ();
+        $ch = curl_init();
 
-        curl_setopt( $ch, CURLOPT_URL, $url );
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4); //若果报错 name lookup timed out 报错时添加这一行代码
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $ch, CURLOPT_POST, 1 );
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, $postFields);
-        curl_setopt( $ch, CURLOPT_TIMEOUT,60);
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0);
-        $ret = curl_exec ( $ch );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        $ret = curl_exec($ch);
         if (false == $ret) {
-            $result = curl_error(  $ch);
+            $result = curl_error($ch);
         } else {
-            $rsp = curl_getinfo( $ch, CURLINFO_HTTP_CODE);
+            $rsp = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if (200 != $rsp) {
-                $result = "请求状态 ". $rsp . " " . curl_error($ch);
+                $result = '请求状态 '.$rsp.' '.curl_error($ch);
             } else {
                 $result = $ret;
             }
         }
-        curl_close ( $ch );
+        curl_close($ch);
 
         return $result;
     }
@@ -119,9 +116,9 @@ class HttpHelper
         return $menu_path;
     }
 
-
     //
-    public static function guzzleHttpPost($url, $params, $headers = []){
+    public static function guzzleHttpPost($url, $params, $headers = [])
+    {
 
         // 发送请求
         $client = new \GuzzleHttp\Client();
@@ -136,12 +133,13 @@ class HttpHelper
 
         return $resArr;
     }
+
     public static function curl($url, $postData = [], $file = '')
     {
-        #1. 初始化curl连接
+        //1. 初始化curl连接
         $ch = curl_init();
 
-        #2. 设置各项参数
+        //2. 设置各项参数
         // 启动curl
         $ch = curl_init();
         // 设置请求URL地址
@@ -165,13 +163,13 @@ class HttpHelper
         //                              http_build_query这个函数在单纯传递post数据，注意不包含文件数据的时候，建议加上，否则可能出现传输数据不稳定的情况
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 
-        #3. 执行curl连接
+        //3. 执行curl连接
         $data = curl_exec($ch);
 
         //获得执行curl连接的相关信息
         $info = curl_getinfo($ch);
 
-        #4. 关闭curl连接
+        //4. 关闭curl连接
         curl_close($ch);
 
         if ($info['http_code'] == '200') { //只有当响应状态码为200时，才有必要将执行的结果返回出去
@@ -182,14 +180,14 @@ class HttpHelper
     }
 
     /*请求外部地址*/
-    public static function curlRequest($url,$mothed = "GET" , $data = array())
+    public static function curlRequest($url, $mothed = 'GET', $data = [])
     {
         $ch = curl_init();
-        $header = "Accept-Charset: utf-8";
+        $header = 'Accept-Charset: utf-8';
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $mothed);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
@@ -197,6 +195,7 @@ class HttpHelper
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $temp = curl_exec($ch);
         curl_close($ch);
+
         return $temp;
     }
 }

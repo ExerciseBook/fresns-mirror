@@ -9,14 +9,14 @@
 namespace App\Http\Fresns\FresnsApi\Content;
 
 use App\Base\Checkers\BaseChecker;
-use App\Http\Models\Common\ConfigGroup;
-use App\Http\Fresns\FresnsUsers\FresnsUsers;
+use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
+use App\Http\Fresns\FresnsFiles\FresnsFiles;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
+use App\Http\Fresns\FresnsUsers\FresnsUsers;
+use App\Http\Models\Common\ConfigGroup;
 
 //业务检查，比如状态
 class AmChecker extends BaseChecker
@@ -29,7 +29,5 @@ class AmChecker extends BaseChecker
 
     public static function checkPost($mid)
     {
-
     }
-
 }

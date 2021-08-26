@@ -7,6 +7,7 @@
  */
 
 // 系统解耦, 快捷方式入口
+
 namespace App\Http\Fresns\FresnsConfigs;
 
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
@@ -19,7 +20,7 @@ class FresnsConfigsService extends AmService
         //是否启用
         $languageStatus = AmModel::where('item_key', AmConfig::LANGUAGE_STATUS)->value('item_value');
         // $languageStatusArr = json_decode($languageStatus,true);
-        $common['language_status'] = $languageStatus ?? 0;
+        $common['language_status'] = $languageStatus ?? false;
         //默认
         $defaultLanguage = AmModel::where('item_key', AmConfig::DEFAULT_LANGUAGE)->value('item_value');
         // $defaultLanguageArr = json_decode($defaultLanguage,true);
@@ -33,7 +34,7 @@ class FresnsConfigsService extends AmService
         $oldLangSettingArr = json_decode($oldLangSettingJson, true);
         $languageOptionArr = $oldLangSettingArr;
 
-        if ($common['language_status'] == 0) {
+        if ($common['language_status'] == false) {
             $languageOptionArr = [];
             foreach ($oldLangSettingArr as $v) {
                 if ($v['langTag'] == $common['default_language']) {

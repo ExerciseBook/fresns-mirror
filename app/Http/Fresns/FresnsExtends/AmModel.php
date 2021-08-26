@@ -9,8 +9,8 @@
 namespace App\Http\Fresns\FresnsExtends;
 
 use App\Base\Models\BaseAdminModel;
-use Illuminate\Support\Facades\DB;
 use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
+use Illuminate\Support\Facades\DB;
 
 class AmModel extends BaseAdminModel
 {
@@ -31,7 +31,6 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
 
     public function getRawSqlQuery()
@@ -69,7 +68,6 @@ class AmModel extends BaseAdminModel
             $extendIdArr = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id',
                 $searchPid)->pluck('extend_id')->toArray();
             $query->whereIn('extends.id', $searchMid);
-
         }
         // 指定范围：评论
         $searchCid = $request->input('searchCid');
@@ -79,9 +77,9 @@ class AmModel extends BaseAdminModel
             $query->whereIn('extends.id', $searchMid);
         }
         // 排序处理
-        $sortType = request()->input('sortType', "");
+        $sortType = request()->input('sortType', '');
         $sortWay = request()->input('sortWay', 2);
-        $sortWayType = $sortWay == 2 ? "DESC" : "ASC";
+        $sortWayType = $sortWay == 2 ? 'DESC' : 'ASC';
         switch ($sortType) {
             case 'created':
                 $query->orderBy('extends.created_at', $sortWayType);
@@ -96,8 +94,7 @@ class AmModel extends BaseAdminModel
                 $query->orderBy('extends.created_at', $sortWayType);
                 break;
         }
-        return $query;
 
+        return $query;
     }
 }
-

@@ -11,9 +11,9 @@ namespace App\Http\Fresns\FresnsPluginUsages;
 // 配置
 use App\Base\Config\BaseConfig;
 use App\Http\Config\AssetFileConfig;
+use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
 
 class AmConfig extends BaseConfig
 {
@@ -30,15 +30,15 @@ class AmConfig extends BaseConfig
     ];
     const TEST_SELECTED_OPTION = [
         ['key' => 0, 'text' => '禁用'],
-        ['key' => 1, 'text' => '启用']
+        ['key' => 1, 'text' => '启用'],
     ];
     const IS_GROUP_ADMIN_OPTION = [
         ['key' => 0, 'text' => '禁用'],
-        ['key' => 1, 'text' => '启用']
+        ['key' => 1, 'text' => '启用'],
     ];
     const GROUP_SELECTED_OPTION = [
         ['key' => 1, 'text' => '小组1'],
-        ['key' => 2, 'text' => '小组2']
+        ['key' => 2, 'text' => '小组2'],
     ];
     const MULTILINGUAL_OPTION = [
         ['key' => 'zh-Hans', 'text' => '简体中文', 'nickname' => 'zh-CN'],
@@ -67,7 +67,7 @@ class AmConfig extends BaseConfig
     // 应用数量tips
     const EDITER_NUMBER_TIPS = "以'投票'插件为例,数量为2则代表单个帖子可以附带2个投票";
     // 小组管理员专用tips
-    const IS_ADMIN_TIPS = "启用后,仅小组管理员会展示该插件";
+    const IS_ADMIN_TIPS = '启用后,仅小组管理员会展示该插件';
 
     // 扩展类型
     const TYPE_OPTION = [
@@ -102,7 +102,4 @@ class AmConfig extends BaseConfig
         'is_group_admin' => 'is_group_admin',
         'data_sources' => 'data_sources',
     ];
-
-    
-
 }

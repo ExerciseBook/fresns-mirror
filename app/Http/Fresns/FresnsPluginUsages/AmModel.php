@@ -10,8 +10,8 @@ namespace App\Http\Fresns\FresnsPluginUsages;
 
 use App\Base\Models\BaseAdminModel;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsLanguages\AmModel as FresnsLanguagesModel;
+use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 
 class AmModel extends BaseAdminModel
 {
@@ -38,7 +38,7 @@ class AmModel extends BaseAdminModel
                 'table_type' => 1,
                 'table_name' => AmConfig::CFG_TABLE,
                 'table_field' => 'id',
-                'table_id' => $id
+                'table_id' => $id,
             ]);
         }
 
@@ -46,7 +46,6 @@ class AmModel extends BaseAdminModel
         $nameArr = json_decode(request()->input('name'), true);
         $inputArr = [];
         foreach ($nameArr as $v) {
-
             $item = [];
             $tagArr = FresnsLanguagesService::conversionLangTag($v['lang_code']);
             // $tagArr = explode('-',$v['lang_code']);
@@ -74,7 +73,7 @@ class AmModel extends BaseAdminModel
                 'table_type' => 1,
                 'table_name' => AmConfig::CFG_TABLE,
                 'table_field' => 'id',
-                'table_id' => $id
+                'table_id' => $id,
             ]);
         }
         // 语言表
@@ -101,4 +100,3 @@ class AmModel extends BaseAdminModel
         FresnsLanguagesModel::insert($inputArr);
     }
 }
-

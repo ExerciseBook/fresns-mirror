@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsMemberLikes;
 
 use App\Base\Models\BaseAdminModel;
 
-
 class AmModel extends BaseAdminModel
 {
     protected $table = AmConfig::CFG_TABLE;
@@ -30,19 +29,18 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
 
     // 搜索排序字段
     public function initOrderByFields()
     {
         $sortWay = request()->input('sortWay', 2);
-        $sortWayType = $sortWay == 2 ? "DESC" : "ASC";
+        $sortWayType = $sortWay == 2 ? 'DESC' : 'ASC';
         $orderByFields = [
             'created_at' => $sortWayType,
             // 'updated_at'    => 'DESC',
         ];
+
         return $orderByFields;
     }
 }
-

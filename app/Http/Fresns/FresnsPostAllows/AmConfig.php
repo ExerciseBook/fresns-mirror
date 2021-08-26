@@ -11,7 +11,6 @@ namespace App\Http\Fresns\FresnsPostAllows;
 // 配置
 use App\Base\Config\BaseConfig;
 
-
 class AmConfig extends BaseConfig
 {
     // 主表
@@ -25,9 +24,6 @@ class AmConfig extends BaseConfig
     // model 使用 - 表单映射
     const FORM_FIELDS_MAP = [
         'id' => 'id',
-         
+
     ];
-
-     
-
 }

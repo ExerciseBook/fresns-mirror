@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsUserWallets;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -25,8 +24,6 @@ class AmConfig extends BaseConfig
     // model 使用 - 表单映射
     const FORM_FIELDS_MAP = [
         'id' => 'id',
-         
-    ];
 
-     
+    ];
 }

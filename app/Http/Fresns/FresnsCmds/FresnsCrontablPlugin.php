@@ -19,7 +19,6 @@ use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\Fresns\FresnsMemberIcons\FresnsMemberIconsConfig;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
-use App\Http\Share\Common\ErrorCodeService;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
@@ -35,13 +34,12 @@ use App\Http\Fresns\FresnsUserConnects\FresnsUserConnectsConfig;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
 use App\Http\Fresns\FresnsUserWalletLogs\FresnsUserWalletLogsConfig;
 use App\Http\Fresns\FresnsUserWallets\FresnsUserWalletsConfig;
+use App\Http\Share\Common\ErrorCodeService;
 use Illuminate\Support\Facades\DB;
 
 /**
  * Class FresnsCrontabPlugin
  * 主程序定时任务
- *
- * @package App\Http\Fresns\FresnsCmds
  */
 class FresnsCrontablPlugin extends BasePlugin
 {
@@ -57,7 +55,7 @@ class FresnsCrontablPlugin extends BasePlugin
     {
         $item = $input['sub_table_plugin_item'];
         $config = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->first();
-        if (!empty($config)) {
+        if (! empty($config)) {
             $configArr = json_decode($config['item_value'], true);
             foreach ($item as $v) {
                 foreach ($configArr as $value) {
@@ -75,13 +73,12 @@ class FresnsCrontablPlugin extends BasePlugin
                 'item_key' => FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS,
                 'item_tag' => 'sites',
                 'item_type' => 'plugin',
-                'item_value' => json_encode($item)
+                'item_value' => json_encode($item),
             ];
             FresnsConfigs::insert($input);
         }
 
         return $this->pluginSuccess();
-
     }
 
     //删除订阅信息
@@ -101,7 +98,6 @@ class FresnsCrontablPlugin extends BasePlugin
                     $isDel = 1;
                     break;
                 }
-
             }
             if ($isDel == 1) {
                 continue;
@@ -113,7 +109,6 @@ class FresnsCrontablPlugin extends BasePlugin
             FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->update(['item_value' => $dataArr]);
 
         return $this->pluginSuccess();
-
     }
 
     //新增任务
@@ -121,7 +116,7 @@ class FresnsCrontablPlugin extends BasePlugin
     {
         $item = $input['crontab_plugin_item'];
         $config = FresnsConfigs::where('item_key', 'crontab_plugins')->first();
-        if (!empty($config)) {
+        if (! empty($config)) {
             $configArr = json_decode($config['item_value'], true);
             foreach ($item as $v) {
                 foreach ($configArr as $value) {
@@ -135,10 +130,11 @@ class FresnsCrontablPlugin extends BasePlugin
         } else {
             $input = [
                 'item_key' => 'crontab_plugins',
-                'item_value' => json_encode($item)
+                'item_value' => json_encode($item),
             ];
             FresnsConfigs::insert($input);
         }
+
         return $this->pluginSuccess();
     }
 
@@ -160,7 +156,6 @@ class FresnsCrontablPlugin extends BasePlugin
                     $isDel = 1;
                     break;
                 }
-
             }
             if ($isDel == 1) {
                 continue;
@@ -171,7 +166,6 @@ class FresnsCrontablPlugin extends BasePlugin
         FresnsConfigs::where('item_key', 'crontab_plugins')->update(['item_value' => $dataArr]);
 
         return $this->pluginSuccess();
-
     }
 
     // 每隔 10 分钟执行一次用户角色过期时间检测：
@@ -185,7 +179,7 @@ class FresnsCrontablPlugin extends BasePlugin
                 // 判断是否已过日期，过了日期则将该记录删除
                 if ($expire_times < time()) {
                     // 判断该记录restore_role_id是否有值
-                    if (!empty($m['restore_role_id'])) {
+                    if (! empty($m['restore_role_id'])) {
                         // 判断该值是否与该成员关联
                         $memberCount = FresnsMemberRoleRels::where('member_id', $m['member_id'])->where('role_id',
                             $m['restore_role_id'])->count();
@@ -194,7 +188,7 @@ class FresnsCrontablPlugin extends BasePlugin
                             $inputs = [
                                 'type' => 2,
                                 'member_id' => $m['member_id'],
-                                'role_id' => $m['restore_role_id']
+                                'role_id' => $m['restore_role_id'],
                             ];
                             (new FresnsMemberRoleRels())->store($inputs);
                         } else {
@@ -222,7 +216,6 @@ class FresnsCrontablPlugin extends BasePlugin
      */
     protected function crontabCheckDeleteUserHandler($input)
     {
-
         $sessionId = FresnsSessionLogsService::addSessionLogs('plg_cmd_crontab_check_delete_user', '定时任务');
         $deleteAccount = ApiConfigHelper::getConfigByItemKey('delete_account');
         $deleteAccountTodo = ApiConfigHelper::getConfigByItemKey('delete_account_todo') ?? 0;
@@ -234,7 +227,7 @@ class FresnsCrontablPlugin extends BasePlugin
             'id',
             'email',
             'phone',
-            'deleted_at'
+            'deleted_at',
         ])->toArray();
         // $users = DB::table(FresnsUsersConfig::CFG_TABLE)->where('deleted_at',NULL)->get(['id','email','phone','deleted_at'])->toArray();
         $time = date('Y-m-d H:i:s', time());
@@ -253,12 +246,10 @@ class FresnsCrontablPlugin extends BasePlugin
                         continue;
                     }
                     $this->softDelete($v);
-
                 }
 
                 if ($deleteAccount == 3) {
                     $this->hardDelete($v);
-
                 }
             }
         }
@@ -266,7 +257,6 @@ class FresnsCrontablPlugin extends BasePlugin
         FresnsSessionLogsService::updateSessionLogs($sessionId, 2);
 
         return $this->pluginSuccess();
-
     }
 
     /**
@@ -300,15 +290,14 @@ class FresnsCrontablPlugin extends BasePlugin
         $memberIdArr = DB::table(FresnsMembersConfig::CFG_TABLE)->where('user_id', $id)->pluck('id')->toArray();
         if ($memberIdArr) {
             $aInput = [
-                'a_is_deactivate' => 0
+                'a_is_deactivate' => 0,
             ];
             $bInput = [
-                'b_is_deactivate' => 0
+                'b_is_deactivate' => 0,
             ];
             DB::table(FresnsDialogsConfig::CFG_TABLE)->whereIn('a_member_id', $memberIdArr)->update($aInput);
             DB::table(FresnsDialogsConfig::CFG_TABLE)->whereIn('b_member_id', $memberIdArr)->update($bInput);
         }
-
     }
 
     /**
@@ -333,7 +322,7 @@ class FresnsCrontablPlugin extends BasePlugin
      * posts 见「物理删除说明」文档“删除正式内容”部分的介绍
      * post_logs
      * comments 见「物理删除说明」文档“删除正式内容”部分的介绍
-     * comment_logs
+     * comment_logs.
      */
     public function hardDelete($data)
     {
@@ -362,8 +351,8 @@ class FresnsCrontablPlugin extends BasePlugin
         DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->whereIn('member_id', $memberIdArr)->delete();
         DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('shield_type', 1)->whereIn('shield_id',
             $memberIdArr)->delete();
-        DB::table(FresnsSessionLogsConfig::CFG_TABLE)->where('user_id',$id)->delete();
-        DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id',$id)->delete();
+        DB::table(FresnsSessionLogsConfig::CFG_TABLE)->where('user_id', $id)->delete();
+        DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $id)->delete();
         $fileIdArr = DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('user_id', $id)->pluck('file_id')->toArray();
         $fileUuIdArr = DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('user_id', $id)->pluck('uuid')->toArray();
         $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
@@ -407,12 +396,10 @@ class FresnsCrontablPlugin extends BasePlugin
         if ($memberIdArr) {
             $DialogsInput = [
                 'a_is_deactivate' => 0,
-                'b_is_deactivate' => 0
+                'b_is_deactivate' => 0,
             ];
             DB::table(FresnsDialogsConfig::CFG_TABLE)->whereIn('a_member_id', $memberIdArr)->orWhere('b_member_id',
                 $memberIdArr)->update($DialogsInput);
         }
-
-
     }
 }

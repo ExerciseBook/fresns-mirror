@@ -9,13 +9,12 @@
 namespace App\Http\Fresns\FresnsPluginUsages;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
+use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
 
 class AmResourceDetail extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -34,16 +33,16 @@ class AmResourceDetail extends BaseAdminResource
                 'table_name' => AmConfig::CFG_TABLE,
                 'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
                 'table_id' => $this->id,
-                'lang_tag' => $v['key']
+                'lang_tag' => $v['key'],
             ];
             // dd($input);
             $name = FresnsLanguages::where($input)->first();
-            $v['lang_content'] = $name['lang_content'] ?? "";
-            $nameArr[] = $v;;
+            $v['lang_content'] = $name['lang_content'] ?? '';
+            $nameArr[] = $v;
         }
         // 角色
         $user_rolesArr = [];
-        $roleNames = "";
+        $roleNames = '';
         if ($this->member_roles) {
             $user_rolesArr = explode(',', $this->member_roles);
             $roleInfo = FresnsMemberRoles::whereIn('id', $user_rolesArr)->pluck('name')->toArray();
@@ -91,4 +90,3 @@ class AmResourceDetail extends BaseAdminResource
         return $arr;
     }
 }
-

@@ -30,7 +30,6 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
 
     public function getRawSqlQuery()
@@ -52,6 +51,7 @@ class AmModel extends BaseAdminModel
             $query->where('comment_id', '!=', null);
         }
         $query->orderBy('id', 'desc');
+
         return $query;
     }
 
@@ -62,7 +62,7 @@ class AmModel extends BaseAdminModel
             'id' => 'DESC',
             // 'updated_at'    => 'DESC',
         ];
+
         return $orderByFields;
     }
 }
-

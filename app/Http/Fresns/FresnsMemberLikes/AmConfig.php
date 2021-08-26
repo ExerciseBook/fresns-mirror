@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsMemberLikes;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -31,7 +30,4 @@ class AmConfig extends BaseConfig
         'like_type' => 'like_type',
         'like_id' => 'like_id',
     ];
-
-     
-
 }

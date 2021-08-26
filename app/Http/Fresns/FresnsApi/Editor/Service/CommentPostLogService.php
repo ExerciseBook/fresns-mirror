@@ -6,33 +6,32 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\Fresns\FresnsApi\Editor\service;
-
+namespace App\Http\Fresns\FresnsApi\Editor\Service;
 
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsPostAppends\FresnsPostAppends;
-use App\Http\Fresns\FresnsPosts\FresnsPosts;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
-use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
-use App\Http\Fresns\FresnsExtends\FresnsExtends;
-use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
-use App\Http\Fresns\FresnsComments\FresnsComments;
 use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppends;
 use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
+use App\Http\Fresns\FresnsComments\FresnsComments;
+use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
+use App\Http\Fresns\FresnsExtends\FresnsExtends;
 use App\Http\Fresns\FresnsFileAppends\FresnsFileAppends;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsPostAllows\FresnsPostAllowsConfig;
-use App\Http\Share\Common\LogService;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
-use App\Http\Share\AmGlobal\GlobalService;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsPostAllows\FresnsPostAllowsConfig;
+use App\Http\Fresns\FresnsPostAppends\FresnsPostAppends;
+use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
 use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
+use App\Http\Share\AmGlobal\GlobalService;
+use App\Http\Share\Common\LogService;
+use Illuminate\Support\Facades\DB;
 
 class CommentPostLogService
 {
@@ -147,7 +146,6 @@ class CommentPostLogService
             }
             $allow_json['permission']['members'] = $result;
 
-
             // 成员角色关联表表
             $roleRels = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('type', 2)->where('post_id',
                 $postInfo['id'])->pluck('object_id')->toArray();
@@ -174,19 +172,19 @@ class CommentPostLogService
         }
         // 	位置信息
         $location_json = [];
-        $location_json['isLbs'] = $postInfo['is_lbs'] ?? "";
-        $location_json['mapId'] = $postInfo['map_id'] ?? "";
-        $location_json['latitude'] = $postInfo['map_latitude'] ?? "";
-        $location_json['longitude'] = $postInfo['map_longitude'] ?? "";
-        $location_json['scale'] = $postAppend['map_scale'] ?? "";
-        $location_json['poi'] = $postAppend['map_poi'] ?? "";
-        $location_json['poiId'] = $postAppend['map_poi_id'] ?? "";
-        $location_json['nation'] = $postAppend['map_nation'] ?? "";
-        $location_json['province'] = $postAppend['map_province'] ?? "";
-        $location_json['city'] = $postAppend['map_city'] ?? "";
-        $location_json['district'] = $postAppend['map_district'] ?? "";
-        $location_json['adcode'] = $postAppend['map_adcode'] ?? "";
-        $location_json['address'] = $postAppend['map_address'] ?? "";
+        $location_json['isLbs'] = $postInfo['is_lbs'] ?? '';
+        $location_json['mapId'] = $postInfo['map_id'] ?? '';
+        $location_json['latitude'] = $postInfo['map_latitude'] ?? '';
+        $location_json['longitude'] = $postInfo['map_longitude'] ?? '';
+        $location_json['scale'] = $postAppend['map_scale'] ?? '';
+        $location_json['poi'] = $postAppend['map_poi'] ?? '';
+        $location_json['poiId'] = $postAppend['map_poi_id'] ?? '';
+        $location_json['nation'] = $postAppend['map_nation'] ?? '';
+        $location_json['province'] = $postAppend['map_province'] ?? '';
+        $location_json['city'] = $postAppend['map_city'] ?? '';
+        $location_json['district'] = $postAppend['map_district'] ?? '';
+        $location_json['adcode'] = $postAppend['map_adcode'] ?? '';
+        $location_json['address'] = $postAppend['map_address'] ?? '';
         // $editStatus = [];
         // $editStatus['isUse'] = true;
         // $editStatus['isDelete'] = 2;
@@ -227,32 +225,32 @@ class CommentPostLogService
 
         $extends_json = $result;
         // dd($extends_json);
-        if (!empty($member_list_json)) {
+        if (! empty($member_list_json)) {
             $member_list_json = json_encode($member_list_json);
         } else {
             $member_list_json = null;
         }
-        if (!empty($comment_set_json)) {
+        if (! empty($comment_set_json)) {
             $comment_set_json = json_encode($comment_set_json);
         } else {
             $comment_set_json = null;
         }
-        if (!empty($allow_json)) {
+        if (! empty($allow_json)) {
             $allow_json = json_encode($allow_json);
         } else {
             $allow_json = null;
         }
-        if (!empty($location_json)) {
+        if (! empty($location_json)) {
             $location_json = json_encode($location_json);
         } else {
             $location_json = null;
         }
-        if (!empty($files)) {
+        if (! empty($files)) {
             $files = json_encode($files);
         } else {
             $files = null;
         }
-        if (!empty($extends_json)) {
+        if (! empty($extends_json)) {
             $extends_json = json_encode($extends_json);
         } else {
             $extends_json = null;
@@ -280,6 +278,7 @@ class CommentPostLogService
         // dd($postInput);
         $FresnsPostLogsService = new FresnsPostLogs();
         $postLogId = $FresnsPostLogsService->store($postInput);
+
         return $postLogId;
     }
 
@@ -333,7 +332,6 @@ class CommentPostLogService
         //     $files['editStatus'] = $editStatus;
         // }
 
-
         // 扩展内容
         // 扩展内容
         $extends_json = [];
@@ -355,17 +353,17 @@ class CommentPostLogService
         }
 
         $extends_json = $result;
-        if (!empty($location_json)) {
+        if (! empty($location_json)) {
             $location_json = json_encode($location_json);
         } else {
             $location_json = null;
         }
-        if (!empty($files)) {
+        if (! empty($files)) {
             $files = json_encode($files);
         } else {
             $files = null;
         }
-        if (!empty($extends_json)) {
+        if (! empty($extends_json)) {
             $extends_json = json_encode($extends_json);
         } else {
             $extends_json = null;
@@ -388,6 +386,7 @@ class CommentPostLogService
         ];
         $FresnsCommentLogsService = new FresnsCommentLogs();
         $commentLogId = $FresnsCommentLogsService->store($commentInput);
+
         return $commentLogId;
     }
 
@@ -415,9 +414,9 @@ class CommentPostLogService
         // $extendsJson = $request->input('extendsJson') ?? null;
         $extends_json = json_decode($request->input('extendsJson'), true);
         $extends = [];
-        if($extends_json){
+        if ($extends_json) {
             $arr = [];
-            foreach($extends_json as $v){
+            foreach ($extends_json as $v) {
                 $arr['eid'] = $v['eid'];
                 $arr['rankNum'] = $v['rankNum'] ?? 9;
                 $arr['canDelete'] = $v['canDelete'] ?? true;
@@ -425,7 +424,7 @@ class CommentPostLogService
             }
         }
         $extendsJson = json_encode($extends);
-        $content= self::stopWords($content);
+        $content = self::stopWords($content);
         // dd($type);
         $input = [
             'group_id' => $gid,
@@ -447,6 +446,7 @@ class CommentPostLogService
         ];
         // dd($input);
         FresnsPostLogs::where('id', $logId)->update($input);
+
         return true;
     }
 
@@ -456,7 +456,7 @@ class CommentPostLogService
         $request = request();
         $mid = $mid;
         $logId = $request->input('logId');
-        $type = $request->input('type','text') ?? 'text';
+        $type = $request->input('type', 'text') ?? 'text';
         $content = $request->input('content');
         $isMarkdown = $request->input('isMarkdown', 0);
         $isAnonymous = $request->input('isAnonymous', 0);
@@ -467,11 +467,11 @@ class CommentPostLogService
         $filesJson = $request->input('filesJson');
         // $extendsJson = $request->input('extendsJson');
         $extends_json = json_decode($request->input('extendsJson'), true);
-        $content= self::stopWords($content);
+        $content = self::stopWords($content);
         $extends = [];
-        if($extends_json){
+        if ($extends_json) {
             $arr = [];
-            foreach($extends_json as $v){
+            foreach ($extends_json as $v) {
                 $arr['eid'] = $v['eid'];
                 $arr['rankNum'] = $v['rankNum'] ?? 9;
                 $arr['canDelete'] = $v['canDelete'] ?? true;
@@ -493,6 +493,7 @@ class CommentPostLogService
         ];
         // dd($input);
         FresnsCommentLogs::where('id', $logId)->update($input);
+
         return true;
     }
 
@@ -539,7 +540,7 @@ class CommentPostLogService
         }
         $fileArr = [];
 
-        if (!empty($idArr)) {
+        if (! empty($idArr)) {
             $fileArr = self::getFilesByIdArr($idArr);
         }
         $typeArr = array_unique(array_merge($pluginTypeArr, $imageType));
@@ -554,7 +555,7 @@ class CommentPostLogService
             $group = FresnsGroups::where('uuid', $postGid)->first();
             $group_id = $group['id'] ?? null;
         }
-        $content= self::stopWords($content);
+        $content = self::stopWords($content);
 
         $input = [
             'group_id' => $group_id,
@@ -570,9 +571,10 @@ class CommentPostLogService
         ];
         // 入库帖子日志表
         $draftId = (new FresnsPostLogs())->store($input);
-        if(!empty($idArr)){
-            FresnsFiles::whereIn('id',$idArr)->update(['table_id'=>$draftId]);
+        if (! empty($idArr)) {
+            FresnsFiles::whereIn('id', $idArr)->update(['table_id'=>$draftId]);
         }
+
         return $draftId;
     }
 
@@ -644,7 +646,7 @@ class CommentPostLogService
         }
         // dd($type);
         // dd(json_encode($fileArr));
-        $content= self::stopWords($content);
+        $content = self::stopWords($content);
         $input = [
             'platform_id' => $request->header('platform'),
             'member_id' => $member_id,
@@ -658,14 +660,15 @@ class CommentPostLogService
         ];
         // 入库评论日志表
         $draftId = (new FresnsCommentLogs())->store($input);
-        if(!empty($idArr)){
-            FresnsFiles::whereIn('id',$idArr)->update(['table_id'=>$draftId]);
+        if (! empty($idArr)) {
+            FresnsFiles::whereIn('id', $idArr)->update(['table_id'=>$draftId]);
         }
+
         return $draftId;
     }
 
     /**
-     * 上传文件
+     * 上传文件.
      *
      * @param [type] $type 1-帖子 2-评论
      * @return void
@@ -709,8 +712,7 @@ class CommentPostLogService
         $file['table_name'] = $tableName;
         $file['table_field'] = 'files_json';
 
-
-        LogService::info("文件存储本地成功 ", $file);
+        LogService::info('文件存储本地成功 ', $file);
         $t2 = time();
 
         $file['uuid'] = ApiCommonHelper::createUuid();
@@ -733,7 +735,7 @@ class CommentPostLogService
         $input['image_width'] = $imageSize[0] ?? null;
         $input['image_height'] = $imageSize[1] ?? null;
         $input['image_is_long'] = 0;
-        if (!empty($input['image_width']) && !empty($input['image_height'])) {
+        if (! empty($input['image_width']) && ! empty($input['image_height'])) {
             if ($input['image_height'] >= $input['image_width'] * 4) {
                 $input['image_is_long'] = 1;
             }
@@ -780,9 +782,9 @@ class CommentPostLogService
                 $append['image_width'] = empty($v['imageWidth']) ? null : $v['imageWidth'];
                 $append['image_height'] = empty($v['imageHeight']) ? null : $v['imageHeight'];
                 $imageLong = 0;
-                if(!empty($fileInfo['imageLong'])){
+                if (! empty($fileInfo['imageLong'])) {
                     $length = strlen($fileInfo['imageLong']);
-                    if($length == 1){
+                    if ($length == 1) {
                         $imageLong = $fileInfo['imageLong'];
                     }
                 }
@@ -795,13 +797,13 @@ class CommentPostLogService
                 $append['platform_id'] = $platformId;
                 FresnsFileAppends::insert($append);
             }
-
         }
+
         return $retIdArr;
     }
 
     /**
-     * 通过file->id 数组去查询文件信息
+     * 通过file->id 数组去查询文件信息.
      */
     public static function getFilesByIdArr($idArr)
     {
@@ -825,7 +827,7 @@ class CommentPostLogService
                 $item['name'] = $file['file_name'];
                 $item['extension'] = $file['file_extension'];
                 $item['size'] = $append['file_size'];
-                if($type == 1){
+                if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
                     $item['imageLong'] = $file['image_long'] ?? '';
@@ -833,23 +835,22 @@ class CommentPostLogService
                     $item['imageSquareUrl'] = $imagesHost.$file['file_path'].$imagesSquare;
                     $item['imageBigUrl'] = $imagesHost.$file['file_path'].$imagesBig;
                 }
-                if($type == 2){
+                if ($type == 2) {
                     $item['videoTime'] = $append['video_time'] ?? '';
                     $item['videoCover'] = $append['video_cover'] ?? '';
                     $item['videoGif'] = $append['video_gif'] ?? '';
                     $item['videoUrl'] = $videosHost.$file['file_path'];
                 }
-                if($type == 3){
+                if ($type == 3) {
                     $item['audioTime'] = $append['audio_time'] ?? '';
                     $item['audioUrl'] = $audiosHost.$file['file_path'];
                     $item['transcodingStatus'] = $append['transcoding_status'];
                 }
-                if($type == 4){
+                if ($type == 4) {
                     $item['docUrl'] = $docsHost.$file['file_path'];
                 }
                 $item['moreJson'] = json_decode($append['more_json'], true);
 
-                
                 $data[] = $item;
             }
         }
@@ -858,7 +859,7 @@ class CommentPostLogService
     }
 
     /**
-     * 根据fileInfo获取type
+     * 根据fileInfo获取type.
      */
     public static function getFileType($fileInfo)
     {
@@ -882,6 +883,7 @@ class CommentPostLogService
                 $res[] = $arr;
             }
         }
+
         return $res;
     }
 
@@ -896,10 +898,12 @@ class CommentPostLogService
             if ($str != false) {
                 if ($v['content_mode'] == 2) {
                     $text = str_replace($v['word'], $v['replace_word'], $text);
+
                     return $text;
                 }
             }
         }
+
         return $text;
     }
 }

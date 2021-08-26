@@ -9,25 +9,24 @@
 namespace App\Http\Fresns\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
+use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
 use App\Http\Fresns\FresnsGroups\FresnsGroupsService;
-use App\Http\Share\AmGlobal\GlobalService;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
-use Illuminate\Support\Facades\DB;
+use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\Share\AmGlobal\GlobalService;
+use Illuminate\Support\Facades\DB;
 
 class FresnsGroupResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
 
@@ -44,15 +43,15 @@ class FresnsGroupResource extends BaseAdminResource
         $parentId = $this->parent_id;
         $parentGroupInfo = FresnsGroups::where('id', $parentId)->first();
         // dd($parentGroupInfo);
-        $parentId = $parentGroupInfo['uuid'] ?? "";
+        $parentId = $parentGroupInfo['uuid'] ?? '';
         $mid = GlobalService::getGlobalKey('member_id');
         // dd($mid);
         // 语言
         $name = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
         // dd($name);
         $description = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'description', $this->id);
-        $gname = $name == null ? "" : $name['lang_content'];
-        $description = $description == null ? "" : $description['lang_content'];
+        $gname = $name == null ? '' : $name['lang_content'];
+        $description = $description == null ? '' : $description['lang_content'];
         // dump($gname);
         // dd($description);
         // $cover = $this->cover_file_url;
@@ -85,19 +84,19 @@ class FresnsGroupResource extends BaseAdminResource
         $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_GROUP_SETTING);
         $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_SETTING);
         $groupName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_NAME) ?? "小组";
+                AmConfig::GROUP_NAME) ?? '小组';
         $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_FOLLOW_NAME) ?? "加入";
+                AmConfig::GROUP_FOLLOW_NAME) ?? '加入';
         $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_LIKE_NAME) ?? "点赞";
+                AmConfig::GROUP_LIKE_NAME) ?? '点赞';
         $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_SHIELD_NAME) ?? "屏蔽";
+                AmConfig::GROUP_SHIELD_NAME) ?? '屏蔽';
         $parentGroup = FresnsGroups::find($this->parent_id);
         $parentInfo = [];
         if ($parentGroup) {
-            $parentInfo['gid'] = $parentGroup['uuid'] ?? "";
+            $parentInfo['gid'] = $parentGroup['uuid'] ?? '';
             $pname = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
-            $parentInfo['gname'] = $pname == null ? "" : $pname['lang_content'];
+            $parentInfo['gname'] = $pname == null ? '' : $pname['lang_content'];
             // $parentInfo['cover'] = $parentGroup['cover_file_url'] ?? "";
             $parentInfo['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($parentGroup['cover_file_id'],
                 $parentGroup['cover_file_url']);
@@ -154,4 +153,3 @@ class FresnsGroupResource extends BaseAdminResource
         return $arr;
     }
 }
-

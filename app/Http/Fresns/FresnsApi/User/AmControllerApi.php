@@ -12,12 +12,7 @@ use App\Helpers\DateHelper;
 use App\Helpers\StrHelper;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
-use Illuminate\Http\Request;
-use App\Http\Share\Common\ValidateService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
-use App\Http\Fresns\FresnsVerifyCodes\FresnsVerifyCodes;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\Fresns\FresnsCmds\FresnsCmdService;
@@ -36,8 +31,13 @@ use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
 use App\Http\Fresns\FresnsUserWalletLogs\FresnsUserWalletLogsService;
 use App\Http\Fresns\FresnsUserWallets\FresnsUserWallets;
+use App\Http\Fresns\FresnsVerifyCodes\FresnsVerifyCodes;
 use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Share\Common\ErrorCodeService;
+use App\Http\Share\Common\ValidateService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AmControllerApi extends FresnsBaseApiController
 {
@@ -57,7 +57,6 @@ class AmControllerApi extends FresnsBaseApiController
      */
     public function register(Request $request)
     {
-
         $rule = [
             'type' => 'required|numeric|in:1,2,3',
             'account' => 'required',
@@ -85,29 +84,25 @@ class AmControllerApi extends FresnsBaseApiController
         }
         ValidateService::validateRule($request, $rule);
 
-
         $account = $request->input('account');
         $countryCode = $request->input('countryCode');
         $verifyCode = $request->input('verifyCode');
         $password = $request->input('password');
         $nickname = $request->input('nickname');
 
-
         $langTag = ApiLanguageHelper::getLangTagByHeader();
-
 
         $siteMode = ApiConfigHelper::getConfigByItemKey('site_mode');
         if ($siteMode == 'private') {
             $this->error(ErrorCodeService::API_NO_CALL_ERROR);
         }
 
-
         $sitePublicClose = ApiConfigHelper::getConfigByItemKey('site_public_close');
         if ($sitePublicClose === false) {
             $this->error(ErrorCodeService::API_NO_CALL_ERROR);
         }
         $sitePublicService = ApiConfigHelper::getConfigByItemKey('site_public_service');
-        if (!empty($sitePublicService)) {
+        if (! empty($sitePublicService)) {
             $this->error(ErrorCodeService::API_NO_CALL_ERROR);
         }
         if ($type == 1) {
@@ -136,7 +131,7 @@ class AmControllerApi extends FresnsBaseApiController
             $passwordStrength = ApiConfigHelper::getConfigByItemKey('password_strength');
 
             //校验密码规则
-            if (!empty($passwordStrength)) {
+            if (! empty($passwordStrength)) {
                 $passwordStrengthArr = explode(',', $passwordStrength);
 
                 if (in_array(AmConfig::PASSWORD_NUMBER, $passwordStrengthArr)) {
@@ -158,19 +153,18 @@ class AmControllerApi extends FresnsBaseApiController
                     }
                 }
                 if (in_array(AmConfig::PASSWORD_SYMBOL, $passwordStrengthArr)) {
-                    $isError = preg_match("/^[A-Za-z0-9]+$/", $password);
+                    $isError = preg_match('/^[A-Za-z0-9]+$/', $password);
                     if ($isError == 1) {
                         $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);
                     }
                 }
             }
-
         }
 
         $time = date('Y-m-d H:i:s', time());
         $codeArr = FresnsVerifyCodes::where('type', $type)->where('account', $codeAccount)->where('expired_at', '>',
             $time)->pluck('code')->toArray();
-        if (!in_array($verifyCode, $codeArr)) {
+        if (! in_array($verifyCode, $codeArr)) {
             $this->error(ErrorCodeService::SMS_CODE_CHECK_ERROR);
         }
 
@@ -209,7 +203,7 @@ class AmControllerApi extends FresnsBaseApiController
                 ];
                 break;
             default:
-                # code...
+                // code...
                 break;
         }
 
@@ -224,12 +218,11 @@ class AmControllerApi extends FresnsBaseApiController
         $uid = FresnsUsers::insertGetId($input);
         FresnsCmdService::addSubTablePluginItem(FresnsUsersConfig::CFG_TABLE, $uid);
 
-        
         $memberInput = [
             'user_id' => $uid,
             'name' => StrHelper::createToken(rand(6, 8)),
             'nickname' => $nickname,
-            'uuid' => ApiCommonHelper::createMemberUuid()
+            'uuid' => ApiCommonHelper::createMemberUuid(),
         ];
 
         $mid = FresnsMembers::insertGetId($memberInput);
@@ -245,7 +238,7 @@ class AmControllerApi extends FresnsBaseApiController
                     'item_key' => 'user_counts',
                     'item_value' => 1,
                     'item_tag' => 'stats',
-                    'item_type' => 'number'
+                    'item_type' => 'number',
                 ];
                 FresnsConfigs::insert($input);
             } else {
@@ -257,18 +250,17 @@ class AmControllerApi extends FresnsBaseApiController
                     'item_key' => 'member_counts',
                     'item_value' => 1,
                     'item_tag' => 'stats',
-                    'item_type' => 'number'
+                    'item_type' => 'number',
                 ];
                 FresnsConfigs::insert($input);
             } else {
                 FresnsConfigs::where('item_key', 'member_counts')->update(['item_value' => $memberCounts + 1]);
             }
-
         }
 
         //注册成功向member_stats表添加记录
         $memberStatsInput = [
-            'member_id' => $mid
+            'member_id' => $mid,
         ];
         FresnsMemberStats::insert($memberStatsInput);
         //注册成功向user_wallets表添加记录
@@ -294,7 +286,6 @@ class AmControllerApi extends FresnsBaseApiController
 
         $data = $this->service->getUserInfo($uid, $langTag, $mid);
         if ($data) {
-            
             $cmd = FresnsPluginConfig::PLG_CMD_CREATE_SESSION_TOKEN;
             $input['uid'] = $userUuid;
             $input['platform'] = $request->header('platform');
@@ -328,15 +319,14 @@ class AmControllerApi extends FresnsBaseApiController
         $verifyCode = $request->input('verifyCode');
         $passwordBase64 = $request->input('password');
 
-        if($passwordBase64){
-            $password = base64_decode($passwordBase64,true);
-            if($password == false){
+        if ($passwordBase64) {
+            $password = base64_decode($passwordBase64, true);
+            if ($password == false) {
                 $password = $passwordBase64;
             }
         } else {
             $password = null;
         }
-
 
         switch ($type) {
             case 1:
@@ -361,45 +351,41 @@ class AmControllerApi extends FresnsBaseApiController
                 }
                 break;
             default:
-                # code...
+                // code...
                 break;
         }
 
         ValidateService::validateRule($request, $rule);
-        
-        if (empty($user)) {
 
+        if (empty($user)) {
             $this->error(ErrorCodeService::CODE_PHONE_ERROR);
         }
 
         $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
-        if($sessionLogId){
+        if ($sessionLogId) {
             $sessionInput = [
                 'object_order_id' => $user->id,
                 'user_id' => $user->id,
             ];
-            FresnsSessionLogs::where('id',$sessionLogId)->update($sessionInput);
+            FresnsSessionLogs::where('id', $sessionLogId)->update($sessionInput);
         }
 
         //查询该邮箱或手机号所属用户，近 1 小时内登录密码错误次数，达到 5 次，则限制登录。
         //session_logs 3-登陆 情况
-        $startTime = date('Y-m-d H:i:s',strtotime("-1 hour"));
-        $sessionCount = FresnsSessionLogs::where('created_at','>=',$startTime)
-        ->where('user_id',$user->id)
-        ->where('object_result',FresnsSessionLogsConfig::OBJECT_RESULT_ERROR)
-        ->where('object_type',FresnsSessionLogsConfig::OBJECT_TYPE_USER_LOGIN)
+        $startTime = date('Y-m-d H:i:s', strtotime('-1 hour'));
+        $sessionCount = FresnsSessionLogs::where('created_at', '>=', $startTime)
+        ->where('user_id', $user->id)
+        ->where('object_result', FresnsSessionLogsConfig::OBJECT_RESULT_ERROR)
+        ->where('object_type', FresnsSessionLogsConfig::OBJECT_TYPE_USER_LOGIN)
         ->count();
 
-        if($sessionCount >= 5){
+        if ($sessionCount >= 5) {
             $this->error(ErrorCodeService::LOGIN_ERROR);
         }
         //密码或验证码其中一项必填
         if (empty($password) && empty($verifyCode)) {
             $this->error(ErrorCodeService::CODE_PARAM_ERROR);
-
         }
-
-        
 
         $time = date('Y-m-d H:i:s', time());
         if ($type != 3) {
@@ -416,36 +402,33 @@ class AmControllerApi extends FresnsBaseApiController
                         break;
 
                     default:
-                        # code...
+                        // code...
                         break;
                 }
 
-                if(!in_array($verifyCode,$codeArr)){
+                if (! in_array($verifyCode, $codeArr)) {
                     $this->error(ErrorCodeService::SMS_CODE_CHECK_ERROR);
                 }
             }
 
             if ($password) {
-                if (!Hash::check($password, $user->password)) {
+                if (! Hash::check($password, $user->password)) {
                     $this->error(ErrorCodeService::PASSWORD_INVALID);
                 }
             }
-
         }
 
         if ($user->is_enable == 0) {
             $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
         }
 
-
         $langTag = ApiLanguageHelper::getLangTagByHeader();
-
 
         $data = $this->service->getUserInfo($user->id, $langTag);
         if ($data) {
             //更新users表last_login_at字段
             FresnsUsers::where('id', $user->id)->update(['last_login_at' => date('Y-m-d H:i:s', time())]);
-            
+
             $cmd = FresnsPluginConfig::PLG_CMD_CREATE_SESSION_TOKEN;
             $input['uid'] = $user->uuid;
             $input['platform'] = $request->header('platform');
@@ -463,7 +446,7 @@ class AmControllerApi extends FresnsBaseApiController
         if ($sessionId) {
             FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $user->id, null, $user->id);
         }
-      
+
         $this->success($data);
     }
 
@@ -473,7 +456,6 @@ class AmControllerApi extends FresnsBaseApiController
         $uid = GlobalService::getGlobalKey('user_id');
         $mid = GlobalService::getGlobalKey('member_id');
 
-
         DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $uid)->where('member_id', null)->delete();
         DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('member_id', $mid)->delete();
         $this->success();
@@ -482,12 +464,10 @@ class AmControllerApi extends FresnsBaseApiController
     //注销
     public function userDelete(Request $request)
     {
-
         $uid = GlobalService::getGlobalKey('user_id');
 
         $user = FresnsUsers::where('id', $uid)->first();
         if (empty($user)) {
-
             $this->error(ErrorCodeService::NO_RECORD);
         }
 
@@ -518,7 +498,6 @@ class AmControllerApi extends FresnsBaseApiController
         $user = FresnsUsers::where('uuid', $uid)->first();
         if ($user) {
             $this->error(ErrorCodeService::NO_RECORD);
-
         }
 
         $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->first();
@@ -526,7 +505,6 @@ class AmControllerApi extends FresnsBaseApiController
         if (empty($user)) {
             $this->error(ErrorCodeService::NO_RECORD);
         }
-
 
         // if(!empty($user->phone)){
 
@@ -540,7 +518,7 @@ class AmControllerApi extends FresnsBaseApiController
         $input['deleted_at'] = null;
 
         $memberInput = [
-            'deleted_at' => null
+            'deleted_at' => null,
         ];
 
         DB::table(FresnsUsersConfig::CFG_TABLE)->where('id', $user->id)->update($input);
@@ -592,12 +570,11 @@ class AmControllerApi extends FresnsBaseApiController
 
                 break;
             default:
-                # code...
+                // code...
                 break;
         }
 
         ValidateService::validateRule($request, $rule);
-
 
         $time = date('Y-m-d H:i:s', time());
         switch ($type) {
@@ -612,11 +589,11 @@ class AmControllerApi extends FresnsBaseApiController
                 break;
 
             default:
-                # code...
+                // code...
                 break;
         }
 
-        if (!in_array($verifyCode, $codeArr)) {
+        if (! in_array($verifyCode, $codeArr)) {
             $this->error(ErrorCodeService::SMS_CODE_CHECK_ERROR);
         }
 
@@ -643,7 +620,7 @@ class AmControllerApi extends FresnsBaseApiController
         $passwordStrength = ApiConfigHelper::getConfigByItemKey('password_strength');
 
         //校验密码规则
-        if (!empty($passwordStrength)) {
+        if (! empty($passwordStrength)) {
             $passwordStrengthArr = explode(',', $passwordStrength);
 
             if (in_array(AmConfig::PASSWORD_NUMBER, $passwordStrengthArr)) {
@@ -665,7 +642,7 @@ class AmControllerApi extends FresnsBaseApiController
                 }
             }
             if (in_array(AmConfig::PASSWORD_SYMBOL, $passwordStrengthArr)) {
-                $isError = preg_match("/^[A-Za-z0-9]+$/", $password);
+                $isError = preg_match('/^[A-Za-z0-9]+$/', $password);
                 if ($isError == 1) {
                     $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);
                 }
@@ -673,7 +650,7 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         $input = [
-            'password' => StrHelper::createPassword($newPassword)
+            'password' => StrHelper::createPassword($newPassword),
         ];
 
         FresnsUsers::where('id', $user['id'])->update($input);
@@ -714,16 +691,13 @@ class AmControllerApi extends FresnsBaseApiController
         $pageSize = $request->input('pageSize', 30);
         if ($currentPage < 0 || $pageSize < 0) {
             $this->error(ErrorCodeService::CODE_PARAM_ERROR);
-
         }
 
         $uid = GlobalService::getGlobalKey('user_id');
 
         $langTag = ApiLanguageHelper::getLangTagByHeader();
 
-
         $fresnsUserWalletLogsService = new FresnsUserWalletLogsService();
-
 
         $request->offsetSet('currentPage', $currentPage);
         $request->offsetSet('pageSize', $pageSize);
@@ -747,7 +721,6 @@ class AmControllerApi extends FresnsBaseApiController
         ];
         ValidateService::validateRule($request, $rule);
         $uid = GlobalService::getGlobalKey('user_id');
-
 
         $verifyCode = $request->input('verifyCode');
         $codeType = $request->input('codeType');
@@ -804,12 +777,11 @@ class AmControllerApi extends FresnsBaseApiController
                 $codeArr = FresnsVerifyCodes::where('account', $account)->where('expired_at', '>',
                     $time)->pluck('code')->toArray();
 
-                if (!in_array($verifyCode, $codeArr)) {
+                if (! in_array($verifyCode, $codeArr)) {
                     $this->error(ErrorCodeService::SMS_CODE_CHECK_ERROR);
                 }
             }
         }
-
 
         if ($editEmail) {
             FresnsUsers::where('id', $user['id'])->update(['email' => $editEmail]);
@@ -825,20 +797,19 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         if ($editPassword) {
-            if (!empty($password)) {
-                if (!Hash::check($password, $user['password'])) {
+            if (! empty($password)) {
+                if (! Hash::check($password, $user['password'])) {
                     $this->error(ErrorCodeService::PASSWORD_INVALID);
                 }
             }
 
             FresnsUsers::where('id', $user['id'])->update(['password' => bcrypt($editPassword)]);
-
         }
 
         if ($editWalletPassword) {
             $wallets = FresnsUserWallets::where('user_id', $user['id'])->first();
             if (empty($codeArr)) {
-                if (!Hash::check($password, $wallets['password'])) {
+                if (! Hash::check($password, $wallets['password'])) {
                     $this->error(ErrorCodeService::PASSWORD_INVALID);
                 }
             }
@@ -847,7 +818,6 @@ class AmControllerApi extends FresnsBaseApiController
             }
             FresnsUserWallets::where('id', $wallets['id'])->update(['password' => bcrypt($editWalletPassword)]);
         }
-
 
         if ($editLastLoginTime) {
             $rule = [
@@ -863,9 +833,6 @@ class AmControllerApi extends FresnsBaseApiController
             FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $user['id'], null, $user['id']);
         }
 
-
         $this->success();
     }
-
 }
-

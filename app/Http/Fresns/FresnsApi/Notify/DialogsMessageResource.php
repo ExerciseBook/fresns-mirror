@@ -9,20 +9,19 @@
 namespace App\Http\Fresns\FresnsApi\Notify;
 
 use App\Base\Resources\BaseAdminResource;
+use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessagesConfig;
 use App\Http\Fresns\FresnsDialogs\FresnsDialogs;
 use App\Http\Fresns\FresnsDialogs\FresnsDialogsConfig;
-use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessagesConfig;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
-use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
 use App\Http\Share\AmGlobal\GlobalService;
+use Illuminate\Support\Facades\DB;
 
 class DialogsMessageResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // dd(1);
@@ -41,11 +40,11 @@ class DialogsMessageResource extends BaseAdminResource
         $sendMid = $this->send_member_id;
         if ($memberInfo) {
             if ($memberInfo->deleted_at != null) {
-                $sendMid = "";
+                $sendMid = '';
                 $sendDeactivate = false;
             }
         } else {
-            $sendMid = "";
+            $sendMid = '';
             $sendDeactivate = false;
         }
         $sendMemberInfo = FresnsMembers::find($sendMid);
@@ -56,8 +55,8 @@ class DialogsMessageResource extends BaseAdminResource
             $messageArr['type'] = 1;
             $messageArr['content'] = $this->message_text;
             $messageArr['sendDeactivate'] = $sendDeactivate;
-            $messageArr['sendMid'] = $sendMemberInfo['uuid'] ?? "";
-            $messageArr['sendAvatar'] = $memberInfo->avatar_file_url ?? "";
+            $messageArr['sendMid'] = $sendMemberInfo['uuid'] ?? '';
+            $messageArr['sendAvatar'] = $memberInfo->avatar_file_url ?? '';
 
             // 为空用默认头像
             if (empty($messageArr['sendAvatar'])) {
@@ -123,4 +122,3 @@ class DialogsMessageResource extends BaseAdminResource
         return $default;
     }
 }
-

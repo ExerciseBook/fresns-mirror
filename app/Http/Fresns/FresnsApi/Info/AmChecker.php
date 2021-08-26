@@ -11,8 +11,8 @@ namespace App\Http\Fresns\FresnsApi\Info;
 use App\Base\Checkers\BaseChecker;
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseChecker;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Models\Common\ConfigGroup;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
+use App\Http\Models\Common\ConfigGroup;
 use App\Http\Share\Common\ErrorCodeService;
 
 //业务检查，比如状态
@@ -60,7 +60,7 @@ class AmChecker extends FresnsBaseChecker
         $countryCode = request()->input('countryCode');
         $template = request()->input('template');
         $templateBlade = ApiConfigHelper::getConfigByItemKey('verifycode_template'.$template);
-        if (!$templateBlade) {
+        if (! $templateBlade) {
             return self::checkInfo(self::TEAMPLAPE_ERROR);
         }
         $templateData = json_decode($templateBlade, true);
@@ -75,17 +75,17 @@ class AmChecker extends FresnsBaseChecker
             }
         }
         if ($type == 1) {
-            if (!$emailArr) {
+            if (! $emailArr) {
                 return self::checkInfo(self::TEAMPLAPE_ERROR);
             }
-            if (!$emailArr['isEnable']) {
+            if (! $emailArr['isEnable']) {
                 return self::checkInfo(self::TEAMPLAPE_ERROR);
             }
         } else {
-            if (!$phoneArr) {
+            if (! $phoneArr) {
                 return self::checkInfo(self::TEAMPLAPE_ERROR);
             }
-            if (!$phoneArr['isEnable']) {
+            if (! $phoneArr['isEnable']) {
                 return self::checkInfo(self::TEAMPLAPE_ERROR);
             }
         }
@@ -100,7 +100,7 @@ class AmChecker extends FresnsBaseChecker
                 if ($type == 1) {
                     $result = self::RuleEmail($account);
                     // dd($result);
-                    if (!$result) {
+                    if (! $result) {
                         return self::checkInfo(self::EMAIL_REGEX_ERROR);
                     }
                     $count = FresnsUsers::where('email', $account)->count();
@@ -112,7 +112,7 @@ class AmChecker extends FresnsBaseChecker
                         return self::checkInfo(self::COUNTRY_CODE_ERROR);
                     }
                     $result = self::RulePhone($account);
-                    if (!$result) {
+                    if (! $result) {
                         return self::checkInfo(self::PHONE_REGEX_ERROR);
                     }
                     $count = FresnsUsers::where('pure_phone', $account)->count();
@@ -127,7 +127,7 @@ class AmChecker extends FresnsBaseChecker
                 if ($type == 1) {
                     $result = self::RuleEmail($account);
                     // dd($result);
-                    if (!$result) {
+                    if (! $result) {
                         return self::checkInfo(self::EMAIL_REGEX_ERROR);
                     }
                     $count = FresnsUsers::where('email', $account)->count();
@@ -139,7 +139,7 @@ class AmChecker extends FresnsBaseChecker
                         return self::checkInfo(self::COUNTRY_CODE_ERROR);
                     }
                     $result = self::RulePhone($account);
-                    if (!$result) {
+                    if (! $result) {
                         return self::checkInfo(self::PHONE_REGEX_ERROR);
                     }
                     $count = FresnsUsers::where('pure_phone', $account)->count();
@@ -158,7 +158,7 @@ class AmChecker extends FresnsBaseChecker
                 if ($type == 1) {
                     $result = self::RuleEmail($account);
                     // dd($result);
-                    if (!$result) {
+                    if (! $result) {
                         return self::checkInfo(self::EMAIL_REGEX_ERROR);
                     }
                     $userInfo = FresnsUsers::where('uuid', request()->header('uid'))->first();
@@ -173,7 +173,7 @@ class AmChecker extends FresnsBaseChecker
                         return self::checkInfo(self::COUNTRY_CODE_ERROR);
                     }
                     $result = self::RulePhone($account);
-                    if (!$result) {
+                    if (! $result) {
                         return self::checkInfo(self::PHONE_REGEX_ERROR);
                     }
                     $userInfo = FresnsUsers::where('uuid', request()->header('uid'))->first();
@@ -197,11 +197,11 @@ class AmChecker extends FresnsBaseChecker
                 }
                 // 邮件
                 if ($type == 1) {
-                    if (!$userInfo['email']) {
+                    if (! $userInfo['email']) {
                         return self::checkInfo(self::EMAIL_EXIST_ERROR);
                     }
                 } else {
-                    if (!$userInfo['pure_phone']) {
+                    if (! $userInfo['pure_phone']) {
                         return self::checkInfo(self::PHONE_EXIST_ERROR);
                     }
                 }
@@ -213,7 +213,7 @@ class AmChecker extends FresnsBaseChecker
                 if ($type == 1) {
                     $result = self::RuleEmail($account);
                     // dd($result);
-                    if (!$result) {
+                    if (! $result) {
                         return self::checkInfo(self::EMAIL_REGEX_ERROR);
                     }
                 } else {
@@ -221,7 +221,7 @@ class AmChecker extends FresnsBaseChecker
                         return self::checkInfo(self::COUNTRY_CODE_ERROR);
                     }
                     $result = self::RulePhone($account);
-                    if (!$result) {
+                    if (! $result) {
                         return self::checkInfo(self::PHONE_REGEX_ERROR);
                     }
                 }
@@ -232,6 +232,7 @@ class AmChecker extends FresnsBaseChecker
     public static function RulePhone($phone)
     {
         $result = preg_match("/^1[34578]{1}\d{9}$/", $phone);
+
         return $result;
     }
 
@@ -239,8 +240,7 @@ class AmChecker extends FresnsBaseChecker
     {
         $pattern = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/";
         preg_match($pattern, $email, $matches);
+
         return $matches;
     }
-
-
 }

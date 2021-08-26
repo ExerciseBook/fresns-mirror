@@ -12,7 +12,6 @@ use App\Base\Resources\BaseAdminResource;
 
 class AmResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -22,7 +21,6 @@ class AmResource extends BaseAdminResource
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
 
-       
         // 默认字段
         $default = [
             'key' => $this->id,
@@ -42,4 +40,3 @@ class AmResource extends BaseAdminResource
         return $arr;
     }
 }
-

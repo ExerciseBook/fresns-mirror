@@ -28,6 +28,7 @@ class AmChecker extends BaseChecker
                 return false;
             }
         }
+
         return true;
     }
 
@@ -35,7 +36,7 @@ class AmChecker extends BaseChecker
     public static function checkUserMember($mid, $uid)
     {
         $memberIdArr = FresnsMembers::where('user_id', $uid)->pluck('id')->toArray();
-        if (!in_array($mid, $memberIdArr)) {
+        if (! in_array($mid, $memberIdArr)) {
             return false;
         }
 
@@ -46,7 +47,7 @@ class AmChecker extends BaseChecker
     public static function checkUserMemberPermissions($mid, $uid, $token)
     {
         $platform = request()->header('platform');
-        if (!empty($mid)) {
+        if (! empty($mid)) {
             $userToken = FresnsSessionTokens::where('user_id', $uid)
                 ->where('member_id', $mid)
                 ->where('platform_id', $platform)
@@ -66,5 +67,4 @@ class AmChecker extends BaseChecker
 
         return true;
     }
-
 }

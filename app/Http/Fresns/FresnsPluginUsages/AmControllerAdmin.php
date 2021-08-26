@@ -9,13 +9,12 @@
 namespace App\Http\Fresns\FresnsPluginUsages;
 
 use App\Base\Controllers\BaseAdminController;
-use Illuminate\Http\Request;
-use App\Http\Share\Common\ValidateService;
 use App\Helpers\CommonHelper;
+use App\Http\Share\Common\ValidateService;
+use Illuminate\Http\Request;
 
 class AmControllerAdmin extends BaseAdminController
 {
-
     public function __construct()
     {
         $this->service = new AmService();

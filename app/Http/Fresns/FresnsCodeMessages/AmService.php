@@ -23,6 +23,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
@@ -34,5 +35,4 @@ class AmService extends BaseAdminService
 
         return $message;
     }
-
 }

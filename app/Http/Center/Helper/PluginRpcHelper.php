@@ -11,8 +11,9 @@ namespace App\Http\Center\Helper;
 class PluginRpcHelper
 {
     // rpc 调用
-    public static function call($plugin, $cmd, $input, $option = []){
-        $plugin =  new $plugin;
+    public static function call($plugin, $cmd, $input, $option = [])
+    {
+        $plugin = new $plugin;
         // dd($plugin);
         $res = $plugin->handle($cmd, $input, $option);
         // dd($res);
@@ -22,23 +23,26 @@ class PluginRpcHelper
     }
 
     // 检查服务返回是否无效
-    public static function isErrorPluginResp($pluginResp){
+    public static function isErrorPluginResp($pluginResp)
+    {
         $serverCode = $pluginResp['code'];
-        if(intval($serverCode) == 0){
+        if (intval($serverCode) == 0) {
             return false;
         }
+
         return true;
     }
 
     // 格式化服务器返回
-    private static function formatPluginResp($pluginResp){
+    private static function formatPluginResp($pluginResp)
+    {
         $code = $pluginResp['plugin_code'];
         $msg = $pluginResp['plugin_msg'];
         $output = [];
 
         $pluginData = $pluginResp['plugin_data'];
 
-        if(isset($pluginData['output'])){
+        if (isset($pluginData['output'])) {
             $output = $pluginData['output'];
         }
 
@@ -46,8 +50,7 @@ class PluginRpcHelper
         $ret['code'] = $code;
         $ret['message'] = $msg;
         $ret['output'] = $output;
+
         return $ret;
     }
-
-
 }

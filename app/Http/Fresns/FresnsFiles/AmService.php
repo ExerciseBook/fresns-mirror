@@ -8,7 +8,6 @@
 
 namespace App\Http\Fresns\FresnsFiles;
 
-
 use App\Base\Services\BaseAdminService;
 
 class AmService extends BaseAdminService
@@ -24,7 +23,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
-
 }

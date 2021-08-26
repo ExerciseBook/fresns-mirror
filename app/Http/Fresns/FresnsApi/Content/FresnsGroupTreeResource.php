@@ -9,27 +9,26 @@
 namespace App\Http\Fresns\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsApi\Info\AmService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
-use App\Http\Fresns\FresnsGroups\FresnsGroups;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
-use App\Http\Fresns\FresnsGroups\FresnsGroupsService;
-use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
 use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\Fresns\FresnsApi\Info\AmService;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
+use App\Http\Fresns\FresnsGroups\FresnsGroups;
+use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
+use App\Http\Fresns\FresnsGroups\FresnsGroupsService;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
+use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
+use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\Share\AmGlobal\GlobalService;
+use Illuminate\Support\Facades\DB;
 
 class FresnsGroupTreeResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // dd(1);
@@ -48,8 +47,8 @@ class FresnsGroupTreeResource extends BaseAdminResource
         // 语言
         $name = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
         $description = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'description', $this->id);
-        $gname = $name == null ? "" : $name['lang_content'];
-        $description = $description == null ? "" : $description['lang_content'];
+        $gname = $name == null ? '' : $name['lang_content'];
+        $description = $description == null ? '' : $description['lang_content'];
         // $cover = $this->cover_file_url;
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
         // $banner = $this->banner_file_url;
@@ -93,9 +92,9 @@ class FresnsGroupTreeResource extends BaseAdminResource
                 // 语言
                 $cname = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $c['id']);
                 $cdescription = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'description', $c['id']);
-                $arr['gname'] = $cname == null ? "" : $cname['lang_content'];
+                $arr['gname'] = $cname == null ? '' : $cname['lang_content'];
                 $arr['type'] = $c['type'];
-                $arr['description'] = $cdescription == null ? "" : $cdescription['lang_content'];
+                $arr['description'] = $cdescription == null ? '' : $cdescription['lang_content'];
                 // $arr['cover'] = $c['cover_file_url'];
                 // $arr['banner'] = $c['banner_file_url'];
                 // $cover = $this->cover_file_url;
@@ -104,10 +103,10 @@ class FresnsGroupTreeResource extends BaseAdminResource
                 $arr['banner'] = ApiFileHelper::getImageSignUrlByFileIdUrl($c['banner_file_id'], $c['banner_file_url']);
                 $arr['recommend'] = $c['is_recommend'];
                 $arr['groupName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE,
-                        'item_value', AmConfig::GROUP_NAME) ?? "小组";
+                        'item_value', AmConfig::GROUP_NAME) ?? '小组';
                 $arr['followSetting'] = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_GROUP_SETTING);
                 $arr['followName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE,
-                        'item_value', AmConfig::GROUP_FOLLOW_NAME) ?? "加入";
+                        'item_value', AmConfig::GROUP_FOLLOW_NAME) ?? '加入';
                 // 是否关注
                 // $arr['followStatus'] = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->where('follow_id',$c['id'])->count();
                 $arr['followStatus'] = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id',
@@ -117,13 +116,13 @@ class FresnsGroupTreeResource extends BaseAdminResource
                 $arr['followUrl'] = $c['plugin_unikey'];
                 $arr['likeSetting'] = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_GROUP_SETTING);
                 $arr['likeName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE,
-                        'item_value', AmConfig::GROUP_LIKE_NAME) ?? "点赞";
+                        'item_value', AmConfig::GROUP_LIKE_NAME) ?? '点赞';
                 // $arr['likeStatus'] = FresnsMemberLikes::where('member_id',$mid)->where('like_type',2)->where('like_id',$c['id'])->count();
                 $arr['likeStatus'] = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id',
                     $mid)->where('like_type', 2)->where('like_id', $c['id'])->count();
                 $arr['shieldSetting'] = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_SETTING);
                 $arr['shieldName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE,
-                        'item_value', AmConfig::GROUP_SHIELD_NAME) ?? "屏蔽";
+                        'item_value', AmConfig::GROUP_SHIELD_NAME) ?? '屏蔽';
                 // $arr['shieldStatus'] = FresnsMemberShields::where('member_id',$mid)->where('shield_type',2)->where('shield_id',$this->id)->count();
                 $arr['shieldStatus'] = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id',
                     $mid)->where('shield_type', 2)->where('shield_id', $c['id'])->count();
@@ -250,4 +249,3 @@ class FresnsGroupTreeResource extends BaseAdminResource
         return $arr;
     }
 }
-

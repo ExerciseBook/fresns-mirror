@@ -9,18 +9,18 @@
 namespace App\Http\Fresns\FresnsApi\Notify;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsNotifies\FresnsNotifiesConfig;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\Fresns\FresnsComments\FresnsComments;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
+use App\Http\Fresns\FresnsNotifies\FresnsNotifiesConfig;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use Illuminate\Support\Facades\DB;
+
 class NotifyResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -33,15 +33,15 @@ class NotifyResource extends BaseAdminResource
         $type = $this->source_type;
         $class = $this->source_class;
         $sourceId = $this->source_id;
-        if($class == 1){
-           $data = FresnsPosts::find($sourceId);
-        }else{
-           $data = FresnsComments::find($sourceId);
+        if ($class == 1) {
+            $data = FresnsPosts::find($sourceId);
+        } else {
+            $data = FresnsComments::find($sourceId);
         }
         // $member = FresnsMembers::find($this->source_mid);
         $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $this->source_mid)->first();
         $sourceMember = [];
-        $avatar = $member->avatar_file_url ?? "";
+        $avatar = $member->avatar_file_url ?? '';
         if ($member) {
             // 为空用默认头像
             if (empty($avatar)) {
@@ -62,19 +62,19 @@ class NotifyResource extends BaseAdminResource
             $member = FresnsMembers::find($this->source_mid);
             $sourceMember = [
                 [
-                    'mid' => $member['uuid'] ?? "",
-                    'mname' => $member->name ?? "",
-                    'nickname' => $member->nickname ?? "",
+                    'mid' => $member['uuid'] ?? '',
+                    'mname' => $member->name ?? '',
+                    'nickname' => $member->nickname ?? '',
                     'avatar' => $avatar,
                     // 'avatar' =>  ApiFileHelper::getImageSignUrlByFileIdUrl($member['avatar_file_id'],$member['avatar_file_url']),
                     // 'decorate' =>  $member['decorate_file_url'] ?? "",
                     'decorate' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->decorate_file_id,
                         $member->decorate_file_url),
-                    'verifiedStatus' => $member->verified_status ?? "",
+                    'verifiedStatus' => $member->verified_status ?? '',
                     // 'verifiedIcon' => $member['verified_file_url'] ?? ""
                     'verifiedIcon' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->verified_file_id,
                         $member->verified_file_url),
-                ]
+                ],
             ];
         }
 
@@ -85,7 +85,7 @@ class NotifyResource extends BaseAdminResource
             'nitifyId' => $messageId,
             'type' => $type,
             'class' => $class,
-            'sourceUuId' => $data['uuid'] ?? "",
+            'sourceUuId' => $data['uuid'] ?? '',
             'sourceMember' => $sourceMember,
             'sourceBrief' => $sourceBrief,
             'status' => $status,
@@ -97,4 +97,3 @@ class NotifyResource extends BaseAdminResource
         return $arr;
     }
 }
-

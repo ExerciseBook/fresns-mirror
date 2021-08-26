@@ -29,7 +29,8 @@ class TreeHelper
     }
 
     // array version
-    public static function buildTreeFromArray($items) {
+    public static function buildTreeFromArray($items)
+    {
         $childs = [];
 
         foreach ($items as &$item) {
@@ -49,14 +50,14 @@ class TreeHelper
         return $ret;
     }
 
-    public static function getAllIdsInTreeData($categoryArr, &$idArr){
-        foreach ($categoryArr as $category){
+    public static function getAllIdsInTreeData($categoryArr, &$idArr)
+    {
+        foreach ($categoryArr as $category) {
             $idArr[] = $category['id'] ?? '';
             $children = $category['children'] ?? [];
-            if(!empty($children)){
+            if (! empty($children)) {
                 self::getAllIdsInTreeData($children, $idArr);
             }
         }
     }
-
 }

@@ -7,6 +7,7 @@
  */
 
 // 系统解耦, 快捷方式入口
+
 namespace App\Http\Fresns\FresnsPlugins;
 
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
@@ -26,7 +27,8 @@ class FresnsPluginsService extends AmService
         } else {
             $domain = ApiConfigHelper::getConfigByItemKey('backend_domain');
         }
-        $url = $domain . $uri;
+        $url = $domain.$uri;
+
         return $url;
     }
 }

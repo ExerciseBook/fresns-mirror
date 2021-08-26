@@ -8,12 +8,11 @@
 
 namespace App\Http\Fresns\FresnsCmds;
 
-use Illuminate\Validation\Rule;
 use App\Http\Center\Base\BasePluginConfig;
+use Illuminate\Validation\Rule;
 
 class FresnsSubPluginConfig extends BasePluginConfig
 {
-
     const SUB_ADD_TABLE_PLUGINS = 'subscribe_plugins';
     const SUBSCRITE_TYPE2 = 2;
     const SUBSCRITE_TYPE3 = 3;
@@ -35,6 +34,7 @@ class FresnsSubPluginConfig extends BasePluginConfig
             'tableName' => 'required',
             'insertId' => 'required',
         ];
+
         return $rule;
     }
 }

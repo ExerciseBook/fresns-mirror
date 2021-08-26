@@ -8,13 +8,11 @@
 
 namespace App\Http\Fresns\FresnsLanguages;
 
-
 use App\Base\Controllers\BaseAdminController;
 use Illuminate\Http\Request;
 
 class AmControllerAdmin extends BaseAdminController
 {
-
     public function __construct()
     {
         $this->service = new AmService();

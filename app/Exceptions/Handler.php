@@ -8,7 +8,6 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
-
 class Handler extends ExceptionHandler
 {
     /**
@@ -52,6 +51,7 @@ class Handler extends ExceptionHandler
     {
         parent::report($exception);
     }
+
     /**
      * Render an exception into an HTTP response.
      *
@@ -61,10 +61,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if($exception instanceof Exception){
+        if ($exception instanceof Exception) {
             $msg = $exception->getMessage();
             $traceMsgArr = $exception->getTrace();
-
 
             $statusCode = 500;
             if ($exception instanceof NotFoundHttpException) {
@@ -74,25 +73,25 @@ class Handler extends ExceptionHandler
             // 格式化
             $newTraceMsgArr = [];
             $needField = ['file', 'line', 'function', 'class'];
-            foreach($traceMsgArr as $trace){
+            foreach ($traceMsgArr as $trace) {
                 $valid = true;
-                foreach ($needField as $filed){
-                    if(!isset($trace[$filed])){
+                foreach ($needField as $filed) {
+                    if (! isset($trace[$filed])) {
                         $valid = false;
                     }
                 }
-                if($valid){
+                if ($valid) {
                     $newTraceMsgArr[] = $trace;
                 }
             }
 
             //  dd($newTraceMsgArr);
-            LogService::warning("error", $exception);
+            LogService::warning('error', $exception);
 
             return response()->view('commons.error', [
-                "status"  => $statusCode,
-                "msg" => $msg,
-                "traceMsgArr" => $newTraceMsgArr
+                'status'  => $statusCode,
+                'msg' => $msg,
+                'traceMsgArr' => $newTraceMsgArr,
             ], 500);
         }
 

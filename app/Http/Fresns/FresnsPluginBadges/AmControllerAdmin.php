@@ -8,12 +8,10 @@
 
 namespace App\Http\Fresns\FresnsPluginBadges;
 
-
 use App\Base\Controllers\BaseAdminController;
 
 class AmControllerAdmin extends BaseAdminController
 {
-
     public function __construct()
     {
         $this->service = new AmService();

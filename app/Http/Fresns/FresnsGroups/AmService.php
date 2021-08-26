@@ -9,11 +9,12 @@
 namespace App\Http\Fresns\FresnsGroups;
 
 use App\Base\Services\BaseAdminService;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
+
 class AmService extends BaseAdminService
 {
     public function __construct()
@@ -44,9 +45,10 @@ class AmService extends BaseAdminService
         $common['multilingualoption'] = $languageArr['languagesOption'];
         // 一级小组common
         $common['groupOption'] = FresnsGroups::buildSelectTreeData('id', 'name', ['is_enable' => 1]);
-        $common['oneGroupOption'] = FresnsGroups::staticBuildSelectOptions('id','name',['parent_id'=>NULL]);
+        $common['oneGroupOption'] = FresnsGroups::staticBuildSelectOptions('id', 'name', ['parent_id'=>null]);
         // 插件
         $common['plugOption'] = FresnsPlugins::staticBuildSelectOptions2('unikey', 'name', []);
+
         return $common;
     }
 
@@ -102,7 +104,6 @@ class AmService extends BaseAdminService
 
             $categoryArr[] = $c;
         }
-
     }
 
     public static function getLangaugeArr($table, $table_field, $item)
@@ -116,14 +117,13 @@ class AmService extends BaseAdminService
                 'table_name' => $table,
                 'table_field' => $table_field,
                 'table_id' => $item->id,
-                'lang_tag' => $v['key']
+                'lang_tag' => $v['key'],
             ];
             $name = FresnsLanguages::where($input)->first();
-            $v['lang_content'] = $name['lang_content'] ?? "";
-            $nameArr[] = $v;;
+            $v['lang_content'] = $name['lang_content'] ?? '';
+            $nameArr[] = $v;
         }
+
         return $nameArr;
     }
-
-
 }

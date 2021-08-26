@@ -75,5 +75,4 @@ class FresnsCrontabPluginConfig extends BasePluginConfig
 
         return $rule;
     }
-
 }

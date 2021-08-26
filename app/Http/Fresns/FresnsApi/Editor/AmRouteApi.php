@@ -23,11 +23,9 @@ Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\Fresns\FresnsApi\E
     // 撤回审核中草稿
     Route::post('/editor/revoke', 'AmControllerApi@revoke')->name('admin.editor.revoke');
 
-
     //上传文件
     Route::post('/editor/upload', 'AmControllerApi@upload')->name('admin.editor.upload');
     //删除草稿
     Route::post('/editor/delete', 'AmControllerApi@delete')->name('admin.editor.delete');
     Route::post('/editor/uploadToken', 'AmControllerApi@uploadToken')->name('admin.editor.uploadToken');
-
 });

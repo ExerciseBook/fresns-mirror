@@ -12,9 +12,8 @@ use App\Base\Controllers\BaseController;
 
 /**
  * 插件场景基础类
- * 处理插件的安装/卸载/升级等基础操作
+ * 处理插件的安装/卸载/升级等基础操作.
  */
 class BaseSceneController extends BaseController
 {
-
 }

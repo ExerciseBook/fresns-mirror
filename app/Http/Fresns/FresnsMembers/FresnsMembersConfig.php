@@ -7,11 +7,9 @@
  */
 
 // 系统解耦, 快捷方式入口
-namespace App\Http\Fresns\FresnsMembers;
 
+namespace App\Http\Fresns\FresnsMembers;
 
 class FresnsMembersConfig extends AmConfig
 {
-
-
 }

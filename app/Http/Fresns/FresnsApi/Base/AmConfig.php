@@ -13,7 +13,6 @@ class AmConfig
     const VIEW_MODE_PUBLIC = 1;
     const VIEW_MODE_PRIVATE = 2;
 
-
     //用户状态 users > deleted_at 注销，仅可请求「登录」和「恢复」 [用户基本信息] [退出登录]接口。
     const CHECK_USER_DELETE_URI = [
         '/api/fresns/user/login',
@@ -366,7 +365,6 @@ class AmConfig
         '/api/fresns/editor/create',
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
-
 
     ];
 }

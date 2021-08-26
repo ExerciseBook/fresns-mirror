@@ -14,8 +14,6 @@ use App\Http\Fresns\FresnsPosts\FresnsPosts;
 
 class PostLogResource extends BaseAdminResource
 {
-
-
     public function toArray($request)
     {
         // dd(1);
@@ -28,7 +26,7 @@ class PostLogResource extends BaseAdminResource
         $postInfo = FresnsPosts::find($this->post_id);
         $default = [
             'id' => $this->id,
-            'pid' => $postInfo['uuid'] ?? "",
+            'pid' => $postInfo['uuid'] ?? '',
             'type' => $this->type,
             'title' => $this->title,
             'content' => mb_substr($this->content, 0, 140),
@@ -36,6 +34,7 @@ class PostLogResource extends BaseAdminResource
             'submitTime' => $this->submit_at,
             'time' => $this->created_at,
         ];
+
         return $default;
     }
 }

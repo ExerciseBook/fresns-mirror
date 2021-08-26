@@ -12,7 +12,6 @@ use App\Base\Resources\BaseAdminResource;
 
 class FresnsInfoStopWordsResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
 
@@ -25,8 +24,6 @@ class FresnsInfoStopWordsResource extends BaseAdminResource
             'replaceWord' => $this->replace_word,
         ];
 
-
         return $default;
     }
 }
-

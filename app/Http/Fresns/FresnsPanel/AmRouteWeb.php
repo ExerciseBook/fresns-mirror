@@ -17,7 +17,7 @@ if ($appName == 'Fresns') {
     GlobalService::loadGlobalData();
     $adminPath = ApiConfigHelper::getConfigByItemKey(FresnsConfigsConfig::BACKEND_PATH) ?? 'admin';
 
-    $adminPath = "/fresns"."/$adminPath";
+    $adminPath = '/fresns'."/$adminPath";
     Route::group(['prefix' => "$adminPath", 'namespace' => '\App\Http\Fresns\FresnsPanel'], function () {
         //首页
         Route::get('/', 'AmControllerWeb@index')->name('fresns.index.index');
@@ -29,7 +29,7 @@ if ($appName == 'Fresns') {
         Route::post('/checkLogin', 'AmControllerWeb@checkLogin')->name('fresns.index.checkLogin');
         Route::get('/login', 'AmControllerWeb@loginIndex')->name('fresns.index.loginIndex');
     });
-    
+
     //页面需登录接口
     Route::group(['prefix' => 'fresns', 'middleware' => ['web', 'auth'], 'namespace' => '\App\Http\Fresns\FresnsPanel'], function () {
         //页面
@@ -69,6 +69,6 @@ if ($appName == 'Fresns') {
         Route::post('/updateUnikey', 'AmControllerWeb@updateUnikey')->name('fresns.index.updateUnikey');
         Route::post('/localInstall', 'AmControllerWeb@localInstall')->name('fresns.index.localInstall');
         Route::post('/enableUnikeyStatus', 'AmControllerWeb@enableUnikeyStatus')->name('fresns.index.install');
-        Route::post('/websiteLinkSubject','AmControllerWeb@websiteLinkSubject')->name('fresns.index.websiteLinkSubject');
+        Route::post('/websiteLinkSubject', 'AmControllerWeb@websiteLinkSubject')->name('fresns.index.websiteLinkSubject');
     });
 }

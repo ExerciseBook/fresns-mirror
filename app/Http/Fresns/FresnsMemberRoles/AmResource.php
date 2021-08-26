@@ -15,7 +15,6 @@ use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 
 class AmResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // 默认字段
@@ -25,10 +24,9 @@ class AmResource extends BaseAdminResource
             'name' => FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $this->id),
             'icon' => ApiFileHelper::getImageSignUrlByFileIdUrl($this->icon_file_id, $this->icon_file_url),
             'nicknameColor' => $this->nickname_color,
-            'permission' => json_decode($this->permission,true),
+            'permission' => json_decode($this->permission, true),
         ];
 
         return $arr;
     }
 }
-

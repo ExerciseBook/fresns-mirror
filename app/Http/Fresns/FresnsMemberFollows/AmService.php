@@ -23,6 +23,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
@@ -42,5 +43,4 @@ class AmService extends BaseAdminService
         FresnsMemberFollows::where('member_id', $mid)->where('follow_type', $markTarget)->where('follow_id',
             $markId)->delete();
     }
-
 }

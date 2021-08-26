@@ -9,15 +9,15 @@
 namespace App\Http\Fresns\FresnsComments;
 
 use App\Base\Models\BaseAdminModel;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
-use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Base\Models\BaseCategoryModel;
-use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
 use App\Http\Share\AmGlobal\GlobalService;
+use Illuminate\Support\Facades\DB;
 
 class AmModel extends BaseCategoryModel
 {
@@ -38,7 +38,6 @@ class AmModel extends BaseCategoryModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
 
     public function getRawSqlQuery()
@@ -50,8 +49,7 @@ class AmModel extends BaseCategoryModel
         /**
          * 过滤屏蔽对象的评论（成员、评论）。
          * searchType 留空代表输出所有内容。内容为插件 unikey 值，用于搜索包含指定插件扩展内容的帖子。
-         * 默认排序类型「time」，默认排序方式「降序」
-         *
+         * 默认排序类型「time」，默认排序方式「降序」.
          */
         // 屏蔽的目标字段
         $request = request();
@@ -70,11 +68,11 @@ class AmModel extends BaseCategoryModel
         // 2.1、过期后内容不可见，不输出帖子列表。
         // 2.2、过期后，到期前的内容可见，输出到期日期前的帖子列表。
         // 2.3、在有效期内，继续往下判断。
-        $site_mode = ApiConfigHelper::getConfigByItemKey("site_mode");
+        $site_mode = ApiConfigHelper::getConfigByItemKey('site_mode');
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
-            if (!empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
-                $site_private_end = ApiConfigHelper::getConfigByItemKey("site_private_end");
+            if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
+                $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
                     $query->where('comment.member_id', '=', 0);
                 }
@@ -102,7 +100,7 @@ class AmModel extends BaseCategoryModel
             $memberInfo = FresnsMembers::where('uuid', $searchMid)->first();
 
             // dd($allowPost)
-            if (!$allowComment) {
+            if (! $allowComment) {
                 $query->where('comment.member_id', '=', 0);
             } else {
                 if ($memberInfo) {
@@ -169,7 +167,7 @@ class AmModel extends BaseCategoryModel
         $searchSticky = $request->input('searchSticky');
         // dump($searchSticky);
         // dd(!empty($searchSticky));
-        if (!empty($searchSticky)) {
+        if (! empty($searchSticky)) {
             // $searchEssenceType = $searchEssence == false ? 0 : 1;
             $query->where('comment.is_sticky', '=', $searchSticky);
         }
@@ -237,9 +235,9 @@ class AmModel extends BaseCategoryModel
             $query->where('comment.created_at', '<=', $publishTimeLt);
         }
         // 排序处理
-        $sortType = request()->input('sortType', "");
+        $sortType = request()->input('sortType', '');
         $sortWay = request()->input('sortDirection', 2);
-        $sortWayType = $sortWay == 2 ? "DESC" : "ASC";
+        $sortWayType = $sortWay == 2 ? 'DESC' : 'ASC';
         switch ($sortType) {
             case 'view':
                 $query->orderBy('comment.view_count', $sortWayType);
@@ -268,9 +266,10 @@ class AmModel extends BaseCategoryModel
     public function initOrderByFields()
     {
         $orderByFields = [
-            'created_at' => "DESC",
+            'created_at' => 'DESC',
             // 'updated_at'    => 'DESC',
         ];
+
         return $orderByFields;
     }
 
@@ -289,4 +288,3 @@ class AmModel extends BaseCategoryModel
         // dd($childrenIdArr);
     }
 }
-

@@ -10,24 +10,22 @@ namespace App\Http\Fresns\FresnsPanel;
 
 use App\Base\Config\BaseConfig;
 
-
 class AmConfig extends BaseConfig
 {
+    const PLUGINS_TYPE = 2;
+    const ENABLE_FALSE = 0;
 
-    CONST PLUGINS_TYPE = 2;
-    CONST ENABLE_FALSE = 0;
+    const NOTICE_URL = 'https://api.fresns.cn/news.json';
 
-    CONST NOTICE_URL = 'https://api.fresns.cn/news.json';
+    const PLUGIN_TYPE4 = 4;
+    const PLUGIN_TYPE3 = 3;
+    const PLUGIN_TYPE1 = 1;
 
-    CONST PLUGIN_TYPE4 = 4;
-    CONST PLUGIN_TYPE3 = 3;
-    CONST PLUGIN_TYPE1 = 1;
-
-    CONST BACKEND_PATH_NOT = [
-        'login','dashboard','settings','keys','admins','websites','apps','plugins'
+    const BACKEND_PATH_NOT = [
+        'login', 'dashboard', 'settings', 'keys', 'admins', 'websites', 'apps', 'plugins',
     ];
 
-    CONST LANGUAGE_MAP = [
+    const LANGUAGE_MAP = [
         'en' => 'English - English',
         'es' => 'Español - Spanish',
         'fr' => 'Français - French',
@@ -41,5 +39,4 @@ class AmConfig extends BaseConfig
         'zh-Hans' => '简体中文 - Chinese (Simplified)',
         'zh-Hant' => '繁體中文 - Chinese (Traditional)',
     ];
-
 }

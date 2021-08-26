@@ -12,14 +12,14 @@ class ArrayHelper
 {
     /**
      * 多维数组排序
-     * 第一个参数为要排序的数组，剩下是要排序的键（key）和排序方法，键的话因为要应对多维的情况，所以需要上下级连接，用`.`
+     * 第一个参数为要排序的数组，剩下是要排序的键（key）和排序方法，键的话因为要应对多维的情况，所以需要上下级连接，用`.`.
      * @example multiDimensionSort($arr,'price',SORT_DESC,'top1.field',SORT_ASC)
      * @param mixed ...$args
      * @return mixed
      */
     public static function multiDimensionSort(...$args)
     {
-        $arr      = array_shift($args); // 取到要排序的数组，剩下的为要排序的键和排序类型
+        $arr = array_shift($args); // 取到要排序的数组，剩下的为要排序的键和排序类型
         $sort_arg = [];
         foreach ($args as $arg) {
             // 这里主要是为了得到排序的key对应的值
@@ -38,44 +38,48 @@ class ArrayHelper
 
         call_user_func_array('array_multisort', $sort_arg);
 
-        return ($arr);
+        return $arr;
     }
 
     /**
-     * 二维数组根据某个字段排序
+     * 二维数组根据某个字段排序.
      * @param array $array 要排序的数组
      * @param string $keys   要排序的键字段
      * @param string $sort  排序类型  SORT_ASC     SORT_DESC
      * @return array 排序后的数组
      */
-    public static function arraySort(&$array, $keys, $sortDirection) {
+    public static function arraySort(&$array, $keys, $sortDirection)
+    {
         $keysValue = [];
         foreach ($array as $k => $v) {
             $keysValue[$k] = intval($v[$keys]);
         }
         array_multisort($keysValue, $sortDirection, $array);
+
         return $array;
     }
 
     // object to array
-    public static function objectToArray($obj){
+    public static function objectToArray($obj)
+    {
         $a = json_encode($obj);
         $b = json_decode($a, true);
+
         return $b;
     }
 
     // 获取描述
-    public static function keyDescInArray($key, $arr, $matchKey = 'key', $descKey = 'text'){
-        foreach ($arr as $item){
-            if(!is_array($item)){
+    public static function keyDescInArray($key, $arr, $matchKey = 'key', $descKey = 'text')
+    {
+        foreach ($arr as $item) {
+            if (! is_array($item)) {
                 $item = self::objectToArray($item);
             }
-            if(isset($item[$matchKey]) && $item[$matchKey] == $key){
+            if (isset($item[$matchKey]) && $item[$matchKey] == $key) {
                 return  $item[$descKey] ?? '未知';
             }
         }
 
         return '未知';
     }
-
 }

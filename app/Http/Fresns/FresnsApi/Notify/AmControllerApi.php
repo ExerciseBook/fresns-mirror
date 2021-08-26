@@ -8,33 +8,33 @@
 
 namespace App\Http\Fresns\FresnsApi\Notify;
 
-use App\Http\Share\Common\ValidateService;
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
+use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessages;
+use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessagesConfig;
 use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessagesService;
 use App\Http\Fresns\FresnsDialogs\FresnsDialogs;
 use App\Http\Fresns\FresnsDialogs\FresnsDialogsConfig;
 use App\Http\Fresns\FresnsDialogs\FresnsDialogsService;
+use App\Http\Fresns\FresnsFiles\FresnsFiles;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
 use App\Http\Fresns\FresnsNotifies\FresnsNotifies;
 use App\Http\Fresns\FresnsNotifies\FresnsNotifiesConfig;
 use App\Http\Fresns\FresnsNotifies\FresnsNotifiesService;
-use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
+use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
+use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
+use App\Http\Share\AmGlobal\GlobalService;
+use App\Http\Share\Common\ErrorCodeService;
+use App\Http\Share\Common\ValidateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsDialogMessages\FresnsDialogMessagesConfig;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
-use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
-use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
-use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 
 class AmControllerApi extends FresnsBaseApiController
 {
@@ -156,7 +156,7 @@ class AmControllerApi extends FresnsBaseApiController
         $idArr = $request->input('notifyId');
         $result = self::isExsitMember($idArr, FresnsNotifiesConfig::CFG_TABLE, 'member_id', $member_id);
         // dd($result);
-        if (!$result) {
+        if (! $result) {
             $this->error(ErrorCodeService::DELETED_NOTIFY_ERROR);
         }
         FresnsNotifies::whereIn('id', $idArr)->delete();
@@ -242,10 +242,10 @@ class AmControllerApi extends FresnsBaseApiController
         $memberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $member_id)->first();
         $member = [];
         $member['deactivate'] = false;
-        $member['mid'] = "";
-        $member['mname'] = "";
-        $member['nickname'] = "";
-        $member['avatar'] = $memberInfo->avatar_file_url ?? "";
+        $member['mid'] = '';
+        $member['mname'] = '';
+        $member['nickname'] = '';
+        $member['avatar'] = $memberInfo->avatar_file_url ?? '';
         // 为空用默认头像
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEFAULT_AVATAR);
@@ -257,9 +257,9 @@ class AmControllerApi extends FresnsBaseApiController
             $member['avatar'] = $deactivateAvatar;
         }
         $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
-        $member['decorate'] = "";
-        $member['verifiedStatus'] = "";
-        $member['verifiedIcon'] = "";
+        $member['decorate'] = '';
+        $member['verifiedStatus'] = '';
+        $member['verifiedIcon'] = '';
         if ($memberInfo) {
             if ($memberInfo->deleted_at == null) {
                 $member['deactivate'] = true;
@@ -358,7 +358,7 @@ class AmControllerApi extends FresnsBaseApiController
         // }
         if ($fid) {
             $filesInfo = FresnsFiles::Where('uuid', $fid)->first();
-            if (!$filesInfo) {
+            if (! $filesInfo) {
                 $this->error(ErrorCodeService::FILES_ERROR);
             }
             $fileId = $filesInfo->id;
@@ -381,7 +381,7 @@ class AmControllerApi extends FresnsBaseApiController
         }
         if ($message) {
             $message = ApiCommonHelper::stopWords($message);
-            if (!$message) {
+            if (! $message) {
                 $this->error(ErrorCodeService::DIALOG_WORD_ERROR);
             }
         }
@@ -393,19 +393,19 @@ class AmControllerApi extends FresnsBaseApiController
             'b_member_id' => $recvMid,
         ];
         $dialogs = FresnsDialogs::where($input1)->first();
-        if (!$dialogs) {
+        if (! $dialogs) {
             $input2 = [
                 'b_member_id' => $mid,
                 'a_member_id' => $recvMid,
             ];
             $dialogs = FresnsDialogs::where($input2)->first();
-            if (!$dialogs) {
+            if (! $dialogs) {
                 $input_dialogs = [
                     'a_member_id' => $mid,
                     'b_member_id' => $recvMid,
                 ];
                 $dialogsId = (new FresnsDialogs())->store($input_dialogs);
-                // $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
+            // $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
                 // if($sessionLogId){
                 //     FresnsSessionLogs::where('id',$sessionLogId)->update(['object_result' => AmConfig::OBJECT_SUCCESS,'object_order_id' => $dialogsId]);
                 // }
@@ -430,7 +430,7 @@ class AmControllerApi extends FresnsBaseApiController
         if ($sessionLogId) {
             FresnsSessionLogs::where('id', $sessionLogId)->update([
                 'object_result' => AmConfig::OBJECT_SUCCESS,
-                'object_order_id' => $messageId
+                'object_order_id' => $messageId,
             ]);
         }
         // 更新dialogs表
@@ -489,17 +489,17 @@ class AmControllerApi extends FresnsBaseApiController
         $rule = [
             'dialogId' => [
                 "exists:{$table},id",
-                "required_without:messageId"
+                'required_without:messageId',
             ],
             'messageId' => [
                 'array',
-                "required_without:dialogId"
-            ]
+                'required_without:dialogId',
+            ],
         ];
         ValidateService::validateRule($request, $rule);
         $mid = GlobalService::getGlobalKey('member_id');
-        $dialogId = $request->input('dialogId', "");
-        $messageIdArr = $request->input('messageId', "");
+        $dialogId = $request->input('dialogId', '');
+        $messageIdArr = $request->input('messageId', '');
         if ($dialogId) {
             if ($messageIdArr) {
                 $this->error(ErrorCodeService::DIALOG_OR_MESSAGE_ERROR);
@@ -559,7 +559,7 @@ class AmControllerApi extends FresnsBaseApiController
     // 数据是否为用户所有
     public static function isExsitMember($idArr, $table, $field, $field_value)
     {
-        if (!is_array($idArr)) {
+        if (! is_array($idArr)) {
             return false;
         }
 
@@ -573,6 +573,7 @@ class AmControllerApi extends FresnsBaseApiController
                 return false;
             }
         }
+
         return true;
     }
 }

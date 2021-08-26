@@ -42,6 +42,6 @@ class AmConfig
         'maps',
         'default_language',
         'language_status',
-        'language_menus'
+        'language_menus',
     ];
 }

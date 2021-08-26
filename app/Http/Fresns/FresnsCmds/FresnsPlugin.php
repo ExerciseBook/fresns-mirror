@@ -10,55 +10,55 @@ namespace App\Http\Fresns\FresnsCmds;
 
 use App\Helpers\SignHelper;
 use App\Helpers\StrHelper;
-use App\Http\Center\Helper\PluginHelper;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsVerifyCodes\FresnsVerifyCodes;
-use App\Http\Fresns\FresnsPosts\FresnsPostsService;
-use App\Http\Fresns\FresnsComments\FresnsCommentsService;
 use App\Http\Center\Base\BasePlugin;
-use App\Http\Share\Common\LogService;
+use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\Fresns\FresnsComments\FresnsComments;
 use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
+use App\Http\Fresns\FresnsComments\FresnsCommentsService;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
-use App\Http\Fresns\FresnsFileAppends\FresnsFileAppends;
-use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsPlugins\FresnsPlugins as FresnsPluginFresnsPlugin;
-use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
-use App\Http\Fresns\FresnsSessionTokens\FresnsSessionTokensConfig;
-use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Share\Common\ValidateService;
-use Illuminate\Support\Facades\Request;
+use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinksConfig;
+use App\Http\Fresns\FresnsDomains\FresnsDomains;
 use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
 use App\Http\Fresns\FresnsExtends\FresnsExtendsConfig;
+use App\Http\Fresns\FresnsFileAppends\FresnsFileAppends;
 use App\Http\Fresns\FresnsFileAppends\FresnsFileAppendsConfig;
-use App\Http\Fresns\FresnsLanguages\FresnsLanguagesConfig;
-use App\Http\Fresns\FresnsMentions\FresnsMentionsConfig;
-use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
-use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinksConfig;
-use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
-use App\Http\Fresns\FresnsDomains\FresnsDomains;
+use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsFiles\FresnsFilesConfig;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
+use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
+use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
+use App\Http\Fresns\FresnsLanguages\FresnsLanguagesConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
+use App\Http\Fresns\FresnsMentions\FresnsMentionsConfig;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins as FresnsPluginFresnsPlugin;
 use App\Http\Fresns\FresnsPostAllows\FresnsPostAllowsConfig;
 use App\Http\Fresns\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\Fresns\FresnsPostLogs\FresnsPostLogsConfig;
 use App\Http\Fresns\FresnsPosts\FresnsPosts;
 use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
+use App\Http\Fresns\FresnsPosts\FresnsPostsService;
 use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeys;
+use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
+use App\Http\Fresns\FresnsSessionTokens\FresnsSessionTokensConfig;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
 use App\Http\Fresns\FresnsUserWalletLogs\FresnsUserWalletLogs;
 use App\Http\Fresns\FresnsUserWallets\FresnsUserWallets;
+use App\Http\Fresns\FresnsVerifyCodes\FresnsVerifyCodes;
+use App\Http\Share\Common\ErrorCodeService;
+use App\Http\Share\Common\LogService;
+use App\Http\Share\Common\ValidateService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 
 class FresnsPlugin extends BasePlugin
 {
@@ -94,10 +94,11 @@ class FresnsPlugin extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         // dd($pluginClass);
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类1");
+            LogService::error('未找到插件类1');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
-        LogService::info("插件处理开始: ", $input);
+        LogService::info('插件处理开始: ', $input);
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_CODE;
         // 准备参数
         $account = $input['account'];
@@ -107,15 +108,15 @@ class FresnsPlugin extends BasePlugin
         // $params = $input['params'];
         $countryCode = $input['countryCode'];
         // 邮件
-        if($type == 1){
+        if ($type == 1) {
             $input = [
                 'type'   => $type,
                 'account' => $account,
                 'template' => $template,
                 'langTag' => $langTag,
             ];
-            // 手机
-        }else{
+        // 手机
+        } else {
             $input = [
                 'type'   => $type,
                 'account' => $account,
@@ -126,8 +127,7 @@ class FresnsPlugin extends BasePlugin
         }
         // dd($input);
         $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-        
-        
+
         // // todo 执行验证码发送（手机）
         // if ($type == 2) {
         //     $cmd = PluginConfig::PLG_CMD_SEND_SMS_PHONE;
@@ -171,7 +171,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError($resp['code']);
         }
 
-        LogService::info("插件处理完成: ", $input);
+        LogService::info('插件处理完成: ', $input);
 
         return $this->pluginSuccess($resp['output']);
     }
@@ -190,14 +190,14 @@ class FresnsPlugin extends BasePlugin
                 'type' => $type,
                 'account' => $account,
                 'code' => $verifyCode,
-                'is_enable' => 1
+                'is_enable' => 1,
             ];
         } else {
             $where = [
                 'type' => $type,
                 'account' => $countryCode.$account,
                 'code' => $verifyCode,
-                'is_enable' => 1
+                'is_enable' => 1,
             ];
         }
         // 验证码是否有效
@@ -205,6 +205,7 @@ class FresnsPlugin extends BasePlugin
         // dd($verifyInfo);
         if ($verifyInfo) {
             FresnsVerifyCodes::where('id', $verifyInfo['id'])->update(['is_enable' => 0]);
+
             return $this->pluginSuccess();
         } else {
             return $this->pluginError(ErrorCodeService::CAPTCHA_ERROR);
@@ -235,6 +236,7 @@ class FresnsPlugin extends BasePlugin
 
                 break;
         }
+
         return $this->pluginSuccess();
     }
 
@@ -255,7 +257,8 @@ class FresnsPlugin extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         // dd($pluginClass);
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
         $input = [
@@ -290,7 +293,8 @@ class FresnsPlugin extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         // dd($pluginClass);
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
         $input = [
@@ -304,6 +308,7 @@ class FresnsPlugin extends BasePlugin
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
             return $this->pluginError($resp['code']);
         }
+
         return $this->pluginSuccess($resp);
     }
 
@@ -330,7 +335,8 @@ class FresnsPlugin extends BasePlugin
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_WECHAT;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
         $input = [
@@ -375,7 +381,8 @@ class FresnsPlugin extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         // dd($pluginClass);
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
         $input = [
@@ -392,6 +399,7 @@ class FresnsPlugin extends BasePlugin
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
             return $this->pluginError($resp['code']);
         }
+
         return $this->pluginSuccess($resp);
     }
 
@@ -417,7 +425,8 @@ class FresnsPlugin extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         // dd($pluginClass);
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
         $input = [
@@ -448,8 +457,8 @@ class FresnsPlugin extends BasePlugin
         $platform = $input['platform'];
 
         $expiredTime = $input['expiredTime'] ?? null;
-        if($userId){
-            $userId = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid',$userId)->value('id');
+        if ($userId) {
+            $userId = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $userId)->value('id');
         }
         if ($memberId) {
             $memberId = DB::table(FresnsMembersConfig::CFG_TABLE)->where('uuid', $memberId)->value('id');
@@ -467,11 +476,10 @@ class FresnsPlugin extends BasePlugin
             $input['platform_id'] = $platform;
             $input['user_id'] = $userId;
             $input['token'] = $token;
-            if($expiredTime){
+            if ($expiredTime) {
                 $input['expired_at'] = $expiredTime ?? null;
             }
             DB::table(FresnsSessionTokensConfig::CFG_TABLE)->insert($input);
-            
         } else {
             $sessionToken = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id',
                 $userId)->where('member_id', $memberId)->where('platform_id', $platform)->first();
@@ -485,18 +493,17 @@ class FresnsPlugin extends BasePlugin
             $input['platform_id'] = $platform;
             $input['user_id'] = $userId;
             $input['member_id'] = $memberId;
-            if($expiredTime){
+            if ($expiredTime) {
                 $input['expired_at'] = $expiredTime ?? null;
             }
 
             DB::table(FresnsSessionTokensConfig::CFG_TABLE)->insert($input);
-
         }
 
         $data = [];
         $data['token'] = $token;
-        return $this->pluginSuccess($data);
 
+        return $this->pluginSuccess($data);
     }
 
     //校验交互凭证
@@ -508,8 +515,8 @@ class FresnsPlugin extends BasePlugin
         $token = $input['token'];
         $time = date('Y-m-d H:i:s', time());
 
-        if($userId){
-            $userId = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid',$userId)->value('id');
+        if ($userId) {
+            $userId = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $userId)->value('id');
         }
         if ($memberId) {
             $memberId = DB::table(FresnsMembersConfig::CFG_TABLE)->where('uuid', $memberId)->value('id');
@@ -521,20 +528,18 @@ class FresnsPlugin extends BasePlugin
                 $platform)->where('user_id', $userId)->where('member_id', null)->first();
 
             if (empty($uidToken)) {
-
                 return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
             }
 
-            if (!empty($uidToken->expired_at)) {
+            if (! empty($uidToken->expired_at)) {
                 if ($uidToken->expired_at < $time) {
                     return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
                 }
             }
-            
+
             if ($uidToken->token != $token) {
                 return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
             }
-            
         } else {
             //校验token
             $midToken = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('platform_id',
@@ -543,7 +548,7 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
             }
 
-            if (!empty($midToken->expired_at)) {
+            if (! empty($midToken->expired_at)) {
                 if ($midToken->expired_at < $time) {
                     return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
                 }
@@ -552,11 +557,9 @@ class FresnsPlugin extends BasePlugin
             if ($midToken->token != $token) {
                 return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
             }
-
         }
 
         return $this->pluginSuccess();
-
     }
 
     //上传交互日志
@@ -595,13 +598,12 @@ class FresnsPlugin extends BasePlugin
             'user_id' => $userId,
             'member_id' => $memberId,
             'more_json' => $moreJson,
-            'object_type' => $objectType
+            'object_type' => $objectType,
         ];
 
         FresnsSessionLogs::insert($input);
 
         return $this->pluginSuccess();
-
     }
 
     //获取上传凭证
@@ -630,17 +632,18 @@ class FresnsPlugin extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
         }
 
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
 
         if ($isPlugin == false) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
-
 
         $file['file_type'] = $type;
         $paramsExist = false;
@@ -672,7 +675,8 @@ class FresnsPlugin extends BasePlugin
         }
 
         if ($paramsExist == false) {
-            LogService::error("插件信息未配置");
+            LogService::error('插件信息未配置');
+
             return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
         }
 
@@ -690,7 +694,6 @@ class FresnsPlugin extends BasePlugin
         $data['expireTime'] = $output['expireTime'] ?? '';
 
         return $this->pluginSuccess($data);
-
     }
 
     //上传文件
@@ -710,19 +713,20 @@ class FresnsPlugin extends BasePlugin
         $userId = $input['uid'] ?? null;
         $memberId = $input['mid'] ?? null;
 
-        if($userId){
-            $userId = FresnsUsers::where('uuid',$userId)->value('id');
+        if ($userId) {
+            $userId = FresnsUsers::where('uuid', $userId)->value('id');
         }
 
-        if($memberId){
-            $memberId = FresnsMembers::where('uuid',$memberId)->value('id');
+        if ($memberId) {
+            $memberId = FresnsMembers::where('uuid', $memberId)->value('id');
         }
 
         if ($mode == 2) {
             if (empty($tableId) && empty($tableKey)) {
                 $input = [
-                    '参数错误：' => 'tableId或tableKey至少填一项'
+                    '参数错误：' => 'tableId或tableKey至少填一项',
                 ];
+
                 return $this->pluginError(ErrorCodeService::CODE_PARAM_ERROR);
             }
         }
@@ -749,28 +753,29 @@ class FresnsPlugin extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
         }
 
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
 
         if ($isPlugin == false) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
-
 
         $file['file_type'] = $type;
         $paramsExist = false;
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_2) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id','videos_secret_key','videos_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id', 'videos_secret_key', 'videos_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
 
             $paramsExist = ValidateService::validParamExist($configMapInDB,
@@ -778,20 +783,21 @@ class FresnsPlugin extends BasePlugin
         }
 
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_3) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id','audios_secret_key','audios_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_4) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id','docs_secret_key','docs_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
         }
 
         if ($paramsExist == false) {
-            LogService::error("插件信息未配置");
+            LogService::error('插件信息未配置');
+
             return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
         }
         if ($mode == 1) {
@@ -801,7 +807,7 @@ class FresnsPlugin extends BasePlugin
             $options['table_type'] = $tableType;
             $storePath = FileSceneService::getEditorPath($options);
 
-            if (!$storePath) {
+            if (! $storePath) {
                 return $this->pluginError(ErrorCodeService::CODE_FAIL);
             }
 
@@ -824,8 +830,7 @@ class FresnsPlugin extends BasePlugin
             $file['table_id'] = $tableId ?? null;
             $file['table_key'] = $tableKey ?? null;
 
-
-            LogService::info("文件存储本地成功 ", $file);
+            LogService::info('文件存储本地成功 ', $file);
             $t2 = time();
 
             $file['uuid'] = ApiCommonHelper::createUuid();
@@ -851,7 +856,7 @@ class FresnsPlugin extends BasePlugin
                 $imageSize = getimagesize($uploadFile);
                 $input['image_width'] = $imageSize[0] ?? null;
                 $input['image_height'] = $imageSize[1] ?? null;
-                if (!empty($input['image_width']) && !empty($input['image_height'])) {
+                if (! empty($input['image_width']) && ! empty($input['image_height'])) {
                     if ($input['image_height'] >= $input['image_width'] * 4) {
                         $input['image_is_long'] = 1;
                     }
@@ -860,7 +865,7 @@ class FresnsPlugin extends BasePlugin
             $file['file_size'] = $input['file_size'];
             FresnsFileAppends::insert($input);
 
-            LogService::info("上传本地时间", ($t2 - $t1));
+            LogService::info('上传本地时间', ($t2 - $t1));
 
             $fidArr = [$file['uuid']];
             $fileIdArr = [$retId];
@@ -898,9 +903,9 @@ class FresnsPlugin extends BasePlugin
                     $append['image_width'] = $fileInfo['imageWidth'] == '' ? null : $fileInfo['imageWidth'];
                     $append['image_height'] = $fileInfo['imageHeight'] == '' ? null : $fileInfo['imageHeight'];
                     $imageLong = 0;
-                    if(!empty($fileInfo['imageLong'])){
+                    if (! empty($fileInfo['imageLong'])) {
                         $length = strlen($fileInfo['imageLong']);
-                        if($length == 1){
+                        if ($length == 1) {
                             $imageLong = $fileInfo['imageLong'];
                         }
                     }
@@ -916,10 +921,9 @@ class FresnsPlugin extends BasePlugin
                     FresnsFileAppends::insert($append);
                 }
             }
-
         }
 
-        if($pluginClass){
+        if ($pluginClass) {
             $cmd = FresnsPluginConfig::PLG_CMD_UPLOAD_FILE;
             // dd($cmd);
             $input = [];
@@ -931,7 +935,6 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError($resp['code']);
             }
         }
-        
 
         $data['files'] = [];
         $imagesHost = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
@@ -952,7 +955,7 @@ class FresnsPlugin extends BasePlugin
                 $item['name'] = $file['file_name'];
                 $item['extension'] = $file['file_extension'];
                 $item['size'] = $append['file_size'];
-                if($type == 1){
+                if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
                     $item['imageLong'] = $file['image_long'] ?? '';
@@ -960,17 +963,17 @@ class FresnsPlugin extends BasePlugin
                     $item['imageSquareUrl'] = $imagesHost.$file['file_path'].$imagesSquare;
                     $item['imageBigUrl'] = $imagesHost.$file['file_path'].$imagesBig;
                 }
-                if($type == 2){
+                if ($type == 2) {
                     $item['videoTime'] = $append['video_time'] ?? '';
                     $item['videoCover'] = $append['video_cover'] ?? '';
                     $item['videoGif'] = $append['video_gif'] ?? '';
                     $item['videoUrl'] = $videosHost.$file['file_path'];
                 }
-                if($type == 3){
+                if ($type == 3) {
                     $item['audioTime'] = $append['audio_time'] ?? '';
                     $item['audioUrl'] = $audiosHost.$file['file_path'];
                 }
-                if($type == 4){
+                if ($type == 4) {
                     $item['docUrl'] = $docsHost.$file['file_path'];
                 }
                 $item['moreJson'] = json_decode($append['more_json'], true);
@@ -979,7 +982,6 @@ class FresnsPlugin extends BasePlugin
         }
 
         return $this->pluginSuccess($data);
-
     }
 
     //图片存储
@@ -999,9 +1001,9 @@ class FresnsPlugin extends BasePlugin
         $images_thumb_square = ApiConfigHelper::getConfigByItemKey('images_thumb_square');
         $images_thumb_big = ApiConfigHelper::getConfigByItemKey('images_thumb_big');
         $url = $imagesBucketDomain.$files['file_path'].$images_thumb_big;
-        $imageRatioUrl = $imagesBucketDomain.$files['file_path'] . $images_thumb_ratio;
-        $imageSquareUrl = $imagesBucketDomain.$files['file_path'] . $images_thumb_square;
-        $imageBigUrl = $imagesBucketDomain.$files['file_path'] . $images_thumb_big;
+        $imageRatioUrl = $imagesBucketDomain.$files['file_path'].$images_thumb_ratio;
+        $imageSquareUrl = $imagesBucketDomain.$files['file_path'].$images_thumb_square;
+        $imageBigUrl = $imagesBucketDomain.$files['file_path'].$images_thumb_big;
         if ($imageStatus == true) {
             $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
 
@@ -1009,23 +1011,26 @@ class FresnsPlugin extends BasePlugin
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
             if (empty($pluginClass)) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
+
                 return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
 
             if ($isPlugin == false) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
             if ($paramsExist == false) {
-                LogService::error("插件信息未配置");
+                LogService::error('插件信息未配置');
+
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
@@ -1050,8 +1055,8 @@ class FresnsPlugin extends BasePlugin
         $item['imageRatioUrl'] = $imageRatioUrl;
         $item['imageSquareUrl'] = $imageSquareUrl;
         $item['imageBigUrl'] = $imageBigUrl;
-        return $this->pluginSuccess($item);
 
+        return $this->pluginSuccess($item);
     }
 
     //视频存储
@@ -1063,9 +1068,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::NO_RECORD);
         }
 
-        
-
-        $append = FresnsFileAppends::where('file_id',$files['id'])->first();
+        $append = FresnsFileAppends::where('file_id', $files['id'])->first();
 
         //判断是否开启防盗链
         $videosStatus = ApiConfigHelper::getConfigByItemKey('videos_url_status');
@@ -1081,25 +1084,28 @@ class FresnsPlugin extends BasePlugin
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
             if (empty($pluginClass)) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
+
                 return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
 
             if ($isPlugin == false) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id','videos_secret_key','videos_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id', 'videos_secret_key', 'videos_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
 
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['videos_secret_id', 'videos_secret_key', 'videos_bucket_domain']);
 
             if ($paramsExist == false) {
-                LogService::error("插件信息未配置");
+                LogService::error('插件信息未配置');
+
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
 
@@ -1123,6 +1129,7 @@ class FresnsPlugin extends BasePlugin
 
         return $this->pluginSuccess($item);
     }
+
     //音频存储
     public function plgCmdAntiLinkAudioHandler($input)
     {
@@ -1143,23 +1150,26 @@ class FresnsPlugin extends BasePlugin
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
             if (empty($pluginClass)) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
+
                 return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
 
             if ($isPlugin == false) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id','audios_secret_key','audios_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
             if ($paramsExist == false) {
-                LogService::error("插件信息未配置");
+                LogService::error('插件信息未配置');
+
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
 
@@ -1177,8 +1187,8 @@ class FresnsPlugin extends BasePlugin
             $singUrl = $url;
         }
 
-
         $item['audioUrl'] = $singUrl;
+
         return $this->pluginSuccess($item);
     }
 
@@ -1191,7 +1201,6 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::NO_RECORD);
         }
 
-        
         //判断是否开启防盗链
         $urlStatus = ApiConfigHelper::getConfigByItemKey('docs_url_status');
         $bucketDomain = ApiConfigHelper::getConfigByItemKey('docs_bucket_domain');
@@ -1204,29 +1213,32 @@ class FresnsPlugin extends BasePlugin
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
             if (empty($pluginClass)) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
+
                 return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
 
             if ($isPlugin == false) {
-                LogService::error("未找到插件类");
+                LogService::error('未找到插件类');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id','docs_secret_key','docs_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
             if ($paramsExist == false) {
-                LogService::error("插件信息未配置");
+                LogService::error('插件信息未配置');
+
                 return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
             }
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
             $input = [];
             $input['fid'] = $fid;
-           
+
             $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
 
             if (PluginRpcHelper::isErrorPluginResp($resp)) {
@@ -1238,6 +1250,7 @@ class FresnsPlugin extends BasePlugin
             $singUrl = $url;
         }
         $item['docUrl'] = $singUrl;
+
         return $this->pluginSuccess($item);
     }
 
@@ -1257,7 +1270,6 @@ class FresnsPlugin extends BasePlugin
         }
 
         return $this->pluginSuccess();
-
     }
 
     // 删除正式内容
@@ -1265,7 +1277,7 @@ class FresnsPlugin extends BasePlugin
     /**
      * #params
      * type : 1 帖子 2草稿
-     * contentId ： 对应内容id
+     * contentId ： 对应内容id.
      */
     public function deleteContentHandler($input)
     {
@@ -1277,7 +1289,7 @@ class FresnsPlugin extends BasePlugin
                 $input = ['linked_type' => 1, 'linked_id' => $contentId];
                 $extendsLinksArr = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where($input)->pluck('extend_id')->toArray();
                 // 是否存在扩展
-                if (!empty($extendsLinksArr)) {
+                if (! empty($extendsLinksArr)) {
                     foreach ($extendsLinksArr as $e) {
                         $extendsLinksInfo = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('extend_id',
                             $e)->where('linked_type', 1)->where('linked_id', '!=', $contentId)->first();
@@ -1288,16 +1300,16 @@ class FresnsPlugin extends BasePlugin
                                 'table_type' => 10,
                                 'table_name' => FresnsExtendsConfig::CFG_TABLE,
                                 'table_field' => 'id',
-                                'table_id' => $e
+                                'table_id' => $e,
                             ];
-                            $extendFiles = FresnsFiles::where($input)->get(['id', 'uuid','file_type'])->toArray();
+                            $extendFiles = FresnsFiles::where($input)->get(['id', 'uuid', 'file_type'])->toArray();
                             // 将查询到的文件 ID，凭文件类型转交给关联插件，由插件删除存储服务商的物理文件。
-                            if (!empty($extendFiles)) {
+                            if (! empty($extendFiles)) {
                                 foreach ($extendFiles as $file) {
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
                                     /**
-                                     * 插件处理逻辑
+                                     * 插件处理逻辑.
                                      */
                                     $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
                                     $input['fid'] = $extendsFileId;
@@ -1337,9 +1349,9 @@ class FresnsPlugin extends BasePlugin
                 $postAppend = DB::table(FresnsPostAppendsConfig::CFG_TABLE)->where('post_id', $contentId)->first();
                 //获取帖子主表文件
                 $filesUuidArr = [];
-                if (!empty($post->more_json)) {
+                if (! empty($post->more_json)) {
                     $postMoreJsonArr = json_decode($post->more_json, true);
-                    if (!empty($postMoreJsonArr['files'])) {
+                    if (! empty($postMoreJsonArr['files'])) {
                         foreach ($postMoreJsonArr['files'] as $v) {
                             $filesUuidArr[] = $v['fid'];
                         }
@@ -1348,10 +1360,10 @@ class FresnsPlugin extends BasePlugin
                 //获取post_logs表文件信息
                 $postLogsFiles = DB::table(FresnsPostLogsConfig::CFG_TABLE)->where('post_id',
                     $post->id)->pluck('files_json')->toArray();
-                if (!empty($postLogsFiles)) {
+                if (! empty($postLogsFiles)) {
                     foreach ($postLogsFiles as $v) {
                         $filesArr = json_decode($v, true);
-                        if (!empty($filesArr)) {
+                        if (! empty($filesArr)) {
                             foreach ($filesArr as $files) {
                                 $filesUuidArr[] = $files['fid'];
                             }
@@ -1372,7 +1384,6 @@ class FresnsPlugin extends BasePlugin
                         //删除文件
                         DB::table(FresnsFilesConfig::CFG_TABLE)->whereIn('uuid', $filesIdArr)->delete();
                         DB::table(FresnsFileAppendsConfig::CFG_TABLE)->whereIn('file_id', $filesIdArr)->delete();
-
                     }
                 }
                 // 3、删除解析关联
@@ -1426,7 +1437,7 @@ class FresnsPlugin extends BasePlugin
                 $input = ['linked_type' => 2, 'linked_id' => $contentId];
                 $extendsLinksArr = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where($input)->pluck('extend_id')->toArray();
                 // 是否存在扩展
-                if (!empty($extendsLinksArr)) {
+                if (! empty($extendsLinksArr)) {
                     foreach ($extendsLinksArr as $e) {
                         $extendsLinksInfo = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('extend_id',
                             $e)->where('linked_type', 2)->where('linked_id', '!=', $contentId)->first();
@@ -1437,16 +1448,16 @@ class FresnsPlugin extends BasePlugin
                                 'table_type' => 10,
                                 'table_name' => FresnsExtendsConfig::CFG_TABLE,
                                 'table_field' => 'id',
-                                'table_id' => $e
+                                'table_id' => $e,
                             ];
-                            $extendFiles = FresnsFiles::where($input)->get(['id', 'uuid','file_type'])->toArray();
+                            $extendFiles = FresnsFiles::where($input)->get(['id', 'uuid', 'file_type'])->toArray();
                             // 将查询到的文件 ID，凭文件类型转交给关联插件，由插件删除存储服务商的物理文件。
-                            if (!empty($extendFiles)) {
+                            if (! empty($extendFiles)) {
                                 foreach ($extendFiles as $file) {
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
                                     /**
-                                     * 插件处理逻辑
+                                     * 插件处理逻辑.
                                      */
                                     $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
                                     $input['fid'] = $extendsFileId;
@@ -1488,9 +1499,9 @@ class FresnsPlugin extends BasePlugin
                     $contentId)->first();
                 //获取帖子主表文件
                 $filesUuidArr = [];
-                if (!empty($comment->more_json)) {
+                if (! empty($comment->more_json)) {
                     $commentMoreJsonArr = json_decode($comment->more_json, true);
-                    if (!empty($commentMoreJsonArr['files'])) {
+                    if (! empty($commentMoreJsonArr['files'])) {
                         foreach ($commentMoreJsonArr['files'] as $v) {
                             $filesUuidArr[] = $v['fid'];
                         }
@@ -1499,15 +1510,14 @@ class FresnsPlugin extends BasePlugin
                 //获取comment_logs表文件信息
                 $commentLogsFiles = DB::table(FresnsCommentLogsConfig::CFG_TABLE)->where('comment_id',
                     $comment->id)->pluck('files_json')->toArray();
-                if (!empty($commentLogsFiles)) {
+                if (! empty($commentLogsFiles)) {
                     foreach ($commentLogsFiles as $v) {
                         $filesArr = json_decode($v, true);
-                        if (!empty($filesArr)) {
+                        if (! empty($filesArr)) {
                             foreach ($filesArr as $files) {
                                 $filesUuidArr[] = $files['fid'];
                             }
                         }
-
                     }
                 }
                 if ($filesUuidArr) {
@@ -1524,7 +1534,6 @@ class FresnsPlugin extends BasePlugin
                         //删除文件
                         DB::table(FresnsFilesConfig::CFG_TABLE)->whereIn('id', $filesIdArr)->delete();
                         DB::table(FresnsFileAppendsConfig::CFG_TABLE)->whereIn('file_id', $filesIdArr)->delete();
-
                     }
                 }
                 // 3、删除解析关联
@@ -1559,7 +1568,6 @@ class FresnsPlugin extends BasePlugin
         }
 
         return $this->pluginSuccess();
-
     }
 
     //获取上传token
@@ -1587,27 +1595,29 @@ class FresnsPlugin extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
         }
 
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
 
         if ($isPlugin == false) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
 
         $file['file_type'] = $type;
         $paramsExist = false;
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_2) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id','videos_secret_key','videos_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id', 'videos_secret_key', 'videos_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
 
             $paramsExist = ValidateService::validParamExist($configMapInDB,
@@ -1615,30 +1625,30 @@ class FresnsPlugin extends BasePlugin
         }
 
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_3) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id','audios_secret_key','audios_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_4) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id','docs_secret_key','docs_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
         }
 
         if ($paramsExist == false) {
-            LogService::error("插件信息未配置");
+            LogService::error('插件信息未配置');
+
             return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
         }
 
         $data = [];
         $data['storageId'] = 19;
         $data['token'] = ApiCommonHelper::createUuid(10);
-        $data['expireTime'] = date('Y-m-d H:i:s', strtotime("+30 min"));
+        $data['expireTime'] = date('Y-m-d H:i:s', strtotime('+30 min'));
 
         return $this->pluginSuccess($data);
-
     }
 
     //获取上传网址
@@ -1660,34 +1670,36 @@ class FresnsPlugin extends BasePlugin
                 $unikey = ApiConfigHelper::getConfigByItemKey('docs_service');
                 break;
         }
-       
+
         $pluginUniKey = $unikey;
 
         // 执行上传
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
 
         if (empty($pluginClass)) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
         }
 
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
 
         if ($isPlugin == false) {
-            LogService::error("未找到插件类");
+            LogService::error('未找到插件类');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
 
         $file['file_type'] = $type;
         $paramsExist = false;
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id','images_secret_key','images_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_2) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id','videos_secret_key','videos_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['videos_secret_id', 'videos_secret_key', 'videos_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
 
             $paramsExist = ValidateService::validParamExist($configMapInDB,
@@ -1695,33 +1707,34 @@ class FresnsPlugin extends BasePlugin
         }
 
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_3) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id','audios_secret_key','audios_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
         }
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_4) {
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id','docs_secret_key','docs_bucket_domain'])->pluck('item_value',
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain'])->pluck('item_value',
                 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
         }
 
         if ($paramsExist == false) {
-            LogService::error("插件信息未配置");
+            LogService::error('插件信息未配置');
+
             return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
         }
 
         $plugin = FresnsPluginFresnsPlugin::where('unikey', $pluginUniKey)->first();
         $data = [];
-        if (!empty($plugin['plugin_domain'])) {
+        if (! empty($plugin['plugin_domain'])) {
             $domain = $plugin['plugin_domain'];
         } else {
             $domain = ApiConfigHelper::getConfigByItemKey('backend_domain');
         }
         $data['storageId'] = 19;
         $data['token'] = $domain.$plugin['access_path'];
-        $data['expireTime'] = date('Y-m-d H:i:s', strtotime("+30 min"));
+        $data['expireTime'] = date('Y-m-d H:i:s', strtotime('+30 min'));
 
         return $this->pluginSuccess($data);
     }
@@ -1740,21 +1753,21 @@ class FresnsPlugin extends BasePlugin
         $token = $input['token'] ?? null;
 
         $dataMap['platform'] = $platform;
-        if($version){
+        if ($version) {
             $dataMap['version'] = $version;
         }
-        if($versionInt){
+        if ($versionInt) {
             $dataMap['versionInt'] = $versionInt;
         }
         $dataMap['appId'] = $appId;
         $dataMap['timestamp'] = $timestamp;
-        if($uid){
+        if ($uid) {
             $dataMap['uid'] = $uid;
         }
-        if($mid){
+        if ($mid) {
             $dataMap['mid'] = $mid;
         }
-        if($token){
+        if ($token) {
             $dataMap['token'] = $token;
         }
         $dataMap['sign'] = $sign;
@@ -1763,10 +1776,10 @@ class FresnsPlugin extends BasePlugin
         $min = 5; //过期时效，单位：分钟
         $expiredMin = $min * 60;
         $now = time();
-        if($now - $timestamp > $expiredMin){
+        if ($now - $timestamp > $expiredMin) {
             return $this->pluginError(ErrorCodeService::SING_EXPIRED_ERROR);
         }
-        LogService::info("验签信息: ", $dataMap);
+        LogService::info('验签信息: ', $dataMap);
         $signKey = FresnsSessionKeys::where('app_id', $appId)->value('app_secret');
 
         $checkSignRes = SignHelper::checkSign($dataMap, $signKey);
@@ -1775,13 +1788,11 @@ class FresnsPlugin extends BasePlugin
             $info = [
                 'sign' => $checkSignRes,
             ];
+
             return $this->pluginError(ErrorCodeService::CODE_SIGN_ERROR, $info);
         }
 
-        
-
         return $this->pluginSuccess();
-
     }
 
     public function plgCmdWalletIncreaseHandler($input)
@@ -1797,78 +1808,77 @@ class FresnsPlugin extends BasePlugin
         $originName = $input['originName'];
         $originId = $input['originId'] ?? null;
 
-        $userId = FresnsUsers::where('uuid',$uid)->value('id');
-        if(empty($userId)){
+        $userId = FresnsUsers::where('uuid', $uid)->value('id');
+        if (empty($userId)) {
             return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
         }
         $memberId = null;
-        if(!empty($mid)){
+        if (! empty($mid)) {
             //如果有传mid则校验是否属于uid
-            $member = FresnsMembers::where('uuid',$mid)->first();
-            if(empty($member)){
+            $member = FresnsMembers::where('uuid', $mid)->first();
+            if (empty($member)) {
                 return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
             }
-            if($member['user_id'] !== $userId){
+            if ($member['user_id'] !== $userId) {
                 return $this->pluginError(ErrorCodeService::CODE_FAIL);
             }
             $memberId = $member['id'];
         }
 
         //交易前需要查询用户的最后一条交易记录的期末余额值（is_enable=1），比对当前用户的钱包余额，不一致返回状态码。如果查询不到交易记录，默认期末余额为 0 值。
-        $userWallets = FresnsUserWallets::where('user_id',$userId)->where('is_enable',1)->first();
-        if(empty($userWallets)){
+        $userWallets = FresnsUserWallets::where('user_id', $userId)->where('is_enable', 1)->first();
+        if (empty($userWallets)) {
             return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
         }
 
         $balance = $userWallets['balance'] ?? 0;
-        $closingBalance = FresnsUserWalletLogs::where('user_id',$userId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
+        $closingBalance = FresnsUserWalletLogs::where('user_id', $userId)->where('is_enable', 1)->orderByDesc('id')->value('closing_balance');
         $closingBalance = $closingBalance ?? 0;
 
-        if($balance !== $closingBalance){
+        if ($balance !== $closingBalance) {
             return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
         }
 
-        
         $originUserId = null;
-        if($originUid){
-            $originUserId = FresnsUsers::where('uuid',$originUid)->value('id');
-            if(empty($originUserId)){
+        if ($originUid) {
+            $originUserId = FresnsUsers::where('uuid', $originUid)->value('id');
+            if (empty($originUserId)) {
                 return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
             }
         }
 
         $originMemberId = null;
-        if($originMid){
-            $originMember = FresnsMembers::where('uuid',$originMid)->first();
-            if(empty($originMember)){
+        if ($originMid) {
+            $originMember = FresnsMembers::where('uuid', $originMid)->first();
+            if (empty($originMember)) {
                 return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
             }
-            if($originMember['user_id'] !== $userId){
+            if ($originMember['user_id'] !== $userId) {
                 return $this->pluginError(ErrorCodeService::CODE_FAIL);
             }
             $originMemberId = $originMember['id'];
         }
 
         //如果有关联方，给对方也生成一条交易记录 user_wallet_logs 表，并以 amount 的参数减对方余额 user_wallets > balance
-        if($originUserId){
-            $originUserWallets = FresnsUserWallets::where('user_id',$originUserId)->where('is_enable',1)->first();
-            if(empty($originUserWallets)){
+        if ($originUserId) {
+            $originUserWallets = FresnsUserWallets::where('user_id', $originUserId)->where('is_enable', 1)->first();
+            if (empty($originUserWallets)) {
                 return $this->pluginError(ErrorCodeService::TO_USER_WALLETS_ERROR);
             }
 
             $originUserBalance = $originUserWallets['balance'] ?? 0;
-            $originUserClosingBalance = FresnsUserWalletLogs::where('user_id',$originUserId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
+            $originUserClosingBalance = FresnsUserWalletLogs::where('user_id', $originUserId)->where('is_enable', 1)->orderByDesc('id')->value('closing_balance');
             $originUserClosingBalance = $originUserClosingBalance ?? 0;
 
-            if($originUserBalance < $amount){
+            if ($originUserBalance < $amount) {
                 return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
             }
 
-            if($originUserBalance !== $originUserClosingBalance){
+            if ($originUserBalance !== $originUserClosingBalance) {
                 return $this->pluginError(ErrorCodeService::TO_BALANCE_CLOSING_BALANCE_ERROR);
             }
 
-            if($originUserBalance - $amount < 0){
+            if ($originUserBalance - $amount < 0) {
                 return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
             }
 
@@ -1902,13 +1912,10 @@ class FresnsPlugin extends BasePlugin
             FresnsUserWalletLogs::insert($input);
             //更新用户钱包
             $originWalletsInput = [
-                'balance' => $originUserBalance - $amount
+                'balance' => $originUserBalance - $amount,
             ];
-            FresnsUserWallets::where('user_id',$originUserId)->update($originWalletsInput);
-
+            FresnsUserWallets::where('user_id', $originUserId)->update($originWalletsInput);
         }
-
-        
 
         //添加到钱包log
         $input = [
@@ -1929,14 +1936,11 @@ class FresnsPlugin extends BasePlugin
         FresnsUserWalletLogs::insert($input);
         //更新用户钱包
         $userWalletsInput = [
-            'balance' => $balance + $transactionAmount
+            'balance' => $balance + $transactionAmount,
         ];
-        FresnsUserWallets::where('user_id',$userId)->update($userWalletsInput);
-
-        
+        FresnsUserWallets::where('user_id', $userId)->update($userWalletsInput);
 
         return $this->pluginSuccess();
-
     }
 
     public function plgCmdWalletDecreaseHandler($input)
@@ -1952,76 +1956,75 @@ class FresnsPlugin extends BasePlugin
         $originName = $input['originName'];
         $originId = $input['originId'] ?? null;
 
-        $userId = FresnsUsers::where('uuid',$uid)->value('id');
-        if(empty($userId)){
+        $userId = FresnsUsers::where('uuid', $uid)->value('id');
+        if (empty($userId)) {
             return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
         }
         $memberId = null;
-        if(!empty($mid)){
+        if (! empty($mid)) {
             //如果有传mid则校验是否属于uid
-            $member = FresnsMembers::where('uuid',$mid)->first();
-            if(empty($member)){
+            $member = FresnsMembers::where('uuid', $mid)->first();
+            if (empty($member)) {
                 return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
             }
-            if($member['user_id'] !== $userId){
+            if ($member['user_id'] !== $userId) {
                 return $this->pluginError(ErrorCodeService::CODE_FAIL);
             }
             $memberId = $member['id'];
         }
 
         $originUserId = null;
-        if($originUid){
-            $originUserId = FresnsUsers::where('uuid',$originUid)->value('id');
-            if(empty($originUserId)){
+        if ($originUid) {
+            $originUserId = FresnsUsers::where('uuid', $originUid)->value('id');
+            if (empty($originUserId)) {
                 return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
             }
         }
 
         $originMemberId = null;
-        if($originMid){
-            $originMember = FresnsMembers::where('uuid',$originMid)->first();
-            if(empty($originMember)){
+        if ($originMid) {
+            $originMember = FresnsMembers::where('uuid', $originMid)->first();
+            if (empty($originMember)) {
                 return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
             }
-            if($originMember['user_id'] !== $userId){
+            if ($originMember['user_id'] !== $userId) {
                 return $this->pluginError(ErrorCodeService::CODE_FAIL);
             }
             $originMemberId = $originMember['id'];
         }
 
-        $userWallets = FresnsUserWallets::where('user_id',$userId)->where('is_enable',1)->first();
-        if(empty($userWallets)){
+        $userWallets = FresnsUserWallets::where('user_id', $userId)->where('is_enable', 1)->first();
+        if (empty($userWallets)) {
             return $this->pluginError(ErrorCodeService::USER_WALLETS_ERROR);
         }
-        
+
         $balance = $userWallets['balance'] ?? 0;
-        $userClosingBalance = FresnsUserWalletLogs::where('user_id',$userId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
+        $userClosingBalance = FresnsUserWalletLogs::where('user_id', $userId)->where('is_enable', 1)->orderByDesc('id')->value('closing_balance');
         $userClosingBalance = $userClosingBalance ?? 0;
-        
-        if($balance !== $userClosingBalance){
+
+        if ($balance !== $userClosingBalance) {
             return $this->pluginError(ErrorCodeService::BALANCE_CLOSING_BALANCE_ERROR);
         }
 
-        if($originUserId){
-            $originUserWallets = FresnsUserWallets::where('user_id',$originUserId)->where('is_enable',1)->first();
-            if(empty($originUserWallets)){
+        if ($originUserId) {
+            $originUserWallets = FresnsUserWallets::where('user_id', $originUserId)->where('is_enable', 1)->first();
+            if (empty($originUserWallets)) {
                 return $this->pluginError(ErrorCodeService::TO_USER_WALLETS_ERROR);
             }
 
-            if($balance < $amount){
+            if ($balance < $amount) {
                 return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
             }
 
             $originBalance = $originUserWallets['balance'] ?? 0;
-            $originClosingBalance = FresnsUserWalletLogs::where('user_id',$originUserId)->where('is_enable',1)->orderByDesc('id')->value('closing_balance');
+            $originClosingBalance = FresnsUserWalletLogs::where('user_id', $originUserId)->where('is_enable', 1)->orderByDesc('id')->value('closing_balance');
             $originClosingBalance = $originClosingBalance ?? 0;
 
-            if($originBalance !== $originClosingBalance){
+            if ($originBalance !== $originClosingBalance) {
                 return $this->pluginError(ErrorCodeService::TO_BALANCE_CLOSING_BALANCE_ERROR);
             }
 
-
-            if($balance - $amount < 0){
+            if ($balance - $amount < 0) {
                 return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
             }
 
@@ -2055,16 +2058,14 @@ class FresnsPlugin extends BasePlugin
             FresnsUserWalletLogs::insert($input);
             //更新用户钱包
             $originWalletsInput = [
-                'balance' => $originBalance + $transactionAmount
+                'balance' => $originBalance + $transactionAmount,
             ];
-            FresnsUserWallets::where('user_id',$originUserId)->update($originWalletsInput);
+            FresnsUserWallets::where('user_id', $originUserId)->update($originWalletsInput);
         }
 
-
-        if($balance - $amount < 0){
+        if ($balance - $amount < 0) {
             return $this->pluginError(ErrorCodeService::USER_BALANCE_ERROR);
         }
-
 
         //添加到钱包log
         $input = [
@@ -2085,13 +2086,10 @@ class FresnsPlugin extends BasePlugin
         FresnsUserWalletLogs::insert($input);
         //更新用户钱包
         $userWalletsInput = [
-            'balance' => $balance - $amount
+            'balance' => $balance - $amount,
         ];
-        FresnsUserWallets::where('user_id',$userId)->update($userWalletsInput);
-
-        
+        FresnsUserWallets::where('user_id', $userId)->update($userWalletsInput);
 
         return $this->pluginSuccess();
-
     }
 }

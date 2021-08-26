@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Closure;
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
 {
@@ -34,13 +34,12 @@ class Authenticate extends Middleware
      */
     public function handle($request, Closure $next, ...$guards)
     {
-
-        try{
+        try {
             $this->authenticate($request, $guards);
-        }catch(\Exception $e){
-            
+        } catch (\Exception $e) {
             return redirect('/fresns/login');
         }
+
         return $next($request);
     }
 }

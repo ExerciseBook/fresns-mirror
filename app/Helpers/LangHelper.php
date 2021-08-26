@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Auth;
 
 class LangHelper
 {
-
     // 初始化语言信息
-    public static function initLocale(){
+    public static function initLocale()
+    {
 
         // 语言标签（留空则输出默认语言内容，查询不到默认语言则输出第一条）
         $locale = request()->header('langTag', 'zh-Hans');
@@ -28,5 +28,4 @@ class LangHelper
 
         App::setLocale($locale);
     }
-
 }

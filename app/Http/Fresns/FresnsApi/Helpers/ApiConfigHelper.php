@@ -11,10 +11,11 @@ namespace App\Http\Fresns\FresnsApi\Helpers;
 use App\Helpers\StrHelper;
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Share\Common\LogService;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
+
 class ApiConfigHelper
 {
     //获取系统配置信息
@@ -31,7 +32,7 @@ class ApiConfigHelper
         $map = config(FresnsBaseConfig::CONFIGS_LIST_API);
 
         $itemArr = [];
-        if (!empty($map)) {
+        if (! empty($map)) {
             foreach ($map as $v) {
                 if ($v['is_restful'] == 0) {
                     continue;
@@ -112,6 +113,7 @@ class ApiConfigHelper
                 }
             }
         }
+
         return $data;
     }
 
@@ -126,6 +128,7 @@ class ApiConfigHelper
                 }
             }
         }
+
         return $data;
     }
 
@@ -159,7 +162,7 @@ class ApiConfigHelper
         if ($data['itemType'] == 'plugin') {
             $plugin = FresnsPlugins::where('unikey', $item['itemValue'])->first();
             if ($plugin) {
-                if (!empty($plugin['plugin_domain'])) {
+                if (! empty($plugin['plugin_domain'])) {
                     $domain = $plugin['plugin_domain'];
                 } else {
                     $domain = ApiConfigHelper::getConfigByItemKey('backend_domain');
@@ -175,7 +178,7 @@ class ApiConfigHelper
             $pluginArr = FresnsPlugins::whereIn('unikey', $unikeyArr)->get([
                 'unikey',
                 'plugin_domain',
-                'access_path'
+                'access_path',
             ])->toArray();
             if ($pluginArr) {
                 $domain = ApiConfigHelper::getConfigByItemKey('backend_domain');
@@ -183,7 +186,7 @@ class ApiConfigHelper
                 foreach ($pluginArr as $v) {
                     $it = [];
                     $it['unikey'] = $v['unikey'];
-                    if (!empty($v['plugin_domain'])) {
+                    if (! empty($v['plugin_domain'])) {
                         $domain = $v['plugin_domain'];
                     }
                     $it['url'] = $domain.$v['access_path'] ?? '';
@@ -196,10 +199,8 @@ class ApiConfigHelper
         $item['itemType'] = $data['itemType'];
         $item['itemStatus'] = $data['itemStatus'];
 
-
         return $item;
     }
-
 
     //获取所有的语言参数
     public static function getConfigsLanguageList()
@@ -220,10 +221,10 @@ class ApiConfigHelper
     {
         $language = self::getConfigsLanguageList();
         $languageArr = FresnsConfigsService::getLanguageStatus();
-        LogService::Info('language',$language);
+        LogService::Info('language', $language);
         $distanceUnits = '';
         // 获取默认语言的距离单位
-        $language_menus = json_decode($language['language_menus'],true);
+        $language_menus = json_decode($language['language_menus'], true);
         foreach ($language_menus as $f) {
             if ($f['langTag'] == $languageArr['default_language']) {
                 $distanceUnits = $f['lengthUnits'];
@@ -231,12 +232,12 @@ class ApiConfigHelper
         }
         foreach ($language_menus as $v) {
             if ($v['langTag'] == $langTag) {
-                if (!empty($v['lengthUnits'])) {
+                if (! empty($v['lengthUnits'])) {
                     $distanceUnits = $v['lengthUnits'];
                 }
             }
         }
-        
+
         return $distanceUnits;
     }
 }

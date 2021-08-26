@@ -9,14 +9,13 @@
 namespace App\Http\Fresns\FresnsPluginUsages;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
-use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsService;
+use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
 use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 
 class AmResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -40,10 +39,10 @@ class AmResource extends BaseAdminResource
             'table_name' => AmConfig::CFG_TABLE,
             'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
             'table_id' => $this->id,
-            'lang_tag' => $lang_code
+            'lang_tag' => $lang_code,
         ];
         $names = FresnsLanguages::where($input)->first();
-        if (!$names) {
+        if (! $names) {
             $input = [
                 'table_name' => AmConfig::CFG_TABLE,
                 'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
@@ -62,11 +61,11 @@ class AmResource extends BaseAdminResource
                 'table_name' => AmConfig::CFG_TABLE,
                 'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
                 'table_id' => $this->id,
-                'lang_tag' => $v['key']
+                'lang_tag' => $v['key'],
             ];
             // dd($input);
             $name = FresnsLanguages::where($input)->first();
-            $v['lang_content'] = $name['lang_content'] ?? "";
+            $v['lang_content'] = $name['lang_content'] ?? '';
             $nameArr[] = $v;
         }
         // dd($nameArr);
@@ -95,15 +94,15 @@ class AmResource extends BaseAdminResource
 
         $newArr = [];
         // sort_number参数过滤
-        if (!$sort_number) {
+        if (! $sort_number) {
             $arr = [];
             foreach ($multilingual as &$m) {
-                $arr['id'] = "";
+                $arr['id'] = '';
                 $intro = [];
                 $intro['lang_code'] = $m['key'];
                 $intro['text'] = $m['text'];
-                $intro['title'] = "";
-                $intro['description'] = "";
+                $intro['title'] = '';
+                $intro['description'] = '';
                 $arr['intro'] = $intro;
                 $newArr['postLists'][] = $arr;
                 $newArr['postFollows'][] = $arr;
@@ -115,7 +114,6 @@ class AmResource extends BaseAdminResource
             foreach ($sort_number as $k => &$s) {
                 // $sArr = [];
                 foreach ($s as &$v) {
-
                     $introArr = [];
                     foreach ($v['intro'] as $i) {
                         $map[$i['lang_code']] = $i;
@@ -132,7 +130,6 @@ class AmResource extends BaseAdminResource
                     // $item1['intro']= $introArr;
                     $v['intro'] = $introArr;
                     // $sArr[] = $item1;
-
                 }
                 // $arr1[$k] = $sArr;
             }
@@ -144,8 +141,8 @@ class AmResource extends BaseAdminResource
         // 数据来源
         $source_parameter = AmConfig::SOURCE_PARAMETER;
         foreach ($source_parameter as &$v) {
-            $v['postLists'] = $parameter[$v['nickname']] ?? "";
-            $v['sort_number'] = $newArr[$v['nickname']] ?? "";
+            $v['postLists'] = $parameter[$v['nickname']] ?? '';
+            $v['sort_number'] = $newArr[$v['nickname']] ?? '';
         }
         // dd($source_parameter);
         // 默认字段
@@ -160,8 +157,8 @@ class AmResource extends BaseAdminResource
             'nickname' => $this->nickname,
             'more_json' => $this->more_json,
             'more_json_decode' => json_decode($this->more_json, true),
-            'plug_name' => $plugInfo['name'] ?? "",
-            'name' => $names['lang_content'] ?? "",
+            'plug_name' => $plugInfo['name'] ?? '',
+            'name' => $names['lang_content'] ?? '',
             'roleNames' => $roleNames,
             'roleNamesArr' => $roleInfo,
             'userRolesArr' => $user_rolesArr,
@@ -180,4 +177,3 @@ class AmResource extends BaseAdminResource
         return $arr;
     }
 }
-

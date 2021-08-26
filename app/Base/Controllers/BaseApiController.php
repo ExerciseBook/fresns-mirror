@@ -10,5 +10,4 @@ namespace App\Base\Controllers;
 
 class BaseApiController extends BaseController
 {
-
 }

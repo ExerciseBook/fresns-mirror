@@ -9,14 +9,13 @@
 namespace App\Http\Fresns\FresnsPlugins;
 
 use App\Base\Controllers\BaseAdminController;
-use Illuminate\Http\Request;
-use App\Http\Share\Common\ValidateService;
-use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Base\FresnsCode;
+use App\Http\Center\Helper\PluginHelper;
+use App\Http\Share\Common\ValidateService;
+use Illuminate\Http\Request;
 
 class AmControllerAdmin extends BaseAdminController
 {
-
     public function __construct()
     {
         $this->service = new AmService();
@@ -39,7 +38,7 @@ class AmControllerAdmin extends BaseAdminController
                         'description' => $plugin['description'],
                         'version' => $plugin['version'],
                         'version_int' => $plugin['versionInt'],
-                        'is_enable' => AmConfig::ENABLE_FALSE
+                        'is_enable' => AmConfig::ENABLE_FALSE,
                     ];
                     (new FresnsPlugins())->store($input);
                 }

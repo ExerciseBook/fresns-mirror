@@ -9,17 +9,17 @@
 namespace App\Http\Fresns\FresnsPosts;
 
 use App\Base\Models\BaseAdminModel;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
-use App\Http\Fresns\FresnsPostAppends\FresnsPostAppendsConfig;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\Fresns\FresnsPostAppends\FresnsPostAppendsConfig;
+use App\Http\Share\AmGlobal\GlobalService;
+use Illuminate\Support\Facades\DB;
 
 class AmModel extends BaseAdminModel
 {
@@ -40,7 +40,6 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
 
     public function getRawSqlQuery()
@@ -54,8 +53,7 @@ class AmModel extends BaseAdminModel
          *过滤屏蔽对象的帖子（成员、小组、话题、帖子），屏蔽对象的帖子不输出。
          *searchKey 查询的是帖子标题（posts > title）和全量正文（post_appends > content）
          *searchType 留空代表输出所有内容。内容为插件 unikey 值，用于搜索包含指定插件扩展内容的帖子。
-         *默认排序类型「time」，默认排序方式「降序」
-         *
+         *默认排序类型「time」，默认排序方式「降序」.
          */
         // 屏蔽的目标字段
         $request = request();
@@ -94,18 +92,18 @@ class AmModel extends BaseAdminModel
         // dump($memberShields);
         // dump($noPostHashtags);
         // dd($commentShields);
-        if (!empty($noGroupArr)) {
+        if (! empty($noGroupArr)) {
             // dump($noGroupArr);
             // $query->whereNotIn('post.group_id',$noGroupArr);
             $postgroupIdArr = FresnsPosts::whereNotIn('group_id', $noGroupArr)->pluck('id')->toArray();
-            $noPostgroupIdArr = FresnsPosts::where('group_id',NULL)->pluck('id')->toArray();
+            $noPostgroupIdArr = FresnsPosts::where('group_id', null)->pluck('id')->toArray();
             // dd($postIdArr);
-            $postIdArr = array_merge($postgroupIdArr,$noPostgroupIdArr);
+            $postIdArr = array_merge($postgroupIdArr, $noPostgroupIdArr);
             // dump($postIdArr);
             $query->whereIn('post.id', $postIdArr);
         }
         // dd($GroupShields);
-        if (!empty($GroupShields)) {
+        if (! empty($GroupShields)) {
             // dump($GroupShields);
             // $query->whereNotIn('post.group_id',$GroupShields);
             $postIdArr = FresnsPosts::whereNotIn('group_id', $GroupShields)->pluck('id')->toArray();
@@ -118,11 +116,11 @@ class AmModel extends BaseAdminModel
         // 2.1、过期后内容不可见，不输出帖子列表。
         // 2.2、过期后，到期前的内容可见，输出到期日期前的帖子列表。
         // 2.3、在有效期内，继续往下判断。
-        $site_mode = ApiConfigHelper::getConfigByItemKey("site_mode");
+        $site_mode = ApiConfigHelper::getConfigByItemKey('site_mode');
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
-            if (!empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
-                $site_private_end = ApiConfigHelper::getConfigByItemKey("site_private_end");
+            if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
+                $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
                     $query->where('post.member_id', '=', 0);
                 }
@@ -152,7 +150,7 @@ class AmModel extends BaseAdminModel
             // 后台是否允许查看别人的帖子
             $allowPost = ApiConfigHelper::getConfigByItemKey(AmConfig::IT_PUBLISH_POSTS) ?? true;
             // dd($allowPost);
-            if (!$allowPost) {
+            if (! $allowPost) {
                 $query->where('post.member_id', '=', 0);
             } else {
                 $memberInfo = FresnsMembers::where('uuid', $searchMid)->first();
@@ -262,9 +260,9 @@ class AmModel extends BaseAdminModel
             $query->where('post.created_at', '<=', $createdTimeLt);
         }
         // 排序处理
-        $sortType = request()->input('sortType', "");
+        $sortType = request()->input('sortType', '');
         $sortDirection = request()->input('sortDirection', 2);
-        $sortWayType = $sortDirection == 2 ? "DESC" : "ASC";
+        $sortWayType = $sortDirection == 2 ? 'DESC' : 'ASC';
         switch ($sortType) {
             case 'view':
                 $query->orderBy('post.view_count', $sortWayType);
@@ -295,15 +293,16 @@ class AmModel extends BaseAdminModel
     // 搜索排序字段
     public function initOrderByFields()
     {
-        $sortType = request()->input('sortType', "");
+        $sortType = request()->input('sortType', '');
         $sortWay = request()->input('sortWay', 2);
-        $sortWayType = $sortWay == 2 ? "DESC" : "ASC";
+        $sortWayType = $sortWay == 2 ? 'DESC' : 'ASC';
         switch ($sortType) {
             case 'view':
                 $orderByFields = [
                     'view_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'like':
@@ -311,6 +310,7 @@ class AmModel extends BaseAdminModel
                     'like_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'follow':
@@ -318,6 +318,7 @@ class AmModel extends BaseAdminModel
                     'follow_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'shield':
@@ -325,6 +326,7 @@ class AmModel extends BaseAdminModel
                     'shield_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'post':
@@ -332,6 +334,7 @@ class AmModel extends BaseAdminModel
                     'post_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'essence':
@@ -339,6 +342,7 @@ class AmModel extends BaseAdminModel
                     'essence_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'time':
@@ -346,6 +350,7 @@ class AmModel extends BaseAdminModel
                     'created_at' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
 
@@ -354,10 +359,9 @@ class AmModel extends BaseAdminModel
                     'created_at' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
         }
     }
 }
-
-

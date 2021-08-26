@@ -9,6 +9,4 @@ namespace App\Http\Share\AmGlobal;
 
 class GlobalService extends AmService
 {
-
-    
 }

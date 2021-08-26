@@ -19,7 +19,4 @@ class BasePluginWebController extends BaseController
 
     public $themePc;
     public $themeMobile;
-
-
-
 }

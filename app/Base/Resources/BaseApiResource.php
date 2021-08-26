@@ -10,5 +10,4 @@ namespace App\Base\Resources;
 
 class BaseApiResource extends BaseResource
 {
-
 }

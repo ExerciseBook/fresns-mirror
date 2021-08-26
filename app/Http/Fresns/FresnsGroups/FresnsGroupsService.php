@@ -7,23 +7,24 @@
  */
 
 // 系统解耦, 快捷方式入口
+
 namespace App\Http\Fresns\FresnsGroups;
 
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseService;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
-use App\Http\Fresns\FresnsPlugins\FresnsPlugins as pluginUnikey;
-use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
-use App\Http\Fresns\FresnsApi\Info\AmService as InfoService;
-use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Fresns\FresnsApi\Content\AmConfig as ContentConfig;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\Fresns\FresnsApi\Info\AmService as InfoService;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins as pluginUnikey;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
+use App\Http\Share\AmGlobal\GlobalService;
+use Illuminate\Support\Facades\DB;
 
 class FresnsGroupsService extends FresnsBaseService
 {
@@ -45,7 +46,7 @@ class FresnsGroupsService extends FresnsBaseService
         $mid = GlobalService::getGlobalKey('member_id');
         $group = FresnsGroups::where('uuid', $id)->first();
         $common['seoInfo'] = [];
-        if (!$langTag) {
+        if (! $langTag) {
             $langTag = FresnsPluginUsagesService::getDefaultLanguage();
         }
         if ($group) {
@@ -74,32 +75,32 @@ class FresnsGroupsService extends FresnsBaseService
                 $plugin = pluginUnikey::where('unikey', $pluginUsages['plugin_unikey'])->first();
                 //    dd($plugin);
                 $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $pluginUsages['plugin_unikey'])->first();
-                $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? "";
+                $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? '';
                 $name = InfoService::getlanguageField('name', $pluginUsages['id']);
-                $extends['name'] = $name == null ? "" : $name['lang_content'];
+                $extends['name'] = $name == null ? '' : $name['lang_content'];
                 //    $extends['icon'] = $pluginUsages['icon_file_url'] ?? "";
                 $extends['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($pluginUsages['icon_file_id'],
                     $pluginUsages['icon_file_url']);
                 //    $extends['url'] = $plugin['access_path']  .'/'. $pluginUsages['parameter'];
                 $extends['url'] = ApiFileHelper::getPluginUsagesUrl($pluginUsages['plugin_unikey'],
                     $pluginUsages['id']);
-                $extends['badgesType'] = $pluginBadges['display_type'] ?? "";
-                $extends['badgesValue'] = ($pluginBadges['value_text'] ?? "") ?? ($pluginBadges['value_number'] ?? "");
+                $extends['badgesType'] = $pluginBadges['display_type'] ?? '';
+                $extends['badgesValue'] = ($pluginBadges['value_text'] ?? '') ?? ($pluginBadges['value_number'] ?? '');
                 // 是否有权限
                 if ($pluginUsages['member_roles']) {
                     $member_roles = $pluginUsages['member_roles'];
                     $memberRoleArr = FresnsMemberRoleRels::where('member_id', $mid)->pluck('role_id')->toArray();
                     $memberPluginRolesArr = explode(',', $member_roles);
                     $status = array_intersect($memberRoleArr, $memberPluginRolesArr);
-                    if (!$status) {
+                    if (! $status) {
                         $extends = [];
                     }
                 }
             }
         }
         $common['extensions'] = $extends;
-        $common['seoInfo'] = (Object)$common['seoInfo'];
-        $common['extensions'] = (Object)$common['extensions'];
+        $common['seoInfo'] = (object) $common['seoInfo'];
+        $common['extensions'] = $common['extensions'];
 
         return $common;
         // $extends = [];
@@ -131,10 +132,10 @@ class FresnsGroupsService extends FresnsBaseService
                     $array['nicknameColor'] = $memberInfo['uuid'];
                     // 成员角色关联表表
                     $roleRels = FresnsMemberRoleRels::where('member_id', $memberInfo['id'])->first();
-                    if (!empty($roleRels)) {
+                    if (! empty($roleRels)) {
                         $memberRole = FresnsMemberRoles::find($roleRels['role_id']);
                     }
-                    $array['nicknameColor'] = $memberRole['nickname_color'] ?? "";
+                    $array['nicknameColor'] = $memberRole['nickname_color'] ?? '';
                     $array['avatar'] = $memberInfo['avatar_file_url'];
                     $adminMemberArr[] = $array;
                 }
@@ -207,6 +208,7 @@ class FresnsGroupsService extends FresnsBaseService
                 $publishRule['reviewComment'] = false;
             }
         }
+
         return $publishRule;
     }
 
@@ -236,12 +238,12 @@ class FresnsGroupsService extends FresnsBaseService
                     $array['nicknameColor'] = $memberInfo['uuid'];
                     // 成员角色关联表表
                     $roleRels = FresnsMemberRoleRels::where('member_id', $memberInfo['id'])->first();
-                    if (!empty($roleRels)) {
+                    if (! empty($roleRels)) {
                         $memberRole = FresnsMemberRoles::find($roleRels['role_id']);
                     }
-                    $array['nicknameColor'] = $memberRole['nickname_color'] ?? "";
+                    $array['nicknameColor'] = $memberRole['nickname_color'] ?? '';
                     // $array['avatar'] = $memberInfo['avatar_file_url'];
-                    $avatar = $memberInfo['avatar_file_url'] ?? "";
+                    $avatar = $memberInfo['avatar_file_url'] ?? '';
                     // 为空用默认头像
                     if (empty($avatar)) {
                         $defaultIcon = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEFAULT_AVATAR);
@@ -253,6 +255,7 @@ class FresnsGroupsService extends FresnsBaseService
                 }
             }
         }
+
         return $adminMemberArr;
     }
 
@@ -261,7 +264,7 @@ class FresnsGroupsService extends FresnsBaseService
     {
         $permissionArr = json_decode($permission, true);
         $arr = [];
-        if (!$permissionArr) {
+        if (! $permissionArr) {
             return $arr;
         }
         unset($permissionArr['admin_members']);
@@ -271,6 +274,7 @@ class FresnsGroupsService extends FresnsBaseService
         unset($permissionArr['publish_comment']);
         // unset($permissionArr['publish_comment_roles']);
         unset($permissionArr['publish_comment_review']);
+
         return $permissionArr;
     }
 }

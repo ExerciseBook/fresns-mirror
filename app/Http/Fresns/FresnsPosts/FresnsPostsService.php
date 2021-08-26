@@ -7,41 +7,43 @@
  */
 
 // 系统解耦, 快捷方式入口
+
 namespace App\Http\Fresns\FresnsPosts;
 
-use App\Http\Share\Common\LogService;
-use Illuminate\Support\Str;
-use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
-use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Helpers\StrHelper;
-use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
-use App\Http\Fresns\FresnsLanguages\AmModel as FresnsLanguagesModel;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsPostAllows\FresnsPostAllowsConfig;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
-use App\Http\Fresns\FresnsPostAppends\FresnsPostAppendsConfig;
-use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsMemberStats\FresnsMemberStats;
-use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
-use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
-use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
-use App\Http\Fresns\FresnsPosts\FresnsPosts;
-use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
-use App\Http\Fresns\FresnsPostAppends\FresnsPostAppends;
-use App\Http\Fresns\FresnsExtends\FresnsExtends;
-use App\Http\Fresns\FresnsDomains\FresnsDomains;
-use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
-use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinksConfig;
-use App\Http\Fresns\FresnsGroups\FresnsGroups;
-use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
-use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
-use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinks;
-use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
-use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
 use App\Http\Center\Helper\PluginRpcHelper;
-header("Content-Type:text/html;charset=utf-8");
+use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
+use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
+use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
+use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinks;
+use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinksConfig;
+use App\Http\Fresns\FresnsDomains\FresnsDomains;
+use App\Http\Fresns\FresnsExtends\FresnsExtends;
+use App\Http\Fresns\FresnsFiles\FresnsFiles;
+use App\Http\Fresns\FresnsGroups\FresnsGroups;
+use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
+use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
+use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
+use App\Http\Fresns\FresnsLanguages\AmModel as FresnsLanguagesModel;
+use App\Http\Fresns\FresnsLanguages\FresnsLanguages;
+use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
+use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsMemberStats\FresnsMemberStats;
+use App\Http\Fresns\FresnsPostAllows\FresnsPostAllowsConfig;
+use App\Http\Fresns\FresnsPostAppends\FresnsPostAppends;
+use App\Http\Fresns\FresnsPostAppends\FresnsPostAppendsConfig;
+use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
+use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
+use App\Http\Share\Common\LogService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
+header('Content-Type:text/html;charset=utf-8');
 
 class FresnsPostsService extends AmService
 {
@@ -51,13 +53,13 @@ class FresnsPostsService extends AmService
         // 读取草稿表记录
         $draftPost = FresnsPostLogs::find($draftId);
         $releaseResult = $this->doRelease($draftId, $sessionLogsId);
-        if (!$releaseResult) {
-            LogService::formatInfo("帖子发布异常");
+        if (! $releaseResult) {
+            LogService::formatInfo('帖子发布异常');
+
             return false;
         }
 
         return $releaseResult;
-
     }
 
     // 发表
@@ -66,13 +68,14 @@ class FresnsPostsService extends AmService
         // s判断是更新还是新增
         $draftPost = FresnsPostLogs::find($draftId);
         // $this->sendAtMessages(10,$draftId);
-        if (!$draftPost['post_id']) {
+        if (! $draftPost['post_id']) {
             // dd(1);
             $res = $this->storeToDb($draftId, $sessionLogsId);
         } else {
             // 编辑帖子
             $res = $this->updateDb($draftId, $sessionLogsId);
         }
+
         return true;
     }
 
@@ -122,7 +125,7 @@ class FresnsPostsService extends AmService
             'map_latitude' => $latitude,
             'map_longitude' => $longitude,
             // 'release_at'  => date('Y-m-d H:i:s'),
-            'more_json' => json_encode($more_json)
+            'more_json' => json_encode($more_json),
         ];
         // $postId = DB::table('posts')->insertGetId($postInput);
         // dd($postInput);
@@ -131,7 +134,7 @@ class FresnsPostsService extends AmService
         if ($AppendStore) {
             FresnsSessionLogs::where('id', $sessionLogsId)->update([
                 'object_result' => 2,
-                'object_order_id' => $postId
+                'object_order_id' => $postId,
             ]);
             // 入库后执行相应操作
             $this->afterStoreToDb($postId, $draftId);
@@ -144,7 +147,7 @@ class FresnsPostsService extends AmService
         $draftPost = FresnsPostLogs::find($draftId);
         FresnsSessionLogs::where('id', $sessionLogsId)->update([
             'object_result' => 2,
-            'object_order_id' => $draftPost['post_id']
+            'object_order_id' => $draftPost['post_id'],
         ]);
         $post = FresnsPosts::find($draftPost['post_id']);
         // 小组帖子是数-1(编辑前的小组数 - 1)
@@ -185,7 +188,7 @@ class FresnsPostsService extends AmService
             'map_latitude' => $latitude,
             'map_longitude' => $longitude,
             'latest_edit_at' => date('Y-m-d H:i:s'),
-            'more_json' => $more_json
+            'more_json' => $more_json,
         ];
         FresnsPosts::where('id', $draftPost['post_id'])->update($input);
         $AppendStore = $this->postAppendUpdate($draftPost['post_id'], $draftId);
@@ -217,7 +220,6 @@ class FresnsPostsService extends AmService
                 // $memberListNameArr = $member_list_decode['memberListName'];
                 $inputArr = [];
                 foreach ($member_list_name as $v) {
-
                     $item = [];
                     $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
                     // $tagArr = explode('-',$v['lang_code']);
@@ -256,7 +258,6 @@ class FresnsPostsService extends AmService
                 $btnNameArr = $commentConfig_decode['btnName'];
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
-
                     $item = [];
                     $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
                     // $tagArr = explode('-',$v['lang_code']);
@@ -297,7 +298,6 @@ class FresnsPostsService extends AmService
                 $btnNameArr = $allosJsonDecode['btnName'];
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
-
                     $item = [];
                     $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
                     // $tagArr = explode('-',$v['lang_code']);
@@ -316,12 +316,11 @@ class FresnsPostsService extends AmService
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
-
                 }
                 // FresnsLanguagesModel::insert($inputArr);
             }
             // postAllow数据
-            if($allosJsonDecode['permission']){
+            if ($allosJsonDecode['permission']) {
                 $permission = $allosJsonDecode['permission'];
                 if ($permission['members']) {
                     $allowMemberArr = $permission['members'];
@@ -331,7 +330,7 @@ class FresnsPostsService extends AmService
                             DB::table(FresnsPostAllowsConfig::CFG_TABLE)->insert([
                                 'post_id' => $postId,
                                 'type' => 1,
-                                'object_id' => $memberInfo['id']
+                                'object_id' => $memberInfo['id'],
                             ]);
                         }
                     }
@@ -345,7 +344,7 @@ class FresnsPostsService extends AmService
                             DB::table(FresnsPostAllowsConfig::CFG_TABLE)->insert([
                                 'post_id' => $postId,
                                 'type' => 2,
-                                'object_id' => $memberRolesInfo['id']
+                                'object_id' => $memberRolesInfo['id'],
                             ]);
                         }
                     }
@@ -356,15 +355,15 @@ class FresnsPostsService extends AmService
         // 位置信息配置
         $locationJson = json_decode($draftPost['location_json'], true);
 
-        $scale = $locationJson['scale'] ?? "";
-        $poi = $locationJson['poi'] ?? "";
-        $poiId = $locationJson['poiId'] ?? "";
-        $nation = $locationJson['nation'] ?? "";
-        $province = $locationJson['province'] ?? "";
-        $city = $locationJson['city'] ?? "";
-        $district = $locationJson['district'] ?? "";
-        $adcode = $locationJson['adcode'] ?? "";
-        $address = $locationJson['address'] ?? "";
+        $scale = $locationJson['scale'] ?? '';
+        $poi = $locationJson['poi'] ?? '';
+        $poiId = $locationJson['poiId'] ?? '';
+        $nation = $locationJson['nation'] ?? '';
+        $province = $locationJson['province'] ?? '';
+        $city = $locationJson['city'] ?? '';
+        $district = $locationJson['district'] ?? '';
+        $adcode = $locationJson['adcode'] ?? '';
+        $address = $locationJson['address'] ?? '';
 
         // 扩展信息
         $extendsJson = json_decode($draftPost['extends_json'], true);
@@ -376,7 +375,7 @@ class FresnsPostsService extends AmService
                         'linked_type' => 1,
                         'linked_id' => $postId,
                         'extend_id' => $extend['id'],
-                        'plugin_unikey' => $extend['plugin_unikey'] ?? "",
+                        'plugin_unikey' => $extend['plugin_unikey'] ?? '',
                         'rank_num' => $e['rankNum'] ?? 9,
                     ];
                     Db::table('extend_linkeds')->insert($input);
@@ -415,6 +414,7 @@ class FresnsPostsService extends AmService
             'map_address' => $address,
         ];
         DB::table(FresnsPostAppendsConfig::CFG_TABLE)->insert($postAppendInput);
+
         return true;
     }
 
@@ -442,7 +442,6 @@ class FresnsPostsService extends AmService
                 // $memberListNameArr = $member_list_decode['memberListName'];
                 $inputArr = [];
                 foreach ($member_list_name as $v) {
-
                     $item = [];
                     $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
                     // $tagArr = explode('-',$v['lang_code']);
@@ -485,7 +484,6 @@ class FresnsPostsService extends AmService
                 $btnNameArr = $commentConfig_decode['btnName'];
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
-
                     $item = [];
                     $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
                     // $tagArr = explode('-',$v['lang_code']);
@@ -511,7 +509,7 @@ class FresnsPostsService extends AmService
 
         // 阅读权限配置
         $allowJson = $draftPost['allow_json'];
-        $allowPluginUnikey = "";
+        $allowPluginUnikey = '';
         $allowBtnName = null;
         $proportion = null;
         $web_proportion = ApiConfigHelper::getConfigByItemKey(AmConfig::WEB_PROPORTION) ?? 30;
@@ -526,7 +524,6 @@ class FresnsPostsService extends AmService
                 $btnNameArr = $allosJsonDecode['btnName'];
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
-
                     $item = [];
                     $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
                     // $tagArr = explode('-',$v['lang_code']);
@@ -550,11 +547,11 @@ class FresnsPostsService extends AmService
                 // FresnsLanguagesModel::insert($inputArr);
             }
             // postAllow数据
-            if($allosJsonDecode['permission']){
+            if ($allosJsonDecode['permission']) {
                 $permission = $allosJsonDecode['permission'];
                 if ($permission['members']) {
                     $allowMemberArr = $permission['members'];
-                    if($allowMemberArr){
+                    if ($allowMemberArr) {
                         foreach ($allowMemberArr as $m) {
                             $memberInfo = FresnsMembers::where('uuid', $m['mid'])->first();
                             if ($memberInfo) {
@@ -564,7 +561,7 @@ class FresnsPostsService extends AmService
                                     DB::table(FresnsPostAllowsConfig::CFG_TABLE)->insert([
                                         'post_id' => $postId,
                                         'type' => 1,
-                                        'object_id' => $memberInfo['id']
+                                        'object_id' => $memberInfo['id'],
                                     ]);
                                 }
                             }
@@ -576,7 +573,7 @@ class FresnsPostsService extends AmService
                     // 先清空（再新增）
                     DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $postId)->where('type', 2)->delete();
                     $allowRolesArr = $permission['roles'];
-                    if($allowRolesArr){
+                    if ($allowRolesArr) {
                         foreach ($allowRolesArr as $r) {
                             $memberRolesInfo = FresnsMemberRoles::find($r['rid']);
                             if ($memberRolesInfo) {
@@ -586,12 +583,12 @@ class FresnsPostsService extends AmService
                                     DB::table(FresnsPostAllowsConfig::CFG_TABLE)->insert([
                                         'post_id' => $postId,
                                         'type' => 2,
-                                        'object_id' => $memberRolesInfo['id']
+                                        'object_id' => $memberRolesInfo['id'],
                                     ]);
                                 }
                             }
                         }
-                    } 
+                    }
                 }
             }
         }
@@ -599,15 +596,15 @@ class FresnsPostsService extends AmService
         // 位置信息配置
         $locationJson = json_decode($draftPost['location_json'], true);
 
-        $scale = $locationJson['scale'] ?? "";
-        $poi = $locationJson['poi'] ?? "";
-        $poiId = $locationJson['poiId'] ?? "";
-        $nation = $locationJson['nation'] ?? "";
-        $province = $locationJson['province'] ?? "";
-        $city = $locationJson['city'] ?? "";
-        $district = $locationJson['district'] ?? "";
-        $adcode = $locationJson['adcode'] ?? "";
-        $address = $locationJson['address'] ?? "";
+        $scale = $locationJson['scale'] ?? '';
+        $poi = $locationJson['poi'] ?? '';
+        $poiId = $locationJson['poiId'] ?? '';
+        $nation = $locationJson['nation'] ?? '';
+        $province = $locationJson['province'] ?? '';
+        $city = $locationJson['city'] ?? '';
+        $district = $locationJson['district'] ?? '';
+        $adcode = $locationJson['adcode'] ?? '';
+        $address = $locationJson['address'] ?? '';
 
         // 扩展信息
         $extendsJson = json_decode($draftPost['extends_json'], true);
@@ -621,8 +618,8 @@ class FresnsPostsService extends AmService
                         'linked_type' => 1,
                         'linked_id' => $postId,
                         'extend_id' => $extend['id'],
-                        'plugin_unikey' => $extend['plugin_unikey'] ?? "",
-                        'rank_num' => $e['rankNum'] ?? "",
+                        'plugin_unikey' => $extend['plugin_unikey'] ?? '',
+                        'rank_num' => $e['rankNum'] ?? '',
                     ];
                     Db::table('extend_linkeds')->insert($input);
                 }
@@ -660,6 +657,7 @@ class FresnsPostsService extends AmService
             'map_address' => $address,
         ];
         FresnsPostAppends::where('post_id', $postId)->update($postAppendInput);
+
         return true;
     }
 
@@ -672,13 +670,13 @@ class FresnsPostsService extends AmService
             'tableName' => FresnsPostsConfig::CFG_TABLE,
             'insertId' => $postId,
         ];
-        LogService::info('table_input',$input);
+        LogService::info('table_input', $input);
         // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $this->stopWords($draftPost['content']);
         // 草稿更新为已发布
-        FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId,'content' => $content]);
+        FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId, 'content' => $content]);
         // 小组帖子是数+1
         FresnsGroups::where('id', $draftPost['group_id'])->increment('post_count');
         $this->sendAtMessages($postId, $draftId);
@@ -702,13 +700,13 @@ class FresnsPostsService extends AmService
             'tableName' => FresnsPostsConfig::CFG_TABLE,
             'insertId' => $postId,
         ];
-        LogService::info('table_input',$input);
+        LogService::info('table_input', $input);
         // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $this->stopWords($draftPost['content']);
         // 草稿更新为已发布
-        FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId,'content' => $content]);
+        FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId, 'content' => $content]);
         // 小组帖子是数+1
         FresnsGroups::where('id', $draftPost['group_id'])->increment('post_count');
         // post_appends > edit_count	字段数值 +1
@@ -762,12 +760,13 @@ class FresnsPostsService extends AmService
                         'mention_member_id' => $memberInfo['id'],
                     ];
                     $count = DB::table('mentions')->where($mentions)->count();
-                    if($count == 0){
+                    if ($count == 0) {
                         DB::table('mentions')->insert($mentions);
                     }
                 }
             }
         }
+
         return true;
     }
 
@@ -775,7 +774,6 @@ class FresnsPostsService extends AmService
     // 调用 MessageService 处理
     public function sendCommentMessages($postInfo)
     {
-
     }
 
     // 发表成功后，帖子或者评论的主键 ID 产生，然后把 ID 填到 files > table_id 字段里，补齐信息。
@@ -792,6 +790,7 @@ class FresnsPostsService extends AmService
                 }
             }
         }
+
         return true;
     }
 
@@ -807,6 +806,7 @@ class FresnsPostsService extends AmService
             (new FresnsMemberStats())->store(['member_id' => $draftPost['member_id'], 'post_publish_count' => 1]);
         }
         DB::table('configs')->where('item_key', AmConfig::POST_COUNTS)->increment('item_value');
+
         return true;
     }
 
@@ -814,18 +814,18 @@ class FresnsPostsService extends AmService
 
     /**
      * $params
-     * updateType 1 新增 2 编辑
+     * updateType 1 新增 2 编辑.
      */
     public function analisisHashtag($draftId, $updateType = 1)
     {
         $draftPost = FresnsPostLogs::find($draftId);
         // $draftPost['content'] = "这里是1帖子@成员3 的文本。<a onclick='return false;' href='http://www.baidu.com'>点击跳转百度</a>#话题 5##话题2#@成员2";
         if ($updateType == 2) {
-            // 话题 post_count 
-            $hashtagIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->where('linked_id',$draftPost['post_id'])->pluck('hashtag_id')->toArray();
-            FresnsHashtags::whereIn('id',$hashtagIdArr)->decrement('post_count');
+            // 话题 post_count
+            $hashtagIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->where('linked_id', $draftPost['post_id'])->pluck('hashtag_id')->toArray();
+            FresnsHashtags::whereIn('id', $hashtagIdArr)->decrement('post_count');
             // 删除话题关联
-            FresnsHashtagLinkeds::where('linked_type', 1)->where('linked_id',$draftPost['post_id'])->delete();
+            FresnsHashtagLinkeds::where('linked_type', 1)->where('linked_id', $draftPost['post_id'])->delete();
             // DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id',$draftPost['post_id'])->delete();
         }
         // 当前后台话题的显示模式
@@ -833,45 +833,45 @@ class FresnsPostsService extends AmService
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $draftPost['content'], $singlePoundMatches);
         } else {
-            preg_match_all("/#.*?#/", $draftPost['content'], $singlePoundMatches);
+            preg_match_all('/#.*?#/', $draftPost['content'], $singlePoundMatches);
         }
         // dd($singlePoundMatches);
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
                 // 将话题的#号去掉
-                $s = trim(str_replace("#", '', $s));
+                $s = trim(str_replace('#', '', $s));
                 // 是否存在话题
                 $hashInfo = FresnsHashtags::where('name', $s)->first();
                 if ($hashInfo) {
-                    // 话题表post_count +1 
-                    FresnsHashtags::where('id',$hashInfo['id'])->increment('post_count');
+                    // 话题表post_count +1
+                    FresnsHashtags::where('id', $hashInfo['id'])->increment('post_count');
                     // 建立关联关系
                     $res = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->insert([
                         'linked_type' => 1,
                         'linked_id' => $draftPost['post_id'],
-                        'hashtag_id' => $hashInfo['id']
+                        'hashtag_id' => $hashInfo['id'],
                     ]);
                 } else {
                     // 新建话题和话题关联
-                    $slug = urlencode(str_replace(' ','-',$s));
+                    $slug = urlencode(str_replace(' ', '-', $s));
 
-                    if(preg_match("/^[a-zA-Z\s]+$/",$s)){
+                    if (preg_match("/^[a-zA-Z\s]+$/", $s)) {
                         $slug = $slug;
-                    }else{
-                        $slug = str_replace('-','%20',$slug);
+                    } else {
+                        $slug = str_replace('-', '%20', $slug);
                     }
                     $input = [
                         'slug' => $slug,
                         'name' => $s,
                         'member_id' => $draftPost['member_id'],
-                        'post_count' => 1
+                        'post_count' => 1,
                     ];
                     $hashtagId = (new FresnsHashtags())->store($input);
                     // 建立关联关系
                     $res = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->insert([
                         'linked_type' => 1,
                         'linked_id' => $draftPost['post_id'],
-                        'hashtag_id' => $hashtagId
+                        'hashtag_id' => $hashtagId,
                     ]);
                     DB::table('configs')->where('item_key', AmConfig::HASHTAG_COUNTS)->increment('item_value');
                 }
@@ -887,16 +887,16 @@ class FresnsPostsService extends AmService
     {
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $draftPost['content'];
-        if($draftPost['allow_json']){
-            $allow_json = json_decode($draftPost['allow_json'],true);
-            if($allow_json['isAllow'] == 1){
+        if ($draftPost['allow_json']) {
+            $allow_json = json_decode($draftPost['allow_json'], true);
+            if ($allow_json['isAllow'] == 1) {
                 $web_proportion = ApiConfigHelper::getConfigByItemKey(AmConfig::WEB_PROPORTION) ?? 30;
-                if(!isset($allow_json['proportion'])){
+                if (! isset($allow_json['proportion'])) {
                     $proportion = $web_proportion;
-                }else{
-                    if(empty($allow_json['proportion'])){
+                } else {
+                    if (empty($allow_json['proportion'])) {
                         $proportion = $web_proportion;
-                    }else{
+                    } else {
                         $proportion = $allow_json['proportion'];
                     }
                 }
@@ -905,20 +905,21 @@ class FresnsPostsService extends AmService
                 // $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
                 // 获取帖子的摘要字数
                 $commentEditorbRIEFCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_BRIEF_COUNT) ?? 280;
-                if($proportionCount > $commentEditorbRIEFCount){
+                if ($proportionCount > $commentEditorbRIEFCount) {
                     $contentInfo = $this->truncatedContentInfo($content, $commentEditorbRIEFCount);
                     $content = $contentInfo['truncated_content'];
-                }else{
+                } else {
                     $contentInfo = $this->truncatedContentInfo($content, $proportionCount);
                     $content = $contentInfo['truncated_content'];
                 }
             }
         }
-        
+
         // 是否存在替换关键字
         $content = $this->stopWords($content);
         // 去除html标签
         $content = strip_tags($content);
+
         return $content;
     }
 
@@ -926,15 +927,15 @@ class FresnsPostsService extends AmService
 
     /**
      * $params
-     * updateType 1 新增 2 编辑
+     * updateType 1 新增 2 编辑.
      */
     public function domainStore($postId, $draftId, $updateType = 1)
     {
         $draftPost = FresnsPostLogs::find($draftId);
         if ($updateType == 2) {
-            $domainLinksIdArr = FresnsDomainLinks::where('linked_type', 1)->where('linked_id',$postId)->pluck('domain_id')->toArray();
-            FresnsDomains::where('id',$domainLinksIdArr)->decrement('post_count');
-            DB::table(FresnsDomainLinksConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id',$postId)->delete();
+            $domainLinksIdArr = FresnsDomainLinks::where('linked_type', 1)->where('linked_id', $postId)->pluck('domain_id')->toArray();
+            FresnsDomains::where('id', $domainLinksIdArr)->decrement('post_count');
+            DB::table(FresnsDomainLinksConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id', $postId)->delete();
         }
         $postInfo = FresnsPosts::find($postId);
         preg_match_all("/http[s]{0,1}:\/\/.*?\s/", $draftPost['content'], $hrefMatches);
@@ -950,42 +951,41 @@ class FresnsPostsService extends AmService
                 // dd($secDomain);
                 // 域名表是否存在
                 // if($secDomain){
-                    if ($domain) {
-                        $domain_input = [
-                            'domain' => $firstDomain,
-                            'sld' => $domain,
-                        ];
-                        $domainInfo = FresnsDomains::where($domain_input)->first();
-                        if ($domainInfo) {
-                            $domainId = $domainInfo['id'];
-                            FresnsDomains::where('id', $domainId)->increment('post_count');
-                        } else {
-                            $domainId = (new FresnsDomains())->store($domain_input);
-                            FresnsDomains::where('id', $domainId)->increment('post_count');
-                        }
-                        $input = [
-                            'linked_type' => 1,
-                            'linked_id' => $postId,
-                            'link_url' => trim($h),
-                            'domain_id' => $domainId
-                        ];
-                        $domainLinkCount = DB::table('domain_links')->where($input)->count();
-                        if ($domainLinkCount == 0) {
-                            DB::table('domain_links')->insert($input);
-                        }
-                    }     
+                if ($domain) {
+                    $domain_input = [
+                        'domain' => $firstDomain,
+                        'sld' => $domain,
+                    ];
+                    $domainInfo = FresnsDomains::where($domain_input)->first();
+                    if ($domainInfo) {
+                        $domainId = $domainInfo['id'];
+                        FresnsDomains::where('id', $domainId)->increment('post_count');
+                    } else {
+                        $domainId = (new FresnsDomains())->store($domain_input);
+                        FresnsDomains::where('id', $domainId)->increment('post_count');
+                    }
+                    $input = [
+                        'linked_type' => 1,
+                        'linked_id' => $postId,
+                        'link_url' => trim($h),
+                        'domain_id' => $domainId,
+                    ];
+                    $domainLinkCount = DB::table('domain_links')->where($input)->count();
+                    if ($domainLinkCount == 0) {
+                        DB::table('domain_links')->insert($input);
+                    }
+                }
                 // }
             }
         }
+
         return true;
     }
 
     // 编辑内容的草稿，根据 status 参数去执行“清空”、“删除”、“替换”旧内容。
     public function oldContentByStatus($draftPost)
     {
-
     }
-
 
     // “艾特”、“话题”、“链接” content全文中三者的位置信息
     // 内容超过设置的字数时，需要摘要存储，如果摘要最后内容是“艾特”、“话题”、“链接”三种信息，要留全，不能截断，保全时可以限定字数。
@@ -1001,10 +1001,10 @@ class FresnsPostsService extends AmService
         if ($hashtagShow == 1) {
             preg_match("/#.*?\s/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         } else {
-            preg_match("/#.*?#/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
+            preg_match('/#.*?#/', $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         }
         /**
-         * preg_match("/<a .*?>.*?<\/a>/",$content,$hrefMatches,PREG_OFFSET_CAPTURE);
+         * preg_match("/<a .*?>.*?<\/a>/",$content,$hrefMatches,PREG_OFFSET_CAPTURE);.
          *  */
         preg_match("/http[s]{0,1}:\/\/.*?\s/", $content, $hrefMatches, PREG_OFFSET_CAPTURE);
         // dd($singlePoundMatches);
@@ -1045,7 +1045,7 @@ class FresnsPostsService extends AmService
         //     }
         // }
 
-        if (!$findTruncatedPos) {
+        if (! $findTruncatedPos) {
             foreach ($hrefMatches as $currMatch) {
                 $matchStr = $currMatch[0];
                 $matchStrStartPosition = $currMatch[1];
@@ -1057,7 +1057,7 @@ class FresnsPostsService extends AmService
                 }
             }
         }
-        if (!$findTruncatedPos) {
+        if (! $findTruncatedPos) {
             foreach ($atMatches as $currMatch) {
                 $matchStr = $currMatch[0];
                 $matchStrStartPosition = $currMatch[1];
@@ -1074,7 +1074,7 @@ class FresnsPostsService extends AmService
         $info['find_truncated_pos'] = $findTruncatedPos;
         $info['truncated_pos'] = $truncatedPos;  // 截断位置
         if ($findTruncatedPos) {
-            // 字节数转字数 
+            // 字节数转字数
             $chars = self::getChars($content);
             $strLen = self::getStrLen($chars, $truncatedPos);
         } else {
@@ -1110,8 +1110,8 @@ class FresnsPostsService extends AmService
         for ($i = 0; $i < $len; $i++) {
             $utf8Pos = $i;
 
-            $utf8PosDesc = "utf_".$utf8Pos;
-            $charPosDesc = "char_".$charPos;
+            $utf8PosDesc = 'utf_'.$utf8Pos;
+            $charPosDesc = 'char_'.$charPos;
             // $utf8posCharPosMap[$utf8PosDesc] = $charPosDesc;
             $utf8posCharPosMap[$utf8PosDesc] = $charPosDesc;
             // 匹配字符是否为中文
@@ -1122,7 +1122,7 @@ class FresnsPostsService extends AmService
             if (preg_match("/^[\x7f-\xff]+$/", $char)) {
                 // dump($i);
                 $charPos = $charPos + 3;
-                // dump($i);
+            // dump($i);
                 // dump($char);
                 // dd(mb_detect_encoding($char));
                 // dump($charPos);
@@ -1143,12 +1143,13 @@ class FresnsPostsService extends AmService
     // 获取字数对应的字节数
     public static function getChar($utf8posCharPosMap, $sublen)
     {
-        $chars = "";
+        $chars = '';
         foreach ($utf8posCharPosMap as $key => $u) {
             if ($key == 'utf_'.$sublen) {
                 $chars = str_replace('char_', '', $u);
             }
         }
+
         return $chars;
     }
 
@@ -1158,12 +1159,12 @@ class FresnsPostsService extends AmService
         $utf8posCharPosMap = [];
         $len = mb_strlen($content, 'utf8');
         $charPos = 0;
-        $char = "";
+        $char = '';
         for ($i = 0; $i < $len; $i++) {
             $utf8Pos = $i;
 
-            $utf8PosDesc = "utf_".$utf8Pos;
-            $charPosDesc = "char_".$charPos;
+            $utf8PosDesc = 'utf_'.$utf8Pos;
+            $charPosDesc = 'char_'.$charPos;
             // $utf8posCharPosMap[$utf8PosDesc] = $charPosDesc;
             $utf8posCharPosMap[$charPosDesc] = $utf8PosDesc;
             // 匹配字符是否为中文
@@ -1175,18 +1176,20 @@ class FresnsPostsService extends AmService
                 $charPos = $charPos + 1;
             }
         }
+
         return $utf8posCharPosMap;
     }
 
     // 获取字节数对应的字数
     public static function getStrLen($utf8posCharPosMap, $sublen)
     {
-        $strLen = "";
+        $strLen = '';
         foreach ($utf8posCharPosMap as $key => $u) {
             if ($key == 'char_'.$sublen) {
                 $strLen = str_replace('utf_', '', $u);
             }
         }
+
         return $strLen;
     }
 
@@ -1201,6 +1204,7 @@ class FresnsPostsService extends AmService
         if (strpos($domain, '/') !== false) {
             $domain = substr($domain, 0, strpos($domain, '/'));
         }
+
         return strtolower($domain);
     }
 
@@ -1208,7 +1212,7 @@ class FresnsPostsService extends AmService
     {
         $domain = $this->regular_domain($domain);
         //dd($domain);
-        $iana_root = array(
+        $iana_root = [
             'ac',
             'ad',
             'ae',
@@ -1485,8 +1489,8 @@ class FresnsPostsService extends AmService
             'yt',
             'za',
             'zm',
-            'zw'
-        );
+            'zw',
+        ];
         $sub_domain = explode('.', $domain);
         $top_domain = '';
         $top_domain_count = 0;
@@ -1504,6 +1508,7 @@ class FresnsPostsService extends AmService
             }
         }
         $top_domain = $sub_domain [count($sub_domain) - $top_domain_count - 1].$top_domain;
+
         return $top_domain;
     }
 
@@ -1518,10 +1523,12 @@ class FresnsPostsService extends AmService
             if ($str != false) {
                 if ($v['content_mode'] == 2) {
                     $text = str_replace($v['word'], $v['replace_word'], $text);
+
                     return $text;
                 }
             }
         }
+
         return $text;
     }
 }

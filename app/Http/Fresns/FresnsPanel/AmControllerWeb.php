@@ -10,54 +10,53 @@ namespace App\Http\Fresns\FresnsPanel;
 
 use App\Base\Controllers\BaseFrontendController;
 use App\Helpers\HttpHelper;
-use App\Http\Center\Base\PluginConst;
-use App\Http\Share\Common\LogService;
-use Illuminate\Http\Request;
 use App\Helpers\StrHelper;
-use App\Http\Fresns\FresnsPanel\Resource\PluginResource;
+use App\Http\Auth\User;
+use App\Http\Center\Base\PluginConst;
+use App\Http\Center\Helper\InstallHelper;
+use App\Http\Center\Helper\PluginHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsComments\FresnsComments;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
 use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
-use App\Http\Fresns\FresnsPosts\FresnsPosts;
-
-use Illuminate\Support\Facades\Auth;
-use App\Http\Fresns\FresnsPanel\Resource\KeysResource;
-use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeys;
-use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeysService;
-use App\Http\Center\Helper\InstallHelper;
-use App\Http\Center\Helper\PluginHelper;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsPanel\Resource\KeysResource;
+use App\Http\Fresns\FresnsPanel\Resource\PluginResource;
 use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsPlugins\FresnsPluginsService as FresnsPluginFresnsPluginsService;
-use App\Http\Fresns\FresnsUsers\FresnsUsers;
-use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Auth\User;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeys;
+use App\Http\Fresns\FresnsSessionKeys\FresnsSessionKeysService;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
+use App\Http\Fresns\FresnsUsers\FresnsUsers;
+use App\Http\Share\Common\ErrorCodeService;
+use App\Http\Share\Common\LogService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
+
 class AmControllerWeb extends BaseFrontendController
 {
-
     public function __construct()
     {
         $fresnsVersion = ApiConfigHelper::getConfigByItemKey('fresns_version');
 
-        View::share("version", $fresnsVersion ?? '');
+        View::share('version', $fresnsVersion ?? '');
 
-        request()->offsetSet("is_control_api", 1);
+        request()->offsetSet('is_control_api', 1);
     }
 
     public function index()
     {
-        $lang = request()->input('lang','zh-Hans');
+        $lang = request()->input('lang', 'zh-Hans');
         $data = [
             'lang' => $lang,
             'location' => 'action',
@@ -71,20 +70,18 @@ class AmControllerWeb extends BaseFrontendController
 
     public function loginIndex()
     {
-        $lang = request()->input('lang','zh-Hans');
+        $lang = request()->input('lang', 'zh-Hans');
         $data = [
             'lang' => $lang,
         ];
 
         return $this->display('fresns/login', $data);
-
     }
 
     public function loginAcc(Request $request)
     {
         $account = $request->input('account');
         $password = $request->input('password');
-        
 
         $user = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->where('phone', $account)->first();
         if (empty($user)) {
@@ -93,10 +90,9 @@ class AmControllerWeb extends BaseFrontendController
 
         if (empty($user)) {
             $this->error(ErrorCodeService::CODE_LOGIN_ERROR);
-
         }
 
-        $password = base64_decode($password,true);
+        $password = base64_decode($password, true);
         $credentials = [
             'login_name' => $account,
             'password' => $password,
@@ -111,14 +107,13 @@ class AmControllerWeb extends BaseFrontendController
         // dd($user);
         Auth::login($user);
 
-        $lang = $request->input('lang','zh-Hans');
-        if(empty($lang)){
+        $lang = $request->input('lang', 'zh-Hans');
+        if (empty($lang)) {
             $lang = 'zh-Hans';
         }
-        Cache::forever('lang_tag_' . $user['id'],$lang);
+        Cache::forever('lang_tag_'.$user['id'], $lang);
 
         App::setLocale($lang);
-
 
         return redirect('/fresns/dashboard');
     }
@@ -128,7 +123,7 @@ class AmControllerWeb extends BaseFrontendController
         $account = $request->input('account');
         $password = $request->input('password');
 
-        $password = base64_decode($password,true);
+        $password = base64_decode($password, true);
 
         $user = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->where('phone', $account)->first();
         // dd($user);
@@ -139,28 +134,28 @@ class AmControllerWeb extends BaseFrontendController
         if (empty($user)) {
             $this->error(ErrorCodeService::CODE_LOGIN_ERROR);
         }
-        
-        $sessionLogId = FresnsSessionLogsService::addConsoleSessionLogs(3,'控制台登录校验',$user->id);
 
-        if($sessionLogId){
+        $sessionLogId = FresnsSessionLogsService::addConsoleSessionLogs(3, '控制台登录校验', $user->id);
+
+        if ($sessionLogId) {
             $sessionInput = [
                 'object_order_id' => $user->id,
                 'user_id' => $user->id,
             ];
-            FresnsSessionLogs::where('id',$sessionLogId)->update($sessionInput);
+            FresnsSessionLogs::where('id', $sessionLogId)->update($sessionInput);
         }
 
         //查询该邮箱或手机号所属用户，近 1 小时内登录密码错误次数，达到 5 次，则限制登录。
         //session_logs 3-登陆 情况
-        $startTime = date('Y-m-d H:i:s',strtotime("-1 hour"));
-        $sessionCount = FresnsSessionLogs::where('created_at','>=',$startTime)
-        ->where('user_id',$user->id)
-        ->where('object_result',FresnsSessionLogsConfig::OBJECT_RESULT_ERROR)
-        ->where('object_type',FresnsSessionLogsConfig::OBJECT_TYPE_USER_LOGIN)
+        $startTime = date('Y-m-d H:i:s', strtotime('-1 hour'));
+        $sessionCount = FresnsSessionLogs::where('created_at', '>=', $startTime)
+        ->where('user_id', $user->id)
+        ->where('object_result', FresnsSessionLogsConfig::OBJECT_RESULT_ERROR)
+        ->where('object_type', FresnsSessionLogsConfig::OBJECT_TYPE_USER_LOGIN)
         ->count();
 
-        if($sessionCount >= 5){
-            FresnsSessionLogsService::updateSessionLogs($sessionLogId,1);
+        if ($sessionCount >= 5) {
+            FresnsSessionLogsService::updateSessionLogs($sessionLogId, 1);
             $this->error(ErrorCodeService::LOGIN_ERROR);
         }
 
@@ -168,15 +163,15 @@ class AmControllerWeb extends BaseFrontendController
             'login_name' => $account,
             'password' => $password,
         ];
-        
+
         $result = $this->attemptLogin($credentials);
         // dd($result);
         if ($result == false) {
-            FresnsSessionLogsService::updateSessionLogs($sessionLogId,1);
+            FresnsSessionLogsService::updateSessionLogs($sessionLogId, 1);
             $this->error(ErrorCodeService::CODE_LOGIN_ERROR);
         }
 
-        FresnsSessionLogsService::updateSessionLogs($sessionLogId,2);
+        FresnsSessionLogsService::updateSessionLogs($sessionLogId, 2);
 
         return $this->success();
     }
@@ -189,19 +184,20 @@ class AmControllerWeb extends BaseFrontendController
         Auth::logout();
         $request->session()->flush();
         $adminPath = ApiConfigHelper::getConfigByItemKey(FresnsConfigsConfig::BACKEND_PATH) ?? 'admin';
-        $lang = Cache::get('lang_tag_' . $userId);
+        $lang = Cache::get('lang_tag_'.$userId);
 
-        $adminPath = "/fresns"."/$adminPath" . "?lang=$lang";
+        $adminPath = '/fresns'."/$adminPath"."?lang=$lang";
+
         return redirect("$adminPath");
     }
 
     //设置多语言
     public function setLanguage(Request $request)
     {
-        $lang = $request->input('lang','zh-Hans');
+        $lang = $request->input('lang', 'zh-Hans');
         $userId = Auth::id();
 
-        Cache::forever('lang_tag_' . $userId,$lang);
+        Cache::forever('lang_tag_'.$userId, $lang);
 
         $this->success();
     }
@@ -214,15 +210,15 @@ class AmControllerWeb extends BaseFrontendController
             'phone',
             'email',
             'country_code',
-            'pure_phone'
+            'pure_phone',
         ])->toArray();
         foreach ($userArr as &$v) {
             $v['phone_desc'] = 'null';
             $v['email_desc'] = 'null';
-            if (!empty($v['pure_phone'])) {
+            if (! empty($v['pure_phone'])) {
                 $v['phone_desc'] = '+'.$v['country_code'].ApiCommonHelper::encryptPhone($v['pure_phone']);
             }
-            if (!empty($v['email'])) {
+            if (! empty($v['email'])) {
                 $v['email_desc'] = ApiCommonHelper::encryptPhone($v['email']);
             }
         }
@@ -233,12 +229,12 @@ class AmControllerWeb extends BaseFrontendController
         $site_url = ApiConfigHelper::getConfigByItemKey(FresnsConfigsConfig::SITE_DOMAIN);
         $path = '';
         if ($backend_url) {
-            $path = $backend_url."/fresns"."/$admin_path";
+            $path = $backend_url.'/fresns'."/$admin_path";
         }
 
         $userId = Auth::id();
-        $lang = Cache::get('lang_tag_' . $userId);
-        
+        $lang = Cache::get('lang_tag_'.$userId);
+
         App::setLocale($lang);
 
         $data = [
@@ -259,7 +255,6 @@ class AmControllerWeb extends BaseFrontendController
 
     public function updateSetting(Request $request)
     {
-
         $backend_url = $request->input('backend_url');
         $backend_url_end = substr($backend_url, -1);
         if ($backend_url_end == '/') {
@@ -269,7 +264,7 @@ class AmControllerWeb extends BaseFrontendController
         $admin_path = $request->input('admin_path');
 
         $pathNot = AmConfig::BACKEND_PATH_NOT;
-        if(in_array($admin_path,$pathNot)){
+        if (in_array($admin_path, $pathNot)) {
             $this->error(ErrorCodeService::BACKEND_PATH_ERROR);
         }
         $site_url = $request->input('site_url');
@@ -327,11 +322,11 @@ class AmControllerWeb extends BaseFrontendController
         // ];
         // ValidateService::validateRule($request, $rule);
         $account = $request->input('account');
-        if(empty($account)){
+        if (empty($account)) {
             $this->error(ErrorCodeService::ACCOUNT_ERROR);
         }
-        
-        $user = FresnsUsers::where('is_enable', 1)->where('user_type', '!=',AmConfig::USER_TYPE_ADMIN)->where(function ($query) {
+
+        $user = FresnsUsers::where('is_enable', 1)->where('user_type', '!=', AmConfig::USER_TYPE_ADMIN)->where(function ($query) {
             $account = request()->input('account');
             $query->where('phone', $account)->orWhere('email', $account);
         })->first();
@@ -349,7 +344,7 @@ class AmControllerWeb extends BaseFrontendController
     {
         $uuid = $request->input('uuid');
         $user = Auth::user();
-        if($uuid == $user['uuid']){
+        if ($uuid == $user['uuid']) {
             $this->error(ErrorCodeService::DELETE_ADMIN);
         }
         FresnsUsers::where('uuid', $uuid)->update(['user_type' => AmConfig::USER_TYPE_USER]);
@@ -369,7 +364,7 @@ class AmControllerWeb extends BaseFrontendController
         $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
 
         $userId = Auth::id();
-        $lang = Cache::get('lang_tag_' . $userId);
+        $lang = Cache::get('lang_tag_'.$userId);
 
         App::setLocale($lang);
         // dd($pluginList);
@@ -402,7 +397,7 @@ class AmControllerWeb extends BaseFrontendController
         // dd($pluginArr);
 
         $userId = Auth::id();
-        $lang = Cache::get('lang_tag_' . $userId);
+        $lang = Cache::get('lang_tag_'.$userId);
 
         App::setLocale($lang);
         $data = [
@@ -420,7 +415,7 @@ class AmControllerWeb extends BaseFrontendController
     public function dashboard(Request $request)
     {
         $userId = Auth::id();
-        $langTag = Cache::get('lang_tag_' . $userId);
+        $langTag = Cache::get('lang_tag_'.$userId);
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
         $request->offsetSet('type', AmConfig::PLUGINS_TYPE);
         $pluginList = $FresnsPluginsService->searchData();
@@ -486,9 +481,9 @@ class AmControllerWeb extends BaseFrontendController
 
         $json = HttpHelper::curlRequest($url);
         $noticeArr = [];
-        if (!empty($json)) {
+        if (! empty($json)) {
             $jsonArr = json_decode($json, true);
-            if (!empty($jsonArr)) {
+            if (! empty($jsonArr)) {
                 foreach ($jsonArr as $v) {
                     if ($v['langTag'] == $langTag) {
                         $noticeArr[] = $v['content'];
@@ -519,7 +514,7 @@ class AmControllerWeb extends BaseFrontendController
     {
         $url = $request->input('url');
         $userId = Auth::id();
-        $lang = Cache::get('lang_tag_' . $userId);
+        $lang = Cache::get('lang_tag_'.$userId);
 
         App::setLocale($lang);
         $data = [
@@ -545,12 +540,12 @@ class AmControllerWeb extends BaseFrontendController
         $pluginArr = KeysResource::collection($keyLists['list'])->toArray($keyLists['list']);
         // 获取密钥数据
         $clientData = FresnsSessionKeys::getByStaticWithCond()->toArray();
-        $platforms = FresnsConfigs::where("item_key", "platforms")->first(["item_value"]);
+        $platforms = FresnsConfigs::where('item_key', 'platforms')->first(['item_value']);
         // // 平台配置数据
         $platforms = json_decode($platforms['item_value'], true);
         // // 插件数据
         $cond = [
-            ['type','!=',5]
+            ['type', '!=', 5],
         ];
         $plugin = FresnsPlugins::getByStaticWithCond($cond)->toArray();
         // // dd($platforms);
@@ -569,7 +564,7 @@ class AmControllerWeb extends BaseFrontendController
         // dd($pluginArr);
 
         $userId = Auth::id();
-        $lang = Cache::get('lang_tag_' . $userId);
+        $lang = Cache::get('lang_tag_'.$userId);
 
         App::setLocale($lang);
         $data = [
@@ -635,13 +630,13 @@ class AmControllerWeb extends BaseFrontendController
         //页面总数
         $pagination = $pluginList['pagination'];
         if ($pagination['total'] != 0) {
-            $totalPage = (int)ceil($pagination['total'] / $pageSize);
+            $totalPage = (int) ceil($pagination['total'] / $pageSize);
         } else {
             $totalPage = 1;
         }
 
         $userId = Auth::id();
-        $lang = Cache::get('lang_tag_' . $userId);
+        $lang = Cache::get('lang_tag_'.$userId);
 
         App::setLocale($lang);
         // dd($totalPage);
@@ -684,7 +679,7 @@ class AmControllerWeb extends BaseFrontendController
         }
 
         $userId = Auth::id();
-        $lang = Cache::get('lang_tag_' . $userId);
+        $lang = Cache::get('lang_tag_'.$userId);
 
         App::setLocale($lang);
         // dump($websitePluginArr);
@@ -722,14 +717,14 @@ class AmControllerWeb extends BaseFrontendController
         $app_id = strtolower('tw'.StrHelper::randString(14));
         $app_secret = strtolower(StrHelper::randString(32));
         $enAbleStatus = $request->input('enAbleStatus');
-        if(!$keyName){
+        if (! $keyName) {
             $this->error(ErrorCodeService::KEYS_NAME_ERROR);
         }
-        if($platformId == '选择密钥应用平台'){
+        if ($platformId == '选择密钥应用平台') {
             $this->error(ErrorCodeService::KEYS_PLAT_ERROR);
         }
-        if($type == 2){
-            if(!$plugin || $plugin == "选择密钥用于哪个插件"){
+        if ($type == 2) {
+            if (! $plugin || $plugin == '选择密钥用于哪个插件') {
                 $this->error(ErrorCodeService::PLUGIN_PLAT_ERROR);
             }
         }
@@ -755,14 +750,14 @@ class AmControllerWeb extends BaseFrontendController
         $type = $request->input('type');
         $plugin = ($type == 2) ? $request->input('plugin') : null;
         $enAbleStatus = $request->input('enAbleStatus');
-        if(!$keyName){
+        if (! $keyName) {
             $this->error(ErrorCodeService::KEYS_NAME_ERROR);
         }
-        if($platformId == '选择密钥应用平台'){
+        if ($platformId == '选择密钥应用平台') {
             $this->error(ErrorCodeService::KEYS_PLAT_ERROR);
         }
-        if($type == 2){
-            if(!$plugin || $plugin == "选择密钥用于哪个插件"){
+        if ($type == 2) {
+            if (! $plugin || $plugin == '选择密钥用于哪个插件') {
                 $this->error(ErrorCodeService::PLUGIN_PLAT_ERROR);
             }
         }
@@ -806,9 +801,9 @@ class AmControllerWeb extends BaseFrontendController
         // dd($pluginConfig);
         $type = $pluginConfig->type;
         if ($type == PluginConst::PLUGIN_TYPE_THEME) {
-            // todo 
+            // todo
             $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
-            if (!$plugin) {
+            if (! $plugin) {
                 $this->error(ErrorCodeService::PLUGIN_UNIKEY_ERROR);
             }
             if ($plugin['is_enable'] == 1) {
@@ -830,7 +825,7 @@ class AmControllerWeb extends BaseFrontendController
         }
 
         $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
-        if (!$plugin) {
+        if (! $plugin) {
             $this->error(ErrorCodeService::PLUGIN_UNIKEY_ERROR);
         }
         if ($plugin['is_enable'] == 1) {
@@ -853,10 +848,10 @@ class AmControllerWeb extends BaseFrontendController
             'public',
             'storage',
             'plugins',
-            $unikey
+            $unikey,
         ];
         $downloadFileName = implode(DIRECTORY_SEPARATOR, $pathArr);
-        if (!file_exists($downloadFileName)) {
+        if (! file_exists($downloadFileName)) {
             $this->error(ErrorCodeService::FILES_ERROR);
         }
         // 插件目录下的json文件
@@ -895,12 +890,12 @@ class AmControllerWeb extends BaseFrontendController
     public function localInstall(Request $request)
     {
         $dirName = $request->input('dirName');
-        if(empty($dirName)){
+        if (empty($dirName)) {
             $this->error(ErrorCodeService::FILES_EMPTY_ERROR);
         }
         // dd($dirName);
         $downloadFileName = InstallHelper::getPluginExtensionPath($dirName);
-        if (!file_exists($downloadFileName)) {
+        if (! file_exists($downloadFileName)) {
             $this->error(ErrorCodeService::FILES_ERROR);
         }
 
@@ -934,7 +929,7 @@ class AmControllerWeb extends BaseFrontendController
             $info['installInfo'] = $installInfo;
         }
 
-        LogService::info("install info : ", $info);
+        LogService::info('install info : ', $info);
 
         // 插件入库
 
@@ -962,7 +957,7 @@ class AmControllerWeb extends BaseFrontendController
         if (empty($plugin)) {
             // dump($input);
             $res = (new FresnsPlugins())->store($input);
-            // dd($res);
+        // dd($res);
         } else {
             FresnsPlugins::where('unikey', $uniKey)->update($input);
         }
@@ -972,7 +967,7 @@ class AmControllerWeb extends BaseFrontendController
     // 更新插件
     public function uploadPlugin(Request $request)
     {
-        $dowmLoadUrl = "https://apps.fresns.cn/releases/fresns.zip";
+        $dowmLoadUrl = 'https://apps.fresns.cn/releases/fresns.zip';
     }
 
     // 插件启用禁用
@@ -1026,8 +1021,9 @@ class AmControllerWeb extends BaseFrontendController
         }
         $this->success();
     }
-    
-    public function getPostPage(Request $request){
+
+    public function getPostPage(Request $request)
+    {
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 10);
         $request->offsetSet('currentPage', $current);
@@ -1039,7 +1035,7 @@ class AmControllerWeb extends BaseFrontendController
         $postArr = KeysResource::collection($data['list'])->toArray($data['list']);
 
         $post['list_arr'] = $postArr;
-        $bladeData = $this->ajaxBlade("keys", $post);
+        $bladeData = $this->ajaxBlade('keys', $post);
 
         $data = [
             'bladeData' => $bladeData,

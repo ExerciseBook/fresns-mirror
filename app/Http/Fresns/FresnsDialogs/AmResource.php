@@ -12,7 +12,6 @@ use App\Base\Resources\BaseAdminResource;
 
 class AmResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -42,4 +41,3 @@ class AmResource extends BaseAdminResource
         return $arr;
     }
 }
-

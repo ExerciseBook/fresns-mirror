@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsConfigs;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -68,7 +67,7 @@ class AmConfig extends BaseConfig
     const VIDEO_STORAGE = 'storageVideos';
 
     const AUDIO_STORAGE = 'storageAudios';
-    
+
     const DOC_STORAGE = 'storageDocs';
 
     //控制台域名
@@ -97,15 +96,10 @@ class AmConfig extends BaseConfig
         ['key' => 9, 'text' => 'dd.mm.yyyy'],
     ];
 
-     
-
     const SITE_PRIVATE_END_OPTION = [
         ['key' => 1, 'text' => '站点内容不可见'],
         ['key' => 2, 'text' => '到期前内容可见，新内容不可见'],
     ];
-
-    
-
 
     // model 使用 - 表单映射
     const FORM_FIELDS_MAP = [
@@ -117,7 +111,4 @@ class AmConfig extends BaseConfig
         'item_tag' => 'item_tag',
         'item_type' => 'item_type',
     ];
-
-     
-
 }

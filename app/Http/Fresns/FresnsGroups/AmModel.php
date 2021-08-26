@@ -10,11 +10,11 @@ namespace App\Http\Fresns\FresnsGroups;
 
 use App\Base\Models\BaseAdminModel;
 use App\Base\Models\BaseCategoryModel;
-use Illuminate\Support\Facades\DB;
 use App\Helpers\StrHelper;
-use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsFiles\FresnsFiles;
 use App\Http\Fresns\FresnsLanguages\AmModel as FresnsLanguagesModel;
+use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
+use Illuminate\Support\Facades\DB;
 
 class AmModel extends BaseCategoryModel
 {
@@ -56,7 +56,7 @@ class AmModel extends BaseCategoryModel
                 'table_type' => 1,
                 'table_name' => AmConfig::CFG_TABLE,
                 'table_field' => 'id',
-                'table_id' => $id
+                'table_id' => $id,
             ]);
         }
         // 语言表
@@ -99,15 +99,16 @@ class AmModel extends BaseCategoryModel
     // 搜索排序字段
     public function initOrderByFields()
     {
-        $sortType = request()->input('sortType', "");
+        $sortType = request()->input('sortType', '');
         $sortWay = request()->input('sortWay', 2);
-        $sortWayType = $sortWay == 2 ? "DESC" : "ASC";
+        $sortWayType = $sortWay == 2 ? 'DESC' : 'ASC';
         switch ($sortType) {
             case 'view':
                 $orderByFields = [
                     'view_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'like':
@@ -115,6 +116,7 @@ class AmModel extends BaseCategoryModel
                     'like_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'follow':
@@ -122,6 +124,7 @@ class AmModel extends BaseCategoryModel
                     'follow_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'shield':
@@ -129,6 +132,7 @@ class AmModel extends BaseCategoryModel
                     'shield_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'post':
@@ -136,6 +140,7 @@ class AmModel extends BaseCategoryModel
                     'post_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'essence':
@@ -143,6 +148,7 @@ class AmModel extends BaseCategoryModel
                     'essence_count' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
             case 'time':
@@ -150,17 +156,18 @@ class AmModel extends BaseCategoryModel
                     'created_at' => $sortWayType,
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
 
             default:
                 $orderByFields = [
-                    'rank_num' => "ASC",
+                    'rank_num' => 'ASC',
                     // 'updated_at'    => 'DESC',
                 ];
+
                 return $orderByFields;
                 break;
         }
     }
 }
-

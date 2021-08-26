@@ -8,6 +8,7 @@
 
 namespace App\Base\Controllers;
 
+use App\Base\Config\BaseConfig;
 use App\Http\Share\Common\LogService;
 use App\Servers\AccountServer\UserServer;
 use App\Servers\AccountServer\UserServerConfig;
@@ -16,7 +17,7 @@ use App\Traits\ApiTrait;
 use App\Traits\BladeTrait;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
-use App\Base\Config\BaseConfig;
+
 class BaseFrontendController extends Controller
 {
     use BladeTrait;
@@ -27,63 +28,68 @@ class BaseFrontendController extends Controller
     public function username()
     {
         $request = request();
-        
+
         $loginType = $request->input('login_type');
 
-        if(!empty($loginType)){
+        if (! empty($loginType)) {
             return $loginType;
         }
 
         return 'login_name';
     }
-    public static function checkLoginTest($login_name){
+
+    public static function checkLoginTest($login_name)
+    {
         // 判断登录方式
-        if(preg_match(BaseConfig::PHONE_REG,$login_name)){
+        if (preg_match(BaseConfig::PHONE_REG, $login_name)) {
             return  BaseConfig::LOGIN_TYPE[BaseConfig::LOGIN_TYPE_PHONE];
-        }elseif(filter_var($login_name,FILTER_VALIDATE_EMAIL)){
+        } elseif (filter_var($login_name, FILTER_VALIDATE_EMAIL)) {
             return  BaseConfig::LOGIN_TYPE[BaseConfig::LOGIN_TYPE_EMAIL];
-        }else{
+        } else {
             return  BaseConfig::LOGIN_TYPE[BaseConfig::LOGIN_TYPE_NAME];
         }
     }
+
     // 登录
-    public function attemptLogin($credentials){
+    public function attemptLogin($credentials)
+    {
         $request = request();
-        LogService::info("登录请求信息为", $credentials);
+        LogService::info('登录请求信息为', $credentials);
         $loginTypeTest = self::checkLoginTest($credentials['login_name']);
-        if($loginTypeTest == 'email'){
+        if ($loginTypeTest == 'email') {
             $request->offsetSet('login_type', 'email');
             $request->offsetSet('email', $credentials['login_name']);
             $request->offsetSet('password', $credentials['password']);
         }
 
-        if($loginTypeTest == 'phone'){
+        if ($loginTypeTest == 'phone') {
             $request->offsetSet('login_type', 'phone');
             $request->offsetSet('phone', $credentials['login_name']);
             $request->offsetSet('password', $credentials['password']);
         }
 
-        if($loginTypeTest == 'login_name'){
+        if ($loginTypeTest == 'login_name') {
             $request->offsetSet('login_type', 'login_name');
             $request->offsetSet('login_name', $credentials['login_name']);
             $request->offsetSet('password', $credentials['password']);
         }
 
-        $loginResult  = collect(['email', 'phone'])->contains(function ($value) use ($request) {
+        $loginResult = collect(['email', 'phone'])->contains(function ($value) use ($request) {
             $username = $this->username();
-            LogService::info("登录方式", $username);
+            LogService::info('登录方式', $username);
             $account = $request->input($this->username());
             $password = $request->input('password');
             $credentials = [
                 $value => $account,
-                'password' => $password
+                'password' => $password,
             ];
-            LogService::info("登录凭证信息为", $credentials);
+            LogService::info('登录凭证信息为', $credentials);
+
             return $this->guard()->attempt($credentials, $request->filled('remember'));
         });
 
-        LogService::info("登录结果", $loginResult);
+        LogService::info('登录结果', $loginResult);
+
         return $loginResult;
     }
-
 }

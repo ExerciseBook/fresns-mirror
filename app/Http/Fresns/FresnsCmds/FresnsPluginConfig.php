@@ -8,8 +8,8 @@
 
 namespace App\Http\Fresns\FresnsCmds;
 
-use Illuminate\Validation\Rule;
 use App\Http\Center\Base\BasePluginConfig;
+use Illuminate\Validation\Rule;
 
 class FresnsPluginConfig extends BasePluginConfig
 {
@@ -116,7 +116,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'template' => 'required',
             // 'template' => 'required',
             'account' => 'required',
-            'langTag' => 'required'
+            'langTag' => 'required',
         ];
         // 校验参数
         // $type = $request->input('type');
@@ -130,7 +130,7 @@ class FresnsPluginConfig extends BasePluginConfig
         //     case 2:
         //         $rule = [
         //             'account' => 'required|numeric|regex:/^1[^0-2]\d{9}$/',
-        //         ];    
+        //         ];
         //         break;
         // }
         // $rule = [
@@ -166,7 +166,7 @@ class FresnsPluginConfig extends BasePluginConfig
         //     case 2:
         //         $rule = [
         //             'account' => 'required|numeric|regex:/^1[^0-2]\d{9}$/',
-        //         ];    
+        //         ];
         //         break;
         // }
         return $rule;
@@ -179,6 +179,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'type' => 'required|in:1,2',
             'logId' => 'required',
         ];
+
         return $rule;
     }
 
@@ -190,6 +191,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'title' => 'required',
             'content' => 'required',
         ];
+
         return $rule;
     }
 
@@ -204,6 +206,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'variale2' => 'required',
             'countryCode' => 'required',
         ];
+
         return $rule;
     }
 
@@ -221,6 +224,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'linkType' => 'required',
             'linkUrl' => 'required',
         ];
+
         return $rule;
     }
 
@@ -237,6 +241,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'linkType' => 'required',
             'linkUrl' => 'required',
         ];
+
         return $rule;
     }
 
@@ -252,6 +257,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'linkType' => 'required',
             'linkUrl' => 'required',
         ];
+
         return $rule;
     }
 
@@ -272,7 +278,7 @@ class FresnsPluginConfig extends BasePluginConfig
         $rule = [
             'platform' => 'required',
             'uid' => 'required',
-            'token' => 'required'
+            'token' => 'required',
         ];
 
         return $rule;
@@ -300,25 +306,24 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdGetUploadTokenHandlerRule()
     {
         $rule = [
-            'type' => "required|in:1,2,3,4",
-            'mode' => "required|in:1,2",
-            'scene' => "required|numeric",
+            'type' => 'required|in:1,2,3,4',
+            'mode' => 'required|in:1,2',
+            'scene' => 'required|numeric',
 
         ];
 
         return $rule;
-
     }
 
     //上传文件
     public function plgCmdUploadFileHandlerRule()
     {
         $rule = [
-            'type' => "required|in:1,2,3,4",
-            'tableType' => "required",
-            'tableName' => "required",
-            'tableField' => "required",
-            'mode' => "required|in:1,2",
+            'type' => 'required|in:1,2,3,4',
+            'tableType' => 'required',
+            'tableName' => 'required',
+            'tableField' => 'required',
+            'mode' => 'required|in:1,2',
         ];
 
         return $rule;
@@ -328,7 +333,7 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdAntiLinkImageHandlerRule()
     {
         $rule = [
-            'fid' => "required",
+            'fid' => 'required',
         ];
 
         return $rule;
@@ -338,7 +343,7 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdAntiLinkVideoHandlerRule()
     {
         $rule = [
-            'fid' => "required",
+            'fid' => 'required',
         ];
 
         return $rule;
@@ -348,7 +353,7 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdAntiLinkAudioHandlerRule()
     {
         $rule = [
-            'fid' => "required",
+            'fid' => 'required',
         ];
 
         return $rule;
@@ -358,7 +363,7 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdAntiLinkDocHandlerRule()
     {
         $rule = [
-            'fid' => "required",
+            'fid' => 'required',
         ];
 
         return $rule;
@@ -368,7 +373,7 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdHardDeleteFidHandlerRule()
     {
         $rule = [
-            'fid' => "required",
+            'fid' => 'required',
         ];
 
         return $rule;
@@ -378,8 +383,8 @@ class FresnsPluginConfig extends BasePluginConfig
     public function deleteContentHandlerRule()
     {
         $rule = [
-            'type' => "required | in:1,2",
-            'content' => 'required'
+            'type' => 'required | in:1,2',
+            'content' => 'required',
         ];
 
         return $rule;
@@ -388,8 +393,8 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdGetTokenHandlerRule()
     {
         $rule = [
-            'type' => "required | in:1,2,3,4",
-            'scene' => 'required|in:1,2,3,4,5,6,7,8,9,10,11'
+            'type' => 'required | in:1,2,3,4',
+            'scene' => 'required|in:1,2,3,4,5,6,7,8,9,10,11',
         ];
 
         return $rule;
@@ -398,8 +403,8 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdGetAccessPathHandlerRule()
     {
         $rule = [
-            'type' => "required | in:1,2,3,4",
-            'scene' => 'required|in:1,2,3,4,5,6,7,8,9,10,11'
+            'type' => 'required | in:1,2,3,4',
+            'scene' => 'required|in:1,2,3,4,5,6,7,8,9,10,11',
         ];
 
         return $rule;
@@ -408,7 +413,7 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdVerifySignHandlerRule()
     {
         $rule = [
-            'platform' => "required",
+            'platform' => 'required',
             'appId' => 'required',
             'timestamp' => 'required',
             'sign' => 'required',
@@ -420,7 +425,7 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdWalletIncreaseHandlerRule()
     {
         $rule = [
-            'type' => "required|in:1,2,3",
+            'type' => 'required|in:1,2,3',
             'uid' => 'required',
             'amount' => 'required|numeric',
             'transactionAmount' => 'required|numeric',
@@ -434,7 +439,7 @@ class FresnsPluginConfig extends BasePluginConfig
     public function plgCmdWalletDecreaseHandlerRule()
     {
         $rule = [
-            'type' => "required|in:4,5,6",
+            'type' => 'required|in:4,5,6',
             'uid' => 'required',
             'amount' => 'required|numeric',
             'transactionAmount' => 'required|numeric',

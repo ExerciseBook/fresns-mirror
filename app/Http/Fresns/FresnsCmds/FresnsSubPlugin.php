@@ -9,18 +9,16 @@
 namespace App\Http\Fresns\FresnsCmds;
 
 use App\Http\Center\Base\BasePlugin;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
+use App\Http\Center\Base\BasePluginConfig;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Helper\PluginRpcHelper;
-use App\Http\Center\Base\BasePluginConfig;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Share\Common\LogService;
 
 /**
  * Class FresnsCrontabPlugin
- * 订阅事件处理
- *
- * @package App\Http\Fresns\FresnsCmds
+ * 订阅事件处理.
  */
 class FresnsSubPlugin extends BasePlugin
 {
@@ -45,11 +43,11 @@ class FresnsSubPlugin extends BasePlugin
         // 查询订阅信息（tableName是否存在订阅信息）
         $subscribe = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->where('is_enable',
             1)->first();
-        $subscribeArr = "";
+        $subscribeArr = '';
         if ($subscribe) {
             $subscribeInfo = json_decode($subscribe['item_value'], true);
-            LogService::Info('subscribeInfo',$subscribeInfo);
-            if($subscribeInfo){
+            LogService::Info('subscribeInfo', $subscribeInfo);
+            if ($subscribeInfo) {
                 foreach ($subscribeInfo as $s) {
                     if ($tableName == $s['subscribe_table_name']) {
                         $subscribeArr = $s;
@@ -58,9 +56,9 @@ class FresnsSubPlugin extends BasePlugin
             }
         }
         // 获取发送命令字得cmd 和 unikey
-        $cmd = "";
-        $unikey = "";
-        if (!empty($subscribeArr)) {
+        $cmd = '';
+        $unikey = '';
+        if (! empty($subscribeArr)) {
             // 订阅类型为 2， 则执行 anget_plugin_unikey 的 anget_plugin_cmd
             if ($subscribeArr['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE2) {
                 $cmd = $subscribeArr['anget_plugin_cmd'];
@@ -92,6 +90,7 @@ class FresnsSubPlugin extends BasePlugin
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
             return $this->pluginError($resp);
         }
+
         return $this->pluginSuccess($resp);
     }
 
@@ -101,9 +100,9 @@ class FresnsSubPlugin extends BasePlugin
         // 查询订阅信息（tableName是否存在订阅信息）
         $subscribe = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->where('is_enable',
             1)->first();
-        if (!empty($subscribe)) {
+        if (! empty($subscribe)) {
             $subscribeInfo = json_decode($subscribe['item_value'], true);
-            if($subscribeInfo){
+            if ($subscribeInfo) {
                 foreach ($subscribe as $s) {
                     // 订阅类型为4
                     if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE4) {
@@ -118,8 +117,8 @@ class FresnsSubPlugin extends BasePlugin
                     }
                 }
             }
-            
         }
+
         return $this->pluginSuccess();
     }
-}       
+}

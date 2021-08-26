@@ -29,6 +29,4 @@ Route::group(['prefix' => 'fresns/info', 'namespace' => '\App\Http\Fresns\Fresns
 
     // 全局摘要信息
     Route::post('/overview', 'AmControllerApi@overview')->name('admin.info.overview');
-
-
 });

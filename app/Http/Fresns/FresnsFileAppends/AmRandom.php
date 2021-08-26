@@ -8,7 +8,6 @@
 
 namespace App\Http\Fresns\FresnsFileAppends;
 
-
 use App\Base\Randoms\BaseRandom;
 use Faker\Generator;
 

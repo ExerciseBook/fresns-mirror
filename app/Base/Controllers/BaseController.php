@@ -24,11 +24,11 @@ class BaseController extends Controller
     protected $service;
 
     // 列表
-    public function index(Request $request){
-
+    public function index(Request $request)
+    {
         ValidateService::validateRule($request, $this->rules(BaseConfig::RULE_INDEX));
 
-        $currentPage = $request->input('current',1);
+        $currentPage = $request->input('current', 1);
 
         $request->offsetSet('currentPage', $currentPage);
 
@@ -38,15 +38,15 @@ class BaseController extends Controller
     }
 
     // 新增
-    public function store(Request $request){
-        $rules= $this->rules(BaseConfig::RULE_STORE);
+    public function store(Request $request)
+    {
+        $rules = $this->rules(BaseConfig::RULE_STORE);
 
-        ValidateService::validateRule($request,$rules,$this->messages(BaseConfig::RULE_STORE));
+        ValidateService::validateRule($request, $rules, $this->messages(BaseConfig::RULE_STORE));
 
         $this->hookStoreValidateAfter();
 
         $this->service->store();
-
 
         // 清空request数据
         CommonHelper::removeRequestFields($this->service->getSearchableFields());
@@ -99,23 +99,27 @@ class BaseController extends Controller
     }
 
     // 验证规则
-    public function rules($ruleType){
+    public function rules($ruleType)
+    {
         return [];
     }
 
     // 验证规则语言
-    public function messages($ruleType){
+    public function messages($ruleType)
+    {
         return [];
     }
 
     // 导出
-    public function export(Request $request){
+    public function export(Request $request)
+    {
         $data = $this->service->exportData();
         $this->success($data);
     }
 
     // 导入
-    public function import(Request $request){
+    public function import(Request $request)
+    {
         //ValidateService::validateRule($request, BaseConfig::IMPORT_RULE);
 
         $uploadFile = $request->file('excel');
@@ -130,14 +134,14 @@ class BaseController extends Controller
         $data = $parseInfo['data'] ?? ['default' => ''];
 
         // 成功则返回数据
-        if($code == ErrorCodeService::CODE_OK){
+        if ($code == ErrorCodeService::CODE_OK) {
             $this->success($data);
         }
 
         $msg = $parseInfo['msg'] ?? [];
 
         // 失败返回信息详情
-        $this->errorInfo($code, $msg, [],$data);
+        $this->errorInfo($code, $msg, [], $data);
     }
 
     // 拉取数据

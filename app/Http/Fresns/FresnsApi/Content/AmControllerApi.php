@@ -8,63 +8,63 @@
 
 namespace App\Http\Fresns\FresnsApi\Content;
 
+use App\Helpers\StrHelper;
+use App\Http\Center\Base\BasePluginConfig;
+use App\Http\Center\Helper\PluginHelper;
+use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Scene\FileSceneService;
 use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
-use Illuminate\Http\Request;
-use App\Http\Fresns\FresnsGroups\FresnsGroupsService;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsGroups\FresnsGroups;
-use App\Http\Share\Common\ValidateService;
-use Illuminate\Validation\Rule;
-use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
-use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
-use App\Http\Fresns\FresnsPosts\FresnsPostsService;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
-use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
-use App\Http\Fresns\FresnsHashtags\FresnsHashtagsService;
-use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesService;
-use App\Http\Fresns\FresnsPosts\FresnsPosts;
-use App\Http\Fresns\FresnsPostMembers\FresnsPostMembersService;
-use App\Http\Fresns\FresnsComments\FresnsComments;
-use App\Http\Fresns\FresnsHashtags\FresnsHashtagsConfig;
-use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsDownloads\FresnsDownloadsService;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
-use App\Http\Fresns\FresnsComments\FresnsCommentsService;
 use App\Http\Fresns\FresnsApi\Content\Resource\CommentResource;
+use App\Http\Fresns\FresnsApi\Content\Resource\CommentResourceDetail;
+use App\Http\Fresns\FresnsApi\Content\Resource\FresnsExtendsResource;
 use App\Http\Fresns\FresnsApi\Content\Resource\FresnsPostResource;
 use App\Http\Fresns\FresnsApi\Content\Resource\FresnsPostResourceDetail;
-use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
-use App\Http\Fresns\FresnsApi\Content\Resource\CommentResourceDetail;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\Fresns\FresnsApi\Info\AmService;
+use App\Http\Fresns\FresnsCmds\FresnsPlugin;
+use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
+use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
+use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
+use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
+use App\Http\Fresns\FresnsComments\FresnsComments;
+use App\Http\Fresns\FresnsComments\FresnsCommentsConfig;
+use App\Http\Fresns\FresnsComments\FresnsCommentsService;
+use App\Http\Fresns\FresnsDownloads\FresnsDownloadsService;
 use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
 use App\Http\Fresns\FresnsExtends\FresnsExtendsService;
-use App\Http\Fresns\FresnsApi\Content\Resource\FresnsExtendsResource;
-use App\Http\Share\Common\LogService;
-use App\Http\Center\Scene\FileSceneService;
+use App\Http\Fresns\FresnsFiles\FresnsFiles;
+use App\Http\Fresns\FresnsGroups\FresnsGroups;
+use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
+use App\Http\Fresns\FresnsGroups\FresnsGroupsService;
+use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
+use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
+use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
+use App\Http\Fresns\FresnsHashtags\FresnsHashtagsConfig;
+use App\Http\Fresns\FresnsHashtags\FresnsHashtagsService;
 use App\Http\Fresns\FresnsImplants\FresnsImplantsService;
-use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
-use App\Http\Fresns\FresnsCmds\FresnsPlugin;
-use App\Http\Center\Helper\PluginRpcHelper;
-use App\Helpers\StrHelper;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
-use App\Http\Center\Helper\PluginHelper;
-use App\Http\Center\Base\BasePluginConfig;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
-use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
-use App\Http\Fresns\FresnsApi\Info\AmService;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
+use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
+use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesService;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\Fresns\FresnsPlugins\FresnsPlugins as pluginUnikey;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
+use App\Http\Fresns\FresnsPostMembers\FresnsPostMembersService;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsPosts\FresnsPostsConfig;
+use App\Http\Fresns\FresnsPosts\FresnsPostsService;
 use App\Http\Share\AmGlobal\GlobalService;
 use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
-use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
-use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
+use App\Http\Share\Common\LogService;
+use App\Http\Share\Common\ValidateService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class AmControllerApi extends FresnsBaseApiController
 {
@@ -143,7 +143,7 @@ class AmControllerApi extends FresnsBaseApiController
     {
         // dd(1);
         $rule = [
-            'type' => "required|in:1,2",
+            'type' => 'required|in:1,2',
             'createdTimeGt' => 'date_format:"Y-m-d H:i:s"',
             'createdTimeLt' => 'date_format:"Y-m-d H:i:s"',
         ];
@@ -230,7 +230,7 @@ class AmControllerApi extends FresnsBaseApiController
     {
         $table = FresnsGroupsConfig::CFG_TABLE;
         $rule = [
-            'gid' => "required|exists:{$table},uuid"
+            'gid' => "required|exists:{$table},uuid",
         ];
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         if ($site_mode == AmConfig::PRIVATE) {
@@ -255,7 +255,7 @@ class AmControllerApi extends FresnsBaseApiController
         $request->offsetSet('gid', $id);
         $FresnsGroupsService->setResourceDetail(FresnsGroupResourceDetail::class);
         // $data = $FresnsGroupsService->searchData();
-        $group = FresnsGroups::where('uuid',$id)->first();
+        $group = FresnsGroups::where('uuid', $id)->first();
         $detail = $FresnsGroupsService->detail($group['id']);
         // $data = [
         //     // 'pagination' => $data['pagination'],
@@ -269,8 +269,8 @@ class AmControllerApi extends FresnsBaseApiController
     public function post_lists(Request $request)
     {
         $rule = [
-            'searchEssence' => "in:1,2,3",
-            'searchSticky' => "in:1,2,3",
+            'searchEssence' => 'in:1,2,3',
+            'searchSticky' => 'in:1,2,3',
             'createdTimeGt' => 'date_format:"Y-m-d H:i:s"',
             'createdTimeLt' => 'date_format:"Y-m-d H:i:s"',
             'viewCountGt' => 'numeric',
@@ -318,7 +318,7 @@ class AmControllerApi extends FresnsBaseApiController
         $data = [
             'pagination' => $list['pagination'],
             'list' => $list['list'],
-            'common' => $common
+            'common' => $common,
         ];
         $this->success($data);
     }
@@ -328,7 +328,7 @@ class AmControllerApi extends FresnsBaseApiController
     {
         $table = FresnsPostsConfig::CFG_TABLE;
         $rule = [
-            'pid' => "required|exists:{$table},uuid"
+            'pid' => "required|exists:{$table},uuid",
         ];
         ValidateService::validateRule($request, $rule);
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
@@ -345,25 +345,25 @@ class AmControllerApi extends FresnsBaseApiController
         }
         //  请求接口时查询配置表键名‘post_detail_service’（有值，将请求转述给插件，由插件处理
         $post_detail_config = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_DETAIL_SERVICE);
-        if($post_detail_config){
+        if ($post_detail_config) {
             $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
-                $pluginClass = PluginHelper::findPluginClass($post_detail_config);
-                if (empty($pluginClass)) {
-                    LogService::error("未找到插件类");
-                    $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
-                }
-                $input = [
-                    'type' => 'postDetail',
-                    'header' => $this->getHeader($request->header()),
-                    'body' => $request->all(),
-                ];
-                $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-                $this->success($resp['output']);
+            $pluginClass = PluginHelper::findPluginClass($post_detail_config);
+            if (empty($pluginClass)) {
+                LogService::error('未找到插件类');
+                $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
+            }
+            $input = [
+                'type' => 'postDetail',
+                'header' => $this->getHeader($request->header()),
+                'body' => $request->all(),
+            ];
+            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
+            $this->success($resp['output']);
         }
         $mid = GlobalService::getGlobalKey('member_id');
         $langTag = $this->langTag;
         $id = $request->input('pid');
-        $postId = FresnsPosts::where('uuid',$id)->first();
+        $postId = FresnsPosts::where('uuid', $id)->first();
         $FresnsPostsService = new FresnsPostsService();
         $FresnsPostsService->setResourceDetail(FresnsPostResourceDetail::class);
         $detail = $FresnsPostsService->detail($postId['id']);
@@ -377,8 +377,8 @@ class AmControllerApi extends FresnsBaseApiController
             null)->where('follow_type', 2)->pluck('follow_id')->toArray();
         // // dd($FresnsGroups);
         $noGroupArr = array_diff($FresnsGroups, $groupMember);
-        if(!empty($detail['detail']['group_id'])){
-            if(in_array($detail['detail']['group_id'],$noGroupArr)){
+        if (! empty($detail['detail']['group_id'])) {
+            if (in_array($detail['detail']['group_id'], $noGroupArr)) {
                 $detail['detail'] = [];
             }
         }
@@ -387,29 +387,29 @@ class AmControllerApi extends FresnsBaseApiController
         $memberShieldsTable = FresnsMemberShieldsConfig::CFG_TABLE;
         $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at',
             null)->where('shield_type', 1)->pluck('shield_id')->toArray();
-        if(in_array($detail['detail']['member_id'],$memberShields)){
+        if (in_array($detail['detail']['member_id'], $memberShields)) {
             $detail['detail'] = [];
-        }    
+        }
         $GroupShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
             2)->where('deleted_at', null)->pluck('shield_id')->toArray();
-        if(!empty($detail['detail']['group_id'])){
-            if(in_array($detail['detail']['group_id'],$GroupShields)){
+        if (! empty($detail['detail']['group_id'])) {
+            if (in_array($detail['detail']['group_id'], $GroupShields)) {
                 $detail['detail'] = [];
-            }    
+            }
         }
         $shieldshashtags = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
             3)->where('deleted_at', null)->pluck('shield_id')->toArray();
         // $noPostHashtags = FresnsHashtagLinkeds::where('linked_type',1)->whereIn('hashtag_id',$shieldshashtags)->pluck('linked_id')->toArray();
         $noPostHashtags = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('deleted_at',
             null)->whereIn('hashtag_id', $shieldshashtags)->pluck('linked_id')->toArray();
-        if(in_array($detail['detail']['id'],$noPostHashtags)){
+        if (in_array($detail['detail']['id'], $noPostHashtags)) {
             $detail['detail'] = [];
-        }    
+        }
         $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
             4)->pluck('shield_id')->where('deleted_at', null)->toArray();
-        if(in_array($detail['detail']['id'],$commentShields)){
+        if (in_array($detail['detail']['id'], $commentShields)) {
             $detail['detail'] = [];
-        }  
+        }
         // $query = DB::table('posts as p');
         // // dump($noPostHashtags);
         // // dump($commentShields);
@@ -442,15 +442,15 @@ class AmControllerApi extends FresnsBaseApiController
         // }
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
-            if (!empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
-                $site_private_end = ApiConfigHelper::getConfigByItemKey("site_private_end");
+            if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
+                $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
                     // $query->where('p.member_id','=',0);
                     $this->error(ErrorCodeService::USER_EXPIRED_ERROR);
                 }
                 if ($site_private_end == 2) {
                     // $query->where('p.created_at', '<=', $memberInfo['expired_at']);
-                    if($detail['detail']['created_at'] > $memberInfo['expired_at']){
+                    if ($detail['detail']['created_at'] > $memberInfo['expired_at']) {
                         $detail['detail'] = [];
                     }
                 }
@@ -462,7 +462,7 @@ class AmControllerApi extends FresnsBaseApiController
 
         $post = Fresnsposts::where('uuid', $id)->first();
         $seoPost['seoInfo'] = [];
-        if (!$langTag) {
+        if (! $langTag) {
             $langTag = FresnsPluginUsagesService::getDefaultLanguage();
         }
         // dd($post);
@@ -478,7 +478,7 @@ class AmControllerApi extends FresnsBaseApiController
             $seoInfo['description'] = $seo->description;
             $seoPost['seoInfo'] = $seoInfo;
         }
-        $seoPost['seoInfo'] = (Object)$seoPost['seoInfo'];
+        $seoPost['seoInfo'] = (object) $seoPost['seoInfo'];
         // $data = [
         //     // 'pagination' => $data['pagination'],
         //     'detail' => $detail,
@@ -525,7 +525,7 @@ class AmControllerApi extends FresnsBaseApiController
     {
         $table = FresnsHashtagsConfig::CFG_TABLE;
         $rule = [
-            'huri' => "required|exists:{$table},slug"
+            'huri' => "required|exists:{$table},slug",
         ];
         ValidateService::validateRule($request, $rule);
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
@@ -544,7 +544,7 @@ class AmControllerApi extends FresnsBaseApiController
         $langTag = $this->langTag;
         $FresnsHashtagsService = new FresnsHashtagsService();
         $FresnsHashtagsService->setResourceDetail(FresnsHashtagsResourceDetail::class);
-        $id = FresnsHashtags::where('slug',$request->input('huri'))->first();
+        $id = FresnsHashtags::where('slug', $request->input('huri'))->first();
         // $data = $FresnsHashtagsService->searchData();
         $detail = $FresnsHashtagsService->detail($id['id']);
         // dd($data);
@@ -586,7 +586,7 @@ class AmControllerApi extends FresnsBaseApiController
         $data = [
             'pagination' => $list['pagination'],
             'list' => $list['list'],
-            'common' => $common
+            'common' => $common,
         ];
         $this->success($data);
     }
@@ -596,7 +596,7 @@ class AmControllerApi extends FresnsBaseApiController
     {
         $table = FresnsCommentsConfig::CFG_TABLE;
         $rule = [
-            'cid' => "required|exists:{$table},uuid"
+            'cid' => "required|exists:{$table},uuid",
         ];
         ValidateService::validateRule($request, $rule);
         // 未登录，私有模式 不输出
@@ -611,8 +611,8 @@ class AmControllerApi extends FresnsBaseApiController
             if (empty($member_id)) {
                 $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
             }
-        }     
-        $comment = FresnsComments::where('uuid',$request->input('cid'))->first(); 
+        }
+        $comment = FresnsComments::where('uuid', $request->input('cid'))->first();
         // dd($comment);s
         $fresnsCommentsService = new FresnsCommentsService();
         $fresnsCommentsService->setResourceDetail(CommentResourceDetail::class);
@@ -624,21 +624,20 @@ class AmControllerApi extends FresnsBaseApiController
         $postTable = FresnsPostsConfig::CFG_TABLE;
         /**
          * 过滤屏蔽对象的评论（成员、评论）。
-         *
          */
         // 屏蔽的目标字段
         $request = request();
         $mid = GlobalService::getGlobalKey('member_id');
         $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at',
             null)->where('shield_type', 1)->pluck('shield_id')->toArray();
-        if(in_array($detail['detail']['member_id'],$memberShields)){
+        if (in_array($detail['detail']['member_id'], $memberShields)) {
             $detail['detail'] = [];
-        } 
+        }
         $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at',
             null)->where('shield_type', 5)->pluck('shield_id')->toArray();
-        if(in_array($detail['detail']['id'],$commentShields)){
+        if (in_array($detail['detail']['id'], $commentShields)) {
             $detail['detail'] = [];
-        } 
+        }
         // $query = DB::table("$commentTable as comment")->select('comment.*')
         //     ->leftJoin("$commentAppendTable as append", 'comment.id', '=', 'append.comment_id')
         //     ->whereNotIn('comment.member_id', $memberShields)
@@ -647,15 +646,15 @@ class AmControllerApi extends FresnsBaseApiController
         //     ->where('comment.uuid', $request->input('cid'));
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
-            if (!empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
-                $site_private_end = ApiConfigHelper::getConfigByItemKey("site_private_end");
+            if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
+                $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
                     // $query->where('comment.member_id','=',0);
                     $this->error(ErrorCodeService::USER_EXPIRED_ERROR);
                 }
                 if ($site_private_end == 2) {
                     // $query->where('comment.created_at', '<=', $memberInfo['expired_at']);
-                    if($detail['detail']['created_at'] > $memberInfo['expired_at']){
+                    if ($detail['detail']['created_at'] > $memberInfo['expired_at']) {
                         $detail['detail'] = [];
                     }
                 }
@@ -672,7 +671,7 @@ class AmControllerApi extends FresnsBaseApiController
         // $data = $fresnsCommentsService->searchData();
         $comment = FresnsComments::where('uuid', $request->input('cid'))->first();
         $seoComment['seoInfo'] = [];
-        if (!$langTag) {
+        if (! $langTag) {
             $langTag = FresnsPluginUsagesService::getDefaultLanguage();
         }
         $seo = [];
@@ -687,7 +686,7 @@ class AmControllerApi extends FresnsBaseApiController
             $seoInfo['description'] = $seo->description;
             $seoComment['seoInfo'] = $seoInfo;
         }
-        $seoComment['seoInfo'] = (Object)$seoComment['seoInfo'];
+        $seoComment['seoInfo'] = (object) $seoComment['seoInfo'];
 
         $detail['common'] = $seoComment;
         // $data = [
@@ -773,8 +772,8 @@ class AmControllerApi extends FresnsBaseApiController
         // dd($ids);
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
-            if (!empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
-                $site_private_end = ApiConfigHelper::getConfigByItemKey("site_private_end");
+            if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
+                $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
                     $request->offsetSet('id', 0);
                 }
@@ -784,9 +783,9 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
         // dd($ids);
-        $searchType = $request->input('searchType', "");
+        $searchType = $request->input('searchType', '');
         if ($searchType == 'all') {
-            $request->offsetSet('searchType', "");
+            $request->offsetSet('searchType', '');
         }
         // dd($ids);
         $page = $request->input('page', 1);
@@ -805,7 +804,7 @@ class AmControllerApi extends FresnsBaseApiController
         $data = [
             'pagination' => $list['pagination'],
             'list' => $list['list'],
-            'common' => $common
+            'common' => $common,
         ];
         $this->success($data);
     }
@@ -818,9 +817,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->isPluginData('postNearbys');
         $table = FresnsGroupsConfig::CFG_TABLE;
         $rule = [
-            'longitude' => "required",
-            'latitude' => "required",
-            'mapId' => "required",
+            'longitude' => 'required',
+            'latitude' => 'required',
+            'mapId' => 'required',
         ];
         ValidateService::validateRule($request, $rule);
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
@@ -831,7 +830,7 @@ class AmControllerApi extends FresnsBaseApiController
         $length = $request->input('length', $configLength);
 
         $lengthUnits = $request->input('lengthUnits');
-        if (!$lengthUnits) {
+        if (! $lengthUnits) {
             // 距离
             $languages = ApiConfigHelper::distanceUnits($langTag);
             $lengthUnits = empty($languages) ? 'km' : $languages;
@@ -873,9 +872,9 @@ class AmControllerApi extends FresnsBaseApiController
         // dd($postArr2);
         $idArr = array_intersect($postArr1, $postArr2);
         // dd($idArr);
-        $searchType = $request->input('searchType', "");
+        $searchType = $request->input('searchType', '');
         if ($searchType == 'all') {
-            $request->offsetSet('searchType', "");
+            $request->offsetSet('searchType', '');
         }
         /**
          * 2、成员 members > expired_at 是否在有效期内（为空代表永久有效）。
@@ -886,8 +885,8 @@ class AmControllerApi extends FresnsBaseApiController
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
             // dd($memberInfo);
-            if (!empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
-                $site_private_end = ApiConfigHelper::getConfigByItemKey("site_private_end");
+            if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
+                $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
                     // $request->offsetSet('id', 0);
                     $this->error(ErrorCodeService::USER_EXPIRED_ERROR);
@@ -915,7 +914,7 @@ class AmControllerApi extends FresnsBaseApiController
         $data = [
             'pagination' => $list['pagination'],
             'list' => $list['list'],
-            'common' => $common
+            'common' => $common,
         ];
         $this->success($data);
     }
@@ -1055,17 +1054,17 @@ class AmControllerApi extends FresnsBaseApiController
         $request = request();
         $pluginUsages = FresnsPluginUsages::where('type', 4)->where('is_enable', 1)->first();
         //  $status = false;
-        if (!$pluginUsages || empty($pluginUsages['data_sources'])) {
+        if (! $pluginUsages || empty($pluginUsages['data_sources'])) {
             return;
         }
         $data_source = json_decode($pluginUsages['data_sources'], true);
         // dd($data_source);
-        if (!$data_source) {
+        if (! $data_source) {
             return;
         }
         foreach ($data_source as $key => $d) {
             if ($key == $apiName) {
-                if (!isset($d['pluginUnikey'])) {
+                if (! isset($d['pluginUnikey'])) {
                     return;
                 } else {
                     if (empty($d['pluginUnikey'])) {
@@ -1080,7 +1079,7 @@ class AmControllerApi extends FresnsBaseApiController
                     $pluginClass = PluginHelper::findPluginClass($pluginUnikey);
                     // dd($pluginClass);
                     if (empty($pluginClass)) {
-                        LogService::error("未找到插件类");
+                        LogService::error('未找到插件类');
                         $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
                     }
                     $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
@@ -1097,13 +1096,16 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
     }
-    public function getHeader($header){
+
+    public function getHeader($header)
+    {
         $arr = [];
-        foreach($header as $key => $h){
-            foreach($h as $v){
+        foreach ($header as $key => $h) {
+            foreach ($h as $v) {
                 $arr[$key] = $v;
             }
         }
+
         return $arr;
     }
 }

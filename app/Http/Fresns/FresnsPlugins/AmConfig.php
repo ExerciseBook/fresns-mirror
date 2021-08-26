@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsPlugins;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -80,6 +79,4 @@ class AmConfig extends BaseConfig
         'upgrade_version' => 'upgrade_version',
         'upgrade_version_int' => 'upgrade_version_int',
     ];
-
-     
 }

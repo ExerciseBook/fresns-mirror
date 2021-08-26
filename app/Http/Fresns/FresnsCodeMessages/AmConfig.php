@@ -28,6 +28,4 @@ class AmConfig extends BaseConfig
     const FORM_FIELDS_MAP = [
         'id' => 'id',
     ];
-
-
 }

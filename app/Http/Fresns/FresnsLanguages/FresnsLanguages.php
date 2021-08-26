@@ -7,11 +7,9 @@
  */
 
 // 系统解耦, 快捷方式入口
-namespace App\Http\Fresns\FresnsLanguages;
 
+namespace App\Http\Fresns\FresnsLanguages;
 
 class FresnsLanguages extends AmModel
 {
-
 }
-

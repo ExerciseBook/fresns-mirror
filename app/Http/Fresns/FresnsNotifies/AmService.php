@@ -26,11 +26,12 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
     /**
-     * 插入信息
+     * 插入信息.
      *
      * @param [type] $mark_id 对象id
      * @param [type] $member_id 当前用户
@@ -84,9 +85,8 @@ class AmService extends BaseAdminService
             'source_brief' => $source_brief,
             'source_id' => $source_id,
             'source_class' => $source_class,
-            'source_member_id' => $member_id
+            'source_member_id' => $member_id,
         ];
         FresnsNotifies::insert($input);
     }
-
 }

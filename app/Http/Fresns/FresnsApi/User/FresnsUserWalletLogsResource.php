@@ -18,7 +18,6 @@ use App\Http\Fresns\FresnsUserWalletLogs\FresnsUserWalletLogs;
 
 class FresnsUserWalletLogsResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         //user_wallet_logs > object_name >> plugin_usages(type=1 或 2) > name 多语言，如果插件关联已经删除，则原样输出 object_name 字段值
@@ -32,7 +31,6 @@ class FresnsUserWalletLogsResource extends BaseAdminResource
         } else {
             $name = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name',
                 $pluginUsages['id'], $langTag);
-
         }
         // 默认字段
         $default = [
@@ -49,8 +47,6 @@ class FresnsUserWalletLogsResource extends BaseAdminResource
 
         ];
 
-
         return $default;
     }
 }
-

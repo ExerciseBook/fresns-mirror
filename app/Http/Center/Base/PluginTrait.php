@@ -27,11 +27,11 @@ trait PluginTrait
     public $codeMap = [];
 
     /**
-     * 插件初始化
+     * 插件初始化.
      * @return bool
      */
-    public function initPlugin(){
-
+    public function initPlugin()
+    {
         return true;
     }
 
@@ -43,41 +43,41 @@ trait PluginTrait
         $code = BasePluginConfig::OK;
         $msg = 'ok';
 
-        
         // $pluginConfig = $m->pluginConfig; // 获取 unikey 方法 1
         $uniKey = $this->pluginConfig->uniKey; // 获取 unikey 方法 2
         $langTag = GlobalService::getGlobalKey('langTag');
-        $message = FresnsCodeMessagesService::getCodeMessage($uniKey,$langTag,$code);
-        if(empty($message)){
+        $message = FresnsCodeMessagesService::getCodeMessage($uniKey, $langTag, $code);
+        if (empty($message)) {
             $message = $msg;
         }
+
         return $this->output($code, $message, $data);
     }
 
     /**
-     * 调用异常
+     * 调用异常.
      */
     protected function pluginError($code, $data = [], $msg = '')
     {
         $c = get_called_class();
         $m = new $c;
         $codeMap = $m->getPluginCodeMap();
-     // $pluginConfig = $m->pluginConfig; // 获取 unikey 方法 1
+        // $pluginConfig = $m->pluginConfig; // 获取 unikey 方法 1
         $uniKey = $this->pluginConfig->uniKey; // 获取 unikey 方法 2
         $langTag = GlobalService::getGlobalKey('langTag');
-        $message = FresnsCodeMessagesService::getCodeMessage($uniKey,$langTag,$code);
-        if(empty($message)){
-            $message = ErrorCodeService::getMsg($code,$data) ?? "插件检查异常[{$code}]";
+        $message = FresnsCodeMessagesService::getCodeMessage($uniKey, $langTag, $code);
+        if (empty($message)) {
+            $message = ErrorCodeService::getMsg($code, $data) ?? "插件检查异常[{$code}]";
         }
 
         return $this->output($code, $message, $data);
     }
 
     /**
-     * 插件返回数据
+     * 插件返回数据.
      */
-    protected function output($code, $msg, $data){
-
+    protected function output($code, $msg, $data)
+    {
         $ret = [];
         $ret['plugin_code'] = $code;
         $ret['plugin_msg'] = $msg;
@@ -87,8 +87,8 @@ trait PluginTrait
     }
 
     // 错误码映射
-    public function getPluginCodeMap(){
+    public function getPluginCodeMap()
+    {
         return $this->codeMap;
     }
-
 }

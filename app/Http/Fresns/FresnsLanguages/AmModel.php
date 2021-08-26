@@ -8,9 +8,7 @@
 
 namespace App\Http\Fresns\FresnsLanguages;
 
-
 use App\Base\Models\BaseAdminModel;
-
 
 class AmModel extends BaseAdminModel
 {
@@ -31,8 +29,5 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
-
 }
-

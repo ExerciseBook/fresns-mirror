@@ -12,14 +12,13 @@ use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-   
-    CONST CONFIGS_LIST = 'configs_list';
+    const CONFIGS_LIST = 'configs_list';
     //系统配置api接口返回
-    CONST CONFIGS_LIST_API = 'configs_list_api';
+    const CONFIGS_LIST_API = 'configs_list_api';
 
     //不需要新增的
 
-    CONST URI_CONVERSION_OBJECT_TYPE = [
+    const URI_CONVERSION_OBJECT_TYPE = [
         '未知' => [
             '/api/fresns/info/configs',
             '/api/fresns/info/extensions',
@@ -95,7 +94,7 @@ class AmConfig extends BaseConfig
     ];
 
     //链接转换为接口名称
-    CONST URI_API_NAME_MAP = [
+    const URI_API_NAME_MAP = [
         '/api/fresns/info/configs' => '系统配置信息',
         '/api/fresns/info/extensions' => '扩展配置信息',
         '/api/fresns/info/summary' => '全局摘要信息',
@@ -154,24 +153,24 @@ class AmConfig extends BaseConfig
     ];
 
     //链接转换 //未知
-    CONST URI_CONVERSION_OBJECT_NAME = [
+    const URI_CONVERSION_OBJECT_NAME = [
         'App\Http\Fresns\FresnsConfigs' => [
-            '/api/fresns/info/configs'
+            '/api/fresns/info/configs',
         ],
         'App\Http\Fresns\FresnsPluginUsages' => [
-            '/api/fresns/info/configs'
+            '/api/fresns/info/configs',
         ],
         'App\Http\Fresns\FresnsEmojis' => [
-            '/api/fresns/info/emojis'
+            '/api/fresns/info/emojis',
         ],
         'App\Http\Fresns\FresnsStopWords' => [
-            '/api/fresns/info/stopWords'
+            '/api/fresns/info/stopWords',
         ],
         'App\Http\Fresns\FresnsVerifyCodes' => [
-            '/api/fresns/info/sendVerifyCode'
+            '/api/fresns/info/sendVerifyCode',
         ],
         'App\Http\Fresns\FresnsSessionLogs' => [
-            '/api/fresns/info/uploadLog'
+            '/api/fresns/info/uploadLog',
         ],
         'App\Http\Fresns\FresnsFiles' => [
             '/api/fresns/info/downloadFile',
@@ -238,6 +237,4 @@ class AmConfig extends BaseConfig
             '/api/fresns/comment/detail',
         ],
     ];
-
-
 }

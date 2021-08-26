@@ -8,12 +8,10 @@
 
 namespace App\Http\Fresns\FresnsFiles;
 
-
 use App\Base\Resources\BaseAdminResource;
 
 class AmResourceDetail extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -43,4 +41,3 @@ class AmResourceDetail extends BaseAdminResource
         return $arr;
     }
 }
-

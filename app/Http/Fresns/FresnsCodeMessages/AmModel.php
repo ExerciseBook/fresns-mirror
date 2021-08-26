@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsCodeMessages;
 
 use App\Base\Models\BaseAdminModel;
 
-
 class AmModel extends BaseAdminModel
 {
     protected $table = AmConfig::CFG_TABLE;
@@ -30,8 +29,5 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
-
 }
-

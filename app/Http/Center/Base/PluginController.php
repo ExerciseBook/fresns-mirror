@@ -12,19 +12,20 @@ use App\Base\Controllers\BaseController;
 use App\Http\Center\Helper\InstallHelper;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
+use App\Http\Share\Common\ErrorCodeService;
+use App\Http\Share\Common\ValidateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use App\Http\Share\Common\ValidateService;
-use App\Http\Share\Common\ErrorCodeService;
+
 /**
  * 基础控制器类
- * 处理插件的安装/卸载/升级等基础操作
+ * 处理插件的安装/卸载/升级等基础操作.
  */
 class PluginController extends BaseController
 {
-
     // 远程安装插件
-    public function install(Request $request){
+    public function install(Request $request)
+    {
         $uniKey = $request->input('unikey');
         $dirName = $uniKey;
         $downloadUrl = $request->input('downloadUrl');
@@ -34,7 +35,7 @@ class PluginController extends BaseController
 
         $pathArr = [
             $downloadPath,
-            $dirName . ".zip",
+            $dirName.'.zip',
         ];
         $downloadFileName = implode(DIRECTORY_SEPARATOR, $pathArr);
 
@@ -44,7 +45,7 @@ class PluginController extends BaseController
 
         $fileSize = File::size($downloadFileName);
 
-        if($fileSize < 10){
+        if ($fileSize < 10) {
             $this->error(ErrorCodeService::DOWMLOAD_ERROR, ['info' => '下载失败或者文件为空']);
         }
 
@@ -61,28 +62,28 @@ class PluginController extends BaseController
 
         // 3. 执行插件本身的安装函数
         $installer = InstallHelper::findInstaller($uniKey);
-        if(empty($installer)){
+        if (empty($installer)) {
             $this->error(ErrorCodeService::NO_RECORD);
         }
 
         $installInfo = $installer->install();
         $info['installInfo'] = $installInfo;
 
-
         $this->success($info);
     }
 
     /**
-     * 打包插件
+     * 打包插件.
      * @param Request $request
      */
-    public function package(Request $request){
+    public function package(Request $request)
+    {
         $unikey = $request->input('unikey');
 
         // 获取安装类
         $installer = InstallHelper::findInstaller($unikey);
         // dd($installer);
-        if(empty($installer)){
+        if (empty($installer)) {
             $this->error(ErrorCodeService::NO_RECORD);
         }
 
@@ -92,10 +93,11 @@ class PluginController extends BaseController
     }
 
     /**
-     * 卸载插件
+     * 卸载插件.
      * @param Request $request
      */
-    public function uninstall(Request $request){
+    public function uninstall(Request $request)
+    {
         $uniKey = $request->input('unikey');
 
 //        // 获取安装类
@@ -107,16 +109,17 @@ class PluginController extends BaseController
 
         $info = PluginHelper::uninstallByUniKey($uniKey);
         // 删除插件数据
-        FresnsPlugins::where('unikey',$uniKey)->delete();
+        FresnsPlugins::where('unikey', $uniKey)->delete();
 
         $this->success($info);
     }
 
     /**
-     * 升级插件
+     * 升级插件.
      * @param Request $request
      */
-    public function upgrade(Request $request){
+    public function upgrade(Request $request)
+    {
         $rule = [
             'unikey' => 'required',
             'localVision' => 'required',
@@ -132,34 +135,36 @@ class PluginController extends BaseController
         $remoteVisionInt = $request->input('remoteVisionInt');
         $remoteVision = $request->input('remoteVision');
         $downloadUrl = $request->input('downloadUrl');
-        if($localVision == $remoteVisionInt){
+        if ($localVision == $remoteVisionInt) {
             $this->errorInfo(ErrorCodeService::CODE_FAIL, ['info' => '当前版本与升级版本一致']);
         }
         // 获取安装类
         $installer = InstallHelper::findInstaller($unikey);
-        if(empty($installer)){
+        if (empty($installer)) {
             $this->error(ErrorCodeService::NO_RECORD);
         }
         // 执行安装
-        $res = self::beforeUpgrade($unikey,$dirName,$downloadUrl);
-        if(!$res){
+        $res = self::beforeUpgrade($unikey, $dirName, $downloadUrl);
+        if (! $res) {
             $this->error(ErrorCodeService::DOWMLOAD_ERROR, ['info' => '下载失败或者文件为空']);
         }
         $info = $installer->upgrade();
         // 更新至最新版本
-        FresnsPlugins::where('unikey',$unikey)->update(['version_int' => $remoteVisionInt,'version' => $remoteVision]);
+        FresnsPlugins::where('unikey', $unikey)->update(['version_int' => $remoteVisionInt, 'version' => $remoteVision]);
 
         $this->success($info);
     }
+
     /**
      * @param Request $request
      */
-    public function genDescJson(Request $request){
+    public function genDescJson(Request $request)
+    {
         $unikey = $request->input('unikey');
 
         // 获取安装类
         $installer = InstallHelper::findInstaller($unikey);
-        if(empty($installer)){
+        if (empty($installer)) {
             $this->error(ErrorCodeService::NO_RECORD);
         }
 
@@ -169,7 +174,8 @@ class PluginController extends BaseController
     }
 
     // 升级插件之前执行安装
-    public static function beforeUpgrade($unikey,$dirName,$dowmloadUrl){
+    public static function beforeUpgrade($unikey, $dirName, $dowmloadUrl)
+    {
         $unikey = $unikey;
         $dirName = $dirName;
         $downloadUrl = $dowmloadUrl;
@@ -180,7 +186,7 @@ class PluginController extends BaseController
             'public',
             'storage',
             'export',
-            $dirName . ".zip",
+            $dirName.'.zip',
         ];
         $downloadFileName = implode(DIRECTORY_SEPARATOR, $pathArr);
 
@@ -190,7 +196,7 @@ class PluginController extends BaseController
 
         $fileSize = File::size($downloadFileName);
 
-        if($fileSize < 10){
+        if ($fileSize < 10) {
             return false;
         }
 
@@ -204,13 +210,14 @@ class PluginController extends BaseController
 
         // 2. 执行插件本身的安装函数
         $installer = InstallHelper::findInstaller($unikey);
-        if(empty($installer)){
+        if (empty($installer)) {
             return false;
             // $this->error(FresnsCode::NO_RECORD);
         }
 
         $installInfo = $installer->install();
         $info['installInfo'] = $installInfo;
+
         return $info;
     }
 }

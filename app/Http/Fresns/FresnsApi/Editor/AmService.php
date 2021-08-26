@@ -23,7 +23,7 @@ class AmService
 {
     /**
      * 新内容：post_logs > post_id 和 comment_logs > comment_id 为空，代表新内容
-     * 编辑已有内容：post_logs > post_id 和 comment_logs > comment_id 有值，代表编辑内容
+     * 编辑已有内容：post_logs > post_id 和 comment_logs > comment_id 有值，代表编辑内容.
      */
     public function deletePostComment($uid, $mid, $logs, $type)
     {
@@ -38,8 +38,8 @@ class AmService
                 //情况 1，新草稿：日志表 post_logs > post_id 或 comment_logs > comment_id 字段值为空的记录
                 if ((empty($logs['post_id']) && $type == 1) || (empty($logs['comment_id']) && $type == 2)) {
                     //如果该草稿含有附属文件，则在该文件 files > deleted_at 字段填入时间。
-                    if (!empty($filesArr)) {
-                        if (!empty($filesArr)) {
+                    if (! empty($filesArr)) {
+                        if (! empty($filesArr)) {
                             $filesUuidArr = [];
                             foreach ($filesArr as $v) {
                                 $filesUuidArr[] = $v['fid'];
@@ -50,13 +50,13 @@ class AmService
                             }
                         }
                     }
-                    if (!empty($extendArr)) {
+                    if (! empty($extendArr)) {
                         //如果该草稿含有附属扩展内容，查询 extend_linkeds 是否有内容关联了该扩展内容；有则中止操作，没有则在 extends > deleted_at 字段填入时间。
                         $extendIdArr = [];
                         foreach ($extendArr as $v) {
                             $eid = FresnsExtends::where('uuid', $v['eid'])->value('id');
-                            $count = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('extend_id', $eid)->where('deleted_at',null)->count();
-                                
+                            $count = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('extend_id', $eid)->where('deleted_at', null)->count();
+
                             if ($count == 0) {
                                 $extendIdArr[] = $eid;
                             } else {
@@ -74,30 +74,29 @@ class AmService
                         FresnsCommentLogs::where('id', $logs['id'])->delete();
                     }
                 } else {
-
-                    if (!empty($filesArr)) {
+                    if (! empty($filesArr)) {
                         $filesIdArr = [];
                         foreach ($filesArr as $v) {
                             $filesIdArr[] = $v['fid'];
                         }
 
                         if ($type == 1) {
-                            $isCheck = $this->deletePostFiles($logs['id'], $filesIdArr,$logs['post_id']);
-                            if($isCheck !== true){
+                            $isCheck = $this->deletePostFiles($logs['id'], $filesIdArr, $logs['post_id']);
+                            if ($isCheck !== true) {
                                 return $isCheck;
                             }
                         } else {
-                            $isCheck = $this->deleteCommentFiles($logs['id'], $filesIdArr,$logs['comment_id']);
-                            if($isCheck !== true){
+                            $isCheck = $this->deleteCommentFiles($logs['id'], $filesIdArr, $logs['comment_id']);
+                            if ($isCheck !== true) {
                                 return $isCheck;
                             }
                         }
-                        if (!empty($extendArr)) {
+                        if (! empty($extendArr)) {
                             //如果该草稿含有附属扩展内容，查询 extend_linkeds 是否有内容关联了该扩展内容；有则中止操作，没有则在 extends > deleted_at 字段填入时间。
                             $extendIdArr = [];
                             foreach ($extendArr as $v) {
                                 $eid = FresnsExtends::where('uuid', $v['eid'])->value('id');
-                                $count = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('extend_id', $eid)->where('deleted_at',null)->count();
+                                $count = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('extend_id', $eid)->where('deleted_at', null)->count();
                                 if ($count == 0) {
                                     $extendIdArr[] = $eid;
                                 } else {
@@ -123,13 +122,13 @@ class AmService
                     FresnsFiles::where('uuid', $deleteUuid)->delete();
                 } else {
                     if ($type == 1) {
-                       $isCheck = $this->deletePostFiles($logs['id'], [$deleteUuid],$logs['post_id']);
-                       if($isCheck !== true){
-                           return $isCheck;
-                       }
+                        $isCheck = $this->deletePostFiles($logs['id'], [$deleteUuid], $logs['post_id']);
+                        if ($isCheck !== true) {
+                            return $isCheck;
+                        }
                     } else {
-                        $isCheck = $this->deleteCommentFiles($logs['id'], [$deleteUuid],$logs['comment_id']);
-                        if($isCheck !== true){
+                        $isCheck = $this->deleteCommentFiles($logs['id'], [$deleteUuid], $logs['comment_id']);
+                        if ($isCheck !== true) {
                             return $isCheck;
                         }
                     }
@@ -138,7 +137,7 @@ class AmService
             default:
                 //查询 extend_linkeds 是否有内容关联了该扩展内容；有则中止操作（还有其他内容在使用该扩展，包括自己主表的关联也算），没有则在 extends > deleted_at 字段填入时间。
                 $eid = FresnsExtends::where('uuid', $deleteUuid)->value('id');
-                $count = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('deleted_at',null)->where('extend_id',
+                $count = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('deleted_at', null)->where('extend_id',
                     $eid)->count();
                 if ($count == 0) {
                     FresnsExtends::where('id', $eid)->delete();
@@ -153,10 +152,10 @@ class AmService
     }
 
     //删除帖子相关文件
-    public function deletePostFiles($logId, $filesIdArr,$postId)
+    public function deletePostFiles($logId, $filesIdArr, $postId)
     {
         //流程 1、查询主表是否在使用 posts > more_json > files，在使用则流程中止，没有使用则继续下一个流程。
-        $postsMoreJson = FresnsPosts::where('more_json', 'LIKE', "%files%")->pluck('more_json')->toArray();
+        $postsMoreJson = FresnsPosts::where('more_json', 'LIKE', '%files%')->pluck('more_json')->toArray();
 
         $postFidIdArr = [];
         if ($postsMoreJson) {
@@ -166,7 +165,7 @@ class AmService
                     continue;
                 }
                 foreach ($jsonArr['files'] as $file) {
-                    if(empty($file['fid'])){
+                    if (empty($file['fid'])) {
                         continue;
                     }
                     $postFidIdArr[] = $file['fid'];
@@ -175,7 +174,7 @@ class AmService
         }
 
         $fidArr = [];
-        if (!empty($postFidIdArr)) {
+        if (! empty($postFidIdArr)) {
             foreach ($filesIdArr as $v) {
                 if (in_array($v, $postFidIdArr)) {
                     //如果有使用则流程终止
@@ -188,25 +187,25 @@ class AmService
         $postsLogsFilesJson = FresnsPostLogs::where('files_json', '!=', null)->where('id', '!=',
             $logId)->where('status', 3)->pluck('files_json')->toArray();
 
-        if (!empty($postsLogsFilesJson)) {
+        if (! empty($postsLogsFilesJson)) {
             $postLogFidArr = [];
             foreach ($postsLogsFilesJson as $v) {
                 $postsLogsFilesArr = json_decode($v, true);
                 foreach ($postsLogsFilesArr as $file) {
-                    if(empty($file['fid'])){
+                    if (empty($file['fid'])) {
                         continue;
                     }
                     $postLogFidArr[] = $file['fid'];
                 }
             }
 
-            if (!empty($postLogFidArr)) {
+            if (! empty($postLogFidArr)) {
                 foreach ($filesIdArr as $v) {
                     if (in_array($v, $postLogFidArr)) {
                         //如果有使用则流程终止
                         return ErrorCodeService::DELETE_FILES_ERROR;
                     }
-                }  
+                }
             }
         }
 
@@ -217,10 +216,10 @@ class AmService
     }
 
     //删除评论相关
-    public function deleteCommentFiles($logId, $filesIdArr,$commentId)
+    public function deleteCommentFiles($logId, $filesIdArr, $commentId)
     {
         //流程 流程 1、查询主表是否在使用 comments > more_json > files，在使用则流程中止，没有使用则继续下一个流程。
-        $commentMoreJson = FresnsComments::where('more_json', 'LIKE', "%files%")->pluck('more_json')->toArray();
+        $commentMoreJson = FresnsComments::where('more_json', 'LIKE', '%files%')->pluck('more_json')->toArray();
         $commentFidIdArr = [];
         if ($commentMoreJson) {
             foreach ($commentMoreJson as $v) {
@@ -229,7 +228,7 @@ class AmService
                     continue;
                 }
                 foreach ($jsonArr['files'] as $file) {
-                    if(empty($file['fid'])){
+                    if (empty($file['fid'])) {
                         continue;
                     }
                     $commentFidIdArr[] = $file['fid'];
@@ -238,7 +237,7 @@ class AmService
         }
 
         $fidArr = [];
-        if (!empty($commentFidIdArr)) {
+        if (! empty($commentFidIdArr)) {
             foreach ($filesIdArr as $v) {
                 if (in_array($v, $commentFidIdArr)) {
                     //如果有使用则流程终止
@@ -250,31 +249,30 @@ class AmService
 
         $commentLogsFilesJson = FresnsCommentLogs::where('files_json', '!=', null)->where('id', '!=',
             $logId)->where('status', 3)->pluck('files_json')->toArray();
-        if (!empty($commentLogsFilesJson)) {
+        if (! empty($commentLogsFilesJson)) {
             $commentLogFidArr = [];
             foreach ($commentLogsFilesJson as $v) {
                 $commentLogsFilesArr = json_decode($v, true);
                 foreach ($commentLogsFilesArr as $file) {
-                    if(empty($file['fid'])){
+                    if (empty($file['fid'])) {
                         continue;
                     }
                     $commentLogFidArr[] = $file['fid'];
                 }
             }
 
-            if (!empty($commentLogFidArr)) {
+            if (! empty($commentLogFidArr)) {
                 foreach ($filesIdArr as $v) {
                     if (in_array($v, $commentLogFidArr)) {
                         //如果有使用则流程终止
                         return ErrorCodeService::DELETE_FILES_ERROR;
                     }
                 }
-            } 
+            }
         }
         //在 files > deleted_at 字段填入时间。
         FresnsFiles::whereIn('uuid', $filesIdArr)->delete();
 
         return true;
     }
-
 }

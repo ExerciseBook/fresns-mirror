@@ -9,20 +9,20 @@
 namespace App\Http\Fresns\FresnsApi\Helpers;
 
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use Illuminate\Support\Str;
 use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
+use Illuminate\Support\Str;
 
 class ApiCommonHelper
 {
     // 是否https请求
     public static function isHttpsRequest()
     {
-
         if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
             (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
         ) {
             return true;
         }
+
         return false;
     }
 
@@ -33,9 +33,10 @@ class ApiCommonHelper
         $httpHost = $request->server('HTTP_HOST');
 
         if (self::isHttpsRequest()) {
-            return "https://".$httpHost;
+            return 'https://'.$httpHost;
         }
-        return "http://".$httpHost;
+
+        return 'http://'.$httpHost;
     }
 
     // 电话加密
@@ -44,13 +45,13 @@ class ApiCommonHelper
         if (empty($phone)) {
             return '';
         }
+
         return substr_replace($phone, '****', $start, $end);
     }
 
     // 邮箱加密
     public static function encryptEmail($email)
     {
-
         if (empty($email)) {
             return '';
         }
@@ -74,6 +75,7 @@ class ApiCommonHelper
         $name = mb_substr($name, -1, 1);
 
         $name = '*'.$name;
+
         return $name;
     }
 
@@ -84,7 +86,7 @@ class ApiCommonHelper
         $count = $startNum + $endNum;
         $num = $num - $count;
         $str = '';
-        $str = sprintf("%'*".$num."s", $str);
+        $str = sprintf("%'*".$num.'s', $str);
         $start = mb_substr($number, 0, $startNum);
         $end = mb_substr($number, $endNum);
 
@@ -125,6 +127,7 @@ class ApiCommonHelper
             if ($str != false) {
                 if ($v['dialog_mode'] == 2) {
                     $text = str_replace($v['word'], $v['replace_word'], $text);
+
                     return $text;
                 }
                 if ($v['dialog_mode'] == 3) {
@@ -132,6 +135,7 @@ class ApiCommonHelper
                 }
             }
         }
+
         return $text;
     }
 }

@@ -16,12 +16,12 @@ class BasePlugin
     use PluginTrait;
 
     /**
-     * 服务配置类
+     * 服务配置类.
      */
     public $pluginConfig = null;
 
     /**
-     * 命令字映射
+     * 命令字映射.
      *
      * @var array
      */
@@ -52,21 +52,21 @@ class BasePlugin
         LogService::info("插件请求 cmd [$cmd] 参数", $params);
 
         // 检查命令字
-        if (!$this->checkPluginCmdExist($cmd)) {
+        if (! $this->checkPluginCmdExist($cmd)) {
             return $this->pluginError(BasePluginConfig::CODE_NOT_EXIST);
         }
 
         $method = $this->pluginCmdHandlerMap[$cmd] ?? '';
-        $methodRule = $method."Rule";
+        $methodRule = $method.'Rule';
 
         //   dd($methodRule);
         // 参数校验
         if (method_exists($this->pluginConfig, $methodRule)) {
-
             $validRes = ValidateService::validateServerRule($params, $this->pluginConfig->{$methodRule}());
 
             if ($validRes !== true) {
                 LogService::info("插件请求cmd [$cmd] 参数异常", $validRes);
+
                 return $this->pluginError(BasePluginConfig::CODE_PARAMS_ERROR, $validRes);
             }
         }
@@ -90,5 +90,4 @@ class BasePlugin
     {
         return BasePluginConfig::CODE_MAP;
     }
-
 }

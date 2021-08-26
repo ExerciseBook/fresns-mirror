@@ -13,41 +13,41 @@ use Illuminate\Validation\Rule;
 
 class BaseConfig
 {
-    CONST DEFAULT_PAGE_SIZE = 30;
-    CONST DEFAULT_LARGE_PAGE_SIZE = 500;
-    CONST DEFAULT_ALL_IN_ONE_PAGE_SIZE = 30000;
-    CONST DEFAULT_ROOT_ID = 1;
-    CONST PHONE_REG="/^1[34578]{1}\d{9}$/";
-    CONST DEFAULT_ADMIN_ID = 1;
+    const DEFAULT_PAGE_SIZE = 30;
+    const DEFAULT_LARGE_PAGE_SIZE = 500;
+    const DEFAULT_ALL_IN_ONE_PAGE_SIZE = 30000;
+    const DEFAULT_ROOT_ID = 1;
+    const PHONE_REG = "/^1[34578]{1}\d{9}$/";
+    const DEFAULT_ADMIN_ID = 1;
 
-    CONST RULE_INDEX = 'index';
-    CONST RULE_STORE = 'store';
-    CONST RULE_UPDATE = 'update';
-    CONST RULE_DETAIL = 'detail';
-    CONST RULE_DESTROY = 'destroy';
-    CONST RULE_STORE_MORE_JSON = 'store_more_json';
-    CONST RULE_UPDATE_MORE_JSON = 'update_more_json';
-    CONST IMPORT_RULE = [
+    const RULE_INDEX = 'index';
+    const RULE_STORE = 'store';
+    const RULE_UPDATE = 'update';
+    const RULE_DETAIL = 'detail';
+    const RULE_DESTROY = 'destroy';
+    const RULE_STORE_MORE_JSON = 'store_more_json';
+    const RULE_UPDATE_MORE_JSON = 'update_more_json';
+    const IMPORT_RULE = [
         'excel' => ['required', 'file', 'mimes:xls,xlsx'],
     ];
 
-    CONST NICKNAME = 'nickname';
+    const NICKNAME = 'nickname';
 
     // 查询模式
-    CONST QUERY_TYPE_DB_QUERY= 'db_query';  // 支持join配置的查询
-    CONST QUERY_TYPE_SQL_QUERY= 'sql_query'; // 原生SQL查询
+    const QUERY_TYPE_DB_QUERY = 'db_query';  // 支持join配置的查询
+    const QUERY_TYPE_SQL_QUERY = 'sql_query'; // 原生SQL查询
 
     // button
-    CONST BUTTON_INDEX = 'index_btn';
-    CONST BUTTON_CREATE = 'create_btn';
-    CONST BUTTON_UPDATE = 'update_btn';
-    CONST BUTTON_DELETE = 'delete_btn';
-    CONST BUTTON_DETAIL = 'detail_btn';
-    CONST BUTTON_IMPORT = 'import_btn';
-    CONST BUTTON_EXPORT = 'export_btn';
+    const BUTTON_INDEX = 'index_btn';
+    const BUTTON_CREATE = 'create_btn';
+    const BUTTON_UPDATE = 'update_btn';
+    const BUTTON_DELETE = 'delete_btn';
+    const BUTTON_DETAIL = 'detail_btn';
+    const BUTTON_IMPORT = 'import_btn';
+    const BUTTON_EXPORT = 'export_btn';
 
     // status 1-normal, 2-disabled
-    CONST BUTTON_INFO = [
+    const BUTTON_INFO = [
         ['key' => self::BUTTON_INDEX, 'show' => true, 'name' => '列表', 'status' => 'normal'],
         ['key' => self::BUTTON_CREATE, 'show' => true, 'name' => '新建', 'status' => 'normal'],
         ['key' => self::BUTTON_UPDATE, 'show' => true, 'name' => '编辑', 'status' => 'normal'],
@@ -57,46 +57,45 @@ class BaseConfig
         ['key' => self::BUTTON_EXPORT, 'show' => false, 'name' => '导出', 'status' => 'normal'],
     ];
 
-    CONST ENABLE_VALUE_ARR = [0, 1];
+    const ENABLE_VALUE_ARR = [0, 1];
 
     //启用
-    CONST ENABLE_TRUE = 1;
+    const ENABLE_TRUE = 1;
     // CONST ENABLE_TRUE = true;
     //禁用
-    CONST ENABLE_FALSE = 0;
+    const ENABLE_FALSE = 0;
     // CONST ENABLE_FALSE = false;
 
-    CONST ENABLE_OPTION = [
+    const ENABLE_OPTION = [
         ['key' => self::ENABLE_TRUE, 'text' => '启用'],
         ['key' => self::ENABLE_FALSE, 'text' => '禁用'],
     ];
 
-
-    CONST TABLE_AREA = 'area';
+    const TABLE_AREA = 'area';
 
     // 数据库链接
-    CONST MYSQL_CONNECTION = 'mysql';
-    CONST MYSQL_CONNECTION_SLAVE = 'mysql_slave';
-    CONST MYSQL_CONNECTION_HELPER = "mysql_helper";
+    const MYSQL_CONNECTION = 'mysql';
+    const MYSQL_CONNECTION_SLAVE = 'mysql_slave';
+    const MYSQL_CONNECTION_HELPER = 'mysql_helper';
 
     // 主表额外的查询规则
-    CONST ADDED_SEARCHABLE_FIELDS = [];
+    const ADDED_SEARCHABLE_FIELDS = [];
 
     // 附表额外的查询规则
-    CONST APPEND_SEARCHABLE_FIELDS = [
+    const APPEND_SEARCHABLE_FIELDS = [
         'child_begin_at' => ['field' => 'start_at', 'op' => '>='],
         'child_end_at' => ['field' => 'end_at', 'op' => '<='],
     ];
 
     // join查询规则，部分情况使用
-    CONST JOIN_SEARCHABLE_FIELDS = [
+    const JOIN_SEARCHABLE_FIELDS = [
     ];
 
     // 分类数据表的查询规则，只查询一级节点
     protected $treeSearchRule = [];
 
     // 模型 默认搜索字段
-    CONST DEFAULT_SEARCHABLE_FIELDS = [
+    const DEFAULT_SEARCHABLE_FIELDS = [
         'id' => ['field' => 'id', 'op' => '='],
         'ids' => ['field' => 'id', 'op' => 'IN'],
         'name' => ['field' => 'name', 'op' => 'LIKE'],
@@ -112,34 +111,33 @@ class BaseConfig
     ];
 
     /**
-     * 配置类基本功能
+     * 配置类基本功能.
      */
 
     // 用户类型
-    CONST USER_TYPE_ADMIN = 1; //管理员
-    CONST USER_TYPE_USER = 2; //用户
-
+    const USER_TYPE_ADMIN = 1; //管理员
+    const USER_TYPE_USER = 2; //用户
 
     // 性别
-    CONST GENDER_UNKNOWN = 0;
-    CONST GENDER_MAN = 1;
-    CONST GENDER_FEMALE = 2;
-    CONST GENDER_MAP = [
+    const GENDER_UNKNOWN = 0;
+    const GENDER_MAN = 1;
+    const GENDER_FEMALE = 2;
+    const GENDER_MAP = [
         self::GENDER_UNKNOWN => '未知',
         self::GENDER_MAN => '男',
         self::GENDER_FEMALE => '女',
     ];
     // 登录方式
-    CONST LOGIN_TYPE_EMAIL = 1;
-    CONST LOGIN_TYPE_PHONE = 2;
-    CONST LOGIN_TYPE_NAME = 3;
-    CONST LOGIN_TYPE = [
+    const LOGIN_TYPE_EMAIL = 1;
+    const LOGIN_TYPE_PHONE = 2;
+    const LOGIN_TYPE_NAME = 3;
+    const LOGIN_TYPE = [
         self::LOGIN_TYPE_EMAIL => 'email',
         self::LOGIN_TYPE_PHONE => 'phone',
         self::LOGIN_TYPE_NAME => 'login_name',
     ];
 
-    CONST TEST_SELECT_OPTION = [
+    const TEST_SELECT_OPTION = [
         ['key' => 1, 'text' => '选项1'],
         ['key' => 2, 'text' => '选项2'],
         ['key' => 3, 'text' => '选项3'],
@@ -163,19 +161,16 @@ class BaseConfig
     // 列表规则
     public function indexRule()
     {
-
     }
 
     // 新增规则
     public function storeRule()
     {
-
     }
 
     // 更新规则
     public function updateRule()
     {
-
     }
 
     // 删除规则
@@ -183,11 +178,11 @@ class BaseConfig
     {
         $table = $this->table;
 
-        $rule = ['ids' => ["required",
+        $rule = ['ids' => ['required',
             Rule::exists($table)->where(function ($query) {
                 $query->where('deleted_at', null);
-            })
-        ],];
+            }),
+        ]];
 
         return $rule;
     }
@@ -196,11 +191,12 @@ class BaseConfig
     public function detailRule()
     {
         $table = $this->table;
-        $rule = ['id' => ["required",
+        $rule = ['id' => ['required',
             Rule::exists($table)->where(function ($query) {
                 $query->where('deleted_at', null);
-            })
-        ],];
+            }),
+        ]];
+
         return $rule;
     }
 
@@ -221,5 +217,4 @@ class BaseConfig
     {
         return [];
     }
-
 }

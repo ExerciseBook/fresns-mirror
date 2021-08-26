@@ -8,28 +8,28 @@
 
 namespace App\Helpers;
 
-
 use Illuminate\Support\Facades\DB;
 
 class FresnsConfig
 {
-    public static function configSet($itemKey, $columnName,$columnValue){
-        $t = date("Y-m-d H:i:s", time());
+    public static function configSet($itemKey, $columnName, $columnValue)
+    {
+        $t = date('Y-m-d H:i:s', time());
 
         //echo env("APP_NAME"); exit;
 
-        $configItem =  DB::connection('mysql')->table('configs')->where('item_key', $itemKey)->first();
+        $configItem = DB::connection('mysql')->table('configs')->where('item_key', $itemKey)->first();
 
-        if(empty($configItem)){
+        if (empty($configItem)) {
             $upInfo = [
                 'item_key'   => $itemKey,
                 $columnName => $columnValue,
             ];
             DB::table('configs')->where('item_key', $itemKey)->insert($upInfo);
-        }else{
+        } else {
             $upInfo = [
                 $columnName   => $columnValue,
-                'updated_at'   => date("Y-m-d H:i:s", time())
+                'updated_at'   => date('Y-m-d H:i:s', time()),
             ];
             DB::table('configs')->where('item_key', $itemKey)->update($upInfo);
         }
@@ -37,12 +37,13 @@ class FresnsConfig
         return true;
     }
 
-    public static function configLangSet($itemKey,$content,$lang){
-        $t = date("Y-m-d H:i:s", time());
+    public static function configLangSet($itemKey, $content, $lang)
+    {
+        $t = date('Y-m-d H:i:s', time());
 
-        $languagesItem =  DB::connection('mysql')->table('languages')->where('table_name', 'languages')->where('table_field','item_value')->where('table_key',$itemKey)->where('lang_tag',$lang)->first();
+        $languagesItem = DB::connection('mysql')->table('languages')->where('table_name', 'languages')->where('table_field', 'item_value')->where('table_key', $itemKey)->where('lang_tag', $lang)->first();
 
-        if(empty($languagesItem)){
+        if (empty($languagesItem)) {
             $tag = self::conversionLangTag($lang);
             $langCode = $tag['lang_code'];
             $areaCode = $tag['area_code'];
@@ -52,11 +53,11 @@ class FresnsConfig
                 'table_key'   => $itemKey,
                 'lang_tag'   => $lang,
                 'lang_code' => $langCode,
-                'area_code' => $areaCode ?? NULL,
+                'area_code' => $areaCode ?? null,
                 'lang_content' => $content,
             ];
             DB::table('languages')->where('item_key', $itemKey)->insert($upInfo);
-        }else{
+        } else {
             $upInfo = [
                 'lang_content'   => $content,
             ];
@@ -67,10 +68,11 @@ class FresnsConfig
     }
 
     // 获取配置
-    public static function configGet($itemKey,$columnName){
-        $columnValue =  \Illuminate\Support\Facades\DB::table('configs')->where('item_key', $itemKey)->value($columnName);
+    public static function configGet($itemKey, $columnName)
+    {
+        $columnValue = \Illuminate\Support\Facades\DB::table('configs')->where('item_key', $itemKey)->value($columnName);
 
-        if(empty($columnValue)){
+        if (empty($columnValue)) {
             return '';
         }
 
@@ -78,37 +80,36 @@ class FresnsConfig
     }
 
     // 获取配置
-    public static function configLangGet($itemKey,$lang){
-        $langItem =  \Illuminate\Support\Facades\DB::table('languages')->where('table_name', 'languages')->where('table_field','item_value')->where('table_key',$itemKey)->where('lang_tag',$lang)->first();
+    public static function configLangGet($itemKey, $lang)
+    {
+        $langItem = \Illuminate\Support\Facades\DB::table('languages')->where('table_name', 'languages')->where('table_field', 'item_value')->where('table_key', $itemKey)->where('lang_tag', $lang)->first();
 
-        if(empty($langItem)){
+        if (empty($langItem)) {
             return '';
         }
 
         return $langItem->lang_content;
     }
 
-
     //截取标签
     public static function conversionLangTag($langTag)
     {
-        if(strstr($langTag,'zh-Hans') || strstr($langTag,'zh-Hant')){
-            $tagArr = explode('-',$langTag);
-            if(count($tagArr) == 3){
+        if (strstr($langTag, 'zh-Hans') || strstr($langTag, 'zh-Hant')) {
+            $tagArr = explode('-', $langTag);
+            if (count($tagArr) == 3) {
                 $areaCode = array_pop($tagArr);
-                $langCode = str_replace("-$areaCode",'',$langTag);
+                $langCode = str_replace("-$areaCode", '', $langTag);
             } else {
-                $areaCode = NULL;
+                $areaCode = null;
                 $langCode = $langTag;
             }
-
         } else {
-            $tagArr = explode('-',$langTag);
-            if(count($tagArr) == 2){
+            $tagArr = explode('-', $langTag);
+            if (count($tagArr) == 2) {
                 $areaCode = array_pop($tagArr);
-                $langCode = str_replace("-$areaCode",'',$langTag);
+                $langCode = str_replace("-$areaCode", '', $langTag);
             } else {
-                $areaCode = NULL;
+                $areaCode = null;
                 $langCode = $langTag;
             }
         }

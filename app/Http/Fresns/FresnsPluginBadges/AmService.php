@@ -8,13 +8,11 @@
 
 namespace App\Http\Fresns\FresnsPluginBadges;
 
-
 use App\Base\Services\BaseAdminService;
 use App\Http\Fresns\FresnsLanguages\FresnsLanguagesService;
 use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
-
 
 class AmService extends BaseAdminService
 {
@@ -29,6 +27,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
@@ -55,5 +54,4 @@ class AmService extends BaseAdminService
 
         return $expandsArr;
     }
-
 }

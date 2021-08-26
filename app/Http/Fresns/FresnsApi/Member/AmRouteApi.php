@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-// Fresns_
+//Fresns API
 Route::group(['prefix' => 'fresns/member', 'namespace' => '\App\Http\Fresns\FresnsApi\Member'], function () {
     //登陆
     Route::post('/auth', 'AmControllerApi@auth')->name('admin.member.auth');
@@ -25,5 +25,4 @@ Route::group(['prefix' => 'fresns/member', 'namespace' => '\App\Http\Fresns\Fres
     Route::post('/markLists', 'AmControllerApi@memberMarkLists')->name('admin.member.memberMarkLists');
     //获取成员【互动列表】
     Route::post('/interactions', 'AmControllerApi@memberInteractions')->name('admin.member.memberInteractions');
-
 });

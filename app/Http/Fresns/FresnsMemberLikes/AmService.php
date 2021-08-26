@@ -25,6 +25,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
@@ -51,7 +52,5 @@ class AmService extends BaseAdminService
     {
         DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('like_type', $mark_target)->where('member_id',
             $member_id)->where('like_id', $mark_id)->update(['deleted_at' => date('Y-m-d H:i:s', time())]);
-
     }
-
 }

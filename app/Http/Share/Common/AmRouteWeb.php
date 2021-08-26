@@ -13,4 +13,3 @@ Route::get('/', function () {
 // 查看日志
 Route::get('log3', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('clearLog', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-

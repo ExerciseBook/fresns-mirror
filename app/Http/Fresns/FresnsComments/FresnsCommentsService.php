@@ -7,36 +7,38 @@
  */
 
 // 系统解耦, 快捷方式入口
+
 namespace App\Http\Fresns\FresnsComments;
 
-use App\Http\Fresns\FresnsMembers\FresnsMembers;
-use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use Illuminate\Support\Str;
 use App\Helpers\StrHelper;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
-use App\Http\Fresns\FresnsComments\FresnsComments;
-use App\Http\Fresns\FresnsFiles\FresnsFiles;
-use App\Http\Fresns\FresnsMemberStats\FresnsMemberStats;
-use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
-use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
-use App\Http\Fresns\FresnsPosts\FresnsPosts;
-use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppends;
-use App\Http\Fresns\FresnsExtends\FresnsExtends;
-use App\Http\Fresns\FresnsApi\Content\Resource\FresnsPostResource;
-use App\Http\Share\Common\LogService;
-use App\Http\Fresns\FresnsDomains\FresnsDomains;
-use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
-use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
-use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinksConfig;
-use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
-use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
-use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
-use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinks;
-use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
-use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
 use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Fresns\FresnsApi\Content\Resource\FresnsPostResource;
+use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsCmds\FresnsSubPlugin;
+use App\Http\Fresns\FresnsCmds\FresnsSubPluginConfig;
+use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppends;
+use App\Http\Fresns\FresnsCommentAppends\FresnsCommentAppendsConfig;
+use App\Http\Fresns\FresnsCommentLogs\FresnsCommentLogs;
+use App\Http\Fresns\FresnsComments\FresnsComments;
+use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinks;
+use App\Http\Fresns\FresnsDomainLinks\FresnsDomainLinksConfig;
+use App\Http\Fresns\FresnsDomains\FresnsDomains;
+use App\Http\Fresns\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
+use App\Http\Fresns\FresnsExtends\FresnsExtends;
+use App\Http\Fresns\FresnsFiles\FresnsFiles;
+use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
+use App\Http\Fresns\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
+use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
+use App\Http\Fresns\FresnsMembers\FresnsMembers;
+use App\Http\Fresns\FresnsMembers\FresnsMembersConfig;
+use App\Http\Fresns\FresnsMemberStats\FresnsMemberStats;
+use App\Http\Fresns\FresnsPosts\FresnsPosts;
+use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogs;
+use App\Http\Fresns\FresnsStopWords\FresnsStopWords;
+use App\Http\Share\Common\LogService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 class FresnsCommentsService extends AmService
 {
     public function getCommentPreviewList($comment_id, $limit, $mid)
@@ -71,10 +73,10 @@ class FresnsCommentsService extends AmService
                 $memberInfo = FresnsMembers::find($v['member_id']);
                 $arr = [];
                 $arr['anonymous'] = $v['is_anonymous'];
-                $arr['isAuthor'] = "";
-                $arr['mid'] = "";
-                $arr['mname'] = "";
-                $arr['nickname'] = "";
+                $arr['isAuthor'] = '';
+                $arr['mid'] = '';
+                $arr['mname'] = '';
+                $arr['nickname'] = '';
                 if ($v['is_anonymous'] == 0) {
                     $arr['isAuthor'] = $v['member_id'] == $mid ? true : false;
                     $arr['mid'] = $memberInfo['uuid'];
@@ -101,20 +103,21 @@ class FresnsCommentsService extends AmService
                     $replyComment = FresnsComments::where('id', $v['parent_id'])->orderBy('like_count',
                         'desc')->first();
                     // 回复用户信息
-                    if (!empty($replyComment) && ($v['parent_id'] != $comment_id)) {
+                    if (! empty($replyComment) && ($v['parent_id'] != $comment_id)) {
                         $replyMEmberInfo = FresnsMembers::find($replyComment['member_id']);
-                        $replyTo['cid'] = $replyComment['uuid'] ?? "";
-                        $replyTo['anonymous'] = $replyComment['uuid'] ?? "";
+                        $replyTo['cid'] = $replyComment['uuid'] ?? '';
+                        $replyTo['anonymous'] = $replyComment['uuid'] ?? '';
                         $replyTo['deactivate'] = $replyComment['deleted_at'] == null ? true : false;
-                        $replyTo['mid'] = $replyMEmberInfo['uuid'] ?? "";
-                        $replyTo['mname'] = $replyMEmberInfo['name'] ?? "";
-                        $replyTo['nickname'] = $replyMEmberInfo['nickname'] ?? "";
+                        $replyTo['mid'] = $replyMEmberInfo['uuid'] ?? '';
+                        $replyTo['mname'] = $replyMEmberInfo['name'] ?? '';
+                        $replyTo['nickname'] = $replyMEmberInfo['nickname'] ?? '';
                         $arr['replyTo'] = $replyTo;
                     }
                     $result[] = $arr;
                 }
             }
         }
+
         return $result;
     }
 
@@ -150,21 +153,21 @@ class FresnsCommentsService extends AmService
                 $reply = [];
                 if ($c['parent_id'] != $comment_id) {
                     $parentCommentInfo = FresnsComments::find($c['parent_id']);
-                    if($parentCommentInfo){
-                        $parentMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id',$parentCommentInfo['member_id'])->first();
+                    if ($parentCommentInfo) {
+                        $parentMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $parentCommentInfo['member_id'])->first();
                     }
-                    $reply['cid'] = $parentCommentInfo['uuid'] ?? "";
+                    $reply['cid'] = $parentCommentInfo['uuid'] ?? '';
                     $reply['anonymous'] = $parentCommentInfo['is_anonymous'];
                     $reply['deactivate'] = false;
-                    $reply['mid'] = "";
-                    $reply['mname'] = "";
-                    $reply['nickname'] = "";
+                    $reply['mid'] = '';
+                    $reply['mname'] = '';
+                    $reply['nickname'] = '';
                     if ($parentCommentInfo['is_anonymous'] == 0) {
                         if ($parentMemberInfo->deleted_at == null) {
                             $reply['deactivate'] = true;
-                            $reply['mid'] = $parentMemberInfo->uuid ?? "";
-                            $reply['mname'] = $parentMemberInfo->name ?? "";
-                            $reply['nickname'] = $parentMemberInfo->nickname ?? "";
+                            $reply['mid'] = $parentMemberInfo->uuid ?? '';
+                            $reply['mname'] = $parentMemberInfo->name ?? '';
+                            $reply['nickname'] = $parentMemberInfo->nickname ?? '';
                         }
                     }
                     $replyTo[] = $reply;
@@ -180,8 +183,9 @@ class FresnsCommentsService extends AmService
     {
         // 直接发表
         $releaseResult = $this->doRelease($draftId, $commentCid, $sessionLodsId);
-        if (!$releaseResult) {
-            LogService::formatInfo("评论发布异常");
+        if (! $releaseResult) {
+            LogService::formatInfo('评论发布异常');
+
             return false;
         }
 
@@ -193,19 +197,21 @@ class FresnsCommentsService extends AmService
     {
         // s判断是更新还是新增
         $draftComment = FresnsCommentLogs::find($draftId);
-        if (!$draftComment) {
-            LogService::formatInfo("评论草稿不存在");
+        if (! $draftComment) {
+            LogService::formatInfo('评论草稿不存在');
+
             return false;
         }
         // $this->sendAtMessages(10,$draftId);
         // 新增
-        if (!$draftComment['comment_id']) {
+        if (! $draftComment['comment_id']) {
             // dd(1);
             $res = $this->storeToDb($draftId, $commentCid, $sessionLodsId);
         } else {
             // 编辑
             $res = $this->updateTob($draftId, $sessionLodsId);
         }
+
         return true;
     }
 
@@ -249,7 +255,7 @@ class FresnsCommentsService extends AmService
             // 'status' => 3,
             'is_lbs' => $isLbs,
             // 'release_at'  => date('Y-m-d H:i:s'),
-            'more_json' => json_encode($more_json)
+            'more_json' => json_encode($more_json),
         ];
         LogService::info('postInput', $postInput);
 
@@ -259,7 +265,7 @@ class FresnsCommentsService extends AmService
         if ($AppendStore) {
             FresnsSessionLogs::where('id', $sessionLodsId)->update([
                 'object_result' => 2,
-                'object_order_id' => $commentId
+                'object_order_id' => $commentId,
             ]);
             // 入库后执行相应操作
             $this->afterStoreToDb($commentId, $draftId);
@@ -273,7 +279,7 @@ class FresnsCommentsService extends AmService
         $comment = FresnsComments::find($draftComment['comment_id']);
         FresnsSessionLogs::where('id', $sessionLodsId)->update([
             'object_result' => 2,
-            'object_order_id' => $draftComment['comment_id']
+            'object_order_id' => $draftComment['comment_id'],
         ]);
         // 解析内容信息(判断内容是否需要截断)
         $contentBrief = $this->parseDraftContent($draftId);
@@ -289,7 +295,7 @@ class FresnsCommentsService extends AmService
         $is_allow = $allosJsonDecode['isAllow'] ?? 0;
         // 位置信息配置
         $locationJson = json_decode($draftComment['location_json'], true);
-        $isLbs = $locationJson['isLbs'] ?? "";
+        $isLbs = $locationJson['isLbs'] ?? '';
         $more_json = [];
         $more_json['files'] = json_decode($draftComment['files_json'], true);
 
@@ -301,7 +307,7 @@ class FresnsCommentsService extends AmService
             'is_anonymous' => $draftComment['is_anonymous'],
             'is_lbs' => $isLbs,
             'latest_edit_at' => date('Y-m-d H:i:s'),
-            'more_json' => $more_json
+            'more_json' => $more_json,
         ];
         FresnsComments::where('id', $draftComment['comment_id'])->update($commentInput);
         $AppendStore = $this->commentAppendUpdate($draftComment['comment_id'], $draftId);
@@ -345,7 +351,7 @@ class FresnsCommentsService extends AmService
                         'linked_type' => 2,
                         'linked_id' => $commentId,
                         'extend_id' => $extend['id'],
-                        'plugin_unikey' => $extend['plugin_unikey'] ?? "",
+                        'plugin_unikey' => $extend['plugin_unikey'] ?? '',
                         'rank_num' => $e['rankNum'],
                     ];
                     Db::table('extend_linkeds')->insert($input);
@@ -377,6 +383,7 @@ class FresnsCommentsService extends AmService
             'map_address' => $address,
         ];
         DB::table(FresnsCommentAppendsConfig::CFG_TABLE)->insert($commentAppendInput);
+
         return true;
     }
 
@@ -413,7 +420,7 @@ class FresnsCommentsService extends AmService
                         'linked_type' => 2,
                         'linked_id' => $commentId,
                         'extend_id' => $extend['id'],
-                        'plugin_unikey' => $extend['plugin_unikey'] ?? "",
+                        'plugin_unikey' => $extend['plugin_unikey'] ?? '',
                         'rank_num' => $e['rankNum'] ?? 9,
                     ];
                     Db::table('extend_linkeds')->insert($input);
@@ -443,6 +450,7 @@ class FresnsCommentsService extends AmService
             'map_address' => $address,
         ];
         FresnsCommentAppends::where('comment_id', $commentId)->update($commentAppendInput);
+
         return true;
     }
 
@@ -455,13 +463,13 @@ class FresnsCommentsService extends AmService
             'tableName' => FresnsCommentsConfig::CFG_TABLE,
             'insertId' => $commentId,
         ];
-        LogService::info('table_input',$input);
+        LogService::info('table_input', $input);
         // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftComment = FresnsCommentLogs::find($draftId);
         $content = $this->stopWords($draftComment['content']);
         // 草稿更新为已发布
-        FresnsCommentLogs::where('id', $draftId)->update(['status' => 3, 'comment_id' => $commentId,'content' => $content]);
+        FresnsCommentLogs::where('id', $draftId)->update(['status' => 3, 'comment_id' => $commentId, 'content' => $content]);
         $this->sendAtMessages($commentId, $draftId);
         $this->sendCommentMessages($commentId, $draftId);
         // $this->fillDbInfo($draftId);
@@ -485,13 +493,13 @@ class FresnsCommentsService extends AmService
             'tableName' => FresnsCommentsConfig::CFG_TABLE,
             'insertId' => $commentId,
         ];
-        LogService::info('table_input',$input);
+        LogService::info('table_input', $input);
         // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftComment = FresnsCommentLogs::find($draftId);
         $content = $this->stopWords($draftComment['content']);
         // 草稿更新为已发布
-        FresnsCommentLogs::where('id', $draftId)->update(['status' => 3,'content'=> $content]);
+        FresnsCommentLogs::where('id', $draftId)->update(['status' => 3, 'content'=> $content]);
 
         FresnsCommentAppends::where('comment_id', $commentId)->increment('edit_count');
 
@@ -544,12 +552,13 @@ class FresnsCommentsService extends AmService
                         'mention_member_id' => $memberInfo['id'],
                     ];
                     $count = DB::table('mentions')->where($mentions)->count();
-                    if($count == 0){
+                    if ($count == 0) {
                         DB::table('mentions')->insert($mentions);
                     }
                 }
             }
         }
+
         return true;
     }
 
@@ -567,6 +576,7 @@ class FresnsCommentsService extends AmService
                 }
             }
         }
+
         return true;
     }
 
@@ -582,6 +592,7 @@ class FresnsCommentsService extends AmService
             (new FresnsMemberStats())->store(['member_id' => $draftComment['member_id'], 'comment_publish_count' => 1]);
         }
         DB::table('configs')->where('item_key', AmConfig::COMMENT_COUNTS)->increment('item_value');
+
         return true;
     }
 
@@ -618,6 +629,7 @@ class FresnsCommentsService extends AmService
             ];
             DB::table('notifies')->insert($input);
         }
+
         return true;
     }
 
@@ -626,9 +638,9 @@ class FresnsCommentsService extends AmService
     {
         $draftComment = FresnsCommentLogs::find($draftId);
         if ($updateType == 2) {
-            $domainLinksIdArr = FresnsDomainLinks::where('linked_type', 1)->where('linked_id',$commentId)->pluck('domain_id')->toArray();
-            FresnsDomains::where('id',$domainLinksIdArr)->decrement('post_count');
-            DB::table(FresnsDomainLinksConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id',$commentId)->delete();
+            $domainLinksIdArr = FresnsDomainLinks::where('linked_type', 1)->where('linked_id', $commentId)->pluck('domain_id')->toArray();
+            FresnsDomains::where('id', $domainLinksIdArr)->decrement('post_count');
+            DB::table(FresnsDomainLinksConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $commentId)->delete();
         }
         // $postInfo = FresnsPosts::find($postId);
         preg_match_all("/http[s]{0,1}:\/\/.*?\s/", $draftComment['content'], $hrefMatches);
@@ -655,7 +667,7 @@ class FresnsCommentsService extends AmService
                     'linked_type' => 2,
                     'linked_id' => $commentId,
                     'link_url' => trim($h),
-                    'domain_id' => $domainId
+                    'domain_id' => $domainId,
                 ];
                 $domainLinkCount = DB::table('domain_links')->where($input)->count();
                 if ($domainLinkCount == 0) {
@@ -663,6 +675,7 @@ class FresnsCommentsService extends AmService
                 }
             }
         }
+
         return true;
     }
 
@@ -677,31 +690,30 @@ class FresnsCommentsService extends AmService
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $draftComment['content'], $singlePoundMatches);
         } else {
-            preg_match_all("/#.*?#/", $draftComment['content'], $singlePoundMatches);
+            preg_match_all('/#.*?#/', $draftComment['content'], $singlePoundMatches);
         }
         // dd($singlePoundMatches);
         if ($type == 2) {
             // 去除话题关联
             // DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id',$draftComment['comment_id'])->delete();
-            $hashtagIdArr = FresnsHashtagLinkeds::where('linked_type', 2)->where('linked_id',$draftComment['comment_id'])->pluck('hashtag_id')->toArray();
-            FresnsHashtags::whereIn('id',$hashtagIdArr)->decrement('comment_count');
-            FresnsHashtagLinkeds::where('linked_type', 2)->where('linked_id',$draftComment['post_id'])->delete();
-
+            $hashtagIdArr = FresnsHashtagLinkeds::where('linked_type', 2)->where('linked_id', $draftComment['comment_id'])->pluck('hashtag_id')->toArray();
+            FresnsHashtags::whereIn('id', $hashtagIdArr)->decrement('comment_count');
+            FresnsHashtagLinkeds::where('linked_type', 2)->where('linked_id', $draftComment['post_id'])->delete();
         }
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
                 // 将话题的#号去掉
-                $s = trim(str_replace("#", '', $s));
+                $s = trim(str_replace('#', '', $s));
                 // 是否存在话题
                 $hashInfo = FresnsHashtags::where('name', $s)->first();
                 if ($hashInfo) {
-                    // 话题表comment_count +1 
-                    FresnsHashtags::where('id',$hashInfo['id'])->increment('comment_count');
+                    // 话题表comment_count +1
+                    FresnsHashtags::where('id', $hashInfo['id'])->increment('comment_count');
                     // 建立关联关系
                     $res = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->insert([
                         'linked_type' => 2,
                         'linked_id' => $draftComment['comment_id'],
-                        'hashtag_id' => $hashInfo['id']
+                        'hashtag_id' => $hashInfo['id'],
                     ]);
                 } else {
                     // 新建话题和话题关联
@@ -709,14 +721,14 @@ class FresnsCommentsService extends AmService
                     $input = [
                         'slug' => $slug,
                         'name' => $s,
-                        'comment_count' => 1
+                        'comment_count' => 1,
                     ];
                     $hashtagId = (new FresnsHashtags())->store($input);
                     // 建立关联关系
                     $res = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->insert([
                         'linked_type' => 2,
                         'linked_id' => $draftComment['comment_id'],
-                        'hashtag_id' => $hashtagId
+                        'hashtag_id' => $hashtagId,
                     ]);
                     DB::table('configs')->where('item_key', AmConfig::HASHTAG_COUNTS)->increment('item_value');
                 }
@@ -759,10 +771,10 @@ class FresnsCommentsService extends AmService
         if ($hashtagShow == 1) {
             preg_match("/#.*?\s/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         } else {
-            preg_match("/#.*?#/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
+            preg_match('/#.*?#/', $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         }
         /**
-         * preg_match("/<a .*?>.*?<\/a>/",$content,$hrefMatches,PREG_OFFSET_CAPTURE);
+         * preg_match("/<a .*?>.*?<\/a>/",$content,$hrefMatches,PREG_OFFSET_CAPTURE);.
          *  */
         preg_match("/http[s]:\/\/.*?\s/", $content, $hrefMatches, PREG_OFFSET_CAPTURE);
         // dd($singlePoundMatches);
@@ -801,7 +813,7 @@ class FresnsCommentsService extends AmService
         //     }
         // }
 
-        if (!$findTruncatedPos) {
+        if (! $findTruncatedPos) {
             foreach ($hrefMatches as $currMatch) {
                 $matchStr = $currMatch[0];
                 $matchStrStartPosition = $currMatch[1];
@@ -813,7 +825,7 @@ class FresnsCommentsService extends AmService
                 }
             }
         }
-        if (!$findTruncatedPos) {
+        if (! $findTruncatedPos) {
             foreach ($atMatches as $currMatch) {
                 $matchStr = $currMatch[0];
                 $matchStrStartPosition = $currMatch[1];
@@ -850,6 +862,7 @@ class FresnsCommentsService extends AmService
         if (strpos($domain, '/') !== false) {
             $domain = substr($domain, 0, strpos($domain, '/'));
         }
+
         return strtolower($domain);
     }
 
@@ -857,7 +870,7 @@ class FresnsCommentsService extends AmService
     {
         $domain = $this->regular_domain($domain);
         //   dd($domain);
-        $iana_root = array(
+        $iana_root = [
             'ac',
             'ad',
             'ae',
@@ -1134,8 +1147,8 @@ class FresnsCommentsService extends AmService
             'yt',
             'za',
             'zm',
-            'zw'
-        );
+            'zw',
+        ];
         $sub_domain = explode('.', $domain);
         $top_domain = '';
         $top_domain_count = 0;
@@ -1153,6 +1166,7 @@ class FresnsCommentsService extends AmService
             }
         }
         $top_domain = $sub_domain [count($sub_domain) - $top_domain_count - 1].$top_domain;
+
         return $top_domain;
     }
 
@@ -1182,10 +1196,12 @@ class FresnsCommentsService extends AmService
             if ($str != false) {
                 if ($v['content_mode'] == 2) {
                     $text = str_replace($v['word'], $v['replace_word'], $text);
+
                     return $text;
                 }
             }
         }
+
         return $text;
     }
 }

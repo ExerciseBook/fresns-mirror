@@ -15,123 +15,141 @@ class RandomHelper
 {
     public $faker = null;
 
-    CONST RAND_INT = 'randInt';
-    CONST RAND_TEXT = 'randText';
-    CONST RAND_REMARK = 'randRemark';
-    CONST RAND_DATE = 'randDate';
-    CONST RAND_JSON = 'randMoreJson';
-    CONST RAND_FILE = 'randFile';
-    CONST RAND_BOOL = 'randBool';
-    CONST RAND_STRING = 'randString';
-    CONST RAND_NAME = 'randName';
-    CONST RAND_USERNAME = 'randUserName';
-    CONST RAND_PHONE = 'randPhone';
-    CONST RAND_EMAIL = 'randEmail';
-    CONST RAND_HTML = 'randHtml';
-    CONST RAND_COLOR = 'randColor';
-
+    const RAND_INT = 'randInt';
+    const RAND_TEXT = 'randText';
+    const RAND_REMARK = 'randRemark';
+    const RAND_DATE = 'randDate';
+    const RAND_JSON = 'randMoreJson';
+    const RAND_FILE = 'randFile';
+    const RAND_BOOL = 'randBool';
+    const RAND_STRING = 'randString';
+    const RAND_NAME = 'randName';
+    const RAND_USERNAME = 'randUserName';
+    const RAND_PHONE = 'randPhone';
+    const RAND_EMAIL = 'randEmail';
+    const RAND_HTML = 'randHtml';
+    const RAND_COLOR = 'randColor';
 
     public function __construct($lang = 'zh-Hans')
     {
         $this->faker = Factory::create($lang);
     }
 
-    public function getFaker(){
+    public function getFaker()
+    {
         return $this->faker;
     }
 
     // 整数
-    public function randInt($min=0, $max=999999){
+    public function randInt($min = 0, $max = 999999)
+    {
         return $this->faker->randomDigitNotNull;
     }
 
-    public function randIntByLength($length = 6){
+    public function randIntByLength($length = 6)
+    {
         return $this->faker->numberBetween(100000, 999999);
     }
 
     // 电话
-    public function randPhone($min=0, $max=999999){
+    public function randPhone($min = 0, $max = 999999)
+    {
         return $this->faker->phoneNumber;
     }
 
     // 邮箱
-    public function randEmail($min=0, $max=999999){
+    public function randEmail($min = 0, $max = 999999)
+    {
         return $this->faker->email;
     }
 
     // Html
-    public function randHtml($min=0, $max=999999){
+    public function randHtml($min = 0, $max = 999999)
+    {
         return $this->faker->randomHtml();
     }
 
     // 字符串
-    public function randString($length = 20, $prefix = ''){
-        return $prefix . StrHelper::randString($length);
+    public function randString($length = 20, $prefix = '')
+    {
+        return $prefix.StrHelper::randString($length);
     }
 
     // url
-    public function randUrl(){
+    public function randUrl()
+    {
         return $this->faker->randomElement(self::COVERS);
     }
 
     // file
-    public function randFile(){
+    public function randFile()
+    {
         return $this->faker->randomElement(self::COVERS);
     }
 
     // 头像
-    public function randAvatar(){
+    public function randAvatar()
+    {
         return $this->faker->randomElement(self::AVATARS);
     }
 
     // 人名
-    public function randUserName(){
+    public function randUserName()
+    {
         return $this->faker->randomElement(self::USER_NAME);
     }
 
     // 名称
-    public function randName(){
+    public function randName()
+    {
         return $this->faker->name();
     }
 
     // 布尔
-    public function randBool(){
+    public function randBool()
+    {
         return $this->faker->boolean;
     }
 
     // text
-    public function randText(){
+    public function randText()
+    {
         return $this->faker->text();
     }
 
     // remark
-    public function randRemark(){
+    public function randRemark()
+    {
         return $this->faker->randomElement(self::DESC);
     }
 
     // json
-    public function randMoreJson(){
+    public function randMoreJson()
+    {
         $arr = [
             StrHelper::randString(3),
             StrHelper::randString(5),
-            StrHelper::randString(8)
+            StrHelper::randString(8),
         ];
         $jsonArr = [];
-        foreach ($arr as $key){
+        foreach ($arr as $key) {
             $jsonArr[$key] = StrHelper::randString(8);
         }
 
         $jsonArr['list'] = $this->faker->randomElements();
+
         return json_encode($jsonArr);
     }
 
     // date
-    public function randDate(){
+    public function randDate()
+    {
         return $this->faker->dateTimeBetween('-12 days', '+3 days');
     }
 
     // color
-    public function randColor(){
+    public function randColor()
+    {
         return $this->faker->hexColor;
     }
 
@@ -184,5 +202,4 @@ class RandomHelper
         '谭小仪',
         '仲尼',
     ];
-
 }

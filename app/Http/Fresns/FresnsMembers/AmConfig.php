@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsMembers;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -42,7 +41,4 @@ class AmConfig extends BaseConfig
         ['key' => 2, 'text' => '系统设置类'],
         ['key' => 3, 'text' => '用户运营类'],
     ];
-
-     
-
 }

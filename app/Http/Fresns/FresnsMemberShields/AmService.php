@@ -24,6 +24,7 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
+
         return $common;
     }
 
@@ -32,7 +33,7 @@ class AmService extends BaseAdminService
         $input = [
             'member_id' => $mid,
             'shield_type' => $markTarget,
-            'shield_id' => $markId
+            'shield_id' => $markId,
         ];
         FresnsMemberShields::insert($input);
     }
@@ -42,5 +43,4 @@ class AmService extends BaseAdminService
         DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('shield_type', $markTarget)->where('member_id',
             $mid)->where('shield_id', $markId)->update(['deleted_at' => date('Y-m-d H:i:s', time())]);
     }
-
 }

@@ -2,8 +2,6 @@
 
 ## Beta (2021-08-05)
 
-[https://gitee.com/fresns/docs/blob/master/prd/beta.md](https://gitee.com/fresns/docs/blob/master/prd/beta.md)
-
 **Bug Fixes**
 
 - 控制台：修复多语言标识名不准确，以语言文件为准
@@ -23,8 +21,6 @@
 - 清理 users 表冗余字段
 
 ## Alpha (2021-07-05)
-
-[https://gitee.com/fresns/docs/blob/master/prd/alpha.md](https://gitee.com/fresns/docs/blob/master/prd/alpha.md)
 
 **Bug Fixes**
 

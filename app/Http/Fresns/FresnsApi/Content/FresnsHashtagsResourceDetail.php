@@ -9,25 +9,24 @@
 namespace App\Http\Fresns\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\Fresns\FresnsHashtags\FresnsHashtagsConfig;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
+use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
+use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
+use App\Http\Fresns\FresnsHashtags\FresnsHashtagsConfig;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
 use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
-use Illuminate\Support\Facades\DB;
-use App\Http\Fresns\FresnsHashtags\FresnsHashtags;
-use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
+use App\Http\Share\AmGlobal\GlobalService;
+use Illuminate\Support\Facades\DB;
 
 class FresnsHashtagsResourceDetail extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // dd(1);
@@ -64,14 +63,14 @@ class FresnsHashtagsResourceDetail extends BaseAdminResource
         $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_HASHTAG_SETTING);
         $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_HASHTAG_SETTING);
         $hashtagName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::HASHTAG_NAME) ?? "话题";
+                AmConfig::HASHTAG_NAME) ?? '话题';
         $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::FOLLOW_HASHTAG_NAME) ?? "收藏";
+                AmConfig::FOLLOW_HASHTAG_NAME) ?? '收藏';
         $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::LIKE_HASHTAG_NAME) ?? "点赞";
+                AmConfig::LIKE_HASHTAG_NAME) ?? '点赞';
         $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::SHIELD_HASHTAG_NAME) ?? "不喜欢";
-        if (!$langTag) {
+                AmConfig::SHIELD_HASHTAG_NAME) ?? '不喜欢';
+        if (! $langTag) {
             $langTag = FresnsPluginUsagesService::getDefaultLanguage();
         }
         $seo = DB::table('seo')->where('linked_type', 2)->where('linked_id', $this->id)->where('lang_tag',
@@ -88,7 +87,7 @@ class FresnsHashtagsResourceDetail extends BaseAdminResource
             'huri' => $this->slug,
             'hname' => $this->name,
             'cover' => $cover,
-            'description' => $description == null ? "" : $description['lang_content'],
+            'description' => $description == null ? '' : $description['lang_content'],
             'hashtagName' => $hashtagName,
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,
@@ -116,4 +115,3 @@ class FresnsHashtagsResourceDetail extends BaseAdminResource
         return $arr;
     }
 }
-

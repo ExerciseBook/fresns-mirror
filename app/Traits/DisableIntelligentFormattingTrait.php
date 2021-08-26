@@ -6,8 +6,8 @@
  * Released under the Apache-2.0 License.
  */
 
-
 //namespace Maatwebsite\Excel\Concerns;
+
 namespace App\Traits;
 
 use PhpOffice\PhpSpreadsheet\Cell\Cell;

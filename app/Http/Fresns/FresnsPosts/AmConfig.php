@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsPosts;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -55,7 +54,7 @@ class AmConfig extends BaseConfig
         'expired_at' => ['field' => 'created_at', 'op' => '<='],
     ];
     const APPEND_SEARCHABLE_FIELDS = [
-        'searchKey' => ['field' => 'content', 'op' => 'LIKE']
+        'searchKey' => ['field' => 'content', 'op' => 'LIKE'],
     ];
     // model 使用 - 表单映射
     const FORM_FIELDS_MAP = [
@@ -88,6 +87,4 @@ class AmConfig extends BaseConfig
         'latest_comment_at' => 'latest_comment_at',
         'is_enable' => 'is_enable',
     ];
-
-     
 }

@@ -10,5 +10,4 @@ namespace App\Base\Models;
 
 class BaseAdminModel extends BaseModel
 {
-
 }

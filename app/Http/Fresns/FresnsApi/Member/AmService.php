@@ -27,9 +27,9 @@ use App\Http\Fresns\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
 use App\Http\Fresns\FresnsMemberStats\FresnsMemberStats;
-use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadgesService;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Http\Fresns\FresnsPostLogs\FresnsPostLogs;
@@ -42,23 +42,23 @@ class AmService
     public function common($mid, $langTag, $isMe)
     {
         $seoInfoArr = DB::table('seo')->where('linked_type', 1)->where('linked_id', $mid)->where('deleted_at',
-            null)->where('lang_tag',$langTag)->get(['title', 'keywords', 'description'])->first();
-        if(empty($seoInfoArr)){
+            null)->where('lang_tag', $langTag)->get(['title', 'keywords', 'description'])->first();
+        if (empty($seoInfoArr)) {
             $defaultLangTag = ApiLanguageHelper::getDefaultLanguage();
             $seoInfoArr = DB::table('seo')->where('linked_type', 1)->where('linked_id', $mid)->where('deleted_at',
-            null)->where('lang_tag',$defaultLangTag)->get(['title', 'keywords', 'description'])->first();
+            null)->where('lang_tag', $defaultLangTag)->get(['title', 'keywords', 'description'])->first();
         }
         $data['seoInfo'] = $seoInfoArr;
         //manages
         // plugin_usages > type=5 + scene 字段包含 3
         // plugin_usages > member_roles 为空，则全部输出；有值则判断当前请求成员的所有关联角色 id 是否在字段配置中。
-        $pluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'LIKE', "%3%")->get()->toArray();
+        $pluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'LIKE', '%3%')->get()->toArray();
         $managesArr = [];
-        if (!empty($pluginUsagesArr)) {
+        if (! empty($pluginUsagesArr)) {
             foreach ($pluginUsagesArr as $v) {
-                if (!empty($v['member_roles'])) {
+                if (! empty($v['member_roles'])) {
                     $rolesArr = explode(',', $v['member_roles']);
-                    if (!in_array($mid, $rolesArr)) {
+                    if (! in_array($mid, $rolesArr)) {
                         continue;
                     }
                 }
@@ -79,11 +79,11 @@ class AmService
         $features = [];
         if ($isMe == true) {
             $pluginUsagesArr = FresnsPluginUsages::where('type', 7)->get()->toArray();
-            if (!empty($pluginUsagesArr)) {
+            if (! empty($pluginUsagesArr)) {
                 foreach ($pluginUsagesArr as $v) {
-                    if (!empty($v['member_roles'])) {
+                    if (! empty($v['member_roles'])) {
                         $rolesArr = explode(',', $v['member_roles']);
-                        if (!in_array($mid, $rolesArr)) {
+                        if (! in_array($mid, $rolesArr)) {
                             continue;
                         }
                     }
@@ -108,11 +108,11 @@ class AmService
         $profiles = [];
         if ($isMe == true) {
             $pluginUsagesArr = FresnsPluginUsages::where('type', 8)->get()->toArray();
-            if (!empty($pluginUsagesArr)) {
+            if (! empty($pluginUsagesArr)) {
                 foreach ($pluginUsagesArr as $v) {
-                    if (!empty($v['member_roles'])) {
+                    if (! empty($v['member_roles'])) {
                         $rolesArr = explode(',', $v['member_roles']);
-                        if (!in_array($mid, $rolesArr)) {
+                        if (! in_array($mid, $rolesArr)) {
                             continue;
                         }
                     }
@@ -147,7 +147,6 @@ class AmService
         $query = DB::table('members as me');
         $query = $query->select('me.*')->leftJoin('member_stats as st', 'me.id', '=', 'st.member_id');
 
-
         if ($viewType) {
             switch ($viewType) {
                 case 1:
@@ -165,7 +164,6 @@ class AmService
             }
             $query->whereIn('me.id', $memberIdArr);
         }
-
 
         $item = $query->paginate($pageSize, ['*'], 'page', $page);
 
@@ -202,17 +200,17 @@ class AmService
                 $data['roleName'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE,
                     'name', $memberRole['id'], $langTag);
                 $data['roleNameDisplay'] = $memberRole['is_display_name'];
-                $data['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'],$memberRole['icon_file_url']);
+                $data['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
                 $data['roleIconDisplay'] = $memberRole['icon_display_icon'];
             }
             $users = DB::table(FresnsUsersConfig::CFG_TABLE)->where('id', $member['user_id'])->first();
 
-            if(empty($users->deleted_at)){
-                if(empty($member['avatar_file_url']) && empty($member['avatar_file_id'])){
+            if (empty($users->deleted_at)) {
+                if (empty($member['avatar_file_url']) && empty($member['avatar_file_id'])) {
                     $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
                     $memberAvatar = ApiFileHelper::getImageSignUrl($defaultAvatar);
                 } else {
-                    $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($member['avatar_file_id'],$member['avatar_file_url']);
+                    $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($member['avatar_file_id'], $member['avatar_file_url']);
                 }
             } else {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey('deactivate_avatar');
@@ -246,7 +244,7 @@ class AmService
                     $v['id'], $langTag);
                 $item['icon'] = $v['icon_file_url'];
                 $item['nicknameColor'] = $v['nickname_color'];
-                $item['permission'] = json_decode($v['permission'],true);
+                $item['permission'] = json_decode($v['permission'], true);
                 $rolesArr[] = $item;
             }
             $data['roles'] = $rolesArr;
@@ -327,10 +325,10 @@ class AmService
             $data['icons'] = $iconsArr;
             $data['draftCount'] = null;
             if ($isMe == true) {
-                $draftCount['posts'] = FresnsPostLogs::whereIn('status',[1,4])->count();
-                $draftCount['comments'] = FresnsCommentLogs::whereIn('status',[1,4])->count();
+                $draftCount['posts'] = FresnsPostLogs::whereIn('status', [1, 4])->count();
+                $draftCount['comments'] = FresnsCommentLogs::whereIn('status', [1, 4])->count();
                 $data['draftCount'] = $draftCount;
-            }    
+            }
             $data['memberName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
                 'item_value', 'member_name', $langTag);
             $data['memberIdName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
@@ -387,7 +385,7 @@ class AmService
                 }
                 $data['shieldStatus'] = $isShields;
             }
-            
+
             if ($isMe = false) {
                 $unikeyArr = FresnsPluginBadges::where('member_id', $mid)->pluck('plugin_unikey')->toArray();
                 $managesArr = FresnsPluginUsages::whereIn('plugin_unikey', $unikeyArr)->get()->toArray();
@@ -431,6 +429,7 @@ class AmService
                 break;
 
         }
+
         return $groupArr;
     }
 
@@ -455,6 +454,7 @@ class AmService
                 break;
 
         }
+
         return $hashtagArr;
     }
 
@@ -479,6 +479,7 @@ class AmService
                 break;
 
         }
+
         return $postArr;
     }
 
@@ -503,8 +504,7 @@ class AmService
                 break;
 
         }
+
         return $commentArr;
     }
-
-
 }

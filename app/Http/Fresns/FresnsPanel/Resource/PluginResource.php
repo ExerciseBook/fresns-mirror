@@ -17,7 +17,6 @@ use App\Http\Fresns\FresnsPlugins\FresnsPluginsConfig;
 
 class PluginResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -66,19 +65,19 @@ class PluginResource extends BaseAdminResource
         //             }
         //     }
         // }
-        $websitePc = "";
-        $websiteMobile = "";
-        $websitePcPlugin = "";
-        $websiteMobilePlugin = "";
+        $websitePc = '';
+        $websiteMobile = '';
+        $websitePcPlugin = '';
+        $websiteMobilePlugin = '';
         // 网站引擎关联模板
         if ($this->type == 1) {
             $websitePc = ApiConfigHelper::getConfigByItemKey($this->unikey.'_Pc');
             $websitePcPlugin = TweetPlugin::where('unikey', $websitePc)->first();
-            $websitePcPlugin = $websitePcPlugin['name'] ?? "";
+            $websitePcPlugin = $websitePcPlugin['name'] ?? '';
             // dd($websitePc);
             $websiteMobile = ApiConfigHelper::getConfigByItemKey($this->unikey.'_Mobile');
             $websiteMobilePlugin = TweetPlugin::where('unikey', $websiteMobile)->first();
-            $websiteMobilePlugin = $websiteMobilePlugin['name'] ?? "";
+            $websiteMobilePlugin = $websiteMobilePlugin['name'] ?? '';
         }
         // dd($author);
         // 默认字段
@@ -97,8 +96,8 @@ class PluginResource extends BaseAdminResource
             // 'newVision' => $newVision,
             'websitePc' => $websitePc,
             'websiteMobile' => $websiteMobile,
-            'websitePcPlugin' => $websitePcPlugin ?? "",
-            'websiteMobilePlugin' => $websiteMobilePlugin ?? "",
+            'websitePcPlugin' => $websitePcPlugin ?? '',
+            'websiteMobilePlugin' => $websiteMobilePlugin ?? '',
             // 'downloadUrl' => $downloadUrl,
             // 'author' => $author,
         ];
@@ -109,4 +108,3 @@ class PluginResource extends BaseAdminResource
         return $arr;
     }
 }
-

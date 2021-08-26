@@ -18,13 +18,12 @@ use Illuminate\Http\Request;
 
 class ToolController extends BasePluginApiController
 {
-
     /**
-     * 获取远程插件列表
+     * 获取远程插件列表.
      * @param Request $request
      */
-    public function sign(Request  $request){
-
+    public function sign(Request $request)
+    {
         $headerFieldArr = AmConfig::HEADER_FIELD_ARR;
         foreach ($headerFieldArr as $headerField) {
             $headerContent = request()->header($headerField);
@@ -38,17 +37,17 @@ class ToolController extends BasePluginApiController
         }
 
         $dataMap = [];
-        foreach (AmConfig::SIGN_FIELD_ARR as $signField){
+        foreach (AmConfig::SIGN_FIELD_ARR as $signField) {
             $signFieldValue = request()->header($signField);
-            if(!empty($signFieldValue)){
+            if (! empty($signFieldValue)) {
                 $dataMap[$signField] = $signFieldValue;
             }
         }
 
         $appId = request()->header('appId');
-        $sessionKeys = FresnsSessionKeys::where('app_id',$appId)->first();
+        $sessionKeys = FresnsSessionKeys::where('app_id', $appId)->first();
 
-        if(empty($sessionKeys)){
+        if (empty($sessionKeys)) {
             $info = [
                 'appId' => '无此记录',
             ];
@@ -65,5 +64,4 @@ class ToolController extends BasePluginApiController
 
         $this->success($data);
     }
-
 }

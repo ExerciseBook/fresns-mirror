@@ -15,7 +15,6 @@ use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\Fresns\FresnsCmds\FresnsPlugin;
 use App\Http\Fresns\FresnsCmds\FresnsPluginConfig;
-use App\Http\Share\Common\LogService;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigs;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
@@ -27,6 +26,7 @@ use App\Http\Fresns\FresnsSessionTokens\FresnsSessionTokensConfig;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Fresns\FresnsUsers\FresnsUsersConfig;
 use App\Http\Share\Common\ErrorCodeService;
+use App\Http\Share\Common\LogService;
 use App\Http\Share\Common\ValidateService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
@@ -58,23 +58,20 @@ class FresnsBaseApiController extends BaseApiController
     {
         $this->checkRequest();
         $this->initData();
-
     }
 
     public function initData()
     {
         // header 数据初始化, 参数
 
-        $this->mid = request()->header("mid");
-        $this->uid = request()->header("uid");
-        $this->langTag = request()->header("langTag");
-        $this->platform = request()->header("platform");
-
+        $this->mid = request()->header('mid');
+        $this->uid = request()->header('uid');
+        $this->langTag = request()->header('langTag');
+        $this->platform = request()->header('platform');
     }
 
     public function checkRequest()
     {
-
         $uri = Request::getRequestUri();
 
         if ($this->checkHeader) {
@@ -109,7 +106,6 @@ class FresnsBaseApiController extends BaseApiController
                         'missing header' => 'uid',
                     ];
                     $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
                 }
             }
 
@@ -119,7 +115,6 @@ class FresnsBaseApiController extends BaseApiController
                         'missing header' => 'mid',
                     ];
                     $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
                 }
             }
             if (empty($token)) {
@@ -129,7 +124,6 @@ class FresnsBaseApiController extends BaseApiController
                     ];
 
                     $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
                 }
             }
             if (empty($deviceInfo)) {
@@ -138,12 +132,9 @@ class FresnsBaseApiController extends BaseApiController
                         'missing header' => 'deviceInfo',
                     ];
                     $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
                 }
             }
-
         } else {
-
             if (empty($uid)) {
                 if (in_array($uri, AmConfig::PRIVATE_UID_URI_ARR)) {
                     $info = [
@@ -151,7 +142,6 @@ class FresnsBaseApiController extends BaseApiController
                     ];
 
                     $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
                 }
             }
 
@@ -162,7 +152,6 @@ class FresnsBaseApiController extends BaseApiController
                     ];
 
                     $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
                 }
             }
             if (empty($token)) {
@@ -172,7 +161,6 @@ class FresnsBaseApiController extends BaseApiController
                     ];
 
                     $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
                 }
             }
             if (empty($deviceInfo)) {
@@ -182,7 +170,6 @@ class FresnsBaseApiController extends BaseApiController
                     ];
 
                     $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
                 }
             }
         }
@@ -192,24 +179,22 @@ class FresnsBaseApiController extends BaseApiController
             $isJson = StrHelper::isJson($deviceInfo);
             if ($isJson === false) {
                 $info = [
-                    'deviceInfo' => '请输入json类型'
+                    'deviceInfo' => '请输入json类型',
                 ];
                 $this->error(ErrorCodeService::HEADER_TYPE_ERROR, $info);
-
             }
         }
 
         $time = date('Y-m-d H:i:s', time());
         //如果uid不为空则token必传，如果mid不为空，则三个参数都必传
         if (empty($mid)) {
-            if (!empty($uid)) {
+            if (! empty($uid)) {
                 if (empty($token)) {
                     $info = [
                         'missing header' => 'token',
                     ];
 
                     $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
                 }
                 if (in_array($uri, AmConfig::CHECK_USER_DELETE_URI)) {
                     $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->first();
@@ -224,7 +209,7 @@ class FresnsBaseApiController extends BaseApiController
                     $this->error(ErrorCodeService::UID_EXIST_ERROR, $info);
                 }
                 //校验是否存在deleted
-                if (!empty($user->phone)) {
+                if (! empty($user->phone)) {
                     $str = strstr($user->phone, 'deleted');
                     if ($str != false) {
                         $info = [
@@ -233,7 +218,7 @@ class FresnsBaseApiController extends BaseApiController
                         $this->error(ErrorCodeService::NO_RECORD, $info);
                     }
                 }
-                if (!empty($user->email)) {
+                if (! empty($user->email)) {
                     $str = strstr($user->phone, 'deleted');
                     if ($str != false) {
                         $info = [
@@ -243,7 +228,7 @@ class FresnsBaseApiController extends BaseApiController
                     }
                 }
                 if ($user->is_enable == 0) {
-                    if (!in_array($uri, AmConfig::CHECK_USER_IS_ENABLE_URI)) {
+                    if (! in_array($uri, AmConfig::CHECK_USER_IS_ENABLE_URI)) {
                         $this->error(ErrorCodeService::HEADER_IS_ENABLE_ERROR);
                     }
                 }
@@ -269,7 +254,6 @@ class FresnsBaseApiController extends BaseApiController
                 $this->error(ErrorCodeService::CODE_PARAM_ERROR, $info);
 
                 $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
             }
             //校验mid是否属于uid
             if (in_array($uri, AmConfig::CHECK_USER_DELETE_URI)) {
@@ -284,7 +268,7 @@ class FresnsBaseApiController extends BaseApiController
                 $this->error(ErrorCodeService::UID_EXIST_ERROR, $info);
             }
             //校验是否存在deleted
-            if (!empty($user->phone)) {
+            if (! empty($user->phone)) {
                 $str = strstr($user->phone, 'deleted');
                 if ($str != false) {
                     $info = [
@@ -293,7 +277,7 @@ class FresnsBaseApiController extends BaseApiController
                     $this->error(ErrorCodeService::NO_RECORD, $info);
                 }
             }
-            if (!empty($user->email)) {
+            if (! empty($user->email)) {
                 $str = strstr($user->phone, 'deleted');
                 if ($str != false) {
                     $info = [
@@ -304,7 +288,7 @@ class FresnsBaseApiController extends BaseApiController
             }
 
             if ($user->is_enable == 0) {
-                if (!in_array($uri, AmConfig::CHECK_USER_IS_ENABLE_URI)) {
+                if (! in_array($uri, AmConfig::CHECK_USER_IS_ENABLE_URI)) {
                     $this->error(ErrorCodeService::HEADER_IS_ENABLE_ERROR);
                 }
             }
@@ -320,7 +304,6 @@ class FresnsBaseApiController extends BaseApiController
             }
             if ($member['is_enable'] == 0) {
                 $this->error(ErrorCodeService::HEADER_IS_ENABLE_ERROR);
-
             }
             $memberId = $member['id'];
 
@@ -354,23 +337,20 @@ class FresnsBaseApiController extends BaseApiController
                 }
 
                 $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
-                if (!empty($memberRole)) {
+                if (! empty($memberRole)) {
                     $permission = $memberRole['permission'];
                     $permissionArr = json_decode($permission, true);
-                    if (!empty($permissionArr)) {
+                    if (! empty($permissionArr)) {
                         $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
                         if (empty($permissionMap)) {
                             $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
                         }
                         if ($permissionMap['content_view'] == false) {
                             $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
-
                         }
-
                     }
                 }
             }
-
         }
 
         return true;
@@ -380,8 +360,8 @@ class FresnsBaseApiController extends BaseApiController
     {
         $request = request();
         $rule = [
-            'pageSize' => "numeric",
-            'page' => "numeric",
+            'pageSize' => 'numeric',
+            'page' => 'numeric',
         ];
         ValidateService::validateRule($request, $rule);
     }
@@ -400,7 +380,6 @@ class FresnsBaseApiController extends BaseApiController
     // 公开模式 header 校验
     public function checkPublicModeHeaders()
     {
-
         return true;
     }
 
@@ -416,7 +395,6 @@ class FresnsBaseApiController extends BaseApiController
                 ];
 
                 $this->error(ErrorCodeService::HEADER_ERROR, $info);
-
             }
         }
 
@@ -431,20 +409,17 @@ class FresnsBaseApiController extends BaseApiController
         $appId = request()->header('appId');
         $platform = request()->header('platform');
         $versionInt = request()->header('versionInt');
-        if (!is_numeric($platform)) {
+        if (! is_numeric($platform)) {
             $info = [
-                'platform' => '请输入整数'
+                'platform' => '请输入整数',
             ];
             $this->error(ErrorCodeService::HEADER_TYPE_ERROR, $info);
-
         }
-        if (!is_numeric($versionInt)) {
+        if (! is_numeric($versionInt)) {
             $info = [
-                'versionInt' => '请输入整数'
+                'versionInt' => '请输入整数',
             ];
             $this->error(ErrorCodeService::HEADER_TYPE_ERROR, $info);
-
-
         }
 
         //1、验证 appId 和 platform 参数
@@ -467,34 +442,30 @@ class FresnsBaseApiController extends BaseApiController
             $this->error(ErrorCodeService::NO_RECORD, $info);
         }
         if ($sessionKeys['is_enable'] == 0) {
-
             $this->error(ErrorCodeService::HEADER_IS_ENABLE_ERROR);
         }
         if ($sessionKeys['type'] == 2) {
             $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
-
         }
         $signKey = $sessionKeys['app_secret'];
         $dataMap = [];
         foreach (AmConfig::SIGN_FIELD_ARR as $signField) {
             $signFieldValue = request()->header($signField);
-            if (!empty($signFieldValue)) {
+            if (! empty($signFieldValue)) {
                 $dataMap[$signField] = $signFieldValue;
             }
         }
 
         $dataMap['sign'] = request()->header('sign');
-        LogService::info("验签信息: ", $dataMap);
+        LogService::info('验签信息: ', $dataMap);
 
         $cmd = FresnsPluginConfig::PLG_CMD_VERIFY_SIGN;
-        
+
         $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $dataMap);
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
-            $this->errorCheckInfo($resp,[],$resp['output']);
+            $this->errorCheckInfo($resp, [], $resp['output']);
         }
 
         return true;
     }
-
-
 }

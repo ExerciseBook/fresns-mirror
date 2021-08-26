@@ -20,7 +20,6 @@ class AmModel extends BaseAdminModel
         return AmConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
-
     // 搜索排序字段
     public function initOrderByFields()
     {
@@ -28,8 +27,7 @@ class AmModel extends BaseAdminModel
             'id' => 'DESC',
             // 'updated_at'    => 'DESC',
         ];
+
         return $orderByFields;
     }
-
 }
-

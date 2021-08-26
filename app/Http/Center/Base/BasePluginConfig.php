@@ -11,49 +11,49 @@ namespace App\Http\Center\Base;
 class BasePluginConfig
 {
     /**
-     * 插件名称
+     * 插件名称.
      *
      * @var string
      */
     public $name = '';
 
     /**
-     * 插件类型
+     * 插件类型.
      *
      * @var string
      */
     public $type = '';
 
     /**
-     * 插件描述
+     * 插件描述.
      *
      * @var string
      */
     public $description = '';
 
     /**
-     * 插件图片 url
+     * 插件图片 url.
      *
      * @var string
      */
     public $imageUrl = '';
 
     /**
-     * 插件作者
+     * 插件作者.
      *
      * @var string
      */
     public $author = '作者';
 
     /**
-     * 插件作者链接
+     * 插件作者链接.
      *
      * @var string
      */
     public $authorLink = '';
     /**
      * 插件使用场景
-     * 如 短信服务商/文件存储服务商 等
+     * 如 短信服务商/文件存储服务商 等.
      *
      * @var string
      */
@@ -69,14 +69,14 @@ class BasePluginConfig
     public $uniKey = '';
 
     /**
-     * 插件最新三位版本号
+     * 插件最新三位版本号.
      *
      * @var string
      */
     public $currVersion = '1.0.0';
 
     /**
-     * 插件最新整型版本号
+     * 插件最新整型版本号.
      *
      * @var int
      */
@@ -84,21 +84,21 @@ class BasePluginConfig
 
     /**
      * 插件目录名称, 小驼峰, 注意大小写
-     * app/Plugins/Addons/$dirName
+     * app/Plugins/Addons/$dirName.
      *
      * @var string
      */
     public $dirName = '';
 
     /**
-     * PC端模版名称
+     * PC端模版名称.
      *
      * @var string
      */
     public $themePc = '';
 
     /**
-     * H5端模版名称
+     * H5端模版名称.
      *
      * @var string
      */
@@ -106,14 +106,14 @@ class BasePluginConfig
 
     /**
      * 插件访问路径
-     * 相对路径，支持变量名, 同“站点网址”拼接成完整 URL
+     * 相对路径，支持变量名, 同“站点网址”拼接成完整 URL.
      *
      * @var string
      */
     public $accessPath = '';
 
     /**
-     * 插件设置路径
+     * 插件设置路径.
      *
      * @var string
      */
@@ -150,18 +150,16 @@ class BasePluginConfig
 
     public function getThemePc()
     {
-        return $this->uniKey."Pc";
+        return $this->uniKey.'Pc';
     }
 
     public function getThemeMobile()
     {
-        return $this->uniKey."Mobile";
+        return $this->uniKey.'Mobile';
     }
 
     public function getViewSetting()
     {
-        return $this->uniKey."Setting";
+        return $this->uniKey.'Setting';
     }
-
-
 }

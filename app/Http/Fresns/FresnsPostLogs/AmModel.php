@@ -11,7 +11,6 @@ namespace App\Http\Fresns\FresnsPostLogs;
 use App\Base\Models\BaseAdminModel;
 use Illuminate\Support\Facades\DB;
 
-
 class AmModel extends BaseAdminModel
 {
     protected $table = AmConfig::CFG_TABLE;
@@ -31,7 +30,6 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
 
     public function getRawSqlQuery()
@@ -50,13 +48,14 @@ class AmModel extends BaseAdminModel
             $query->where('status', 2);
         }
         $class = $request->input('class');
-        // dd($class);      
+        // dd($class);
         if ($class == 1) {
             $query->where('post_id', null);
         } else {
             $query->where('post_id', '!=', null);
         }
         $query->orderBy('id', 'asc');
+
         return $query;
     }
 
@@ -67,7 +66,7 @@ class AmModel extends BaseAdminModel
             'id' => 'DESC',
             // 'updated_at'    => 'DESC',
         ];
+
         return $orderByFields;
     }
 }
-

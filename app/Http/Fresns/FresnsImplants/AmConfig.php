@@ -11,8 +11,6 @@ namespace App\Http\Fresns\FresnsImplants;
 // 配置
 use App\Base\Config\BaseConfig;
 
- 
-
 class AmConfig extends BaseConfig
 {
     // 主表
@@ -39,7 +37,4 @@ class AmConfig extends BaseConfig
         'starting_at' => 'starting_at',
         'expired_at' => 'expired_at',
     ];
-
-     
-
 }

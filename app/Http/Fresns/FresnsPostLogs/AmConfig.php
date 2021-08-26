@@ -10,7 +10,6 @@ namespace App\Http\Fresns\FresnsPostLogs;
 
 // 配置
 use App\Base\Config\BaseConfig;
- 
 
 class AmConfig extends BaseConfig
 {
@@ -48,6 +47,4 @@ class AmConfig extends BaseConfig
         'reason' => 'reason',
         'submit_at' => 'submit_at',
     ];
-
-    
 }

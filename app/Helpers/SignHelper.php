@@ -12,9 +12,8 @@ use App\Http\Share\Common\LogService;
 
 class SignHelper
 {
-
-    public static function checkSign($dataMap, $signKey){
-
+    public static function checkSign($dataMap, $signKey)
+    {
         $inputSign = $dataMap['sign'];
         unset($dataMap['sign']);
 
@@ -22,7 +21,7 @@ class SignHelper
         $info = [];
         $info['input_sign'] = $inputSign;
         $info['gen_sign'] = $genSign;
-        LogService::info("check sign: ", $info);
+        LogService::info('check sign: ', $info);
 
         if ($inputSign == $genSign) {
             return true;
@@ -31,15 +30,16 @@ class SignHelper
         return $info;
     }
 
-    public static function genSign($dataMap , $signKey){
+    public static function genSign($dataMap, $signKey)
+    {
         // 对数组的值按key排序
         ksort($dataMap);
         // 生成url的形式
         $params = http_build_query($dataMap);
-        $params = $params . "&key={$signKey}";
+        $params = $params."&key={$signKey}";
         // 生成sign
         $sign = md5($params);
+
         return $sign;
     }
-
 }

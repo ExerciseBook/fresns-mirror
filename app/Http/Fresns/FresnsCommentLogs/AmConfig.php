@@ -42,7 +42,4 @@ class AmConfig extends BaseConfig
         'reason' => 'reason',
         'submit_at' => 'submit_at',
     ];
-
-     
-
 }

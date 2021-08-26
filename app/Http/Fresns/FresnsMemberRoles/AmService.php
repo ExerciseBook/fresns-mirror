@@ -9,6 +9,7 @@
 namespace App\Http\Fresns\FresnsMemberRoles;
 
 use App\Base\Services\BaseAdminService;
+
 class AmService extends BaseAdminService
 {
     protected $needCommon = false;
@@ -25,7 +26,7 @@ class AmService extends BaseAdminService
     {
         $permissionMap = [];
         foreach ($permissionArr as $v) {
-            if (empty($v['permKey']) || !isset($v['permValue'])) {
+            if (empty($v['permKey']) || ! isset($v['permValue'])) {
                 return [];
                 break;
             }
@@ -34,5 +35,4 @@ class AmService extends BaseAdminService
 
         return $permissionMap;
     }
-
 }

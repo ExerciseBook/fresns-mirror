@@ -10,10 +10,8 @@ namespace App\Http\Fresns\FresnsMemberRoles;
 
 use App\Base\Controllers\BaseAdminController;
 
-
 class AmControllerAdmin extends BaseAdminController
 {
-
     public function __construct()
     {
         $this->service = new AmService();

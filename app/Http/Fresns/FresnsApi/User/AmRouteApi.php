@@ -27,5 +27,4 @@ Route::group(['prefix' => 'fresns/user', 'namespace' => '\App\Http\Fresns\Fresns
     Route::post('/walletLogs', 'AmControllerApi@userWalletLogs')->name('admin.user.walletLogs');
     //修改用户资料
     Route::post('/edit', 'AmControllerApi@userEdit')->name('admin.user.userEdit');
-
 });

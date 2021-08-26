@@ -30,7 +30,6 @@ class AmModel extends BaseAdminModel
     // hook-添加之后
     public function hookStoreAfter($id)
     {
-
     }
 
     //根据昵称获取插件
@@ -49,7 +48,6 @@ class AmModel extends BaseAdminModel
         return $opts;
     }
 
-
     public function initOrderByFields()
     {
         $orderByFields = [
@@ -57,7 +55,7 @@ class AmModel extends BaseAdminModel
             'id' => 'ASC',
             // 'updated_at'    => 'DESC',
         ];
+
         return $orderByFields;
     }
 }
-

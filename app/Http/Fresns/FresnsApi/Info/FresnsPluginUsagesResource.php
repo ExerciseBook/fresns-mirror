@@ -9,15 +9,14 @@
 namespace App\Http\Fresns\FresnsApi\Info;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
-use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
-use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
 use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesConfig;
 
 class FresnsPluginUsagesResource extends BaseAdminResource
 {
-
     public function toArray($request)
     {
         // form 字段
@@ -26,7 +25,7 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        $langTag = request()->header('langTag', "");
+        $langTag = request()->header('langTag', '');
         // 语言
         $name = ApiLanguageHelper::getLanguages(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $this->id);
         $type = $this->type;
@@ -36,14 +35,14 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         // $icon = $this->icon_file_url;
         $icon = ApiFileHelper::getImageSignUrlByFileIdUrl($this->icon_file_id, $this->icon_file_url);
 
-        $url = "";
+        $url = '';
         if ($pluginInfo) {
             // $url = $pluginInfo['access_path'] .'/'. $this->parameter;
             $url = ApiFileHelper::getPluginUsagesUrl($plugin, $this->id);
         }
         $number = $this->editor_number;
-        $badgesType = "";
-        $badgesValue = "";
+        $badgesType = '';
+        $badgesValue = '';
         $pluginbades = FresnsPluginBadges::where('plugin_unikey', $this->plugin_unikey)->first();
         if ($pluginbades) {
             $badgesType = $pluginbades['display_type'];
@@ -51,10 +50,10 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         }
         $sortNumber = [];
         if ($this->type == 4) {
-            $postLists = self::gettypePluginUsages('postLists',$this->data_sources);
+            $postLists = self::gettypePluginUsages('postLists', $this->data_sources);
             // dd($postLists);
-            $postFollows = self::gettypePluginUsages('postLists',$this->data_sources);
-            $postNearbys = self::gettypePluginUsages('postLists',$this->data_sources);
+            $postFollows = self::gettypePluginUsages('postLists', $this->data_sources);
+            $postNearbys = self::gettypePluginUsages('postLists', $this->data_sources);
             // $sort_number = json_decode($this->data_sources, true);
             // // dd($sort_number);
             // $sortNumber = [];
@@ -91,8 +90,8 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         $default = [
             'type' => $type,
             'plugin' => $plugin,
-            'name' => $name == null ? "" : $name['lang_content'],
-            'icon' => $icon == null ? "" : $icon,
+            'name' => $name == null ? '' : $name['lang_content'],
+            'icon' => $icon == null ? '' : $icon,
             'url' => $url,
             'number' => $number,
             'badgesType' => $badgesType,
@@ -106,45 +105,45 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         return $arr;
     }
 
-    public static function gettypePluginUsages($key,$data){
+    public static function gettypePluginUsages($key, $data)
+    {
         $sort_number = json_decode($data, true);
         // dump($sort_number[$key]['sortNumber']);
         $sortNumber = [];
         $introArr = [];
         if ($sort_number) {
-            if($sort_number[$key]){
+            if ($sort_number[$key]) {
                 foreach ($sort_number[$key]['sortNumber'] as $k => &$s) {
                     // $sArr = [];
                     // dd($s);
                     foreach ($s as &$v) {
                         // dump($v);
-                        if(!is_array($v)){
+                        if (! is_array($v)) {
                             $id = $v;
                         }
-                        if(is_array($v)){
+                        if (is_array($v)) {
                             $intro = [];
                             foreach ($v as $i) {
-                                    // dd($i);
-                                    // $map[$i['langTag']] = $i;
-                                    // if ($i['langTag'] == $langTag) {
-                                    $intro['id'] = $id;
-                                    $intro['title'] = $i['title'];
-                                    $intro['description'] = $i['description'];
-                                    $introArr[] = $intro;
-                                }
+                                // dd($i);
+                                // $map[$i['langTag']] = $i;
+                                // if ($i['langTag'] == $langTag) {
+                                $intro['id'] = $id;
+                                $intro['title'] = $i['title'];
+                                $intro['description'] = $i['description'];
+                                $introArr[] = $intro;
+                            }
                             // }
                             // dd($introArr);
                             // $v['intro'] = $introArr;
-                        }                       
+                        }
                         // $sArr[] = $item1;
-    
                     }
                     // $arr1[$k] = $sArr;
                 }
-            }          
+            }
             // $sortNumber = $sort_number;
         }
+
         return $introArr;
     }
 }
-

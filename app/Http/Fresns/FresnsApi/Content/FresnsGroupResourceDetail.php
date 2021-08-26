@@ -9,31 +9,30 @@
 namespace App\Http\Fresns\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
-use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
-use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
-use App\Http\Fresns\FresnsApi\Info\AmService;
 use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\Fresns\FresnsApi\Info\AmService;
 use App\Http\Fresns\FresnsConfigs\FresnsConfigsConfig;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
 use App\Http\Fresns\FresnsGroups\FresnsGroups;
-use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsGroups\FresnsGroupsConfig;
 use App\Http\Fresns\FresnsGroups\FresnsGroupsService;
-use Illuminate\Support\Facades\DB;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollows;
+use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
+use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikes;
+use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
+use App\Http\Fresns\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShields;
+use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\Fresns\FresnsPluginBadges\FresnsPluginBadges;
+use App\Http\Fresns\FresnsPlugins\FresnsPlugins;
+use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\Fresns\FresnsPluginUsages\FresnsPluginUsagesService;
 use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Fresns\FresnsMemberFollows\FresnsMemberFollowsConfig;
-use App\Http\Fresns\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\Fresns\FresnsMemberLikes\FresnsMemberLikesConfig;
-use App\Http\Fresns\FresnsApi\Helpers\ApiFileHelper;
+use Illuminate\Support\Facades\DB;
 
 class FresnsGroupResourceDetail extends BaseAdminResource
 {
-
     public function toArray($request)
     {
 
@@ -54,8 +53,8 @@ class FresnsGroupResourceDetail extends BaseAdminResource
         // 语言
         $name = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
         $description = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'description', $this->id);
-        $gname = $name == null ? "" : $name['lang_content'];
-        $description = $description == null ? "" : $description['lang_content'];
+        $gname = $name == null ? '' : $name['lang_content'];
+        $description = $description == null ? '' : $description['lang_content'];
         // $cover = $this->cover_file_url;
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
         // $banner = $this->banner_file_url;
@@ -86,13 +85,13 @@ class FresnsGroupResourceDetail extends BaseAdminResource
         $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_GROUP_SETTING);
         $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_SETTING);
         $groupName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_NAME) ?? "小组";
+                AmConfig::GROUP_NAME) ?? '小组';
         $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_FOLLOW_NAME) ?? "加入";
+                AmConfig::GROUP_FOLLOW_NAME) ?? '加入';
         $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_LIKE_NAME) ?? "点赞";
+                AmConfig::GROUP_LIKE_NAME) ?? '点赞';
         $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_SHIELD_NAME) ?? "屏蔽";
+                AmConfig::GROUP_SHIELD_NAME) ?? '屏蔽';
         $extends = [];
         // $extends['plugin'] = "";
         // $extends['name'] = "";
@@ -130,16 +129,16 @@ class FresnsGroupResourceDetail extends BaseAdminResource
         $parentInfo = [];
         $parentGroup = FresnsGroups::find($this->parent_id);
         if ($parentGroup) {
-            $parentInfo['gid'] = $parentGroup['uuid'] ?? "";
+            $parentInfo['gid'] = $parentGroup['uuid'] ?? '';
             $pname = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
-            $parentInfo['pname'] = $pname == null ? "" : $pname['lang_content'];
-            $parentInfo['cover'] = $parentGroup['cover_file_url'] ?? "";
+            $parentInfo['pname'] = $pname == null ? '' : $pname['lang_content'];
+            $parentInfo['cover'] = $parentGroup['cover_file_url'] ?? '';
         }
         $parentInfo = [];
         if ($parentGroup) {
-            $parentInfo['gid'] = $parentGroup['uuid'] ?? "";
+            $parentInfo['gid'] = $parentGroup['uuid'] ?? '';
             $pname = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
-            $parentInfo['gname'] = $pname == null ? "" : $pname['lang_content'];
+            $parentInfo['gname'] = $pname == null ? '' : $pname['lang_content'];
             $parentInfo['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($parentGroup['cover_file_id'],
                 $parentGroup['cover_file_url']);
         }
@@ -205,4 +204,3 @@ class FresnsGroupResourceDetail extends BaseAdminResource
         return $arr;
     }
 }
-
