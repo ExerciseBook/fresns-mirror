@@ -13,6 +13,7 @@ use App\Helpers\FileHelper;
 use App\Http\Center\Base\PluginConst;
 use App\Http\Share\Common\LogService;
 use App\Http\Center\Base\BaseInstaller;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Composer;
@@ -201,22 +202,35 @@ class InstallHelper
     // 分发插件文件到框架目录
     public static function pushPluginResourcesFiles($uniKey){
         $info = [];
-
-        //  所有文件
+        // 本地插件目录
         $extensionAllPath = self::getPluginExtensionPath($uniKey);
-        $runtimeAllPath = self::getPluginRuntimePath($uniKey);
+        // 插件目录
+        $pluginAllPath    = self::getPluginRuntimePath($uniKey);
+        $frameworkAssetsPath = PluginHelper::frameworkAssetsPath($uniKey);
+        $frameworkComponentsAppPath = PluginHelper::frameworkComponentsAppPath($uniKey);
+        $frameworkComponentsViewPath = PluginHelper::frameworkComponentsViewPath($uniKey);
 
-        // 先删除运行时目录
-        if(is_dir($runtimeAllPath)){
-            File::deleteDirectory($runtimeAllPath);
-        }
-        self::copyPluginDirectory($extensionAllPath, $runtimeAllPath);
-        InstallHelper::freshSystem();
+        $extensionAssetsPath = PluginHelper::extensionAssetsPath($uniKey);
+        $extensionComponentsAppPath = PluginHelper::extensionComponentsAppPath($uniKey);
+        $extensionComponentsViewPath = PluginHelper::extensionComponentsViewPath($uniKey);
 
-        // 删除 lang 和 views目录
-        $deleteRuntimeDirArr = ['lang', 'views', 'LICENSE'];
+        // 删除插件目录
+        (new Filesystem)->deleteDirectory($pluginAllPath);
+        // 创建插件目录
+        (new Filesystem)->ensureDirectoryExists($pluginAllPath);
+        // 复制插件到插件目录
+        (new Filesystem)->copyDirectory($extensionAllPath, $pluginAllPath);
+        // 插件静态文件
+        (new Filesystem)->copyDirectory($extensionAssetsPath, $frameworkAssetsPath);
+        // 插件视图组件
+        (new Filesystem)->copyDirectory($extensionComponentsAppPath, $frameworkComponentsAppPath);
+        // 插件视图组件
+        (new Filesystem)->copyDirectory($extensionComponentsViewPath, $frameworkComponentsViewPath);
+
+        // 删除插件中需要分发的文件
+        $deleteRuntimeDirArr = ['assets', 'views', 'components', 'lang', 'LICENSE'];
         foreach ($deleteRuntimeDirArr as $subDir){
-            $delSubDir = implode(DIRECTORY_SEPARATOR, [$runtimeAllPath, $subDir]);
+            $delSubDir = implode(DIRECTORY_SEPARATOR, [$pluginAllPath, $subDir]);
             if(is_dir($delSubDir)){
                 File::deleteDirectory($delSubDir);
             }
@@ -225,8 +239,10 @@ class InstallHelper
             }
         }
 
+        // 初始化文件加载
+        InstallHelper::freshSystem();
+
         $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
-        // dd($pluginConfig);
         $type = $pluginConfig->type;
 
         // extension 信息
@@ -238,7 +254,6 @@ class InstallHelper
             LogService::info('frameworkThemePath',$frameworkThemePath);
             self::copyPluginDirectory($extensionViewPath, $frameworkThemePath);
         }else{
-            // 其他
             // views 插件试图文件，直接分发至框架 views目录下, 包括设置文件
             $frameworkViewPath = PluginHelper::frameworkViewPath($uniKey);
             self::copyPluginDirectory($extensionViewPath, $frameworkViewPath);
@@ -249,7 +264,6 @@ class InstallHelper
             // lang
             self::pushLang($uniKey);
         }
-
     }
 
     // 语言文件同步
@@ -369,7 +383,7 @@ class InstallHelper
     public static function freshSystem(){
         $composer = app('composer');
         $composer->dumpAutoloads();
-        
+
         Artisan::call("clear-compiled");// Remove the compiled class file
         // 删除缓存文件
         $deleteDir = implode(DIRECTORY_SEPARATOR, [base_path(), 'bootstrap', 'cache']);

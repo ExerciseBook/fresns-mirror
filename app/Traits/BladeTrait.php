@@ -123,7 +123,7 @@ trait BladeTrait
         // 视图路径
         // dd(public_path($templateName));
         $view = app('view')->getFinder();
-        $view->prependLocation(public_path("/views/"));
+        $view->prependLocation(resource_path("/views/"));
 
         return view($viewName, $assignData);
 

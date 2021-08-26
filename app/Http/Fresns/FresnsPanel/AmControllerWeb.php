@@ -84,7 +84,7 @@ class AmControllerWeb extends BaseFrontendController
     {
         $account = $request->input('account');
         $password = $request->input('password');
-        
+
 
         $user = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->where('phone', $account)->first();
         if (empty($user)) {
@@ -139,7 +139,7 @@ class AmControllerWeb extends BaseFrontendController
         if (empty($user)) {
             $this->error(ErrorCodeService::CODE_LOGIN_ERROR);
         }
-        
+
         $sessionLogId = FresnsSessionLogsService::addConsoleSessionLogs(3,'控制台登录校验',$user->id);
 
         if($sessionLogId){
@@ -168,7 +168,7 @@ class AmControllerWeb extends BaseFrontendController
             'login_name' => $account,
             'password' => $password,
         ];
-        
+
         $result = $this->attemptLogin($credentials);
         // dd($result);
         if ($result == false) {
@@ -238,7 +238,7 @@ class AmControllerWeb extends BaseFrontendController
 
         $userId = Auth::id();
         $lang = Cache::get('lang_tag_' . $userId);
-        
+
         App::setLocale($lang);
 
         $data = [
@@ -330,7 +330,7 @@ class AmControllerWeb extends BaseFrontendController
         if(empty($account)){
             $this->error(ErrorCodeService::ACCOUNT_ERROR);
         }
-        
+
         $user = FresnsUsers::where('is_enable', 1)->where('user_type', '!=',AmConfig::USER_TYPE_ADMIN)->where(function ($query) {
             $account = request()->input('account');
             $query->where('phone', $account)->orWhere('email', $account);
@@ -806,7 +806,7 @@ class AmControllerWeb extends BaseFrontendController
         // dd($pluginConfig);
         $type = $pluginConfig->type;
         if ($type == PluginConst::PLUGIN_TYPE_THEME) {
-            // todo 
+            // todo
             $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
             if (!$plugin) {
                 $this->error(ErrorCodeService::PLUGIN_UNIKEY_ERROR);
@@ -906,11 +906,10 @@ class AmControllerWeb extends BaseFrontendController
 
         // todo 检查一下文件信息是否全
 
-        // dd($jsonArr);
+        // 第一步：本地安装插件, 先将文件全量 copy 到 app/Plugins 下
         $uniKey = $dirName;
         $options = [];
         $installFileInfo = InstallHelper::installLocalPluginFile($uniKey, $dirName, $downloadFileName, $options);
-        // dd($installFileInfo);
         $info = [];
         $info['downloadFileName'] = $downloadFileName;
         $info['installFileInfo'] = $installFileInfo;
@@ -1026,7 +1025,7 @@ class AmControllerWeb extends BaseFrontendController
         }
         $this->success();
     }
-    
+
     public function getPostPage(Request $request){
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 10);

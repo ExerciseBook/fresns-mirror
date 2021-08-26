@@ -127,8 +127,24 @@ class PluginHelper
         $path = implode(DIRECTORY_SEPARATOR, [$currPluginRoot, 'Resources', $themePc]);
         return $path;
     }
-
-
+    // 插件 assets 目录
+    public static function extensionAssetsPath($uniKey){
+        $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
+        $path = implode(DIRECTORY_SEPARATOR, [$extensionRootPath, 'assets']);
+        return $path;
+    }
+    // 插件 components 目录
+    public static function extensionComponentsAppPath($uniKey){
+        $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
+        $path = implode(DIRECTORY_SEPARATOR, [$extensionRootPath, 'components','app']);
+        return $path;
+    }
+    // 插件 components 目录
+    public static function extensionComponentsViewPath($uniKey){
+        $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
+        $path = implode(DIRECTORY_SEPARATOR, [$extensionRootPath, 'components','resources']);
+        return $path;
+    }
     // 插件 views 目录
     public static function extensionViewPath($uniKey){
         $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
@@ -175,6 +191,24 @@ class PluginHelper
     // 框架 views 目录
     public static function frameworkViewPath($uniKey){
         $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::viewRoot(), $uniKey]);
+        return $path;
+    }
+
+    // 框架 assets 目录
+    public static function frameworkAssetsPath($uniKey){
+        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::assetsRoot(), $uniKey]);
+        return $path;
+    }
+
+    // 框架 assets 目录
+    public static function frameworkComponentsAppPath($uniKey){
+        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::componentsAppRoot(), $uniKey]);
+        return $path;
+    }
+
+    // 框架 assets 目录
+    public static function frameworkComponentsViewPath($uniKey){
+        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::componentsViewRoot(), $uniKey]);
         return $path;
     }
 
@@ -256,19 +290,37 @@ class PluginHelper
 
     // 插件模版目录
     public static function themeRoot(){
-        $pathArr = [ base_path(), 'public', 'themes' ];
+        $pathArr = [ base_path(), 'resources', 'themes' ];
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
 
     // 插件配置视图目录
     public static function viewRoot(){
-        $pathArr = [ base_path(), 'public', 'views' ];
+        $pathArr = [ base_path(), 'resources', 'views' ];
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
 
     // 插件配置视图目录
     public static function langRoot(){
         $pathArr = [ base_path(), 'resources', 'lang' ];
+        return implode(DIRECTORY_SEPARATOR, $pathArr);
+    }
+
+    // 插件配置静态文件目录
+    public static function assetsRoot(){
+        $pathArr = [ base_path(), 'public', 'assets' ];
+        return implode(DIRECTORY_SEPARATOR, $pathArr);
+    }
+
+    // 插件配置视图组件目录
+    public static function componentsViewRoot(){
+        $pathArr = [ base_path(), 'resources', 'views','components' ];
+        return implode(DIRECTORY_SEPARATOR, $pathArr);
+    }
+
+    // 插件配置视图组件控制器目录
+    public static function componentsAppRoot(){
+        $pathArr = [ base_path(), 'app', 'View', 'Components' ];
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
 
