@@ -10,38 +10,38 @@ namespace App\Http\Center\Helper;
 
 use App\Helpers\CommonHelper;
 use App\Helpers\FileHelper;
+use App\Http\Center\Base\BaseInstaller;
 use App\Http\Center\Base\PluginConst;
 use App\Http\Share\Common\LogService;
-use App\Http\Center\Base\BaseInstaller;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Composer;
 
 class InstallHelper
 {
-
-    public static function findInstaller($uniKey): ?BaseInstaller{
+    public static function findInstaller($uniKey): ?BaseInstaller
+    {
         return PluginHelper::findInstaller($uniKey);
     }
 
     // 安装插件
-    public static function installPluginFile($uniKey, $dirName, $downloadFileName, $options = []){
-
+    public static function installPluginFile($uniKey, $dirName, $downloadFileName, $options = [])
+    {
         $toName = self::getExtensionsRootPath();
         $unzipResult = FileHelper::unzip($downloadFileName, $toName);
 
         $info = [];
         $info['unzipFromName'] = $downloadFileName;
         $info['unzipToName'] = $toName;
-        $info['unzipResult'] = $unzipResult ;
+        $info['unzipResult'] = $unzipResult;
 
         return $info;
     }
 
     // 本地安装插件, 先将文件全量 copy 到 app/Plugins 下
-    public static function installLocalPluginFile($uniKey, $dirName, $downloadFileName, $options = []){
-
+    public static function installLocalPluginFile($uniKey, $dirName, $downloadFileName, $options = [])
+    {
         $pluginRoot = PluginHelper::pluginRoot();
         $toName = implode(DIRECTORY_SEPARATOR, [$pluginRoot, $dirName]);
         $toName1 = implode(DIRECTORY_SEPARATOR, [$pluginRoot]);
@@ -49,8 +49,8 @@ class InstallHelper
         $files = substr(sprintf('%o', fileperms($downloadFileName)), -4);
         clearstatcache();
         // dd($files);
-        LogService::info('Auth-toName1',$downloadFileName);
-        LogService::info('Auth',$files);
+        LogService::info('Auth-toName1', $downloadFileName);
+        LogService::info('Auth', $files);
         self::copyPluginDirectory($downloadFileName, $toName);
         $info = [];
         $info['unzipFromName'] = $downloadFileName;
@@ -59,16 +59,16 @@ class InstallHelper
         return $info;
     }
 
-
     /**
-     * 打包插件
+     * 打包插件.
      * @param       $uniKey
      * @param       $dirName
      * @param       $versionInt
      * @param array $options
      */
-    public static function packagePluginFile($uniKey, $dirName, $versionInt, $options = []){
-        $pathArr = [ base_path(), 'app', 'Plugins', $dirName ];
+    public static function packagePluginFile($uniKey, $dirName, $versionInt, $options = [])
+    {
+        $pathArr = [base_path(), 'app', 'Plugins', $dirName];
 
         $path = implode(DIRECTORY_SEPARATOR, $pathArr);
 
@@ -83,8 +83,8 @@ class InstallHelper
         $info = [];
         $info['zipToPathFile'] = $toPathFile;
         $info['zipFileName'] = $zipFilename;
-        $info['zipResult'] = $zipResult ;
-        $info['url'] = $domain . "/storage/plugins/" . $zipFilename ;
+        $info['zipResult'] = $zipResult;
+        $info['url'] = $domain.'/storage/plugins/'.$zipFilename;
 
         return $info;
     }
@@ -92,14 +92,16 @@ class InstallHelper
     /*
      * 获取插件存储目录
      */
-    public static function getPluginStorageDir(){
-        $pathArr = [ base_path(), 'public', 'storage', 'plugins' ];
+    public static function getPluginStorageDir()
+    {
+        $pathArr = [base_path(), 'public', 'storage', 'plugins'];
         $path = implode(DIRECTORY_SEPARATOR, $pathArr);
 
         // 不存在则创建
         $createDir = FileHelper::assetDir($path);
-        if(!$createDir){
-            LogService::error("创建目录失败", $path);
+        if (! $createDir) {
+            LogService::error('创建目录失败', $path);
+
             return false;
         }
 
@@ -107,7 +109,8 @@ class InstallHelper
     }
 
     // 获取插件相关的所有文件
-    public static function pullPluginResourcesFiles($uniKey){
+    public static function pullPluginResourcesFiles($uniKey)
+    {
         $info = [];
 
         // pc theme
@@ -117,7 +120,7 @@ class InstallHelper
         $info['theme_pc_path_framework'] = $srcPath;
         $info['theme_pc_path_plugin'] = $destPath;
 
-        if(!empty($srcPath)){
+        if (! empty($srcPath)) {
             FileHelper::assetDir($destPath);
             File::copyDirectory($srcPath, $destPath);
         }
@@ -127,7 +130,7 @@ class InstallHelper
         $destPath = PluginHelper::pluginThemeMobilePath($uniKey);
         $info['theme_mobile_path_framework'] = $srcPath;
         $info['theme_mobile_path_plugin'] = $destPath;
-        if(!empty($srcPath)){
+        if (! empty($srcPath)) {
             FileHelper::assetDir($destPath);
             File::copyDirectory($srcPath, $destPath);
         }
@@ -138,7 +141,7 @@ class InstallHelper
         $info['view_path_framework'] = $srcPath;
         $info['view_path_plugin'] = $destPath;
 
-        if(!empty($srcPath)){
+        if (! empty($srcPath)) {
             FileHelper::assetDir($destPath);
             File::copyDirectory($srcPath, $destPath);
         }
@@ -146,23 +149,24 @@ class InstallHelper
         // lang
         self::pullLang($uniKey);
 
-     //   dd($info);
+        //   dd($info);
     }
 
     // 语言文件同步
-    public static function pullLang($uniKey){
+    public static function pullLang($uniKey)
+    {
         $info = [];
         $srcPath = PluginHelper::frameworkLangPath($uniKey);
         $destPath = PluginHelper::pluginLangPath($uniKey);
         $info['lang_path_framework'] = $srcPath;
         $info['lang_path_plugin'] = $destPath;
 
-        $dir = new \DirectoryIterator( $srcPath);
-        foreach ($dir as $file){
+        $dir = new \DirectoryIterator($srcPath);
+        foreach ($dir as $file) {
             // 遍历子目录
-            if($file->isDir()){
+            if ($file->isDir()) {
                 $fileName = $file->getFilename();
-                if(in_array($fileName, PluginConst::PLUGIN_SKIP_DIR_ARR)){
+                if (in_array($fileName, PluginConst::PLUGIN_SKIP_DIR_ARR)) {
                     continue;
                 }
 
@@ -172,7 +176,7 @@ class InstallHelper
                 $pluginLangPath = implode(DIRECTORY_SEPARATOR, [$destPath, $fileName, $uniKey]);
 
                 // 源目录存在
-                if(is_dir($frameworkLangPath)){
+                if (is_dir($frameworkLangPath)) {
                     $info['lang_sub_path_framework'] = $frameworkLangPath;
                     $info['lang_sub_path_plugin'] = $pluginLangPath;
                     FileHelper::assetDir($pluginLangPath);
@@ -183,29 +187,32 @@ class InstallHelper
     }
 
     // 公共方法
-    public static function copyPluginDirectory($srcPath, $destPath){
-        LogService::Info('srcPath',$srcPath);
-        if(!empty($srcPath) || is_dir($srcPath)){
-            LogService::Info('destPath',$destPath);
+    public static function copyPluginDirectory($srcPath, $destPath)
+    {
+        LogService::Info('srcPath', $srcPath);
+        if (! empty($srcPath) || is_dir($srcPath)) {
+            LogService::Info('destPath', $destPath);
             FileHelper::assetDir($destPath);
             File::copyDirectory($srcPath, $destPath);
         }
     }
 
     // 公共方法
-    public static function copyPluginFile($srcFile, $destPath){
-        if(file_exists($srcFile)){
+    public static function copyPluginFile($srcFile, $destPath)
+    {
+        if (file_exists($srcFile)) {
             File::copy($srcFile, $destPath);
         }
     }
 
     // 分发插件文件到框架目录
-    public static function pushPluginResourcesFiles($uniKey){
+    public static function pushPluginResourcesFiles($uniKey)
+    {
         $info = [];
         // 本地插件目录
         $extensionAllPath = self::getPluginExtensionPath($uniKey);
         // 插件目录
-        $pluginAllPath    = self::getPluginRuntimePath($uniKey);
+        $pluginAllPath = self::getPluginRuntimePath($uniKey);
         $frameworkAssetsPath = PluginHelper::frameworkAssetsPath($uniKey);
         $frameworkComponentsAppPath = PluginHelper::frameworkComponentsAppPath($uniKey);
         $frameworkComponentsViewPath = PluginHelper::frameworkComponentsViewPath($uniKey);
@@ -229,12 +236,12 @@ class InstallHelper
 
         // 删除插件中需要分发的文件
         $deleteRuntimeDirArr = ['assets', 'views', 'components', 'lang', 'LICENSE'];
-        foreach ($deleteRuntimeDirArr as $subDir){
+        foreach ($deleteRuntimeDirArr as $subDir) {
             $delSubDir = implode(DIRECTORY_SEPARATOR, [$pluginAllPath, $subDir]);
-            if(is_dir($delSubDir)){
+            if (is_dir($delSubDir)) {
                 File::deleteDirectory($delSubDir);
             }
-            if(is_file($delSubDir)){
+            if (is_file($delSubDir)) {
                 File::delete($delSubDir);
             }
         }
@@ -247,13 +254,13 @@ class InstallHelper
 
         // extension 信息
         $extensionViewPath = PluginHelper::extensionViewPath($uniKey);
-        LogService::info('extensionViewPath',$extensionViewPath);
+        LogService::info('extensionViewPath', $extensionViewPath);
         // 主题模版
-        if($type == PluginConst::PLUGIN_TYPE_THEME){
+        if ($type == PluginConst::PLUGIN_TYPE_THEME) {
             $frameworkThemePath = PluginHelper::frameworkThemePath($uniKey);
-            LogService::info('frameworkThemePath',$frameworkThemePath);
+            LogService::info('frameworkThemePath', $frameworkThemePath);
             self::copyPluginDirectory($extensionViewPath, $frameworkThemePath);
-        }else{
+        } else {
             // views 插件试图文件，直接分发至框架 views目录下, 包括设置文件
             $frameworkViewPath = PluginHelper::frameworkViewPath($uniKey);
             self::copyPluginDirectory($extensionViewPath, $frameworkViewPath);
@@ -267,23 +274,24 @@ class InstallHelper
     }
 
     // 语言文件同步
-    public static function pushLang($uniKey){
-
+    public static function pushLang($uniKey)
+    {
         $info = [];
         $extensionLangPath = PluginHelper::extensionLangPath($uniKey);
         $frameworkLangPath = PluginHelper::frameworkLangPath($uniKey);
 
-        if(!is_dir($extensionLangPath)){
-            LogService::info("没有语言路径");
-            return ;
+        if (! is_dir($extensionLangPath)) {
+            LogService::info('没有语言路径');
+
+            return;
         }
 
-        $dir = new \DirectoryIterator( $extensionLangPath);
-        foreach ($dir as $file){
+        $dir = new \DirectoryIterator($extensionLangPath);
+        foreach ($dir as $file) {
             // 遍历子目录
-            if($file->isDir()){
+            if ($file->isDir()) {
                 $fileName = $file->getFilename();
-                if(in_array($fileName, PluginConst::PLUGIN_SKIP_DIR_ARR)){
+                if (in_array($fileName, PluginConst::PLUGIN_SKIP_DIR_ARR)) {
                     continue;
                 }
                 $filePath = $file->getPath();
@@ -294,10 +302,10 @@ class InstallHelper
 
                 $info['extension_sub_lang_path'] = $extensionSubLangPath;
                 $info['framework_sub_lang_path'] = $frameworkSubLangPath;
-                LogService::info("curr", $info);
+                LogService::info('curr', $info);
 
                 // extension -> framework
-                if(is_dir($extensionSubLangPath)){
+                if (is_dir($extensionSubLangPath)) {
                     self::copyPluginDirectory($extensionSubLangPath, $frameworkSubLangPath);
                 }
             }
@@ -305,7 +313,8 @@ class InstallHelper
     }
 
     // 删除插件文件和目录
-    public static function deletePluginFiles($uniKey){
+    public static function deletePluginFiles($uniKey)
+    {
         $info = [];
         $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
         $type = $pluginConfig->type;
@@ -325,8 +334,8 @@ class InstallHelper
         $info['framework_theme_path'] = $frameworkThemePath;
         $info['runtime_all_path'] = $runtimeAllPath;
 
-        foreach ($info as $key => $path){
-            if(is_dir($path)){
+        foreach ($info as $key => $path) {
+            if (is_dir($path)) {
                 File::deleteDirectory($path);
             }
         }
@@ -335,24 +344,25 @@ class InstallHelper
     }
 
     // 语言文件删除
-    public static function deleteLang($uniKey){
+    public static function deleteLang($uniKey)
+    {
         $info = [];
         $srcPath = PluginHelper::frameworkLangPath($uniKey);
         $info['lang_path_framework'] = $srcPath;
 
-        $dir = new \DirectoryIterator( $srcPath);
-        foreach ($dir as $file){
+        $dir = new \DirectoryIterator($srcPath);
+        foreach ($dir as $file) {
             // 遍历子目录
-            if($file->isDir()){
+            if ($file->isDir()) {
                 $fileName = $file->getFilename();
-                if(in_array($fileName, PluginConst::PLUGIN_SKIP_DIR_ARR)){
+                if (in_array($fileName, PluginConst::PLUGIN_SKIP_DIR_ARR)) {
                     continue;
                 }
 
                 $filePath = $file->getPath();
                 $frameworkLangPath = implode(DIRECTORY_SEPARATOR, [$filePath, $fileName, $uniKey]);
 
-                if(is_dir($frameworkLangPath)){
+                if (is_dir($frameworkLangPath)) {
                     File::deleteDirectory($frameworkLangPath);
                 }
             }
@@ -360,31 +370,38 @@ class InstallHelper
     }
 
     //  所有插件安装之前都在这个目录下
-    public static function getExtensionsRootPath(){
-        $pathArr = [ base_path(), 'extensions'];
+    public static function getExtensionsRootPath()
+    {
+        $pathArr = [base_path(), 'extensions'];
         $path = implode(DIRECTORY_SEPARATOR, $pathArr);
+
         return $path;
     }
 
     // 获取插件本地路径
-    public static function getPluginExtensionPath($dirName){
-        $pathArr = [ base_path(), 'extensions', $dirName];
+    public static function getPluginExtensionPath($dirName)
+    {
+        $pathArr = [base_path(), 'extensions', $dirName];
         $path = implode(DIRECTORY_SEPARATOR, $pathArr);
+
         return $path;
     }
 
     // 获取插件本地路径
-    public static function getPluginRuntimePath($dirName){
-        $pathArr = [ base_path(), 'app', 'Plugins', $dirName];
+    public static function getPluginRuntimePath($dirName)
+    {
+        $pathArr = [base_path(), 'app', 'Plugins', $dirName];
         $path = implode(DIRECTORY_SEPARATOR, $pathArr);
+
         return $path;
     }
 
-    public static function freshSystem(){
+    public static function freshSystem()
+    {
         $composer = app('composer');
         $composer->dumpAutoloads();
 
-        Artisan::call("clear-compiled");// Remove the compiled class file
+        Artisan::call('clear-compiled'); // Remove the compiled class file
         // 删除缓存文件
         $deleteDir = implode(DIRECTORY_SEPARATOR, [base_path(), 'bootstrap', 'cache']);
         $deleteFileArr = [
@@ -393,9 +410,9 @@ class InstallHelper
             'services.php',
             'route.php',
         ];
-        foreach ($deleteFileArr as $file){
-            $deleteFile =  implode(DIRECTORY_SEPARATOR, [$deleteDir, $file]);
-            if(is_file($deleteFile)){
+        foreach ($deleteFileArr as $file) {
+            $deleteFile = implode(DIRECTORY_SEPARATOR, [$deleteDir, $file]);
+            if (is_file($deleteFile)) {
                 File::delete($deleteFile);
             }
         }
