@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 trait BladePluginTrait
 {
-    public function displayEngine($engineUniKey, $viewName, $assignData)
-    {
+
+    public function displayEngine($engineUniKey, $viewName, $assignData){
         $route_arr = explode('@', Route::currentRouteAction());
 
         // 为插件控制器
@@ -29,37 +29,38 @@ trait BladePluginTrait
         $defaultTheme = 'default';
 
         $configKey = "{$engineUniKey}_Pc";
-        if ($isMobile) {
+        if($isMobile){
             $configKey = "{$engineUniKey}_Mobile";
         }
 
-        $currentTheme = DB::table('configs')->where('item_key', $configKey)->where('deleted_at', null)->value('item_value');
-        if (empty($currentTheme)) {
+        $currentTheme = DB::table('configs')->where('item_key', $configKey)->where('deleted_at',NULL)->value('item_value');
+        if(empty($currentTheme)){
             $currentTheme = $defaultTheme;
         }
 
-        // dd($currentTheme);
+       // dd($currentTheme);
 
         // 同时获取分享数据
         // 插件static目录
         $domain = CommonHelper::domain();
         $shareData = [];
-        $shareData['theme_static'] = $domain."/themes/$currentTheme/";
-        $shareData['global_static'] = $domain.'/static/';
+        $shareData['theme_static'] = $domain . "/themes/$currentTheme/";
+        $shareData['global_static'] = $domain . "/static/";
         $shareData['cdn_static'] = CommonHelper::getWebCdnStatic();
         $shareData['cdn_static_h5'] = CommonHelper::getWebCdnH5Static();
         view()->share($shareData);
         // 视图路径
         // dd(public_path($templateName));
         $view = app('view')->getFinder();
-        $view->prependLocation(public_path('/themes/'.$currentTheme));
+        $view->prependLocation(public_path("/themes/" . $currentTheme));
 
         return view($viewName, $assignData);
+
     }
 
+
     // 插件设置页面
-    public function displayView($viewName, $assignData)
-    {
+    public function displayView($viewName, $assignData){
         $route_arr = explode('@', Route::currentRouteAction());
 
         // 为插件控制器
@@ -72,7 +73,7 @@ trait BladePluginTrait
         // 插件static目录
         $domain = CommonHelper::domain();
         $shareData = [];
-        $shareData['global_static'] = $domain.'/static/';
+        $shareData['global_static'] = $domain . "/static/";
         $shareData['cdn_static'] = CommonHelper::getWebCdnStatic();
         $shareData['cdn_static_h5'] = CommonHelper::getWebCdnH5Static();
         view()->share($shareData);
@@ -80,8 +81,9 @@ trait BladePluginTrait
         // 视图路径
         // dd(public_path($templateName));
         $view = app('view')->getFinder();
-        $view->prependLocation(public_path('/views/'));
+        $view->prependLocation(resource_path("/views/"));
 
         return view($viewName, $assignData);
+
     }
 }
