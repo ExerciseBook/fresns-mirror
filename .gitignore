@@ -14,5 +14,3 @@ yarn-error.log
 /.idea
 /.vscode
 .DS_Store
-/database
-/tests
