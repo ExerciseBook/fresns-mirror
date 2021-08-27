@@ -356,7 +356,7 @@ class PluginHelper
     // 插件模版目录
     public static function themeRoot()
     {
-        $pathArr = [base_path(), 'resources', 'themes'];
+        $pathArr = [base_path(), 'resources', 'views', 'themes'];
 
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }

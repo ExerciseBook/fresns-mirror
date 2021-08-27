@@ -9,12 +9,15 @@ namespace App\Traits;
 
 // 模版设置
 use App\Helpers\CommonHelper;
-use App\Helpers\ThemeHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 trait BladePluginTrait
 {
+
+    /**
+     * 主题视图渲染
+     */
     public function displayEngine($engineUniKey, $viewName, $assignData)
     {
         $route_arr = explode('@', Route::currentRouteAction());
@@ -37,27 +40,23 @@ trait BladePluginTrait
         if (empty($currentTheme)) {
             $currentTheme = $defaultTheme;
         }
-
-        // dd($currentTheme);
-
         // 同时获取分享数据
         // 插件static目录
         $domain = CommonHelper::domain();
         $shareData = [];
-        $shareData['theme_static'] = $domain."/themes/$currentTheme/";
-        $shareData['global_static'] = $domain.'/static/';
+        $shareData['theme_static'] = $domain."/assets/";
+        $shareData['global_static'] = $domain.'/assets/';
         $shareData['cdn_static'] = CommonHelper::getWebCdnStatic();
         $shareData['cdn_static_h5'] = CommonHelper::getWebCdnH5Static();
         view()->share($shareData);
         // 视图路径
-        // dd(public_path($templateName));
-        $view = app('view')->getFinder();
-        $view->prependLocation(public_path('/themes/'.$currentTheme));
-
-        return view($viewName, $assignData);
+        $view_path_name = 'themes/'.$currentTheme.'/'.$viewName;
+        return view($view_path_name, $assignData);
     }
 
-    // 插件设置页面
+    /**
+     * 基础视图渲染
+     */
     public function displayView($viewName, $assignData)
     {
         $route_arr = explode('@', Route::currentRouteAction());
@@ -72,15 +71,10 @@ trait BladePluginTrait
         // 插件static目录
         $domain = CommonHelper::domain();
         $shareData = [];
-        $shareData['global_static'] = $domain.'/static/';
+        $shareData['global_static'] = $domain.'/assets/';
         $shareData['cdn_static'] = CommonHelper::getWebCdnStatic();
         $shareData['cdn_static_h5'] = CommonHelper::getWebCdnH5Static();
         view()->share($shareData);
-
-        // 视图路径
-        // dd(public_path($templateName));
-        $view = app('view')->getFinder();
-        $view->prependLocation(resource_path('/views/'));
 
         return view($viewName, $assignData);
     }
