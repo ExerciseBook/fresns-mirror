@@ -19,25 +19,25 @@ class BaseExport implements FromCollection, WithMapping, WithHeadings
 
     protected $invoices;
 
-    // 初始化
+    // Initial
     public function __construct($invoices = [])
     {
         $this->invoices = $invoices;
     }
 
-    // 导出
+    // Export
     public function collection()
     {
         return $this->invoices;
     }
 
-    // 表头
+    // Table Name
     public function headings(): array
     {
-        return ['ID', 'Name', '创建时间'];
+        return ['ID', 'Name', 'Created Time'];
     }
 
-    // 导出的字段
+    // Exported Column
     public function map($item): array
     {
         return [

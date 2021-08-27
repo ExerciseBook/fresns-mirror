@@ -18,11 +18,9 @@ use App\Http\Fresns\FresnsMembers\FresnsMembers;
 use App\Http\Fresns\FresnsUsers\FresnsUsers;
 use App\Http\Models\Common\ConfigGroup;
 
-//业务检查，比如状态
 class AmChecker extends BaseChecker
 {
     // 错误码
-
     public $codeMap = [
 
     ];

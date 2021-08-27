@@ -17,20 +17,20 @@ use Illuminate\Support\Str;
 
 class BaseQuery
 {
-    // 查询字段
+    // Query Columns
     protected $searchableFields;
 
     protected $joinSearchableFields;
 
-    // 排序字段
+    // Sort Columns
     protected $orderByFields;
 
-    // 模型
+    // Model
     protected $model;
     protected $table;
     protected $query;
 
-    // 分页字段
+    // Pagination
     protected $pageInfo;
     protected $page;
     protected $limit;
@@ -45,29 +45,27 @@ class BaseQuery
         $this->limit = $this->getLimit();
         $this->searchableFields = $this->model->initSearchableFields();
         $this->orderByFields = $this->model->initOrderByFields();
-        // dbQuery
         $this->dbQuery = DB::table($this->table);
         $this->joinSearchableFields = $this->model->getJoinSearchableFields();
     }
 
-    // 初始化搜索条件
+    // Initialize search cond
     public function initWhereCond()
     {
         $req = request();
-//        dd($this->searchableFields);
         foreach ($this->searchableFields as $searchField => $arr) {
-            // 无key跳过
+            // Skip (No key)
             if (! $req->has($searchField)) {
                 continue;
             }
 
             $searchValue = $req->input($searchField);
-            // 无值跳过
+            // Skip (No value)
             if ($searchValue === null) {
                 continue;
             }
 
-            // 验证数组字段
+            // Validate array fields
             ValidateService::validParamExist($arr, ['field', 'op']);
 
             $field = $arr['field'];
@@ -120,12 +118,12 @@ class BaseQuery
                     foreach ($inArr as &$value) {
                         $value = intval($value);
                     }
-              //      App\User::where('meta->skills', 'like',  '%Vue%')->get()
+                    // App\User::where('meta->skills', 'like', '%Vue%')->get()
                     $this->query = $this->query->whereJsonContains($field, $inArr);
 
                     break;
                 case 'JOIN':
-                    $inArr = explode(',', $field); //特殊处理实现多表联表查询
+                    $inArr = explode(',', $field); // Special processing to achieve multi-table join query
                     $cnt = 0; $resArr = [];
                     foreach ($inArr as $value) {
                         $resArr[$cnt] = $value;
@@ -135,12 +133,9 @@ class BaseQuery
                     break;
             }
         }
-
-        //dd($this->query);
-    //  dd($this->query->toSql());
     }
 
-    // 初始化排序
+    // Initial sorting
     public function initOrderBy()
     {
         foreach ($this->orderByFields as $orderByField => $orderType) {
@@ -148,14 +143,14 @@ class BaseQuery
         }
     }
 
-    // 执行查询
+    // Execution of queries
     public function executeQuery()
     {
         $req = request();
         $this->page = $req->input('currentPage', 1);
         $this->limit = $req->input('pageSize', $this->getLimit());
 
-        // 初始化查询参数
+        // Initialize query parameters
         $this->initWhereCond();
         $this->initOrderBy();
         $req->offsetSet('page', $this->page);
@@ -170,12 +165,12 @@ class BaseQuery
         return $ret;
     }
 
-    // 执行查询所有符合条件的数据
+    // Execute the query for all the data that match the criteria
     public function executeQueryAll()
     {
         $req = request();
 
-        // 初始化查询参数
+        // Initialize query parameters
         $this->initWhereCond();
         $this->initOrderBy();
         $req->offsetSet('page', $this->page);
@@ -185,12 +180,12 @@ class BaseQuery
         return $result;
     }
 
-    //执行查询符合条件的数据，并只返回单个字段
+    // Execute a query for data that matches the conditions and returns only a single field
     public function executeQueryField($field)
     {
         $req = request();
 
-        // 初始化查询参数
+        // Initialize query parameters
         $this->initWhereCond();
         $this->initOrderBy();
         $req->offsetSet('page', $this->page);
@@ -216,10 +211,10 @@ class BaseQuery
     public function setSearchPageInfo(LengthAwarePaginator $searchRes)
     {
         $pageInfo = [];
-        $pageInfo['total'] = $searchRes->total();  // 总数
-        $pageInfo['current'] = $searchRes->currentPage();    // 当前页
-        $pageInfo['pageSize'] = $searchRes->perPage();    // 每页数量
-        $pageInfo['lastPage'] = $searchRes->lastPage();   // 最后一页
+        $pageInfo['total'] = $searchRes->total();    // Total
+        $pageInfo['current'] = $searchRes->currentPage();    // Current page
+        $pageInfo['pageSize'] = $searchRes->perPage();    // Number per page
+        $pageInfo['lastPage'] = $searchRes->lastPage();    // Last Page
 
         if ($searchRes->perPage() == BaseConfig::DEFAULT_LARGE_PAGE_SIZE) {
             $perPage = BaseConfig::DEFAULT_LARGE_PAGE_SIZE.'';
@@ -231,60 +226,36 @@ class BaseQuery
         return $pageInfo;
     }
 
-    // 初始化DB搜索条件
+    // Initialize DB search criteria
     public function initWhereCondForDbQuery()
     {
         $req = request();
-        // join 测试
-//        $cjoinItem = [
-//            'join_table'    => 'crm_customer_append',   // join表
-//            'join_type'     => 'join',   // join类型
-//            'join_select_fields'   => [
-//                'crm_customer_append.id',
-//                'crm_customer_append.customer_code',
-//                'crm_customer_append.name',
-//            ], // join表select字段
-//
-//            'join_cond_arr'    => [
-//                [
-//                    'main_table_field' => 'id',
-//                    'join_table_field' => 'customer_id',
-//                    'op' => '=',
-//                ]
-//            ], // join条件
-//
-//            'join_table_cond_arr'  => [
-//                'customer_code'   => ['field' => 'customer_code', 'op'   => 'LIKE'],
-//            ],  // join表多个条件
-//        ];
-
         $mainTable = $this->table;
         $selectFields = [
             "{$mainTable}.*",
         ];
 
-        DB::connection()->enableQueryLog();  // 开启QueryLog
+        DB::connection()->enableQueryLog();  // Turn on Query Log
 
-        // 初始化主表条件
+        // Initialize master table cond
         $this->buildDbQueryWithSearchCondArr($mainTable, $this->searchableFields);
 
-        // 默认条件
+        // Default cond
         if ($this->model->hasDeletedAt) {
             $this->dbQuery->where($mainTable.'.deleted_at', '=', null);
         }
 
-        //   dd($joinItem);
-        // 此处设置 join 条件
+        // Set join cond
         foreach ($this->joinSearchableFields as $joinItem) {
-            // join表
+            // join Table
             $joinTable = $joinItem['join_table'];
-            // join 表 select 字段
+            // join Table select Column
             $joinSelectFields = $joinItem['join_select_fields'];
             $selectFields = array_merge($selectFields, $joinSelectFields);
-            // join 条件
+            // join cond
             $joinCondArr = $joinItem['join_cond_arr'];
 
-            // join表 查询条件
+            // join Table query cond
             $joinTableCondArr = $joinItem['join_table_cond_arr'];
 
             $needJoin = $this->buildDbQueryWithSearchCondArr($joinTable, $joinTableCondArr);
@@ -302,20 +273,18 @@ class BaseQuery
                 }
             });
         }
-
-        //  dd($this->dbQuery);
     }
 
-    // 给表生成条件
+    // Generate cond for the table
     public function buildDbQueryWithSearchCondArr($table, $searchCondArr)
     {
-        // 前缀
-        // $dbPrefix = env("DB_PREFIX");
-        $dbPrefix = '';
+        // Data Table Prefix
+        $dbPrefix = env("DB_PREFIX");
+        // $dbPrefix = '';
         LogService::info("DB PREFIX [$dbPrefix]");
         $table = Str::startsWith($dbPrefix, $table) ? $table : $dbPrefix.$table;
 
-        // todo 等待调试
+        // todo Waiting for debugging
         if ($table == 'users') {
             $table = 'bl_users';
         }
@@ -323,24 +292,24 @@ class BaseQuery
         $needJoinArr = [];
         $req = request();
         foreach ($searchCondArr as $searchField => $arr) {
-            // 无key跳过
+            // Skip (No key)
             if (! $req->has($searchField)) {
                 continue;
             }
 
             $searchValue = $req->input($searchField);
 
-            // 无值跳过
+            // Skip (No value)
             if ($searchValue === null) {
                 continue;
             }
 
             $needJoinArr[] = $searchValue;
 
-            // 验证数组字段
+            // Validate array fields
             ValidateService::validParamExist($arr, ['field', 'op']);
 
-            // 附上表
+            // Attached table
             $field = $table.'.'.$arr['field'];
             $op = $arr['op'];
 
@@ -372,24 +341,23 @@ class BaseQuery
             }
         }
 
-        // 大于0 才需要join
+        // Greater than 0 to require join
         return count($needJoinArr) > 0;
     }
 
-    // 执行查询
+    // Execution of queries
     public function executeDbQuery()
     {
         $req = request();
         $this->page = $req->input('currentPage', 1);
         $this->limit = $req->input('pageSize', $this->getLimit());
 
-        // 初始化查询参数
+        // Initialize query parameters
         $this->initWhereCondForDbQuery();
         $this->initOrderBy();
         $req->offsetSet('page', $this->page);
 
         $result = $this->dbQuery->paginate($this->getLimit());
-        //   dd($result);
 
         $pagination = $this->setSearchPageInfo($result);
 
@@ -407,21 +375,20 @@ class BaseQuery
 
         $req->offsetSet('page', $this->page);
 
-        DB::connection()->enableQueryLog();  // 开启QueryLog
+        DB::connection()->enableQueryLog();  // Turn on Query Log
 
         $sqlQuery = $this->model->getRawSqlQuery();
-        // dd($sqlQuery);
 
         $result = $sqlQuery->paginate($this->getLimit());
         $pagination = $this->setSearchPageInfo($result);
 
         $queries = \DB::getQueryLog();
 
-        LogService::info('执行语句: ', $queries);
+        LogService::info('Execution Statements: ', $queries);
 
         $ret['result'] = $result;
         $ret['pagination'] = $pagination;
-        //    dd($ret);
+
         return $ret;
     }
 }

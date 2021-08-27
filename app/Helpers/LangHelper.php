@@ -8,24 +8,19 @@
 
 namespace App\Helpers;
 
-/*
- * 语言处理类
- */
-
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class LangHelper
 {
-    // 初始化语言信息
+    // Initialize language information
     public static function initLocale()
     {
-
-        // 语言标签（留空则输出默认语言内容，查询不到默认语言则输出第一条）
-        $locale = request()->header('langTag', 'zh-Hans');
-
-        $locale = request()->input('lang', 'zh-Hans');
-
+        // Language Tags (langTag)
+        // Leave blank to output the default language content
+        // If no default language is queried, the first entry is output
+        $locale = request()->header('langTag', 'en');
+        $locale = request()->input('lang', 'en');
         App::setLocale($locale);
     }
 }

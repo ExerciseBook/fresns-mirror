@@ -24,7 +24,7 @@ class BaseFrontendController extends Controller
     use ApiTrait;
     use AuthenticatesUsers;
 
-    // 登录方式
+    // Login Mode
     public function username()
     {
         $request = request();
@@ -40,7 +40,7 @@ class BaseFrontendController extends Controller
 
     public static function checkLoginTest($login_name)
     {
-        // 判断登录方式
+        // Determine the login mode
         if (preg_match(BaseConfig::PHONE_REG, $login_name)) {
             return  BaseConfig::LOGIN_TYPE[BaseConfig::LOGIN_TYPE_PHONE];
         } elseif (filter_var($login_name, FILTER_VALIDATE_EMAIL)) {
@@ -50,11 +50,11 @@ class BaseFrontendController extends Controller
         }
     }
 
-    // 登录
+    // Login
     public function attemptLogin($credentials)
     {
         $request = request();
-        LogService::info('登录请求信息为', $credentials);
+        LogService::info('The login request information is', $credentials);
         $loginTypeTest = self::checkLoginTest($credentials['login_name']);
         if ($loginTypeTest == 'email') {
             $request->offsetSet('login_type', 'email');
@@ -76,19 +76,19 @@ class BaseFrontendController extends Controller
 
         $loginResult = collect(['email', 'phone'])->contains(function ($value) use ($request) {
             $username = $this->username();
-            LogService::info('登录方式', $username);
+            LogService::info('login mode', $username);
             $account = $request->input($this->username());
             $password = $request->input('password');
             $credentials = [
                 $value => $account,
                 'password' => $password,
             ];
-            LogService::info('登录凭证信息为', $credentials);
+            LogService::info('The login credentials information is', $credentials);
 
             return $this->guard()->attempt($credentials, $request->filled('remember'));
         });
 
-        LogService::info('登录结果', $loginResult);
+        LogService::info('Login Results', $loginResult);
 
         return $loginResult;
     }

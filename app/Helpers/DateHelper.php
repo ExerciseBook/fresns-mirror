@@ -16,70 +16,52 @@ class DateHelper
 {
     const DEFAULT_FORMATTER = 'Y-m-d';
 
-    // 初始化时区
+    // Initialize time zone
     public static function initTimezone()
     {
         $timezone = 'UTC + 8';
-        //  $timezone = "UTC";
+        // $timezone = "UTC";
         config(['app.timezone' =>  $timezone]);
-        // (UTC8 => Asia/Shanghai)
-        date_default_timezone_set('Europe/Brussels');
-        date_default_timezone_set('Asia/Shanghai');
+        // (UTC8 => Asia/Singapore)
+        date_default_timezone_set('Europe/London');
+        date_default_timezone_set('Asia/Singapore');
     }
 
-    // 毫秒
+    // Milliseconds
     public static function milliseconds($format = 'u', $utimestamp = null)
     {
         if (is_null($utimestamp)) {
             $utimestamp = microtime(true);
         }
         $timestamp = floor($utimestamp);
-        $milliseconds = round(($utimestamp - $timestamp) * 1000000); //改这里的数值控制毫秒位数
+
+        //Change the value here to control the number of milliseconds
+        $milliseconds = round(($utimestamp - $timestamp) * 1000000); 
 
         return $milliseconds;
     }
 
-    // 毫秒
+    // format date
     public static function format_date($time)
     {
         $t = time() - $time;
         $f = [
-            '31536000'=>' year ',
-            '2592000'=>' month ',
-            '604800'=>' week ',
-            '86400'=>' day ',
-            '3600'=>' hour ',
-            '60'=>' min ',
-            '1'=>' second ',
+            '31536000' => ' year ',
+            '2592000' => ' month ',
+            '604800' => ' week ',
+            '86400' => ' day ',
+            '3600' => ' hour ',
+            '60' => ' min ',
+            '1' => ' second ',
         ];
         foreach ($f as $k=>$v) {
             if (0 != $c = floor($t / (int) $k)) {
-                return $c.$v.'前';
+                return $c.$v.'ago';
             }
         }
     }
 
-    // 毫秒
-    public static function format_date_zh($time)
-    {
-        $t = time() - $time;
-        $f = [
-            '31536000'=>' 年 ',
-            '2592000'=>' 月 ',
-            '604800'=>' 周 ',
-            '86400'=>' 天 ',
-            '3600'=>' 小时 ',
-            '60'=>' 分钟 ',
-            '1'=>' 秒 ',
-        ];
-        foreach ($f as $k=>$v) {
-            if (0 != $c = floor($t / (int) $k)) {
-                return $c.$v.'前';
-            }
-        }
-    }
-
-    // 根据时区获取时间
+    // Get time according to time zone
     public static function exDate($format, $timeZone = null)
     {
         if ($timeZone === null) {
@@ -92,37 +74,37 @@ class DateHelper
         return $dateTime->format($format);
     }
 
-    // 获取小时
+    // Get Hours
     public static function getHour($date)
     {
         return date('H', strtotime($date));
     }
 
-    // 获取日期
+    // Get Date
     public static function getDate($date)
     {
         return date('Y-m-d', strtotime($date));
     }
 
-    // 获取月份
+    // Get Month
     public static function getMonth($date)
     {
         return date('Y-m', strtotime($date));
     }
 
-    // 当前日期
+    // Current Date
     public static function currentDay($format = 'Y-m-d')
     {
         return date($format, time());
     }
 
-    // 当前日期
+    // Current Date and Time
     public static function currentTime($format = 'Y-m-d H:i:s')
     {
         return date($format, time());
     }
 
-    // 当前日期
+    // Current Date
     public static function formatTime($t, $format = 'Y-m-d')
     {
         return date($format, $t);
@@ -131,17 +113,17 @@ class DateHelper
     public static function humanReadForSecond($sec)
     {
         if ($sec < 3600 && $sec >= 60) {
-            return intval($sec / 60).' 分';
+            return intval($sec / 60).' Month';
         }
 
         if ($sec > 3600) {
-            return sprintf('%.2f', $sec / 3600).' 小时';
+            return sprintf('%.2f', $sec / 3600).' Hour';
         }
 
-        return $sec.' 秒';
+        return $sec.' Second';
     }
 
-    // 2020-10-01, 7   =>  2020-10-07
+    // 2021-10-01, 7   =>  2021-10-07
     public static function addDays($fromDate, $n)
     {
         $carbon = new Carbon();
@@ -150,7 +132,7 @@ class DateHelper
         return $date;
     }
 
-    // 2020-10-01, 1   =>  2020-10-08
+    // 2021-10-01, 1   =>  2021-10-08
     public static function addWeeks($fromDate, $n)
     {
         $carbon = new Carbon();
@@ -159,7 +141,7 @@ class DateHelper
         return $date;
     }
 
-    // 2020-10-01, 1   =>  2020-10-08
+    // 2021-10-01, 1   =>  2021-10-08
     public static function addMonth($fromDate, $n)
     {
         $carbon = new Carbon();
@@ -168,7 +150,7 @@ class DateHelper
         return $date;
     }
 
-    // 2020-10-01, 1   =>  2020-10-08
+    // 2021-10-01, 1   =>  2021-10-08
     public static function addYears($fromDate, $n)
     {
         $carbon = new Carbon();
@@ -178,8 +160,8 @@ class DateHelper
     }
 
     /**
-     * 通过时区将传入的时间转换为数据库时间
-     * time - 传入的时区时间.
+     * Convert incoming time to database time via time zone
+     * time - Incoming time zone time.
      */
     public static function timezoneToAsiaShanghai($time)
     {
@@ -198,8 +180,8 @@ class DateHelper
     }
 
     /**
-     * 通过时区将数据库时间转换为该时区时间
-     * time - 传入的本地时间.
+     * Convert database time to this time zone by time zone
+     * time - Incoming local time.
      */
     public static function asiaShanghaiToTimezone($time)
     {
@@ -217,7 +199,7 @@ class DateHelper
         return $time;
     }
 
-    // 毫秒
+    // Humanization time
     public static function format_date_langTag($time)
     {
         if (empty($time)) {
@@ -232,20 +214,20 @@ class DateHelper
                 $langInfo = $l;
             }
         }
-        // dd($langInfo);
+        
         if (empty($langInfo)) {
             return '';
         }
         $t = time() - $time;
         $f = [
-            '2592000'=>'month',
-            '86400'=>'day',
-            '3600'=>'hour',
-            '60'=>'minute',
+            '2592000' => 'month',
+            '86400' => 'day',
+            '3600' => 'hour',
+            '60' => 'minute',
         ];
         foreach ($f as $k=>$v) {
             if (0 != $c = floor($t / (int) $k)) {
-                // return $c.$v.'前';
+                // return $c.$v.'ago';
                 if ($v == 'minute') {
                     return str_replace('{n}', $c, $langInfo['timeFormatMinute']);
                 }

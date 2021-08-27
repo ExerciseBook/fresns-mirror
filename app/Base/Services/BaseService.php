@@ -36,9 +36,8 @@ class BaseService
         // $baseQueryRes = $baseQuery->executeQuery();
 
         $queryType = request()->input('queryType');
-        // dd($queryType);
-        // 查询类型
-        // join查询
+
+        // Query Type
         if ($queryType == BaseConfig::QUERY_TYPE_DB_QUERY) {
             $baseQueryRes = $baseQuery->executeDbQuery();
         } elseif ($queryType == BaseConfig::QUERY_TYPE_SQL_QUERY) {
@@ -46,28 +45,25 @@ class BaseService
         } else {
             $baseQueryRes = $baseQuery->executeQuery();
         }
-        //    dd($baseQueryRes);
-        // 结果封装
+
+        // Result Package
         $data = [];
         $result = $baseQueryRes['result'];
-        // dd($result);
         $r = new $this->resource($result);
-        // dd($r);
         $data['list'] = $r::collection($result);
 
-        // common 数据
+        // common data
         if ($this->needCommon) {
             $data['common'] = $this->common();
         }
 
-        //分页
+        // pagination
         $data['pagination'] = $baseQueryRes['pagination'];
 
-        // dd($data);
         return $data;
     }
 
-    // 新增
+    // New
     public function store()
     {
         $input = $this->model->convertFormRequestToInput();
@@ -77,7 +73,7 @@ class BaseService
         return $id;
     }
 
-    // 新增
+    // New (by input)
     public function storeByInput($input)
     {
         $id = $this->model->store($input);
@@ -85,45 +81,47 @@ class BaseService
         return $id;
     }
 
-    // 更新
+    // Update
     public function update($id)
     {
         $input = $this->model->convertFormRequestToInput();
 
         unset($input['id']);
-        unset($input['create_user_id']); // 更新不要更改原始数据
+        unset($input['create_user_id']);
         $this->model->updateItem($id, $input);
     }
 
-    // 更新
+    // Update (by input)
     public function updateByInput($id, $input)
     {
         $this->model->updateItem($id, $input);
     }
 
-    // 更新后的操作, 如更新附表, 计算属性等
+    // Updated operations. (e.g. updating schedules, calculating properties, etc.)
     public function updateItemAfter($id)
     {
         $this->model->updateItemAfter($id);
     }
 
+    // Detail
     public function detail($id)
     {
         //dd($this->resourceDetail);
         $data['detail'] = new $this->resourceDetail($this->model->findById($id));
 
-        // common 数据
+        // common data
         $data['common'] = $this->common();
 
         return $data;
     }
 
-    // 删除
+    // Delete
     public function destroy($idArr)
     {
         $this->model->destroyByIdArr($idArr);
     }
 
+    // set Tree Data
     public function setTreeData($treeData)
     {
         $this->treeData = $treeData;
@@ -134,13 +132,13 @@ class BaseService
         return $this->treeData;
     }
 
-    // 获取表
+    // Get Table
     public function getTable()
     {
         return $this->model->getTable();
     }
 
-    // 表单个性化提示
+    // Form personalization tips
     public function tips()
     {
         $arr = [
@@ -167,13 +165,13 @@ class BaseService
         return $data;
     }
 
-    // 获取搜索字段
+    // Get the search field
     public function getSearchableFields()
     {
         return $this->model->initSearchableFields();
     }
 
-    // 计算/刷新 某个item
+    // Calculate/refresh an item
     public function computeItem($id)
     {
         return $this->model->computeItem($id);

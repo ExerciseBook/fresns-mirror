@@ -30,7 +30,7 @@ class RandomHelper
     const RAND_HTML = 'randHtml';
     const RAND_COLOR = 'randColor';
 
-    public function __construct($lang = 'zh-Hans')
+    public function __construct($lang = 'en')
     {
         $this->faker = Factory::create($lang);
     }

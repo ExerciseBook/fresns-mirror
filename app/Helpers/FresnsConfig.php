@@ -12,11 +12,10 @@ use Illuminate\Support\Facades\DB;
 
 class FresnsConfig
 {
+    // Config
     public static function configSet($itemKey, $columnName, $columnValue)
     {
         $t = date('Y-m-d H:i:s', time());
-
-        //echo env("APP_NAME"); exit;
 
         $configItem = DB::connection('mysql')->table('configs')->where('item_key', $itemKey)->first();
 
@@ -28,8 +27,8 @@ class FresnsConfig
             DB::table('configs')->where('item_key', $itemKey)->insert($upInfo);
         } else {
             $upInfo = [
-                $columnName   => $columnValue,
-                'updated_at'   => date('Y-m-d H:i:s', time()),
+                $columnName => $columnValue,
+                'updated_at' => date('Y-m-d H:i:s', time()),
             ];
             DB::table('configs')->where('item_key', $itemKey)->update($upInfo);
         }
@@ -37,6 +36,7 @@ class FresnsConfig
         return true;
     }
 
+    // Language Config
     public static function configLangSet($itemKey, $content, $lang)
     {
         $t = date('Y-m-d H:i:s', time());
@@ -48,10 +48,10 @@ class FresnsConfig
             $langCode = $tag['lang_code'];
             $areaCode = $tag['area_code'];
             $upInfo = [
-                'table_name'   => 'languages',
-                'table_field'   => 'item_value',
-                'table_key'   => $itemKey,
-                'lang_tag'   => $lang,
+                'table_name' => 'languages',
+                'table_field' => 'item_value',
+                'table_key' => $itemKey,
+                'lang_tag' => $lang,
                 'lang_code' => $langCode,
                 'area_code' => $areaCode ?? null,
                 'lang_content' => $content,
@@ -59,7 +59,7 @@ class FresnsConfig
             DB::table('languages')->where('item_key', $itemKey)->insert($upInfo);
         } else {
             $upInfo = [
-                'lang_content'   => $content,
+                'lang_content' => $content,
             ];
             DB::table('languages')->where('id', $languagesItem->id)->update($upInfo);
         }
@@ -67,7 +67,7 @@ class FresnsConfig
         return true;
     }
 
-    // 获取配置
+    // Get Config
     public static function configGet($itemKey, $columnName)
     {
         $columnValue = \Illuminate\Support\Facades\DB::table('configs')->where('item_key', $itemKey)->value($columnName);
@@ -79,7 +79,7 @@ class FresnsConfig
         return $columnValue;
     }
 
-    // 获取配置
+    // Get Config (language)
     public static function configLangGet($itemKey, $lang)
     {
         $langItem = \Illuminate\Support\Facades\DB::table('languages')->where('table_name', 'languages')->where('table_field', 'item_value')->where('table_key', $itemKey)->where('lang_tag', $lang)->first();
@@ -91,10 +91,10 @@ class FresnsConfig
         return $langItem->lang_content;
     }
 
-    //截取标签
+    // Intercepting language tags
     public static function conversionLangTag($langTag)
     {
-        if (strstr($langTag, 'zh-Hans') || strstr($langTag, 'zh-Hant')) {
+        if (strstr($langTag, 'en') || strstr($langTag, 'en-US')) {
             $tagArr = explode('-', $langTag);
             if (count($tagArr) == 3) {
                 $areaCode = array_pop($tagArr);

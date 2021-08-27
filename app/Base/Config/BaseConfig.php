@@ -33,11 +33,11 @@ class BaseConfig
 
     const NICKNAME = 'nickname';
 
-    // 查询模式
-    const QUERY_TYPE_DB_QUERY = 'db_query';  // 支持join配置的查询
-    const QUERY_TYPE_SQL_QUERY = 'sql_query'; // 原生SQL查询
+    // Query Mode
+    const QUERY_TYPE_DB_QUERY = 'db_query';  // Queries with join configuration support
+    const QUERY_TYPE_SQL_QUERY = 'sql_query'; // Native SQL Queries
 
-    // button
+    // Button
     const BUTTON_INDEX = 'index_btn';
     const BUTTON_CREATE = 'create_btn';
     const BUTTON_UPDATE = 'update_btn';
@@ -46,55 +46,55 @@ class BaseConfig
     const BUTTON_IMPORT = 'import_btn';
     const BUTTON_EXPORT = 'export_btn';
 
-    // status 1-normal, 2-disabled
+    // Status: 1-normal, 2-disabled
     const BUTTON_INFO = [
-        ['key' => self::BUTTON_INDEX, 'show' => true, 'name' => '列表', 'status' => 'normal'],
-        ['key' => self::BUTTON_CREATE, 'show' => true, 'name' => '新建', 'status' => 'normal'],
-        ['key' => self::BUTTON_UPDATE, 'show' => true, 'name' => '编辑', 'status' => 'normal'],
-        ['key' => self::BUTTON_DELETE, 'show' => true, 'name' => '删除', 'status' => 'normal'],
-        ['key' => self::BUTTON_DETAIL, 'show' => true, 'name' => '详情', 'status' => 'normal'],
-        ['key' => self::BUTTON_IMPORT, 'show' => false, 'name' => '导入', 'status' => 'normal'],
-        ['key' => self::BUTTON_EXPORT, 'show' => false, 'name' => '导出', 'status' => 'normal'],
+        ['key' => self::BUTTON_INDEX, 'show' => true, 'name' => 'List', 'status' => 'normal'],
+        ['key' => self::BUTTON_CREATE, 'show' => true, 'name' => 'New', 'status' => 'normal'],
+        ['key' => self::BUTTON_UPDATE, 'show' => true, 'name' => 'Change', 'status' => 'normal'],
+        ['key' => self::BUTTON_DELETE, 'show' => true, 'name' => 'Drop', 'status' => 'normal'],
+        ['key' => self::BUTTON_DETAIL, 'show' => true, 'name' => 'Detail', 'status' => 'normal'],
+        ['key' => self::BUTTON_IMPORT, 'show' => false, 'name' => 'Import', 'status' => 'normal'],
+        ['key' => self::BUTTON_EXPORT, 'show' => false, 'name' => 'Export', 'status' => 'normal'],
     ];
 
     const ENABLE_VALUE_ARR = [0, 1];
 
-    //启用
+    // Enable
     const ENABLE_TRUE = 1;
-    // CONST ENABLE_TRUE = true;
-    //禁用
+    // const ENABLE_TRUE = true;
+
+    // Disable
     const ENABLE_FALSE = 0;
-    // CONST ENABLE_FALSE = false;
+    // const ENABLE_FALSE = false;
 
     const ENABLE_OPTION = [
-        ['key' => self::ENABLE_TRUE, 'text' => '启用'],
-        ['key' => self::ENABLE_FALSE, 'text' => '禁用'],
+        ['key' => self::ENABLE_TRUE, 'text' => 'Enable'],
+        ['key' => self::ENABLE_FALSE, 'text' => 'Disable'],
     ];
 
     const TABLE_AREA = 'area';
 
-    // 数据库链接
+    // Database Config
     const MYSQL_CONNECTION = 'mysql';
     const MYSQL_CONNECTION_SLAVE = 'mysql_slave';
     const MYSQL_CONNECTION_HELPER = 'mysql_helper';
 
-    // 主表额外的查询规则
+    // Main Table: Additional query rules
     const ADDED_SEARCHABLE_FIELDS = [];
 
-    // 附表额外的查询规则
+    // Append Table: Additional query rules
     const APPEND_SEARCHABLE_FIELDS = [
         'child_begin_at' => ['field' => 'start_at', 'op' => '>='],
         'child_end_at' => ['field' => 'end_at', 'op' => '<='],
     ];
 
-    // join查询规则，部分情况使用
-    const JOIN_SEARCHABLE_FIELDS = [
-    ];
+    // "join" query rules (used in some cases)
+    const JOIN_SEARCHABLE_FIELDS = [];
 
-    // 分类数据表的查询规则，只查询一级节点
+    // Query rules for categorized data tables, querying only first-level nodes
     protected $treeSearchRule = [];
 
-    // 模型 默认搜索字段
+    // Model (default search column)
     const DEFAULT_SEARCHABLE_FIELDS = [
         'id' => ['field' => 'id', 'op' => '='],
         'ids' => ['field' => 'id', 'op' => 'IN'],
@@ -111,23 +111,24 @@ class BaseConfig
     ];
 
     /**
-     * 配置类基本功能.
+     * Configuration class basic functions
      */
 
-    // 用户类型
-    const USER_TYPE_ADMIN = 1; //管理员
-    const USER_TYPE_USER = 2; //用户
+    // User Type
+    const USER_TYPE_ADMIN = 1; // Fresns Console Administrator
+    const USER_TYPE_USER = 2; // General User
 
-    // 性别
+    // Gender
     const GENDER_UNKNOWN = 0;
     const GENDER_MAN = 1;
     const GENDER_FEMALE = 2;
     const GENDER_MAP = [
-        self::GENDER_UNKNOWN => '未知',
-        self::GENDER_MAN => '男',
-        self::GENDER_FEMALE => '女',
+        self::GENDER_UNKNOWN => 'Unknown',
+        self::GENDER_MAN => 'Man',
+        self::GENDER_FEMALE => 'Female',
     ];
-    // 登录方式
+
+    // Login Mode
     const LOGIN_TYPE_EMAIL = 1;
     const LOGIN_TYPE_PHONE = 2;
     const LOGIN_TYPE_NAME = 3;
@@ -138,13 +139,13 @@ class BaseConfig
     ];
 
     const TEST_SELECT_OPTION = [
-        ['key' => 1, 'text' => '选项1'],
-        ['key' => 2, 'text' => '选项2'],
-        ['key' => 3, 'text' => '选项3'],
+        ['key' => 1, 'text' => 'Option 1'],
+        ['key' => 2, 'text' => 'Option 2'],
+        ['key' => 3, 'text' => 'Option 3'],
     ];
 
     /*
-     * 对应的表字段
+     * Corresponding table columns
      */
     public $table;
 
@@ -158,22 +159,22 @@ class BaseConfig
         return $this->table;
     }
 
-    // 列表规则
+    // List Rules
     public function indexRule()
     {
     }
 
-    // 新增规则
+    // New Rules
     public function storeRule()
     {
     }
 
-    // 更新规则
+    // Update Rules
     public function updateRule()
     {
     }
 
-    // 删除规则
+    // Drop Rules
     public function destroyRule()
     {
         $table = $this->table;
@@ -187,7 +188,7 @@ class BaseConfig
         return $rule;
     }
 
-    // 详情规则
+    // Details Rules
     public function detailRule()
     {
         $table = $this->table;
@@ -200,19 +201,19 @@ class BaseConfig
         return $rule;
     }
 
-    // 获取tree查询规则
+    // Get tree query rules
     public function getTreeSearchRule()
     {
         return $this->treeSearchRule;
     }
 
-    // 新建more_json规则
+    // Create a new more_json rule
     public function storeMoreJsonRule()
     {
         return [];
     }
 
-    // 更新more_json规则
+    // Update the more_json rule
     public function updateMoreJsonRule()
     {
         return [];

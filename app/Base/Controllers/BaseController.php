@@ -23,7 +23,7 @@ class BaseController extends Controller
 
     protected $service;
 
-    // 列表
+    // List
     public function index(Request $request)
     {
         ValidateService::validateRule($request, $this->rules(BaseConfig::RULE_INDEX));
@@ -37,7 +37,7 @@ class BaseController extends Controller
         $this->success($data);
     }
 
-    // 新增
+    // New
     public function store(Request $request)
     {
         $rules = $this->rules(BaseConfig::RULE_STORE);
@@ -48,13 +48,13 @@ class BaseController extends Controller
 
         $this->service->store();
 
-        // 清空request数据
+        // Clear request data
         CommonHelper::removeRequestFields($this->service->getSearchableFields());
 
         $this->index($request);
     }
 
-    // 更新
+    // Update
     public function update(Request $request)
     {
         ValidateService::validateRule($request, $this->rules(BaseConfig::RULE_UPDATE));
@@ -65,13 +65,13 @@ class BaseController extends Controller
 
         $this->service->update($id);
 
-        // 清空request数据
+        // Clear request data
         CommonHelper::removeRequestFields($this->service->getSearchableFields());
 
         $this->index($request);
     }
 
-    // 详情
+    // Detail
     public function detail(Request $request)
     {
         ValidateService::validateRule($request, $this->rules(BaseConfig::RULE_DETAIL));
@@ -82,42 +82,42 @@ class BaseController extends Controller
         $this->success($data);
     }
 
-    // 删除
+    // Drop
     public function destroy(Request $request)
     {
-        //验证
+        // Check Drop
         $ids = $request->input('ids');
         $idArr = explode(',', $ids);
 
-        // 执行
+        // Go drop
         $this->service->destroy($idArr);
 
-        // 清空request数据
+        // Clear request data
         CommonHelper::removeRequestFields($this->service->getSearchableFields());
 
         $this->index($request);
     }
 
-    // 验证规则
+    // Validate rules
     public function rules($ruleType)
     {
         return [];
     }
 
-    // 验证规则语言
+    // Validate rule language
     public function messages($ruleType)
     {
         return [];
     }
 
-    // 导出
+    // Export
     public function export(Request $request)
     {
         $data = $this->service->exportData();
         $this->success($data);
     }
 
-    // 导入
+    // Import
     public function import(Request $request)
     {
         //ValidateService::validateRule($request, BaseConfig::IMPORT_RULE);
@@ -133,18 +133,18 @@ class BaseController extends Controller
         $code = $parseInfo['code'] ?? ErrorCodeService::CODE_OK;
         $data = $parseInfo['data'] ?? ['default' => ''];
 
-        // 成功则返回数据
+        // Success (return data)
         if ($code == ErrorCodeService::CODE_OK) {
             $this->success($data);
         }
 
         $msg = $parseInfo['msg'] ?? [];
 
-        // 失败返回信息详情
+        // Failure (return error message)
         $this->errorInfo($code, $msg, [], $data);
     }
 
-    // 拉取数据
+    // Get Data
     public function fetch(Request $request)
     {
         $this->service->fetchData();

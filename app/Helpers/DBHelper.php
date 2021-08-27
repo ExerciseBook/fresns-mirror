@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 
 class DBHelper
 {
-    // 多库， 检查是否有table
+    // Multiple tables, Check if there is a table
     public static function hasTable($tableName)
     {
         $inMysql = Schema::connection(BaseConfig::MYSQL_CONNECTION)->hasTable($tableName);
@@ -27,7 +27,7 @@ class DBHelper
         return $inMysql || $inMysqlHelper;
     }
 
-    // 多库， 检查是否有table
+    // Multiple tables, Check if there is a table
     public static function hasTableInCurrentDB($tableName)
     {
         $inMysql = Schema::connection(BaseConfig::MYSQL_CONNECTION)->hasTable($tableName);
@@ -35,7 +35,7 @@ class DBHelper
         return $inMysql;
     }
 
-    // 多库， 获取connection
+    // Multiple tables, Get connection
     public static function getConnectionName($tableName)
     {
         $inMysqlHelper = Schema::connection(BaseConfig::MYSQL_CONNECTION_HELPER)->hasTable($tableName);
@@ -49,16 +49,16 @@ class DBHelper
     public static function compareDb($conn1, $conn2)
     {
 
-        // 获取数据表
+        // Get tables
         $table1Arr = self::getAllTables($conn1);
         $table2Arr = self::getAllTables($conn2);
 
-        // 差异表比较
+        // Comparison of difference tables
         $diffTables1 = array_diff($table1Arr, $table2Arr);
         $diffTables2 = array_diff($table2Arr, $table1Arr);
         $diffTableArr = array_merge($diffTables1, $diffTables2);
 
-        // 相同表的字段比较
+        // Comparison of fields in the same table
         $diffTableFieldArr = [];
         $sameTableArr = array_intersect($table1Arr, $table2Arr);
 
@@ -73,7 +73,6 @@ class DBHelper
             LogService::info('conn1TableColumnMap: ', $conn1TableColumnMap);
             LogService::info('conn2TableColumnMap: ', $conn2TableColumnMap);
 
-            //    dd($result);
             if (! empty($result)) {
                 $diffTableFieldArr[$table] = $result;
             }
@@ -125,18 +124,16 @@ class DBHelper
         return $columnNameMap;
     }
 
-    // 比较两个表的信息
+    // Compare information from two tables
     public static function compare2TableColumnMapInfo($map1, $map2)
     {
-
-        //
         $diffArr = [];
         foreach ($map1 as $columnName => $columnType) {
             $columnType1 = $columnType;
             $columnType2 = $map2[$columnName] ?? '';
 
             $compareStr = "{$columnName} : {$columnType1} - {$columnType2}";
-            //    LogService::info($compareStr);
+            // LogService::info($compareStr);
             if ($columnType1 != $columnType2) {
                 $item = [];
                 $item['column'] = $columnName;
@@ -152,7 +149,7 @@ class DBHelper
             $columnType2 = $columnType;
 
             $compareStr = "{$columnName} : {$columnType1} - {$columnType2}";
-            //   LogService::info($compareStr);
+            // LogService::info($compareStr);
             if ($columnType1 != $columnType2) {
                 $item = [];
                 $item['column'] = $columnName;
@@ -172,7 +169,7 @@ class DBHelper
         if (intval(request()->input('adjust')) == 1) {
             $totalSqlArr = self::adjustTableFieldOrder($conn);
         }
-        //   dd(123);
+
         $tableArr = self::getAllTables($conn);
 
         foreach ($tableArr as $table) {
@@ -183,19 +180,15 @@ class DBHelper
                 // continue;
             }
 
-            // dd($realTable);
-
-            // 查询表信息
+            // Query Table Information
             $sql = "SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = '{$realTable}'";
             $queryResult = DB::connection($conn)->select($sql);
             $tableComment = $queryResult[0]->TABLE_COMMENT;
 
-            // 查询列信息
+            // Query Column Information
             $sql = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = '{$realTable}'";
             $queryResult = DB::connection($conn)->select($sql);
 
-            //  dd($realTable);
-            //  dd($queryResult);
             // ### 多媒体表 *media*
 
             $markdownArr = [
@@ -210,8 +203,8 @@ class DBHelper
                 $item = [];
                 $commentArr = explode('#', $columnInfo->COLUMN_COMMENT);
                 $item[] = $columnInfo->COLUMN_NAME;
-                //  $item[] = $columnInfo->DATA_TYPE;
-                //  $item[] = $columnInfo->COLUMN_TYPE . "(". $columnInfo->CHARACTER_MAXIMUM_LENGTH . ")";
+                // $item[] = $columnInfo->DATA_TYPE;
+                // $item[] = $columnInfo->COLUMN_TYPE . "(". $columnInfo->CHARACTER_MAXIMUM_LENGTH . ")";
                 $dataType = $columnInfo->DATA_TYPE;
                 $columnType = $columnInfo->COLUMN_TYPE;
                 if ($dataType == 'bigint') {
@@ -242,13 +235,13 @@ class DBHelper
 
         $finalStr = implode("\n\n\n", $markdownStrArr);
 
-        // 准备数据
+        // Prepare data
 
         $d = date('YmdHis', time());
         $fileName = "table_markdown_{$d}.txt";
         $filePath = base_path()."/storage/app/public/export/{$fileName}";
 
-        // 写入
+        // Write to
         file_put_contents($filePath, $finalStr);
 
         $domain = CommonHelper::domain();
@@ -269,14 +262,12 @@ class DBHelper
         $tableArr = self::getAllTables($conn);
 
         $fieldOrderArr = [
-            'is_enable',
-            'rank_num',
-            'remark',
             'file_id',
             'file_url',
             'more_json',
-            'create_user_id',
-            'delete_user_id',
+            'rank_num',
+            'remark',
+            'is_enable',
             'created_at',
             'updated_at',
             'deleted_at',

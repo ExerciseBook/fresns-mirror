@@ -31,7 +31,6 @@ use App\Http\Share\Common\LogService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
-//业务检查，比如状态
 class AmChecker extends BaseChecker
 {
     // 错误码

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class CommonHelper
 {
-    // 是否https请求
+    // Whether https request
     public static function isHttpsRequest()
     {
         if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
@@ -25,7 +25,7 @@ class CommonHelper
         return false;
     }
 
-    // 获取域名
+    // Get Domain
     public static function domain()
     {
         $request = request();
@@ -38,7 +38,7 @@ class CommonHelper
         return 'http://'.$httpHost;
     }
 
-    // 获取host
+    // Get Host
     public static function host()
     {
         $request = request();
@@ -47,8 +47,8 @@ class CommonHelper
         return $httpHost;
     }
 
-    // 判断是否为微信浏览器
-    public static function isWeixinBrowser()
+    // Determine if it is a WeChat browser
+    public static function isWeChatBrowser()
     {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             return true;
@@ -57,7 +57,7 @@ class CommonHelper
         return false;
     }
 
-    // 移除请求的数据
+    // Remove the requested data
     public static function removeRequestFields($fieldMap)
     {
         foreach ($fieldMap as $field => $arr) {
@@ -65,13 +65,13 @@ class CommonHelper
         }
     }
 
-    // 只保留请求的字段
+    // Keep only the requested fields
     public static function onlyRequestFields($onlyFieldArr)
     {
         $allFiledMap = request()->all();
 
         foreach ($allFiledMap as $field => $value) {
-            //不在则移除
+            // Remove if not present
             if (! in_array($field, $onlyFieldArr)) {
                 request()->offsetUnset($field);
             }
@@ -87,39 +87,18 @@ class CommonHelper
         return $b;
     }
 
-    // 获取地址全称
-    public static function getFullAddress($input)
-    {
-        $fullAddressArr = [];
-
-        $addressFieldsArr = ['province_id', 'city_id', 'region_id'];
-
-        foreach ($addressFieldsArr as $field) {
-            if (! isset($input[$field]) || empty($input[$field])) {
-                continue;
-            }
-            $fullAddressArr[] = DB::table(BaseConfig::TABLE_AREA)
-                ->where('id', $input[$field])->value('name');
-        }
-
-        if (isset($input['address_detail'])) {
-            $fullAddressArr[] = $input['address_detail'];
-        }
-
-        return implode('', $fullAddressArr);
-    }
-
     public static function isMobile()
     {
-        // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
+        // If there is HTTP_X_WAP_PROFILE then it must be a mobile device
         if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
             return true;
         }
-        // 如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
+        // If the via information contains wap then it must be a mobile device (some service providers will block the information)
         if (isset($_SERVER['HTTP_VIA'])) {
-            return stristr($_SERVER['HTTP_VIA'], 'wap') ? true : false; // 找不到为flase,否则为TRUE
+            // false if not found, otherwise true
+            return stristr($_SERVER['HTTP_VIA'], 'wap') ? true : false;
         }
-        // 判断手机发送的客户端标志,兼容性有待提高
+        // Determine client flags sent by cell phones
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $clientkeywords = [
                 'mobile',
@@ -155,14 +134,15 @@ class CommonHelper
                 'midp',
                 'wap',
             ];
-            // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+            // Find mobile browser keywords from HTTP_USER_AGENT
             if (preg_match('/('.implode('|', $clientkeywords).')/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
                 return true;
             }
         }
-        if (isset($_SERVER['HTTP_ACCEPT'])) { // 协议法，因为有可能不准确，放到最后判断
-            // 如果只支持wml并且不支持html那一定是移动设备
-            // 如果支持wml和html但是wml在html之前则是移动设备
+        if (isset($_SERVER['HTTP_ACCEPT'])) {
+            // Agreement method (because of the possibility of inaccuracy, put into the final judgment)
+            // If it only supports wml and does not support html then it must be a mobile device
+            // If wml and html are supported but wml comes before html then it is a mobile device
             if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
                 return true;
             }
@@ -171,32 +151,7 @@ class CommonHelper
         return false;
     }
 
-    // 价格: 元 转 分
-    public static function formatPrice2Fen($price)
-    {
-        return intval($price * 100);
-    }
-
-    // 价格: 分 转 元
-    public static function formatFen2Yuan($price, $precision = 2)
-    {
-        return sprintf("%.{$precision}f", $price / 100);
-    }
-
-    // 获取单个show button
-    public static function generateShowButtonInfo($showBtnKey, $show = true, $buttonKeyNameMap = [])
-    {
-        $showButton = [
-            'key'    => $showBtnKey,
-            'name'   => $buttonKeyNameMap[$showBtnKey] ?? '未知',
-            'show'   => $show,
-            'status' => 'normal',
-        ];
-
-        return $showButton;
-    }
-
-    // 获取网页cdn资源路径
+    // Get Web CDN Static
     public static function getWebCdnStatic()
     {
         $domain = CommonHelper::domain();
@@ -209,7 +164,7 @@ class CommonHelper
         return $cdnUrl;
     }
 
-    // 获取网页cdn_h5资源路径
+    // Get H5 CDN Static
     public static function getWebCdnH5Static()
     {
         $domain = CommonHelper::domain();

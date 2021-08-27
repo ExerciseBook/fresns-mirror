@@ -11,30 +11,30 @@ namespace App\Helpers;
 class ArrayHelper
 {
     /**
-     * 多维数组排序
-     * 第一个参数为要排序的数组，剩下是要排序的键（key）和排序方法，键的话因为要应对多维的情况，所以需要上下级连接，用`.`.
+     * Sorting multidimensional arrays
+     * The first parameter is the array to be sorted, the rest is the key to be sorted (key) and the sorting method, the key then needs to be connected up and down because it has to cope with the multi-dimensional situation, using "."
      * @example multiDimensionSort($arr,'price',SORT_DESC,'top1.field',SORT_ASC)
      * @param mixed ...$args
      * @return mixed
      */
     public static function multiDimensionSort(...$args)
     {
-        $arr = array_shift($args); // 取到要排序的数组，剩下的为要排序的键和排序类型
+        $arr = array_shift($args); // Get the array to be sorted, the rest is the key to be sorted and the sort type
         $sort_arg = [];
         foreach ($args as $arg) {
-            // 这里主要是为了得到排序的key对应的值
+            // The main purpose here is to get the value corresponding to the sorted key
             $sort = $arr;
             if (is_string($arg)) {
-                $arg = explode('.', $arg); // 我设定参数里面多维数组下的键，用‘.’连接下级的键，这里得到键，然后下面循环取得数组$arr里面该键对应的值
+                $arg = explode('.', $arg); // Set the key under the multi-dimensional array inside the parameter, and use '.' to connect the keys of the lower level, here we get the key, and then the following loop gets the value corresponding to the key in the array $arr
                 foreach ($arg as $key) {
-                    $sort = array_column($sort, $key); // 每次循环$sort的维度就会减一
+                    $sort = array_column($sort, $key); // The dimension of $sort is reduced by one with each loop
                 }
                 $sort_arg[] = $sort;
             } else {
-                $sort_arg[] = $arg; // 排序方法SORT_ASC、SORT_DESC等
+                $sort_arg[] = $arg; // Sorting methods SORT_ASC, SORT_DESC, etc.
             }
         }
-        $sort_arg[] = &$arr; // 这个数组大致结构为：[$sort, SORT_ASC, $sort2, SORT_DESC,$arr]
+        $sort_arg[] = &$arr; // The approximate structure of this array is: [$sort, SORT_ASC, $sort2, SORT_DESC, $arr]
 
         call_user_func_array('array_multisort', $sort_arg);
 
@@ -42,11 +42,11 @@ class ArrayHelper
     }
 
     /**
-     * 二维数组根据某个字段排序.
-     * @param array $array 要排序的数组
-     * @param string $keys   要排序的键字段
-     * @param string $sort  排序类型  SORT_ASC     SORT_DESC
-     * @return array 排序后的数组
+     * Two-dimensional arrays sorted by a field.
+     * @param array $array / The array to sort
+     * @param string $keys / Key fields to sort
+     * @param string $sort / Sort Type: SORT_ASC, SORT_DESC
+     * @return array / Sorted arrays
      */
     public static function arraySort(&$array, $keys, $sortDirection)
     {
@@ -68,7 +68,7 @@ class ArrayHelper
         return $b;
     }
 
-    // 获取描述
+    // Get description
     public static function keyDescInArray($key, $arr, $matchKey = 'key', $descKey = 'text')
     {
         foreach ($arr as $item) {
@@ -76,10 +76,10 @@ class ArrayHelper
                 $item = self::objectToArray($item);
             }
             if (isset($item[$matchKey]) && $item[$matchKey] == $key) {
-                return  $item[$descKey] ?? '未知';
+                return  $item[$descKey] ?? 'Unknown';
             }
         }
 
-        return '未知';
+        return 'Unknown';
     }
 }

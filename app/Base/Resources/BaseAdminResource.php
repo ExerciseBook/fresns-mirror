@@ -12,23 +12,23 @@ use App\Http\Share\Common\Perm\RolePermService;
 
 class BaseAdminResource extends BaseResource
 {
-    // show button 信息
+    // show button info
     public $columnShowButtons = [];
 
-    // 获取 resource show buttons 信息
+    // get resource show buttons info
     public function getColumnShowButtons()
     {
         return $this->columnShowButtons;
     }
 
     /**
-     * 获取当前菜单下的column权限.
-     * @var 返回状态 1 = true 2 = false 3 = 随机返回
+     * Get the column permission under the current menu.
+     * @var Return Status: 1=true / 2=false / 3=Random Return
      */
     public function getColumnShowButtonsType($type = 1)
     {
         $typeMap = [true, false];
-        //获取当前菜单下所有的权限
+        //Get all permissions under the current menu
         $menuPerm = RolePermService::getAllShowButtonFiledUrl(2);
 
         $data = [];

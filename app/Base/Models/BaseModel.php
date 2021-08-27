@@ -26,7 +26,7 @@ class BaseModel extends Model
     use SoftDeletes;
     use HookModelTrait;
 
-    // 我的数据库链接
+    // My Database Connection
     protected $myConnection = BaseConfig::MYSQL_CONNECTION;
 
     protected $dates = ['deleted_at'];
@@ -43,13 +43,13 @@ class BaseModel extends Model
         $this->hookModelInit();
     }
 
-    // 设置 connection
+    // Setting connection
     protected function initConnection()
     {
         DB::setDefaultConnection($this->myConnection);
     }
 
-    // 可搜索字段
+    // Searchable columns
     public function initSearchableFields()
     {
         $searchableFields = BaseConfig::DEFAULT_SEARCHABLE_FIELDS;
@@ -59,77 +59,74 @@ class BaseModel extends Model
         return $searchableFields;
     }
 
-    // 获取新增的搜索字段
+    // Get the added search columns
     public function getAddedSearchableFields()
     {
         return [];
     }
 
-    // 获取附加表的搜索字段
+    // Get the search columns of the append table
     public function getAppendSearchableFields()
     {
         return [];
     }
 
-    // 获取join 表的搜索字段, 仅在dbQuery时候使用
+    // Get the search columns of the join table (used only when dbQuery)
     public function getJoinSearchableFields()
     {
         return [];
     }
 
-    // 搜索排序字段
+    // Search for sorted columns
     public function initOrderByFields()
     {
         $orderByFields = [
             // 'rank_num' => 'ASC',
             'id' => 'DESC',
-            // 'updated_at'    => 'DESC',
+            // 'updated_at' => 'DESC',
         ];
 
         return $orderByFields;
     }
 
-    // 新增
+    // New
     public function store($input)
     {
         $id = DB::table($this->table)->insertGetId($input);
-        // 新增完了之后的操作
+        // Operation after adding
         $this->hookStoreAfter($id);
-        // 调用插件订阅命令字
+        // Call the plugin to subscribe to the command word
         $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => $this->table,
             'insertId' => $id,
         ];
         LogService::info('table_input', $input);
-        // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
-
         return $id;
     }
 
-    // 批量新增
+    // Batch Add
     public function batchStore($inputArr)
     {
         $rs = DB::table($this->table)->insert($inputArr);
-
         return $rs;
     }
 
-    // 数据存在则更新，不存在则写入
+    // Update if data exists, add if it doesn't
     public function updateOrInsertByCond($cond, $input = [])
     {
         return self::updateOrInsert($cond, $input);
     }
 
-    // 更新
+    // Update
     public function updateItem($id, $upInput)
     {
         self::where('id', $id)->update($upInput);
-        //   $this->hookUpdateAfter($id);
+        // $this->hookUpdateAfter($id);
     }
 
-    // 更新后的操作, 如更新附表, 计算属性等
+    // Updated operations. For example: updating schedules, calculating properties, etc.
     public function updateItemAfter($id)
     {
         if (in_array('hookUpdateAfter', get_class_methods($this))) {
@@ -137,7 +134,7 @@ class BaseModel extends Model
         }
     }
 
-    // 已存在则更新，不存在则创建
+    // Update if it already exists, create if it doesn't
     public static function updateOrCreateItem($cond, $input)
     {
         $c = get_called_class();
@@ -147,7 +144,7 @@ class BaseModel extends Model
         return true;
     }
 
-    // 批量删除
+    // Batch delete
     public function destroyByIdArr($idArr)
     {
         if ($this->canDelete($idArr)) {
@@ -157,25 +154,25 @@ class BaseModel extends Model
         }
     }
 
-    // 软删除恢复
+    // Recovery (Logical Deletion)
     public static function restoreItem($id)
     {
         self::withTrashed()->find($id)->restore();
     }
 
-    // 恢复多个
+    // Recover multiple (Logical Deletion)
     public static function batchRestore($cond)
     {
         self::withTrashed()->where($cond)->restore();
     }
 
-    // 强制删除
+    // Physical Deletion
     public static function forceDeleteItem($id)
     {
         self::withTrashed()->find($id)->forceDelete();
     }
 
-    // 查询-单个
+    // Query a single
     public static function find($id)
     {
         $c = get_called_class();
@@ -184,7 +181,7 @@ class BaseModel extends Model
         return $m->findById($id);
     }
 
-    //
+    // Query Find By Field
     public static function staticFindByField($field, $value)
     {
         $c = get_called_class();
@@ -193,7 +190,7 @@ class BaseModel extends Model
         return $m->findByField($field, $value);
     }
 
-    // 查询附表记录
+    // Query append table
     public static function findAppend($field, $value)
     {
         $c = get_called_class();
@@ -202,7 +199,7 @@ class BaseModel extends Model
         return $m->findByField($field, $value);
     }
 
-    // 查询附表记录, 根据条件查询
+    // Query append table (Search by condition)
     public static function findAppendByCond($cond)
     {
         $c = get_called_class();
@@ -211,61 +208,61 @@ class BaseModel extends Model
         return $m->findByCond($cond);
     }
 
-    // 查询-单个
+    // Query a single
     public function findById($id)
     {
         return self::where('id', $id)->first();
     }
 
-    // 查询-单个-字段条件
+    // Query a single (Column Cond)
     public function findByField($fieldName, $fieldValue)
     {
         return self::where($fieldName, $fieldValue)->first();
     }
 
-    // 查询-单个-条件
+    // Query a single (Cond)
     public function findByCond($cond)
     {
         return self::where($cond)->first();
     }
 
-    // 查询-单个-条件-静态
+    // Query a single (Nickname Cond)
     public static function staticFindByNickname($nickname)
     {
         return self::where('nickname', $nickname)->first();
     }
 
-    // 查询字段值，如根据id获取name
+    // Query column value (e.g. get name based on id)
     public static function findValueById($id, $field = 'name')
     {
         return self::where('id', $id)->value($field);
     }
 
-    // 查询字段数组，如根据标签idArr，获取标签名称数组
+    // Query column value (e.g. Get an array of tag names based on tag idArr)
     public static function getValueArrByIdArr($idArr, $field = 'name')
     {
         return self::whereIn('id', $idArr)->pluck($field);
     }
 
-    //通过where条件查询并返回数组
+    // Query by where condition and return an array
     public static function getValueArrByCond($cond, $field = 'name')
     {
         return self::where($cond)->pluck($field)->toArray();
     }
 
-    //通过whereIn条件查询并返回数组
+    // Query by whereIn condition and return the array
     public static function getValueArrByCondIn($key = 'id', $valueArr, $field = 'name')
     {
         return self::whereIn($key, $valueArr)->pluck($field)->toArray();
     }
 
-    // 查询-多个
+    // Query a single
     public function getByCond($cond = [])
     {
         return self::where($cond)->get();
     }
 
-    // 查询-多个
+    // Query multiple
     public static function getByStaticWithCond($cond = [], $column = ['*'])
     {
         $c = get_called_class();
@@ -274,6 +271,7 @@ class BaseModel extends Model
         return self::where($cond)->get($column);
     }
 
+    // Query (rank_num)
     public static function getByStaticWithCondArr($cond = [], $column = ['*'])
     {
         $c = get_called_class();
@@ -282,12 +280,13 @@ class BaseModel extends Model
         return self::where($cond)->orderBy('rank_num')->get($column)->toArray();
     }
 
-    // 查询-多个-指定列
+    // Query multiple (Specify column)
     public function getByCondWithFields($cond, $fields)
     {
         return self::where($cond)->select($fields)->get();
     }
 
+    // Map: staticGetByCondKVMap
     public static function staticGetByCondKVMap($k = 'id', $v = 'name', $cond = [])
     {
         $c = get_called_class();
@@ -296,13 +295,13 @@ class BaseModel extends Model
         return $m->getByCondKVMap($k, $v, $cond);
     }
 
-    // map : 根据条件组合列
+    // Map: Combine columns according to conditions
     public function getByCondKVMap($k = 'id', $v = 'name', $cond = [])
     {
         return DB::table($this->table)->where($cond)->whereNull('deleted_at')->pluck($v, $k);
     }
 
-    //多条件搜索
+    // Map: Multi-Criteria Search
     public static function getMultipleCond($map, $column = ['*'])
     {
         $query = self::query();
@@ -336,7 +335,7 @@ class BaseModel extends Model
         return $query->get($column);
     }
 
-    //多条件搜索 分页数据
+    // Multi-criteria search, paginated data
     public static function getMultipleCondPage($map, $page_param, $column = ['*'])
     {
         $query = self::query();
@@ -386,23 +385,23 @@ class BaseModel extends Model
         return $data;
     }
 
-    // 批量更新
+    // Batch Update
     public function updateBatch($multipleData = [])
     {
         try {
             if (empty($multipleData)) {
-                throw new \Exception('数据不能为空');
+                throw new \Exception('Data cannot be empty');
             }
 
-            $tableName = DB::getTablePrefix().$this->getTable(); // 表名
+            $tableName = DB::getTablePrefix().$this->getTable(); // Table Name
             $firstRow = current($multipleData);
             $updateColumn = array_keys($firstRow);
 
-            // 默认以id为条件更新，如果没有ID则以第一个字段为条件
+            // Update by id by default, or the first column if there is no ID
             $referenceColumn = isset($firstRow['id']) ? 'id' : current($updateColumn);
             unset($updateColumn[0]);
 
-            // 拼接sql语句
+            // Splicing sql statements
             $updateSql = 'UPDATE '.$tableName.' SET ';
             $sets = [];
             $bindings = [];
@@ -424,7 +423,7 @@ class BaseModel extends Model
             $whereIn = rtrim(str_repeat('?,', count($whereIn)), ',');
             $updateSql = rtrim($updateSql, ', ').' WHERE `'.$referenceColumn.'` IN ('.$whereIn.')';
 
-            // 传入预处理sql语句和对应绑定数据
+            // Pass in pre-processed sql statements and corresponding bound data
             $ret = DB::update($updateSql, $bindings);
 
             return $ret;
@@ -433,7 +432,7 @@ class BaseModel extends Model
         }
     }
 
-    // 静态方法
+    // Static methods
     public static function staticBuildSelectOptions($key = 'id', $text = 'name', $cond = [], $price = 'price')
     {
         $c = get_called_class();
@@ -442,7 +441,7 @@ class BaseModel extends Model
         return $m->buildSelectOptions($key, $text, $cond, $price);
     }
 
-    // 组件下拉框选择
+    // Component drop-down box selection
     public function buildSelectOptions($key = 'id', $text = 'name', $cond = [], $price = 'price')
     {
         if (Schema::hasColumn('users', 'rank_num')) {
@@ -458,8 +457,8 @@ class BaseModel extends Model
             if (! empty($item->login_name)) {
                 $it['text'] .= '['.$item->login_name.']';
             }
-            //$it['login_name']  = $item->login_name;
-            //   $it['name']  = $item->name;
+            // $it['login_name'] = $item->login_name;
+            // $it['name'] = $item->name;
             if ($price == 'show_price') {
                 $it['price'] = $item->price_sale;
             }
@@ -469,7 +468,7 @@ class BaseModel extends Model
         return $newItemArr;
     }
 
-    // 静态方法
+    // Static methods
     public static function staticBuildSelectOptions2($key = 'id', $text = 'name', $cond = [], $price = 'price')
     {
         $c = get_called_class();
@@ -489,15 +488,15 @@ class BaseModel extends Model
             if (! empty($item->login_name)) {
                 $it['text'] .= '['.$item->login_name.']';
             }
-            //$it['login_name']  = $item->login_name;
-            //   $it['name']  = $item->name;
+            // $it['login_name'] = $item->login_name;
+            // $it['name'] = $item->name;
             $newItemArr[] = $it;
         }
 
         return $newItemArr;
     }
 
-    //组建下拉框数组查询
+    // Assemble drop-down box array query
     public static function getBuildSelectOptions($key = 'id', $text = 'name', $fieldValue, $fieldName = 'id')
     {
         $items = self::whereIn($fieldName, $fieldValue)->orderBy('rank_num', 'ASC')->get();
@@ -506,7 +505,7 @@ class BaseModel extends Model
             $it = [];
             $it['key'] = $item->$key;
             $it['text'] = $item->$text;
-            //   $it['name']  = $item->name;
+            // $it['name'] = $item->name;
             $newItemArr[] = $it;
         }
 
@@ -559,13 +558,13 @@ class BaseModel extends Model
         return $newItemArr;
     }
 
-    // 是否可删除
+    // Can be deleted or not
     public function canDelete($idArr)
     {
         return true;
     }
 
-    // 是否可编辑
+    // Can be edit or not
     public function canUpdate($idArr)
     {
     }
@@ -575,13 +574,13 @@ class BaseModel extends Model
         return $this->dates;
     }
 
-    // 前台表单-数据库表字段映射
+    // Frontend forms (database table field mapping)
     public function formFieldsMap()
     {
         return [];
     }
 
-    //
+    // Convert Form Request To Input
     public function convertFormRequestToInput()
     {
         $req = request();
@@ -600,7 +599,7 @@ class BaseModel extends Model
             }
         }
 
-        // 创建用户ID create_user_id
+        // Create User ID
         if (Schema::hasColumn($this->table, 'create_user_id')) {
             $user = Auth::user();
             $input['create_user_id'] = $user->id ?? null;
@@ -609,7 +608,7 @@ class BaseModel extends Model
         return $input;
     }
 
-    // 更新删除用户ID
+    // Update Delete User ID
     public function updateDestroyUserId($idArr)
     {
         if (Schema::hasColumn($this->table, 'delete_user_id')) {
@@ -620,40 +619,38 @@ class BaseModel extends Model
         }
     }
 
-    // 返回数据表
+    // Return to Data Sheet
     public function getTable()
     {
-//        $data = Schema::getColumnListing($table);
+        // $data = Schema::getColumnListing($table);
         return parent::getTable();
     }
 
-    // 返回数据表
     public static function staticGetConnectionName()
     {
         return (new self)->getConnectionName();
     }
 
-    // 刷新，计算item
+    // Refresh, calculate item
     public function computeItem($id)
     {
         return $id;
     }
 
-    // 清除表数据
+    // Clear table data
     protected function clearData()
     {
     }
 
-    // 获取原生SQL查询
+    // Get native SQL queries
     public function getRawSqlQuery()
     {
         return true;
     }
 
-    // 获取列信息
+    // Get column information
     public function getTableColumns()
     {
-        return $this->getConnection()->getSchemaBuilder()
-            ->getColumnListing($this->getTable());
+        return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
     }
 }

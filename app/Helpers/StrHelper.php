@@ -12,13 +12,13 @@ use Illuminate\Support\Str;
 
 class StrHelper
 {
-    // 随机字符串
+    // Random String
     public static function randString($length = 10)
     {
         return Str::random($length);
     }
 
-    // 随机字符串
+    // Random String
     public static function randOrderNo($prefix = 'BD')
     {
         $t = date('YmdHis', time());
@@ -26,7 +26,7 @@ class StrHelper
         return $prefix.$t.rand(100, 999).rand(10000, 99999);
     }
 
-    //去除字符串中所有中文字符
+    //Remove all Chinese characters from a string
     public static function replaceZh($str)
     {
         $str = preg_replace('/([\x80-\xff]*)/i', '', $str);
@@ -34,7 +34,7 @@ class StrHelper
         return $str;
     }
 
-    // 判断是否为 true
+    // Determine if it is true
     public static function isTrue($val, $return_null = false)
     {
         $boolVal = (is_string($val) ? filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : (bool) $val);
@@ -42,6 +42,7 @@ class StrHelper
         return  $boolVal === null && ! $return_null ? false : $boolVal;
     }
 
+    // Random SMS Code
     public static function randSmsCode($length = 6)
     {
         $smsCode = rand(100000, 999999);
@@ -49,64 +50,45 @@ class StrHelper
         return $smsCode;
     }
 
-    // 创建token
+    // Create Token
     public static function createToken($length = 30)
     {
         return Str::random($length);
     }
 
+    // Create Password
     public static function createPassword($str)
     {
         return password_hash($str, PASSWORD_BCRYPT);
     }
 
+    // Create Phone
     public static function createPhone($phone)
     {
         return substr_replace($phone, '****', 3, 4);
     }
 
-    // 电话加密
+    // Encrypt Phone
     public static function encryptPhone($phone)
     {
         return substr_replace($phone, '****', 3, 4);
     }
 
-    // 身份证加密
+    // Encrypt ID
     public static function encryptIdNumber($number)
     {
         return substr_replace($number, '********', 4, 11);
     }
 
-    //分变元
-    public static function createYuan($price, $count = 2)
-    {
-        return sprintf('%.'.$count.'f', $price / 100);
-    }
-
-    // 签名联系qr
-    public static function signConcatQrData($phone)
-    {
-        $src = $phone.','.date('Ymd').','.(date('His') + 24 * 60 * 60);
-        $keys = [0xA1, 0xB7, 0xAC, 0x57, 0x1C, 0x63, 0x3B, 0x81];
-        $len = strlen($src);
-        $res = '';
-        for ($i = $j = 0; $i < $len; $i++) {
-            $res .= str_pad(dechex(ord($src[$i]) ^ $keys[$j]), 2, '0', STR_PAD_LEFT);
-            $j = ++$j % 8;
-        }
-
-        return $res;
-    }
-
     /**
-     * 校验位
-     *校验位计算方式如下
-     *取出该数的奇数位的和
-     *取出该数的偶数位的和
-     *将奇数位的和与“偶数位的和的三倍”相加
-     *取出结果的个位数
-     *用10减去这个个位数
-     *对得到的数再取个位数.
+     * Check digit
+     * The check digit is calculated as follows:
+     *   Take the sum of the odd bits of the number
+     *   Take the sum of the even digits of the number
+     *   Add the sum of the odd digits to the "triple of the sum of the even digits"
+     *   Take the number of digits of the result
+     *   Subtract this digit from 10
+     *   Take the resulting number to the single digit again
      */
     public static function createNumber($rand)
     {
@@ -133,8 +115,8 @@ class StrHelper
         return $number;
     }
 
-    //查询条件去重
-    //筛选数据
+    // Query condition de-duplication
+    // Filter Data
     public static function SearchIntersect($intersectArr)
     {
         if (empty($intersectArr[0])) {
@@ -157,7 +139,7 @@ class StrHelper
         return $idArr;
     }
 
-    //判断是否是json
+    // Determine if it is json
     public static function isJson($json_str)
     {
         try {
@@ -171,7 +153,7 @@ class StrHelper
         return false;
     }
 
-    // 字符串裁剪
+    // String Trimming
     public static function cropContent($content, $cropLength)
     {
         $len = $cropLength * 2;

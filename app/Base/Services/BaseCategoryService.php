@@ -18,34 +18,34 @@ use Illuminate\Cache\NullStore;
 
 class BaseCategoryService extends BaseService
 {
-    // 搜索条件
+    // Search cond
     public $cond = [];
 
-    // 钩子函数: index之前
+    // Hook functions: Before index
     public function hookListTreeBefore()
     {
         $this->initTreeSearchCond();
     }
 
-    // 初始化搜索条件
+    // Initialize search cond
     public function initTreeSearchCond()
     {
         $req = request();
         $cond = [];
         $searchCondConfig = $this->config->getTreeSearchRule();
         foreach ($searchCondConfig as $searchField => $arr) {
-            // 无key跳过
+            // Skip (No key)
             if (! $req->has($searchField)) {
                 continue;
             }
 
             $searchValue = $req->input($searchField);
-            // 无值跳过
+            // Skip (No value)
             if ($searchValue === null) {
                 continue;
             }
 
-            // 验证数组字段
+            // Validate array fields
             ValidateService::validParamExist($arr, ['field', 'op']);
 
             $field = $arr['field'];
@@ -65,41 +65,39 @@ class BaseCategoryService extends BaseService
         }
 
         $this->cond = $cond;
-        // dd($cond);
     }
 
     public function detail($id)
     {
-        //  dd($this->resourceDetail);
         $data['detail'] = new $this->resourceDetail($this->model->findById($id));
 
-        // common 数据
-        // 为了获取treeData
+        // common data
+        // To get tree data
         $this->listTree();
         $data['common'] = $this->common();
 
         return $data;
     }
 
-    // 列表展示
+    // List Show
     public function listTree()
     {
         $this->hookListTreeBefore();
 
         $topCategoryArr = $this->model->where('parent_id', null)->where($this->cond)->get();
-        // dd($topCategoryArr);
+
         foreach ($topCategoryArr as &$category) {
             $category['key'] = $category->id;
             $allChildren = $category->getAllChildren();
 
             if (! empty($allChildren)) {
                 $category->children = $allChildren;
-                //    array_multisort(array_column($category['children'], 'rank_num'), SORT_ASC, $category['children']);
+                // array_multisort(array_column($category['children'], 'rank_num'), SORT_ASC, $category['children']);
             }
         }
 
         if (count($topCategoryArr) > 0) {
-            // 先处理格式化
+            // Handling formatting
             $this->formatTree($topCategoryArr);
 
             $tree = [];
@@ -110,58 +108,53 @@ class BaseCategoryService extends BaseService
         return $topCategoryArr;
     }
 
-    // 列表展示
+    // List Show (sorting)
     public function listTreeNoRankNum()
     {
         $this->hookListTreeBefore();
 
         $topCategoryArr = $this->model->where('parent_id', 0)->where($this->cond)->get();
-        // dd($topCategoryArr);
+
         foreach ($topCategoryArr as &$category) {
             $category['key'] = $category->id;
             $allChildren = $category->getAllChildren();
 
             if (! empty($allChildren)) {
                 $category->children = $allChildren;
-                //    array_multisort(array_column($category['children'], 'rank_num'), SORT_ASC, $category['children']);
+                // array_multisort(array_column($category['children'], 'rank_num'), SORT_ASC, $category['children']);
             }
         }
-        // dd($topCategoryArr);
+
         if (count($topCategoryArr) > 0) {
-            // 先处理格式化
+            // Handling formatting
             $this->formatTree($topCategoryArr);
-            // dd($topCategoryArr);
             $tree = [];
             $this->buildTreeData($topCategoryArr, $tree);
-            // dd($tree);
             $this->setTreeData($tree);
         }
-        // dd($topCategoryArr);
         $childrenIdArr = [];
         // $this->getChildrenIds2($topCategoryArr,$childrenIdArr);
-        // dd($childrenIdArr);
         return $topCategoryArr;
     }
 
-    // 列表展示
+    // List Show (no cond)
     public function listTreeNoCond()
     {
         $topCategoryArr = $this->model->where('parent_id', null)->get();
-        // dd($topCategoryArr);
+
         foreach ($topCategoryArr as &$category) {
             $category['key'] = $category->id;
             $allChildren = $category->getAllChildren();
 
             if (! empty($allChildren)) {
                 $category->children = $allChildren;
-                //    array_multisort(array_column($category['children'], 'rank_num'), SORT_ASC, $category['children']);
+                // array_multisort(array_column($category['children'], 'rank_num'), SORT_ASC, $category['children']);
             }
         }
 
         if (count($topCategoryArr) > 0) {
-            // 先处理格式化
+            // Handling formatting
             $this->formatTree($topCategoryArr);
-
             $tree = [];
             $this->buildTreeData($topCategoryArr, $tree);
             $this->setTreeData($tree);
@@ -170,7 +163,7 @@ class BaseCategoryService extends BaseService
         return $topCategoryArr;
     }
 
-    //获取已选中菜单ID所有上一级
+    // Get all previous levels of the selected menu ID
     public function getParentMenuArr($menuIdArr)
     {
         $parentAllId = [];
@@ -203,7 +196,7 @@ class BaseCategoryService extends BaseService
         }
     }
 
-    // 格式化处理
+    // Formatting
     public function formatTree(&$categoryArr)
     {
         foreach ($categoryArr as &$item) {
@@ -214,35 +207,30 @@ class BaseCategoryService extends BaseService
                 $item->is_enable = false;
             }
 
-            // 不为空则获取childrenIds
+            // If not empty, get childrenIds
             if ($children && count($children) > 0) {
                 $childrenIdArr = [];
                 $this->getChildrenIds($item->toArray(), $childrenIdArr);
                 $item->childrenIds = $childrenIdArr;
-                // dd($childrenIdArr);
                 $this->formatTree($children);
             }
         }
     }
 
-    // 生成数据
+    // Generate data
     public function buildTreeData(&$itemArr, &$categoryArr)
     {
         foreach ($itemArr as $item) {
             $children = $item->children;
 
-            // 这里获取直接的children
+            // Get the direct children
             $directChildren = [];
             foreach ($children as $child) {
                 if ($child->parent_id == $item->id) {
                     $directChildren[] = $child;
                 }
             }
-
             $children = $directChildren;
-
-//            dd(CommonHelper::objectToArray($directChildren));
-//            dd(CommonHelper::objectToArray($children));
             $c = [];
             $c['key'] = $item->id;
             $c['value'] = $item->id;
@@ -257,10 +245,9 @@ class BaseCategoryService extends BaseService
         }
     }
 
-    // 获取childrenIds
+    // Get childrenIds
     public function getChildrenIds($categoryItem, &$childrenIdArr)
     {
-        // dd($categoryItem);
         if (key_exists('children', $categoryItem)) {
             $childrenArr = $categoryItem['children'];
             foreach ($childrenArr as $children) {
@@ -268,43 +255,38 @@ class BaseCategoryService extends BaseService
                 $this->getChildrenIds($children, $childrenIdArr);
             }
         }
-        // dd($childrenIdArr);
     }
 
-    // 获取childrenIds
+    // Get childrenIds2
     public function getChildrenIds2($categoryItem, &$childrenIdArr)
     {
-        // dd($categoryItem);
         if (key_exists('children', $categoryItem)) {
             $childrenArr = $categoryItem['children'];
-            // dd($childrenArr);
             foreach ($childrenArr as $children) {
                 $childrenIdArr[] = $children['id'];
                 $this->getChildrenIds($children, $childrenIdArr);
             }
         }
-        // dd($childrenIdArr);
     }
 
-    // 列表展示
+    // List Show (by cond)
     public function listTreeBycond($cond = [])
     {
         $this->hookListTreeBefore();
 
         $topCategoryArr = $this->model->where('parent_id', null)->where($this->cond)->where($cond)->get();
-        // dd($topCategoryArr);
+
         foreach ($topCategoryArr as &$category) {
             $category['key'] = $category->id;
             $allChildren = $category->getAllChildren();
-            // dd($allChildren);
             if (! empty($allChildren)) {
                 $category->children = $allChildren;
-                //    array_multisort(array_column($category['children'], 'rank_num'), SORT_ASC, $category['children']);
+                // array_multisort(array_column($category['children'], 'rank_num'), SORT_ASC, $category['children']);
             }
         }
 
         if (count($topCategoryArr) > 0) {
-            // 先处理格式化
+            // Handling formatting
             $this->formatTree($topCategoryArr);
 
             $tree = [];
