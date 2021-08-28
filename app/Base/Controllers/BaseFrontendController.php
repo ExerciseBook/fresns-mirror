@@ -9,7 +9,7 @@
 namespace App\Base\Controllers;
 
 use App\Base\Config\BaseConfig;
-use App\Http\Share\Common\LogService;
+use App\Http\Center\Common\LogService;
 use App\Servers\AccountServer\UserServer;
 use App\Servers\AccountServer\UserServerConfig;
 use App\Servers\RpcHelper;

@@ -8,8 +8,8 @@
 
 namespace App\Http\Center\Base;
 
-use App\Http\Share\Common\LogService;
-use App\Http\Share\Common\ValidateService;
+use App\Http\Center\Common\LogService;
+use App\Http\Center\Common\ValidateService;
 
 class BasePlugin
 {

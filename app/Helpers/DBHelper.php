@@ -10,7 +10,7 @@ namespace App\Helpers;
 
 use App\Base\Config\BaseConfig;
 use App\Base\Models\BaseModel;
-use App\Http\Share\Common\LogService;
+use App\Http\Center\Common\LogService;
 use Doctrine\DBAL\Driver\IBMDB2\DB2Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;

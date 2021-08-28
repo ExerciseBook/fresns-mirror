@@ -9,8 +9,8 @@
 namespace App\Base\Models;
 
 use App\Base\Config\BaseConfig;
-use App\Http\Share\Common\LogService;
-use App\Http\Share\Common\ValidateService;
+use App\Http\Center\Common\LogService;
+use App\Http\Center\Common\ValidateService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;

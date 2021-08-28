@@ -8,7 +8,7 @@
 
 namespace App\Helpers;
 
-use App\Http\Share\Common\LogService;
+use App\Http\Center\Common\LogService;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Fresns\FresnsApi\Base\FresnsBaseApiController;
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\FresnsApi\Base\FresnsBaseApiController;
+use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 

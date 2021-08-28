@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Http\Share\Common\LogService;
+use App\Http\Center\Common\LogService;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
