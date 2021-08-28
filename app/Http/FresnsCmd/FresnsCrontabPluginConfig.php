@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsCmds;
+namespace App\Http\FresnsCmd;
 
 use App\Http\Center\Base\BasePluginConfig;
 

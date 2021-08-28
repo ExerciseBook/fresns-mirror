@@ -21,8 +21,8 @@ use App\Http\FresnsApi\Editor\Resource\PostLogResource;
 use App\Http\FresnsApi\Editor\Resource\PostLogResourceDetail;
 use App\Http\FresnsApi\Editor\Service\CommentPostLogService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsCmds\FresnsPlugin as FresnsCmdsFresnsPlugin;
-use App\Http\FresnsCmds\FresnsPluginConfig;
+use App\Http\FresnsCmd\FresnsPlugin as FresnsCmdFresnsPlugin;
+use App\Http\FresnsCmd\FresnsPluginConfig;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsService;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -639,7 +639,7 @@ class AmControllerApi extends FresnsBaseApiController
         $input['platform'] = $request->header('platform');
         $input['uid'] = $request->header('uid');
         $input['mid'] = $request->header('mid');
-        $resp = PluginRpcHelper::call(FresnsCmdsFresnsPlugin::class, $cmd, $input);
+        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
 
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
             $this->errorCheckInfo($resp);
@@ -753,7 +753,7 @@ class AmControllerApi extends FresnsBaseApiController
         $input['mode'] = $request->input('mode');
         $input['scene'] = $request->input('scene');
 
-        $resp = PluginRpcHelper::call(FresnsCmdsFresnsPlugin::class, $cmd, $input);
+        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
             $this->errorCheckInfo($resp);
         }

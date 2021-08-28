@@ -11,7 +11,7 @@ namespace App\Http\FresnsDb\FresnsSessionLogs;
 use App\Base\Services\BaseAdminService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsCmds\FresnsCmdService;
+use App\Http\FresnsCmd\FresnsCmdService;
 use Illuminate\Support\Facades\Request;
 
 class AmService extends BaseAdminService

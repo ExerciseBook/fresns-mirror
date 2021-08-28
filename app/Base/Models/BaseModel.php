@@ -10,8 +10,8 @@ namespace App\Base\Models;
 
 use App\Base\Config\BaseConfig;
 use App\Http\Center\Helper\PluginRpcHelper;
-use App\Http\FresnsCmds\FresnsSubPlugin;
-use App\Http\FresnsCmds\FresnsSubPluginConfig;
+use App\Http\FresnsCmd\FresnsSubPlugin;
+use App\Http\FresnsCmd\FresnsSubPluginConfig;
 use App\Http\Center\Common\LogService;
 use App\Traits\HookModelTrait;
 use App\Traits\QueryTrait;
