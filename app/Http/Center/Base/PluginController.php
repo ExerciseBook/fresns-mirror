@@ -9,11 +9,11 @@
 namespace App\Http\Center\Base;
 
 use App\Base\Controllers\BaseController;
+use App\Http\Center\Common\ErrorCodeService;
+use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\InstallHelper;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
-use App\Http\Center\Common\ErrorCodeService;
-use App\Http\Center\Common\ValidateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 

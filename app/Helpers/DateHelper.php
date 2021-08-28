@@ -36,7 +36,7 @@ class DateHelper
         $timestamp = floor($utimestamp);
 
         //Change the value here to control the number of milliseconds
-        $milliseconds = round(($utimestamp - $timestamp) * 1000000); 
+        $milliseconds = round(($utimestamp - $timestamp) * 1000000);
 
         return $milliseconds;
     }
@@ -214,7 +214,7 @@ class DateHelper
                 $langInfo = $l;
             }
         }
-        
+
         if (empty($langInfo)) {
             return '';
         }

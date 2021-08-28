@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 class HttpHelper
 {
     /**
-     * Initiate a request
+     * Initiate a request.
      * @param $url
      * @param array $postData
      * @param string $method
@@ -70,7 +70,7 @@ class HttpHelper
     }
 
     /**
-     * Initiate a request
+     * Initiate a request.
      * @param $url
      * @param array $postData
      * @param string $method

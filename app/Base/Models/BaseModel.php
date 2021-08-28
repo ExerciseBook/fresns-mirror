@@ -9,10 +9,10 @@
 namespace App\Base\Models;
 
 use App\Base\Config\BaseConfig;
+use App\Http\Center\Common\LogService;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\FresnsCmd\FresnsSubPlugin;
 use App\Http\FresnsCmd\FresnsSubPluginConfig;
-use App\Http\Center\Common\LogService;
 use App\Traits\HookModelTrait;
 use App\Traits\QueryTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -103,6 +103,7 @@ class BaseModel extends Model
         ];
         LogService::info('table_input', $input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+
         return $id;
     }
 
@@ -110,6 +111,7 @@ class BaseModel extends Model
     public function batchStore($inputArr)
     {
         $rs = DB::table($this->table)->insert($inputArr);
+
         return $rs;
     }
 

@@ -10,6 +10,7 @@ namespace App\Http\FresnsApi\Content\Resource;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Helpers\DateHelper;
+use App\Http\Center\AmGlobal\GlobalService;
 use App\Http\FresnsApi\Content\AmConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
@@ -49,7 +50,6 @@ use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppends;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
-use App\Http\Center\AmGlobal\GlobalService;
 use Illuminate\Support\Facades\DB;
 
 class FresnsPostResourceDetail extends BaseAdminResource

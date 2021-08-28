@@ -8,7 +8,6 @@
 
 namespace App\Helpers;
 
-use App\Http\Models\Common\AssetFile;
 use App\Http\Center\Common\LogService;
 use Illuminate\Support\Facades\File;
 
@@ -135,7 +134,7 @@ class FileHelper
     }
 
     /**
-     * Copy all the files and folders under one folder to another folder (keeping the original structure)
+     * Copy all the files and folders under one folder to another folder (keeping the original structure).
      * @param <string> $rootFrom / Source folder path
      * @param <string> $rootTo / Destination folder path
      */

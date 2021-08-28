@@ -9,6 +9,7 @@
 namespace App\Http\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
+use App\Http\Center\AmGlobal\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
@@ -22,7 +23,6 @@ use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikes;
 use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikesConfig;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\Center\AmGlobal\GlobalService;
 use Illuminate\Support\Facades\DB;
 
 class FresnsGroupResource extends BaseAdminResource

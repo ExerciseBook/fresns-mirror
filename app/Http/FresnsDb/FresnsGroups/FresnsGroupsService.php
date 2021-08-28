@@ -6,10 +6,9 @@
  * Released under the Apache-2.0 License.
  */
 
-// 系统解耦, 快捷方式入口
-
 namespace App\Http\FresnsDb\FresnsGroups;
 
+use App\Http\Center\AmGlobal\GlobalService;
 use App\Http\FresnsApi\Base\FresnsBaseService;
 use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
@@ -23,7 +22,6 @@ use App\Http\FresnsDb\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins as pluginUnikey;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesService;
-use App\Http\Center\AmGlobal\GlobalService;
 use Illuminate\Support\Facades\DB;
 
 class FresnsGroupsService extends FresnsBaseService

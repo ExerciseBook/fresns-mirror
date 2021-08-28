@@ -14,8 +14,8 @@ use App\Http\Center\Base\BaseInstaller;
 use App\Http\Center\Base\BasePlugin;
 use App\Http\Center\Base\BasePluginConfig;
 use App\Http\Center\Base\PluginConst;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 use App\Http\Center\Common\LogService;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -156,7 +156,6 @@ class PluginHelper
 
         return $path;
     }
-
 
     // 插件 views 目录
     public static function extensionViewPath($uniKey)
@@ -331,7 +330,7 @@ class PluginHelper
     // 插件配置视图目录
     public static function viewRoot()
     {
-        $pathArr = [base_path(), 'resources', 'views','plugins'];
+        $pathArr = [base_path(), 'resources', 'views', 'plugins'];
 
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
@@ -351,7 +350,6 @@ class PluginHelper
 
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
-
 
     // 下载路径
     public static function getDownloadPath()

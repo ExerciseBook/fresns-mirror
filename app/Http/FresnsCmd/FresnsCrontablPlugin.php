@@ -9,6 +9,7 @@
 namespace App\Http\FresnsCmd;
 
 use App\Http\Center\Base\BasePlugin;
+use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
@@ -34,7 +35,6 @@ use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnectsConfig;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use App\Http\FresnsDb\FresnsUserWalletLogs\FresnsUserWalletLogsConfig;
 use App\Http\FresnsDb\FresnsUserWallets\FresnsUserWalletsConfig;
-use App\Http\Center\Common\ErrorCodeService;
 use Illuminate\Support\Facades\DB;
 
 /**

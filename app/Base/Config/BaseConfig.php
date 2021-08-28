@@ -110,7 +110,7 @@ class BaseConfig
     ];
 
     /**
-     * Configuration class basic functions
+     * Configuration class basic functions.
      */
 
     // User Type

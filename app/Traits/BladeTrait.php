@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\Route;
 
 trait BladeTrait
 {
-
-    /**
-     *
-     */
     public function display($viewName, $assignData)
     {
         $route_arr = explode('@', Route::currentRouteAction());
@@ -50,7 +46,7 @@ trait BladeTrait
 
     /**
      * $viewPath = "plugins/example/$currentTheme/$viewName";
-     * return view("plugins/example/theme1/a", $data);
+     * return view("plugins/example/theme1/a", $data);.
      * @param $viewName
      * @param $assignData
      * @return string
@@ -79,12 +75,13 @@ trait BladeTrait
         // 同时获取分享数据
         $domain = CommonHelper::domain();
         $shareData = [];
-        $shareData['theme_static'] = $domain."/assets/";
+        $shareData['theme_static'] = $domain.'/assets/';
         $shareData['global_static'] = $domain.'/assets/';
         view()->share($shareData);
 
         // 视图路径
         $view_path_name = 'themes/'.$currentTheme.'/'.$viewName;
+
         return view($view_path_name, $assignData)->render();
     }
 

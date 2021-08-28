@@ -8,9 +8,9 @@
 
 namespace App\Http\Center\Base;
 
-use App\Http\FresnsDb\FresnsCodeMessages\FresnsCodeMessagesService;
 use App\Http\Center\AmGlobal\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
+use App\Http\FresnsDb\FresnsCodeMessages\FresnsCodeMessagesService;
 
 trait PluginTrait
 {

@@ -9,6 +9,9 @@
 namespace App\Http\FresnsApi\Info;
 
 use App\Helpers\DateHelper;
+use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\ErrorCodeService;
+use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
@@ -42,9 +45,6 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsStopWords\FresnsStopWordsService;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
-use App\Http\Center\AmGlobal\GlobalService;
-use App\Http\Center\Common\ErrorCodeService;
-use App\Http\Center\Common\ValidateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

@@ -6,8 +6,6 @@
  * Released under the Apache-2.0 License.
  */
 
-// 系统解耦, 快捷方式入口
-
 namespace App\Http\FresnsDb\FresnsCodeMessages;
 
 class FresnsCodeMessages extends AmModel

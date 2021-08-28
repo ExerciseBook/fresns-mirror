@@ -16,7 +16,6 @@ use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
-use App\Http\Models\Common\ConfigGroup;
 
 class AmChecker extends BaseChecker
 {

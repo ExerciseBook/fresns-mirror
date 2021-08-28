@@ -9,6 +9,9 @@
 namespace App\Http\FresnsApi\Member;
 
 use App\Helpers\DateHelper;
+use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\ErrorCodeService;
+use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Content\FresnsGroupResource;
@@ -49,9 +52,6 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\FresnsDb\FresnsStopWords\FresnsStopWords;
-use App\Http\Center\AmGlobal\GlobalService;
-use App\Http\Center\Common\ErrorCodeService;
-use App\Http\Center\Common\ValidateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;

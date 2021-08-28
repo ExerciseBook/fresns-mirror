@@ -88,7 +88,7 @@ class StrHelper
      *   Add the sum of the odd digits to the "triple of the sum of the even digits"
      *   Take the number of digits of the result
      *   Subtract this digit from 10
-     *   Take the resulting number to the single digit again
+     *   Take the resulting number to the single digit again.
      */
     public static function createNumber($rand)
     {

@@ -10,8 +10,8 @@ namespace App\Http\FresnsDb\FresnsPlugins;
 
 use App\Base\Controllers\BaseAdminController;
 use App\Http\Center\Base\FresnsCode;
-use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Common\ValidateService;
+use App\Http\Center\Helper\PluginHelper;
 use Illuminate\Http\Request;
 
 class AmControllerAdmin extends BaseAdminController

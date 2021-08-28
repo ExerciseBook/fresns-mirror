@@ -9,8 +9,8 @@
 namespace App\Http\FresnsCmd;
 
 use App\Base\Services\BaseService;
-use  App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Center\Common\LogService;
+use App\Http\Center\Helper\PluginRpcHelper;
 
 /**
  * Class FresnsCrontabPlugin

@@ -9,6 +9,7 @@
 namespace App\Http\FresnsApi\Notify;
 
 use App\Base\Resources\BaseAdminResource;
+use App\Http\Center\AmGlobal\GlobalService;
 use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
@@ -17,7 +18,6 @@ use App\Http\FresnsDb\FresnsDialogs\FresnsDialogs;
 use App\Http\FresnsDb\FresnsDialogs\FresnsDialogsConfig;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
-use App\Http\Center\AmGlobal\GlobalService;
 use Illuminate\Support\Facades\DB;
 
 class DialogsMessageResource extends BaseAdminResource

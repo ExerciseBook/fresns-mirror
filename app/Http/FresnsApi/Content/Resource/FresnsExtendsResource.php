@@ -9,25 +9,25 @@
 namespace App\Http\FresnsApi\Content\Resource;
 
 use App\Base\Resources\BaseAdminResource;
+use App\Http\FresnsApi\Content\AmConfig;
+use App\Http\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\FresnsApi\Info\AmService;
+use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
+use App\Http\FresnsDb\FresnsComments\FresnsComments;
+use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
+use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkeds;
+use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
+use App\Http\FresnsDb\FresnsExtends\FresnsExtendsConfig;
+use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroupsConfig;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
-use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikes;
-use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppends;
-use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMemberIcons\FresnsMemberIcons;
-use App\Http\FresnsDb\FresnsComments\FresnsComments;
-use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
-use App\Http\FresnsApi\Info\AmService;
-use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
-use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
-use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
+use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikes;
+use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
-use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkeds;
+use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppends;
+use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use Illuminate\Support\Facades\DB;
-use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
-use App\Http\FresnsApi\Content\AmConfig;
-use App\Http\FresnsDb\FresnsExtends\FresnsExtendsConfig;
 
 class FresnsExtendsResource extends BaseAdminResource
 {
@@ -44,9 +44,9 @@ class FresnsExtendsResource extends BaseAdminResource
         $extendLinkeds = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('extend_id', $this->id)->first();
         $sourceContent['type'] = $extendLinkeds->type;
         $sourceContent['id'] = $extendLinkeds->linked_id;
-        $sourceContent['title'] = "";
-        $sourceContent['content'] = "";
-        $sourceContent['status'] = "";
+        $sourceContent['title'] = '';
+        $sourceContent['content'] = '';
+        $sourceContent['status'] = '';
         if ($extendLinkeds->type == 1) {
             $posts = FresnsPosts::find($extendLinkeds->linked_id);
             $sourceContent['title'] = $posts['title'];
@@ -107,4 +107,3 @@ class FresnsExtendsResource extends BaseAdminResource
         return $d * M_PI / 180.0;
     }
 }
-

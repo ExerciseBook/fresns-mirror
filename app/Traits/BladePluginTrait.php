@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\Route;
 
 trait BladePluginTrait
 {
-
     /**
-     * 主题视图渲染
+     * 主题视图渲染.
      */
     public function displayEngine($engineUniKey, $viewName, $assignData)
     {
@@ -44,16 +43,17 @@ trait BladePluginTrait
         // 插件static目录
         $domain = CommonHelper::domain();
         $shareData = [];
-        $shareData['theme_static'] = $domain."/assets/";
+        $shareData['theme_static'] = $domain.'/assets/';
         $shareData['global_static'] = $domain.'/assets/';
         view()->share($shareData);
         // 视图路径
         $view_path_name = 'themes/'.$currentTheme.'/'.$viewName;
+
         return view($view_path_name, $assignData);
     }
 
     /**
-     * 基础视图渲染
+     * 基础视图渲染.
      */
     public function displayView($viewName, $assignData)
     {

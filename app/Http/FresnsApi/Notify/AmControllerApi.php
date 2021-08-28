@@ -8,6 +8,9 @@
 
 namespace App\Http\FresnsApi\Notify;
 
+use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\ErrorCodeService;
+use App\Http\Center\Common\ValidateService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
@@ -30,9 +33,6 @@ use App\Http\FresnsDb\FresnsNotifies\FresnsNotifiesConfig;
 use App\Http\FresnsDb\FresnsNotifies\FresnsNotifiesService;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
-use App\Http\Center\AmGlobal\GlobalService;
-use App\Http\Center\Common\ErrorCodeService;
-use App\Http\Center\Common\ValidateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

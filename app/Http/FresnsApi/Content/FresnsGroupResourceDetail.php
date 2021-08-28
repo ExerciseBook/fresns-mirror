@@ -9,6 +9,7 @@
 namespace App\Http\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
+use App\Http\Center\AmGlobal\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
@@ -28,7 +29,6 @@ use App\Http\FresnsDb\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesService;
-use App\Http\Center\AmGlobal\GlobalService;
 use Illuminate\Support\Facades\DB;
 
 class FresnsGroupResourceDetail extends BaseAdminResource

@@ -279,7 +279,7 @@ class BaseQuery
     public function buildDbQueryWithSearchCondArr($table, $searchCondArr)
     {
         // Data Table Prefix
-        $dbPrefix = env("DB_PREFIX");
+        $dbPrefix = env('DB_PREFIX');
         // $dbPrefix = '';
         LogService::info("DB PREFIX [$dbPrefix]");
         $table = Str::startsWith($dbPrefix, $table) ? $table : $dbPrefix.$table;

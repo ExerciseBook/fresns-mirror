@@ -12,7 +12,7 @@ class ArrayHelper
 {
     /**
      * Sorting multidimensional arrays
-     * The first parameter is the array to be sorted, the rest is the key to be sorted (key) and the sorting method, the key then needs to be connected up and down because it has to cope with the multi-dimensional situation, using "."
+     * The first parameter is the array to be sorted, the rest is the key to be sorted (key) and the sorting method, the key then needs to be connected up and down because it has to cope with the multi-dimensional situation, using ".".
      * @example multiDimensionSort($arr,'price',SORT_DESC,'top1.field',SORT_ASC)
      * @param mixed ...$args
      * @return mixed

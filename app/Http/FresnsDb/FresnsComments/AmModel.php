@@ -10,13 +10,13 @@ namespace App\Http\FresnsDb\FresnsComments;
 
 use App\Base\Models\BaseAdminModel;
 use App\Base\Models\BaseCategoryModel;
+use App\Http\Center\AmGlobal\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
-use App\Http\Center\AmGlobal\GlobalService;
 use Illuminate\Support\Facades\DB;
 
 class AmModel extends BaseCategoryModel

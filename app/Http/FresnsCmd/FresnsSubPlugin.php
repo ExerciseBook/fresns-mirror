@@ -10,11 +10,11 @@ namespace App\Http\FresnsCmd;
 
 use App\Http\Center\Base\BasePlugin;
 use App\Http\Center\Base\BasePluginConfig;
+use App\Http\Center\Common\LogService;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
-use App\Http\Center\Common\LogService;
 
 /**
  * Class FresnsCrontabPlugin

@@ -6,11 +6,10 @@
  * Released under the Apache-2.0 License.
  */
 
-// 系统解耦, 快捷方式入口
-
 namespace App\Http\FresnsDb\FresnsComments;
 
 use App\Helpers\StrHelper;
+use App\Http\Center\Common\LogService;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\FresnsApi\Content\Resource\FresnsPostResource;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
@@ -35,7 +34,6 @@ use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\FresnsDb\FresnsStopWords\FresnsStopWords;
-use App\Http\Center\Common\LogService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

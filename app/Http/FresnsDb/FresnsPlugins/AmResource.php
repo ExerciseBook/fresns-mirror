@@ -38,7 +38,7 @@ class AmResource extends BaseAdminResource
         $newVisionInt = '';
         $newVision = '';
         $author = '';
-        
+
         // 默认字段
         $default = [
             'key' => $this->id,

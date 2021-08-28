@@ -9,6 +9,7 @@
 namespace App\Http\FresnsApi\Notify;
 
 use App\Base\Checkers\BaseChecker;
+use App\Http\Center\Common\LogService;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
@@ -19,8 +20,6 @@ use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesService;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
-use App\Http\Models\Common\ConfigGroup;
-use App\Http\Center\Common\LogService;
 
 class AmChecker extends BaseChecker
 {

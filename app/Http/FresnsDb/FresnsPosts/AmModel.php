@@ -9,6 +9,7 @@
 namespace App\Http\FresnsDb\FresnsPosts;
 
 use App\Base\Models\BaseAdminModel;
+use App\Http\Center\AmGlobal\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
@@ -18,7 +19,6 @@ use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
-use App\Http\Center\AmGlobal\GlobalService;
 use Illuminate\Support\Facades\DB;
 
 class AmModel extends BaseAdminModel
