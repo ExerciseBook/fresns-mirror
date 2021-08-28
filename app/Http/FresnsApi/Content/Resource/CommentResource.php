@@ -291,7 +291,7 @@ class CommentResource extends BaseAdminResource
         }
 
         $location = [];
-        $location['is_lbs'] = $this->is_lbs;
+        $location['isLbs'] = $this->is_lbs;
         $location['mapId'] = $append->map_id ?? '';
         $location['latitude'] = $append->map_latitude ?? '';
         $location['longitude'] = $append->map_longitude ?? '';
