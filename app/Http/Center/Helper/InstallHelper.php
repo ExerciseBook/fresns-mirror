@@ -214,12 +214,7 @@ class InstallHelper
         // 插件目录
         $pluginAllPath = self::getPluginRuntimePath($uniKey);
         $frameworkAssetsPath = PluginHelper::frameworkAssetsPath($uniKey);
-        $frameworkComponentsAppPath = PluginHelper::frameworkComponentsAppPath($uniKey);
-        $frameworkComponentsViewPath = PluginHelper::frameworkComponentsViewPath($uniKey);
-
         $extensionAssetsPath = PluginHelper::extensionAssetsPath($uniKey);
-        $extensionComponentsAppPath = PluginHelper::extensionComponentsAppPath($uniKey);
-        $extensionComponentsViewPath = PluginHelper::extensionComponentsViewPath($uniKey);
 
         // 删除插件目录
         (new Filesystem)->deleteDirectory($pluginAllPath);
@@ -229,13 +224,9 @@ class InstallHelper
         (new Filesystem)->copyDirectory($extensionAllPath, $pluginAllPath);
         // 插件静态文件
         (new Filesystem)->copyDirectory($extensionAssetsPath, $frameworkAssetsPath);
-        // 插件视图组件
-        (new Filesystem)->copyDirectory($extensionComponentsAppPath, $frameworkComponentsAppPath);
-        // 插件视图组件
-        (new Filesystem)->copyDirectory($extensionComponentsViewPath, $frameworkComponentsViewPath);
 
         // 删除插件中需要分发的文件
-        $deleteRuntimeDirArr = ['assets', 'views', 'components', 'lang', 'LICENSE'];
+        $deleteRuntimeDirArr = ['assets', 'views', 'lang', 'LICENSE'];
         foreach ($deleteRuntimeDirArr as $subDir) {
             $delSubDir = implode(DIRECTORY_SEPARATOR, [$pluginAllPath, $subDir]);
             if (is_dir($delSubDir)) {
