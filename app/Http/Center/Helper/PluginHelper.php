@@ -331,7 +331,7 @@ class PluginHelper
     // 插件配置视图目录
     public static function viewRoot()
     {
-        $pathArr = [base_path(), 'resources', 'views'];
+        $pathArr = [base_path(), 'resources', 'views','plugins'];
 
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
