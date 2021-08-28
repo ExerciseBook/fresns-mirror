@@ -123,7 +123,7 @@ class DateHelper
         return $sec.' Second';
     }
 
-    // 2021-10-01, 7   =>  2021-10-07
+    // add Days
     public static function addDays($fromDate, $n)
     {
         $carbon = new Carbon();
@@ -132,7 +132,7 @@ class DateHelper
         return $date;
     }
 
-    // 2021-10-01, 1   =>  2021-10-08
+    // add Weeks
     public static function addWeeks($fromDate, $n)
     {
         $carbon = new Carbon();
@@ -141,7 +141,7 @@ class DateHelper
         return $date;
     }
 
-    // 2021-10-01, 1   =>  2021-10-08
+    // add Month
     public static function addMonth($fromDate, $n)
     {
         $carbon = new Carbon();
@@ -150,7 +150,7 @@ class DateHelper
         return $date;
     }
 
-    // 2021-10-01, 1   =>  2021-10-08
+    // add Years
     public static function addYears($fromDate, $n)
     {
         $carbon = new Carbon();
