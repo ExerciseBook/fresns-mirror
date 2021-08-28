@@ -70,7 +70,7 @@ class Handler extends ExceptionHandler
                 $statusCode = 404;
             }
 
-            // 格式化
+            // Format error info
             $newTraceMsgArr = [];
             $needField = ['file', 'line', 'function', 'class'];
             foreach ($traceMsgArr as $trace) {
@@ -85,7 +85,7 @@ class Handler extends ExceptionHandler
                 }
             }
 
-            //  dd($newTraceMsgArr);
+            // error info
             LogService::warning('error', $exception);
 
             return response()->view('commons.error', [

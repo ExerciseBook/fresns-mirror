@@ -32,12 +32,12 @@ class SignHelper
 
     public static function genSign($dataMap, $signKey)
     {
-        // 对数组的值按key排序
+        // Sort the values of the array by key
         ksort($dataMap);
-        // 生成url的形式
+        // Generate the url mode
         $params = http_build_query($dataMap);
         $params = $params."&key={$signKey}";
-        // 生成sign
+        // Generate sign
         $sign = md5($params);
 
         return $sign;

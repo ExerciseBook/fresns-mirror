@@ -43,8 +43,6 @@ trait BladeTrait
         $shareData = [];
         $shareData['theme_static'] = $domain.'/assets/';
         $shareData['global_static'] = $domain.'/assets/';
-        $shareData['cdn_static'] = CommonHelper::getWebCdnStatic();
-        $shareData['cdn_static_h5'] = CommonHelper::getWebCdnH5Static();
         view()->share($shareData);
 
         return view($viewName, $assignData);
@@ -83,8 +81,6 @@ trait BladeTrait
         $shareData = [];
         $shareData['theme_static'] = $domain."/assets/";
         $shareData['global_static'] = $domain.'/assets/';
-        $shareData['cdn_static'] = CommonHelper::getWebCdnStatic();
-        $shareData['cdn_static_h5'] = CommonHelper::getWebCdnH5Static();
         view()->share($shareData);
 
         // 视图路径
@@ -108,8 +104,6 @@ trait BladeTrait
         $domain = CommonHelper::domain();
         $shareData = [];
         $shareData['global_static'] = $domain.'/assets/';
-        $shareData['cdn_static'] = CommonHelper::getWebCdnStatic();
-        $shareData['cdn_static_h5'] = CommonHelper::getWebCdnH5Static();
         view()->share($shareData);
 
         return view($viewName, $assignData);

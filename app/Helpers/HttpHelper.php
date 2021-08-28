@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 class HttpHelper
 {
     /**
-     * 发起请求
+     * Initiate a request
      * @param $url
      * @param array $postData
      * @param string $method
@@ -34,7 +34,7 @@ class HttpHelper
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $content);
-        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4); //若果报错 name lookup timed out 报错时添加这一行代码
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4); // If the error "name lookup timed out" is reported, add this line of code
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
@@ -48,7 +48,7 @@ class HttpHelper
         } else {
             $rsp = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if (200 != $rsp) {
-                $result = '请求状态 '.$rsp.' '.curl_error($ch);
+                $result = 'Request Status: '.$rsp.' '.curl_error($ch);
             } else {
                 $result = $ret;
             }
@@ -65,12 +65,12 @@ class HttpHelper
         try {
             return json_decode($client->request($method, $url, [$useJson ? 'json' : 'form_params' => $postData])->getBody()->getContents(), true);
         } catch (RequestException $e) {
-            Log::error('RequestException:'.$e->getCode().','.$e->getMessage());
+            Log::error('Request Exception: '.$e->getCode().','.$e->getMessage());
         }
     }
 
     /**
-     * 发起请求
+     * Initiate a request
      * @param $url
      * @param array $postData
      * @param string $method
@@ -84,7 +84,7 @@ class HttpHelper
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4); //若果报错 name lookup timed out 报错时添加这一行代码
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4); // If the error "name lookup timed out" is reported, add this line of code
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
@@ -97,7 +97,7 @@ class HttpHelper
         } else {
             $rsp = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if (200 != $rsp) {
-                $result = '请求状态 '.$rsp.' '.curl_error($ch);
+                $result = 'Request Status: '.$rsp.' '.curl_error($ch);
             } else {
                 $result = $ret;
             }
@@ -107,7 +107,7 @@ class HttpHelper
         return $result;
     }
 
-    //获取路径
+    // Get Path
     public static function getParseUrl()
     {
         $menu_path_arr = parse_url(url()->previous());
@@ -116,11 +116,11 @@ class HttpHelper
         return $menu_path;
     }
 
-    //
+    // Post Request
     public static function guzzleHttpPost($url, $params, $headers = [])
     {
 
-        // 发送请求
+        // Send Request
         $client = new \GuzzleHttp\Client();
         $respData = $client->request('post',
             $url, [
@@ -136,50 +136,49 @@ class HttpHelper
 
     public static function curl($url, $postData = [], $file = '')
     {
-        //1. 初始化curl连接
+        // 1. Initializing curl connection
         $ch = curl_init();
 
-        //2. 设置各项参数
-        // 启动curl
+        // 2. Set each parameter
+        // Start curl
         $ch = curl_init();
-        // 设置请求URL地址
+        // Set the request URL
         curl_setopt($ch, CURLOPT_URL, $url);
-        // 不获取header头信息
+        // Do not get header information
         curl_setopt($ch, CURLOPT_HEADER, 0);
-        // 结果不直接返回到终端
+        // The results are not returned directly to the terminal
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        // 设置curl不进行证书的检测
+        // Set curl to not perform certificate detection
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-
-        // 超时时间 秒
+        // Timeout time (second)
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        // 设置请求的浏览器
+        // Set the requested browser
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36');
-
-        // 发起POST请求
+        // Initiate a POST request
         curl_setopt($ch, CURLOPT_POST, 1);
-        // post发送的数据，注意http_build_query可以将$postData数组数据格式化成http传输数据的格式
-        //                              http_build_query这个函数在单纯传递post数据，注意不包含文件数据的时候，建议加上，否则可能出现传输数据不稳定的情况
+        // The data sent by post, note that http_build_query can format the $postData array data into the format of http transfer data
+        // http_build_query This function is recommended to be added when simply passing post data, note that it does not contain file data, otherwise there may be instability in the transfer of data
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 
-        //3. 执行curl连接
+        // 3. Execute curl connection
         $data = curl_exec($ch);
-
-        //获得执行curl连接的相关信息
+        // Get information about the execution of curl connection
         $info = curl_getinfo($ch);
 
-        //4. 关闭curl连接
+        // 4. Close curl connection
         curl_close($ch);
 
-        if ($info['http_code'] == '200') { //只有当响应状态码为200时，才有必要将执行的结果返回出去
+        if ($info['http_code'] == '200') {
+            // Only when the response status code is 200 is it necessary to return the result of the execution
             return $data;
         }
 
-        return false; //如果响应状态码的值不为200，则返回false
+        // If the value of the response status code is not 200, false is returned
+        return false;
     }
 
-    /*请求外部地址*/
+    // Request External URL
     public static function curlRequest($url, $mothed = 'GET', $data = [])
     {
         $ch = curl_init();

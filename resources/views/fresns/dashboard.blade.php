@@ -147,12 +147,11 @@
                 <div class="modal-header">
                     <h5 class="modal-title"><i class="bi bi-laptop"></i>
                         @lang('fresns.localInstall')
-                        <!--远程安装标题
+                        <!--
                             @lang('fresns.codeInstall')
                         -->
-                        <!--升级时样式
-                            插件名
-                            <span class="badge bg-secondary">当前版本号</span> to <span class="badge bg-danger">新版本号</span>
+                        <!--Style when upgrading
+                            Plugin name <span class="badge bg-secondary">Current version</span> to <span class="badge bg-danger">New version</span>
                         -->
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
