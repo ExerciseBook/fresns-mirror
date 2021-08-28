@@ -99,15 +99,14 @@ class BaseConfig
         'id' => ['field' => 'id', 'op' => '='],
         'ids' => ['field' => 'id', 'op' => 'IN'],
         'name' => ['field' => 'name', 'op' => 'LIKE'],
+        'nickname' => ['field' => 'nickname', 'op' => 'LIKE'],
         'type' => ['field' => 'type', 'op' => 'IN'],
         'status' => ['field' => 'status', 'op' => 'IN'],
         'created_at_from' => ['field' => 'created_at', 'op' => '>='],
         'created_at_to' => ['field' => 'created_at', 'op' => '<='],
         'updated_at_from' => ['field' => 'updated_at', 'op' => '>='],
         'updated_at_to' => ['field' => 'updated_at', 'op' => '<='],
-        'nickname' => ['field' => 'nickname', 'op' => 'LIKE'],
         'is_enable' => ['field' => 'is_enable', 'op' => '='],
-        'create_user_id' => ['field' => 'create_user_id', 'op' => '='],
     ];
 
     /**

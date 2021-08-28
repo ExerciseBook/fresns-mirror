@@ -67,51 +67,6 @@ class FileHelper
         return $newFolders;
     }
 
-    // Image to local, prevent cross-domain
-    public static function fileItemToLocalDomain($ossUrl, $subFolder = 'avatars')
-    {
-
-        // Prepare data
-        $fileItem = AssetFile::staticFindByField('oss_url', $ossUrl);
-        $domain = CommonHelper::domain();
-
-        // If not found, then splice directly
-        if (empty($fileItem)) {
-            $urlArr = explode('/', $ossUrl);
-            $fileName = end($urlArr);
-            // 注: 默认图片在 avatar下面
-            $localUrl = implode('/', [$domain, 'storage', $subFolder, $fileName]);
-
-            return $localUrl;
-        }
-
-        // 如果查到
-        $uri = $fileItem->uri;
-
-        $localUrl = $domain.$uri;
-
-        return $localUrl;
-    }
-
-    //通过oss_url链接查询本地图片
-    public static function getLocalUrl($ossUrl)
-    {
-        $domain = CommonHelper::domain();
-
-        $url = $domain.'/storage/avatars/';
-
-        $urlArr = explode('/', $ossUrl);
-        $fileName = end($urlArr);
-
-        $url = $url.$fileName;
-
-        if (empty($fileName)) {
-            return $ossUrl;
-        }
-
-        return $url;
-    }
-
     // Verify that the directory exists, or create it if it does not.
     public static function assetDir($path)
     {

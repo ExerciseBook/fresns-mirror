@@ -284,11 +284,6 @@ class BaseQuery
         LogService::info("DB PREFIX [$dbPrefix]");
         $table = Str::startsWith($dbPrefix, $table) ? $table : $dbPrefix.$table;
 
-        // todo Waiting for debugging
-        if ($table == 'users') {
-            $table = 'bl_users';
-        }
-
         $needJoinArr = [];
         $req = request();
         foreach ($searchCondArr as $searchField => $arr) {

@@ -87,7 +87,6 @@ class BaseService
         $input = $this->model->convertFormRequestToInput();
 
         unset($input['id']);
-        unset($input['create_user_id']);
         $this->model->updateItem($id, $input);
     }
 
@@ -141,9 +140,7 @@ class BaseService
     // Form personalization tips
     public function tips()
     {
-        $arr = [
-            'picture_banner'   => '图片大小为300x180',
-        ];
+        $arr = [];
 
         return $arr;
     }
@@ -152,17 +149,9 @@ class BaseService
     {
         $common['selectOption'] = [];
         $common['treeData'] = $this->treeData();
-        $common['showButtons'] = $this->showButtons();
         $common['tips'] = $this->tips();
 
         return $common;
-    }
-
-    public function showButtons()
-    {
-        $data = [];
-
-        return $data;
     }
 
     // Get the search field

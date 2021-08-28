@@ -150,30 +150,4 @@ class CommonHelper
 
         return false;
     }
-
-    // Get Web CDN Static
-    public static function getWebCdnStatic()
-    {
-        $domain = CommonHelper::domain();
-        $cdnUrl = $domain;
-
-        if (DBHelper::hasTableInCurrentDB('config')) {
-            $cdnUrl = DB::table('config')->where('nickname', 'web_cdn_path')->value('content');
-        }
-
-        return $cdnUrl;
-    }
-
-    // Get H5 CDN Static
-    public static function getWebCdnH5Static()
-    {
-        $domain = CommonHelper::domain();
-        $cdnUrl = $domain;
-
-        if (DBHelper::hasTableInCurrentDB('config')) {
-            $cdnUrl = DB::table('config')->where('nickname', 'web_cdn_path_h5')->value('content');
-        }
-
-        return $cdnUrl;
-    }
 }

@@ -599,24 +599,7 @@ class BaseModel extends Model
             }
         }
 
-        // Create User ID
-        if (Schema::hasColumn($this->table, 'create_user_id')) {
-            $user = Auth::user();
-            $input['create_user_id'] = $user->id ?? null;
-        }
-
         return $input;
-    }
-
-    // Update Delete User ID
-    public function updateDestroyUserId($idArr)
-    {
-        if (Schema::hasColumn($this->table, 'delete_user_id')) {
-            $user = Auth::user();
-            $up = [];
-            $up['delete_user_id'] = $user->id ?? null;
-            DB::table($this->table)->whereIn('id', $idArr)->update($up);
-        }
     }
 
     // Return to Data Sheet
