@@ -11,7 +11,6 @@ namespace App\Base\Models;
 use App\Base\Config\BaseConfig;
 use App\Helpers\CommonHelper;
 use App\Helpers\TreeHelper;
-use App\Traits\QueryTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;

@@ -14,13 +14,11 @@ use App\Servers\AccountServer\UserServer;
 use App\Servers\AccountServer\UserServerConfig;
 use App\Servers\RpcHelper;
 use App\Traits\ApiTrait;
-use App\Traits\BladeTrait;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 
 class BaseFrontendController extends Controller
 {
-    use BladeTrait;
     use ApiTrait;
     use AuthenticatesUsers;
 

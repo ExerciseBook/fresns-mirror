@@ -566,7 +566,6 @@ class AmControllerApi extends FresnsBaseApiController
         if (count($idArr) == 0) {
             return false;
         }
-        // $conn = DBHelper::getConnectionName($table);
         foreach ($idArr as $id) {
             $queryCount = DB::table($table)->where('id', $id)->where($field, $field_value)->count();
             if ($queryCount == 0) {

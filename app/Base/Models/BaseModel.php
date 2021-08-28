@@ -14,7 +14,6 @@ use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\FresnsCmd\FresnsSubPlugin;
 use App\Http\FresnsCmd\FresnsSubPluginConfig;
 use App\Traits\HookModelTrait;
-use App\Traits\QueryTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;

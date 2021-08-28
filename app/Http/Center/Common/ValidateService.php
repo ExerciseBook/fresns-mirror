@@ -7,7 +7,6 @@
 
 namespace App\Http\Center\Common;
 
-use App\Helpers\DBHelper;
 use App\Traits\ApiTrait;
 use App\Traits\ServerTrait;
 use Illuminate\Http\Request;
@@ -60,37 +59,6 @@ class ValidateService
             'id' => 'required',
         ],
     ];
-
-    // 检查id是否存在表中
-    public static function existInTable($idArr, $table)
-    {
-        if (! is_array($idArr)) {
-            return false;
-        }
-
-        if (count($idArr) == 0) {
-            return false;
-        }
-        $conn = DBHelper::getConnectionName($table);
-
-        $queryCount = DB::connection($conn)->table($table)->whereIn('id', $idArr)->count();
-
-        return count($idArr) === $queryCount;
-    }
-
-    // 检查id是否存在表中
-    public static function idsStrExistInTable($idStr, $table)
-    {
-        $idArr = explode(',', $idStr);
-
-        if (count($idArr) == 0) {
-            return false;
-        }
-
-        $queryCount = DB::table($table)->whereIn('id', $idArr)->count();
-
-        return count($idArr) === $queryCount;
-    }
 
     //  验证数组字段
     public static function validParamExist($params, $checkParamsArr)
