@@ -11,8 +11,8 @@ namespace App\Http\Center\Scene;
 use App\Base\Services\BaseService;
 use App\Helpers\CommonHelper;
 use App\Helpers\FileHelper;
-use App\Http\Fresns\FresnsApi\Helpers\ApiCommonHelper;
-use App\Http\Share\Common\LogService;
+use App\Http\FresnsApi\Helpers\ApiCommonHelper;
+use App\Http\Center\Common\LogService;
 
 /**
  * 文件上传

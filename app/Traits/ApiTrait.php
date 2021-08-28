@@ -7,13 +7,13 @@
 
 namespace App\Traits;
 
-use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\Fresns\FresnsCodeMessages\FresnsCodeMessagesConfig;
-use App\Http\Fresns\FresnsCodeMessages\FresnsCodeMessagesService;
-use App\Http\Fresns\FresnsSessionLogs\FresnsSessionLogsService;
-use App\Http\Share\AmGlobal\GlobalService;
-use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Share\Common\LogService;
+use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\FresnsDb\FresnsCodeMessages\FresnsCodeMessagesConfig;
+use App\Http\FresnsDb\FresnsCodeMessages\FresnsCodeMessagesService;
+use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
+use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\ErrorCodeService;
+use App\Http\Center\Common\LogService;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;

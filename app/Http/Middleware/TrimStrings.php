@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Helpers\DateHelper;
 use App\Helpers\LangHelper;
-use App\Http\Share\AmGlobal\GlobalService;
+use App\Http\Center\AmGlobal\GlobalService;
 use Closure;
 use Illuminate\Foundation\Http\Middleware\TrimStrings as Middleware;
 

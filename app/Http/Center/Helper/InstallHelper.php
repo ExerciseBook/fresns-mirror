@@ -12,7 +12,7 @@ use App\Helpers\CommonHelper;
 use App\Helpers\FileHelper;
 use App\Http\Center\Base\BaseInstaller;
 use App\Http\Center\Base\PluginConst;
-use App\Http\Share\Common\LogService;
+use App\Http\Center\Common\LogService;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\Artisan;

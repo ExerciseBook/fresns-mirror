@@ -10,8 +10,8 @@ namespace App\Base\Controllers;
 
 use App\Base\Config\BaseConfig;
 use App\Helpers\CommonHelper;
-use App\Http\Share\Common\ErrorCodeService;
-use App\Http\Share\Common\ValidateService;
+use App\Http\Center\Common\ErrorCodeService;
+use App\Http\Center\Common\ValidateService;
 use App\Traits\ApiTrait;
 use App\Traits\HookControllerTrait;
 use Illuminate\Http\Request;

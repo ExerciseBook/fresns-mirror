@@ -12,8 +12,8 @@ use App\Base\Config\BaseConfig;
 use App\Helpers\CommonHelper;
 use App\Helpers\TreeHelper;
 use App\Http\Models\Perm\Menu;
-use App\Http\Share\Common\LogService;
-use App\Http\Share\Common\ValidateService;
+use App\Http\Center\Common\LogService;
+use App\Http\Center\Common\ValidateService;
 use Illuminate\Cache\NullStore;
 
 class BaseCategoryService extends BaseService

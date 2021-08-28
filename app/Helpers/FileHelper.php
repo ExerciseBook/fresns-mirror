@@ -9,7 +9,7 @@
 namespace App\Helpers;
 
 use App\Http\Models\Common\AssetFile;
-use App\Http\Share\Common\LogService;
+use App\Http\Center\Common\LogService;
 use Illuminate\Support\Facades\File;
 
 class FileHelper

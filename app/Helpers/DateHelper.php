@@ -8,8 +8,8 @@
 
 namespace App\Helpers;
 
-use App\Http\Fresns\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\Fresns\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use Carbon\Carbon;
 
 class DateHelper
