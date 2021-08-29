@@ -84,7 +84,7 @@ class GlobalService
         $uid = GlobalService::getGlobalKey('user_id');
         $mid = GlobalService::getGlobalKey('member_id');
         if ($deviceInfo) {
-            $map = AmConfig::URI_CONVERSION_OBJECT_TYPE;
+            $map = GlobalConfig::URI_CONVERSION_OBJECT_TYPE;
             $uri = Request::getRequestUri();
             $objectType = '';
             foreach ($map as $k => $v) {
@@ -95,14 +95,14 @@ class GlobalService
 
             if (! empty($objectType)) {
                 $objectName = $uri;
-                $objectNameMap = AmConfig::URI_CONVERSION_OBJECT_NAME;
+                $objectNameMap = GlobalConfig::URI_CONVERSION_OBJECT_NAME;
                 foreach ($objectNameMap as $k => $v) {
                     if (in_array($uri, $v)) {
                         $objectName = $k;
                     }
                 }
 
-                $actionMap = AmConfig::URI_API_NAME_MAP;
+                $actionMap = GlobalConfig::URI_API_NAME_MAP;
                 $uriAction = $actionMap[$uri] ?? '未知';
 
                 $sessionLogInfoId = FresnsSessionLogsService::addSessionLogs($objectName, $objectType, $uid, $mid, null, $uriAction);
@@ -166,7 +166,7 @@ class GlobalService
                 $item['is_enable'] = $v['is_enable'];
                 $arr[] = $item;
             }
-            config([AmConfig::CONFIGS_LIST_API => $arr]);
+            config([GlobalConfig::CONFIGS_LIST_API => $arr]);
 
             $mapArr = [];
             foreach ($arr as $v) {
@@ -193,7 +193,7 @@ class GlobalService
                 $map['language'] = $lang;
             }
 
-            config([AmConfig::CONFIGS_LIST => $map]);
+            config([GlobalConfig::CONFIGS_LIST => $map]);
         }
         // config(["lang.{key}_{lang_tag}", "{value}"]);
     }

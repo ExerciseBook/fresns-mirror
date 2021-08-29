@@ -10,7 +10,7 @@ namespace App\Http\Center\Common;
 // 模型配置
 use App\Base\Config\BaseConfig;
 
-class AmConfig extends BaseConfig
+class GlobalConfig extends BaseConfig
 {
     const CONFIGS_LIST = 'configs_list';
     //系统配置api接口返回
