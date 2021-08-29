@@ -421,17 +421,23 @@ class CommentResource extends BaseAdminResource
         //  searchPid 为空时输出，代表评论脱离了帖子独立输出，所以需要附带 post 参数，该评论所属帖子的信息
         $searchPid = request()->input('searchPid');
         $post = [];
-        if (! $searchPid) {
+        if (!$searchPid) {
             $post['pid'] = $posts['uuid'];
             $post['title'] = $posts['title'];
             $post['content'] = $posts['content'];
             $post['status'] = $posts['is_enable'];
-            $gname = ApiLanguageHelper::getLanguages('groups', 'name', $groupInfo['id']);
-            $gname = $gname == null ? '' : $gname['lang_content'];
-            $post['gname'] = $gname;
-            $post['gid'] = $groupInfo['uuid'];
-            // $post['cover'] = $groupInfo['cover_file_url'];
-            $post['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
+            $post['gname'] = "";
+            $post['gid'] = "";
+            $post['cover'] = "";
+            if($groupInfo){
+                $gname = ApiLanguageHelper::getLanguages('groups', 'name', $groupInfo['id']);
+                $gname = $gname == null ? '' : $gname['lang_content'];
+                $post['gname'] = $gname;
+                $post['gid'] = $groupInfo['uuid'];
+                // $post['cover'] = $groupInfo['cover_file_url'];
+                $post['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
+            }
+            
             $post['mid'] = $memberInfo->uuid ?? '';
             $post['mname'] = $memberInfo->name ?? '';
             $post['nickname'] = $memberInfo->nickname ?? '';
