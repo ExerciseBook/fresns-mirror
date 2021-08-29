@@ -12,14 +12,14 @@ use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    const PLUGINS_TYPE = 2;
     const ENABLE_FALSE = 0;
 
     const NOTICE_URL = 'https://api.fresns.cn/news.json';
 
-    const PLUGIN_TYPE4 = 4;
-    const PLUGIN_TYPE3 = 3;
     const PLUGIN_TYPE1 = 1;
+    const PLUGIN_TYPE2 = 2;
+    const PLUGIN_TYPE3 = 3;
+    const PLUGIN_TYPE4 = 4;
 
     const BACKEND_PATH_NOT = [
         'login', 'dashboard', 'settings', 'keys', 'admins', 'websites', 'apps', 'plugins',

@@ -64,8 +64,7 @@ class AmControllerWeb extends BaseFrontendController
             'title' => 'Home',
         ];
 
-        // dd($data);
-        return $this->display('fresns/index', $data);
+        return view('fresns.index', $data);
     }
 
     public function loginIndex()
@@ -75,7 +74,7 @@ class AmControllerWeb extends BaseFrontendController
             'lang' => $lang,
         ];
 
-        return $this->display('fresns/login', $data);
+        return view('fresns.login', $data);
     }
 
     public function loginAcc(Request $request)
@@ -250,7 +249,7 @@ class AmControllerWeb extends BaseFrontendController
             'lang_desc' => AmService::getLanguage($lang),
         ];
 
-        return $this->display('fresns/settings', $data);
+        return view('fresns.settings', $data);
     }
 
     public function updateSetting(Request $request)
@@ -379,7 +378,7 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
 
-        return $this->display('fresns/admins', $data);
+        return view('fresns.admins', $data);
     }
 
     public function apps(Request $request)
@@ -409,7 +408,7 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
 
-        return $this->display('fresns/apps', $data);
+        return view('fresns.apps', $data);
     }
 
     public function dashboard(Request $request)
@@ -417,7 +416,7 @@ class AmControllerWeb extends BaseFrontendController
         $userId = Auth::id();
         $langTag = Cache::get('lang_tag_'.$userId);
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGINS_TYPE);
+        $request->offsetSet('type', AmConfig::PLUGIN_TYPE2);
         $pluginList = $FresnsPluginsService->searchData();
         $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
         // dd($pluginArr);
@@ -507,7 +506,7 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
 
-        return $this->display('fresns/dashboard', $data);
+        return view('fresns.dashboard', $data);
     }
 
     public function iframe(Request $request)
@@ -525,8 +524,8 @@ class AmControllerWeb extends BaseFrontendController
             'lang_desc' => AmService::getLanguage($lang),
 
         ];
-        // dd($data);
-        return $this->display('fresns/iframe', $data);
+
+        return view('fresns.iframe', $data);
     }
 
     public function keys(Request $request)
@@ -579,8 +578,8 @@ class AmControllerWeb extends BaseFrontendController
             'lang_desc' => AmService::getLanguage($lang),
 
         ];
-        // dd($data);
-        return $this->display('fresns/keys', $data);
+
+        return view('fresns.keys', $data);
     }
 
     public function plugins(Request $request)
@@ -588,7 +587,7 @@ class AmControllerWeb extends BaseFrontendController
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 20);
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGINS_TYPE);
+        $request->offsetSet('type', AmConfig::PLUGIN_TYPE2);
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
         $pluginList = $FresnsPluginsService->searchData();
@@ -632,8 +631,8 @@ class AmControllerWeb extends BaseFrontendController
             'lang_desc' => AmService::getLanguage($lang),
 
         ];
-        // dd($data);
-        return $this->display('fresns/plugins', $data);
+
+        return view('fresns.plugins', $data);
     }
 
     public function websites(Request $request)
@@ -674,7 +673,7 @@ class AmControllerWeb extends BaseFrontendController
 
         ];
 
-        return $this->display('fresns/websites', $data);
+        return view('fresns.websites', $data);
     }
 
     // 重置密钥
