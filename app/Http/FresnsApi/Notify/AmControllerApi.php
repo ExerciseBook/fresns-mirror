@@ -8,7 +8,7 @@
 
 namespace App\Http\FresnsApi\Notify;
 
-use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;

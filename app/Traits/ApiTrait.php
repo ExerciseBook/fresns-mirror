@@ -7,7 +7,7 @@
 
 namespace App\Traits;
 
-use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\LogService;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
@@ -103,7 +103,7 @@ trait ApiTrait
         $this->errorMsg = $message;
         $this->data = $data;
 
-        // 补充
+        // Supplementary data
         if (isset($checkInfo['data'])) {
             $this->data = $checkInfo['data'];
         }

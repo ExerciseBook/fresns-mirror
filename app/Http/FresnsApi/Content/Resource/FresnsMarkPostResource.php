@@ -10,7 +10,7 @@ namespace App\Http\FresnsApi\Content\Resource;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Helpers\DateHelper;
-use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Content\AmConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;

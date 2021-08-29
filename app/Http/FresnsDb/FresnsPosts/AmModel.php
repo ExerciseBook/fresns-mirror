@@ -9,7 +9,7 @@
 namespace App\Http\FresnsDb\FresnsPosts;
 
 use App\Base\Models\BaseAdminModel;
-use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkeds;

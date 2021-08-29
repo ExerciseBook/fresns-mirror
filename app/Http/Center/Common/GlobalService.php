@@ -5,7 +5,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\Center\AmGlobal;
+namespace App\Http\Center\Common;
 
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
@@ -24,7 +24,7 @@ use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Schema;
 
-class AmService
+class GlobalService
 {
     // 加载数据
     public static function loadData()

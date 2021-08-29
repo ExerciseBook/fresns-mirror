@@ -10,7 +10,7 @@ namespace App\Http\FresnsApi\Editor;
 
 use App\Helpers\DateHelper;
 use App\Helpers\StrHelper;
-use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Common\ValidateService;

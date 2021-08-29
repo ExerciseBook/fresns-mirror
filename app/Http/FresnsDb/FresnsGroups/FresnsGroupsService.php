@@ -8,7 +8,7 @@
 
 namespace App\Http\FresnsDb\FresnsGroups;
 
-use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Base\FresnsBaseService;
 use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;

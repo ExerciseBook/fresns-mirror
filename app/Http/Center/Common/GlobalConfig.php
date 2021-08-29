@@ -5,7 +5,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\Center\AmGlobal;
+namespace App\Http\Center\Common;
 
 // 模型配置
 use App\Base\Config\BaseConfig;

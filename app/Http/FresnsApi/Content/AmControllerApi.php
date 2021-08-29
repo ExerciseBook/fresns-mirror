@@ -9,7 +9,7 @@
 namespace App\Http\FresnsApi\Content;
 
 use App\Helpers\StrHelper;
-use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Base\BasePluginConfig;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\LogService;

@@ -10,7 +10,7 @@ namespace App\Http\FresnsDb\FresnsComments;
 
 use App\Base\Models\BaseAdminModel;
 use App\Base\Models\BaseCategoryModel;
-use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;

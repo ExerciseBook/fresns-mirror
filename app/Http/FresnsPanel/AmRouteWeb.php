@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-use App\Http\Center\AmGlobal\GlobalService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsConfig;
