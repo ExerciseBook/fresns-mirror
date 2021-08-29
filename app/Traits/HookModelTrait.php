@@ -9,7 +9,6 @@ namespace App\Traits;
 
 // 模版设置
 use App\Helpers\CommonHelper;
-use App\Helpers\PluginHelper;
 use Illuminate\Support\Facades\Route;
 
 trait HookModelTrait
