@@ -26,7 +26,6 @@ class PluginResource extends BaseAdminResource
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
         // 插件是否下载
-        // $doloadPlugin = PluginHelper::getPluginJsonFileArr();
         $pluginConfig = PluginHelper::findPluginConfigClass($this->unikey);
         // dump($pluginConfig);
         $isDownload = FresnsPluginsConfig::NO_DOWNLOAD;
@@ -51,20 +50,6 @@ class PluginResource extends BaseAdminResource
         // }
         // 是否有新版本
         $isNewVision = FresnsPluginsConfig::NO_NEWVISION;
-        // 获取远程的插件版本
-        // $localPlugin = PluginHelper::getPluginJsonFileArrByDirName($this->unikey);
-        // // dd($localPlugin);
-        // $newVisionInt = "";
-        // $newVision = "";
-        // if($localPlugin){
-        //         if($this->unikey == $localPlugin['uniKey']){
-        //             if($this->version_int != $localPlugin['currVersionInt']){
-        //                 $isNewVision = TweetPluginConfig::NEWVISION;
-        //                 $newVisionInt = $localPlugin['currVersionInt'];
-        //                 $newVision = $localPlugin['currVersion'];
-        //             }
-        //     }
-        // }
         $websitePc = '';
         $websiteMobile = '';
         $websitePcPlugin = '';

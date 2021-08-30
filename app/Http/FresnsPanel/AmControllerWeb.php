@@ -832,11 +832,6 @@ class AmControllerWeb extends BaseFrontendController
         if (! file_exists($downloadFileName)) {
             $this->error(ErrorCodeService::FILES_ERROR);
         }
-        // 插件目录下的json文件
-        $jsonArr = PluginHelper::getPluginJsonFileArrByDirName($unikey);
-        if (empty($jsonArr)) {
-            $this->error(ErrorCodeService::FILES_JSON_ERROR);
-        }
         // dd($jsonArr);
         $options = [];
         $installFileInfo = InstallHelper::installLocalPluginFile($jsonArr['uniKey'], $unikey, $downloadFileName,
@@ -925,7 +920,6 @@ class AmControllerWeb extends BaseFrontendController
             'scene' => empty($scene) ? null : json_encode($scene),
             'author' => $pluginConfig->author,
             'author_link' => $pluginConfig->authorLink,
-            'plugin_domain' => $pluginConfig->pluginUrl,
             'access_path' => $pluginConfig->accessPath,
             'setting_path' => $pluginConfig->settingPath,
         ];

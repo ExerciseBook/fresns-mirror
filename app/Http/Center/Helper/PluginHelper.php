@@ -22,35 +22,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 class PluginHelper
 {
-    // 获取插件json文件
-    public static function getPluginJsonFileArr()
-    {
-        $scanDir = self::pluginRoot();
-
-        $pluginJsonArr = [];
-        $pluginUniKeyArr = [];
-        $dir = new \DirectoryIterator($scanDir);
-        // dd($dir);
-        foreach ($dir as $file) {
-            // 遍历子目录
-            if ($file->isDir()) {
-                $subDir = new \DirectoryIterator($file->getPathname());
-                foreach ($subDir as $subFile) {
-                    $pluginJsonFile = implode(DIRECTORY_SEPARATOR, [$subFile->getPath(), PluginConst::PLUGIN_JSON_FILE_NAME]);
-                    if (file_exists($pluginJsonFile)) {
-                        $pluginJson = json_decode(file_get_contents($pluginJsonFile), true);
-                        $uniKey = $pluginJson['uniKey'] ?? '';
-                        if (! in_array($uniKey, $pluginUniKeyArr)) {
-                            $pluginUniKeyArr[] = $uniKey;
-                            $pluginJsonArr[] = $pluginJson;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $pluginJsonArr;
-    }
 
     // 获取插件类
     public static function findPluginClass($uniKey)
@@ -92,60 +63,12 @@ class PluginHelper
         return new $installClass();
     }
 
-    // 框架PC端模版
-    public static function frameworkThemePcPath($uniKey)
-    {
-        $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
-        $themePc = $pluginConfig->getThemePc();
-        $themeRoot = PluginHelper::themeRoot();
-
-        $path = implode(DIRECTORY_SEPARATOR, [$themeRoot, $themePc]);
-
-        return $path;
-    }
-
-    // 框架移动端模版
-    public static function frameworkThemeMobilePath($uniKey)
-    {
-        $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
-        $themeMobile = $pluginConfig->getThemeMobile();
-        $themeRoot = PluginHelper::themeRoot();
-
-        $path = implode(DIRECTORY_SEPARATOR, [$themeRoot, $themeMobile]);
-
-        return $path;
-    }
-
-    // 框架设置页面路径
-    public static function frameworkViewSettingPath($uniKey)
-    {
-        $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
-        $viewSetting = $pluginConfig->getViewSetting();
-
-        $viewRoot = self::viewRoot();
-        $path = implode(DIRECTORY_SEPARATOR, [$viewRoot, $viewSetting]);
-
-        return $path;
-    }
-
     // 框架语言路径
     public static function frameworkLangPath($uniKey)
     {
         $langRoot = self::langRoot();
 
         return $langRoot;
-    }
-
-    // 插件PC端模版
-    public static function pluginThemePcPath($uniKey)
-    {
-        $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
-        $themePc = $pluginConfig->getThemePc();
-
-        $currPluginRoot = self::currPluginRoot($uniKey);
-        $path = implode(DIRECTORY_SEPARATOR, [$currPluginRoot, 'Resources', $themePc]);
-
-        return $path;
     }
 
     // 插件 assets 目录
@@ -246,29 +169,6 @@ class PluginHelper
     public static function frameworkImagePath($uniKey)
     {
         $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::viewRoot(), $uniKey, $uniKey.'.png']);
-
-        return $path;
-    }
-
-    // 插件移动端模版
-    public static function pluginThemeMobilePath($uniKey)
-    {
-        $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
-        $themeMobile = $pluginConfig->getThemeMobile();
-
-        $currPluginRoot = self::currPluginRoot($uniKey);
-        $path = implode(DIRECTORY_SEPARATOR, [$currPluginRoot, 'Resources', $themeMobile]);
-
-        return $path;
-    }
-
-    // 插件设置页面路径
-    public static function pluginViewSettingPath($uniKey)
-    {
-        $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
-        $viewSetting = $pluginConfig->getViewSetting();
-        $currPluginRoot = self::currPluginRoot($uniKey);
-        $path = implode(DIRECTORY_SEPARATOR, [$currPluginRoot, 'Resources', $viewSetting]);
 
         return $path;
     }
@@ -384,37 +284,6 @@ class PluginHelper
         }
 
         return true;
-    }
-
-    // 获取插件json文件
-    public static function getPluginJsonFileArrByDirName($dirName)
-    {
-        // $scanDir = self::pluginRoot();
-        $pathArr = [base_path(), 'public', 'storage', 'plugins', $dirName];
-        $scanDir = implode(DIRECTORY_SEPARATOR, $pathArr);
-        $pluginJsonArr = [];
-        $pluginUniKeyArr = [];
-        $dir = new \DirectoryIterator($scanDir);
-        // dd($dir);
-        foreach ($dir as $file) {
-            // 遍历子目录
-            if ($file->isDir()) {
-                $subDir = new \DirectoryIterator($file->getPathname());
-                foreach ($subDir as $subFile) {
-                    $pluginJsonFile = implode(DIRECTORY_SEPARATOR, [$subFile->getPath(), PluginConst::PLUGIN_JSON_FILE_NAME]);
-                    if (file_exists($pluginJsonFile)) {
-                        $pluginJson = json_decode(file_get_contents($pluginJsonFile), true);
-                        $uniKey = $pluginJson['uniKey'] ?? '';
-                        if (! in_array($uniKey, $pluginUniKeyArr)) {
-                            $pluginUniKeyArr[] = $uniKey;
-                            $pluginJsonArr = $pluginJson;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $pluginJsonArr;
     }
 
     public static function getPluginImageUrl(BasePluginConfig $pluginConfig)

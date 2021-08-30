@@ -113,33 +113,6 @@ class InstallHelper
     {
         $info = [];
 
-        // pc theme
-        $srcPath = PluginHelper::frameworkThemePcPath($uniKey);
-        $destPath = PluginHelper::pluginThemePcPath($uniKey);
-
-        $info['theme_pc_path_framework'] = $srcPath;
-        $info['theme_pc_path_plugin'] = $destPath;
-
-        if (! empty($srcPath)) {
-            FileHelper::assetDir($destPath);
-            File::copyDirectory($srcPath, $destPath);
-        }
-
-        // mobile theme
-        $srcPath = PluginHelper::frameworkThemeMobilePath($uniKey);
-        $destPath = PluginHelper::pluginThemeMobilePath($uniKey);
-        $info['theme_mobile_path_framework'] = $srcPath;
-        $info['theme_mobile_path_plugin'] = $destPath;
-        if (! empty($srcPath)) {
-            FileHelper::assetDir($destPath);
-            File::copyDirectory($srcPath, $destPath);
-        }
-
-        // view
-        $srcPath = PluginHelper::frameworkViewSettingPath($uniKey);
-        $destPath = PluginHelper::pluginViewSettingPath($uniKey);
-        $info['view_path_framework'] = $srcPath;
-        $info['view_path_plugin'] = $destPath;
 
         if (! empty($srcPath)) {
             FileHelper::assetDir($destPath);

@@ -19,7 +19,6 @@ class BaseInstaller
 {
     /**
      * 安装配置类.
-     * @var
      */
     protected $pluginConfig;
 
@@ -119,46 +118,5 @@ class BaseInstaller
         }
 
         return true;
-    }
-
-    /**
-     * 生成插件信息的json文件.
-     */
-    public function generateJsonFile()
-    {
-        $pluginInfo = [];
-        $config = $this->getPluginConfig();
-
-        $pluginInfo['uniKey'] = $config->uniKey;
-        $pluginInfo['name'] = $config->name;
-        $pluginInfo['description'] = $config->description;
-        $pluginInfo['author'] = $config->author;
-        $pluginInfo['authorLink'] = $config->authorLink;
-        $pluginInfo['dirName'] = $config->dirName;
-        $pluginInfo['currVersion'] = $config->currVersion;
-        $pluginInfo['currVersionInt'] = $config->currVersionInt;
-        $pluginInfo['scene'] = $config->sceneArr;
-        $pluginInfo['theme']['PC'] = $config->getThemePc();
-        $pluginInfo['theme']['Mobile'] = $config->getThemeMobile();
-
-        $pathInfoArr = [
-            base_path(),
-            'app',
-            'Plugins',
-            $config->uniKey,
-            'plugin.json',
-        ];
-
-        $fileName = implode(DIRECTORY_SEPARATOR, $pathInfoArr);
-
-        $jsonContent = json_encode($pluginInfo, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-        file_put_contents($fileName, $jsonContent);
-
-        $info = [];
-        $info['filename'] = $fileName;
-        $info['pluginInfo'] = $pluginInfo;
-
-        return $info;
     }
 }

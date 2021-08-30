@@ -155,24 +155,6 @@ class PluginController extends BaseController
         $this->success($info);
     }
 
-    /**
-     * @param Request $request
-     */
-    public function genDescJson(Request $request)
-    {
-        $unikey = $request->input('unikey');
-
-        // 获取安装类
-        $installer = InstallHelper::findInstaller($unikey);
-        if (empty($installer)) {
-            $this->error(ErrorCodeService::NO_RECORD);
-        }
-
-        $info = $installer->generateJsonFile();
-
-        $this->success($info);
-    }
-
     // 升级插件之前执行安装
     public static function beforeUpgrade($unikey, $dirName, $dowmloadUrl)
     {

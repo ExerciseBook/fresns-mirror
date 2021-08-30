@@ -21,18 +21,6 @@ class AmResource extends BaseAdminResource
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        // 插件是否下载
-        $localPlugin = PluginHelper::getPluginJsonFileArr();
-        // 是否下载
-        $isDownload = AmConfig::NO_DOWNLOAD;
-
-        if ($localPlugin) {
-            foreach ($localPlugin as $plugin) {
-                if ($this->unikey == $plugin['uniKey']) {
-                    $isDownload = AmConfig::DOWNLOAD;
-                }
-            }
-        }
         // 是否有新版本
         $isNewVision = AmConfig::NO_NEWVISION;
         $newVisionInt = '';

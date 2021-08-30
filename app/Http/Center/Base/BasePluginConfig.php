@@ -10,6 +10,14 @@ namespace App\Http\Center\Base;
 
 class BasePluginConfig
 {
+
+    /**
+     * 插件全局唯一值
+     *
+     * @var string
+     */
+    public $uniKey = '';
+    
     /**
      * 插件名称.
      *
@@ -20,9 +28,9 @@ class BasePluginConfig
     /**
      * 插件类型.
      *
-     * @var string
+     * @var int
      */
-    public $type = '';
+    public $type = 2;
 
     /**
      * 插件描述.
@@ -43,7 +51,7 @@ class BasePluginConfig
      *
      * @var string
      */
-    public $author = '作者';
+    public $author = '';
 
     /**
      * 插件作者链接.
@@ -51,22 +59,16 @@ class BasePluginConfig
      * @var string
      */
     public $authorLink = '';
+
     /**
      * 插件使用场景
      * 如 短信服务商/文件存储服务商 等.
      *
-     * @var string
+     * @var array
      */
     public $sceneArr = [
 
     ];
-
-    /**
-     * 插件全局唯一值
-     *
-     * @var string
-     */
-    public $uniKey = '';
 
     /**
      * 插件最新三位版本号.
@@ -83,26 +85,12 @@ class BasePluginConfig
     public $currVersionInt = 1;
 
     /**
-     * 插件目录名称, 小驼峰, 注意大小写
+     * 插件目录名称, 大驼峰, 注意大小写
      * app/Plugins/Addons/$dirName.
      *
      * @var string
      */
     public $dirName = '';
-
-    /**
-     * PC端模版名称.
-     *
-     * @var string
-     */
-    public $themePc = '';
-
-    /**
-     * H5端模版名称.
-     *
-     * @var string
-     */
-    public $themeMobile = '';
 
     /**
      * 插件访问路径
@@ -118,13 +106,6 @@ class BasePluginConfig
      * @var string
      */
     public $settingPath = '';
-
-    /**
-     * 插件网址
-     *
-     * @var string
-     */
-    public $pluginUrl = '';
 
     // 插件默认命令字, 任何插件必须要要有
     public const PLG_CMD_DEFAULT = 'plg_cmd_default';
@@ -148,18 +129,4 @@ class BasePluginConfig
         self::CODE_PARAMS_ERROR => '参数错误',
     ];
 
-    public function getThemePc()
-    {
-        return $this->uniKey.'Pc';
-    }
-
-    public function getThemeMobile()
-    {
-        return $this->uniKey.'Mobile';
-    }
-
-    public function getViewSetting()
-    {
-        return $this->uniKey.'Setting';
-    }
 }

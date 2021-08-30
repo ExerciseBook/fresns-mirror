@@ -17,9 +17,6 @@ use Illuminate\Support\Facades\File;
  */
 class PluginConst
 {
-    // 插件描述符文件名称
-    const PLUGIN_JSON_FILE_NAME = 'plugin.json';
-
     const PLUGIN_IMAGE_NAME = 'fresns.png';
 
     const PLUGIN_SKIP_DIR_ARR = ['.', '..'];
