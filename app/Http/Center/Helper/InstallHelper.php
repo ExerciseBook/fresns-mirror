@@ -59,36 +59,6 @@ class InstallHelper
         return $info;
     }
 
-    /**
-     * 打包插件.
-     * @param       $uniKey
-     * @param       $dirName
-     * @param       $versionInt
-     * @param array $options
-     */
-    public static function packagePluginFile($uniKey, $dirName, $versionInt, $options = [])
-    {
-        $pathArr = [base_path(), 'app', 'Plugins', $dirName];
-
-        $path = implode(DIRECTORY_SEPARATOR, $pathArr);
-
-        $toPath = self::getPluginStorageDir();
-        $zipFilename = "{$uniKey}_V{$versionInt}.zip";
-
-        $toPathFile = implode(DIRECTORY_SEPARATOR, [$toPath, $zipFilename]);
-        $zipResult = FileHelper::zip($toPathFile, $dirName, $path, $toPath);
-
-        $domain = CommonHelper::domain();
-
-        $info = [];
-        $info['zipToPathFile'] = $toPathFile;
-        $info['zipFileName'] = $zipFilename;
-        $info['zipResult'] = $zipResult;
-        $info['url'] = $domain.'/storage/plugins/'.$zipFilename;
-
-        return $info;
-    }
-
     /*
      * 获取插件存储目录
      */

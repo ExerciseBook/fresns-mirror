@@ -55,26 +55,6 @@ class BaseInstaller
     }
 
     /**
-     * 打包.
-     */
-    public function package()
-    {
-        $config = $this->getPluginConfig();
-        $uniKey = $config->uniKey;
-
-        // 复制文件
-        InstallHelper::pullPluginResourcesFiles($uniKey);
-
-        // 插件目录
-        $pluginDir = $config->dirName;
-        $versionInt = $config->currVersionInt;
-        $options = [];
-        $info = InstallHelper::packagePluginFile($uniKey, $pluginDir, $versionInt, $options);
-
-        return $info;
-    }
-
-    /**
      * 卸载
      * 删除插件的目录.
      */
@@ -86,7 +66,7 @@ class BaseInstaller
         // 删除模版文件
         InstallHelper::deletePluginFiles($uniKey);
 
-        // 插件目录
+        // 删除插件目录
         $pluginPath = PluginHelper::currPluginRoot($uniKey);
         if (is_dir($pluginPath)) {
             File::deleteDirectory($pluginPath);
@@ -103,8 +83,7 @@ class BaseInstaller
      */
     public function upgrade()
     {
-
-        //  如果当前版本有安装函数，则执行安装函数
+        // 如果当前版本有安装函数，则执行安装函数
         // $currVersionInt = $this->pluginConfig->currVersionInt;
         $currVersionInt = request()->input('localVision');
         $remoteVision = request()->input('remoteVision');

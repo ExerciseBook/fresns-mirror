@@ -89,7 +89,7 @@ class PluginHelper
         return $path;
     }
 
-    // 插件 views 目录
+    // 插件 lang 目录
     public static function extensionLangPath($uniKey)
     {
         $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
@@ -98,37 +98,11 @@ class PluginHelper
         return $path;
     }
 
-    // 插件 views 目录
+    // 插件 Routes 目录
     public static function extensionRoutePath($uniKey)
     {
         $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
-        $path = implode(DIRECTORY_SEPARATOR, [$extensionRootPath, 'Route']);
-
-        return $path;
-    }
-
-    // 插件 image 目录
-    public static function extensionImagePath($uniKey)
-    {
-        $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
-        $path = implode(DIRECTORY_SEPARATOR, [$extensionRootPath, $uniKey.'.png']);
-
-        return $path;
-    }
-
-    // 插件 设置文件 目录
-    public static function extensionSettingsPath($uniKey)
-    {
-        $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
-        $path = implode(DIRECTORY_SEPARATOR, [$extensionRootPath, 'settings.php']);
-
-        return $path;
-    }
-
-    // 插件 设置文件 目录
-    public static function frameworkSettingsPath($uniKey)
-    {
-        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::themeRoot(), $uniKey, 'settings.php']);
+        $path = implode(DIRECTORY_SEPARATOR, [$extensionRootPath, 'Routes']);
 
         return $path;
     }
@@ -153,22 +127,6 @@ class PluginHelper
     public static function frameworkThemePath($uniKey)
     {
         $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::themeRoot(), $uniKey]);
-
-        return $path;
-    }
-
-    // 框架 theme image 目录
-    public static function frameworkThemeImagePath($uniKey)
-    {
-        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::themeRoot(), $uniKey, $uniKey.'.png']);
-
-        return $path;
-    }
-
-    // 框架 views image 目录
-    public static function frameworkImagePath($uniKey)
-    {
-        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::viewRoot(), $uniKey, $uniKey.'.png']);
 
         return $path;
     }
@@ -258,7 +216,7 @@ class PluginHelper
             base_path(),
             'public',
             'storage',
-            'download',
+            'extensions',
         ];
         $downloadPath = implode(DIRECTORY_SEPARATOR, $pathArr);
         FileHelper::assetDir($downloadPath);

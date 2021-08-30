@@ -85,8 +85,11 @@ class BasePluginConfig
     public $currVersionInt = 1;
 
     /**
-     * 插件目录名称, 大驼峰, 注意大小写
-     * app/Plugins/Addons/$dirName.
+     * 插件目录名称, 大驼峰
+     * app/Plugins/$dirName
+     * public/assets/$dirName
+     * resources/views/plugins/$dirName
+     * resources/lang/{语言标签}/$dirName
      *
      * @var string
      */
