@@ -37,27 +37,10 @@ class BaseConfig
     const QUERY_TYPE_DB_QUERY = 'db_query';  // Queries with join configuration support
     const QUERY_TYPE_SQL_QUERY = 'sql_query'; // Native SQL Queries
 
-    // Button
-    const BUTTON_INDEX = 'index_btn';
-    const BUTTON_CREATE = 'create_btn';
-    const BUTTON_UPDATE = 'update_btn';
-    const BUTTON_DELETE = 'delete_btn';
-    const BUTTON_DETAIL = 'detail_btn';
-    const BUTTON_IMPORT = 'import_btn';
-    const BUTTON_EXPORT = 'export_btn';
-
-    // Status: 1-normal, 2-disabled
-    const BUTTON_INFO = [
-        ['key' => self::BUTTON_INDEX, 'show' => true, 'name' => 'List', 'status' => 'normal'],
-        ['key' => self::BUTTON_CREATE, 'show' => true, 'name' => 'New', 'status' => 'normal'],
-        ['key' => self::BUTTON_UPDATE, 'show' => true, 'name' => 'Change', 'status' => 'normal'],
-        ['key' => self::BUTTON_DELETE, 'show' => true, 'name' => 'Drop', 'status' => 'normal'],
-        ['key' => self::BUTTON_DETAIL, 'show' => true, 'name' => 'Detail', 'status' => 'normal'],
-        ['key' => self::BUTTON_IMPORT, 'show' => false, 'name' => 'Import', 'status' => 'normal'],
-        ['key' => self::BUTTON_EXPORT, 'show' => false, 'name' => 'Export', 'status' => 'normal'],
-    ];
-
-    const ENABLE_VALUE_ARR = [0, 1];
+    // Database Config
+    const MYSQL_CONNECTION = 'mysql';
+    const MYSQL_CONNECTION_SLAVE = 'mysql_slave';
+    const MYSQL_CONNECTION_HELPER = 'mysql_helper';
 
     // Enable
     const ENABLE_TRUE = 1;
@@ -72,13 +55,6 @@ class BaseConfig
         ['key' => self::ENABLE_FALSE, 'text' => 'Disable'],
     ];
 
-    const TABLE_AREA = 'area';
-
-    // Database Config
-    const MYSQL_CONNECTION = 'mysql';
-    const MYSQL_CONNECTION_SLAVE = 'mysql_slave';
-    const MYSQL_CONNECTION_HELPER = 'mysql_helper';
-
     // Main Table: Additional query rules
     const ADDED_SEARCHABLE_FIELDS = [];
 
@@ -87,9 +63,6 @@ class BaseConfig
         'child_begin_at' => ['field' => 'start_at', 'op' => '>='],
         'child_end_at' => ['field' => 'end_at', 'op' => '<='],
     ];
-
-    // "join" query rules (used in some cases)
-    const JOIN_SEARCHABLE_FIELDS = [];
 
     // Query rules for categorized data tables, querying only first-level nodes
     protected $treeSearchRule = [];
@@ -102,11 +75,11 @@ class BaseConfig
         'nickname' => ['field' => 'nickname', 'op' => 'LIKE'],
         'type' => ['field' => 'type', 'op' => 'IN'],
         'status' => ['field' => 'status', 'op' => 'IN'],
+        'is_enable' => ['field' => 'is_enable', 'op' => '='],
         'created_at_from' => ['field' => 'created_at', 'op' => '>='],
         'created_at_to' => ['field' => 'created_at', 'op' => '<='],
         'updated_at_from' => ['field' => 'updated_at', 'op' => '>='],
         'updated_at_to' => ['field' => 'updated_at', 'op' => '<='],
-        'is_enable' => ['field' => 'is_enable', 'op' => '='],
     ];
 
     /**
