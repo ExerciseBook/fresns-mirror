@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Schema;
 
 class GlobalService
 {
-    // 加载数据
+    // Loading data
     public static function loadData()
     {
         self::initSessionLog();
@@ -35,7 +35,7 @@ class GlobalService
         self::crontabCheck();
     }
 
-    // 初始化配置
+    // Initial Configuration
     public static function loadGlobal()
     {
         $fresns = [];
@@ -48,12 +48,11 @@ class GlobalService
             $fresns[$field] = request()->header($field);
         }
 
-        // user 和 member 值
+        // user and member data
         $fresns['user'] = null;
         $fresns['member'] = null;
         if (! empty($uid)) {
             $user = FresnsUsers::staticFindByField('uuid', $uid);
-            // dd($user);
             $fresns['user'] = $user ?? null;
             $fresns['user_id'] = $user->id ?? null;
         }
@@ -66,17 +65,16 @@ class GlobalService
 
         $langTag = ApiLanguageHelper::getLangTagByHeader();
         $fresns['langTag'] = $langTag;
-
         $GLOBALS['fresns'] = $fresns;
     }
 
-    // 根据 key 获取值
+    // Get the value based on key
     public static function getGlobalKey($globalKey)
     {
         return $GLOBALS['fresns'][$globalKey] ?? null;
     }
 
-    // 初始化
+    // Initialization Log
     public static function initSessionLog()
     {
         $sessionLogInfo = [];
@@ -103,7 +101,7 @@ class GlobalService
                 }
 
                 $actionMap = GlobalConfig::URI_API_NAME_MAP;
-                $uriAction = $actionMap[$uri] ?? '未知';
+                $uriAction = $actionMap[$uri] ?? 'Unknown';
 
                 $sessionLogInfoId = FresnsSessionLogsService::addSessionLogs($objectName, $objectType, $uid, $mid, null, $uriAction);
 
@@ -117,7 +115,7 @@ class GlobalService
         return $GLOBALS['session_logs_info'][$globalKey] ?? null;
     }
 
-    // 更新
+    // Update Log
     public static function updateSessionLog()
     {
         $sessionLogInfo = [];
@@ -128,14 +126,10 @@ class GlobalService
         ];
 
         // $GLOBALS['session_logs_info'] = $sessionLogInfo;
-
-        // // 插入操作
         // $GLOBALS['session_log_id'] = 3333;
     }
 
-    /**
-     * 加载配置数据.
-     */
+    // Loading config data
     public static function loadGlobalData()
     {
         $hasConfig = Schema::hasTable(FresnsConfigsConfig::CFG_TABLE);
@@ -199,14 +193,14 @@ class GlobalService
     }
 
     /**
-     * 定时任务
-     * 每隔 10 分钟执行一次用户角色过期时间检测
-     * 每隔 8 小时执行一次用户注销任务
-     * 订阅用户日活命令字.
+     * Timed tasks
+     * Perform member role expiration time detection every 10 minutes.
+     * Perform user logout tasks every 8 hours.
+     * Subscription user daily activity command word.
      */
     public static function crontabCheck()
     {
-        //订阅用户日活命令字 登陆才调用
+        // Subscribe to the user's daily activity command word (called only when logged in)
         $uid = request()->header('uid');
         if ($uid) {
             $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_USER_ACTIVE;
@@ -215,12 +209,14 @@ class GlobalService
         }
         $time = date('Y-m-d H:i:s', time());
         $isCheckRole = true;
-        //用户角色过期时间检测
+
+        // Member role expiration time detection
         $checkRoleTime = FresnsSessionLogs::where('object_name', FresnsCrontabPluginConfig::PLG_CMD_CRONTAB_CHECK_ROLE_EXPIRED)
         ->where('object_type', FresnsSessionLogsConfig::OBJECT_TYPE_PLUGIN)
         ->orderByDesc('id')
         ->value('created_at');
 
+        // Timed Task Plugin
         $crontabPlugins = ApiConfigHelper::getConfigByItemKey('crontab_plugins');
         $checkRole = null;
         $checkDelete = null;
@@ -253,7 +249,8 @@ class GlobalService
             $resp = PluginRpcHelper::call(FresnsCrontablPlugin::class, $cmd, $input);
         }
         $isCheckDelete = true;
-        //用户注销任务
+
+        // Delete users tasks
         $checkDeleteTime = FresnsSessionLogs::where('object_name', FresnsCrontabPluginConfig::PLG_CMD_CRONTAB_CHECK_DELETE_USER)
         ->where('object_type', FresnsSessionLogsConfig::OBJECT_TYPE_PLUGIN)
         ->orderByDesc('id')

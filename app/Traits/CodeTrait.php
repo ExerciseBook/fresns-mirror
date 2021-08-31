@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Fresns
  * Copyright (C) 2021-Present 唐杰
@@ -17,7 +18,7 @@ trait CodeTrait
         $codeMap = $m->getCodeMap();
         $data = [
             'code'  => $code,
-            'msg'   => $codeMap[$code] ?? '业务检查异常',
+            'msg'   => $codeMap[$code] ?? 'Function Check Anomalies',
         ];
 
         return $data;

@@ -45,6 +45,7 @@ use Illuminate\Support\Facades\View;
 
 class AmControllerWeb extends BaseFrontendController
 {
+    // Version Info
     public function __construct()
     {
         $fresnsVersion = ApiConfigHelper::getConfigByItemKey('fresns_version');
@@ -54,6 +55,7 @@ class AmControllerWeb extends BaseFrontendController
         request()->offsetSet('is_control_api', 1);
     }
 
+    // Login Page
     public function index()
     {
         $lang = request()->input('lang', 'zh-Hans');
@@ -67,6 +69,7 @@ class AmControllerWeb extends BaseFrontendController
         return view('fresns.index', $data);
     }
 
+    // After Login Status Expires
     public function loginIndex()
     {
         $lang = request()->input('lang', 'zh-Hans');
@@ -77,6 +80,7 @@ class AmControllerWeb extends BaseFrontendController
         return view('fresns.login', $data);
     }
 
+    // Login Request
     public function loginAcc(Request $request)
     {
         $account = $request->input('account');
@@ -103,7 +107,7 @@ class AmControllerWeb extends BaseFrontendController
         }
 
         $user = User::find($user['id']);
-        // dd($user);
+
         Auth::login($user);
 
         $lang = $request->input('lang', 'zh-Hans');
@@ -117,6 +121,7 @@ class AmControllerWeb extends BaseFrontendController
         return redirect('/fresns/dashboard');
     }
 
+    // Check Login
     public function checkLogin(Request $request)
     {
         $account = $request->input('account');
@@ -125,7 +130,7 @@ class AmControllerWeb extends BaseFrontendController
         $password = base64_decode($password, true);
 
         $user = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->where('phone', $account)->first();
-        // dd($user);
+
         if (empty($user)) {
             $user = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->where('email', $account)->first();
         }
@@ -144,8 +149,8 @@ class AmControllerWeb extends BaseFrontendController
             FresnsSessionLogs::where('id', $sessionLogId)->update($sessionInput);
         }
 
-        //查询该邮箱或手机号所属用户，近 1 小时内登录密码错误次数，达到 5 次，则限制登录。
-        //session_logs 3-登陆 情况
+        // If the number of times of wrong login password in the past 1 hour reaches 5, the login will be restricted.
+        // session_logs = 3
         $startTime = date('Y-m-d H:i:s', strtotime('-1 hour'));
         $sessionCount = FresnsSessionLogs::where('created_at', '>=', $startTime)
         ->where('user_id', $user->id)
@@ -164,7 +169,7 @@ class AmControllerWeb extends BaseFrontendController
         ];
 
         $result = $this->attemptLogin($credentials);
-        // dd($result);
+
         if ($result == false) {
             FresnsSessionLogsService::updateSessionLogs($sessionLogId, 1);
             $this->error(ErrorCodeService::CODE_LOGIN_ERROR);
@@ -175,7 +180,7 @@ class AmControllerWeb extends BaseFrontendController
         return $this->success();
     }
 
-    // 退出
+    // Logout
     public function login_out(Request $request)
     {
         $userId = Auth::id();
@@ -190,7 +195,7 @@ class AmControllerWeb extends BaseFrontendController
         return redirect("$adminPath");
     }
 
-    //设置多语言
+    // Setting Language
     public function setLanguage(Request $request)
     {
         $lang = $request->input('lang', 'zh-Hans');
@@ -201,6 +206,94 @@ class AmControllerWeb extends BaseFrontendController
         $this->success();
     }
 
+    // Dashboard Page
+    public function dashboard(Request $request)
+    {
+        $userId = Auth::id();
+        $langTag = Cache::get('lang_tag_'.$userId);
+        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
+        $request->offsetSet('type', AmConfig::PLUGIN_TYPE2);
+        $pluginList = $FresnsPluginsService->searchData();
+        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
+        $newVision = [];
+        if ($pluginArr) {
+            foreach ($pluginArr as $key => $p) {
+                if ($key == 5) {
+                    break;
+                }
+                $arr = [];
+                if ($p['isDownload'] == 1 && $p['isNewVision'] == 1) {
+                    $arr = $p;
+                    $newVision[] = $arr;
+                }
+            }
+        }
+
+        // Overview
+        $userCount = FresnsUsers::count();
+        $memberCount = FresnsMembers::count();
+        $groupCount = FresnsGroups::count();
+        $hashtagCount = FresnsHashtags::count();
+        $postCount = FresnsPosts::count();
+        $commentCount = FresnsComments::count();
+
+        // Extensions
+        $plugin1 = FresnsPlugins::where('type', 1)->count();
+        $plugin2 = FresnsPlugins::where('type', 2)->count();
+        $plugin3 = FresnsPlugins::where('type', 3)->count();
+        $plugin4 = FresnsPlugins::where('type', 4)->count();
+        $plugin5 = FresnsPlugins::where('type', 5)->count();
+        $keysCount = FresnsSessionKeys::count();
+
+        $total['user_count'] = $userCount;
+        $total['member_count'] = $memberCount;
+        $total['group_count'] = $groupCount;
+        $total['hashtag_count'] = $hashtagCount;
+        $total['post_count'] = $postCount;
+        $total['comment_count'] = $commentCount;
+        $total['plugin_1'] = $plugin1;
+        $total['plugin_2'] = $plugin2;
+        $total['plugin_3'] = $plugin3;
+        $total['plugin_4'] = $plugin4;
+        $total['plugin_5'] = $plugin5;
+        $total['keys_count'] = $keysCount;
+
+        // Fresns Events and News
+        $url = AmConfig::NOTICE_URL;
+
+        $userId = Auth::id();
+
+        App::setLocale($langTag);
+
+        $json = HttpHelper::curlRequest($url);
+        $noticeArr = [];
+        if (! empty($json)) {
+            $jsonArr = json_decode($json, true);
+            if (! empty($jsonArr)) {
+                foreach ($jsonArr as $v) {
+                    if ($v['langTag'] == $langTag) {
+                        $noticeArr[] = $v['content'];
+                        break;
+                    }
+                }
+            }
+        }
+
+        $data = [
+            'lang' => $langTag,
+            'location' => 'dashboard',
+            'choose' => 'dashboard',
+            'newVisionPlugin' => $newVision,
+            'title' => 'Dashboard',
+            'total' => $total,
+            'notice_arr' => $noticeArr,
+            'lang_desc' => AmService::getLanguage($langTag),
+        ];
+
+        return view('fresns.dashboard', $data);
+    }
+
+    // Settings Page
     public function settings()
     {
         $userArr = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->get([
@@ -252,6 +345,7 @@ class AmControllerWeb extends BaseFrontendController
         return view('fresns.settings', $data);
     }
 
+    // Settings Page: Fresns Console
     public function updateSetting(Request $request)
     {
         $backend_url = $request->input('backend_url');
@@ -313,13 +407,9 @@ class AmControllerWeb extends BaseFrontendController
         return $this->success();
     }
 
+    // Settings Page: System Administrator (add admin)
     public function addAdmin(Request $request)
     {
-        // 校验参数
-        // $rule = [
-        //     'account' => 'required',
-        // ];
-        // ValidateService::validateRule($request, $rule);
         $account = $request->input('account');
         if (empty($account)) {
             $this->error(ErrorCodeService::ACCOUNT_ERROR);
@@ -339,6 +429,7 @@ class AmControllerWeb extends BaseFrontendController
         $this->success();
     }
 
+    // Settings Page: System Administrator (delete admin)
     public function delAdmin(Request $request)
     {
         $uuid = $request->input('uuid');
@@ -351,183 +442,7 @@ class AmControllerWeb extends BaseFrontendController
         $this->success();
     }
 
-    public function admins(Request $request)
-    {
-        $current = $request->input('page', 1);
-        $pageSize = $request->input('pageSize', 50);
-        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGIN_TYPE4);
-        $request->offsetSet('currentPage', $current);
-        $request->offsetSet('pageSize', $pageSize);
-        $pluginList = $FresnsPluginsService->searchData();
-        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
-
-        $userId = Auth::id();
-        $lang = Cache::get('lang_tag_'.$userId);
-
-        App::setLocale($lang);
-        // dd($pluginList);
-        // 类型为控制面板的插件
-        // $pluginList = FresnsPlugin::where('type',AmConfig::PLUGIN_TYPE4)->get();
-        $data = [
-            'lang' => $lang,
-            'choose' => 'admins',
-            'location' => $pluginArr,
-            'title' => 'Admins',
-            'lang_desc' => AmService::getLanguage($lang),
-
-        ];
-
-        return view('fresns.admins', $data);
-    }
-
-    public function apps(Request $request)
-    {
-        // 类型为控制面板的插件
-        $current = $request->input('page', 1);
-        $pageSize = $request->input('pageSize', 50);
-        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGIN_TYPE3);
-        $request->offsetSet('currentPage', $current);
-        $request->offsetSet('pageSize', $pageSize);
-        $pluginList = $FresnsPluginsService->searchData();
-        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
-        // $pluginList = FresnsPlugin::where('type',AmConfig::PLUGIN_TYPE3)->get();
-        // dd($pluginArr);
-
-        $userId = Auth::id();
-        $lang = Cache::get('lang_tag_'.$userId);
-
-        App::setLocale($lang);
-        $data = [
-            'lang' => $lang,
-            'choose' => 'apps',
-            'location' => $pluginArr,
-            'title' => 'Apps',
-            'lang_desc' => AmService::getLanguage($lang),
-
-        ];
-
-        return view('fresns.apps', $data);
-    }
-
-    public function dashboard(Request $request)
-    {
-        $userId = Auth::id();
-        $langTag = Cache::get('lang_tag_'.$userId);
-        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGIN_TYPE2);
-        $pluginList = $FresnsPluginsService->searchData();
-        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
-        // dd($pluginArr);
-        $newVision = [];
-        if ($pluginArr) {
-            foreach ($pluginArr as $key => $p) {
-                if ($key == 5) {
-                    break;
-                }
-                $arr = [];
-                if ($p['isDownload'] == 1 && $p['isNewVision'] == 1) {
-                    $arr = $p;
-                    $newVision[] = $arr;
-                }
-            }
-        }
-        // dd($newVision);
-        //账号总数
-        $memberCount = FresnsMembers::count();
-        //用户总数
-        $userCount = FresnsUsers::count();
-        //小组总数
-        $groupCount = FresnsGroups::count();
-        //话题总数
-        $hashtagCount = FresnsHashtags::count();
-        //帖子总数
-        $postCount = FresnsPosts::count();
-        //评论总数
-        $commentCount = FresnsComments::count();
-        //控制面板
-        $plugin5 = FresnsPlugins::where('type', 5)->count();
-        //网站主题
-        $plugin4 = FresnsPlugins::where('type', 4)->count();
-        //移动应用
-        $plugin3 = FresnsPlugins::where('type', 3)->count();
-        //扩展插件
-        $plugin2 = FresnsPlugins::where('type', 2)->count();
-        $plugin1 = FresnsPlugins::where('type', 1)->count();
-        $keysCount = FresnsSessionKeys::count();
-
-        $total['member_count'] = $memberCount;
-        $total['user_count'] = $userCount;
-        $total['group_count'] = $groupCount;
-        $total['hashtag_count'] = $hashtagCount;
-        $total['post_count'] = $postCount;
-        $total['comment_count'] = $commentCount;
-        $total['keys_count'] = $keysCount;
-        $total['plugin_5'] = $plugin5;
-        $total['plugin_4'] = $plugin4;
-        $total['plugin_3'] = $plugin3;
-        $total['plugin_2'] = $plugin2;
-        $total['plugin_1'] = $plugin1;
-        // dd($newVision);
-
-        //动态获取通知
-        $url = AmConfig::NOTICE_URL;
-
-        $userId = Auth::id();
-
-        App::setLocale($langTag);
-
-        $json = HttpHelper::curlRequest($url);
-        $noticeArr = [];
-        if (! empty($json)) {
-            $jsonArr = json_decode($json, true);
-            if (! empty($jsonArr)) {
-                foreach ($jsonArr as $v) {
-                    if ($v['langTag'] == $langTag) {
-                        $noticeArr[] = $v['content'];
-                        break;
-                    }
-                }
-            }
-        }
-
-        // dd($newVision);
-
-        $data = [
-            'lang' => $langTag,
-            'location' => 'dashboard',
-            'choose' => 'dashboard',
-            'newVisionPlugin' => $newVision,
-            'title' => 'Dashboard',
-            'total' => $total,
-            'notice_arr' => $noticeArr,
-            'lang_desc' => AmService::getLanguage($langTag),
-
-        ];
-
-        return view('fresns.dashboard', $data);
-    }
-
-    public function iframe(Request $request)
-    {
-        $url = $request->input('url');
-        $userId = Auth::id();
-        $lang = Cache::get('lang_tag_'.$userId);
-
-        App::setLocale($lang);
-        $data = [
-            'lang' => $lang,
-            'choose' => 'iframe',
-            'location' => $url,
-            'title' => 'Setting',
-            'lang_desc' => AmService::getLanguage($lang),
-
-        ];
-
-        return view('fresns.iframe', $data);
-    }
-
+    // Keys Page
     public function keys(Request $request)
     {
         $current = $request->input('page', 1);
@@ -536,31 +451,15 @@ class AmControllerWeb extends BaseFrontendController
         $request->offsetSet('pageSize', $pageSize);
         $FresnsSessionKeysService = new FresnsSessionKeysService();
         $keyLists = $FresnsSessionKeysService->searchData();
+
         $pluginArr = KeysResource::collection($keyLists['list'])->toArray($keyLists['list']);
-        // 获取密钥数据
         $clientData = FresnsSessionKeys::getByStaticWithCond()->toArray();
         $platforms = FresnsConfigs::where('item_key', 'platforms')->first(['item_value']);
-        // // 平台配置数据
         $platforms = json_decode($platforms['item_value'], true);
-        // // 插件数据
         $cond = [
             ['type', '!=', 5],
         ];
         $plugin = FresnsPlugins::getByStaticWithCond($cond)->toArray();
-        // // dd($platforms);
-        // // 平台编号名称
-        // if($clientData){
-        //     foreach($clientData as &$c){
-        //         $c['platformName'] = "";
-        //         foreach($platforms as $p){
-        //             if($c['platform_id'] == $p['id']){
-        //                 $c['platformName'] = $p['name'];
-        //             }
-        //         }
-        //         $c['typeName'] = $c['type'] == 1 ? "主程API" : "插件API";
-        //     }
-        // }
-        // dd($pluginArr);
 
         $userId = Auth::id();
         $lang = Cache::get('lang_tag_'.$userId);
@@ -576,68 +475,125 @@ class AmControllerWeb extends BaseFrontendController
             'plugin' => $plugin,
             'title' => 'Keys',
             'lang_desc' => AmService::getLanguage($lang),
-
         ];
 
         return view('fresns.keys', $data);
     }
 
-    public function plugins(Request $request)
+    // Keys Page: add key
+    public function submitKey(Request $request)
+    {
+        $platformId = $request->input('platformId');
+        $keyName = $request->input('keyName');
+        $type = $request->input('type');
+        $plugin = $type == 2 ? $request->input('plugin') : null;
+        $app_id = strtolower('tw'.StrHelper::randString(14));
+        $app_secret = strtolower(StrHelper::randString(32));
+        $enAbleStatus = $request->input('enAbleStatus');
+        if (! $keyName) {
+            $this->error(ErrorCodeService::KEYS_NAME_ERROR);
+        }
+        if ($platformId == 'Select a key application platform') {
+            $this->error(ErrorCodeService::KEYS_PLAT_ERROR);
+        }
+        if ($type == 2) {
+            if (! $plugin || $plugin == 'Select which plugin to use the key for') {
+                $this->error(ErrorCodeService::PLUGIN_PLAT_ERROR);
+            }
+        }
+        $input = [
+            'platform_id' => $platformId,
+            'name' => $keyName,
+            'type' => $type,
+            'plugin_unikey' => $plugin,
+            'app_id' => $app_id,
+            'app_secret' => $app_secret,
+            'is_enable' => $enAbleStatus,
+        ];
+        (new FresnsSessionKeys())->store($input);
+        $this->success();
+    }
+
+    // Keys Page: reset key
+    public function resetKey(Request $request)
+    {
+        $id = $request->input('data_id');
+        $app_secret = strtolower(StrHelper::randString(32));
+        FresnsSessionKeys::where('id', $id)->update(['app_secret' => $app_secret]);
+        $this->success();
+    }
+
+    // Keys Page: edit key
+    public function updateKey(Request $request)
+    {
+        $id = $request->input('id');
+        $platformId = $request->input('platformId');
+        $keyName = $request->input('keyName');
+        $type = $request->input('type');
+        $plugin = ($type == 2) ? $request->input('plugin') : null;
+        $enAbleStatus = $request->input('enAbleStatus');
+        if (! $keyName) {
+            $this->error(ErrorCodeService::KEYS_NAME_ERROR);
+        }
+        if ($platformId == 'Select a key application platform') {
+            $this->error(ErrorCodeService::KEYS_PLAT_ERROR);
+        }
+        if ($type == 2) {
+            if (! $plugin || $plugin == 'Select which plugin to use the key for') {
+                $this->error(ErrorCodeService::PLUGIN_PLAT_ERROR);
+            }
+        }
+        $input = [
+            'platform_id' => $platformId,
+            'name' => $keyName,
+            'type' => $type,
+            'plugin_unikey' => $plugin,
+            'is_enable' => $enAbleStatus,
+        ];
+        FresnsSessionKeys::where('id', $id)->update($input);
+        $this->success();
+    }
+
+    // Keys Page: delete key
+    public function delKey(Request $request)
+    {
+        $id = $request->input('data_id');
+        FresnsSessionKeys::where('id', $id)->delete();
+        $this->success();
+    }
+
+    // Admins Page (Control Panel)
+    public function admins(Request $request)
     {
         $current = $request->input('page', 1);
-        $pageSize = $request->input('pageSize', 20);
+        $pageSize = $request->input('pageSize', 50);
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGIN_TYPE2);
+        $request->offsetSet('type', AmConfig::PLUGIN_TYPE4);
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
         $pluginList = $FresnsPluginsService->searchData();
-        // dd($pluginList);
-        $enableCount = 0;
-        $unEnableCount = 0;
         $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
-        // dd($pluginArr);
-        foreach ($pluginArr as $p) {
-            if ($p['is_enable'] == 0) {
-                $unEnableCount++;
-            }
-            if ($p['is_enable'] == 1) {
-                $enableCount++;
-            }
-        }
-        // dd($pluginArr);
-        //页面总数
-        $pagination = $pluginList['pagination'];
-        if ($pagination['total'] != 0) {
-            $totalPage = (int) ceil($pagination['total'] / $pageSize);
-        } else {
-            $totalPage = 1;
-        }
 
         $userId = Auth::id();
         $lang = Cache::get('lang_tag_'.$userId);
 
         App::setLocale($lang);
-        // dd($totalPage);
+
         $data = [
             'lang' => $lang,
+            'choose' => 'admins',
             'location' => $pluginArr,
-            'unEnableCount' => $unEnableCount,
-            'enableCount' => $enableCount,
-            'data' => $pluginList,
-            'page' => $current,
-            'title' => 'Plugins',
-            'choose' => 'plugins',
-            'totalPage' => $totalPage,
+            'title' => 'Admins',
             'lang_desc' => AmService::getLanguage($lang),
 
         ];
 
-        return view('fresns.plugins', $data);
+        return view('fresns.admins', $data);
     }
 
+    // Websites Page
     public function websites(Request $request)
     {
-        // 插件表类型为网站引擎
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 50);
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
@@ -660,8 +616,7 @@ class AmControllerWeb extends BaseFrontendController
         $lang = Cache::get('lang_tag_'.$userId);
 
         App::setLocale($lang);
-        // dump($websitePluginArr);
-        // dd($subjectPluginArr);
+
         $data = [
             'lang' => $lang,
             'location' => 'index',
@@ -670,116 +625,123 @@ class AmControllerWeb extends BaseFrontendController
             'subjectPluginArr' => $subjectPluginArr,
             'title' => 'Websites',
             'lang_desc' => AmService::getLanguage($lang),
-
         ];
 
         return view('fresns.websites', $data);
     }
 
-    // 重置密钥
-    public function resetKey(Request $request)
+    // Apps Page(App Client Companion Plugin)
+    public function apps(Request $request)
     {
-        $id = $request->input('data_id');
-        $app_secret = strtolower(StrHelper::randString(32));
-        FresnsSessionKeys::where('id', $id)->update(['app_secret' => $app_secret]);
-        $this->success();
+        $current = $request->input('page', 1);
+        $pageSize = $request->input('pageSize', 50);
+        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
+        $request->offsetSet('type', AmConfig::PLUGIN_TYPE3);
+        $request->offsetSet('currentPage', $current);
+        $request->offsetSet('pageSize', $pageSize);
+        $pluginList = $FresnsPluginsService->searchData();
+        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
+
+        $userId = Auth::id();
+        $lang = Cache::get('lang_tag_'.$userId);
+
+        App::setLocale($lang);
+        $data = [
+            'lang' => $lang,
+            'choose' => 'apps',
+            'location' => $pluginArr,
+            'title' => 'Apps',
+            'lang_desc' => AmService::getLanguage($lang),
+        ];
+
+        return view('fresns.apps', $data);
     }
 
-    // 新增密钥
-    public function submitKey(Request $request)
+    // Plugins Page
+    public function plugins(Request $request)
     {
-        $platformId = $request->input('platformId');
-        $keyName = $request->input('keyName');
-        $type = $request->input('type');
-        $plugin = $type == 2 ? $request->input('plugin') : null;
-        $app_id = strtolower('tw'.StrHelper::randString(14));
-        $app_secret = strtolower(StrHelper::randString(32));
-        $enAbleStatus = $request->input('enAbleStatus');
-        if (! $keyName) {
-            $this->error(ErrorCodeService::KEYS_NAME_ERROR);
-        }
-        if ($platformId == '选择密钥应用平台') {
-            $this->error(ErrorCodeService::KEYS_PLAT_ERROR);
-        }
-        if ($type == 2) {
-            if (! $plugin || $plugin == '选择密钥用于哪个插件') {
-                $this->error(ErrorCodeService::PLUGIN_PLAT_ERROR);
+        $current = $request->input('page', 1);
+        $pageSize = $request->input('pageSize', 20);
+        $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
+        $request->offsetSet('type', AmConfig::PLUGIN_TYPE2);
+        $request->offsetSet('currentPage', $current);
+        $request->offsetSet('pageSize', $pageSize);
+        $pluginList = $FresnsPluginsService->searchData();
+
+        $enableCount = 0;
+        $unEnableCount = 0;
+        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
+
+        foreach ($pluginArr as $p) {
+            if ($p['is_enable'] == 0) {
+                $unEnableCount++;
+            }
+            if ($p['is_enable'] == 1) {
+                $enableCount++;
             }
         }
-        $input = [
-            'platform_id' => $platformId,
-            'name' => $keyName,
-            'type' => $type,
-            'plugin_unikey' => $plugin,
-            'app_id' => $app_id,
-            'app_secret' => $app_secret,
-            'is_enable' => $enAbleStatus,
+
+        // Pagination
+        $pagination = $pluginList['pagination'];
+        if ($pagination['total'] != 0) {
+            $totalPage = (int) ceil($pagination['total'] / $pageSize);
+        } else {
+            $totalPage = 1;
+        }
+
+        $userId = Auth::id();
+        $lang = Cache::get('lang_tag_'.$userId);
+
+        App::setLocale($lang);
+
+        $data = [
+            'lang' => $lang,
+            'location' => $pluginArr,
+            'unEnableCount' => $unEnableCount,
+            'enableCount' => $enableCount,
+            'data' => $pluginList,
+            'page' => $current,
+            'title' => 'Plugins',
+            'choose' => 'plugins',
+            'totalPage' => $totalPage,
+            'lang_desc' => AmService::getLanguage($lang),
         ];
-        (new FresnsSessionKeys())->store($input);
-        $this->success();
+
+        return view('fresns.plugins', $data);
     }
 
-    // 编辑密钥
-    public function updateKey(Request $request)
+    // Extensions Settings Page Iframe
+    public function iframe(Request $request)
     {
-        $id = $request->input('id');
-        $platformId = $request->input('platformId');
-        $keyName = $request->input('keyName');
-        $type = $request->input('type');
-        $plugin = ($type == 2) ? $request->input('plugin') : null;
-        $enAbleStatus = $request->input('enAbleStatus');
-        if (! $keyName) {
-            $this->error(ErrorCodeService::KEYS_NAME_ERROR);
-        }
-        if ($platformId == '选择密钥应用平台') {
-            $this->error(ErrorCodeService::KEYS_PLAT_ERROR);
-        }
-        if ($type == 2) {
-            if (! $plugin || $plugin == '选择密钥用于哪个插件') {
-                $this->error(ErrorCodeService::PLUGIN_PLAT_ERROR);
-            }
-        }
-        // dd($plugin);
-        $input = [
-            'platform_id' => $platformId,
-            'name' => $keyName,
-            'type' => $type,
-            'plugin_unikey' => $plugin,
-            'is_enable' => $enAbleStatus,
+        $url = $request->input('url');
+        $userId = Auth::id();
+        $lang = Cache::get('lang_tag_'.$userId);
+
+        App::setLocale($lang);
+        $data = [
+            'lang' => $lang,
+            'choose' => 'iframe',
+            'location' => $url,
+            'title' => 'Setting',
+            'lang_desc' => AmService::getLanguage($lang),
         ];
-        FresnsSessionKeys::where('id', $id)->update($input);
-        $this->success();
+
+        return view('fresns.iframe', $data);
     }
 
-    // 启用禁用
-    public function enableStatus(Request $request)
-    {
-        $id = $request->input('data_id');
-        $is_enable = $request->input('is_enable');
-        FresnsSessionKeys::where('id', $id)->update(['is_enable' => $is_enable]);
-        $this->success();
-    }
-
-    // 删除
-    public function delKey(Request $request)
-    {
-        $id = $request->input('data_id');
-        FresnsSessionKeys::where('id', $id)->delete();
-        $this->success();
-    }
-
-    // 卸载插件
+    // Uninstall Extensions
     public function uninstall(Request $request)
     {
-        // 主要是让插件去判断是否清除数据的，目前只需要传到后端即可 1 删除数据 删除文件 0 代表不删除，保留数据仅卸载插件文件
+        // Provide parameters for whether data should be deleted when the plugin is uninstalled
+        // clear_plugin_data = 1 // Delete files and data
+        // clear_plugin_data = 0 // Delete files only
         $clear_plugin_data = $request->input('clear_plugin_data');
+
         $uniKey = $request->input('unikey');
-        // 插件配置
         $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
-        // dd($pluginConfig);
+
         $type = $pluginConfig->type;
         if ($type == PluginConst::PLUGIN_TYPE_THEME) {
-            // todo
             $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
             if (! $plugin) {
                 $this->error(ErrorCodeService::PLUGIN_UNIKEY_ERROR);
@@ -788,14 +750,14 @@ class AmControllerWeb extends BaseFrontendController
                 $this->error(ErrorCodeService::PLUGIN_ENABLE_ERROR);
             }
             $info = PluginHelper::uninstallByUniKey($uniKey);
-            // $info = $installer->uninstall();
+
             InstallHelper::freshSystem();
-            // 删除插件数据
+            // Delete Extensions Data
             // FresnsPlugin::where('unikey', $uniKey)->delete();
             DB::table('plugins')->where('unikey', $uniKey)->delete();
             $this->success($info);
         } else {
-            // 获取安装类
+            // Get Install Class
             $installer = InstallHelper::findInstaller($uniKey);
             if (empty($installer)) {
                 $this->error(ErrorCodeService::NO_RECORD);
@@ -811,13 +773,13 @@ class AmControllerWeb extends BaseFrontendController
         }
         $info = $installer->uninstall();
         InstallHelper::freshSystem();
-        // 删除插件数据
+        // Delete Extensions Data
         // FresnsPlugin::where('unikey', $uniKey)->delete();
         DB::table('plugins')->where('unikey', $uniKey)->delete();
         $this->success($info);
     }
 
-    // 安装插件
+    // Install Extensions
     public function install(Request $request)
     {
         $unikey = $request->input('unikey');
@@ -832,20 +794,17 @@ class AmControllerWeb extends BaseFrontendController
         if (! file_exists($downloadFileName)) {
             $this->error(ErrorCodeService::FILES_ERROR);
         }
-        // dd($jsonArr);
+
         $options = [];
         $installFileInfo = InstallHelper::installLocalPluginFile($jsonArr['uniKey'], $unikey, $downloadFileName,
             $options);
         $info = [];
         $info['downloadFileName'] = $downloadFileName;
         $info['installFileInfo'] = $installFileInfo;
-        // dd($info);
-        // 2. 执行插件本身的安装函数
+
+        // Execute the installation function of the plugin itself
         $installer = InstallHelper::findInstaller($unikey);
-        // dd($info);
-        // 2. 执行插件本身的安装函数
-        $installer = InstallHelper::findInstaller($unikey);
-        // dd($installer);
+
         if (empty($installer)) {
             $this->error(ErrorCodeService::NO_RECORD);
         }
@@ -853,44 +812,43 @@ class AmControllerWeb extends BaseFrontendController
         $installInfo = $installer->install();
         $info['installInfo'] = $installInfo;
 
-        // 3. 模版和前端文件的安装
+        // Install of templates and front-end files
         InstallHelper::pushPluginResourcesFiles($unikey);
 
         $this->success($info);
     }
 
-    // 本地安装, 直接覆盖，无升级操作
+    // Local installation, direct override
     public function localInstall(Request $request)
     {
         $dirName = $request->input('dirName');
         if (empty($dirName)) {
             $this->error(ErrorCodeService::FILES_EMPTY_ERROR);
         }
-        // dd($dirName);
+
         $downloadFileName = InstallHelper::getPluginExtensionPath($dirName);
         if (! file_exists($downloadFileName)) {
             $this->error(ErrorCodeService::FILES_ERROR);
         }
 
-        // todo 检查一下文件信息是否全
+        // 1. Check if the file information is secure
 
-        // 第一步：本地安装插件, 先将文件全量 copy 到 app/Plugins 下
+        // 2. Full copy of the file to app/Plugins
         $uniKey = $dirName;
         $options = [];
         $installFileInfo = InstallHelper::installLocalPluginFile($uniKey, $dirName, $downloadFileName, $options);
         $info = [];
         $info['downloadFileName'] = $downloadFileName;
         $info['installFileInfo'] = $installFileInfo;
-        // dd($info);
 
-        // 1. 分发文件
+        // 3. Distribution of documents
         InstallHelper::pushPluginResourcesFiles($uniKey);
 
-        // 插件配置
+        // 4. Plugin Configuration
         $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
         $type = $pluginConfig->type;
 
-        // 2. 执行插件本身的安装函数, 主题模版不需要执行该步骤
+        // 5. Execute the installation function of the plugin itself (the theme template does not need to perform this step)
         if ($type != PluginConst::PLUGIN_TYPE_THEME) {
             $installer = InstallHelper::findInstaller($uniKey);
             if (empty($installer)) {
@@ -903,9 +861,6 @@ class AmControllerWeb extends BaseFrontendController
 
         LogService::info('install info : ', $info);
 
-        // 插件入库
-
-        // dd($type);
         $image = PluginHelper::getPluginImageUrl($pluginConfig);
 
         $scene = $pluginConfig->sceneArr;
@@ -924,24 +879,15 @@ class AmControllerWeb extends BaseFrontendController
             'setting_path' => $pluginConfig->settingPath,
         ];
         $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
-        // dump($plugin);
         if (empty($plugin)) {
-            // dump($input);
             $res = (new FresnsPlugins())->store($input);
-        // dd($res);
         } else {
             FresnsPlugins::where('unikey', $uniKey)->update($input);
         }
         $this->success($info);
     }
 
-    // 更新插件
-    public function uploadPlugin(Request $request)
-    {
-        $dowmLoadUrl = 'https://apps.fresns.cn/releases/fresns.zip';
-    }
-
-    // 插件启用禁用
+    // Extensions Enabled or Disabled
     public function enableUnikeyStatus(Request $request)
     {
         $id = $request->input('data_id');
@@ -950,7 +896,7 @@ class AmControllerWeb extends BaseFrontendController
         $this->success();
     }
 
-    // 引擎关联主题模板
+    // Engine Associated Theme Template
     public function websiteLinkSubject(Request $request)
     {
         $websiteUnikey = $request->input('websiteUnikey');
@@ -966,7 +912,6 @@ class AmControllerWeb extends BaseFrontendController
                     'item_tag' => 'themes',
                     'item_value' => $subjectUnikeyPc,
                     'item_type' => 'plugin',
-
                 ];
                 FresnsConfigs::insert($input);
             }
@@ -991,27 +936,5 @@ class AmControllerWeb extends BaseFrontendController
             FresnsConfigs::where('item_key', $websiteUnikey.'_Mobile')->delete();
         }
         $this->success();
-    }
-
-    public function getPostPage(Request $request)
-    {
-        $current = $request->input('page', 1);
-        $pageSize = $request->input('pageSize', 10);
-        $request->offsetSet('currentPage', $current);
-        $request->offsetSet('pageSize', $pageSize);
-        // request()->offsetSet('pageSize',5);
-
-        $cmsPostService = new FresnsSessionKeysService();
-        $data = $cmsPostService->searchData();
-        $postArr = KeysResource::collection($data['list'])->toArray($data['list']);
-
-        $post['list_arr'] = $postArr;
-        $bladeData = $this->ajaxBlade('keys', $post);
-
-        $data = [
-            'bladeData' => $bladeData,
-        ];
-
-        $this->success($data);
     }
 }

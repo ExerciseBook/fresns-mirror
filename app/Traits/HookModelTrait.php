@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Fresns
  * Copyright (C) 2021-Present 唐杰
@@ -7,7 +8,6 @@
 
 namespace App\Traits;
 
-// 模版设置
 use App\Helpers\CommonHelper;
 use Illuminate\Support\Facades\Route;
 
@@ -20,32 +20,32 @@ trait HookModelTrait
         $this->model = $m;
     }
 
-    // 钩子函数: 初始化数据库
+    // Hook functions: Initializing the database
     public function hookConnectionInit()
     {
         return true;
     }
 
-    // 钩子函数: 模型初始化
+    // Hook functions: Model initialization
     public function hookModelInit()
     {
         return true;
     }
 
-    // 钩子函数: 模型附加表条件初始化
-    // 场景： 附表搜索条件
+    // Hook functions: Model additional table condition initialization
+    // Scenario: Schedule search criteria
     public function hookModelInitAppend()
     {
         return true;
     }
 
-    // 钩子函数: 模型创建完成之后
+    // Hook functions: After the model has been created
     public function hookStoreAfter($id)
     {
         return $id;
     }
 
-    // 钩子函数: 批量删除之前
+    // Hook functions: Before Batch Delete
     public function hookDestroyBefore($idArr)
     {
         foreach ($idArr as $id) {
@@ -55,7 +55,7 @@ trait HookModelTrait
         return $idArr;
     }
 
-    // 钩子函数: 单个删除之前
+    // Hook functions: Before individual deletion
     public function hookDestroyItemBefore($id)
     {
         return $id;

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Fresns
  * Copyright (C) 2021-Present 唐杰
@@ -7,19 +8,18 @@
 
 namespace App\Traits;
 
-// 模版设置
 use App\Helpers\CommonHelper;
 use Illuminate\Support\Facades\Route;
 
 trait HookServiceTrait
 {
-    // 钩子函数: service 初始化
+    // Hook functions: service (initializing)
     public function hookInit()
     {
         return true;
     }
 
-    // 钩子函数: tree service 列表之前， 初始化查询条件
+    // Hook functions: tree service (Before the list, initialize the query criteria)
     public function hookListTreeBefore()
     {
         return true;

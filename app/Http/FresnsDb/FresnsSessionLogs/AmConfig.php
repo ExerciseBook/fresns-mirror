@@ -32,7 +32,7 @@ class AmConfig extends BaseConfig
     ];
 
     const SESSION_OBJECT_TYPE_ARR = [
-        '未知' => 1,
+        'Unknown' => 1,
         '注册' => 2,
         '登录' => 3,
         '注销' => 4,

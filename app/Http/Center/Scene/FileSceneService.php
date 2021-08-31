@@ -14,18 +14,14 @@ use App\Helpers\FileHelper;
 use App\Http\Center\Common\LogService;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 
-/**
- * 文件上传
- * 处理文件上传.
- */
 class FileSceneService extends BaseService
 {
-    // 入库
+    // Insert
     public static function createFile()
     {
     }
 
-    // 获取文件存储路径
+    // Get the file storage path
     public static function getPath($options)
     {
         $t = time();
@@ -112,7 +108,7 @@ class FileSceneService extends BaseService
         }
 
         if (empty($suffixArr)) {
-            // 测试路径样例 /avatars/{YYYYMM}/{DD}
+            // Test Path /avatars/{YYYYMM}/{DD}
             $suffixArr = ['avatars', $ym, $day];
         }
 
@@ -122,20 +118,20 @@ class FileSceneService extends BaseService
         ];
         $realPath = implode(DIRECTORY_SEPARATOR, array_merge($basePathArr, $suffixArr));
 
-        // 创建目录
+        // Create a directory
         if (! FileHelper::assetDir($realPath)) {
-            LogService::error('创建目录失败:', $realPath);
+            LogService::error('Failed to create a directory:', $realPath);
 
             return false;
         }
 
-        // 拼接为
+        // Spliced as:
         array_unshift($suffixArr, 'public');
 
         return implode(DIRECTORY_SEPARATOR, $suffixArr);
     }
 
-    //前端编辑器文件上传
+    // Editor: file upload
     public static function getEditorPath($options)
     {
         $t = time();
@@ -222,7 +218,7 @@ class FileSceneService extends BaseService
         }
 
         if (empty($suffixArr)) {
-            // 测试路径样例 /avatars/{YYYYMM}/{DD}
+            // Test Path /avatars/{YYYYMM}/{DD}
             $suffixArr = ['avatars', $ym, $day];
         }
 
@@ -232,21 +228,21 @@ class FileSceneService extends BaseService
         ];
         $realPath = implode(DIRECTORY_SEPARATOR, array_merge($basePathArr, $suffixArr));
 
-        // 创建目录
+        // Create a directory
         if (! FileHelper::assetDir($realPath)) {
-            LogService::error('创建目录失败:', $realPath);
+            LogService::error('Failed to create a directory:', $realPath);
 
             return false;
         }
 
-        // 拼接为
+        // Spliced as:
         array_unshift($suffixArr, 'public');
 
         return implode(DIRECTORY_SEPARATOR, $suffixArr);
     }
 
-    // 获取存储服务商, 本地上传或者插件上传
-    // todo 根据后台配置判断
+    // Get storage provider (local upload or plugin upload)
+    // Determined by background configuration
     public static function getUploadProvider()
     {
         return FileSceneConfig::UPLOAD_PROVIDER_PLUGIN;

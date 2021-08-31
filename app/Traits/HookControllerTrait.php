@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Fresns
  * Copyright (C) 2021-Present 唐杰
@@ -7,31 +8,30 @@
 
 namespace App\Traits;
 
-// 模版设置
 use App\Helpers\CommonHelper;
 use Illuminate\Support\Facades\Route;
 
 trait HookControllerTrait
 {
-    // 钩子函数: store 验证之后, 如二次验证
+    // Hook functions: store after verification, such as secondary verification
     public function hookStoreValidateAfter()
     {
         return true;
     }
 
-    // 钩子函数: update 验证之后, 如二次验证
+    // Hook functions: update after verification, such as secondary verification
     public function hookUpdateValidateAfter()
     {
         return true;
     }
 
-    // 检查服务器返回
+    // Check the server returns
     public function checkServerResp($serverResp)
     {
         return true;
     }
 
-    // 格式化服务器返回
+    // Formatting server returns
     public function formatServerResp($serverResp)
     {
         $code = $serverResp['server_code'];

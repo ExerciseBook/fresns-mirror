@@ -42,7 +42,7 @@ class ValidateService
         (new self)->error(ErrorCodeService::CODE_PARAM_ERROR, $data);
     }
 
-    // 校验服务规则
+    // Rules for calibration services
     public static function validateServerRule($params, $rule)
     {
         self::$validator = \Validator::make($params, $rule);
@@ -61,7 +61,7 @@ class ValidateService
         ],
     ];
 
-    // 检查id是否存在表中
+    // Check if the id exists in the table
     public static function existInTable($idArr, $table)
     {
         if (! is_array($idArr)) {
@@ -78,7 +78,7 @@ class ValidateService
         return count($idArr) === $queryCount;
     }
 
-    // 检查id是否存在表中
+    // Check if the ids exists in the table
     public static function idsStrExistInTable($idStr, $table)
     {
         $idArr = explode(',', $idStr);
@@ -92,16 +92,16 @@ class ValidateService
         return count($idArr) === $queryCount;
     }
 
-    //  验证数组字段
+    //  Validate array fields
     public static function validParamExist($params, $checkParamsArr)
     {
         foreach ($checkParamsArr as $v) {
             if (! isset($params[$v]) || $params[$v] == '') {
-                LogService::error("参数校验失败 [$v] ", $params);
-                LogService::error('校验字段为: ', $checkParamsArr);
+                LogService::error("Parameter checksum failure [$v] ", $params);
+                LogService::error('The calibration field is: ', $checkParamsArr);
 
                 return false;
-//                (new self)->error(ErrorCodeService::CODE_EXCEPTION, $data);
+                // (new self)->error(ErrorCodeService::CODE_EXCEPTION, $data);
             }
         }
 

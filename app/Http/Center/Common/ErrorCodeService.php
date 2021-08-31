@@ -10,6 +10,8 @@ namespace App\Http\Center\Common;
 class ErrorCodeService
 {
     const CODE_OK = 0;
+
+    // API Status Code
     const HEADER_ERROR = 30000;
     const CODE_FAIL = 30001;
     const PASSWORD_INVALID = 30002;
@@ -176,7 +178,7 @@ class ErrorCodeService
     const DELETE_ADMIN = 30217;
     const LANGUAGE_SETTING_ERROR = 30218;
 
-    // 插件错误码
+    // Plugin Config Status Code
     const CONFIGS_SERVER_ERROR = 30300;
     const PLUGINS_CLASS_ERROR = 30301;
     const CAPTCHA_ERROR = 30302;

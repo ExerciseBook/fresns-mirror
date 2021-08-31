@@ -29,7 +29,6 @@
             <div class="card-body p-5">
                 <h3 class="card-title">Fresns {{$status}}</h3>
                 <p>{{$msg}}</p>
-                <!--.env APP_DEBUG=true-->
                 @if(env('APP_DEBUG') && true)
                 <div class="fs-9 mt-4 overflow-auto">
                     <table class="table table-hover">

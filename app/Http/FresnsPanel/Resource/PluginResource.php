@@ -19,53 +19,38 @@ class PluginResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // form 字段
+        // Form Column
         $formMap = FresnsPluginsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        // 插件是否下载
+        // Plugin download or not
         $pluginConfig = PluginHelper::findPluginConfigClass($this->unikey);
-        // dump($pluginConfig);
         $isDownload = FresnsPluginsConfig::NO_DOWNLOAD;
         if ($pluginConfig) {
             if ($pluginConfig->uniKey == $this->unikey) {
                 $isDownload = FresnsPluginsConfig::DOWNLOAD;
             }
         }
-        // 插件目录下的json文件
-        // dd($pluginConfig);
-        // 是否下载
-        // $isDownload = TweetPluginConfig::NO_DOWNLOAD;
-        // $isNewVision = TweetPluginConfig::NO_NEWVISION;
-        // // dd($localPlugin);
-        // if($doloadPlugin){
-        //     foreach($doloadPlugin as $d){
-        //         if($this->unikey == $d['uniKey']){
-        //             $isDownload = TweetPluginConfig::DOWNLOAD;
-        //         }
-        //     }
-
-        // }
-        // 是否有新版本
+        // Is there a new version
         $isNewVision = FresnsPluginsConfig::NO_NEWVISION;
         $websitePc = '';
         $websiteMobile = '';
         $websitePcPlugin = '';
         $websiteMobilePlugin = '';
-        // 网站引擎关联模板
+
+        // Website engine association template
         if ($this->type == 1) {
             $websitePc = ApiConfigHelper::getConfigByItemKey($this->unikey.'_Pc');
             $websitePcPlugin = TweetPlugin::where('unikey', $websitePc)->first();
             $websitePcPlugin = $websitePcPlugin['name'] ?? '';
-            // dd($websitePc);
             $websiteMobile = ApiConfigHelper::getConfigByItemKey($this->unikey.'_Mobile');
             $websiteMobilePlugin = TweetPlugin::where('unikey', $websiteMobile)->first();
             $websiteMobilePlugin = $websiteMobilePlugin['name'] ?? '';
         }
-        // dd($author);
-        // 默认字段
+        
+        // Default Column
         $default = [
             'key' => $this->id,
             'id' => $this->id,
@@ -77,17 +62,13 @@ class PluginResource extends BaseAdminResource
             'more_json_decode' => json_decode($this->more_json, true),
             'isDownload' => $isDownload,
             'isNewVision' => $isNewVision,
-            // 'newVisionInt' => $newVisionInt,
-            // 'newVision' => $newVision,
             'websitePc' => $websitePc,
             'websiteMobile' => $websiteMobile,
             'websitePcPlugin' => $websitePcPlugin ?? '',
             'websiteMobilePlugin' => $websiteMobilePlugin ?? '',
-            // 'downloadUrl' => $downloadUrl,
-            // 'author' => $author,
         ];
 
-        // 合并
+        // Merger
         $arr = array_merge($formMapFieldsArr, $default);
 
         return $arr;
