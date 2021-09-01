@@ -36,7 +36,7 @@ class AmModel extends BaseAdminModel
     {
         $orderByFields = [
             'latest_message_time' => 'DESC',
-            // 'updated_at'    => 'DESC',
+            // 'updated_at' => 'DESC',
         ];
 
         return $orderByFields;

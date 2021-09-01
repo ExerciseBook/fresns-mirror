@@ -300,7 +300,7 @@ class AmModel extends BaseAdminModel
             case 'view':
                 $orderByFields = [
                     'view_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -308,7 +308,7 @@ class AmModel extends BaseAdminModel
             case 'like':
                 $orderByFields = [
                     'like_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -316,7 +316,7 @@ class AmModel extends BaseAdminModel
             case 'follow':
                 $orderByFields = [
                     'follow_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -324,7 +324,7 @@ class AmModel extends BaseAdminModel
             case 'shield':
                 $orderByFields = [
                     'shield_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -332,7 +332,7 @@ class AmModel extends BaseAdminModel
             case 'post':
                 $orderByFields = [
                     'post_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -340,7 +340,7 @@ class AmModel extends BaseAdminModel
             case 'essence':
                 $orderByFields = [
                     'essence_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -348,7 +348,7 @@ class AmModel extends BaseAdminModel
             case 'time':
                 $orderByFields = [
                     'created_at' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -357,7 +357,7 @@ class AmModel extends BaseAdminModel
             default:
                 $orderByFields = [
                     'created_at' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;

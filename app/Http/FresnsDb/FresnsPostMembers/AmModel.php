@@ -38,7 +38,7 @@ class AmModel extends BaseAdminModel
         $sortWayType = $sortWay == 2 ? 'DESC' : 'ASC';
         $orderByFields = [
             'created_at' => $sortWayType,
-            // 'updated_at'    => 'DESC',
+            // 'updated_at' => 'DESC',
         ];
 
         return $orderByFields;

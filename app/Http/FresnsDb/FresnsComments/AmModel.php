@@ -265,7 +265,7 @@ class AmModel extends BaseCategoryModel
     {
         $orderByFields = [
             'created_at' => 'DESC',
-            // 'updated_at'    => 'DESC',
+            // 'updated_at' => 'DESC',
         ];
 
         return $orderByFields;

@@ -33,6 +33,5 @@ class AmConfig extends BaseConfig
     // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
-
     ];
 }

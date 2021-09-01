@@ -53,7 +53,7 @@ class AmModel extends BaseAdminModel
         $orderByFields = [
             // 'rank_num' => 'ASC',
             'id' => 'ASC',
-            // 'updated_at'    => 'DESC',
+            // 'updated_at' => 'DESC',
         ];
 
         return $orderByFields;

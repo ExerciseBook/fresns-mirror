@@ -106,7 +106,7 @@ class AmModel extends BaseCategoryModel
             case 'view':
                 $orderByFields = [
                     'view_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -114,7 +114,7 @@ class AmModel extends BaseCategoryModel
             case 'like':
                 $orderByFields = [
                     'like_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -122,7 +122,7 @@ class AmModel extends BaseCategoryModel
             case 'follow':
                 $orderByFields = [
                     'follow_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -130,7 +130,7 @@ class AmModel extends BaseCategoryModel
             case 'shield':
                 $orderByFields = [
                     'shield_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -138,7 +138,7 @@ class AmModel extends BaseCategoryModel
             case 'post':
                 $orderByFields = [
                     'post_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -146,7 +146,7 @@ class AmModel extends BaseCategoryModel
             case 'essence':
                 $orderByFields = [
                     'essence_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -154,7 +154,7 @@ class AmModel extends BaseCategoryModel
             case 'time':
                 $orderByFields = [
                     'created_at' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -163,7 +163,7 @@ class AmModel extends BaseCategoryModel
             default:
                 $orderByFields = [
                     'rank_num' => 'ASC',
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
