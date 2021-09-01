@@ -45,13 +45,12 @@ class ApiFileHelper
             $file['imageThumbUrl'] = '';
             $file['imageSquareUrl'] = '';
             $file['imageBigUrl'] = '';
-            // $img_setting = ApiConfigHelper::getConfigByKey(AmConfig::IMG_SETTING);
-            // dd($img_setting);
+            // 图片配置
             $imagesHost = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
             $imagesRatio = ApiConfigHelper::getConfigByItemKey('images_thumb_ratio');
             $imagesSquare = ApiConfigHelper::getConfigByItemKey('images_thumb_square');
             $imagesBig = ApiConfigHelper::getConfigByItemKey('images_thumb_big');
-            // 图片类型
+            // 图片属性
             if ($fileInfo['file_type'] == 1) {
                 $file['imageLong'] = $fileAppend['image_is_long'] ?? '';
                 $file['imageThumbUrl'] = $imagesHost.$fileInfo['file_path'].$imagesRatio;
@@ -83,11 +82,11 @@ class ApiFileHelper
             // 文档类型
             // $file['docPreviewUrl'] = "";
             // $file['docUrl'] = "";
-            $file_setting = ApiConfigHelper::getConfigByKey(AmConfig::FILE_SETTING);
+            $doc_setting = ApiConfigHelper::getConfigByKey(AmConfig::DOC_SETTING);
             // 文档专用
             if ($fileInfo['file_type'] == 4) {
-                $file['docPreviewUrl'] = $file_setting['docs_online_preview'].$file_setting['docs_bucket_domain'].$fileInfo['file_path'];
-                $file['docUrl'] = $file_setting['docs_bucket_domain'].$fileInfo['file_path'];
+                $file['docPreviewUrl'] = $doc_setting['docs_online_preview'].$doc_setting['docs_bucket_domain'].$fileInfo['file_path'];
+                $file['docUrl'] = $doc_setting['docs_bucket_domain'].$fileInfo['file_path'];
             }
 
             $file['moreJson'] = [];
@@ -145,14 +144,13 @@ class ApiFileHelper
                 $file['fileSize'] = $fileAppend['file_extension'] ?? '';
                 $file['imageWidth'] = $fileAppend['image_width'] ?? '';
                 $file['imageHeight'] = $fileAppend['image_height'] ?? '';
-                $img_setting = ApiConfigHelper::getConfigByKey(AmConfig::IMG_SETTING);
-                // dd($img_setting);
+                $image_setting = ApiConfigHelper::getConfigByKey(AmConfig::IMAGE_SETTING);
                 // 图片类型
                 if ($v['file_type'] == 1) {
                     $file['imageLong'] = $fileAppend['image_is_long'] ?? '';
-                    $file['imageThumbUrl'] = $img_setting['images_bucket_domain'].$v['file_path'].$img_setting['images_thumb_ratio'];
-                    $file['imageSquareUrl'] = $img_setting['images_bucket_domain'].$v['file_path'].$img_setting['images_thumb_square'];
-                    $file['imageBigUrl'] = $img_setting['images_bucket_domain'].$v['file_path'].$img_setting['images_thumb_big'];
+                    $file['imageThumbUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_ratio'];
+                    $file['imageSquareUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_square'];
+                    $file['imageBigUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_big'];
                 }
                 // 视频类型
                 // $file['videoTime'] = "";
@@ -179,11 +177,11 @@ class ApiFileHelper
                 // 文档类型
                 // $file['docPreviewUrl'] = "";
                 // $file['docUrl'] = "";
-                $file_setting = ApiConfigHelper::getConfigByKey(AmConfig::FILE_SETTING);
+                $doc_setting = ApiConfigHelper::getConfigByKey(AmConfig::DOC_SETTING);
                 // 文档专用
                 if ($v['file_type'] == 4) {
-                    $file['docPreviewUrl'] = $file_setting['docs_online_preview'].$file_setting['docs_bucket_domain'].$v['file_path'];
-                    $file['docUrl'] = $file_setting['docs_bucket_domain'].$v['file_path'];
+                    $file['docPreviewUrl'] = $doc_setting['docs_online_preview'].$doc_setting['docs_bucket_domain'].$v['file_path'];
+                    $file['docUrl'] = $doc_setting['docs_bucket_domain'].$v['file_path'];
                 }
                 $file['more_json'] = [];
                 $result[] = $file;
@@ -200,7 +198,6 @@ class ApiFileHelper
         if ($fileInfo) {
             $files = [];
             foreach ($fileInfo as $f) {
-                // $img_setting = ApiConfigHelper::getConfigByKey(AmConfig::IMG_SETTING);
                 $imagesHost = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
                 $imagesRatio = ApiConfigHelper::getConfigByItemKey('images_thumb_ratio');
                 $imagesSquare = ApiConfigHelper::getConfigByItemKey('images_thumb_square');
@@ -212,9 +209,6 @@ class ApiFileHelper
                 $file['imageRatioUrl'] = self::getImageSignUrl($file['imageRatioUrl']);
                 $file['imageSquareUrl'] = self::getImageSignUrl($file['imageSquareUrl']);
                 $file['imageBigUrl'] = self::getImageSignUrl($file['imageBigUrl']);
-                // $file['imageThumbUrl'] = $img_setting['images_bucket_domain'].$f['file_path'].$img_setting['images_thumb_ratio'];
-                // $file['imageSquareUrl'] = $img_setting['images_bucket_domain'].$f['file_path'].$img_setting['images_thumb_square'];
-                // $file['imageBigUrl'] = $img_setting['images_bucket_domain'].$f['file_path'].$img_setting['images_thumb_big'];
                 $files[] = $file;
             }
         }

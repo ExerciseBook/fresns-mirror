@@ -10,9 +10,9 @@ namespace App\Http\FresnsApi\Helpers;
 
 class AmConfig
 {
-    const IMG_SETTING = 'img_setting';
+    const IMAGE_SETTING = 'image_setting';
     const VIDEO_SETTING = 'video_setting';
     const AUDIO_SETTING = 'audio_setting';
-    const FILE_SETTING = 'file_setting';
+    const DOC_SETTING = 'doc_setting';
     const BACKEND_DOMAIN = 'backend_domain';
 }
