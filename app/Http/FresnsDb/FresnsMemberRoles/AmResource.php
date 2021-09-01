@@ -17,7 +17,7 @@ class AmResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // 默认字段
+        // Default Field
         $arr = [
             'id' => $this->id,
             'type' => $this->type,

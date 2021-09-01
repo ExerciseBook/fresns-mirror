@@ -8,7 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsPluginUsages;
 
-// 配置
 use App\Base\Config\BaseConfig;
 use App\Http\Config\AssetFileConfig;
 use App\Http\FresnsDb\FresnsFiles\FresnsFilesConfig;
@@ -17,10 +16,10 @@ use Illuminate\Validation\Rule;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'plugin_usages';
 
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
         'type' => ['field' => 'type', 'op' => '='],
         'ids' => ['field' => 'id', 'op' => 'IN'],
@@ -80,7 +79,7 @@ class AmConfig extends BaseConfig
         ['key' => 7, 'text' => '用户功能扩展'],
         ['key' => 8, 'text' => '用户资料扩展'],
     ];
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
         'name' => 'name',

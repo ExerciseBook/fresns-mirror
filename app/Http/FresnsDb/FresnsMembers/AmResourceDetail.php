@@ -14,14 +14,14 @@ class AmResourceDetail extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // form 字段
+        // Form Field
         $formMap = AmConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
 
-        // 默认字段
+        // Default Field
         $default = [
             'key' => $this->id,
             'id' => $this->id,
@@ -37,7 +37,7 @@ class AmResourceDetail extends BaseAdminResource
 
         ];
 
-        // 合并
+        // Merger
         $arr = array_merge($formMapFieldsArr, $default);
 
         return $arr;

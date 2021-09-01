@@ -23,19 +23,19 @@ class AmModel extends BaseCategoryModel
 {
     protected $table = AmConfig::CFG_TABLE;
 
-    // 前台表单字段映射
+    // Front-end form field mapping
     public function formFieldsMap()
     {
         return AmConfig::FORM_FIELDS_MAP;
     }
 
-    // 新增搜索条件
+    // New search criteria
     public function getAddedSearchableFields()
     {
         return AmConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
-    // hook-添加之后
+    // hook - after adding
     public function hookStoreAfter($id)
     {
     }
@@ -47,17 +47,15 @@ class AmModel extends BaseCategoryModel
         $commentAppendTable = FresnsCommentAppendsConfig::CFG_TABLE;
         $postTable = FresnsPostsConfig::CFG_TABLE;
         /**
-         * 过滤屏蔽对象的评论（成员、评论）。
-         * searchType 留空代表输出所有内容。内容为插件 unikey 值，用于搜索包含指定插件扩展内容的帖子。
-         * 默认排序类型「time」，默认排序方式「降序」.
+         * Filtering the comments of blocked objects (member, comment)
+         * "searchType": Leave blank to output all content (comments > type)
+         * Default sorting type "time", default sorting method "descending".
          */
-        // 屏蔽的目标字段
+        // Target fields to be masked
         $request = request();
         $mid = GlobalService::getGlobalKey('member_id');
-        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            1)->pluck('shield_id')->toArray();
-        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            5)->pluck('shield_id')->toArray();
+        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 1)->pluck('shield_id')->toArray();
+        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 5)->pluck('shield_id')->toArray();
         $query = DB::table("$commentTable as comment")->select('comment.*')
             ->join("$commentAppendTable as append", 'comment.id', '=', 'append.comment_id')
             ->whereNotIn('comment.member_id', $memberShields)
@@ -262,7 +260,7 @@ class AmModel extends BaseCategoryModel
         return $query;
     }
 
-    // 搜索排序字段
+    // Search for sorted fields
     public function initOrderByFields()
     {
         $orderByFields = [

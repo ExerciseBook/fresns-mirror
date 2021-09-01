@@ -8,15 +8,14 @@
 
 namespace App\Http\FresnsDb\FresnsGroups;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'groups';
 
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
         'ids' => ['field' => 'id', 'op' => 'in'],
         'gid' => ['field' => 'uuid', 'op' => '='],
@@ -41,7 +40,7 @@ class AmConfig extends BaseConfig
         // 'is_recommend' => ['field' => 'is_recommend', 'op' => '<='],
     ];
 
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
         'uuid' => 'uuid',

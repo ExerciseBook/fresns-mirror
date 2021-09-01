@@ -15,29 +15,29 @@ class AmModel extends BaseAdminModel
 {
     protected $table = AmConfig::CFG_TABLE;
 
-    // 前台表单字段映射
+    // Front-end form field mapping
     public function formFieldsMap()
     {
         return AmConfig::FORM_FIELDS_MAP;
     }
 
-    // 新增搜索条件
+    // New search criteria
     public function getAddedSearchableFields()
     {
         return AmConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
-    // hook-添加之后
+    // hook - after adding
     public function hookStoreAfter($id)
     {
     }
 
     public function getRawSqlQuery()
     {
-        $query = DB::table(AmConfig::CFG_TABLE)
-            ->where('deleted_at', null);
+        $query = DB::table(AmConfig::CFG_TABLE) ->where('deleted_at', null);
         $request = request();
-        // 1.草稿+审核拒绝（status=1+4） / 2.审核中（status=2）
+        // 1.Draft + review rejection (status=1+4)
+        // 2.Under Review (status=2)
         $status = $request->input('status');
         if ($status == 1) {
             $query->where('status', 1)->orwhere('status', 4);
@@ -55,12 +55,12 @@ class AmModel extends BaseAdminModel
         return $query;
     }
 
-    // 搜索排序字段
+    // Search for sorted fields
     public function initOrderByFields()
     {
         $orderByFields = [
             'id' => 'DESC',
-            // 'updated_at'    => 'DESC',
+            // 'updated_at' => 'DESC',
         ];
 
         return $orderByFields;

@@ -16,7 +16,7 @@ class AmResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // form 字段
+        // Form Field
         $formMap = AmConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
@@ -57,7 +57,7 @@ class AmResource extends BaseAdminResource
         $permission_decode = json_decode($this->permission, true);
         $publish_post = $permission_decode['publish_post'] ?? 1;
         $publish_comment = $permission_decode['publish_comment'] ?? 1;
-        // 默认字段
+        // Default Field
         $default = [
             'key' => $this->id,
             'id' => $this->id,
@@ -76,7 +76,7 @@ class AmResource extends BaseAdminResource
             'publish_comment' => $publish_comment,
         ];
 
-        // 合并
+        // Merger
         $arr = array_merge($formMapFieldsArr, $default);
 
         return $arr;

@@ -8,12 +8,11 @@
 
 namespace App\Http\FresnsDb\FresnsPosts;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'posts';
     const IT_PUBLISH_POSTS = 'it_publish_posts';
     const CHECK_CONTENT = 'check_content';
@@ -26,7 +25,7 @@ class AmConfig extends BaseConfig
 
     //是否有权限阅读
     const IS_ALLOW_1 = 1;
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
         'ids' => ['field' => 'id', 'op' => 'IN'],
         'pid' => ['field' => 'uuid', 'op' => '='],
@@ -56,7 +55,7 @@ class AmConfig extends BaseConfig
     const APPEND_SEARCHABLE_FIELDS = [
         'searchKey' => ['field' => 'content', 'op' => 'LIKE'],
     ];
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
         'uuid' => 'uuid',

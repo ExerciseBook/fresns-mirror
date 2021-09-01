@@ -20,19 +20,19 @@ class AmModel extends BaseCategoryModel
 {
     protected $table = AmConfig::CFG_TABLE;
 
-    // 前台表单字段映射
+    // Front-end form field mapping
     public function formFieldsMap()
     {
         return AmConfig::FORM_FIELDS_MAP;
     }
 
-    // 新增搜索条件
+    // New search criteria
     public function getAddedSearchableFields()
     {
         return AmConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
-    // hook-添加之后
+    // hook - after adding
     public function hookStoreAfter($id)
     {
         $request = request();
@@ -96,7 +96,7 @@ class AmModel extends BaseCategoryModel
         FresnsLanguagesModel::insert($inputArr);
     }
 
-    // 搜索排序字段
+    // Search for sorted fields
     public function initOrderByFields()
     {
         $sortType = request()->input('sortType', '');

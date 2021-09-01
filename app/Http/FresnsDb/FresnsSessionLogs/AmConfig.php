@@ -8,50 +8,52 @@
 
 namespace App\Http\FresnsDb\FresnsSessionLogs;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'session_logs';
 
-    //记录行为结果0-未知或执行中1-失败2-成功
+    // Recording behavior results
+    // 0-Unknown or under implementation
+    // 1-Failure
+    // 2-Success
     const OBJECT_RESULT_DEFAULT = 0;
     const OBJECT_RESULT_ERROR = 1;
     const OBJECT_RESULT_SUCCESS = 2;
 
-    //记录类型
+    // Log Type Relationships
     const OBJECT_TYPE_USER_LOGIN = 3;
     const OBJECT_TYPE_MEMBER_LOGIN = 7;
     const OBJECT_TYPE_PLUGIN = 15;
 
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
 
     ];
 
+    // Log Type
     const SESSION_OBJECT_TYPE_ARR = [
         'Unknown' => 1,
-        '注册' => 2,
-        '登录' => 3,
-        '注销' => 4,
-        '重置用户密码' => 5,
-        '修改用户资料' => 6,
-        '成员登录' => 7,
-        '修改成员资料' => 8,
-        '交易支出' => 9,
-        '交易收入' => 10,
-        '创建帖子草稿' => 11,
-        '创建评论草稿' => 12,
-        '发表帖子内容' => 13,
-        '发表评论内容' => 14,
-        '定时任务' => 15,
+        'User Register' => 2,
+        'User Login' => 3,
+        'Delete User' => 4,
+        'Reset User Password' => 5,
+        'Modify User Information' => 6,
+        'Member Login' => 7,
+        'Modify Member Information' => 8,
+        'Wallet Trading Decrease' => 9,
+        'Wallet Trading Increase' => 10,
+        'Create Draft Post' => 11,
+        'Create Draft Comment' => 12,
+        'Publish Post Content' => 13,
+        'Publish Post Content' => 14,
+        'Timed Task' => 15,
     ];
 
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
-
     ];
 }

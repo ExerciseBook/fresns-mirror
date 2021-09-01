@@ -8,15 +8,14 @@
 
 namespace App\Http\FresnsDb\FresnsConfigs;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'configs';
 
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
         'ids' => ['field' => 'id', 'op' => 'IN'],
         'item_key' => ['field' => 'item_key', 'op' => '='],
@@ -25,7 +24,7 @@ class AmConfig extends BaseConfig
         'item_tag' => ['field' => 'item_tag', 'op' => '='],
     ];
 
-    //新增订阅
+    //订阅记录
     const SUB_PLUGINS = 'subscribe_plugins';
 
     //站点设置
@@ -46,14 +45,13 @@ class AmConfig extends BaseConfig
     //地区编码
     const AREAS = 'areas_codes';
 
-    //语言设置
-    const LANG_SETTINGS = 'language_menus';
     //多语言相关配置
-    const LANGUAGE = 'language_menus';
-    //是否开启多语言
+    const LANGUAGES = 'languages';
+
+    //语言设置
     const LANGUAGE_STATUS = 'language_status';
-    //默认
     const DEFAULT_LANGUAGE = 'default_language';
+    const LANG_SETTINGS = 'language_menus';
 
     //用户修改间隔天数
     const MNAME_EDIT = 'mname_edit';
@@ -62,12 +60,9 @@ class AmConfig extends BaseConfig
     const NICKNAME_EDIT = 'nickname_edit';
 
     //存储配置
-    const STORAGE = 'storageImages';
-
+    const IMAGE_STORAGE = 'storageImages';
     const VIDEO_STORAGE = 'storageVideos';
-
     const AUDIO_STORAGE = 'storageAudios';
-
     const DOC_STORAGE = 'storageDocs';
 
     //控制台域名
@@ -79,10 +74,12 @@ class AmConfig extends BaseConfig
     //站点域名
     const SITE_DOMAIN = 'site_domain';
 
+    //距离单位
     const LENGTHUNITS_OPTION = [
         ['key' => 'km', 'text' => '公里 km'],
         ['key' => 'mi', 'text' => '英里 mi'],
     ];
+
     //日期格式
     const DATE_OPTION = [
         ['key' => 1, 'text' => 'yyyy-mm-dd'],
@@ -96,12 +93,13 @@ class AmConfig extends BaseConfig
         ['key' => 9, 'text' => 'dd.mm.yyyy'],
     ];
 
+    //私有模式显示方式
     const SITE_PRIVATE_END_OPTION = [
         ['key' => 1, 'text' => '站点内容不可见'],
         ['key' => 2, 'text' => '到期前内容可见，新内容不可见'],
     ];
 
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
         'rank_num' => 'rank_num',
