@@ -20,14 +20,14 @@ class FresnsCmdService
 {
     public static function addSubTablePluginItem($tableName, $insertId)
     {
-        // 调用插件订阅命令字
+        // Call the plugin to subscribe to the command word
         $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => $tableName,
             'insertId' => $insertId,
         ];
         LogService::info('table_input', $input);
-        // dd($input);
+
         $resp = PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
 
         return $resp;

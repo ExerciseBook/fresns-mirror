@@ -23,13 +23,13 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 class PluginHelper
 {
 
-    // 获取插件类
+    // Get Plugin Class
     public static function findPluginClass($uniKey)
     {
         $pluginClass = "\\App\\Plugins\\{$uniKey}\\Plugin";
-        LogService::info('获取插件类', $pluginClass);
+        LogService::info('Get Plugin Class', $pluginClass);
         if (! class_exists($pluginClass)) {
-            LogService::error('插件类不存在', $pluginClass);
+            LogService::error('Plugin Class: Does not exist', $pluginClass);
 
             return null;
         }
@@ -37,12 +37,12 @@ class PluginHelper
         return new $pluginClass();
     }
 
-    // 获取插件类
+    // Get Plugin Config Class
     public static function findPluginConfigClass($uniKey): ?BasePluginConfig
     {
         $configClass = "\\App\\Plugins\\{$uniKey}\\PluginConfig";
         if (! class_exists($configClass)) {
-            LogService::error('配置类不存在', $configClass);
+            LogService::error('Config Class: Does not exist', $configClass);
 
             return null;
         }
@@ -50,12 +50,12 @@ class PluginHelper
         return new $configClass();
     }
 
-    // 获取生成插件安装类
+    // Get Plugin Installer Class
     public static function findInstaller($uniKey): ?BaseInstaller
     {
         $installClass = "\\App\\Plugins\\{$uniKey}\\Installer";
         if (! class_exists($installClass)) {
-            LogService::error('安装类不存在', $installClass);
+            LogService::error('Installer Class: Does not exist', $installClass);
 
             return null;
         }
@@ -63,15 +63,7 @@ class PluginHelper
         return new $installClass();
     }
 
-    // 框架语言路径
-    public static function frameworkLangPath($uniKey)
-    {
-        $langRoot = self::langRoot();
-
-        return $langRoot;
-    }
-
-    // 插件 assets 目录
+    // Extension "assets" Path
     public static function extensionAssetsPath($uniKey)
     {
         $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
@@ -80,7 +72,7 @@ class PluginHelper
         return $path;
     }
 
-    // 插件 views 目录
+    // Extension "views" Path
     public static function extensionViewPath($uniKey)
     {
         $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
@@ -89,7 +81,7 @@ class PluginHelper
         return $path;
     }
 
-    // 插件 lang 目录
+    // Extension "lang" Path
     public static function extensionLangPath($uniKey)
     {
         $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
@@ -98,7 +90,7 @@ class PluginHelper
         return $path;
     }
 
-    // 插件 Routes 目录
+    // Extension "Routes" Path
     public static function extensionRoutePath($uniKey)
     {
         $extensionRootPath = InstallHelper::getPluginExtensionPath($uniKey);
@@ -107,31 +99,7 @@ class PluginHelper
         return $path;
     }
 
-    // 框架 views 目录
-    public static function frameworkViewPath($uniKey)
-    {
-        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::viewRoot(), $uniKey]);
-
-        return $path;
-    }
-
-    // 框架 assets 目录
-    public static function frameworkAssetsPath($uniKey)
-    {
-        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::assetsRoot(), $uniKey]);
-
-        return $path;
-    }
-
-    // 框架 theme 目录
-    public static function frameworkThemePath($uniKey)
-    {
-        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::themeRoot(), $uniKey]);
-
-        return $path;
-    }
-
-    // 插件语言路径
+    // Plugin "lang" Path
     public static function pluginLangPath($uniKey)
     {
         $currPluginRoot = self::currPluginRoot($uniKey);
@@ -140,13 +108,45 @@ class PluginHelper
         return $path;
     }
 
-    // 根据 unikey 删除文件
+    // Framework "assets" Path
+    public static function frameworkAssetsPath($uniKey)
+    {
+        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::assetsRoot(), $uniKey]);
+
+        return $path;
+    }
+
+    // Framework "views" Path
+    public static function frameworkViewPath($uniKey)
+    {
+        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::viewRoot(), $uniKey]);
+
+        return $path;
+    }
+
+    // Framework "theme" Path
+    public static function frameworkThemePath($uniKey)
+    {
+        $path = implode(DIRECTORY_SEPARATOR, [PluginHelper::themeRoot(), $uniKey]);
+
+        return $path;
+    }
+
+    // Framework "lang" Path
+    public static function frameworkLangPath($uniKey)
+    {
+        $langRoot = self::langRoot();
+
+        return $langRoot;
+    }
+
+    // Delete files according to unikey
     public static function uninstallByUniKey($uniKey)
     {
-        // 删除模版文件
+        // Delete File
         InstallHelper::deletePluginFiles($uniKey);
 
-        // 插件目录
+        // Delete Directory
         $pluginPath = PluginHelper::currPluginRoot($uniKey);
         if (is_dir($pluginPath)) {
             File::deleteDirectory($pluginPath);
@@ -158,9 +158,7 @@ class PluginHelper
         return $info;
     }
 
-    /**
-     * 获取某个插件目录.
-     */
+    // Get a plugin directory
     public static function currPluginRoot($uniKey)
     {
         $pathArr = [base_path(), 'app', 'Plugins', $uniKey];
@@ -169,7 +167,7 @@ class PluginHelper
         return $path;
     }
 
-    // 插件运行根目录
+    // Plugin run root directory
     public static function pluginRoot()
     {
         $pathArr = [base_path(), 'app', 'Plugins'];
@@ -177,7 +175,7 @@ class PluginHelper
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
 
-    // 插件模版目录
+    // Theme template directory
     public static function themeRoot()
     {
         $pathArr = [base_path(), 'resources', 'views', 'themes'];
@@ -185,7 +183,7 @@ class PluginHelper
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
 
-    // 插件配置视图目录
+    // Plugin view directory
     public static function viewRoot()
     {
         $pathArr = [base_path(), 'resources', 'views', 'plugins'];
@@ -193,7 +191,7 @@ class PluginHelper
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
 
-    // 插件配置视图目录
+    // Plugin lang directory
     public static function langRoot()
     {
         $pathArr = [base_path(), 'resources', 'lang'];
@@ -201,7 +199,7 @@ class PluginHelper
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
 
-    // 插件配置静态文件目录
+    // all assets directory
     public static function assetsRoot()
     {
         $pathArr = [base_path(), 'public', 'assets'];
@@ -209,7 +207,7 @@ class PluginHelper
         return implode(DIRECTORY_SEPARATOR, $pathArr);
     }
 
-    // 下载路径
+    // Download Path
     public static function getDownloadPath()
     {
         $pathArr = [
@@ -224,19 +222,19 @@ class PluginHelper
         return $downloadPath;
     }
 
-    // 插件是否安装、启用
+    // Whether the plugin is installed or enabled
     public static function pluginCanUse($uniKey)
     {
-        // 获取安装类
+        // Get installation class
         $installer = InstallHelper::findInstaller($uniKey);
         if (empty($installer)) {
-            LogService::info('info', '未找到插件类');
+            LogService::info('info', 'Plugin Class: not found');
 
             return false;
         }
         $plugin = FresnsPlugins::where('unikey', $uniKey)->where('is_enable', 1)->first();
         if (empty($plugin)) {
-            LogService::info('info', '插件未启用');
+            LogService::info('info', 'Plugin Not Enabled');
 
             return false;
         }
@@ -250,18 +248,16 @@ class PluginHelper
         $uniKey = $pluginConfig->uniKey;
 
         $imgName = PluginConst::PLUGIN_IMAGE_NAME;
-        // $domain = CommonHelper::domain();
         $domain = request()->server('HTTP_ORIGIN');
-        // $domain = $server['HTTP_ORIGIN'];
         LogService::info('server', request()->server());
 
         LogService::info('domain', $domain);
 
-        $url = $domain."/views/{$uniKey}/{$imgName}";
+        $url = $domain."/assets/{$uniKey}/{$imgName}";
         LogService::info('url', $url);
 
         if ($type == PluginConst::PLUGIN_TYPE_THEME) {
-            $url = $domain."/themes/{$uniKey}/{$imgName}";
+            $url = $domain."/assets/{$uniKey}/{$imgName}";
         }
 
         return $url;

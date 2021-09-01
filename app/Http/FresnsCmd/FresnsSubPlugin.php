@@ -18,31 +18,31 @@ use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
 
 /**
  * Class FresnsCrontabPlugin
- * 订阅事件处理.
+ * Subscription Event Processing
+ * https://fresns.org/extensions/basis.html
  */
 class FresnsSubPlugin extends BasePlugin
 {
-    // 构造函数
+    // Constructors
     public function __construct()
     {
         $this->pluginConfig = new FresnsSubPluginConfig();
         $this->pluginCmdHandlerMap = FresnsSubPluginConfig::PLG_CMD_HANDLE_MAP;
     }
 
-    // 获取错误码
+    // Get status code
     public function getCodeMap()
     {
         return FresnsSubPluginConfig::CODE_MAP;
     }
 
-    // 扫描指定的订阅信息
+    // Scan for specified subscription information
     protected function subAddTableHandler($input)
     {
         $tableName = $input['tableName'];
         $insertId = $input['insertId'];
-        // 查询订阅信息（tableName是否存在订阅信息）
-        $subscribe = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->where('is_enable',
-            1)->first();
+        // Query subscription information (configs > item_key: subscribe_plugins)
+        $subscribe = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->where('is_enable', 1)->first();
         $subscribeArr = '';
         if ($subscribe) {
             $subscribeInfo = json_decode($subscribe['item_value'], true);
@@ -55,21 +55,24 @@ class FresnsSubPlugin extends BasePlugin
                 }
             }
         }
-        // 获取发送命令字得cmd 和 unikey
+        // Get the cmd and unikey of the sent command word
         $cmd = '';
         $unikey = '';
         if (! empty($subscribeArr)) {
-            // 订阅类型为 2， 则执行 anget_plugin_unikey 的 anget_plugin_cmd
+            // Subscription type: 2
+            // Execute anget_plugin_cmd for anget_plugin_unikey
             if ($subscribeArr['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE2) {
                 $cmd = $subscribeArr['anget_plugin_cmd'];
-                $unikey = $subscribeArr['anget_plugin_key'];
+                $unikey = $subscribeArr['anget_plugin_unikey'];
             }
-            // 订阅类型为3， 则执行 subscribe_plugin_unikey 的 subscribe_plugin_cmd
+            // Subscription type: 3
+            // Execute subscribe_plugin_cmd for subscribe_plugin_unikey
             if ($subscribeArr['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE3) {
                 $cmd = $subscribeArr['subscribe_plugin_cmd'];
                 $unikey = $subscribeArr['subscribe_plugin_unikey'];
             }
-            // 订阅类型为5， 则执行 subscribe_plugin_unikey 的 subscribe_plugin_cmd
+            // Subscription type: 5
+            // Execute subscribe_plugin_cmd for subscribe_plugin_unikey
             if ($subscribeArr['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE5) {
                 $cmd = $subscribeArr['subscribe_plugin_cmd'];
                 $unikey = $subscribeArr['subscribe_plugin_unikey'];
@@ -94,17 +97,18 @@ class FresnsSubPlugin extends BasePlugin
         return $this->pluginSuccess($resp);
     }
 
-    // 订阅用户活跃状态
+    // Subscribe to user activity status
     protected function subUserActiveHandler($input)
     {
-        // 查询订阅信息（tableName是否存在订阅信息）
+        // Query subscription information (configs > item_key: subscribe_plugins)
         $subscribe = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->where('is_enable',
             1)->first();
         if (! empty($subscribe)) {
             $subscribeInfo = json_decode($subscribe['item_value'], true);
             if ($subscribeInfo) {
                 foreach ($subscribe as $s) {
-                    // 订阅类型为4
+                    // Subscription type: 4
+                    // Execute subscribe_plugin_cmd for subscribe_plugin_unikey
                     if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE4) {
                         $cmd = $s['subscribe_plugin_cmd'];
                         $unikey = $s['subscribe_plugin_unikey'];

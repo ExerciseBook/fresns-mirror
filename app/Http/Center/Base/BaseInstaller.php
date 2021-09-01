@@ -13,19 +13,19 @@ use App\Http\Center\Helper\PluginHelper;
 use Illuminate\Support\Facades\File;
 
 /**
- * 安装基础类.
+ * Install of basic class.
  */
 class BaseInstaller
 {
     /**
-     * 安装配置类.
+     * Install config class.
      */
     protected $pluginConfig;
 
     /**
-     * 安装插件时，每个版本对应的安装函数
-     * 键: 整型版本号, versionInt
-     * 值: 安装函数的名称, functionName, 例如 installV1.
+     * The installation function corresponding to each version when installing the plugin
+     * Key: Integer version number (versionInt)
+     * Value: Name of the installation function (functionName), example: installV1.
      * @var array
      */
     public $versionIntInstallFunctionNameMap = [
@@ -38,9 +38,9 @@ class BaseInstaller
     }
 
     /**
-     * 每个整型版本和三位版本的对应关系, 存储发布记录
-     * 键: 整型版本号, versionInt
-     * 值: 三位版本号 , version, 例如 1.0.0.
+     * Correspondence between each integer version and three versions, storing release records
+     * Key: Integer version number (versionInt)
+     * Value: Semantic version number (version), example: 1.0.0
      * @var array
      */
     public $versionIntToVersionMap = [
@@ -48,25 +48,25 @@ class BaseInstaller
     ];
 
     /**
-     * 安装.
+     * install
      */
     public function install()
     {
     }
 
     /**
-     * 卸载
-     * 删除插件的目录.
+     * uninstall
+     * Delete the directory of the plugin.
      */
     public function uninstall()
     {
         $config = $this->getPluginConfig();
         $uniKey = $config->uniKey;
 
-        // 删除模版文件
+        // Delete File
         InstallHelper::deletePluginFiles($uniKey);
 
-        // 删除插件目录
+        // Delete plugin directory
         $pluginPath = PluginHelper::currPluginRoot($uniKey);
         if (is_dir($pluginPath)) {
             File::deleteDirectory($pluginPath);
@@ -79,16 +79,16 @@ class BaseInstaller
     }
 
     /**
-     * 升级.
+     * upgrade
      */
     public function upgrade()
     {
-        // 如果当前版本有安装函数，则执行安装函数
+        // Execute the install function if it is available in the current version
         // $currVersionInt = $this->pluginConfig->currVersionInt;
         $currVersionInt = request()->input('localVision');
         $remoteVision = request()->input('remoteVision');
         $installFunc = $this->versionIntInstallFunctionNameMap;
-        // dd($installFunc);
+        
         for ($i = $currVersionInt + 1; $i <= $remoteVision; $i++) {
             $installFunc = $this->versionIntInstallFunctionNameMap[$i] ?? '';
             if (! empty($installFunc)) {

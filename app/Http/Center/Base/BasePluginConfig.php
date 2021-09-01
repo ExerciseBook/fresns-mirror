@@ -12,57 +12,56 @@ class BasePluginConfig
 {
 
     /**
-     * 插件全局唯一值
+     * Plugin Global Unique Values
      *
      * @var string
      */
     public $uniKey = '';
     
     /**
-     * 插件名称.
+     * Plugin Name.
      *
      * @var string
      */
     public $name = '';
 
     /**
-     * 插件类型.
+     * Plugin Type.
      *
      * @var int
      */
     public $type = 2;
 
     /**
-     * 插件描述.
+     * Plugin Description.
      *
      * @var string
      */
     public $description = '';
 
     /**
-     * 插件图片 url.
+     * Plugin Image URL.
      *
      * @var string
      */
     public $imageUrl = '';
 
     /**
-     * 插件作者.
+     * Plugin Author.
      *
      * @var string
      */
     public $author = '';
 
     /**
-     * 插件作者链接.
+     * Plugin Author Link.
      *
      * @var string
      */
     public $authorLink = '';
 
     /**
-     * 插件使用场景
-     * 如 短信服务商/文件存储服务商 等.
+     * Plugin Usage Scenarios
      *
      * @var array
      */
@@ -71,65 +70,65 @@ class BasePluginConfig
     ];
 
     /**
-     * 插件最新三位版本号.
+     * The latest Semantic version number of the plugin.
      *
      * @var string
      */
     public $currVersion = '1.0.0';
 
     /**
-     * 插件最新整型版本号.
+     * The latest integer version number of the plugin.
      *
      * @var int
      */
     public $currVersionInt = 1;
 
     /**
-     * 插件目录名称, 大驼峰
+     * Plugin directory name (upper camel case)
      * app/Plugins/$dirName
      * public/assets/$dirName
      * resources/views/plugins/$dirName
-     * resources/lang/{语言标签}/$dirName
+     * resources/lang/{langtag}/$dirName
      *
      * @var string
      */
     public $dirName = '';
 
     /**
-     * 插件访问路径
-     * 相对路径，支持变量名, 同“站点网址”拼接成完整 URL.
+     * Plugin Access Path
+     * Relative paths, support for variable names.
      *
      * @var string
      */
     public $accessPath = '';
 
     /**
-     * 插件设置路径.
+     * Plugin settings path.
      *
      * @var string
      */
     public $settingPath = '';
 
-    // 插件默认命令字, 任何插件必须要要有
+    // Plugin default command word, any plugin must have
     public const PLG_CMD_DEFAULT = 'plg_cmd_default';
 
-    // 插件命令字回调映射
+    // Plugin command word callback mapping
     const PLG_CMD_HANDLE_MAP = [
         self::PLG_CMD_DEFAULT => 'defaultHandler',
     ];
 
-    // 插件错误码
+    // Plugin Status Code
     const OK = 0;
     const FAIL = 1001;
     const CODE_NOT_EXIST = 1002;
     const CODE_PARAMS_ERROR = 1003;
 
-    // 插件错误码映射
+    // Plugin status code mapping
     const CODE_MAP = [
         self::OK => 'ok',
         self::FAIL => 'fail',
-        self::CODE_NOT_EXIST => '数据不存在',
-        self::CODE_PARAMS_ERROR => '参数错误',
+        self::CODE_NOT_EXIST => 'Data does not exist',
+        self::CODE_PARAMS_ERROR => 'Parameter error',
     ];
 
 }

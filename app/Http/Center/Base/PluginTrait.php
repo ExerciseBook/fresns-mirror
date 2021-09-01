@@ -14,20 +14,20 @@ use App\Http\FresnsDb\FresnsCodeMessages\FresnsCodeMessagesService;
 
 trait PluginTrait
 {
-    // 插件错误码
+    // Plugin Status Code
     public $code;
 
-    // 插件错误码信息
+    // Plugin Status Code Message
     public $msg;
 
-    // 插件返回的data
+    // The data returned by the plugin
     public $data = [];
 
-    // 错误码映射
+    // Status Code Mapping
     public $codeMap = [];
 
     /**
-     * 插件初始化.
+     * Plugin initialization.
      * @return bool
      */
     public function initPlugin()
@@ -36,15 +36,15 @@ trait PluginTrait
     }
 
     /**
-     * 调用成功
+     * Called Success
      */
     protected function pluginSuccess($data = [])
     {
         $code = BasePluginConfig::OK;
         $msg = 'ok';
 
-        // $pluginConfig = $m->pluginConfig; // 获取 unikey 方法 1
-        $uniKey = $this->pluginConfig->uniKey; // 获取 unikey 方法 2
+        // $pluginConfig = $m->pluginConfig; // Get unikey method 1
+        $uniKey = $this->pluginConfig->uniKey; // Get unikey method 2
         $langTag = GlobalService::getGlobalKey('langTag');
         $message = FresnsCodeMessagesService::getCodeMessage($uniKey, $langTag, $code);
         if (empty($message)) {
@@ -55,26 +55,26 @@ trait PluginTrait
     }
 
     /**
-     * 调用异常.
+     * Calling exceptions.
      */
     protected function pluginError($code, $data = [], $msg = '')
     {
         $c = get_called_class();
         $m = new $c;
         $codeMap = $m->getPluginCodeMap();
-        // $pluginConfig = $m->pluginConfig; // 获取 unikey 方法 1
-        $uniKey = $this->pluginConfig->uniKey; // 获取 unikey 方法 2
+        // $pluginConfig = $m->pluginConfig; // Get unikey method 1
+        $uniKey = $this->pluginConfig->uniKey; // Get unikey method 2
         $langTag = GlobalService::getGlobalKey('langTag');
         $message = FresnsCodeMessagesService::getCodeMessage($uniKey, $langTag, $code);
         if (empty($message)) {
-            $message = ErrorCodeService::getMsg($code, $data) ?? "插件检查异常[{$code}]";
+            $message = ErrorCodeService::getMsg($code, $data) ?? "Plugin check exception: [{$code}]";
         }
 
         return $this->output($code, $message, $data);
     }
 
     /**
-     * 插件返回数据.
+     * Plugin returns data.
      */
     protected function output($code, $msg, $data)
     {
@@ -86,7 +86,7 @@ trait PluginTrait
         return $ret;
     }
 
-    // 错误码映射
+    // Status Code Mapping
     public function getPluginCodeMap()
     {
         return $this->codeMap;
