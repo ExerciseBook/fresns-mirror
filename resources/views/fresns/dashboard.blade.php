@@ -89,13 +89,13 @@
                                 @endforeach
                             </ul>
                         </div>
-                        @endif    
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    
+
     <!--localInstall Modal-->
     <div class="modal fade" id="localInstall" tabindex="-1" aria-labelledby="localInstall" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -135,33 +135,6 @@
                         </div>
                         <div class="form-text"><i class="bi bi-info-circle"></i> @lang('fresns.codeInstallInfo')</div>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--Action Modal-->
-    <div class="modal fade" id="upgrade" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-laptop"></i>
-                        @lang('fresns.localInstall')
-                        <!--
-                            @lang('fresns.codeInstall')
-                        -->
-                        <!--Style when upgrading
-                            Plugin name <span class="badge bg-secondary">Current version</span> to <span class="badge bg-danger">New version</span>
-                        -->
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body ps-5">
-                    <p><i class="spinner-border spinner-border-sm me-2 step1"></i>@lang('fresns.localInstallStep1')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step2"></i>@lang('fresns.localInstallStep2')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step3"></i>@lang('fresns.localInstallStep3')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step4"></i>@lang('fresns.localInstallStep4')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.localInstallStep5')</p>
                 </div>
             </div>
         </div>

@@ -1,3 +1,69 @@
+<!--Action Modal local install-->
+<div class="modal fade" id="upgrade" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-laptop"></i>
+                @lang('fresns.localInstall')
+                    <!--Style when upgrading
+                        Plugin name <span class="badge bg-secondary">Current version</span> to <span class="badge bg-danger">New version</span>
+                    -->
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ps-5">
+                <p><i class="spinner-border spinner-border-sm me-2 step1"></i>@lang('fresns.localInstallStep1')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step2"></i>@lang('fresns.localInstallStep2')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step3"></i>@lang('fresns.localInstallStep3')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step4"></i>@lang('fresns.localInstallStep4')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.localInstallStep5')</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Action Modal code install-->
+<div class="modal fade" id="upgrade2" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-laptop"></i>
+                    @lang('fresns.codeInstall')
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ps-5">
+                <p><i class="spinner-border spinner-border-sm me-2 step1"></i>@lang('fresns.codeInstallStep1')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step2"></i>@lang('fresns.codeInstallStep2')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step3"></i>@lang('fresns.codeInstallStep3')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step4"></i>@lang('fresns.codeInstallStep4')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.codeInstallStep5')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.codeInstallStep6')</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Action Modal local uninstall-->
+<div class="modal fade" id="upgrade3" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-laptop"></i>
+                @lang('fresns.uninstall')
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ps-5">
+                <p><i class="spinner-border spinner-border-sm me-2 step1"></i>@lang('fresns.uninstallStep1')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step2"></i>@lang('fresns.uninstallStep2')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step3"></i>@lang('fresns.uninstallStep3')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step4"></i>@lang('fresns.uninstallStep4')</p>
+                <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.uninstallStep5')</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <footer>
     <div class="copyright text-center">
         <p class="mt-5 mb-5 text-muted">Powered by Fresns</p>

@@ -191,6 +191,12 @@ $('.uninstallUnikey').on('click', function() {
 $(".btn-danger").click(function(){
     var unikey = $(this).attr('unikey');
     var clear_plugin_data = $('#is-delete-data').is(':checked') ? 1 : 0;
+
+    $('#upgrade3').addClass('show');
+    $('#upgrade3').css({
+        'display': 'block'
+    });
+
     $.ajax({
         async: false,
         type: "post",
@@ -201,8 +207,39 @@ $(".btn-danger").click(function(){
         },
         success: function (data) {
             if(data.code == 0){
-                window.location.reload();
+                setTimeout(function(){
+                    $('.step1').removeClass("spinner-border spinner-border-sm")
+                    $('.step1').addClass("bi bi-check-lg text-success")
+                    $('.step2').removeClass("bi bi-hourglass text-secondary")
+                    $('.step2').addClass("spinner-border spinner-border-sm")
+                },300)
+                setTimeout(function(){
+                    $('.step2').removeClass("spinner-border spinner-border-sm")
+                    $('.step2').addClass("bi bi-check-lg text-success")
+                    $('.step3').removeClass("bi bi-hourglass text-secondary")
+                    $('.step3').addClass("spinner-border spinner-border-sm")
+                },600)
+                setTimeout(function(){
+                    $('.step3').removeClass("spinner-border spinner-border-sm")
+                    $('.step3').addClass("bi bi-check-lg text-success")
+                    $('.step4').removeClass("bi bi-hourglass text-secondary")
+                    $('.step4').addClass("spinner-border spinner-border-sm")
+                },900)
+                setTimeout(function(){
+                    $('.step4').removeClass("spinner-border spinner-border-sm")
+                    $('.step4').addClass("bi bi-check-lg text-success")
+                    $('.step5').removeClass("bi bi-hourglass text-secondary")
+                    $('.step5').addClass("spinner-border spinner-border-sm")
+                },1200)
+                setTimeout(function(){
+                    $('.step5').removeClass("spinner-border spinner-border-sm")
+                    $('.step5').addClass("bi bi-check-lg text-success")
+                },1500)
+                setTimeout(function(){
+                    window.location.reload();
+                },1800)
             }else{
+                $('#upgrade3').removeClass('show');
                 alert(data.message)
             }
         }
