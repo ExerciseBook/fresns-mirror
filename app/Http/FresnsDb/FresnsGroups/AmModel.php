@@ -79,10 +79,10 @@ class AmModel extends BaseCategoryModel
                 DB::table($table_name)->where('id', $table_id)->update([$table_filed => $v['lang_content']]);
             }
             $item = [];
-            $tagArr = FresnsLanguagesService::conversionLangTag($v['lang_code']);
+            $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
             $item['lang_code'] = $tagArr['lang_code'];
             $item['area_code'] = $tagArr['area_code'];
-            $item['lang_tag'] = $v['lang_code'];
+            $item['lang_tag'] = $v['langTag'];
             $item['lang_content'] = $v['lang_content'];
             $item['table_field'] = $table_filed;
             $item['table_id'] = $table_id;

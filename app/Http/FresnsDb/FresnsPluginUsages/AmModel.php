@@ -47,13 +47,10 @@ class AmModel extends BaseAdminModel
         $inputArr = [];
         foreach ($nameArr as $v) {
             $item = [];
-            $tagArr = FresnsLanguagesService::conversionLangTag($v['lang_code']);
-            // $tagArr = explode('-',$v['lang_code']);
-            // $areaCode = array_pop($tagArr);
-            // $langCode = str_replace("-$areaCode",'',$v['lang_code']);
+            $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
             $item['lang_code'] = $tagArr['lang_code'];
             $item['area_code'] = $tagArr['area_code'];
-            $item['lang_tag'] = $v['lang_code'];
+            $item['lang_tag'] = $v['langTag'];
             $item['lang_content'] = $v['lang_content'];
             $item['table_field'] = AmConfig::FORM_FIELDS_MAP['name'];
             $item['table_id'] = $id;
@@ -83,13 +80,10 @@ class AmModel extends BaseAdminModel
             AmConfig::FORM_FIELDS_MAP['name'])->where('table_id', $id)->delete();
         foreach ($nameArr as $v) {
             $item = [];
-            $tagArr = FresnsLanguagesService::conversionLangTag($v['lang_code']);
-            // $tagArr = explode('-',$v['lang_code']);
-            // $areaCode = array_pop($tagArr);
-            // $langCode = str_replace("-$areaCode",'',$v['lang_code']);
+            $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
             $item['lang_code'] = $tagArr['lang_code'];
             $item['area_code'] = $tagArr['area_code'];
-            $item['lang_tag'] = $v['lang_code'];
+            $item['lang_tag'] = $v['langTag'];
             $item['lang_content'] = $v['lang_content'];
             $item['table_field'] = AmConfig::FORM_FIELDS_MAP['name'];
             $item['table_id'] = $id;

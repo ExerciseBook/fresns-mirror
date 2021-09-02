@@ -60,20 +60,6 @@ class AmControllerAdmin extends BaseAdminController
         $this->success();
     }
 
-    // 添加多语言标识
-    public function addLangCode(Request $request)
-    {
-        $content = json_encode(AmConfig::MULTILINGUAL_OPTION);
-        $input = [
-            'item_key' => '',
-            'alias_key' => 'lang_code',
-            'content' => $content,
-        ];
-        // dd($input);
-        (new TweetConfig())->store($input);
-        $this->success();
-    }
-
     // Validation Rules
     public function rules($ruleType)
     {

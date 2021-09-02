@@ -33,17 +33,12 @@ class AmResource extends BaseAdminResource
         // 语言名称
         // 获取默认语言code
         $defaultCode = AmService::getDefaultLanguage();
-        $lang_code = request()->header('lang-code', $defaultCode);
-        foreach (AmConfig::MULTILINGUAL_OPTION as $v) {
-            if ($v['nickname'] == $lang_code) {
-                $lang_code = $v['key'];
-            }
-        }
+        $langTag = request()->header('langTag', $defaultCode);
         $input = [
             'table_name' => AmConfig::CFG_TABLE,
             'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
             'table_id' => $this->id,
-            'lang_tag' => $lang_code,
+            'lang_tag' => $langTag,
         ];
         $names = FresnsLanguages::where($input)->first();
         if (! $names) {
@@ -102,7 +97,7 @@ class AmResource extends BaseAdminResource
             foreach ($multilingual as &$m) {
                 $arr['id'] = '';
                 $intro = [];
-                $intro['lang_code'] = $m['key'];
+                $intro['langTag'] = $m['key'];
                 $intro['text'] = $m['text'];
                 $intro['title'] = '';
                 $intro['description'] = '';
@@ -118,12 +113,12 @@ class AmResource extends BaseAdminResource
                 foreach ($s as &$v) {
                     $introArr = [];
                     foreach ($v['intro'] as $i) {
-                        $map[$i['lang_code']] = $i;
+                        $map[$i['langTag']] = $i;
                     }
                     foreach ($multilingual as $m) {
                         $item = [];
                         $item['title'] = $map[$m['key']]['title'] ?? '';
-                        $item['lang_code'] = $m['key'];
+                        $item['langTag'] = $m['key'];
                         $item['text'] = $m['text'];
                         $item['description'] = $map[$m['key']]['description'] ?? '';
                         $introArr[] = $item;

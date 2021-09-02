@@ -35,15 +35,6 @@ class AmConfig extends BaseConfig
         ['key' => 0, 'text' => '禁用'],
         ['key' => 1, 'text' => '启用'],
     ];
-    const GROUP_SELECTED_OPTION = [
-        ['key' => 1, 'text' => '小组1'],
-        ['key' => 2, 'text' => '小组2'],
-    ];
-    const MULTILINGUAL_OPTION = [
-        ['key' => 'zh-Hans', 'text' => '简体中文', 'nickname' => 'zh-CN'],
-        ['key' => 'zh-Hant', 'text' => '繁体中文', 'nickname' => 'zh-TW'],
-        ['key' => 'en', 'text' => '英文', 'nickname' => 'en-US'],
-    ];
     const LANGUAGE_CODES = 'language_codes';
     const LANG_SETTINGS = 'language_menus';
     const DEFAULT_LANGUAGE = 'default_language';
