@@ -289,7 +289,8 @@ class AmControllerApi extends FresnsBaseApiController
             FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $uid, $mid, $mid);
         }
 
-        $this->success();
+        
+        $this->success((object)[]);
     }
 
     //获取用户角色
@@ -1058,9 +1059,9 @@ class AmControllerApi extends FresnsBaseApiController
         $query->orderBy('me.created_at', $sortDirection);
 
         $item = $query->paginate($pageSize, ['*'], 'page', $page);
-
+        $list = FresnsMemberListsResource::collection($item->items())->toArray($item->items());
         $data = [];
-        $data['list'] = FresnsMemberListsResource::collection($item->items())->toArray($item->items());
+        $data['list'] = $list;
         $pagination['total'] = $item->total();
         $pagination['current'] = $page;
         $pagination['pageSize'] = $pageSize;
