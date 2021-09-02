@@ -10,6 +10,10 @@ namespace App\Http\FresnsDb\FresnsMemberRoles;
 
 use App\Base\Resources\BaseAdminResource;
 
+/**
+ * Detail resource config processing
+ */
+
 class AmResourceDetail extends BaseAdminResource
 {
     public function toArray($request)
@@ -23,18 +27,11 @@ class AmResourceDetail extends BaseAdminResource
 
         // Default Field
         $default = [
-            'key' => $this->id,
             'id' => $this->id,
+            'permission_decode' => json_decode($this->permission, true),
             'is_enable' => boolval($this->is_enable),
-            'disabled' => false,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-
-            'nickname' => $this->nickname,
-            'more_json' => $this->more_json,
-            'more_json_decode' => json_decode($this->more_json, true),
-            'permission_decode' => json_decode($this->permission, true),
-
         ];
 
         // Merger

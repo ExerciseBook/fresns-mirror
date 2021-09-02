@@ -14,6 +14,10 @@ use App\Http\FresnsDb\FresnsLanguages\FresnsLanguages;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 
+/**
+ * List resource config processing
+ */
+
 class AmResource extends BaseAdminResource
 {
     public function toArray($request)
@@ -51,7 +55,6 @@ class AmResource extends BaseAdminResource
             $names = FresnsLanguages::where($input)->first();
         }
         // 语言名称
-
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
         // dd($multilingual);
@@ -112,7 +115,6 @@ class AmResource extends BaseAdminResource
             // sort_number参数过滤
             $arr1 = [];
             foreach ($sort_number as $k => &$s) {
-                // $sArr = [];
                 foreach ($s as &$v) {
                     $introArr = [];
                     foreach ($v['intro'] as $i) {
@@ -127,48 +129,35 @@ class AmResource extends BaseAdminResource
                         $introArr[] = $item;
                     }
 
-                    // $item1['intro']= $introArr;
                     $v['intro'] = $introArr;
-                    // $sArr[] = $item1;
                 }
-                // $arr1[$k] = $sArr;
             }
-            // dd($sort_number);
             $newArr = $sort_number;
         }
-        // dd($multilingual);
-        // dd($newArr);
+
         // 数据来源
         $source_parameter = AmConfig::SOURCE_PARAMETER;
         foreach ($source_parameter as &$v) {
             $v['postLists'] = $parameter[$v['nickname']] ?? '';
             $v['sort_number'] = $newArr[$v['nickname']] ?? '';
         }
-        // dd($source_parameter);
+        
         // Default Field
         $default = [
-            'key' => $this->id,
             'id' => $this->id,
-            'is_enable' => boolval($this->is_enable),
-            'disabled' => false,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-
-            'nickname' => $this->nickname,
-            'more_json' => $this->more_json,
-            'more_json_decode' => json_decode($this->more_json, true),
             'plug_name' => $plugInfo['name'] ?? '',
             'name' => $names['lang_content'] ?? '',
+            'nameArr' => $nameArr,
             'roleNames' => $roleNames,
             'roleNamesArr' => $roleInfo,
             'userRolesArr' => $user_rolesArr,
             'scene' => $sceneArr,
-            // 'sceneArr' => $sceneArr,
             'sceneNames' => $sceneNames,
-            'nameArr' => $nameArr,
             'source_parameter' => $source_parameter,
             'sort_number' => json_decode($this->sort_number, true),
-            // 'is_group_admin' => boolval($this->is_group_admin)
+            'is_enable' => boolval($this->is_enable),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
 
         // Merger

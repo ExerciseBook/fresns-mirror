@@ -13,6 +13,10 @@ use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
 
+/**
+ * List resource config processing
+ */
+
 class AmResource extends BaseAdminResource
 {
     public function toArray($request)

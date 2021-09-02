@@ -29,7 +29,6 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['TableName'] = AmConfig::CFG_TABLE;
-        $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
         // 场景
         $common['sceneOption'] = AmConfig::SCONE_OPTION;
         $common['typeOption'] = AmConfig::TYPE_OPTION;

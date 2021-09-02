@@ -80,9 +80,6 @@ class AmModel extends BaseCategoryModel
             }
             $item = [];
             $tagArr = FresnsLanguagesService::conversionLangTag($v['lang_code']);
-            // $tagArr = explode('-',$v['lang_code']);
-            // $areaCode = array_pop($tagArr);
-            // $langCode = str_replace("-$areaCode",'',$v['lang_code']);
             $item['lang_code'] = $tagArr['lang_code'];
             $item['area_code'] = $tagArr['area_code'];
             $item['lang_tag'] = $v['lang_code'];

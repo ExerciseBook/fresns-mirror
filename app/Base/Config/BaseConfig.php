@@ -110,12 +110,6 @@ class BaseConfig
         self::LOGIN_TYPE_NAME => 'login_name',
     ];
 
-    const TEST_SELECT_OPTION = [
-        ['key' => 1, 'text' => 'Option 1'],
-        ['key' => 2, 'text' => 'Option 2'],
-        ['key' => 3, 'text' => 'Option 3'],
-    ];
-
     /*
      * Corresponding table columns
      */

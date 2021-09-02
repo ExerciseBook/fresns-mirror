@@ -13,6 +13,10 @@ use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsService;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguages;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 
+/**
+ * Detail resource config processing
+ */
+
 class AmResourceDetail extends BaseAdminResource
 {
     public function toArray($request)
@@ -23,10 +27,10 @@ class AmResourceDetail extends BaseAdminResource
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
+        
         // 语言名称
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
-        // dd($multilingual);
         $nameArr = [];
         foreach ($multilingual as $v) {
             $input = [
@@ -40,6 +44,7 @@ class AmResourceDetail extends BaseAdminResource
             $v['lang_content'] = $name['lang_content'] ?? '';
             $nameArr[] = $v;
         }
+
         // 角色
         $user_rolesArr = [];
         $roleNames = '';
@@ -62,26 +67,19 @@ class AmResourceDetail extends BaseAdminResource
             }
         }
         $sceneNames = implode(',', $sceneNameArr);
+
         // Default Field
         $default = [
-            'key' => $this->id,
             'id' => $this->id,
-            'is_enable' => boolval($this->is_enable),
-            'disabled' => false,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-
-            'nickname' => $this->nickname,
-            'more_json' => $this->more_json,
-            'more_json_decode' => json_decode($this->more_json, true),
             'name' => $nameArr,
             'roleInfo' => $roleInfo,
             'roleNames' => $roleNames,
             'scene' => $sceneArr,
-            // 'roleNames' => $roleNames,
             'userRolesArr' => $user_rolesArr,
-            // 'sceneArr' => $sceneArr,
             'sceneNames' => $sceneNames,
+            'is_enable' => boolval($this->is_enable),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
 
         // Merger

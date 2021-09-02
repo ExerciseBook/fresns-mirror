@@ -11,6 +11,10 @@ namespace App\Http\FresnsDb\FresnsDialogMessages;
 use App\Base\Resources\BaseAdminResource;
 use App\Http\FresnsApi\Base\FresnsBaseService;
 
+/**
+ * List resource config processing
+ */
+
 class AmResource extends FresnsBaseService
 {
     public function toArray($request)
@@ -24,16 +28,10 @@ class AmResource extends FresnsBaseService
 
         // Default Field
         $default = [
-            'key' => $this->id,
             'id' => $this->id,
             'is_enable' => boolval($this->is_enable),
-            'disabled' => false,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-
-            'nickname' => $this->nickname,
-            'more_json' => $this->more_json,
-            'more_json_decode' => json_decode($this->more_json, true),
         ];
 
         // Merger
