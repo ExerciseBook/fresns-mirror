@@ -48,7 +48,7 @@ class BaseInstaller
     ];
 
     /**
-     * install, make some sql insert
+     * install, example:execute some sql insert
      */
     public function install()
     {
@@ -56,7 +56,7 @@ class BaseInstaller
     }
 
     /**
-     * uninstall, make some sql delete
+     * uninstall, example:execute some sql delete
      */
     public function uninstall()
     {
