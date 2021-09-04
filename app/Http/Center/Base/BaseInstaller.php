@@ -48,34 +48,19 @@ class BaseInstaller
     ];
 
     /**
-     * install
+     * install, make some sql insert
      */
     public function install()
     {
+        //
     }
 
     /**
-     * uninstall
-     * Delete the directory of the plugin.
+     * uninstall, make some sql delete
      */
     public function uninstall()
     {
-        $config = $this->getPluginConfig();
-        $uniKey = $config->uniKey;
-
-        // Delete File
-        InstallHelper::deletePluginFiles($uniKey);
-
-        // Delete plugin directory
-        $pluginPath = PluginHelper::currPluginRoot($uniKey);
-        if (is_dir($pluginPath)) {
-            File::deleteDirectory($pluginPath);
-        }
-
-        $info = [];
-        $info['pluginDir'] = $pluginPath;
-
-        return $info;
+        //
     }
 
     /**
