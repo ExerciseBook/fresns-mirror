@@ -11,11 +11,15 @@ namespace App\Http\FresnsDb\FresnsPlugins;
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Center\Helper\PluginHelper;
 
+/**
+ * List resource config processing
+ */
+
 class AmResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // form 字段
+        // Form Field
         $formMap = AmConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
@@ -27,25 +31,23 @@ class AmResource extends BaseAdminResource
         $newVision = '';
         $author = '';
 
-        // 默认字段
+        // Default Field
         $default = [
-            'key' => $this->id,
             'id' => $this->id,
-            'is_enable' => boolval($this->is_enable),
-            'disabled' => false,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'author' => $author,
+            'isNewVision' => $isNewVision,
+            'newVision' => $newVision,
+            'newVisionInt' => $newVisionInt,
+            'isDownload' => $isDownload,
+            'downloadUrl' => $downloadUrl,
             'more_json' => $this->more_json,
             'more_json_decode' => json_decode($this->more_json, true),
-            'isDownload' => $isDownload,
-            'isNewVision' => $isNewVision,
-            'newVisionInt' => $newVisionInt,
-            'newVision' => $newVision,
-            'downloadUrl' => $downloadUrl,
-            'author' => $author,
+            'is_enable' => boolval($this->is_enable),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
 
-        // 合并
+        // Merger
         $arr = array_merge($formMapFieldsArr, $default);
 
         return $arr;

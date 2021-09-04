@@ -1,5 +1,5 @@
 <!--Action Modal local install-->
-<div class="modal fade" id="upgrade" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
+<div class="modal fade" id="localInstallActionModal" tabindex="-1" aria-labelledby="localInstall" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -21,14 +21,13 @@
         </div>
     </div>
 </div>
+
 <!--Action Modal code install-->
-<div class="modal fade" id="upgrade2" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
+<div class="modal fade" id="codeInstallActionModal" tabindex="-1" aria-labelledby="codeInstall" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-laptop"></i>
-                    @lang('fresns.codeInstall')
-                </h5>
+                <h5 class="modal-title"><i class="bi bi-laptop"></i> @lang('fresns.codeInstall')</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body ps-5">
@@ -42,14 +41,13 @@
         </div>
     </div>
 </div>
-<!--Action Modal local uninstall-->
-<div class="modal fade" id="upgrade3" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
+
+<!--Action Modal uninstall-->
+<div class="modal fade" id="uninstallActionModal" tabindex="-1" aria-labelledby="uninstall" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-laptop"></i>
-                @lang('fresns.uninstall')
-                </h5>
+                <h5 class="modal-title"><i class="bi bi-laptop"></i> @lang('fresns.uninstall')</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body ps-5">
@@ -62,7 +60,6 @@
         </div>
     </div>
 </div>
-
 
 <footer>
     <div class="copyright text-center">

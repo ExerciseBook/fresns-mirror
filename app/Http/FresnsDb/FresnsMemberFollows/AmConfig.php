@@ -8,15 +8,14 @@
 
 namespace App\Http\FresnsDb\FresnsMemberFollows;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'member_follows';
 
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
 
     ];
@@ -31,9 +30,8 @@ class AmConfig extends BaseConfig
     //每次输出数量
     const INPUTTIPS_COUNT = 20;
 
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
-
     ];
 }

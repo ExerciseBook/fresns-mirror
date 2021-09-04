@@ -13,71 +13,84 @@ use Illuminate\Validation\Rule;
 
 class FresnsPluginConfig extends BasePluginConfig
 {
+    /**
+     * System Command Word
+     * https://fresns.org/extensions/command.html
+     */
+
     // unikey
     public $uniKey = 'fresns';
 
-    // 插件默认命令字, 任何插件必须要要有
+    // Plugin default command word (a must for any plugin)
     public const PLG_CMD_DEFAULT = 'plg_cmd_default';
 
-    // 发送验证码命令字
+    // Command Word: Send verification code
     public const PLG_CMD_SEND_CODE = 'plg_cmd_send_code';
 
-    // 校验验证码
+    // Command Word: Verify the verification code
     public const PLG_CMD_CHECKED_CODE = 'plg_cmd_checked_code';
 
-    //帖子草稿入库
-    // public CONST PLG_CMD_POST_LOG_CREATED = 'plg_cmd_post_log_created';
-    public const PLG_CMD_DIRECT_RELEASE_CONTENT = 'plg_cmd_direct_release_content';
-
-    // 发信-邮件
+    // Command Word: Send email
     public const PLG_CMD_SEND_EMAIL = 'plg_cmd_send_email';
 
-    // 发信-手机
+    // Command Word: Send sms
     public const PLG_CMD_SEND_SMS = 'plg_cmd_send_sms';
 
-    // 发信-微信推送
+    // Command Word: Send wechat push
     public const PLG_CMD_SEND_WECHAT = 'plg_cmd_send_wechat';
 
-    // 	发信-iOS 推送
+    // Command Word: Send ios push
     public const PLG_CMD_SEND_IOS = 'plg_cmd_send_ios';
 
-    // 	发信-Android 推送
+    // Command Word: Send android push
     public const PLG_CMD_SEND_ANDROID = 'plg_cmd_send_android';
 
-    //创建交互凭证
-    public const PLG_CMD_CREATE_SESSION_TOKEN = 'plg_cmd_create_session_token';
-    //校验交互凭证
-    public const PLG_CMD_VERIFY_SESSION_TOKEN = 'plg_cmd_verify_session_token';
-    //上传交互日志
-    public const PLG_CMD_UPLOAD_SESSION_LOG = 'plg_cmd_upload_session_log';
-    //获取上传凭证
-    public const PLG_CMD_GET_UPLOAD_TOKEN = 'plg_cmd_get_upload_token';
-    //上传文件
-    public const PLG_CMD_UPLOAD_FILE = 'plg_cmd_upload_file';
-    //图片存储
-    public const PLG_CMD_ANTI_LINK_IMAGE = 'plg_cmd_anti_link_image';
-    //视频存储
-    public const PLG_CMD_ANTI_LINK_VIDEO = 'plg_cmd_anti_link_video';
-    //音频存储
-    public const PLG_CMD_ANTI_LINK_AUDIO = 'plg_cmd_anti_link_audio';
-    //文档存储
-    public const PLG_CMD_ANTI_LINK_DOC = 'plg_cmd_anti_link_doc';
-    //凭fid命令删除物理文件
-    public const PLG_CMD_HARD_DELETE_FID = 'plg_cmd_hard_delete_fid';
-    //获取上传文件凭证token
-    public const PLG_CMD_GET_TOKEN = 'plg_cmd_get_token';
-    //获取上传文件网址
-    public const PLG_CMD_GET_ACCESS_PATH = 'plg_cmd_get_access_path';
-    //签名验证
+    // Command Word: Verify Sign
     public const PLG_CMD_VERIFY_SIGN = 'plg_cmd_verify_sign';
 
-    // 删除正式内容
+    // Command Word: Creating Token
+    public const PLG_CMD_CREATE_SESSION_TOKEN = 'plg_cmd_create_session_token';
+
+    // Command Word: Verify Token
+    public const PLG_CMD_VERIFY_SESSION_TOKEN = 'plg_cmd_verify_session_token';
+
+    // Command Word: Upload log
+    public const PLG_CMD_UPLOAD_SESSION_LOG = 'plg_cmd_upload_session_log';
+
+    // Command Word: Get upload token
+    public const PLG_CMD_GET_UPLOAD_TOKEN = 'plg_cmd_get_upload_token';
+
+    // Command Word: Upload file
+    public const PLG_CMD_UPLOAD_FILE = 'plg_cmd_upload_file';
+
+    // Command Word: anti hotlinking (image)
+    public const PLG_CMD_ANTI_LINK_IMAGE = 'plg_cmd_anti_link_image';
+
+    // Command Word: anti hotlinking (video)
+    public const PLG_CMD_ANTI_LINK_VIDEO = 'plg_cmd_anti_link_video';
+
+    // Command Word: anti hotlinking (audio)
+    public const PLG_CMD_ANTI_LINK_AUDIO = 'plg_cmd_anti_link_audio';
+
+    // Command Word: anti hotlinking (doc)
+    public const PLG_CMD_ANTI_LINK_DOC = 'plg_cmd_anti_link_doc';
+
+    // Command Word: Delete physical file by fid
+    public const PLG_CMD_HARD_DELETE_FID = 'plg_cmd_hard_delete_fid';
+
+    // Command Word: Submit content into the main form
+    public const PLG_CMD_DIRECT_RELEASE_CONTENT = 'plg_cmd_direct_release_content';
+
+    // Command Word: Delete official content
     public const PLG_CMD_DELETE_CONTENT = 'plg_cmd_delete_content';
-    //钱包收入交易
+
+    // Command Word: Wallet Trading (increase)
     public const PLG_CMD_WALLET_INCREASE = 'plg_cmd_wallet_increase';
-    //钱包支出交易
+
+    // Command Word: Wallet Trading (decrease)
     public const PLG_CMD_WALLET_DECREASE = 'plg_cmd_wallet_decrease';
-    // 插件命令字回调映射
+
+    // Command word callback mapping
     const PLG_CMD_HANDLE_MAP = [
         self::PLG_CMD_DEFAULT => 'defaultHandler',
         self::PLG_CMD_SEND_CODE => 'sendCodeHandler',
@@ -85,9 +98,10 @@ class FresnsPluginConfig extends BasePluginConfig
         self::PLG_CMD_DIRECT_RELEASE_CONTENT => 'directReleaseContentHandler',
         self::PLG_CMD_SEND_EMAIL => 'sendEmailHandler',
         self::PLG_CMD_SEND_SMS => 'sendSmsHandler',
-        self::PLG_CMD_SEND_WECHAT => 'sendWechatHandler',
+        self::PLG_CMD_SEND_WECHAT => 'sendWeChatHandler',
         self::PLG_CMD_SEND_IOS => 'sendIosHandler',
         self::PLG_CMD_SEND_ANDROID => 'sendAndriodHandler',
+        self::PLG_CMD_VERIFY_SIGN => 'plgCmdVerifySignHandler',
         self::PLG_CMD_CREATE_SESSION_TOKEN => 'plgCmdCreateSessionTokenHandler',
         self::PLG_CMD_VERIFY_SESSION_TOKEN => 'plgCmdVerifySessionTokenHandler',
         self::PLG_CMD_UPLOAD_SESSION_LOG => 'plgCmdUploadSessionLogHandler',
@@ -99,52 +113,24 @@ class FresnsPluginConfig extends BasePluginConfig
         self::PLG_CMD_ANTI_LINK_DOC => 'plgCmdAntiLinkDocHandler',
         self::PLG_CMD_HARD_DELETE_FID => 'plgCmdHardDeleteFidHandler',
         self::PLG_CMD_DELETE_CONTENT => 'deleteContentHandler',
-        self::PLG_CMD_GET_TOKEN => 'plgCmdGetTokenHandler',
-        self::PLG_CMD_GET_ACCESS_PATH => 'plgCmdGetAccessPathHandler',
-        self::PLG_CMD_VERIFY_SIGN => 'plgCmdVerifySignHandler',
         self::PLG_CMD_WALLET_INCREASE => 'plgCmdWalletIncreaseHandler',
         self::PLG_CMD_WALLET_DECREASE => 'plgCmdWalletDecreaseHandler',
     ];
 
-    // 发送验证码
+    // Send verification code
     public function sendCodeHandlerRule()
     {
         $request = request();
         $rule = [
             'type' => 'required|in:1,2',
-            // 'useType' => 'required|in:1,2,3,4,5',
             'template' => 'required',
-            // 'template' => 'required',
             'account' => 'required',
             'langTag' => 'required',
         ];
-        // 校验参数
-        // $type = $request->input('type');
-        // switch ($type) {
-        //     case 1:
-        //         $rule = [
-        //             'account' => 'required|email',
-        //         ];
-        //         break;
-
-        //     case 2:
-        //         $rule = [
-        //             'account' => 'required|numeric|regex:/^1[^0-2]\d{9}$/',
-        //         ];
-        //         break;
-        // }
-        // $rule = [
-        //     'type' => 'required|in:1,2',
-        //     'useType' => 'required|in:1,2,3,4,5',
-        //     'template' => 'required',
-        //     // 'template' => 'required',
-        //     'account' => 'required',
-        //     'langTag' => 'required'
-        // ];
         return $rule;
     }
 
-    // 校验验证码
+    // Verify the verification code
     public function checkedCodeHandlerRule()
     {
         $request = request();
@@ -152,23 +138,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'type' => 'required|in:1,2',
             'verifyCode' => 'required',
             'account' => 'required',
-            // 'countryCode' => 'required',
         ];
-        // // 校验参数
-        // $type = $request->input('type');
-        // switch ($type) {
-        //     case 1:
-        //         $rule = [
-        //             'account' => 'required|email',
-        //         ];
-        //         break;
-
-        //     case 2:
-        //         $rule = [
-        //             'account' => 'required|numeric|regex:/^1[^0-2]\d{9}$/',
-        //         ];
-        //         break;
-        // }
         return $rule;
     }
 
@@ -179,11 +149,10 @@ class FresnsPluginConfig extends BasePluginConfig
             'type' => 'required|in:1,2',
             'logId' => 'required',
         ];
-
         return $rule;
     }
 
-    // 发送邮件
+    // Send email
     public function sendEmailHandlerRule()
     {
         $rule = [
@@ -191,27 +160,24 @@ class FresnsPluginConfig extends BasePluginConfig
             'title' => 'required',
             'content' => 'required',
         ];
-
         return $rule;
     }
 
-    // 发送手机
+    // Send sms
     public function sendSmsHandlerRule()
     {
         $rule = [
-            // 'phone' => 'required|numeric|regex:/^1[^0-2]\d{9}$/',
             'phone' => 'required',
             'template' => 'required',
             'variale1' => 'required',
             'variale2' => 'required',
             'countryCode' => 'required',
         ];
-
         return $rule;
     }
 
-    // 发信-微信推送
-    public function sendWechatHandlerRule()
+    // Send wechat push
+    public function sendWeChatHandlerRule()
     {
         $rule = [
             'mid' => 'required',
@@ -224,11 +190,10 @@ class FresnsPluginConfig extends BasePluginConfig
             'linkType' => 'required',
             'linkUrl' => 'required',
         ];
-
         return $rule;
     }
 
-    // 	发信-iOS 推送
+    // Send ios push
     public function sendIosHandlerRule()
     {
         $rule = [
@@ -241,10 +206,10 @@ class FresnsPluginConfig extends BasePluginConfig
             'linkType' => 'required',
             'linkUrl' => 'required',
         ];
-
         return $rule;
     }
 
+    // Send android push
     public function sendAndriodHandlerRule()
     {
         $rule = [
@@ -257,22 +222,32 @@ class FresnsPluginConfig extends BasePluginConfig
             'linkType' => 'required',
             'linkUrl' => 'required',
         ];
-
         return $rule;
     }
 
-    //创建交互凭证
+    // Verify Sign
+    public function plgCmdVerifySignHandlerRule()
+    {
+        $rule = [
+            'platform' => 'required',
+            'appId' => 'required',
+            'timestamp' => 'required',
+            'sign' => 'required',
+        ];
+        return $rule;
+    }
+
+    // Creating Token
     public function plgCmdCreateSessionTokenHandlerRule()
     {
         $rule = [
             'platform' => 'required',
             'uid' => 'required',
         ];
-
         return $rule;
     }
 
-    //校验交互凭证
+    // Verify Token
     public function plgCmdVerifySessionTokenHandlerRule()
     {
         $rule = [
@@ -280,11 +255,10 @@ class FresnsPluginConfig extends BasePluginConfig
             'uid' => 'required',
             'token' => 'required',
         ];
-
         return $rule;
     }
 
-    //上传交互日志
+    // Upload log
     public function plgCmdUploadSessionLogHandlerRule()
     {
         $rule = [
@@ -298,11 +272,10 @@ class FresnsPluginConfig extends BasePluginConfig
             'deviceInfo' => 'json',
             'moreJson' => 'json',
         ];
-
         return $rule;
     }
 
-    //获取上传凭证
+    // Get upload token
     public function plgCmdGetUploadTokenHandlerRule()
     {
         $rule = [
@@ -311,11 +284,10 @@ class FresnsPluginConfig extends BasePluginConfig
             'scene' => 'required|numeric',
 
         ];
-
         return $rule;
     }
 
-    //上传文件
+    // Upload file
     public function plgCmdUploadFileHandlerRule()
     {
         $rule = [
@@ -325,103 +297,65 @@ class FresnsPluginConfig extends BasePluginConfig
             'tableField' => 'required',
             'mode' => 'required|in:1,2',
         ];
-
         return $rule;
     }
 
-    //图片存储
+    // anti hotlinking (image)
     public function plgCmdAntiLinkImageHandlerRule()
     {
         $rule = [
             'fid' => 'required',
         ];
-
         return $rule;
     }
 
-    //视频存储
+    // anti hotlinking (video)
     public function plgCmdAntiLinkVideoHandlerRule()
     {
         $rule = [
             'fid' => 'required',
         ];
-
         return $rule;
     }
 
-    //音频存储
+    // anti hotlinking (audio)
     public function plgCmdAntiLinkAudioHandlerRule()
     {
         $rule = [
             'fid' => 'required',
         ];
-
         return $rule;
     }
 
-    //文档存储
+    // anti hotlinking (doc)
     public function plgCmdAntiLinkDocHandlerRule()
     {
         $rule = [
             'fid' => 'required',
         ];
-
         return $rule;
     }
 
-    //删除物理文件
+    // Delete physical file by fid
     public function plgCmdHardDeleteFidHandlerRule()
     {
         $rule = [
             'fid' => 'required',
         ];
-
         return $rule;
     }
 
-    // 删除正式内容
+    // Delete official content
     public function deleteContentHandlerRule()
     {
         $rule = [
             'type' => 'required | in:1,2',
             'content' => 'required',
         ];
-
         return $rule;
     }
 
-    public function plgCmdGetTokenHandlerRule()
-    {
-        $rule = [
-            'type' => 'required | in:1,2,3,4',
-            'scene' => 'required|in:1,2,3,4,5,6,7,8,9,10,11',
-        ];
-
-        return $rule;
-    }
-
-    public function plgCmdGetAccessPathHandlerRule()
-    {
-        $rule = [
-            'type' => 'required | in:1,2,3,4',
-            'scene' => 'required|in:1,2,3,4,5,6,7,8,9,10,11',
-        ];
-
-        return $rule;
-    }
-
-    public function plgCmdVerifySignHandlerRule()
-    {
-        $rule = [
-            'platform' => 'required',
-            'appId' => 'required',
-            'timestamp' => 'required',
-            'sign' => 'required',
-        ];
-
-        return $rule;
-    }
-
+    // Wallet Trading (increase)
     public function plgCmdWalletIncreaseHandlerRule()
     {
         $rule = [
@@ -432,10 +366,10 @@ class FresnsPluginConfig extends BasePluginConfig
             'systemFee' => 'required|numeric',
             'originName' => 'required',
         ];
-
         return $rule;
     }
 
+    // Wallet Trading (decrease)
     public function plgCmdWalletDecreaseHandlerRule()
     {
         $rule = [
@@ -446,7 +380,6 @@ class FresnsPluginConfig extends BasePluginConfig
             'systemFee' => 'required|numeric',
             'originName' => 'required',
         ];
-
         return $rule;
     }
 }

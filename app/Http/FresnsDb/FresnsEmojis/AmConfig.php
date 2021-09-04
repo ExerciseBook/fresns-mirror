@@ -8,15 +8,14 @@
 
 namespace App\Http\FresnsDb\FresnsEmojis;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'emojis';
 
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
         'parent_id' => ['field' => 'parent_id', 'op' => '='],
     ];
@@ -24,7 +23,7 @@ class AmConfig extends BaseConfig
     //表情小组
     const TYPE_GROUP = 2;
 
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
         'name' => 'name',

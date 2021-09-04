@@ -54,38 +54,11 @@ class FresnsPluginUsagesResource extends BaseAdminResource
             // dd($postLists);
             $postFollows = self::gettypePluginUsages('postLists', $this->data_sources);
             $postNearbys = self::gettypePluginUsages('postLists', $this->data_sources);
-            // $sort_number = json_decode($this->data_sources, true);
-            // // dd($sort_number);
-            // $sortNumber = [];
-            // if ($sort_number) {
-            //     foreach ($sort_number as $k => &$s) {
-            //         // $sArr = [];
-            //         foreach ($s as &$v) {
-
-            //             $introArr = [];
-            //             foreach ($v['intro'] as $i) {
-            //                 $map[$i['lang_code']] = $i;
-            //                 if ($i['lang_code'] == $langTag) {
-            //                     $introArr['title'] = $i['title'];
-            //                     $introArr['description'] = $i['description'];
-            //                     $introArr['langTag'] = $i['lang_code'];
-            //                 }
-            //             }
-            //             $v['intro'] = $introArr;
-            //             // $sArr[] = $item1;
-
-            //         }
-            //         // $arr1[$k] = $sArr;
-            //     }
-            //     $sortNumber = $sort_number;
-            // }
             $sortNumber['postLists'] = $postLists;
             $sortNumber['postFollows'] = $postFollows;
             $sortNumber['postNearbys'] = $postNearbys;
         }
 
-        // $sort_number
-        // dd($sort_number);
         // 默认字段
         $default = [
             'type' => $type,
@@ -108,7 +81,6 @@ class FresnsPluginUsagesResource extends BaseAdminResource
     public static function gettypePluginUsages($key, $data)
     {
         $sort_number = json_decode($data, true);
-        // dump($sort_number[$key]['sortNumber']);
         $sortNumber = [];
         $introArr = [];
         if ($sort_number) {
@@ -141,7 +113,6 @@ class FresnsPluginUsagesResource extends BaseAdminResource
                     // $arr1[$k] = $sArr;
                 }
             }
-            // $sortNumber = $sort_number;
         }
 
         return $introArr;

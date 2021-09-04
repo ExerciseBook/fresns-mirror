@@ -28,7 +28,6 @@ class AmService extends BaseAdminService
     public function common()
     {
         $common = parent::common();
-        $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
         $common['recommendOption'] = AmConfig::RECOMMEND_OPTION;
         $common['typeModel'] = AmConfig::TYPE_MODE;
         $common['typeFind'] = AmConfig::TYPE_FIND;

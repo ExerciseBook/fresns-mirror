@@ -8,15 +8,14 @@
 
 namespace App\Http\FresnsDb\FresnsHashtags;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'hashtags';
 
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
         'huri' => ['field' => 'slug', 'op' => '='],
         'viewCountGt' => ['field' => 'view_count', 'op' => '>='],
@@ -33,7 +32,7 @@ class AmConfig extends BaseConfig
         'essenceCountLt' => ['field' => 'essence_count', 'op' => '<='],
     ];
 
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
         'uuid' => 'uuid',

@@ -18,10 +18,11 @@ class FresnsSubPluginConfig extends BasePluginConfig
     const SUBSCRITE_TYPE3 = 3;
     const SUBSCRITE_TYPE4 = 4;
     const SUBSCRITE_TYPE5 = 5;
-    // 扫描指定的订阅信息
+
+    // Scan for specified subscription information
     public const PLG_CMD_SUB_ADD_TABLE = 'plg_cmd_sub_add_table';
 
-    // 订阅用户活跃状态
+    // Subscribe to user activity status
     public const PLG_CMD_SUB_USER_ACTIVE = 'plg_cmd_sub_user_active';
     const PLG_CMD_HANDLE_MAP = [
         self::PLG_CMD_SUB_ADD_TABLE => 'subAddTableHandler',

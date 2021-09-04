@@ -8,22 +8,21 @@
 
 namespace App\Http\FresnsDb\FresnsMemberLikes;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'member_likes';
 
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
         'member_id' => ['field' => 'member_id', 'op' => '='],
         'type' => ['field' => 'like_type', 'op' => '='],
         'like_id' => ['field' => 'like_id', 'op' => '='],
     ];
 
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
         'member_id' => 'member_id',

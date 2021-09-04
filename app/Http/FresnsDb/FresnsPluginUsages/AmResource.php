@@ -14,11 +14,15 @@ use App\Http\FresnsDb\FresnsLanguages\FresnsLanguages;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 
+/**
+ * List resource config processing
+ */
+
 class AmResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // form 字段
+        // Form Field
         $formMap = AmConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
@@ -29,17 +33,12 @@ class AmResource extends BaseAdminResource
         // 语言名称
         // 获取默认语言code
         $defaultCode = AmService::getDefaultLanguage();
-        $lang_code = request()->header('lang-code', $defaultCode);
-        foreach (AmConfig::MULTILINGUAL_OPTION as $v) {
-            if ($v['nickname'] == $lang_code) {
-                $lang_code = $v['key'];
-            }
-        }
+        $langTag = request()->header('langTag', $defaultCode);
         $input = [
             'table_name' => AmConfig::CFG_TABLE,
             'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
             'table_id' => $this->id,
-            'lang_tag' => $lang_code,
+            'lang_tag' => $langTag,
         ];
         $names = FresnsLanguages::where($input)->first();
         if (! $names) {
@@ -51,7 +50,6 @@ class AmResource extends BaseAdminResource
             $names = FresnsLanguages::where($input)->first();
         }
         // 语言名称
-
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
         // dd($multilingual);
@@ -99,7 +97,7 @@ class AmResource extends BaseAdminResource
             foreach ($multilingual as &$m) {
                 $arr['id'] = '';
                 $intro = [];
-                $intro['lang_code'] = $m['key'];
+                $intro['langTag'] = $m['key'];
                 $intro['text'] = $m['text'];
                 $intro['title'] = '';
                 $intro['description'] = '';
@@ -112,66 +110,52 @@ class AmResource extends BaseAdminResource
             // sort_number参数过滤
             $arr1 = [];
             foreach ($sort_number as $k => &$s) {
-                // $sArr = [];
                 foreach ($s as &$v) {
                     $introArr = [];
                     foreach ($v['intro'] as $i) {
-                        $map[$i['lang_code']] = $i;
+                        $map[$i['langTag']] = $i;
                     }
                     foreach ($multilingual as $m) {
                         $item = [];
                         $item['title'] = $map[$m['key']]['title'] ?? '';
-                        $item['lang_code'] = $m['key'];
+                        $item['langTag'] = $m['key'];
                         $item['text'] = $m['text'];
                         $item['description'] = $map[$m['key']]['description'] ?? '';
                         $introArr[] = $item;
                     }
 
-                    // $item1['intro']= $introArr;
                     $v['intro'] = $introArr;
-                    // $sArr[] = $item1;
                 }
-                // $arr1[$k] = $sArr;
             }
-            // dd($sort_number);
             $newArr = $sort_number;
         }
-        // dd($multilingual);
-        // dd($newArr);
+
         // 数据来源
         $source_parameter = AmConfig::SOURCE_PARAMETER;
         foreach ($source_parameter as &$v) {
             $v['postLists'] = $parameter[$v['nickname']] ?? '';
             $v['sort_number'] = $newArr[$v['nickname']] ?? '';
         }
-        // dd($source_parameter);
-        // 默认字段
+        
+        // Default Field
         $default = [
-            'key' => $this->id,
             'id' => $this->id,
-            'is_enable' => boolval($this->is_enable),
-            'disabled' => false,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-
-            'nickname' => $this->nickname,
-            'more_json' => $this->more_json,
-            'more_json_decode' => json_decode($this->more_json, true),
             'plug_name' => $plugInfo['name'] ?? '',
             'name' => $names['lang_content'] ?? '',
+            'nameArr' => $nameArr,
             'roleNames' => $roleNames,
             'roleNamesArr' => $roleInfo,
             'userRolesArr' => $user_rolesArr,
             'scene' => $sceneArr,
-            // 'sceneArr' => $sceneArr,
             'sceneNames' => $sceneNames,
-            'nameArr' => $nameArr,
             'source_parameter' => $source_parameter,
             'sort_number' => json_decode($this->sort_number, true),
-            // 'is_group_admin' => boolval($this->is_group_admin)
+            'is_enable' => boolval($this->is_enable),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
 
-        // 合并
+        // Merger
         $arr = array_merge($formMapFieldsArr, $default);
 
         return $arr;

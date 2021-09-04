@@ -1,8 +1,8 @@
 //install extensions
 $(".installLocal").click(function(){
     var dirName = $(".installDirName").val();
-    $('#upgrade').addClass('show');
-    $('#upgrade').css({
+    $('#localInstallActionModal').addClass('show');
+    $('#localInstallActionModal').css({
         'display': 'block'
     });
     var isAdd = true;
@@ -48,38 +48,15 @@ $(".installLocal").click(function(){
                     window.location.reload();
                 },1800)
             }else{
-                $('#upgrade').removeClass('show');
+                $('#localInstallActionModal').removeClass('show');
                 alert(data.message);
             }
         }
     })
 });
 
-//down extensions
-$(".update_plugin").click(function(){
-    var unikey = $(this).attr('unikey');
-    var dirName = unikey;
-    var downloadUrl = "https://cdn.fresns.cn/extensions/plugin_v1.0.0.zip";
-    $.ajax({
-        async: false,
-        type: "get",
-        url: "https://apps.fresns.cn/api/extensions/upgrade",
-        data: {'unikey':unikey,'dirName':dirName,'downloadUrl':downloadUrl,"localVision":1,'remoteVisionInt':2,'remoteVision':'2.0.0'},
-        beforeSend: function (request) {
-            return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-        },
-        success: function (data) {
-            if(data.code == 0){
-                window.location.reload();
-            }else{
-                alert(data.message)
-            }
-        }
-    })
-});
-
 //update extensions
-$("#updatePlugin").click(function(){
+$("#updateExtensions").click(function(){
     var unikey = $(this).attr('data_unikey');
     // var downloadUrl = $(this).attr('data_download_url');
     var localVision = $(this).attr('data_local_vision');
@@ -116,7 +93,7 @@ $("#linkSubject").click(function(){
 $(".updateSubject").click(function(){
     var websiteUnikey = $("#updateWebsite").val();
     if(!websiteUnikey){
-        alert("插件未知");
+        alert("Unknown");
         return ;
     }
     var pluginPc = $(".subectUnikeyPc").find("option:selected").val();
@@ -192,8 +169,8 @@ $(".btn-danger").click(function(){
     var unikey = $(this).attr('unikey');
     var clear_plugin_data = $('#is-delete-data').is(':checked') ? 1 : 0;
 
-    $('#upgrade3').addClass('show');
-    $('#upgrade3').css({
+    $('#uninstallActionModal').addClass('show');
+    $('#uninstallActionModal').css({
         'display': 'block'
     });
 
@@ -239,7 +216,7 @@ $(".btn-danger").click(function(){
                     window.location.reload();
                 },1800)
             }else{
-                $('#upgrade3').removeClass('show');
+                $('#uninstallActionModal').removeClass('show');
                 alert(data.message)
             }
         }

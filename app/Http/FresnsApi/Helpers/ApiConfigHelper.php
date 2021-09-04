@@ -208,7 +208,7 @@ class ApiConfigHelper
         $map = config(FresnsBaseConfig::CONFIGS_LIST);
         $data = [];
         foreach ($map as $k => $v) {
-            if ($k == FresnsConfigsConfig::LANGUAGE) {
+            if ($k == FresnsConfigsConfig::LANGUAGES) {
                 $data = $v;
             }
         }

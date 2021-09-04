@@ -8,12 +8,11 @@
 
 namespace App\Http\FresnsDb\FresnsComments;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'comments';
     const IT_PUBLISH_COMMENTS = 'it_publish_comments';
     const COMMENT_EDITOR_BRIEF_COUNT = 'comment_editor_brief_count';
@@ -21,18 +20,19 @@ class AmConfig extends BaseConfig
     const HASHTAG_SHOW = 'hashtag_show';
     const COMMENT_COUNTS = 'comment_counts';
     const HASHTAG_COUNTS = 'hashtag_counts';
-    // 主表额外搜索字段
+
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
-        // 'status' => ['field' => 'status','op'=>'=' ],
         'cid' => ['field' => 'uuid', 'op' => '='],
         'ids' => ['field' => 'id', 'op' => 'IN'],
-        // 'inStatus' => ['field' => 'status', 'op' => 'IN'],
     ];
-    // tree 搜索条件
+
+    // Tree Search Rule
     protected $treeSearchRule = [
         'id' => ['field' => 'id', 'op' => '='],
     ];
-    // model 使用 - 表单映射
+
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
         'uuid' => 'uuid',
@@ -42,19 +42,15 @@ class AmConfig extends BaseConfig
         'type' => 'type',
         'content' => 'content',
         'is_brief' => 'is_brief',
-        // 'status'  => 'status',
         'is_anonymous' => 'is_anonymous',
         'is_lbs' => 'is_lbs',
         'is_sticky' => 'is_sticky',
-        // 'label_file_id'  => 'label_file_id',
-        // 'label_file_url'  => 'label_file_url',
         'more_json' => 'more_json',
         'like_count' => 'like_count',
         'follow_count' => 'follow_count',
         'shield_count' => 'shield_count',
         'comment_count' => 'comment_count',
         'comment_like_count' => 'comment_like_count',
-        // 'release_at'  => 'release_at',
         'latest_edit_at' => 'latest_edit_at',
         'latest_comment_at' => 'latest_comment_at',
         'is_enable' => 'is_enable',

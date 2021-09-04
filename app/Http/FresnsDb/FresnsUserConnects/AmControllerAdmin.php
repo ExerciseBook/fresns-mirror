@@ -17,7 +17,7 @@ class AmControllerAdmin extends BaseAdminController
         $this->service = new AmService();
     }
 
-    // 验证规则
+    // Validation Rules
     public function rules($ruleType)
     {
         $rule = [];

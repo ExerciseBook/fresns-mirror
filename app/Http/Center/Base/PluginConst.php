@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 
 /**
  * Class PluginConst
- * 插件常量和路径相关的信息.
+ * Plugin constants and path-related information.
  */
 class PluginConst
 {

@@ -18,19 +18,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 /**
- * 基础控制器类
- * 处理插件的安装/卸载/升级等基础操作.
+ * Basic controller class
+ * Handle basic operations such as install/uninstall/upgrade of plugins.
  */
 class PluginController extends BaseController
 {
-    // 远程安装插件
+    // Fresns Store Install Plugin
     public function install(Request $request)
     {
         $uniKey = $request->input('unikey');
         $dirName = $uniKey;
         $downloadUrl = $request->input('downloadUrl');
 
-        // 根据unikey获取下载地址
+        // Get the download address according to unikey
         $downloadPath = PluginHelper::getDownloadPath();
 
         $pathArr = [
@@ -49,7 +49,7 @@ class PluginController extends BaseController
             $this->error(ErrorCodeService::DOWMLOAD_ERROR, ['info' => '下载失败或者文件为空']);
         }
 
-        // 1. 安装文件
+        // 1. Install files
         $options = [];
         $installFileInfo = InstallHelper::installPluginFile($uniKey, $dirName, $downloadFileName, $options);
 
@@ -57,10 +57,10 @@ class PluginController extends BaseController
         $info['downloadFileName'] = $downloadFileName;
         $info['installFileInfo'] = $installFileInfo;
 
-        // 2. 分发文件
+        // 2. Distribution of documents
         InstallHelper::pushPluginResourcesFiles($uniKey);
 
-        // 3. 执行插件本身的安装函数
+        // 3. Execute the installation function of the plugin itself
         $installer = InstallHelper::findInstaller($uniKey);
         if (empty($installer)) {
             $this->error(ErrorCodeService::NO_RECORD);
@@ -73,49 +73,22 @@ class PluginController extends BaseController
     }
 
     /**
-     * 打包插件.
-     * @param Request $request
-     */
-    public function package(Request $request)
-    {
-        $unikey = $request->input('unikey');
-
-        // 获取安装类
-        $installer = InstallHelper::findInstaller($unikey);
-        // dd($installer);
-        if (empty($installer)) {
-            $this->error(ErrorCodeService::NO_RECORD);
-        }
-
-        $info = $installer->package();
-
-        $this->success($info);
-    }
-
-    /**
-     * 卸载插件.
+     * Uninstall the plugin.
      * @param Request $request
      */
     public function uninstall(Request $request)
     {
         $uniKey = $request->input('unikey');
 
-//        // 获取安装类
-//        $installer = InstallHelper::findInstaller($uniKey);
-//        if(empty($installer)){
-//            $this->error(ErrorCodeService::NO_RECORD);
-//        }
-//        $info = $installer->uninstall();
-
         $info = PluginHelper::uninstallByUniKey($uniKey);
-        // 删除插件数据
+        // Delete plugin data
         FresnsPlugins::where('unikey', $uniKey)->delete();
 
         $this->success($info);
     }
 
     /**
-     * 升级插件.
+     * Upgrade plugin.
      * @param Request $request
      */
     public function upgrade(Request $request)
@@ -136,33 +109,33 @@ class PluginController extends BaseController
         $remoteVision = $request->input('remoteVision');
         $downloadUrl = $request->input('downloadUrl');
         if ($localVision == $remoteVisionInt) {
-            $this->errorInfo(ErrorCodeService::CODE_FAIL, ['info' => '当前版本与升级版本一致']);
+            $this->errorInfo(ErrorCodeService::CODE_FAIL, ['info' => 'The current version is the same as the upgraded version']);
         }
-        // 获取安装类
+        // Get install class
         $installer = InstallHelper::findInstaller($unikey);
         if (empty($installer)) {
             $this->error(ErrorCodeService::NO_RECORD);
         }
-        // 执行安装
+        // Perform installation
         $res = self::beforeUpgrade($unikey, $dirName, $downloadUrl);
         if (! $res) {
             $this->error(ErrorCodeService::DOWMLOAD_ERROR, ['info' => '下载失败或者文件为空']);
         }
         $info = $installer->upgrade();
-        // 更新至最新版本
+        // Update to the latest version
         FresnsPlugins::where('unikey', $unikey)->update(['version_int' => $remoteVisionInt, 'version' => $remoteVision]);
 
         $this->success($info);
     }
 
-    // 升级插件之前执行安装
+    // Perform installation before upgrading the plugin
     public static function beforeUpgrade($unikey, $dirName, $dowmloadUrl)
     {
         $unikey = $unikey;
         $dirName = $dirName;
         $downloadUrl = $dowmloadUrl;
 
-        // 根据unikey获取下载地址
+        // Get the download address according to unikey
         $pathArr = [
             base_path(),
             'public',
@@ -182,7 +155,7 @@ class PluginController extends BaseController
             return false;
         }
 
-        // 1. 安装文件
+        // 1. Install files
         $options = [];
         $installFileInfo = InstallHelper::installPluginFile($unikey, $dirName, $downloadFileName, $options);
 
@@ -190,7 +163,7 @@ class PluginController extends BaseController
         $info['downloadFileName'] = $downloadFileName;
         $info['installFileInfo'] = $installFileInfo;
 
-        // 2. 执行插件本身的安装函数
+        // 2. Execute the installation function of the plugin itself
         $installer = InstallHelper::findInstaller($unikey);
         if (empty($installer)) {
             return false;

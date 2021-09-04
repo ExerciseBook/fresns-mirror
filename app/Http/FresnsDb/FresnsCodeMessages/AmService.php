@@ -22,16 +22,13 @@ class AmService extends BaseAdminService
     public function common()
     {
         $common = parent::common();
-        $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
-
         return $common;
     }
 
-    //获取对应的codeMessage
+    // Get the corresponding code message
     public static function getCodeMessage($pluginUnikey, $langTag, $code)
     {
-        $message = AmModel::where('plugin_unikey', $pluginUnikey)->where('lang_tag', $langTag)->where('code',
-            $code)->value('message');
+        $message = AmModel::where('plugin_unikey', $pluginUnikey)->where('lang_tag', $langTag)->where('code', $code)->value('message');
 
         return $message;
     }

@@ -20,19 +20,19 @@ class AmModel extends BaseCategoryModel
 {
     protected $table = AmConfig::CFG_TABLE;
 
-    // 前台表单字段映射
+    // Front-end form field mapping
     public function formFieldsMap()
     {
         return AmConfig::FORM_FIELDS_MAP;
     }
 
-    // 新增搜索条件
+    // New search criteria
     public function getAddedSearchableFields()
     {
         return AmConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
-    // hook-添加之后
+    // hook - after adding
     public function hookStoreAfter($id)
     {
         $request = request();
@@ -79,13 +79,10 @@ class AmModel extends BaseCategoryModel
                 DB::table($table_name)->where('id', $table_id)->update([$table_filed => $v['lang_content']]);
             }
             $item = [];
-            $tagArr = FresnsLanguagesService::conversionLangTag($v['lang_code']);
-            // $tagArr = explode('-',$v['lang_code']);
-            // $areaCode = array_pop($tagArr);
-            // $langCode = str_replace("-$areaCode",'',$v['lang_code']);
+            $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
             $item['lang_code'] = $tagArr['lang_code'];
             $item['area_code'] = $tagArr['area_code'];
-            $item['lang_tag'] = $v['lang_code'];
+            $item['lang_tag'] = $v['langTag'];
             $item['lang_content'] = $v['lang_content'];
             $item['table_field'] = $table_filed;
             $item['table_id'] = $table_id;
@@ -96,7 +93,7 @@ class AmModel extends BaseCategoryModel
         FresnsLanguagesModel::insert($inputArr);
     }
 
-    // 搜索排序字段
+    // Search for sorted fields
     public function initOrderByFields()
     {
         $sortType = request()->input('sortType', '');
@@ -106,7 +103,7 @@ class AmModel extends BaseCategoryModel
             case 'view':
                 $orderByFields = [
                     'view_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -114,7 +111,7 @@ class AmModel extends BaseCategoryModel
             case 'like':
                 $orderByFields = [
                     'like_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -122,7 +119,7 @@ class AmModel extends BaseCategoryModel
             case 'follow':
                 $orderByFields = [
                     'follow_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -130,7 +127,7 @@ class AmModel extends BaseCategoryModel
             case 'shield':
                 $orderByFields = [
                     'shield_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -138,7 +135,7 @@ class AmModel extends BaseCategoryModel
             case 'post':
                 $orderByFields = [
                     'post_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -146,7 +143,7 @@ class AmModel extends BaseCategoryModel
             case 'essence':
                 $orderByFields = [
                     'essence_count' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -154,7 +151,7 @@ class AmModel extends BaseCategoryModel
             case 'time':
                 $orderByFields = [
                     'created_at' => $sortWayType,
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;
@@ -163,7 +160,7 @@ class AmModel extends BaseCategoryModel
             default:
                 $orderByFields = [
                     'rank_num' => 'ASC',
-                    // 'updated_at'    => 'DESC',
+                    // 'updated_at' => 'DESC',
                 ];
 
                 return $orderByFields;

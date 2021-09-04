@@ -84,7 +84,7 @@
                                 @foreach ($newVisionPlugin as $item)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div><i class="bi bi-sliders"></i> {{$item['name']}} <span class="badge bg-secondary">{{$item['version']}}</span> to <span class="badge bg-danger">{{$item['newVision']}}</span></div>
-                                        <div><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#upgrade" id="updatePlugin" data_unikey="{{$item['unikey']}}" data_local_vision="{{$item['version_int']}}" data_new_vision_int="{{$item['newVisionInt']}}" data_new_vision="{{$item['newVision']}}">@lang('fresns.updateBtn')</button></div>
+                                        <div><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateActionModal" id="updateExtensions" data_unikey="{{$item['unikey']}}" data_local_vision="{{$item['version_int']}}" data_new_vision_int="{{$item['newVisionInt']}}" data_new_vision="{{$item['newVision']}}">@lang('fresns.updateBtn')</button></div>
                                     </li>
                                 @endforeach
                             </ul>

@@ -12,11 +12,15 @@ use App\Base\Resources\BaseAdminResource;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsService;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguages;
 
+/**
+ * List resource config processing
+ */
+
 class AmResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // form 字段
+        // Form Field
         $formMap = AmConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
@@ -57,26 +61,20 @@ class AmResource extends BaseAdminResource
         $permission_decode = json_decode($this->permission, true);
         $publish_post = $permission_decode['publish_post'] ?? 1;
         $publish_comment = $permission_decode['publish_comment'] ?? 1;
-        // 默认字段
+
+        // Default Field
         $default = [
-            'key' => $this->id,
             'id' => $this->id,
+            'gid' => $this->uuid,
+            'permission_decode' => json_decode($this->permission, true),
+            'name' => $nameArr,
+            'description' => $descriptionArr,
             'is_enable' => boolval($this->is_enable),
-            'disabled' => false,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-
-            'nickname' => $this->nickname,
-            'more_json' => $this->more_json,
-            'more_json_decode' => json_decode($this->more_json, true),
-            'permission_decode' => json_decode($this->permission, true),
-            'nameArr' => $nameArr,
-            'descriptionArr' => $descriptionArr,
-            'publish_post' => $publish_post,
-            'publish_comment' => $publish_comment,
         ];
 
-        // 合并
+        // Merger
         $arr = array_merge($formMapFieldsArr, $default);
 
         return $arr;

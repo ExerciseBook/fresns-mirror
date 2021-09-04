@@ -29,7 +29,6 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['TableName'] = AmConfig::CFG_TABLE;
-        $common['selectOption'] = AmConfig::TEST_SELECT_OPTION;
         // 场景
         $common['sceneOption'] = AmConfig::SCONE_OPTION;
         $common['typeOption'] = AmConfig::TYPE_OPTION;
@@ -66,25 +65,7 @@ class AmService extends BaseAdminService
     {
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $code = $languageArr['default_language'];
-        // $lang_code = FresnsConfigs::where('item_key', AmConfig::LANG_SETTINGS)->first(['item_value']);
-        // if (!$lang_code) {
-        //     return "";
-        // }
-        // // dd($lang_code);
-        // $lang_code_arr = json_decode($lang_code['item_value'], true);
-        // $default = FresnsConfigs::where('item_key', AmConfig::DEFAULT_LANGUAGE)->first(['item_value']);
-        // // dd($default['item_value']);
-
-        // // $default = json_decode($default['item_value'],true);
-        // $code = "";
-        // // dd($lang_code_arr);
-        // foreach ($lang_code_arr as $v) {
-        //     // dd($v);
-        //     if ($default['item_value'] == $v['langTag']) {
-        //         $code = $v['langTag'];
-        //     }
-        // }
-        // dd($code);
+        
         return $code;
     }
 

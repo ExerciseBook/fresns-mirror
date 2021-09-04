@@ -23,19 +23,19 @@ class AmModel extends BaseCategoryModel
 {
     protected $table = AmConfig::CFG_TABLE;
 
-    // 前台表单字段映射
+    // Front-end form field mapping
     public function formFieldsMap()
     {
         return AmConfig::FORM_FIELDS_MAP;
     }
 
-    // 新增搜索条件
+    // New search criteria
     public function getAddedSearchableFields()
     {
         return AmConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
-    // hook-添加之后
+    // hook - after adding
     public function hookStoreAfter($id)
     {
     }
@@ -47,17 +47,15 @@ class AmModel extends BaseCategoryModel
         $commentAppendTable = FresnsCommentAppendsConfig::CFG_TABLE;
         $postTable = FresnsPostsConfig::CFG_TABLE;
         /**
-         * 过滤屏蔽对象的评论（成员、评论）。
-         * searchType 留空代表输出所有内容。内容为插件 unikey 值，用于搜索包含指定插件扩展内容的帖子。
-         * 默认排序类型「time」，默认排序方式「降序」.
+         * Filtering the comments of blocked objects (member, comment)
+         * "searchType": Leave blank to output all content (comments > type)
+         * Default sorting type "time", default sorting method "descending".
          */
-        // 屏蔽的目标字段
+        // Target fields to be masked
         $request = request();
         $mid = GlobalService::getGlobalKey('member_id');
-        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            1)->pluck('shield_id')->toArray();
-        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            5)->pluck('shield_id')->toArray();
+        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 1)->pluck('shield_id')->toArray();
+        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 5)->pluck('shield_id')->toArray();
         $query = DB::table("$commentTable as comment")->select('comment.*')
             ->join("$commentAppendTable as append", 'comment.id', '=', 'append.comment_id')
             ->whereNotIn('comment.member_id', $memberShields)
@@ -146,12 +144,9 @@ class AmModel extends BaseCategoryModel
                         foreach ($data as $v) {
                             $this->getChildrenIds($v, $childrenIdArr);
                         }
-                        // dd($childrenIdArr);
                     }
                     array_unshift($childrenIdArr, $comments['id']);
-                    // dd($childrenIdArr);
                     request()->offsetUnset('id');
-                    // dd($childrenIdArr);
                     // $query->where('comment.id','=',$comments['id']);
                     $query->whereIn('comment.id', $childrenIdArr)->where('comment.parent_id', '!=', 0);
                 } else {
@@ -163,10 +158,8 @@ class AmModel extends BaseCategoryModel
         } else {
             $query->where('comment.parent_id', '=', 0);
         }
-        // 置顶
+        // sticky status
         $searchSticky = $request->input('searchSticky');
-        // dump($searchSticky);
-        // dd(!empty($searchSticky));
         if (! empty($searchSticky)) {
             // $searchEssenceType = $searchEssence == false ? 0 : 1;
             $query->where('comment.is_sticky', '=', $searchSticky);
@@ -199,7 +192,7 @@ class AmModel extends BaseCategoryModel
         if ($shieldCountGt) {
             $query->where('comment.shield_count', '>=', $shieldCountGt);
         }
-        // shield_count
+        // shieldCountLt
         $shieldCountLt = $request->input('shieldCountLt');
         if ($shieldCountLt) {
             $query->where('comment.shield_count', '<=', $shieldCountLt);
@@ -234,7 +227,7 @@ class AmModel extends BaseCategoryModel
         if ($publishTimeLt) {
             $query->where('comment.created_at', '<=', $publishTimeLt);
         }
-        // 排序处理
+        // Sorting
         $sortType = request()->input('sortType', '');
         $sortWay = request()->input('sortDirection', 2);
         $sortWayType = $sortWay == 2 ? 'DESC' : 'ASC';
@@ -258,33 +251,29 @@ class AmModel extends BaseCategoryModel
                 $query->orderBy('comment.created_at', $sortWayType);
                 break;
         }
-        // dd($query);
         return $query;
     }
 
-    // 搜索排序字段
+    // Search for sorted fields
     public function initOrderByFields()
     {
         $orderByFields = [
             'created_at' => 'DESC',
-            // 'updated_at'    => 'DESC',
+            // 'updated_at' => 'DESC',
         ];
 
         return $orderByFields;
     }
 
-    // 获取childrenIds
+    // Get childrenIds
     public function getChildrenIds($categoryItem, &$childrenIdArr)
     {
-        // dd($categoryItem);
         if (key_exists('children', $categoryItem)) {
             $childrenArr = $categoryItem['children'];
-            // dd($childrenArr);
             foreach ($childrenArr as $children) {
                 $childrenIdArr[] = $children['value'];
                 $this->getChildrenIds($children, $childrenIdArr);
             }
         }
-        // dd($childrenIdArr);
     }
 }

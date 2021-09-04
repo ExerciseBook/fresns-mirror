@@ -16,18 +16,18 @@ class BasePlugin
     use PluginTrait;
 
     /**
-     * 服务配置类.
+     * Service config class.
      */
     public $pluginConfig = null;
 
     /**
-     * 命令字映射.
+     * Command word mapping.
      *
      * @var array
      */
     public $pluginCmdHandlerMap = [];
 
-    // 构造函数
+    // Constructors
     public function __construct()
     {
         $this->pluginConfig = new BasePluginConfig();
@@ -35,7 +35,7 @@ class BasePlugin
         $this->initPlugin();
     }
 
-    // 检查命令字
+    // Check command word
     protected function checkPluginCmdExist($cmd)
     {
         $method = $this->pluginCmdHandlerMap[$cmd] ?? '';
@@ -46,12 +46,12 @@ class BasePlugin
         return true;
     }
 
-    // 执行方法调用
+    // Execute method calls
     public function handle($cmd, $params, $options = [])
     {
-        LogService::info("插件请求 cmd [$cmd] 参数", $params);
+        LogService::info("Plugin Request: cmd [$cmd] Parameter", $params);
 
-        // 检查命令字
+        // Check command word
         if (! $this->checkPluginCmdExist($cmd)) {
             return $this->pluginError(BasePluginConfig::CODE_NOT_EXIST);
         }
@@ -59,33 +59,33 @@ class BasePlugin
         $method = $this->pluginCmdHandlerMap[$cmd] ?? '';
         $methodRule = $method.'Rule';
 
-        //   dd($methodRule);
-        // 参数校验
+        // Parameter verification
         if (method_exists($this->pluginConfig, $methodRule)) {
             $validRes = ValidateService::validateServerRule($params, $this->pluginConfig->{$methodRule}());
 
             if ($validRes !== true) {
-                LogService::info("插件请求cmd [$cmd] 参数异常", $validRes);
+                LogService::info("Plugin Request: cmd [$cmd] Parameter Exception", $validRes);
 
                 return $this->pluginError(BasePluginConfig::CODE_PARAMS_ERROR, $validRes);
             }
         }
 
-        // 执行方法
+        // Implementation Method
         $result = $this->$method($params);
 
-        LogService::info("插件请求 cmd [$cmd] 结果", $result);
+        LogService::info("Plugin Request: cmd [$cmd] Results", $result);
 
-        // 代理模式直接返回服务结果不做任何处理
+        // Proxy mode returns service results directly without any processing
         return $result;
     }
 
-    //
+    // Get Plugin Cmd Handler Map
     public function getPluginCmdHandlerMap()
     {
         return [];
     }
 
+    // Get Status Code
     public function getCodeMap()
     {
         return BasePluginConfig::CODE_MAP;

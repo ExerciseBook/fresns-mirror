@@ -8,23 +8,22 @@
 
 namespace App\Http\FresnsDb\FresnsCodeMessages;
 
-// 配置
 use App\Base\Config\BaseConfig;
 
 class AmConfig extends BaseConfig
 {
-    // 主表
+    // Main Table
     const CFG_TABLE = 'code_messages';
 
-    //错误码默认插件
+    // Status Code Default Plugin Name
     const ERROR_CODE_DEFAULT_PLUGIN = 'Fresns';
 
-    // 主表额外搜索字段
+    // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
 
     ];
 
-    // model 使用 - 表单映射
+    // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
     ];

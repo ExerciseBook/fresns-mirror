@@ -10,19 +10,17 @@ namespace App\Http\Center\Helper;
 
 class PluginRpcHelper
 {
-    // rpc 调用
+    // rpc call
     public static function call($plugin, $cmd, $input, $option = [])
     {
         $plugin = new $plugin;
-        // dd($plugin);
         $res = $plugin->handle($cmd, $input, $option);
-        // dd($res);
         $res = self::formatPluginResp($res);
 
         return $res;
     }
 
-    // 检查服务返回是否无效
+    // Check if the service return is invalid
     public static function isErrorPluginResp($pluginResp)
     {
         $serverCode = $pluginResp['code'];
@@ -33,7 +31,7 @@ class PluginRpcHelper
         return true;
     }
 
-    // 格式化服务器返回
+    // Formatting server returns
     private static function formatPluginResp($pluginResp)
     {
         $code = $pluginResp['plugin_code'];
