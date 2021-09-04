@@ -48,34 +48,20 @@ class BaseInstaller
     ];
 
     /**
-     * 安装.
+     * 安装时候执行的额外操作，示例：往数据库写入插件配置文件
+     *
      */
     public function install()
     {
+        //
     }
 
     /**
-     * 卸载
-     * 删除插件的目录.
+     * 卸载时候执行的额外操作，示例：删除数据库中的插件配置文件
      */
     public function uninstall()
     {
-        $config = $this->getPluginConfig();
-        $uniKey = $config->uniKey;
-
-        // 删除模版文件
-        InstallHelper::deletePluginFiles($uniKey);
-
-        // 删除插件目录
-        $pluginPath = PluginHelper::currPluginRoot($uniKey);
-        if (is_dir($pluginPath)) {
-            File::deleteDirectory($pluginPath);
-        }
-
-        $info = [];
-        $info['pluginDir'] = $pluginPath;
-
-        return $info;
+        //
     }
 
     /**

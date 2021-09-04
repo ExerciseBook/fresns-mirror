@@ -735,34 +735,15 @@ class AmControllerWeb extends BaseFrontendController
         // Provide parameters for whether data should be deleted when the plugin is uninstalled
         // clear_plugin_data = 1 // Delete files and data
         // clear_plugin_data = 0 // Delete files only
-        $clear_plugin_data = $request->input('clear_plugin_data');
+        $clear_plugin_data = $request->input('clear_plugin_data');//是否删除插件数据库数据
 
         $uniKey = $request->input('unikey');
-        $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
 
-        $type = $pluginConfig->type;
-        if ($type == PluginConst::PLUGIN_TYPE_THEME) {
-            $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
-            if (! $plugin) {
-                $this->error(ErrorCodeService::PLUGIN_UNIKEY_ERROR);
-            }
-            if ($plugin['is_enable'] == 1) {
-                $this->error(ErrorCodeService::PLUGIN_ENABLE_ERROR);
-            }
-            $info = PluginHelper::uninstallByUniKey($uniKey);
-
-            InstallHelper::freshSystem();
-            // Delete Extensions Data
-            // FresnsPlugin::where('unikey', $uniKey)->delete();
-            DB::table('plugins')->where('unikey', $uniKey)->delete();
-            $this->success($info);
-        } else {
-            // Get Install Class
-            $installer = InstallHelper::findInstaller($uniKey);
-            if (empty($installer)) {
-                $this->error(ErrorCodeService::NO_RECORD);
-            }
+        $installer = InstallHelper::findInstaller($uniKey);
+        if (empty($installer)) {
+            $this->error(ErrorCodeService::NO_RECORD);
         }
+        $installer->uninstall();
 
         $plugin = FresnsPlugins::where('unikey', $uniKey)->first();
         if (! $plugin) {
@@ -771,7 +752,8 @@ class AmControllerWeb extends BaseFrontendController
         if ($plugin['is_enable'] == 1) {
             $this->error(ErrorCodeService::PLUGIN_ENABLE_ERROR);
         }
-        $info = $installer->uninstall();
+
+        $info = PluginHelper::uninstallByUniKey($uniKey);
         InstallHelper::freshSystem();
         // Delete Extensions Data
         // FresnsPlugin::where('unikey', $uniKey)->delete();
