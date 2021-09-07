@@ -80,10 +80,8 @@ class AmControllerApi extends FresnsBaseApiController
     // 获取消息列表
     public function lists(Request $request)
     {
-        $rule = [
-            'type' => 'required|in:1,2,3,4,5,6',
-        ];
-        ValidateService::validateRule($request, $rule);
+        //$rule = ['type' => 'required|in:1,2,3,4,5,6',];
+        //ValidateService::validateRule($request, $rule);
         $uid = $this->uid;
         $member_id = $this->mid;
         $uid = $this->uid;
