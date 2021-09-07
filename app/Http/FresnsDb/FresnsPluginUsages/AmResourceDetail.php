@@ -14,7 +14,7 @@ use App\Http\FresnsDb\FresnsLanguages\FresnsLanguages;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 
 /**
- * Detail resource config processing
+ * Detail resource config handle
  */
 
 class AmResourceDetail extends BaseAdminResource

@@ -284,7 +284,7 @@ class FresnsCrontablPlugin extends BasePlugin
         DB::table(FresnsUsersConfig::CFG_TABLE)->where('id', $id)->update($input);
         DB::table(FresnsUserConnectsConfig::CFG_TABLE)->where('user_id', $id)->delete();
         /**
-         * Processing Dialogs: If a record exists, it is marked as deactivated
+         * Handle Dialogs: If a record exists, it is marked as deactivated
          * The column is a_is_deactivate or b_is_deactivate
          */
         // Query all member ids under the user
@@ -391,7 +391,7 @@ class FresnsCrontablPlugin extends BasePlugin
                 $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
             }
         }
-        // Processing Dialogs
+        // Handle Dialogs
         if ($memberIdArr) {
             $DialogsInput = [
                 'a_is_deactivate' => 0,

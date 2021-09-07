@@ -11,7 +11,7 @@ namespace App\Http\FresnsDb\FresnsComments;
 use App\Base\Resources\BaseAdminResource;
 
 /**
- * List resource config processing
+ * List resource config handle
  */
 
 class AmResource extends BaseAdminResource

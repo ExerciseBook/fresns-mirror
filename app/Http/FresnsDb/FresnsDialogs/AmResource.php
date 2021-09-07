@@ -11,7 +11,7 @@ namespace App\Http\FresnsDb\FresnsDialogs;
 use App\Base\Resources\BaseAdminResource;
 
 /**
- * List resource config processing
+ * List resource config handle
  */
 
 class AmResource extends BaseAdminResource

@@ -12,7 +12,7 @@ use App\Base\Resources\BaseAdminResource;
 use App\Http\FresnsApi\Base\FresnsBaseService;
 
 /**
- * List resource config processing
+ * List resource config handle
  */
 
 class AmResource extends FresnsBaseService

@@ -123,7 +123,7 @@ class BaseQuery
 
                     break;
                 case 'JOIN':
-                    $inArr = explode(',', $field); // Special processing to achieve multi-table join query
+                    $inArr = explode(',', $field); // Special handle to achieve multi-table join query
                     $cnt = 0; $resArr = [];
                     foreach ($inArr as $value) {
                         $resArr[$cnt] = $value;

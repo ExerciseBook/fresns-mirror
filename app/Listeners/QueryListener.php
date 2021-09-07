@@ -16,7 +16,7 @@ class QueryListener
      */
     public function __construct()
     {
-        //
+        //code
     }
 
     /**

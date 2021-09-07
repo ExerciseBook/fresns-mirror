@@ -14,7 +14,7 @@ use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
 
 /**
- * List resource config processing
+ * List resource config handle
  */
 
 class AmResource extends BaseAdminResource

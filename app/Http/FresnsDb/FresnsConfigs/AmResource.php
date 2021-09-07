@@ -12,7 +12,7 @@ use App\Base\Resources\BaseAdminResource;
 use App\Helpers\ArrayHelper;
 
 /**
- * List resource config processing
+ * List resource config handle
  */
 
 class AmResource extends BaseAdminResource

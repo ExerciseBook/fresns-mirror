@@ -11,7 +11,7 @@ namespace App\Http\FresnsDb\FresnsVerifyCodes;
 use App\Base\Resources\BaseAdminResource;
 
 /**
- * Detail resource config processing
+ * Detail resource config handle
  */
 
 class AmResourceDetail extends BaseAdminResource

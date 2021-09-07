@@ -75,7 +75,7 @@ class BasePlugin
 
         LogService::info("Plugin Request: cmd [$cmd] Results", $result);
 
-        // Proxy mode returns service results directly without any processing
+        // Proxy mode returns service results directly without any handle
         return $result;
     }
 

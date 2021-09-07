@@ -18,7 +18,7 @@ use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
 
 /**
  * Class FresnsCrontabPlugin
- * Subscription Event Processing
+ * Subscription Event handle
  * https://fresns.org/extensions/basis.html
  */
 class FresnsSubPlugin extends BasePlugin

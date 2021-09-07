@@ -88,13 +88,13 @@ class FresnsPlugin extends BasePlugin
         if (empty($pluginUniKey)) {
             return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
         }
-        // Start Processing
+        // Start Handle
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
-        LogService::info('Start Processing: ', $input);
+        LogService::info('Start Handle: ', $input);
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_CODE;
         // Preparation parameters
         $account = $input['account'];
@@ -125,7 +125,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError($resp['code']);
         }
 
-        LogService::info('Processing Done: ', $input);
+        LogService::info('Handle Done: ', $input);
 
         return $this->pluginSuccess($resp['output']);
     }
@@ -1222,7 +1222,7 @@ class FresnsPlugin extends BasePlugin
                                 foreach ($extendFiles as $file) {
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
-                                    // Plugin processing logic.
+                                    // Plugin handle logic.
                                     $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
                                     $input['fid'] = $extendsFileId;
                                     $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
@@ -1380,7 +1380,7 @@ class FresnsPlugin extends BasePlugin
                                 foreach ($extendFiles as $file) {
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
-                                    // Plugin processing logic.
+                                    // Plugin handle logic.
                                     $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
                                     $input['fid'] = $extendsFileId;
                                     $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);

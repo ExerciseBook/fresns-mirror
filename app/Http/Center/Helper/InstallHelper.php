@@ -88,7 +88,7 @@ class InstallHelper
         self::pullLang($uniKey);
     }
 
-    // Processing language files
+    // Handle language files
     public static function pullLang($uniKey)
     {
         $info = [];
