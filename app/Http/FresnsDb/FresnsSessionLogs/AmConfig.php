@@ -50,6 +50,7 @@ class AmConfig extends BaseConfig
         'Publish Post Content' => 13,
         'Publish Post Content' => 14,
         'Timed Task' => 15,
+        'Console Login' => 16,
     ];
 
     // Model Usage - Form Mapping

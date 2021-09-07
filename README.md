@@ -18,12 +18,6 @@ Fresns 是一款基于 PHP Laravel 8 框架和 MySQL 8 数据库而开发的社�
 
 [https://fresns.cn/guide/install.html](https://fresns.cn/guide/install.html)
 
-## 插件示例
-
-测试插件仓库 [https://gitee.com/fresns/tests](https://gitee.com/fresns/tests)
-
-第三方开发的「独立部署版控制面板」和配套的「API 插件」 [https://gitee.com/jyq/fresns-control-panel](https://gitee.com/jyq/fresns-control-panel)
-
 ## 加入我们
 
 Fresns 的开源社区正在急速增长中，如果你认可我们的开源软件，有兴趣为 Fresns 的发展做贡献，竭诚欢迎[加入我们](https://fresns.cn/community/join.html)一起开发完善。无论是[报告错误](https://fresns.cn/guide/feedback.html)或是 Pull Request 开发，那怕是修改一个错别字也是对我们莫大的帮助。
@@ -31,6 +25,24 @@ Fresns 的开源社区正在急速增长中，如果你认可我们的开源软�
 贡献指南：[https://fresns.cn/contributing/](https://fresns.cn/contributing/)
 
 *有任何问题，欢迎联系项目发起人唐杰，参与贡献代码可加入我们开发者群*
+
+## 技术框架
+
+| 框架 | 版本 | 用途 |
+| --- | --- | --- |
+| [Composer](https://github.com/composer/composer) | 2.1.6 | 软体包管理系统 |
+| [Laravel](https://github.com/laravel/laravel) | 8.6.2 | 主程序框架 |
+| [Laravel Framework](https://github.com/laravel/framework) | 8.59.0 | 主程序框架 |
+| [Bootstrap](https://getbootstrap.com/) | 5.1.0 | 内置前端框架 |
+| [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.5.0 | 内置前端图标字体库 |
+| [jQuery](https://github.com/jquery/jquery) | 3.6.0 | 内置 JS 库 |
+| [Base64 JS](https://github.com/dankogai/js-base64) | 3.6.1 | 内置 Base64 转码器 |
+
+| 数据库 | 版本 |
+| --- | --- |
+| MySQL | 8.0.17 |
+| 排序规则 | utf8mb4_0900_ai_ci |
+| 存储引擎 | InnoDB |
 
 ## 联系我们
 
