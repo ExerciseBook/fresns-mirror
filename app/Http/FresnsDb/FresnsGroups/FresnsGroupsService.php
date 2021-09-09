@@ -36,6 +36,7 @@ class FresnsGroupsService extends FresnsBaseService
         $this->resourceDetail = AmResourceDetail::class;
     }
 
+    // Group Common
     public function common()
     {
         // $common =  parent::common();
@@ -71,20 +72,18 @@ class FresnsGroupsService extends FresnsBaseService
             $pluginUsages = FresnsPluginUsages::where('type', 6)->where('group_id', $group['id'])->first();
             if ($pluginUsages) {
                 $plugin = pluginUnikey::where('unikey', $pluginUsages['plugin_unikey'])->first();
-                //    dd($plugin);
+                // dd($plugin);
                 $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $pluginUsages['plugin_unikey'])->first();
                 $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? '';
                 $name = InfoService::getlanguageField('name', $pluginUsages['id']);
                 $extends['name'] = $name == null ? '' : $name['lang_content'];
-                //    $extends['icon'] = $pluginUsages['icon_file_url'] ?? "";
-                $extends['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($pluginUsages['icon_file_id'],
-                    $pluginUsages['icon_file_url']);
-                //    $extends['url'] = $plugin['access_path']  .'/'. $pluginUsages['parameter'];
-                $extends['url'] = ApiFileHelper::getPluginUsagesUrl($pluginUsages['plugin_unikey'],
-                    $pluginUsages['id']);
+                // $extends['icon'] = $pluginUsages['icon_file_url'] ?? "";
+                $extends['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($pluginUsages['icon_file_id'], $pluginUsages['icon_file_url']);
+                // $extends['url'] = $plugin['access_path']  .'/'. $pluginUsages['parameter'];
+                $extends['url'] = ApiFileHelper::getPluginUsagesUrl($pluginUsages['plugin_unikey'], $pluginUsages['id']);
                 $extends['badgesType'] = $pluginBadges['display_type'] ?? '';
                 $extends['badgesValue'] = ($pluginBadges['value_text'] ?? '') ?? ($pluginBadges['value_number'] ?? '');
-                // 是否有权限
+                // Determine if a member role has permissions
                 if ($pluginUsages['member_roles']) {
                     $member_roles = $pluginUsages['member_roles'];
                     $memberRoleArr = FresnsMemberRoleRels::where('member_id', $mid)->pluck('role_id')->toArray();
@@ -105,7 +104,7 @@ class FresnsGroupsService extends FresnsBaseService
         // $seoGroup['extends'] = $extends;
     }
 
-    // 权限数据
+    // Permission data
     public static function publishRule($mid, $permission, $group_id)
     {
         $permissionArr = json_decode($permission, true);
@@ -128,7 +127,7 @@ class FresnsGroupsService extends FresnsBaseService
                     $array['mname'] = $memberInfo['name'];
                     $array['nickname'] = $memberInfo['nickname'];
                     $array['nicknameColor'] = $memberInfo['uuid'];
-                    // 成员角色关联表表
+                    // Member Role Association Table
                     $roleRels = FresnsMemberRoleRels::where('member_id', $memberInfo['id'])->first();
                     if (! empty($roleRels)) {
                         $memberRole = FresnsMemberRoles::find($roleRels['role_id']);
@@ -141,14 +140,15 @@ class FresnsGroupsService extends FresnsBaseService
         }
         $arr['adminMemberArr'] = $adminMemberArr;
 
-        // 当前请求接口的成员，是否拥有该小组发表帖子权限
+        // Posts
+        // Whether the member currently requesting the interface has permission to post to the group
         $publishRule = [];
         $publishRule['allowPost'] = false;
-        // 1.所有人
+        // 1.All Members
         if ($publish_post == 1) {
             $publishRule['allowPost'] = true;
         }
-        //  2.仅关注了小组的成员
+        // 2.Anyone in the group
         if ($publish_post == 2) {
             $followCount = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 2)->where('follow_id',
                 $group_id)->count();
@@ -156,7 +156,7 @@ class FresnsGroupsService extends FresnsBaseService
                 $publishRule['allowPost'] = true;
             }
         }
-        // 3.仅指定的角色成员
+        // 3.Specified role members only
         if ($publish_post == 3) {
             $memberRoleArr = FresnsMemberRoleRels::where('member_id', $mid)->pluck('role_id')->toArray();
             $arrIntersect = array_intersect($memberRoleArr, $publish_post_roles);
@@ -164,24 +164,25 @@ class FresnsGroupsService extends FresnsBaseService
                 $publishRule['allowPost'] = true;
             }
         }
-        // 当前请求接口的成员，发帖是否需要审核（如果是管理员，无需审核）
+        // Members of the current request interface, whether the post needs to be reviewed (if it is an administrator, no review is required)
         $publishRule['reviewPost'] = true;
         if ($publish_post_review == 0) {
             $publishRule['reviewPost'] = false;
         }
-        // dd($admin_member);
         if ($admin_member) {
             if (in_array($mid, $admin_member)) {
                 $publishRule['reviewPost'] = false;
             }
         }
 
+        // Comments
+        // Whether the member currently requesting the interface has permission to comment to the group
         $publishRule['allowComment'] = false;
-        // 1.所有人
+        // 1.All Members
         if ($publish_comment == 1) {
             $publishRule['allowComment'] = true;
         }
-        //  2.仅关注了小组的成员
+        // 2.Anyone in the group
         if ($publish_comment == 2) {
             $followCount = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 2)->where('follow_id',
                 $group_id)->count();
@@ -189,7 +190,7 @@ class FresnsGroupsService extends FresnsBaseService
                 $publishRule['allowComment'] = true;
             }
         }
-        // 3.仅指定的角色成员
+        // 3.Specified role members only
         if ($publish_comment == 3) {
             $memberRoleArr = FresnsMemberRoleRels::where('member_id', $mid)->pluck('role_id')->toArray();
             $arrIntersect = array_intersect($memberRoleArr, $publish_comment_roles);
@@ -197,6 +198,7 @@ class FresnsGroupsService extends FresnsBaseService
                 $publishRule['allowComment'] = true;
             }
         }
+        // Members of the current request interface, whether the comment needs to be reviewed (if it is an administrator, no review is required)
         $publishRule['reviewComment'] = true;
         if ($publish_comment_review == 0) {
             $publishRule['reviewComment'] = false;
@@ -210,7 +212,7 @@ class FresnsGroupsService extends FresnsBaseService
         return $publishRule;
     }
 
-    // 管理员数据
+    // Group Administrator Data
     public static function adminData($permission)
     {
         $permissionArr = json_decode($permission, true);
@@ -234,7 +236,7 @@ class FresnsGroupsService extends FresnsBaseService
                     $array['mname'] = $memberInfo['name'];
                     $array['nickname'] = $memberInfo['nickname'];
                     $array['nicknameColor'] = $memberInfo['uuid'];
-                    // 成员角色关联表表
+                    // Member Role Association Table
                     $roleRels = FresnsMemberRoleRels::where('member_id', $memberInfo['id'])->first();
                     if (! empty($roleRels)) {
                         $memberRole = FresnsMemberRoles::find($roleRels['role_id']);
@@ -242,7 +244,7 @@ class FresnsGroupsService extends FresnsBaseService
                     $array['nicknameColor'] = $memberRole['nickname_color'] ?? '';
                     // $array['avatar'] = $memberInfo['avatar_file_url'];
                     $avatar = $memberInfo['avatar_file_url'] ?? '';
-                    // 为空用默认头像
+                    // Empty with default avatar
                     if (empty($avatar)) {
                         $defaultIcon = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEFAULT_AVATAR);
                         $avatar = $defaultIcon;
@@ -257,7 +259,7 @@ class FresnsGroupsService extends FresnsBaseService
         return $adminMemberArr;
     }
 
-    // p其他pession
+    // Other pession
     public static function othetPession($permission)
     {
         $permissionArr = json_decode($permission, true);

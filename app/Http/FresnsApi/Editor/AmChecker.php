@@ -1011,7 +1011,7 @@ class AmChecker extends BaseChecker
                 if (empty($postLog['content']) && (empty($postLog['files_json']) || empty(json_decode($postLog['files_json'], true))) && (empty($postLog['extends_json']) || empty(json_decode($postLog['extends_json'], true)))) {
                     return self::checkInfo(self::POSTS_LOG_CHECK_PARAMS_ERROR);
                 }
-                // 过滤词规则检查
+                // Stop Word Rule Check
                 if ($postLog['content']) {
                     $message = self::stopWords($postLog['content']);
                     if (! $message) {
@@ -1055,7 +1055,7 @@ class AmChecker extends BaseChecker
                 if (empty($commentLog['content']) && (empty($commentLog['files_json']) || empty(json_decode($commentLog['files_json'], true))) && (empty($commentLog['extends_json']) || empty(json_decode($commentLog['extends_json'], true)))) {
                     return self::checkInfo(self::POSTS_LOG_CHECK_PARAMS_ERROR);
                 }
-                // 过滤词规则检查
+                // Stop Word Rule Check
                 if ($commentLog['content']) {
                     $message = self::stopWords($commentLog['content']);
                     if (! $message) {
@@ -1147,7 +1147,7 @@ class AmChecker extends BaseChecker
                 }
             }
         }
-        // 过滤词规则检查
+        // Stop Word Rule Check
         $message = self::stopWords($request->input('content'));
         if (! $message) {
             return self::checkInfo(self::COMMENT_CONTENT_WORDS_ERROR);
@@ -1183,7 +1183,7 @@ class AmChecker extends BaseChecker
         }
     }
 
-    // 过滤词规则
+    // Stop Word Rules
     public static function stopWords($text)
     {
         $stopWordsArr = FresnsStopWords::get()->toArray();

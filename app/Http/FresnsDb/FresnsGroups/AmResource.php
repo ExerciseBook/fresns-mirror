@@ -26,11 +26,10 @@ class AmResource extends BaseAdminResource
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        // 语言名称
-        // dd(123);
+
+        // Language Name
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
-        // dd($multilingual);
         $nameArr = [];
         foreach ($multilingual as $v) {
             $input = [
@@ -39,7 +38,6 @@ class AmResource extends BaseAdminResource
                 'table_id' => $this->id,
                 'lang_tag' => $v['key'],
             ];
-            // dd($input);
             $name = FresnsLanguages::where($input)->first();
             $v['lang_content'] = $name['lang_content'] ?? '';
             $nameArr[] = $v;
@@ -53,7 +51,6 @@ class AmResource extends BaseAdminResource
                 'table_id' => $this->id,
                 'lang_tag' => $v['key'],
             ];
-            // dd($input);
             $name = FresnsLanguages::where($input)->first();
             $v['lang_content'] = $name['lang_content'] ?? '';
             $descriptionArr[] = $v;

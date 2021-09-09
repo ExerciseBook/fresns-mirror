@@ -12,21 +12,21 @@ use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 
 class FresnsConfigsService extends AmService
 {
-    //是否启用多语言
+    // Language Settings
     public static function getLanguageStatus()
     {
-        //是否启用
+        // Enabled or not
         $languageStatus = AmModel::where('item_key', AmConfig::LANGUAGE_STATUS)->value('item_value');
         // $languageStatusArr = json_decode($languageStatus,true);
         $common['language_status'] = $languageStatus ?? false;
-        //默认
+        // Default
         $defaultLanguage = AmModel::where('item_key', AmConfig::DEFAULT_LANGUAGE)->value('item_value');
         // $defaultLanguageArr = json_decode($defaultLanguage,true);
 
         $common['default_language'] = ApiLanguageHelper::getDefaultLanguageByLangTag($defaultLanguage);
         $common['default_language_tag'] = $defaultLanguage ?? null;
 
-        //多语言下拉框
+        // Multi-language options
         $langSettings = AmModel::where('item_key', AmConfig::LANG_SETTINGS)->first();
         $oldLangSettingJson = $langSettings['item_value'];
         $oldLangSettingArr = json_decode($oldLangSettingJson, true);

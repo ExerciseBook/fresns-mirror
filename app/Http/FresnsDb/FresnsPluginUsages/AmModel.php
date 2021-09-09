@@ -32,7 +32,7 @@ class AmModel extends BaseAdminModel
     // hook - after adding
     public function hookStoreAfter($id)
     {
-        // 文件表
+        // files
         if (request()->input('icon_file_id')) {
             FresnsFiles::where('id', request()->input('icon_file_id'))->update([
                 'table_type' => 1,
@@ -42,7 +42,7 @@ class AmModel extends BaseAdminModel
             ]);
         }
 
-        // 语言表
+        // languages
         $nameArr = json_decode(request()->input('name'), true);
         $inputArr = [];
         foreach ($nameArr as $v) {
@@ -55,16 +55,15 @@ class AmModel extends BaseAdminModel
             $item['table_field'] = AmConfig::FORM_FIELDS_MAP['name'];
             $item['table_id'] = $id;
             $item['table_name'] = AmConfig::CFG_TABLE;
-            // $item['alias_key'] = $v['nickname'];
             $inputArr[] = $item;
         }
         FresnsLanguagesModel::insert($inputArr);
     }
 
-    // hook - 编辑之后
+    // hook - After Editing
     public function hookUpdateAfter($id)
     {
-        // 文件表
+        // files
         if (request()->input('icon_file_id')) {
             FresnsFiles::where('id', request()->input('icon_file_id'))->update([
                 'table_type' => 1,
@@ -73,11 +72,10 @@ class AmModel extends BaseAdminModel
                 'table_id' => $id,
             ]);
         }
-        // 语言表
+        // languages
         $nameArr = json_decode(request()->input('name'), true);
         $inputArr = [];
-        FresnsLanguagesModel::where('table_name', AmConfig::CFG_TABLE)->where('table_field',
-            AmConfig::FORM_FIELDS_MAP['name'])->where('table_id', $id)->delete();
+        FresnsLanguagesModel::where('table_name', AmConfig::CFG_TABLE)->where('table_field', AmConfig::FORM_FIELDS_MAP['name'])->where('table_id', $id)->delete();
         foreach ($nameArr as $v) {
             $item = [];
             $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);

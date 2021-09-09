@@ -20,7 +20,7 @@ class AmConfig extends BaseConfig
         'parent_id' => ['field' => 'parent_id', 'op' => '='],
     ];
 
-    //表情小组
+    // Emoji Group Number
     const TYPE_GROUP = 2;
 
     // Model Usage - Form Mapping

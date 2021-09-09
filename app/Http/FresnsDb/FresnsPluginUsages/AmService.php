@@ -29,38 +29,41 @@ class AmService extends BaseAdminService
     {
         $common = parent::common();
         $common['TableName'] = AmConfig::CFG_TABLE;
-        // 场景
+
+        // Scenes
         $common['sceneOption'] = AmConfig::SCONE_OPTION;
         $common['typeOption'] = AmConfig::TYPE_OPTION;
-        // 小组
-        $common['groupOption'] = FresnsGroups::buildSelectTreeData('id', 'name', ['is_enable' => 1]);
 
+        // Group
+        $common['groupOption'] = FresnsGroups::buildSelectTreeData('id', 'name', ['is_enable' => 1]);
         $common['isGroupAdminOption'] = AmCOnfig::IS_GROUP_ADMIN_OPTION;
-        // 语言
+
+        // Languages
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $common['language_status'] = $languageArr['language_status'];
         $common['default_language'] = $languageArr['default_language'];
         $common['multilingualoption'] = $languageArr['languagesOption'];
-        // dd($common);
-        // 角色Tips
-        $common['roleUsersTips'] = AmConfig::ROLE_USERS_TIPS;
+
+        // Tips
+        $common['roleMembersTips'] = AmConfig::ROLE_MEMBERS_TIPS;
         $common['editerNumberTips'] = AmConfig::EDITER_NUMBER_TIPS;
         $common['isAdminTips'] = AmConfig::IS_ADMIN_TIPS;
-        // 插件
+
+        // Plugin
         $common['plugOption'] = FresnsPlugins::staticBuildSelectOptions2('unikey', 'name', []);
-        // 角色
+        
+        // Role
         $common['roleOption'] = FresnsMemberRoles::buildSelectTreeData('id', 'name', []);
 
-        // 数据服务商插件
+        // Data Service Provider Plugin
         $common['restfulPlugin'] = FresnsPlugins::where('scene', 'like', '%restful%')->get([
             'unikey as key',
             'name as text',
         ]);
-        // dd($common['restfulPlugin']);
         return $common;
     }
 
-    // 获取后台设置默认语言code
+    // Get default language tag
     public static function getDefaultLanguage()
     {
         $languageArr = FresnsConfigsService::getLanguageStatus();

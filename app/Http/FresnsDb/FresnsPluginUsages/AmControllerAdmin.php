@@ -20,7 +20,7 @@ class AmControllerAdmin extends BaseAdminController
         $this->service = new AmService();
     }
 
-    //编辑
+    // edit plugin usages
     public function update(Request $request)
     {
         ValidateService::validateRule($request, $this->rules(Amconfig::RULE_UPDATE));
@@ -41,13 +41,13 @@ class AmControllerAdmin extends BaseAdminController
 
         $this->service->hookUpdateAfter($id);
 
-        // 清空request数据
+        // Clear request data
         CommonHelper::removeRequestFields($this->service->getSearchableFields());
 
         $this->index($request);
     }
 
-    // 编辑排序
+    // Edit Sort
     public function updateRankNum(Request $request)
     {
         $more_json = $request->input('more_json');

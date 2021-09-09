@@ -28,7 +28,7 @@ class AmResourceDetail extends BaseAdminResource
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
         
-        // 语言名称
+        // Languages
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
         $nameArr = [];
@@ -39,22 +39,21 @@ class AmResourceDetail extends BaseAdminResource
                 'table_id' => $this->id,
                 'lang_tag' => $v['key'],
             ];
-            // dd($input);
             $name = FresnsLanguages::where($input)->first();
             $v['lang_content'] = $name['lang_content'] ?? '';
             $nameArr[] = $v;
         }
 
-        // 角色
-        $user_rolesArr = [];
+        // Member Roles
+        $member_rolesArr = [];
         $roleNames = '';
         if ($this->member_roles) {
-            $user_rolesArr = explode(',', $this->member_roles);
-            $roleInfo = FresnsMemberRoles::whereIn('id', $user_rolesArr)->pluck('name')->toArray();
+            $member_rolesArr = explode(',', $this->member_roles);
+            $roleInfo = FresnsMemberRoles::whereIn('id', $member_rolesArr)->pluck('name')->toArray();
             $roleNames = implode(',', $roleInfo);
         }
 
-        // 应用场景
+        // Application Scenarios
         $sceneArr = explode(',', $this->scene);
         $sceneNameArr = [];
         if ($sceneArr) {
@@ -75,7 +74,7 @@ class AmResourceDetail extends BaseAdminResource
             'roleInfo' => $roleInfo,
             'roleNames' => $roleNames,
             'scene' => $sceneArr,
-            'userRolesArr' => $user_rolesArr,
+            'memberRolesArr' => $member_rolesArr,
             'sceneNames' => $sceneNames,
             'is_enable' => boolval($this->is_enable),
             'created_at' => $this->created_at,

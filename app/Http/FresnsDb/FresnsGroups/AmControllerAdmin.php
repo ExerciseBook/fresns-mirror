@@ -21,19 +21,6 @@ class AmControllerAdmin extends BaseAdminController
         $this->service = new AmService();
     }
 
-    // public function index(Request $request)
-    // {
-
-    //     $data = $this->service->searchData();
-    //     // dd($data);
-    //     $listTreeData = $this->service->listTree();
-    //     // dd($listTreeData);
-    //     $data['list'] = $listTreeData;
-    //     $data['common'] = $this->service->common();
-
-    //     $this->success($data);
-    // }
-
     public function store(Request $request)
     {
         // $uuid = rand(10000000,99999999);
@@ -70,31 +57,27 @@ class AmControllerAdmin extends BaseAdminController
         }
         $request->offsetUnset('admin_members');
         $request->offsetSet('uuid', $uuid);
-        // permission参数组装
+        // permission (Parameter assembly)
 
         parent::store($request);
     }
 
-    //编辑
+    // edit
     public function update(Request $request)
     {
         ValidateService::validateRule($request, $this->rules(Amconfig::RULE_UPDATE));
 
         $this->hookUpdateValidateAfter();
         if ($request->is_recommend) {
-            // dd(1);
             $is_recommend = $request->is_recommend === 'true' ? 1 : 0;
-            // dd($is_recommend);
             $request->offsetSet('is_recommend', $is_recommend);
         }
         if ($request->type_find) {
-            // dd(1);
             $type_find = $request->type_find === 'true' ? 1 : 0;
-            // dd($is_recommend);
             $request->offsetSet('type_find', $type_find);
         }
         $id = $request->input('id');
-        // permission参数组装
+        // permission (Parameter assembly)
         $admin_members = $request->input('admin_members', '');
         $publish_post = $request->input('publish_post');
         $publish_post_roles = $request->input('publish_post_roles');
@@ -122,14 +105,13 @@ class AmControllerAdmin extends BaseAdminController
         $request->offsetSet('permission', json_encode($permission));
         $request->offsetUnset('admin_members');
         $this->service->update($id);
-        // dd($request);
         if (empty($request->nameArr)) {
             $this->index($request);
         }
 
         $this->service->hookUpdateAfter($id);
 
-        // 清空request数据
+        // Clear request data
         CommonHelper::removeRequestFields($this->service->getSearchableFields());
 
         $this->index($request);
@@ -140,7 +122,7 @@ class AmControllerAdmin extends BaseAdminController
         parent::index($request);
     }
 
-    // 删除小组（没有二级分类的小组爱可以删除）
+    // Delete group categories (can be deleted when there are no groups under the category)
     public function destroy(Request $request)
     {
         $table = AmConfig::CFG_TABLE;
@@ -151,24 +133,24 @@ class AmControllerAdmin extends BaseAdminController
         $id = $request->input('id');
         $count = FresnsGroups::where('parent_id', $id)->count();
         if ($count > 0) {
-            $this->errorInfo(3001, '存在下级分组，不能删除');
+            $this->errorInfo(3001, 'There are groups under the group category, can not be deleted by operation.');
         }
         FresnsGroups::where('id', $id)->delete();
         $this->success();
     }
 
-    // 移动小组
+    // Moving Group
     public function moveByGroups(Request $request)
     {
         $id = $request->input('group_id');
         $moveGroupId = $request->input('moveGroupId');
         $groupInfo = FresnsGroups::find($id);
         if ($groupInfo['type'] == 1) {
-            $this->errorInfo(3001, '小组分类不可移动');
+            $this->errorInfo(3001, 'Group category is not removable');
         }
         $pGroupInfo = FresnsGroups::find($moveGroupId);
         if ($pGroupInfo['type'] == 2) {
-            $this->errorInfo(3001, '只可移动到小组分类下面');
+            $this->errorInfo(3001, 'Can only be moved under the group category');
         }
         FresnsGroups::where('id', $id)->update(['parent_id' => $moveGroupId]);
         $this->success();

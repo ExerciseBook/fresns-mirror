@@ -46,11 +46,11 @@ class AmModel extends BaseCategoryModel
         }
     }
 
-    // hook - 编辑之后
+    // hook - After Editing
     public function hookUpdateAfter($id)
     {
         $request = request();
-        // 文件表
+        // files table
         if (request()->input('file_id')) {
             FresnsFiles::where('id', request()->input('icon_file_id'))->update([
                 'table_type' => 1,
@@ -59,7 +59,7 @@ class AmModel extends BaseCategoryModel
                 'table_id' => $id,
             ]);
         }
-        // 语言表
+        // languages table
         $nameArr = json_decode($request->input('name_arr'), true);
         $descriptionArr = json_decode($request->input('description_arr'), true);
         FresnsLanguagesModel::where('table_name', AmConfig::CFG_TABLE)->where('table_id', $id)->delete();
@@ -87,7 +87,6 @@ class AmModel extends BaseCategoryModel
             $item['table_field'] = $table_filed;
             $item['table_id'] = $table_id;
             $item['table_name'] = $table_name;
-            // $item['alias_key'] = $v['nickname'];
             $inputArr[] = $item;
         }
         FresnsLanguagesModel::insert($inputArr);

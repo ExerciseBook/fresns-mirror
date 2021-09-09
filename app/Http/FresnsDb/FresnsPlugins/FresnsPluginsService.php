@@ -12,7 +12,7 @@ use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 
 class FresnsPluginsService extends AmService
 {
-    //通过unikey获取插件url
+    // Get plugin url via unikey
     public static function getPluginUrlByUnikey($unikey)
     {
         $plugin = FresnsPlugins::where('unikey', $unikey)->first();

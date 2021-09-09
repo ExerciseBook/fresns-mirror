@@ -25,6 +25,7 @@ class AmService extends BaseAdminService
         $this->resourceDetail = AmResourceDetail::class;
     }
 
+    // Group Common
     public function common()
     {
         $common = parent::common();
@@ -33,19 +34,19 @@ class AmService extends BaseAdminService
         $common['typeFind'] = AmConfig::TYPE_FIND;
         $common['typeFollow'] = AmConfig::TYPE_FOLLOW;
         $common['publishPostOption'] = AmConfig::PUBLISH_POST;
-        // 小组管理员common
+        // Group Administrator
         $common['memberOption'] = FresnsMembers::buildSelectTreeDataByNoRankNum('id', 'name', ['is_enable' => 1]);
-        // 角色权限common
+        // Role Permissions
         $common['roleOption'] = FresnsMemberRoles::buildSelectTreeData('id', 'name', []);
-        // 语言
+        // Language
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $common['language_status'] = $languageArr['language_status'];
         $common['default_language'] = $languageArr['default_language'];
         $common['multilingualoption'] = $languageArr['languagesOption'];
-        // 一级小组common
+        // Group Categories
         $common['groupOption'] = FresnsGroups::buildSelectTreeData('id', 'name', ['is_enable' => 1]);
         $common['oneGroupOption'] = FresnsGroups::staticBuildSelectOptions('id', 'name', ['parent_id'=>null]);
-        // 插件
+        // Plugin
         $common['plugOption'] = FresnsPlugins::staticBuildSelectOptions2('unikey', 'name', []);
 
         return $common;
@@ -56,14 +57,11 @@ class AmService extends BaseAdminService
         $this->model->hookUpdateAfter($id);
     }
 
-    // 生成数据
+    // Generate data
     public function buildTreeData(&$itemArr, &$categoryArr)
     {
-        // dd($itemArr);
-
         foreach ($itemArr as &$item) {
-            // dd($item->toArray());
-            // 语言名称(多语言名称和描述)
+            // Language (name and description)
             $nameArr = self::getLangaugeArr(AmConfig::CFG_TABLE, AmConfig::FORM_FIELDS_MAP['name'], $item);
             $descriptionArr = self::getLangaugeArr(AmConfig::CFG_TABLE, AmConfig::FORM_FIELDS_MAP['description'],
                 $item);
@@ -79,7 +77,7 @@ class AmService extends BaseAdminService
             $item['allow_view_arr'] = $allow_view_arr;
             $item['allow_post_arr'] = $allow_post_arr;
             $item['allow_comment_arr'] = $allow_comment_arr;
-            // 这里获取直接的children
+            // get children
             $directChildren = [];
             foreach ($children as $child) {
                 if ($child->parent_id == $item->id) {
@@ -89,8 +87,6 @@ class AmService extends BaseAdminService
 
             $children = $directChildren;
 
-            //            dd(CommonHelper::objectToArray($directChildren));
-            //            dd(CommonHelper::objectToArray($children));
             $c = [];
             $c['key'] = $item->id;
             $c['value'] = $item->id;
@@ -105,11 +101,11 @@ class AmService extends BaseAdminService
         }
     }
 
+    // Get Langauge
     public static function getLangaugeArr($table, $table_field, $item)
     {
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
-        // dd($multilingual);
         $nameArr = [];
         foreach ($multilingual as $v) {
             $input = [

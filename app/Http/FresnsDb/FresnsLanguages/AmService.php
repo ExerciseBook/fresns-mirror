@@ -27,7 +27,7 @@ class AmService extends BaseAdminService
         return $common;
     }
 
-    //截取标签
+    // Intercepting tags
     public static function conversionLangTag($langTag)
     {
         if (strstr($langTag, 'zh-Hans') || strstr($langTag, 'zh-Hant')) {
@@ -56,7 +56,7 @@ class AmService extends BaseAdminService
         return $data;
     }
 
-    //获取对应的多语言
+    // Get the corresponding multilingual
     public static function getLanguageByTableId($table, $field, $tableId, $langTag = null)
     {
         $lang_content = FresnsLanguages::where('table_name', $table)->where('table_field', $field)->where('table_id',
@@ -83,7 +83,7 @@ class AmService extends BaseAdminService
         return $lang_content;
     }
 
-    //插入到表数据
+    // Insert into table data
     public static function addLanguages($json, $tableName, $tableField, $tableId)
     {
         AmModel::where('table_name', $tableName)->where('table_field', $tableField)->where('table_id',
@@ -107,13 +107,13 @@ class AmService extends BaseAdminService
         AmModel::insert($itemArr);
     }
 
-    //获取表数据
+    // Get table data
     public static function getLanguages($tableName, $tableField, $tableId)
     {
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $languagesOption = $languageArr['languagesOption'];
 
-        //查询对应的语言
+        // Search for the corresponding language
         $langMap = FresnsLanguages::where('table_name', $tableName)
             ->where('table_field', $tableField)
             ->where('table_id', $tableId)

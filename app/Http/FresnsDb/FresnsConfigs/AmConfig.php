@@ -24,63 +24,47 @@ class AmConfig extends BaseConfig
         'item_tag' => ['field' => 'item_tag', 'op' => '='],
     ];
 
-    //订阅记录
+    // Subscription History
     const SUB_PLUGINS = 'subscribe_plugins';
 
-    //站点设置
-    const SITE_SETTING = 'site_setting';
-    //短信设置
-    const SMS_SETTING = 'sms_setting';
-    //发信配置
-    const SEND_SETTING = 'send_setting';
-    //其他设置
-    const OTHER_SETTING = 'other_setting';
-
-    //七大洲编号
+    // Dictionary Data
     const CONTINENTS = 'continents';
-    //地图服务商
     const MAP = 'maps';
-    //语言代码
     const LANGUAGE_CODES = 'language_codes';
-    //地区编码
     const AREAS = 'areas_codes';
 
-    //多语言相关配置
+    // Language Tag
     const LANGUAGES = 'languages';
 
-    //语言设置
+    // Languages
     const LANGUAGE_STATUS = 'language_status';
     const DEFAULT_LANGUAGE = 'default_language';
     const LANG_SETTINGS = 'language_menus';
 
-    //用户修改间隔天数
+    // Number of days between member name changes
     const MNAME_EDIT = 'mname_edit';
 
-    //用户昵称修改间隔天数
+    // Number of days between member nickname changes
     const NICKNAME_EDIT = 'nickname_edit';
 
-    //存储配置
+    // Storage Config
     const IMAGE_STORAGE = 'storageImages';
     const VIDEO_STORAGE = 'storageVideos';
     const AUDIO_STORAGE = 'storageAudios';
     const DOC_STORAGE = 'storageDocs';
 
-    //控制台域名
+    // System Config
     const BACKEND_DOMAIN = 'backend_domain';
-
-    //登录入口
     const BACKEND_PATH = 'backend_path';
-
-    //站点域名
     const SITE_DOMAIN = 'site_domain';
 
-    //距离单位
+    // Distance unit
     const LENGTHUNITS_OPTION = [
-        ['key' => 'km', 'text' => '公里 km'],
-        ['key' => 'mi', 'text' => '英里 mi'],
+        ['key' => 'km', 'text' => 'Kilometer (km)'],
+        ['key' => 'mi', 'text' => 'Mile (mi)'],
     ];
 
-    //日期格式
+    // Date Format
     const DATE_OPTION = [
         ['key' => 1, 'text' => 'yyyy-mm-dd'],
         ['key' => 2, 'text' => 'yyyy/mm/dd'],
@@ -93,10 +77,10 @@ class AmConfig extends BaseConfig
         ['key' => 9, 'text' => 'dd.mm.yyyy'],
     ];
 
-    //私有模式显示方式
+    // Private mode display method
     const SITE_PRIVATE_END_OPTION = [
-        ['key' => 1, 'text' => '站点内容不可见'],
-        ['key' => 2, 'text' => '到期前内容可见，新内容不可见'],
+        ['key' => 1, 'text' => 'Content not visible'],
+        ['key' => 2, 'text' => 'Pre-expiration content visible, new content not visible'],
     ];
 
     // Model Usage - Form Mapping

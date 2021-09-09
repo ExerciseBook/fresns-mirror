@@ -42,29 +42,22 @@ class FresnsCommentsService extends AmService
     public function getCommentPreviewList($comment_id, $limit, $mid)
     {
         $AmService = new AmService();
-        // dd($comments['id']);
         request()->offsetSet('id', $comment_id);
         $data = $AmService->listTreeNoRankNum();
         $data = $AmService->treeData();
-        // dd($data);
-        // 获取childrenIdArr
+        // get childrenIdArr
         $childrenIdArr = [];
         if ($data) {
             foreach ($data as $v) {
                 $this->getChildrenIds($v, $childrenIdArr);
             }
-            // dd($childrenIdArr);
         }
         array_unshift($childrenIdArr, $comment_id);
-        // dd($childrenIdArr);
         request()->offsetUnset('id');
-        // dd($childrenIdArr);
         // $query->where('comment.id','=',$comments['id']);
-        // 未被删除用户的评论
+
         $memberArr = FresnsMembers::where('deleted_at', null)->pluck('id')->toArray();
-        $comments = FresnsComments::whereIn('member_id', $memberArr)->whereIn('id', $childrenIdArr)->where('parent_id',
-            '!=', 0)->orderBy('like_count', 'desc')->limit($limit)->get();
-        //    dd($comments);
+        $comments = FresnsComments::whereIn('member_id', $memberArr)->whereIn('id', $childrenIdArr)->where('parent_id', '!=', 0)->orderBy('like_count', 'desc')->limit($limit)->get();
         $result = [];
         if ($comments) {
             foreach ($comments as $v) {
@@ -82,7 +75,6 @@ class FresnsCommentsService extends AmService
                     $arr['nickname'] = $memberInfo['nickname'];
                     $arr['avatar'] = $memberInfo['avatar_file_url'];
                     $arr['cid '] = $v['uuid'];
-                    // $arr['content '] = $v['content'];
                     $arr['content '] = FresnsPostResource::getContentView($v['content'], $comment_id, 2);
                     $attachCount = [];
                     $attachCount['image'] = FresnsFiles::where('file_type', 2)->where('table_name',
@@ -96,11 +88,13 @@ class FresnsCommentsService extends AmService
                     $attachCount['extends'] = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type',
                         2)->where('linked_id', $v['id'])->count();
                     $arr['attachCount'] = $attachCount;
+
+                    // replyTo
+                    // The following information is not output if the parent_id of the reply = the ID of the current comment.
+                    // The current comment ID then represents a secondary comment.
                     $replyTo = [];
-                    // replyTo 该条回复的 parent_id = 当前评论的 ID，则不输出以下信息。当前评论 ID 则代表二级评论。
-                    $replyComment = FresnsComments::where('id', $v['parent_id'])->orderBy('like_count',
-                        'desc')->first();
-                    // 回复用户信息
+                    $replyComment = FresnsComments::where('id', $v['parent_id'])->orderBy('like_count', 'desc')->first();
+                    // Respondent Information
                     if (! empty($replyComment) && ($v['parent_id'] != $comment_id)) {
                         $replyMEmberInfo = FresnsMembers::find($replyComment['member_id']);
                         $replyTo['cid'] = $replyComment['uuid'] ?? '';
@@ -119,33 +113,26 @@ class FresnsCommentsService extends AmService
         return $result;
     }
 
-    // 获取replty
+    // get replty
     public function getReplyToPreviewList($comment_id, $mid)
     {
         $searchCid = request()->input('searchCid');
         $commentCid = FresnsComments::where('uuid', $searchCid)->first();
         $AmService = new AmService();
-        // dump($comment_id);
         request()->offsetSet('id', $comment_id);
         $data = $AmService->listTreeNoRankNum();
         $data = $AmService->treeData();
-        // dd($data);
-        // 获取childrenIdArr
+        // get childrenIdArr
         $childrenIdArr = [];
         if ($data) {
             foreach ($data as $v) {
                 $this->getChildrenIds($v, $childrenIdArr);
             }
-            // dd($childrenIdArr);
         }
-        // dd($childrenIdArr);
         array_unshift($childrenIdArr, $comment_id);
-        // dd($childrenIdArr);
         request()->offsetUnset('id');
         $replyTo = [];
-        $comments = FresnsComments::whereIn('id', $childrenIdArr)->where('parent_id', '!=',
-            $commentCid['id'])->where('parent_id', '!=', 0)->orderBy('like_count', 'desc')->get();
-        // dd($comments);
+        $comments = FresnsComments::whereIn('id', $childrenIdArr)->where('parent_id', '!=', $commentCid['id'])->where('parent_id', '!=', 0)->orderBy('like_count', 'desc')->get();
         if ($comments) {
             foreach ($comments as $c) {
                 $reply = [];
@@ -172,68 +159,62 @@ class FresnsCommentsService extends AmService
                 }
             }
         }
-        // dd($replyTo);
         return $replyTo;
     }
 
-    // 发表评论
+    // Publish comment
     public function releaseByDraft($draftId, $commentCid = 0, $sessionLodsId = 0)
     {
-        // 直接发表
+        // Direct Publishing
         $releaseResult = $this->doRelease($draftId, $commentCid, $sessionLodsId);
         if (! $releaseResult) {
-            LogService::formatInfo('评论发布异常');
-
+            LogService::formatInfo('Comment Publish Exception');
             return false;
         }
-
         return $releaseResult;
     }
 
-    // 发表
+    // Publish Type
     public function doRelease($draftId, $commentCid = 0, $sessionLodsId)
     {
-        // s判断是更新还是新增
+        // Determine if it is an update or a new addition
         $draftComment = FresnsCommentLogs::find($draftId);
         if (! $draftComment) {
-            LogService::formatInfo('评论草稿不存在');
-
+            LogService::formatInfo('Comment log does not exist');
             return false;
         }
-        // $this->sendAtMessages(10,$draftId);
-        // 新增
+        // Type
         if (! $draftComment['comment_id']) {
-            // dd(1);
+            // add
             $res = $this->storeToDb($draftId, $commentCid, $sessionLodsId);
         } else {
-            // 编辑
+            // edit
             $res = $this->updateTob($draftId, $sessionLodsId);
         }
-
         return true;
     }
 
-    // 入库
+    // Insert main table (add)
     public function storeToDb($draftId, $commentCid = 0, $sessionLodsId = 0)
     {
-        // 解析基础信息
+        // Parsing basic information
         $draftComment = FresnsCommentLogs::find($draftId);
         // $baseInfoArr = $this->parseDraftBaseInfo($draftId);
         // dump($baseInfoArr);
-        // 解析内容信息(判断内容是否需要截断)
+        // Parse content information (determine whether the content needs to be truncated)
         $contentBrief = $this->parseDraftContent($draftId);
         // dd($contentBrief);
         $uuid = strtolower(StrHelper::randString(8));
-        // 获取评论的摘要字数
-        $commentEditorbRIEFCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
-        if (mb_strlen($draftComment['content']) > $commentEditorbRIEFCount) {
+        // Get the number of words in the brief of the comment
+        $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
+        if (mb_strlen($draftComment['content']) > $commentEditorBriefCount) {
             $is_brief = 1;
         } else {
             $is_brief = 0;
         }
         $allosJsonDecode = json_decode($draftComment['allow_json'], true);
         $is_allow = $allosJsonDecode['isAllow'] ?? 0;
-        // 位置信息配置
+        // Location Information
         $locationJson = json_decode($draftComment['location_json'], true);
         $isLbs = $locationJson['isLbs'] ?? 0;
         $more_json = [];
@@ -265,12 +246,12 @@ class FresnsCommentsService extends AmService
                 'object_result' => 2,
                 'object_order_id' => $commentId,
             ]);
-            // 入库后执行相应操作
+            // Perform the corresponding operation after inserting into the main table
             $this->afterStoreToDb($commentId, $draftId);
         }
     }
 
-    // 编辑
+    // Insert main table (edit)
     public function updateTob($draftId, $sessionLodsId)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
@@ -279,19 +260,20 @@ class FresnsCommentsService extends AmService
             'object_result' => 2,
             'object_order_id' => $draftComment['comment_id'],
         ]);
-        // 解析内容信息(判断内容是否需要截断)
+
+        // Parse content information (determine whether the content needs to be truncated)
         $contentBrief = $this->parseDraftContent($draftId);
-        // dd($contentBrief);
-        // 获取评论的摘要字数
-        $commentEditorbRIEFCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
-        if (mb_strlen($draftComment['content']) > $commentEditorbRIEFCount) {
+
+        // Get the number of words in the brief of the comment
+        $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
+        if (mb_strlen($draftComment['content']) > $commentEditorBriefCount) {
             $is_brief = 1;
         } else {
             $is_brief = 0;
         }
         $allosJsonDecode = json_decode($draftComment['allow_json'], true);
         $is_allow = $allosJsonDecode['isAllow'] ?? 0;
-        // 位置信息配置
+        // Location Information
         $locationJson = json_decode($draftComment['location_json'], true);
         $isLbs = $locationJson['isLbs'] ?? '';
         $more_json = [];
@@ -310,20 +292,19 @@ class FresnsCommentsService extends AmService
         FresnsComments::where('id', $draftComment['comment_id'])->update($commentInput);
         $AppendStore = $this->commentAppendUpdate($draftComment['comment_id'], $draftId);
         if ($AppendStore) {
-            // 入库后执行相应操作
+            // Perform the corresponding operation after inserting into the main table
             $this->afterUpdateToDb($draftComment['comment_id'], $draftId);
         }
     }
 
-    // 副表(新增)
+    // comment_appends (add)
     public function postAppendStore($commentId, $draftId)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
-        // 副表
-        // 编辑器配置
+        // Editor Config
         $pluginEdit = $draftComment['is_plugin_edit'];
         $pluginUnikey = $draftComment['plugin_unikey'];
-        // 位置信息配置
+        // Location Config
         $locationJson = json_decode($draftComment['location_json'], true);
         $mapId = $locationJson['mapId'] ?? null;
         $latitude = $locationJson['latitude'] ?? null;
@@ -337,11 +318,9 @@ class FresnsCommentsService extends AmService
         $district = $locationJson['district'] ?? null;
         $adcode = $locationJson['adcode'] ?? null;
         $address = $locationJson['address'] ?? null;
-        // 扩展信息
+        // Extends
         $extendsJson = json_decode($draftComment['extends_json'], true);
         if ($extendsJson) {
-            // 先清空
-            // Db::table('extend_linkeds')->where('linked_type',2)->where('linked_id',$commentId)->delete();
             foreach ($extendsJson as $e) {
                 $extend = FresnsExtends::where('uuid', $e['eid'])->first();
                 if ($extend) {
@@ -358,7 +337,7 @@ class FresnsCommentsService extends AmService
         }
         $content = $draftComment['content'];
         $content = $this->stopWords($content);
-        // 去除html标签
+        // Removing html tags
         $content = strip_tags($content);
         $commentAppendInput = [
             'comment_id' => $commentId,
@@ -385,14 +364,14 @@ class FresnsCommentsService extends AmService
         return true;
     }
 
-    // 副表（编辑）
+    // comment_appends (edit)
     public function commentAppendUpdate($commentId, $draftId)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
-        // 编辑器配置
+        // Editor Config
         $pluginEdit = $draftComment['is_plugin_edit'];
         $pluginUnikey = $draftComment['plugin_unikey'];
-        // 位置信息配置
+        // Location Config
         $locationJson = json_decode($draftComment['location_json'], true);
         $mapId = $locationJson['mapId'] ?? null;
         $latitude = $locationJson['latitude'] ?? null;
@@ -406,10 +385,10 @@ class FresnsCommentsService extends AmService
         $district = $locationJson['district'] ?? null;
         $adcode = $locationJson['adcode'] ?? null;
         $address = $locationJson['address'] ?? null;
-        // 扩展信息
+        // Extends
         $extendsJson = json_decode($draftComment['extends_json'], true);
         if ($extendsJson) {
-            // 先清空
+            // Empty first, then enter a new one
             Db::table('extend_linkeds')->where('linked_type', 2)->where('linked_id', $commentId)->delete();
             foreach ($extendsJson as $e) {
                 $extend = FresnsExtends::where('uuid', $e['eid'])->first();
@@ -427,7 +406,7 @@ class FresnsCommentsService extends AmService
         }
         $content = $draftComment['content'];
         $content = $this->stopWords($content);
-        // 去除html标签
+        // Removing html tags
         $content = strip_tags($content);
         $commentAppendInput = [
             'platform_id' => $draftComment['platform_id'],
@@ -452,85 +431,74 @@ class FresnsCommentsService extends AmService
         return true;
     }
 
-    // 入库后执行相应操作
+    // Perform the corresponding operation after inserting into the main table (add)
     public function afterStoreToDb($commentId, $draftId)
     {
-        // 调用插件订阅命令字
+        // Call the plugin to subscribe to the command word
         $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsCommentsConfig::CFG_TABLE,
             'insertId' => $commentId,
         ];
         LogService::info('table_input', $input);
-        // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftComment = FresnsCommentLogs::find($draftId);
         $content = $this->stopWords($draftComment['content']);
-        // 草稿更新为已发布
+
+        // Log updated to published
         FresnsCommentLogs::where('id', $draftId)->update(['status' => 3, 'comment_id' => $commentId, 'content' => $content]);
+        // Notification
         $this->sendAtMessages($commentId, $draftId);
         $this->sendCommentMessages($commentId, $draftId);
-        // $this->fillDbInfo($draftId);
-        // 	我的 member_stats > post_publish_count
+        // Add stats: member_stats > post_publish_count
         $this->memberStats($draftId);
-        // 解析话题
+        // Analyze the hashtag and domain
         $this->analisisHashtag($draftId, 1);
         $this->domainStore($commentId, $draftId);
 
-        //dd($res);
-        //  配置表键值 post_counts
         return true;
     }
 
-    // 入库后执行相应操作（编辑）
+    // Perform the corresponding operation after inserting into the main table (edit)
     public function afterUpdateToDb($commentId, $draftId)
     {
-        // 调用插件订阅命令字
+        // Call the plugin to subscribe to the command word
         $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsCommentsConfig::CFG_TABLE,
             'insertId' => $commentId,
         ];
         LogService::info('table_input', $input);
-        // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftComment = FresnsCommentLogs::find($draftId);
         $content = $this->stopWords($draftComment['content']);
-        // 草稿更新为已发布
+
+        // Log updated to published
         FresnsCommentLogs::where('id', $draftId)->update(['status' => 3, 'content'=> $content]);
-
         FresnsCommentAppends::where('comment_id', $commentId)->increment('edit_count');
-
+        // Notification
         $this->sendAtMessages($commentId, $draftId, 2);
         $this->sendCommentMessages($commentId, $draftId);
-        // $this->fillDbInfo($draftId);
-        // 	我的 member_stats > post_publish_count
-        // 解析话题
+        // Add stats: member_stats > post_publish_count
+        // Analyze the hashtag
         $this->analisisHashtag($draftId, 2);
         $this->domainStore($commentId, $draftId, 2);
-        //dd($res);
-        //  配置表键值 post_counts
+
         return true;
     }
 
-    // 不能艾特自己，艾特别人则给对方产生一条通知消息。
-    // 调用 MessageService 处理
+    // Notifications (Call MessageService to handle)
+    // Can't @ self, @ others generate a notification message to each other.
     public function sendAtMessages($commentId, $draftId, $updateType = 1)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
         $commentInfo = FresnsComments::find($commentId);
-        // if ($updateType == 2) {
-        //     DB::table('mentions')->where('linked_type', 2)->where('linked_id', $commentId)->delete();
-        // }
         preg_match_all("/@.*?\s/", $draftComment['content'], $atMatches);
-        // 存在发送消息
-        // dd($atMatches);
+        // Presence send message
         if ($atMatches[0]) {
             foreach ($atMatches[0] as $s) {
-                // dd($s);
-                // 查询接受用户id
+                // Query accept member id
                 $name = trim(ltrim($s, '@'));
-                // dd($name);
                 $memberInfo = FresnsMembers::where('name', $name)->first();
                 if ($memberInfo && $memberInfo['id'] != $draftComment['member_id']) {
                     $input = [
@@ -542,7 +510,7 @@ class FresnsCommentsService extends AmService
                         'source_class' => 2,
                     ];
                     DB::table('notifies')->insert($input);
-                    //  艾特记录表
+                    // @ Record table
                     $mentions = [
                         'member_id' => $commentInfo['member_id'],
                         'linked_type' => 2,
@@ -560,7 +528,7 @@ class FresnsCommentsService extends AmService
         return true;
     }
 
-    // 发表成功后，帖子或者评论的主键 ID 产生，然后把 ID 填到 files > table_id 字段里，补齐信息。
+    // After successful posting, the primary key ID of the comment is generated, and then the ID is filled into the files > table_id field to perfection the information.
     public function fillDbInfo($draftId)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
@@ -578,8 +546,8 @@ class FresnsCommentsService extends AmService
         return true;
     }
 
-    // 我的 member_stats > post_publish_count
-    // 配置表键值 post_counts
+    // Add stats: member_stats > comment_publish_count
+    // Add stats: Configs item_key = comment_counts
     public function memberStats($draftId)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
@@ -594,14 +562,15 @@ class FresnsCommentsService extends AmService
         return true;
     }
 
-    // 评论则判断父级是否为自己，不是自己则为对方产生一条通知。一级评论给帖子作者（帖子作者不是自己）产生通知。
-    // 调用 MessageService 处理
+    // The comment then determines whether the parent is itself, and generates a notification for the other party if it is not itself.
+    // A first-level comment generates a notification for the author of the post (the author of the post is not himself).
+    // Call MessageService to process
     public function sendCommentMessages($commentId, $draftId)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
         $postInfo = FresnsPosts::find($draftComment['post_id']);
         $comment = FresnsComments::where('id', $draftComment['comment_id'])->first();
-        // 一级评论给帖子作者（帖子作者不是自己）产生通知。
+        // First-level comments to post authors (post authors who are not themselves) generate notifications.
         if (($draftComment['member_id'] != $postInfo['member_id']) && $comment['parent_id'] == 0) {
             FresnsComments::where('id', $commentId)->increment('comment_count');
             $input = [
@@ -614,7 +583,7 @@ class FresnsCommentsService extends AmService
             ];
             DB::table('notifies')->insert($input);
         }
-        // 评论则判断父级是否为自己，不是自己则为对方产生一条通知
+        // The comment determines whether the parent is itself, and if not, generates a notification for the other party
         if ($comment['parent_id'] != 0 && ($comment['parent_id'] != $draftComment['member_id'])) {
             FresnsComments::where('id', $comment['parent_id'])->increment('comment_count');
             $input = [
@@ -631,7 +600,7 @@ class FresnsCommentsService extends AmService
         return true;
     }
 
-    // 域名链接表
+    // Domain Link Table
     public function domainStore($commentId, $draftId, $updateType = 1)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
@@ -640,15 +609,15 @@ class FresnsCommentsService extends AmService
             FresnsDomains::where('id', $domainLinksIdArr)->decrement('post_count');
             DB::table(FresnsDomainLinksConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $commentId)->delete();
         }
-        // $postInfo = FresnsPosts::find($postId);
         preg_match_all("/http[s]{0,1}:\/\/.*?\s/", $draftComment['content'], $hrefMatches);
         if ($hrefMatches[0]) {
             foreach ($hrefMatches[0] as $h) {
+                // Top level domains
                 $firstDomain = $this->top_domain(trim($h));
-                // 二级域名
+                // Second level domain name
                 $domain = $this->regular_domain(trim($h));
                 preg_match('/(.*\.)?\w+\.\w+$/', $domain, $secDomain);
-                // 域名表是否存在
+                // Does the domain table exist
                 $domain_input = [
                     'domain' => $firstDomain,
                     'sld' => $secDomain[0],
@@ -677,44 +646,42 @@ class FresnsCommentsService extends AmService
         return true;
     }
 
-    // 解析话题(入库话题表)
+    // Parsing Hashtag (insert hashtags table)
     public function analisisHashtag($draftId, $type = 1)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
-        // $draftPost['content'] = "这里是1帖子@成员3 的文本。<a onclick='return false;' href='http://www.baidu.com'>点击跳转百度</a>#话题 5##话题2#@成员2";
-        // dump($draftPost['content']);
-        // 当前后台话题的显示模式
+        // The currently configured Hashtag display mode
         $hashtagShow = ApiConfigHelper::getConfigByItemKey(AmConfig::HASHTAG_SHOW) ?? 2;
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $draftComment['content'], $singlePoundMatches);
         } else {
             preg_match_all('/#.*?#/', $draftComment['content'], $singlePoundMatches);
         }
-        // dd($singlePoundMatches);
         if ($type == 2) {
-            // 去除话题关联
+            // Removing Hashtag Associations
             // DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id',$draftComment['comment_id'])->delete();
             $hashtagIdArr = FresnsHashtagLinkeds::where('linked_type', 2)->where('linked_id', $draftComment['comment_id'])->pluck('hashtag_id')->toArray();
             FresnsHashtags::whereIn('id', $hashtagIdArr)->decrement('comment_count');
             FresnsHashtagLinkeds::where('linked_type', 2)->where('linked_id', $draftComment['post_id'])->delete();
         }
+
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
-                // 将话题的#号去掉
+                // Remove the # sign from Hashtag
                 $s = trim(str_replace('#', '', $s));
-                // 是否存在话题
+                // Existence of Hashtag
                 $hashInfo = FresnsHashtags::where('name', $s)->first();
                 if ($hashInfo) {
-                    // 话题表comment_count +1
+                    // hashtags table: comment_count +1
                     FresnsHashtags::where('id', $hashInfo['id'])->increment('comment_count');
-                    // 建立关联关系
+                    // Establishing Affiliations
                     $res = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->insert([
                         'linked_type' => 2,
                         'linked_id' => $draftComment['comment_id'],
                         'hashtag_id' => $hashInfo['id'],
                     ]);
                 } else {
-                    // 新建话题和话题关联
+                    // New Hashtag and Hashtag Association
                     $slug = urlencode($s);
                     $input = [
                         'slug' => $slug,
@@ -722,7 +689,7 @@ class FresnsCommentsService extends AmService
                         'comment_count' => 1,
                     ];
                     $hashtagId = (new FresnsHashtags())->store($input);
-                    // 建立关联关系
+                    // Establishing Affiliations
                     $res = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->insert([
                         'linked_type' => 2,
                         'linked_id' => $draftComment['comment_id'],
@@ -732,40 +699,38 @@ class FresnsCommentsService extends AmService
                 }
             }
         }
-        // dd($res);
+
         return true;
-        // dd($singlePoundMatches);
     }
 
-    // 解析截断内容信息
+    // Parsing truncated content information
     public function parseDraftContent($draftId)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
         $content = $draftComment['content'];
-        // 获取帖子的上线字数
-        // $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
-        // 获取帖子的摘要字数
-        $commentEditorbRIEFCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_BRIEF_COUNT) ?? 280;
-        if (mb_strlen(trim($draftComment['content'])) > $commentEditorbRIEFCount) {
-            $contentInfo = $this->truncatedContentInfo($content, $commentEditorbRIEFCount);
+
+        // Get the maximum number of words for the comment brief
+        $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_BRIEF_COUNT) ?? 280;
+        if (mb_strlen(trim($draftComment['content'])) > $commentEditorBriefCount) {
+            $contentInfo = $this->truncatedContentInfo($content, $commentEditorBriefCount);
             $content = $contentInfo['truncated_content'];
         } else {
             $content = $draftComment['content'];
         }
         $content = $this->stopWords($content);
-        // if(mb_strlen($content) > $commentEditorWordCount){
-        // }
         return $content;
     }
 
-    // “艾特”、“话题”、“链接” content全文中三者的位置信息
-    // 内容超过设置的字数时，需要摘要存储，如果摘要最后内容是“艾特”、“话题”、“链接”三种信息，要留全，不能截断，保全时可以限定字数。
+    // "@", "#", "Link" Location information of the three in the full text
+    
+    // If the content exceeds the set number of words, the brief is stored.
+    // If the last content of the brief is "@", "#", and "Link", it should be kept in full and not truncated.
+    // The maximum number of words in the brief can be exceeded when preserving.
     public function truncatedContentInfo($content, $wordCount = 280)
     {
-        // 当前后台话题的显示模式
+        // The currently configured Hashtag display mode
         $hashtagShow = ApiConfigHelper::getConfigByItemKey(AmConfig::HASHTAG_SHOW) ?? 2;
-        // $content = "这里是1帖子@刘liuliu 的文本。https://tangjie.me #话题1 12345#话题 2#";
-        // 在 $content 中匹配 位置信息,  这里的正则放到配置文件中
+        // Match the location information in $content, where the rule is placed in the configuration file
         if ($hashtagShow == 1) {
             preg_match("/#.*?\s/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         } else {
@@ -775,48 +740,32 @@ class FresnsCommentsService extends AmService
          * preg_match("/<a .*?>.*?<\/a>/",$content,$hrefMatches,PREG_OFFSET_CAPTURE);.
          *  */
         preg_match("/http[s]:\/\/.*?\s/", $content, $hrefMatches, PREG_OFFSET_CAPTURE);
-        // dd($singlePoundMatches);
-        // dd($hrefMatches);
+
         // preg_match("/<a href=.*?}></a>/", $content, $hrefMatches,PREG_OFFSET_CAPTURE);
         preg_match("/@.*?\s/", $content, $atMatches, PREG_OFFSET_CAPTURE);
         $truncatedPos = $wordCount;
         $findTruncatedPos = false;
-        // 判断这个wordCount落在的区间位置， 如果有命中，则找到对应的截断位置，并执行截断
+        
+        // Determine the position of the interval where this wordCount falls.
+        // If there is a hit, find the corresponding truncation position and execute the truncation
         // https://www.php.net/manual/en/function.preg-match.php
         foreach ($singlePoundMatches as $currMatch) {
             $matchStr = $currMatch[0];
             $matchStrStartPosition = $currMatch[1];
             $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
-            // 命中
+            // Hit
             if ($matchStrStartPosition <= $wordCount && $matchStrEndPosition >= $wordCount) {
                 $findTruncatedPos = true;
                 $truncatedPos = $matchStrEndPosition;
             }
         }
-        // [1,4] [6,9] [15,33] [41,45], [50,77]
-        // [1,4] [6,9] [15,33] [41,45], [65,69]
-        //  adjfaljdfsdfidksieijsdfasdf@cccc
-
-        // // 如果未发现则继续匹配
-        // if(!$findTruncatedPos){
-        //     foreach ($singlePoundMatches as $currMatch) {
-        //         $matchStr = $currMatch[0];
-        //         $matchStrStartPosition = $currMatch[1];
-        //         $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
-        //         // 命中
-        //         if ($matchStrStartPosition <= $wordCount && $matchStrEndPosition >= $wordCount) {
-        //             $findTruncatedPos = true;
-        //             $truncatedPos = $matchStrEndPosition;
-        //         }
-        //     }
-        // }
 
         if (! $findTruncatedPos) {
             foreach ($hrefMatches as $currMatch) {
                 $matchStr = $currMatch[0];
                 $matchStrStartPosition = $currMatch[1];
                 $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
-                // 命中
+                // Hit
                 if ($matchStrStartPosition <= $wordCount && $matchStrEndPosition >= $wordCount) {
                     $findTruncatedPos = true;
                     $truncatedPos = $matchStrEndPosition;
@@ -828,7 +777,7 @@ class FresnsCommentsService extends AmService
                 $matchStr = $currMatch[0];
                 $matchStrStartPosition = $currMatch[1];
                 $matchStrEndPosition = $currMatch[1] + mb_strlen($matchStr);
-                // 命中
+                // Hit
                 if ($matchStrStartPosition <= $wordCount && $matchStrEndPosition >= $wordCount) {
                     $findTruncatedPos = true;
                     $truncatedPos = $matchStrEndPosition;
@@ -836,11 +785,11 @@ class FresnsCommentsService extends AmService
             }
         }
 
-        // 执行操作
+        // Execute the operation
         $info = [];
         $info['find_truncated_pos'] = $findTruncatedPos;
-        $info['truncated_pos'] = $truncatedPos;  // 截断位置
-        $info['truncated_content'] = Str::substr($content, 0, $truncatedPos); // 最终内容
+        $info['truncated_pos'] = $truncatedPos;  // Truncation position
+        $info['truncated_content'] = Str::substr($content, 0, $truncatedPos); // Final content
         // $info['double_pound_arr'] = $doublePoundMatches;
         $info['single_pound_arr'] = $singlePoundMatches;
         $info['link_pound_arr'] = $hrefMatches;
@@ -867,285 +816,30 @@ class FresnsCommentsService extends AmService
     public function top_domain($domain)
     {
         $domain = $this->regular_domain($domain);
-        //   dd($domain);
+        // Domain name suffix
         $iana_root = [
-            'ac',
-            'ad',
-            'ae',
-            'aero',
-            'af',
-            'ag',
-            'ai',
-            'al',
-            'am',
-            'an',
-            'ao',
-            'aq',
-            'ar',
-            'arpa',
-            'as',
-            'asia',
-            'at',
-            'au',
-            'aw',
-            'ax',
-            'az',
-            'ba',
-            'bb',
-            'bd',
-            'be',
-            'bf',
-            'bg',
-            'bh',
-            'bi',
-            'biz',
-            'bj',
-            'bl',
-            'bm',
-            'bn',
-            'bo',
-            'bq',
-            'br',
-            'bs',
-            'bt',
-            'bv',
-            'bw',
-            'by',
-            'bz',
-            'ca',
-            'cat',
-            'cc',
-            'cd',
-            'cf',
-            'cg',
-            'ch',
-            'ci',
-            'ck',
-            'cl',
-            'cm',
-            'cn',
-            'co',
-            'com',
-            'coop',
-            'cr',
-            'cu',
-            'cv',
-            'cw',
-            'cx',
-            'cy',
-            'cz',
-            'de',
-            'dj',
-            'dk',
-            'dm',
-            'do',
-            'dz',
-            'ec',
-            'edu',
-            'ee',
-            'eg',
-            'eh',
-            'er',
-            'es',
-            'et',
-            'eu',
-            'fi',
-            'fj',
-            'fk',
-            'fm',
-            'fo',
-            'fr',
-            'ga',
-            'gb',
-            'gd',
-            'ge',
-            'gf',
-            'gg',
-            'gh',
-            'gi',
-            'gl',
-            'gm',
-            'gn',
-            'gov',
-            'gp',
-            'gq',
-            'gr',
-            'gs',
-            'gt',
-            'gu',
-            'gw',
-            'gy',
-            'hk',
-            'hm',
-            'hn',
-            'hr',
-            'ht',
-            'hu',
-            'id',
-            'ie',
-            'il',
-            'im',
-            'in',
-            'info',
-            'int',
-            'io',
-            'iq',
-            'ir',
-            'is',
-            'it',
-            'je',
-            'jm',
-            'jo',
-            'jobs',
-            'jp',
-            'ke',
-            'kg',
-            'kh',
-            'ki',
-            'km',
-            'kn',
-            'kp',
-            'kr',
-            'kw',
-            'ky',
-            'kz',
-            'la',
-            'lb',
-            'lc',
-            'li',
-            'lk',
-            'lr',
-            'ls',
-            'lt',
-            'lu',
-            'lv',
-            'ly',
-            'ma',
-            'mc',
-            'md',
-            'me',
-            'mf',
-            'mg',
-            'mh',
-            'mil',
-            'mk',
-            'ml',
-            'mm',
-            'mn',
-            'mo',
-            'mobi',
-            'mp',
-            'mq',
-            'mr',
-            'ms',
-            'mt',
-            'mu',
-            'museum',
-            'mv',
-            'mw',
-            'mx',
-            'my',
-            'mz',
-            'na',
-            'name',
-            'nc',
-            'ne',
-            'net',
-            'nf',
-            'ng',
-            'ni',
-            'nl',
-            'no',
-            'np',
-            'nr',
-            'nu',
-            'nz',
-            'om',
-            'org',
-            'pa',
-            'pe',
-            'pf',
-            'pg',
-            'ph',
-            'pk',
-            'pl',
-            'pm',
-            'pn',
-            'pr',
-            'pro',
-            'ps',
-            'pt',
-            'pw',
-            'py',
-            'qa',
-            're',
-            'ro',
-            'rs',
-            'ru',
-            'rw',
-            'sa',
-            'sb',
-            'sc',
-            'sd',
-            'se',
-            'sg',
-            'sh',
-            'si',
-            'sj',
-            'sk',
-            'sl',
-            'sm',
-            'sn',
-            'so',
-            'sr',
-            'ss',
-            'st',
-            'su',
-            'sv',
-            'sx',
-            'sy',
-            'sz',
-            'tc',
-            'td',
-            'tel',
-            'tf',
-            'tg',
-            'th',
-            'tj',
-            'tk',
-            'tl',
-            'tm',
-            'tn',
-            'to',
-            'tp',
-            'tr',
-            'travel',
-            'tt',
-            'tv',
-            'tw',
-            'tz',
-            'ua',
-            'ug',
-            'uk',
-            'um',
-            'us',
-            'uy',
-            'uz',
-            'va',
-            'vc',
-            've',
-            'vg',
-            'vi',
-            'vn',
-            'vu',
-            'wf',
-            'ws',
-            'xxx',
-            'ye',
-            'yt',
-            'za',
-            'zm',
-            'zw',
+            // gTLDs
+            'com','net','org','edu','gov','int','mil','arpa','biz','info','pro','name','coop','travel','xxx','idv','aero','museum','mobi','asia','tel','post','jobs','cat',
+            // ccTLDs
+            'ad','ae','af','ag','ai','al','am','an','ao','aq','ar','as','at','au','aw','az','ba','bb','bd','be','bf','bg','bh','bi','bj','bm','bn','bo','br','bs','bt','bv','bw','by','bz','ca','cc','cd','cf','cg','ch','ci','ck','cl','cm','cn','co','cr','cu','cv','cx','cy','cz','de','dj','dk','dm','do','dz','ec','ee','eg','eh','er','es','et','eu','fi','fj','fk','fm','fo','fr','ga','gd','ge','gf','gg','gh','gi','gl','gm','gn','gp','gq','gr','gs','gt','gu','gw','gy','hk','hm','hn','hr','ht','hu','id','ie','il','im','in','io','iq','ir','is','it','je','jm','jo','jp','ke','kg','kh','ki','km','kn','kp','kr','kw','ky','kz','la','lb','lc','li','lk','lr','ls','ma','mc','md','me','mg','mh','mk','ml','mm','mn','mo','mp','mq','mr','ms','mt','mu','mv','mw','mx','my','mz','na','nc','ne','nf','ng','ni','nl','no','np','nr','nu','nz','om','pa','pe','pf','pg','ph','pk','pl','pm','pn','pr','ps','pt','pw','py','qa','re','ro','ru','rw','sa','sb','sc','sd','se','sg','sh','si','sj','sk','sm','sn','so','sr','st','sv','sy','sz','tc','td','tf','tg','th','tj','tk','tl','tm','tn','to','tp','tr','tt','tv','tw','tz','ua','ug','uk','um','us','uy','uz','va','vc','ve','vg','vi','vn','vu','wf','ws','ye','yt','yu','yr','za','zm','zw',
+            // new gTLDs (Business)
+            'accountant','club','coach','college','company','construction','consulting','contractors','cooking','corp','credit','creditcard','dance','dealer','democrat','dental','dentist','design','diamonds','direct','doctor','drive','eco','education','energy','engineer','engineering','equipment','events','exchange','expert','express','faith','farm','farmers','fashion','finance','financial','fish','fit','fitness','flights','florist','flowers','food','football','forsale','furniture','game','games','garden','gmbh','golf','health','healthcare','hockey','holdings','holiday','home','hospital','hotel','hotels','house','inc','industries','insurance','insure','investments','islam','jewelry','justforu','kid','kids','law','lawyer','legal','lighting','limited','live','llc','llp','loft','ltd','ltda','managment','marketing','media','medical','men','money','mortgage','moto','motorcycles','music','mutualfunds','ngo','partners','party','pharmacy','photo','photography','photos','physio','pizza','plumbing','press','prod','productions','radio','rehab','rent','repair','report','republican','restaurant','room','rugby','safe','sale','sarl','save','school','secure','security','services','shoes','show','soccer','spa','sport','sports','spot','srl','storage','studio','tattoo','taxi','team','tech','technology','thai','tips','tour','tours','toys','trade','trading','travelers','university','vacations','ventures','versicherung','versicherung','vet','wedding','wine','winners','work','works','yachts','zone',
+            // new gTLDs (Construction & Real Estate)
+            'archi','architect','casa','contruction','estate','haus','house','immo','immobilien','lighting','loft','mls','realty',
+            // new gTLDs (Community & Religion)
+            'academy','arab','bible','care','catholic','charity','christmas','church','college','community','contact','degree','education','faith','foundation','gay','halal','hiv','indiands','institute','irish','islam','kiwi','latino','mba','meet','memorial','ngo','phd','prof','school','schule','science','singles','social','swiss','thai','trust','university','uno',
+            // new gTLDs (E-commerce & Shopping)
+            'auction','best','bid','boutique','center','cheap','compare','coupon','coupons','deal','deals','diamonds','discount','fashion','forsale','free','gift','gold','gratis','hot','jewelry','kaufen','luxe','luxury','market','moda','pay','promo','qpon','review','reviews','rocks','sale','shoes','shop','shopping','store','tienda','top','toys','watch','zero',
+            // new gTLDs (Dining)
+            'bar','bio','cafe','catering','coffee','cooking','diet','eat','food','kitchen','menu','organic','pizza','pub','rest','restaurant','vodka','wine',
+            // new gTLDs (Travel)
+            'abudhabi','africa','alsace','amsterdam','barcelona','bayern','berlin','boats','booking','boston','brussels','budapest','caravan','casa','catalonia','city','club','cologne','corsica','country','cruise','cruises','deal','deals','doha','dubai','durban','earth','flights','fly','fun','gent','guide','hamburg','helsinki','holiday','hotel','hoteles','hotels','ist','istanbul','joburg','koeln','land','london','madrid','map','melbourne','miami','moscow','nagoya','nrw','nyc','osaka','paris','party','persiangulf','place','quebec','reise','reisen','rio','roma','room','ruhr','saarland','stockholm','swiss','sydney','taipei','tickets','tirol','tokyo','tour','tours','town','travelers','vacations','vegas','wales','wien','world','yokohama','zuerich',
+            // new gTLDs (Sports & Hobbies)
+            'art','auto','autos','baby','band','baseball','beats','beauty','beknown','bike','book','boutique','broadway','car','cars','club','coach','contact','cool','cricket','dad','dance','date','dating','design','dog','events','family','fan','fans','fashion','film','final','fishing','football','fun','furniture','futbol','gallery','game','games','garden','gay','golf','guru','hair','hiphop','hockey','home','horse','icu','joy','kid','kids','life','lifestyle','like','living','lol','makeup','meet','men','moda','moi','mom','movie','movistar','music','party','pet','pets','photo','photography','photos','pics','pictures','play','poker','rodeo','rugby','run','salon','singles','ski','skin','smile','soccer','social','song','soy','sport','sports','star','style','surf','tatoo','tennis','theater','theatre','tunes','vip','wed','wedding','winwinners','yoga','you',
+            // new gTLDs (Network Technology)
+            'analytics','antivirus','app','blog','call','camera','channel','chat','click','cloud','computer','contact','data','dev','digital','direct','docs','domains','dot','download','email','foo','forum','graphics','guide','help','home','host','hosting','idn','link','lol','mail','mobile','network','online','open','page','phone','pin','search','site','software','webcam',
+            // new gTLDs (Other)
+            'airforce','army','black','blue','box','buzz','casa','cool','day','discover','donuts','exposed','fast','finish','fire','fyi','global','green','help','here','how','international','ira','jetzt','jot','like','live','kim','navy','new','news','next','ninja','now','one','ooo','pink','plus','red','solar','tips','today','weather','wow','wtf','xyz','abogado','adult','anquan','aquitaine','attorney','audible','autoinsurance','banque','bargains','bcn','beer','bet','bingo','blackfriday','bom','boo','bot','broker','builders','business','bzh','cab','cal','cam','camp','cancerresearch','capetown','carinsurance','casino','ceo','cfp','circle','claims','cleaning','clothing','codes','condos','connectors','courses','cpa','cymru','dds','delivery','desi','directory','diy','dvr','ecom','enterprises','esq','eus','fail','feedback','financialaid','frontdoor','fund','gal','gifts','gives','giving','glass','gop','got','gripe','grocery','group','guitars','hangout','homegoods','homes','homesense','hotels','ing','ink','juegos','kinder','kosher','kyoto','lat','lease','lgbt','liason','loan','loans','locker','lotto','love','maison','markets','matrix','meme','mov','okinawa','ong','onl','origins','parts','patch','pid','ping','porn','progressive','properties','property','protection','racing','read','realestate','realtor','recipes','rentals','sex','sexy','shopyourway','shouji','silk','solutions','stroke','study','sucks','supplies','supply','tax','tires','total','training','translations','travelersinsurcance','ventures','viajes','villas','vin','vivo','voyage','vuelos','wang','watches',
         ];
         $sub_domain = explode('.', $domain);
         $top_domain = '';
@@ -1168,22 +862,19 @@ class FresnsCommentsService extends AmService
         return $top_domain;
     }
 
-    // 获取childrenIds
+    // get childrenIds
     public function getChildrenIds($categoryItem, &$childrenIdArr)
     {
-        // dd($categoryItem);
         if (key_exists('children', $categoryItem)) {
             $childrenArr = $categoryItem['children'];
-            // dd($childrenArr);
             foreach ($childrenArr as $children) {
                 $childrenIdArr[] = $children['value'];
                 $this->getChildrenIds($children, $childrenIdArr);
             }
         }
-        // dd($childrenIdArr);
     }
 
-    // 过滤词规则
+    // Stop Word Rules
     public function stopWords($text)
     {
         $stopWordsArr = FresnsStopWords::get()->toArray();

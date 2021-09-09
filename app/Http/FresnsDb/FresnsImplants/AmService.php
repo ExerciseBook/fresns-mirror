@@ -30,10 +30,9 @@ class AmService extends BaseAdminService
     {
         $startNum = ($size - 1) * $pageSize;
         $endNum = $size * $pageSize;
-        $data = FresnsImplants::where('implant_type', $type)->where('position', '>=', $startNum)->where('position', '<',
-            $endNum)->get(['id', 'implant_template', 'type', 'target', 'value', 'support', 'position']);
-        // dd($data);
-        // 判断是否过期
+        $data = FresnsImplants::where('implant_type', $type)->where('position', '>=', $startNum)->where('position', '<', $endNum)->get(['id', 'implant_template', 'type', 'target', 'value', 'support', 'position']);
+        
+        // Determine if it is expired
         if ($data) {
             foreach ($data as &$v) {
                 $name = ApiLanguageHelper::getLanguages(AmConfig::CFG_TABLE, 'name', $v['id']);
@@ -48,7 +47,6 @@ class AmService extends BaseAdminService
                 if ($v['expired_at'] && $v['expired_at'] < date('Y-m-d H:i:s', time())) {
                     unset($v);
                 }
-                // unset($v['id']);
                 unset($v['implant_template']);
                 unset($v['type']);
                 unset($v['target']);

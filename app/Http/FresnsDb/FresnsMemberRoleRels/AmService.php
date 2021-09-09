@@ -26,7 +26,7 @@ class AmService extends BaseAdminService
         return $common;
     }
 
-    //获取roleId
+    // get roleId
     public static function getMemberRoleRels($memberId)
     {
         $roleTime = date('Y-m-d H:i:s', time());

@@ -27,8 +27,8 @@ class AmService extends BaseAdminService
         return $common;
     }
 
-    //向member_likes表插入数据
-    public static function addMemberLikes($member_id, $mark_target, $mark_id, $member_count = null, $me_count = null)
+    // Add data to the member_likes table
+    public static function addMemberLike($member_id, $mark_target, $mark_id, $member_count = null, $me_count = null)
     {
         $input = [
             'member_id' => $member_id,
@@ -45,10 +45,9 @@ class AmService extends BaseAdminService
         }
     }
 
-    //删除数据
-    public static function delMemberLikes($member_id, $mark_target, $mark_id)
+    // Delete Like Data
+    public static function deleMemberLike($member_id, $mark_target, $mark_id)
     {
-        DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('like_type', $mark_target)->where('member_id',
-            $member_id)->where('like_id', $mark_id)->update(['deleted_at' => date('Y-m-d H:i:s', time())]);
+        DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('like_type', $mark_target)->where('member_id', $member_id)->where('like_id', $mark_id)->update(['deleted_at' => date('Y-m-d H:i:s', time())]);
     }
 }

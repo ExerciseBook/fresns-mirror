@@ -45,60 +45,61 @@ header('Content-Type:text/html;charset=utf-8');
 
 class FresnsPostsService extends AmService
 {
-    // 发布文章
+    // Publish post
     public function releaseByDraft($draftId, $sessionLogsId = 0)
     {
-        // 读取草稿表记录
+        // Direct Publishing
         $draftPost = FresnsPostLogs::find($draftId);
         $releaseResult = $this->doRelease($draftId, $sessionLogsId);
         if (! $releaseResult) {
-            LogService::formatInfo('帖子发布异常');
+            LogService::formatInfo('Post Publish Exception');
 
             return false;
         }
-
         return $releaseResult;
     }
 
-    // 发表
+    // Publish Type
     public function doRelease($draftId, $sessionLogsId)
     {
-        // s判断是更新还是新增
+        // Determine if it is an update or a new addition
         $draftPost = FresnsPostLogs::find($draftId);
-        // $this->sendAtMessages(10,$draftId);
+        if (! $draftPost) {
+            LogService::formatInfo('Post log does not exist');
+            return false;
+        }
+        // Type
         if (! $draftPost['post_id']) {
-            // dd(1);
+            // add
             $res = $this->storeToDb($draftId, $sessionLogsId);
         } else {
-            // 编辑帖子
+            // edit
             $res = $this->updateDb($draftId, $sessionLogsId);
         }
-
         return true;
     }
 
-    // 入库(新增)
+    // Insert main table (add)
     public function storeToDb($draftId, $sessionLogsId)
     {
-        // 解析基础信息
+        // Parsing basic information
         $draftPost = FresnsPostLogs::find($draftId);
-        // $baseInfoArr = $this->parseDraftBaseInfo($draftId);
-        // dump($baseInfoArr);
-        // 解析内容信息(判断内容是否需要截断)
+
+        // Parse content information (determine whether the content needs to be truncated)
         $contentBrief = $this->parseDraftContent($draftId);
         $uuid = strtolower(StrHelper::randString(8));
-        // 获取帖子的摘要字数
-        $commentEditorbRIEFCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
-        if (mb_strlen($draftPost['content']) > $commentEditorbRIEFCount) {
+
+        // Get the number of words in the brief of the post
+        $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_WORD_COUNT) ?? 280;
+        if (mb_strlen($draftPost['content']) > $postEditorBriefCount) {
             $is_brief = 1;
         } else {
             $is_brief = 0;
         }
         $allosJsonDecode = json_decode($draftPost['allow_json'], true);
-        // dd($)
         $is_allow = $allosJsonDecode['isAllow'] ?? 0;
-        // dd($is_allow);
-        // 位置信息配置
+
+        // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
         $isLbs = $locationJson['isLbs'] ?? 0;
         $mapId = $locationJson['mapId'] ?? null;
@@ -106,7 +107,6 @@ class FresnsPostsService extends AmService
         $longitude = $locationJson['longitude'] ?? null;
         $more_json = [];
         $more_json['files'] = json_decode($draftPost['files_json'], true);
-        // dd($more_json);
         $postInput = [
             'uuid' => $uuid,
             'member_id' => $draftPost['member_id'],
@@ -125,8 +125,6 @@ class FresnsPostsService extends AmService
             // 'release_at'  => date('Y-m-d H:i:s'),
             'more_json' => json_encode($more_json),
         ];
-        // $postId = DB::table('posts')->insertGetId($postInput);
-        // dd($postInput);
         $postId = (new FresnsPosts())->store($postInput);
         $AppendStore = $this->postAppendStore($postId, $draftId);
         if ($AppendStore) {
@@ -134,12 +132,12 @@ class FresnsPostsService extends AmService
                 'object_result' => 2,
                 'object_order_id' => $postId,
             ]);
-            // 入库后执行相应操作
+            // Execute the corresponding operation after entering the master table
             $this->afterStoreToDb($postId, $draftId);
         }
     }
 
-    // 入库（编辑）
+    // Insert main table (edit)
     public function updateDb($draftId, $sessionLogsId)
     {
         $draftPost = FresnsPostLogs::find($draftId);
@@ -148,31 +146,33 @@ class FresnsPostsService extends AmService
             'object_order_id' => $draftPost['post_id'],
         ]);
         $post = FresnsPosts::find($draftPost['post_id']);
-        // 小组帖子是数-1(编辑前的小组数 - 1)
+        // Group post count
         FresnsGroups::where('id', $post['group_id'])->decrement('post_count');
 
-        // 解析内容信息(判断内容是否需要截断)
+        // Parse content information (determine whether the content needs to be truncated)
         $contentBrief = $this->parseDraftContent($draftId);
-        // 获取帖子的摘要字数
-        $commentEditorbRIEFCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
-        if (mb_strlen($draftPost['content']) > $commentEditorbRIEFCount) {
+
+        // Get the number of words in the brief of the post
+        $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_WORD_COUNT) ?? 280;
+        if (mb_strlen($draftPost['content']) > $postEditorBriefCount) {
             $is_brief = 1;
         } else {
             $is_brief = 0;
         }
+
+        // Allow Config
         $allosJsonDecode = json_decode($draftPost['allow_json'], true);
-        // dd($)
         $is_allow = $allosJsonDecode['isAllow'] ?? 0;
-        // 位置信息配置
+
+        // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
         $isLbs = $locationJson['isLbs'] ?? 0;
         $mapId = $locationJson['mapId'] ?? null;
         $latitude = $locationJson['latitude'] ?? null;
         $longitude = $locationJson['longitude'] ?? null;
+
         $more_json = json_decode($post['more_json'], true) ?? null;
         $more_json['files'] = json_decode($draftPost['files_json'], true);
-
-        // $more_json['files'] = json_decode($draftPost['file_json'],true);
         $input = [
             'group_id' => $draftPost['group_id'],
             'type' => $draftPost['type'],
@@ -191,21 +191,20 @@ class FresnsPostsService extends AmService
         FresnsPosts::where('id', $draftPost['post_id'])->update($input);
         $AppendStore = $this->postAppendUpdate($draftPost['post_id'], $draftId);
         if ($AppendStore) {
-            // 入库后执行相应操作
+            // Perform the corresponding operation after inserting into the main table
             $this->afterUpdateToDb($draftPost['post_id'], $draftId);
         }
     }
 
-    // 副表(新增)
+    // post_appends (add)
     public function postAppendStore($postId, $draftId)
     {
         $draftPost = FresnsPostLogs::find($draftId);
-        // 副表
-        // 编辑器配置
+        // Editor Config
         $pluginEdit = $draftPost['is_plugin_edit'];
         $pluginUnikey = $draftPost['plugin_unikey'];
 
-        // 特定成员配置
+        // Specific members config
         $member_list_json = $draftPost['member_list_json'];
         $member_list_name = [];
         if ($member_list_json) {
@@ -213,9 +212,8 @@ class FresnsPostsService extends AmService
             $member_list_status = $member_list_decode['memberListStatus'] ?? 0;
             $member_list_plugin_unikey = $member_list_decode['pluginUnikey'] ?? [];
             $member_list_name = $member_list_decode['memberListName'] ?? [];
-            // 特定成员多语言
+            // Specific member names multilingual
             if ($member_list_name) {
-                // $memberListNameArr = $member_list_decode['memberListName'];
                 $inputArr = [];
                 foreach ($member_list_name as $v) {
                     $item = [];
@@ -227,18 +225,16 @@ class FresnsPostsService extends AmService
                     $item['table_field'] = 'member_list_name';
                     $item['table_id'] = $postId;
                     $item['table_name'] = AmConfig::CFG_TABLE;
-                    // $item['alias_key'] = $v['nickname'];
                     $count = FresnsLanguages::where($item)->count();
-                    //  dump($count);
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
                     $inputArr[] = $item;
                 }
-                // FresnsLanguagesModel::insert($inputArr);
             }
         }
-        // 评论设置
+
+        // Comment Config
         $commentConfig = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
         $commentPluginUnikey = null;
@@ -248,7 +244,7 @@ class FresnsPostsService extends AmService
             $commentBtnStatus = $commentConfig_decode['btnStatus'] ?? 0;
             $commentPluginUnikey = $commentConfig_decode['pluginUnikey'] ?? null;
             $commentBtnName = $commentConfig_decode['btnName'] ?? null;
-            // 评论多语言入库
+            // Btn names multilingual
             if ($commentConfig_decode['btnName']) {
                 $btnNameArr = $commentConfig_decode['btnName'];
                 $inputArr = [];
@@ -262,18 +258,15 @@ class FresnsPostsService extends AmService
                     $item['table_field'] = 'comment_btn_name';
                     $item['table_id'] = $postId;
                     $item['table_name'] = AmConfig::CFG_TABLE;
-                    // $item['alias_key'] = $v['nickname'];
                     $count = FresnsLanguages::where($item)->count();
-                    //  dump($count);
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
                 }
-                // FresnsLanguagesModel::insert($inputArr);
             }
         }
 
-        // 阅读权限配置
+        // Read Allow Config
         $allowJson = $draftPost['allow_json'];
         $allowPluginUnikey = null;
         $allowBtnName = null;
@@ -285,7 +278,7 @@ class FresnsPostsService extends AmService
             $allowBtnName = $allosJsonDecode['btnName'] ?? null;
             $proportion = $allosJsonDecode['proportion'] ?? $web_proportion;
             $proportion = empty($proportion) ? $web_proportion : $proportion;
-            // 权限多语言入库
+            // Btn names multilingual
             if ($allosJsonDecode['btnName']) {
                 $btnNameArr = $allosJsonDecode['btnName'];
                 $inputArr = [];
@@ -299,18 +292,16 @@ class FresnsPostsService extends AmService
                     $item['table_field'] = 'allow_btn_name';
                     $item['table_id'] = $postId;
                     $item['table_name'] = AmConfig::CFG_TABLE;
-                    // $item['alias_key'] = $v['nickname'];
                     $count = FresnsLanguages::where($item)->count();
-                    //  dump($count);
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
                 }
-                // FresnsLanguagesModel::insert($inputArr);
             }
-            // postAllow数据
+            // postAllow data
             if ($allosJsonDecode['permission']) {
                 $permission = $allosJsonDecode['permission'];
+                // Allow members
                 if ($permission['members']) {
                     $allowMemberArr = $permission['members'];
                     foreach ($allowMemberArr as $m) {
@@ -324,7 +315,7 @@ class FresnsPostsService extends AmService
                         }
                     }
                 }
-
+                // Allow roles
                 if ($permission['roles']) {
                     $allowRolesArr = $permission['roles'];
                     foreach ($allowRolesArr as $r) {
@@ -341,9 +332,8 @@ class FresnsPostsService extends AmService
             }
         }
 
-        // 位置信息配置
+        // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
-
         $scale = $locationJson['scale'] ?? '';
         $poi = $locationJson['poi'] ?? '';
         $poiId = $locationJson['poiId'] ?? '';
@@ -354,7 +344,7 @@ class FresnsPostsService extends AmService
         $adcode = $locationJson['adcode'] ?? '';
         $address = $locationJson['address'] ?? '';
 
-        // 扩展信息
+        // Extends
         $extendsJson = json_decode($draftPost['extends_json'], true);
         if ($extendsJson) {
             foreach ($extendsJson as $e) {
@@ -371,10 +361,10 @@ class FresnsPostsService extends AmService
                 }
             }
         }
-        // 是否存在替换关键字
+        // Existence of replacement words
         $content = $draftPost['content'];
         $content = $this->stopWords($content);
-        // 去除html标签
+        // Removing html tags
         $content = strip_tags($content);
         $postAppendInput = [
             'post_id' => $postId,
@@ -407,28 +397,27 @@ class FresnsPostsService extends AmService
         return true;
     }
 
-    // 副表（编辑）
+    // post_appends (edit)
     public function postAppendUpdate($postId, $draftId)
     {
         $draftPost = FresnsPostLogs::find($draftId);
-        // 编辑器配置
+        // Editor Config
         $pluginEdit = $draftPost['is_plugin_edit'];
         $pluginUnikey = $draftPost['plugin_unikey'];
-        // 特定成员配置
+        // Specific members config
         $member_list_json = $draftPost['member_list_json'];
         $member_list_name = [];
         $member_list_status = 0;
         if ($member_list_json) {
-            // 先删除旧数据（清空多语言表）
+            // Delete the old data first (empty the multilingual table)
             FresnsLanguages::where('table_name', AmConfig::CFG_TABLE)->where('table_id', $postId)->where('table_field',
                 'member_list_name')->delete();
             $member_list_decode = json_decode($member_list_json, true);
             $member_list_status = $member_list_decode['memberListStatus'] ?? 0;
             $member_list_plugin_unikey = $member_list_decode['pluginUnikey'] ?? [];
             $member_list_name = $member_list_decode['memberListName'] ?? [];
-            // 特定成员多语言
+            // Specific member names multilingual
             if ($member_list_name) {
-                // $memberListNameArr = $member_list_decode['memberListName'];
                 $inputArr = [];
                 foreach ($member_list_name as $v) {
                     $item = [];
@@ -441,18 +430,15 @@ class FresnsPostsService extends AmService
                     $item['table_id'] = $postId;
                     $item['table_name'] = AmConfig::CFG_TABLE;
                     $count = FresnsLanguages::where($item)->count();
-                    //  dump($count);
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
-                    // $item['alias_key'] = $v['nickname'];
                     $inputArr[] = $item;
                 }
-                // FresnsLanguagesModel::insert($inputArr);
             }
         }
 
-        // 评论设置
+        // Comment Config
         $commentConfig = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
         $commentPluginUnikey = null;
@@ -462,9 +448,9 @@ class FresnsPostsService extends AmService
             $commentBtnStatus = $commentConfig_decode['btnStatus'] ?? 0;
             $commentPluginUnikey = $commentConfig_decode['pluginUnikey'] ?? null;
             $commentBtnName = $commentConfig_decode['btnName'] ?? null;
-            // 评论多语言入库
+            // Btn names multilingual
             if ($commentConfig_decode['btnName']) {
-                // 先删除旧数据（清空多语言表）
+                // Delete the old data first (empty the multilingual table)
                 FresnsLanguages::where('table_name', AmConfig::CFG_TABLE)->where('table_id',
                     $postId)->where('table_field', 'comment_btn_name')->delete();
                 $btnNameArr = $commentConfig_decode['btnName'];
@@ -480,17 +466,14 @@ class FresnsPostsService extends AmService
                     $item['table_id'] = $postId;
                     $item['table_name'] = AmConfig::CFG_TABLE;
                     $count = FresnsLanguages::where($item)->count();
-                    //  dump($count);
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
-                    // $item['alias_key'] = $v['nickname'];
-                    //  $inputArr[] = $item;
                 }
             }
         }
 
-        // 阅读权限配置
+        // Read Allow Config
         $allowJson = $draftPost['allow_json'];
         $allowPluginUnikey = '';
         $allowBtnName = null;
@@ -502,7 +485,7 @@ class FresnsPostsService extends AmService
             $allowBtnName = $allosJsonDecode['btnName'] ?? null;
             $proportion = $allosJsonDecode['proportion'] ?? $web_proportion;
             $proportion = empty($proportion) ? $web_proportion : $proportion;
-            // 权限多语言入库
+            // Btn names multilingual
             if ($allosJsonDecode['btnName']) {
                 $btnNameArr = $allosJsonDecode['btnName'];
                 $inputArr = [];
@@ -517,16 +500,13 @@ class FresnsPostsService extends AmService
                     $item['table_id'] = $postId;
                     $item['table_name'] = AmConfig::CFG_TABLE;
                     $count = FresnsLanguages::where($item)->count();
-                    //  dump($count);
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
-                    // $item['alias_key'] = $v['nickname'];
                     $inputArr[] = $item;
                 }
-                // FresnsLanguagesModel::insert($inputArr);
             }
-            // postAllow数据
+            // postAllow data
             if ($allosJsonDecode['permission']) {
                 $permission = $allosJsonDecode['permission'];
                 if ($permission['members']) {
@@ -550,7 +530,7 @@ class FresnsPostsService extends AmService
                 }
 
                 if ($permission['roles']) {
-                    // 先清空（再新增）
+                    // Empty first, then add
                     DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $postId)->where('type', 2)->delete();
                     $allowRolesArr = $permission['roles'];
                     if ($allowRolesArr) {
@@ -573,9 +553,8 @@ class FresnsPostsService extends AmService
             }
         }
 
-        // 位置信息配置
+        // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
-
         $scale = $locationJson['scale'] ?? '';
         $poi = $locationJson['poi'] ?? '';
         $poiId = $locationJson['poiId'] ?? '';
@@ -586,10 +565,10 @@ class FresnsPostsService extends AmService
         $adcode = $locationJson['adcode'] ?? '';
         $address = $locationJson['address'] ?? '';
 
-        // 扩展信息
+        // Extends
         $extendsJson = json_decode($draftPost['extends_json'], true);
         if ($extendsJson) {
-            // 先清空
+            // Empty first, then add
             Db::table('extend_linkeds')->where('linked_type', 1)->where('linked_id', $postId)->delete();
             foreach ($extendsJson as $e) {
                 $extend = FresnsExtends::where('uuid', $e['eid'])->first();
@@ -605,11 +584,10 @@ class FresnsPostsService extends AmService
                 }
             }
         }
-        // $member_list_status = empty($member_list_status) ? 1 : 0;
-        // 是否存在替换关键字
+        // Existence of replacement words
         $content = $draftPost['content'];
         $content = $this->stopWords($content);
-        // 去除html标签
+        // Removing html tags
         $content = strip_tags($content);
         $postAppendInput = [
             'platform_id' => $draftPost['platform_id'],
@@ -641,87 +619,77 @@ class FresnsPostsService extends AmService
         return true;
     }
 
-    // 入库后执行相应操作
+    // Perform the corresponding operation after inserting into the main table (add)
     public function afterStoreToDb($postId, $draftId)
     {
-        // 调用插件订阅命令字
+        // Call the plugin to subscribe to the command word
         $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsPostsConfig::CFG_TABLE,
             'insertId' => $postId,
         ];
         LogService::info('table_input', $input);
-        // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $this->stopWords($draftPost['content']);
-        // 草稿更新为已发布
+
+        // Log updated to published
         FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId, 'content' => $content]);
-        // 小组帖子是数+1
+        // Add stats: groups > post_count
         FresnsGroups::where('id', $draftPost['group_id'])->increment('post_count');
+        // Notification
         $this->sendAtMessages($postId, $draftId);
-        // $this->fillDbInfo($draftId);
-        // 	我的 member_stats > post_publish_count
+        // Add stats: member_stats > post_publish_count
         $this->memberStats($draftId);
-        // 解析话题
+        // Analyze the hashtag and domain
         $this->analisisHashtag($draftId, 1);
-        //   域名链接表
         $this->domainStore($postId, $draftId);
-        //  配置表键值 post_counts
+
         return true;
     }
 
-    // 入库后执行相应操作(编辑)
+    // Perform the corresponding operation after inserting into the main table (edit)
     public function afterUpdateToDb($postId, $draftId)
     {
-        // 调用插件订阅命令字
+        // Call the plugin to subscribe to the command word
         $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsPostsConfig::CFG_TABLE,
             'insertId' => $postId,
         ];
         LogService::info('table_input', $input);
-        // dd($input);
         PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $this->stopWords($draftPost['content']);
-        // 草稿更新为已发布
+
+        // Log updated to published
         FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId, 'content' => $content]);
-        // 小组帖子是数+1
+        // Add stats: groups > post_count
         FresnsGroups::where('id', $draftPost['group_id'])->increment('post_count');
-        // post_appends > edit_count	字段数值 +1
+        // Add stats: post_appends > edit_count
         FresnsPostAppends::where('post_id', $postId)->increment('edit_count');
+        // Notification
         $this->sendAtMessages($postId, $draftId, 2);
-        // $this->fillDbInfo($draftId);
-        // 	我的 member_stats > post_publish_count
-        // $this->memberStats($draftId);
-        // 解析话题
+        // Analyze the hashtag and domain
         $this->analisisHashtag($draftId, 2);
         $this->domainStore($postId, $draftId, 2);
-        //  配置表键值 post_counts
+
         return true;
     }
 
-    // 不能艾特自己，艾特别人则给对方产生一条通知消息。
-    // 调用 MessageService 处理
+    // Notifications (Call MessageService to handle)
+    // Can't @ self, @ others generate a notification message to each other.
     public function sendAtMessages($postId, $draftId, $updateType = 2)
     {
         $draftPost = FresnsPostLogs::find($draftId);
         $postInfo = FresnsPosts::find($postId);
-        // if ($updateType == 2) {
-        //     DB::table('mentions')->where('linked_type', 1)->where('linked_id', $postId)->delete();
-        // }
         preg_match_all("/@.*?\s/", $draftPost['content'], $atMatches);
-        // 存在发送消息
-        // dd($atMatches);
+        // Presence send message
         if ($atMatches[0]) {
             foreach ($atMatches[0] as $s) {
-                // dd($s);
-                // 查询接受用户id
+                // Query accept member id
                 $name = trim(ltrim($s, '@'));
-                // dd($name);
                 $memberInfo = FresnsMembers::where('name', $name)->first();
-                // dd($memberInfo);
                 if ($memberInfo && ($memberInfo['id'] != $draftPost['member_id'])) {
                     $input = [
                         'source_id' => $postId,
@@ -732,7 +700,7 @@ class FresnsPostsService extends AmService
                         'source_class' => 1,
                     ];
                     DB::table('notifies')->insert($input);
-                    // 艾特记录表
+                    // @ Record table
                     $mentions = [
                         'member_id' => $postInfo['member_id'],
                         'linked_type' => 1,
@@ -750,13 +718,7 @@ class FresnsPostsService extends AmService
         return true;
     }
 
-    // 评论则判断父级是否为自己，不是自己则为对方产生一条通知。一级评论给帖子作者（帖子作者不是自己）产生通知。
-    // 调用 MessageService 处理
-    public function sendCommentMessages($postInfo)
-    {
-    }
-
-    // 发表成功后，帖子或者评论的主键 ID 产生，然后把 ID 填到 files > table_id 字段里，补齐信息。
+    // After successful posting, the primary key ID of the post is generated, and then the ID is filled into the files > table_id field to perfection the information.
     public function fillDbInfo($draftId)
     {
         $draftPost = FresnsPostLogs::find($draftId);
@@ -774,8 +736,8 @@ class FresnsPostsService extends AmService
         return true;
     }
 
-    // 我的 member_stats > post_publish_count
-    // 配置表键值 post_counts
+    // Add stats: member_stats > post_publish_count
+    // Add stats: Configs item_key = post_counts
     public function memberStats($draftId)
     {
         $draftPost = FresnsPostLogs::find($draftId);
@@ -790,49 +752,47 @@ class FresnsPostsService extends AmService
         return true;
     }
 
-    // 解析话题(入库话题表)
-
     /**
+     * Parsing Hashtag (insert hashtags table)
      * $params
-     * updateType 1 新增 2 编辑.
+     * updateType 1.add 2.edit
      */
     public function analisisHashtag($draftId, $updateType = 1)
     {
         $draftPost = FresnsPostLogs::find($draftId);
-        // $draftPost['content'] = "这里是1帖子@成员3 的文本。<a onclick='return false;' href='http://www.baidu.com'>点击跳转百度</a>#话题 5##话题2#@成员2";
         if ($updateType == 2) {
-            // 话题 post_count
+            // Hashtag post_count
             $hashtagIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->where('linked_id', $draftPost['post_id'])->pluck('hashtag_id')->toArray();
             FresnsHashtags::whereIn('id', $hashtagIdArr)->decrement('post_count');
-            // 删除话题关联
+            // Remove Hashtag association
             FresnsHashtagLinkeds::where('linked_type', 1)->where('linked_id', $draftPost['post_id'])->delete();
             // DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id',$draftPost['post_id'])->delete();
         }
-        // 当前后台话题的显示模式
+        // The currently configured Hashtag display mode
         $hashtagShow = ApiConfigHelper::getConfigByItemKey(AmConfig::HASHTAG_SHOW) ?? 2;
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $draftPost['content'], $singlePoundMatches);
         } else {
             preg_match_all('/#.*?#/', $draftPost['content'], $singlePoundMatches);
         }
-        // dd($singlePoundMatches);
+
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
-                // 将话题的#号去掉
+                // Remove the # sign from Hashtag
                 $s = trim(str_replace('#', '', $s));
-                // 是否存在话题
+                // Existence of Hashtag
                 $hashInfo = FresnsHashtags::where('name', $s)->first();
                 if ($hashInfo) {
-                    // 话题表post_count +1
+                    // hashtags table: post_count +1
                     FresnsHashtags::where('id', $hashInfo['id'])->increment('post_count');
-                    // 建立关联关系
+                    // Establishing Affiliations
                     $res = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->insert([
                         'linked_type' => 1,
                         'linked_id' => $draftPost['post_id'],
                         'hashtag_id' => $hashInfo['id'],
                     ]);
                 } else {
-                    // 新建话题和话题关联
+                    // New Hashtag and Hashtag Association
                     $slug = urlencode(str_replace(' ', '-', $s));
 
                     if (preg_match("/^[a-zA-Z\s]+$/", $s)) {
@@ -847,7 +807,7 @@ class FresnsPostsService extends AmService
                         'post_count' => 1,
                     ];
                     $hashtagId = (new FresnsHashtags())->store($input);
-                    // 建立关联关系
+                    // Establishing Affiliations
                     $res = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->insert([
                         'linked_type' => 1,
                         'linked_id' => $draftPost['post_id'],
@@ -857,12 +817,11 @@ class FresnsPostsService extends AmService
                 }
             }
         }
-        // dd($res);
+
         return true;
-        // dd($singlePoundMatches);
     }
 
-    // 解析截断内容信息
+    // Parsing truncated content information
     public function parseDraftContent($draftId)
     {
         $draftPost = FresnsPostLogs::find($draftId);
@@ -881,12 +840,11 @@ class FresnsPostsService extends AmService
                     }
                 }
                 $proportionCount = (mb_strlen(trim($draftPost['content'])) * $proportion) / 100;
-                // 获取帖子的上线字数
-                // $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
-                // 获取帖子的摘要字数
-                $commentEditorbRIEFCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_BRIEF_COUNT) ?? 280;
-                if ($proportionCount > $commentEditorbRIEFCount) {
-                    $contentInfo = $this->truncatedContentInfo($content, $commentEditorbRIEFCount);
+
+                // Get the maximum number of words for the post brief
+                $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_BRIEF_COUNT) ?? 280;
+                if ($proportionCount > $postEditorBriefCount) {
+                    $contentInfo = $this->truncatedContentInfo($content, $postEditorBriefCount);
                     $content = $contentInfo['truncated_content'];
                 } else {
                     $contentInfo = $this->truncatedContentInfo($content, $proportionCount);
@@ -895,19 +853,18 @@ class FresnsPostsService extends AmService
             }
         }
 
-        // 是否存在替换关键字
+        // Existence of replacement words
         $content = $this->stopWords($content);
-        // 去除html标签
+        // Removing html tags
         $content = strip_tags($content);
 
         return $content;
     }
 
-    // 域名链接表
-
     /**
+     * Domain Link Table
      * $params
-     * updateType 1 新增 2 编辑.
+     * updateType 1.add 2.edit
      */
     public function domainStore($postId, $draftId, $updateType = 1)
     {
@@ -921,16 +878,11 @@ class FresnsPostsService extends AmService
         preg_match_all("/http[s]{0,1}:\/\/.*?\s/", $draftPost['content'], $hrefMatches);
         if ($hrefMatches[0]) {
             foreach ($hrefMatches[0] as $h) {
-                // 一级域名
+                // Top level domains
                 $firstDomain = $this->top_domain(trim($h));
-                // 二级域名
+                // Second level domain name
                 $domain = $this->regular_domain(trim($h));
-                // dump($firstDomain);
-                // dump($domain);
-                // preg_match('/(.*\.)?\w+\.\w+$/', $domain, $secDomain);
-                // dd($secDomain);
-                // 域名表是否存在
-                // if($secDomain){
+                // Does the domain table exist
                 if ($domain) {
                     $domain_input = [
                         'domain' => $firstDomain,
@@ -955,29 +907,22 @@ class FresnsPostsService extends AmService
                         DB::table('domain_links')->insert($input);
                     }
                 }
-                // }
             }
         }
 
         return true;
     }
 
-    // 编辑内容的草稿，根据 status 参数去执行“清空”、“删除”、“替换”旧内容。
-    public function oldContentByStatus($draftPost)
-    {
-    }
-
-    // “艾特”、“话题”、“链接” content全文中三者的位置信息
-    // 内容超过设置的字数时，需要摘要存储，如果摘要最后内容是“艾特”、“话题”、“链接”三种信息，要留全，不能截断，保全时可以限定字数。
+    // "@", "#", "Link" Location information of the three in the full text
+    
+    // If the content exceeds the set number of words, the brief is stored.
+    // If the last content of the brief is "@", "#", and "Link", it should be kept in full and not truncated.
+    // The maximum number of words in the brief can be exceeded when preserving.
     public function truncatedContentInfo($content, $wordCount = 280)
     {
-        // dump($content);
-        // dump($wordCount);
-        // 当前后台话题的显示模式
+        // The currently configured Hashtag display mode
         $hashtagShow = ApiConfigHelper::getConfigByItemKey(AmConfig::HASHTAG_SHOW) ?? 2;
-        // dd($hashtagShow);
-        // $content = "这里是1帖子@刘liuliu 的文本。https://tangjie.me #话题1 12345#话题 2#";
-        // 在 $content 中匹配 位置信息,  这里的正则放到配置文件中
+        // Match the location information in $content, where the rule is placed in the configuration file
         if ($hashtagShow == 1) {
             preg_match("/#.*?\s/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         } else {
@@ -985,52 +930,36 @@ class FresnsPostsService extends AmService
         }
         /**
          * preg_match("/<a .*?>.*?<\/a>/",$content,$hrefMatches,PREG_OFFSET_CAPTURE);.
-         *  */
+         */
         preg_match("/http[s]{0,1}:\/\/.*?\s/", $content, $hrefMatches, PREG_OFFSET_CAPTURE);
-        // dd($singlePoundMatches);
+        
         // preg_match("/<a href=.*?}></a>/", $content, $hrefMatches,PREG_OFFSET_CAPTURE);
         preg_match("/@.*?\s/", $content, $atMatches, PREG_OFFSET_CAPTURE);
         $truncatedPos = ceil($wordCount);
         $findTruncatedPos = false;
-        // 获取匹配到的数据对应的字符数（匹配到的是字节）
+        // Get the number of characters corresponding to the matched data (the match is bytes)
         $contentArr = self::getString($content);
         $charCounts = self::getChar($contentArr, $truncatedPos);
-        // 判断这个wordCount落在的区间位置， 如果有命中，则找到对应的截断位置，并执行截断
+        // Determine the position of the interval where this wordCount falls.
+        // If there is a hit, find the corresponding truncation position and execute the truncation
         // https://www.php.net/manual/en/function.preg-match.php
         foreach ($singlePoundMatches as $currMatch) {
             $matchStr = $currMatch[0];
             $matchStrStartPosition = $currMatch[1];
             $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
-            // 命中
+            // Hit
             if ($matchStrStartPosition <= $charCounts && $matchStrEndPosition >= $charCounts) {
                 $findTruncatedPos = true;
                 $truncatedPos = $matchStrEndPosition;
             }
         }
-        // [1,4] [6,9] [15,33] [41,45], [50,77]
-        // [1,4] [6,9] [15,33] [41,45], [65,69]
-        //  adjfaljdfsdfidksieijsdfasdf@cccc
-
-        // // 如果未发现则继续匹配
-        // if(!$findTruncatedPos){
-        //     foreach ($singlePoundMatches as $currMatch) {
-        //         $matchStr = $currMatch[0];
-        //         $matchStrStartPosition = $currMatch[1];
-        //         $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
-        //         // 命中
-        //         if ($matchStrStartPosition <= $wordCount && $matchStrEndPosition >= $wordCount) {
-        //             $findTruncatedPos = true;
-        //             $truncatedPos = $matchStrEndPosition;
-        //         }
-        //     }
-        // }
 
         if (! $findTruncatedPos) {
             foreach ($hrefMatches as $currMatch) {
                 $matchStr = $currMatch[0];
                 $matchStrStartPosition = $currMatch[1];
                 $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
-                // 命中
+                // Hit
                 if ($matchStrStartPosition <= $charCounts && $matchStrEndPosition >= $charCounts) {
                     $findTruncatedPos = true;
                     $truncatedPos = $matchStrEndPosition;
@@ -1042,38 +971,36 @@ class FresnsPostsService extends AmService
                 $matchStr = $currMatch[0];
                 $matchStrStartPosition = $currMatch[1];
                 $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
-                // 命中
+                // Hit
                 if ($matchStrStartPosition <= $charCounts && $matchStrEndPosition >= $charCounts) {
                     $findTruncatedPos = true;
                     $truncatedPos = $matchStrEndPosition;
                 }
             }
         }
-        // 执行操作
+        // Execute the operation
         $info = [];
         $info['find_truncated_pos'] = $findTruncatedPos;
-        $info['truncated_pos'] = $truncatedPos;  // 截断位置
+        $info['truncated_pos'] = $truncatedPos;  // Truncation position
         if ($findTruncatedPos) {
-            // 字节数转字数
+            // Byte count to word count
             $chars = self::getChars($content);
             $strLen = self::getStrLen($chars, $truncatedPos);
         } else {
             $strLen = $truncatedPos;
         }
 
-        $info['truncated_content'] = Str::substr($content, 0, $strLen); // 最终内容
-        // $info['double_pound_arr'] = $doublePoundMatches;
+        $info['truncated_content'] = Str::substr($content, 0, $strLen); // Final content
         $info['single_pound_arr'] = $singlePoundMatches;
         $info['link_pound_arr'] = $hrefMatches;
         $info['at_arr'] = $atMatches;
-        // dd($info);
         return $info;
     }
 
-    // 执行审核操作
+    // Perform Review Operations
     public function parseToReview($draftId)
     {
-        // 帖子
+        // post
         FresnsPostLogs::where('id', $draftId)->update(['status' => 2, 'submit_at' => date('Y-m-d H:i:s')]);
 
         return true;
@@ -1083,8 +1010,6 @@ class FresnsPostsService extends AmService
     {
         $utf8posCharPosMap = [];
         $len = mb_strlen($content);
-        // dump($content);
-        // dump($len);
         $charPos = 0;
         $str = 0;
         for ($i = 0; $i < $len; $i++) {
@@ -1092,35 +1017,17 @@ class FresnsPostsService extends AmService
 
             $utf8PosDesc = 'utf_'.$utf8Pos;
             $charPosDesc = 'char_'.$charPos;
-            // $utf8posCharPosMap[$utf8PosDesc] = $charPosDesc;
             $utf8posCharPosMap[$utf8PosDesc] = $charPosDesc;
-            // 匹配字符是否为中文
-            // $char = $content[$i];
             $char = mb_substr($content, $i, 1);
-            // dump($i);
-            // dump($char);
             if (preg_match("/^[\x7f-\xff]+$/", $char)) {
-                // dump($i);
                 $charPos = $charPos + 3;
-            // dump($i);
-                // dump($char);
-                // dd(mb_detect_encoding($char));
-                // dump($charPos);
             } else {
-                // dd($i);
-                // dump($char);
-                // dd((iconv('utf-8','UTF-8',$char));
-                // dump($charPos);
                 $charPos = $charPos + 1;
-                // dump($charPos);
             }
         }
-        // dump($content);
-        // dd($utf8posCharPosMap);
         return $utf8posCharPosMap;
     }
 
-    // 获取字数对应的字节数
     public static function getChar($utf8posCharPosMap, $sublen)
     {
         $chars = '';
@@ -1133,7 +1040,6 @@ class FresnsPostsService extends AmService
         return $chars;
     }
 
-    // 字节对应的字符数
     public static function getChars($content)
     {
         $utf8posCharPosMap = [];
@@ -1145,14 +1051,11 @@ class FresnsPostsService extends AmService
 
             $utf8PosDesc = 'utf_'.$utf8Pos;
             $charPosDesc = 'char_'.$charPos;
-            // $utf8posCharPosMap[$utf8PosDesc] = $charPosDesc;
             $utf8posCharPosMap[$charPosDesc] = $utf8PosDesc;
-            // 匹配字符是否为中文
             $char = mb_substr($content, $i, 1);
             if (preg_match("/^[\x7f-\xff]+$/", $char)) {
                 $charPos = $charPos + 3;
             } else {
-                // dd($char);
                 $charPos = $charPos + 1;
             }
         }
@@ -1160,7 +1063,7 @@ class FresnsPostsService extends AmService
         return $utf8posCharPosMap;
     }
 
-    // 获取字节数对应的字数
+    // Get the number of words corresponding to the number of bytes
     public static function getStrLen($utf8posCharPosMap, $sublen)
     {
         $strLen = '';
@@ -1191,285 +1094,30 @@ class FresnsPostsService extends AmService
     public function top_domain($domain)
     {
         $domain = $this->regular_domain($domain);
-        //dd($domain);
+        // Domain name suffix
         $iana_root = [
-            'ac',
-            'ad',
-            'ae',
-            'aero',
-            'af',
-            'ag',
-            'ai',
-            'al',
-            'am',
-            'an',
-            'ao',
-            'aq',
-            'ar',
-            'arpa',
-            'as',
-            'asia',
-            'at',
-            'au',
-            'aw',
-            'ax',
-            'az',
-            'ba',
-            'bb',
-            'bd',
-            'be',
-            'bf',
-            'bg',
-            'bh',
-            'bi',
-            'biz',
-            'bj',
-            'bl',
-            'bm',
-            'bn',
-            'bo',
-            'bq',
-            'br',
-            'bs',
-            'bt',
-            'bv',
-            'bw',
-            'by',
-            'bz',
-            'ca',
-            'cat',
-            'cc',
-            'cd',
-            'cf',
-            'cg',
-            'ch',
-            'ci',
-            'ck',
-            'cl',
-            'cm',
-            'cn',
-            'co',
-            'com',
-            'coop',
-            'cr',
-            'cu',
-            'cv',
-            'cw',
-            'cx',
-            'cy',
-            'cz',
-            'de',
-            'dj',
-            'dk',
-            'dm',
-            'do',
-            'dz',
-            'ec',
-            'edu',
-            'ee',
-            'eg',
-            'eh',
-            'er',
-            'es',
-            'et',
-            'eu',
-            'fi',
-            'fj',
-            'fk',
-            'fm',
-            'fo',
-            'fr',
-            'ga',
-            'gb',
-            'gd',
-            'ge',
-            'gf',
-            'gg',
-            'gh',
-            'gi',
-            'gl',
-            'gm',
-            'gn',
-            'gov',
-            'gp',
-            'gq',
-            'gr',
-            'gs',
-            'gt',
-            'gu',
-            'gw',
-            'gy',
-            'hk',
-            'hm',
-            'hn',
-            'hr',
-            'ht',
-            'hu',
-            'id',
-            'ie',
-            'il',
-            'im',
-            'in',
-            'info',
-            'int',
-            'io',
-            'iq',
-            'ir',
-            'is',
-            'it',
-            'je',
-            'jm',
-            'jo',
-            'jobs',
-            'jp',
-            'ke',
-            'kg',
-            'kh',
-            'ki',
-            'km',
-            'kn',
-            'kp',
-            'kr',
-            'kw',
-            'ky',
-            'kz',
-            'la',
-            'lb',
-            'lc',
-            'li',
-            'lk',
-            'lr',
-            'ls',
-            'lt',
-            'lu',
-            'lv',
-            'ly',
-            'ma',
-            'mc',
-            'md',
-            'me',
-            'mf',
-            'mg',
-            'mh',
-            'mil',
-            'mk',
-            'ml',
-            'mm',
-            'mn',
-            'mo',
-            'mobi',
-            'mp',
-            'mq',
-            'mr',
-            'ms',
-            'mt',
-            'mu',
-            'museum',
-            'mv',
-            'mw',
-            'mx',
-            'my',
-            'mz',
-            'na',
-            'name',
-            'nc',
-            'ne',
-            'net',
-            'nf',
-            'ng',
-            'ni',
-            'nl',
-            'no',
-            'np',
-            'nr',
-            'nu',
-            'nz',
-            'om',
-            'org',
-            'pa',
-            'pe',
-            'pf',
-            'pg',
-            'ph',
-            'pk',
-            'pl',
-            'pm',
-            'pn',
-            'pr',
-            'pro',
-            'ps',
-            'pt',
-            'pw',
-            'py',
-            'qa',
-            're',
-            'ro',
-            'rs',
-            'ru',
-            'rw',
-            'sa',
-            'sb',
-            'sc',
-            'sd',
-            'se',
-            'sg',
-            'sh',
-            'si',
-            'sj',
-            'sk',
-            'sl',
-            'sm',
-            'sn',
-            'so',
-            'sr',
-            'ss',
-            'st',
-            'su',
-            'sv',
-            'sx',
-            'sy',
-            'sz',
-            'tc',
-            'td',
-            'tel',
-            'tf',
-            'tg',
-            'th',
-            'tj',
-            'tk',
-            'tl',
-            'tm',
-            'tn',
-            'to',
-            'tp',
-            'tr',
-            'travel',
-            'tt',
-            'tv',
-            'tw',
-            'tz',
-            'ua',
-            'ug',
-            'uk',
-            'um',
-            'us',
-            'uy',
-            'uz',
-            'va',
-            'vc',
-            've',
-            'vg',
-            'vi',
-            'vn',
-            'vu',
-            'wf',
-            'ws',
-            'xxx',
-            'ye',
-            'yt',
-            'za',
-            'zm',
-            'zw',
+            // gTLDs
+            'com','net','org','edu','gov','int','mil','arpa','biz','info','pro','name','coop','travel','xxx','idv','aero','museum','mobi','asia','tel','post','jobs','cat',
+            // ccTLDs
+            'ad','ae','af','ag','ai','al','am','an','ao','aq','ar','as','at','au','aw','az','ba','bb','bd','be','bf','bg','bh','bi','bj','bm','bn','bo','br','bs','bt','bv','bw','by','bz','ca','cc','cd','cf','cg','ch','ci','ck','cl','cm','cn','co','cr','cu','cv','cx','cy','cz','de','dj','dk','dm','do','dz','ec','ee','eg','eh','er','es','et','eu','fi','fj','fk','fm','fo','fr','ga','gd','ge','gf','gg','gh','gi','gl','gm','gn','gp','gq','gr','gs','gt','gu','gw','gy','hk','hm','hn','hr','ht','hu','id','ie','il','im','in','io','iq','ir','is','it','je','jm','jo','jp','ke','kg','kh','ki','km','kn','kp','kr','kw','ky','kz','la','lb','lc','li','lk','lr','ls','ma','mc','md','me','mg','mh','mk','ml','mm','mn','mo','mp','mq','mr','ms','mt','mu','mv','mw','mx','my','mz','na','nc','ne','nf','ng','ni','nl','no','np','nr','nu','nz','om','pa','pe','pf','pg','ph','pk','pl','pm','pn','pr','ps','pt','pw','py','qa','re','ro','ru','rw','sa','sb','sc','sd','se','sg','sh','si','sj','sk','sm','sn','so','sr','st','sv','sy','sz','tc','td','tf','tg','th','tj','tk','tl','tm','tn','to','tp','tr','tt','tv','tw','tz','ua','ug','uk','um','us','uy','uz','va','vc','ve','vg','vi','vn','vu','wf','ws','ye','yt','yu','yr','za','zm','zw',
+            // new gTLDs (Business)
+            'accountant','club','coach','college','company','construction','consulting','contractors','cooking','corp','credit','creditcard','dance','dealer','democrat','dental','dentist','design','diamonds','direct','doctor','drive','eco','education','energy','engineer','engineering','equipment','events','exchange','expert','express','faith','farm','farmers','fashion','finance','financial','fish','fit','fitness','flights','florist','flowers','food','football','forsale','furniture','game','games','garden','gmbh','golf','health','healthcare','hockey','holdings','holiday','home','hospital','hotel','hotels','house','inc','industries','insurance','insure','investments','islam','jewelry','justforu','kid','kids','law','lawyer','legal','lighting','limited','live','llc','llp','loft','ltd','ltda','managment','marketing','media','medical','men','money','mortgage','moto','motorcycles','music','mutualfunds','ngo','partners','party','pharmacy','photo','photography','photos','physio','pizza','plumbing','press','prod','productions','radio','rehab','rent','repair','report','republican','restaurant','room','rugby','safe','sale','sarl','save','school','secure','security','services','shoes','show','soccer','spa','sport','sports','spot','srl','storage','studio','tattoo','taxi','team','tech','technology','thai','tips','tour','tours','toys','trade','trading','travelers','university','vacations','ventures','versicherung','versicherung','vet','wedding','wine','winners','work','works','yachts','zone',
+            // new gTLDs (Construction & Real Estate)
+            'archi','architect','casa','contruction','estate','haus','house','immo','immobilien','lighting','loft','mls','realty',
+            // new gTLDs (Community & Religion)
+            'academy','arab','bible','care','catholic','charity','christmas','church','college','community','contact','degree','education','faith','foundation','gay','halal','hiv','indiands','institute','irish','islam','kiwi','latino','mba','meet','memorial','ngo','phd','prof','school','schule','science','singles','social','swiss','thai','trust','university','uno',
+            // new gTLDs (E-commerce & Shopping)
+            'auction','best','bid','boutique','center','cheap','compare','coupon','coupons','deal','deals','diamonds','discount','fashion','forsale','free','gift','gold','gratis','hot','jewelry','kaufen','luxe','luxury','market','moda','pay','promo','qpon','review','reviews','rocks','sale','shoes','shop','shopping','store','tienda','top','toys','watch','zero',
+            // new gTLDs (Dining)
+            'bar','bio','cafe','catering','coffee','cooking','diet','eat','food','kitchen','menu','organic','pizza','pub','rest','restaurant','vodka','wine',
+            // new gTLDs (Travel)
+            'abudhabi','africa','alsace','amsterdam','barcelona','bayern','berlin','boats','booking','boston','brussels','budapest','caravan','casa','catalonia','city','club','cologne','corsica','country','cruise','cruises','deal','deals','doha','dubai','durban','earth','flights','fly','fun','gent','guide','hamburg','helsinki','holiday','hotel','hoteles','hotels','ist','istanbul','joburg','koeln','land','london','madrid','map','melbourne','miami','moscow','nagoya','nrw','nyc','osaka','paris','party','persiangulf','place','quebec','reise','reisen','rio','roma','room','ruhr','saarland','stockholm','swiss','sydney','taipei','tickets','tirol','tokyo','tour','tours','town','travelers','vacations','vegas','wales','wien','world','yokohama','zuerich',
+            // new gTLDs (Sports & Hobbies)
+            'art','auto','autos','baby','band','baseball','beats','beauty','beknown','bike','book','boutique','broadway','car','cars','club','coach','contact','cool','cricket','dad','dance','date','dating','design','dog','events','family','fan','fans','fashion','film','final','fishing','football','fun','furniture','futbol','gallery','game','games','garden','gay','golf','guru','hair','hiphop','hockey','home','horse','icu','joy','kid','kids','life','lifestyle','like','living','lol','makeup','meet','men','moda','moi','mom','movie','movistar','music','party','pet','pets','photo','photography','photos','pics','pictures','play','poker','rodeo','rugby','run','salon','singles','ski','skin','smile','soccer','social','song','soy','sport','sports','star','style','surf','tatoo','tennis','theater','theatre','tunes','vip','wed','wedding','winwinners','yoga','you',
+            // new gTLDs (Network Technology)
+            'analytics','antivirus','app','blog','call','camera','channel','chat','click','cloud','computer','contact','data','dev','digital','direct','docs','domains','dot','download','email','foo','forum','graphics','guide','help','home','host','hosting','idn','link','lol','mail','mobile','network','online','open','page','phone','pin','search','site','software','webcam',
+            // new gTLDs (Other)
+            'airforce','army','black','blue','box','buzz','casa','cool','day','discover','donuts','exposed','fast','finish','fire','fyi','global','green','help','here','how','international','ira','jetzt','jot','like','live','kim','navy','new','news','next','ninja','now','one','ooo','pink','plus','red','solar','tips','today','weather','wow','wtf','xyz','abogado','adult','anquan','aquitaine','attorney','audible','autoinsurance','banque','bargains','bcn','beer','bet','bingo','blackfriday','bom','boo','bot','broker','builders','business','bzh','cab','cal','cam','camp','cancerresearch','capetown','carinsurance','casino','ceo','cfp','circle','claims','cleaning','clothing','codes','condos','connectors','courses','cpa','cymru','dds','delivery','desi','directory','diy','dvr','ecom','enterprises','esq','eus','fail','feedback','financialaid','frontdoor','fund','gal','gifts','gives','giving','glass','gop','got','gripe','grocery','group','guitars','hangout','homegoods','homes','homesense','hotels','ing','ink','juegos','kinder','kosher','kyoto','lat','lease','lgbt','liason','loan','loans','locker','lotto','love','maison','markets','matrix','meme','mov','okinawa','ong','onl','origins','parts','patch','pid','ping','porn','progressive','properties','property','protection','racing','read','realestate','realtor','recipes','rentals','sex','sexy','shopyourway','shouji','silk','solutions','stroke','study','sucks','supplies','supply','tax','tires','total','training','translations','travelersinsurcance','ventures','viajes','villas','vin','vivo','voyage','vuelos','wang','watches',
         ];
         $sub_domain = explode('.', $domain);
         $top_domain = '';
@@ -1492,7 +1140,7 @@ class FresnsPostsService extends AmService
         return $top_domain;
     }
 
-    // 过滤词规则
+    // Stop Word Rules
     public function stopWords($text)
     {
         $stopWordsArr = FresnsStopWords::get()->toArray();

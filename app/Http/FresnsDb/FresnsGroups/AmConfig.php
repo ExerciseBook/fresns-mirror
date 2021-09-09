@@ -20,7 +20,6 @@ class AmConfig extends BaseConfig
         'ids' => ['field' => 'id', 'op' => 'in'],
         'gid' => ['field' => 'uuid', 'op' => '='],
         'parentId' => ['field' => 'parent_id', 'op' => '='],
-        // 'recommend' => ['field' => 'is_recommend','op' => '='],
         'pid' => ['field' => 'parent_id', 'op' => '='],
         'recommend' => ['field' => 'is_recommend', 'op' => '='],
         'viewCountGt' => ['field' => 'view_count', 'op' => '>='],
@@ -37,7 +36,6 @@ class AmConfig extends BaseConfig
         'essenceCountLt' => ['field' => 'essence_count', 'op' => '<='],
         'createdTimeGt' => ['field' => 'created_at', 'op' => '>='],
         'createdTimeLt' => ['field' => 'created_at', 'op' => '<='],
-        // 'is_recommend' => ['field' => 'is_recommend', 'op' => '<='],
     ];
 
     // Model Usage - Form Mapping
@@ -72,25 +70,41 @@ class AmConfig extends BaseConfig
         'essence_count' => 'essence_count',
         'is_enable' => 'is_enable',
     ];
+
+    // Operation Config
     const RECOMMEND_OPTION = [
-        ['key' => 1, 'text' => '不推荐'],
-        ['key' => 2, 'text' => '推荐'],
+        ['key' => 1, 'text' => 'Not recommended'],
+        ['key' => 2, 'text' => 'Recommend'],
     ];
+
+    // Choose Privacy
+    // 1.Public: Anyone can see who's in the group and what they post.
+    // 2.Private: Only members can see who's in the group and what they post.
     const TYPE_MODE = [
-        ['key' => 1, 'text' => '公开（任何人都能查看小组内帖子）'],
-        ['key' => 2, 'text' => '非公开（只有成员才能查看小组内帖子）'],
+        ['key' => 1, 'text' => 'Public'],
+        ['key' => 2, 'text' => 'Private'],
     ];
+
+    // Follow the way
+    // 1.Fresns: Main program API operable follow
+    // 2.Plugin: Can only be operated via plugin follow
     const TYPE_FOLLOW = [
-        ['key' => 1, 'text' => '原生方式'],
-        ['key' => 2, 'text' => '插件方式'],
+        ['key' => 1, 'text' => 'Fresns'],
+        ['key' => 2, 'text' => 'Plugin'],
     ];
+
+    // Hide Group
+    // 1.Visible: Anyone can find this group.
+    // 1.Hidden: Only members can find this group.
     const TYPE_FIND = [
-        ['key' => 1, 'text' => '可发现（任何人都能找到这个小组）'],
-        ['key' => 2, 'text' => '不可发现（只有成员能找到这个小组）'],
+        ['key' => 1, 'text' => 'Visible'],
+        ['key' => 2, 'text' => 'Hidden'],
     ];
+
+    // Who Can Post
     const PUBLISH_POST = [
-        ['key' => 1, 'text' => '所有人'],
-        ['key' => 2, 'text' => '仅关注了小组的成员'],
-        ['key' => 3, 'text' => '仅指定的角色成员'],
+        ['key' => 1, 'text' => 'All Members'],
+        ['key' => 2, 'text' => 'Anyone in the group'],
+        ['key' => 3, 'text' => 'Specified role members only'],
     ];
 }

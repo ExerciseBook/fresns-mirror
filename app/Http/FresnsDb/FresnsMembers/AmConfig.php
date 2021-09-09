@@ -35,9 +35,10 @@ class AmConfig extends BaseConfig
 
     ];
 
+    // Role Type
     const TYPE_OPTION = [
-        ['key' => 1, 'text' => '管理人员类'],
-        ['key' => 2, 'text' => '系统设置类'],
-        ['key' => 3, 'text' => '用户运营类'],
+        ['key' => 1, 'text' => 'Management'],
+        ['key' => 2, 'text' => 'Configuration'],
+        ['key' => 3, 'text' => 'General'],
     ];
 }

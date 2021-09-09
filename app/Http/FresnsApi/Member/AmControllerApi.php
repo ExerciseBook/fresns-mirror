@@ -441,12 +441,12 @@ class AmControllerApi extends FresnsBaseApiController
                 switch ($markType) {
                     case 1:
                         if ($type == 1) {
-                            FresnsMemberLikesService::addMemberLikes($mid, $markTarget, $markId, 'like_member_count',
+                            FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId, 'like_member_count',
                                 'like_me_count');
                             //给对方录入一条通知
                             FresnsNotifiesService::markNotifies($markId, $mid, 3, $markTarget, '点赞');
                         } else {
-                            FresnsMemberLikesService::delMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
 
                             DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
                                 $mid)->decrement('like_member_count');
@@ -473,7 +473,7 @@ class AmControllerApi extends FresnsBaseApiController
                             //给对方录入一条通知
                             FresnsNotifiesService::markNotifies($markId, $mid, 2, $markTarget, '关注');
                         } else {
-                            FresnsMemberFollowsService::delMemberFollow($mid, $markTarget, $markId);
+                            FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
                             FresnsMemberFollows::where('member_id', $markId)->where('follow_type',
                                 $markTarget)->where('follow_id', $mid)->update(['is_mutual' => 0]);
                             DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
@@ -484,13 +484,13 @@ class AmControllerApi extends FresnsBaseApiController
                         break;
                     default:
                         if ($type == 1) {
-                            FresnsMemberShieldsService::addMemberShields($mid, $markTarget, $markId);
+                            FresnsMemberShieldsService::addMemberShield($mid, $markTarget, $markId);
                             DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
                                 $mid)->increment('shield_member_count');
                             DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
                                 $markId)->increment('shield_me_count');
                         } else {
-                            FresnsMemberShieldsService::delMemberShields($mid, $markTarget, $markId);
+                            FresnsMemberShieldsService::deleMemberShield($mid, $markTarget, $markId);
                             DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
                                 $mid)->decrement('shield_member_count');
                             DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
@@ -504,10 +504,10 @@ class AmControllerApi extends FresnsBaseApiController
                 switch ($markType) {
                     case 1:
                         if ($type == 1) {
-                            FresnsMemberLikesService::addMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsGroups::where('id', $markId)->increment('like_count');
                         } else {
-                            FresnsMemberLikesService::delMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsGroups::where('id', $markId)->decrement('like_count');
                         }
                         break;
@@ -516,17 +516,17 @@ class AmControllerApi extends FresnsBaseApiController
                             FresnsMemberFollowsService::addMemberFollow($mid, $markTarget, $markId);
                             FresnsGroups::where('id', $markId)->increment('follow_count');
                         } else {
-                            FresnsMemberFollowsService::delMemberFollow($mid, $markTarget, $markId);
+                            FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
                             FresnsGroups::where('id', $markId)->decrement('follow_count');
                         }
 
                         break;
                     default:
                         if ($type == 1) {
-                            FresnsMemberShieldsService::addMemberShields($mid, $markTarget, $markId);
+                            FresnsMemberShieldsService::addMemberShield($mid, $markTarget, $markId);
                             DB::table(FresnsGroupsConfig::CFG_TABLE)->where('id', $markId)->increment('shield_count');
                         } else {
-                            FresnsMemberShieldsService::delMemberShields($mid, $markTarget, $markId);
+                            FresnsMemberShieldsService::deleMemberShield($mid, $markTarget, $markId);
                             DB::table(FresnsGroupsConfig::CFG_TABLE)->where('id', $markId)->decrement('shield_count');
                         }
                         break;
@@ -536,12 +536,12 @@ class AmControllerApi extends FresnsBaseApiController
                 switch ($markType) {
                     case 1:
                         if ($type == 1) {
-                            FresnsMemberLikesService::addMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsHashtags::where('id', $markId)->increment('like_count');
                             //向配置表插入数据
                             FresnsConfigsService::addLikeCounts('hashtag_like_counts');
                         } else {
-                            FresnsMemberLikesService::delMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsHashtags::where('id', $markId)->decrement('like_count');
                             FresnsConfigsService::delLikeCounts('hashtag_like_counts');
                         }
@@ -553,7 +553,7 @@ class AmControllerApi extends FresnsBaseApiController
                             //向配置表插入数据
                             FresnsConfigsService::addLikeCounts('hashtag_follow_counts');
                         } else {
-                            FresnsMemberFollowsService::delMemberFollow($mid, $markTarget, $markId);
+                            FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
                             FresnsHashtags::where('id', $markId)->decrement('follow_count');
                             FresnsConfigsService::delLikeCounts('hashtag_follow_counts');
                         }
@@ -565,7 +565,7 @@ class AmControllerApi extends FresnsBaseApiController
                             //向配置表插入数据
                             FresnsConfigsService::addLikeCounts('hashtag_shield_counts');
                         } else {
-                            FresnsMemberFollowsService::delMemberFollow($mid, $markTarget, $markId);
+                            FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
                             FresnsHashtags::where('id', $markId)->decrement('shield_count');
                             FresnsConfigsService::delLikeCounts('hashtag_shield_counts');
                         }
@@ -578,7 +578,7 @@ class AmControllerApi extends FresnsBaseApiController
                 switch ($markType) {
                     case 1:
                         if ($type == 1) {
-                            FresnsMemberLikesService::addMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsPosts::where('id', $markId)->increment('like_count');
                             //向配置表插入数据
                             FresnsConfigsService::addLikeCounts('post_like_counts');
@@ -587,7 +587,7 @@ class AmControllerApi extends FresnsBaseApiController
                             FresnsNotifiesService::markNotifies($post['member_id'], $mid, 3, $markTarget,
                                 $post['title'], 1, $markId);
                         } else {
-                            FresnsMemberLikesService::delMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsPosts::where('id', $markId)->decrement('like_count');
                             FresnsConfigsService::delLikeCounts('post_like_counts');
                         }
@@ -603,7 +603,7 @@ class AmControllerApi extends FresnsBaseApiController
                             FresnsNotifiesService::markNotifies($post['member_id'], $mid, 2, $markTarget,
                                 $post['title'], 1, $markId);
                         } else {
-                            FresnsMemberFollowsService::delMemberFollow($mid, $markTarget, $markId);
+                            FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
                             FresnsPosts::where('id', $markId)->decrement('follow_count');
                             FresnsConfigsService::delLikeCounts('post_follow_counts');
                         }
@@ -615,7 +615,7 @@ class AmControllerApi extends FresnsBaseApiController
                             //向配置表插入数据
                             FresnsConfigsService::addLikeCounts('post_shield_counts');
                         } else {
-                            FresnsMemberFollowsService::delMemberFollow($mid, $markTarget, $markId);
+                            FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
                             FresnsPosts::where('id', $markId)->decrement('shield_count');
                             FresnsConfigsService::delLikeCounts('post_shield_counts');
                         }
@@ -628,7 +628,7 @@ class AmControllerApi extends FresnsBaseApiController
                 switch ($markType) {
                     case 1:
                         if ($type == 1) {
-                            FresnsMemberLikesService::addMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->increment('like_count');
                             FresnsPosts::where('id', $comment['post_id'])->increment('comment_like_count');
                             //向配置表插入数据
@@ -640,7 +640,7 @@ class AmControllerApi extends FresnsBaseApiController
                             FresnsNotifiesService::markNotifies($comment['member_id'], $mid, 3, $markTarget,
                                 $comment['content'], 2, $markId);
                         } else {
-                            FresnsMemberLikesService::delMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->decrement('like_count');
                             FresnsPosts::where('id', $comment['post_id'])->decrement('comment_like_count');
                             //向配置表插入数据
@@ -652,7 +652,7 @@ class AmControllerApi extends FresnsBaseApiController
                         break;
                     case 2:
                         if ($type == 1) {
-                            FresnsMemberLikesService::addMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->increment('follow_count');
                             //向配置表插入数据
                             FresnsConfigsService::addLikeCounts('comment_follow_counts');
@@ -660,7 +660,7 @@ class AmControllerApi extends FresnsBaseApiController
                             FresnsNotifiesService::markNotifies($comment['member_id'], $mid, 2, $markTarget,
                                 $comment['content'], 2, $markId);
                         } else {
-                            FresnsMemberLikesService::delMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->decrement('follow_count');
                             //向配置表插入数据
                             FresnsConfigsService::delLikeCounts('comment_follow_counts');
@@ -668,12 +668,12 @@ class AmControllerApi extends FresnsBaseApiController
                         break;
                     default:
                         if ($type == 1) {
-                            FresnsMemberLikesService::addMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->increment('shield_count');
                             //向配置表插入数据
                             FresnsConfigsService::addLikeCounts('comment_shield_counts');
                         } else {
-                            FresnsMemberLikesService::delMemberLikes($mid, $markTarget, $markId);
+                            FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->decrement('shield_count');
                             //向配置表插入数据
                             FresnsConfigsService::delLikeCounts('comment_shield_counts');

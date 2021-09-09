@@ -28,10 +28,12 @@ class AmResource extends BaseAdminResource
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        // 插件名称
+
+        // Plugin Name
         $plugInfo = FresnsPlugins::where('unikey', $this->plugin_unikey)->first();
-        // 语言名称
-        // 获取默认语言code
+
+        // Languages
+        // Get default language tag
         $defaultCode = AmService::getDefaultLanguage();
         $langTag = request()->header('langTag', $defaultCode);
         $input = [
@@ -49,10 +51,9 @@ class AmResource extends BaseAdminResource
             ];
             $names = FresnsLanguages::where($input)->first();
         }
-        // 语言名称
+        // Language Name
         $languageArr = FresnsConfigsService::getLanguageStatus();
         $multilingual = $languageArr['languagesOption'];
-        // dd($multilingual);
         $nameArr = [];
         foreach ($multilingual as $v) {
             $input = [
@@ -61,20 +62,18 @@ class AmResource extends BaseAdminResource
                 'table_id' => $this->id,
                 'lang_tag' => $v['key'],
             ];
-            // dd($input);
             $name = FresnsLanguages::where($input)->first();
             $v['lang_content'] = $name['lang_content'] ?? '';
             $nameArr[] = $v;
         }
-        // dd($nameArr);
-        // 角色
-        $user_rolesArr = explode(',', $this->member_roles);
-        $roleInfo = FresnsMemberRoles::whereIn('id', $user_rolesArr)->pluck('name')->toArray();
+
+        // Member Roles
+        $member_rolesArr = explode(',', $this->member_roles);
+        $roleInfo = FresnsMemberRoles::whereIn('id', $member_rolesArr)->pluck('name')->toArray();
         $roleNames = implode(',', $roleInfo);
-        // $user_roles_arr = explode(',',$this->user_roles);
-        // 应用场景
+
+        // Application Scenarios
         $sceneArr = explode(',', $this->scene);
-        // dd($sceneArr);
         $sceneNameArr = [];
         if ($sceneArr) {
             foreach (AmConfig::SCONE_OPTION as $v) {
@@ -91,7 +90,7 @@ class AmResource extends BaseAdminResource
         $sort_number = json_decode($this->data_sources, true);
 
         $newArr = [];
-        // sort_number参数过滤
+        // sort_number Parameter Filtering
         if (! $sort_number) {
             $arr = [];
             foreach ($multilingual as &$m) {
@@ -107,7 +106,7 @@ class AmResource extends BaseAdminResource
                 $newArr['postNearbys'][] = $arr;
             }
         } else {
-            // sort_number参数过滤
+            // sort_number Parameter Filtering
             $arr1 = [];
             foreach ($sort_number as $k => &$s) {
                 foreach ($s as &$v) {
@@ -130,7 +129,7 @@ class AmResource extends BaseAdminResource
             $newArr = $sort_number;
         }
 
-        // 数据来源
+        // Data source
         $source_parameter = AmConfig::SOURCE_PARAMETER;
         foreach ($source_parameter as &$v) {
             $v['postLists'] = $parameter[$v['nickname']] ?? '';
@@ -145,7 +144,7 @@ class AmResource extends BaseAdminResource
             'nameArr' => $nameArr,
             'roleNames' => $roleNames,
             'roleNamesArr' => $roleInfo,
-            'userRolesArr' => $user_rolesArr,
+            'memberRolesArr' => $member_rolesArr,
             'scene' => $sceneArr,
             'sceneNames' => $sceneNames,
             'source_parameter' => $source_parameter,

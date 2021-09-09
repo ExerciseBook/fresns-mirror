@@ -29,7 +29,7 @@ class AmService extends BaseAdminService
         return $common;
     }
 
-    //向session_logs表插入数据
+    // Insert data into the session_logs table
     public static function addSessionLogs(
         $objectName,
         $objectAction,
@@ -94,15 +94,16 @@ class AmService extends BaseAdminService
         FresnsSessionLogs::where('id', $sessionLogsId)->update($input);
     }
 
-    //控制台添加日志
+    // Fresns Console (Panel) Add Log
     public static function addConsoleSessionLogs($objectType, $objectAction, $userId = null)
     {
         $fresnsVersion = ApiConfigHelper::getConfigByItemKey('fresns_version');
+        $fresnsVersionInt = ApiConfigHelper::getConfigByItemKey('fresns_version_int');
 
         $input = [
-            'platform_id' => '1',
+            'platform_id' => '4',
             'version' => $fresnsVersion ?? 1,
-            'version_int' => 1,
+            'version_int' => $fresnsVersionInt ?? 1,
             'object_type' => $objectType,
             'object_name' => Request::getRequestUri(),
             'object_action' => $objectAction,

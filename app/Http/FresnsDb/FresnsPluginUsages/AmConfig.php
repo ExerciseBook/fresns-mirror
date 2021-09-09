@@ -27,49 +27,53 @@ class AmConfig extends BaseConfig
         'scene' => ['field' => 'scene', 'op' => 'LIKE'],
         'is_enable' => ['field' => 'is_enable', 'op' => '='],
     ];
-    const TEST_SELECTED_OPTION = [
-        ['key' => 0, 'text' => '禁用'],
-        ['key' => 1, 'text' => '启用'],
-    ];
+
     const IS_GROUP_ADMIN_OPTION = [
-        ['key' => 0, 'text' => '禁用'],
-        ['key' => 1, 'text' => '启用'],
+        ['key' => 0, 'text' => 'Disable'],
+        ['key' => 1, 'text' => 'Enable'],
     ];
+
     const LANGUAGE_CODES = 'language_codes';
     const LANG_SETTINGS = 'language_menus';
     const DEFAULT_LANGUAGE = 'default_language';
-    // scene(应用场景)
+
+    // Application Scenarios
     const SCONE_OPTION = [
-        // ['key' => 0,'value' =>0,'name'=>'全部', 'title' => '全部'],
-        ['key' => '1', 'value' => '1', 'name' => '帖子', 'title' => '帖子'],
-        ['key' => '2', 'value' => '2', 'name' => '评论 ', 'title' => '评论 '],
-        ['key' => '3', 'value' => '3', 'name' => '用户', 'title' => '用户'],
+        // ['key' => 0,'value' =>0,'name'=>'All', 'title' => 'All'],
+        ['key' => '1', 'value' => '1', 'name' => 'Posts', 'title' => 'Posts'],
+        ['key' => '2', 'value' => '2', 'name' => 'Comments ', 'title' => 'Comments '],
+        ['key' => '3', 'value' => '3', 'name' => 'Members', 'title' => 'Members'],
 
     ];
-    // 数据来源
+
+    // Data source
     const SOURCE_PARAMETER = [
-        ['apiName' => '获取帖子[列表]', 'apiAddress' => '/api/fresns/post/lists', 'nickname' => 'postLists'],
-        ['apiName' => '获取帖子关注的[列表]', 'apiAddress' => '/api/fresns/post/follows', 'nickname' => 'postFollows'],
-        ['apiName' => '获取帖子附近的[列表]', 'apiAddress' => '/api/fresns/post/nearbys', 'nickname' => 'postNearbys'],
+        ['apiName' => 'Get the list of posts', 'apiAddress' => '/api/fresns/post/lists', 'nickname' => 'postLists'],
+        ['apiName' => 'Get posts from following', 'apiAddress' => '/api/fresns/post/follows', 'nickname' => 'postFollows'],
+        ['apiName' => 'Get posts from nearby', 'apiAddress' => '/api/fresns/post/nearbys', 'nickname' => 'postNearbys'],
     ];
-    // 用户角色tips
-    const ROLE_USERS_TIPS = '留空代表所有用户都有使用权';
-    // 应用数量tips
-    const EDITER_NUMBER_TIPS = "以'投票'插件为例,数量为2则代表单个帖子可以附带2个投票";
-    // 小组管理员专用tips
-    const IS_ADMIN_TIPS = '启用后,仅小组管理员会展示该插件';
+    // Member role tips
+    const ROLE_MEMBERS_TIPS = 'Leave blank means all members have access';
 
-    // 扩展类型
+    // Number of applications tips
+    const EDITER_NUMBER_TIPS = "To 'poll' plugin, for example, the number of 2 means that a single post can be accompanied by 2 polls";
+
+    // Group administrator tips
+    const IS_ADMIN_TIPS = 'When enabled, only group administrators will show the plugin';
+
+    // Extensions Type
     const TYPE_OPTION = [
-        ['key' => 1, 'text' => '支付服务商'],
-        ['key' => 2, 'text' => '体现支持渠道'],
-        ['key' => 3, 'text' => '编辑器扩展'],
-        ['key' => 4, 'text' => '搜索类型扩展'],
-        ['key' => 5, 'text' => '管理扩展'],
-        ['key' => 6, 'text' => '小组扩展'],
-        ['key' => 7, 'text' => '用户功能扩展'],
-        ['key' => 8, 'text' => '用户资料扩展'],
+        ['key' => 1, 'text' => 'Wallet Income'],
+        ['key' => 2, 'text' => 'Wallet Expenses'],
+        ['key' => 3, 'text' => 'Editor Extensions'],
+        ['key' => 4, 'text' => 'Search Type Extensions'],
+        ['key' => 5, 'text' => 'Management Extensions'],
+        ['key' => 6, 'text' => 'Group Extensions'],
+        ['key' => 7, 'text' => 'Member Feature Extensions'],
+        ['key' => 8, 'text' => 'Member Profile Extensions'],
+        ['key' => 9, 'text' => 'Map Extensions'],
     ];
+
     // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',

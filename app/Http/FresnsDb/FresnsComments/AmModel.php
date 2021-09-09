@@ -46,11 +46,12 @@ class AmModel extends BaseCategoryModel
         $commentTable = FresnsCommentsConfig::CFG_TABLE;
         $commentAppendTable = FresnsCommentAppendsConfig::CFG_TABLE;
         $postTable = FresnsPostsConfig::CFG_TABLE;
+        
         /**
-         * Filtering the comments of blocked objects (member, comment)
-         * "searchType": Leave blank to output all content (comments > type)
-         * Default sorting type "time", default sorting method "descending".
+         * API Logic
+         * https://fresns.org/api/content/comment-lists.html
          */
+
         // Target fields to be masked
         $request = request();
         $mid = GlobalService::getGlobalKey('member_id');
@@ -62,10 +63,10 @@ class AmModel extends BaseCategoryModel
             ->whereNotIn('comment.id', $commentShields)
             ->where('comment.deleted_at', null);
 
-        // 2、成员 members > expired_at 是否在有效期内（为空代表永久有效）。
-        // 2.1、过期后内容不可见，不输出帖子列表。
-        // 2.2、过期后，到期前的内容可见，输出到期日期前的帖子列表。
-        // 2.3、在有效期内，继续往下判断。
+        // Whether the member > expired_at is valid (null means permanent).
+        // 1.The content is not visible after expiration and no post list is output.
+        // 2.After expiration, the content before expiration is visible, and the list of posts before expiration date is output.
+        // 3.During the validity period, continue the following process.
         $site_mode = ApiConfigHelper::getConfigByItemKey('site_mode');
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
@@ -79,25 +80,24 @@ class AmModel extends BaseCategoryModel
                 }
             }
         }
-        // 公共参数
-        // 搜索：关键词
+
+        // Search: Keywords
         $searchKey = $request->input('searchKey');
         if ($searchKey) {
             $query->where('append.content', 'like', "%{$searchKey}%");
         }
-        // 搜索类型（搜索类型扩展配置的参数）
+        // Search type (parameters of the search type extension config)
         $searchType = $request->input('searchType');
         if ($searchType) {
             $query->where('comment.type', 'like', "%{$searchType}%");
         }
-        // 指定范围：成员
+
+        // Specify the range: Member
         $searchMid = $request->input('searchMid');
         if ($searchMid) {
-            // 后台是否允许查看别人的评论
+            // configs table settings: whether to allow viewing of other people's comments
             $allowComment = ApiConfigHelper::getConfigByItemKey(AmConfig::IT_PUBLISH_COMMENTS) ?? false;
             $memberInfo = FresnsMembers::where('uuid', $searchMid)->first();
-
-            // dd($allowPost)
             if (! $allowComment) {
                 $query->where('comment.member_id', '=', 0);
             } else {
@@ -107,38 +107,28 @@ class AmModel extends BaseCategoryModel
                     $query->where('comment.member_id', '=', 0);
                 }
             }
-            // $query->where('comment.member_id','=',$searchMid);
         }
-        // 指定范围：帖子
+        // Specify the range: Post
         $searchPid = $request->input('searchPid');
         if ($searchPid) {
             $posts = FresnsPosts::where('uuid', $searchPid)->first();
-            // dd($posts);
             if ($posts) {
                 $query->where('comment.post_id', '=', $posts['id']);
             } else {
                 $query->where('comment.post_id', '=', 0);
             }
         }
-        // 指定范围：评论
+        // Specify the range: Comment
         $searchCid = $request->input('searchCid');
         if ($searchCid) {
             $comments = FresnsComments::where('uuid', $searchCid)->first();
-            // 判断是否为一级评论
-            // parent_id为0
-            // dd($upComment);
-            // dd($comments);
-            // dd($data);
+            // Determine if it is a first class comment (parent_id = 0)
             if ($comments) {
                 if ($comments['parent_id'] == 0) {
-                    // $query->where('comment.id','=',$comments['id']);
                     $AmService = new AmService();
-                    // dd($comments['id']);
                     request()->offsetSet('id', $comments['id']);
                     $data = $AmService->listTreeNoRankNum();
                     $data = $AmService->treeData();
-                    // dd($data);
-                    // 获取childrenIdArr
                     if ($data) {
                         $childrenIdArr = [];
                         foreach ($data as $v) {
@@ -147,7 +137,6 @@ class AmModel extends BaseCategoryModel
                     }
                     array_unshift($childrenIdArr, $comments['id']);
                     request()->offsetUnset('id');
-                    // $query->where('comment.id','=',$comments['id']);
                     $query->whereIn('comment.id', $childrenIdArr)->where('comment.parent_id', '!=', 0);
                 } else {
                     $query->where('comment.id', '=', 0);
@@ -158,6 +147,7 @@ class AmModel extends BaseCategoryModel
         } else {
             $query->where('comment.parent_id', '=', 0);
         }
+
         // sticky status
         $searchSticky = $request->input('searchSticky');
         if (! empty($searchSticky)) {
@@ -167,6 +157,7 @@ class AmModel extends BaseCategoryModel
         if ($searchSticky == '0') {
             $query->where('comment.is_sticky', '=', 0);
         }
+
         // likeCountGt
         $likeCountGt = $request->input('likeCountGt');
         if ($likeCountGt) {
@@ -227,6 +218,7 @@ class AmModel extends BaseCategoryModel
         if ($publishTimeLt) {
             $query->where('comment.created_at', '<=', $publishTimeLt);
         }
+
         // Sorting
         $sortType = request()->input('sortType', '');
         $sortWay = request()->input('sortDirection', 2);

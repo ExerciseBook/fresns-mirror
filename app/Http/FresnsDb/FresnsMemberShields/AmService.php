@@ -26,7 +26,8 @@ class AmService extends BaseAdminService
         return $common;
     }
 
-    public static function addMemberShields($mid, $markTarget, $markId)
+    // Add data to the member_shields table
+    public static function addMemberShield($mid, $markTarget, $markId)
     {
         $input = [
             'member_id' => $mid,
@@ -36,9 +37,9 @@ class AmService extends BaseAdminService
         FresnsMemberShields::insert($input);
     }
 
-    public static function delMemberShields($mid, $markTarget, $markId)
+    // Delete Shield Data
+    public static function deleMemberShield($mid, $markTarget, $markId)
     {
-        DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('shield_type', $markTarget)->where('member_id',
-            $mid)->where('shield_id', $markId)->update(['deleted_at' => date('Y-m-d H:i:s', time())]);
+        DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('shield_type', $markTarget)->where('member_id', $mid)->where('shield_id', $markId)->update(['deleted_at' => date('Y-m-d H:i:s', time())]);
     }
 }

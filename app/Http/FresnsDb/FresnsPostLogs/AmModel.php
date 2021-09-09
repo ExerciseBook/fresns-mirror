@@ -39,7 +39,8 @@ class AmModel extends BaseAdminModel
             ->where('deleted_at', null)
             ->where('member_id', $mid);
         $request = request();
-        // 1.草稿+审核拒绝（status=1+4） / 2.审核中（status=2）
+        // 1.Draft + review rejection (status=1+4)
+        // 2.Under Review (status=2)
         $status = $request->input('status');
         if ($status == 1) {
             $query->where('status', 1);
@@ -48,7 +49,7 @@ class AmModel extends BaseAdminModel
             $query->where('status', 2);
         }
         $class = $request->input('class');
-        // dd($class);
+        
         if ($class == 1) {
             $query->where('post_id', null);
         } else {

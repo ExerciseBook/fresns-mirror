@@ -21,7 +21,7 @@ class AmService extends BaseAdminService
         $this->resourceDetail = AmResourceDetail::class;
     }
 
-    //获取权限的map
+    // Get permission for map
     public static function getPermissionMap($permissionArr)
     {
         $permissionMap = [];

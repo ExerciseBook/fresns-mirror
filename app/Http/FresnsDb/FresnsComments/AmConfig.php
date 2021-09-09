@@ -14,6 +14,8 @@ class AmConfig extends BaseConfig
 {
     // Main Table
     const CFG_TABLE = 'comments';
+
+    // Configs item_key
     const IT_PUBLISH_COMMENTS = 'it_publish_comments';
     const COMMENT_EDITOR_BRIEF_COUNT = 'comment_editor_brief_count';
     const COMMENT_EDITOR_WORD_COUNT = 'comment_editor_word_count';

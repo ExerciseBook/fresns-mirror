@@ -14,17 +14,20 @@ class AmConfig extends BaseConfig
 {
     // Main Table
     const CFG_TABLE = 'posts';
+
+    // Configs item_key
     const IT_PUBLISH_POSTS = 'it_publish_posts';
     const CHECK_CONTENT = 'check_content';
-    const COMMENT_EDITOR_WORD_COUNT = 'post_editor_word_count';
-    const COMMENT_EDITOR_BRIEF_COUNT = 'post_editor_brief_count';
+    const POST_EDITOR_WORD_COUNT = 'post_editor_word_count';
+    const POST_EDITOR_BRIEF_COUNT = 'post_editor_brief_count';
     const WEB_PROPORTION = 'web_proportion';
     const HASHTAG_SHOW = 'hashtag_show';
     const POST_COUNTS = 'post_counts';
     const HASHTAG_COUNTS = 'hashtag_counts';
 
-    //是否有权限阅读
+    // Whether you have permission to read
     const IS_ALLOW_1 = 1;
+
     // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
         'ids' => ['field' => 'id', 'op' => 'IN'],
@@ -52,9 +55,11 @@ class AmConfig extends BaseConfig
         'publishTimeLt' => ['field' => 'created_at', 'op' => '<='],
         'expired_at' => ['field' => 'created_at', 'op' => '<='],
     ];
+
     const APPEND_SEARCHABLE_FIELDS = [
         'searchKey' => ['field' => 'content', 'op' => 'LIKE'],
     ];
+    
     // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
@@ -65,7 +70,6 @@ class AmConfig extends BaseConfig
         'title' => 'title',
         'content' => 'content',
         'is_brief' => 'is_brief',
-        // 'status'   => 'status',
         'sticky_status' => 'sticky_status',
         'essence_status' => 'essence_status',
         'is_anonymous' => 'is_anonymous',
@@ -82,7 +86,6 @@ class AmConfig extends BaseConfig
         'shield_count' => 'shield_count',
         'comment_count' => 'comment_count',
         'comment_like_count' => 'comment_like_count',
-        // 'release_at'  => 'release_at',
         'latest_comment_at' => 'latest_comment_at',
         'is_enable' => 'is_enable',
     ];

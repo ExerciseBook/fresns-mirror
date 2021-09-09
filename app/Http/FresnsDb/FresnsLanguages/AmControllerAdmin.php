@@ -18,7 +18,7 @@ class AmControllerAdmin extends BaseAdminController
         $this->service = new AmService();
     }
 
-    //配置新增多语言
+    // Configure new multi-language
     public function configStore(Request $request)
     {
         $tableName = $request->input('table_name');

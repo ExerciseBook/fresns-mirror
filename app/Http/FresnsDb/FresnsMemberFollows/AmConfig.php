@@ -20,14 +20,14 @@ class AmConfig extends BaseConfig
 
     ];
 
-    //目标类型
-    const FOLLOW_TYPE_1 = 1; //成员
-    const FOLLOW_TYPE_2 = 2; //小组
-    const FOLLOW_TYPE_3 = 3; //话题
-    const FOLLOW_TYPE_4 = 4; //帖子
-    const FOLLOW_TYPE_5 = 5; //评论
+    // Target Type
+    const FOLLOW_TYPE_1 = 1; //Member
+    const FOLLOW_TYPE_2 = 2; //Group
+    const FOLLOW_TYPE_3 = 3; //Hashtag
+    const FOLLOW_TYPE_4 = 4; //Post
+    const FOLLOW_TYPE_5 = 5; //Comment
 
-    //每次输出数量
+    // Quantity per output
     const INPUTTIPS_COUNT = 20;
 
     // Model Usage - Form Mapping

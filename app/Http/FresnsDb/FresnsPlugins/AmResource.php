@@ -25,7 +25,7 @@ class AmResource extends BaseAdminResource
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        // 是否有新版本
+        // Is there a new version
         $isNewVision = AmConfig::NO_NEWVISION;
         $newVisionInt = '';
         $newVision = '';

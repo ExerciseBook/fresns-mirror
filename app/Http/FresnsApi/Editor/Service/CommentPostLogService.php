@@ -887,7 +887,7 @@ class CommentPostLogService
         return $res;
     }
 
-    // 过滤词规则
+    // Stop Word Rules
     public static function stopWords($text)
     {
         $stopWordsArr = FresnsStopWords::get()->toArray();

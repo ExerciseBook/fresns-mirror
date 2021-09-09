@@ -32,7 +32,7 @@ class AmModel extends BaseAdminModel
     {
     }
 
-    //根据昵称获取插件
+    // Get plugins based on scenarios
     public static function buildSelectOptionsByUnikey($scene): array
     {
         if (empty($scene)) {

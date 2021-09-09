@@ -29,7 +29,7 @@ class AmService extends BaseAdminService
         return $common;
     }
 
-    //获取插件
+    // Get Plugin
     public static function getPluginExpand($member_id, $type, $langTag)
     {
         $unikeyArr = FresnsPluginBadges::where('member_id', $member_id)->pluck('plugin_unikey')->toArray();
@@ -38,13 +38,11 @@ class AmService extends BaseAdminService
         foreach ($payArr as $v) {
             $item = [];
             $item['plugin'] = $v['plugin_unikey'];
-            $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name',
-                $v['id'], $langTag);
+            $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
             $item['icon'] = $v['icon_file_url'];
             $plugins = FresnsPlugins::where('unikey', $v['plugin_unikey'])->first();
             $item['url'] = $plugins['access_path'].$v['parameter'];
-            $badges = FresnsPluginBadges::where('member_id', $member_id)->where('plugin_unikey',
-                $v['plugin_unikey'])->first();
+            $badges = FresnsPluginBadges::where('member_id', $member_id)->where('plugin_unikey', $v['plugin_unikey'])->first();
             $item['badgesType'] = $badges['display_type'];
             $item['badgesValue'] = $badges['value_text'];
             $expandsArr[] = $item;

@@ -25,7 +25,7 @@ class AmService extends BaseAdminService
         return $common;
     }
 
-    //向member_follow表添加数据
+    // Add data to the member_follows table
     public static function addMemberFollow($mid, $markTarget, $markId)
     {
         $input = [
@@ -36,9 +36,9 @@ class AmService extends BaseAdminService
         FresnsMemberFollows::insert($input);
     }
 
-    public static function delMemberFollow($mid, $markTarget, $markId)
+    // Delete Follow Data
+    public static function deleMemberFollow($mid, $markTarget, $markId)
     {
-        FresnsMemberFollows::where('member_id', $mid)->where('follow_type', $markTarget)->where('follow_id',
-            $markId)->delete();
+        FresnsMemberFollows::where('member_id', $mid)->where('follow_type', $markTarget)->where('follow_id', $markId)->delete();
     }
 }
