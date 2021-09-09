@@ -6,7 +6,7 @@ Fresns 是一款免费开源的社交网络服务软件，专为跨平台而打�
 
 ## 介绍
 
-当前 Fresns 属于「开发者测试版」，已提供框架、API、开发者文档等资料。接下来我们会用两个月时间开发一个网站引擎，提供一个网页端模板规范标准，然后面向所有人推出「正式版」，时间预计在 10 月上旬。
+当前 Fresns 属于「开发者测试版」，已提供框架、API、开发者文档等资料。接下来我们会用两个月时间开发一个网站引擎，提供一个网页端模板规范标准，然后面向所有人推出「正式版」，时间在 10 月上旬。
 
 我们提供的「模板引擎规范」仅供开发者参考，开发者可以不遵守规范，完全根据自己的意愿开发网站前端，相当于自己独立发展前端。独立发展前端也能和其他插件兼容，并且不影响主程序同步升级，不会因为前端分叉了就脱离了主程序轨道，所以请开发者放心遵循自己的业务场景开发。
 
@@ -33,7 +33,7 @@ Fresns 的开源社区正在急速增长中，如果你认可我们的开源软�
 | [Composer](https://github.com/composer/composer) | 2.1.6 | 软体包管理系统 |
 | [Laravel](https://github.com/laravel/laravel) | 8.6.2 | 主程序框架 |
 | [Laravel Framework](https://github.com/laravel/framework) | 8.59.0 | 主程序框架 |
-| [Bootstrap](https://getbootstrap.com/) | 5.1.0 | 内置前端框架 |
+| [Bootstrap](https://getbootstrap.com/) | 5.1.1 | 内置前端框架 |
 | [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.5.0 | 内置前端图标字体库 |
 | [jQuery](https://github.com/jquery/jquery) | 3.6.0 | 内置 JS 库 |
 | [Base64 JS](https://github.com/dankogai/js-base64) | 3.6.1 | 内置 Base64 转码器 |
