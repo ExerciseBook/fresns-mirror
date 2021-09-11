@@ -19,7 +19,7 @@ use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 
 class AmChecker extends BaseChecker
 {
-    // 错误码
+    // Status Code
     public $codeMap = [
 
     ];

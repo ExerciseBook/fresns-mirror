@@ -16,6 +16,10 @@ use App\Http\FresnsDb\FresnsEmojis\FresnsEmojis;
 use App\Http\FresnsDb\FresnsEmojis\FresnsEmojisConfig;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
 
+/**
+ * List resource config handle
+ */
+
 class FresnsInfoEmojisResource extends BaseAdminResource
 {
     public function toArray($request)
@@ -37,7 +41,7 @@ class FresnsInfoEmojisResource extends BaseAdminResource
 
         // dd($itemArr);
 
-        // 默认字段
+        // Default Field
         $default = [
             'name' => FresnsLanguagesService::getLanguageByTableId(FresnsEmojisConfig::CFG_TABLE, 'name', $this->id),
             'image' => ApiFileHelper::getImageSignUrlByFileIdUrl($this->image_file_id, $this->image_file_url),

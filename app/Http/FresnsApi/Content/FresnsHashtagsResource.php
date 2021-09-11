@@ -23,52 +23,45 @@ use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * List resource config handle
+ */
+
 class FresnsHashtagsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // dd(1);
-        // form 字段
+        // Form Field
         $formMap = FresnsGroupsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
+
+        // Hashtag Info
         $mid = GlobalService::getGlobalKey('member_id');
         $description = ApiLanguageHelper::getLanguages(FresnsHashtagsConfig::CFG_TABLE, 'description', $this->id);
-        // $followName = ApiConfigHelper::getConfigByKey(AmConfig::HASHTAG_FOLLOW_NAME);
-        // $likeName = ApiConfigHelper::getConfigByKey(AmConfig::HASHTAG_LIKE_NAME);
-        // $shieldName = ApiConfigHelper::getConfigByKey(AmConfig::HASHTAG_SHIELD_NAME);
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
-        // 是否关注
-        // $followStatus = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',3)->where('follow_id',$this->id)->count();
-        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type',
-            3)->where('follow_id', $this->id)->count();
 
-        // 是否点赞
-        $likeStatus = FresnsMemberLikes::where('member_id', $mid)->where('like_type', 3)->where('like_id',
-            $this->id)->count();
-        // 是否屏蔽
-        // $shieldStatus = FresnsMemberShields::where('member_id',$mid)->where('shield_type',3)->where('shield_id',$this->id)->count();
-        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type',
-            3)->where('shield_id', $this->id)->count();
-        // 查询 member_shields 表，该评论的作者是否被我屏蔽。输出 0.未屏蔽 1.已屏蔽"
-        // $shieldMemberStatus = FresnsMemberShields::where('member_id',$mid)->where('shield_type',1)->where('shield_id',$this->member_id)->count();
-        $shieldMemberStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id',
-            $mid)->where('shield_type', 1)->where('shield_id', $this->member_id)->count();
-
-        $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_HASHTAG_SETTING);
+        // Operation behavior status
+        $likeStatus = FresnsMemberLikes::where('member_id', $mid)->where('like_type', 3)->where('like_id', $this->id)->count();
+        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('follow_id', $this->id)->count();
+        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 3)->where('shield_id', $this->id)->count();
+        // Operation behavior settings
         $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_HASHTAG_SETTING);
+        $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_HASHTAG_SETTING);
         $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_HASHTAG_SETTING);
-        $hashtagName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::HASHTAG_NAME) ?? '话题';
-        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::FOLLOW_HASHTAG_NAME) ?? '收藏';
-        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::LIKE_HASHTAG_NAME) ?? '点赞';
-        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::SHIELD_HASHTAG_NAME) ?? '不喜欢';
-        // 默认字段
+        // Operation behavior naming
+        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::LIKE_HASHTAG_NAME) ?? 'Like';
+        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::FOLLOW_HASHTAG_NAME) ?? 'Watching';
+        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::SHIELD_HASHTAG_NAME) ?? 'Block';
+        // Content Naming
+        $hashtagName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::HASHTAG_NAME) ?? 'Hashtag';
+
+        // member_shields: query the table to confirm if the object is blocked
+        $shieldMemberStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 1)->where('shield_id', $this->member_id)->count();
+
+        // Default Field
         $default = [
             'huri' => $this->slug,
             'hname' => $this->name,
@@ -94,7 +87,7 @@ class FresnsHashtagsResource extends BaseAdminResource
             // 'likeName' => $likeName,
             // 'shieldName' => $shieldName,
         ];
-        // 合并
+        // Merger
         $arr = $default;
 
         return $arr;

@@ -13,7 +13,8 @@ class AmConfig
     const VIEW_MODE_PUBLIC = 1;
     const VIEW_MODE_PRIVATE = 2;
 
-    //用户状态 users > deleted_at 注销，仅可请求「登录」和「恢复」 [用户基本信息] [退出登录]接口。
+    // User deleted, list of requestable APIs
+    // users > deleted_at
     const CHECK_USER_DELETE_URI = [
         '/api/fresns/user/login',
         '/api/fresns/user/restore',
@@ -21,13 +22,14 @@ class AmConfig
         '/api/fresns/user/logout',
     ];
 
-    //用户状态 users > is_enable 可以请求[用户基本信息] [退出登录]
+    // User disabled status, list of requestable APIs
+    // users > is_enable
     const CHECK_USER_IS_ENABLE_URI = [
         '/api/fresns/user/detail',
         '/api/fresns/user/logout',
     ];
 
-    //消息内容类
+    // Content class APIs
     const NOTICE_CONTENT_URI = [
         '/api/fresns/notify/lists',
         '/api/fresns/notify/read',
@@ -51,9 +53,9 @@ class AmConfig
     ];
 
     const CONFIGS_LIST = 'configs_list';
-    //系统配置api接口返回
     const CONFIGS_LIST_API = 'configs_list_api';
 
+    // Not logged in
     const HEADER_FIELD_ARR = [
         'platform',
         'version',
@@ -63,6 +65,7 @@ class AmConfig
         'sign',
     ];
 
+    // Logged in
     const SIGN_FIELD_ARR = [
         'platform',
         'version',
@@ -74,7 +77,8 @@ class AmConfig
         'appId',
     ];
 
-    //公开模式 public uid 必传
+    // Site Mode = public
+    // uid required
     const PUBLIC_UID_URI_ARR = [
         '/api/fresns/info/downloadFile',
         '/api/fresns/info/overview',
@@ -110,7 +114,8 @@ class AmConfig
         '/api/fresns/editor/revoke',
     ];
 
-    //公开模式mid必传
+    // Site Mode = public
+    // mid required
     const PUBLIC_MID_URI_ARR = [
         '/api/fresns/info/downloadFile',
         '/api/fresns/info/overview',
@@ -138,7 +143,8 @@ class AmConfig
         '/api/fresns/editor/revoke',
     ];
 
-    //公开模式public token必传
+    // Site Mode = public
+    // token required
     const PUBLIC_TOKEN_URI_ARR = [
         '/api/fresns/info/downloadFile',
         '/api/fresns/info/overview',
@@ -172,10 +178,10 @@ class AmConfig
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
         '/api/fresns/editor/revoke',
-
     ];
 
-    //公有模式public deviceInfo必传
+    // Site Mode = public
+    // deviceInfo required
     const PUBLIC_DEVICEINFO_URI_ARR = [
         '/api/fresns/info/uploadLog',
         '/api/fresns/info/downloadFile',
@@ -190,10 +196,10 @@ class AmConfig
         '/api/fresns/editor/create',
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
-
     ];
 
-    //私有模式private uid必传
+    // Site Mode = private
+    // uid required
     const PRIVATE_UID_URI_ARR = [
         '/api/fresns/info/extensions',
         '/api/fresns/info/overview',
@@ -248,7 +254,8 @@ class AmConfig
         '/api/fresns/editor/revoke',
     ];
 
-    //私有模式 private mid 必传
+    // Site Mode = private
+    // mid required
     const PRIVATE_MID_URI_ARR = [
         '/api/fresns/info/extensions',
         '/api/fresns/info/overview',
@@ -296,7 +303,8 @@ class AmConfig
         '/api/fresns/editor/revoke',
     ];
 
-    //私有模式 private token 必传
+    // Site Mode = private
+    // token required
     const PRIVATE_TOKEN_URI_ARR = [
         '/api/fresns/info/overview',
         '/api/fresns/info/extensions',
@@ -351,7 +359,8 @@ class AmConfig
         '/api/fresns/editor/revoke',
     ];
 
-    //私有模式 private deviceInfo 必传
+    // Site Mode = private
+    // deviceInfo required
     const PRIVATE_DEVICEINFO_URI_ARR = [
         '/api/fresns/info/uploadLog',
         '/api/fresns/info/downloadFile',
@@ -365,6 +374,5 @@ class AmConfig
         '/api/fresns/editor/create',
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
-
     ];
 }

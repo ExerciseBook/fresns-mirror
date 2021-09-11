@@ -25,38 +25,33 @@ use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * List resource config handle
+ */
+
 class FresnsGroupResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-
-        // form 字段
+        // Form Field
         $formMap = FresnsGroupsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
 
+        // Group Info
         $gid = $this->uuid;
         $type = $this->type;
-        // dd($type);
         $parentId = $this->parent_id;
         $parentGroupInfo = FresnsGroups::where('id', $parentId)->first();
-        // dd($parentGroupInfo);
         $parentId = $parentGroupInfo['uuid'] ?? '';
         $mid = GlobalService::getGlobalKey('member_id');
-        // dd($mid);
-        // 语言
         $name = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
-        // dd($name);
         $description = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'description', $this->id);
         $gname = $name == null ? '' : $name['lang_content'];
         $description = $description == null ? '' : $description['lang_content'];
-        // dump($gname);
-        // dd($description);
-        // $cover = $this->cover_file_url;
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
-        // $banner = $this->banner_file_url;
         $banner = ApiFileHelper::getImageSignUrlByFileIdUrl($this->banner_file_id, $this->banner_file_url);
         $recommend = $this->is_recommend;
         $followType = $this->type_follow;
@@ -67,39 +62,29 @@ class FresnsGroupResource extends BaseAdminResource
         $shieldCount = $this->shield_count;
         $postCount = $this->post_count;
         $essenceCount = $this->essence_count;
-        // 是否关注
-        // $followStatus = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->where('follow_id',$this->id)->count();
-        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type',
-            2)->where('follow_id', $this->id)->count();
-        // 是否点赞
-        // $likeStatus = FresnsMemberLikes::where('member_id',$mid)->where('like_type',2)->where('like_id',$this->id)->count();
-        $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type',
-            2)->where('like_id', $this->id)->count();
-        // 是否屏蔽
-        // $shieldStatus = FresnsMemberShields::where('member_id',$mid)->where('shield_type',2)->where('shield_id',$this->id)->count();
-        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type',
-            2)->where('shield_id', $this->id)->count();
-        // dd(1);
-        $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_GROUP_SETTING);
+
+        // Operation behavior status
+        $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 2)->where('like_id', $this->id)->count();
+        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('follow_id', $this->id)->count();
+        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 2)->where('shield_id', $this->id)->count();
+        // Operation behavior settings
         $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_GROUP_SETTING);
-        $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_SETTING);
-        $groupName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_NAME) ?? '小组';
-        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_FOLLOW_NAME) ?? '加入';
-        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_LIKE_NAME) ?? '点赞';
-        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-                AmConfig::GROUP_SHIELD_NAME) ?? '屏蔽';
+        $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_GROUP_SETTING);
+        $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_GROUP_SETTING);
+        // Operation behavior naming
+        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::LIKE_GROUP_NAME) ?? 'Like';
+        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::FOLLOW_GROUP_NAME) ?? 'Join';
+        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::SHIELD_GROUP_NAME) ?? 'Block';
+        // Content Naming
+        $groupName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::GROUP_NAME) ?? 'Group';
+
         $parentGroup = FresnsGroups::find($this->parent_id);
         $parentInfo = [];
         if ($parentGroup) {
             $parentInfo['gid'] = $parentGroup['uuid'] ?? '';
             $pname = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
             $parentInfo['gname'] = $pname == null ? '' : $pname['lang_content'];
-            // $parentInfo['cover'] = $parentGroup['cover_file_url'] ?? "";
-            $parentInfo['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($parentGroup['cover_file_id'],
-                $parentGroup['cover_file_url']);
+            $parentInfo['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($parentGroup['cover_file_id'], $parentGroup['cover_file_url']);
         }
         $admins = [];
         if ($type != 1) {
@@ -114,7 +99,7 @@ class FresnsGroupResource extends BaseAdminResource
             $permission = FresnsGroupsService::othetPession($this->permission);
         }
 
-        // 默认字段
+        // Default Field
         $default = [
             'gid' => $gid,
             'gname' => $gname,
@@ -147,9 +132,10 @@ class FresnsGroupResource extends BaseAdminResource
             'publishRule' => $publishRule,
             'permission' => $permission,
         ];
-        // 合并
+
+        // Merger
         $arr = $default;
-        // dd($arr);
+
         return $arr;
     }
 }

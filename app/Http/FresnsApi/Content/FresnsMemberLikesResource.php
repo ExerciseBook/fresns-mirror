@@ -15,22 +15,25 @@ use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikesConfig;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 
+/**
+ * List resource config handle
+ */
+
 class FresnsMemberLikesResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // dd(1);
-        // form 字段
+        // Form Field
         $formMap = FresnsMemberLikesConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
         $memberInfo = FresnsMembers::find($this->member_id);
-        // dd($memberInfo);
-        // 默认字段
+
+        // Default Field
         $default = [
-            'mid' => $memberInfo['id'],
+            'mid' => $memberInfo['uuid'],
             'mname' => $memberInfo['name'],
             'nickname' => $memberInfo['nickname'],
             'avatar' => $memberInfo['decorate_file_url'],
@@ -38,7 +41,8 @@ class FresnsMemberLikesResource extends BaseAdminResource
             'verifiedStatus' => $memberInfo['verified_status'],
             'verifiedIcon' => $memberInfo['verified_file_url'],
         ];
-        // 合并
+
+        // Merger
         $arr = $default;
 
         return $arr;

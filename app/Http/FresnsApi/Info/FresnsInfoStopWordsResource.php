@@ -10,12 +10,16 @@ namespace App\Http\FresnsApi\Info;
 
 use App\Base\Resources\BaseAdminResource;
 
+/**
+ * List resource config handle
+ */
+
 class FresnsInfoStopWordsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
 
-        // 默认字段
+        // Default Field
         $default = [
             'word' => $this->word,
             'contentMode' => $this->content_mode,

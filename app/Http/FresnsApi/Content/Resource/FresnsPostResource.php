@@ -60,34 +60,25 @@ class FresnsPostResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // dd(Carbon::today()->toDateTimeString());
-        // $dt = Carbon::createFromDate(2011, 8, 1);
-        // form 字段
-        // 副表
-        // $append = FresnsPostAppends::findAppend('post_id',$this->id);
+        // Form Field
+        
+        // Data Table: post_appends
         $append = DB::table(FresnsPostAppendsConfig::CFG_TABLE)->where('post_id', $this->id)->first();
         if ($append) {
             $append = get_object_vars($append);
         }
-        // dd($append);
-        // dd($append);
-        // 成员表
+        // Data Table: members
         $memberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $this->member_id)->first();
-        // 成员角色关联表表(主角色)
+        // Data Table: member_role_rels
         $roleRels = FresnsMemberRoleRels::where('member_id', $this->member_id)->where('type', 2)->first();
-        // 成员角色表
+        // Data Table: member_roles
         $memberRole = [];
         if (! empty($roleRels)) {
             $memberRole = FresnsMemberRoles::find($roleRels['role_id']);
         }
-        // dd($this->id);
-        // $memberRole = TweetMemberRoles::find($roleRels['role_id']);
-        // dd($memberRole);
-        // 成员图标
+        // Data Table: member_icons
         $memberIcon = FresnsMemberIcons::where('member_id', $this->member_id)->first();
-        // dd(1);
-        // 评论
-        // 如果满足条件需要输出一条评论内容，如果点赞最多的评论作者已经删除（members > deleted_at），则顺延下一条评论输出
+        // Data Table: comments
         $comments = DB::table('comments as c')->select('c.*')
             ->leftJoin('members as m', 'c.member_id', '=', 'm.id')
             ->where('c.post_id', $this->id)
@@ -95,15 +86,12 @@ class FresnsPostResource extends BaseAdminResource
             ->where('c.deleted_at', null)
             ->orderby('like_count', 'Desc')
             ->first();
-        // dump($comments);
-        // $comments = FresnsComments::where('post_id',$this->id)->where('parent_id',0)->orderby('like_count','Desc')->first();
-
-        // 小组
+        // Data Table: groups
         $groupInfo = FresnsGroups::find($this->group_id);
 
+        // Post Info
         $pid = $this->uuid;
         $mid = GlobalService::getGlobalKey('member_id');
-
         $input = [
             'member_id' => $mid,
             'like_type' => 4,
@@ -113,23 +101,18 @@ class FresnsPostResource extends BaseAdminResource
         $count = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where($input)->count();
         $isLike = $count == 0 ? false : true;
         $title = $this->title;
-        // dd($this->content);
         $content = self::getContentView(($this->content), ($this->id), 1);
-        // dd($content);
-        // dd($content);
-        // 是否需要阅读权限
+        // Read permission required or not
         $allowStatus = $this->is_allow;
-        $allowProportion = 50;
+        $allowProportion = 10;
         $noAllow = 0;
         if ($allowStatus == 1) {
-            $memberCount = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $this->id)->where('type',
-                1)->where('object_id', $mid)->count();
+            $memberCount = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $this->id)->where('type', 1)->where('object_id', $mid)->count();
             $memberoleCount = 0;
             if (! empty($roleRels)) {
-                $memberoleCount = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id',
-                    $this->id)->where('type', 2)->where('object_id', $roleRels['role_id'])->count();
+                $memberoleCount = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $this->id)->where('type', 2)->where('object_id', $roleRels['role_id'])->count();
             }
-            // 有阅读权限
+            // Read access
             if ($memberCount > 0 || $memberoleCount > 0) {
                 $allowStatus = 1;
                 $allowProportion = 100;
@@ -139,17 +122,11 @@ class FresnsPostResource extends BaseAdminResource
                 if (! $allowProportion) {
                     $allowProportion = ApiConfigHelper::getConfigByItemKey(AmConfig::SNS_PROPORTION);
                 }
-                // dd($allowProportion);
-                // $contentLength = mb_strlen($this->content);
-                // $length = ceil($contentLength * $allowProportion /100);
                 $FresnsPostsService = new FresnsPostsService();
-                // 防止@ 链接等信息被截断
+                // Prevent @, hashtags, emojis, links and other messages from being truncated
                 $contentInfo = $FresnsPostsService->truncatedContentInfo($this->content);
-                // dd($content);
-                // $content = $contentInfo['truncated_content'];
                 $content = self::getContentView(($contentInfo['truncated_content']), ($this->id), 1);
-                // dd($allowProportion);
-                // $content = mb_substr($content,0,$length);
+
                 $allowStatus = 0;
             }
         } else {
@@ -166,26 +143,22 @@ class FresnsPostResource extends BaseAdminResource
         $commentIcon = $more_json_decode['commentIcon'] ?? '';
         $shareIcon = $more_json_decode['shareIcon'] ?? '';
         $moreIcon = $more_json_decode['moreIcon'] ?? '';
-        // 是否关注
-        // $followStatus = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',4)->where('follow_id',$this->id)->count();
-        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type',
-            4)->where('follow_id', $this->id)->count();
-        // 是否点赞
-        // $likeStatus = FresnsMemberLikes::where('member_id',$mid)->where('like_type',4)->where('like_id',$this->id)->count();
-        $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type',
-            4)->where('like_id', $this->id)->count();
-        // 是否屏蔽
-        // $shieldStatus = FresnsMemberShields::where('member_id',$mid)->where('shield_type',4)->where('shield_id',$this->id)->count();
-        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type',
-            4)->where('shield_id', $this->id)->count();
-        $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_SETTING);
-        $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_GROUP_SETTING);
+
+        // Operation behavior status
+        $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 4)->where('like_id', $this->id)->count();
+        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 4)->where('follow_id', $this->id)->count();
+        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 4)->where('shield_id', $this->id)->count();
+        // Operation behavior settings
+        $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_POST_SETTING);
         $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_POST_SETTING);
-        // dd($followSetting);
-        $PostName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::POST_NAME) ?? '帖子';
-        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::POST_FOLLOW_NAME) ?? '加入';
-        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::POST_LIKE_NAME) ?? '点赞';
-        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::POST_SHIELD_NAME) ?? '屏蔽';
+        $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_POST_SETTING);
+        // Operation behavior naming
+        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::LIKE_POST_NAME) ?? 'Like';
+        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::FOLLOW_POST_NAME) ?? 'Save post';
+        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::SHIELD_POST_NAME) ?? 'Hide post';
+        // Content Naming
+        $PostName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::POST_NAME) ?? 'Post';
+
         $viewCount = $this->view_count;
         $likeCount = $this->like_count;
         $followCount = $this->follow_count;
@@ -194,29 +167,18 @@ class FresnsPostResource extends BaseAdminResource
         $commentLikeCount = $this->comment_like_count;
         $time = DateHelper::asiaShanghaiToTimezone($this->created_at);
         $timeFormat = DateHelper::format_date_langTag(strtotime($time));
-        // $timeFormat = str_replace("前", 'ago', $timeFormat);
-        // $editTime = $this->latest_edit_at == null ? $this->updated_at : $this->latest_edit_at;
         $editTime = DateHelper::asiaShanghaiToTimezone($this->latest_edit_at);
         $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
-        // $editTimeFormat = str_replace("前", 'ago', $editTimeFormat);
-        // $canDelete = $append['can_delete'];
         $allowStatus = $this->is_allow;
-        // 多语言 副表allow_btn_name
         $allowBtnName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
         $allowBtnName = $allowBtnName == null ? '' : $allowBtnName['lang_content'];
         $allowBtnUrl = $append['allow_plugin_unikey'];
-        // dump($append);
-        // 多语言 member_list_name
         $memberListName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'member_list_name', $this->id);
         $memberListName = $memberListName == null ? '' : $memberListName['lang_content'];
-        // dd($memberListName);
-        // memberListCount
         $memberListCount = Db::table('post_members')->where('post_id', $this->id)->count();
         $member = [];
-        // dd($memberInfo);
         $member['anonymous'] = $this->is_anonymous;
         $member['deactivate'] = false;
-        // $member['isAuthor'] = "";
         $member['mid'] = '';
         $member['mname'] = '';
         $member['nickname'] = '';
@@ -226,17 +188,18 @@ class FresnsPostResource extends BaseAdminResource
         $member['roleIcon'] = '';
         $member['roleIconDisplay'] = '';
         $member['avatar'] = $memberInfo->avatar_file_url ?? '';
-        // 为空用默认头像
+
+        // Default avatar when members have no avatar
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }
-        // 匿名头像 anonymous_avatar 键值
+        // Anonymous content for avatar
         if ($this->is_anonymous == 1) {
             $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::ANONYMOUS_AVATAR);
             $member['avatar'] = $anonymousAvatar;
         }
-        // 已注销头像 deactivate_avatar 键值"
+        // The avatar displayed when a member has been deleted
         if ($memberInfo) {
             if ($memberInfo->deleted_at != null) {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::DEACTIVATE_AVATAR);
@@ -257,48 +220,39 @@ class FresnsPostResource extends BaseAdminResource
         $icons['icon'] = '';
         $icons['name'] = '';
         $member['icons'] = $icons;
-        // dd($member['avatar']);
         if ($this->is_anonymous == 0) {
             if ($memberInfo->deleted_at == null && $memberInfo) {
                 $member['anonymous'] = $this->is_anonymous;
                 $member['deactivate'] = true;
-                // $member['isAuthor'] = $this->member_id == $mid ? true :false;
                 $member['mid'] = $memberInfo->uuid ?? '';
                 $member['mname'] = $memberInfo->name ?? '';
                 $member['nickname'] = $memberInfo->nickname ?? '';
                 $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
-                // "roleName": "主角色的值，如果为不显示则不输出 member_roles > name 多语言",
+
                 $roleName = '';
                 if (! empty($memberRole)) {
-                    $roleName = ApiLanguageHelper::getLanguages(FresnsMemberRolesConfig::CFG_TABLE, 'name',
-                        $memberRole['id']);
+                    $roleName = ApiLanguageHelper::getLanguages(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
                     $roleName = $roleName == null ? '' : $roleName['lang_content'];
                 }
-
                 $member['roleName'] = $roleName;
                 $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? '';
                 $member['roleIcon'] = $memberRole['icon_file_url'] ?? '';
                 $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? '';
-                // $member['avatar'] = $member['avatar'];
 
-                // $member['decorate'] = $memberInfo->decorate_file_url ?? "";
                 $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
                 LogService::info('decorate_file_id', $memberInfo);
                 $member['gender'] = $memberInfo->gender ?? '';
                 $member['bio'] = $memberInfo->bio ?? '';
                 $member['verifiedStatus'] = $memberInfo->verified_status ?? '';
-                // $member['verifiedIcon'] = $memberInfo->verified_file_url ?? "";
                 $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
                 $icons = [];
                 $icons['icon'] = $memberIcon['icon_file_url'] ?? '';
                 if ($icons['icon']) {
                     $icons['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberIcon['icon_file_id'], $memberIcon['icon_file_url']);
                 }
-                // 多语言 icon  name
                 $icons['name'] = '';
                 if ($memberIcon) {
-                    $iconName = ApiLanguageHelper::getLanguages(FresnsMemberIconsConfig::CFG_TABLE, 'name',
-                        $memberIcon['id']);
+                    $iconName = ApiLanguageHelper::getLanguages(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
                     $iconName = $iconName == null ? '' : $iconName['lang_content'];
                     $icons['name'] = $iconName;
                 }
@@ -309,35 +263,32 @@ class FresnsPostResource extends BaseAdminResource
                 $member['icons'] = $icons;
             }
         }
+
+        // Post Hot
         $postHotStatus = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_HOT);
-        // dd($postHotStatus);
         $postHotStatus = $postHotStatus == null ? 0 : $postHotStatus;
         $comment = [];
-        // dump($comments);
         $comment['status'] = false;
         if ($postHotStatus != 0 && ! empty($comments)) {
-            // 查询评论人员信息
-            // dump($comments);
-
-            // if(!empty($comments)){
+            // Check commenter information
             $commentMemberInfo = FresnsMembers::find($comments->member_id);
             $comment['status'] = true;
             $comment['anonymous'] = $comments->is_anonymous ?? '';
-            // 该条评论的作者是不是帖子作者自己
+            // Is the author of the comment the author of the post himself
             $commentStatus = $this->member_id == $comments->member_id ? true : false;
-            // dump($comments);
             if ($comments->is_anonymous == 0) {
                 $comment['isAuthor'] = $commentStatus;
-                $comment['mid'] = $commentMemberInfo['id'] ?? '';
+                $comment['mid'] = $commentMemberInfo['uuid'] ?? '';
                 $comment['mname'] = $commentMemberInfo['name'] ?? '';
                 $comment['nickname'] = $commentMemberInfo['nickname'] ?? '';
             }
-            // 为空用默认头像
+
+            // Default avatar when members have no avatar
             if (empty($commentStatus['avatar'])) {
                 $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
                 $comment['avatar'] = $defaultIcon;
             }
-            // 匿名头像 anonymous_avatar 键值
+            // Anonymous content for avatar
             if ($comments->is_anonymous == 1) {
                 $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::ANONYMOUS_AVATAR);
                 $comment['avatar'] = $anonymousAvatar;
@@ -345,41 +296,28 @@ class FresnsPostResource extends BaseAdminResource
             $comment['avatar'] = ApiFileHelper::getImageSignUrl($comment['avatar']);
 
             $comment['cid'] = $comments->uuid ?? '';
-            // $comment['content'] = $comments['content'];
             $comment['content'] = self::getContentView(($comments->content), ($comments->id), 2);
             $comment['likeCount'] = $comments->like_count ?? '';
-            $attachedQuantity = [];
-            $attachedQuantity['image'] = FresnsFiles::where('file_type', 2)->where('table_name',
-                FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
-            $attachedQuantity['videos'] = FresnsFiles::where('file_type', 3)->where('table_name',
-                FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
-            $attachedQuantity['audios'] = FresnsFiles::where('file_type', 4)->where('table_name',
-                FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
-            $attachedQuantity['docs'] = FresnsFiles::where('file_type', 5)->where('table_name',
-                FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
-            $attachedQuantity['extends'] = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type',
-                2)->where('linked_id', $comments->id)->count();
-            $comment['attachCount'] = $attachedQuantity;
+
+            // Attached Quantity
+            $attachCount = [];
+            $attachCount['images'] = FresnsFiles::where('file_type', 1)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
+            $attachCount['videos'] = FresnsFiles::where('file_type', 2)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
+            $attachCount['audios'] = FresnsFiles::where('file_type', 3)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
+            $attachCount['docs'] = FresnsFiles::where('file_type', 4)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
+            $attachCount['extends'] = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $comments->id)->count();
+            $comment['attachCount'] = $attachCount;
             $images = [];
-            $fileInfo = FresnsFiles::where('file_type', 2)->where('table_name',
-                FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->get();
-            // dump($comments->id);
-            // dd($fileInfo);
-            if ($fileInfo) {
-                $images = ApiFileHelper::antiTheftFile($fileInfo);
-                // dump($images);
-                $comment['imageCount'] = count($fileInfo);
-            } else {
-                $comment['imageCount'] = 0;
-            }
-            $comment['images'] = $images;
+
+            $fileInfo = FresnsFiles::where('file_type', 1)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->get();
+            $comment['images'] = ApiFileHelper::antiTheftFile($fileInfo);
+
             if (($this->comment_like_count) < $postHotStatus) {
                 $comment = [];
                 $comment['status'] = false;
             }
-            // }
         }
-        // dd(1);
+
         $location = [];
         $location['isLbs'] = $this->is_lbs;
         $location['mapId'] = $this->map_id;
@@ -391,59 +329,42 @@ class FresnsPostResource extends BaseAdminResource
         $location['distance'] = '';
         $longitude = request()->input('longitude', '');
         $latitude = request()->input('latitude', '');
-        // dd(1);
         if ($longitude && $latitude && $this->map_latitude && $this->map_longitude) {
-            // 获取单位
+            // Get location units
             $langTag = $request->header('langTag');
             $distanceUnits = $request->input('lengthUnits');
             if (! $distanceUnits) {
-                // 距离
+                // Distance
                 $languages = ApiConfigHelper::distanceUnits($langTag);
                 $distanceUnits = empty($languages) ? 'km' : $languages;
             }
-
-            // dd($languageConfig);
-            $location['distance'] = $this->GetDistance($latitude, $longitude, $this->map_latitude, $this->map_longitude,
-                $distanceUnits);
+            $location['distance'] = $this->GetDistance($latitude, $longitude, $this->map_latitude, $this->map_longitude, $distanceUnits);
         }
-        $attachedQuantity = [];
-        $attachedQuantity['image'] = FresnsFiles::where('file_type', 2)->where('table_name',
-            FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachedQuantity['videos'] = FresnsFiles::where('file_type', 3)->where('table_name',
-            FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachedQuantity['audios'] = FresnsFiles::where('file_type', 4)->where('table_name',
-            FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachedQuantity['docs'] = FresnsFiles::where('file_type', 5)->where('table_name',
-            FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachedQuantity['extends'] = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type',
-            1)->where('linked_id', $this->id)->count();
 
+        // Attached Quantity
+        $attachCount = [];
+        $attachCount['images'] = FresnsFiles::where('file_type', 2)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        $attachCount['videos'] = FresnsFiles::where('file_type', 3)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        $attachCount['audios'] = FresnsFiles::where('file_type', 4)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        $attachCount['docs'] = FresnsFiles::where('file_type', 5)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        $attachCount['extends'] = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id', $this->id)->count();
+
+        // Files
         $files = [];
+
+        // Extends
         $extends = [];
-        // dump($noAllow);
-        $extendsLinks = Db::table('extend_linkeds')->where('linked_type', 1)->where('linked_id',
-            $this->id)->pluck('extend_id')->toArray();
+        $extendsLinks = Db::table('extend_linkeds')->where('linked_type', 1)->where('linked_id', $this->id)->pluck('extend_id')->toArray();
         $extendsInfo = [];
         if ($extendsLinks) {
             $extendsLinks = array_unique($extendsLinks);
             $extendsInfo = FresnsExtends::whereIn('id', $extendsLinks)->get();
         }
-        // dd($this->id);
-        // $files = ApiFileHelper::getFileInfoByTable(FresnsPostsConfig::CFG_TABLE,$this->id);
-        // dd($files);
-        // $more_json = json_decode($this->more_json,true);
-        // if($more_json){
-        //     $files = $more_json['files'];
-        // }
         if ($noAllow != 0) {
             $more_json = json_decode($this->more_json, true);
             if ($more_json) {
-                // dd($more_json['files']);
                 $files = ApiFileHelper::getMoreJsonSignUrl($more_json['files']);
             }
-            // $extends = $more_json_decode['extends'];
-            // extends
-            // $extendsInfo = FresnsExtends::where('post_id',$this->id)->first();
             if (! empty($extendsInfo)) {
                 $extends = [];
                 foreach ($extendsInfo as $e) {
@@ -453,7 +374,6 @@ class FresnsPostResource extends BaseAdminResource
                     $arr['frame'] = $e['frame'] ?? '';
                     $arr['position'] = $e['position'] ?? '';
                     $arr['content'] = $e['text_content'] ?? '';
-                    // $arr['files'] = ApiFileHelper::getFileInfoByTable(FresnsPostsConfig::CFG_TABLE,$this->id);
                     if ($arr['frame'] == 1) {
                         $arr['files'] = $e['text_files'];
                     }
@@ -467,7 +387,6 @@ class FresnsPostResource extends BaseAdminResource
                         $title = $title == null ? '' : $title['lang_content'];
                         $arr['title'] = $title;
                     }
-
                     $arr['titleColor'] = $e['title_color'] ?? '';
                     $arr['descPrimary'] = '';
                     if (! empty($e)) {
@@ -482,7 +401,6 @@ class FresnsPostResource extends BaseAdminResource
                         $descSecondary = $descSecondary == null ? '' : $descSecondary['lang_content'];
                         $arr['descSecondary'] = $descSecondary;
                     }
-
                     $arr['descSecondaryColor'] = $e['desc_secondary_color'] ?? '';
                     $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
                     $arr['btnName'] = '';
@@ -501,31 +419,28 @@ class FresnsPostResource extends BaseAdminResource
                 }
             }
         }
+
+        // Group
         $group = [];
         if ($groupInfo) {
             $group['gid'] = $groupInfo['uuid'] ?? '';
             $name = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->group_id);
             $group['gname'] = $name == null ? '' : $name['lang_content'];
-            // $group['cover'] = $groupInfo['cover_file_url'] ?? "";
-            $group['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'],
-                $groupInfo['cover_file_url']);
+            $group['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
             $group['allow'] = true;
-            // 当前请求接口的成员，是否拥有该小组评论权限
+            // Whether the current member has the right to comment in the group
             $permission = $groupInfo['permission'] ?? '';
             $permissionArr = json_decode($permission, true);
-            // dd($permissionArr);
             if ($permissionArr) {
-                // $publish_comment = $permissionArr['publish_comment'];
                 $publish_comment = $permissionArr['publish_comment'];
                 $publish_comment_roles = $permissionArr['publish_comment_roles'];
                 $group['allow'] = false;
-                // 1.所有人
+                // 1.All Members
                 if ($publish_comment == 1) {
                     $group['allow'] = true;
                 }
-                //  2.仅关注了小组的成员
+                // 2.Anyone in the group
                 if ($publish_comment == 2) {
-                    // $followCount = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->where('follow_id',$this->group_id)->count();
                     $followCount = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)
                             ->where('member_id', $mid)
                             ->where('follow_type', 2)
@@ -536,7 +451,7 @@ class FresnsPostResource extends BaseAdminResource
                         $group['allow'] = true;
                     }
                 }
-                // 3.仅指定的角色成员
+                // 3.Specified role members only
                 if ($publish_comment == 3) {
                     $memberRoleArr = FresnsMemberRoleRels::where('member_id', $mid)->pluck('role_id')->toArray();
                     $arrIntersect = array_intersect($memberRoleArr, $publish_comment_roles);
@@ -546,32 +461,20 @@ class FresnsPostResource extends BaseAdminResource
                 }
             }
         }
+
+        // Post Plugin Extensions
         $manages = [];
-        //
-        /**1、当 plugin_usages > scene 应用场景不包含「帖子」的插件，不输出。
-         * 2、当 plugin_usages > is_group_admin 为小组管理员专用，则判断接口请求的成员是否为管理员。
-         * 2.1、当 posts > group_id 为空时，代表帖子无小组，小组管理员专用插件无效不输出。
-         * 2.2、根据 posts > group_id 和 groups > admin_members 查询该字段中是否含有该成员的 mid，无则不输出。
-         */
-        //
-        // dd(2);
-        //  插件扩展
         $TweetPluginUsages = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%1%')->first();
-        // dd($TweetPluginUsages['plugin_unikey']);
         if ($TweetPluginUsages) {
             $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
             $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-            // dd($plugin);
             $name = AmService::getlanguageField('name', $TweetPluginUsages['id']);
             $manages['name'] = $name == null ? '' : $name['lang_content'];
             $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
-            // $manages['url'] = $plugin['access_path'] .'/'. $TweetPluginUsages['parameter'];
             $manages['url'] = ApiFileHelper::getPluginUsagesUrl($TweetPluginUsages['plugin_unikey'], $TweetPluginUsages['id']);
-            // 是否管理员专用
+            // Is the group administrator dedicated
             if ($TweetPluginUsages['is_group_admin'] != 0) {
-                // 查询登录用户是否为管理员
-                // $roleRels = FresnsMemberRoleRels::where('member_id',$mid)->where('type',2)->pluck('role_id')->toArray();
-                // $roles = FresnsMemberRoles::whereIn('id',$roleRels)->where('type',1)->count();
+                // Query whether the current member is a group administrator
                 if (! $this->group_id) {
                     $manages = [];
                 } else {
@@ -580,8 +483,6 @@ class FresnsPostResource extends BaseAdminResource
                         $manages = [];
                     } else {
                         $permission = json_decode($groupInfo['permission'], true);
-                        // dump($permission);
-                        // dump($mid);
                         if (isset($permission['admin_members'])) {
                             if (! is_array($permission['admin_members'])) {
                                 $manages = [];
@@ -596,52 +497,39 @@ class FresnsPostResource extends BaseAdminResource
                     }
                 }
             }
-            // dd($manages);
-            // plugin_usages > member_roles 有值，则判断当前请求成员的所有角色 ID 是否包含在其中，在则输出，不在不输出（未登录则不在）。
+            // Determine if the primary role of the current member is an administrator
             if ($TweetPluginUsages['member_roles']) {
                 $mroleRels = FresnsMemberRoleRels::where('member_id', $mid)->first();
-                // dd( $mroleRels['role_id']);
                 if ($mroleRels) {
                     $pluMemberRoleArr = explode(',', $TweetPluginUsages['member_roles']);
-                    // dump($mroleRels);
-                    // dd($pluMemberRoleArr);
                     if (! in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
                         $manages = [];
                     }
                 }
             }
         }
-        // dd($manages);
-        // if(!$this->group_id ){
-        //     $manages = [];
-        // }else{
-        //    $count =  FresnsGroups::where('id',$this->group_id)->where('admin_members','like',"%$mid%")->count();
-        //     if($count == 0){
-        //         $manages = [];
-        //     }
-        // }
-        // editStatus
+        
+        // Edit Status
         $editStatus = [];
-        // 该篇帖子作者是否为本人
+        // Is the current member an author
         $editStatus['isMe'] = $this->member_id == $mid ? true : false;
-        // 帖子编辑权限
+        // Post editing privileges
         $postEdit = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDIT) ?? false;
         $editTimeRole = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDIT_TIMELIMIT) ?? 5;
         $editSticky = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDIT_STICKY) ?? false;
         $editEssence = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDIT_ESSENCE) ?? false;
         if ($postEdit) {
-            // 多长时间内可以编辑
+            // How long you can edit
             if (strtotime($this->created_at) + ($editTimeRole * 60) > time()) {
                 $postEdit = false;
             }
-            // 帖子置顶后编辑权限
+            // Post top edit permission
             if ($this->sticky_status != 0) {
                 if (! $editSticky) {
                     $postEdit = false;
                 }
             }
-
-            // 帖子加精后编辑权限
+            // Post editing privileges after adding essence
             if ($this->essence_status != 0) {
                 if (! $editEssence) {
                     $postEdit = false;
@@ -649,13 +537,15 @@ class FresnsPostResource extends BaseAdminResource
             }
         }
         $editStatus['canEdit'] = $postEdit;
-        // dd($postEdit);
+        
+        // Delete Status
         $editStatus['canDelete'] = $append['can_delete'] == 1 ? true : false;
-        // implants
-        // dd(2);
+        
+        // more_json
         $more_json = json_decode($this->more_json, true);
         $icons = $more_json['icons'] ?? [];
-        // 默认字段
+
+        // Default Field
         $default = [
             'pid' => $pid,
             // 'titleIcon' => $titleIcon,
@@ -704,19 +594,21 @@ class FresnsPostResource extends BaseAdminResource
             'icons' => $icons,
             'commentSetting' => $comment,
             'location' => $location,
-            'attachCount' => $attachedQuantity,
+            'attachCount' => $attachCount,
             'files' => $files,
             'extends' => $extends,
             'group' => $group,
             'manages' => $manages,
             'editStatus' => $editStatus,
         ];
-        // 合并
+
+        // Merger
         $arr = $default;
 
         return $arr;
     }
 
+    // Distance Conversion
     public function GetDistance($lat1, $lng1, $lat2, $lng2, $distanceUnits)
     {
         $EARTH_RADIUS = 6378.137;
@@ -727,15 +619,14 @@ class FresnsPostResource extends BaseAdminResource
         $b = $this->rad($lng1) - $this->rad($lng2);
         $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2)));
         $s = $s * $EARTH_RADIUS;
-        // $unitCounts =
-        // 1 千米(km)=0.621371192237 英里(mi)
+        // 1 km=0.621371192237 mi
         if ($distanceUnits == 'mi') {
             $s = round($s * 1000 * 0.62);
         } else {
             $s = round($s * 1000);
         }
         $s = round($s / 1000) == 0 ? 1 : round($s / 1000);
-        // dd($s);
+        
         return $s.$distanceUnits;
     }
 
@@ -744,6 +635,7 @@ class FresnsPostResource extends BaseAdminResource
         return $d * M_PI / 180.0;
     }
 
+    // Time
     public function getTime($time)
     {
         $carbon = carbon::parse($time);
@@ -752,27 +644,24 @@ class FresnsPostResource extends BaseAdminResource
         $int = (new Carbon)->diffInDays($carbon, true);
         $int = (new Carbon)->diffInYears($carbon, true);
         $timeStr = $carbon->diffForHumans(Carbon::now());
-        // dd($timeStr);
         $timeStr = DateHelper::format_date(strtotime($time));
-        $timeStr = str_replace('前', 'ago', $timeStr);
-        // dd($timeStr);
-        // 小于60分钟
+        $timeStr = str_replace('ago', $timeStr);
+        // Less than 60 minutes
         if ($minutesInt < 60) {
         }
     }
 
-    // content数据输出操作
+    // Content Data Export Operations
     public static function getContentView($content, $postId, $postType)
     {
         $request = request();
-        // dd($request->header('platform'));
-        // 找链接
+
+        // Link
         preg_match_all("/http[s]{0,1}:\/\/.*?\s/", $content, $hrefMatches);
-        // dd($hrefMatches);
         if ($hrefMatches[0]) {
             foreach ($hrefMatches[0] as &$h) {
                 $h = trim($h);
-                // 链接关联表是否存在title
+                // Does the link association table exist title
                 $domainLinked = DB::table(FresnsDomainLinksConfig::CFG_TABLE)->where('link_url',
                     $h)->where('linked_type', $postType)->where('linked_id', $postId)->first();
                 $title = $h;
@@ -781,44 +670,39 @@ class FresnsPostResource extends BaseAdminResource
                         $title = $domainLinked->link_title;
                     }
                 }
-                $content = str_replace($h, "<a href='$h'>$title</a>", $content);
+                $content = str_replace($h, "<a href='$h' class='fresns_content_link'>$title</a>", $content);
             }
         }
-        // 找表情
+
+        // Emoji
         preg_match_all("/\[.*?\]/", $content, $emojis);
-        // dd($emojis);
         if ($emojis[0]) {
             foreach ($emojis[0] as $e) {
                 $emojiName = str_replace('[', '', $e);
                 $emoji = str_replace(']', '', $emojiName);
                 $emojiInfo = FresnsEmojis::where('code', $emoji)->where('is_enable', 1)->first();
-                // dd($emojiInfo);
                 if ($emojiInfo) {
                     $url = $emojiInfo['image_file_url'];
-                    $content = str_replace($e, "<img src = '$url' />", $content);
+                    $content = str_replace($e, "<img src='$url' class='fresns_content_emoji' />", $content);
                 }
-                // dd($emoji);
             }
         }
 
-        // 找@
+        // mention @
         preg_match_all("/@.*?\s/", $content, $member);
-        // dd($member);
         if ($member[0]) {
             foreach ($member[0] as $m) {
-                // $h = trim($h);
                 $mname = trim(str_replace('@', '', $m));
                 $trimName = trim($m);
                 $memberInfo = FresnsMembers::where('name', $mname)->first();
                 if ($memberInfo) {
                     $jumpUrl = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_DOMAIN)."/$mname";
-                    $content = str_replace($m, "<a href='{$jumpUrl}'>{$memberInfo['nickname']}</a> ", $content);
+                    $content = str_replace($m, "<a href='{$jumpUrl}' class='fresns_content_mention'>{$memberInfo['nickname']}</a> ", $content);
                 }
             }
         }
 
-        // 找话题
-        // 当前后台话题的显示模式
+        // Hashtag
         $hashtagShow = ApiConfigHelper::getConfigByItemKey('hashtag_show') ?? 2;
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $content, $singlePoundMatches);
@@ -827,16 +711,16 @@ class FresnsPostResource extends BaseAdminResource
         }
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
-                // 获取话题huri
+                // get hashtag huri
                 $hashTags = trim(str_replace('#', '', $s));
                 $hashtagsInfo = FresnsHashtags::where('name', $hashTags)->first();
                 if ($hashtagsInfo) {
                     $jumpUrl = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
-                    $content = str_replace($s, "<a href='{$jumpUrl}'>$s</a>", $content);
+                    $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$s</a>", $content);
                 }
             }
         }
-        // dd($singlePoundMatches);
+
         return $content;
     }
 }

@@ -19,11 +19,15 @@ use App\Http\FresnsDb\FresnsNotifies\FresnsNotifiesConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * List resource config handle
+ */
+
 class NotifyResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // form 字段
+        // Form Field
         $formMap = FresnsNotifiesConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
@@ -80,7 +84,7 @@ class NotifyResource extends BaseAdminResource
 
         $sourceBrief = $this->source_brief;
         $status = $this->status;
-        // 默认字段
+        // Default Field
         $default = [
             'nitifyId' => $messageId,
             'type' => $type,
@@ -91,7 +95,7 @@ class NotifyResource extends BaseAdminResource
             'status' => $status,
         ];
 
-        // 合并
+        // Merger
         $arr = $default;
 
         return $arr;

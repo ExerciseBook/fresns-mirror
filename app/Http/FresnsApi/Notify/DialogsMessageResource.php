@@ -20,12 +20,16 @@ use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * List resource config handle
+ */
+
 class DialogsMessageResource extends BaseAdminResource
 {
     public function toArray($request)
     {
         // dd(1);
-        // form 字段
+        // Form Field
         $formMap = FresnsDialogMessagesConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
@@ -110,13 +114,13 @@ class DialogsMessageResource extends BaseAdminResource
         //     $file['moreJson'] = [];
         //     $fileArr['file'] = $file;
         // }
-        // 默认字段
+        // Default Field
         if ($messageArr) {
             $default = $messageArr;
         } else {
             $default = $fileInfo;
         }
-        // 合并
+        // Merger
         // $arr = $default;
 
         return $default;

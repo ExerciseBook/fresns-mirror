@@ -19,12 +19,16 @@ use App\Http\FresnsDb\FresnsDialogs\FresnsDialogsConfig;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * List resource config handle
+ */
+
 class DialogsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
         // dd(1);
-        // form 字段
+        // Form Field
         $formMap = FresnsDialogsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
@@ -91,7 +95,7 @@ class DialogsResource extends BaseAdminResource
         if ($status == 1) {
             $messageUnread = FresnsDialogMessages::where('recv_member_id', $mid)->where('recv_read_at', null)->count();
         }
-        // 默认字段
+        // Default Field
         $default = [
             'dialogId' => $dialogId,
             'member' => $member,
@@ -102,7 +106,7 @@ class DialogsResource extends BaseAdminResource
             'status' => $status,
         ];
 
-        // 合并
+        // Merger
         $arr = $default;
 
         return $arr;

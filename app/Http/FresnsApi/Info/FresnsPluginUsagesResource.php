@@ -15,11 +15,15 @@ use App\Http\FresnsDb\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 
+/**
+ * List resource config handle
+ */
+
 class FresnsPluginUsagesResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // form 字段
+        // Form Field
         $formMap = FresnsPluginUsagesConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
@@ -59,7 +63,7 @@ class FresnsPluginUsagesResource extends BaseAdminResource
             $sortNumber['postNearbys'] = $postNearbys;
         }
 
-        // 默认字段
+        // Default Field
         $default = [
             'type' => $type,
             'plugin' => $plugin,
@@ -72,7 +76,7 @@ class FresnsPluginUsagesResource extends BaseAdminResource
             'sortNumber' => $sortNumber,
         ];
 
-        // 合并
+        // Merger
         $arr = $default;
 
         return $arr;

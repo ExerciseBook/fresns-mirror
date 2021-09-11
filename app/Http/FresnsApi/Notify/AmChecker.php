@@ -23,7 +23,7 @@ use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 
 class AmChecker extends BaseChecker
 {
-    // 错误码
+    // Status Code
     const MEMBER_ROLE_ERROR = 30083;
     const MEMBER_ERROR = 30032;
     const MEMBER_FOLLOW_ERROR = 30033;

@@ -16,7 +16,7 @@ use App\Http\FresnsDb\FresnsSessionTokens\FresnsSessionTokens;
 
 class AmChecker extends BaseChecker
 {
-    //校验私有模式下uid和mid必传
+    // Check: Site Mode = private (uid and mid required)
     public static function checkSiteMode()
     {
         $siteMode = ApiConfigHelper::getConfigByItemKey('site_mode');
@@ -32,7 +32,7 @@ class AmChecker extends BaseChecker
         return true;
     }
 
-    //校验该成员是否在用户下
+    // Check: Whether the member belongs to the user
     public static function checkUserMember($mid, $uid)
     {
         $memberIdArr = FresnsMembers::where('user_id', $uid)->pluck('id')->toArray();
@@ -43,7 +43,7 @@ class AmChecker extends BaseChecker
         return true;
     }
 
-    //校验用户,成员权限
+    // Check: User or member permissions
     public static function checkUserMemberPermissions($mid, $uid, $token)
     {
         $platform = request()->header('platform');

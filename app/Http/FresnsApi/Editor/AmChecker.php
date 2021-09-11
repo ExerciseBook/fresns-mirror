@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Request;
 
 class AmChecker extends BaseChecker
 {
-    // 错误码
+    // Status Code
     const POST_LOGS_EXISTS = 30006;
     const COMMENT_LOGS_EXISTS = 30008;
     const GROUP_EXISTS = 30057;

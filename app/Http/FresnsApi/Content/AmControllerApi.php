@@ -68,13 +68,7 @@ use Illuminate\Validation\Rule;
 
 class AmControllerApi extends FresnsBaseApiController
 {
-    // public function __construct()
-    // {
-    //     $fresnsMemberFollowsModel = new FresnsMemberFollows();
-    //     $fresnsMemberFollowsModel->hasDeletedAt = false;
-    //     parent::__construct();
-    // }
-    // 获取小组[树结构列表]
+    // Get group [tree structure list]
     public function trees(Request $request)
     {
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
@@ -90,40 +84,13 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
-        // $follow = $request->input('follow',"");
-        // 如果是非公开小组的帖子，不是小组成员，不输出。
+        // If it is a non-public group post, it is not a member of the group and is not exported.
         $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
-        // $noGroupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
-        $noGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type',
-            2)->pluck('follow_id')->toArray();
+        $noGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->pluck('follow_id')->toArray();
+
         $groupArr = FresnsGroups::whereNotIn('id', $noGroupArr)->where('parent_id', null)->pluck('id')->toArray();
         $ids = implode(',', $groupArr);
         $request->offsetSet('ids', $ids);
-        // if($mid){
-        //     // 不需要关注获取的小组
-        //     $noFollowGroupIdArr1 = FresnsGroups::where('type_find',2)->where('type_mode',2)->pluck('id')->toArray();
-        //     $noFollowGroupIdArr1 = FresnsGroups::whereNotIn('id',$noFollowGroupIdArr1)->pluck('id')->toArray();
-        //     // $noFollowGroupIdArr2 = FresnsGroups::where('type_mode',2)->where('parent_id',null)->where('type_find',1)->pluck('id')->toArray();
-        //     // 查询需要关注才能获取的小组
-        //     $groupIdArr = FresnsGroups::where('type_mode',2)->where('type_find',2)->where('parent_id',null)->pluck('id')->toArray();
-        //     $memberGroupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->whereIn('follow_id',$groupIdArr)->pluck('follow_id')->toArray();
-        //     // dd($memberGroupArr);
-        //     $noFollowGroupIdArr = array_merge($noFollowGroupIdArr1,$memberGroupArr);
-        //     $ids = implode(',',$noFollowGroupIdArr);
-        //     $request->offsetSet('ids',$ids);
-        //     // if($follow == 'true'){
-        //     //     // 获取已经关注的小组
-        //     //    $groupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
-        //     //    $ids = implode(',',$groupArr);
-        //     //    $request->offsetSet('ids',$ids);
-        //     // }
-        // }else{
-        //     // 查询type_find 模式为“不可发现”
-        //     $groupArr = FresnsGroups::where('type_find','!=',2)->where('parent_id',null)->pluck('id')->toArray();
-        //     $ids = implode(',',$groupArr);
-        //     $request->offsetSet('ids',$ids);
-        // }
-        // dd($ids);
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 30);
         $FresnsDialogsService = new FresnsGroupsService();
@@ -138,10 +105,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 获取小组【列表】
+    // Get group [list]
     public function group_lists(Request $request)
     {
-        // dd(1);
         $rule = [
             'type' => 'required|in:1,2',
             'createdTimeGt' => 'date_format:"Y-m-d H:i:s"',
@@ -161,55 +127,23 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
-        // 如果是非公开小组的帖子，不是小组成员，不输出。
+        // If it is a non-public group post, it is not a member of the group and is not exported.
         $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
-        // $groupMember = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
-        $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type',
-            2)->pluck('follow_id')->toArray();
-        $noGroupArr = array_diff($FresnsGroups, $groupMember);
+        $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->pluck('follow_id')->toArray();
 
+        $noGroupArr = array_diff($FresnsGroups, $groupMember);
         $groupArr = FresnsGroups::whereNotIn('id', $noGroupArr)->pluck('id')->toArray();
         $ids = implode(',', $groupArr);
         $request->offsetSet('ids', $ids);
-        // dd($ids);
-        // $follow = $request->input('follow',"");
-        // if($mid){
-        //     // 不需要关注获取的小组
-        //     $noFollowGroupIdArr1 = FresnsGroups::where('type_find',2)->where('type_mode',2)->pluck('id')->toArray();
-        //     $noFollowGroupIdArr1 = FresnsGroups::whereNotIn('id',$noFollowGroupIdArr1)->pluck('id')->toArray();
-        //     // $noFollowGroupIdArr2 = FresnsGroups::where('type_mode',2)->where('type_find',1)->pluck('id')->toArray();
-        //     // 查询需要关注才能获取的小组
-        //     $groupIdArr = FresnsGroups::where('type_mode',2)->where('type_find',2)->pluck('id')->toArray();
-        //     $memberGroupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->whereIn('follow_id',$groupIdArr)->pluck('follow_id')->toArray();
-        //     // dd($memberGroupArr);
-        //     $noFollowGroupIdArr = array_merge($noFollowGroupIdArr1,$memberGroupArr);
-        //     $ids = implode(',',$noFollowGroupIdArr);
-        //     $request->offsetSet('ids',$ids);
-        //     // if($follow == 'true'){
-        //     //     // 获取已经关注的小组
-        //     //    $groupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
-        //     //    $ids = implode(',',$groupArr);
-        //     //    $request->offsetSet('ids',$ids);
-        //     // }
-        // }else{
-        //     // 查询type_find 模式为“不可发现”
-        //     $groupArr = FresnsGroups::where('type_find',2)->where('type_mode',2)->pluck('id')->toArray();
-        //     $groupArr = FresnsGroups::whereNotIn('id',$groupArr)->pluck('id')->toArray();
-        //     $ids = implode(',',$groupArr);
-        //     $request->offsetSet('ids',$ids);
-        // }
         $parentId = $request->input('parentGId');
         if ($parentId) {
             $group = FresnsGroups::where('uuid', $parentId)->first();
-            // dump($group['id']);
             if ($group) {
                 $request->offsetSet('pid', $group['id']);
             } else {
                 $request->offsetSet('pid', 0);
             }
         }
-        // dd($request);
-        // dd(1);
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 30);
         $FresnsDialogsService = new FresnsGroupsService();
@@ -225,7 +159,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 获取小组【单条】
+    // Get group [detail]
     public function group_detail(Request $request)
     {
         $table = FresnsGroupsConfig::CFG_TABLE;
@@ -249,23 +183,15 @@ class AmControllerApi extends FresnsBaseApiController
         $mid = $this->mid;
         ValidateService::validateRule($request, $rule);
         $id = $request->input('gid');
-        // dd(1);
         $FresnsGroupsService = new FresnsGroupsService();
-        // dd($FresnsGroupsService);
         $request->offsetSet('gid', $id);
         $FresnsGroupsService->setResourceDetail(FresnsGroupResourceDetail::class);
-        // $data = $FresnsGroupsService->searchData();
         $group = FresnsGroups::where('uuid', $id)->first();
         $detail = $FresnsGroupsService->detail($group['id']);
-        // $data = [
-        //     // 'pagination' => $data['pagination'],
-        //     'detail' => $data['list'],
-        //     'common' => $data['common']
-        // ];
         $this->success($detail);
     }
 
-    // 获取帖子【列表】
+    // Get post [list]
     public function post_lists(Request $request)
     {
         $rule = [
@@ -285,9 +211,9 @@ class AmControllerApi extends FresnsBaseApiController
             'commentCountLt' => 'numeric',
         ];
         ValidateService::validateRule($request, $rule);
-        // $fresnsMemberFollowsModel = new FresnsMemberFollows();
-        // $fresnsMemberFollowsModel->hasDeletedAt = false;
-        // 未登录，私有模式 不输出
+        
+        // Site Model = Private
+        // Not logged in, content not output
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         if ($site_mode == AmConfig::PRIVATE) {
             $uid = $this->uid;
@@ -301,14 +227,15 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
-        // 是否为插件返回数据
+
+        // Data source: whether provided by the plugin
         $sortNumber = $request->input('sortNumber');
         $this->isPluginData('postLists');
+
         $request->offsetSet('queryType', AmConfig::QUERY_TYPE_SQL_QUERY);
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 30);
         $FresnsPostsService = new FresnsPostsService();
-        // dd($FresnsPostsService);
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
         $FresnsPostsService->setResource(FresnsPostResource::class);
@@ -323,7 +250,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 获取帖子【单条】
+    // Get post [detail]
     public function post_detail(Request $request)
     {
         $table = FresnsPostsConfig::CFG_TABLE;
@@ -343,13 +270,14 @@ class AmControllerApi extends FresnsBaseApiController
                 $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
             }
         }
-        //  请求接口时查询配置表键名‘post_detail_service’（有值，将请求转述给插件，由插件处理
+
+        // Data source: whether provided by the plugin
         $post_detail_config = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_DETAIL_SERVICE);
         if ($post_detail_config) {
             $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
             $pluginClass = PluginHelper::findPluginClass($post_detail_config);
             if (empty($pluginClass)) {
-                LogService::error('未找到插件类');
+                LogService::error('Plugin not found');
                 $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
             $input = [
@@ -367,109 +295,65 @@ class AmControllerApi extends FresnsBaseApiController
         $FresnsPostsService = new FresnsPostsService();
         $FresnsPostsService->setResourceDetail(FresnsPostResourceDetail::class);
         $detail = $FresnsPostsService->detail($postId['id']);
-        // $this->success($detail);
-        // dd(gettype($detail));
 
-        // 如果是非公开小组的帖子，不是小组成员，不输出。
+        // If it is a non-public group post, it is not a member of the group and is not exported.
         $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
-        // $groupMember = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
-        $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('deleted_at',
-            null)->where('follow_type', 2)->pluck('follow_id')->toArray();
-        // // dd($FresnsGroups);
+        $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('deleted_at', null)->where('follow_type', 2)->pluck('follow_id')->toArray();
         $noGroupArr = array_diff($FresnsGroups, $groupMember);
         if (! empty($detail['detail']['group_id'])) {
             if (in_array($detail['detail']['group_id'], $noGroupArr)) {
                 $detail['detail'] = [];
             }
         }
-        // dd($noGroupArr);
-        // 过滤屏蔽对象的帖子（成员、小组、话题、帖子），屏蔽对象的帖子不输出。
+        // Filter the posts of blocked objects (members, groups, hashtags, posts), and the posts of blocked objects are not output.
         $memberShieldsTable = FresnsMemberShieldsConfig::CFG_TABLE;
-        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at',
-            null)->where('shield_type', 1)->pluck('shield_id')->toArray();
+        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 1)->pluck('shield_id')->toArray();
         if (in_array($detail['detail']['member_id'], $memberShields)) {
             $detail['detail'] = [];
         }
-        $GroupShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            2)->where('deleted_at', null)->pluck('shield_id')->toArray();
+        $GroupShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 2)->where('deleted_at', null)->pluck('shield_id')->toArray();
         if (! empty($detail['detail']['group_id'])) {
             if (in_array($detail['detail']['group_id'], $GroupShields)) {
                 $detail['detail'] = [];
             }
         }
-        $shieldshashtags = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            3)->where('deleted_at', null)->pluck('shield_id')->toArray();
-        // $noPostHashtags = FresnsHashtagLinkeds::where('linked_type',1)->whereIn('hashtag_id',$shieldshashtags)->pluck('linked_id')->toArray();
-        $noPostHashtags = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('deleted_at',
-            null)->whereIn('hashtag_id', $shieldshashtags)->pluck('linked_id')->toArray();
+        $shieldshashtags = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 3)->where('deleted_at', null)->pluck('shield_id')->toArray();
+        $noPostHashtags = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('deleted_at', null)->whereIn('hashtag_id', $shieldshashtags)->pluck('linked_id')->toArray();
         if (in_array($detail['detail']['id'], $noPostHashtags)) {
             $detail['detail'] = [];
         }
-        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            4)->pluck('shield_id')->where('deleted_at', null)->toArray();
+        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 4)->pluck('shield_id')->where('deleted_at', null)->toArray();
         if (in_array($detail['detail']['id'], $commentShields)) {
             $detail['detail'] = [];
         }
-        // $query = DB::table('posts as p');
-        // // dump($noPostHashtags);
-        // // dump($commentShields);
-        // $query = $query->select('p.*')
-        //     ->leftJoin("post_appends as append", 'p.id', '=', 'append.post_id')
-        //     // ->whereNotIn('p.group_id',$noGroupArr)
-        //     // ->whereNotIn('p.group_id',$GroupShields)
-        //     ->whereNotIn('p.member_id', $memberShields)
-        //     ->whereNotIn('p.id', $noPostHashtags)
-        //     ->whereNotIn('p.id', $commentShields)
-        //     ->where('p.deleted_at', null)
-        //     // ->where('p.status',3)
-        //     ->where('p.uuid', $id);
-        // if (!empty($noGroupArr)) {
-        //     // dump($noGroupArr);
-        //     // $query->whereNotIn('post.group_id',$noGroupArr);
-        //     $postgroupIdArr = FresnsPosts::whereNotIn('group_id', $noGroupArr)->pluck('id')->toArray();
-        //     $noPostgroupIdArr = FresnsPosts::where('group_id',NULL)->pluck('id')->toArray();
-        //     // dd($postIdArr);
-        //     $postIdArr = array_merge($postgroupIdArr,$noPostgroupIdArr);
-        //     // dd($postIdArr);
-        //     $query->whereIn('p.id', $postIdArr);
-        // }
-        // if (!empty($GroupShields)) {
-        //     // dump($GroupShields);
-        //     // $query->whereNotIn('post.group_id',$GroupShields);
-        //     $postIdArr = FresnsPosts::whereNotIn('group_id', $GroupShields)->pluck('id')->toArray();
-        //     // dd($postIdArr);
-        //     $query->whereIn('p.id', $postIdArr);
-        // }
+
+        // Site Model = Private
+        // Content output processing
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
             if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
                 $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
-                    // $query->where('p.member_id','=',0);
                     $this->error(ErrorCodeService::USER_EXPIRED_ERROR);
                 }
                 if ($site_private_end == 2) {
-                    // $query->where('p.created_at', '<=', $memberInfo['expired_at']);
                     if ($detail['detail']['created_at'] > $memberInfo['expired_at']) {
                         $detail['detail'] = [];
                     }
                 }
             }
         }
-        // $item = $query->paginate(10, ['*'], 'page', 1);
         $data = [];
-        // $detail = FresnsPostResourceDetail::collection($item->items())->toArray($item->items());
 
+        // SEO Info
         $post = Fresnsposts::where('uuid', $id)->first();
         $seoPost['seoInfo'] = [];
         if (! $langTag) {
             $langTag = FresnsPluginUsagesService::getDefaultLanguage();
         }
-        // dd($post);
         $seo = [];
         if ($post) {
-            $seo = DB::table('seo')->where('linked_type', 4)->where('linked_id', $post['id'])->where('lang_tag',
-                $langTag)->where('deleted_at', null)->first();
+            $seo = DB::table('seo')->where('linked_type', 4)->where('linked_id', $post['id'])->where('lang_tag', $langTag)->where('deleted_at', null)->first();
         }
         $seoInfo = [];
         if ($seo) {
@@ -479,20 +363,14 @@ class AmControllerApi extends FresnsBaseApiController
             $seoPost['seoInfo'] = $seoInfo;
         }
         $seoPost['seoInfo'] = (object) $seoPost['seoInfo'];
-        // $data = [
-        //     // 'pagination' => $data['pagination'],
-        //     'detail' => $detail,
-        //     'common' => $seoPost
-        // ];
         $detail['common'] = $seoPost;
         $this->success($detail);
     }
 
-    // 获取话题列表
+    // Get hashtag [list]
     public function hashtag_lists(Request $request)
     {
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        // dump($site_mode);
         if ($site_mode == AmConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
@@ -520,7 +398,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 获取话题单个
+    // Get hashtag [detail]
     public function hashtag_detail(Request $request)
     {
         $table = FresnsHashtagsConfig::CFG_TABLE;
@@ -529,7 +407,6 @@ class AmControllerApi extends FresnsBaseApiController
         ];
         ValidateService::validateRule($request, $rule);
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        // dump($site_mode);
         if ($site_mode == AmConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
@@ -545,21 +422,15 @@ class AmControllerApi extends FresnsBaseApiController
         $FresnsHashtagsService = new FresnsHashtagsService();
         $FresnsHashtagsService->setResourceDetail(FresnsHashtagsResourceDetail::class);
         $id = FresnsHashtags::where('slug', $request->input('huri'))->first();
-        // $data = $FresnsHashtagsService->searchData();
         $detail = $FresnsHashtagsService->detail($id['id']);
-        // dd($data);
-        // $data = [
-        //     // 'pagination' => $data['pagination'],
-        //     'detail' => $data['list'],
-        //     'common' => $data['common']
-        // ];
         $this->success($detail);
     }
 
-    // 获取评论【列表】
+    // Get comment [list]
     public function comment_lists(Request $request)
     {
-        // 未登录，私有模式 不输出
+        // Site Model = Private
+        // Not logged in, content not output
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         if ($site_mode == AmConfig::PRIVATE) {
             $uid = $this->uid;
@@ -591,7 +462,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 获取评论【单条】
+    // Get comment [detail]
     public function commentDetail(Request $request)
     {
         $table = FresnsCommentsConfig::CFG_TABLE;
@@ -599,7 +470,9 @@ class AmControllerApi extends FresnsBaseApiController
             'cid' => "required|exists:{$table},uuid",
         ];
         ValidateService::validateRule($request, $rule);
-        // 未登录，私有模式 不输出
+
+        // Site Model = Private
+        // Not logged in, content not output
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         if ($site_mode == AmConfig::PRIVATE) {
             $uid = $this->uid;
@@ -613,37 +486,31 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
         $comment = FresnsComments::where('uuid', $request->input('cid'))->first();
-        // dd($comment);s
         $fresnsCommentsService = new FresnsCommentsService();
         $fresnsCommentsService->setResourceDetail(CommentResourceDetail::class);
         $detail = $fresnsCommentsService->detail($comment['id']);
-        // 屏蔽的目标字段
+        // Target fields to be masked
         $memberShieldsTable = FresnsMemberShieldsConfig::CFG_TABLE;
         $commentTable = FresnsCommentsConfig::CFG_TABLE;
         $commentAppendTable = FresnsCommentAppendsConfig::CFG_TABLE;
         $postTable = FresnsPostsConfig::CFG_TABLE;
         /**
-         * 过滤屏蔽对象的评论（成员、评论）。
+         * Filtering of comments on blocked objects (members and comments)
          */
-        // 屏蔽的目标字段
+        // Target fields to be masked
         $request = request();
         $mid = GlobalService::getGlobalKey('member_id');
-        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at',
-            null)->where('shield_type', 1)->pluck('shield_id')->toArray();
+        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 1)->pluck('shield_id')->toArray();
         if (in_array($detail['detail']['member_id'], $memberShields)) {
             $detail['detail'] = [];
         }
-        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at',
-            null)->where('shield_type', 5)->pluck('shield_id')->toArray();
+        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 5)->pluck('shield_id')->toArray();
         if (in_array($detail['detail']['id'], $commentShields)) {
             $detail['detail'] = [];
         }
-        // $query = DB::table("$commentTable as comment")->select('comment.*')
-        //     ->leftJoin("$commentAppendTable as append", 'comment.id', '=', 'append.comment_id')
-        //     ->whereNotIn('comment.member_id', $memberShields)
-        //     ->whereNotIn('comment.id', $commentShields)
-        //     ->where('comment.deleted_at', null)
-        //     ->where('comment.uuid', $request->input('cid'));
+
+        // Site Model = Private
+        // Content output processing
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
             if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
@@ -660,15 +527,9 @@ class AmControllerApi extends FresnsBaseApiController
                 }
             }
         }
-        // $item = $query->paginate(10, ['*'], 'page', 1);
-        // $data = [];
-        // $data['list'] = CommentResourceDetail::collection($item->items())->toArray($item->items());
         $langTag = $this->langTag;
-        // $fresnsCommentsService = new FresnsCommentsService();
-        // $request->offsetSet('is_enable',true);
-        // $request->offsetSet('status',3);
-        // $fresnsCommentsService->setResource(CommentResourceDetail::class);
-        // $data = $fresnsCommentsService->searchData();
+
+        // SEO Info
         $comment = FresnsComments::where('uuid', $request->input('cid'))->first();
         $seoComment['seoInfo'] = [];
         if (! $langTag) {
@@ -689,87 +550,69 @@ class AmControllerApi extends FresnsBaseApiController
         $seoComment['seoInfo'] = (object) $seoComment['seoInfo'];
 
         $detail['common'] = $seoComment;
-        // $data = [
-        //     // 'pagination' => $data['pagination'],
-        //     'detail' => $data['list'],
-        //     'common' => $seoComment
-        // ];
+
         $this->success($detail);
     }
 
-    // 获取tiezi关注的【列表】
-
-    /**
-     *   获取「1.成员 / 2.小组 / 3.话题」这三个对象的帖子。
-     *   成员的全部帖子，小组和话题下只输出被加精华的帖子，以发表时间倒序排列。
-     *   帖子有重复时，以成员的帖子为主。比如我关注的成员，在小组里帖子被加精华了，这时候会重复，届时以成员身份输出为主。
-     *   type 留空时，输出三个对象的帖子，届时无论是否关注了对象，被设置为二级精华的帖子，强制输出。
-     *   type 有值时，输出对应对象的全部帖子，无论是否为精华。
-     */
+    // Get posts to follow [list]
     public function postFollows(Request $request)
     {
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        // 是否为插件返回数据
+
+        // Data source: whether provided by the plugin
         $sortNumber = $request->input('sortNumber');
         $this->isPluginData('postFollows');
         $mid = GlobalService::getGlobalKey('member_id');
-        // dd($mid);
         $type = $request->input('followType');
         switch ($type) {
             case 'member':
-                //$followMemberArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',1)->pluck('follow_id')->toArray();
+                // My posts
                 $mePostsArr = FresnsPosts::where('member_id', $mid)->pluck('id')->toArray();
-                $followMemberArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id',
-                    $mid)->where('follow_type', 1)->where('deleted_at', null)->pluck('follow_id')->toArray();
+
+                // $followMemberArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',1)->pluck('follow_id')->toArray();
+                $followMemberArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 1)->where('deleted_at', null)->pluck('follow_id')->toArray();
                 $postIdArr = FresnsPosts::whereIn('member_id', $followMemberArr)->pluck('id')->toArray();
                 $postIdArr = array_merge($mePostsArr, $postIdArr);
                 $ids = implode(',', $postIdArr);
-                //    dd($ids);
                 break;
             case 'group':
                 // $folloGroupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
-                $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id',
-                    $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
+                $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
                 $postIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->pluck('id')->toArray();
                 $ids = implode(',', $postIdArr);
                 break;
             case 'hashtag':
                 // $folloHashtagArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',3)->pluck('follow_id')->toArray();
-                $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id',
-                    $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
-                $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id',
-                    $folloHashtagArr)->pluck('linked_id')->toArray();
+                $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
+                $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
                 $ids = implode(',', $postIdArr);
                 break;
             default:
-                // 我自己发布的帖子
+                // My posts
                 $mePostsArr = FresnsPosts::where('member_id', $mid)->pluck('id')->toArray();
-                // 关注成员下全部
+
+                // Posts by following members
                 // $followMemberArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',1)->pluck('follow_id')->toArray();
-                $followMemberArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id',
-                    $mid)->where('follow_type', 1)->pluck('follow_id')->toArray();
+                $followMemberArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 1)->pluck('follow_id')->toArray();
                 $postMemberIdArr = FresnsPosts::whereIn('member_id', $followMemberArr)->pluck('id')->toArray();
-                // dd($postMemberIdArr);
-                // 小组和话题下只输出被加精华的帖子
+
+                // Only posts that have been added to the essence are exported under groups and hashtags
                 // $folloGroupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
-                $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id',
-                    $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
-                $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=',
-                    1)->pluck('id')->toArray();
+                $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
+                $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
                 // $folloHashtagArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',3)->pluck('follow_id')->toArray();
-                $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id',
-                    $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
-                $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id',
-                    $folloHashtagArr)->pluck('linked_id')->toArray();
-                $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=',
-                    1)->pluck('id')->toArray();
-                // 设置为二级精华的帖子，强制输出
+                $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
+                $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
+                $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
+                // Posts set as secondary essence, forced output
                 $essenceIdArr = FresnsPosts::where('essence_status', 3)->pluck('id')->toArray();
                 $idArr = array_merge($mePostsArr, $postMemberIdArr, $postGroupIdArr, $postHashtagIdArr, $essenceIdArr);
                 $ids = implode(',', $idArr);
                 break;
         }
-        // dd($ids);
+
+        // Site Model = Private
+        // Content output processing
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
             if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
@@ -782,25 +625,24 @@ class AmControllerApi extends FresnsBaseApiController
                 }
             }
         }
-        // dd($ids);
+
+        // Content Type
         $searchType = $request->input('searchType', '');
         if ($searchType == 'all') {
             $request->offsetSet('searchType', '');
         }
-        // dd($ids);
+
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 30);
         $FresnsPostsService = new FresnsPostsService();
         $request->offsetSet('ids', $ids);
         $request->offsetSet('is_enable', 1);
-        // $request->offsetSet('status', 3);
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
         $FresnsPostsService->setResource(FresnsPostResource::class);
         $list = $FresnsPostsService->searchData();
         $implants = FresnsImplantsService::getImplants($page, $pageSize, 1);
         $common['implants'] = $implants;
-        // $list['list']['followType'] = $type;
         $data = [
             'pagination' => $list['pagination'],
             'list' => $list['list'],
@@ -809,10 +651,10 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 获取帖子附近的列表
+    // Get posts to nearby [list]
     public function postNearbys(Request $request)
     {
-        // 是否为插件返回数据
+        // Data source: whether provided by the plugin
         $sortNumber = $request->input('sortNumber');
         $this->isPluginData('postNearbys');
         $table = FresnsGroupsConfig::CFG_TABLE;
@@ -825,13 +667,13 @@ class AmControllerApi extends FresnsBaseApiController
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         $mid = GlobalService::getGlobalKey('member_id');
         $langTag = $this->langTag;
-        // 默认的公里数
+        // Default kilometers
         $configLength = ApiConfigHelper::getConfigByItemKey('nearby_length');
         $length = $request->input('length', $configLength);
 
         $lengthUnits = $request->input('lengthUnits');
         if (! $lengthUnits) {
-            // 距离
+            // Distance
             $languages = ApiConfigHelper::distanceUnits($langTag);
             $lengthUnits = empty($languages) ? 'km' : $languages;
         }
@@ -842,58 +684,37 @@ class AmControllerApi extends FresnsBaseApiController
         } else {
             $distance = 1000 * $length;
         }
-        // dd($distance);
-        $postArr1 = self::distance1($longitude, $latitude, $distance);
-        // dd($postArr1);
-        $memberShieldsTable = FresnsMemberShieldsConfig::CFG_TABLE;
-        // 如果是非公开小组的帖子，不是小组成员，不输出。
-        $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
-        // $groupMember = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
-        $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type',
-            2)->pluck('follow_id')->toArray();
 
-        // dump($FresnsGroups);
+        $postArr1 = self::distance1($longitude, $latitude, $distance);
+        $memberShieldsTable = FresnsMemberShieldsConfig::CFG_TABLE;
+
+        // If it is a non-public group post, it is not a member of the group and is not exported.
+        $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
+        $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->pluck('follow_id')->toArray();
         $noGroupArr = array_diff($FresnsGroups, $groupMember);
-        // dump($noGroupArr);
-        // 过滤屏蔽对象的帖子（成员、小组、话题、帖子），屏蔽对象的帖子不输出。
-        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            1)->pluck('shield_id')->toArray();
-        $GroupShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            2)->pluck('shield_id')->toArray();
-        $shieldshashtags = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            3)->pluck('shield_id')->toArray();
-        $noPostHashtags = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id',
-            $shieldshashtags)->pluck('linked_id')->toArray();
-        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type',
-            4)->pluck('shield_id')->toArray();
-        $postArr2 = FresnsPosts::whereNotIn('group_id', $noGroupArr)->whereNotIn('member_id',
-            $memberShields)->whereNotIn('group_id', $GroupShields)->whereNotIn('id', $noPostHashtags)->whereNotIn('id',
-            $commentShields)->pluck('id')->toArray();
-        // dd($postArr2);
+
+        // Filter the posts of blocked objects (members, groups, hashtags, posts), and the posts of blocked objects are not output.
+        $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 1)->pluck('shield_id')->toArray();
+        $GroupShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 2)->pluck('shield_id')->toArray();
+        $shieldshashtags = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 3)->pluck('shield_id')->toArray();
+        $noPostHashtags = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $shieldshashtags)->pluck('linked_id')->toArray();
+        $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 4)->pluck('shield_id')->toArray();
+        $postArr2 = FresnsPosts::whereNotIn('group_id', $noGroupArr)->whereNotIn('member_id', $memberShields)->whereNotIn('group_id', $GroupShields)->whereNotIn('id', $noPostHashtags)->whereNotIn('id', $commentShields)->pluck('id')->toArray();
         $idArr = array_intersect($postArr1, $postArr2);
-        // dd($idArr);
         $searchType = $request->input('searchType', '');
         if ($searchType == 'all') {
             $request->offsetSet('searchType', '');
         }
-        /**
-         * 2、成员 members > expired_at 是否在有效期内（为空代表永久有效）。
-         *2.1、过期后内容不可见，不输出帖子列表。
-         *2.2、过期后，到期前的内容可见，输出到期日期前的帖子列表。
-         *2.3、在有效期内，继续往下判断。
-         */
+
+        // Site Model = Private
+        // Content output processing
         if ($site_mode == 'private') {
             $memberInfo = FresnsMembers::find($mid);
-            // dd($memberInfo);
             if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
                 $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
-                    // $request->offsetSet('id', 0);
                     $this->error(ErrorCodeService::USER_EXPIRED_ERROR);
                 }
-                // dump($memberInfo['expired_at']);
-                // dd($site_private_end);
-
                 if ($site_private_end == 2) {
                     $request->offsetSet('expired_at', $memberInfo['expired_at']);
                 }
@@ -904,7 +725,6 @@ class AmControllerApi extends FresnsBaseApiController
         $FresnsPostsService = new FresnsPostsService();
         $request->offsetSet('ids', implode(',', $idArr));
         $request->offsetSet('is_enable', true);
-        // $request->offsetSet('status', 3);
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
         $FresnsPostsService->setResource(FresnsPostResource::class);
@@ -919,7 +739,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 获取扩展内容[列表]
+    // Get extended content [list]
     public function extendsLists(Request $request)
     {
         $request->offsetSet('queryType', AmConfig::QUERY_TYPE_SQL_QUERY);
@@ -937,74 +757,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 内容互动记录[列表]
-    // public function content_members(Request $request)
-    // {
-    //     $rule = [
-    //         'type' => "required|in:1,2,3,4",
-    //         'uuid' => 'required'
-    //     ];
-    //     ValidateService::validateRule($request, $rule);
-    //     // 1.帖子点赞用户列表 / 2.帖子特定成员列表 / 3.评论点赞用户列表 / 4.下载附件用户列表
-    //     $type = $request->input('type');
-    //     $uid = $request->input('uuid');
-    //     $page = $request->input('page', 1);
-    //     $pageSize = $request->input('pageSize', 30);
-    //     switch ($type) {
-    //         case 1:
-    //             // 获取uuid对应的主键id
-    //             $like_id = FresnsPosts::where('uuid', $uid)->first('id');
-    //             // dd($like_id);
-    //             $dataId = $like_id['id'] ?? "";
-    //             $FresnsMemberLikesService = new FresnsMemberLikesService();
-    //             $request->offsetSet('currentPage', $page);
-    //             $request->offsetSet('type', 4);
-    //             $request->offsetSet('like_id', $dataId);
-    //             $request->offsetSet('pageSize', $pageSize);
-    //             $FresnsMemberLikesService->setResource(FresnsMemberLikesResource::class);
-    //             $data = $FresnsMemberLikesService->searchData();
-    //             break;
-    //         case 2:
-    //             $post = FresnsPosts::where('uuid', $uid)->first('id');
-    //             $dataId = $post['id'] ?? "";
-    //             $FresnsPostMembersService = new FresnsPostMembersService();
-    //             $request->offsetSet('currentPage', $page);
-    //             $request->offsetSet('post_id', $dataId);
-    //             $request->offsetSet('pageSize', $pageSize);
-    //             $FresnsPostMembersService->setResource(FresnsPostMembersResource::class);
-    //             $data = $FresnsPostMembersService->searchData();
-    //         case 3:
-    //             // 获取uuid对应的主键id
-    //             $comment = FresnsComments::where('uuid', $uid)->first('id');
-    //             $like_id = $comment == null ? 0 : $comment['id'];
-    //             $FresnsMemberLikesService = new FresnsMemberLikesService();
-    //             $request->offsetSet('currentPage', $page);
-    //             $request->offsetSet('type', 5);
-    //             $request->offsetSet('like_id', $like_id);
-    //             $request->offsetSet('pageSize', $pageSize);
-    //             $FresnsMemberLikesService->setResource(FresnsMemberLikesResource::class);
-    //             $data = $FresnsMemberLikesService->searchData();
-    //             break;
-    //         default:
-    //             // 获取uuid对应的主键id
-    //             $like_id = FresnsFiles::where('uuid', $uid)->first('id');
-    //             $dataId = $like_id['id'] ?? "";
-    //             $FresnsDownloadsService = new FresnsDownloadsService();
-    //             $request->offsetSet('currentPage', $page);
-    //             $request->offsetSet('file_id', $dataId);
-    //             $request->offsetSet('pageSize', $pageSize);
-    //             $FresnsDownloadsService->setResource(FresnsDownloadsResource::class);
-    //             $data = $FresnsDownloadsService->searchData();
-    //             break;
-    //     }
-    //     $data = [
-    //         'pagination' => $data['pagination'],
-    //         'detail' => $data['list'],
-    //     ];
-    //     $this->success($data);
-    // }
-
-    // 距离
+    // Calculate distance by latitude and longitude
     public static function distance1($longitude, $latitude, $distance)
     {
         $sql = "SELECT id,
@@ -1036,29 +789,23 @@ class AmControllerApi extends FresnsBaseApiController
         ORDER BY
             juli ASC";
         $result = DB::select($sql);
-        // dd($result);
         $res = [];
         foreach ($result as $key => $v) {
-            // dd($key);
-            // if($v->juli){
             $res[] = $v->id;
-            // }
         }
-        // dd($res);
         return $res;
     }
 
-    // 数据是否为插件返回
+    // Data source: whether provided by the plugin
     public function isPluginData($apiName)
     {
         $request = request();
         $pluginUsages = FresnsPluginUsages::where('type', 4)->where('is_enable', 1)->first();
-        //  $status = false;
+        // $status = false;
         if (! $pluginUsages || empty($pluginUsages['data_sources'])) {
             return;
         }
         $data_source = json_decode($pluginUsages['data_sources'], true);
-        // dd($data_source);
         if (! $data_source) {
             return;
         }
@@ -1070,16 +817,16 @@ class AmControllerApi extends FresnsBaseApiController
                     if (empty($d['pluginUnikey'])) {
                         return;
                     }
-                    // 获取接口 sortNumber 参数，
+                    // Get interface sortNumber parameters
                     // $sortNumber = $d['sortNumber'][0]['id'];
-                    // dd($sortNumber);
-                    // 插件返回数据
+
+                    // Plugin return data
                     $pluginUnikey = $d['pluginUnikey'];
-                    // 执行上传
+
+                    // Request Plugin
                     $pluginClass = PluginHelper::findPluginClass($pluginUnikey);
-                    // dd($pluginClass);
                     if (empty($pluginClass)) {
-                        LogService::error('未找到插件类');
+                        LogService::error('Plugin not found');
                         $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
                     }
                     $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
@@ -1089,7 +836,6 @@ class AmControllerApi extends FresnsBaseApiController
                         'header' => $this->getHeader($request->header()),
                         'body' => $request->all(),
                     ];
-                    // dd($input);
                     $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
                     $this->success($resp['output']);
                 }

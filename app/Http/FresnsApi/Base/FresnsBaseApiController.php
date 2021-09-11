@@ -33,25 +33,21 @@ use Illuminate\Support\Facades\Request;
 
 class FresnsBaseApiController extends BaseApiController
 {
-    public $appId;
-
-    public $langTag;
-
-    public $sign;
-
     public $platform;
     public $version;
     public $versionInt;
+    public $langTag;
+    public $appId;
+    public $sign;
     public $uid;
     public $mid;
     public $token;
 
-    // 浏览模式默认私有
+    // Site Mode: Default Private
     public $viewMode = AmConfig::VIEW_MODE_PRIVATE;
 
+    // Check Info: Header and Sign (true or false)
     public $checkHeader = true;
-
-    //是否开启签名验证: true 开启，false 关闭
     public $checkSign = true;
 
     public function __construct()
@@ -60,14 +56,13 @@ class FresnsBaseApiController extends BaseApiController
         $this->initData();
     }
 
+    // header data initialization
     public function initData()
     {
-        // header 数据初始化, 参数
-
+        $this->platform = request()->header('platform');
+        $this->langTag = request()->header('langTag');
         $this->mid = request()->header('mid');
         $this->uid = request()->header('uid');
-        $this->langTag = request()->header('langTag');
-        $this->platform = request()->header('platform');
     }
 
     public function checkRequest()
@@ -92,7 +87,7 @@ class FresnsBaseApiController extends BaseApiController
     public function checkAccessPerm()
     {
         $uri = Request::getRequestUri();
-        //是否私有化
+        // Site Mode: public or private
         $siteMode = FresnsConfigs::where('item_key', 'site_mode')->value('item_value');
         $uid = request()->header('uid');
         $mid = request()->header('mid');
@@ -175,18 +170,19 @@ class FresnsBaseApiController extends BaseApiController
         }
 
         if ($deviceInfo) {
-            //校验是否是json
+            // Verify if it is json
             $isJson = StrHelper::isJson($deviceInfo);
             if ($isJson === false) {
                 $info = [
-                    'deviceInfo' => '请输入json类型',
+                    'deviceInfo' => 'Please pass the reference in json format',
                 ];
                 $this->error(ErrorCodeService::HEADER_TYPE_ERROR, $info);
             }
         }
 
         $time = date('Y-m-d H:i:s', time());
-        //如果uid不为空则token必传，如果mid不为空，则三个参数都必传
+        // If uid is not empty then token must be passed
+        // If mid is not empty, then all three parameters must be passed
         if (empty($mid)) {
             if (! empty($uid)) {
                 if (empty($token)) {
@@ -208,7 +204,7 @@ class FresnsBaseApiController extends BaseApiController
                     ];
                     $this->error(ErrorCodeService::UID_EXIST_ERROR, $info);
                 }
-                //校验是否存在deleted
+                // Verify the existence of deleted_at
                 if (! empty($user->phone)) {
                     $str = strstr($user->phone, 'deleted');
                     if ($str != false) {
@@ -234,7 +230,7 @@ class FresnsBaseApiController extends BaseApiController
                 }
                 $userId = $user->id;
 
-                //校验token
+                // Verify token
                 $cmd = FresnsPluginConfig::PLG_CMD_VERIFY_SESSION_TOKEN;
                 $input = [];
                 $input['uid'] = request()->header('uid');
@@ -255,7 +251,7 @@ class FresnsBaseApiController extends BaseApiController
 
                 $this->error(ErrorCodeService::HEADER_ERROR, $info);
             }
-            //校验mid是否属于uid
+            // Check if mid belongs to uid
             if (in_array($uri, AmConfig::CHECK_USER_DELETE_URI)) {
                 $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->first();
             } else {
@@ -267,7 +263,7 @@ class FresnsBaseApiController extends BaseApiController
                 ];
                 $this->error(ErrorCodeService::UID_EXIST_ERROR, $info);
             }
-            //校验是否存在deleted
+            // Check if the uid is deleted_at
             if (! empty($user->phone)) {
                 $str = strstr($user->phone, 'deleted');
                 if ($str != false) {
@@ -312,7 +308,7 @@ class FresnsBaseApiController extends BaseApiController
                 $this->error(ErrorCodeService::CODE_FAIL);
             }
 
-            //校验token
+            // Verify token
             $cmd = FresnsPluginConfig::PLG_CMD_VERIFY_SESSION_TOKEN;
             $input = [];
             $input['uid'] = request()->header('uid');
@@ -325,11 +321,16 @@ class FresnsBaseApiController extends BaseApiController
             if (PluginRpcHelper::isErrorPluginResp($resp)) {
                 $this->errorCheckInfo($resp);
             }
-            //查询角色权限
+            // Querying Role Permissions
             if (in_array($uri, AmConfig::NOTICE_CONTENT_URI)) {
-                //成员主角色权限 member_roles > permission > content_view 是否允许浏览，如果禁止浏览，不可请求「内容类」和「消息类」接口；
-                //如果角色有过期时间，并且已经过期，则以继承角色权限为主；
-                //如果无继承角色，则以配置表 default_role 键名键值的角色权限为准；如果配置表键值为空，则当无权处理。
+                /*
+                 * Member Master Role Permission
+                 * https://fresns.org/api/header.html
+                 * member master role permission member_roles > permission > content_view whether to allow the view, if the view is prohibited, the "content class" and "message class" interfaces cannot be requested.
+                 * If the primary role has an expiration time and has expired, then the inherited role permission is primary.
+                 * If there is no inherited role (or the inherited ID cannot be found for the role), then the role permissions of the configuration table default_role key name key value prevails.
+                 * If the configuration table key value is empty (or the role cannot be found), it is treated as no authority.
+                 */
                 $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
 
                 if (empty($roleId)) {
@@ -377,13 +378,13 @@ class FresnsBaseApiController extends BaseApiController
         return true;
     }
 
-    // 公开模式 header 校验
+    // Public mode header checksum
     public function checkPublicModeHeaders()
     {
         return true;
     }
 
-    // 私有模式 header 校验
+    // Private mode header checksum
     public function checkPrivateModeHeaders()
     {
         $headerFieldArr = AmConfig::HEADER_FIELD_ARR;
@@ -401,9 +402,10 @@ class FresnsBaseApiController extends BaseApiController
         return true;
     }
 
-    // 验证签名
-    // 第一步，设所有发送或者接收到的数据为集合M，将集合M内非空参数值的参数按照参数名ASCII码从小到大排序（字典序），使用URL键值对的格式（即key1=value1&key2=value2…）拼接成字符串stringA。
-    // 第二步，在stringA最后拼接上key得到stringSignTemp字符串，并对stringSignTemp进行MD5运算，再将得到的字符串所有字符转换为大写，得到sign值signValue。
+    /*
+     * Verify Signature
+     * https://fresns.org/api/header.html
+     */
     public function checkSign()
     {
         $appId = request()->header('appId');
@@ -411,32 +413,36 @@ class FresnsBaseApiController extends BaseApiController
         $versionInt = request()->header('versionInt');
         if (! is_numeric($platform)) {
             $info = [
-                'platform' => '请输入整数',
+                'platform' => 'Please enter an integer',
             ];
             $this->error(ErrorCodeService::HEADER_TYPE_ERROR, $info);
         }
         if (! is_numeric($versionInt)) {
             $info = [
-                'versionInt' => '请输入整数',
+                'versionInt' => 'Please enter an integer',
             ];
             $this->error(ErrorCodeService::HEADER_TYPE_ERROR, $info);
         }
 
-        //1、验证 appId 和 platform 参数
-        //1.1、是否存在 session_keys > app_id
-        //1.2、是否匹配 platsession_keys > platform_id
-        //1.3、是否启用 session_keys > is_enable
+        /*
+         * Verify the appId and platform parameters
+         * https://fresns.org/api/header.html
+         * 
+         * Does session_keys > app_id exist
+         * Does it match session_keys > platform_id
+         * Whether session_keys > is_enable
+         */
         $sessionKeys = FresnsSessionKeys::where('app_id', $appId)->first();
         if (empty($sessionKeys)) {
             $info = [
-                'appId' => '无此记录',
+                'appId' => 'App ID does not exist',
             ];
 
             $this->error(ErrorCodeService::NO_RECORD, $info);
         }
         if ($sessionKeys['platform_id'] != $platform) {
             $info = [
-                'platform' => '无此记录',
+                'platform' => 'Platform ID does not exist',
             ];
 
             $this->error(ErrorCodeService::NO_RECORD, $info);
@@ -457,7 +463,7 @@ class FresnsBaseApiController extends BaseApiController
         }
 
         $dataMap['sign'] = request()->header('sign');
-        LogService::info('验签信息: ', $dataMap);
+        LogService::info('Verify Info: ', $dataMap);
 
         $cmd = FresnsPluginConfig::PLG_CMD_VERIFY_SIGN;
 

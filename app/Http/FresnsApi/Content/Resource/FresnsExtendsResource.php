@@ -33,13 +33,14 @@ class FresnsExtendsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // dd(1);
-        // form 字段
+        // Form Field
         $formMap = FresnsExtendsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
+        
+        // Extend Info
         $sourceContent = [];
         $extendLinkeds = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('extend_id', $this->id)->first();
         $sourceContent['type'] = $extendLinkeds->type;
@@ -59,6 +60,7 @@ class FresnsExtendsResource extends BaseAdminResource
             $sourceContent['status'] = $comment['is_enable'];
         }
 
+        // Default Field
         $default = [
             'eid' => $this->uuid,
             'plugin' => $this->plugin_unikey,
@@ -81,12 +83,14 @@ class FresnsExtendsResource extends BaseAdminResource
             'moreJson' => [],
             'sourceContent' => $sourceContent,
         ];
-        // 合并
+
+        // Merger
         $arr = $default;
 
         return $arr;
     }
 
+    // Distance Conversion
     public function GetDistance($lat1, $lng1, $lat2, $lng2)
     {
         $EARTH_RADIUS = 6378.137;

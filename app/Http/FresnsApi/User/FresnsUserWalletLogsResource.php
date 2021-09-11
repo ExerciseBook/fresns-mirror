@@ -16,6 +16,10 @@ use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Http\FresnsDb\FresnsUserWalletLogs\FresnsUserWalletLogs;
 
+/**
+ * List resource config handle
+ */
+
 class FresnsUserWalletLogsResource extends BaseAdminResource
 {
     public function toArray($request)
@@ -32,7 +36,7 @@ class FresnsUserWalletLogsResource extends BaseAdminResource
             $name = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name',
                 $pluginUsages['id'], $langTag);
         }
-        // 默认字段
+        // Default Field
         $default = [
             'type' => $this->object_type,
             'amount' => $this->amount,

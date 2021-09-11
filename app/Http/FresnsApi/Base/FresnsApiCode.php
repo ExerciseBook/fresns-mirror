@@ -111,7 +111,7 @@ class FresnsApiCode extends ErrorCodeService
             return 'unknown code';
         }
 
-        // 关于参数错误的信息具体化
+        // Specifying information about parameter errors
         try {
             if ($code == self::CODE_PARAM_ERROR) {
                 $data = (array) $data;

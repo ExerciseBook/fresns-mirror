@@ -16,7 +16,7 @@ use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 
 class AmChecker extends FresnsBaseChecker
 {
-    // 错误码
+    // Status Code
     const EMAIL_ERROR = 30074;
     const EMAIL_REGEX_ERROR = 30075;
     const PHONE_REGEX_ERROR = 30076;
