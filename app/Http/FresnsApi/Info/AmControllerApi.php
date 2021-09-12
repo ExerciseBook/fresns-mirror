@@ -101,7 +101,7 @@ class AmControllerApi extends FresnsBaseApiController
         $request->offsetSet('is_enable', 1);
         $FresnsEmojisService = new FresnsEmojisService();
 
-        $FresnsEmojisService->setResource(FresnsInfoEmojisResource::class);
+        $FresnsEmojisService->setResource(FresnsEmojisResource::class);
         $data = $FresnsEmojisService->searchData();
 
         $this->success($data);
@@ -117,7 +117,7 @@ class AmControllerApi extends FresnsBaseApiController
 
         $FresnsStopWordsService = new FresnsStopWordsService();
 
-        $FresnsStopWordsService->setResource(FresnsInfoStopWordsResource::class);
+        $FresnsStopWordsService->setResource(FresnsStopWordsResource::class);
         $data = $FresnsStopWordsService->searchData();
 
         $this->success($data);

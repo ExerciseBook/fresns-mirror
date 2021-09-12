@@ -19,11 +19,6 @@ use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
-use App\Http\FresnsApi\Editor\Resource\CommentLogResource;
-use App\Http\FresnsApi\Editor\Resource\CommentResourceDetail;
-use App\Http\FresnsApi\Editor\Resource\PostLogResource;
-use App\Http\FresnsApi\Editor\Resource\PostLogResourceDetail;
-use App\Http\FresnsApi\Editor\Service\CommentPostLogService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsCmd\FresnsPlugin as FresnsCmdFresnsPlugin;
 use App\Http\FresnsCmd\FresnsPluginConfig;
@@ -126,7 +121,7 @@ class AmControllerApi extends FresnsBaseApiController
                     $postLog = FresnsPostLogs::where('post_id', $postInfo['id'])->where('member_id',
                         $mid)->where('status', '!=', 3)->first();
                     if (! $postLog) {
-                        $postLogId = CommentPostLogService::postLogInsert($uuid, $mid);
+                        $postLogId = ContentLogsService::postLogInsert($uuid, $mid);
                     } else {
                         $postLogId = $postLog['id'];
                     }
@@ -139,7 +134,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $FresnsPostLogsService = new FresnsPostLogsService();
                 $request->offsetSet('id', $postLogId);
                 $request->offsetUnset('type');
-                $FresnsPostLogsService->setResource(PostLogResourceDetail::class);
+                $FresnsPostLogsService->setResource(FresnsPostLogsResourceDetail::class);
                 $list = $FresnsPostLogsService->searchData();
                 break;
             /**type=2
@@ -196,7 +191,7 @@ class AmControllerApi extends FresnsBaseApiController
                     $commentLog = FresnsCommentLogs::where('comment_id', $commentInfo['id'])->where('member_id',
                         $mid)->where('status', '!=', 3)->first();
                     if (! $commentLog) {
-                        $commentLogId = CommentPostLogService::commentLogInsert($uuid, $mid);
+                        $commentLogId = ContentLogsService::commentLogInsert($uuid, $mid);
                     } else {
                         $commentLogId = $commentLog['id'];
                     }
@@ -208,7 +203,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $FresnsCommentLogsService = new FresnsCommentLogsService();
                 $request->offsetSet('id', $commentLogId);
                 $request->offsetUnset('type');
-                $FresnsCommentLogsService->setResource(CommentResourceDetail::class);
+                $FresnsCommentLogsService->setResource(FresnsCommentLogsResourceDetail::class);
                 $list = $FresnsCommentLogsService->searchData();
                 break;
         }
@@ -235,7 +230,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $request->offsetUnset('type');
                 // $request->offsetset('inStatus',"1,4");
                 $request->offsetSet('member_id', $mid);
-                $FresnsPostLogsService->setResource(PostLogResourceDetail::class);
+                $FresnsPostLogsService->setResource(FresnsPostLogsResourceDetail::class);
                 $list = $FresnsPostLogsService->searchData();
                 break;
 
@@ -244,7 +239,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $request->offsetUnset('type');
                 // $request->offsetset('inStatus',"1,4");
                 $request->offsetSet('member_id', $mid);
-                $FresnsCommentLogsService->setResource(CommentResourceDetail::class);
+                $FresnsCommentLogsService->setResource(FresnsCommentLogsResourceDetail::class);
                 $list = $FresnsCommentLogsService->searchData();
                 break;
         }
@@ -294,7 +289,7 @@ class AmControllerApi extends FresnsBaseApiController
             $request->offsetSet('currentPage', $page);
             $request->offsetSet('pageSize', $pageSize);
             // dd($request);
-            $FresnsPostLogsService->setResource(PostLogResource::class);
+            $FresnsPostLogsService->setResource(FresnsPostLogsResource::class);
             $list = $FresnsPostLogsService->searchData();
         // dd(1);
         } else {
@@ -323,7 +318,7 @@ class AmControllerApi extends FresnsBaseApiController
             $request->offsetSet('member_id', $mid);
             $request->offsetSet('currentPage', $page);
             $request->offsetSet('pageSize', $pageSize);
-            $FresnsCommentLogsService->setResource(CommentLogResource::class);
+            $FresnsCommentLogsService->setResource(FresnsCommentLogsResource::class);
             $list = $FresnsCommentLogsService->searchData();
         }
         $data = [
@@ -362,9 +357,9 @@ class AmControllerApi extends FresnsBaseApiController
         }
         // 帖子更新
         if ($logType == 1) {
-            CommentPostLogService::updatePostLog($mid);
+            ContentLogsService::updatePostLog($mid);
         } else {
-            CommentPostLogService::updateCommentLog($mid);
+            ContentLogsService::updateCommentLog($mid);
         }
         $this->success();
     }
@@ -851,7 +846,7 @@ class AmControllerApi extends FresnsBaseApiController
 
         switch ($type) {
             case 1:
-                $draftId = CommentPostLogService::publishCreatedPost($request);
+                $draftId = ContentLogsService::publishCreatedPost($request);
                 if ($checkAudit) {
                     FresnsPostLogs::where('id', $draftId)->update([
                         'status' => 2,
@@ -870,7 +865,7 @@ class AmControllerApi extends FresnsBaseApiController
                 if (empty($commentCid)) {
                     $commentCid = 0;
                 }
-                $draftId = CommentPostLogService::publishCreatedComment($request);
+                $draftId = ContentLogsService::publishCreatedComment($request);
                 if ($checkAudit) {
                     FresnsCommentLogs::where('id', $draftId)->update([
                         'status' => 2,

@@ -20,7 +20,7 @@ use App\Http\FresnsDb\FresnsUserWalletLogs\FresnsUserWalletLogs;
  * List resource config handle
  */
 
-class FresnsUserWalletLogsResource extends BaseAdminResource
+class FresnsWalletLogsResource extends BaseAdminResource
 {
     public function toArray($request)
     {

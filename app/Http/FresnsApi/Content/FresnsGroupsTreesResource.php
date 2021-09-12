@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\DB;
  * List resource config handle
  */
 
-class FresnsGroupTreeResource extends BaseAdminResource
+class FresnsGroupsTreesResource extends BaseAdminResource
 {
     public function toArray($request)
     {

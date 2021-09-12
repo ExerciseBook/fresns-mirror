@@ -18,11 +18,6 @@ use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
-use App\Http\FresnsApi\Content\Resource\CommentResource;
-use App\Http\FresnsApi\Content\Resource\CommentResourceDetail;
-use App\Http\FresnsApi\Content\Resource\FresnsExtendsResource;
-use App\Http\FresnsApi\Content\Resource\FresnsPostResource;
-use App\Http\FresnsApi\Content\Resource\FresnsPostResourceDetail;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Info\AmService;
 use App\Http\FresnsCmd\FresnsPlugin;
@@ -96,7 +91,7 @@ class AmControllerApi extends FresnsBaseApiController
         $FresnsDialogsService = new FresnsGroupsService();
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
-        $FresnsDialogsService->setResource(FresnsGroupTreeResource::class);
+        $FresnsDialogsService->setResource(FresnsGroupsTreesResource::class);
         $data = $FresnsDialogsService->searchData();
         $data = [
             'pagination' => $data['pagination'],
@@ -150,7 +145,7 @@ class AmControllerApi extends FresnsBaseApiController
         // dd($FresnsDialogsService);
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
-        $FresnsDialogsService->setResource(FresnsGroupResource::class);
+        $FresnsDialogsService->setResource(FresnsGroupsResource::class);
         $data = $FresnsDialogsService->searchData();
         $data = [
             'pagination' => $data['pagination'],
@@ -185,7 +180,7 @@ class AmControllerApi extends FresnsBaseApiController
         $id = $request->input('gid');
         $FresnsGroupsService = new FresnsGroupsService();
         $request->offsetSet('gid', $id);
-        $FresnsGroupsService->setResourceDetail(FresnsGroupResourceDetail::class);
+        $FresnsGroupsService->setResourceDetail(FresnsGroupsResourceDetail::class);
         $group = FresnsGroups::where('uuid', $id)->first();
         $detail = $FresnsGroupsService->detail($group['id']);
         $this->success($detail);
@@ -238,7 +233,7 @@ class AmControllerApi extends FresnsBaseApiController
         $FresnsPostsService = new FresnsPostsService();
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
-        $FresnsPostsService->setResource(FresnsPostResource::class);
+        $FresnsPostsService->setResource(FresnsPostsResource::class);
         $list = $FresnsPostsService->searchData();
         $implants = FresnsImplantsService::getImplants($page, $pageSize, 1);
         $common['implants'] = $implants;
@@ -293,7 +288,7 @@ class AmControllerApi extends FresnsBaseApiController
         $id = $request->input('pid');
         $postId = FresnsPosts::where('uuid', $id)->first();
         $FresnsPostsService = new FresnsPostsService();
-        $FresnsPostsService->setResourceDetail(FresnsPostResourceDetail::class);
+        $FresnsPostsService->setResourceDetail(FresnsPostsResourceDetail::class);
         $detail = $FresnsPostsService->detail($postId['id']);
 
         // If it is a non-public group post, it is not a member of the group and is not exported.
@@ -450,7 +445,7 @@ class AmControllerApi extends FresnsBaseApiController
         $fresnsCommentsService = new FresnsCommentsService();
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
-        $fresnsCommentsService->setResource(CommentResource::class);
+        $fresnsCommentsService->setResource(FresnsCommentsResource::class);
         $list = $fresnsCommentsService->searchData();
         $implants = FresnsImplantsService::getImplants($page, $pageSize, 1);
         $common['implants'] = $implants;
@@ -487,7 +482,7 @@ class AmControllerApi extends FresnsBaseApiController
         }
         $comment = FresnsComments::where('uuid', $request->input('cid'))->first();
         $fresnsCommentsService = new FresnsCommentsService();
-        $fresnsCommentsService->setResourceDetail(CommentResourceDetail::class);
+        $fresnsCommentsService->setResourceDetail(FresnsCommentsResourceDetail::class);
         $detail = $fresnsCommentsService->detail($comment['id']);
         // Target fields to be masked
         $memberShieldsTable = FresnsMemberShieldsConfig::CFG_TABLE;
@@ -639,7 +634,7 @@ class AmControllerApi extends FresnsBaseApiController
         $request->offsetSet('is_enable', 1);
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
-        $FresnsPostsService->setResource(FresnsPostResource::class);
+        $FresnsPostsService->setResource(FresnsPostsResource::class);
         $list = $FresnsPostsService->searchData();
         $implants = FresnsImplantsService::getImplants($page, $pageSize, 1);
         $common['implants'] = $implants;
@@ -727,7 +722,7 @@ class AmControllerApi extends FresnsBaseApiController
         $request->offsetSet('is_enable', true);
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
-        $FresnsPostsService->setResource(FresnsPostResource::class);
+        $FresnsPostsService->setResource(FresnsPostsResource::class);
         $list = $FresnsPostsService->searchData();
         $implants = FresnsImplantsService::getImplants($page, $pageSize, 1);
         $common['implants'] = $implants;

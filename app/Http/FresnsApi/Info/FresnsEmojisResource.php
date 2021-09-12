@@ -20,7 +20,7 @@ use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
  * List resource config handle
  */
 
-class FresnsInfoEmojisResource extends BaseAdminResource
+class FresnsEmojisResource extends BaseAdminResource
 {
     public function toArray($request)
     {

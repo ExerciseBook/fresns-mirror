@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Editor\Service;
+namespace App\Http\FresnsApi\Editor;
 
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\LogService;
@@ -33,7 +33,7 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsStopWords\FresnsStopWords;
 use Illuminate\Support\Facades\DB;
 
-class CommentPostLogService
+class ContentLogsService
 {
     // 获取该帖子现有内容创建草稿。
     public static function postLogInsert($uuid, $mid)

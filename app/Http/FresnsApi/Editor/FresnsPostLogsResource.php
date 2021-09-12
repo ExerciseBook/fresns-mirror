@@ -6,27 +6,36 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Editor\Resource;
+namespace App\Http\FresnsApi\Editor;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
-use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 
-class CommentLogResource extends BaseAdminResource
+/**
+ * List resource config handle
+ */
+
+class FresnsPostLogsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        $formMap = FresnsCommentLogsConfig::FORM_FIELDS_MAP;
+        // Form Field
+        $formMap = FresnsPostLogsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        $commentInfo = FresnsComments::find($this->comment_id);
+
+        // Post Info
+        $postInfo = FresnsPosts::find($this->post_id);
+
+        // Default Field
         $default = [
             'id' => $this->id,
-            'cid' => $commentInfo['uuid'] ?? '',
+            'pid' => $postInfo['uuid'] ?? '',
+            'type' => $this->type,
+            'title' => $this->title,
             'content' => mb_substr($this->content, 0, 140),
             'reason' => $this->reason,
             'submitTime' => $this->submit_at,

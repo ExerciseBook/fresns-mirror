@@ -6,29 +6,36 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Editor\Resource;
+namespace App\Http\FresnsApi\Editor;
 
 use App\Base\Resources\BaseAdminResource;
+use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
+use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 
-class PostLogResource extends BaseAdminResource
+/**
+ * List resource config handle
+ */
+
+class FresnsCommentLogsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // dd(1);
-
-        $formMap = FresnsPostLogsConfig::FORM_FIELDS_MAP;
+        // Form Field
+        $formMap = FresnsCommentLogsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        $postInfo = FresnsPosts::find($this->post_id);
+
+        // Comment Info
+        $commentInfo = FresnsComments::find($this->comment_id);
+
+        // Default Field
         $default = [
             'id' => $this->id,
-            'pid' => $postInfo['uuid'] ?? '',
-            'type' => $this->type,
-            'title' => $this->title,
+            'cid' => $commentInfo['uuid'] ?? '',
             'content' => mb_substr($this->content, 0, 140),
             'reason' => $this->reason,
             'submitTime' => $this->submit_at,

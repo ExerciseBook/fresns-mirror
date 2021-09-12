@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\DB;
  * List resource config handle
  */
 
-class DialogsMessageResource extends BaseAdminResource
+class FresnsDialogMessagesResource extends BaseAdminResource
 {
     public function toArray($request)
     {

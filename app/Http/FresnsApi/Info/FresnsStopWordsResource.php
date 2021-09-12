@@ -14,7 +14,7 @@ use App\Base\Resources\BaseAdminResource;
  * List resource config handle
  */
 
-class FresnsInfoStopWordsResource extends BaseAdminResource
+class FresnsStopWordsResource extends BaseAdminResource
 {
     public function toArray($request)
     {

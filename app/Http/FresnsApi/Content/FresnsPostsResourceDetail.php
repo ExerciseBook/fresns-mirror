@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Content\Resource;
+namespace App\Http\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Helpers\DateHelper;
@@ -52,7 +52,11 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use Illuminate\Support\Facades\DB;
 
-class FresnsPostResourceDetail extends BaseAdminResource
+/**
+ * Detail resource config handle
+ */
+
+class FresnsPostsResourceDetail extends BaseAdminResource
 {
     public function toArray($request)
     {
@@ -97,7 +101,7 @@ class FresnsPostResourceDetail extends BaseAdminResource
         $count = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where($input)->count();
         $isLike = $count == 0 ? false : true;
         $title = $this->title;
-        $content = FresnsPostResource::getContentView(($this->content), ($this->id), 1);
+        $content = FresnsPostsResource::getContentView(($this->content), ($this->id), 1);
         // Read permission required or not
         $allowStatus = $this->is_allow;
         $allowProportion = 10;
@@ -121,7 +125,7 @@ class FresnsPostResourceDetail extends BaseAdminResource
                 $FresnsPostsService = new FresnsPostsService();
                 // Prevent @, hashtags, emojis, links and other messages from being truncated
                 $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content']);
-                $content = FresnsPostResource::getContentView(($this->content), ($this->id), 1);
+                $content = FresnsPostsResource::getContentView(($this->content), ($this->id), 1);
 
                 $allowStatus = 0;
             }

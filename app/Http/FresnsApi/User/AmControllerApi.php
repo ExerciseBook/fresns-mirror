@@ -704,7 +704,7 @@ class AmControllerApi extends FresnsBaseApiController
         $request->offsetSet('user_id', $uid);
         $request->offsetSet('langTag', $langTag);
 
-        $fresnsUserWalletLogsService->setResource(FresnsUserWalletLogsResource::class);
+        $fresnsUserWalletLogsService->setResource(FresnsWalletLogsResource::class);
         $data = $fresnsUserWalletLogsService->searchData();
 
         $this->success($data);

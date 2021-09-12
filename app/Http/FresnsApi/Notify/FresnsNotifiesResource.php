@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\DB;
  * List resource config handle
  */
 
-class NotifyResource extends BaseAdminResource
+class FresnsNotifiesResource extends BaseAdminResource
 {
     public function toArray($request)
     {

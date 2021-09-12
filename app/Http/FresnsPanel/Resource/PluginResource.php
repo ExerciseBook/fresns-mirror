@@ -15,6 +15,10 @@ use App\Http\FresnsCmd\FresnsPlugin;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins as TweetPlugin;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsConfig;
 
+/**
+ * List resource config handle
+ */
+
 class PluginResource extends BaseAdminResource
 {
     public function toArray($request)

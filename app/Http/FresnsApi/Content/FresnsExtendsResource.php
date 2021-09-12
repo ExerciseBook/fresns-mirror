@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Content\Resource;
+namespace App\Http\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\FresnsApi\Content\AmConfig;
@@ -28,6 +28,10 @@ use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppends;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use Illuminate\Support\Facades\DB;
+
+/**
+ * List resource config handle
+ */
 
 class FresnsExtendsResource extends BaseAdminResource
 {

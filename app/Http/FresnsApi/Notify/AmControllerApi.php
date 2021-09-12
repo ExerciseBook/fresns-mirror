@@ -101,7 +101,7 @@ class AmControllerApi extends FresnsBaseApiController
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
         $request->offsetSet('member_id', $member_id);
-        $FresnsNotifiesService->setResource(NotifyResource::class);
+        $FresnsNotifiesService->setResource(FresnsNotifiesResource::class);
         $list = $FresnsNotifiesService->searchData();
         $data = [
             'pagination' => $list['pagination'],
@@ -186,7 +186,7 @@ class AmControllerApi extends FresnsBaseApiController
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('ids', $ids);
         $request->offsetSet('pageSize', $pageSize);
-        $FresnsDialogsService->setResource(DialogsResource::class);
+        $FresnsDialogsService->setResource(FresnsDialogsResource::class);
         $list = $FresnsDialogsService->searchData();
         $data = [
             'pagination' => $list['pagination'],
@@ -282,7 +282,7 @@ class AmControllerApi extends FresnsBaseApiController
         // $request->offsetSet('dialog_id', $dialogId);
         $request->offsetSet('ids', $ids);
         $request->offsetSet('pageSize', $pageSize);
-        $FresnsDialogsService->setResource(DialogsMessageResource::class);
+        $FresnsDialogsService->setResource(FresnsDialogMessagesResource::class);
         $list = $FresnsDialogsService->searchData();
         $data = [
             'pagination' => $list['pagination'],

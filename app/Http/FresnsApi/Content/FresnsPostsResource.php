@@ -6,11 +6,12 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Content\Resource;
+namespace App\Http\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Helpers\DateHelper;
 use App\Http\Center\Common\GlobalService;
+use App\Http\Center\Common\LogService;
 use App\Http\FresnsApi\Content\AmConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
@@ -21,6 +22,7 @@ use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\FresnsDb\FresnsDomainLinks\FresnsDomainLinksConfig;
 use App\Http\FresnsDb\FresnsEmojis\FresnsEmojis;
+use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkeds;
 use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtends;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtendsConfig;
@@ -28,6 +30,8 @@ use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroupsConfig;
 use App\Http\FresnsDb\FresnsHashtags\FresnsHashtags;
+use App\Http\FresnsDb\FresnsImplants\FresnsImplants;
+use App\Http\FresnsDb\FresnsImplants\FresnsImplantsConfig;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\FresnsDb\FresnsMemberIcons\FresnsMemberIcons;
@@ -46,17 +50,22 @@ use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPostAllows\FresnsPostAllowsConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppends;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
+use App\Http\FresnsDb\FresnsPostMembers\FresnsPostMembers;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class FresnsMarkPostResource extends BaseAdminResource
+/**
+ * List resource config handle
+ */
+
+class FresnsPostsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
         // Form Field
-
+        
         // Data Table: post_appends
         $append = DB::table(FresnsPostAppendsConfig::CFG_TABLE)->where('post_id', $this->id)->first();
         if ($append) {
@@ -92,6 +101,7 @@ class FresnsMarkPostResource extends BaseAdminResource
             'like_type' => 4,
             'like_id' => $this->id,
         ];
+        // $count = FresnsMemberLikes::where($input)->count();
         $count = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where($input)->count();
         $isLike = $count == 0 ? false : true;
         $title = $this->title;
@@ -122,7 +132,6 @@ class FresnsMarkPostResource extends BaseAdminResource
                 $content = self::getContentView(($contentInfo['truncated_content']), ($this->id), 1);
 
                 $allowStatus = 0;
-                $noAllow = 0;
             }
         } else {
             $noAllow = 1;
@@ -153,7 +162,7 @@ class FresnsMarkPostResource extends BaseAdminResource
         $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::SHIELD_POST_NAME) ?? 'Hide post';
         // Content Naming
         $PostName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::POST_NAME) ?? 'Post';
-        
+
         $viewCount = $this->view_count;
         $likeCount = $this->like_count;
         $followCount = $this->follow_count;
@@ -164,12 +173,15 @@ class FresnsMarkPostResource extends BaseAdminResource
         $timeFormat = DateHelper::format_date_langTag(strtotime($time));
         $editTime = DateHelper::asiaShanghaiToTimezone($this->latest_edit_at);
         $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
-        $canDelete = $append['can_delete'];
         $allowStatus = $this->is_allow;
         $allowBtnName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
         $allowBtnName = $allowBtnName == null ? '' : $allowBtnName['lang_content'];
         $allowBtnUrl = $append['allow_plugin_unikey'];
+        $memberListName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'member_list_name', $this->id);
+        $memberListName = $memberListName == null ? '' : $memberListName['lang_content'];
+        $memberListCount = Db::table('post_members')->where('post_id', $this->id)->count();
         $member = [];
+        $member['anonymous'] = $this->is_anonymous;
         $member['deactivate'] = false;
         $member['mid'] = '';
         $member['mname'] = '';
@@ -182,7 +194,7 @@ class FresnsMarkPostResource extends BaseAdminResource
         $member['avatar'] = $memberInfo->avatar_file_url ?? '';
 
         // Default avatar when members have no avatar
-        if (empty($member['avatar_file_url'])) {
+        if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }
@@ -232,6 +244,7 @@ class FresnsMarkPostResource extends BaseAdminResource
                 $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? '';
 
                 $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
+                LogService::info('decorate_file_id', $memberInfo);
                 $member['gender'] = $memberInfo->gender ?? '';
                 $member['bio'] = $memberInfo->bio ?? '';
                 $member['verifiedStatus'] = $memberInfo->verified_status ?? '';
@@ -241,10 +254,13 @@ class FresnsMarkPostResource extends BaseAdminResource
                 if ($icons['icon']) {
                     $icons['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberIcon['icon_file_id'], $memberIcon['icon_file_url']);
                 }
-                $iconName = ApiLanguageHelper::getLanguages(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id'] ?? '');
-                $iconName = $iconName == null ? '' : $iconName['lang_content'];
-                $icons['name'] = $iconName;
-                $member['icons'] = $icons;
+                $icons['name'] = '';
+                if ($memberIcon) {
+                    $iconName = ApiLanguageHelper::getLanguages(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
+                    $iconName = $iconName == null ? '' : $iconName['lang_content'];
+                    $icons['name'] = $iconName;
+                }
+
                 if (empty($icons['name']) && empty($icons['icon'])) {
                     $icons = [];
                 }
@@ -256,10 +272,11 @@ class FresnsMarkPostResource extends BaseAdminResource
         $postHotStatus = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_HOT);
         $postHotStatus = $postHotStatus == null ? 0 : $postHotStatus;
         $comment = [];
+        $comment['status'] = false;
         if ($postHotStatus != 0 && ! empty($comments)) {
             // Check commenter information
             $commentMemberInfo = FresnsMembers::find($comments->member_id);
-            $comment['status'] = $postHotStatus;
+            $comment['status'] = true;
             $comment['anonymous'] = $comments->is_anonymous ?? '';
             // Is the author of the comment the author of the post himself
             $commentStatus = $this->member_id == $comments->member_id ? true : false;
@@ -281,7 +298,7 @@ class FresnsMarkPostResource extends BaseAdminResource
                 $comment['avatar'] = $anonymousAvatar;
             }
             $comment['avatar'] = ApiFileHelper::getImageSignUrl($comment['avatar']);
-            
+
             $comment['cid'] = $comments->uuid ?? '';
             $comment['content'] = self::getContentView(($comments->content), ($comments->id), 2);
             $comment['likeCount'] = $comments->like_count ?? '';
@@ -294,15 +311,17 @@ class FresnsMarkPostResource extends BaseAdminResource
             $attachCount['docs'] = FresnsFiles::where('file_type', 4)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->count();
             $attachCount['extends'] = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $comments->id)->count();
             $comment['attachCount'] = $attachCount;
-
             $images = [];
+
             $fileInfo = FresnsFiles::where('file_type', 1)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $comments->id)->get();
             $comment['images'] = ApiFileHelper::antiTheftFile($fileInfo);
 
-            if ($this->comment_like_count < $postHotStatus) {
+            if (($this->comment_like_count) < $postHotStatus) {
                 $comment = [];
+                $comment['status'] = false;
             }
         }
+
         $location = [];
         $location['isLbs'] = $this->is_lbs;
         $location['mapId'] = $this->map_id;
@@ -323,16 +342,15 @@ class FresnsMarkPostResource extends BaseAdminResource
                 $languages = ApiConfigHelper::distanceUnits($langTag);
                 $distanceUnits = empty($languages) ? 'km' : $languages;
             }
-
             $location['distance'] = $this->GetDistance($latitude, $longitude, $this->map_latitude, $this->map_longitude, $distanceUnits);
         }
 
         // Attached Quantity
         $attachCount = [];
-        $attachCount['images'] = FresnsFiles::where('file_type', 1)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachCount['videos'] = FresnsFiles::where('file_type', 2)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachCount['audios'] = FresnsFiles::where('file_type', 3)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachCount['docs'] = FresnsFiles::where('file_type', 4)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        $attachCount['images'] = FresnsFiles::where('file_type', 2)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        $attachCount['videos'] = FresnsFiles::where('file_type', 3)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        $attachCount['audios'] = FresnsFiles::where('file_type', 4)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        $attachCount['docs'] = FresnsFiles::where('file_type', 5)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
         $attachCount['extends'] = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id', $this->id)->count();
 
         // Files
@@ -340,8 +358,8 @@ class FresnsMarkPostResource extends BaseAdminResource
 
         // Extends
         $extends = [];
-        $extendsLinks = Db::table('extend_linkeds')->where('linked_type', 1)->where('linked_id', $this->id)->first();
-        $extendsLinks = [];
+        $extendsLinks = Db::table('extend_linkeds')->where('linked_type', 1)->where('linked_id', $this->id)->pluck('extend_id')->toArray();
+        $extendsInfo = [];
         if ($extendsLinks) {
             $extendsLinks = array_unique($extendsLinks);
             $extendsInfo = FresnsExtends::whereIn('id', $extendsLinks)->get();
@@ -412,14 +430,13 @@ class FresnsMarkPostResource extends BaseAdminResource
             $group['gid'] = $groupInfo['uuid'] ?? '';
             $name = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->group_id);
             $group['gname'] = $name == null ? '' : $name['lang_content'];
-            $group['cover'] = $groupInfo['cover_file_url'] ?? '';
+            $group['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
             $group['allow'] = true;
             // Whether the current member has the right to comment in the group
             $permission = $groupInfo['permission'] ?? '';
             $permissionArr = json_decode($permission, true);
             if ($permissionArr) {
                 $publish_comment = $permissionArr['publish_comment'];
-                $publish_post = $permissionArr['publish_post'];
                 $publish_comment_roles = $permissionArr['publish_comment_roles'];
                 $group['allow'] = false;
                 // 1.All Members
@@ -428,13 +445,18 @@ class FresnsMarkPostResource extends BaseAdminResource
                 }
                 // 2.Anyone in the group
                 if ($publish_comment == 2) {
-                    $followCount = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('follow_id', $this->group_id)->count();
+                    $followCount = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)
+                            ->where('member_id', $mid)
+                            ->where('follow_type', 2)
+                            ->where('follow_id', $groupInfo['id'])
+                            ->where('deleted_at', null)
+                            ->count();
                     if ($followCount > 0) {
                         $group['allow'] = true;
                     }
                 }
                 // 3.Specified role members only
-                if ($publish_post == 3) {
+                if ($publish_comment == 3) {
                     $memberRoleArr = FresnsMemberRoleRels::where('member_id', $mid)->pluck('role_id')->toArray();
                     $arrIntersect = array_intersect($memberRoleArr, $publish_comment_roles);
                     if ($arrIntersect) {
@@ -490,7 +512,7 @@ class FresnsMarkPostResource extends BaseAdminResource
                 }
             }
         }
-
+        
         // Edit Status
         $editStatus = [];
         // Is the current member an author
@@ -519,10 +541,10 @@ class FresnsMarkPostResource extends BaseAdminResource
             }
         }
         $editStatus['canEdit'] = $postEdit;
-
+        
         // Delete Status
         $editStatus['canDelete'] = $append['can_delete'] == 1 ? true : false;
-
+        
         // more_json
         $more_json = json_decode($this->more_json, true);
         $icons = $more_json['icons'] ?? [];
@@ -553,6 +575,10 @@ class FresnsMarkPostResource extends BaseAdminResource
             'shieldSetting' => $shieldSetting,
             'shieldName' => $shieldName,
             'shieldStatus' => $shieldStatus,
+            'memberListStatus' => $append['member_list_status'],
+            'memberListName' => $memberListName,
+            'memberListCount' => $memberListCount,
+            'memberListUrl' => $append['member_list_plugin_unikey'],
             'viewCount' => $viewCount,
             'likeCount' => $likeCount,
             'followCount' => $followCount,
@@ -570,14 +596,14 @@ class FresnsMarkPostResource extends BaseAdminResource
             'allowBtnUrl' => $allowBtnUrl,
             'member' => $member,
             'icons' => $icons,
-            // 'commentSetting' => $comment,
+            'commentSetting' => $comment,
             'location' => $location,
             'attachCount' => $attachCount,
             'files' => $files,
             'extends' => $extends,
             'group' => $group,
-            // 'manages' => $manages,
-            // 'editStatus' => $editStatus,
+            'manages' => $manages,
+            'editStatus' => $editStatus,
         ];
 
         // Merger
@@ -599,11 +625,11 @@ class FresnsMarkPostResource extends BaseAdminResource
         $s = $s * $EARTH_RADIUS;
         // 1 km=0.621371192237 mi
         if ($distanceUnits == 'mi') {
-            $s = round($s * 10000 * 0.62);
+            $s = round($s * 1000 * 0.62);
         } else {
-            $s = round($s * 10000);
+            $s = round($s * 1000);
         }
-        $s = round($s / 10000) == 0 ? 1 : round($s / 10000);
+        $s = round($s / 1000) == 0 ? 1 : round($s / 1000);
         
         return $s.$distanceUnits;
     }
@@ -624,7 +650,6 @@ class FresnsMarkPostResource extends BaseAdminResource
         $timeStr = $carbon->diffForHumans(Carbon::now());
         $timeStr = DateHelper::format_date(strtotime($time));
         $timeStr = str_replace('ago', $timeStr);
-        dd($timeStr);
         // Less than 60 minutes
         if ($minutesInt < 60) {
         }

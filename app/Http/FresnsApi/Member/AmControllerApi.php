@@ -14,10 +14,10 @@ use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
-use App\Http\FresnsApi\Content\FresnsGroupResource;
+use App\Http\FresnsApi\Content\FresnsGroupsResource;
 use App\Http\FresnsApi\Content\FresnsHashtagsResource;
-use App\Http\FresnsApi\Content\Resource\CommentMarkResource;
-use App\Http\FresnsApi\Content\Resource\FresnsMarkPostResource;
+use App\Http\FresnsApi\Content\FresnsCommentsResource;
+use App\Http\FresnsApi\Content\FresnsPostsResource;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsCmd\FresnsPlugin;
@@ -1140,7 +1140,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $request->offsetSet('ids', $groupIds);
                 $request->offsetSet('currentPage', $page);
                 $request->offsetSet('pageSize', $pageSize);
-                $FresnsDialogsService->setResource(FresnsGroupResource::class);
+                $FresnsDialogsService->setResource(FresnsGroupsResource::class);
                 $data = $FresnsDialogsService->searchData();
 
                 break;
@@ -1161,7 +1161,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $request->offsetSet('ids', $postIds);
                 $request->offsetSet('currentPage', $page);
                 $request->offsetSet('pageSize', $pageSize);
-                $FresnsPostsService->setResource(FresnsMarkPostResource::class);
+                $FresnsPostsService->setResource(FresnsPostsResource::class);
                 $data = $FresnsPostsService->searchData();
                 break;
             default:
@@ -1171,7 +1171,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $request->offsetSet('ids', $commentIds);
                 $request->offsetSet('currentPage', $page);
                 $request->offsetSet('pageSize', $pageSize);
-                $FresnsCommentsService->setResource(CommentMarkResource::class);
+                $FresnsCommentsService->setResource(FresnsCommentsResource::class);
                 $data = $FresnsCommentsService->searchData();
                 break;
         }
