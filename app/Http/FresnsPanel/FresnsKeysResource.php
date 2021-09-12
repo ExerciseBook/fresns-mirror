@@ -16,7 +16,7 @@ use App\Http\FresnsDb\FresnsSessionKeys\FresnsSessionKeysConfig;
  * List resource config handle
  */
 
-class KeysResource extends BaseAdminResource
+class FresnsKeysResource extends BaseAdminResource
 {
     public function toArray($request)
     {

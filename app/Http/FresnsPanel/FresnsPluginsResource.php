@@ -19,7 +19,7 @@ use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsConfig;
  * List resource config handle
  */
 
-class PluginResource extends BaseAdminResource
+class FresnsPluginsResource extends BaseAdminResource
 {
     public function toArray($request)
     {

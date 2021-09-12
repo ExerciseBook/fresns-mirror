@@ -34,8 +34,6 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
-use App\Http\FresnsPanel\Resource\KeysResource;
-use App\Http\FresnsPanel\Resource\PluginResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -214,7 +212,7 @@ class AmControllerWeb extends BaseFrontendController
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
         $request->offsetSet('type', AmConfig::PLUGIN_TYPE2);
         $pluginList = $FresnsPluginsService->searchData();
-        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
+        $pluginArr = FresnsPluginsResource::collection($pluginList['list'])->toArray($pluginList['list']);
         $newVision = [];
         if ($pluginArr) {
             foreach ($pluginArr as $key => $p) {
@@ -452,7 +450,7 @@ class AmControllerWeb extends BaseFrontendController
         $FresnsSessionKeysService = new FresnsSessionKeysService();
         $keyLists = $FresnsSessionKeysService->searchData();
 
-        $pluginArr = KeysResource::collection($keyLists['list'])->toArray($keyLists['list']);
+        $pluginArr = FresnsKeysResource::collection($keyLists['list'])->toArray($keyLists['list']);
         $clientData = FresnsSessionKeys::getByStaticWithCond()->toArray();
         $platforms = FresnsConfigs::where('item_key', 'platforms')->first(['item_value']);
         $platforms = json_decode($platforms['item_value'], true);
@@ -572,7 +570,7 @@ class AmControllerWeb extends BaseFrontendController
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
         $pluginList = $FresnsPluginsService->searchData();
-        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
+        $pluginArr = FresnsPluginsResource::collection($pluginList['list'])->toArray($pluginList['list']);
 
         $userId = Auth::id();
         $lang = Cache::get('lang_tag_'.$userId);
@@ -600,7 +598,7 @@ class AmControllerWeb extends BaseFrontendController
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
         $pluginList = $FresnsPluginsService->searchData();
-        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
+        $pluginArr = FresnsPluginsResource::collection($pluginList['list'])->toArray($pluginList['list']);
         $websitePluginArr = [];
         $subjectPluginArr = [];
         foreach ($pluginArr as $p) {
@@ -640,7 +638,7 @@ class AmControllerWeb extends BaseFrontendController
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
         $pluginList = $FresnsPluginsService->searchData();
-        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
+        $pluginArr = FresnsPluginsResource::collection($pluginList['list'])->toArray($pluginList['list']);
 
         $userId = Auth::id();
         $lang = Cache::get('lang_tag_'.$userId);
@@ -670,7 +668,7 @@ class AmControllerWeb extends BaseFrontendController
 
         $enableCount = 0;
         $unEnableCount = 0;
-        $pluginArr = PluginResource::collection($pluginList['list'])->toArray($pluginList['list']);
+        $pluginArr = FresnsPluginsResource::collection($pluginList['list'])->toArray($pluginList['list']);
 
         foreach ($pluginArr as $p) {
             if ($p['is_enable'] == 0) {
