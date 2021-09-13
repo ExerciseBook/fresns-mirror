@@ -2,7 +2,7 @@
     "name": "fresns/fresns",
     "type": "project",
     "description": "Cross-platform general-purpose multiple content forms social network service software",
-    "keywords": ["fresns", "sns", "forum", "community"],
+    "keywords": ["fresns", "sns", "bbs", "forum", "community"],
     "license": "Apache-2.0",
     "authors": [
         {
@@ -15,7 +15,7 @@
         "php": "^7.3|^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.55",
+        "laravel/framework": "^8.60",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.0",
