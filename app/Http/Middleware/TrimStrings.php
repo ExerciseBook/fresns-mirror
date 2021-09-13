@@ -8,7 +8,7 @@ use App\Http\Center\Common\GlobalService;
 use Closure;
 use Illuminate\Foundation\Http\Middleware\TrimStrings as Middleware;
 
-// 数据转换层
+// Data conversion layer
 class TrimStrings extends Middleware
 {
     /**
@@ -30,7 +30,6 @@ class TrimStrings extends Middleware
      */
     public function handle($request, Closure $next)
     {
-        // TODO 取token信息需要更新
         $token = $request->header('bdToken');
 
         if ($request->has('is_enable')) {
@@ -46,13 +45,13 @@ class TrimStrings extends Middleware
             $request->offsetSet('is_enable', $isEnable);
         }
 
-        // 切换时间
+        // Switching time
         DateHelper::initTimezone();
 
-        // 切换语言
+        // Switching languages
         LangHelper::initLocale();
 
-        // 初始化全局数据
+        // Initialize global data
         GlobalService::loadData();
 
         return $next($request);
