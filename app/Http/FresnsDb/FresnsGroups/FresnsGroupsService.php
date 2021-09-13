@@ -39,7 +39,7 @@ class FresnsGroupsService extends FresnsBaseService
     // Group Common
     public function common()
     {
-        // $common =  parent::common();
+        // Group SEO Info
         $id = request()->input('gid');
         $langTag = request()->header('langTag');
         $mid = GlobalService::getGlobalKey('member_id');
@@ -60,26 +60,17 @@ class FresnsGroupsService extends FresnsBaseService
             }
         }
 
+        // Group Plugin Extensions
         $extends = [];
-        // $extends['plugin'] = "";
-        // $extends['name'] = "";
-        // $extends['icon'] = "";
-        // $extends['url'] = "";
-        // $extends['badgesType'] = "";
-        // $extends['badgesValue'] = "";
-        // dd($group);
         if ($group) {
             $pluginUsages = FresnsPluginUsages::where('type', 6)->where('group_id', $group['id'])->first();
             if ($pluginUsages) {
                 $plugin = pluginUnikey::where('unikey', $pluginUsages['plugin_unikey'])->first();
-                // dd($plugin);
                 $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $pluginUsages['plugin_unikey'])->first();
                 $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? '';
                 $name = InfoService::getlanguageField('name', $pluginUsages['id']);
                 $extends['name'] = $name == null ? '' : $name['lang_content'];
-                // $extends['icon'] = $pluginUsages['icon_file_url'] ?? "";
                 $extends['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($pluginUsages['icon_file_id'], $pluginUsages['icon_file_url']);
-                // $extends['url'] = $plugin['access_path']  .'/'. $pluginUsages['parameter'];
                 $extends['url'] = ApiFileHelper::getPluginUsagesUrl($pluginUsages['plugin_unikey'], $pluginUsages['id']);
                 $extends['badgesType'] = $pluginBadges['display_type'] ?? '';
                 $extends['badgesValue'] = ($pluginBadges['value_text'] ?? '') ?? ($pluginBadges['value_number'] ?? '');
@@ -100,8 +91,6 @@ class FresnsGroupsService extends FresnsBaseService
         $common['extensions'] = $common['extensions'];
 
         return $common;
-        // $extends = [];
-        // $seoGroup['extends'] = $extends;
     }
 
     // Permission data

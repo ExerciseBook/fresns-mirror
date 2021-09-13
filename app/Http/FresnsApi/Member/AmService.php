@@ -42,12 +42,10 @@ class AmService
     public function common($mid, $langTag, $isMe)
     {
         // Member SEO Info
-        $seoInfoArr = DB::table('seo')->where('linked_type', 1)->where('linked_id', $mid)->where('deleted_at',
-            null)->where('lang_tag', $langTag)->get(['title', 'keywords', 'description'])->first();
+        $seoInfoArr = DB::table('seo')->where('linked_type', 1)->where('linked_id', $mid)->where('deleted_at', null)->where('lang_tag', $langTag)->get(['title', 'keywords', 'description'])->first();
         if (empty($seoInfoArr)) {
             $defaultLangTag = ApiLanguageHelper::getDefaultLanguage();
-            $seoInfoArr = DB::table('seo')->where('linked_type', 1)->where('linked_id', $mid)->where('deleted_at',
-            null)->where('lang_tag', $defaultLangTag)->get(['title', 'keywords', 'description'])->first();
+            $seoInfoArr = DB::table('seo')->where('linked_type', 1)->where('linked_id', $mid)->where('deleted_at', null)->where('lang_tag', $defaultLangTag)->get(['title', 'keywords', 'description'])->first();
         }
         $data['seoInfo'] = $seoInfoArr;
 
