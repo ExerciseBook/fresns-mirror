@@ -64,7 +64,7 @@ use Illuminate\Validation\Rule;
 class AmControllerApi extends FresnsBaseApiController
 {
     // Get group [tree structure list]
-    public function trees(Request $request)
+    public function groupTrees(Request $request)
     {
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         if ($site_mode == AmConfig::PRIVATE) {
@@ -101,7 +101,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get group [list]
-    public function group_lists(Request $request)
+    public function groupLists(Request $request)
     {
         $rule = [
             'type' => 'required|in:1,2',
@@ -155,7 +155,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get group [detail]
-    public function group_detail(Request $request)
+    public function groupDetail(Request $request)
     {
         $table = FresnsGroupsConfig::CFG_TABLE;
         $rule = [
@@ -187,7 +187,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get post [list]
-    public function post_lists(Request $request)
+    public function postLists(Request $request)
     {
         $rule = [
             'searchEssence' => 'in:1,2,3',
@@ -246,7 +246,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get post [detail]
-    public function post_detail(Request $request)
+    public function postDetail(Request $request)
     {
         $table = FresnsPostsConfig::CFG_TABLE;
         $rule = [
@@ -363,7 +363,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get hashtag [list]
-    public function hashtag_lists(Request $request)
+    public function hashtagLists(Request $request)
     {
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         if ($site_mode == AmConfig::PRIVATE) {
@@ -394,7 +394,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get hashtag [detail]
-    public function hashtag_detail(Request $request)
+    public function hashtagDetail(Request $request)
     {
         $table = FresnsHashtagsConfig::CFG_TABLE;
         $rule = [
@@ -422,7 +422,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get comment [list]
-    public function comment_lists(Request $request)
+    public function commentLists(Request $request)
     {
         // Site Model = Private
         // Not logged in, content not output

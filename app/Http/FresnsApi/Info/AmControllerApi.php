@@ -57,7 +57,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Configs
-    public function infoConfigs(Request $request)
+    public function configs(Request $request)
     {
         $itemTag = $request->input('itemTag');
         $itemKey = $request->input('itemKey');
@@ -91,7 +91,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Emojis
-    public function infoEmojis(Request $request)
+    public function emojis(Request $request)
     {
         $pageSize = $request->input('pageSize', 10);
         $currentPage = $request->input('page', 1);
@@ -108,7 +108,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Stop Words
-    public function infoStopWords(Request $request)
+    public function stopWords(Request $request)
     {
         $currentPage = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 100);
@@ -124,7 +124,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Upload Log
-    public function infoUploadLog(Request $request)
+    public function uploadLog(Request $request)
     {
         $rule = [
             'objectName' => 'required',
@@ -162,7 +162,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Input Tips
-    public function infoInputtips(Request $request)
+    public function inputTips(Request $request)
     {
         $rule = [
             'queryType' => 'required|numeric|in:1,2,3,4,5',

@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Messages;
+namespace App\Http\FresnsApi\Message;
 
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\DB;
 class AmControllerApi extends FresnsBaseApiController
 {
     // Get Notify List
-    public function lists(Request $request)
+    public function notifyLists(Request $request)
     {
         $uid = $this->uid;
         $member_id = $this->mid;
@@ -69,7 +69,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Update Notify Reading
-    public function read(Request $request)
+    public function notifyRead(Request $request)
     {
         $rule = [
             'type' => 'required|in:1,2,3,4,5,6',
@@ -93,7 +93,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Delete Notify
-    public function delete(Request $request)
+    public function notifyDelete(Request $request)
     {
         $rule = [
             'notifyId' => 'required|array',
@@ -119,7 +119,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get Dialog List
-    public function dialog_lists(Request $request)
+    public function dialogLists(Request $request)
     {
         $uid = $this->uid;
         $member_id = $this->mid;
@@ -151,7 +151,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get Dialog Message List
-    public function message_lists(Request $request)
+    public function dialogMessages(Request $request)
     {
         $table = FresnsDialogsConfig::CFG_TABLE;
         $rule = [
@@ -242,7 +242,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Update Dialog Message Reading
-    public function message_read(Request $request)
+    public function readMessage(Request $request)
     {
         $table = FresnsDialogsConfig::CFG_TABLE;
         $rule = [
@@ -274,7 +274,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Send Dialog Message
-    public function message_send(Request $request)
+    public function sendMessage(Request $request)
     {
         $table = FresnsMembersConfig::CFG_TABLE;
         $mid = GlobalService::getGlobalKey('member_id');
@@ -413,7 +413,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Delete Dialog Message
-    public function dialog_delete(Request $request)
+    public function dialogDelete(Request $request)
     {
         $table = FresnsDialogsConfig::CFG_TABLE;
         $messageTable = FresnsDialogMessagesConfig::CFG_TABLE;

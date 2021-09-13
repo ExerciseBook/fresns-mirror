@@ -29,8 +29,8 @@ use Illuminate\Support\Facades\DB;
 
 class AmService
 {
-    // Get User Info
-    public function getUserInfo($uid, $langTag, $mid = null)
+    // Get User Detail
+    public function getUserDetail($uid, $langTag, $mid = null)
     {
         $langTag = ApiLanguageHelper::getLangTagByHeader();
 

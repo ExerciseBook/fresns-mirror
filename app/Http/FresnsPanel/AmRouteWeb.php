@@ -20,47 +20,47 @@ if ($appName == 'Fresns') {
 
     Route::group(['prefix' => "$adminPath", 'namespace' => '\App\Http\FresnsPanel'], function () {
         // Login Page
-        Route::get('/', 'AmControllerWeb@index')->name('fresns.index.index');
+        Route::get('/', 'AmControllerWeb@index')->name('admin.fresnsConsole.index');
     });
 
     // Login Request (No login status required)
     Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\FresnsPanel'], function () {
-        Route::post('/loginAcc', 'AmControllerWeb@loginAcc')->name('fresns.index.loginAcc');
-        Route::post('/checkLogin', 'AmControllerWeb@checkLogin')->name('fresns.index.checkLogin');
-        Route::get('/login', 'AmControllerWeb@loginIndex')->name('fresns.index.loginIndex');
+        Route::post('/loginAcc', 'AmControllerWeb@loginAcc')->name('admin.fresnsConsole.loginAcc');
+        Route::post('/checkLogin', 'AmControllerWeb@checkLogin')->name('admin.fresnsConsole.checkLogin');
+        Route::get('/login', 'AmControllerWeb@loginIndex')->name('admin.fresnsConsole.loginIndex');
     });
 
     // Console Page (login status required)
     Route::group(['prefix' => 'fresns', 'middleware' => ['web', 'auth'], 'namespace' => '\App\Http\FresnsPanel'], function () {
         // Function Operation Page
-        Route::get('/dashboard', 'AmControllerWeb@dashboard')->name('fresns.index.dashboard');
-        Route::get('/settings', 'AmControllerWeb@settings')->name('fresns.index.settings');
-        Route::get('/keys', 'AmControllerWeb@keys')->name('fresns.index.keys');
-        Route::get('/admins', 'AmControllerWeb@admins')->name('fresns.index.admins');
-        Route::get('/websites', 'AmControllerWeb@websites')->name('fresns.index.websites');
-        Route::get('/apps', 'AmControllerWeb@apps')->name('fresns.index.apps');
-        Route::get('/plugins', 'AmControllerWeb@plugins')->name('fresns.index.plugins');
-        Route::get('/iframe', 'AmControllerWeb@iframe')->name('fresns.index.iframe');
+        Route::get('/dashboard', 'AmControllerWeb@dashboard')->name('admin.fresnsConsole.dashboard');
+        Route::get('/settings', 'AmControllerWeb@settings')->name('admin.fresnsConsole.settings');
+        Route::get('/keys', 'AmControllerWeb@keys')->name('admin.fresnsConsole.keys');
+        Route::get('/admins', 'AmControllerWeb@admins')->name('admin.fresnsConsole.admins');
+        Route::get('/websites', 'AmControllerWeb@websites')->name('admin.fresnsConsole.websites');
+        Route::get('/apps', 'AmControllerWeb@apps')->name('admin.fresnsConsole.apps');
+        Route::get('/plugins', 'AmControllerWeb@plugins')->name('admin.fresnsConsole.plugins');
+        Route::get('/iframe', 'AmControllerWeb@iframe')->name('admin.fresnsConsole.iframe');
         // Logout Console
-        Route::get('/logout', 'AmControllerWeb@login_out')->name('fresns.index.login_out');
+        Route::get('/logout', 'AmControllerWeb@logout')->name('admin.fresnsConsole.logout');
         // Setting Language
-        Route::post('/setLanguage', 'AmControllerWeb@setLanguage')->name('fresns.index.setLanguage');
+        Route::post('/setLanguage', 'AmControllerWeb@setLanguage')->name('admin.fresnsConsole.setLanguage');
         // Console Settings
-        Route::post('/updateSetting', 'AmControllerWeb@updateSetting')->name('fresns.index.updateSetting');
+        Route::post('/updateSetting', 'AmControllerWeb@updateSetting')->name('admin.fresnsConsole.updateSetting');
         // Administrator Settings
-        Route::post('/addAdmin', 'AmControllerWeb@addAdmin')->name('fresns.index.addAdmin');
-        Route::post('/delAdmin', 'AmControllerWeb@delAdmin')->name('fresns.index.delAdmin');
+        Route::post('/addAdmin', 'AmControllerWeb@addAdmin')->name('admin.fresnsConsole.addAdmin');
+        Route::post('/delAdmin', 'AmControllerWeb@delAdmin')->name('admin.fresnsConsole.delAdmin');
         // Key Management
-        Route::post('/submitKey', 'AmControllerWeb@submitKey')->name('fresns.index.submitKey');
-        Route::post('/updateKey', 'AmControllerWeb@updateKey')->name('fresns.index.updateKey');
-        Route::post('/resetKey', 'AmControllerWeb@resetKey')->name('fresns.index.resetKey');
-        Route::post('/delKey', 'AmControllerWeb@delKey')->name('fresns.index.delKey');
+        Route::post('/submitKey', 'AmControllerWeb@submitKey')->name('admin.fresnsConsole.submitKey');
+        Route::post('/updateKey', 'AmControllerWeb@updateKey')->name('admin.fresnsConsole.updateKey');
+        Route::post('/resetKey', 'AmControllerWeb@resetKey')->name('admin.fresnsConsole.resetKey');
+        Route::post('/delKey', 'AmControllerWeb@delKey')->name('admin.fresnsConsole.delKey');
         // Extensions Related
-        Route::post('/install', 'AmControllerWeb@install')->name('fresns.index.install');
-        Route::post('/uninstall', 'AmControllerWeb@uninstall')->name('fresns.index.uninstall');
-        Route::post('/updateUnikey', 'AmControllerWeb@updateUnikey')->name('fresns.index.updateUnikey');
-        Route::post('/localInstall', 'AmControllerWeb@localInstall')->name('fresns.index.localInstall');
-        Route::post('/enableUnikeyStatus', 'AmControllerWeb@enableUnikeyStatus')->name('fresns.index.install');
-        Route::post('/websiteLinkSubject', 'AmControllerWeb@websiteLinkSubject')->name('fresns.index.websiteLinkSubject');
+        Route::post('/install', 'AmControllerWeb@install')->name('admin.fresnsConsole.install');
+        Route::post('/uninstall', 'AmControllerWeb@uninstall')->name('admin.fresnsConsole.uninstall');
+        Route::post('/updateUnikey', 'AmControllerWeb@updateUnikey')->name('admin.fresnsConsole.updateUnikey');
+        Route::post('/localInstall', 'AmControllerWeb@localInstall')->name('admin.fresnsConsole.localInstall');
+        Route::post('/enableUnikeyStatus', 'AmControllerWeb@enableUnikeyStatus')->name('admin.fresnsConsole.install');
+        Route::post('/websiteLinkSubject', 'AmControllerWeb@websiteLinkSubject')->name('admin.fresnsConsole.websiteLinkSubject');
     });
 }

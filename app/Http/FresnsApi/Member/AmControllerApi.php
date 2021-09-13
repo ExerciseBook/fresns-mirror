@@ -159,8 +159,136 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
+    // Member Detail
+    public function detail(Request $request)
+    {
+        $mid = GlobalService::getGlobalKey('member_id');
+        $viewMid = $request->input('viewMid');
+        $viewMname = $request->input('viewMname');
+        $langTag = ApiLanguageHelper::getLangTagByHeader();
+
+        $request->offsetSet('langTag', $langTag);
+        $request->offsetSet('mid', $mid);
+        if (empty($viewMid)) {
+            $viewMid = FresnsMembers::where('name', $viewMname)->value('id');
+        } else {
+            $viewMid = FresnsMembers::where('uuid', $viewMid)->value('id');
+        }
+
+        if (empty($viewMid)) {
+            $this->error(ErrorCodeService::UID_EXIST_ERROR);
+        }
+
+        // Is it me
+        $isMe = false;
+        if ($mid == $viewMid) {
+            $isMe = true;
+        }
+
+        $data['common'] = $this->service->common($viewMid, $langTag, $isMe, $mid);
+        $data['detail'] = $this->service->getMemberDetail($mid, $viewMid, $isMe, $langTag);
+
+        $this->success($data);
+    }
+
+    // Member List
+    public function lists(Request $request)
+    {
+        $rule = [
+            'gender' => 'numeric|in:0,1,2',
+            'sortDirection' => 'numeric|in:1,2',
+            'pageSize' => 'numeric',
+            'page' => 'numeric',
+        ];
+        ValidateService::validateRule($request, $rule);
+
+        $searchKey = $request->input('searchKey');
+        $gender = $request->input('gender', 3);
+        $sortType = $request->input('sortType', 'follow');
+        $createdTimeGt = $request->input('createdTimeGt');
+        $createdTimeLt = $request->input('createdTimeLt');
+        $sortDirection = $request->input('sortDirection', 2);
+        $pageSize = $request->input('pageSize', 20);
+        $page = $request->input('page', 1);
+        if ($pageSize > 50) {
+            $pageSize = 50;
+        }
+        $query = DB::table('members as me');
+        $query = $query->select('me.*')->leftJoin('member_stats as st', 'me.id', '=', 'st.member_id');
+
+        if ($searchKey) {
+            $memberIdArr1 = FresnsMembers::where('name', 'LIKE', "%$searchKey%")->pluck('id')->toArray();
+            $memberIdArr2 = FresnsMembers::where('nickname', 'LIKE', "%$searchKey%")->pluck('id')->toArray();
+            $idArr = array_unique(array_merge($memberIdArr1, $memberIdArr2));
+            $query->whereIn('me.id', $idArr);
+        }
+        if ($createdTimeGt) {
+            $createdTimeGt = DateHelper::fresnsInputTimeToTimezone($createdTimeGt);
+            $query->where('st.created_at', '>', $createdTimeGt);
+        }
+        if ($createdTimeLt) {
+            $createdTimeLt = DateHelper::fresnsInputTimeToTimezone($createdTimeLt);
+            $query->where('st.created_at', '<', $createdTimeLt);
+        }
+
+        if (in_array($gender, [0, 1, 2])) {
+            $query->where('me.gender', $gender);
+        }
+
+        $sortDirection = $sortDirection == 1 ? 'ASC' : 'DESC';
+        switch ($sortType) {
+            case 'like':
+                $query->orderBy('st.like_me_count', $sortDirection);
+                break;
+            case 'follow':
+                $query->orderBy('st.follow_me_count', $sortDirection);
+                break;
+            case 'shield':
+                $query->orderBy('st.shield_me_count', $sortDirection);
+                break;
+            case 'post':
+                $query->orderBy('st.post_publish_count', $sortDirection);
+                break;
+            case 'comment':
+                $query->orderBy('st.comment_publish_count', $sortDirection);
+                break;
+            case 'postLike':
+                $query->orderBy('st.post_like_count', $sortDirection);
+                break;
+            case 'commentLike':
+                $query->orderBy('st.comment_like_count', $sortDirection);
+                break;
+            case 'extcredits1':
+                $query->orderBy('st.extcredits1', $sortDirection);
+                break;
+            case 'extcredits2':
+                $query->orderBy('st.extcredits2', $sortDirection);
+                break;
+            case 'extcredits3':
+                $query->orderBy('st.extcredits3', $sortDirection);
+                break;
+            case 'extcredits4':
+                $query->orderBy('st.extcredits4', $sortDirection);
+                break;
+            default:
+                $query->orderBy('st.extcredits5', $sortDirection);
+                break;
+        }
+
+        $item = $query->paginate($pageSize, ['*'], 'page', $page);
+        $data = [];
+        $data['list'] = FresnsMemberListsResource::collection($item->items())->toArray($item->items());
+        $pagination['total'] = $item->total();
+        $pagination['current'] = $page;
+        $pagination['pageSize'] = $pageSize;
+        $pagination['lastPage'] = $item->lastPage();
+
+        $data['pagination'] = $pagination;
+        $this->success($data);
+    }
+
     // Member Edit Profile
-    public function memberEdit(Request $request)
+    public function edit(Request $request)
     {
         $rule = [
             'gender' => 'numeric|in:0,1,2',
@@ -294,7 +422,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Get Member Role List
-    public function memberRoles(Request $request)
+    public function roles(Request $request)
     {
         $rule = [
             'type' => 'in:1,2,3',
@@ -312,8 +440,202 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
+    // Get Member Interactions Data
+    public function interactions(Request $request)
+    {
+        $rule = [
+            'type' => 'required|in:1,2,3,4,5',
+            'objectType' => 'numeric|in:1,2,3,4,5',
+            'objectId' => 'required',
+            'sortDirection' => 'numeric',
+            'pageSize' => 'numeric',
+            'page' => 'numeric',
+        ];
+        ValidateService::validateRule($request, $rule);
+
+        $type = $request->input('type');
+        $objectType = $request->input('objectType', 1);
+        $objectId = $request->input('objectId');
+        $sortDirection = $request->input('sortDirection');
+        $pageSize = $request->input('pageSize', 30);
+        $page = $request->input('page', 1);
+
+        /**
+         * Whether to output data when viewing other people's information
+         * https://fresns.org/database/keyname/interactives.html
+         * View other people's content settings
+         */
+        $typeArr = [4, 5];
+        if (! in_array($type, $typeArr)) {
+            $isMarkLists = AmChecker::checkMarkLists($type, $objectType);
+            if ($isMarkLists == false) {
+                $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+            }
+        }
+
+        $idArr = [];
+
+        /**
+         * Whether to output data when viewing other people's information
+         * https://fresns.org/database/keyname/interactives.html
+         * View other people's content settings
+         * 
+         * type=1 Get a list of all members liked by objectType > objectId (query member_likes table)
+         * type=2 Get a list of all members followed by objectType > objectId (query member_follows table)
+         * type=3 Get a list of all members blocked by objectType > objectId (query member_shields table)
+         */
+        switch ($type) {
+            case 1:
+                $likeId = 0;
+                switch ($objectType) {
+                    case 1:
+                        $it_like_members = ApiConfigHelper::getConfigByItemKey('it_like_members');
+                        if ($it_like_members == true) {
+                            $likeId = FresnsMembers::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                    case 2:
+                        $it_like_groups = ApiConfigHelper::getConfigByItemKey('it_like_groups');
+                        if ($it_like_groups == true) {
+                            $likeId = FresnsGroups::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                    case 3:
+                        $it_like_hashtags = ApiConfigHelper::getConfigByItemKey('it_like_hashtags');
+                        if ($it_like_hashtags == true) {
+                            $likeId = $objectId;
+                        }
+
+                        break;
+                    case 4:
+                        $it_like_posts = ApiConfigHelper::getConfigByItemKey('it_like_posts');
+                        if ($it_like_posts == true) {
+                            $likeId = FresnsPosts::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                    default:
+                        $it_like_comments = ApiConfigHelper::getConfigByItemKey('it_like_comments');
+                        if ($it_like_comments == true) {
+                            $likeId = FresnsComments::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                }
+                $idArr = FresnsMemberLikes::where('like_type', $objectType)->where('like_id',
+                    $likeId)->pluck('member_id')->toArray();
+                break;
+            case 2:
+                $followId = 0;
+                switch ($objectType) {
+                    case 1:
+                        $it_follow_members = ApiConfigHelper::getConfigByItemKey('it_follow_members');
+                        if ($it_follow_members == true) {
+                            $followId = FresnsMembers::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                    case 2:
+                        $it_follow_groups = ApiConfigHelper::getConfigByItemKey('it_follow_groups');
+                        if ($it_follow_groups == true) {
+                            $followId = FresnsGroups::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                    case 3:
+                        $it_follow_hashtags = ApiConfigHelper::getConfigByItemKey('it_follow_hashtags');
+                        if ($it_follow_hashtags == true) {
+                            $followId = $objectId;
+                        }
+                        break;
+                    case 4:
+                        $it_follow_posts = ApiConfigHelper::getConfigByItemKey('it_follow_posts');
+                        if ($it_follow_posts == true) {
+                            $followId = FresnsPosts::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                    default:
+                        $it_follow_comments = ApiConfigHelper::getConfigByItemKey('it_follow_comments');
+                        if ($it_follow_comments == true) {
+                            $followId = FresnsComments::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                }
+                $idArr = FresnsMemberFollows::where('follow_type', $objectType)->where('follow_id',
+                    $followId)->pluck('member_id')->toArray();
+
+                break;
+            case 3:
+                $shieldId = 0;
+                switch ($objectType) {
+                    case 1:
+                        $it_shield_members = ApiConfigHelper::getConfigByItemKey('it_shield_members');
+                        if ($it_shield_members == true) {
+                            $shieldId = FresnsMembers::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                    case 2:
+                        $it_shield_groups = ApiConfigHelper::getConfigByItemKey('it_shield_groups');
+                        if ($it_shield_groups == true) {
+                            $shieldId = FresnsGroups::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                    case 3:
+                        $it_shield_hashtags = ApiConfigHelper::getConfigByItemKey('it_shield_hashtags');
+                        if ($it_shield_hashtags == true) {
+                            $shieldId = $objectId;
+                        }
+                        break;
+                    case 4:
+                        $it_shield_posts = ApiConfigHelper::getConfigByItemKey('it_shield_posts');
+                        if ($it_shield_posts == true) {
+                            $shieldId = FresnsPosts::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                    default:
+                        $it_shield_comments = ApiConfigHelper::getConfigByItemKey('it_shield_comments');
+                        if ($it_shield_comments == true) {
+                            $shieldId = FresnsComments::where('uuid', $objectId)->value('id');
+                        }
+                        break;
+                }
+                $idArr = FresnsMemberFollows::where('follow_type', $objectType)->where('follow_id',
+                    $shieldId)->pluck('member_id')->toArray();
+
+                break;
+            case 4:
+                if ($objectType == 4) {
+                    $postUuidArr = FresnsPosts::where('uuid', $objectId)->pluck('id')->toArray();
+                    $idArr = DB::table(FresnsPostMembersConfig::CFG_TABLE)->whereIn('post_id',
+                        $postUuidArr)->pluck('member_id')->toArray();
+                }
+                break;
+            default:
+                $idArr = DB::table(FresnsFileLogsConfig::CFG_TABLE)->where('file_id',
+                    $objectId)->pluck('member_id')->toArray();
+
+                break;
+        }
+
+        $query = DB::table('members as me');
+        $query = $query->select('me.*')->leftJoin('member_stats as st', 'me.id', '=', 'st.member_id');
+
+        $query->whereIn('me.id', $idArr);
+
+        $sortDirection = $sortDirection == 1 ? 'ASC' : 'DESC';
+        $query->orderBy('me.created_at', $sortDirection);
+
+        $item = $query->paginate($pageSize, ['*'], 'page', $page);
+        $list = FresnsMemberListsResource::collection($item->items())->toArray($item->items());
+        $data = [];
+        $data['list'] = $list;
+        $pagination['total'] = $item->total();
+        $pagination['current'] = $page;
+        $pagination['pageSize'] = $pageSize;
+        $pagination['lastPage'] = $item->lastPage();
+
+        $data['pagination'] = $pagination;
+        $this->success($data);
+    }
+
     // Operation Mark
-    public function memberMark(Request $request)
+    public function mark(Request $request)
     {
         $rule = [
             'type' => 'required|numeric|in:1,2',
@@ -672,393 +994,8 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success();
     }
 
-    /**
-     * Member Operation Delete Content
-     * Delete all to verify that the author of the post or comment is me
-     * You need to verify that the member has the right to delete, there are some contents that may not be allowed to be deleted, query the can_delete field in the dependent information table.
-     */
-    public function memberDelete(Request $request)
-    {
-        $rule = [
-            'type' => 'required|numeric|in:1,2',
-            'uuid' => 'required',
-
-        ];
-        ValidateService::validateRule($request, $rule);
-
-        $mid = GlobalService::getGlobalKey('member_id');
-
-        $uuid = $request->input('uuid');
-        $type = $request->input('type');
-        switch ($type) {
-            case 1:
-                $posts = FresnsPosts::where('uuid', $uuid)->first();
-                if (empty($posts)) {
-                    $this->error(ErrorCodeService::DELETE_FILE_ERROR);
-                }
-                if ($posts['member_id'] != $mid) {
-                    $this->error(ErrorCodeService::NO_PERMISSION);
-                }
-                $postsAppend = FresnsPostAppends::where('post_id', $posts['id'])->first();
-                if ($postsAppend['can_delete'] == 0) {
-                    $this->error(ErrorCodeService::NO_PERMISSION);
-                }
-                FresnsPosts::where('id', $posts['id'])->delete();
-                FresnsPostAppends::where('id', $postsAppend['id'])->delete();
-                break;
-
-            default:
-                $comments = FresnsComments::where('uuid', $uuid)->first();
-
-                if (empty($comments)) {
-                    $this->error(ErrorCodeService::DELETE_COMMENT_ERROR);
-                }
-                if ($comments['member_id'] != $mid) {
-                    $this->error(ErrorCodeService::NO_PERMISSION);
-                }
-                $commentsAppend = FresnsCommentAppends::where('comment_id', $comments['id'])->first();
-                if (! empty($commentsAppend)) {
-                    if ($commentsAppend['can_delete'] == 0) {
-                        $this->error(ErrorCodeService::NO_PERMISSION);
-                    }
-                }
-
-                FresnsComments::where('id', $comments['id'])->delete();
-                FresnsMemberStats::where('member_id', $mid)->decrement('comment_publish_count');
-                FresnsConfigs::where('item_key', 'comment_counts')->decrement('item_value');
-                if (! empty($commentsAppend['id'])) {
-                    FresnsCommentAppends::where('id', $commentsAppend['id'])->delete();
-                }
-                break;
-        }
-
-        $this->success();
-    }
-
-    // Member Detail
-    public function memberDetail(Request $request)
-    {
-        $mid = GlobalService::getGlobalKey('member_id');
-        $viewMid = $request->input('viewMid');
-        $viewMname = $request->input('viewMname');
-        $langTag = ApiLanguageHelper::getLangTagByHeader();
-
-        $request->offsetSet('langTag', $langTag);
-        $request->offsetSet('mid', $mid);
-        if (empty($viewMid)) {
-            $viewMid = FresnsMembers::where('name', $viewMname)->value('id');
-        } else {
-            $viewMid = FresnsMembers::where('uuid', $viewMid)->value('id');
-        }
-
-        if (empty($viewMid)) {
-            $this->error(ErrorCodeService::UID_EXIST_ERROR);
-        }
-
-        // Is it me
-        $isMe = false;
-        if ($mid == $viewMid) {
-            $isMe = true;
-        }
-
-        $data['common'] = $this->service->common($viewMid, $langTag, $isMe, $mid);
-        $data['detail'] = $this->service->getMemberDetail($mid, $viewMid, $isMe, $langTag);
-
-        $this->success($data);
-    }
-
-    // Member List
-    public function memberLists(Request $request)
-    {
-        $rule = [
-            'gender' => 'numeric|in:0,1,2',
-            'sortDirection' => 'numeric|in:1,2',
-            'pageSize' => 'numeric',
-            'page' => 'numeric',
-        ];
-        ValidateService::validateRule($request, $rule);
-
-        $searchKey = $request->input('searchKey');
-        $gender = $request->input('gender', 3);
-        $sortType = $request->input('sortType', 'follow');
-        $createdTimeGt = $request->input('createdTimeGt');
-        $createdTimeLt = $request->input('createdTimeLt');
-        $sortDirection = $request->input('sortDirection', 2);
-        $pageSize = $request->input('pageSize', 20);
-        $page = $request->input('page', 1);
-        if ($pageSize > 50) {
-            $pageSize = 50;
-        }
-        $query = DB::table('members as me');
-        $query = $query->select('me.*')->leftJoin('member_stats as st', 'me.id', '=', 'st.member_id');
-
-        if ($searchKey) {
-            $memberIdArr1 = FresnsMembers::where('name', 'LIKE', "%$searchKey%")->pluck('id')->toArray();
-            $memberIdArr2 = FresnsMembers::where('nickname', 'LIKE', "%$searchKey%")->pluck('id')->toArray();
-            $idArr = array_unique(array_merge($memberIdArr1, $memberIdArr2));
-            $query->whereIn('me.id', $idArr);
-        }
-        if ($createdTimeGt) {
-            $createdTimeGt = DateHelper::fresnsInputTimeToTimezone($createdTimeGt);
-            $query->where('st.created_at', '>', $createdTimeGt);
-        }
-        if ($createdTimeLt) {
-            $createdTimeLt = DateHelper::fresnsInputTimeToTimezone($createdTimeLt);
-            $query->where('st.created_at', '<', $createdTimeLt);
-        }
-
-        if (in_array($gender, [0, 1, 2])) {
-            $query->where('me.gender', $gender);
-        }
-
-        $sortDirection = $sortDirection == 1 ? 'ASC' : 'DESC';
-        switch ($sortType) {
-            case 'like':
-                $query->orderBy('st.like_me_count', $sortDirection);
-                break;
-            case 'follow':
-                $query->orderBy('st.follow_me_count', $sortDirection);
-                break;
-            case 'shield':
-                $query->orderBy('st.shield_me_count', $sortDirection);
-                break;
-            case 'post':
-                $query->orderBy('st.post_publish_count', $sortDirection);
-                break;
-            case 'comment':
-                $query->orderBy('st.comment_publish_count', $sortDirection);
-                break;
-            case 'postLike':
-                $query->orderBy('st.post_like_count', $sortDirection);
-                break;
-            case 'commentLike':
-                $query->orderBy('st.comment_like_count', $sortDirection);
-                break;
-            case 'extcredits1':
-                $query->orderBy('st.extcredits1', $sortDirection);
-                break;
-            case 'extcredits2':
-                $query->orderBy('st.extcredits2', $sortDirection);
-                break;
-            case 'extcredits3':
-                $query->orderBy('st.extcredits3', $sortDirection);
-                break;
-            case 'extcredits4':
-                $query->orderBy('st.extcredits4', $sortDirection);
-                break;
-            default:
-                $query->orderBy('st.extcredits5', $sortDirection);
-                break;
-        }
-
-        $item = $query->paginate($pageSize, ['*'], 'page', $page);
-        $data = [];
-        $data['list'] = FresnsMemberListsResource::collection($item->items())->toArray($item->items());
-        $pagination['total'] = $item->total();
-        $pagination['current'] = $page;
-        $pagination['pageSize'] = $pageSize;
-        $pagination['lastPage'] = $item->lastPage();
-
-        $data['pagination'] = $pagination;
-        $this->success($data);
-    }
-
-    // Get Member Interactions Data
-    public function memberInteractions(Request $request)
-    {
-        $rule = [
-            'type' => 'required|in:1,2,3,4,5',
-            'objectType' => 'numeric|in:1,2,3,4,5',
-            'objectId' => 'required',
-            'sortDirection' => 'numeric',
-            'pageSize' => 'numeric',
-            'page' => 'numeric',
-        ];
-        ValidateService::validateRule($request, $rule);
-
-        $type = $request->input('type');
-        $objectType = $request->input('objectType', 1);
-        $objectId = $request->input('objectId');
-        $sortDirection = $request->input('sortDirection');
-        $pageSize = $request->input('pageSize', 30);
-        $page = $request->input('page', 1);
-
-        /**
-         * Whether to output data when viewing other people's information
-         * https://fresns.org/database/keyname/interactives.html
-         * View other people's content settings
-         */
-        $typeArr = [4, 5];
-        if (! in_array($type, $typeArr)) {
-            $isMarkLists = AmChecker::checkMarkLists($type, $objectType);
-            if ($isMarkLists == false) {
-                $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
-            }
-        }
-
-        $idArr = [];
-
-        /**
-         * Whether to output data when viewing other people's information
-         * https://fresns.org/database/keyname/interactives.html
-         * View other people's content settings
-         * 
-         * type=1 Get a list of all members liked by objectType > objectId (query member_likes table)
-         * type=2 Get a list of all members followed by objectType > objectId (query member_follows table)
-         * type=3 Get a list of all members blocked by objectType > objectId (query member_shields table)
-         */
-        switch ($type) {
-            case 1:
-                $likeId = 0;
-                switch ($objectType) {
-                    case 1:
-                        $it_like_members = ApiConfigHelper::getConfigByItemKey('it_like_members');
-                        if ($it_like_members == true) {
-                            $likeId = FresnsMembers::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                    case 2:
-                        $it_like_groups = ApiConfigHelper::getConfigByItemKey('it_like_groups');
-                        if ($it_like_groups == true) {
-                            $likeId = FresnsGroups::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                    case 3:
-                        $it_like_hashtags = ApiConfigHelper::getConfigByItemKey('it_like_hashtags');
-                        if ($it_like_hashtags == true) {
-                            $likeId = $objectId;
-                        }
-
-                        break;
-                    case 4:
-                        $it_like_posts = ApiConfigHelper::getConfigByItemKey('it_like_posts');
-                        if ($it_like_posts == true) {
-                            $likeId = FresnsPosts::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                    default:
-                        $it_like_comments = ApiConfigHelper::getConfigByItemKey('it_like_comments');
-                        if ($it_like_comments == true) {
-                            $likeId = FresnsComments::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                }
-                $idArr = FresnsMemberLikes::where('like_type', $objectType)->where('like_id',
-                    $likeId)->pluck('member_id')->toArray();
-                break;
-            case 2:
-                $followId = 0;
-                switch ($objectType) {
-                    case 1:
-                        $it_follow_members = ApiConfigHelper::getConfigByItemKey('it_follow_members');
-                        if ($it_follow_members == true) {
-                            $followId = FresnsMembers::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                    case 2:
-                        $it_follow_groups = ApiConfigHelper::getConfigByItemKey('it_follow_groups');
-                        if ($it_follow_groups == true) {
-                            $followId = FresnsGroups::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                    case 3:
-                        $it_follow_hashtags = ApiConfigHelper::getConfigByItemKey('it_follow_hashtags');
-                        if ($it_follow_hashtags == true) {
-                            $followId = $objectId;
-                        }
-                        break;
-                    case 4:
-                        $it_follow_posts = ApiConfigHelper::getConfigByItemKey('it_follow_posts');
-                        if ($it_follow_posts == true) {
-                            $followId = FresnsPosts::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                    default:
-                        $it_follow_comments = ApiConfigHelper::getConfigByItemKey('it_follow_comments');
-                        if ($it_follow_comments == true) {
-                            $followId = FresnsComments::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                }
-                $idArr = FresnsMemberFollows::where('follow_type', $objectType)->where('follow_id',
-                    $followId)->pluck('member_id')->toArray();
-
-                break;
-            case 3:
-                $shieldId = 0;
-                switch ($objectType) {
-                    case 1:
-                        $it_shield_members = ApiConfigHelper::getConfigByItemKey('it_shield_members');
-                        if ($it_shield_members == true) {
-                            $shieldId = FresnsMembers::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                    case 2:
-                        $it_shield_groups = ApiConfigHelper::getConfigByItemKey('it_shield_groups');
-                        if ($it_shield_groups == true) {
-                            $shieldId = FresnsGroups::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                    case 3:
-                        $it_shield_hashtags = ApiConfigHelper::getConfigByItemKey('it_shield_hashtags');
-                        if ($it_shield_hashtags == true) {
-                            $shieldId = $objectId;
-                        }
-                        break;
-                    case 4:
-                        $it_shield_posts = ApiConfigHelper::getConfigByItemKey('it_shield_posts');
-                        if ($it_shield_posts == true) {
-                            $shieldId = FresnsPosts::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                    default:
-                        $it_shield_comments = ApiConfigHelper::getConfigByItemKey('it_shield_comments');
-                        if ($it_shield_comments == true) {
-                            $shieldId = FresnsComments::where('uuid', $objectId)->value('id');
-                        }
-                        break;
-                }
-                $idArr = FresnsMemberFollows::where('follow_type', $objectType)->where('follow_id',
-                    $shieldId)->pluck('member_id')->toArray();
-
-                break;
-            case 4:
-                if ($objectType == 4) {
-                    $postUuidArr = FresnsPosts::where('uuid', $objectId)->pluck('id')->toArray();
-                    $idArr = DB::table(FresnsPostMembersConfig::CFG_TABLE)->whereIn('post_id',
-                        $postUuidArr)->pluck('member_id')->toArray();
-                }
-                break;
-            default:
-                $idArr = DB::table(FresnsFileLogsConfig::CFG_TABLE)->where('file_id',
-                    $objectId)->pluck('member_id')->toArray();
-
-                break;
-        }
-
-        $query = DB::table('members as me');
-        $query = $query->select('me.*')->leftJoin('member_stats as st', 'me.id', '=', 'st.member_id');
-
-        $query->whereIn('me.id', $idArr);
-
-        $sortDirection = $sortDirection == 1 ? 'ASC' : 'DESC';
-        $query->orderBy('me.created_at', $sortDirection);
-
-        $item = $query->paginate($pageSize, ['*'], 'page', $page);
-        $list = FresnsMemberListsResource::collection($item->items())->toArray($item->items());
-        $data = [];
-        $data['list'] = $list;
-        $pagination['total'] = $item->total();
-        $pagination['current'] = $page;
-        $pagination['pageSize'] = $pageSize;
-        $pagination['lastPage'] = $item->lastPage();
-
-        $data['pagination'] = $pagination;
-        $this->success($data);
-    }
-
     // Member Mark Data List
-    public function memberMarkLists(Request $request)
+    public function markLists(Request $request)
     {
         $rule = [
             'viewType' => 'required|numeric|in:1,2,3',
@@ -1166,5 +1103,68 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         $this->success($data);
+    }
+
+    /**
+     * Member Operation Delete Content
+     * Delete all to verify that the author of the post or comment is me
+     * You need to verify that the member has the right to delete, there are some contents that may not be allowed to be deleted, query the can_delete field in the dependent information table.
+     */
+    public function delete(Request $request)
+    {
+        $rule = [
+            'type' => 'required|numeric|in:1,2',
+            'uuid' => 'required',
+
+        ];
+        ValidateService::validateRule($request, $rule);
+
+        $mid = GlobalService::getGlobalKey('member_id');
+
+        $uuid = $request->input('uuid');
+        $type = $request->input('type');
+        switch ($type) {
+            case 1:
+                $posts = FresnsPosts::where('uuid', $uuid)->first();
+                if (empty($posts)) {
+                    $this->error(ErrorCodeService::DELETE_FILE_ERROR);
+                }
+                if ($posts['member_id'] != $mid) {
+                    $this->error(ErrorCodeService::NO_PERMISSION);
+                }
+                $postsAppend = FresnsPostAppends::where('post_id', $posts['id'])->first();
+                if ($postsAppend['can_delete'] == 0) {
+                    $this->error(ErrorCodeService::NO_PERMISSION);
+                }
+                FresnsPosts::where('id', $posts['id'])->delete();
+                FresnsPostAppends::where('id', $postsAppend['id'])->delete();
+                break;
+
+            default:
+                $comments = FresnsComments::where('uuid', $uuid)->first();
+
+                if (empty($comments)) {
+                    $this->error(ErrorCodeService::DELETE_COMMENT_ERROR);
+                }
+                if ($comments['member_id'] != $mid) {
+                    $this->error(ErrorCodeService::NO_PERMISSION);
+                }
+                $commentsAppend = FresnsCommentAppends::where('comment_id', $comments['id'])->first();
+                if (! empty($commentsAppend)) {
+                    if ($commentsAppend['can_delete'] == 0) {
+                        $this->error(ErrorCodeService::NO_PERMISSION);
+                    }
+                }
+
+                FresnsComments::where('id', $comments['id'])->delete();
+                FresnsMemberStats::where('member_id', $mid)->decrement('comment_publish_count');
+                FresnsConfigs::where('item_key', 'comment_counts')->decrement('item_value');
+                if (! empty($commentsAppend['id'])) {
+                    FresnsCommentAppends::where('id', $commentsAppend['id'])->delete();
+                }
+                break;
+        }
+
+        $this->success();
     }
 }

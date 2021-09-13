@@ -443,6 +443,119 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success();
     }
 
+    // Fast Publishing
+    public function publish(Request $request)
+    {
+        $rule = [
+            'type' => 'required|in:1,2',
+            'content' => 'required',
+            'isMarkdown' => 'required|in:0,1',
+            'content' => 'required',
+            'isAnonymous' => 'required | in:0,1',
+        ];
+        ValidateService::validateRule($request, $rule);
+        $deviceInfo = $request->header('deviceInfo');
+        $platform = $this->platform;
+        $type = $request->input('type');
+        $uid = GlobalService::getGlobalKey('user_id');
+        $member_id = GlobalService::getGlobalKey('member_id');
+        $logsId = 0;
+        if ($deviceInfo) {
+            if ($type == 1) {
+                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), 'Publish Post Content', $uid, $member_id, null, 'Officially Published Post Content');
+            } else {
+                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), 'Publish Comment Content', $uid, $member_id, null, 'Officially Published Comment Content');
+            }
+        }
+        LogService::Info('logsId', $logsId);
+        $commentCid = $request->input('commentCid');
+        $file = request()->file('file');
+
+        $fileInfo = $request->input('fileInfo');
+        $checkInfo = AmChecker::checkPublish($member_id);
+        if (is_array($checkInfo)) {
+            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
+            return $this->errorCheckInfo($checkInfo);
+        }
+        if (! empty($file)) {
+            $pluginUniKey = ApiConfigHelper::getConfigByItemKey('images_service');
+            // Perform Upload
+            $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+
+            if (empty($pluginClass)) {
+                LogService::error('Plugin not found');
+                FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                $this->error(ErrorCodeService::FILE_SALE_ERROR);
+            }
+
+            $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
+            if ($isPlugin == false) {
+                LogService::error('Plugin not found');
+                $this->error(ErrorCodeService::DOWMLOAD_ERROR);
+            }
+
+            $paramsExist = false;
+
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
+                'item_key')->toArray();
+            $paramsExist = ValidateService::validParamExist($configMapInDB,
+                ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
+
+            if ($paramsExist == false) {
+                LogService::error('插件信息未配置');
+                FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                $this->error(ErrorCodeService::FILE_SALE_ERROR);
+            }
+        }
+
+        // In case of private mode, this feature is not available when it expires (members > expired_at).
+        $checker = AmChecker::checkPermission($type, 1, $uid, $member_id);
+        if (is_array($checker)) {
+            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+
+            return $this->errorCheckInfo($checker);
+        }
+        $FresnsPostsService = new FresnsPostsService();
+        $fresnsCommentService = new FresnsCommentsService();
+        // Determine if review is required
+        $checkAudit = AmChecker::checkAudit($type, $member_id, $request->input('content'));
+
+        switch ($type) {
+            case 1:
+                $draftId = ContentLogsService::publishCreatedPost($request);
+                if ($checkAudit) {
+                    FresnsPostLogs::where('id', $draftId)->update([
+                        'status' => 2,
+                        'submit_at' => date('Y-m-d H:i:s', time()),
+                    ]);
+                    $this->success();
+                }
+                // Call Release
+                $FresnsPostsService->releaseByDraft($draftId, $logsId);
+                break;
+            default:
+                if ($commentCid) {
+                    $commentInfo = FresnsComments::where('uuid', $commentCid)->first();
+                    $commentCid = $commentInfo['id'];
+                }
+                if (empty($commentCid)) {
+                    $commentCid = 0;
+                }
+                $draftId = ContentLogsService::publishCreatedComment($request);
+                if ($checkAudit) {
+                    FresnsCommentLogs::where('id', $draftId)->update([
+                        'status' => 2,
+                        'submit_at' => date('Y-m-d H:i:s', time()),
+                    ]);
+                    $this->success();
+                }
+                $fresnsCommentService->releaseByDraft($draftId, $commentCid, $logsId);
+                break;
+        }
+        $this->success();
+    }
+
     // Upload File
     public function upload(Request $request)
     {
@@ -587,6 +700,35 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
+    // Get Upload Token
+    public function uploadToken(Request $request)
+    {
+        $rule = [
+            'type' => 'required|in:1,2,3,4',
+            'mode' => 'required|in:1,2',
+            'scene' => 'required|numeric|in:1,2,3,4,5,6,7,8,9,10,11',
+
+        ];
+        ValidateService::validateRule($request, $rule);
+
+        $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
+        $input['type'] = $request->input('type');
+        $input['mode'] = $request->input('mode');
+        $input['scene'] = $request->input('scene');
+
+        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
+        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $this->errorCheckInfo($resp);
+        }
+        $output = $resp['output'];
+
+        $data['storageId'] = $output['storageId'] ?? 1;
+        $data['token'] = $output['token'] ?? '';
+        $data['expireTime'] = DateHelper::fresnsOutputTimeToTimezone($output['expireTime']) ?? '';
+
+        $this->success($data);
+    }
+
     // Editor Delete
     public function delete(Request $request)
     {
@@ -669,148 +811,6 @@ class AmControllerApi extends FresnsBaseApiController
             $this->error($checkDelete);
         }
 
-        $this->success();
-    }
-
-    // Get Upload Token
-    public function uploadToken(Request $request)
-    {
-        $rule = [
-            'type' => 'required|in:1,2,3,4',
-            'mode' => 'required|in:1,2',
-            'scene' => 'required|numeric|in:1,2,3,4,5,6,7,8,9,10,11',
-
-        ];
-        ValidateService::validateRule($request, $rule);
-
-        $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
-        $input['type'] = $request->input('type');
-        $input['mode'] = $request->input('mode');
-        $input['scene'] = $request->input('scene');
-
-        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
-            $this->errorCheckInfo($resp);
-        }
-        $output = $resp['output'];
-
-        $data['storageId'] = $output['storageId'] ?? 1;
-        $data['token'] = $output['token'] ?? '';
-        $data['expireTime'] = DateHelper::fresnsOutputTimeToTimezone($output['expireTime']) ?? '';
-
-        $this->success($data);
-    }
-
-    // Fast Publishing
-    public function publish(Request $request)
-    {
-        $rule = [
-            'type' => 'required|in:1,2',
-            'content' => 'required',
-            'isMarkdown' => 'required|in:0,1',
-            'content' => 'required',
-            'isAnonymous' => 'required | in:0,1',
-        ];
-        ValidateService::validateRule($request, $rule);
-        $deviceInfo = $request->header('deviceInfo');
-        $platform = $this->platform;
-        $type = $request->input('type');
-        $uid = GlobalService::getGlobalKey('user_id');
-        $member_id = GlobalService::getGlobalKey('member_id');
-        $logsId = 0;
-        if ($deviceInfo) {
-            if ($type == 1) {
-                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), 'Publish Post Content', $uid, $member_id, null, 'Officially Published Post Content');
-            } else {
-                $logsId = FresnsSessionLogsService::addSessionLogs($request->getRequestUri(), 'Publish Comment Content', $uid, $member_id, null, 'Officially Published Comment Content');
-            }
-        }
-        LogService::Info('logsId', $logsId);
-        $commentCid = $request->input('commentCid');
-        $file = request()->file('file');
-
-        $fileInfo = $request->input('fileInfo');
-        $checkInfo = AmChecker::checkPublish($member_id);
-        if (is_array($checkInfo)) {
-            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
-
-            return $this->errorCheckInfo($checkInfo);
-        }
-        if (! empty($file)) {
-            $pluginUniKey = ApiConfigHelper::getConfigByItemKey('images_service');
-            // Perform Upload
-            $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
-
-            if (empty($pluginClass)) {
-                LogService::error('Plugin not found');
-                FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
-                $this->error(ErrorCodeService::FILE_SALE_ERROR);
-            }
-
-            $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
-            if ($isPlugin == false) {
-                LogService::error('Plugin not found');
-                $this->error(ErrorCodeService::DOWMLOAD_ERROR);
-            }
-
-            $paramsExist = false;
-
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
-                'item_key')->toArray();
-            $paramsExist = ValidateService::validParamExist($configMapInDB,
-                ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
-
-            if ($paramsExist == false) {
-                LogService::error('插件信息未配置');
-                FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
-                $this->error(ErrorCodeService::FILE_SALE_ERROR);
-            }
-        }
-
-        // In case of private mode, this feature is not available when it expires (members > expired_at).
-        $checker = AmChecker::checkPermission($type, 1, $uid, $member_id);
-        if (is_array($checker)) {
-            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
-
-            return $this->errorCheckInfo($checker);
-        }
-        $FresnsPostsService = new FresnsPostsService();
-        $fresnsCommentService = new FresnsCommentsService();
-        // Determine if review is required
-        $checkAudit = AmChecker::checkAudit($type, $member_id, $request->input('content'));
-
-        switch ($type) {
-            case 1:
-                $draftId = ContentLogsService::publishCreatedPost($request);
-                if ($checkAudit) {
-                    FresnsPostLogs::where('id', $draftId)->update([
-                        'status' => 2,
-                        'submit_at' => date('Y-m-d H:i:s', time()),
-                    ]);
-                    $this->success();
-                }
-                // Call Release
-                $FresnsPostsService->releaseByDraft($draftId, $logsId);
-                break;
-            default:
-                if ($commentCid) {
-                    $commentInfo = FresnsComments::where('uuid', $commentCid)->first();
-                    $commentCid = $commentInfo['id'];
-                }
-                if (empty($commentCid)) {
-                    $commentCid = 0;
-                }
-                $draftId = ContentLogsService::publishCreatedComment($request);
-                if ($checkAudit) {
-                    FresnsCommentLogs::where('id', $draftId)->update([
-                        'status' => 2,
-                        'submit_at' => date('Y-m-d H:i:s', time()),
-                    ]);
-                    $this->success();
-                }
-                $fresnsCommentService->releaseByDraft($draftId, $commentCid, $logsId);
-                break;
-        }
         $this->success();
     }
 

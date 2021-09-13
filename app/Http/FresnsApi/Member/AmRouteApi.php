@@ -9,21 +9,16 @@
 // Fresns Member API
 Route::group(['prefix' => 'fresns/member', 'namespace' => '\App\Http\FresnsApi\Member'], function () {
     // Member Login
-    Route::post('/auth', 'AmControllerApi@auth')->name('admin.member.auth');
-    // Member Edit Profile
-    Route::post('/edit', 'AmControllerApi@memberEdit')->name('admin.member.edit');
-    // Member Operation Mark
-    Route::post('/mark', 'AmControllerApi@memberMark')->name('admin.member.memberMark');
-    // Member Mark Data List
-    Route::post('/markLists', 'AmControllerApi@memberMarkLists')->name('admin.member.memberMarkLists');
-    // Get Member Role List
-    Route::post('/roles', 'AmControllerApi@memberRoles')->name('admin.member.memberRoles');
-    // Member Operation Delete
-    Route::post('/delete', 'AmControllerApi@memberDelete')->name('admin.member.memberDelete');
-    // Get Member Detail
-    Route::post('/detail', 'AmControllerApi@memberDetail')->name('admin.member.memberDetail');
-    // Get Member List
-    Route::post('/lists', 'AmControllerApi@memberLists')->name('admin.member.memberLists');
-    // Get Member Interactions Data
-    Route::post('/interactions', 'AmControllerApi@memberInteractions')->name('admin.member.memberInteractions');
+    Route::post('/auth', 'AmControllerApi@auth')->name('api.member.auth');
+    Route::post('/detail', 'AmControllerApi@detail')->name('api.member.detail');
+    Route::post('/lists', 'AmControllerApi@lists')->name('api.member.lists');
+    Route::post('/edit', 'AmControllerApi@edit')->name('api.member.edit');
+    // Member Mark Operation
+    Route::post('/mark', 'AmControllerApi@mark')->name('api.member.mark');
+    Route::post('/markLists', 'AmControllerApi@markLists')->name('api.member.markLists');
+    // Delete Post or Comment
+    Route::post('/delete', 'AmControllerApi@delete')->name('api.member.delete');
+    // Member Data
+    Route::post('/roles', 'AmControllerApi@roles')->name('api.member.roles');
+    Route::post('/interactions', 'AmControllerApi@interactions')->name('api.member.interactions');
 });

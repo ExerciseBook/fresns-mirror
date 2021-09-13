@@ -179,7 +179,7 @@ class AmControllerWeb extends BaseFrontendController
     }
 
     // Logout
-    public function login_out(Request $request)
+    public function logout(Request $request)
     {
         $userId = Auth::id();
 

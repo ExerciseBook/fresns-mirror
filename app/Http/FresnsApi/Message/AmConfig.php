@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Messages;
+namespace App\Http\FresnsApi\Message;
 
 use App\Base\Config\BaseConfig;
 

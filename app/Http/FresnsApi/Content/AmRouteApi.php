@@ -9,18 +9,18 @@
 // Fresns Content API
 Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\FresnsApi\Content'], function () {
     // Group
-    Route::post('/group/trees', 'AmControllerApi@trees')->name('admin.content.trees');
-    Route::post('/group/lists', 'AmControllerApi@group_lists')->name('admin.content.group_lists');
-    Route::post('/group/detail', 'AmControllerApi@group_detail')->name('admin.content.group_detail');
+    Route::post('/group/trees', 'AmControllerApi@groupTrees')->name('api.content.groupTrees');
+    Route::post('/group/lists', 'AmControllerApi@groupLists')->name('api.content.groupLists');
+    Route::post('/group/detail', 'AmControllerApi@groupDetail')->name('api.content.groupDetail');
     // Hashtag
-    Route::post('/hashtag/lists', 'AmControllerApi@hashtag_lists')->name('admin.content.hashtag_lists');
-    Route::post('/hashtag/detail', 'AmControllerApi@hashtag_detail')->name('admin.content.hashtag_detail');
+    Route::post('/hashtag/lists', 'AmControllerApi@hashtagLists')->name('api.content.hashtagLists');
+    Route::post('/hashtag/detail', 'AmControllerApi@hashtagDetail')->name('api.content.hashtagDetail');
     // Post
-    Route::post('/post/lists', 'AmControllerApi@post_lists')->name('admin.content.post_lists');
-    Route::post('/post/detail', 'AmControllerApi@post_detail')->name('admin.content.post_detail');
-    Route::post('/post/follows', 'AmControllerApi@postFollows')->name('admin.content.postFollows');
-    Route::post('/post/nearbys', 'AmControllerApi@postNearbys')->name('admin.content.postNearbys');
+    Route::post('/post/lists', 'AmControllerApi@postLists')->name('api.content.postLists');
+    Route::post('/post/follows', 'AmControllerApi@postFollows')->name('api.content.postFollows');
+    Route::post('/post/nearbys', 'AmControllerApi@postNearbys')->name('api.content.postNearbys');
+    Route::post('/post/detail', 'AmControllerApi@postDetail')->name('api.content.postDetail');
     // Comment
-    Route::post('/comment/lists', 'AmControllerApi@comment_lists')->name('admin.content.comment_lists');
-    Route::post('/comment/detail', 'AmControllerApi@commentDetail')->name('admin.content.commentDetail');
+    Route::post('/comment/lists', 'AmControllerApi@commentLists')->name('api.content.commentLists');
+    Route::post('/comment/detail', 'AmControllerApi@commentDetail')->name('api.content.commentDetail');
 });

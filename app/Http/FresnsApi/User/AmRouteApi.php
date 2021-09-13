@@ -8,13 +8,13 @@
 
 // Fresns User API
 Route::group(['prefix' => 'fresns/user', 'namespace' => '\App\Http\FresnsApi\User'], function () {
-    Route::post('/register', 'AmControllerApi@register')->name('admin.user.register');
-    Route::post('/login', 'AmControllerApi@login')->name('admin.user.login');
-    Route::post('/logout', 'AmControllerApi@logout')->name('admin.user.logout');
-    Route::post('/delete', 'AmControllerApi@userDelete')->name('admin.user.userDelete');
-    Route::post('/restore', 'AmControllerApi@restore')->name('admin.user.userRestore');
-    Route::post('/reset', 'AmControllerApi@userReset')->name('admin.user.userReset');
-    Route::post('/detail', 'AmControllerApi@userInfo')->name('admin.user.userInfo');
-    Route::post('/edit', 'AmControllerApi@userEdit')->name('admin.user.userEdit');
-    Route::post('/walletLogs', 'AmControllerApi@userWalletLogs')->name('admin.user.walletLogs');
+    Route::post('/register', 'AmControllerApi@register')->name('api.user.register');
+    Route::post('/login', 'AmControllerApi@login')->name('api.user.login');
+    Route::post('/logout', 'AmControllerApi@logout')->name('api.user.logout');
+    Route::post('/delete', 'AmControllerApi@delete')->name('api.user.delete');
+    Route::post('/restore', 'AmControllerApi@restore')->name('api.user.restore');
+    Route::post('/reset', 'AmControllerApi@reset')->name('api.user.reset');
+    Route::post('/detail', 'AmControllerApi@detail')->name('api.user.detail');
+    Route::post('/edit', 'AmControllerApi@edit')->name('api.user.edit');
+    Route::post('/walletLogs', 'AmControllerApi@walletLogs')->name('api.user.walletLogs');
 });

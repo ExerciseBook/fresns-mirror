@@ -275,7 +275,7 @@ class AmControllerApi extends FresnsBaseApiController
             FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $uid, $mid, $uid);
         }
 
-        $data = $this->service->getUserInfo($uid, $langTag, $mid);
+        $data = $this->service->getUserDetail($uid, $langTag, $mid);
         if ($data) {
             $cmd = FresnsPluginConfig::PLG_CMD_CREATE_SESSION_TOKEN;
             $input['uid'] = $userUuid;
@@ -416,7 +416,7 @@ class AmControllerApi extends FresnsBaseApiController
 
         $langTag = ApiLanguageHelper::getLangTagByHeader();
 
-        $data = $this->service->getUserInfo($user->id, $langTag);
+        $data = $this->service->getUserDetail($user->id, $langTag);
         if ($data) {
             // Update the last_login_at field in the users table
             FresnsUsers::where('id', $user->id)->update(['last_login_at' => date('Y-m-d H:i:s', time())]);
@@ -454,7 +454,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Delete User
-    public function userDelete(Request $request)
+    public function delete(Request $request)
     {
         $uid = GlobalService::getGlobalKey('user_id');
 
@@ -508,12 +508,12 @@ class AmControllerApi extends FresnsBaseApiController
 
         $langTag = $this->langTag;
 
-        $data = $this->service->getUserInfo($user->id, $langTag);
+        $data = $this->service->getUserDetail($user->id, $langTag);
         $this->success($data);
     }
 
     // Reset Password
-    public function userReset(Request $request)
+    public function reset(Request $request)
     {
         // Verify Parameters
         $rule = [
@@ -644,7 +644,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // User Detail
-    public function userInfo(Request $request)
+    public function detail(Request $request)
     {
         $uid = $request->header('uid');
         $mid = $request->header('mid');
@@ -653,11 +653,11 @@ class AmControllerApi extends FresnsBaseApiController
 
         $langTag = $this->langTag;
 
-        $data = $this->service->getUserInfo($uid, $langTag, $mid);
+        $data = $this->service->getUserDetail($uid, $langTag, $mid);
         $this->success($data);
     }
 
-    public function userWalletLogs(Request $request)
+    public function walletLogs(Request $request)
     {
         // Verify Parameters
         $rule = [
@@ -691,7 +691,7 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     // Edit User Info
-    public function userEdit(Request $request)
+    public function edit(Request $request)
     {
         // Verify Parameters
         $rule = [
