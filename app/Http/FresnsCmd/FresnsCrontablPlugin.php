@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Fresns
+ * Fresns (https://fresns.cn)
  * Copyright (C) 2021-Present 唐杰
  * Released under the Apache-2.0 License.
  */
@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Class FresnsCrontabPlugin
- * Fresns Timed Tasks
+ * Fresns (https://fresns.cn) Timed Tasks
  */
 class FresnsCrontablPlugin extends BasePlugin
 {
