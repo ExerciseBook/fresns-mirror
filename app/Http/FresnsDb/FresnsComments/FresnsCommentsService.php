@@ -11,7 +11,7 @@ namespace App\Http\FresnsDb\FresnsComments;
 use App\Helpers\StrHelper;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Helper\PluginRpcHelper;
-use App\Http\FresnsApi\Content\Resource\FresnsPostResource;
+use App\Http\FresnsApi\Content\FresnsPostResource;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsCmd\FresnsSubPlugin;
 use App\Http\FresnsCmd\FresnsSubPluginConfig;

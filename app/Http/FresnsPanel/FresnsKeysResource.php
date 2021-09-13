@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsPanel\Resource;
+namespace App\Http\FresnsPanel;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
