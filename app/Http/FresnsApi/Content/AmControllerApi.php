@@ -734,24 +734,6 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // Get extended content [list]
-    public function extendsLists(Request $request)
-    {
-        $request->offsetSet('queryType', AmConfig::QUERY_TYPE_SQL_QUERY);
-        $page = $request->input('page', 1);
-        $pageSize = $request->input('pageSize', 30);
-        $fresnsExtendsService = new FresnsExtendsService();
-        $request->offsetSet('currentPage', $page);
-        $request->offsetSet('pageSize', $pageSize);
-        $fresnsExtendsService->setResource(FresnsExtendsResource::class);
-        $data = $fresnsExtendsService->searchData();
-        $data = [
-            'pagination' => $data['pagination'],
-            'detail' => $data['list'],
-        ];
-        $this->success($data);
-    }
-
     // Calculate distance by latitude and longitude
     public static function distance1($longitude, $latitude, $distance)
     {

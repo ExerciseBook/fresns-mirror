@@ -18,7 +18,7 @@ use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 
 class ApiConfigHelper
 {
-    //获取系统配置信息
+    // Get config info list
     public static function getConfigsList()
     {
         $map = config(FresnsBaseConfig::CONFIGS_LIST);
@@ -26,7 +26,7 @@ class ApiConfigHelper
         return $map;
     }
 
-    //获取系统配置信息api
+    // Get config info list (api)
     public static function getConfigsListApi()
     {
         $map = config(FresnsBaseConfig::CONFIGS_LIST_API);
@@ -56,7 +56,7 @@ class ApiConfigHelper
         return $itemArr;
     }
 
-    //列表数据
+    // Config info list data
     public static function getConfigsListsApi()
     {
         $map = self::getConfigsListApi();
@@ -70,8 +70,8 @@ class ApiConfigHelper
         return $itemArr;
     }
 
-    //通过配置组键名返回
-    public static function getConfigByKey($key)
+    // Get by key tag
+    public static function getConfigByItemTag($key)
     {
         $map = config(FresnsBaseConfig::CONFIGS_LIST);
         $itemArr = [];
@@ -86,7 +86,8 @@ class ApiConfigHelper
         return $itemArr;
     }
 
-    public static function getConfigByKeyApi($key)
+    // Get by key tag (api)
+    public static function getConfigByItemTagApi($key)
     {
         $map = self::getConfigsListApi();
         $itemArr = [];
@@ -101,7 +102,7 @@ class ApiConfigHelper
         return $itemArr;
     }
 
-    //通过键名返回对应的键名键值
+    // Get by key name
     public static function getConfigByItemKey($itemKey)
     {
         $map = config(FresnsBaseConfig::CONFIGS_LIST);
@@ -117,6 +118,7 @@ class ApiConfigHelper
         return $data;
     }
 
+    // Get by key name (api)
     public static function getConfigByItemKeyApi($itemKey)
     {
         $map = self::getConfigsListApi();
@@ -132,14 +134,15 @@ class ApiConfigHelper
         return $data;
     }
 
-    //组装api返回数据
+    // Assembling api return data
     public static function joinData($data)
     {
         $langTag = ApiLanguageHelper::getLangTagByHeader();
 
         $item['itemKey'] = $data['itemKey'];
         $item['itemValue'] = $data['itemValue'];
-        //当 is_multilingual 字段为 1 时，代表该键值为多语言
+
+        // When is_multilingual=1 means that the key is multilingual
         if ($data['isMultilingual'] == 1) {
             $item['itemValue'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
                 'item_value', $item['itemKey'], $langTag);
@@ -149,16 +152,16 @@ class ApiConfigHelper
                 $item['itemValue'] = intval($item['itemValue']);
             }
         }
-        //当 item_type 字段为 file 时，如果键值是以 http:// 或 https:// 开头，则不用特殊处理，原样输出。如果是数字，则代表是文件 ID，凭 ID 输出文件 URL，如果该文件类型开启了防盗链功能，则向插件索要 URL 输出。
+
+        // When item_type=file if the key value starts with http:// or https://, it is output as is without special handling.
+        // If it is a number, it is the file ID, with which the file URL is output, or if the file type has anti-blocking enabled, the URL output is requested from the plugin.
         if ($data['itemType'] == 'file') {
             if (is_numeric($item['itemValue'])) {
                 $item['itemValue'] = ApiFileHelper::getImageSignUrlByFileId($item['itemValue']);
             }
         }
-        //plugin 类型代表是插件 unikey 值，凭 unikey 输出插件 URL。plugins 类型代表是多选插件，以英文逗号隔开。
-        //判断 plugins > plugin_domain 是否有值，
-        //有值则是 plugin_domain + access_path 字段内容拼接成完整 URL；
-        //无值则是拿配置表 backend_domain 键值 + 插件表 access_path 字段拼接成完整 URL
+
+        // When item_type=plugin means it is a plugin unikey value, the plugin URL is output with unikey.
         if ($data['itemType'] == 'plugin') {
             $plugin = FresnsPlugins::where('unikey', $item['itemValue'])->first();
             if ($plugin) {
@@ -173,6 +176,7 @@ class ApiConfigHelper
             }
         }
 
+        // When item_type=plugins means it is a multi-select plugin, separated by English commas.
         if ($data['itemType'] == 'plugins') {
             $unikeyArr = explode(',', $item['itemValue']);
             $pluginArr = FresnsPlugins::whereIn('unikey', $unikeyArr)->get([
@@ -202,7 +206,7 @@ class ApiConfigHelper
         return $item;
     }
 
-    //获取所有的语言参数
+    // Get all language parameters
     public static function getConfigsLanguageList()
     {
         $map = config(FresnsBaseConfig::CONFIGS_LIST);
@@ -216,14 +220,14 @@ class ApiConfigHelper
         return $data;
     }
 
-    // 获取距离单位
+    // Get distance units
     public static function distanceUnits($langTag)
     {
         $language = self::getConfigsLanguageList();
         $languageArr = FresnsConfigsService::getLanguageStatus();
         LogService::Info('language', $language);
         $distanceUnits = '';
-        // 获取默认语言的距离单位
+        // Get the distance units for the default language
         $language_menus = json_decode($language['language_menus'], true);
         foreach ($language_menus as $f) {
             if ($f['langTag'] == $languageArr['default_language']) {

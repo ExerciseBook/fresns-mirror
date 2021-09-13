@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Notify;
+namespace App\Http\FresnsApi\Messages;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Center\Common\GlobalService;
@@ -27,20 +27,18 @@ class FresnsDialogsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // dd(1);
         // Form Field
         $formMap = FresnsDialogsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        $dialogId = $this->id;
-        // $mid = request()->header("mid");
-        $mid = GlobalService::getGlobalKey('member_id');
 
-        // 获取用户是成员A还是成员B
+        // Dialog Data
+        $dialogId = $this->id;
+        $mid = GlobalService::getGlobalKey('member_id');
+        // Determine whether a member is A or B
         $is_member_A = FresnsDialogs::where('a_member_id', $mid)->where('id', $this->id)->count();
-        // dump($is_member_A);
         if ($is_member_A > 0) {
             $member_id = $this->b_member_id;
             $status = $this->a_status;
@@ -49,7 +47,6 @@ class FresnsDialogsResource extends BaseAdminResource
             $status = $this->b_status;
         }
         $memberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $member_id)->first();
-        // dd($memberInfo);
         $member = [];
         $member['deactivate'] = false;
         $member['mid'] = '';
@@ -59,12 +56,12 @@ class FresnsDialogsResource extends BaseAdminResource
         $member['decorate'] = '';
         $member['verifiedStatus'] = '';
         $member['verifiedIcon'] = '';
-        // 为空用默认头像
+        // Default avatar when members have no avatar
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }
-        // 已注销头像 deactivate_avatar 键值"
+        // The avatar displayed when a member has been deleted
         if ($memberInfo) {
             if ($memberInfo->deleted_at != null) {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::DEACTIVATE_AVATAR);
@@ -76,25 +73,21 @@ class FresnsDialogsResource extends BaseAdminResource
                 $member['mname'] = $memberInfo->name;
                 $member['nickname'] = $memberInfo->nickname;
                 $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
-                // $member['decorate'] = $memberInfo->decorate_file_url;
-                $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id,
-                    $memberInfo->decorate_file_url);
+                $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
                 $member['verifiedStatus'] = $memberInfo->verified_status;
-                // $member['verifiedIcon'] = $memberInfo->verified_file_url;
-                $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id,
-                    $memberInfo->verified_file_url);
+                $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
             }
         }
-
         $messageId = $this->latest_message_id;
         $messageTime = $this->latest_message_time;
         $messageBrief = $this->latest_message_brief;
 
-        // 未读数量
+        // Number of unread
         $messageUnread = 0;
         if ($status == 1) {
             $messageUnread = FresnsDialogMessages::where('recv_member_id', $mid)->where('recv_read_at', null)->count();
         }
+
         // Default Field
         $default = [
             'dialogId' => $dialogId,

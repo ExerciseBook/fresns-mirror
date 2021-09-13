@@ -10,17 +10,16 @@ namespace App\Http\FresnsApi\User;
 
 class AmConfig
 {
-    //钱包type = 1 支付
+    // Wallet Type
     const PLUGIN_USAGERS_TYPE_1 = 1;
-    //钱包type = 2 提现
     const PLUGIN_USAGERS_TYPE_2 = 2;
 
-    //主角色
+    // Main Role
     const MEMBER_ROLE_REL_TYPE_2 = 2;
 
-    //密码校验规则
-    const PASSWORD_NUMBER = 1; //数字
-    const PASSWORD_LOWERCASE_LETTERS = 2; //小写字母
-    const PASSWORD_CAPITAL_LETTERS = 4; //大写字母
-    const PASSWORD_SYMBOL = 3; //符号
+    // Password verification rules
+    const PASSWORD_NUMBER = 1; // Digital
+    const PASSWORD_LOWERCASE_LETTERS = 2; // Lowercase letters
+    const PASSWORD_CAPITAL_LETTERS = 3; // Capital letters
+    const PASSWORD_SYMBOL = 4; // Symbols
 }

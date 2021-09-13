@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\DB;
 
 class AmService
 {
+    // Get User Info
     public function getUserInfo($uid, $langTag, $mid = null)
     {
         $langTag = ApiLanguageHelper::getLangTagByHeader();
@@ -46,7 +47,7 @@ class AmService
         $data['purePhone'] = ApiCommonHelper::encryptPhone($users->pure_phone ?? '');
         $data['phone'] = ApiCommonHelper::encryptPhone($phone, 5, 6) ?? '';
         $data['email'] = ApiCommonHelper::encryptEmail($email) ?? '';
-        //配置表 account_prove_service 关联的插件，插件 URL
+        // Configs the plugin associated with the table account_prove_service and output the plugin URL
         $proveSupportUnikey = ApiConfigHelper::getConfigByItemKey('account_prove_service');
         $proveSupportUrl = FresnsPluginsService::getPluginUrlByUnikey($proveSupportUnikey);
         $data['proveSupport'] = $proveSupportUrl;
@@ -55,10 +56,10 @@ class AmService
         $data['gender'] = $users->prove_gender ?? '';
         $data['idType'] = $users->prove_type ?? '';
         $data['idNumber'] = ApiCommonHelper::encryptIdNumber($users->prove_number, 1, -1) ?? '';
-        $data['registerTime'] = DateHelper::asiaShanghaiToTimezone($users->created_at ?? '');
+        $data['registerTime'] = DateHelper::fresnsOutputTimeToTimezone($users->created_at ?? '');
         $data['status'] = $users->is_enable ?? '';
         $data['deactivate'] = boolval($users->deleted_at ?? '');
-        $data['deactivateTime'] = DateHelper::asiaShanghaiToTimezone($users->deleted_at ?? '');
+        $data['deactivateTime'] = DateHelper::fresnsOutputTimeToTimezone($users->deleted_at ?? '');
 
         $connectsArr = DB::table(FresnsUserConnectsConfig::CFG_TABLE)->where('user_id', $uid)->get([
             'connect_id',
@@ -73,30 +74,26 @@ class AmService
                 $itemArr[] = $item;
             }
         }
-
         $data['connects'] = $itemArr;
-        //钱包
+
+        // Wallet
         $userWallets = FresnsUserWallets::where('user_id', $uid)->first();
-        $wallets['status'] = $userWallets['is_enable'] ?? '';
-        $wallets['balance'] = $userWallets['balance'] ?? '';
-        $wallets['freezeAmount'] = $userWallets['freeze_amount'] ?? '';
-        $wallets['bankName'] = $userWallets['bank_name'] ?? '';
-        $wallets['swiftCode'] = $userWallets['swift_code'] ?? '';
-        $wallets['bankAddress'] = $userWallets['bank_address'] ?? '';
-        $wallets['bankAccount'] = '';
+        $wallet['status'] = $userWallets['is_enable'] ?? '';
+        $wallet['balance'] = $userWallets['balance'] ?? '';
+        $wallet['freezeAmount'] = $userWallets['freeze_amount'] ?? '';
+        $wallet['bankName'] = $userWallets['bank_name'] ?? '';
+        $wallet['swiftCode'] = $userWallets['swift_code'] ?? '';
+        $wallet['bankAddress'] = $userWallets['bank_address'] ?? '';
+        $wallet['bankAccount'] = '';
         if (! empty($userWallets)) {
-            $wallets['bankAccount'] = ApiCommonHelper::encryptIdNumber($userWallets['bank_account'], 4, -2);
+            $wallet['bankAccount'] = ApiCommonHelper::encryptIdNumber($userWallets['bank_account'], 4, -2);
         }
-        $wallets['bankStatus'] = $userWallets['bank_status'] ?? '';
+        $wallet['bankStatus'] = $userWallets['bank_status'] ?? '';
+        $wallet['payExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, AmConfig::PLUGIN_USAGERS_TYPE_1, $langTag);
+        $wallet['withdrawExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, AmConfig::PLUGIN_USAGERS_TYPE_2, $langTag);
+        $data['wallet'] = $wallet;
 
-        $wallets['payExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, AmConfig::PLUGIN_USAGERS_TYPE_1,
-            $langTag);
-
-        $wallets['withdrawExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, AmConfig::PLUGIN_USAGERS_TYPE_2,
-            $langTag);
-        $data['wallet'] = $wallets;
         $memberArr = DB::table('members')->where('user_id', $uid)->get()->toArray();
-
         $itemArr = [];
         foreach ($memberArr as $v) {
             $item = [];
@@ -112,11 +109,10 @@ class AmService
             $item['roleIconDisplay'] = '';
             if ($memberRole) {
                 $item['nicknameColor'] = $memberRole['nickname_color'];
-                $item['roleName'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE,
-                    'name', $memberRole['id'], $langTag);
+                $item['roleName'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id'], $langTag);
                 $item['roleNameDisplay'] = $memberRole['is_display_name'];
                 $item['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
-                $item['roleIconDisplay'] = $memberRole['icon_display_icon'];
+                $item['roleIconDisplay'] = $memberRole['is_display_icon'];
             }
 
             $isPassword = false;
@@ -141,22 +137,18 @@ class AmService
             $item['verifiedIcon'] = $v->verified_file_url;
             $item['verifiedDesc'] = $v->verified_desc;
             $item['status'] = $v->is_enable;
-            $item['deactivate'] = DateHelper::asiaShanghaiToTimezone($v->deleted_at);
-            $item['deactivateTime'] = DateHelper::asiaShanghaiToTimezone($v->deleted_at);
+            $item['deactivate'] = DateHelper::fresnsOutputTimeToTimezone($v->deleted_at);
+            $item['deactivateTime'] = DateHelper::fresnsOutputTimeToTimezone($v->deleted_at);
             $item['multiple'] = '';
             $itemArr[] = $item;
         }
         $data['members'] = $itemArr;
-        $data['memberName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value',
-            'member_name', $langTag);
-        $data['memberIdName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-            'item_value', 'member_id_name', $langTag);
-        $data['memberNameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-            'item_value', 'member_name_name', $langTag);
-        $data['memberNicknameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-            'item_value', 'member_nickname_name', $langTag);
-        $data['memberRoleName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-            'item_value', 'member_role_name', $langTag);
+
+        $data['memberName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name', $langTag);
+        $data['memberIdName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_id_name', $langTag);
+        $data['memberNameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name_name', $langTag);
+        $data['memberNicknameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_nickname_name', $langTag);
+        $data['memberRoleName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_role_name', $langTag);
 
         return $data;
     }

@@ -17,9 +17,10 @@ use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 class AmChecker extends FresnsBaseChecker
 {
     /**
-     * 校验点赞，关注，屏蔽是否有添加
-     * markType 1.点赞 2.关注 3.屏蔽
-     * markTarget 1.成员 / 2.小组 / 3.话题 / 4.帖子 / 5.评论.
+     * Check if likes, followers and blockers are added
+     * 
+     * markType 1.like / 2.follow / 3.block
+     * markTarget 1.member / 2.group / 3.hashtag / 4.post / 5.comment
      */
     public static function checkMark($markType, $markTarget, $memberId, $toMemberId)
     {
@@ -51,9 +52,12 @@ class AmChecker extends FresnsBaseChecker
     }
 
     /**
-     * 是否有权操作，根据配置表设置配置键名 > 运营配置 > 互动配置 > 互动行为设置，设置为 false 时，不可操作。
-     * markType 1.点赞 2.关注 3.屏蔽
-     * markTarget 1.成员 / 2.小组 / 3.话题 / 4.帖子 / 5.评论.
+     * Whether the right to operate
+     * https://fresns.org/database/keyname/interactives.html
+     * Interactive behavior settings
+     * 
+     * markType 1.like / 2.follow / 3.block
+     * markTarget 1.member / 2.group / 3.hashtag / 4.post / 5.comment
      */
     public static function checkMarkApi($markType, $markTarget)
     {
@@ -122,9 +126,12 @@ class AmChecker extends FresnsBaseChecker
     }
 
     /**
-     * 查看别人信息时，是否输出数据，根据配置表设置配置键名 > 运营配置 > 互动配置 > 查看别人内容设置，设置为 false 时，不输出数据。
-     * viewType 1.点赞 2.关注 3.屏蔽
-     * viewTarget 1.成员 / 2.小组 / 3.话题 / 4.帖子 / 5.评论.
+     * Whether to output data when viewing other people's information
+     * https://fresns.org/database/keyname/interactives.html
+     * View other people's content settings
+     * 
+     * markType 1.like / 2.follow / 3.block
+     * markTarget 1.member / 2.group / 3.hashtag / 4.post / 5.comment
      */
     public static function checkMarkLists($viewType, $viewTarget)
     {

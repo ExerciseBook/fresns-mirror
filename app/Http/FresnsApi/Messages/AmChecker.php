@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Notify;
+namespace App\Http\FresnsApi\Messages;
 
 use App\Base\Checkers\BaseChecker;
 use App\Http\Center\Common\LogService;
@@ -48,32 +48,28 @@ class AmChecker extends BaseChecker
     public static function checkSendMessage($mid)
     {
         // return true;
-        // 键名 dialog_status 关闭了总站私信功能，全员不可发送。
+        // Key Name dialog_status Configure global dialog function
         $dialogStatus = ApiConfigHelper::getConfigByItemKey(AmConfig::DIALOG_STATUS);
-        // dd($dialogStatus);
         if (! $dialogStatus) {
             return self::checkInfo(self::DIALOG_ERROR);
         }
-        // 如果是私有模式，当过期后 members > expired_at ，不允许发送消息。
+
+        // In case of private mode, when expired (members > expired_at ) no messages are allowed to be sent.
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        // dump($site_mode);
         if ($site_mode == AmConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
-                LogService::info('私有模式有效期过期', $memberInfo);
-
+                LogService::info('Your account status has expired', $memberInfo);
                 return self::checkInfo(self::MEMBER_EXPIRED_ERROR);
             }
         }
-        // 需要先判断成员主角色是否有权发送私信（member_roles > permission > dialog=true）
-        // dump($mid);
+
+        // Determine if the member master role has the right to send private messages (member_roles > permission > dialog=true)
         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($mid);
-        // dd($roleId);
         if (empty($roleId)) {
             return self::checkInfo(self::MEMBER_ROLE_ERROR);
         }
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
-        // dd($memberRole);
         if (! empty($memberRole)) {
             $permission = $memberRole['permission'];
             $permissionArr = json_decode($permission, true);
@@ -92,77 +88,44 @@ class AmChecker extends BaseChecker
         } else {
             return self::checkInfo(self::MEMBER_ROLE_ERROR);
         }
-        // $fresnsMemberRoles = FresnsMemberRoleRels::where('member_id',$mid)->where('type',2)->first();
-        // dd($fresnsMemberRoles);
-        // if(!$fresnsMemberRoles){
-        //     // $this->error(ErrorCodeService::MEMBER_ROLE_ERROR);
-        //     LogService::info('角色是否无权发送私信',$fresnsMemberRoles);
-        //     return self::checkInfo(self::MEMBER_ROLE_ERROR);
-        // }else{
-        //     $memberRoles = FresnsMemberRoles::find($fresnsMemberRoles['role_id']);
-        //     // dd($memberRoles);
-        //     if(!$memberRoles){
-        //         // $this->error(ErrorCodeService::MEMBER_ROLE_ERROR);
-        //         return self::checkInfo(self::MEMBER_ROLE_ERROR);
 
-        //     }else{
-        //         if(!$memberRoles['permission']){
-        //             return self::checkInfo(self::MEMBER_ROLE_ERROR);
-        //         }else{
-        //             $permission = json_decode($memberRoles['permission'],true);
-        //             // dd($permission);
-        //             if(!isset($permission[0])){
-        //                 return self::checkInfo(self::MEMBER_ROLE_ERROR);
-        //             }
-
-        //             if(!isset($permission[0]['dialog'])){
-        //                 return self::checkInfo(self::MEMBER_ROLE_ERROR);
-        //             }
-        //             if($permission[0]['dialog'] == 1){
-        //                 return self::checkInfo(self::MEMBER_ROLE_ERROR);
-        //             }
-        //         }
-        //     }
-        // }
-
-        // 如果对方已经注销（members > deleted_at），不可以发送。
+        // Determine if the other party has deleted (members > deleted_at)
         $recvMid = request()->input('recvMid');
         $recvMidInfo = FresnsMembers::where('uuid', $recvMid)->first();
         if (! $recvMidInfo) {
-            // $this->error(ErrorCodeService::MEMBER_ERROR);
             return self::checkInfo(self::MEMBER_ERROR);
         }
-        // 符合对方的私信设置（members > dialog_limit）
+
+        // Determine whether the dialog settings match each other (members > dialog_limit)
         $memberInfo = FresnsMembers::where('uuid', $recvMid)->first();
         if ($memberInfo['id'] == $mid) {
             return self::checkInfo(self::MEMBER_ME_ERROR);
         }
+        // dialog_limit = 2 / Only members that I am allowed to follow
         if ($memberInfo['dialog_limit'] == 2) {
             $count = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id',
                 $memberInfo['id'])->count();
             if ($count == 0) {
-                // $this->error(ErrorCodeService::MEMBER_FOLLOW_ERROR);
                 return self::checkInfo(self::MEMBER_FOLLOW_ERROR);
             }
         }
-        // 我关注的人和已认证的人（verified_status）
+        // dialog_limit = 3 / Members I follow and members I have certified
         if ($memberInfo['dialog_limit'] == 3) {
             $count = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id',
                 $memberInfo['id'])->count();
             if ($count == 0) {
                 return self::checkInfo(self::MEMBER_FOLLOW_ERROR);
             }
-            // 自己的信息
             $myInfo = FresnsMembers::find($mid);
             if ($myInfo['verified_status'] == 1) {
                 return self::checkInfo(self::VERIFIED_ERROR);
             }
         }
-        // dd($mid);
+
+        // request
         $message = request()->input('message', null);
         $fid = request()->input('fid', null);
         if ($message && $fid) {
-            // $this->error(ErrorCodeService::FILE_OR_MESSAGE_ERROR);
             return self::checkInfo(self::FILE_OR_MESSAGE_ERROR);
         }
     }

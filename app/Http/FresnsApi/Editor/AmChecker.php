@@ -159,13 +159,13 @@ class AmChecker extends BaseChecker
     ];
 
     /**
-     * 校验帖子，评论权限.
+     * Verify post and comment permissions.
      *
-     * @param [type] $type 1-帖子 2-评论
-     * @param [update_type] $update_type 1-新增 2-编辑
-     * @param [userId] $userId 用户名
-     * @param [memberId] $memberId 成员名
-     * @param [typeId] $typeId 帖子或者评论id update_type 为2时必传
+     * @param [type] $type 1-post 2-comment
+     * @param [update_type] $update_type 1-add 2-edit
+     * @param [userId] $userId
+     * @param [memberId] $memberId
+     * @param [typeId] $typeId Post or comment id (update_type Must be passed when 2)
      * @return void
      */
     public static function checkPermission($type, $update_type, $userId, $memberId, $typeId = null)
@@ -173,11 +173,9 @@ class AmChecker extends BaseChecker
         $uri = Request::getRequestUri();
 
         $uriRuleArr = AmConfig::URI_NOT_IN_RULE;
-        //校验用户,成员状态
+        // Verify user and member status
         $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('id', $userId)->first();
         $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $memberId)->first();
-        // dump($user);
-        // dd($member);
         $data = [];
         if (empty($user) || empty($member)) {
             return self::checkInfo(self::USER_ERROR);
@@ -186,11 +184,11 @@ class AmChecker extends BaseChecker
             case 1:
                 switch ($update_type) {
                     case 1:
-                        //校验角色权限
+                        // Verify member role permissions
                         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
 
-                        //全局校验
-                        //发布帖子校验邮箱，手机号，实名制
+                        // Global checksum (post)
+                        // Email, Phone number, Real name
                         $post_email_verify = ApiConfigHelper::getConfigByItemKey('post_email_verify');
                         if ($post_email_verify == true) {
                             if (empty($user->email)) {
@@ -209,14 +207,13 @@ class AmChecker extends BaseChecker
                                 return self::checkInfo(self::USER_BINDING_REAL_NAME_ERROR);
                             }
                         }
-                        // dd(1);
                         $post_limit_status = ApiConfigHelper::getConfigByItemKey('post_limit_status');
 
-                        //如果成员主角色是白名单角色，则不受该权限要求
+                        // If the member master role is a whitelisted role, it is not subject to this permission requirement
                         if (in_array($uri, $uriRuleArr)) {
                             if ($post_limit_status == true) {
                                 if (! empty($roleId)) {
-                                    //获取白名单
+                                    // Get a list of whitelisted roles
                                     $post_limit_whitelist = ApiConfigHelper::getConfigByItemKey('post_limit_whitelist');
                                     if (! empty($post_limit_whitelist)) {
                                         $post_limit_whitelist_arr = json_decode($post_limit_whitelist, true);
@@ -228,12 +225,12 @@ class AmChecker extends BaseChecker
                             }
                         }
 
-                        //校验特殊规则-开放时间
+                        // Check Special Rules - Opening Hours
                         if ($post_limit_status === true) {
                             $post_limit_rule = ApiConfigHelper::getConfigByItemKey('post_limit_rule');
                             $post_limit_prompt = ApiConfigHelper::getConfigByItemKey('post_limit_prompt');
                             $post_limit_type = ApiConfigHelper::getConfigByItemKey('post_limit_type');
-                            //指定日期全天限制
+                            // 1.All-day limit on specified dates
                             if ($post_limit_type == 1) {
                                 $post_limit_period_start = ApiConfigHelper::getConfigByItemKey('post_limit_period_start');
                                 $post_limit_period_end = ApiConfigHelper::getConfigByItemKey('post_limit_period_end');
@@ -250,7 +247,7 @@ class AmChecker extends BaseChecker
                                     }
                                 }
                             }
-                            //指定某个时间段设置
+                            // 2.Specify a time period to set
                             if ($post_limit_type == 2) {
                                 $post_limit_cycle_start = ApiConfigHelper::getConfigByItemKey('post_limit_cycle_start');
                                 $post_limit_cycle_end = ApiConfigHelper::getConfigByItemKey('post_limit_cycle_end');
@@ -263,13 +260,12 @@ class AmChecker extends BaseChecker
                                 }
 
                                 $time = date('Y-m-d H:i:s', time());
-                                // dd($post_limit_rule);
+
                                 if ($post_limit_rule == 2) {
                                     if ($post_limit_cycle_start <= $time && $post_limit_cycle_end >= $time) {
                                         return self::checkInfo(ErrorCodeService::SUBMIT_LIMIT_ERROR);
                                     }
                                 } else {
-                                    // dd($post_limit_cycle_start . '----'.$post_limit_cycle_end . '|||'.$time);
                                     if ($time < $post_limit_cycle_start || $time > $post_limit_cycle_end) {
                                         return self::checkInfo(ErrorCodeService::SUBMIT_LIMIT_ERROR);
                                     }
@@ -282,7 +278,6 @@ class AmChecker extends BaseChecker
                         }
 
                         $permission = FresnsMemberRoles::where('id', $roleId)->value('permission');
-                        // dd($permission);
                         if ($permission) {
                             $permissionArr = json_decode($permission, true);
                             if ($permissionArr) {
@@ -292,23 +287,23 @@ class AmChecker extends BaseChecker
                                 if (empty($permissionMap)) {
                                     return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
                                 }
-                                //发表帖子权限
+                                // Publish Post Permissions
                                 if ($permissionMap['post_publish'] == false) {
                                     return self::checkInfo(ErrorCodeService::MEMBER_ROLE_SUBMIT_NO_ERROR);
                                 }
-                                //发表帖子要求-邮箱
+                                // Publish Post Request - Email
                                 if ($permissionMap['post_email_verify'] == true) {
                                     if (empty($user->email)) {
                                         return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_EMAIL_ERROR);
                                     }
                                 }
-                                //发表帖子要求-手机号
+                                // Publish Post Request - Phone Number
                                 if ($permissionMap['post_phone_verify'] == true) {
                                     if (empty($user->phone)) {
                                         return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_PHONE_ERROR);
                                     }
                                 }
-                                //发表帖子要求-实名制
+                                // Publish Post Request - Real name
                                 if ($permissionMap['post_prove_verify'] == true) {
                                     if ($user->prove_verify == 1) {
                                         return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_REAL_NAME_ERROR);
@@ -342,7 +337,6 @@ class AmChecker extends BaseChecker
                                                     strtotime('+1 day')).' '.$post_limit_cycle_end;
                                         }
                                         $time = date('Y-m-d H:i:s', time());
-                                        // dd($post_limit_rule);
                                         if ($post_limit_rule == 2) {
                                             if ($post_limit_cycle_start <= $time && $post_limit_cycle_end >= $time) {
                                                 return self::checkInfo(ErrorCodeService::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
@@ -359,44 +353,38 @@ class AmChecker extends BaseChecker
                             return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
                         }
 
-                        // code...
                         break;
 
                     default:
-                        //多长时间内可编辑
+                        // How long to edit
                         $posts = FresnsPosts::where('id', $typeId)->first();
                         if (! $posts) {
                             return self::checkInfo(self::POSTS_LOG_EXIST_ERROR);
                         }
-                        // 帖子的member_id和编辑的人是否为同一人
+                        // Whether the member_id and the editor of the post are the same person
                         if ($memberId != $posts['member_id']) {
                             return self::checkInfo(self::POST_MEMBER_ERROR);
                         }
                         $post_edit = ApiConfigHelper::getConfigByItemKey('post_edit');
-                        // dd($post_edit);
                         if ($post_edit == false) {
                             return self::checkInfo(self::POSTS_UPDATE_ERROR);
                         }
 
-                        // dd($posts);
                         $post_edit_timelimit = ApiConfigHelper::getConfigByItemKey('post_edit_timelimit');
-                        $postTime = date('Y-m-d H:i:s',
-                            strtotime("+$post_edit_timelimit minutes", strtotime($posts['created_at'])));
-                        // dd($postTime);
+                        $postTime = date('Y-m-d H:i:s', strtotime("+$post_edit_timelimit minutes", strtotime($posts['created_at'])));
                         $time = date('Y-m-d H:i:s', time());
                         if ($postTime < $time) {
                             return self::checkInfo(ErrorCodeService::EDIT_TIME_ERROR);
                         }
-                        // dd(123);
                         $post_edit_sticky = ApiConfigHelper::getConfigByItemKey('post_edit_sticky');
-                        //帖子置顶后编辑权限
+                        // Determine edit permissions after post topping
                         if ($posts['sticky_status'] != 1) {
                             if ($post_edit_sticky == false) {
                                 return self::checkInfo(ErrorCodeService::EDIT_TOP_ERROR);
                             }
                         }
                         $post_edit_essence = ApiConfigHelper::getConfigByItemKey('post_edit_essence');
-                        //帖子加精后编辑权限
+                        // Determine the editing permissions after the post is refined
                         if ($posts['essence_status'] != 1) {
                             if ($post_edit_essence == false) {
                                 return self::checkInfo(ErrorCodeService::EDIT_ESSENCE_ERROR);
@@ -410,20 +398,21 @@ class AmChecker extends BaseChecker
                 switch ($update_type) {
                     case 1:
                         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
-
-                        //发布评论校验邮箱，手机号，实名制
+                        // Publish Comment Request - Email
                         $comment_email_verify = ApiConfigHelper::getConfigByItemKey('comment_email_verify');
                         if ($comment_email_verify == true) {
                             if (empty($user->email)) {
                                 return self::checkInfo(self::USER_BINDING_EMAIL_ERROR);
                             }
                         }
+                        // Publish Comment Request - Phone Number
                         $comment_phone_verify = ApiConfigHelper::getConfigByItemKey('comment_phone_verify');
                         if ($comment_phone_verify == true) {
                             if (empty($user->phone)) {
                                 return self::checkInfo(self::USER_BINDING_PHONE_ERROR);
                             }
                         }
+                        // Publish Comment Request - Real name
                         $comment_prove_verify = ApiConfigHelper::getConfigByItemKey('comment_prove_verify');
                         if ($comment_prove_verify == true) {
                             if ($user->prove_verify == 1) {
@@ -432,11 +421,11 @@ class AmChecker extends BaseChecker
                         }
 
                         $comment_limit_status = ApiConfigHelper::getConfigByItemKey('comment_limit_status');
-                        //如果成员主角色是白名单角色，则不受该权限要求
+                        // If the member master role is a whitelisted role, it is not subject to this permission requirement
                         if (in_array($uri, $uriRuleArr)) {
                             if ($comment_limit_status == true) {
                                 if (! empty($roleId)) {
-                                    //获取白名单
+                                    // Get a list of whitelisted roles
                                     $comment_limit_whitelist = ApiConfigHelper::getConfigByItemKey('comment_limit_whitelist');
                                     if (! empty($comment_limit_whitelist)) {
                                         $comment_limit_whitelist_arr = json_decode($comment_limit_whitelist, true);
@@ -447,12 +436,12 @@ class AmChecker extends BaseChecker
                                 }
                             }
                         }
-                        //校验特殊规则-开放时间
+                        // Check Special Rules - Opening Hours
                         if ($comment_limit_status == true) {
                             $comment_limit_rule = ApiConfigHelper::getConfigByItemKey('comment_limit_rule');
                             $comment_limit_prompt = ApiConfigHelper::getConfigByItemKey('comment_limit_prompt');
                             $comment_limit_type = ApiConfigHelper::getConfigByItemKey('comment_limit_type');
-                            //指定日期全天限制
+                            // 1.All-day limit on specified dates
                             if ($comment_limit_type == 1) {
                                 $comment_limit_period_start = ApiConfigHelper::getConfigByItemKey('comment_limit_period_start');
                                 $comment_limit_period_end = ApiConfigHelper::getConfigByItemKey('comment_limit_period_end');
@@ -467,7 +456,7 @@ class AmChecker extends BaseChecker
                                     }
                                 }
                             }
-                            //指定某个时间段设置
+                            // 2.Specify a time period to set
                             if ($comment_limit_type == 2) {
                                 $comment_limit_cycle_start = ApiConfigHelper::getConfigByItemKey('comment_limit_cycle_start');
                                 $comment_limit_cycle_end = ApiConfigHelper::getConfigByItemKey('comment_limit_cycle_end');
@@ -491,7 +480,7 @@ class AmChecker extends BaseChecker
                                 }
                             }
                         }
-                        //全局校验通过，校验角色权限
+                        // Global checks pass, checks role permissions
                         if (empty($roleId)) {
                             return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
                         }
@@ -504,32 +493,34 @@ class AmChecker extends BaseChecker
                                 return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
                             }
 
-                            //发表评论权限
+                            // Publish Comment Permissions
                             if ($permissionMap['comment_publish'] == false) {
                                 return self::checkInfo(self::MEMBER_ROLE_SUBMIT_NO_ERROR);
                             }
 
-                            //发表评论要求-邮箱
+                            // Publish Comment Request - Email
                             if ($permissionMap['comment_email_verify'] == true) {
                                 if (empty($user->email)) {
                                     return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_EMAIL_ERROR);
                                 }
                             }
-                            //发表评论要求-手机号
+                            // Publish Comment Request - Phone Number
                             if ($permissionMap['comment_phone_verify'] == true) {
                                 if (empty($user->phone)) {
                                     return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_PHONE_ERROR);
                                 }
                             }
-                            //发表评论要求-实名制
+                            // Publish Comment Request - Real name
                             if ($permissionMap['comment_prove_verify'] == true) {
                                 if ($user->prove_verify == 1) {
                                     return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_REAL_NAME_ERROR);
                                 }
                             }
 
+                            // Check Special Rules - Opening Hours
                             if ($permissionMap['comment_limit_status'] == true) {
                                 $comment_limit_rule = $permissionMap['comment_limit_rule'];
+                                // 1.All-day limit on specified dates
                                 if ($comment_limit_type == 1) {
                                     $comment_limit_period_start = $permissionMap['comment_limit_period_start'];
                                     $comment_limit_period_end = $permissionMap['comment_limit_period_end'];
@@ -544,7 +535,7 @@ class AmChecker extends BaseChecker
                                         }
                                     }
                                 }
-                                //指定某个时间段设置
+                                // 2.Specify a time period to set
                                 if ($comment_limit_type == 2) {
                                     $comment_limit_cycle_start = $permissionMap['comment_limit_cycle_start'];
                                     $comment_limit_cycle_end = $permissionMap['comment_limit_cycle_end'];
@@ -571,37 +562,32 @@ class AmChecker extends BaseChecker
                         } else {
                             return self::checkInfo(ErrorCodeService::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
                         }
-                        // code...
+
                         break;
 
                     default:
-                        //多长时间内可编辑
+                        // How long to edit
                         $comments = FresnsComments::where('id', $typeId)->first();
                         if (! $comments) {
                             return self::checkInfo(self::COMMENTS_LOG_EXIST_ERROR);
                         }
-                        // 帖子的member_id和编辑的人是否为同一人
+                        // Whether the member_id and the editor of the comment are the same person
                         if ($memberId != $comments['member_id']) {
                             return self::checkInfo(self::POST_MEMBER_ERROR);
                         }
                         $comment_edit = ApiConfigHelper::getConfigByItemKey('comment_edit');
-                        // dd($comment_edit);
                         if ($comment_edit == false) {
                             return self::checkInfo(self::COMMENTS_UPDATE_ERROR);
                         }
 
-                        // dd($comments);
                         $comment_edit_timelimit = ApiConfigHelper::getConfigByItemKey('comment_edit_timelimit');
-                        // dd($comment_edit_timelimit);
-                        $commentsTime = date('Y-m-d H:i:s',
-                            strtotime("+$comment_edit_timelimit minutes", strtotime($comments['created_at'])));
+                        $commentsTime = date('Y-m-d H:i:s', strtotime("+$comment_edit_timelimit minutes", strtotime($comments['created_at'])));
                         $time = date('Y-m-d H:i:s', time());
                         if ($commentsTime < $time) {
                             return self::checkInfo(self::EDIT_TIME_ERROR);
                         }
-                        // dd(2);
                         $comment_edit_sticky = ApiConfigHelper::getConfigByItemKey('comment_edit_sticky');
-                        //帖子置顶后编辑权限
+                        // Determine edit permissions after post topping
                         if ($comments['is_sticky'] == 1) {
                             if ($comment_edit_sticky == false) {
                                 return self::checkInfo(self::EDIT_TOP_ERROR);
@@ -612,19 +598,15 @@ class AmChecker extends BaseChecker
                 break;
         }
 
-        // $data = [];
-        // $data['code'] = 0;
-        // $data['msg'] = 'ok';
-        // return $data;
         return true;
     }
 
     /**
-     * 校验是否全局配置
-     * 1.发帖/评论要求为false
-     * 2.未开启特殊规则.
+     * Verify global config
+     * 1.The posting or commenting requirement is false
+     * 2.Special rules not turned on.
      *
-     * @param [type] $type 1-帖子2-评论
+     * @param [type] $type 1-post 2-comment
      * @return void
      */
     public static function checkGlobalSubmit($type)
@@ -637,7 +619,6 @@ class AmChecker extends BaseChecker
                 $post_limit_status = ApiConfigHelper::getConfigByItemKey('post_limit_status');
 
                 if ($post_email_verify == false && $post_phone_verify == false && $post_prove_verify == false && $post_limit_status == false) {
-                    // return self::checkInfo(ErrorCodeService::POSTS_SUBMIT_ERROR);
                     return false;
                 }
                 break;
@@ -658,20 +639,20 @@ class AmChecker extends BaseChecker
     }
 
     /**
-     * 校验当前帖子或者评论是否需要审核.
+     * Check if the current post or comment needs to be moderated.
      *
-     * @param [type] $type 1-帖子2-评论
-     * @param [mid] $mid 成员id
+     * @param [type] $type 1-post 2-comment
+     * @param [mid] $mid
      */
     public static function checkAudit($type, $mid, $content)
     {
         $isCheck = false;
         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($mid);
-        //全局配置只有开启特殊规则时才会审核
+        // Global special rules configuration (Review requirements)
         if ($type == 1) {
             $post_limit_status = ApiConfigHelper::getConfigByItemKey('post_limit_status');
             if ($post_limit_status == true && $roleId > 0) {
-                //获取白名单
+                // Get a list of whitelisted roles
                 $post_limit_whitelist = ApiConfigHelper::getConfigByItemKey('post_limit_whitelist');
                 if (! empty($post_limit_whitelist)) {
                     $post_limit_whitelist_arr = json_decode($post_limit_whitelist, true);
@@ -694,7 +675,7 @@ class AmChecker extends BaseChecker
         } else {
             $comment_limit_status = ApiConfigHelper::getConfigByItemKey('comment_limit_status');
             if ($comment_limit_status == true && $roleId > 0) {
-                //获取白名单
+                // Get a list of whitelisted roles
                 $comment_limit_whitelist = ApiConfigHelper::getConfigByItemKey('comment_limit_whitelist');
                 if (! empty($comment_limit_whitelist)) {
                     $comment_limit_whitelist_arr = json_decode($comment_limit_whitelist, true);
@@ -743,7 +724,7 @@ class AmChecker extends BaseChecker
     }
 
     /**
-     * 更新草稿内容校验.
+     * Update draft content validation.
      */
     public static function checkDrast($mid)
     {
@@ -804,7 +785,6 @@ class AmChecker extends BaseChecker
                 }
             }
         }
-        // dd($gid);
         $title = $request->input('title');
         $content = $request->input('content');
         // pluginUnikey
@@ -815,7 +795,7 @@ class AmChecker extends BaseChecker
                 return self::checkInfo(self::PLUGIN_ERROR);
             }
         }
-        // 站点模式校验
+        // Site mode verification
         $site_mode = ApiConfigHelper::getConfigByItemKey('site_mode');
         if ($site_mode == AmConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
@@ -829,14 +809,14 @@ class AmChecker extends BaseChecker
                 if (! $postLogs) {
                     return self::checkInfo(self::POST_LOGS_EXISTS);
                 }
-                // 是否可编辑
+                // Editable or not
                 if ($postLogs['status'] == 2) {
                     return self::checkInfo(self::POST_STATUS_2_ERROR);
                 }
                 if ($postLogs['status'] == 3) {
                     return self::checkInfo(self::POST_STATUS_3_ERROR);
                 }
-                // 检测 gid 是否正确，包括是否有权在该小组发帖子，该小组是否可以发帖（小组分类不允许）
+                // Check whether the gid is correct, including whether the right to post in the group, whether the group can post (group classification is not allowed)
                 if (! empty($gid)) {
                     $group = FresnsGroups::where('uuid', $gid)->first();
                     if (! ($group)) {
@@ -846,9 +826,9 @@ class AmChecker extends BaseChecker
                         return self::checkInfo(self::GROUP_TYPE_ERROR);
                     }
                 }
-                //  判断字数限制
+                // Judgment word limit
                 if ($content) {
-                    // 获取帖子的上线字数
+                    // Get the maximum number of words in a post
                     $postEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_WORD_COUNT) ?? 1000;
                     if (mb_strlen(trim($content)) > $postEditorWordCount) {
                         return self::checkInfo(self::CONTENT_COUNT_ERROR);
@@ -860,7 +840,7 @@ class AmChecker extends BaseChecker
                 if (! $commentLogs) {
                     return self::checkInfo(self::COMMENT_LOGS_EXISTS);
                 }
-                // 是否可编辑
+                // Editable or not
                 if ($commentLogs['status'] == 2) {
                     return self::checkInfo(self::COMMENT_STATUS_2_ERROR);
                 }
@@ -868,7 +848,7 @@ class AmChecker extends BaseChecker
                     return self::checkInfo(self::COMMENT_STATUS_3_ERROR);
                 }
                 if ($content) {
-                    // 获取评论的上线字数
+                    // Get the maximum number of words in a comment
                     $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
                     if (mb_strlen(trim($content)) > $commentEditorWordCount) {
                         return self::checkInfo(self::CONTENT_COUNT_ERROR);
@@ -876,14 +856,14 @@ class AmChecker extends BaseChecker
                 }
                 break;
         }
-        // 标题不能过长
+        // The title should not be too long
         if ($title) {
             $strlen = mb_strlen($title);
             if ($strlen > 255) {
                 return self::checkInfo(self::TITLE_ERROR);
             }
         }
-        // type不能过长
+        // type cannot be too long
         if ($type) {
             $strlen = mb_strlen($type);
             if ($strlen > 128) {
@@ -892,8 +872,8 @@ class AmChecker extends BaseChecker
         }
     }
 
-    /**
-     * 创建新草稿
+    /*
+     * Create Draft Check
      */
     public static function checkCreate($mid)
     {
@@ -901,7 +881,7 @@ class AmChecker extends BaseChecker
         $type = $request->input('type');
         $uuid = $request->Input('uuid');
         $pid = $request->input('pid');
-        // 如果是私有模式，当过期后 members > expired_at，该接口不可请求。
+        // In case of private mode, the feature cannot be requested when it expires (members > expired_at).
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         if ($site_mode == AmConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
@@ -954,7 +934,6 @@ class AmChecker extends BaseChecker
                         ->where('comment.uuid', $uuid)
                         ->where('comment.deleted_at', null)
                         ->count();
-                    // dd($commentCount);
                     if ($commentCount == 0) {
                         return self::checkInfo(self::COMMENT_APPEND_ERROR);
                     }
@@ -966,14 +945,15 @@ class AmChecker extends BaseChecker
         }
     }
 
-    /* 提交内容check
-    */
+    /*
+     * Submitted Content Check
+     */
     public static function checkSubmit($mid)
     {
         $request = request();
         $type = $request->input('type');
         $logId = $request->input('logId');
-        // 如果是私有模式，当过期后 members > expired_at，该接口不可请求。
+        // In case of private mode, the feature cannot be requested when it expires (members > expired_at).
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         if ($site_mode == AmConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
@@ -993,7 +973,7 @@ class AmChecker extends BaseChecker
                 if ($postLog['status'] == 3) {
                     return self::checkInfo(self::POST_SUBMIT_STATUS3_ERROR);
                 }
-                // 日志有小组值判断该小组是否存在，以及当前成员是否有权在该小组发帖
+                // Logs have group values to determine whether the group exists and whether current members have the right to post in the group
                 if ($postLog['group_id']) {
                     $groupInfo = FresnsGroups::find($postLog['group_id']);
                     if (! $groupInfo) {
@@ -1003,7 +983,6 @@ class AmChecker extends BaseChecker
                         return self::checkInfo(self::GROUP_TYPE_ERROR);
                     }
                     $publishRule = FresnsGroupsService::publishRule($mid, $groupInfo['permission'], $groupInfo['id']);
-                    // dd($publishRule);
                     if (! $publishRule['allowPost']) {
                         return self::checkInfo(self::POST_GROUP_ALLOW_ERROR);
                     }
@@ -1044,14 +1023,10 @@ class AmChecker extends BaseChecker
                         return self::checkInfo(self::GROUP_TYPE_ERROR);
                     }
                     $publishRule = FresnsGroupsService::publishRule($mid, $groupInfo['permission'], $groupInfo['id']);
-                    // dd($publishRule);
                     if (! $publishRule['allowComment']) {
                         return self::checkInfo(self::POST_COMMENTS_ALLOW_ERROR);
                     }
                 }
-                // if(!$commentLog['content'] && empty($commentLog['files_json']) && empty($commentLog['extends_json'])){
-                //     return self::checkInfo(self::POSTS_LOG_CHECK_PARAMS_ERROR);
-                // }
                 if (empty($commentLog['content']) && (empty($commentLog['files_json']) || empty(json_decode($commentLog['files_json'], true))) && (empty($commentLog['extends_json']) || empty(json_decode($commentLog['extends_json'], true)))) {
                     return self::checkInfo(self::POSTS_LOG_CHECK_PARAMS_ERROR);
                 }
@@ -1067,13 +1042,13 @@ class AmChecker extends BaseChecker
         }
     }
 
-    /**快速发表
-     *
+    /*
+     * Fast Publishing Check
      */
     public static function checkPublish($mid)
     {
         $request = request();
-        // 如果是私有模式，当过期后 members > expired_at，该接口不可请求。
+        // In case of private mode, the feature cannot be requested when it expires (members > expired_at).
         $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
         if ($site_mode == AmConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
@@ -1092,14 +1067,14 @@ class AmChecker extends BaseChecker
             }
         }
         if ($commentPid) {
-            // 帖子信息
+            // Post Info
             $postInfo = FresnsPosts::where('uuid', $commentPid)->first();
             if (! $postInfo) {
                 return self::checkInfo(self::POST_LOGS_EXISTS);
             }
         }
         if ($type == 2) {
-            // 获取评论的上线字数
+            // Get the maximum number of words in a comment
             $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
             $content = $request->input('content');
             if (mb_strlen(trim($content)) > $commentEditorWordCount) {
@@ -1108,7 +1083,7 @@ class AmChecker extends BaseChecker
             if (empty($commentPid)) {
                 return self::checkInfo(self::COMMENT_PID_ERROR);
             }
-            // 是否有小组发帖权限
+            // Whether to have group publish privileges
             $postInfo = FresnsPosts::where('uuid', $commentPid)->first();
             if ($postInfo['group_id']) {
                 $groupInfo = FresnsGroups::find($postInfo['group_id']);
@@ -1119,13 +1094,12 @@ class AmChecker extends BaseChecker
                     return self::checkInfo(self::GROUP_TYPE_ERROR);
                 }
                 $publishRule = FresnsGroupsService::publishRule($mid, $groupInfo['permission'], $groupInfo['id']);
-                // dd($publishRule);
                 if (! $publishRule['allowComment']) {
                     return self::checkInfo(self::POST_COMMENTS_ALLOW_ERROR);
                 }
             }
         } else {
-            // 获取帖子的上线字数
+            // Get the maximum number of words in a post
             $postEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_WORD_COUNT) ?? 1000;
             $content = $request->input('content');
             if (mb_strlen(trim($content)) > $postEditorWordCount) {
@@ -1139,9 +1113,8 @@ class AmChecker extends BaseChecker
                 if ($groupInfo['type'] == 1) {
                     return self::checkInfo(self::GROUP_TYPE_ERROR);
                 }
-                // 是否有小组发帖权限
+                // Whether to have group publish privileges
                 $publishRule = FresnsGroupsService::publishRule($mid, $groupInfo['permission'], $groupInfo['id']);
-                // dd($publishRule);
                 if (! $publishRule['allowPost']) {
                     return self::checkInfo(self::POST_GROUP_ALLOW_ERROR);
                 }
@@ -1209,7 +1182,7 @@ class AmChecker extends BaseChecker
         return $text;
     }
 
-    //校验接口如果是私有模式，当过期后 members > expired_at，该接口不可请求。
+    // Calibrate the interface if it is in private mode, when the interface is not requestable after expiration (members > expired_at).
     public static function checkUploadPermission($memberId, $type, $fileSize = null, $suffix = null)
     {
         $siteMode = ApiConfigHelper::getConfigByItemKey('site_mode');
@@ -1244,13 +1217,13 @@ class AmChecker extends BaseChecker
                 }
                 switch ($type) {
                     case 1:
-                        //校验用户是否能上传
+                        // Verify member upload permissions (image)
                         if ($permissionMap['post_editor_image'] == false) {
                             return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
                         }
 
                         if (! empty($mbFileSize)) {
-                            //校验全局可上传文件大小
+                            // Check global configuration of uploadable image size
                             $images_max_size = ApiConfigHelper::getConfigByItemKey('images_max_size');
                             if ($mbFileSize > $images_max_size * 1024 * 1024) {
                                 return ErrorCodeService::UPLOAD_FILES_SIZE_ERROR;
@@ -1270,11 +1243,12 @@ class AmChecker extends BaseChecker
 
                         break;
                     case 2:
+                        // Verify member upload permissions (video)
                         if ($permissionMap['post_editor_video'] == false) {
                             return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
                         }
                         if (! empty($mbFileSize)) {
-                            //校验全局可上传文件大小
+                            // Check global configuration of uploadable video size
                             $videos_max_size = ApiConfigHelper::getConfigByItemKey('videos_max_size');
                             if ($mbFileSize > $videos_max_size * 1024 * 1024) {
                                 return ErrorCodeService::UPLOAD_FILES_SIZE_ERROR;
@@ -1293,11 +1267,12 @@ class AmChecker extends BaseChecker
 
                         break;
                     case 3:
+                        // Verify member upload permissions (audio)
                         if ($permissionMap['post_editor_audio'] == false) {
                             return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
                         }
                         if (! empty($mbFileSize)) {
-                            //校验全局可上传文件大小
+                            // Check global configuration of uploadable audio size
                             $audios_max_size = ApiConfigHelper::getConfigByItemKey('audios_max_size');
                             if ($mbFileSize > $audios_max_size * 1024 * 1024) {
                                 return ErrorCodeService::UPLOAD_FILES_SIZE_ERROR;
@@ -1317,11 +1292,12 @@ class AmChecker extends BaseChecker
 
                         break;
                     default:
+                        // Verify member upload permissions (doc)
                         if ($permissionMap['post_editor_doc'] == false) {
                             return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
                         }
                         if (! empty($mbFileSize)) {
-                            //校验全局可上传文件大小
+                            // Check global configuration of uploadable document size
                             $doc_max_size = ApiConfigHelper::getConfigByItemKey('docs_max_size');
                             if ($mbFileSize > $doc_max_size * 1024 * 1024) {
                                 return ErrorCodeService::UPLOAD_FILES_SIZE_ERROR;

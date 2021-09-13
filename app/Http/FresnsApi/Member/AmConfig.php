@@ -10,7 +10,7 @@ namespace App\Http\FresnsApi\Member;
 
 class AmConfig
 {
-    //修改成员资料参数
+    // Modify member profile parameters
     const MEMBER_EDIT = [
         'mname' => 'name',
         'nickname' => 'nickname',

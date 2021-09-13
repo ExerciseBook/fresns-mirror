@@ -24,18 +24,18 @@ class FresnsWalletLogsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        //user_wallet_logs > object_name >> plugin_usages(type=1 或 2) > name 多语言，如果插件关联已经删除，则原样输出 object_name 字段值
+        // user_wallet_logs > object_name >> plugin_usages(type=1 or 2) > name
+        // If the plugin association has been deleted, the object_name field value is output as is
         $uid = request()->input('uid');
         $langTag = request()->input('langTag');
-        $pluginUsages = FresnsPluginUsages::whereIn('type', [1, 2])->where('plugin_unikey',
-            $this->objuct_name)->first();
+        $pluginUsages = FresnsPluginUsages::whereIn('type', [1, 2])->where('plugin_unikey', $this->objuct_name)->first();
 
         if (empty($pluginUsages)) {
             $name = $this->object_name;
         } else {
-            $name = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name',
-                $pluginUsages['id'], $langTag);
+            $name = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $pluginUsages['id'], $langTag);
         }
+
         // Default Field
         $default = [
             'type' => $this->object_type,
@@ -47,8 +47,7 @@ class FresnsWalletLogsResource extends BaseAdminResource
             'name' => $name,
             'remark' => $this->remark,
             'status' => $this->is_enable,
-            'date' => DateHelper::asiaShanghaiToTimezone($this->created_at),
-
+            'date' => DateHelper::fresnsOutputTimeToTimezone($this->created_at),
         ];
 
         return $default;

@@ -23,6 +23,4 @@ Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\FresnsApi\Content'
     // Comment
     Route::post('/comment/lists', 'AmControllerApi@comment_lists')->name('admin.content.comment_lists');
     Route::post('/comment/detail', 'AmControllerApi@commentDetail')->name('admin.content.commentDetail');
-    // Extend
-    Route::post('/extend/lists', 'AmControllerApi@extendsLists')->name('admin.content.extendsLists');
 });

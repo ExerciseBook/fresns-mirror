@@ -19,19 +19,11 @@ class ApiLanguageHelper
 {
     public static function getLanguages($table, $table_field, $table_id)
     {
-        // dd(1);
         if (! $table_id) {
             return '';
         }
         $langTag = ApiLanguageHelper::getLangTagByHeader();
-        // $languageArr = TweetConfigService::getLanguageStatus();
-        // $default_language = FresnsPluginUsagesService::getDefaultLanguage();
-        // dd($default_language);
-        // if(empty($langTag)){
-        //     $langTag = $default_language;
-        // }
-        // 留空则输出默认语言内容，查询不到默认语言则输出第一条
-        // dd($default_language);
+        // Leave blank to output the content of the default language, the query does not default language to output the first
         $input = [
             'lang_tag' => $langTag,
             'table_field' => $table_field,
@@ -58,21 +50,13 @@ class ApiLanguageHelper
             return '';
         }
         $langTag = ApiLanguageHelper::getLangTagByHeader();
-        // $languageArr = TweetConfigService::getLanguageStatus();
-        // $default_language = FresnsPluginUsagesService::getDefaultLanguage();
-        // if(empty($langTag)){
-        //     $langTag = $default_language;
-        // }
-        // 留空则输出默认语言内容，查询不到默认语言则输出第一条
-        // dd($default_language);
-        // dump($langTag);
+        // Leave blank to output the content of the default language, the query does not default language to output the first
         $input = [
             'lang_tag' => $langTag,
             // 'table_field' => 'item_key',
             'table_key' => $table_key,
             'table_name' => $table,
         ];
-        // dump($input);
         $name = FresnsLanguages::where($input)->first();
         if (! $name) {
             $input = [
@@ -82,13 +66,12 @@ class ApiLanguageHelper
             ];
             $name = FresnsLanguages::where($input)->first();
         }
-        // dump($name);
         $content = $name['lang_content'] ?? '';
 
         return $content;
     }
 
-    //获取默认语言
+    // Get default language
     public static function getDefaultLanguage()
     {
         $defaultLanguage = ApiConfigHelper::getConfigByItemKey(FresnsConfigsConfig::DEFAULT_LANGUAGE);
@@ -99,13 +82,13 @@ class ApiLanguageHelper
         return $defaultLanguage;
     }
 
-    //获取langTag
+    // Get langTag
     public static function getLangTagByHeader()
     {
         $langTagHeader = request()->header('langTag');
         $langTag = null;
         if (! empty($langTagHeader)) {
-            //如果不为空则去查询是否存在该语言
+            // If it is not empty, check if the language exists
             $langSetting = FresnsConfigs::where('item_key', FresnsConfigsConfig::LANG_SETTINGS)->value('item_value');
             if (! empty($langSetting)) {
                 $langSettingArr = json_decode($langSetting, true);
@@ -117,7 +100,7 @@ class ApiLanguageHelper
             }
         }
 
-        //如果没有传多语言或者查询不到则查询默认语言
+        // If no multiple languages are passed or not queried, the default language is queried
         if (empty($langTag)) {
             $langTag = ApiLanguageHelper::getDefaultLanguage();
         }
@@ -125,24 +108,15 @@ class ApiLanguageHelper
         return $langTag;
     }
 
-    //api接口使用
+    // Use default language
     public static function getDefaultLanguageByApi()
     {
-        $defaultLanguage = FresnsConfigs::where('item_key', FresnsConfigsConfig::DEFAULT_LANGUAGE)->where('is_restful',
-            1)->value('item_value');
-        // $langSettings = TweetConfigs::where('item_key',TweetConfigsConfig::LANG_SETTINGS)->value('item_value');
-        // $langSettingsArr = json_decode($langSettings,true);
-        // $default = null;
-        // foreach($langSettingsArr as $v){
-        //     if($v['key'] == $defaultLanguage){
-        //         $default = $v['langTag'];
-        //     }
-        // }
+        $defaultLanguage = FresnsConfigs::where('item_key', FresnsConfigsConfig::DEFAULT_LANGUAGE)->where('is_restful', 1)->value('item_value');
 
         return $defaultLanguage;
     }
 
-    //通过key过去对应的语言标签
+    // Filter by key for the corresponding language tag
     public static function getDefaultLanguageByKey($key)
     {
         $langSettings = FresnsConfigs::where('item_key', FresnsConfigsConfig::LANG_SETTINGS)->value('item_value');
@@ -157,7 +131,7 @@ class ApiLanguageHelper
         return $default;
     }
 
-    //通过语言标签去查询对应的key
+    // Look up the corresponding key by language tag
     public static function getDefaultLanguageByLangTag($langTag)
     {
         $langSettings = FresnsConfigs::where('item_key', FresnsConfigsConfig::LANG_SETTINGS)->value('item_value');
@@ -172,14 +146,13 @@ class ApiLanguageHelper
         return $default;
     }
 
-    // 获取多语言
+    // Get all languages
     public static function getAllLanguages($table, $table_field, $table_id)
     {
         if (! $table_id) {
             return '';
         }
 
-        // dd($default_language);
         $input = [
             'table_field' => $table_field,
             'table_id' => $table_id,

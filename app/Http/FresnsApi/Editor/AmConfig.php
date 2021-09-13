@@ -16,13 +16,15 @@ class AmConfig
     const COMMENT_EDITOR_WORD_COUNT = 'comment_editor_word_count';
     const POST_EDITOR_WORD_COUNT = 'post_editor_word_count';
     const POST_EDITOR_BRIEF_COUNT = 'post_editor_brief_count';
-    // 查询模式
-    const QUERY_TYPE_DB_QUERY = 'db_query';  // 支持join配置的查询
-    const QUERY_TYPE_SQL_QUERY = 'sql_query'; // 原生SQL查询
+
+    // Query Mode
+    const QUERY_TYPE_DB_QUERY = 'db_query';  // Queries with join config support
+    const QUERY_TYPE_SQL_QUERY = 'sql_query'; // Native SQL queries
+
     const OBJECT_DEFAIL = 1;
     const OBJECT_SUCCESS = 2;
 
-    //不受特殊规则影响的api
+    // api not affected by special rules
     const URI_NOT_IN_RULE = [
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',

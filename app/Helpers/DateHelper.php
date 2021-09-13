@@ -163,7 +163,7 @@ class DateHelper
      * Convert incoming time to database time via time zone
      * time - Incoming time zone time.
      */
-    public static function timezoneToAsiaShanghai($time)
+    public static function fresnsInputTimeToTimezone($time)
     {
         if (empty($time)) {
             return $time;
@@ -183,7 +183,7 @@ class DateHelper
      * Convert database time to this time zone by time zone
      * time - Incoming local time.
      */
-    public static function asiaShanghaiToTimezone($time)
+    public static function fresnsOutputTimeToTimezone($time)
     {
         if (empty($time)) {
             return $time;

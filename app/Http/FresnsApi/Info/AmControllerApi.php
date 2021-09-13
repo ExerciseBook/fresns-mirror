@@ -56,7 +56,7 @@ class AmControllerApi extends FresnsBaseApiController
         parent::__construct();
     }
 
-    //系统配置信息
+    // Configs
     public function infoConfigs(Request $request)
     {
         $itemTag = $request->input('itemTag');
@@ -68,7 +68,7 @@ class AmControllerApi extends FresnsBaseApiController
             if (! empty($itemTag)) {
                 $itemTagArr = explode(',', $itemTag);
                 foreach ($itemTagArr as $v) {
-                    $data = array_merge($data, ApiConfigHelper::getConfigByKeyApi($v));
+                    $data = array_merge($data, ApiConfigHelper::getConfigByItemTagApi($v));
                 }
             }
             if (! empty($itemKey)) {
@@ -90,7 +90,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($item);
     }
 
-    //表情
+    // Emojis
     public function infoEmojis(Request $request)
     {
         $pageSize = $request->input('pageSize', 10);
@@ -107,7 +107,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    //敏感词
+    // Stop Words
     public function infoStopWords(Request $request)
     {
         $currentPage = $request->input('page', 1);
@@ -123,10 +123,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    //上传交互日志
+    // Upload Log
     public function infoUploadLog(Request $request)
     {
-        // 校验参数
         $rule = [
             'objectName' => 'required',
             'objectAction' => 'required',
@@ -162,18 +161,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success();
     }
 
-    /**
-     * 输入提示查询
-     * 1.成员名 members > name
-     * 2.小组名 groups > name
-     * 3.话题名 hashtags > name
-     * 4.帖子标题 posts > title
-     * 5.扩展内容标题 extends > title
-     * 成员名,话题,帖子,不涉及多语言表.
-     */
+    // Input Tips
     public function infoInputtips(Request $request)
     {
-        // 校验参数
         $rule = [
             'queryType' => 'required|numeric|in:1,2,3,4,5',
             'queryKey' => 'required',
@@ -347,7 +337,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 扩展配置信息
+    // Extensions Info
     public function extensions(Request $request)
     {
         $mid = GlobalService::getGlobalKey('member_id');
@@ -362,35 +352,22 @@ class AmControllerApi extends FresnsBaseApiController
         ];
         $type = $request->input('type');
         $scene = $request->input('scene');
-        // if($type != 3){
-        //     if(!empty($scene)){
-        //         $info = [
-        //             'info' => 'scene error',
-        //         ];
-        //         $this->errorInfo(ErrorCodeService::CODE_FAIL,$info);
-        //     }
-        // }
-        // 当 plugin_usages > member_roles 字段有值时，需要判断当前接口请求的成员是否在符合条件的角色当中，如果不在，则不输出。如果字段有值，接口又无成员参数，则默认当无权用户。
+        // When the plugin_usages > member_roles field has a value, you need to determine if the member requested by the current interface is among the eligible roles
+        // If not present, it is not output. If the field has a value and the interface has no member parameters, it defaults to being an unprivileged user.
         if (! $mid) {
             $idArr = FresnsPluginUsages::where('member_roles', null)->pluck('id')->toArray();
             $request->offsetSet('ids', implode(',', $idArr));
         } else {
             $noRoleIdArr = FresnsPluginUsages::where('member_roles', null)->pluck('id')->toArray();
-            // 查询角色
-            $memberRole = FresnsMemberRoleRels::where('member_id', $mid)->where('expired_at', '<',
-                date('Y-m-d H:i:s', time()))->first();
-            // dd($memberRole);
+            // Query Role
+            $memberRole = FresnsMemberRoleRels::where('member_id', $mid)->where('expired_at', '<', date('Y-m-d H:i:s', time()))->first();
             $RoleIdArr = [];
             if ($memberRole) {
-                $memberRole = FresnsMemberRoleRels::where('member_id', $mid)->where('expired_at', '<',
-                    date('Y-m-d H:i:s', time()))->first();
-                $RoleIdArr = FresnsPluginUsages::where('member_roles', 'like',
-                    '%'.$memberRole['role_id'].'%')->pluck('id')->toArray();
-                // dump($memberRole['role_id']);
+                $memberRole = FresnsMemberRoleRels::where('member_id', $mid)->where('expired_at', '<', date('Y-m-d H:i:s', time()))->first();
+                $RoleIdArr = FresnsPluginUsages::where('member_roles', 'like', '%'.$memberRole['role_id'].'%')->pluck('id')->toArray();
                 $RoleIdArr = $RoleIdArr;
             }
             $idArr = array_merge($noRoleIdArr, $RoleIdArr);
-            // dd($idArr);
             $request->offsetSet('ids', implode(',', $idArr));
         }
         ValidateService::validateRule($request, $rule);
@@ -399,7 +376,6 @@ class AmControllerApi extends FresnsBaseApiController
         $request->offsetSet('currentPage', $currentPage);
         $request->offsetSet('is_enable', 1);
         $request->offsetSet('pageSize', $pageSize);
-        // dd($pageSize);
         $TweetPluginUsagesService = new FresnsPluginUsagesService();
         $TweetPluginUsagesService->setResource(FresnsPluginUsagesResource::class);
         $list = $TweetPluginUsagesService->searchData();
@@ -410,7 +386,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 发送验证码
+    // Send Verify Code
     public function sendVerifyCode(Request $request)
     {
         $rule = [
@@ -438,49 +414,28 @@ class AmControllerApi extends FresnsBaseApiController
         $account = $request->input('account');
         $langTag = $request->header('langTag');
         $user_id = GlobalService::getGlobalKey('user_id');
-        // 验证提交参数
         $checkInfo = AmChecker::checkVerifyCode($type, $useType, $account);
-        // dd($checkInfo);
         if (is_array($checkInfo)) {
             return $this->errorCheckInfo($checkInfo);
         }
 
-        // dd($request);
-        // 发送短信验证码
-        // if($type == 2){
         $type = $request->input('type');
         $useType = $request->input('useType');
         $template = $request->input('template');
         $account = $request->input('account');
 
         $countryCode = $request->input('countryCode');
-        // 用途类型为“修改资料验证”，用户参数必填，检查用户对应的邮箱或手机号是否存在，存在才可发送验证码。拿数据表里存储的邮箱或手机号发送验证码，无视 account 和 countryCode 参数。
         if ($useType == 4) {
             $userInfo = FresnsUsers::find($user_id);
             if (empty($userInfo)) {
                 $this->error(ErrorCodeService::UID_EXIST_ERROR);
             }
-            // dd($userInfo);
             if ($type == 1) {
                 $account = $userInfo['email'];
             } else {
                 $account = $userInfo['pure_phone'];
             }
         }
-        // todo 执行验证码发送（手机）
-        // if ($type == 2) {
-        //     $cmd = PluginConfig::PLG_CMD_SEND_SMS_PHONE;
-        //     // 准备参数
-        //     $account = $account;
-        //     $template = $template;
-        //     $countryCode = $countryCode;
-        //     $input = [
-        //         'phone' => $account,
-        //         'template' => $template,
-        //         'countryCode' => $countryCode,
-        //         'langTag' => $langTag,
-        //     ];
-        // }
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_CODE;
         $input = [
             'type' => $type,
@@ -491,45 +446,16 @@ class AmControllerApi extends FresnsBaseApiController
             'countryCode' => $countryCode,
         ];
         $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-        // dd($resp);
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
             $this->errorCheckInfo($resp);
         }
-        // dd($resp['output']);
         $this->success($resp['output']);
-        // 发送邮箱
-        // if ($type == 1) {
-        //     $cmd = PluginConfig::PLG_CMD_SEND_SMS_EMAIL;
-        //     // 准备参数
-        //     $account = $account;
-        //     $template = $template;
-        //     $input = [
-        //         'email' => $account,
-        //         'template' => $template,
-        //         'langTag' => $langTag,
-        //     ];
-        // }
-        // // dd($input);
-        // // 发信设置插件
-        // if ($type == 1) {
-        //     $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_email_service');
-        // } else {
-        //     $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_sms_service');
-        // }
-        // $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
-        // $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-        // // dd($resp);
-        // if (PluginRpcHelper::isErrorPluginResp($resp)) {
-        //     $resp['msg'] = $resp['output'];
-        //     $this->errorCheckInfo($resp);
-        // }
-        // $this->success($resp['output']);
     }
 
-    //下载内容文件
+    // Download File
     public function downloadFile(Request $request)
     {
-        // 校验参数
+        // Calibration parameters
         $rule = [
             'type' => 'required|in:1,2,3',
             'uuid' => 'required',
@@ -540,15 +466,14 @@ class AmControllerApi extends FresnsBaseApiController
         $uid = GlobalService::getGlobalKey('user_id');
         $mid = GlobalService::getGlobalKey('member_id');
 
-        //校验内容是否存在
+        // Verify that the content exists
         $type = $request->input('type');
         $uuid = $request->input('uuid');
         $fid = $request->input('fid');
         switch ($type) {
             case 1:
-                //需要验证文件是否属于对应的来源目标，比如文件是否属于该帖子。
+                // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.
                 $typeData = FresnsPosts::where('uuid', $uuid)->first();
-                // dd($typeData);
                 if (empty($typeData)) {
                     $this->error(ErrorCodeService::FILES_ERROR);
                 }
@@ -558,13 +483,13 @@ class AmControllerApi extends FresnsBaseApiController
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILES_ERROR);
                 }
-                //帖子附件需要判断帖子是否开启了权限功能 posts > is_allow
+                // Post attachments need to determine if the post has permission enabled posts > is_allow
                 if (! empty($typeData)) {
                     if ($typeData['is_allow'] != FresnsPostsConfig::IS_ALLOW_1) {
                         $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
                     }
                 }
-                //如果帖子有阅读权限，则判断当前请求下载的成员本身和成员的主角色是否在授权列表 post_allows 表
+                // If the post has read access, determine if the member requesting the download itself and the member's primary role are in the authorization list post_allows table
                 $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type',
                     2)->where('object_id', $mid)->count();
                 if (empty($count)) {
@@ -572,7 +497,7 @@ class AmControllerApi extends FresnsBaseApiController
                 }
                 break;
             case 2:
-                //需要验证文件是否属于对应的来源目标，比如文件是否属于该帖子。
+                // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.
                 $typeData = FresnsComments::where('uuid', $uuid)->first();
                 if (empty($typeData)) {
                     $this->error(ErrorCodeService::FILES_ERROR);
@@ -586,7 +511,7 @@ class AmControllerApi extends FresnsBaseApiController
                 break;
             default:
                 $typeData = FresnsExtends::where('uuid', $uuid)->first();
-                //需要验证文件是否属于对应的来源目标，比如文件是否属于该帖子。
+                // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.
                 if (empty($typeData)) {
                     $this->error(ErrorCodeService::FILES_ERROR);
                 }
@@ -604,7 +529,7 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         $files = FresnsFiles::where('uuid', $fid)->first();
-        //如果校验通过，将记录填充进file_logs表
+        // If the checksum passes, populate the file_logs table with records
         $input = [
             'file_id' => $files['file_type'],
             'user_id' => $uid,
@@ -643,38 +568,23 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 全局摘要信息
+    // Overview
     public function overview(Request $request)
     {
         $member_id = GlobalService::getGlobalKey('member_id');
-        //消息未读数
-        // 系统
-        $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_1)->where('status', AmConfig::NO_READ)->count();
-        // 关注
-        $follow_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_2)->where('status', AmConfig::NO_READ)->count();
-        // 点赞
-        $like_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_3)->where('status', AmConfig::NO_READ)->count();
-        // 评论
-        $comment_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_4)->where('status', AmConfig::NO_READ)->count();
-        // 提及（艾特）
-        $mention_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_5)->where('status', AmConfig::NO_READ)->count();
-        // 推荐
-        $recommend_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            AmConfig::SOURCE_TYPE_6)->where('status', AmConfig::NO_READ)->count();
-        // 会话及会话消息未读数
-        // 查询未a_status未读
+        // Notifications of unread numbers
+        $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_1)->where('status', AmConfig::NO_READ)->count();
+        $follow_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_2)->where('status', AmConfig::NO_READ)->count();
+        $like_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_3)->where('status', AmConfig::NO_READ)->count();
+        $comment_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_4)->where('status', AmConfig::NO_READ)->count();
+        $mention_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_5)->where('status', AmConfig::NO_READ)->count();
+        $recommend_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_6)->where('status', AmConfig::NO_READ)->count();
+        // Dialogs of unread numbers
         $aStatusNoRead = FresnsDialogs::where('a_member_id', $member_id)->where('a_status', AmConfig::NO_READ)->count();
-        // 查询未b_status未读
         $bStatusNoRead = FresnsDialogs::where('b_member_id', $member_id)->where('b_status', AmConfig::NO_READ)->count();
         $dialogNoRead = $aStatusNoRead + $bStatusNoRead;
-        // 消息未读
-        $dialogMessage = FresnsDialogMessages::where('recv_member_id', $member_id)->where('recv_read_at',
-            null)->count();
+        // Dialog Messages of unread numbers
+        $dialogMessage = FresnsDialogMessages::where('recv_member_id', $member_id)->where('recv_read_at',null)->count();
         $dialogUnread = [
             'dialog' => $dialogNoRead,
             'message' => $dialogMessage,

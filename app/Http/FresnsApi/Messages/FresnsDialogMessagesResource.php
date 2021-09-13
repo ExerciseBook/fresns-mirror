@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Notify;
+namespace App\Http\FresnsApi\Messages;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Center\Common\GlobalService;
@@ -28,16 +28,15 @@ class FresnsDialogMessagesResource extends BaseAdminResource
 {
     public function toArray($request)
     {
-        // dd(1);
         // Form Field
         $formMap = FresnsDialogMessagesConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
-        // $mid = request()->header('mid');
+
+        // Dialog Messages Data
         $mid = GlobalService::getGlobalKey('member_id');
-        // $memberInfo = TweetMembers::find($mid);
         $memberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $this->send_member_id)->first();
         $messageArr = [];
         $sendDeactivate = true;
@@ -62,12 +61,12 @@ class FresnsDialogMessagesResource extends BaseAdminResource
             $messageArr['sendMid'] = $sendMemberInfo['uuid'] ?? '';
             $messageArr['sendAvatar'] = $memberInfo->avatar_file_url ?? '';
 
-            // 为空用默认头像
+            // Default avatar when members have no avatar
             if (empty($messageArr['sendAvatar'])) {
                 $defaultIcon = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEFAULT_AVATAR);
                 $messageArr['sendAvatar'] = $defaultIcon;
             }
-            // 已注销头像 deactivate_avatar 键值"
+            // The avatar displayed when a member has been deleted
             if ($memberInfo) {
                 if ($memberInfo->deleted_at != null) {
                     $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEACTIVATE_AVATAR);
@@ -81,47 +80,19 @@ class FresnsDialogMessagesResource extends BaseAdminResource
             $messageArr['sendAvatar'] = ApiFileHelper::getImageSignUrl($messageArr['sendAvatar']);
             $messageArr['sendTime'] = $this->created_at;
         }
+
+        // File Helper
         $fileInfo = [];
         if ($this->file_id) {
             $fileInfo = ApiFileHelper::getFileInfo($this->id, $this->file_id, $mid);
-            // dd($fileInfo);
         }
-        // if($this->file_id){
-        //     $fileInfo = TweetFiles::find($this->file_id);
-        //     $fileAppend = TweetFileAppends::findAppend('file_id',$this->file_id);
-        //     $fileArr['messageId'] =  $this->id;
-        //     $fileArr['isMe'] =  $this->send_member_id == $mid ? true : false;
-        //     $fileArr['type'] =  "附件消息";
-        //     $file['fileId'] = $this->file_id;
-        //     $file['fileType'] = $fileInfo['file_type'];
-        //     $file['fileName'] = $fileInfo['file_name'];
-        //     $file['fileExtension'] = $fileInfo['file_extension'];
-        //     $file['fileSize'] = $fileAppend['file_extension'];
-        //     $file['imageWidth'] = $fileAppend['image_width'];
-        //     $file['imageHeight'] = $fileAppend['image_height'];
-        //     $file['imageLong'] = $fileInfo['image_is_long'];
-        //     $file['imageThumbUrl'] = "";
-        //     $file['imageSquareUrl'] = "";
-        //     $file['imageBigUrl'] = "";
-        //     $file['videoTime'] = $fileInfo['video_time'];
-        //     $file['videoCover'] = $fileInfo['video_cover'];
-        //     $file['videoGif'] = $fileInfo['video_gif'];
-        //     $file['videoUrl'] = "";
-        //     $file['audioTime'] = $fileInfo['audio_time'];
-        //     $file['audioUrl'] = "";
-        //     $file['docPreviewUrl'] = "";
-        //     $file['docUrl'] = "";
-        //     $file['moreJson'] = [];
-        //     $fileArr['file'] = $file;
-        // }
+
         // Default Field
         if ($messageArr) {
             $default = $messageArr;
         } else {
             $default = $fileInfo;
         }
-        // Merger
-        // $arr = $default;
 
         return $default;
     }

@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 
 class ApiCommonHelper
 {
-    // 是否https请求
+    // Whether https request
     public static function isHttpsRequest()
     {
         if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
@@ -26,7 +26,7 @@ class ApiCommonHelper
         return false;
     }
 
-    // 获取域名
+    // Get Domain
     public static function domain()
     {
         $request = request();
@@ -39,7 +39,7 @@ class ApiCommonHelper
         return 'http://'.$httpHost;
     }
 
-    // 电话加密
+    // Phone Encryption
     public static function encryptPhone($phone, $start = 3, $end = 6)
     {
         if (empty($phone)) {
@@ -49,7 +49,7 @@ class ApiCommonHelper
         return substr_replace($phone, '****', $start, $end);
     }
 
-    // 邮箱加密
+    // Email Encryption
     public static function encryptEmail($email)
     {
         if (empty($email)) {
@@ -69,7 +69,7 @@ class ApiCommonHelper
         return $email;
     }
 
-    //姓名加密
+    // Real Name Encryption
     public static function encryptName($name)
     {
         $name = mb_substr($name, -1, 1);
@@ -79,7 +79,7 @@ class ApiCommonHelper
         return $name;
     }
 
-    // 身份证加密
+    // Real ID Number Encryption
     public static function encryptIdNumber($number, $startNum = 1, $endNum = 1)
     {
         $num = strlen($number);
@@ -93,7 +93,7 @@ class ApiCommonHelper
         return $start.$str.$end;
     }
 
-    //生成uuid
+    // Generate UUID
     public static function createUuid($length = 8)
     {
         $str = Str::random($length);
@@ -102,12 +102,12 @@ class ApiCommonHelper
         return $str;
     }
 
-    //member的uuid 8位数字
+    // Generate mid (Pure Digital)
     public static function createMemberUuid()
     {
         $uuid = rand(10000000, 99999999);
 
-        //查询是否有重复的
+        // Check if there are duplicates of
         $count = FresnsMembers::where('uuid', $uuid)->count();
         if ($count > 0) {
             $uuid = rand(10000000, 99999999);
@@ -123,7 +123,6 @@ class ApiCommonHelper
 
         foreach ($stopWordsArr as $v) {
             $str = strstr($text, $v['word']);
-            // dd($str);
             if ($str != false) {
                 if ($v['dialog_mode'] == 2) {
                     $text = str_replace($v['word'], $v['replace_word'], $text);

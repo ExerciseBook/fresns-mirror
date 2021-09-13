@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Notify;
+namespace App\Http\FresnsApi\Messages;
 
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
@@ -38,50 +38,9 @@ use Illuminate\Support\Facades\DB;
 
 class AmControllerApi extends FresnsBaseApiController
 {
-    // public function __construct()
-    // {
-    //     $this->initData();
-    // }
-    // 获取未读数
-    // public function unread(Request $request)
-    // {
-    //     $member_id = GlobalService::getGlobalKey('member_id');
-    //     //    dd($member_id);
-    //     // 系统
-    //     $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-    //         AmConfig::SOURCE_TYPE_1)->where('status', AmConfig::NO_READ)->count();
-    //     // 关注
-    //     $follow_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-    //         AmConfig::SOURCE_TYPE_2)->where('status', AmConfig::NO_READ)->count();
-    //     // 点赞
-    //     $like_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-    //         AmConfig::SOURCE_TYPE_3)->where('status', AmConfig::NO_READ)->count();
-    //     // 评论
-    //     $comment_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-    //         AmConfig::SOURCE_TYPE_4)->where('status', AmConfig::NO_READ)->count();
-    //     // 提及（艾特）
-    //     $mention_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-    //         AmConfig::SOURCE_TYPE_5)->where('status', AmConfig::NO_READ)->count();
-    //     // 推荐
-    //     $recommend_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-    //         AmConfig::SOURCE_TYPE_6)->where('status', AmConfig::NO_READ)->count();
-
-    //     $data = [
-    //         'system' => $system_count,
-    //         'follow' => $follow_count,
-    //         'like' => $like_count,
-    //         'comment' => $comment_count,
-    //         'mention' => $mention_count,
-    //         'recommend' => $recommend_count,
-    //     ];
-    //     $this->success($data);
-    // }
-
-    // 获取消息列表
+    // Get Notify List
     public function lists(Request $request)
     {
-        //$rule = ['type' => 'required|in:1,2,3,4,5,6',];
-        //ValidateService::validateRule($request, $rule);
         $uid = $this->uid;
         $member_id = $this->mid;
         $uid = $this->uid;
@@ -96,7 +55,6 @@ class AmControllerApi extends FresnsBaseApiController
         $pageSize = $request->input('pageSize', 30);
         $uid = $this->uid;
         $member_id = GlobalService::getGlobalKey('member_id');
-        // dd($member_id);
         $FresnsNotifiesService = new FresnsNotifiesService();
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
@@ -110,7 +68,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 更新阅读状态
+    // Update Notify Reading
     public function read(Request $request)
     {
         $rule = [
@@ -128,13 +86,13 @@ class AmControllerApi extends FresnsBaseApiController
         }
         $member_id = GlobalService::getGlobalKey('member_id');
         $type = $request->input('type');
-        // 将该类型下我收到的消息全部设置为已读。
+        // Set all the notifications I received under this type to read.
         $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
             $type)->update(['status' => AmConfig::READED]);
         $this->success();
     }
 
-    // 删除消息
+    // Delete Notify
     public function delete(Request $request)
     {
         $rule = [
@@ -153,7 +111,6 @@ class AmControllerApi extends FresnsBaseApiController
         $member_id = GlobalService::getGlobalKey('member_id');
         $idArr = $request->input('notifyId');
         $result = self::isExsitMember($idArr, FresnsNotifiesConfig::CFG_TABLE, 'member_id', $member_id);
-        // dd($result);
         if (! $result) {
             $this->error(ErrorCodeService::DELETED_NOTIFY_ERROR);
         }
@@ -161,7 +118,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success();
     }
 
-    // 获取会话列表
+    // Get Dialog List
     public function dialog_lists(Request $request)
     {
         $uid = $this->uid;
@@ -173,13 +130,11 @@ class AmControllerApi extends FresnsBaseApiController
             $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
         }
         $member_id = GlobalService::getGlobalKey('member_id');
-        // 查询会员所处的会话id集合
+        // Query the set of dialog ids that the member is in
         $idArr_A = FresnsDialogs::where('a_member_id', $member_id)->where('a_is_display', 1)->pluck('id')->toArray();
         $idArr_B = FresnsDialogs::where('b_member_id', $member_id)->where('b_is_display', 1)->pluck('id')->toArray();
         $idArr = array_merge($idArr_A, $idArr_B);
-        // dd($idArr);
         $ids = implode(',', $idArr);
-        // dd($ids);
         $page = $request->input('page', 1) ?? 1;
         $pageSize = $request->input('pageSize', 30) ?? 30;
         $FresnsDialogsService = new FresnsDialogsService();
@@ -195,7 +150,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 获取消息列表
+    // Get Dialog Message List
     public function message_lists(Request $request)
     {
         $table = FresnsDialogsConfig::CFG_TABLE;
@@ -216,19 +171,16 @@ class AmControllerApi extends FresnsBaseApiController
             $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
         }
         $mid = GlobalService::getGlobalKey('member_id');
-        // dd($mid);
         $dialogId = $request->input('dialogId');
-        // 查询会员所处的消息id集合
+        // Query the set of dialog ids that the member is in
         $send_member_idArr = FresnsDialogMessages::where('dialog_id', $dialogId)->where('send_member_id',
             $mid)->where('send_deleted_at', null)->pluck('id')->toArray();
         $recv_member_idArr = FresnsDialogMessages::where('dialog_id', $dialogId)->where('recv_member_id',
             $mid)->where('recv_deleted_at', null)->pluck('id')->toArray();
         $idArr = array_merge($send_member_idArr, $recv_member_idArr);
-        // dd($idArr);
         $ids = implode(',', $idArr);
-        // 获取用户是成员A还是成员B
+        // Get whether the membership is A or B
         $dialogsInfo = FresnsDialogs::where('id', $dialogId)->first();
-        // dump($is_member_A);
         if ($dialogsInfo['a_member_id'] == $mid) {
             $member_id = $dialogsInfo['b_member_id'];
         } else {
@@ -244,12 +196,12 @@ class AmControllerApi extends FresnsBaseApiController
         $member['mname'] = '';
         $member['nickname'] = '';
         $member['avatar'] = $memberInfo->avatar_file_url ?? '';
-        // 为空用默认头像
+        // Default avatar when members have no avatar
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }
-        // 已注销头像 deactivate_avatar 键值"
+        // The avatar displayed when a member has been deleted
         if ($memberInfo->deleted_at != null) {
             $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEACTIVATE_AVATAR);
             $member['avatar'] = $deactivateAvatar;
@@ -264,13 +216,9 @@ class AmControllerApi extends FresnsBaseApiController
                 $member['mid'] = $memberInfo->uuid;
                 $member['mname'] = $memberInfo->name;
                 $member['nickname'] = $memberInfo->nickname;
-                // $member['decorate'] = $memberInfo->decorate_file_url;
-                $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id,
-                    $memberInfo->decorate_file_url);
+                $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
                 $member['verifiedStatus'] = $memberInfo->verified_status;
-                // $member['verifiedIcon'] = $memberInfo->verified_file_url;
-                $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id,
-                    $memberInfo->verified_file_url);
+                $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
             }
         }
 
@@ -279,7 +227,6 @@ class AmControllerApi extends FresnsBaseApiController
         $pageSize = $request->input('pageSize', 50);
         $FresnsDialogsService = new FresnsDialogMessagesService();
         $request->offsetSet('currentPage', $page);
-        // $request->offsetSet('dialog_id', $dialogId);
         $request->offsetSet('ids', $ids);
         $request->offsetSet('pageSize', $pageSize);
         $FresnsDialogsService->setResource(FresnsDialogMessagesResource::class);
@@ -294,7 +241,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 更新阅读状态[会话]
+    // Update Dialog Message Reading
     public function message_read(Request $request)
     {
         $table = FresnsDialogsConfig::CFG_TABLE;
@@ -308,18 +255,16 @@ class AmControllerApi extends FresnsBaseApiController
         ValidateService::validateRule($request, $rule);
         $mid = GlobalService::getGlobalKey('member_id');
         $dialogId = $request->input('dialogId');
-        // 会话是否为该成员所有
+        // Whether the dialog is owned by the member
         $aCount = FresnsDialogs::where('a_member_id', $mid)->where('id', $dialogId)->count();
         $bCount = FresnsDialogs::where('b_member_id', $mid)->where('id', $dialogId)->count();
         if ($aCount == 0 && $bCount == 0) {
             $this->error(ErrorCodeService::DIALOG_ERROR);
         }
-        // 收信者-阅读时间更新
-        FresnsDialogMessages::where('dialog_id', $dialogId)->where('recv_member_id',
-            $mid)->update(['recv_read_at' => date('Y-m-d H:i:s')]);
-        // dialogs  status更新
+        // Recipients-Reading time update
+        FresnsDialogMessages::where('dialog_id', $dialogId)->where('recv_member_id', $mid)->update(['recv_read_at' => date('Y-m-d H:i:s')]);
+        // dialogs status update
         $is_member_A = FresnsDialogs::where('a_member_id', $mid)->where('id', $dialogId)->count();
-        // dump($is_member_A);
         if ($is_member_A > 0) {
             FresnsDialogs::where('id', $dialogId)->update(['a_status' => 2]);
         } else {
@@ -328,7 +273,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success();
     }
 
-    // 发送消息
+    // Send Dialog Message
     public function message_send(Request $request)
     {
         $table = FresnsMembersConfig::CFG_TABLE;
@@ -339,21 +284,15 @@ class AmControllerApi extends FresnsBaseApiController
             'fid' => 'required_without:message',
         ];
         ValidateService::validateRule($request, $rule);
-        // 验证提交参数
+        // Validate submission parameters
         $checkInfo = AmChecker::checkSendMessage($mid);
-        // dd($checkInfo);
         if (is_array($checkInfo)) {
             return $this->errorCheckInfo($checkInfo);
         }
-        // 需要先判断成员主角色是否有权发送私信（member_roles > permission > dialog=true）
-
-        // // 如果对方已经注销（members > deleted_at），不可以发送。
+        // Send
         $recvMid = $request->input('recvMid');
         $message = $request->input('message', null);
         $fid = $request->input('fid', null);
-        // if($message && $fid){
-        //     $this->error(ErrorCodeService::FILE_OR_MESSAGE_ERROR);
-        // }
         if ($fid) {
             $filesInfo = FresnsFiles::Where('uuid', $fid)->first();
             if (! $filesInfo) {
@@ -369,7 +308,7 @@ class AmControllerApi extends FresnsBaseApiController
                 case '3':
                     $file_type = 'audio';
                     break;
-                case '3':
+                case '4':
                     $file_type = 'doc';
                     break;
                 default:
@@ -385,7 +324,7 @@ class AmControllerApi extends FresnsBaseApiController
         }
         $recvMemberInfo = FresnsMembers::where('uuid', $recvMid)->first();
         $recvMid = $recvMemberInfo['id'];
-        // 查询会话id 没有则新建
+        // Query the dialog id, if not, create a new one
         $input1 = [
             'a_member_id' => $mid,
             'b_member_id' => $recvMid,
@@ -403,18 +342,13 @@ class AmControllerApi extends FresnsBaseApiController
                     'b_member_id' => $recvMid,
                 ];
                 $dialogsId = (new FresnsDialogs())->store($input_dialogs);
-            // $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
-                // if($sessionLogId){
-                //     FresnsSessionLogs::where('id',$sessionLogId)->update(['object_result' => AmConfig::OBJECT_SUCCESS,'object_order_id' => $dialogsId]);
-                // }
             } else {
                 $dialogsId = $dialogs['id'];
             }
         } else {
             $dialogsId = $dialogs['id'];
         }
-        // dd($dialogsId);
-        // 消息表入库
+        // Insert dialog_messages table
         $fileId = $fileId ?? null;
         $input_message = [
             'dialog_id' => $dialogsId,
@@ -431,10 +365,9 @@ class AmControllerApi extends FresnsBaseApiController
                 'object_order_id' => $messageId,
             ]);
         }
-        // 更新dialogs表
+        // Update dialogs table
         $count = FresnsDialogs::where('id', $dialogsId)->where('a_member_id', $mid)->count();
         if ($count > 0) {
-            // 为消息 更新latest_message_brief 为文件不更新
             if ($fid) {
                 $update_input = [
                     'latest_message_id' => $messageId,
@@ -479,7 +412,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success();
     }
 
-    // 删除消息(会话)
+    // Delete Dialog Message
     public function dialog_delete(Request $request)
     {
         $table = FresnsDialogsConfig::CFG_TABLE;
@@ -502,33 +435,27 @@ class AmControllerApi extends FresnsBaseApiController
             if ($messageIdArr) {
                 $this->error(ErrorCodeService::DIALOG_OR_MESSAGE_ERROR);
             }
-            // 会话是否为该成员所有
+            // Whether the dialog is owned by the member
             $aCount = FresnsDialogs::where('a_member_id', $mid)->where('id', $dialogId)->count();
             $bCount = FresnsDialogs::where('b_member_id', $mid)->where('id', $dialogId)->count();
             if ($aCount == 0 && $bCount == 0) {
                 $this->error(ErrorCodeService::DIALOG_ERROR);
             }
-            // 会话列表隐藏（）
+            // Dialog Hide
             $count = FresnsDialogs::where('id', $dialogId)->where('a_member_id', $mid)->count();
             if ($count > 0) {
                 FresnsDialogs::where('id', $dialogId)->update(['a_is_display' => 0]);
             } else {
                 FresnsDialogs::where('id', $dialogId)->update(['b_is_display' => 0]);
             }
-            // $Message_count = FresnsDialogMessages::where('dialog_id',$dialogId)->where('send_member_id',$mid)->count();
-            // 消息列表相关也删除
-            // if($Message_count > 0){
-            FresnsDialogMessages::where('dialog_id', $dialogId)->where('send_member_id',
-                $mid)->update(['send_deleted_at' => date('Y-m-d H:i:s')]);
-            // }else{
-            FresnsDialogMessages::where('dialog_id', $dialogId)->where('recv_member_id',
-                $mid)->update(['recv_deleted_at' => date('Y-m-d H:i:s')]);
-            // }
+            // Delete Message List
+            FresnsDialogMessages::where('dialog_id', $dialogId)->where('send_member_id', $mid)->update(['send_deleted_at' => date('Y-m-d H:i:s')]);
+            FresnsDialogMessages::where('dialog_id', $dialogId)->where('recv_member_id', $mid)->update(['recv_deleted_at' => date('Y-m-d H:i:s')]);
             $this->success();
         }
         if ($messageIdArr) {
             foreach ($messageIdArr as $messageId) {
-                // 判断用户是发送者还是收信者
+                // Determining whether a member is a sender or a recipient
                 $count = FresnsDialogMessages::where('id', $messageId)->where('send_member_id', $mid)->count();
                 $recvCount = FresnsDialogMessages::where('id', $messageId)->where('recv_member_id', $mid)->count();
                 if ($count == 0 && $recvCount == 0) {
@@ -554,7 +481,7 @@ class AmControllerApi extends FresnsBaseApiController
         }
     }
 
-    // 数据是否为用户所有
+    // Whether the data is owned by the member
     public static function isExsitMember($idArr, $table, $field, $field_value)
     {
         if (! is_array($idArr)) {

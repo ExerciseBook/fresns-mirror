@@ -29,19 +29,16 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
+
+        // Extensions List Info
         $langTag = request()->header('langTag', '');
-        // 语言
         $name = ApiLanguageHelper::getLanguages(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $this->id);
         $type = $this->type;
         $plugin = $this->plugin_unikey;
-        // $name = $name['lang_content'];
         $pluginInfo = FresnsPlugins::where('unikey', $plugin)->first();
-        // $icon = $this->icon_file_url;
         $icon = ApiFileHelper::getImageSignUrlByFileIdUrl($this->icon_file_id, $this->icon_file_url);
-
         $url = '';
         if ($pluginInfo) {
-            // $url = $pluginInfo['access_path'] .'/'. $this->parameter;
             $url = ApiFileHelper::getPluginUsagesUrl($plugin, $this->id);
         }
         $number = $this->editor_number;
@@ -54,10 +51,9 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         }
         $sortNumber = [];
         if ($this->type == 4) {
-            $postLists = self::gettypePluginUsages('postLists', $this->data_sources);
-            // dd($postLists);
-            $postFollows = self::gettypePluginUsages('postLists', $this->data_sources);
-            $postNearbys = self::gettypePluginUsages('postLists', $this->data_sources);
+            $postLists = self::getTypePluginUsages('postLists', $this->data_sources);
+            $postFollows = self::getTypePluginUsages('postLists', $this->data_sources);
+            $postNearbys = self::getTypePluginUsages('postLists', $this->data_sources);
             $sortNumber['postLists'] = $postLists;
             $sortNumber['postFollows'] = $postFollows;
             $sortNumber['postNearbys'] = $postNearbys;
@@ -82,7 +78,8 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         return $arr;
     }
 
-    public static function gettypePluginUsages($key, $data)
+    // Get Type Plugin Usages
+    public static function getTypePluginUsages($key, $data)
     {
         $sort_number = json_decode($data, true);
         $sortNumber = [];
@@ -90,31 +87,20 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         if ($sort_number) {
             if ($sort_number[$key]) {
                 foreach ($sort_number[$key]['sortNumber'] as $k => &$s) {
-                    // $sArr = [];
-                    // dd($s);
                     foreach ($s as &$v) {
-                        // dump($v);
                         if (! is_array($v)) {
                             $id = $v;
                         }
                         if (is_array($v)) {
                             $intro = [];
                             foreach ($v as $i) {
-                                // dd($i);
-                                // $map[$i['langTag']] = $i;
-                                // if ($i['langTag'] == $langTag) {
                                 $intro['id'] = $id;
                                 $intro['title'] = $i['title'];
                                 $intro['description'] = $i['description'];
                                 $introArr[] = $intro;
                             }
-                            // }
-                            // dd($introArr);
-                            // $v['intro'] = $introArr;
                         }
-                        // $sArr[] = $item1;
                     }
-                    // $arr1[$k] = $sArr;
                 }
             }
         }

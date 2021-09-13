@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 
 class ApiFileHelper
 {
+    // Dialog File Message
     public static function getFileInfo($messageId, $file_id, $mid)
     {
         $messageInfo = FresnsDialogMessages::find($messageId);
@@ -39,51 +40,47 @@ class ApiFileHelper
             $file['fileName'] = $fileInfo['file_name'];
             $file['fileExtension'] = $fileInfo['file_extension'];
             $file['fileSize'] = $fileAppend['file_extension'] ?? '';
+
+            // Image Type
             $file['imageWidth'] = $fileAppend['image_width'] ?? '';
             $file['imageHeight'] = $fileAppend['image_height'] ?? '';
-            // 图片类型
             $file['imageThumbUrl'] = '';
             $file['imageSquareUrl'] = '';
             $file['imageBigUrl'] = '';
-            // 图片配置
+            // Image Config
             $imagesHost = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
             $imagesRatio = ApiConfigHelper::getConfigByItemKey('images_thumb_ratio');
             $imagesSquare = ApiConfigHelper::getConfigByItemKey('images_thumb_square');
             $imagesBig = ApiConfigHelper::getConfigByItemKey('images_thumb_big');
-            // 图片属性
+            // Image Properties
             if ($fileInfo['file_type'] == 1) {
                 $file['imageLong'] = $fileAppend['image_is_long'] ?? '';
                 $file['imageThumbUrl'] = $imagesHost.$fileInfo['file_path'].$imagesRatio;
                 $file['imageSquareUrl'] = $imagesRatio.$fileInfo['file_path'].$imagesSquare;
                 $file['imageBigUrl'] = $imagesSquare.$fileInfo['file_path'].$imagesBig;
             }
-            // 视频类型
-            // $file['videoTime'] = "";
-            // $file['videoCover'] = "";
-            // $file['videoGif'] = "";
-            // $file['videoUrl'] = "";
-            $video_setting = ApiConfigHelper::getConfigByKey(AmConfig::VIDEO_SETTING);
-            // dd($video_setting);
-            // 视频专用
+            
+            // Video Type
+            $video_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::VIDEO_SETTING);
+            // Video Properties
             if ($fileInfo['file_type'] == 2) {
                 $file['videoTime'] = $fileInfo['video_time'];
                 $file['videoCover'] = $fileInfo['video_cover'];
                 $file['videoGif'] = $fileInfo['video_gif'];
                 $file['videoUrl'] = $video_setting['videos_bucket_domain'].$fileInfo['file_path'];
             }
-            // 音频类型
-            // $file['audioTime'] = "";
-            // $file['audioUrl'] = "";
-            $audio_setting = ApiConfigHelper::getConfigByKey(AmConfig::AUDIO_SETTING);
+
+            // Audio Type
+            $audio_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::AUDIO_SETTING);
+            // Audio Properties
             if ($fileInfo['file_type'] == 3) {
                 $file['audioTime'] = $fileInfo['audio_time'];
                 $file['audioUrl'] = $audio_setting['audios_bucket_domain'].$fileInfo['file_path'];
             }
-            // 文档类型
-            // $file['docPreviewUrl'] = "";
-            // $file['docUrl'] = "";
-            $doc_setting = ApiConfigHelper::getConfigByKey(AmConfig::DOC_SETTING);
-            // 文档专用
+
+            // Doc Type
+            $doc_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::DOC_SETTING);
+            // Doc Properties
             if ($fileInfo['file_type'] == 4) {
                 $file['docPreviewUrl'] = $doc_setting['docs_online_preview'].$doc_setting['docs_bucket_domain'].$fileInfo['file_path'];
                 $file['docUrl'] = $doc_setting['docs_bucket_domain'].$fileInfo['file_path'];
@@ -92,9 +89,7 @@ class ApiFileHelper
             $file['moreJson'] = [];
         }
         $fileArr['file'] = $file;
-        // dd($messageInfo);
         $memberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $messageInfo['send_member_id'])->first();
-        // dd($memberInfo);
         $sendDeactivate = true;
         $sendMid = $messageInfo['send_member_id'];
         if (($memberInfo->deleted_at != null)) {
@@ -105,12 +100,13 @@ class ApiFileHelper
         $fileArr['sendDeactivate'] = $sendDeactivate;
         $fileArr['sendMid'] = $sendMemberInfo['uuid'] ?? '';
         $fileArr['sendAvatar'] = $memberInfo->avatar_file_url;
-        // 为空用默认头像
+
+        // Default avatar when members have no avatar
         if (empty($memberInfo->avatar_file_url)) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEFAULT_AVATAR);
             $fileArr['sendAvatar'] = $defaultIcon;
         }
-        // 已注销头像 deactivate_avatar 键值"
+        // The avatar displayed when a member has been deleted
         if ($memberInfo) {
             if ($memberInfo->deleted_at != null) {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEACTIVATE_AVATAR);
@@ -125,13 +121,10 @@ class ApiFileHelper
         return $fileArr;
     }
 
-    // 通过file表获取file信息
+    // File Data Table Info
     public static function getFileInfoByTable($table, $table_id)
     {
-        // dump($table);
-        // dd($table_id);
         $fileIdArr = FresnsFiles::where('table_name', $table)->where('table_id', $table_id)->get()->toArray();
-        // $fileInfo = TweetFiles::whereIn('id',$fileIdArr)->get()->toArray();
         $result = [];
         if ($fileIdArr) {
             $file = [];
@@ -142,47 +135,41 @@ class ApiFileHelper
                 $file['name'] = $v['file_name'];
                 $file['extension'] = $v['file_extension'];
                 $file['fileSize'] = $fileAppend['file_extension'] ?? '';
+
+                // Image Type
                 $file['imageWidth'] = $fileAppend['image_width'] ?? '';
                 $file['imageHeight'] = $fileAppend['image_height'] ?? '';
-                $image_setting = ApiConfigHelper::getConfigByKey(AmConfig::IMAGE_SETTING);
-                // 图片类型
+                $image_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::IMAGE_SETTING);
                 if ($v['file_type'] == 1) {
                     $file['imageLong'] = $fileAppend['image_is_long'] ?? '';
                     $file['imageThumbUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_ratio'];
                     $file['imageSquareUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_square'];
                     $file['imageBigUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_big'];
                 }
-                // 视频类型
-                // $file['videoTime'] = "";
-                // $file['videoCover'] = "";
-                // $file['videoGif'] = "";
-                // $file['videoUrl'] = "";
-                $video_setting = ApiConfigHelper::getConfigByKey(AmConfig::VIDEO_SETTING);
-                // dd($video_setting);
-                // 视频专用
+
+                // Video Type
+                $video_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::VIDEO_SETTING);
                 if ($v['file_type'] == 2) {
                     $file['videoTime'] = $fileAppend['video_time'];
                     $file['videoCover'] = $fileAppend['video_cover'];
                     $file['videoGif'] = $fileAppend['video_gif'];
                     $file['videoUrl'] = $video_setting['videos_bucket_domain'].$v['file_path'];
                 }
-                // 音频类型
-                // $file['audioTime'] = "";
-                // $file['audioUrl'] = "";
-                $audio_setting = ApiConfigHelper::getConfigByKey(AmConfig::AUDIO_SETTING);
+
+                // Audio Type
+                $audio_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::AUDIO_SETTING);
                 if ($v['file_type'] == 3) {
                     $file['audioTime'] = $fileAppend['audio_time'];
                     $file['audioUrl'] = $audio_setting['audios_bucket_domain'].$v['file_path'];
                 }
-                // 文档类型
-                // $file['docPreviewUrl'] = "";
-                // $file['docUrl'] = "";
-                $doc_setting = ApiConfigHelper::getConfigByKey(AmConfig::DOC_SETTING);
-                // 文档专用
+
+                // Doc Type
+                $doc_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::DOC_SETTING);
                 if ($v['file_type'] == 4) {
                     $file['docPreviewUrl'] = $doc_setting['docs_online_preview'].$doc_setting['docs_bucket_domain'].$v['file_path'];
                     $file['docUrl'] = $doc_setting['docs_bucket_domain'].$v['file_path'];
                 }
+
                 $file['more_json'] = [];
                 $result[] = $file;
             }
@@ -191,10 +178,9 @@ class ApiFileHelper
         return $result;
     }
 
-    // 图片（防盗链用）
+    // Anti Hotlinking (images)
     public static function antiTheftFile($fileInfo)
     {
-        // $fileInfo = FresnsFiles::find($file_id);
         if ($fileInfo) {
             $files = [];
             foreach ($fileInfo as $f) {
@@ -216,10 +202,10 @@ class ApiFileHelper
         return $files;
     }
 
-    //获取单个图片的防盗链
+    // Get single image link by fid
     public static function getImageSignUrl($url)
     {
-        //判断是否是id，如果是id则去数据库查询，如果不是id则直接返回
+        // determine whether it is id, if it is id then go to the database query, if not id then return directly
         if (! is_numeric($url)) {
             $singUrl = $url;
         } else {
@@ -237,7 +223,7 @@ class ApiFileHelper
         return $singUrl;
     }
 
-    //通过文件id获取图片防盗链
+    // Get image link by fid
     public static function getImageSignUrlByFileId($fileId)
     {
         $uuid = FresnsFiles::where('id', $fileId)->value('uuid');
@@ -254,16 +240,12 @@ class ApiFileHelper
     }
 
     /**
-     * 部分表使用获取防盗链链接
-     * 1、先判断配置表 images_url_status 键名是否开启了防盗链功能。
-     * 2、键值为 false 代表未开启，直接输出 file_url 字段。
-     * 3、键值为 true 代表开启，则需要特殊处理，判断 file_id 是否有值。
-     * 3.1、无值则直接输出 file_url 字段。
-     * 3.2、有值，则代表是文件 ID，任 ID 跟插件索要 URL 信息（插件配置为 images_service 键名）.
+     * Anti Hotlinking
+     * https://fresns.org/extensions/anti-hotlinking.html
      */
     public static function getImageSignUrlByFileIdUrl($fileId, $fileUrl)
     {
-        //判断是否开启防盗链
+        // Determine whether to open the anti-hotlinking chain
         $imageStatus = ApiConfigHelper::getConfigByItemKey('images_url_status');
         if ($imageStatus == true) {
             if (empty($fileId)) {
@@ -284,7 +266,7 @@ class ApiFileHelper
         }
     }
 
-    // 获取pluginUseges url
+    // Handling Custom Parameters for Plugin Usages
     public static function getPluginUsagesUrl($pluginUnikey, $pluginUsagesid)
     {
         $bucketDomain = ApiConfigHelper::getConfigByItemKey(AmConfig::BACKEND_DOMAIN);
@@ -311,15 +293,14 @@ class ApiFileHelper
         return $url;
     }
 
-    // 获取more_json防盗链
+    // Anti Hotlinking (Get the url of the file in the more_json field)
     public static function getMoreJsonSignUrl($moreJson)
     {
-        // dump($moreJson);
         if ($moreJson) {
             foreach ($moreJson as &$m) {
                 $m['moreJson'] = empty($m['moreJson']) ? [] : $m['moreJson'];
                 if ($m['fid']) {
-                    // dump($m);
+                    // Image
                     if (isset($m['imageRatioUrl'])) {
                         $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
                         $input['fid'] = $m['fid'];
@@ -328,13 +309,12 @@ class ApiFileHelper
                         if (PluginRpcHelper::isErrorPluginResp($resp)) {
                             return false;
                         }
-                        // dd($resp);
                         $m['imageRatioUrl'] = $resp['output']['imageRatioUrl'];
                         $m['imageSquareUrl'] = $resp['output']['imageSquareUrl'];
                         $m['imageBigUrl'] = $resp['output']['imageBigUrl'];
                     }
+                    // Video
                     if (isset($m['videoCover'])) {
-                        // $m['videoCover'] = self::getVideoSignUrl($m['videoCover']);
                         $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_VIDEO;
                         $input['fid'] = $m['fid'];
 
@@ -346,6 +326,7 @@ class ApiFileHelper
                         $m['videoGif'] = $resp['output']['videoGif'];
                         $m['videoUrl'] = $resp['output']['videoUrl'];
                     }
+                    // Audio
                     if (isset($m['audioUrl'])) {
                         $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_AUDIO;
                         $input['fid'] = $m['fid'];
@@ -356,6 +337,7 @@ class ApiFileHelper
                         }
                         $m['audioUrl'] = $resp['output']['audioUrl'];
                     }
+                    // Doc
                     if (isset($m['docUrl'])) {
                         $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
                         $input['fid'] = $m['fid'];
@@ -365,7 +347,6 @@ class ApiFileHelper
                             return false;
                         }
                         $m['docUrl'] = $resp['output']['docUrl'];
-                        // $m['docUrl'] = self::getDocsSignUrl($m['docUrl']);
                     }
                 }
             }

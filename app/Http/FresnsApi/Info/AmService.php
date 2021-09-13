@@ -17,6 +17,7 @@ use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 
 class AmService
 {
+    // Get Language Field
     public static function getlanguageField($field, $id)
     {
         if (! $id) {
@@ -43,13 +44,13 @@ class AmService
         return $name;
     }
 
-    //获取查询到和自己关注的信息
+    // Get information about the query and your Follow
     public static function getMemberFollows($queryType, $idArr, $mid, $langTag = null)
     {
         $data = [];
+        // Query Related Tables
         switch ($queryType) {
             case 1:
-                //查询关联表
                 $followIdArr = FresnsMemberFollows::where('member_id', $mid)
                     ->where('follow_type', FresnsMemberFollowsConfig::FOLLOW_TYPE_1)
                     ->pluck('follow_id')
@@ -57,7 +58,6 @@ class AmService
                     ->toArray();
                 break;
             case 2:
-                //查询关联表
                 $followIdArr = FresnsMemberFollows::where('member_id', $mid)
                     ->where('follow_type', FresnsMemberFollowsConfig::FOLLOW_TYPE_2)
                     ->pluck('follow_id')
@@ -65,7 +65,6 @@ class AmService
                     ->toArray();
                 break;
             case 3:
-                //查询关联表
                 $followIdArr = FresnsMemberFollows::where('member_id', $mid)
                     ->where('follow_type', FresnsMemberFollowsConfig::FOLLOW_TYPE_3)
                     ->pluck('follow_id')
@@ -74,7 +73,6 @@ class AmService
 
                 break;
             case 4:
-                //查询关联表
                 $followIdArr = FresnsMemberFollows::where('member_id', $mid)
                     ->where('follow_type', FresnsMemberFollowsConfig::FOLLOW_TYPE_4)
                     ->whereIn('follow_id', $idArr)
@@ -91,7 +89,7 @@ class AmService
         }
 
         if ($followIdArr) {
-            //每次输出数量
+            // Quantity per output
             $count = FresnsMemberFollowsConfig::INPUTTIPS_COUNT;
             $followCount = count($followIdArr);
 
@@ -102,8 +100,6 @@ class AmService
                 $data = array_slice($followIdArr, 0, $count);
             }
             if ($followCount < $count) {
-
-                //求数组的差集
                 $diffArr = array_diff($idArr, $followIdArr);
                 $diffCount = $count - $followCount;
                 sort($diffArr);

@@ -47,21 +47,21 @@ class FresnsMemberListsResource extends BaseAdminResource
             $roleName = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id'], $langTag);
             $roleNameDisplay = $memberRole['is_display_name'];
             $roleIcon = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
-            $roleIconDisplay = $memberRole['icon_display_icon'];
+            $roleIconDisplay = $memberRole['is_display_icon'];
         }
-        $follows = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id', $this->id)->first();
-        $isFollows = 0;
-        if (empty($follows)) {
-            $follows = FresnsMemberFollows::where('member_id', $this->id)->where('follow_type', 1)->where('follow_id',
+        $follow = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id', $this->id)->first();
+        $isFollow = 0;
+        if (empty($follow)) {
+            $follow = FresnsMemberFollows::where('member_id', $this->id)->where('follow_type', 1)->where('follow_id',
                 $mid)->first();
-            if ($follows) {
-                $isFollows = 2;
+            if ($follow) {
+                $isFollow = 2;
             }
         } else {
-            if ($follows['is_mutual'] == 1) {
-                $isFollows = 3;
+            if ($follow['is_mutual'] == 1) {
+                $isFollow = 3;
             } else {
-                $isFollows = 1;
+                $isFollow = 1;
             }
         }
 
@@ -70,10 +70,10 @@ class FresnsMemberListsResource extends BaseAdminResource
         if ($count > 0) {
             $isLike = 1;
         }
-        $isShields = 0;
+        $isShield = 0;
         $count = FresnsMemberShields::where('member_id', $mid)->where('shield_type', 1)->where('shield_id', $this->id)->count();
         if ($count > 0) {
-            $isShields = 1;
+            $isShield = 1;
         }
         $memberStats = FresnsMemberStats::where('member_id', $this->id)->first();
         $stats['likeMemberCount'] = $memberStats['like_member_count'] ?? 0;
@@ -144,17 +144,17 @@ class FresnsMemberListsResource extends BaseAdminResource
             'avatar' => $memberAvatar,
             'decorate' => ApiFileHelper::getImageSignUrlByFileIdUrl($this->decorate_file_id, $this->decorate_file_url),
             'gender' => $this->gender,
-            'birthday' => DateHelper::asiaShanghaiToTimezone($this->birthday),
+            'birthday' => DateHelper::fresnsOutputTimeToTimezone($this->birthday),
             'bio' => $this->bio,
             'likeSetting' => ApiConfigHelper::getConfigByItemKey('like_member_setting'),
             'likeName' => FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'like_member_name', $langTag),
             'likeStatus' => $isLike,
             'followSetting' => ApiConfigHelper::getConfigByItemKey('follow_member_setting'),
             'followName' => FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'follow_member_name', $langTag),
-            'followStatus' => $isFollows,
+            'followStatus' => $isFollow,
             'shieldSetting' => ApiConfigHelper::getConfigByItemKey('shield_member_setting'),
             'shieldName' => FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'shield_member_name', $langTag),
-            'shieldStatus' => $isShields,
+            'shieldStatus' => $isShield,
             'verifiedStatus' => $this->verified_status,
             'verifiedIcon' => ApiFileHelper::getImageSignUrlByFileIdUrl($this->verified_file_id, $this->verified_file_url),
             'stats' => $stats,

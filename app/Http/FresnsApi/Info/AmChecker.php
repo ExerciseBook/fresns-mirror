@@ -44,9 +44,10 @@ class AmChecker extends FresnsBaseChecker
         self::PLUGIN_SMS_ERROR => '未配置插件服务商',
     ];
 
+    // Check Verify Code
     public static function checkVerifyCode($type, $useType, $account)
     {
-        // 发信设置插件
+        // Sending Message Settings Plugin
         if ($type == 1) {
             $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_email_service');
         } else {
@@ -87,17 +88,16 @@ class AmChecker extends FresnsBaseChecker
                 return self::checkInfo(self::TEAMPLAPE_ERROR);
             }
         }
-        // dump($emailArr);
-        // dd($phoneArr);
-        // dd($type);
-        // 用途类型为“注册新账号”，需要验证是否已经注册过，邮箱或手机号不存在则才可注册并发送验证码
-        // 注册用户模板为2
+
+        /*
+         * Code Usage
+         * https://fresns.org/api/info/sendVerifyCode.html
+         */
         switch ($useType) {
+            // useType=1
             case 1:
-                // 邮件
                 if ($type == 1) {
                     $result = self::RuleEmail($account);
-                    // dd($result);
                     if (! $result) {
                         return self::checkInfo(self::EMAIL_REGEX_ERROR);
                     }
@@ -119,12 +119,10 @@ class AmChecker extends FresnsBaseChecker
                     }
                 }
                 break;
-            // 用途类型为“验证码登录”，需要查验账号（邮箱或手机号）是否存在，存在才可发送验证码。
+            // useType=2
             case 2:
-                // 邮件
                 if ($type == 1) {
                     $result = self::RuleEmail($account);
-                    // dd($result);
                     if (! $result) {
                         return self::checkInfo(self::EMAIL_REGEX_ERROR);
                     }
@@ -146,16 +144,13 @@ class AmChecker extends FresnsBaseChecker
                     }
                 }
                 break;
-            // 用途类型为“新绑定账号”，用户参数必填，检查对应的邮箱或手机号，用户表是否为空，为空（代表可以新绑定）才可发送验证码。
+            // useType=3
             case 3:
-                // dd(1);
                 if (empty(request()->header('uid'))) {
                     return self::checkInfo(self::USER_ERROR);
                 }
-                // 邮件
                 if ($type == 1) {
                     $result = self::RuleEmail($account);
-                    // dd($result);
                     if (! $result) {
                         return self::checkInfo(self::EMAIL_REGEX_ERROR);
                     }
@@ -183,9 +178,8 @@ class AmChecker extends FresnsBaseChecker
                     }
                 }
                 break;
-            // 用途类型为“修改资料验证”，用户参数必填，检查用户对应的邮箱或手机号是否存在，存在才可发送验证码。拿数据表里存储的邮箱或手机号发送验证码，无视 account 和 countryCode 参数。
+            // useType=4
             case 4:
-                // dd(34);
                 if (empty(request()->header('uid'))) {
                     return self::checkInfo(self::USER_ERROR);
                 }
@@ -193,7 +187,6 @@ class AmChecker extends FresnsBaseChecker
                 if (empty($userInfo)) {
                     return self::checkInfo(self::USER_ERROR);
                 }
-                // 邮件
                 if ($type == 1) {
                     if (! $userInfo['email']) {
                         return self::checkInfo(self::EMAIL_EXIST_ERROR);
@@ -204,13 +197,10 @@ class AmChecker extends FresnsBaseChecker
                     }
                 }
                 break;
-
+            // default
             default:
-                // 验证正则
-                // 邮件
                 if ($type == 1) {
                     $result = self::RuleEmail($account);
-                    // dd($result);
                     if (! $result) {
                         return self::checkInfo(self::EMAIL_REGEX_ERROR);
                     }

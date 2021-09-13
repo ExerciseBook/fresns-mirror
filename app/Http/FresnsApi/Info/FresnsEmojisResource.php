@@ -39,8 +39,6 @@ class FresnsEmojisResource extends BaseAdminResource
             $itemArr[] = $item;
         }
 
-        // dd($itemArr);
-
         // Default Field
         $default = [
             'name' => FresnsLanguagesService::getLanguageByTableId(FresnsEmojisConfig::CFG_TABLE, 'name', $this->id),

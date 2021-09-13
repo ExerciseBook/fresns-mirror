@@ -165,9 +165,9 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $shieldCount = $this->shield_count;
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
-        $time = DateHelper::asiaShanghaiToTimezone($this->created_at);
+        $time = DateHelper::fresnsOutputTimeToTimezone($this->created_at);
         $timeFormat = DateHelper::format_date_langTag(strtotime($time));
-        $editTime = DateHelper::asiaShanghaiToTimezone($this->latest_edit_at);
+        $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
         $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
         $canDelete = $append['can_delete'];
         $allowStatus = $this->is_allow;

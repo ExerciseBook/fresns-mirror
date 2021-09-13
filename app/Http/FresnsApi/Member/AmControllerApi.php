@@ -66,9 +66,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->initData();
     }
 
+    // Member Login
     public function auth(Request $request)
     {
-        // 校验参数
         $rule = [
             'mid' => 'required|numeric',
         ];
@@ -109,8 +109,9 @@ class AmControllerApi extends FresnsBaseApiController
             FresnsSessionLogs::where('id', $sessionLogId)->update($sessionInput);
         }
 
-        //查询该邮箱或手机号所属用户，近 1 小时内登录密码错误次数，达到 5 次，则限制登录。
-        //session_logs 3-登陆 情况
+        // Check the number of login password errors in the last 1 hour for the member to whom the email or cell phone number belongs.
+        // If it reaches 5 times, the login will be restricted.
+        // session_logs > object_type=7
         $startTime = date('Y-m-d H:i:s', strtotime('-1 hour'));
         $sessionCount = FresnsSessionLogs::where('created_at', '>=', $startTime)
         ->where('user_id', $uid)
@@ -158,9 +159,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
+    // Member Edit Profile
     public function memberEdit(Request $request)
     {
-        // 校验参数
         $rule = [
             'gender' => 'numeric|in:0,1,2',
             'dialogLimit' => 'numeric',
@@ -193,7 +194,6 @@ class AmControllerApi extends FresnsBaseApiController
                     $begin_date = strtotime($last_name_at);
                     $end_date = strtotime(date('Y-m-d', time()));
                     $days = round(($end_date - $begin_date) / 3600 / 24);
-                    // dd($itemValue);
                     if ($days <= $itemValue) {
                         $this->error(ErrorCodeService::UPDATE_TIME_ERROR);
                     }
@@ -204,7 +204,7 @@ class AmControllerApi extends FresnsBaseApiController
             if (in_array($mname, $disableNamesArr)) {
                 $this->error(ErrorCodeService::WXAPP_CONTENT_ERROR);
             }
-            //判断名称是否重复
+            // Determine if the name is duplicated
             $memberCount = FresnsMembers::where('name', $mname)->count();
             if ($memberCount > 0) {
                 $this->error(ErrorCodeService::MEMBER_NAME_ERROR);
@@ -293,10 +293,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success((object)[]);
     }
 
-    //获取用户角色
+    // Get Member Role List
     public function memberRoles(Request $request)
     {
-        // 校验参数
         $rule = [
             'type' => 'in:1,2,3',
             'pageSize' => 'numeric',
@@ -313,9 +312,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
+    // Operation Mark
     public function memberMark(Request $request)
     {
-        // 校验参数
         $rule = [
             'type' => 'required|numeric|in:1,2',
             'markType' => 'required|numeric|in:1,2,3',
@@ -330,7 +329,7 @@ class AmControllerApi extends FresnsBaseApiController
         $markTarget = $request->input('markTarget');
         $markId = $request->input('markId');
         $mid = GlobalService::getGlobalKey('member_id');
-        //私有模式，成员已过期，不允许操作
+        // Private mode, if the member has expired, no operation is allowed
         $siteMode = ApiConfigHelper::getConfigByItemKey('site_mode');
         if ($siteMode == 'private') {
             $midMember = FresnsMembers::where('id', $mid)->first();
@@ -342,13 +341,19 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
 
-        //是否有权操作，根据配置表设置配置键名 > 运营配置 > 互动配置 > 互动行为设置，设置为 false 时，不可操作
+        /**
+         * Whether the right to operate
+         * https://fresns.org/database/keyname/interactives.html
+         * Interactive behavior settings
+         * 
+         * Tag members can not be themselves, as well as their own published posts, comments
+         */
         $checkerApi = AmChecker::checkMarkApi($markType, $markTarget);
         if ($checkerApi == false) {
             $this->error(ErrorCodeService::API_NO_CALL_ERROR);
         }
-        //标记成员不可以是自己，以及自己发表的帖子、评论
-        //成员
+
+        // Member
         if ($markTarget == 1) {
             $markId = FresnsMembers::where('uuid', $markId)->where('is_enable', 1)->value('id');
             if (empty($markId)) {
@@ -362,7 +367,8 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
 
-        //小组关注专用：判断 groups > type_follow = 2 时，不能通过该接口建立关注。
+        // Group
+        // If groups > type_follow = 2, you cannot create a following by this function.
         if ($markTarget == 2) {
             $groups = FresnsGroups::where('uuid', $markId)->where('is_enable', 1)->first();
             if (empty($groups)) {
@@ -377,7 +383,7 @@ class AmControllerApi extends FresnsBaseApiController
             $markId = $groups['id'];
         }
 
-        //话题
+        // Hashtag
         if ($markTarget == 3) {
             $markId = FresnsHashtags::where('slug', $markId)->where('is_enable', 1)->value('id');
             if (empty($markId)) {
@@ -388,7 +394,7 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
 
-        //帖子
+        // Post
         if ($markTarget == 4) {
             $posts = FresnsPosts::where('uuid', $markId)->where('is_enable', 1)->first();
             if (empty($posts)) {
@@ -403,7 +409,8 @@ class AmControllerApi extends FresnsBaseApiController
                 $this->error(ErrorCodeService::FOLLOW_ERROR);
             }
         }
-        //评论
+
+        // Comment
         if ($markTarget == 5) {
             $comment = FresnsComments::where('uuid', $markId)->where('is_enable', 1)->first();
             if (empty($markId)) {
@@ -419,7 +426,7 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
 
-        //校验是否重复操作
+        // Checking for duplicate operations
         switch ($type) {
             case 1:
                 $checkMark = AmChecker::checkMark($markType, $markTarget, $mid, $markId);
@@ -441,60 +448,44 @@ class AmControllerApi extends FresnsBaseApiController
                 switch ($markType) {
                     case 1:
                         if ($type == 1) {
-                            FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId, 'like_member_count',
-                                'like_me_count');
-                            //给对方录入一条通知
-                            FresnsNotifiesService::markNotifies($markId, $mid, 3, $markTarget, '点赞');
+                            FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId, 'like_member_count', 'like_me_count');
+                            // Enter a notification to the other party
+                            FresnsNotifiesService::markNotifies($markId, $mid, 3, $markTarget, 'Like');
                         } else {
                             FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
-
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $mid)->decrement('like_member_count');
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $markId)->decrement('like_me_count');
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $mid)->decrement('like_member_count');
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $markId)->decrement('like_me_count');
                         }
                         break;
                     case 2:
-                        $memberFollows = FresnsMemberFollows::where('follow_id', $mid)->where('member_id',
-                            $markId)->first();
-
+                        $memberFollows = FresnsMemberFollows::where('follow_id', $mid)->where('member_id', $markId)->first();
                         if ($type == 1) {
                             FresnsMemberFollowsService::addMemberFollow($mid, $markTarget, $markId);
                             if ($memberFollows) {
                                 FresnsMemberFollows::where('id', $memberFollows['id'])->update(['is_mutual' => 1]);
-                                FresnsMemberFollows::where('member_id', $mid)->where('follow_type',
-                                    $markTarget)->where('follow_id', $markId)->update(['is_mutual' => 1]);
+                                FresnsMemberFollows::where('member_id', $mid)->where('follow_type', $markTarget)->where('follow_id', $markId)->update(['is_mutual' => 1]);
                             }
 
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $mid)->increment('follow_member_count');
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $markId)->increment('follow_me_count');
-                            //给对方录入一条通知
-                            FresnsNotifiesService::markNotifies($markId, $mid, 2, $markTarget, '关注');
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $mid)->increment('follow_member_count');
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $markId)->increment('follow_me_count');
+                            // Enter a notification to the other party
+                            FresnsNotifiesService::markNotifies($markId, $mid, 2, $markTarget, 'Follow');
                         } else {
                             FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
-                            FresnsMemberFollows::where('member_id', $markId)->where('follow_type',
-                                $markTarget)->where('follow_id', $mid)->update(['is_mutual' => 0]);
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $mid)->decrement('follow_member_count');
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $markId)->decrement('follow_me_count');
+                            FresnsMemberFollows::where('member_id', $markId)->where('follow_type', $markTarget)->where('follow_id', $mid)->update(['is_mutual' => 0]);
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $mid)->decrement('follow_member_count');
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $markId)->decrement('follow_me_count');
                         }
                         break;
                     default:
                         if ($type == 1) {
                             FresnsMemberShieldsService::addMemberShield($mid, $markTarget, $markId);
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $mid)->increment('shield_member_count');
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $markId)->increment('shield_me_count');
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $mid)->increment('shield_member_count');
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $markId)->increment('shield_me_count');
                         } else {
                             FresnsMemberShieldsService::deleMemberShield($mid, $markTarget, $markId);
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $mid)->decrement('shield_member_count');
-                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id',
-                                $markId)->decrement('shield_me_count');
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $mid)->decrement('shield_member_count');
+                            DB::table(FresnsMemberStatsConfig::CFG_TABLE)->where('member_id', $markId)->decrement('shield_me_count');
                         }
                         break;
                 }
@@ -538,7 +529,7 @@ class AmControllerApi extends FresnsBaseApiController
                         if ($type == 1) {
                             FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsHashtags::where('id', $markId)->increment('like_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::addLikeCounts('hashtag_like_counts');
                         } else {
                             FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
@@ -550,7 +541,7 @@ class AmControllerApi extends FresnsBaseApiController
                         if ($type == 1) {
                             FresnsMemberFollowsService::addMemberFollow($mid, $markTarget, $markId);
                             FresnsHashtags::where('id', $markId)->increment('follow_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::addLikeCounts('hashtag_follow_counts');
                         } else {
                             FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
@@ -562,7 +553,7 @@ class AmControllerApi extends FresnsBaseApiController
                         if ($type == 1) {
                             FresnsMemberFollowsService::addMemberFollow($mid, $markTarget, $markId);
                             FresnsHashtags::where('id', $markId)->increment('shield_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::addLikeCounts('hashtag_shield_counts');
                         } else {
                             FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
@@ -570,9 +561,7 @@ class AmControllerApi extends FresnsBaseApiController
                             FresnsConfigsService::delLikeCounts('hashtag_shield_counts');
                         }
                         break;
-
                 }
-
                 break;
             case 4:
                 switch ($markType) {
@@ -580,12 +569,11 @@ class AmControllerApi extends FresnsBaseApiController
                         if ($type == 1) {
                             FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsPosts::where('id', $markId)->increment('like_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::addLikeCounts('post_like_counts');
-                            //插入一条通知
+                            // Insert a notice
                             $post = FresnsPosts::where('id', $markId)->first();
-                            FresnsNotifiesService::markNotifies($post['member_id'], $mid, 3, $markTarget,
-                                $post['title'], 1, $markId);
+                            FresnsNotifiesService::markNotifies($post['member_id'], $mid, 3, $markTarget, $post['title'], 1, $markId);
                         } else {
                             FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsPosts::where('id', $markId)->decrement('like_count');
@@ -596,12 +584,11 @@ class AmControllerApi extends FresnsBaseApiController
                         if ($type == 1) {
                             FresnsMemberFollowsService::addMemberFollow($mid, $markTarget, $markId);
                             FresnsPosts::where('id', $markId)->increment('follow_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::addLikeCounts('post_follow_counts');
-                            //插入一条通知
+                            // Insert a notice
                             $post = FresnsPosts::where('id', $markId)->first();
-                            FresnsNotifiesService::markNotifies($post['member_id'], $mid, 2, $markTarget,
-                                $post['title'], 1, $markId);
+                            FresnsNotifiesService::markNotifies($post['member_id'], $mid, 2, $markTarget, $post['title'], 1, $markId);
                         } else {
                             FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
                             FresnsPosts::where('id', $markId)->decrement('follow_count');
@@ -612,7 +599,7 @@ class AmControllerApi extends FresnsBaseApiController
                         if ($type == 1) {
                             FresnsMemberFollowsService::addMemberFollow($mid, $markTarget, $markId);
                             FresnsPosts::where('id', $markId)->increment('shield_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::addLikeCounts('post_shield_counts');
                         } else {
                             FresnsMemberFollowsService::deleMemberFollow($mid, $markTarget, $markId);
@@ -624,26 +611,25 @@ class AmControllerApi extends FresnsBaseApiController
                 break;
             default:
                 $comment = FresnsComments::where('id', $markId)->first();
-
                 switch ($markType) {
                     case 1:
                         if ($type == 1) {
                             FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->increment('like_count');
                             FresnsPosts::where('id', $comment['post_id'])->increment('comment_like_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::addLikeCounts('comment_like_counts');
                             if ($comment['parent_id'] > 0) {
                                 FresnsComments::where('id', $comment['parent_id'])->increment('comment_like_count');
                             }
-                            //插入一条通知
+                            // Insert a notice
                             FresnsNotifiesService::markNotifies($comment['member_id'], $mid, 3, $markTarget,
                                 $comment['content'], 2, $markId);
                         } else {
                             FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->decrement('like_count');
                             FresnsPosts::where('id', $comment['post_id'])->decrement('comment_like_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::delLikeCounts('comment_like_counts');
                             if ($comment['parent_id'] > 0) {
                                 FresnsComments::where('id', $comment['parent_id'])->decrement('comment_like_count');
@@ -654,15 +640,15 @@ class AmControllerApi extends FresnsBaseApiController
                         if ($type == 1) {
                             FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->increment('follow_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::addLikeCounts('comment_follow_counts');
-                            //插入一条通知
+                            // Insert a notice
                             FresnsNotifiesService::markNotifies($comment['member_id'], $mid, 2, $markTarget,
                                 $comment['content'], 2, $markId);
                         } else {
                             FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->decrement('follow_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::delLikeCounts('comment_follow_counts');
                         }
                         break;
@@ -670,12 +656,12 @@ class AmControllerApi extends FresnsBaseApiController
                         if ($type == 1) {
                             FresnsMemberLikesService::addMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->increment('shield_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::addLikeCounts('comment_shield_counts');
                         } else {
                             FresnsMemberLikesService::deleMemberLike($mid, $markTarget, $markId);
                             FresnsComments::where('id', $markId)->decrement('shield_count');
-                            //向配置表插入数据
+                            // Inserting data into the configs table
                             FresnsConfigsService::delLikeCounts('comment_shield_counts');
                         }
                         break;
@@ -687,13 +673,12 @@ class AmControllerApi extends FresnsBaseApiController
     }
 
     /**
-     * 成员操作删除内容
-     * 删除都要验证帖子或者评论的作者是否为本人
-     * 需要验证成员是否有权删除，有一些内容可能不被允许删除，查询附属信息表 can_delete 字段。
+     * Member Operation Delete Content
+     * Delete all to verify that the author of the post or comment is me
+     * You need to verify that the member has the right to delete, there are some contents that may not be allowed to be deleted, query the can_delete field in the dependent information table.
      */
     public function memberDelete(Request $request)
     {
-        // 校验参数
         $rule = [
             'type' => 'required|numeric|in:1,2',
             'uuid' => 'required',
@@ -707,7 +692,6 @@ class AmControllerApi extends FresnsBaseApiController
         $type = $request->input('type');
         switch ($type) {
             case 1:
-                //校验
                 $posts = FresnsPosts::where('uuid', $uuid)->first();
                 if (empty($posts)) {
                     $this->error(ErrorCodeService::DELETE_FILE_ERROR);
@@ -751,12 +735,7 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success();
     }
 
-    /**
-     * 自己的 mid 和接口 viewMid 参数一样，则代表自己查看自己的信息；参数不一样，代表查看别人的信息。
-     * 查看别人的信息，参数 extcredits1 要判断 extcredits1_status 键值，未启用或者为私有状态，则不输出。其他 2～5 同理。
-     * 查看别人的信息，featureExpands 和 dataExpands 扩展列表不输出。
-     * 查看自己的信息，manages 扩展列表不输出。
-     */
+    // Member Detail
     public function memberDetail(Request $request)
     {
         $mid = GlobalService::getGlobalKey('member_id');
@@ -776,7 +755,7 @@ class AmControllerApi extends FresnsBaseApiController
             $this->error(ErrorCodeService::UID_EXIST_ERROR);
         }
 
-        //是否是本人
+        // Is it me
         $isMe = false;
         if ($mid == $viewMid) {
             $isMe = true;
@@ -788,9 +767,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
+    // Member List
     public function memberLists(Request $request)
     {
-        // 校验参数
         $rule = [
             'gender' => 'numeric|in:0,1,2',
             'sortDirection' => 'numeric|in:1,2',
@@ -820,11 +799,11 @@ class AmControllerApi extends FresnsBaseApiController
             $query->whereIn('me.id', $idArr);
         }
         if ($createdTimeGt) {
-            $createdTimeGt = DateHelper::timezoneToAsiaShanghai($createdTimeGt);
+            $createdTimeGt = DateHelper::fresnsInputTimeToTimezone($createdTimeGt);
             $query->where('st.created_at', '>', $createdTimeGt);
         }
         if ($createdTimeLt) {
-            $createdTimeLt = DateHelper::timezoneToAsiaShanghai($createdTimeLt);
+            $createdTimeLt = DateHelper::fresnsInputTimeToTimezone($createdTimeLt);
             $query->where('st.created_at', '<', $createdTimeLt);
         }
 
@@ -873,7 +852,6 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         $item = $query->paginate($pageSize, ['*'], 'page', $page);
-        // dd($createdTimeGt);
         $data = [];
         $data['list'] = FresnsMemberListsResource::collection($item->items())->toArray($item->items());
         $pagination['total'] = $item->total();
@@ -885,10 +863,9 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    //获取互动成员列表
+    // Get Member Interactions Data
     public function memberInteractions(Request $request)
     {
-        // 校验参数
         $rule = [
             'type' => 'required|in:1,2,3,4,5',
             'objectType' => 'numeric|in:1,2,3,4,5',
@@ -906,7 +883,11 @@ class AmControllerApi extends FresnsBaseApiController
         $pageSize = $request->input('pageSize', 30);
         $page = $request->input('page', 1);
 
-        //查看别人信息时，是否输出数据，根据配置表设置配置键名 > 运营配置 > 互动配置 > 查看别人内容设置，设置为 false 时，不输出数据。
+        /**
+         * Whether to output data when viewing other people's information
+         * https://fresns.org/database/keyname/interactives.html
+         * View other people's content settings
+         */
         $typeArr = [4, 5];
         if (! in_array($type, $typeArr)) {
             $isMarkLists = AmChecker::checkMarkLists($type, $objectType);
@@ -916,11 +897,16 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         $idArr = [];
-        //type=1 获得点赞了 objectType > objectId 的所有成员列表。查询 member_likes 表。
-        //type=2 获得关注了 objectType > objectId 的所有成员列表。查询 member_follows 表。
-        //type=3 获得屏蔽了 objectType > objectId 的所有成员列表。查询 member_shields 表。
-        //需要判断「互动配置」是否允许请求。
-        //是否输出数据，根据配置表设置配置键名 > 运营配置 > 互动配置 > 查看别人内容设置，设置为 false 时，不输出数据
+
+        /**
+         * Whether to output data when viewing other people's information
+         * https://fresns.org/database/keyname/interactives.html
+         * View other people's content settings
+         * 
+         * type=1 Get a list of all members liked by objectType > objectId (query member_likes table)
+         * type=2 Get a list of all members followed by objectType > objectId (query member_follows table)
+         * type=3 Get a list of all members blocked by objectType > objectId (query member_shields table)
+         */
         switch ($type) {
             case 1:
                 $likeId = 0;
@@ -1071,11 +1057,10 @@ class AmControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
+    // Member Mark Data List
     public function memberMarkLists(Request $request)
     {
-        // 校验参数
         $rule = [
-            // 'viewMid'    => 'required',
             'viewType' => 'required|numeric|in:1,2,3',
             'viewTarget' => 'required|numeric|in:1,2,3,4,5',
             'pageSize' => 'numeric',
@@ -1111,7 +1096,11 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         $authMemberId = GlobalService::getGlobalKey('member_id');
-        //查看别人信息时，是否输出数据，根据配置表设置配置键名 > 运营配置 > 互动配置 > 查看别人内容设置，设置为 false 时，不输出数据。
+        /**
+         * Whether to output data when viewing other people's information
+         * https://fresns.org/database/keyname/interactives.html
+         * View other people's content settings
+         */
         if ($mid != $authMemberId) {
             $isMarkLists = AmChecker::checkMarkLists($viewType, $viewTarget);
             if ($isMarkLists == false) {

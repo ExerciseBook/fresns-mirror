@@ -107,9 +107,9 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $likeCount = $this->like_count;
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
-        $time = DateHelper::asiaShanghaiToTimezone($this->created_at);
+        $time = DateHelper::fresnsOutputTimeToTimezone($this->created_at);
         $timeFormat = DateHelper::format_date_langTag(strtotime($time));
-        $editTime = DateHelper::asiaShanghaiToTimezone($this->latest_edit_at);
+        $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
         $editTimeFormat = '';
         if ($editTime) {
             $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));

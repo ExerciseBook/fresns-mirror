@@ -41,6 +41,7 @@ class AmService
 {
     public function common($mid, $langTag, $isMe)
     {
+        // Member SEO Info
         $seoInfoArr = DB::table('seo')->where('linked_type', 1)->where('linked_id', $mid)->where('deleted_at',
             null)->where('lang_tag', $langTag)->get(['title', 'keywords', 'description'])->first();
         if (empty($seoInfoArr)) {
@@ -49,9 +50,10 @@ class AmService
             null)->where('lang_tag', $defaultLangTag)->get(['title', 'keywords', 'description'])->first();
         }
         $data['seoInfo'] = $seoInfoArr;
-        //manages
-        // plugin_usages > type=5 + scene 字段包含 3
-        // plugin_usages > member_roles 为空，则全部输出；有值则判断当前请求成员的所有关联角色 id 是否在字段配置中。
+
+        // Manages
+        // plugin_usages > type=5 + scene ⊇ 3
+        // plugin_usages > member_roles If the value is empty, then output all; if there is a value, determine whether all the associated role ids of the current request member are in the field configuration.
         $pluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'LIKE', '%3%')->get()->toArray();
         $managesArr = [];
         if (! empty($pluginUsagesArr)) {
@@ -64,8 +66,7 @@ class AmService
                 }
                 $item = [];
                 $item['plugin'] = $v['plugin_unikey'];
-                $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE,
-                    'name', $v['id'], $langTag);
+                $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                 $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
                 $item['url'] = ApiFileHelper::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
                 $managesArr[] = $item;
@@ -73,9 +74,9 @@ class AmService
         }
         $data['manages'] = $managesArr;
 
+        // Member Features
         // plugin_usages > type=7
-        // plugin_usages > member_roles 为空，则全部输出；有值则判断当前请求成员的所有关联角色 id 是否在字段配置中。
-        // 查看别人信息时不输出。
+        // plugin_usages > member_roles (Permission judgment)
         $features = [];
         if ($isMe == true) {
             $pluginUsagesArr = FresnsPluginUsages::where('type', 7)->get()->toArray();
@@ -87,15 +88,12 @@ class AmService
                             continue;
                         }
                     }
-
                     $item = [];
                     $item['plugin'] = $v['plugin_unikey'];
-                    $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE,
-                        'name', $v['id'], $langTag);
+                    $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                     $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
                     $item['url'] = ApiFileHelper::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
-                    $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $v['plugin_unikey'])->where('member_id',
-                        $mid)->first();
+                    $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $v['plugin_unikey'])->where('member_id', $mid)->first();
                     $item['badgesType'] = $pluginBadges['display_type'] ?? '';
                     $item['badgesValue'] = $pluginBadges['value_text'] ?? '';
                     $features[] = $item;
@@ -105,6 +103,9 @@ class AmService
 
         $data['features'] = $features;
 
+        // Member Profiles
+        // plugin_usages > type=8
+        // plugin_usages > member_roles (Permission judgment)
         $profiles = [];
         if ($isMe == true) {
             $pluginUsagesArr = FresnsPluginUsages::where('type', 8)->get()->toArray();
@@ -118,12 +119,10 @@ class AmService
                     }
                     $item = [];
                     $item['plugin'] = $v['plugin_unikey'];
-                    $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE,
-                        'name', $v['id'], $langTag);
+                    $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                     $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
                     $item['url'] = ApiFileHelper::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
-                    $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $v['plugin_unikey'])->where('member_id',
-                        $mid)->first();
+                    $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $v['plugin_unikey'])->where('member_id', $mid)->first();
                     $item['badgesType'] = $pluginBadges['display_type'] ?? '';
                     $item['badgesValue'] = $pluginBadges['value_text'] ?? '';
                     $profiles[] = $item;
@@ -135,6 +134,7 @@ class AmService
         return $data;
     }
 
+    // Get Member List
     public static function getMemberList($request)
     {
         $viewMid = $request->input('viewMid');
@@ -150,16 +150,13 @@ class AmService
         if ($viewType) {
             switch ($viewType) {
                 case 1:
-                    $memberIdArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type',
-                        1)->pluck('like_id')->toArray();
+                    $memberIdArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type', 1)->pluck('like_id')->toArray();
                     break;
                 case 2:
-                    $memberIdArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type',
-                        1)->pluck('follow_id')->toArray();
+                    $memberIdArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type', 1)->pluck('follow_id')->toArray();
                     break;
                 default:
-                    $memberIdArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type',
-                        1)->pluck('shield_id')->toArray();
+                    $memberIdArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type', 1)->pluck('shield_id')->toArray();
                     break;
             }
             $query->whereIn('me.id', $memberIdArr);
@@ -178,6 +175,7 @@ class AmService
         return $data;
     }
 
+    // Get Member Detail
     public function getMemberDetail($mid, $viewMid, $isMe, $langTag)
     {
         $member = FresnsMembers::where('id', $viewMid)->first();
@@ -197,11 +195,10 @@ class AmService
             $data['roleIconDisplay'] = '';
             if ($memberRole) {
                 $data['nicknameColor'] = $memberRole['nickname_color'];
-                $data['roleName'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE,
-                    'name', $memberRole['id'], $langTag);
+                $data['roleName'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id'], $langTag);
                 $data['roleNameDisplay'] = $memberRole['is_display_name'];
                 $data['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
-                $data['roleIconDisplay'] = $memberRole['icon_display_icon'];
+                $data['roleIconDisplay'] = $memberRole['is_display_icon'];
             }
             $users = DB::table(FresnsUsersConfig::CFG_TABLE)->where('id', $member['user_id'])->first();
 
@@ -217,31 +214,27 @@ class AmService
                 $memberAvatar = ApiFileHelper::getImageSignUrl($deactivateAvatar);
             }
             $data['avatar'] = $memberAvatar;
-            $data['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($member['decorate_file_id'],
-                $member['decorate_file_url']);
+            $data['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($member['decorate_file_id'], $member['decorate_file_url']);
             $data['gender'] = $member['gender'];
-            $data['birthday'] = DateHelper::asiaShanghaiToTimezone($member['birthday']);
+            $data['birthday'] = DateHelper::fresnsOutputTimeToTimezone($member['birthday']);
             $data['bio'] = $member['bio'];
             $data['dialogLimit'] = $member['dialog_limit'];
             $data['timezone'] = $member['timezone'];
             $data['language'] = $member['language'];
-            $data['expiredTime'] = DateHelper::asiaShanghaiToTimezone($member['expired_at']);
+            $data['expiredTime'] = DateHelper::fresnsOutputTimeToTimezone($member['expired_at']);
             $data['verifiedStatus'] = $member['verified_status'];
-            $data['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($member['verified_file_id'],
-                $member['verified_file_url']);
+            $data['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($member['verified_file_id'], $member['verified_file_url']);
             $data['verifiedDesc'] = $member['verified_desc'];
             $data['lastEditMname'] = $member['last_name_at'];
             $data['lastEditNickname'] = $member['last_nickname_at'];
-            $data['createdTime'] = DateHelper::asiaShanghaiToTimezone($member['created_at']);
+            $data['createdTime'] = DateHelper::fresnsOutputTimeToTimezone($member['created_at']);
             $data['status'] = $member['is_enable'];
             $memberRolesArr = FresnsMemberRoles::whereIn('id', $roleIdArr)->get()->toArray();
             $rolesArr = [];
             foreach ($memberRolesArr as $v) {
                 $item = [];
-                $item['type'] = FresnsMemberRoleRels::where('member_id', $mid)->where('role_id',
-                    $v['id'])->value('type');
-                $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name',
-                    $v['id'], $langTag);
+                $item['type'] = FresnsMemberRoleRels::where('member_id', $mid)->where('role_id', $v['id'])->value('type');
+                $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                 $item['icon'] = $v['icon_file_url'];
                 $item['nicknameColor'] = $v['nickname_color'];
                 $item['permission'] = json_decode($v['permission'], true);
@@ -271,41 +264,39 @@ class AmService
             $stats['postLikeCount'] = $memberStats['post_like_count'] ?? 0;
             $stats['commentPublishCount'] = $memberStats['comment_publish_count'] ?? 0;
             $stats['commentLikeCount'] = $memberStats['comment_like_count'] ?? 0;
+
+            // extcredits1
             $stats['extcredits1Status'] = ApiConfigHelper::getConfigByItemKey('extcredits1_status');
             $stats['extcredits1Name'] = ApiConfigHelper::getConfigByItemKey('extcredits1_name');
             $stats['extcredits1Unit'] = ApiConfigHelper::getConfigByItemKey('extcredits1_unit');
             if ($stats['extcredits1Status'] == 3) {
                 $stats['extcredits1'] = $memberStats['extcredits1'];
             }
+            // extcredits2
             $stats['extcredits2Status'] = ApiConfigHelper::getConfigByItemKey('extcredits2_status');
-            $stats['extcredits2Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'extcredits2_name', $langTag);
-            $stats['extcredits2Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'extcredits2_unit', $langTag);
+            $stats['extcredits2Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits2_name', $langTag);
+            $stats['extcredits2Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits2_unit', $langTag);
             if ($stats['extcredits2Status'] == 3) {
                 $stats['extcredits2'] = $memberStats['extcredits2'];
             }
+            // extcredits3
             $stats['extcredits3Status'] = ApiConfigHelper::getConfigByItemKey('extcredits3_status');
-            $stats['extcredits3Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'extcredits3_name', $langTag);
-            $stats['extcredits3Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'extcredits3_unit', $langTag);
+            $stats['extcredits3Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits3_name', $langTag);
+            $stats['extcredits3Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits3_unit', $langTag);
             if ($stats['extcredits3Status'] == 3) {
                 $stats['extcredits3'] = $memberStats['extcredits3'];
             }
+            // extcredits4
             $stats['extcredits4Status'] = ApiConfigHelper::getConfigByItemKey('extcredits4_status');
-            $stats['extcredits4Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'extcredits4_name', $langTag);
-            $stats['extcredits4Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'extcredits4_unit', $langTag);
+            $stats['extcredits4Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits4_name', $langTag);
+            $stats['extcredits4Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits4_unit', $langTag);
             if ($stats['extcredits4Status'] == 3) {
                 $stats['extcredits4'] = $memberStats['extcredits4'];
             }
+            // extcredits5
             $stats['extcredits5Status'] = ApiConfigHelper::getConfigByItemKey('extcredits5_status');
-            $stats['extcredits5Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'extcredits5_name', $langTag);
-            $stats['extcredits5Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'extcredits5_unit', $langTag);
+            $stats['extcredits5Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits5_name', $langTag);
+            $stats['extcredits5Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits5_unit', $langTag);
             if ($stats['extcredits5Status'] == 3) {
                 $stats['extcredits5'] = $memberStats['extcredits5'];
             }
@@ -316,8 +307,7 @@ class AmService
             foreach ($memberIconsArr as $v) {
                 $item = [];
                 $item['icon'] = $v['icon_file_url'];
-                $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name',
-                    $v['id'], $langTag);
+                $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                 $item['type'] = $v['type'];
                 $item['url'] = '';
                 $iconsArr[] = $item;
@@ -329,61 +319,49 @@ class AmService
                 $draftCount['comments'] = FresnsCommentLogs::whereIn('status', [1, 4])->count();
                 $data['draftCount'] = $draftCount;
             }
-            $data['memberName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'member_name', $langTag);
-            $data['memberIdName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'member_id_name', $langTag);
-            $data['memberNameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'member_name_name', $langTag);
-            $data['memberNicknameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'member_nickname_name', $langTag);
-            $data['memberRoleName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'member_role_name', $langTag);
+            $data['memberName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name', $langTag);
+            $data['memberIdName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_id_name', $langTag);
+            $data['memberNameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name_name', $langTag);
+            $data['memberNicknameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_nickname_name', $langTag);
+            $data['memberRoleName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_role_name', $langTag);
             $data['followSetting'] = ApiConfigHelper::getConfigByItemKey('follow_member_setting');
-            $data['followName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'follow_member_name', $langTag);
+            $data['followName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'follow_member_name', $langTag);
             if ($isMe == false) {
-                $follows = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id',
-                    $viewMid)->first();
-                $isFollows = 0;
-                if (empty($follows)) {
-                    $follows = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type',
-                        1)->where('follow_id', $mid)->first();
-                    if ($follows) {
-                        $isFollows = 2;
+                $follow = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id', $viewMid)->first();
+                $isFollow = 0;
+                if (empty($follow)) {
+                    $follow = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type', 1)->where('follow_id', $mid)->first();
+                    if ($follow) {
+                        $isFollow = 2;
                     }
                 } else {
-                    if ($follows['is_mutual'] == 1) {
-                        $isFollows = 3;
+                    if ($follow['is_mutual'] == 1) {
+                        $isFollow = 3;
                     } else {
-                        $isFollows = 1;
+                        $isFollow = 1;
                     }
                 }
-                $data['followStatus'] = $isFollows;
+                $data['followStatus'] = $isFollow;
             }
             $data['likeSetting'] = ApiConfigHelper::getConfigByItemKey('like_member_setting');
-            $data['likeName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'like_member_name', $langTag);
+            $data['likeName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'like_member_name', $langTag);
             if ($isMe == false) {
                 $isLike = 0;
-                $count = FresnsMemberLikes::where('member_id', $mid)->where('like_type', 1)->where('like_id',
-                    $viewMid)->count();
+                $count = FresnsMemberLikes::where('member_id', $mid)->where('like_type', 1)->where('like_id', $viewMid)->count();
                 if ($count > 0) {
                     $isLike = 1;
                 }
                 $data['likeStatus'] = $isLike;
             }
             $data['shieldSetting'] = ApiConfigHelper::getConfigByItemKey('shield_member_setting');
-            $data['shieldName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', 'shield_member_name', $langTag);
+            $data['shieldName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'shield_member_name', $langTag);
             if ($isMe == false) {
-                $isShields = 0;
-                $count = FresnsMemberShields::where('member_id', $mid)->where('shield_type', 1)->where('shield_id',
-                    $viewMid)->count();
+                $isShield = 0;
+                $count = FresnsMemberShields::where('member_id', $mid)->where('shield_type', 1)->where('shield_id', $viewMid)->count();
                 if ($count > 0) {
-                    $isShields = 1;
+                    $isShield = 1;
                 }
-                $data['shieldStatus'] = $isShields;
+                $data['shieldStatus'] = $isShield;
             }
 
             if ($isMe = false) {
@@ -393,8 +371,7 @@ class AmService
                 foreach ($managesArr as $v) {
                     $item = [];
                     $item['plugin'] = $v['plugin_unikey'];
-                    $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE,
-                        'name', $v['id'], $langTag);
+                    $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                     $item['icon'] = $v['icon_file_url'];
                     $plugins = FresnsPlugins::where('unikey', $v['plugin_unikey'])->first();
                     $item['url'] = $plugins['access_path'].$v['parameter'];
@@ -408,101 +385,81 @@ class AmService
         return $data;
     }
 
+    // Get Group List
     public static function getGroupList($request)
     {
         $viewMid = $request->input('viewMid');
         $viewType = $request->input('viewType');
-        // dump($viewMid);
         switch ($viewType) {
-            // 点赞的小组
             case 1:
-                $groupArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type',
-                    2)->pluck('like_id')->toArray();
+                $groupArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type', 2)->pluck('like_id')->toArray();
                 break;
             case 2:
-                $groupArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type',
-                    2)->pluck('follow_id')->toArray();
+                $groupArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type', 2)->pluck('follow_id')->toArray();
                 break;
             default:
-                $groupArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type',
-                    2)->pluck('shield_id')->toArray();
+                $groupArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type', 2)->pluck('shield_id')->toArray();
                 break;
-
         }
 
         return $groupArr;
     }
 
+    // Get Hashtag List
     public static function getHashtagList($request)
     {
         $viewMid = $request->input('viewMid');
         $viewType = $request->input('viewType');
-        // dump($viewMid);
         switch ($viewType) {
-            // 点赞的话题
             case 1:
-                $hashtagArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type',
-                    3)->pluck('like_id')->toArray();
+                $hashtagArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type', 3)->pluck('like_id')->toArray();
                 break;
             case 2:
-                $hashtagArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type',
-                    3)->pluck('follow_id')->toArray();
+                $hashtagArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type', 3)->pluck('follow_id')->toArray();
                 break;
             default:
-                $hashtagArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type',
-                    3)->pluck('shield_id')->toArray();
+                $hashtagArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type', 3)->pluck('shield_id')->toArray();
                 break;
-
         }
 
         return $hashtagArr;
     }
 
+    // Get Post List
     public static function getPostList($request)
     {
         $viewMid = $request->input('viewMid');
         $viewType = $request->input('viewType');
-        // dump($viewMid);
         switch ($viewType) {
-            // 点赞的话题
             case 1:
-                $postArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type',
-                    4)->pluck('like_id')->toArray();
+                $postArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type', 4)->pluck('like_id')->toArray();
                 break;
             case 2:
-                $postArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type',
-                    4)->pluck('follow_id')->toArray();
+                $postArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type', 4)->pluck('follow_id')->toArray();
                 break;
             default:
-                $postArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type',
-                    4)->pluck('shield_id')->toArray();
+                $postArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type', 4)->pluck('shield_id')->toArray();
                 break;
-
         }
 
         return $postArr;
     }
 
+    // Get Comment List
     public static function getCommentList($request)
     {
         $viewMid = $request->input('viewMid');
         $viewType = $request->input('viewType');
-        // dump($viewMid);
         switch ($viewType) {
-            // 点赞的话题
             case 1:
-                $commentArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type',
-                    5)->pluck('like_id')->toArray();
+                $commentArr = FresnsMemberLikes::where('member_id', $viewMid)->where('like_type', 5)->pluck('like_id')->toArray();
                 break;
             case 2:
-                $commentArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type',
-                    5)->pluck('follow_id')->toArray();
+                $commentArr = FresnsMemberFollows::where('member_id', $viewMid)->where('follow_type', 5)->pluck('follow_id')->toArray();
                 break;
             default:
-                $commentArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type',
-                    5)->pluck('shield_id')->toArray();
+                $commentArr = FresnsMemberShields::where('member_id', $viewMid)->where('shield_type', 5)->pluck('shield_id')->toArray();
                 break;
-
         }
 
         return $commentArr;

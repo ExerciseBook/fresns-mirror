@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Http\FresnsApi\Notify;
+namespace App\Http\FresnsApi\Messages;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
@@ -33,6 +33,8 @@ class FresnsNotifiesResource extends BaseAdminResource
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
+
+        // Notify Data
         $messageId = $this->id;
         $type = $this->source_type;
         $class = $this->source_class;
@@ -42,17 +44,16 @@ class FresnsNotifiesResource extends BaseAdminResource
         } else {
             $data = FresnsComments::find($sourceId);
         }
-        // $member = FresnsMembers::find($this->source_mid);
         $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $this->source_mid)->first();
         $sourceMember = [];
         $avatar = $member->avatar_file_url ?? '';
         if ($member) {
-            // 为空用默认头像
+            // Default avatar when members have no avatar
             if (empty($avatar)) {
                 $defaultIcon = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEFAULT_AVATAR);
                 $avatar = $defaultIcon;
             }
-            // 已注销头像 deactivate_avatar 键值"
+            // The avatar displayed when a member has been deleted
             if ($member) {
                 if ($member->deleted_at != null) {
                     $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEACTIVATE_AVATAR);
@@ -70,20 +71,15 @@ class FresnsNotifiesResource extends BaseAdminResource
                     'mname' => $member->name ?? '',
                     'nickname' => $member->nickname ?? '',
                     'avatar' => $avatar,
-                    // 'avatar' =>  ApiFileHelper::getImageSignUrlByFileIdUrl($member['avatar_file_id'],$member['avatar_file_url']),
-                    // 'decorate' =>  $member['decorate_file_url'] ?? "",
-                    'decorate' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->decorate_file_id,
-                        $member->decorate_file_url),
+                    'decorate' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->decorate_file_id, $member->decorate_file_url),
                     'verifiedStatus' => $member->verified_status ?? '',
-                    // 'verifiedIcon' => $member['verified_file_url'] ?? ""
-                    'verifiedIcon' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->verified_file_id,
-                        $member->verified_file_url),
+                    'verifiedIcon' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->verified_file_id, $member->verified_file_url),
                 ],
             ];
         }
-
         $sourceBrief = $this->source_brief;
         $status = $this->status;
+
         // Default Field
         $default = [
             'nitifyId' => $messageId,

@@ -6,23 +6,24 @@
  * Released under the Apache-2.0 License.
  */
 
-//Fresns API
+// Fresns Member API
 Route::group(['prefix' => 'fresns/member', 'namespace' => '\App\Http\FresnsApi\Member'], function () {
-    //登陆
+    // Member Login
     Route::post('/auth', 'AmControllerApi@auth')->name('admin.member.auth');
-    //修改资料
+    // Member Edit Profile
     Route::post('/edit', 'AmControllerApi@memberEdit')->name('admin.member.edit');
-    // 成员操作标记内容
+    // Member Operation Mark
     Route::post('/mark', 'AmControllerApi@memberMark')->name('admin.member.memberMark');
-    //获取用户角色
-    Route::post('/roles', 'AmControllerApi@memberRoles')->name('admin.member.memberRoles');
-    //成员操作删除内容
-    Route::post('/delete', 'AmControllerApi@memberDelete')->name('admin.member.memberDelete');
-    //获取成员
-    Route::post('/detail', 'AmControllerApi@memberDetail')->name('admin.member.memberDetail');
-    //获取成员列表
-    Route::post('/lists', 'AmControllerApi@memberLists')->name('admin.member.memberLists');
+    // Member Mark Data List
     Route::post('/markLists', 'AmControllerApi@memberMarkLists')->name('admin.member.memberMarkLists');
-    //获取成员【互动列表】
+    // Get Member Role List
+    Route::post('/roles', 'AmControllerApi@memberRoles')->name('admin.member.memberRoles');
+    // Member Operation Delete
+    Route::post('/delete', 'AmControllerApi@memberDelete')->name('admin.member.memberDelete');
+    // Get Member Detail
+    Route::post('/detail', 'AmControllerApi@memberDetail')->name('admin.member.memberDetail');
+    // Get Member List
+    Route::post('/lists', 'AmControllerApi@memberLists')->name('admin.member.memberLists');
+    // Get Member Interactions Data
     Route::post('/interactions', 'AmControllerApi@memberInteractions')->name('admin.member.memberInteractions');
 });
