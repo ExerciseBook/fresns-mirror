@@ -85,7 +85,7 @@
                         </a>
                     </li>
                     <li class="px-2">
-                        <a href="https://apps.fresns.cn" target="_blank" class="nav-link d-flex flex-column align-items-center">
+                        <a href="/fresns/iframe?url=https://apps.fresns.cn?lang={{$lang}}" class="nav-link d-flex flex-column align-items-center">
                             <i class="bi bi-shop-window fresns-nav-icon"></i>
                             <span class="fresns-nav-name">@lang('fresns.fresnsAppStore')</span>
                         </a>
