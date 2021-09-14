@@ -44,7 +44,7 @@ foreach ($routeDirArr as $routeDir) {
             $subDir = new DirectoryIterator($file->getPathname());
             foreach ($subDir as $subFile) {
                 $subPathName = $subFile->getPathname();
-                $routeFile = implode(DIRECTORY_SEPARATOR, [$subPathName, 'AmRouteApi.php']);
+                $routeFile = implode(DIRECTORY_SEPARATOR, [$subPathName, 'FsRouteApi.php']);
                 if (file_exists($routeFile)) {
                     require_once $routeFile;
                 }
