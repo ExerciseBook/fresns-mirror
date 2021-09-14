@@ -1140,14 +1140,13 @@ class FresnsPostsService extends AmService
         return $top_domain;
     }
 
-    // Stop Word Rules
+    // Check: Stop Word
     public function stopWords($text)
     {
         $stopWordsArr = FresnsStopWords::get()->toArray();
 
         foreach ($stopWordsArr as $v) {
             $str = strstr($text, $v['word']);
-            // dd($str);
             if ($str != false) {
                 if ($v['content_mode'] == 2) {
                     $text = str_replace($v['word'], $v['replace_word'], $text);

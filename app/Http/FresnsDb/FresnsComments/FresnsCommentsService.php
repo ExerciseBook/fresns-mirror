@@ -874,7 +874,7 @@ class FresnsCommentsService extends AmService
         }
     }
 
-    // Stop Word Rules
+    // Check: Stop Word
     public function stopWords($text)
     {
         $stopWordsArr = FresnsStopWords::get()->toArray();

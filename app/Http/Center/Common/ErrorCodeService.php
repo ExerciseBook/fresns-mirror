@@ -42,7 +42,7 @@ class ErrorCodeService
     const DELETED_NOTIFY_ERROR = 30027;
     const DIALOG_ERROR = 30028;
     const DIALOG_OR_MESSAGE_ERROR = 30029;
-    // CONST MEMBER_ROLE_ERROR = 30030;
+
     const FILE_OR_MESSAGE_ERROR = 30031;
     const MEMBER_ERROR = 30032;
     const MEMBER_FOLLOW_ERROR = 30033;
@@ -218,7 +218,6 @@ class ErrorCodeService
         self::DELETED_NOTIFY_ERROR              => '只能删除自己的消息',
         self::DIALOG_ERROR                      => '非自己的会话',
         self::DIALOG_OR_MESSAGE_ERROR           => '会话和消息只能传其一',
-        // self::GROUP_EXISTS                   => '小组不存在',
         self::GROUP_TYPE_ERROR                  => '小组分类不可发帖',
         self::TITLE_ERROR                       => '标题过长(应小于255)',
         self::POST_STATUS_2_ERROR               => '帖子审核中不可编辑',
