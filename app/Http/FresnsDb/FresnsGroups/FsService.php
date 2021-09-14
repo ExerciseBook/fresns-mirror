@@ -15,25 +15,25 @@ use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     public function __construct()
     {
-        $this->config = new AmConfig();
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->config = new FsConfig();
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     // Group Common
     public function common()
     {
         $common = parent::common();
-        $common['recommendOption'] = AmConfig::RECOMMEND_OPTION;
-        $common['typeModel'] = AmConfig::TYPE_MODE;
-        $common['typeFind'] = AmConfig::TYPE_FIND;
-        $common['typeFollow'] = AmConfig::TYPE_FOLLOW;
-        $common['publishPostOption'] = AmConfig::PUBLISH_POST;
+        $common['recommendOption'] = FsConfig::RECOMMEND_OPTION;
+        $common['typeModel'] = FsConfig::TYPE_MODE;
+        $common['typeFind'] = FsConfig::TYPE_FIND;
+        $common['typeFollow'] = FsConfig::TYPE_FOLLOW;
+        $common['publishPostOption'] = FsConfig::PUBLISH_POST;
         // Group Administrator
         $common['memberOption'] = FresnsMembers::buildSelectTreeDataByNoRankNum('id', 'name', ['is_enable' => 1]);
         // Role Permissions
@@ -62,8 +62,8 @@ class AmService extends BaseAdminService
     {
         foreach ($itemArr as &$item) {
             // Language (name and description)
-            $nameArr = self::getLangaugeArr(AmConfig::CFG_TABLE, AmConfig::FORM_FIELDS_MAP['name'], $item);
-            $descriptionArr = self::getLangaugeArr(AmConfig::CFG_TABLE, AmConfig::FORM_FIELDS_MAP['description'],
+            $nameArr = self::getLangaugeArr(FsConfig::CFG_TABLE, FsConfig::FORM_FIELDS_MAP['name'], $item);
+            $descriptionArr = self::getLangaugeArr(FsConfig::CFG_TABLE, FsConfig::FORM_FIELDS_MAP['description'],
                 $item);
             $item['nameArr'] = $nameArr;
             $item['descriptionArr'] = $descriptionArr;

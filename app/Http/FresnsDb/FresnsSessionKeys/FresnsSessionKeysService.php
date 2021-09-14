@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsSessionKeys;
 
-class FresnsSessionKeysService extends AmService
+class FresnsSessionKeysService extends FsService
 {
 }

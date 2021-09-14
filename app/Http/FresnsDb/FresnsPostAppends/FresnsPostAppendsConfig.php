@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsPostAppends;
 
-class FresnsPostAppendsConfig extends AmConfig
+class FresnsPostAppendsConfig extends FsConfig
 {
 }

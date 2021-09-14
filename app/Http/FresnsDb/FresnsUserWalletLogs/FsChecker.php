@@ -10,6 +10,6 @@ namespace App\Http\FresnsDb\FresnsUserWalletLogs;
 
 use App\Base\Checkers\BaseChecker;
 
-class AmChecker extends BaseChecker
+class FsChecker extends BaseChecker
 {
 }

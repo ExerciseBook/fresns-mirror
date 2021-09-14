@@ -21,20 +21,20 @@ use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use Illuminate\Support\Facades\DB;
 
-class AmModel extends BaseAdminModel
+class FsModel extends BaseAdminModel
 {
-    protected $table = AmConfig::CFG_TABLE;
+    protected $table = FsConfig::CFG_TABLE;
 
     // Front-end form field mapping
     public function formFieldsMap()
     {
-        return AmConfig::FORM_FIELDS_MAP;
+        return FsConfig::FORM_FIELDS_MAP;
     }
 
     // New search criteria
     public function getAddedSearchableFields()
     {
-        return AmConfig::ADDED_SEARCHABLE_FIELDS;
+        return FsConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
     // hook - after adding
@@ -125,7 +125,7 @@ class AmModel extends BaseAdminModel
         $searchMid = $request->input('searchMid');
         if ($searchMid) {
             // configs table settings: whether to allow viewing of other people's posts
-            $allowPost = ApiConfigHelper::getConfigByItemKey(AmConfig::IT_PUBLISH_POSTS) ?? true;
+            $allowPost = ApiConfigHelper::getConfigByItemKey(FsConfig::IT_PUBLISH_POSTS) ?? true;
             if (! $allowPost) {
                 $query->where('post.member_id', '=', 0);
             } else {

@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsMemberShields;
 
-class FresnsMemberShieldsConfig extends AmConfig
+class FresnsMemberShieldsConfig extends FsConfig
 {
 }

@@ -15,7 +15,7 @@ use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 
-class AmService
+class FsService
 {
     // Get Language Field
     public static function getlanguageField($field, $id)

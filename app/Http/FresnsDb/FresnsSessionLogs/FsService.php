@@ -14,13 +14,13 @@ use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsCmd\FresnsCmdService;
 use Illuminate\Support\Facades\Request;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     public function __construct()
     {
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     public function common()
@@ -49,7 +49,7 @@ class AmService extends BaseAdminService
             return true;
         }
 
-        $map = AmConfig::SESSION_OBJECT_TYPE_ARR;
+        $map = FsConfig::SESSION_OBJECT_TYPE_ARR;
         $objectType = $map[$objectAction] ?? 1;
         if ($objectType == 15) {
             $objectName = $objectName;

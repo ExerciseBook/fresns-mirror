@@ -17,12 +17,12 @@ use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
  * Detail resource config handle
  */
 
-class AmResourceDetail extends BaseAdminResource
+class FsResourceDetail extends BaseAdminResource
 {
     public function toArray($request)
     {
         // Form Field
-        $formMap = AmConfig::FORM_FIELDS_MAP;
+        $formMap = FsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
@@ -34,8 +34,8 @@ class AmResourceDetail extends BaseAdminResource
         $nameArr = [];
         foreach ($multilingual as $v) {
             $input = [
-                'table_name' => AmConfig::CFG_TABLE,
-                'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
+                'table_name' => FsConfig::CFG_TABLE,
+                'table_field' => FsConfig::FORM_FIELDS_MAP['name'],
                 'table_id' => $this->id,
                 'lang_tag' => $v['key'],
             ];
@@ -57,7 +57,7 @@ class AmResourceDetail extends BaseAdminResource
         $sceneArr = explode(',', $this->scene);
         $sceneNameArr = [];
         if ($sceneArr) {
-            foreach (AmConfig::SCONE_OPTION as $v) {
+            foreach (FsConfig::SCONE_OPTION as $v) {
                 $arr = [];
                 if (in_array($v['key'], $sceneArr)) {
                     $arr = $v['title'];

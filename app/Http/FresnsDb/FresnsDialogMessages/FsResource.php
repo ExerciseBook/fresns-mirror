@@ -15,12 +15,12 @@ use App\Http\FresnsApi\Base\FresnsBaseService;
  * List resource config handle
  */
 
-class AmResource extends FresnsBaseService
+class FsResource extends FresnsBaseService
 {
     public function toArray($request)
     {
         // Form Field
-        $formMap = AmConfig::FORM_FIELDS_MAP;
+        $formMap = FsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;

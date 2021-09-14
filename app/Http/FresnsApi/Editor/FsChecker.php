@@ -31,7 +31,7 @@ use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
-class AmChecker extends BaseChecker
+class FsChecker extends BaseChecker
 {
     // Status Code
     const POST_LOGS_EXISTS = 30006;
@@ -172,7 +172,7 @@ class AmChecker extends BaseChecker
     {
         $uri = Request::getRequestUri();
 
-        $uriRuleArr = AmConfig::URI_NOT_IN_RULE;
+        $uriRuleArr = FsConfig::URI_NOT_IN_RULE;
         // Verify user and member status
         $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('id', $userId)->first();
         $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $memberId)->first();
@@ -797,7 +797,7 @@ class AmChecker extends BaseChecker
         }
         // Site mode verification
         $site_mode = ApiConfigHelper::getConfigByItemKey('site_mode');
-        if ($site_mode == AmConfig::PRIVATE) {
+        if ($site_mode == FsConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
                 return self::checkInfo(self::MEMBER_EXPIRED_LOGS_ERROR);
@@ -829,7 +829,7 @@ class AmChecker extends BaseChecker
                 // Judgment word limit
                 if ($content) {
                     // Get the maximum number of words in a post
-                    $postEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_WORD_COUNT) ?? 1000;
+                    $postEditorWordCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_WORD_COUNT) ?? 1000;
                     if (mb_strlen(trim($content)) > $postEditorWordCount) {
                         return self::checkInfo(self::CONTENT_COUNT_ERROR);
                     }
@@ -849,7 +849,7 @@ class AmChecker extends BaseChecker
                 }
                 if ($content) {
                     // Get the maximum number of words in a comment
-                    $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
+                    $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
                     if (mb_strlen(trim($content)) > $commentEditorWordCount) {
                         return self::checkInfo(self::CONTENT_COUNT_ERROR);
                     }
@@ -882,8 +882,8 @@ class AmChecker extends BaseChecker
         $uuid = $request->Input('uuid');
         $pid = $request->input('pid');
         // In case of private mode, the feature cannot be requested when it expires (members > expired_at).
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
                 return self::checkInfo(self::MEMBER_EXPIRED_LOGS_ERROR);
@@ -954,8 +954,8 @@ class AmChecker extends BaseChecker
         $type = $request->input('type');
         $logId = $request->input('logId');
         // In case of private mode, the feature cannot be requested when it expires (members > expired_at).
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
                 return self::checkInfo(self::MEMBER_EXPIRED_LOGS_ERROR);
@@ -1049,8 +1049,8 @@ class AmChecker extends BaseChecker
     {
         $request = request();
         // In case of private mode, the feature cannot be requested when it expires (members > expired_at).
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
                 return self::checkInfo(self::MEMBER_EXPIRED_LOGS_ERROR);
@@ -1075,7 +1075,7 @@ class AmChecker extends BaseChecker
         }
         if ($type == 2) {
             // Get the maximum number of words in a comment
-            $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
+            $commentEditorWordCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_WORD_COUNT) ?? 1000;
             $content = $request->input('content');
             if (mb_strlen(trim($content)) > $commentEditorWordCount) {
                 return self::checkInfo(self::CONTENT_COUNT_ERROR);
@@ -1100,7 +1100,7 @@ class AmChecker extends BaseChecker
             }
         } else {
             // Get the maximum number of words in a post
-            $postEditorWordCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_WORD_COUNT) ?? 1000;
+            $postEditorWordCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_WORD_COUNT) ?? 1000;
             $content = $request->input('content');
             if (mb_strlen(trim($content)) > $postEditorWordCount) {
                 return self::checkInfo(self::CONTENT_COUNT_ERROR);

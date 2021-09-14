@@ -14,7 +14,7 @@ use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsApi\Info\AmService;
+use App\Http\FresnsApi\Info\FsService;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -119,15 +119,15 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 5)->where('follow_id', $this->id)->count();
         $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 5)->where('shield_id', $this->id)->count();
         // Operation behavior settings
-        $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_COMMENT_SETTING);
-        $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_COMMENT_SETTING);
-        $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_COMMENT_SETTING);
+        $likeSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::LIKE_COMMENT_SETTING);
+        $followSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_COMMENT_SETTING);
+        $shieldSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::SHIELD_COMMENT_SETTING);
         // Operation behavior naming
-        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::LIKE_COMMENT_NAME) ?? 'Like';
-        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::FOLLOW_COMMENT_NAME) ?? 'Save comment';
-        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::SHIELD_COMMENT_NAME) ?? 'Hide comment';
+        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_COMMENT_NAME) ?? 'Like';
+        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_COMMENT_NAME) ?? 'Save comment';
+        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_COMMENT_NAME) ?? 'Hide comment';
         // Content Naming
-        $commentName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::COMMENT_NAME) ?? 'Comment';
+        $commentName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::COMMENT_NAME) ?? 'Comment';
 
         // member_shields: query the table to confirm if the object is blocked
         $shieldMemberStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 1)->where('shield_id', $this->member_id)->count();
@@ -150,22 +150,22 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
 
         // Default avatar when members have no avatar
         if (empty($member['avatar'])) {
-            $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
+            $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }
         // Anonymous content for avatar
         if ($this->is_anonymous == 1) {
-            $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::ANONYMOUS_AVATAR);
+            $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::ANONYMOUS_AVATAR);
             $member['avatar'] = $anonymousAvatar;
         }
         // The avatar displayed when a member has been deleted
         if ($memberInfo) {
             if ($memberInfo->deleted_at != null) {
-                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::DEACTIVATE_AVATAR);
+                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
                 $member['avatar'] = $deactivateAvatar;
             }
         } else {
-            $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::DEACTIVATE_AVATAR);
+            $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
             $member['avatar'] = $deactivateAvatar;
         }
         $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
@@ -232,7 +232,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $searchCid = request()->input('searchCid');
         // If the configuration table key name comment_preview is not 0, it means the output is on
         // The number represents the number of output bars, up to 3 bars (in reverse order according to the number of likes)
-        $previewStatus = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_PREVIEW);
+        $previewStatus = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_PREVIEW);
 
         if (! $searchCid) {
             if ($previewStatus && $previewStatus != 0) {
@@ -390,7 +390,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         if ($TweetPluginUsages) {
             $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
             $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-            $name = AmService::getlanguageField('name', $TweetPluginUsages['id']);
+            $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
             $manages['name'] = $name == null ? '' : $name['lang_content'];
             $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
             $manages['url'] = $plugin['access_path '].$TweetPluginUsages['parameter'];
@@ -410,9 +410,9 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         // Is the current member an author
         $editStatus['isMe'] = $this->member_id == $mid ? true : false;
         // Comment editing privileges
-        $commentEdit = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDIT) ?? false;
-        $editTimeRole = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDIT_TIMELIMIT) ?? 5;
-        $editSticky = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDIT_STICKY) ?? false;
+        $commentEdit = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDIT) ?? false;
+        $editTimeRole = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDIT_TIMELIMIT) ?? 5;
+        $editSticky = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDIT_STICKY) ?? false;
         if ($commentEdit) {
             // How long you can edit
             if (strtotime($this->created_at) + ($editTimeRole * 60) > time()) {

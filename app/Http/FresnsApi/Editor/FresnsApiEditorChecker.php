@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsApi\Editor;
 
-class FresnsApiEditorChecker extends AmChecker
+class FresnsApiEditorChecker extends FsChecker
 {
 }

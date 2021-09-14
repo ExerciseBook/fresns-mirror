@@ -8,7 +8,7 @@
 
 namespace App\Http\FresnsApi\User;
 
-class AmConfig
+class FsConfig
 {
     // Wallet Type
     const PLUGIN_USAGERS_TYPE_1 = 1;

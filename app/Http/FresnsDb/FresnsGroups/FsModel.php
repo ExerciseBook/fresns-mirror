@@ -12,24 +12,24 @@ use App\Base\Models\BaseAdminModel;
 use App\Base\Models\BaseCategoryModel;
 use App\Helpers\StrHelper;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
-use App\Http\FresnsDb\FresnsLanguages\AmModel as FresnsLanguagesModel;
+use App\Http\FresnsDb\FresnsLanguages\FsModel as FresnsLanguagesModel;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
 use Illuminate\Support\Facades\DB;
 
-class AmModel extends BaseCategoryModel
+class FsModel extends BaseCategoryModel
 {
-    protected $table = AmConfig::CFG_TABLE;
+    protected $table = FsConfig::CFG_TABLE;
 
     // Front-end form field mapping
     public function formFieldsMap()
     {
-        return AmConfig::FORM_FIELDS_MAP;
+        return FsConfig::FORM_FIELDS_MAP;
     }
 
     // New search criteria
     public function getAddedSearchableFields()
     {
-        return AmConfig::ADDED_SEARCHABLE_FIELDS;
+        return FsConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
     // hook - after adding
@@ -39,10 +39,10 @@ class AmModel extends BaseCategoryModel
         $nameArr = json_decode($request->input('name_arr'), true);
         $descriptionArr = json_decode($request->input('description_arr'), true);
         if ($nameArr) {
-            self::insertLanguage($nameArr, AmConfig::CFG_TABLE, AmConfig::FORM_FIELDS_MAP['name'], $id);
+            self::insertLanguage($nameArr, FsConfig::CFG_TABLE, FsConfig::FORM_FIELDS_MAP['name'], $id);
         }
         if ($descriptionArr) {
-            self::insertLanguage($descriptionArr, AmConfig::CFG_TABLE, AmConfig::FORM_FIELDS_MAP['description'], $id);
+            self::insertLanguage($descriptionArr, FsConfig::CFG_TABLE, FsConfig::FORM_FIELDS_MAP['description'], $id);
         }
     }
 
@@ -54,7 +54,7 @@ class AmModel extends BaseCategoryModel
         if (request()->input('file_id')) {
             FresnsFiles::where('id', request()->input('icon_file_id'))->update([
                 'table_type' => 1,
-                'table_name' => AmConfig::CFG_TABLE,
+                'table_name' => FsConfig::CFG_TABLE,
                 'table_field' => 'id',
                 'table_id' => $id,
             ]);
@@ -62,12 +62,12 @@ class AmModel extends BaseCategoryModel
         // languages table
         $nameArr = json_decode($request->input('name_arr'), true);
         $descriptionArr = json_decode($request->input('description_arr'), true);
-        FresnsLanguagesModel::where('table_name', AmConfig::CFG_TABLE)->where('table_id', $id)->delete();
+        FresnsLanguagesModel::where('table_name', FsConfig::CFG_TABLE)->where('table_id', $id)->delete();
         if ($nameArr) {
-            self::insertLanguage($nameArr, AmConfig::CFG_TABLE, AmConfig::FORM_FIELDS_MAP['name'], $id);
+            self::insertLanguage($nameArr, FsConfig::CFG_TABLE, FsConfig::FORM_FIELDS_MAP['name'], $id);
         }
         if ($descriptionArr) {
-            self::insertLanguage($descriptionArr, AmConfig::CFG_TABLE, AmConfig::FORM_FIELDS_MAP['description'], $id);
+            self::insertLanguage($descriptionArr, FsConfig::CFG_TABLE, FsConfig::FORM_FIELDS_MAP['description'], $id);
         }
     }
 

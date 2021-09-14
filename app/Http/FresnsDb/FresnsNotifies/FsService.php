@@ -13,13 +13,13 @@ use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikesConfig;
 use Illuminate\Support\Facades\DB;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     public function __construct()
     {
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     public function common()

@@ -1566,7 +1566,7 @@ class FresnsPlugin extends BasePlugin
         $uid = $input['uid'];
         $mid = $input['mid'] ?? null;
         $amount = $input['amount'];
-        $transactionAmount = $input['transactionAmount'];
+        $transactionFsount = $input['transactionFsount'];
         $systemFee = $input['systemFee'];
         $originUid = $input['originUid'] ?? null;
         $originMid = $input['originMid'] ?? null;
@@ -1665,7 +1665,7 @@ class FresnsPlugin extends BasePlugin
                 'member_id' => $originMemberId,
                 'object_type' => $decreaseType,
                 'amount' => $amount,
-                'transaction_amount' => $transactionAmount,
+                'transaction_amount' => $transactionFsount,
                 'system_fee' => $systemFee,
                 'object_user_id' => $userId,
                 'object_member_id' => $memberId,
@@ -1689,20 +1689,20 @@ class FresnsPlugin extends BasePlugin
             'member_id' => $memberId,
             'object_type' => $type,
             'amount' => $amount,
-            'transaction_amount' => $transactionAmount,
+            'transaction_amount' => $transactionFsount,
             'system_fee' => $systemFee,
             'object_user_id' => $originUserId,
             'object_member_id' => $originMemberId,
             'object_name' => $originName,
             'object_id' => $originId,
             'opening_balance' => $balance,
-            'closing_balance' => $balance + $transactionAmount,
+            'closing_balance' => $balance + $transactionFsount,
         ];
 
         FresnsUserWalletLogs::insert($input);
         // Update User Wallet
         $userWalletsInput = [
-            'balance' => $balance + $transactionAmount,
+            'balance' => $balance + $transactionFsount,
         ];
         FresnsUserWallets::where('user_id', $userId)->update($userWalletsInput);
 
@@ -1717,7 +1717,7 @@ class FresnsPlugin extends BasePlugin
         $uid = $input['uid'];
         $mid = $input['mid'] ?? null;
         $amount = $input['amount'];
-        $transactionAmount = $input['transactionAmount'];
+        $transactionFsount = $input['transactionFsount'];
         $systemFee = $input['systemFee'];
         $originUid = $input['originUid'] ?? null;
         $originMid = $input['originMid'] ?? null;
@@ -1813,20 +1813,20 @@ class FresnsPlugin extends BasePlugin
                 'member_id' => $originMemberId,
                 'object_type' => $decreaseType,
                 'amount' => $amount,
-                'transaction_amount' => $transactionAmount,
+                'transaction_amount' => $transactionFsount,
                 'system_fee' => $systemFee,
                 'object_user_id' => $userId,
                 'object_member_id' => $memberId,
                 'object_name' => $originName,
                 'object_id' => $originId,
                 'opening_balance' => $originBalance,
-                'closing_balance' => $originBalance + $transactionAmount,
+                'closing_balance' => $originBalance + $transactionFsount,
             ];
 
             FresnsUserWalletLogs::insert($input);
             // Update User Wallet
             $originWalletsInput = [
-                'balance' => $originBalance + $transactionAmount,
+                'balance' => $originBalance + $transactionFsount,
             ];
             FresnsUserWallets::where('user_id', $originUserId)->update($originWalletsInput);
         }
@@ -1841,7 +1841,7 @@ class FresnsPlugin extends BasePlugin
             'member_id' => $memberId,
             'object_type' => $type,
             'amount' => $amount,
-            'transaction_amount' => $transactionAmount,
+            'transaction_amount' => $transactionFsount,
             'system_fee' => $systemFee,
             'object_user_id' => $originUserId,
             'object_member_id' => $originMemberId,

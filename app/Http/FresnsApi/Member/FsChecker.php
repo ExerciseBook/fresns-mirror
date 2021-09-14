@@ -14,7 +14,7 @@ use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikes;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 
-class AmChecker extends FresnsBaseChecker
+class FsChecker extends FresnsBaseChecker
 {
     /**
      * Check if likes, followers and blockers are added

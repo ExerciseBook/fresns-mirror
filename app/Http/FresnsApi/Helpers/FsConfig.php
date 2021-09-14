@@ -8,7 +8,7 @@
 
 namespace App\Http\FresnsApi\Helpers;
 
-class AmConfig
+class FsConfig
 {
     const IMAGE_SETTING = 'storageImages';
     const VIDEO_SETTING = 'storageVideos';

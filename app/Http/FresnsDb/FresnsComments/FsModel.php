@@ -19,20 +19,20 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use Illuminate\Support\Facades\DB;
 
-class AmModel extends BaseCategoryModel
+class FsModel extends BaseCategoryModel
 {
-    protected $table = AmConfig::CFG_TABLE;
+    protected $table = FsConfig::CFG_TABLE;
 
     // Front-end form field mapping
     public function formFieldsMap()
     {
-        return AmConfig::FORM_FIELDS_MAP;
+        return FsConfig::FORM_FIELDS_MAP;
     }
 
     // New search criteria
     public function getAddedSearchableFields()
     {
-        return AmConfig::ADDED_SEARCHABLE_FIELDS;
+        return FsConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
     // hook - after adding
@@ -96,7 +96,7 @@ class AmModel extends BaseCategoryModel
         $searchMid = $request->input('searchMid');
         if ($searchMid) {
             // configs table settings: whether to allow viewing of other people's comments
-            $allowComment = ApiConfigHelper::getConfigByItemKey(AmConfig::IT_PUBLISH_COMMENTS) ?? false;
+            $allowComment = ApiConfigHelper::getConfigByItemKey(FsConfig::IT_PUBLISH_COMMENTS) ?? false;
             $memberInfo = FresnsMembers::where('uuid', $searchMid)->first();
             if (! $allowComment) {
                 $query->where('comment.member_id', '=', 0);
@@ -125,10 +125,10 @@ class AmModel extends BaseCategoryModel
             // Determine if it is a first class comment (parent_id = 0)
             if ($comments) {
                 if ($comments['parent_id'] == 0) {
-                    $AmService = new AmService();
+                    $FsService = new FsService();
                     request()->offsetSet('id', $comments['id']);
-                    $data = $AmService->listTreeNoRankNum();
-                    $data = $AmService->treeData();
+                    $data = $FsService->listTreeNoRankNum();
+                    $data = $FsService->treeData();
                     if ($data) {
                         $childrenIdArr = [];
                         foreach ($data as $v) {

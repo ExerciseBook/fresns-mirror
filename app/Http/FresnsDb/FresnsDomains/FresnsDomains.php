@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsDomains;
 
-class FresnsDomains extends AmModel
+class FresnsDomains extends FsModel
 {
 }

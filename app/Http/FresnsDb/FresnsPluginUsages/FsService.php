@@ -14,29 +14,29 @@ use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     protected $needCommon = false;
 
     public function __construct()
     {
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     public function common()
     {
         $common = parent::common();
-        $common['TableName'] = AmConfig::CFG_TABLE;
+        $common['TableName'] = FsConfig::CFG_TABLE;
 
         // Scenes
-        $common['sceneOption'] = AmConfig::SCONE_OPTION;
-        $common['typeOption'] = AmConfig::TYPE_OPTION;
+        $common['sceneOption'] = FsConfig::SCONE_OPTION;
+        $common['typeOption'] = FsConfig::TYPE_OPTION;
 
         // Group
         $common['groupOption'] = FresnsGroups::buildSelectTreeData('id', 'name', ['is_enable' => 1]);
-        $common['isGroupAdminOption'] = AmCOnfig::IS_GROUP_ADMIN_OPTION;
+        $common['isGroupAdminOption'] = FsCOnfig::IS_GROUP_ADMIN_OPTION;
 
         // Languages
         $languageArr = FresnsConfigsService::getLanguageStatus();
@@ -45,9 +45,9 @@ class AmService extends BaseAdminService
         $common['multilingualoption'] = $languageArr['languagesOption'];
 
         // Tips
-        $common['roleMembersTips'] = AmConfig::ROLE_MEMBERS_TIPS;
-        $common['editerNumberTips'] = AmConfig::EDITER_NUMBER_TIPS;
-        $common['isAdminTips'] = AmConfig::IS_ADMIN_TIPS;
+        $common['roleMembersTips'] = FsConfig::ROLE_MEMBERS_TIPS;
+        $common['editerNumberTips'] = FsConfig::EDITER_NUMBER_TIPS;
+        $common['isAdminTips'] = FsConfig::IS_ADMIN_TIPS;
 
         // Plugin
         $common['plugOption'] = FresnsPlugins::staticBuildSelectOptions2('unikey', 'name', []);

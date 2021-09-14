@@ -19,7 +19,7 @@ use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use Illuminate\Support\Facades\DB;
 
-class AmService
+class FsService
 {
     /**
      * post_logs > post_id and comment_logs > comment_id

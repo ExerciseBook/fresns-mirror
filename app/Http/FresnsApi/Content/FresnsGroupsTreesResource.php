@@ -13,7 +13,7 @@ use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsApi\Info\AmService;
+use App\Http\FresnsApi\Info\FsService;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroupsConfig;
@@ -81,15 +81,15 @@ class FresnsGroupsTreesResource extends BaseAdminResource
                 $arr['followStatus'] = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('follow_id', $c['id'])->count();
                 $arr['shieldStatus'] = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 2)->where('shield_id', $c['id'])->count();
                 // Operation behavior settings
-                $arr['likeSetting'] = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_GROUP_SETTING);
-                $arr['followSetting'] = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_GROUP_SETTING);
-                $arr['shieldSetting'] = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_GROUP_SETTING);
+                $arr['likeSetting'] = ApiConfigHelper::getConfigByItemKey(FsConfig::LIKE_GROUP_SETTING);
+                $arr['followSetting'] = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_GROUP_SETTING);
+                $arr['shieldSetting'] = ApiConfigHelper::getConfigByItemKey(FsConfig::SHIELD_GROUP_SETTING);
                 // Operation behavior naming
-                $arr['likeName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::LIKE_GROUP_NAME) ?? 'Like';
-                $arr['followName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::FOLLOW_GROUP_NAME) ?? 'Join';
-                $arr['shieldName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::SHIELD_GROUP_NAME) ?? 'Block';
+                $arr['likeName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_GROUP_NAME) ?? 'Like';
+                $arr['followName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_GROUP_NAME) ?? 'Join';
+                $arr['shieldName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_GROUP_NAME) ?? 'Block';
                 // Content Naming
-                $arr['groupName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::GROUP_NAME) ?? 'Group';
+                $arr['groupName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::GROUP_NAME) ?? 'Group';
 
                 $arr['viewCount'] = $c['view_count'];
                 $arr['likeCount'] = $c['like_count'];

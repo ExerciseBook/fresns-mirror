@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsMentions;
 
-class FresnsMentionsConfig extends AmConfig
+class FresnsMentionsConfig extends FsConfig
 {
 }

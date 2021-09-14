@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsExtendLinkeds;
 
-class FresnsExtendLinkedsConfig extends AmConfig
+class FresnsExtendLinkedsConfig extends FsConfig
 {
 }

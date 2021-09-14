@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsUserConnects;
 
-class FresnsUserConnects extends AmModel
+class FresnsUserConnects extends FsModel
 {
 }

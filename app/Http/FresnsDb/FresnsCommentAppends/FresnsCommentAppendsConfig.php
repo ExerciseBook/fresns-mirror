@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsCommentAppends;
 
-class FresnsCommentAppendsConfig extends AmConfig
+class FresnsCommentAppendsConfig extends FsConfig
 {
 }

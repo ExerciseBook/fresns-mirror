@@ -14,12 +14,12 @@ use App\Base\Resources\BaseAdminResource;
  * Detail resource config handle
  */
 
-class AmResourceDetail extends BaseAdminResource
+class FsResourceDetail extends BaseAdminResource
 {
     public function toArray($request)
     {
         // Form Field
-        $formMap = AmConfig::FORM_FIELDS_MAP;
+        $formMap = FsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;

@@ -56,13 +56,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class AmControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FresnsBaseApiController
 {
     public function __construct()
     {
         parent::__construct();
 
-        $this->service = new AmService();
+        $this->service = new FsService();
         $this->initData();
     }
 
@@ -94,7 +94,7 @@ class AmControllerApi extends FresnsBaseApiController
         $mid = $request->input('mid');
         $mid = FresnsMembers::where('uuid', $mid)->value('id');
 
-        $checkMember = AmChecker::checkUserMember($mid, $uid);
+        $checkMember = FsChecker::checkUserMember($mid, $uid);
         if ($checkMember == false) {
             $this->error(ErrorCodeService::CODE_FAIL);
         }
@@ -301,7 +301,7 @@ class AmControllerApi extends FresnsBaseApiController
         $uid = GlobalService::getGlobalKey('user_id');
         $mid = GlobalService::getGlobalKey('member_id');
 
-        $checkMember = AmChecker::checkUserMember($mid, $uid);
+        $checkMember = FsChecker::checkUserMember($mid, $uid);
         if ($checkMember == false) {
             $this->error(ErrorCodeService::CODE_FAIL);
         }
@@ -384,7 +384,7 @@ class AmControllerApi extends FresnsBaseApiController
                 }
             }
         }
-        $map = AmConfig::MEMBER_EDIT;
+        $map = FsConfig::MEMBER_EDIT;
 
         $itemArr = [];
         foreach ($map as $k => $v) {
@@ -467,7 +467,7 @@ class AmControllerApi extends FresnsBaseApiController
          */
         $typeArr = [4, 5];
         if (! in_array($type, $typeArr)) {
-            $isMarkLists = AmChecker::checkMarkLists($type, $objectType);
+            $isMarkLists = FsChecker::checkMarkLists($type, $objectType);
             if ($isMarkLists == false) {
                 $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
             }
@@ -670,7 +670,7 @@ class AmControllerApi extends FresnsBaseApiController
          * 
          * Tag members can not be themselves, as well as their own published posts, comments
          */
-        $checkerApi = AmChecker::checkMarkApi($markType, $markTarget);
+        $checkerApi = FsChecker::checkMarkApi($markType, $markTarget);
         if ($checkerApi == false) {
             $this->error(ErrorCodeService::API_NO_CALL_ERROR);
         }
@@ -751,14 +751,14 @@ class AmControllerApi extends FresnsBaseApiController
         // Checking for duplicate operations
         switch ($type) {
             case 1:
-                $checkMark = AmChecker::checkMark($markType, $markTarget, $mid, $markId);
+                $checkMark = FsChecker::checkMark($markType, $markTarget, $mid, $markId);
                 if ($checkMark === true) {
                     $this->error(ErrorCodeService::MEMBER_MARK_ERROR);
                 }
                 break;
 
             default:
-                $checkMark = AmChecker::checkMark($markType, $markTarget, $mid, $markId);
+                $checkMark = FsChecker::checkMark($markType, $markTarget, $mid, $markId);
                 if ($checkMark === false) {
                     $this->error(ErrorCodeService::MEMBER_MARK_ERROR);
                 }
@@ -1039,7 +1039,7 @@ class AmControllerApi extends FresnsBaseApiController
          * View other people's content settings
          */
         if ($mid != $authMemberId) {
-            $isMarkLists = AmChecker::checkMarkLists($viewType, $viewTarget);
+            $isMarkLists = FsChecker::checkMarkLists($viewType, $viewTarget);
             if ($isMarkLists == false) {
                 $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
             }
@@ -1050,7 +1050,7 @@ class AmControllerApi extends FresnsBaseApiController
         switch ($viewTarget) {
             case 1:
                 $itLikeMembers = ApiConfigHelper::getConfigByItemKey('it_like_members');
-                $data = AmService::getMemberList($request);
+                $data = FsService::getMemberList($request);
                 if ($itLikeMembers == false) {
                     $data['list'] = [];
                     $data['pagination']['current'] = 1;
@@ -1059,7 +1059,7 @@ class AmControllerApi extends FresnsBaseApiController
                 }
                 break;
             case 2:
-                $groupArr = AmService::getGroupList($request);
+                $groupArr = FsService::getGroupList($request);
                 $groupIds = implode(',', $groupArr);
 
                 $FresnsDialogsService = new FresnsGroupsService();
@@ -1071,7 +1071,7 @@ class AmControllerApi extends FresnsBaseApiController
 
                 break;
             case 3:
-                $hashtagArr = AmService::getHashtagList($request);
+                $hashtagArr = FsService::getHashtagList($request);
                 $hashtagIds = implode(',', $hashtagArr);
                 $FresnsHashtagsService = new FresnsHashtagsService();
                 $request->offsetSet('ids', $hashtagIds);
@@ -1081,7 +1081,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $data = $FresnsHashtagsService->searchData();
                 break;
             case 4:
-                $postArr = AmService::getPostList($request);
+                $postArr = FsService::getPostList($request);
                 $postIds = implode(',', $postArr);
                 $FresnsPostsService = new FresnsPostsService();
                 $request->offsetSet('ids', $postIds);
@@ -1091,7 +1091,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $data = $FresnsPostsService->searchData();
                 break;
             default:
-                $commentArr = AmService::getPostList($request);
+                $commentArr = FsService::getPostList($request);
                 $commentIds = implode(',', $commentArr);
                 $FresnsCommentsService = new FresnsCommentsService();
                 $request->offsetSet('ids', $commentIds);

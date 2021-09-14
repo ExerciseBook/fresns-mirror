@@ -12,7 +12,7 @@ use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
-use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\FresnsApi\Content\FsConfig as ContentConfig;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
@@ -36,7 +36,7 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class AmControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FresnsBaseApiController
 {
     // Get Notify List
     public function notifyLists(Request $request)
@@ -88,7 +88,7 @@ class AmControllerApi extends FresnsBaseApiController
         $type = $request->input('type');
         // Set all the notifications I received under this type to read.
         $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            $type)->update(['status' => AmConfig::READED]);
+            $type)->update(['status' => FsConfig::READED]);
         $this->success();
     }
 
@@ -285,7 +285,7 @@ class AmControllerApi extends FresnsBaseApiController
         ];
         ValidateService::validateRule($request, $rule);
         // Validate submission parameters
-        $checkInfo = AmChecker::checkSendMessage($mid);
+        $checkInfo = FsChecker::checkSendMessage($mid);
         if (is_array($checkInfo)) {
             return $this->errorCheckInfo($checkInfo);
         }
@@ -361,7 +361,7 @@ class AmControllerApi extends FresnsBaseApiController
         $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
         if ($sessionLogId) {
             FresnsSessionLogs::where('id', $sessionLogId)->update([
-                'object_result' => AmConfig::OBJECT_SUCCESS,
+                'object_result' => FsConfig::OBJECT_SUCCESS,
                 'object_order_id' => $messageId,
             ]);
         }

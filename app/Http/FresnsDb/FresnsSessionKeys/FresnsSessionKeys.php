@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsSessionKeys;
 
-class FresnsSessionKeys extends AmModel
+class FresnsSessionKeys extends FsModel
 {
 }

@@ -27,7 +27,7 @@ use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use App\Http\FresnsDb\FresnsUserWallets\FresnsUserWallets;
 use Illuminate\Support\Facades\DB;
 
-class AmService
+class FsService
 {
     // Get User Detail
     public function getUserDetail($uid, $langTag, $mid = null)
@@ -80,7 +80,7 @@ class AmService
         $userWallets = FresnsUserWallets::where('user_id', $uid)->first();
         $wallet['status'] = $userWallets['is_enable'] ?? '';
         $wallet['balance'] = $userWallets['balance'] ?? '';
-        $wallet['freezeAmount'] = $userWallets['freeze_amount'] ?? '';
+        $wallet['freezeFsount'] = $userWallets['freeze_amount'] ?? '';
         $wallet['bankName'] = $userWallets['bank_name'] ?? '';
         $wallet['swiftCode'] = $userWallets['swift_code'] ?? '';
         $wallet['bankAddress'] = $userWallets['bank_address'] ?? '';
@@ -89,8 +89,8 @@ class AmService
             $wallet['bankAccount'] = ApiCommonHelper::encryptIdNumber($userWallets['bank_account'], 4, -2);
         }
         $wallet['bankStatus'] = $userWallets['bank_status'] ?? '';
-        $wallet['payExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, AmConfig::PLUGIN_USAGERS_TYPE_1, $langTag);
-        $wallet['withdrawExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, AmConfig::PLUGIN_USAGERS_TYPE_2, $langTag);
+        $wallet['payExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, FsConfig::PLUGIN_USAGERS_TYPE_1, $langTag);
+        $wallet['withdrawExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, FsConfig::PLUGIN_USAGERS_TYPE_2, $langTag);
         $data['wallet'] = $wallet;
 
         $memberArr = DB::table('members')->where('user_id', $uid)->get()->toArray();

@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsMemberIcons;
 
-class FresnsMemberIcons extends AmModel
+class FresnsMemberIcons extends FsModel
 {
 }

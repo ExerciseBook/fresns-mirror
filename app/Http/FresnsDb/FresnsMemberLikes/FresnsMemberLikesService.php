@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsMemberLikes;
 
-class FresnsMemberLikesService extends AmService
+class FresnsMemberLikesService extends FsService
 {
 }

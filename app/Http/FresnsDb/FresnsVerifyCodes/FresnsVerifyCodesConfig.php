@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsVerifyCodes;
 
-class FresnsVerifyCodesConfig extends AmConfig
+class FresnsVerifyCodesConfig extends FsConfig
 {
 }

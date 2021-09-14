@@ -9,7 +9,7 @@
 namespace App\Http\FresnsApi\Message;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\FresnsApi\Content\FsConfig as ContentConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;

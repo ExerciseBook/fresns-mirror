@@ -10,23 +10,23 @@ namespace App\Http\FresnsDb\FresnsPluginUsages;
 
 use App\Base\Models\BaseAdminModel;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
-use App\Http\FresnsDb\FresnsLanguages\AmModel as FresnsLanguagesModel;
+use App\Http\FresnsDb\FresnsLanguages\FsModel as FresnsLanguagesModel;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
 
-class AmModel extends BaseAdminModel
+class FsModel extends BaseAdminModel
 {
-    protected $table = AmConfig::CFG_TABLE;
+    protected $table = FsConfig::CFG_TABLE;
 
     // Front-end form field mapping
     public function formFieldsMap()
     {
-        return AmConfig::FORM_FIELDS_MAP;
+        return FsConfig::FORM_FIELDS_MAP;
     }
 
     // New search criteria
     public function getAddedSearchableFields()
     {
-        return AmConfig::ADDED_SEARCHABLE_FIELDS;
+        return FsConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
     // hook - after adding
@@ -36,7 +36,7 @@ class AmModel extends BaseAdminModel
         if (request()->input('icon_file_id')) {
             FresnsFiles::where('id', request()->input('icon_file_id'))->update([
                 'table_type' => 1,
-                'table_name' => AmConfig::CFG_TABLE,
+                'table_name' => FsConfig::CFG_TABLE,
                 'table_field' => 'id',
                 'table_id' => $id,
             ]);
@@ -52,9 +52,9 @@ class AmModel extends BaseAdminModel
             $item['area_code'] = $tagArr['area_code'];
             $item['lang_tag'] = $v['langTag'];
             $item['lang_content'] = $v['lang_content'];
-            $item['table_field'] = AmConfig::FORM_FIELDS_MAP['name'];
+            $item['table_field'] = FsConfig::FORM_FIELDS_MAP['name'];
             $item['table_id'] = $id;
-            $item['table_name'] = AmConfig::CFG_TABLE;
+            $item['table_name'] = FsConfig::CFG_TABLE;
             $inputArr[] = $item;
         }
         FresnsLanguagesModel::insert($inputArr);
@@ -67,7 +67,7 @@ class AmModel extends BaseAdminModel
         if (request()->input('icon_file_id')) {
             FresnsFiles::where('id', request()->input('icon_file_id'))->update([
                 'table_type' => 1,
-                'table_name' => AmConfig::CFG_TABLE,
+                'table_name' => FsConfig::CFG_TABLE,
                 'table_field' => 'id',
                 'table_id' => $id,
             ]);
@@ -75,7 +75,7 @@ class AmModel extends BaseAdminModel
         // languages
         $nameArr = json_decode(request()->input('name'), true);
         $inputArr = [];
-        FresnsLanguagesModel::where('table_name', AmConfig::CFG_TABLE)->where('table_field', AmConfig::FORM_FIELDS_MAP['name'])->where('table_id', $id)->delete();
+        FresnsLanguagesModel::where('table_name', FsConfig::CFG_TABLE)->where('table_field', FsConfig::FORM_FIELDS_MAP['name'])->where('table_id', $id)->delete();
         foreach ($nameArr as $v) {
             $item = [];
             $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
@@ -83,9 +83,9 @@ class AmModel extends BaseAdminModel
             $item['area_code'] = $tagArr['area_code'];
             $item['lang_tag'] = $v['langTag'];
             $item['lang_content'] = $v['lang_content'];
-            $item['table_field'] = AmConfig::FORM_FIELDS_MAP['name'];
+            $item['table_field'] = FsConfig::FORM_FIELDS_MAP['name'];
             $item['table_id'] = $id;
-            $item['table_name'] = AmConfig::CFG_TABLE;
+            $item['table_name'] = FsConfig::CFG_TABLE;
             // $item['alias_key'] = $v['nickname'];
             $inputArr[] = $item;
         }

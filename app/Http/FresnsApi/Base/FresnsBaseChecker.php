@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsApi\Base;
 
-class FresnsBaseChecker extends AmChecker
+class FresnsBaseChecker extends FsChecker
 {
 }

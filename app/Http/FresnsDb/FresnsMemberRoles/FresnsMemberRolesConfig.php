@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsMemberRoles;
 
-class FresnsMemberRolesConfig extends AmConfig
+class FresnsMemberRolesConfig extends FsConfig
 {
 }

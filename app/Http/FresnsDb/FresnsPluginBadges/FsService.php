@@ -14,13 +14,13 @@ use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     public function __construct()
     {
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     public function common()

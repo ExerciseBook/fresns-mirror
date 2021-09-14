@@ -51,15 +51,15 @@ class FresnsHashtagsResourceDetail extends BaseAdminResource
         $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('follow_id', $this->id)->count();
         $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 3)->where('shield_id', $this->id)->count();
         // Operation behavior settings
-        $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_HASHTAG_SETTING);
-        $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_HASHTAG_SETTING);
-        $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_HASHTAG_SETTING);
+        $likeSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::LIKE_HASHTAG_SETTING);
+        $shieldSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::SHIELD_HASHTAG_SETTING);
+        $followSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_HASHTAG_SETTING);
         // Operation behavior naming
-        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::LIKE_HASHTAG_NAME) ?? 'Like';
-        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::FOLLOW_HASHTAG_NAME) ?? 'Watching';
-        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::SHIELD_HASHTAG_NAME) ?? 'Block';
+        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_HASHTAG_NAME) ?? 'Like';
+        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_HASHTAG_NAME) ?? 'Watching';
+        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_HASHTAG_NAME) ?? 'Block';
         // Content Naming
-        $hashtagName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::HASHTAG_NAME) ?? 'Hashtag';
+        $hashtagName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::HASHTAG_NAME) ?? 'Hashtag';
 
         // member_shields: query the table to confirm if the object is blocked
         $shieldMemberStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 1)->where('shield_id', $this->member_id)->count();

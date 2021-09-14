@@ -15,18 +15,18 @@ use App\Http\Center\Helper\PluginHelper;
  * List resource config handle
  */
 
-class AmResource extends BaseAdminResource
+class FsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
         // Form Field
-        $formMap = AmConfig::FORM_FIELDS_MAP;
+        $formMap = FsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
         // Is there a new version
-        $isNewVision = AmConfig::NO_NEWVISION;
+        $isNewVision = FsConfig::NO_NEWVISION;
         $newVisionInt = '';
         $newVision = '';
         $author = '';

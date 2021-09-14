@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsFileAppends;
 
-class FresnsFileAppendsService extends AmService
+class FresnsFileAppendsService extends FsService
 {
 }

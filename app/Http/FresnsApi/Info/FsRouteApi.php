@@ -9,21 +9,21 @@
 // Fresns Info API
 Route::group(['prefix' => 'fresns/info', 'namespace' => '\App\Http\FresnsApi\Info'], function () {
     // System Config Info
-    Route::post('/configs', 'AmControllerApi@configs')->name('api.info.configs');
+    Route::post('/configs', 'FsControllerApi@configs')->name('api.info.configs');
     // Extensions Config Info
-    Route::post('/extensions', 'AmControllerApi@extensions')->name('api.info.extensions');
+    Route::post('/extensions', 'FsControllerApi@extensions')->name('api.info.extensions');
     // Overview
-    Route::post('/overview', 'AmControllerApi@overview')->name('api.info.overview');
+    Route::post('/overview', 'FsControllerApi@overview')->name('api.info.overview');
     // Emojis
-    Route::post('/emojis', 'AmControllerApi@emojis')->name('api.info.emojis');
+    Route::post('/emojis', 'FsControllerApi@emojis')->name('api.info.emojis');
     // Stop Words
-    Route::post('/stopWords', 'AmControllerApi@stopWords')->name('api.info.stopWords');
+    Route::post('/stopWords', 'FsControllerApi@stopWords')->name('api.info.stopWords');
     // Send Verify Code
-    Route::post('/sendVerifyCode', 'AmControllerApi@sendVerifyCode')->name('api.info.sendVerifyCode');
+    Route::post('/sendVerifyCode', 'FsControllerApi@sendVerifyCode')->name('api.info.sendVerifyCode');
     // Input Tips
-    Route::post('/inputTips', 'AmControllerApi@inputTips')->name('api.info.inputTips');
+    Route::post('/inputTips', 'FsControllerApi@inputTips')->name('api.info.inputTips');
     // Upload Log
-    Route::post('/uploadLog', 'AmControllerApi@uploadLog')->name('api.info.uploadLog');
+    Route::post('/uploadLog', 'FsControllerApi@uploadLog')->name('api.info.uploadLog');
     // Download File
-    Route::post('/downloadFile', 'AmControllerApi@downloadFile')->name('api.info.downloadFile');
+    Route::post('/downloadFile', 'FsControllerApi@downloadFile')->name('api.info.downloadFile');
 });

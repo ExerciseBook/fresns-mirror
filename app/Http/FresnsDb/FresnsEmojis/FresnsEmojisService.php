@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsEmojis;
 
-class FresnsEmojisService extends AmService
+class FresnsEmojisService extends FsService
 {
 }

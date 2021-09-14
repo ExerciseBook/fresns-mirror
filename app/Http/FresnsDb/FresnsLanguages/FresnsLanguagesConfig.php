@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsLanguages;
 
-class FresnsLanguagesConfig extends AmConfig
+class FresnsLanguagesConfig extends FsConfig
 {
 }

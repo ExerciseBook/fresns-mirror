@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsStopWords;
 
-class FresnsStopWordsConfig extends AmConfig
+class FresnsStopWordsConfig extends FsConfig
 {
 }

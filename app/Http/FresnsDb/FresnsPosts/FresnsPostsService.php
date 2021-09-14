@@ -25,7 +25,7 @@ use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
 use App\Http\FresnsDb\FresnsHashtags\FresnsHashtags;
-use App\Http\FresnsDb\FresnsLanguages\AmModel as FresnsLanguagesModel;
+use App\Http\FresnsDb\FresnsLanguages\FsModel as FresnsLanguagesModel;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguages;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
@@ -43,7 +43,7 @@ use Illuminate\Support\Str;
 
 header('Content-Type:text/html;charset=utf-8');
 
-class FresnsPostsService extends AmService
+class FresnsPostsService extends FsService
 {
     // Publish post
     public function releaseByDraft($draftId, $sessionLogsId = 0)
@@ -90,7 +90,7 @@ class FresnsPostsService extends AmService
         $uuid = strtolower(StrHelper::randString(8));
 
         // Get the number of words in the brief of the post
-        $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_WORD_COUNT) ?? 280;
+        $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_WORD_COUNT) ?? 280;
         if (mb_strlen($draftPost['content']) > $postEditorBriefCount) {
             $is_brief = 1;
         } else {
@@ -153,7 +153,7 @@ class FresnsPostsService extends AmService
         $contentBrief = $this->parseDraftContent($draftId);
 
         // Get the number of words in the brief of the post
-        $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_WORD_COUNT) ?? 280;
+        $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_WORD_COUNT) ?? 280;
         if (mb_strlen($draftPost['content']) > $postEditorBriefCount) {
             $is_brief = 1;
         } else {
@@ -224,7 +224,7 @@ class FresnsPostsService extends AmService
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'member_list_name';
                     $item['table_id'] = $postId;
-                    $item['table_name'] = AmConfig::CFG_TABLE;
+                    $item['table_name'] = FsConfig::CFG_TABLE;
                     $count = FresnsLanguages::where($item)->count();
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
@@ -257,7 +257,7 @@ class FresnsPostsService extends AmService
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'comment_btn_name';
                     $item['table_id'] = $postId;
-                    $item['table_name'] = AmConfig::CFG_TABLE;
+                    $item['table_name'] = FsConfig::CFG_TABLE;
                     $count = FresnsLanguages::where($item)->count();
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
@@ -271,7 +271,7 @@ class FresnsPostsService extends AmService
         $allowPluginUnikey = null;
         $allowBtnName = null;
         $proportion = null;
-        $web_proportion = ApiConfigHelper::getConfigByItemKey(AmConfig::WEB_PROPORTION) ?? 30;
+        $web_proportion = ApiConfigHelper::getConfigByItemKey(FsConfig::WEB_PROPORTION) ?? 30;
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
@@ -291,7 +291,7 @@ class FresnsPostsService extends AmService
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'allow_btn_name';
                     $item['table_id'] = $postId;
-                    $item['table_name'] = AmConfig::CFG_TABLE;
+                    $item['table_name'] = FsConfig::CFG_TABLE;
                     $count = FresnsLanguages::where($item)->count();
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
@@ -410,7 +410,7 @@ class FresnsPostsService extends AmService
         $member_list_status = 0;
         if ($member_list_json) {
             // Delete the old data first (empty the multilingual table)
-            FresnsLanguages::where('table_name', AmConfig::CFG_TABLE)->where('table_id', $postId)->where('table_field',
+            FresnsLanguages::where('table_name', FsConfig::CFG_TABLE)->where('table_id', $postId)->where('table_field',
                 'member_list_name')->delete();
             $member_list_decode = json_decode($member_list_json, true);
             $member_list_status = $member_list_decode['memberListStatus'] ?? 0;
@@ -428,7 +428,7 @@ class FresnsPostsService extends AmService
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'member_list_name';
                     $item['table_id'] = $postId;
-                    $item['table_name'] = AmConfig::CFG_TABLE;
+                    $item['table_name'] = FsConfig::CFG_TABLE;
                     $count = FresnsLanguages::where($item)->count();
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
@@ -451,7 +451,7 @@ class FresnsPostsService extends AmService
             // Btn names multilingual
             if ($commentConfig_decode['btnName']) {
                 // Delete the old data first (empty the multilingual table)
-                FresnsLanguages::where('table_name', AmConfig::CFG_TABLE)->where('table_id',
+                FresnsLanguages::where('table_name', FsConfig::CFG_TABLE)->where('table_id',
                     $postId)->where('table_field', 'comment_btn_name')->delete();
                 $btnNameArr = $commentConfig_decode['btnName'];
                 $inputArr = [];
@@ -464,7 +464,7 @@ class FresnsPostsService extends AmService
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'comment_btn_name';
                     $item['table_id'] = $postId;
-                    $item['table_name'] = AmConfig::CFG_TABLE;
+                    $item['table_name'] = FsConfig::CFG_TABLE;
                     $count = FresnsLanguages::where($item)->count();
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
@@ -478,7 +478,7 @@ class FresnsPostsService extends AmService
         $allowPluginUnikey = '';
         $allowBtnName = null;
         $proportion = null;
-        $web_proportion = ApiConfigHelper::getConfigByItemKey(AmConfig::WEB_PROPORTION) ?? 30;
+        $web_proportion = ApiConfigHelper::getConfigByItemKey(FsConfig::WEB_PROPORTION) ?? 30;
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
@@ -498,7 +498,7 @@ class FresnsPostsService extends AmService
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'allow_btn_name';
                     $item['table_id'] = $postId;
-                    $item['table_name'] = AmConfig::CFG_TABLE;
+                    $item['table_name'] = FsConfig::CFG_TABLE;
                     $count = FresnsLanguages::where($item)->count();
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
@@ -747,7 +747,7 @@ class FresnsPostsService extends AmService
         } else {
             (new FresnsMemberStats())->store(['member_id' => $draftPost['member_id'], 'post_publish_count' => 1]);
         }
-        DB::table('configs')->where('item_key', AmConfig::POST_COUNTS)->increment('item_value');
+        DB::table('configs')->where('item_key', FsConfig::POST_COUNTS)->increment('item_value');
 
         return true;
     }
@@ -769,7 +769,7 @@ class FresnsPostsService extends AmService
             // DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id',$draftPost['post_id'])->delete();
         }
         // The currently configured Hashtag display mode
-        $hashtagShow = ApiConfigHelper::getConfigByItemKey(AmConfig::HASHTAG_SHOW) ?? 2;
+        $hashtagShow = ApiConfigHelper::getConfigByItemKey(FsConfig::HASHTAG_SHOW) ?? 2;
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $draftPost['content'], $singlePoundMatches);
         } else {
@@ -813,7 +813,7 @@ class FresnsPostsService extends AmService
                         'linked_id' => $draftPost['post_id'],
                         'hashtag_id' => $hashtagId,
                     ]);
-                    DB::table('configs')->where('item_key', AmConfig::HASHTAG_COUNTS)->increment('item_value');
+                    DB::table('configs')->where('item_key', FsConfig::HASHTAG_COUNTS)->increment('item_value');
                 }
             }
         }
@@ -829,7 +829,7 @@ class FresnsPostsService extends AmService
         if ($draftPost['allow_json']) {
             $allow_json = json_decode($draftPost['allow_json'], true);
             if ($allow_json['isAllow'] == 1) {
-                $web_proportion = ApiConfigHelper::getConfigByItemKey(AmConfig::WEB_PROPORTION) ?? 30;
+                $web_proportion = ApiConfigHelper::getConfigByItemKey(FsConfig::WEB_PROPORTION) ?? 30;
                 if (! isset($allow_json['proportion'])) {
                     $proportion = $web_proportion;
                 } else {
@@ -842,7 +842,7 @@ class FresnsPostsService extends AmService
                 $proportionCount = (mb_strlen(trim($draftPost['content'])) * $proportion) / 100;
 
                 // Get the maximum number of words for the post brief
-                $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDITOR_BRIEF_COUNT) ?? 280;
+                $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_BRIEF_COUNT) ?? 280;
                 if ($proportionCount > $postEditorBriefCount) {
                     $contentInfo = $this->truncatedContentInfo($content, $postEditorBriefCount);
                     $content = $contentInfo['truncated_content'];
@@ -921,7 +921,7 @@ class FresnsPostsService extends AmService
     public function truncatedContentInfo($content, $wordCount = 280)
     {
         // The currently configured Hashtag display mode
-        $hashtagShow = ApiConfigHelper::getConfigByItemKey(AmConfig::HASHTAG_SHOW) ?? 2;
+        $hashtagShow = ApiConfigHelper::getConfigByItemKey(FsConfig::HASHTAG_SHOW) ?? 2;
         // Match the location information in $content, where the rule is placed in the configuration file
         if ($hashtagShow == 1) {
             preg_match("/#.*?\s/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);

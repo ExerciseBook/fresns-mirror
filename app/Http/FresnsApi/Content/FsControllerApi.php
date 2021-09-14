@@ -19,7 +19,7 @@ use App\Http\Center\Helper\PluginRpcHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsApi\Info\AmService;
+use App\Http\FresnsApi\Info\FsService;
 use App\Http\FresnsCmd\FresnsPlugin;
 use App\Http\FresnsCmd\FresnsPluginConfig;
 use App\Http\FresnsCmd\FresnsSubPlugin;
@@ -61,13 +61,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-class AmControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FresnsBaseApiController
 {
     // Get group [tree structure list]
     public function groupTrees(Request $request)
     {
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
             $uid = $this->uid;
@@ -109,8 +109,8 @@ class AmControllerApi extends FresnsBaseApiController
             'createdTimeLt' => 'date_format:"Y-m-d H:i:s"',
         ];
         ValidateService::validateRule($request, $rule);
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
             $uid = $this->uid;
@@ -161,8 +161,8 @@ class AmControllerApi extends FresnsBaseApiController
         $rule = [
             'gid' => "required|exists:{$table},uuid",
         ];
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
             $uid = $this->uid;
@@ -209,8 +209,8 @@ class AmControllerApi extends FresnsBaseApiController
         
         // Site Model = Private
         // Not logged in, content not output
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
             $uid = $this->uid;
@@ -227,7 +227,7 @@ class AmControllerApi extends FresnsBaseApiController
         $sortNumber = $request->input('sortNumber');
         $this->isPluginData('postLists');
 
-        $request->offsetSet('queryType', AmConfig::QUERY_TYPE_SQL_QUERY);
+        $request->offsetSet('queryType', FsConfig::QUERY_TYPE_SQL_QUERY);
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 30);
         $FresnsPostsService = new FresnsPostsService();
@@ -253,8 +253,8 @@ class AmControllerApi extends FresnsBaseApiController
             'pid' => "required|exists:{$table},uuid",
         ];
         ValidateService::validateRule($request, $rule);
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
             $uid = $this->uid;
@@ -267,7 +267,7 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         // Data source: whether provided by the plugin
-        $post_detail_config = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_DETAIL_SERVICE);
+        $post_detail_config = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_DETAIL_SERVICE);
         if ($post_detail_config) {
             $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
             $pluginClass = PluginHelper::findPluginClass($post_detail_config);
@@ -365,8 +365,8 @@ class AmControllerApi extends FresnsBaseApiController
     // Get hashtag [list]
     public function hashtagLists(Request $request)
     {
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
             $uid = $this->uid;
@@ -401,8 +401,8 @@ class AmControllerApi extends FresnsBaseApiController
             'huri' => "required|exists:{$table},slug",
         ];
         ValidateService::validateRule($request, $rule);
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
             $uid = $this->uid;
@@ -426,8 +426,8 @@ class AmControllerApi extends FresnsBaseApiController
     {
         // Site Model = Private
         // Not logged in, content not output
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
             $uid = $this->uid;
@@ -439,7 +439,7 @@ class AmControllerApi extends FresnsBaseApiController
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
-        $request->offsetSet('queryType', AmConfig::QUERY_TYPE_SQL_QUERY);
+        $request->offsetSet('queryType', FsConfig::QUERY_TYPE_SQL_QUERY);
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 30);
         $fresnsCommentsService = new FresnsCommentsService();
@@ -468,8 +468,8 @@ class AmControllerApi extends FresnsBaseApiController
 
         // Site Model = Private
         // Not logged in, content not output
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $uid = $this->uid;
             $member_id = $this->mid;
             $uid = $this->uid;
@@ -552,7 +552,7 @@ class AmControllerApi extends FresnsBaseApiController
     // Get posts to follow [list]
     public function postFollows(Request $request)
     {
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
 
         // Data source: whether provided by the plugin
         $sortNumber = $request->input('sortNumber');
@@ -659,7 +659,7 @@ class AmControllerApi extends FresnsBaseApiController
             'mapId' => 'required',
         ];
         ValidateService::validateRule($request, $rule);
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
         $mid = GlobalService::getGlobalKey('member_id');
         $langTag = $this->langTag;
         // Default kilometers

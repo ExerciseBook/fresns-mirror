@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsPluginUsages;
 
-class FresnsPluginUsagesService extends AmService
+class FresnsPluginUsagesService extends FsService
 {
 }

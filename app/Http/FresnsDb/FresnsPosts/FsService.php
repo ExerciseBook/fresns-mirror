@@ -11,13 +11,13 @@ namespace App\Http\FresnsDb\FresnsPosts;
 use App\Base\Services\BaseAdminService;
 use App\Http\FresnsApi\Base\FresnsBaseService;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     public function __construct()
     {
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     public function common()

@@ -14,7 +14,7 @@ use App\Http\FresnsDb\FresnsFiles\FresnsFilesConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-class AmConfig extends BaseConfig
+class FsConfig extends BaseConfig
 {
     // Main Table
     const CFG_TABLE = 'plugin_usages';

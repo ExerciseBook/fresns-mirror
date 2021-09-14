@@ -39,12 +39,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class AmControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FresnsBaseApiController
 {
     public function __construct()
     {
         parent::__construct();
-        $this->service = new AmService();
+        $this->service = new FsService();
         $this->initData();
     }
 
@@ -128,25 +128,25 @@ class AmControllerApi extends FresnsBaseApiController
             if (! empty($passwordStrength)) {
                 $passwordStrengthArr = explode(',', $passwordStrength);
 
-                if (in_array(AmConfig::PASSWORD_NUMBER, $passwordStrengthArr)) {
+                if (in_array(FsConfig::PASSWORD_NUMBER, $passwordStrengthArr)) {
                     $isError = preg_match('/\d/is', $password);
                     if ($isError == 0) {
                         $this->error(ErrorCodeService::PASSWORD_NUMBER_ERROR);
                     }
                 }
-                if (in_array(AmConfig::PASSWORD_LOWERCASE_LETTERS, $passwordStrengthArr)) {
+                if (in_array(FsConfig::PASSWORD_LOWERCASE_LETTERS, $passwordStrengthArr)) {
                     $isError = preg_match('/[a-z]/', $password);
                     if ($isError == 0) {
                         $this->error(ErrorCodeService::PASSWORD_LOWERCASE_ERROR);
                     }
                 }
-                if (in_array(AmConfig::PASSWORD_CAPITAL_LETTERS, $passwordStrengthArr)) {
+                if (in_array(FsConfig::PASSWORD_CAPITAL_LETTERS, $passwordStrengthArr)) {
                     $isError = preg_match('/[A-Z]/', $password);
                     if ($isError == 0) {
                         $this->error(ErrorCodeService::PASSWORD_CAPITAL_ERROR);
                     }
                 }
-                if (in_array(AmConfig::PASSWORD_SYMBOL, $passwordStrengthArr)) {
+                if (in_array(FsConfig::PASSWORD_SYMBOL, $passwordStrengthArr)) {
                     $isError = preg_match('/^[A-Za-z0-9]+$/', $password);
                     if ($isError == 1) {
                         $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);
@@ -603,25 +603,25 @@ class AmControllerApi extends FresnsBaseApiController
         if (! empty($passwordStrength)) {
             $passwordStrengthArr = explode(',', $passwordStrength);
 
-            if (in_array(AmConfig::PASSWORD_NUMBER, $passwordStrengthArr)) {
+            if (in_array(FsConfig::PASSWORD_NUMBER, $passwordStrengthArr)) {
                 $isError = preg_match('/\d/is', $password);
                 if ($isError == 0) {
                     $this->error(ErrorCodeService::PASSWORD_NUMBER_ERROR);
                 }
             }
-            if (in_array(AmConfig::PASSWORD_LOWERCASE_LETTERS, $passwordStrengthArr)) {
+            if (in_array(FsConfig::PASSWORD_LOWERCASE_LETTERS, $passwordStrengthArr)) {
                 $isError = preg_match('/[a-z]/', $password);
                 if ($isError == 0) {
                     $this->error(ErrorCodeService::PASSWORD_LOWERCASE_ERROR);
                 }
             }
-            if (in_array(AmConfig::PASSWORD_CAPITAL_LETTERS, $passwordStrengthArr)) {
+            if (in_array(FsConfig::PASSWORD_CAPITAL_LETTERS, $passwordStrengthArr)) {
                 $isError = preg_match('/[A-Z]/', $password);
                 if ($isError == 0) {
                     $this->error(ErrorCodeService::PASSWORD_CAPITAL_ERROR);
                 }
             }
-            if (in_array(AmConfig::PASSWORD_SYMBOL, $passwordStrengthArr)) {
+            if (in_array(FsConfig::PASSWORD_SYMBOL, $passwordStrengthArr)) {
                 $isError = preg_match('/^[A-Za-z0-9]+$/', $password);
                 if ($isError == 1) {
                     $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);

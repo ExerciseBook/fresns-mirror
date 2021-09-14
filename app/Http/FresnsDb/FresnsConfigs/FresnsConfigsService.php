@@ -10,24 +10,24 @@ namespace App\Http\FresnsDb\FresnsConfigs;
 
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 
-class FresnsConfigsService extends AmService
+class FresnsConfigsService extends FsService
 {
     // Language Settings
     public static function getLanguageStatus()
     {
         // Enabled or not
-        $languageStatus = AmModel::where('item_key', AmConfig::LANGUAGE_STATUS)->value('item_value');
+        $languageStatus = FsModel::where('item_key', FsConfig::LANGUAGE_STATUS)->value('item_value');
         // $languageStatusArr = json_decode($languageStatus,true);
         $common['language_status'] = $languageStatus ?? false;
         // Default
-        $defaultLanguage = AmModel::where('item_key', AmConfig::DEFAULT_LANGUAGE)->value('item_value');
+        $defaultLanguage = FsModel::where('item_key', FsConfig::DEFAULT_LANGUAGE)->value('item_value');
         // $defaultLanguageArr = json_decode($defaultLanguage,true);
 
         $common['default_language'] = ApiLanguageHelper::getDefaultLanguageByLangTag($defaultLanguage);
         $common['default_language_tag'] = $defaultLanguage ?? null;
 
         // Multi-language options
-        $langSettings = AmModel::where('item_key', AmConfig::LANG_SETTINGS)->first();
+        $langSettings = FsModel::where('item_key', FsConfig::LANG_SETTINGS)->first();
         $oldLangSettingJson = $langSettings['item_value'];
         $oldLangSettingArr = json_decode($oldLangSettingJson, true);
         $languageOptionArr = $oldLangSettingArr;
@@ -60,21 +60,21 @@ class FresnsConfigsService extends AmService
 
     public static function addLikeCounts($key)
     {
-        $item = AmModel::where('item_key', $key)->first();
+        $item = FsModel::where('item_key', $key)->first();
         if (empty($item)) {
             $input = [
                 'item_key' => $key,
                 'item_value' => 1,
                 'item_tag' => 'stats',
             ];
-            AmModel::insert($input);
+            FsModel::insert($input);
         } else {
-            AmModel::where('item_key', $key)->increment('item_value');
+            FsModel::where('item_key', $key)->increment('item_value');
         }
     }
 
     public static function delLikeCounts($key)
     {
-        AmModel::where('item_key', $key)->decrement('item_value');
+        FsModel::where('item_key', $key)->decrement('item_value');
     }
 }

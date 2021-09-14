@@ -10,13 +10,13 @@ namespace App\Http\FresnsDb\FresnsCodeMessages;
 
 use App\Base\Services\BaseAdminService;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     public function __construct()
     {
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     public function common()
@@ -28,7 +28,7 @@ class AmService extends BaseAdminService
     // Get the corresponding code message
     public static function getCodeMessage($pluginUnikey, $langTag, $code)
     {
-        $message = AmModel::where('plugin_unikey', $pluginUnikey)->where('lang_tag', $langTag)->where('code', $code)->value('message');
+        $message = FsModel::where('plugin_unikey', $pluginUnikey)->where('lang_tag', $langTag)->where('code', $code)->value('message');
 
         return $message;
     }

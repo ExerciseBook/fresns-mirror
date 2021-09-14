@@ -10,7 +10,7 @@ namespace App\Http\FresnsDb\FresnsPosts;
 
 use App\Base\Config\BaseConfig;
 
-class AmConfig extends BaseConfig
+class FsConfig extends BaseConfig
 {
     // Main Table
     const CFG_TABLE = 'posts';

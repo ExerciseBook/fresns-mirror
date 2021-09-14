@@ -10,7 +10,7 @@ namespace App\Http\FresnsDb\FresnsPlugins;
 
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 
-class FresnsPluginsService extends AmService
+class FresnsPluginsService extends FsService
 {
     // Get plugin url via unikey
     public static function getPluginUrlByUnikey($unikey)

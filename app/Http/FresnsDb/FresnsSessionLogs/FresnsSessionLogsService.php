@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsSessionLogs;
 
-class FresnsSessionLogsService extends AmService
+class FresnsSessionLogsService extends FsService
 {
 }

@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsDialogMessages;
 
-class FresnsDialogMessagesConfig extends AmConfig
+class FresnsDialogMessagesConfig extends FsConfig
 {
 }

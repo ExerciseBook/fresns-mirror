@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsSessionTokens;
 
-class FresnsSessionTokensConfig extends AmConfig
+class FresnsSessionTokensConfig extends FsConfig
 {
 }

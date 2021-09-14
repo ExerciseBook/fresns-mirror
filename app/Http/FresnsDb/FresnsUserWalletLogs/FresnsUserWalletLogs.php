@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsUserWalletLogs;
 
-class FresnsUserWalletLogs extends AmModel
+class FresnsUserWalletLogs extends FsModel
 {
 }

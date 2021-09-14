@@ -15,7 +15,7 @@ use App\Http\Center\Common\LogService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsApi\Info\AmService;
+use App\Http\FresnsApi\Info\FsService;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsConfig;
@@ -123,7 +123,7 @@ class FresnsPostsResource extends BaseAdminResource
             } else {
                 $allowProportion = $append['allow_proportion'];
                 if (! $allowProportion) {
-                    $allowProportion = ApiConfigHelper::getConfigByItemKey(AmConfig::SNS_PROPORTION);
+                    $allowProportion = ApiConfigHelper::getConfigByItemKey(FsConfig::SNS_PROPORTION);
                 }
                 $FresnsPostsService = new FresnsPostsService();
                 // Prevent @, hashtags, emojis, links and other messages from being truncated
@@ -152,15 +152,15 @@ class FresnsPostsResource extends BaseAdminResource
         $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 4)->where('follow_id', $this->id)->count();
         $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 4)->where('shield_id', $this->id)->count();
         // Operation behavior settings
-        $likeSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::LIKE_POST_SETTING);
-        $followSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::FOLLOW_POST_SETTING);
-        $shieldSetting = ApiConfigHelper::getConfigByItemKey(AmConfig::SHIELD_POST_SETTING);
+        $likeSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::LIKE_POST_SETTING);
+        $followSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_POST_SETTING);
+        $shieldSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::SHIELD_POST_SETTING);
         // Operation behavior naming
-        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::LIKE_POST_NAME) ?? 'Like';
-        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::FOLLOW_POST_NAME) ?? 'Save post';
-        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::SHIELD_POST_NAME) ?? 'Hide post';
+        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_POST_NAME) ?? 'Like';
+        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_POST_NAME) ?? 'Save post';
+        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_POST_NAME) ?? 'Hide post';
         // Content Naming
-        $PostName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', AmConfig::POST_NAME) ?? 'Post';
+        $PostName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::POST_NAME) ?? 'Post';
 
         $viewCount = $this->view_count;
         $likeCount = $this->like_count;
@@ -194,22 +194,22 @@ class FresnsPostsResource extends BaseAdminResource
 
         // Default avatar when members have no avatar
         if (empty($member['avatar'])) {
-            $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
+            $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }
         // Anonymous content for avatar
         if ($this->is_anonymous == 1) {
-            $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::ANONYMOUS_AVATAR);
+            $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::ANONYMOUS_AVATAR);
             $member['avatar'] = $anonymousAvatar;
         }
         // The avatar displayed when a member has been deleted
         if ($memberInfo) {
             if ($memberInfo->deleted_at != null) {
-                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::DEACTIVATE_AVATAR);
+                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
                 $member['avatar'] = $deactivateAvatar;
             }
         } else {
-            $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::DEACTIVATE_AVATAR);
+            $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
             $member['avatar'] = $deactivateAvatar;
         }
         $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
@@ -268,7 +268,7 @@ class FresnsPostsResource extends BaseAdminResource
         }
 
         // Post Hot
-        $postHotStatus = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_HOT);
+        $postHotStatus = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_HOT);
         $postHotStatus = $postHotStatus == null ? 0 : $postHotStatus;
         $comment = [];
         $comment['status'] = false;
@@ -288,12 +288,12 @@ class FresnsPostsResource extends BaseAdminResource
 
             // Default avatar when members have no avatar
             if (empty($commentStatus['avatar'])) {
-                $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
+                $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
                 $comment['avatar'] = $defaultIcon;
             }
             // Anonymous content for avatar
             if ($comments->is_anonymous == 1) {
-                $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::ANONYMOUS_AVATAR);
+                $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::ANONYMOUS_AVATAR);
                 $comment['avatar'] = $anonymousAvatar;
             }
             $comment['avatar'] = ApiFileHelper::getImageSignUrl($comment['avatar']);
@@ -471,7 +471,7 @@ class FresnsPostsResource extends BaseAdminResource
         if ($TweetPluginUsages) {
             $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
             $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-            $name = AmService::getlanguageField('name', $TweetPluginUsages['id']);
+            $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
             $manages['name'] = $name == null ? '' : $name['lang_content'];
             $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
             $manages['url'] = ApiFileHelper::getPluginUsagesUrl($TweetPluginUsages['plugin_unikey'], $TweetPluginUsages['id']);
@@ -517,10 +517,10 @@ class FresnsPostsResource extends BaseAdminResource
         // Is the current member an author
         $editStatus['isMe'] = $this->member_id == $mid ? true : false;
         // Post editing privileges
-        $postEdit = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDIT) ?? false;
-        $editTimeRole = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDIT_TIMELIMIT) ?? 5;
-        $editSticky = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDIT_STICKY) ?? false;
-        $editEssence = ApiConfigHelper::getConfigByItemKey(AmConfig::POST_EDIT_ESSENCE) ?? false;
+        $postEdit = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT) ?? false;
+        $editTimeRole = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT_TIMELIMIT) ?? 5;
+        $editSticky = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT_STICKY) ?? false;
+        $editEssence = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT_ESSENCE) ?? false;
         if ($postEdit) {
             // How long you can edit
             if (strtotime($this->created_at) + ($editTimeRole * 60) > time()) {
@@ -699,7 +699,7 @@ class FresnsPostsResource extends BaseAdminResource
                 $trimName = trim($m);
                 $memberInfo = FresnsMembers::where('name', $mname)->first();
                 if ($memberInfo) {
-                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_DOMAIN)."/$mname";
+                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/$mname";
                     $content = str_replace($m, "<a href='{$jumpUrl}' class='fresns_content_mention'>{$memberInfo['nickname']}</a> ", $content);
                 }
             }
@@ -718,7 +718,7 @@ class FresnsPostsResource extends BaseAdminResource
                 $hashTags = trim(str_replace('#', '', $s));
                 $hashtagsInfo = FresnsHashtags::where('name', $hashTags)->first();
                 if ($hashtagsInfo) {
-                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
+                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
                     $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$s</a>", $content);
                 }
             }

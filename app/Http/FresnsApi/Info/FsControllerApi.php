@@ -48,11 +48,11 @@ use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class AmControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FresnsBaseApiController
 {
     public function __construct()
     {
-        $this->service = new AmService();
+        $this->service = new FsService();
         parent::__construct();
     }
 
@@ -187,7 +187,7 @@ class AmControllerApi extends FresnsBaseApiController
             case 1:
                 $idArr = FresnsMembers::where('name', 'LIKE', "%$queryKey%")->orWhere('nickname', 'LIKE',
                     "%$queryKey%")->pluck('id')->toArray();
-                $idArr = AmService::getMemberFollows($queryType, $idArr, $mid);
+                $idArr = FsService::getMemberFollows($queryType, $idArr, $mid);
                 $memberArr = FresnsMembers::whereIn('id', $idArr)->where('is_enable', 1)->get()->toArray();
 
                 foreach ($memberArr as $v) {
@@ -220,7 +220,7 @@ class AmControllerApi extends FresnsBaseApiController
                 $langIdArr = FresnsLanguages::where('table_name', FresnsGroupsConfig::CFG_TABLE)->where('table_field',
                     'name')->where('lang_content', 'LIKE', "%$queryKey%")->where('lang_tag',
                     $langTag)->pluck('table_id')->toArray();
-                $idArr = AmService::getMemberFollows($queryType, $langIdArr, $mid);
+                $idArr = FsService::getMemberFollows($queryType, $langIdArr, $mid);
                 $groupsArr = FresnsGroups::whereIn('id', $idArr)->where('is_enable', 1)->get()->toArray();
                 $lenguagesMap = FresnsLanguages::where('table_name',
                     FresnsGroupsConfig::CFG_TABLE)->where('table_field', 'name')->where('lang_tag',
@@ -249,7 +249,7 @@ class AmControllerApi extends FresnsBaseApiController
                 break;
             case 3:
                 $idArr = FresnsHashtags::where('name', 'LIKE', "%$queryKey%")->pluck('id')->toArray();
-                $idArr = AmService::getMemberFollows($queryType, $idArr, $mid);
+                $idArr = FsService::getMemberFollows($queryType, $idArr, $mid);
                 $hashtagsArr = FresnsHashtags::whereIn('id', $idArr)->where('is_enable', 1)->get()->toArray();
                 foreach ($hashtagsArr as $v) {
                     $item = [];
@@ -274,7 +274,7 @@ class AmControllerApi extends FresnsBaseApiController
                 break;
             case 4:
                 $idArr = FresnsPosts::where('title', 'LIKE', "%$queryKey%")->pluck('id')->toArray();
-                $idArr = AmService::getMemberFollows($queryType, $idArr, $mid);
+                $idArr = FsService::getMemberFollows($queryType, $idArr, $mid);
                 $hashtagsArr = FresnsPosts::whereIn('id', $idArr)->where('is_enable', 1)->get()->toArray();
                 foreach ($hashtagsArr as $v) {
                     $item = [];
@@ -301,7 +301,7 @@ class AmControllerApi extends FresnsBaseApiController
                     'title')->where('lang_content', 'LIKE', "%$queryKey%")->where('lang_tag',
                     $langTag)->pluck('table_id')->toArray();
 
-                $idArr = AmService::getMemberFollows($queryType, $langIdArr, $mid);
+                $idArr = FsService::getMemberFollows($queryType, $langIdArr, $mid);
                 $extendArr = FresnsExtends::whereIn('id', $idArr)->get()->toArray();
                 $lenguagesMap = FresnsLanguages::where('table_name',
                     FresnsExtendsConfig::CFG_TABLE)->where('table_field', 'title')->whereIn('table_id',
@@ -414,7 +414,7 @@ class AmControllerApi extends FresnsBaseApiController
         $account = $request->input('account');
         $langTag = $request->header('langTag');
         $user_id = GlobalService::getGlobalKey('user_id');
-        $checkInfo = AmChecker::checkVerifyCode($type, $useType, $account);
+        $checkInfo = FsChecker::checkVerifyCode($type, $useType, $account);
         if (is_array($checkInfo)) {
             return $this->errorCheckInfo($checkInfo);
         }
@@ -573,15 +573,15 @@ class AmControllerApi extends FresnsBaseApiController
     {
         $member_id = GlobalService::getGlobalKey('member_id');
         // Notifications of unread numbers
-        $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_1)->where('status', AmConfig::NO_READ)->count();
-        $follow_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_2)->where('status', AmConfig::NO_READ)->count();
-        $like_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_3)->where('status', AmConfig::NO_READ)->count();
-        $comment_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_4)->where('status', AmConfig::NO_READ)->count();
-        $mention_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_5)->where('status', AmConfig::NO_READ)->count();
-        $recommend_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', AmConfig::SOURCE_TYPE_6)->where('status', AmConfig::NO_READ)->count();
+        $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', FsConfig::SOURCE_TYPE_1)->where('status', FsConfig::NO_READ)->count();
+        $follow_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', FsConfig::SOURCE_TYPE_2)->where('status', FsConfig::NO_READ)->count();
+        $like_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', FsConfig::SOURCE_TYPE_3)->where('status', FsConfig::NO_READ)->count();
+        $comment_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', FsConfig::SOURCE_TYPE_4)->where('status', FsConfig::NO_READ)->count();
+        $mention_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', FsConfig::SOURCE_TYPE_5)->where('status', FsConfig::NO_READ)->count();
+        $recommend_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', FsConfig::SOURCE_TYPE_6)->where('status', FsConfig::NO_READ)->count();
         // Dialogs of unread numbers
-        $aStatusNoRead = FresnsDialogs::where('a_member_id', $member_id)->where('a_status', AmConfig::NO_READ)->count();
-        $bStatusNoRead = FresnsDialogs::where('b_member_id', $member_id)->where('b_status', AmConfig::NO_READ)->count();
+        $aStatusNoRead = FresnsDialogs::where('a_member_id', $member_id)->where('a_status', FsConfig::NO_READ)->count();
+        $bStatusNoRead = FresnsDialogs::where('b_member_id', $member_id)->where('b_status', FsConfig::NO_READ)->count();
         $dialogNoRead = $aStatusNoRead + $bStatusNoRead;
         // Dialog Messages of unread numbers
         $dialogMessage = FresnsDialogMessages::where('recv_member_id', $member_id)->where('recv_read_at',null)->count();

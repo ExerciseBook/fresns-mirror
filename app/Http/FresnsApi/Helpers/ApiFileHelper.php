@@ -9,7 +9,7 @@
 namespace App\Http\FresnsApi\Helpers;
 
 use App\Http\Center\Helper\PluginRpcHelper;
-use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\FresnsApi\Content\FsConfig as ContentConfig;
 use App\Http\FresnsCmd\FresnsPlugin as FresnsCmdFresnsPlugin;
 use App\Http\FresnsCmd\FresnsPluginConfig;
 use App\Http\FresnsDb\FresnsDialogMessages\FresnsDialogMessages;
@@ -61,7 +61,7 @@ class ApiFileHelper
             }
             
             // Video Type
-            $video_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::VIDEO_SETTING);
+            $video_setting = ApiConfigHelper::getConfigByItemTag(FsConfig::VIDEO_SETTING);
             // Video Properties
             if ($fileInfo['file_type'] == 2) {
                 $file['videoTime'] = $fileInfo['video_time'];
@@ -71,7 +71,7 @@ class ApiFileHelper
             }
 
             // Audio Type
-            $audio_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::AUDIO_SETTING);
+            $audio_setting = ApiConfigHelper::getConfigByItemTag(FsConfig::AUDIO_SETTING);
             // Audio Properties
             if ($fileInfo['file_type'] == 3) {
                 $file['audioTime'] = $fileInfo['audio_time'];
@@ -79,7 +79,7 @@ class ApiFileHelper
             }
 
             // Doc Type
-            $doc_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::DOC_SETTING);
+            $doc_setting = ApiConfigHelper::getConfigByItemTag(FsConfig::DOC_SETTING);
             // Doc Properties
             if ($fileInfo['file_type'] == 4) {
                 $file['docPreviewUrl'] = $doc_setting['docs_online_preview'].$doc_setting['docs_bucket_domain'].$fileInfo['file_path'];
@@ -139,7 +139,7 @@ class ApiFileHelper
                 // Image Type
                 $file['imageWidth'] = $fileAppend['image_width'] ?? '';
                 $file['imageHeight'] = $fileAppend['image_height'] ?? '';
-                $image_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::IMAGE_SETTING);
+                $image_setting = ApiConfigHelper::getConfigByItemTag(FsConfig::IMAGE_SETTING);
                 if ($v['file_type'] == 1) {
                     $file['imageLong'] = $fileAppend['image_is_long'] ?? '';
                     $file['imageThumbUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_ratio'];
@@ -148,7 +148,7 @@ class ApiFileHelper
                 }
 
                 // Video Type
-                $video_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::VIDEO_SETTING);
+                $video_setting = ApiConfigHelper::getConfigByItemTag(FsConfig::VIDEO_SETTING);
                 if ($v['file_type'] == 2) {
                     $file['videoTime'] = $fileAppend['video_time'];
                     $file['videoCover'] = $fileAppend['video_cover'];
@@ -157,14 +157,14 @@ class ApiFileHelper
                 }
 
                 // Audio Type
-                $audio_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::AUDIO_SETTING);
+                $audio_setting = ApiConfigHelper::getConfigByItemTag(FsConfig::AUDIO_SETTING);
                 if ($v['file_type'] == 3) {
                     $file['audioTime'] = $fileAppend['audio_time'];
                     $file['audioUrl'] = $audio_setting['audios_bucket_domain'].$v['file_path'];
                 }
 
                 // Doc Type
-                $doc_setting = ApiConfigHelper::getConfigByItemTag(AmConfig::DOC_SETTING);
+                $doc_setting = ApiConfigHelper::getConfigByItemTag(FsConfig::DOC_SETTING);
                 if ($v['file_type'] == 4) {
                     $file['docPreviewUrl'] = $doc_setting['docs_online_preview'].$doc_setting['docs_bucket_domain'].$v['file_path'];
                     $file['docUrl'] = $doc_setting['docs_bucket_domain'].$v['file_path'];
@@ -269,7 +269,7 @@ class ApiFileHelper
     // Handling Custom Parameters for Plugin Usages
     public static function getPluginUsagesUrl($pluginUnikey, $pluginUsagesid)
     {
-        $bucketDomain = ApiConfigHelper::getConfigByItemKey(AmConfig::BACKEND_DOMAIN);
+        $bucketDomain = ApiConfigHelper::getConfigByItemKey(FsConfig::BACKEND_DOMAIN);
         $pluginUsages = FresnsPluginUsages::find($pluginUsagesid);
         $plugin = FresnsPlugins::where('unikey', $pluginUnikey)->first();
         $url = '';

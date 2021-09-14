@@ -14,7 +14,7 @@ use App\Http\FresnsApi\Base\FresnsBaseChecker;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 
-class AmChecker extends FresnsBaseChecker
+class FsChecker extends FresnsBaseChecker
 {
     // Status Code
     const EMAIL_ERROR = 30074;
@@ -106,7 +106,7 @@ class AmChecker extends FresnsBaseChecker
                         return self::checkInfo(self::EMAIL_ERROR);
                     }
                 } else {
-                    if ($countryCode != AmConfig::COUNTRYCODE) {
+                    if ($countryCode != FsConfig::COUNTRYCODE) {
                         return self::checkInfo(self::COUNTRY_CODE_ERROR);
                     }
                     $result = self::RulePhone($account);
@@ -131,7 +131,7 @@ class AmChecker extends FresnsBaseChecker
                         return self::checkInfo(self::EMAIL_EXIST_ERROR);
                     }
                 } else {
-                    if ($countryCode != AmConfig::COUNTRYCODE) {
+                    if ($countryCode != FsConfig::COUNTRYCODE) {
                         return self::checkInfo(self::COUNTRY_CODE_ERROR);
                     }
                     $result = self::RulePhone($account);
@@ -162,7 +162,7 @@ class AmChecker extends FresnsBaseChecker
                         return self::checkInfo(self::EMAIL_BAND_ERROR);
                     }
                 } else {
-                    if ($countryCode != AmConfig::COUNTRYCODE) {
+                    if ($countryCode != FsConfig::COUNTRYCODE) {
                         return self::checkInfo(self::COUNTRY_CODE_ERROR);
                     }
                     $result = self::RulePhone($account);
@@ -205,7 +205,7 @@ class AmChecker extends FresnsBaseChecker
                         return self::checkInfo(self::EMAIL_REGEX_ERROR);
                     }
                 } else {
-                    if ($countryCode != AmConfig::COUNTRYCODE) {
+                    if ($countryCode != FsConfig::COUNTRYCODE) {
                         return self::checkInfo(self::COUNTRY_CODE_ERROR);
                     }
                     $result = self::RulePhone($account);

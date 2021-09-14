@@ -10,10 +10,10 @@ namespace App\Http\FresnsDb\FresnsGroups;
 
 use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Base\FresnsBaseService;
-use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\FresnsApi\Content\FsConfig as ContentConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
-use App\Http\FresnsApi\Info\AmService as InfoService;
+use App\Http\FresnsApi\Info\FsService as InfoService;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
@@ -30,10 +30,10 @@ class FresnsGroupsService extends FresnsBaseService
 
     public function __construct()
     {
-        $this->config = new AmConfig();
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->config = new FsConfig();
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     // Group Common

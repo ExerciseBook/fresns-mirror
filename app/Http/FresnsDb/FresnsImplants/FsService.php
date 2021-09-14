@@ -11,13 +11,13 @@ namespace App\Http\FresnsDb\FresnsImplants;
 use App\Base\Services\BaseAdminService;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     public function __construct()
     {
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     public function common()
@@ -35,7 +35,7 @@ class AmService extends BaseAdminService
         // Determine if it is expired
         if ($data) {
             foreach ($data as &$v) {
-                $name = ApiLanguageHelper::getLanguages(AmConfig::CFG_TABLE, 'name', $v['id']);
+                $name = ApiLanguageHelper::getLanguages(FsConfig::CFG_TABLE, 'name', $v['id']);
                 $v['template'] = $v['implant_template'];
                 $v['name'] = $name == null ? '' : $name['lang_content'];
                 $v['position'] = $v['position'];

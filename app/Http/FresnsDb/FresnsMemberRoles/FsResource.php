@@ -17,7 +17,7 @@ use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
  * List resource config handle
  */
 
-class AmResource extends BaseAdminResource
+class FsResource extends BaseAdminResource
 {
     public function toArray($request)
     {

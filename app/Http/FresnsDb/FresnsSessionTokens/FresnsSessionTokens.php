@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsSessionTokens;
 
-class FresnsSessionTokens extends AmModel
+class FresnsSessionTokens extends FsModel
 {
 }

@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsPluginBadges;
 
-class FresnsPluginBadges extends AmModel
+class FresnsPluginBadges extends FsModel
 {
 }

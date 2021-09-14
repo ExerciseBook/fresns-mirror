@@ -8,7 +8,7 @@
 
 namespace App\Http\FresnsApi\Info;
 
-class AmConfig
+class FsConfig
 {
     // Verify Code Template
     const TEAMPLATE_1 = 1;

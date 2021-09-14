@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsMemberStats;
 
-class FresnsMemberStatsConfig extends AmConfig
+class FresnsMemberStatsConfig extends FsConfig
 {
 }

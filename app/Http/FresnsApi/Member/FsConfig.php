@@ -8,7 +8,7 @@
 
 namespace App\Http\FresnsApi\Member;
 
-class AmConfig
+class FsConfig
 {
     // Modify member profile parameters
     const MEMBER_EDIT = [

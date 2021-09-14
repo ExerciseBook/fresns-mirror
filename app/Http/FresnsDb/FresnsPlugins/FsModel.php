@@ -11,20 +11,20 @@ namespace App\Http\FresnsDb\FresnsPlugins;
 use App\Base\Models\BaseAdminModel;
 use Illuminate\Support\Facades\DB;
 
-class AmModel extends BaseAdminModel
+class FsModel extends BaseAdminModel
 {
-    protected $table = AmConfig::CFG_TABLE;
+    protected $table = FsConfig::CFG_TABLE;
 
     // Front-end form field mapping
     public function formFieldsMap()
     {
-        return AmConfig::FORM_FIELDS_MAP;
+        return FsConfig::FORM_FIELDS_MAP;
     }
 
     // New search criteria
     public function getAddedSearchableFields()
     {
-        return AmConfig::ADDED_SEARCHABLE_FIELDS;
+        return FsConfig::ADDED_SEARCHABLE_FIELDS;
     }
 
     // hook - after adding
@@ -39,7 +39,7 @@ class AmModel extends BaseAdminModel
             return [];
         }
 
-        $opts = DB::table(AmConfig::CFG_TABLE)
+        $opts = DB::table(FsConfig::CFG_TABLE)
             ->select('unikey AS key', 'name AS text')
             ->where('scene', 'LIKE', "%$scene%")
             ->where('deleted_at', null)

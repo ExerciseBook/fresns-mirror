@@ -10,7 +10,7 @@ namespace App\Http\FresnsApi\Message;
 
 use App\Base\Config\BaseConfig;
 
-class AmConfig extends BaseConfig
+class FsConfig extends BaseConfig
 {
     // Notification Form Type
     const SOURCE_TYPE_1 = 1;

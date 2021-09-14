@@ -11,14 +11,14 @@ namespace App\Http\FresnsDb\FresnsComments;
 use App\Base\Services\BaseAdminService;
 use App\Base\Services\BaseCategoryService;
 
-class AmService extends BaseCategoryService
+class FsService extends BaseCategoryService
 {
     public function __construct()
     {
-        $this->config = new AmConfig();
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->config = new FsConfig();
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     public function common()

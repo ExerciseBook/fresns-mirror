@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsMemberRoleRels;
 
-class FresnsMemberRoleRelsService extends AmService
+class FresnsMemberRoleRelsService extends FsService
 {
 }

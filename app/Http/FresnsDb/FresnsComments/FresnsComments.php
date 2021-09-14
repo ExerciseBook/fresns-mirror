@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsComments;
 
-class FresnsComments extends AmModel
+class FresnsComments extends FsModel
 {
 }

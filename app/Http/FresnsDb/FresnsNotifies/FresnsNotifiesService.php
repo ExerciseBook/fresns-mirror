@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsNotifies;
 
-class FresnsNotifiesService extends AmService
+class FresnsNotifiesService extends FsService
 {
 }

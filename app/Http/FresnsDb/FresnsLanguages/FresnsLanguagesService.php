@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsLanguages;
 
-class FresnsLanguagesService extends AmService
+class FresnsLanguagesService extends FsService
 {
 }

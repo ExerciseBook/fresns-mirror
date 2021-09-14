@@ -21,7 +21,7 @@ use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesService;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 
-class AmChecker extends BaseChecker
+class FsChecker extends BaseChecker
 {
     // Status Code
     const MEMBER_ROLE_ERROR = 30083;
@@ -49,14 +49,14 @@ class AmChecker extends BaseChecker
     {
         // return true;
         // Key Name dialog_status Configure global dialog function
-        $dialogStatus = ApiConfigHelper::getConfigByItemKey(AmConfig::DIALOG_STATUS);
+        $dialogStatus = ApiConfigHelper::getConfigByItemKey(FsConfig::DIALOG_STATUS);
         if (! $dialogStatus) {
             return self::checkInfo(self::DIALOG_ERROR);
         }
 
         // In case of private mode, when expired (members > expired_at ) no messages are allowed to be sent.
-        $site_mode = ApiConfigHelper::getConfigByItemKey(AmConfig::SITE_MODEL);
-        if ($site_mode == AmConfig::PRIVATE) {
+        $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
+        if ($site_mode == FsConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
                 LogService::info('Your account status has expired', $memberInfo);

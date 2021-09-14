@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsMemberShields;
 
-class FresnsMemberShieldsService extends AmService
+class FresnsMemberShieldsService extends FsService
 {
 }

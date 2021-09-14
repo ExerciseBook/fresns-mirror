@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsHashtags;
 
-class FresnsHashtags extends AmModel
+class FresnsHashtags extends FsModel
 {
 }

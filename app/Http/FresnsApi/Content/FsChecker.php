@@ -17,7 +17,7 @@ use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 
-class AmChecker extends BaseChecker
+class FsChecker extends BaseChecker
 {
     // Status Code
     public $codeMap = [

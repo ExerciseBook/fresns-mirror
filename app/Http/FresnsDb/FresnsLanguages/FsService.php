@@ -12,13 +12,13 @@ use App\Base\Services\BaseAdminService;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsService;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     public function __construct()
     {
-        $this->model = new AmModel();
-        $this->resource = AmResource::class;
-        $this->resourceDetail = AmResourceDetail::class;
+        $this->model = new FsModel();
+        $this->resource = FsResource::class;
+        $this->resourceDetail = FsResourceDetail::class;
     }
 
     public function common()
@@ -86,7 +86,7 @@ class AmService extends BaseAdminService
     // Insert into table data
     public static function addLanguages($json, $tableName, $tableField, $tableId)
     {
-        AmModel::where('table_name', $tableName)->where('table_field', $tableField)->where('table_id',
+        FsModel::where('table_name', $tableName)->where('table_field', $tableField)->where('table_id',
             $tableId)->delete();
         $langArr = json_decode($json, true);
         $itemArr = [];
@@ -104,7 +104,7 @@ class AmService extends BaseAdminService
             $item['lang_content'] = $lang['lang_content'] ?? null;
             $itemArr[] = $item;
         }
-        AmModel::insert($itemArr);
+        FsModel::insert($itemArr);
     }
 
     // Get table data

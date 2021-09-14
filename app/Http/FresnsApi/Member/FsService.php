@@ -37,7 +37,7 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use Illuminate\Support\Facades\DB;
 
-class AmService
+class FsService
 {
     public function common($mid, $langTag, $isMe)
     {

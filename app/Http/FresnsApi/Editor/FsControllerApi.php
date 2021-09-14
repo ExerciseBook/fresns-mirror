@@ -37,11 +37,11 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class AmControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FresnsBaseApiController
 {
     public function __construct()
     {
-        $this->service = new AmService();
+        $this->service = new FsService();
         $this->checkRequest();
         $this->initData();
         parent::__construct();
@@ -68,9 +68,9 @@ class AmControllerApi extends FresnsBaseApiController
         }
 
         // In case of private mode, this feature is not available when it expires (members > expired_at).
-        $checkInfo = AmChecker::checkCreate($mid);
+        $checkInfo = FsChecker::checkCreate($mid);
         if (is_array($checkInfo)) {
-            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
             return $this->errorCheckInfo($checkInfo);
         }
@@ -88,9 +88,9 @@ class AmControllerApi extends FresnsBaseApiController
                 // Create blank logs without quantity checking, post logs can have more than one.
                 if (empty($uuid)) {
                     // Verify added permissions
-                    $createdCheck = AmChecker::checkPermission($type, 1, $user_id, $mid);
+                    $createdCheck = FsChecker::checkPermission($type, 1, $user_id, $mid);
                     if (is_array($createdCheck)) {
-                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
                         return $this->errorCheckInfo($createdCheck);
                     }
@@ -105,9 +105,9 @@ class AmControllerApi extends FresnsBaseApiController
                     // Check status=1, 2, 4 for the presence of the post ID log.
                     $postInfo = FresnsPosts::where('uuid', $uuid)->first();
                     // Verify editing privileges
-                    $createdCheck = AmChecker::checkPermission($type, 2, $user_id, $mid, $postInfo['id']);
+                    $createdCheck = FsChecker::checkPermission($type, 2, $user_id, $mid, $postInfo['id']);
                     if (is_array($createdCheck)) {
-                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
                         return $this->errorCheckInfo($createdCheck);
                     }
@@ -120,7 +120,7 @@ class AmControllerApi extends FresnsBaseApiController
                     }
                 }
                 FresnsSessionLogs::where('id', $logsId)->update([
-                    'object_result' => AmConfig::OBJECT_SUCCESS,
+                    'object_result' => FsConfig::OBJECT_SUCCESS,
                     'object_order_id' => $postLogId,
                 ]);
                 $FresnsPostLogsService = new FresnsPostLogsService();
@@ -138,7 +138,7 @@ class AmControllerApi extends FresnsBaseApiController
                         $this->errorInfo(ErrorCodeService::CODE_FAIL, ['info' => 'pid required']);
                     }
                     // Verify added permissions
-                    $createdCheck = AmChecker::checkPermission($type, 1, $user_id, $mid);
+                    $createdCheck = FsChecker::checkPermission($type, 1, $user_id, $mid);
                     if (is_array($createdCheck)) {
                         return $this->errorCheckInfo($createdCheck);
                     }
@@ -161,7 +161,7 @@ class AmControllerApi extends FresnsBaseApiController
                     // Check status=1, 2, 4 for the presence of this comment ID log.
                     $commentInfo = FresnsComments::where('uuid', $uuid)->first();
                     // Verify editing privileges
-                    $createdCheck = AmChecker::checkPermission($type, 2, $user_id, $mid, $commentInfo['id']);
+                    $createdCheck = FsChecker::checkPermission($type, 2, $user_id, $mid, $commentInfo['id']);
                     if (is_array($createdCheck)) {
                         return $this->errorCheckInfo($createdCheck);
                     }
@@ -174,7 +174,7 @@ class AmControllerApi extends FresnsBaseApiController
                     }
                 }
                 FresnsSessionLogs::where('id', $logsId)->update([
-                    'object_result' => AmConfig::OBJECT_SUCCESS,
+                    'object_result' => FsConfig::OBJECT_SUCCESS,
                     'object_order_id' => $commentLogId,
                 ]);
                 $FresnsCommentLogsService = new FresnsCommentLogsService();
@@ -305,7 +305,7 @@ class AmControllerApi extends FresnsBaseApiController
         $mid = GlobalService::getGlobalKey('member_id');
         $logType = $request->input('logType');
         $logId = $request->input('logId');
-        $checkInfo = AmChecker::checkDrast($mid);
+        $checkInfo = FsChecker::checkDrast($mid);
         if (is_array($checkInfo)) {
             return $this->errorCheckInfo($checkInfo);
         }
@@ -342,9 +342,9 @@ class AmControllerApi extends FresnsBaseApiController
         $draftId = $request->input('logId');
         $FresnsPostsService = new FresnsPostsService();
         $fresnsCommentService = new FresnsCommentsService();
-        $checkInfo = AmChecker::checkSubmit($mid);
+        $checkInfo = FsChecker::checkSubmit($mid);
         if (is_array($checkInfo)) {
-            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
             return $this->errorCheckInfo($checkInfo);
         }
@@ -354,17 +354,17 @@ class AmControllerApi extends FresnsBaseApiController
                 $draftPost = FresnsPostLogs::find($draftId);
                 if (! $draftPost['post_id']) {
                     // Verify added permissions
-                    $createdCheck = AmChecker::checkPermission(1, 1, $user_id, $mid);
+                    $createdCheck = FsChecker::checkPermission(1, 1, $user_id, $mid);
                     if (is_array($createdCheck)) {
-                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
                         return $this->errorCheckInfo($createdCheck);
                     }
                 } else {
                     // Verify added permissions
-                    $createdCheck = AmChecker::checkPermission(1, 2, $user_id, $mid, $draftPost['post_id']);
+                    $createdCheck = FsChecker::checkPermission(1, 2, $user_id, $mid, $draftPost['post_id']);
                     if (is_array($createdCheck)) {
-                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
                         return $this->errorCheckInfo($createdCheck);
                     }
@@ -375,7 +375,7 @@ class AmControllerApi extends FresnsBaseApiController
                 } else {
                     $draft = FresnsCommentLogs::find($draftId);
                 }
-                $checkAudit = AmChecker::checkAudit($type, $mid, $draft['content']);
+                $checkAudit = FsChecker::checkAudit($type, $mid, $draft['content']);
                 if ($checkAudit) {
                     // Need to review: modify the log status to be reviewed (status), enter the time to submit the review (submit_at), do not move the other, and then operate after the review is passed.
                     if ($type == 1) {
@@ -399,17 +399,17 @@ class AmControllerApi extends FresnsBaseApiController
                 $draftComment = FresnsCommentLogs::find($draftId);
                 if (! $draftComment['comment_id']) {
                     // Verify added permissions
-                    $createdCheck = AmChecker::checkPermission(2, 1, $user_id, $mid);
+                    $createdCheck = FsChecker::checkPermission(2, 1, $user_id, $mid);
                     if (is_array($createdCheck)) {
-                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
                         return $this->errorCheckInfo($createdCheck);
                     }
                 } else {
                     // Verify editing privileges
-                    $createdCheck = AmChecker::checkPermission(2, 2, $user_id, $mid, $draftComment['comment_id']);
+                    $createdCheck = FsChecker::checkPermission(2, 2, $user_id, $mid, $draftComment['comment_id']);
                     if (is_array($createdCheck)) {
-                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                        FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
                         return $this->errorCheckInfo($createdCheck);
                     }
@@ -420,7 +420,7 @@ class AmControllerApi extends FresnsBaseApiController
                 } else {
                     $draft = FresnsCommentLogs::find($draftId);
                 }
-                $checkAudit = AmChecker::checkAudit($type, $mid, $draft['content']);
+                $checkAudit = FsChecker::checkAudit($type, $mid, $draft['content']);
                 if ($checkAudit) {
                     // Need to review: modify the log status to be reviewed (status), enter the time to submit the review (submit_at), do not move the other, and then operate after the review is passed.
                     if ($type == 1) {
@@ -472,9 +472,9 @@ class AmControllerApi extends FresnsBaseApiController
         $file = request()->file('file');
 
         $fileInfo = $request->input('fileInfo');
-        $checkInfo = AmChecker::checkPublish($member_id);
+        $checkInfo = FsChecker::checkPublish($member_id);
         if (is_array($checkInfo)) {
-            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
             return $this->errorCheckInfo($checkInfo);
         }
@@ -485,7 +485,7 @@ class AmControllerApi extends FresnsBaseApiController
 
             if (empty($pluginClass)) {
                 LogService::error('Plugin not found');
-                FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
                 $this->error(ErrorCodeService::FILE_SALE_ERROR);
             }
 
@@ -504,22 +504,22 @@ class AmControllerApi extends FresnsBaseApiController
 
             if ($paramsExist == false) {
                 LogService::error('插件信息未配置');
-                FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+                FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
                 $this->error(ErrorCodeService::FILE_SALE_ERROR);
             }
         }
 
         // In case of private mode, this feature is not available when it expires (members > expired_at).
-        $checker = AmChecker::checkPermission($type, 1, $uid, $member_id);
+        $checker = FsChecker::checkPermission($type, 1, $uid, $member_id);
         if (is_array($checker)) {
-            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => AmConfig::OBJECT_DEFAIL]);
+            FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
             return $this->errorCheckInfo($checker);
         }
         $FresnsPostsService = new FresnsPostsService();
         $fresnsCommentService = new FresnsCommentsService();
         // Determine if review is required
-        $checkAudit = AmChecker::checkAudit($type, $member_id, $request->input('content'));
+        $checkAudit = FsChecker::checkAudit($type, $member_id, $request->input('content'));
 
         switch ($type) {
             case 1:
@@ -662,7 +662,7 @@ class AmControllerApi extends FresnsBaseApiController
             // Storage
             $fileSize = $uploadFile->getSize();
             $suffix = $uploadFile->getClientOriginalExtension();
-            $checker = AmChecker::checkUploadPermission($memberId, $type, $fileSize, $suffix);
+            $checker = FsChecker::checkUploadPermission($memberId, $type, $fileSize, $suffix);
             if ($checker !== true) {
                 $this->error($checker);
             }

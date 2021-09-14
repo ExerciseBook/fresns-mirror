@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsHashtagLinkeds;
 
-class FresnsHashtagLinkedsConfig extends AmConfig
+class FresnsHashtagLinkedsConfig extends FsConfig
 {
 }

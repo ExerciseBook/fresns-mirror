@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsImplants;
 
-class FresnsImplantsService extends AmService
+class FresnsImplantsService extends FsService
 {
 }

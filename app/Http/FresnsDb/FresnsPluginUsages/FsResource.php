@@ -18,12 +18,12 @@ use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
  * List resource config handle
  */
 
-class AmResource extends BaseAdminResource
+class FsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
         // Form Field
-        $formMap = AmConfig::FORM_FIELDS_MAP;
+        $formMap = FsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
@@ -34,19 +34,19 @@ class AmResource extends BaseAdminResource
 
         // Languages
         // Get default language tag
-        $defaultCode = AmService::getDefaultLanguage();
+        $defaultCode = FsService::getDefaultLanguage();
         $langTag = request()->header('langTag', $defaultCode);
         $input = [
-            'table_name' => AmConfig::CFG_TABLE,
-            'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
+            'table_name' => FsConfig::CFG_TABLE,
+            'table_field' => FsConfig::FORM_FIELDS_MAP['name'],
             'table_id' => $this->id,
             'lang_tag' => $langTag,
         ];
         $names = FresnsLanguages::where($input)->first();
         if (! $names) {
             $input = [
-                'table_name' => AmConfig::CFG_TABLE,
-                'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
+                'table_name' => FsConfig::CFG_TABLE,
+                'table_field' => FsConfig::FORM_FIELDS_MAP['name'],
                 'table_id' => $this->id,
             ];
             $names = FresnsLanguages::where($input)->first();
@@ -57,8 +57,8 @@ class AmResource extends BaseAdminResource
         $nameArr = [];
         foreach ($multilingual as $v) {
             $input = [
-                'table_name' => AmConfig::CFG_TABLE,
-                'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
+                'table_name' => FsConfig::CFG_TABLE,
+                'table_field' => FsConfig::FORM_FIELDS_MAP['name'],
                 'table_id' => $this->id,
                 'lang_tag' => $v['key'],
             ];
@@ -76,7 +76,7 @@ class AmResource extends BaseAdminResource
         $sceneArr = explode(',', $this->scene);
         $sceneNameArr = [];
         if ($sceneArr) {
-            foreach (AmConfig::SCONE_OPTION as $v) {
+            foreach (FsConfig::SCONE_OPTION as $v) {
                 $arr = [];
                 if (in_array($v['key'], $sceneArr)) {
                     $arr = $v['title'];
@@ -130,7 +130,7 @@ class AmResource extends BaseAdminResource
         }
 
         // Data source
-        $source_parameter = AmConfig::SOURCE_PARAMETER;
+        $source_parameter = FsConfig::SOURCE_PARAMETER;
         foreach ($source_parameter as &$v) {
             $v['postLists'] = $parameter[$v['nickname']] ?? '';
             $v['sort_number'] = $newArr[$v['nickname']] ?? '';

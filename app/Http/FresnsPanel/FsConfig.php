@@ -10,7 +10,7 @@ namespace App\Http\FresnsPanel;
 
 use App\Base\Config\BaseConfig;
 
-class AmConfig extends BaseConfig
+class FsConfig extends BaseConfig
 {
     const ENABLE_FALSE = 0;
 

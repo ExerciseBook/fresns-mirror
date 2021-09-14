@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsPostLogs;
 
-class FresnsPostLogs extends AmModel
+class FresnsPostLogs extends FsModel
 {
 }

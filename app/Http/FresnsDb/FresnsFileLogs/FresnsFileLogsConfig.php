@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsFileLogs;
 
-class FresnsFileLogsConfig extends AmConfig
+class FresnsFileLogsConfig extends FsConfig
 {
 }

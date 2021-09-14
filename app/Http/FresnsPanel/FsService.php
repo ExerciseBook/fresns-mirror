@@ -10,12 +10,12 @@ namespace App\Http\FresnsPanel;
 
 use App\Base\Services\BaseAdminService;
 
-class AmService extends BaseAdminService
+class FsService extends BaseAdminService
 {
     // Get the current setting language
     public static function getLanguage($lang)
     {
-        $map = AmConfig::LANGUAGE_MAP;
+        $map = FsConfig::LANGUAGE_MAP;
         return $map[$lang] ?? 'English - English';
     }
 }

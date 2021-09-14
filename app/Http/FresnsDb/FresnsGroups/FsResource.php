@@ -16,12 +16,12 @@ use App\Http\FresnsDb\FresnsLanguages\FresnsLanguages;
  * List resource config handle
  */
 
-class AmResource extends BaseAdminResource
+class FsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
         // Form Field
-        $formMap = AmConfig::FORM_FIELDS_MAP;
+        $formMap = FsConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
@@ -33,8 +33,8 @@ class AmResource extends BaseAdminResource
         $nameArr = [];
         foreach ($multilingual as $v) {
             $input = [
-                'table_name' => AmConfig::CFG_TABLE,
-                'table_field' => AmConfig::FORM_FIELDS_MAP['name'],
+                'table_name' => FsConfig::CFG_TABLE,
+                'table_field' => FsConfig::FORM_FIELDS_MAP['name'],
                 'table_id' => $this->id,
                 'lang_tag' => $v['key'],
             ];
@@ -46,8 +46,8 @@ class AmResource extends BaseAdminResource
         $descriptionArr = [];
         foreach ($multilingual as $v) {
             $input = [
-                'table_name' => AmConfig::CFG_TABLE,
-                'table_field' => AmConfig::FORM_FIELDS_MAP['description'],
+                'table_name' => FsConfig::CFG_TABLE,
+                'table_field' => FsConfig::FORM_FIELDS_MAP['description'],
                 'table_id' => $this->id,
                 'lang_tag' => $v['key'],
             ];

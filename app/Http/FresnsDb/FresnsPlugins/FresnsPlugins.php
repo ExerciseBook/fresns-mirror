@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsPlugins;
 
-class FresnsPlugins extends AmModel
+class FresnsPlugins extends FsModel
 {
 }

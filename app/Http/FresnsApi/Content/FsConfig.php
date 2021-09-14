@@ -8,7 +8,7 @@
 
 namespace App\Http\FresnsApi\Content;
 
-class AmConfig
+class FsConfig
 {
     // Avatar Substitute
     const DEFAULT_AVATAR = 'default_avatar';

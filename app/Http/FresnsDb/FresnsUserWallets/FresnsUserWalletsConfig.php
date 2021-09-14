@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsUserWallets;
 
-class FresnsUserWalletsConfig extends AmConfig
+class FresnsUserWalletsConfig extends FsConfig
 {
 }

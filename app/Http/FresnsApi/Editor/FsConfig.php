@@ -8,7 +8,7 @@
 
 namespace App\Http\FresnsApi\Editor;
 
-class AmConfig
+class FsConfig
 {
     const SITE_MODEL = 'site_mode';
     const PRIVATE = 'private';

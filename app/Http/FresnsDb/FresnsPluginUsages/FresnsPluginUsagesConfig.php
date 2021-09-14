@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsPluginUsages;
 
-class FresnsPluginUsagesConfig extends AmConfig
+class FresnsPluginUsagesConfig extends FsConfig
 {
 }

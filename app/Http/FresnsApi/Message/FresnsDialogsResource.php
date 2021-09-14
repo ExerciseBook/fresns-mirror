@@ -10,7 +10,7 @@ namespace App\Http\FresnsApi\Message;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Center\Common\GlobalService;
-use App\Http\FresnsApi\Content\AmConfig as ContentConfig;
+use App\Http\FresnsApi\Content\FsConfig as ContentConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsDb\FresnsDialogMessages\FresnsDialogMessages;
@@ -58,13 +58,13 @@ class FresnsDialogsResource extends BaseAdminResource
         $member['verifiedIcon'] = '';
         // Default avatar when members have no avatar
         if (empty($member['avatar'])) {
-            $defaultIcon = ApiConfigHelper::getConfigByItemKey(AmConfig::DEFAULT_AVATAR);
+            $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }
         // The avatar displayed when a member has been deleted
         if ($memberInfo) {
             if ($memberInfo->deleted_at != null) {
-                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(AmConfig::DEACTIVATE_AVATAR);
+                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
                 $member['avatar'] = $deactivateAvatar;
             }
             if ($memberInfo->deleted_at == null) {

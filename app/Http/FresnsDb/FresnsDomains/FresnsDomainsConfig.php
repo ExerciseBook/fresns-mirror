@@ -8,6 +8,6 @@
 
 namespace App\Http\FresnsDb\FresnsDomains;
 
-class FresnsDomainsConfig extends AmConfig
+class FresnsDomainsConfig extends FsConfig
 {
 }

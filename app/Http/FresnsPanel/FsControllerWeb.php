@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
-class AmControllerWeb extends BaseFrontendController
+class FsControllerWeb extends BaseFrontendController
 {
     // Version Info
     public function __construct()
@@ -84,9 +84,9 @@ class AmControllerWeb extends BaseFrontendController
         $account = $request->input('account');
         $password = $request->input('password');
 
-        $user = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->where('phone', $account)->first();
+        $user = FresnsUsers::where('is_enable', 1)->where('user_type', FsConfig::USER_TYPE_ADMIN)->where('phone', $account)->first();
         if (empty($user)) {
-            $user = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->where('email', $account)->first();
+            $user = FresnsUsers::where('is_enable', 1)->where('user_type', FsConfig::USER_TYPE_ADMIN)->where('email', $account)->first();
         }
 
         if (empty($user)) {
@@ -127,10 +127,10 @@ class AmControllerWeb extends BaseFrontendController
 
         $password = base64_decode($password, true);
 
-        $user = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->where('phone', $account)->first();
+        $user = FresnsUsers::where('is_enable', 1)->where('user_type', FsConfig::USER_TYPE_ADMIN)->where('phone', $account)->first();
 
         if (empty($user)) {
-            $user = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->where('email', $account)->first();
+            $user = FresnsUsers::where('is_enable', 1)->where('user_type', FsConfig::USER_TYPE_ADMIN)->where('email', $account)->first();
         }
 
         if (empty($user)) {
@@ -210,7 +210,7 @@ class AmControllerWeb extends BaseFrontendController
         $userId = Auth::id();
         $langTag = Cache::get('lang_tag_'.$userId);
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGIN_TYPE2);
+        $request->offsetSet('type', FsConfig::PLUGIN_TYPE2);
         $pluginList = $FresnsPluginsService->searchData();
         $pluginArr = FresnsPluginsResource::collection($pluginList['list'])->toArray($pluginList['list']);
         $newVision = [];
@@ -257,7 +257,7 @@ class AmControllerWeb extends BaseFrontendController
         $total['keys_count'] = $keysCount;
 
         // Fresns Events and News
-        $url = AmConfig::NOTICE_URL;
+        $url = FsConfig::NOTICE_URL;
 
         $userId = Auth::id();
 
@@ -285,7 +285,7 @@ class AmControllerWeb extends BaseFrontendController
             'title' => 'Dashboard',
             'total' => $total,
             'notice_arr' => $noticeArr,
-            'lang_desc' => AmService::getLanguage($langTag),
+            'lang_desc' => FsService::getLanguage($langTag),
         ];
 
         return view('fresns.dashboard', $data);
@@ -294,7 +294,7 @@ class AmControllerWeb extends BaseFrontendController
     // Settings Page
     public function settings()
     {
-        $userArr = FresnsUsers::where('is_enable', 1)->where('user_type', AmConfig::USER_TYPE_ADMIN)->get([
+        $userArr = FresnsUsers::where('is_enable', 1)->where('user_type', FsConfig::USER_TYPE_ADMIN)->get([
             'id',
             'uuid',
             'phone',
@@ -337,7 +337,7 @@ class AmControllerWeb extends BaseFrontendController
             'admin_path' => $admin_path,
             'site_url' => $site_url,
             'path' => $path,
-            'lang_desc' => AmService::getLanguage($lang),
+            'lang_desc' => FsService::getLanguage($lang),
         ];
 
         return view('fresns.settings', $data);
@@ -354,7 +354,7 @@ class AmControllerWeb extends BaseFrontendController
 
         $admin_path = $request->input('admin_path');
 
-        $pathNot = AmConfig::BACKEND_PATH_NOT;
+        $pathNot = FsConfig::BACKEND_PATH_NOT;
         if (in_array($admin_path, $pathNot)) {
             $this->error(ErrorCodeService::BACKEND_PATH_ERROR);
         }
@@ -413,7 +413,7 @@ class AmControllerWeb extends BaseFrontendController
             $this->error(ErrorCodeService::ACCOUNT_ERROR);
         }
 
-        $user = FresnsUsers::where('is_enable', 1)->where('user_type', '!=', AmConfig::USER_TYPE_ADMIN)->where(function ($query) {
+        $user = FresnsUsers::where('is_enable', 1)->where('user_type', '!=', FsConfig::USER_TYPE_ADMIN)->where(function ($query) {
             $account = request()->input('account');
             $query->where('phone', $account)->orWhere('email', $account);
         })->first();
@@ -422,7 +422,7 @@ class AmControllerWeb extends BaseFrontendController
             $this->error(ErrorCodeService::ADMIN_ACCOUNT_ERROR);
         }
 
-        FresnsUsers::where('id', $user['id'])->update(['user_type' => AmConfig::USER_TYPE_ADMIN]);
+        FresnsUsers::where('id', $user['id'])->update(['user_type' => FsConfig::USER_TYPE_ADMIN]);
 
         $this->success();
     }
@@ -435,7 +435,7 @@ class AmControllerWeb extends BaseFrontendController
         if ($uuid == $user['uuid']) {
             $this->error(ErrorCodeService::DELETE_ADMIN);
         }
-        FresnsUsers::where('uuid', $uuid)->update(['user_type' => AmConfig::USER_TYPE_USER]);
+        FresnsUsers::where('uuid', $uuid)->update(['user_type' => FsConfig::USER_TYPE_USER]);
 
         $this->success();
     }
@@ -472,7 +472,7 @@ class AmControllerWeb extends BaseFrontendController
             'platform' => $platforms,
             'plugin' => $plugin,
             'title' => 'Keys',
-            'lang_desc' => AmService::getLanguage($lang),
+            'lang_desc' => FsService::getLanguage($lang),
         ];
 
         return view('fresns.keys', $data);
@@ -566,7 +566,7 @@ class AmControllerWeb extends BaseFrontendController
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 50);
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGIN_TYPE4);
+        $request->offsetSet('type', FsConfig::PLUGIN_TYPE4);
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
         $pluginList = $FresnsPluginsService->searchData();
@@ -582,7 +582,7 @@ class AmControllerWeb extends BaseFrontendController
             'choose' => 'admins',
             'location' => $pluginArr,
             'title' => 'Admins',
-            'lang_desc' => AmService::getLanguage($lang),
+            'lang_desc' => FsService::getLanguage($lang),
 
         ];
 
@@ -622,7 +622,7 @@ class AmControllerWeb extends BaseFrontendController
             'websitePluginArr' => $websitePluginArr,
             'subjectPluginArr' => $subjectPluginArr,
             'title' => 'Websites',
-            'lang_desc' => AmService::getLanguage($lang),
+            'lang_desc' => FsService::getLanguage($lang),
         ];
 
         return view('fresns.websites', $data);
@@ -634,7 +634,7 @@ class AmControllerWeb extends BaseFrontendController
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 50);
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGIN_TYPE3);
+        $request->offsetSet('type', FsConfig::PLUGIN_TYPE3);
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
         $pluginList = $FresnsPluginsService->searchData();
@@ -649,7 +649,7 @@ class AmControllerWeb extends BaseFrontendController
             'choose' => 'apps',
             'location' => $pluginArr,
             'title' => 'Apps',
-            'lang_desc' => AmService::getLanguage($lang),
+            'lang_desc' => FsService::getLanguage($lang),
         ];
 
         return view('fresns.apps', $data);
@@ -661,7 +661,7 @@ class AmControllerWeb extends BaseFrontendController
         $current = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 20);
         $FresnsPluginsService = new FresnsPluginFresnsPluginsService();
-        $request->offsetSet('type', AmConfig::PLUGIN_TYPE2);
+        $request->offsetSet('type', FsConfig::PLUGIN_TYPE2);
         $request->offsetSet('currentPage', $current);
         $request->offsetSet('pageSize', $pageSize);
         $pluginList = $FresnsPluginsService->searchData();
@@ -702,7 +702,7 @@ class AmControllerWeb extends BaseFrontendController
             'title' => 'Plugins',
             'choose' => 'plugins',
             'totalPage' => $totalPage,
-            'lang_desc' => AmService::getLanguage($lang),
+            'lang_desc' => FsService::getLanguage($lang),
         ];
 
         return view('fresns.plugins', $data);
@@ -721,7 +721,7 @@ class AmControllerWeb extends BaseFrontendController
             'choose' => 'iframe',
             'location' => $url,
             'title' => 'Setting',
-            'lang_desc' => AmService::getLanguage($lang),
+            'lang_desc' => FsService::getLanguage($lang),
         ];
 
         return view('fresns.iframe', $data);

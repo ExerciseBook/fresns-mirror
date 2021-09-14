@@ -37,14 +37,14 @@ use App\Http\FresnsDb\FresnsStopWords\FresnsStopWords;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class FresnsCommentsService extends AmService
+class FresnsCommentsService extends FsService
 {
     public function getCommentPreviewList($comment_id, $limit, $mid)
     {
-        $AmService = new AmService();
+        $FsService = new FsService();
         request()->offsetSet('id', $comment_id);
-        $data = $AmService->listTreeNoRankNum();
-        $data = $AmService->treeData();
+        $data = $FsService->listTreeNoRankNum();
+        $data = $FsService->treeData();
         // get childrenIdArr
         $childrenIdArr = [];
         if ($data) {
@@ -118,10 +118,10 @@ class FresnsCommentsService extends AmService
     {
         $searchCid = request()->input('searchCid');
         $commentCid = FresnsComments::where('uuid', $searchCid)->first();
-        $AmService = new AmService();
+        $FsService = new FsService();
         request()->offsetSet('id', $comment_id);
-        $data = $AmService->listTreeNoRankNum();
-        $data = $AmService->treeData();
+        $data = $FsService->listTreeNoRankNum();
+        $data = $FsService->treeData();
         // get childrenIdArr
         $childrenIdArr = [];
         if ($data) {
@@ -206,7 +206,7 @@ class FresnsCommentsService extends AmService
         // dd($contentBrief);
         $uuid = strtolower(StrHelper::randString(8));
         // Get the number of words in the brief of the comment
-        $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
+        $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
         if (mb_strlen($draftComment['content']) > $commentEditorBriefCount) {
             $is_brief = 1;
         } else {
@@ -265,7 +265,7 @@ class FresnsCommentsService extends AmService
         $contentBrief = $this->parseDraftContent($draftId);
 
         // Get the number of words in the brief of the comment
-        $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
+        $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
         if (mb_strlen($draftComment['content']) > $commentEditorBriefCount) {
             $is_brief = 1;
         } else {
@@ -557,7 +557,7 @@ class FresnsCommentsService extends AmService
         } else {
             (new FresnsMemberStats())->store(['member_id' => $draftComment['member_id'], 'comment_publish_count' => 1]);
         }
-        DB::table('configs')->where('item_key', AmConfig::COMMENT_COUNTS)->increment('item_value');
+        DB::table('configs')->where('item_key', FsConfig::COMMENT_COUNTS)->increment('item_value');
 
         return true;
     }
@@ -651,7 +651,7 @@ class FresnsCommentsService extends AmService
     {
         $draftComment = FresnsCommentLogs::find($draftId);
         // The currently configured Hashtag display mode
-        $hashtagShow = ApiConfigHelper::getConfigByItemKey(AmConfig::HASHTAG_SHOW) ?? 2;
+        $hashtagShow = ApiConfigHelper::getConfigByItemKey(FsConfig::HASHTAG_SHOW) ?? 2;
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $draftComment['content'], $singlePoundMatches);
         } else {
@@ -695,7 +695,7 @@ class FresnsCommentsService extends AmService
                         'linked_id' => $draftComment['comment_id'],
                         'hashtag_id' => $hashtagId,
                     ]);
-                    DB::table('configs')->where('item_key', AmConfig::HASHTAG_COUNTS)->increment('item_value');
+                    DB::table('configs')->where('item_key', FsConfig::HASHTAG_COUNTS)->increment('item_value');
                 }
             }
         }
@@ -710,7 +710,7 @@ class FresnsCommentsService extends AmService
         $content = $draftComment['content'];
 
         // Get the maximum number of words for the comment brief
-        $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(AmConfig::COMMENT_EDITOR_BRIEF_COUNT) ?? 280;
+        $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_BRIEF_COUNT) ?? 280;
         if (mb_strlen(trim($draftComment['content'])) > $commentEditorBriefCount) {
             $contentInfo = $this->truncatedContentInfo($content, $commentEditorBriefCount);
             $content = $contentInfo['truncated_content'];
@@ -729,7 +729,7 @@ class FresnsCommentsService extends AmService
     public function truncatedContentInfo($content, $wordCount = 280)
     {
         // The currently configured Hashtag display mode
-        $hashtagShow = ApiConfigHelper::getConfigByItemKey(AmConfig::HASHTAG_SHOW) ?? 2;
+        $hashtagShow = ApiConfigHelper::getConfigByItemKey(FsConfig::HASHTAG_SHOW) ?? 2;
         // Match the location information in $content, where the rule is placed in the configuration file
         if ($hashtagShow == 1) {
             preg_match("/#.*?\s/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);

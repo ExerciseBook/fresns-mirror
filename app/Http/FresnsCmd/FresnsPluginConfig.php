@@ -362,7 +362,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'type' => 'required|in:1,2,3',
             'uid' => 'required',
             'amount' => 'required|numeric',
-            'transactionAmount' => 'required|numeric',
+            'transactionFsount' => 'required|numeric',
             'systemFee' => 'required|numeric',
             'originName' => 'required',
         ];
@@ -376,7 +376,7 @@ class FresnsPluginConfig extends BasePluginConfig
             'type' => 'required|in:4,5,6',
             'uid' => 'required',
             'amount' => 'required|numeric',
-            'transactionAmount' => 'required|numeric',
+            'transactionFsount' => 'required|numeric',
             'systemFee' => 'required|numeric',
             'originName' => 'required',
         ];
