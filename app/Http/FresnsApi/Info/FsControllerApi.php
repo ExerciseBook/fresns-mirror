@@ -400,7 +400,7 @@ class FsControllerApi extends FresnsBaseApiController
                 'numeric',
                 'in:1,2,3,4,5',
             ],
-            'template' => [
+            'templateId' => [
                 'required',
                 'numeric',
                 'in:1,2,3,4,5,6,7',
@@ -410,7 +410,7 @@ class FsControllerApi extends FresnsBaseApiController
         ValidateService::validateRule($request, $rule);
         $useType = $request->input('useType');
         $type = $request->input('type');
-        $template = $request->input('template');
+        $templateId = $request->input('templateId');
         $account = $request->input('account');
         $langTag = $request->header('langTag');
         $user_id = GlobalService::getGlobalKey('user_id');
@@ -421,7 +421,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         $type = $request->input('type');
         $useType = $request->input('useType');
-        $template = $request->input('template');
+        $templateId = $request->input('templateId');
         $account = $request->input('account');
 
         $countryCode = $request->input('countryCode');
