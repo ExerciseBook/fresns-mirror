@@ -123,7 +123,7 @@ class FresnsPluginConfig extends BasePluginConfig
         $request = request();
         $rule = [
             'type' => 'required|in:1,2',
-            'template' => 'required',
+            'templateId' => 'required',
             'account' => 'required',
             'langTag' => 'required',
         ];
@@ -167,11 +167,10 @@ class FresnsPluginConfig extends BasePluginConfig
     public function sendSmsHandlerRule()
     {
         $rule = [
-            'phone' => 'required',
-            'template' => 'required',
-            'variale1' => 'required',
-            'variale2' => 'required',
             'countryCode' => 'required',
+            'phoneNumber' => 'required',
+            'templateCode' => 'required',
+            'templateParam' => 'json',
         ];
         return $rule;
     }

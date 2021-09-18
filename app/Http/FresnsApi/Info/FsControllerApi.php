@@ -439,8 +439,7 @@ class FsControllerApi extends FresnsBaseApiController
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_CODE;
         $input = [
             'type' => $type,
-            // 'useType' => $useType,
-            'template' => $template,
+            'templateId' => $templateId,
             'account' => $account,
             'langTag' => $langTag,
             'countryCode' => $countryCode,

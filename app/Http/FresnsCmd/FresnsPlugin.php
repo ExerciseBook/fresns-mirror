@@ -98,7 +98,7 @@ class FresnsPlugin extends BasePlugin
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_CODE;
         // Preparation parameters
         $account = $input['account'];
-        $template = $input['template'];
+        $templateId = $input['templateId'];
         $langTag = $input['langTag'];
         $countryCode = $input['countryCode'];
         // Email
@@ -106,7 +106,7 @@ class FresnsPlugin extends BasePlugin
             $input = [
                 'type'   => $type,
                 'account' => $account,
-                'template' => $template,
+                'templateId' => $templateId,
                 'langTag' => $langTag,
             ];
         // SMS
@@ -114,7 +114,7 @@ class FresnsPlugin extends BasePlugin
             $input = [
                 'type'   => $type,
                 'account' => $account,
-                'template' => $template,
+                'templateId' => $templateId,
                 'countryCode' => $countryCode,
                 'langTag' => $langTag,
             ];
@@ -216,11 +216,11 @@ class FresnsPlugin extends BasePlugin
     // Send sms
     public function sendSmsHandler($input)
     {
-        $phone = $input['phone'];
         $countryCode = $input['countryCode'];
-        $template = $input['template'];
-        $variale1 = $input['variale1'];
-        $variale2 = $input['variale2'];
+        $phoneNumber = $input['phoneNumber'];
+        $signName = $input['signName'];
+        $templateCode = $input['templateCode'];
+        $templateParam = $input['templateParam'];
         $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_sms_service');
         if (empty($pluginUniKey)) {
             LogService::error("No outgoing service provider configured");
@@ -234,11 +234,11 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
         $input = [
-            'phone' => $phone,
             'countryCode' => $countryCode,
-            'template' => $template,
-            'variale1' => $variale1,
-            'variale2' => $variale2,
+            'phoneNumber' => $phoneNumber,
+            'signName' => $signName,
+            'templateCode' => $templateCode,
+            'templateParam' => $templateParam,
         ];
         $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
         if (PluginRpcHelper::isErrorPluginResp($resp)) {
