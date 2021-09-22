@@ -53,7 +53,7 @@ class FsChecker extends BaseChecker
                 ->where('platform_id', $platform)
                 ->value('token');
             if ($userToken != $token) {
-                self::checkInfo(ErrorCodeService::USER_TOKEN_ERROR);
+                self::checkInfo(ErrorCodeService::MEMBER_TOKEN_ERROR);
             }
         } else {
             $userToken = FresnsSessionTokens::where('user_id', $uid)

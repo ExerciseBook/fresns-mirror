@@ -36,126 +36,126 @@ class FsChecker extends BaseChecker
     // Status Code
     const POST_LOGS_EXISTS = 30006;
     const COMMENT_LOGS_EXISTS = 30008;
-    const GROUP_EXISTS = 30057;
+    const GROUP_EXIST_ERROR = 30057;
     const GROUP_TYPE_ERROR = 30058;
     const TITLE_ERROR = 30059;
     const POST_STATUS_2_ERROR = 30060;
     const POST_STATUS_3_ERROR = 30061;
     const COMMENT_STATUS_2_ERROR = 30062;
     const COMMENT_STATUS_3_ERROR = 30063;
-    const POST_SUBMIT_STATUS2_ERROR = 30064;
-    const POST_SUBMIT_STATUS3_ERROR = 30065;
-    const COMMENT_SUBMIT_STATUS2_ERROR = 30066;
-    const COMMENT_SUBMIT_STATUS3_ERROR = 30067;
+    const POST_SUBMIT_STATUS_2_ERROR = 30064;
+    const POST_SUBMIT_STATUS_3_ERROR = 30065;
+    const COMMENT_SUBMIT_STATUS_2_ERROR = 30066;
+    const COMMENT_SUBMIT_STATUS_3_ERROR = 30067;
     const POST_CONTENT_WORDS_ERROR = 30068;
     const COMMENT_CONTENT_WORDS_ERROR = 30069;
     const MEMBER_EXPIRED_LOGS_ERROR = 30070;
     const COMMENT_PID_ERROR = 30071;
-    const COMMENT_PARENT_ERROR = 30072;
+    const COMMENT_CREATE_ERROR = 30072;
     const TYPE_ERROR = 30073;
     const POSTS_SUBMIT_ERROR = 30052;
-    const USER_EXPIRED_ERROR = 30048;
-    const USER_BINDING_EMAIL_ERROR = 30049;
-    const USER_BINDING_PHONE_ERROR = 30050;
-    const USER_BINDING_REAL_NAME_ERROR = 30051;
+    const MEMBER_EXPIRED_ERROR = 30048;
+    const GLOBAL_PUBLISH_EMAIL_VERIFY = 30049;
+    const GLOBAL_PUBLISH_PHONE_VERIFY = 30050;
+    const GLOBAL_PUBLISH_PROVE_VERIFY = 30051;
     const POSTS_UPDATE_ERROR = 30053;
     const COMMENTS_UPDATE_ERROR = 30055;
     const COMMENTS_SUBMIT_ERROR = 30054;
     const USER_ERROR = 30056;
-    const FILE_OR_FILEINFO_ERROR = 30092;
+    const FILE_OR_TEXT_ERROR = 30092;
 
-    const PERMISSION_NO_SETTING_ERROR = 30101;
+    const ROLE_NO_CONFIG_ERROR = 30101;
     const SUBMIT_NO_ERROR = 30102;
-    const SUBMIT_LIMIT_ERROR = 30103;
-    const EDIT_TOP_ERROR = 30104;
+    const PUBLISH_LIMIT_ERROR = 30103;
+    const EDIT_STICKY_ERROR = 30104;
     const EDIT_TIME_ERROR = 30105;
     const EDIT_ESSENCE_ERROR = 30106;
-    const MEMBER_ROLE_SUBMIT_NO_ERROR = 30107;
-    const MEMBER_ROLE_SUBMIT_LIMIT_ERROR = 30108;
-    const MEMBER_ROLE_USER_BINDING_EMAIL_ERROR = 30109;
-    const MEMBER_ROLE_USER_BINDING_PHONE_ERROR = 30110;
-    const MEMBER_ROLE_USER_BINDING_REAL_NAME_ERROR = 30111;
-    const POST_MEMBER_ERROR = 30112;
+    const ROLE_NO_PERMISSION_PUBLISH = 30107;
+    const ROLE_PUBLISH_LIMIT = 30108;
+    const ROLE_PUBLISH_EMAIL_VERIFY = 30109;
+    const ROLE_PUBLISH_PHONE_VERIFY = 30110;
+    const ROLE_PUBLISH_PROVE_VERIFY = 30111;
+    const CONTENT_AUTHOR_ERROR = 30112;
     const PLUGIN_ERROR = 30113;
-    const MEMBER_JSON_ERROR = 30114;
+    const MEMBER_LIST_JSON_ERROR = 30114;
     const ALLOW_JSON_ERROR = 30115;
     const LOCATION_JSON_ERROR = 30116;
-    const FILE_JSON_ERROR = 30117;
+    const FILES_JSON_ERROR = 30117;
     const EXTENDS_JSON_ERROR = 30118;
-    const COMMENT_JSON_ERROR = 30119;
+    const COMMENT_SET_JSON_ERROR = 30119;
     const COMMENT_APPEND_ERROR = 30121;
     const POST_APPEND_ERROR = 30122;
-    const POST_GROUP_ALLOW_ERROR = 30127;
-    const POST_COMMENTS_POSTS_ERROR = 30128;
-    const POST_COMMENTS_ALLOW_ERROR = 30129;
-    const COMMENTS_LOG_EXIST_ERROR = 30130;
-    const POSTS_LOG_EXIST_ERROR = 30131;
-    const POSTS_LOG_CHECK_PARAMS_ERROR = 30132;
-    const EXTENDS_UUID_ERROR = 30133;
+    const GROUP_POST_ALLOW_ERROR = 30127;
+    const COMMENT_PID_EXIST_ERROR = 30128;
+    const GROUP_COMMENTS_ALLOW_ERROR = 30129;
+    const COMMENT_LOG_EXIST_ERROR = 30130;
+    const POST_LOG_EXIST_ERROR = 30131;
+    const CONTENT_CHECK_PARAMS_ERROR = 30132;
+    const EXTEND_EID_ERROR = 30133;
     const CONTENT_COUNT_ERROR = 30134;
-    const EXTENDS_EID_ERROR = 30138;
+    const EXTENDS_JSON_EID_ERROR = 30138;
 
     public $codeMap = [
         self::POST_LOGS_EXISTS => '帖子不存在',
         self::COMMENT_LOGS_EXISTS => '评论不存在',
-        self::GROUP_EXISTS => '小组不存在',
+        self::GROUP_EXIST_ERROR => '小组不存在',
         self::GROUP_TYPE_ERROR => '小组分类不可发帖',
         self::TITLE_ERROR => '标题过长(应小于255)',
         self::POST_STATUS_2_ERROR => '帖子审核中不可编辑',
         self::POST_STATUS_3_ERROR => '帖子已正式发表不可编辑',
         self::COMMENT_STATUS_2_ERROR => '评论审核中不可编辑',
         self::COMMENT_STATUS_3_ERROR => '评论已正式发表不可编辑',
-        self::POST_SUBMIT_STATUS2_ERROR => '处于审核状态的帖子不可提交',
-        self::POST_SUBMIT_STATUS3_ERROR => '处于发布状态的帖子不可提交',
-        self::COMMENT_SUBMIT_STATUS2_ERROR => '处于审核状态的评论不可提交',
-        self::COMMENT_SUBMIT_STATUS3_ERROR => '处于发布状态的评论不可提交',
+        self::POST_SUBMIT_STATUS_2_ERROR => '处于审核状态的帖子不可提交',
+        self::POST_SUBMIT_STATUS_3_ERROR => '处于发布状态的帖子不可提交',
+        self::COMMENT_SUBMIT_STATUS_2_ERROR => '处于审核状态的评论不可提交',
+        self::COMMENT_SUBMIT_STATUS_3_ERROR => '处于发布状态的评论不可提交',
         self::POST_CONTENT_WORDS_ERROR => '帖子内容里存在违规内容',
         self::COMMENT_CONTENT_WORDS_ERROR => '评论内容里存在违规内容',
         self::MEMBER_EXPIRED_LOGS_ERROR => '成员已过期，不可请求',
         self::COMMENT_PID_ERROR => 'pid required',
-        self::COMMENT_PARENT_ERROR => '一级评论才能产生草稿',
+        self::COMMENT_CREATE_ERROR => '一级评论才能产生草稿',
         self::TYPE_ERROR => 'type过长',
         self::POSTS_SUBMIT_ERROR => '不允许发布帖子',
-        self::USER_EXPIRED_ERROR => '成员已过期',
-        self::USER_BINDING_EMAIL_ERROR => '请绑定邮箱',
-        self::USER_BINDING_PHONE_ERROR => '请绑定手机号',
-        self::USER_BINDING_REAL_NAME_ERROR => '请实名制',
+        self::MEMBER_EXPIRED_ERROR => '成员已过期',
+        self::GLOBAL_PUBLISH_EMAIL_VERIFY => '请绑定邮箱',
+        self::GLOBAL_PUBLISH_PHONE_VERIFY => '请绑定手机号',
+        self::GLOBAL_PUBLISH_PROVE_VERIFY => '请实名制',
         self::POSTS_UPDATE_ERROR => '不允许编辑帖子',
         self::COMMENTS_UPDATE_ERROR => '不允许编辑评论',
         self::COMMENTS_SUBMIT_ERROR => '不允许发布评论',
         self::USER_ERROR => '用户不存在',
-        self::FILE_OR_FILEINFO_ERROR => '文件和文件信息只能传其一',
+        self::FILE_OR_TEXT_ERROR => '文件和文件信息只能传其一',
 
-        self::PERMISSION_NO_SETTING_ERROR => '角色未设置权限',
+        self::ROLE_NO_CONFIG_ERROR => '角色未设置权限',
         self::SUBMIT_NO_ERROR => '未开启发布权限',
-        self::SUBMIT_LIMIT_ERROR => '未在指定时间内不允许发布',
-        self::EDIT_TOP_ERROR => '置顶后不允许编辑',
+        self::PUBLISH_LIMIT_ERROR => '未在指定时间内不允许发布',
+        self::EDIT_STICKY_ERROR => '置顶后不允许编辑',
         self::EDIT_TIME_ERROR => '超出编辑时间',
         self::EDIT_ESSENCE_ERROR => '加精不允许编辑',
-        self::MEMBER_ROLE_SUBMIT_NO_ERROR => '角色未开启发布权限',
-        self::MEMBER_ROLE_SUBMIT_LIMIT_ERROR => '角色权限未在指定时间内不允许发布',
-        self::MEMBER_ROLE_USER_BINDING_EMAIL_ERROR => '角色开启邮箱校验',
-        self::MEMBER_ROLE_USER_BINDING_PHONE_ERROR => '角色开启手机号校验',
-        self::MEMBER_ROLE_USER_BINDING_REAL_NAME_ERROR => '角色开启实名制校验',
-        self::POST_MEMBER_ERROR => '成员不一致',
+        self::ROLE_NO_PERMISSION_PUBLISH => '角色未开启发布权限',
+        self::ROLE_PUBLISH_LIMIT => '角色权限未在指定时间内不允许发布',
+        self::ROLE_PUBLISH_EMAIL_VERIFY => '角色开启邮箱校验',
+        self::ROLE_PUBLISH_PHONE_VERIFY => '角色开启手机号校验',
+        self::ROLE_PUBLISH_PROVE_VERIFY => '角色开启实名制校验',
+        self::CONTENT_AUTHOR_ERROR => '成员不一致',
         self::PLUGIN_ERROR => '插件不存在或插件未启用',
-        self::MEMBER_JSON_ERROR => '请输入正确的memberJson格式',
+        self::MEMBER_LIST_JSON_ERROR => '请输入正确的memberJson格式',
         self::ALLOW_JSON_ERROR => '请输入正确的allowJson格式',
         self::LOCATION_JSON_ERROR => '请输入正确的locationJson格式',
-        self::FILE_JSON_ERROR => '请输入正确的fileJson格式',
+        self::FILES_JSON_ERROR => '请输入正确的fileJson格式',
         self::EXTENDS_JSON_ERROR => '请输入正确的extendsJson格式',
-        self::COMMENT_JSON_ERROR => '请输入正确的commentSetJson格式',
+        self::COMMENT_SET_JSON_ERROR => '请输入正确的commentSetJson格式',
         self::COMMENT_APPEND_ERROR => '评论异常，未找到评论副表记录',
         self::POST_APPEND_ERROR => '帖子异常，未找到帖子副表记录',
-        self::POST_GROUP_ALLOW_ERROR => '无小组发帖权限',
-        self::POST_COMMENTS_POSTS_ERROR => '评论异常，未找到帖子信息',
-        self::POST_COMMENTS_ALLOW_ERROR => '无小组评论权限',
-        self::COMMENTS_LOG_EXIST_ERROR => '评论异常，草稿表对应的评论未找到',
-        self::POSTS_LOG_EXIST_ERROR => '帖子异常，草稿表对应的帖子未找到',
-        self::POSTS_LOG_CHECK_PARAMS_ERROR => '内容、文件、扩展内容，三种不可全部为空，至少其中一个有值',
-        self::EXTENDS_UUID_ERROR => '存在未知扩展',
+        self::GROUP_POST_ALLOW_ERROR => '无小组发帖权限',
+        self::COMMENT_PID_EXIST_ERROR => '评论异常，未找到帖子信息',
+        self::GROUP_COMMENTS_ALLOW_ERROR => '无小组评论权限',
+        self::COMMENT_LOG_EXIST_ERROR => '评论异常，草稿表对应的评论未找到',
+        self::POST_LOG_EXIST_ERROR => '帖子异常，草稿表对应的帖子未找到',
+        self::CONTENT_CHECK_PARAMS_ERROR => '内容、文件、扩展内容，三种不可全部为空，至少其中一个有值',
+        self::EXTEND_EID_ERROR => '存在未知扩展',
         self::CONTENT_COUNT_ERROR => '内容字数过多',
-        self::EXTENDS_EID_ERROR => 'extendsJson eid必填',
+        self::EXTENDS_JSON_EID_ERROR => 'extendsJson eid必填',
     ];
 
     /**
@@ -192,19 +192,19 @@ class FsChecker extends BaseChecker
                         $post_email_verify = ApiConfigHelper::getConfigByItemKey('post_email_verify');
                         if ($post_email_verify == true) {
                             if (empty($user->email)) {
-                                return self::checkInfo(self::USER_BINDING_EMAIL_ERROR);
+                                return self::checkInfo(self::PUBLISH_EMAIL_VERIFY_ERROR);
                             }
                         }
                         $post_phone_verify = ApiConfigHelper::getConfigByItemKey('post_phone_verify');
                         if ($post_phone_verify == true) {
                             if (empty($user->phone)) {
-                                return self::checkInfo(self::USER_BINDING_PHONE_ERROR);
+                                return self::checkInfo(self::PUBLISH_PHONE_VERIFY_ERROR);
                             }
                         }
                         $post_prove_verify = ApiConfigHelper::getConfigByItemKey('post_prove_verify');
                         if ($post_prove_verify == true) {
                             if ($user->prove_verify == 1) {
-                                return self::checkInfo(self::USER_BINDING_REAL_NAME_ERROR);
+                                return self::checkInfo(self::PUBLISH_PROVE_VERIFY_ERROR);
                             }
                         }
                         $post_limit_status = ApiConfigHelper::getConfigByItemKey('post_limit_status');
@@ -239,11 +239,11 @@ class FsChecker extends BaseChecker
 
                                 if ($post_limit_rule == 2) {
                                     if ($post_limit_period_start <= $time && $post_limit_period_end >= $time) {
-                                        return self::checkInfo(ErrorCodeService::SUBMIT_LIMIT_ERROR);
+                                        return self::checkInfo(ErrorCodeService::PUBLISH_LIMIT_ERROR);
                                     }
                                 } else {
                                     if ($post_limit_period_start > $time || $post_limit_period_end < $time) {
-                                        return self::checkInfo(ErrorCodeService::SUBMIT_LIMIT_ERROR);
+                                        return self::checkInfo(ErrorCodeService::PUBLISH_LIMIT_ERROR);
                                     }
                                 }
                             }
@@ -263,18 +263,18 @@ class FsChecker extends BaseChecker
 
                                 if ($post_limit_rule == 2) {
                                     if ($post_limit_cycle_start <= $time && $post_limit_cycle_end >= $time) {
-                                        return self::checkInfo(ErrorCodeService::SUBMIT_LIMIT_ERROR);
+                                        return self::checkInfo(ErrorCodeService::PUBLISH_LIMIT_ERROR);
                                     }
                                 } else {
                                     if ($time < $post_limit_cycle_start || $time > $post_limit_cycle_end) {
-                                        return self::checkInfo(ErrorCodeService::SUBMIT_LIMIT_ERROR);
+                                        return self::checkInfo(ErrorCodeService::PUBLISH_LIMIT_ERROR);
                                     }
                                 }
                             }
                         }
 
                         if (empty($roleId)) {
-                            return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
+                            return self::checkInfo(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
                         }
 
                         $permission = FresnsMemberRoles::where('id', $roleId)->value('permission');
@@ -285,28 +285,28 @@ class FsChecker extends BaseChecker
 
                                 LogService::info('permissionMap-checkPermission', $permissionMap);
                                 if (empty($permissionMap)) {
-                                    return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
+                                    return self::checkInfo(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
                                 }
                                 // Publish Post Permissions
                                 if ($permissionMap['post_publish'] == false) {
-                                    return self::checkInfo(ErrorCodeService::MEMBER_ROLE_SUBMIT_NO_ERROR);
+                                    return self::checkInfo(ErrorCodeService::ROLE_NO_PERMISSION_PUBLISH);
                                 }
                                 // Publish Post Request - Email
                                 if ($permissionMap['post_email_verify'] == true) {
                                     if (empty($user->email)) {
-                                        return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_EMAIL_ERROR);
+                                        return self::checkInfo(self::ROLE_PUBLISH_EMAIL_VERIFY);
                                     }
                                 }
                                 // Publish Post Request - Phone Number
                                 if ($permissionMap['post_phone_verify'] == true) {
                                     if (empty($user->phone)) {
-                                        return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_PHONE_ERROR);
+                                        return self::checkInfo(self::ROLE_PUBLISH_PHONE_VERIFY);
                                     }
                                 }
                                 // Publish Post Request - Real name
                                 if ($permissionMap['post_prove_verify'] == true) {
                                     if ($user->prove_verify == 1) {
-                                        return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_REAL_NAME_ERROR);
+                                        return self::checkInfo(self::ROLE_PUBLISH_PROVE_VERIFY);
                                     }
                                 }
 
@@ -318,11 +318,11 @@ class FsChecker extends BaseChecker
                                         $time = date('Y-m-d H:i:s', time());
                                         if ($post_limit_rule == 2) {
                                             if ($post_limit_period_start <= $time && $post_limit_period_end >= $time) {
-                                                return self::checkInfo(ErrorCodeService::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
+                                                return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
                                             }
                                         } else {
                                             if ($post_limit_period_start > $time || $post_limit_period_end < $time) {
-                                                return self::checkInfo(ErrorCodeService::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
+                                                return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
                                             }
                                         }
                                     }
@@ -339,18 +339,18 @@ class FsChecker extends BaseChecker
                                         $time = date('Y-m-d H:i:s', time());
                                         if ($post_limit_rule == 2) {
                                             if ($post_limit_cycle_start <= $time && $post_limit_cycle_end >= $time) {
-                                                return self::checkInfo(ErrorCodeService::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
+                                                return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
                                             }
                                         } else {
                                             if ($time < $post_limit_cycle_start || $time > $post_limit_cycle_end) {
-                                                return self::checkInfo(ErrorCodeService::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
+                                                return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
                                             }
                                         }
                                     }
                                 }
                             }
                         } else {
-                            return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
+                            return self::checkInfo(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
                         }
 
                         break;
@@ -359,15 +359,15 @@ class FsChecker extends BaseChecker
                         // How long to edit
                         $posts = FresnsPosts::where('id', $typeId)->first();
                         if (! $posts) {
-                            return self::checkInfo(self::POSTS_LOG_EXIST_ERROR);
+                            return self::checkInfo(self::POST_LOG_EXIST_ERROR);
                         }
                         // Whether the member_id and the editor of the post are the same person
                         if ($memberId != $posts['member_id']) {
-                            return self::checkInfo(self::POST_MEMBER_ERROR);
+                            return self::checkInfo(self::CONTENT_AUTHOR_ERROR);
                         }
                         $post_edit = ApiConfigHelper::getConfigByItemKey('post_edit');
                         if ($post_edit == false) {
-                            return self::checkInfo(self::POSTS_UPDATE_ERROR);
+                            return self::checkInfo(self::POSTS_EDIT_ERROR);
                         }
 
                         $post_edit_timelimit = ApiConfigHelper::getConfigByItemKey('post_edit_timelimit');
@@ -380,7 +380,7 @@ class FsChecker extends BaseChecker
                         // Determine edit permissions after post topping
                         if ($posts['sticky_status'] != 1) {
                             if ($post_edit_sticky == false) {
-                                return self::checkInfo(ErrorCodeService::EDIT_TOP_ERROR);
+                                return self::checkInfo(ErrorCodeService::EDIT_STICKY_ERROR);
                             }
                         }
                         $post_edit_essence = ApiConfigHelper::getConfigByItemKey('post_edit_essence');
@@ -402,21 +402,21 @@ class FsChecker extends BaseChecker
                         $comment_email_verify = ApiConfigHelper::getConfigByItemKey('comment_email_verify');
                         if ($comment_email_verify == true) {
                             if (empty($user->email)) {
-                                return self::checkInfo(self::USER_BINDING_EMAIL_ERROR);
+                                return self::checkInfo(self::PUBLISH_EMAIL_VERIFY_ERROR);
                             }
                         }
                         // Publish Comment Request - Phone Number
                         $comment_phone_verify = ApiConfigHelper::getConfigByItemKey('comment_phone_verify');
                         if ($comment_phone_verify == true) {
                             if (empty($user->phone)) {
-                                return self::checkInfo(self::USER_BINDING_PHONE_ERROR);
+                                return self::checkInfo(self::PUBLISH_PHONE_VERIFY_ERROR);
                             }
                         }
                         // Publish Comment Request - Real name
                         $comment_prove_verify = ApiConfigHelper::getConfigByItemKey('comment_prove_verify');
                         if ($comment_prove_verify == true) {
                             if ($user->prove_verify == 1) {
-                                return self::checkInfo(self::USER_BINDING_REAL_NAME_ERROR);
+                                return self::checkInfo(self::PUBLISH_PROVE_VERIFY_ERROR);
                             }
                         }
 
@@ -448,11 +448,11 @@ class FsChecker extends BaseChecker
                                 $time = date('Y-m-d H:i:s', time());
                                 if ($comment_limit_rule == 2) {
                                     if ($comment_limit_period_start <= $time && $comment_limit_period_end >= $time) {
-                                        return self::checkInfo(self::SUBMIT_LIMIT_ERROR);
+                                        return self::checkInfo(self::PUBLISH_LIMIT_ERROR);
                                     }
                                 } else {
                                     if ($time < $comment_limit_period_start || $time > $comment_limit_period_end) {
-                                        return self::checkInfo(self::SUBMIT_LIMIT_ERROR);
+                                        return self::checkInfo(self::PUBLISH_LIMIT_ERROR);
                                     }
                                 }
                             }
@@ -471,18 +471,18 @@ class FsChecker extends BaseChecker
 
                                 if ($comment_limit_rule == 2) {
                                     if ($comment_limit_cycle_start <= $time && $comment_limit_cycle_end >= $time) {
-                                        return self::checkInfo(self::SUBMIT_LIMIT_ERROR);
+                                        return self::checkInfo(self::PUBLISH_LIMIT_ERROR);
                                     }
                                 } else {
                                     if ($time < $comment_limit_cycle_start || $time > $comment_limit_cycle_end) {
-                                        return self::checkInfo(self::SUBMIT_LIMIT_ERROR);
+                                        return self::checkInfo(self::PUBLISH_LIMIT_ERROR);
                                     }
                                 }
                             }
                         }
                         // Global checks pass, checks role permissions
                         if (empty($roleId)) {
-                            return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
+                            return self::checkInfo(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
                         }
 
                         $permission = FresnsMemberRoles::where('id', $roleId)->value('permission');
@@ -490,30 +490,30 @@ class FsChecker extends BaseChecker
                             $permissionArr = json_decode($permission, true);
                             $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
                             if (empty($permissionMap)) {
-                                return self::checkInfo(ErrorCodeService::PERMISSION_NO_SETTING_ERROR);
+                                return self::checkInfo(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
                             }
 
                             // Publish Comment Permissions
                             if ($permissionMap['comment_publish'] == false) {
-                                return self::checkInfo(self::MEMBER_ROLE_SUBMIT_NO_ERROR);
+                                return self::checkInfo(self::ROLE_NO_PERMISSION_PUBLISH);
                             }
 
                             // Publish Comment Request - Email
                             if ($permissionMap['comment_email_verify'] == true) {
                                 if (empty($user->email)) {
-                                    return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_EMAIL_ERROR);
+                                    return self::checkInfo(self::ROLE_PUBLISH_EMAIL_VERIFY);
                                 }
                             }
                             // Publish Comment Request - Phone Number
                             if ($permissionMap['comment_phone_verify'] == true) {
                                 if (empty($user->phone)) {
-                                    return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_PHONE_ERROR);
+                                    return self::checkInfo(self::ROLE_PUBLISH_PHONE_VERIFY);
                                 }
                             }
                             // Publish Comment Request - Real name
                             if ($permissionMap['comment_prove_verify'] == true) {
                                 if ($user->prove_verify == 1) {
-                                    return self::checkInfo(self::MEMBER_ROLE_USER_BINDING_REAL_NAME_ERROR);
+                                    return self::checkInfo(self::ROLE_PUBLISH_PROVE_VERIFY);
                                 }
                             }
 
@@ -527,11 +527,11 @@ class FsChecker extends BaseChecker
                                     $time = date('Y-m-d H:i:s', time());
                                     if ($comment_limit_rule == 2) {
                                         if ($comment_limit_period_start <= $time && $comment_limit_period_end >= $time) {
-                                            return self::checkInfo(self::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
+                                            return self::checkInfo(self::ROLE_PUBLISH_LIMIT);
                                         }
                                     } else {
                                         if ($time < $comment_limit_period_start || $time > $comment_limit_period_end) {
-                                            return self::checkInfo(self::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
+                                            return self::checkInfo(self::ROLE_PUBLISH_LIMIT);
                                         }
                                     }
                                 }
@@ -550,17 +550,17 @@ class FsChecker extends BaseChecker
 
                                     if ($comment_limit_rule == 2) {
                                         if ($comment_limit_cycle_start <= $time && $comment_limit_cycle_end >= $time) {
-                                            return self::checkInfo(self::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
+                                            return self::checkInfo(self::ROLE_PUBLISH_LIMIT);
                                         }
                                     } else {
                                         if ($time < $comment_limit_cycle_start || $time > $comment_limit_cycle_end) {
-                                            return self::checkInfo(self::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
+                                            return self::checkInfo(self::ROLE_PUBLISH_LIMIT);
                                         }
                                     }
                                 }
                             }
                         } else {
-                            return self::checkInfo(ErrorCodeService::MEMBER_ROLE_SUBMIT_LIMIT_ERROR);
+                            return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
                         }
 
                         break;
@@ -569,15 +569,15 @@ class FsChecker extends BaseChecker
                         // How long to edit
                         $comments = FresnsComments::where('id', $typeId)->first();
                         if (! $comments) {
-                            return self::checkInfo(self::COMMENTS_LOG_EXIST_ERROR);
+                            return self::checkInfo(self::COMMENT_LOG_EXIST_ERROR);
                         }
                         // Whether the member_id and the editor of the comment are the same person
                         if ($memberId != $comments['member_id']) {
-                            return self::checkInfo(self::POST_MEMBER_ERROR);
+                            return self::checkInfo(self::CONTENT_AUTHOR_ERROR);
                         }
                         $comment_edit = ApiConfigHelper::getConfigByItemKey('comment_edit');
                         if ($comment_edit == false) {
-                            return self::checkInfo(self::COMMENTS_UPDATE_ERROR);
+                            return self::checkInfo(self::COMMENTS_EDIT_ERROR);
                         }
 
                         $comment_edit_timelimit = ApiConfigHelper::getConfigByItemKey('comment_edit_timelimit');
@@ -590,7 +590,7 @@ class FsChecker extends BaseChecker
                         // Determine edit permissions after post topping
                         if ($comments['is_sticky'] == 1) {
                             if ($comment_edit_sticky == false) {
-                                return self::checkInfo(self::EDIT_TOP_ERROR);
+                                return self::checkInfo(self::EDIT_STICKY_ERROR);
                             }
                         }
                         break;
@@ -742,13 +742,13 @@ class FsChecker extends BaseChecker
         if ($memberListJson) {
             $memberListJsonStatus = StrHelper::isJson($memberListJson);
             if (! $memberListJsonStatus) {
-                return self::checkInfo(self::MEMBER_JSON_ERROR);
+                return self::checkInfo(self::MEMBER_LIST_JSON_ERROR);
             }
         }
         if ($commentSetJson) {
             $commentSetJsonStatus = StrHelper::isJson($commentSetJson);
             if (! $commentSetJsonStatus) {
-                return self::checkInfo(self::COMMENT_JSON_ERROR);
+                return self::checkInfo(self::COMMENT_SET_JSON_ERROR);
             }
         }
         if ($allowJson) {
@@ -766,7 +766,7 @@ class FsChecker extends BaseChecker
         if ($filesJson) {
             $filesJsonStatus = StrHelper::isJson($filesJson);
             if (! $filesJsonStatus) {
-                return self::checkInfo(self::FILE_JSON_ERROR);
+                return self::checkInfo(self::FILES_JSON_ERROR);
             }
         }
         if ($extendsJson) {
@@ -777,10 +777,10 @@ class FsChecker extends BaseChecker
             $extends = json_decode($extendsJson, true);
             foreach ($extends as $e) {
                 if (! isset($e['eid'])) {
-                    return self::checkInfo(self::EXTENDS_EID_ERROR);
+                    return self::checkInfo(self::EXTENDS_JSON_EID_ERROR);
                 } else {
                     if (empty($e['eid'])) {
-                        return self::checkInfo(self::EXTENDS_EID_ERROR);
+                        return self::checkInfo(self::EXTENDS_JSON_EID_ERROR);
                     }
                 }
             }
@@ -800,7 +800,7 @@ class FsChecker extends BaseChecker
         if ($site_mode == FsConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
-                return self::checkInfo(self::MEMBER_EXPIRED_LOGS_ERROR);
+                return self::checkInfo(self::MEMBER_EXPIRED_ERROR);
             }
         }
         switch ($logType) {
@@ -820,7 +820,7 @@ class FsChecker extends BaseChecker
                 if (! empty($gid)) {
                     $group = FresnsGroups::where('uuid', $gid)->first();
                     if (! ($group)) {
-                        return self::checkInfo(self::GROUP_EXISTS);
+                        return self::checkInfo(self::GROUP_EXIST_ERROR);
                     }
                     if ($group['type'] == 1) {
                         return self::checkInfo(self::GROUP_TYPE_ERROR);
@@ -867,7 +867,7 @@ class FsChecker extends BaseChecker
         if ($type) {
             $strlen = mb_strlen($type);
             if ($strlen > 128) {
-                return self::checkInfo(self::TYPE_ERROR);
+                return self::checkInfo(self::CONTENT_TYPE_ERROR);
             }
         }
     }
@@ -886,7 +886,7 @@ class FsChecker extends BaseChecker
         if ($site_mode == FsConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
-                return self::checkInfo(self::MEMBER_EXPIRED_LOGS_ERROR);
+                return self::checkInfo(self::MEMBER_EXPIRED_ERROR);
             }
         }
         switch ($type) {
@@ -938,7 +938,7 @@ class FsChecker extends BaseChecker
                         return self::checkInfo(self::COMMENT_APPEND_ERROR);
                     }
                     if ($commentInfo['parent_id'] != 0) {
-                        return self::checkInfo(self::COMMENT_PARENT_ERROR);
+                        return self::checkInfo(self::COMMENT_CREATE_ERROR);
                     }
                 }
                 break;
@@ -958,7 +958,7 @@ class FsChecker extends BaseChecker
         if ($site_mode == FsConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
-                return self::checkInfo(self::MEMBER_EXPIRED_LOGS_ERROR);
+                return self::checkInfo(self::MEMBER_EXPIRED_ERROR);
             }
         }
         switch ($type) {
@@ -968,33 +968,33 @@ class FsChecker extends BaseChecker
                     return self::checkInfo(self::POST_LOGS_EXISTS);
                 }
                 if ($postLog['status'] == 2) {
-                    return self::checkInfo(self::POST_SUBMIT_STATUS2_ERROR);
+                    return self::checkInfo(self::POST_SUBMIT_STATUS_2_ERROR);
                 }
                 if ($postLog['status'] == 3) {
-                    return self::checkInfo(self::POST_SUBMIT_STATUS3_ERROR);
+                    return self::checkInfo(self::POST_SUBMIT_STATUS_3_ERROR);
                 }
                 // Logs have group values to determine whether the group exists and whether current members have the right to post in the group
                 if ($postLog['group_id']) {
                     $groupInfo = FresnsGroups::find($postLog['group_id']);
                     if (! $groupInfo) {
-                        return self::checkInfo(self::GROUP_EXISTS);
+                        return self::checkInfo(self::GROUP_EXIST_ERROR);
                     }
                     if ($groupInfo['type'] == 1) {
                         return self::checkInfo(self::GROUP_TYPE_ERROR);
                     }
                     $publishRule = FresnsGroupsService::publishRule($mid, $groupInfo['permission'], $groupInfo['id']);
                     if (! $publishRule['allowPost']) {
-                        return self::checkInfo(self::POST_GROUP_ALLOW_ERROR);
+                        return self::checkInfo(self::GROUP_POST_ALLOW_ERROR);
                     }
                 }
                 if (empty($postLog['content']) && (empty($postLog['files_json']) || empty(json_decode($postLog['files_json'], true))) && (empty($postLog['extends_json']) || empty(json_decode($postLog['extends_json'], true)))) {
-                    return self::checkInfo(self::POSTS_LOG_CHECK_PARAMS_ERROR);
+                    return self::checkInfo(self::CONTENT_CHECK_PARAMS_ERROR);
                 }
                 // Stop Word Rule Check
                 if ($postLog['content']) {
                     $message = self::stopWords($postLog['content']);
                     if (! $message) {
-                        return self::checkInfo(self::POST_CONTENT_WORDS_ERROR);
+                        return self::checkInfo(self::CONTENT_STOP_WORDS_ERROR);
                     }
                 }
                 break;
@@ -1005,36 +1005,36 @@ class FsChecker extends BaseChecker
                     return self::checkInfo(self::COMMENT_LOGS_EXISTS);
                 }
                 if ($commentLog['status'] == 2) {
-                    return self::checkInfo(self::COMMENT_SUBMIT_STATUS2_ERROR);
+                    return self::checkInfo(self::COMMENT_SUBMIT_STATUS_2_ERROR);
                 }
                 if ($commentLog['status'] == 3) {
-                    return self::checkInfo(self::COMMENT_SUBMIT_STATUS3_ERROR);
+                    return self::checkInfo(self::COMMENT_SUBMIT_STATUS_3_ERROR);
                 }
                 $postInfo = FresnsPosts::find($commentLog['post_id']);
                 if (! $postInfo) {
-                    return self::checkInfo(self::POST_COMMENTS_POSTS_ERROR);
+                    return self::checkInfo(self::COMMENT_PID_EXIST_ERROR);
                 }
                 if ($postInfo['group_id']) {
                     $groupInfo = FresnsGroups::find($postInfo['group_id']);
                     if (! $groupInfo) {
-                        return self::checkInfo(self::GROUP_EXISTS);
+                        return self::checkInfo(self::GROUP_EXIST_ERROR);
                     }
                     if ($groupInfo['type'] == 1) {
                         return self::checkInfo(self::GROUP_TYPE_ERROR);
                     }
                     $publishRule = FresnsGroupsService::publishRule($mid, $groupInfo['permission'], $groupInfo['id']);
                     if (! $publishRule['allowComment']) {
-                        return self::checkInfo(self::POST_COMMENTS_ALLOW_ERROR);
+                        return self::checkInfo(self::GROUP_COMMENTS_ALLOW_ERROR);
                     }
                 }
                 if (empty($commentLog['content']) && (empty($commentLog['files_json']) || empty(json_decode($commentLog['files_json'], true))) && (empty($commentLog['extends_json']) || empty(json_decode($commentLog['extends_json'], true)))) {
-                    return self::checkInfo(self::POSTS_LOG_CHECK_PARAMS_ERROR);
+                    return self::checkInfo(self::CONTENT_CHECK_PARAMS_ERROR);
                 }
                 // Stop Word Rule Check
                 if ($commentLog['content']) {
                     $message = self::stopWords($commentLog['content']);
                     if (! $message) {
-                        return self::checkInfo(self::COMMENT_CONTENT_WORDS_ERROR);
+                        return self::checkInfo(self::CONTENT_STOP_WORDS_ERROR);
                     }
                 }
 
@@ -1053,7 +1053,7 @@ class FsChecker extends BaseChecker
         if ($site_mode == FsConfig::PRIVATE) {
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
-                return self::checkInfo(self::MEMBER_EXPIRED_LOGS_ERROR);
+                return self::checkInfo(self::MEMBER_EXPIRED_ERROR);
             }
         }
         $commentPid = $request->input('commentPid');
@@ -1088,14 +1088,14 @@ class FsChecker extends BaseChecker
             if ($postInfo['group_id']) {
                 $groupInfo = FresnsGroups::find($postInfo['group_id']);
                 if (! $groupInfo) {
-                    return self::checkInfo(self::GROUP_EXISTS);
+                    return self::checkInfo(self::GROUP_EXIST_ERROR);
                 }
                 if ($groupInfo['type'] == 1) {
                     return self::checkInfo(self::GROUP_TYPE_ERROR);
                 }
                 $publishRule = FresnsGroupsService::publishRule($mid, $groupInfo['permission'], $groupInfo['id']);
                 if (! $publishRule['allowComment']) {
-                    return self::checkInfo(self::POST_COMMENTS_ALLOW_ERROR);
+                    return self::checkInfo(self::GROUP_COMMENTS_ALLOW_ERROR);
                 }
             }
         } else {
@@ -1108,7 +1108,7 @@ class FsChecker extends BaseChecker
             if ($postGid) {
                 $groupInfo = FresnsGroups::where('uuid', $postGid)->where('is_enable', 1)->first();
                 if (! $groupInfo) {
-                    return self::checkInfo(self::GROUP_EXISTS);
+                    return self::checkInfo(self::GROUP_EXIST_ERROR);
                 }
                 if ($groupInfo['type'] == 1) {
                     return self::checkInfo(self::GROUP_TYPE_ERROR);
@@ -1116,29 +1116,29 @@ class FsChecker extends BaseChecker
                 // Whether to have group publish privileges
                 $publishRule = FresnsGroupsService::publishRule($mid, $groupInfo['permission'], $groupInfo['id']);
                 if (! $publishRule['allowPost']) {
-                    return self::checkInfo(self::POST_GROUP_ALLOW_ERROR);
+                    return self::checkInfo(self::GROUP_POST_ALLOW_ERROR);
                 }
             }
         }
         // Stop Word Rule Check
         $message = self::stopWords($request->input('content'));
         if (! $message) {
-            return self::checkInfo(self::COMMENT_CONTENT_WORDS_ERROR);
+            return self::checkInfo(self::CONTENT_STOP_WORDS_ERROR);
         }
         $file = $request->input('file');
         $fileInfo = $request->input('fileInfo');
         if ($fileInfo) {
             $filesJsonStatus = StrHelper::isJson($fileInfo);
             if (! $filesJsonStatus) {
-                return self::checkInfo(self::FILE_JSON_ERROR);
+                return self::checkInfo(self::FILES_JSON_ERROR);
             }
             $fileInfo = json_decode($fileInfo, true);
             if (count($fileInfo) == count($fileInfo, 1)) {
-                return self::checkInfo(self::FILE_JSON_ERROR);
+                return self::checkInfo(self::FILES_JSON_ERROR);
             }
         }
         if (! empty($file) && ! empty($fileInfo)) {
-            return self::checkInfo(self::FILE_OR_FILEINFO_ERROR);
+            return self::checkInfo(self::FILE_OR_TEXT_ERROR);
         }
         $eid = $request->input('eid');
         if ($eid) {
@@ -1150,7 +1150,7 @@ class FsChecker extends BaseChecker
             foreach ($extendsJson as $e) {
                 $extend = FresnsExtends::where('uuid', $e)->first();
                 if (! $extend) {
-                    return self::checkInfo(self::EXTENDS_UUID_ERROR);
+                    return self::checkInfo(self::EXTEND_EXIST_ERROR);
                 }
             }
         }
@@ -1191,7 +1191,7 @@ class FsChecker extends BaseChecker
         if ($siteMode == 'private') {
             if (! empty($member['expired_at'])) {
                 if ($time > $member['expired_at']) {
-                    return ErrorCodeService::MEMBER_EXPIRED_AT_ERROR;
+                    return ErrorCodeService::MEMBER_EXPIRED_ERROR;
                 }
             }
         }
@@ -1199,7 +1199,7 @@ class FsChecker extends BaseChecker
         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
 
         if (empty($roleId)) {
-            return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
+            return ErrorCodeService::ROLE_NO_PERMISSION;
         }
 
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
@@ -1209,7 +1209,7 @@ class FsChecker extends BaseChecker
             if (! empty($permissionArr)) {
                 $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
                 if (empty($permissionMap)) {
-                    return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
+                    return ErrorCodeService::ROLE_NO_PERMISSION;
                 }
                 $mbFileSize = null;
                 if ($fileSize) {
@@ -1219,17 +1219,17 @@ class FsChecker extends BaseChecker
                     case 1:
                         // Verify member upload permissions (image)
                         if ($permissionMap['post_editor_image'] == false) {
-                            return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
+                            return ErrorCodeService::ROLE_NO_PERMISSION_UPLOAD_IMAGE;
                         }
 
                         if (! empty($mbFileSize)) {
                             // Check global configuration of uploadable image size
                             $images_max_size = ApiConfigHelper::getConfigByItemKey('images_max_size');
                             if ($mbFileSize > $images_max_size * 1024 * 1024) {
-                                return ErrorCodeService::UPLOAD_FILES_SIZE_ERROR;
+                                return ErrorCodeService::ROLE_UPLOAD_FILES_SIZE_ERROR;
                             }
                             if ($mbFileSize > $permissionMap['images_max_size'] * 1024 * 1024) {
-                                return ErrorCodeService::MEMBER_UPLOAD_FILES_SIZE_ERROR;
+                                return ErrorCodeService::ROLE_UPLOAD_FILES_SIZE_ERROR;
                             }
                         }
 
@@ -1245,16 +1245,16 @@ class FsChecker extends BaseChecker
                     case 2:
                         // Verify member upload permissions (video)
                         if ($permissionMap['post_editor_video'] == false) {
-                            return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
+                            return ErrorCodeService::ROLE_NO_PERMISSION_UPLOAD_VIDEO;
                         }
                         if (! empty($mbFileSize)) {
                             // Check global configuration of uploadable video size
                             $videos_max_size = ApiConfigHelper::getConfigByItemKey('videos_max_size');
                             if ($mbFileSize > $videos_max_size * 1024 * 1024) {
-                                return ErrorCodeService::UPLOAD_FILES_SIZE_ERROR;
+                                return ErrorCodeService::ROLE_UPLOAD_FILES_SIZE_ERROR;
                             }
                             if ($mbFileSize > $permissionMap['videos_max_size'] * 1024 * 1024) {
-                                return ErrorCodeService::MEMBER_UPLOAD_FILES_SIZE_ERROR;
+                                return ErrorCodeService::ROLE_UPLOAD_FILES_SIZE_ERROR;
                             }
                         }
                         if (! empty($suffix)) {
@@ -1269,16 +1269,16 @@ class FsChecker extends BaseChecker
                     case 3:
                         // Verify member upload permissions (audio)
                         if ($permissionMap['post_editor_audio'] == false) {
-                            return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
+                            return ErrorCodeService::ROLE_NO_PERMISSION_UPLOAD_AUDIO;
                         }
                         if (! empty($mbFileSize)) {
                             // Check global configuration of uploadable audio size
                             $audios_max_size = ApiConfigHelper::getConfigByItemKey('audios_max_size');
                             if ($mbFileSize > $audios_max_size * 1024 * 1024) {
-                                return ErrorCodeService::UPLOAD_FILES_SIZE_ERROR;
+                                return ErrorCodeService::ROLE_UPLOAD_FILES_SIZE_ERROR;
                             }
                             if ($mbFileSize > $permissionMap['audios_max_size'] * 1024 * 1024) {
-                                return ErrorCodeService::MEMBER_UPLOAD_FILES_SIZE_ERROR;
+                                return ErrorCodeService::ROLE_UPLOAD_FILES_SIZE_ERROR;
                             }
                         }
 
@@ -1294,16 +1294,16 @@ class FsChecker extends BaseChecker
                     default:
                         // Verify member upload permissions (doc)
                         if ($permissionMap['post_editor_doc'] == false) {
-                            return ErrorCodeService::USERS_NOT_AUTHORITY_ERROR;
+                            return ErrorCodeService::ROLE_NO_PERMISSION_UPLOAD_DOC;
                         }
                         if (! empty($mbFileSize)) {
                             // Check global configuration of uploadable document size
                             $doc_max_size = ApiConfigHelper::getConfigByItemKey('docs_max_size');
                             if ($mbFileSize > $doc_max_size * 1024 * 1024) {
-                                return ErrorCodeService::UPLOAD_FILES_SIZE_ERROR;
+                                return ErrorCodeService::ROLE_UPLOAD_FILES_SIZE_ERROR;
                             }
                             if ($mbFileSize > $permissionMap['docs_max_size'] * 1024 * 1024) {
-                                return ErrorCodeService::MEMBER_UPLOAD_FILES_SIZE_ERROR;
+                                return ErrorCodeService::ROLE_UPLOAD_FILES_SIZE_ERROR;
                             }
                         }
 

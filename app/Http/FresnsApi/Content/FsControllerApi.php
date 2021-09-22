@@ -72,10 +72,10 @@ class FsControllerApi extends FresnsBaseApiController
             $member_id = $this->mid;
             $uid = $this->uid;
             if (empty($uid)) {
-                $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
             if (empty($member_id)) {
-                $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
@@ -115,10 +115,10 @@ class FsControllerApi extends FresnsBaseApiController
             $member_id = $this->mid;
             $uid = $this->uid;
             if (empty($uid)) {
-                $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
             if (empty($member_id)) {
-                $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
@@ -167,10 +167,10 @@ class FsControllerApi extends FresnsBaseApiController
             $member_id = $this->mid;
             $uid = $this->uid;
             if (empty($uid)) {
-                $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
             if (empty($member_id)) {
-                $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
@@ -215,10 +215,10 @@ class FsControllerApi extends FresnsBaseApiController
             $member_id = $this->mid;
             $uid = $this->uid;
             if (empty($uid)) {
-                $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
             if (empty($member_id)) {
-                $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
@@ -259,10 +259,10 @@ class FsControllerApi extends FresnsBaseApiController
             $member_id = $this->mid;
             $uid = $this->uid;
             if (empty($uid)) {
-                $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
             if (empty($member_id)) {
-                $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
             }
         }
 
@@ -329,7 +329,7 @@ class FsControllerApi extends FresnsBaseApiController
             if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
                 $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
-                    $this->error(ErrorCodeService::USER_EXPIRED_ERROR);
+                    $this->error(ErrorCodeService::MEMBER_EXPIRED_ERROR);
                 }
                 if ($site_private_end == 2) {
                     if ($detail['detail']['created_at'] > $memberInfo['expired_at']) {
@@ -371,10 +371,10 @@ class FsControllerApi extends FresnsBaseApiController
             $member_id = $this->mid;
             $uid = $this->uid;
             if (empty($uid)) {
-                $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
             if (empty($member_id)) {
-                $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
@@ -407,10 +407,10 @@ class FsControllerApi extends FresnsBaseApiController
             $member_id = $this->mid;
             $uid = $this->uid;
             if (empty($uid)) {
-                $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
             if (empty($member_id)) {
-                $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
             }
         }
         $langTag = $this->langTag;
@@ -432,10 +432,10 @@ class FsControllerApi extends FresnsBaseApiController
             $member_id = $this->mid;
             $uid = $this->uid;
             if (empty($uid)) {
-                $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
             if (empty($member_id)) {
-                $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
@@ -474,10 +474,10 @@ class FsControllerApi extends FresnsBaseApiController
             $member_id = $this->mid;
             $uid = $this->uid;
             if (empty($uid)) {
-                $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
             if (empty($member_id)) {
-                $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
             }
         }
         $comment = FresnsComments::where('uuid', $request->input('cid'))->first();
@@ -512,7 +512,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
                     // $query->where('comment.member_id','=',0);
-                    $this->error(ErrorCodeService::USER_EXPIRED_ERROR);
+                    $this->error(ErrorCodeService::MEMBER_EXPIRED_ERROR);
                 }
                 if ($site_private_end == 2) {
                     // $query->where('comment.created_at', '<=', $memberInfo['expired_at']);
@@ -708,7 +708,7 @@ class FsControllerApi extends FresnsBaseApiController
             if (! empty($memberInfo['expired_at']) && (strtotime($memberInfo['expired_at'])) < time()) {
                 $site_private_end = ApiConfigHelper::getConfigByItemKey('site_private_end');
                 if ($site_private_end == 1) {
-                    $this->error(ErrorCodeService::USER_EXPIRED_ERROR);
+                    $this->error(ErrorCodeService::MEMBER_EXPIRED_ERROR);
                 }
                 if ($site_private_end == 2) {
                     $request->offsetSet('expired_at', $memberInfo['expired_at']);

@@ -11,350 +11,384 @@ class ErrorCodeService
 {
     const CODE_OK = 0;
 
-    // API Error Code
-    const HEADER_ERROR = 30000;
-    const CODE_FAIL = 30001;
-    const PASSWORD_INVALID = 30002;
-    const UPDATE_TIME_ERROR = 30003;
-    const WXAPP_CONTENT_ERROR = 30004;
-    const FOLLOW_ERROR = 30005;
-    const DELETE_FILE_ERROR = 30006;
-    const NO_PERMISSION = 30007;
-    const DELETE_COMMENT_ERROR = 30008;
-    const SMS_CODE_CHECK_ERROR = 30009;
-    const CODE_PHONE_ERROR = 30010;
-    const USERS_NOT_AUTHORITY_ERROR = 30011;
-    const CODE_EXCEPTION = 30012;
-    const NO_RECORD = 30013;
-    const COMMENT_LOGS_ERROR = 30014;
-    const POSTS_LOGS_EXISTS_ERROR = 30015;
-    const COMMENT_LOGS_EXISTS_ERROR = 30016;
-    const POSTS_LOGS_STATUS_ERROR = 30017;
-    const COMMENTS_LOGS_STATUS_ERROR = 30018;
-    const CODE_PARAM_ERROR = 30019;
-    const FILE_SALE_ERROR = 30020;
-    const POSTS_USER_ERROR = 30021;
-    const COMMENTS_USER_ERROR = 30022;
-    const DELETED_ERROR = 30023;
-    const CODE_SIGN_ERROR = 30024;
-    const USER_REQUIRED_ERROR = 30025;
-    const MEMBER_REQUIRED_ERROR = 30026;
-    const DELETED_NOTIFY_ERROR = 30027;
-    const DIALOG_ERROR = 30028;
-    const DIALOG_OR_MESSAGE_ERROR = 30029;
+    // Extensions
+    const CONFIGS_SERVER_ERROR = 30000;
+    const PLUGINS_CLASS_ERROR = 30001;
+    const PLUGINS_TIMEOUT_ERROR = 30002;
+    const PLUGINS_IS_ENABLE_ERROR = 30003;
+    const PLUGINS_HANDLE_ERROR = 30004;
+    const VERIFY_CODE_CHECK_ERROR = 30005;
+    const PRIVATE_MODE_ERROR = 30006;
+    const DATA_EXCEPTION_ERROR = 30007;
+    const HELPER_EXCEPTION_ERROR = 30008;
+    const CODE_PARAM_ERROR = 30009;
 
-    const FILE_OR_MESSAGE_ERROR = 30031;
-    const MEMBER_ERROR = 30032;
-    const MEMBER_FOLLOW_ERROR = 30033;
-    const VERIFIED_ERROR = 30034;
-    const FILES_ERROR = 30035;
-    const DIALOG_WORD_ERROR = 30036;
-    const POST_REMOKE_ERROR = 30037;
-    const COMMENT_REMOKE_ERROR = 30038;
-    const REGISTER_EMAIL_ERROR = 30039;
-    const REGISTER_PHONE_ERROR = 30040;
-    const REGISTER_USER_ERROR = 30041;
-    const PASSWORD_LENGTH_ERROR = 30042;
-    const PASSWORD_NUMBER_ERROR = 30043;
-    const PASSWORD_LOWERCASE_ERROR = 30044;
-    const PASSWORD_CAPITAL_ERROR = 30045;
-    const PASSWORD_SYMBOL_ERROR = 30046;
-    const USER_TOKEN_ERROR = 30047;
-    const USER_EXPIRED_ERROR = 30048;
-    const USER_BINDING_EMAIL_ERROR = 30049;
-    const USER_BINDING_PHONE_ERROR = 30050;
-    const USER_BINDING_REAL_NAME_ERROR = 30051;
-    const POSTS_SUBMIT_ERROR = 30052;
-    const POSTS_UPDATE_ERROR = 30053;
-    const COMMENTS_SUBMIT_ERROR = 30054;
-    const COMMENTS_UPDATE_ERROR = 30055;
-    const UID_EXIST_ERROR = 30056;
-    const GROUP_EXISTS = 30057;
-    const GROUP_TYPE_ERROR = 30058;
-    const TITLE_ERROR = 30059;
-    const POST_STATUS_2_ERROR = 30060;
-    const POST_STATUS_3_ERROR = 30061;
-    const COMMENT_STATUS_2_ERROR = 30062;
-    const COMMENT_STATUS_3_ERROR = 30063;
-    const POST_SUBMIT_STATUS2_ERROR = 30064;
-    const POST_SUBMIT_STATUS3_ERROR = 30065;
-    const COMMENT_SUBMIT_STATUS2_ERROR = 30066;
-    const COMMENT_SUBMIT_STATUS3_ERROR = 30067;
-    const POST_CONTENT_WORDS_ERROR = 30068;
-    const COMMENT_CONTENT_WORDS_ERROR = 30069;
-    const MEMBER_EXPIRED_LOGS_ERROR = 30070;
-    const COMMENT_PID_ERROR = 30071;
-    const COMMENT_PARENT_ERROR = 30072;
-    const TYPE_ERROR = 30073;
-    const EMAIL_ERROR = 30074;
-    const EMAIL_REGEX_ERROR = 30075;
-    const PHONE_REGEX_ERROR = 30076;
-    const PHONE_ERROR = 30077;
-    const EMAIL_EXIST_ERROR = 30078;
-    const PHONE_EXIST_ERROR = 30079;
-    const EMAIL_BAND_ERROR = 30080;
-    const PHONE_BAND_ERROR = 30081;
-    const COUNTRY_CODE_ERROR = 30082;
-    const MEMBER_ROLE_ERROR = 30083;
-    const TEAMPLAPE_ERROR = 30087;
-    const MEMBER_ME_ERROR = 30089;
-    const MEMBER_EXPIRED_ERROR = 30091;
-    const FILE_OR_FILEINFO_ERROR = 30092;
-    const HEADER_EXSIT_MEMBER = 30093;
+    // Header
+    const HEADER_ERROR = 30100;
+    const HEADER_SIGN_ERROR = 30101;
+    const HEADER_SIGN_EXPIRED = 30102;
+    const HEADER_INFO_ERROR = 30103;
+    const HEADER_PLATFORM_ERROR = 30104;
+    const HEADER_APP_ID_ERROR = 30105;
+    const HEADER_KEY_ERROR = 30106;
+    const UID_REQUIRED_ERROR = 30107;
+    const MID_REQUIRED_ERROR = 30108;
+    const USER_CHECK_ERROR = 30109;
+    const MEMBER_CHECK_ERROR = 30110;
+    const USER_TOKEN_ERROR = 30111;
+    const MEMBER_TOKEN_ERROR = 30112;
+    const TOKEN_IS_ENABLE_ERROR = 30113;
 
-    const HEADER_IS_ENABLE_ERROR = 30094;
-    const HEADER_TYPE_ERROR = 30095;
-    const MEMBER_NAME_ERROR = 30096;
-    const GROUP_MARK_FOLLOW_TYPE_ERROR = 30097;
-    const API_NO_CALL_ERROR = 30098;
-    const UPLOAD_FILES_SIZE_ERROR = 30099;
-    const DIALOGS_MESSAGE_ERROR = 30100;
+    // User
+    const REGISTER_EMAIL_ERROR = 30200;
+    const REGISTER_PHONE_ERROR = 30201;
+    const REGISTER_USER_ERROR = 30202;
+    const PASSWORD_LENGTH_ERROR = 30203;
+    const PASSWORD_NUMBER_ERROR = 30204;
+    const PASSWORD_LOWERCASE_ERROR = 30205;
+    const PASSWORD_CAPITAL_ERROR = 30206;
+    const PASSWORD_SYMBOL_ERROR = 30207;
 
-    const PERMISSION_NO_SETTING_ERROR = 30101;
-    const SUBMIT_NO_ERROR = 30102;
-    const SUBMIT_LIMIT_ERROR = 30103;
-    const EDIT_TOP_ERROR = 30104;
-    const EDIT_TIME_ERROR = 30105;
-    const EDIT_ESSENCE_ERROR = 30106;
+    const EMAIL_ERROR = 30208;
+    const EMAIL_REGEX_ERROR = 30209;
+    const EMAIL_EXIST_ERROR = 30210;
+    const EMAIL_BAND_ERROR = 30211;
+    const PHONE_ERROR = 30212;
+    const PHONE_REGEX_ERROR = 30213;
+    const PHONE_EXIST_ERROR = 30214;
+    const PHONE_BAND_ERROR = 30215;
+    const COUNTRY_CODE_ERROR = 30216;
+    const CODE_TEMPLATE_ERROR = 30217;
 
-    const MEMBER_ROLE_SUBMIT_NO_ERROR = 30107;
-    const MEMBER_ROLE_SUBMIT_LIMIT_ERROR = 30108;
-    const MEMBER_ROLE_USER_BINDING_EMAIL_ERROR = 30109;
-    const MEMBER_ROLE_USER_BINDING_PHONE_ERROR = 30110;
-    const MEMBER_ROLE_USER_BINDING_REAL_NAME_ERROR = 30111;
-    const POST_MEMBER_ERROR = 30112;
-    const PLUGIN_ERROR = 30113;
-    const MEMBER_JSON_ERROR = 30114;
-    const ALLOW_JSON_ERROR = 30115;
-    const LOCATION_JSON_ERROR = 30116;
-    const FILE_JSON_ERROR = 30117;
-    const EXTENDS_JSON_ERROR = 30118;
-    const COMMENT_JSON_ERROR = 30119;
-    const MEMBER_MARK_ERROR = 30120;
-    const POST_APPEND_ERROR = 30121;
-    const COMMENT_APPEND_ERROR = 30122;
-    const EXTEND_ERROR = 30123;
-    const MEMBER_EXPIRED_AT_ERROR = 30124;
-    const MEMBER_UPLOAD_FILES_SIZE_ERROR = 30125;
-    const UPLOAD_FILES_SUFFIX_ERROR = 30126;
-    const POST_GROUP_ALLOW_ERROR = 30127;
-    const POST_COMMENTS_POSTS_ERROR = 30128;
-    const POST_COMMENTS_ALLOW_ERROR = 30129;
-    const COMMENTS_LOG_EXIST_ERROR = 30130;
-    const POSTS_LOG_EXIST_ERROR = 30131;
-    const POSTS_LOG_CHECK_PARAMS_ERROR = 30132;
-    const EXTENDS_UUID_ERROR = 30133;
-    const CONTENT_COUNT_ERROR = 30134;
+    const ACCOUNT_IS_EMPTY_ERROR = 30218;
+    const ACCOUNT_CHECK_ERROR = 30219;
+    const ACCOUNT_PASSWORD_INVALID = 30220;
+    const ACCOUNT_ERROR = 30221;
+    const ACCOUNT_COUNT_ERROR = 30222;
 
-    const DELETE_FILES_ERROR = 30135;
-    const DELETE_EXTEND_ERROR = 30136;
-    const FILES_INFO_ERROR = 30137;
-    const EXTENDS_EID_ERROR = 30138;
-    const USER_WALLETS_ERROR = 30139;
-    const BALANCE_CLOSING_BALANCE_ERROR = 30140;
-    const USER_BALANCE_ERROR = 30141;
-    const SING_EXPIRED_ERROR = 30142;
-    const TO_USER_WALLETS_ERROR = 30143;
-    const TO_BALANCE_CLOSING_BALANCE_ERROR = 30144;
+    const USER_ERROR = 30223;
+    const USER_IS_ENABLE_ERROR = 30224;
+    const USER_WALLETS_ERROR = 30225;
+    const USER_BALANCE_ERROR = 30226;
+    const BALANCE_CLOSING_BALANCE_ERROR = 30227;
+    const TO_USER_WALLETS_ERROR = 30228;
+    const TO_BALANCE_CLOSING_BALANCE_ERROR = 30229;
 
-    // Console Error Code
-    const CODE_LOGIN_ERROR = 30200;
-    const DOWMLOAD_ERROR = 30201;
-    const FILES_JSON_ERROR = 30202;
-    const PLUGIN_ENABLE_ERROR = 30203;
-    const PLUGIN_UNIKEY_ERROR = 30204;
-    const LOGIN_ERROR = 30205;
-    const ACCOUNT_ERROR = 30206;
-    const ADMIN_ACCOUNT_ERROR = 30207;
-    const FILES_EMPTY_ERROR = 30208;
-    const FILES_AUTH_ERROR = 30209;
-    const CODE_CAPTCHA_ERROR = 30210;
-    const BACKEND_PATH_ERROR = 30211;
-    const KEYS_NAME_ERROR = 30212;
-    const KEYS_PLAT_ERROR = 30213;
-    const PLUGIN_PLAT_ERROR = 30214;
-    const DELETE_PACK_ERROR = 30215;
-    const REPEAT_PARTNER_ERROR = 30216;
-    const DELETE_ADMIN = 30217;
-    const LANGUAGE_SETTING_ERROR = 30218;
+    // Member
+    const MEMBER_FAIL = 30300;
+    const MEMBER_ERROR = 30301;
+    const MEMBER_IS_ENABLE_ERROR = 30302;
+    const MEMBER_PASSWORD_INVALID = 30303;
+    const MEMBER_EXPIRED_ERROR = 30304;
+    const MEMBER_NO_PERMISSION = 30305;
+    const MEMBER_NAME_ERROR = 30306;
+    const UPDATE_TIME_ERROR = 30307;
+    const DISABLE_NAME_ERROR = 30308;
 
-    // Plugin Config Error Code
-    const CONFIGS_SERVER_ERROR = 30300;
-    const PLUGINS_CLASS_ERROR = 30301;
-    const CAPTCHA_ERROR = 30302;
-    const PLUGINS_TIMEOUT_ERROR = 30303;
+    // Member Mark
+    const MARK_NOT_ENABLE = 30309;
+    const MARK_FOLLOW_ERROR = 30310;
+    const MARK_REPEAT_ERROR = 30311;
+
+    // Member Role
+    const ROLE_NO_CONFIG_ERROR = 30400;
+    const ROLE_NO_PERMISSION = 30401;
+    const ROLE_NO_PERMISSION_BROWSE = 30402;
+    const ROLE_NO_PERMISSION_PUBLISH = 30403;
+    const ROLE_PUBLISH_LIMIT = 30404;
+    const ROLE_PUBLISH_EMAIL_VERIFY = 30405;
+    const ROLE_PUBLISH_PHONE_VERIFY = 30406;
+    const ROLE_PUBLISH_PROVE_VERIFY = 30407;
+    const ROLE_NO_PERMISSION_UPLOAD_IMAGE = 30408;
+    const ROLE_NO_PERMISSION_UPLOAD_VIDEO = 30409;
+    const ROLE_NO_PERMISSION_UPLOAD_AUDIO = 30410;
+    const ROLE_NO_PERMISSION_UPLOAD_DOC = 30411;
+    const ROLE_UPLOAD_FILES_SIZE_ERROR = 30412;
+    const ROLE_DIALOG_ERROR = 30413;
+
+    // Dialog
+    const DIALOG_ERROR = 30500;
+    const DIALOG_MESSAGE_ERROR = 30501;
+    const SEND_ME_ERROR = 30502;
+    const FILE_OR_TEXT_ERROR = 30503;
+    const DIALOG_LIMIT_2_ERROR = 30504;
+    const DIALOG_LIMIT_3_ERROR = 30505;
+    const DIALOG_WORD_ERROR = 30506;
+    const DIALOG_OR_MESSAGE_ERROR = 30507;
+    const DELETE_NOTIFY_ERROR = 30508;
+
+    // Group Configs
+    const GROUP_MARK_FOLLOW_ERROR = 30600;
+    const GROUP_TYPE_ERROR = 30601;
+    const GROUP_POST_ALLOW_ERROR = 30602;
+    const GROUP_COMMENTS_ALLOW_ERROR = 30603;
+
+    // Publish Configs
+    const PUBLISH_EMAIL_VERIFY_ERROR = 30700;
+    const PUBLISH_PHONE_VERIFY_ERROR = 30701;
+    const PUBLISH_PROVE_VERIFY_ERROR = 30702;
+    const PUBLISH_LIMIT_ERROR = 30703;
+    const POSTS_EDIT_ERROR = 30704;
+    const COMMENTS_EDIT_ERROR = 30705;
+    const EDIT_STICKY_ERROR = 30706;
+    const EDIT_TIME_ERROR = 30707;
+    const EDIT_ESSENCE_ERROR = 30708;
+    const UPLOAD_FILES_SUFFIX_ERROR = 30709;
+    const POST_BROWSE_ERROR = 30710;
+
+    // Main Content
+    const GROUP_EXIST_ERROR = 30800;
+    const HASHTAG_EXIST_ERROR = 30801;
+    const POST_EXIST_ERROR = 30802;
+    const COMMENT_EXIST_ERROR = 30803;
+    const POST_LOG_EXIST_ERROR = 30804;
+    const COMMENT_LOG_EXIST_ERROR = 30805;
+    const POST_APPEND_ERROR = 30806;
+    const COMMENT_APPEND_ERROR = 30807;
+    const FILE_EXIST_ERROR = 30808;
+    const EXTEND_EXIST_ERROR = 30809;
+    const DELETE_CONTENT_ERROR = 30810;
+    const DELETE_POST_ERROR = 30811;
+    const DELETE_COMMENT_ERROR = 30812;
+    const DELETE_FILE_ERROR = 30813;
+    const DELETE_EXTEND_ERROR = 30814;
+
+    // Editor
+    const POST_STATUS_2_ERROR = 30815;
+    const POST_STATUS_3_ERROR = 30816;
+    const COMMENT_STATUS_2_ERROR = 30817;
+    const COMMENT_STATUS_3_ERROR = 30818;
+    const POST_SUBMIT_STATUS_2_ERROR = 30819;
+    const POST_SUBMIT_STATUS_3_ERROR = 30820;
+    const COMMENT_SUBMIT_STATUS_2_ERROR = 30821;
+    const COMMENT_SUBMIT_STATUS_3_ERROR = 30822;
+    const POST_REMOKE_ERROR = 30823;
+    const COMMENT_REMOKE_ERROR = 30824;
+    const CONTENT_AUTHOR_ERROR = 30825;
+    const POST_LOG_EXIST_ERROR = 30826;
+    const COMMENT_LOG_EXIST_ERROR = 30827;
+    const COMMENT_CREATE_ERROR = 30828;
+    
+    // Editor Check Parameters
+    const MEMBER_LIST_JSON_ERROR = 30900;
+    const COMMENT_SET_JSON_ERROR = 30901;
+    const ALLOW_JSON_ERROR = 30902;
+    const LOCATION_JSON_ERROR = 30903;
+    const FILES_JSON_ERROR = 30904;
+    const EXTENDS_JSON_ERROR = 30905;
+    const EXTENDS_JSON_EID_ERROR = 30906;
+    const FILE_INFO_JSON_ERROR = 30907;
+    const COMMENT_PID_ERROR = 30908;
+    const COMMENT_PID_EXIST_ERROR = 30909;
+    const TITLE_ERROR = 30910;
+    const CONTENT_STOP_WORDS_ERROR = 30911;
+    const CONTENT_CHECK_PARAMS_ERROR = 30912;
+    const CONTENT_TYPE_ERROR = 30913;
+    const CONTENT_COUNT_ERROR = 30914;
+
+    // Console Error Message
+    const BACKEND_PATH_ERROR = 31000;
+    const DELETE_ADMIN_ERROR = 31001;
+    const KEY_NAME_ERROR = 31002;
+    const KEY_PLATFORM_ERROR = 31003;
+    const KEY_PLUGIN_ERROR = 31004;
+
+    // Console Manage Extensions
+    const UNINSTALL_EXTENSION_ERROR = 32004;
+    const PLUGIN_UNIKEY_ERROR = 32005;
+    const FOLDER_NAME_EMPTY_ERROR = 32100;
+    const EXTENSION_DOWMLOAD_ERROR = 32200;
 
     private static $CODE_MSG_MAP = [
         self::CODE_OK                           => 'ok',
 
-        // API Error Message
-        self::HEADER_ERROR                      => 'header error',
-        self::CODE_FAIL                         => '当前成员不存在或者不属于当前用户',
-        self::PASSWORD_INVALID                  => '密码不正确',
-        self::UPDATE_TIME_ERROR                 => '未过修改时间间隔',
-        self::WXAPP_CONTENT_ERROR               => '内容存在限制词',
-        self::FOLLOW_ERROR                      => '不能对自己操作',
-        self::DELETE_FILE_ERROR                 => '帖子不存在',
-        self::NO_PERMISSION                     => 'no permission',
-        self::DELETE_COMMENT_ERROR              => '评论不存在',
-        self::SMS_CODE_CHECK_ERROR              => 'Verification code error',
-        self::CODE_PHONE_ERROR                  => '该用户未注册',
-        self::USERS_NOT_AUTHORITY_ERROR         => '当前用户无权操作',
-        self::CODE_EXCEPTION                    => 'exception',
-        self::NO_RECORD                         => '记录不存在',
-        self::COMMENT_LOGS_ERROR                => '只有一级评论可以有草稿',
-        self::POSTS_LOGS_EXISTS_ERROR           => '帖子草稿不存在',
-        self::COMMENT_LOGS_EXISTS_ERROR         => '评论草稿不存在',
-        self::POSTS_LOGS_STATUS_ERROR           => '帖子草稿不处于审核状态',
-        self::COMMENTS_LOGS_STATUS_ERROR        => '评论草稿不处于审核状态',
+        // Extensions
+        self::CONFIGS_SERVER_ERROR              => '未配置服务商',
+        self::PLUGINS_CLASS_ERROR               => '服务商不存在',
+        self::PLUGINS_TIMEOUT_ERROR             => '服务商未响应',
+        self::PLUGINS_IS_ENABLE_ERROR           => '服务商未启用',
+        self::PLUGINS_HANDLE_ERROR              => '服务商处理失败',
+        self::VERIFY_CODE_CHECK_ERROR           => '验证码不正确或验证码已过期',
+        self::PRIVATE_MODE_ERROR                => '私有模式禁止请求该接口',
+        self::DATA_EXCEPTION_ERROR              => '数据异常，查询不到或者数据重复',
+        self::HELPER_EXCEPTION_ERROR            => '执行异常，文件丢失或者记录错误',
         self::CODE_PARAM_ERROR                  => '参数错误',
-        self::FILE_SALE_ERROR                   => '未配置存储设置，请配置后再上传',
-        self::POSTS_USER_ERROR                  => '请确认该帖子是当前用户所写',
-        self::COMMENTS_USER_ERROR               => '请确认该评论是当前用户所写',
-        self::DELETED_ERROR                     => '已发布不允许删除',
-        self::CODE_SIGN_ERROR                   => '签名错误',
-        self::USER_REQUIRED_ERROR               => 'uid required',
-        self::MEMBER_REQUIRED_ERROR             => 'mid required',
-        self::DELETED_NOTIFY_ERROR              => '只能删除自己的消息',
-        self::DIALOG_ERROR                      => '非自己的会话',
-        self::DIALOG_OR_MESSAGE_ERROR           => '会话和消息只能传其一',
-        self::GROUP_TYPE_ERROR                  => '小组分类不可发帖',
-        self::TITLE_ERROR                       => '标题过长(应小于255)',
-        self::POST_STATUS_2_ERROR               => '帖子审核中不可编辑',
-        self::POST_STATUS_3_ERROR               => '帖子已正式发表不可编辑',
-        self::COMMENT_STATUS_2_ERROR            => '评论审核中不可编辑',
-        self::COMMENT_STATUS_3_ERROR            => '评论已正式发表不可编辑',
-        self::POST_SUBMIT_STATUS2_ERROR         => '处于审核状态的帖子不可提交',
-        self::POST_SUBMIT_STATUS3_ERROR         => '处于发布状态的帖子不可提交',
-        self::COMMENT_SUBMIT_STATUS2_ERROR      => '处于审核状态的评论不可提交',
-        self::COMMENT_SUBMIT_STATUS3_ERROR      => '处于发布状态的评论不可提交',
-        self::POST_CONTENT_WORDS_ERROR          => '帖子内容里存在违规内容',
-        self::COMMENT_CONTENT_WORDS_ERROR       => '评论内容里存在违规内容',
-        self::MEMBER_EXPIRED_LOGS_ERROR         => '成员已过期，不能发送私信',
-        self::COMMENT_PID_ERROR                 => 'pid required',
-        self::COMMENT_PARENT_ERROR              => '一级评论才能产生草稿',
-        self::TYPE_ERROR                        => 'type过长',
-        self::EMAIL_ERROR                       => '邮箱已被注册',
-        self::EMAIL_REGEX_ERROR                 => '邮箱格式不正确',
-        self::PHONE_REGEX_ERROR                 => '手机号格式不正确',
-        self::PHONE_ERROR                       => '手机号已被注册',
-        self::EMAIL_EXIST_ERROR                 => '邮箱不存在',
-        self::PHONE_EXIST_ERROR                 => '手机号不存在',
-        self::EMAIL_BAND_ERROR                  => '已绑定邮箱',
-        self::PHONE_BAND_ERROR                  => '已绑定手机',
-        self::COUNTRY_CODE_ERROR                => '手机区号错误',
-        self::MEMBER_ROLE_ERROR                 => '该成员无发送消息权限',
-        self::TEAMPLAPE_ERROR                   => '模板不存在',
-        self::MEMBER_ME_ERROR                   => '自己不能给自己发送信息',
-        self::FILE_OR_MESSAGE_ERROR             => '文件和消息只能传其一',
-        self::MEMBER_ERROR                      => '对方已注销',
-        self::MEMBER_FOLLOW_ERROR               => '需关注对方才能发送消息',
-        self::VERIFIED_ERROR                    => '需认证才能给对方发消息',
-        self::MEMBER_EXPIRED_ERROR              => '成员已过期，不能发送私信',
-        self::FILE_OR_FILEINFO_ERROR            => '文件和文件信息只能传其一',
-        self::FILES_ERROR                       => '文件不存在',
-        self::DIALOG_WORD_ERROR                 => '存在屏蔽字，禁止发送',
-        self::POST_REMOKE_ERROR                 => '审核中的帖子才能撤回',
-        self::COMMENT_REMOKE_ERROR              => '审核中的评论才能撤回',
-        self::REGISTER_EMAIL_ERROR              => '不支持邮箱方式',
-        self::REGISTER_PHONE_ERROR              => '不支持手机号方式',
+
+        // Header
+        self::HEADER_ERROR                      => 'Header Error',
+        self::HEADER_SIGN_ERROR                 => '签名错误',
+        self::HEADER_SIGN_EXPIRED               => '签名已过期',
+        self::HEADER_INFO_ERROR                 => '输入信息错误',
+        self::HEADER_PLATFORM_ERROR             => '平台 ID 不存在',
+        self::HEADER_APP_ID_ERROR               => 'App ID 不存在',
+        self::HEADER_KEY_ERROR                  => '密钥无权请求本接口',
+        self::UID_REQUIRED_ERROR                => 'UID 必传',
+        self::MID_REQUIRED_ERROR                => 'MID 必传',
+        self::USER_CHECK_ERROR                  => '用户错误或者不存在',
+        self::MEMBER_CHECK_ERROR                => '成员错误或者不存在',
+        self::USER_TOKEN_ERROR                  => '用户 Token 不正确',
+        self::MEMBER_TOKEN_ERROR                => '成员 Token 不正确',
+        self::TOKEN_IS_ENABLE_ERROR             => 'Token 未启用',
+
+        // User
+        self::REGISTER_EMAIL_ERROR              => '不支持邮箱注册',
+        self::REGISTER_PHONE_ERROR              => '不支持手机号注册',
         self::REGISTER_USER_ERROR               => '该用户已注册',
         self::PASSWORD_LENGTH_ERROR             => '密码长度不正确',
         self::PASSWORD_NUMBER_ERROR             => '密码应包含数字',
         self::PASSWORD_LOWERCASE_ERROR          => '密码应包含小写字母',
         self::PASSWORD_CAPITAL_ERROR            => '密码应包含大写数字',
         self::PASSWORD_SYMBOL_ERROR             => '密码应包含符号',
-        self::USER_TOKEN_ERROR                  => 'token不正确',
-        self::USER_EXPIRED_ERROR                => '成员已过期',
-        self::USER_BINDING_EMAIL_ERROR          => '请绑定邮箱',
-        self::USER_BINDING_PHONE_ERROR          => '请绑定手机号',
-        self::USER_BINDING_REAL_NAME_ERROR      => '请实名制',
-        self::POSTS_SUBMIT_ERROR                => '不允许发布帖子',
-        self::POSTS_UPDATE_ERROR                => '不允许编辑帖子',
-        self::COMMENTS_SUBMIT_ERROR             => '不允许发布评论',
-        self::COMMENTS_UPDATE_ERROR             => '不允许编辑评论',
-        self::UID_EXIST_ERROR                   => '用户不存在',
-        self::GROUP_EXISTS                      => '小组不存在',
-        self::HEADER_EXSIT_MEMBER               => '成员不存在',
-        self::HEADER_IS_ENABLE_ERROR            => '密钥未启用',
-        self::HEADER_TYPE_ERROR                 => '输入类型错误',
-        self::MEMBER_NAME_ERROR                 => '成员名称不允许重复',
-        self::GROUP_MARK_FOLLOW_TYPE_ERROR      => '插件方式不允许操作',
-        self::API_NO_CALL_ERROR                 => '接口不允许调用',
-        self::UPLOAD_FILES_SIZE_ERROR           => '文件超过上传大小',
-        self::DIALOGS_MESSAGE_ERROR             => '消息已删除',
 
-        self::PERMISSION_NO_SETTING_ERROR       => '未设置权限',
-        self::SUBMIT_NO_ERROR                   => '未开启发布权限',
-        self::SUBMIT_LIMIT_ERROR                => '未在指定时间内不允许发布',
-        self::EDIT_TOP_ERROR                    => '置顶后不允许编辑',
-        self::EDIT_TIME_ERROR                   => '超出编辑时间',
-        self::EDIT_ESSENCE_ERROR                => '加精不允许编辑',
-        self::MEMBER_ROLE_SUBMIT_NO_ERROR       => '角色未开启发布权限',
-        self::MEMBER_ROLE_SUBMIT_LIMIT_ERROR            => '角色权限未在指定时间内不允许发布',
-        self::MEMBER_ROLE_USER_BINDING_EMAIL_ERROR      => '角色开启邮箱校验',
-        self::MEMBER_ROLE_USER_BINDING_PHONE_ERROR      => '角色开启手机号校验',
-        self::MEMBER_ROLE_USER_BINDING_REAL_NAME_ERROR  => '角色开启实名制校验',
-        self::POST_MEMBER_ERROR                 => '成员不一致',
-        self::MEMBER_JSON_ERROR                 => '请输入正确的memberJson格式',
-        self::ALLOW_JSON_ERROR                  => '请输入正确的allowJson格式',
-        self::LOCATION_JSON_ERROR               => '请输入正确的locationJson格式',
-        self::FILE_JSON_ERROR                   => '请输入正确的fileJson格式',
-        self::EXTENDS_JSON_ERROR                => '请输入正确的extendsJson格式',
-        self::COMMENT_JSON_ERROR                => '请输入正确的commentSetJson格式',
-        self::MEMBER_MARK_ERROR                 => '不允许重复操作',
-        self::COMMENT_APPEND_ERROR              => '评论异常，未找到评论副表记录',
-        self::POST_APPEND_ERROR                 => '帖子异常，未找到帖子副表记录',
-        self::EXTEND_ERROR                      => '扩展不存在',
-        self::MEMBER_EXPIRED_AT_ERROR           => '私有模式，成员过期，不可调用',
-        self::MEMBER_UPLOAD_FILES_SIZE_ERROR    => '角色权限文件超过上传大小',
-        self::UPLOAD_FILES_SUFFIX_ERROR         => '文件后缀错误',
-        self::LOGIN_ERROR                       => '登录错误达到次数限制',
-        self::POST_GROUP_ALLOW_ERROR            => '无小组发帖权限',
-        self::POST_COMMENTS_POSTS_ERROR         => '评论异常，未找到帖子信息',
-        self::POST_COMMENTS_ALLOW_ERROR         => '无小组评论权限',
-        self::COMMENTS_LOG_EXIST_ERROR          => '评论异常，草稿表对应的评论未找到',
-        self::POSTS_LOG_EXIST_ERROR             => '帖子异常，草稿表对应的帖子未找到',
-        self::POSTS_LOG_CHECK_PARAMS_ERROR      => '内容、文件、扩展内容，三种不可全部为空，至少其中一个有值',
-        self::EXTENDS_UUID_ERROR                => '存在未知扩展',
-        self::CONTENT_COUNT_ERROR               => '内容字数过多',
-        self::DELETE_FILES_ERROR                => 'files在使用',
-        self::DELETE_EXTEND_ERROR               => 'extend在使用',
-        self::FILES_INFO_ERROR                  => '请输入正确的fileInfo格式',
-        self::EXTENDS_EID_ERROR                 => 'extendsJson eid必填',
+        self::EMAIL_ERROR                       => '邮箱已被注册',
+        self::EMAIL_REGEX_ERROR                 => '邮箱格式不正确',
+        self::EMAIL_EXIST_ERROR                 => '邮箱不存在',
+        self::EMAIL_BAND_ERROR                  => '已绑定邮箱',
+        self::PHONE_ERROR                       => '手机号已被注册',
+        self::PHONE_REGEX_ERROR                 => '手机号格式不正确',
+        self::PHONE_EXIST_ERROR                 => '手机号不存在',
+        self::PHONE_BAND_ERROR                  => '已绑定手机',
+        self::COUNTRY_CODE_ERROR                => '国际区号错误',
+        self::CODE_TEMPLATE_ERROR               => '验证码模板关闭或者不存在',
+
+        self::ACCOUNT_IS_EMPTY_ERROR            => '账号不能为空',
+        self::ACCOUNT_CHECK_ERROR               => '账号错误或者不存在',
+        self::ACCOUNT_PASSWORD_INVALID          => '账号密码不正确',
+        self::ACCOUNT_ERROR                     => '账号不正确或者密码错误',
+        self::ACCOUNT_COUNT_ERROR               => '错误已超系统限制，请 1 小时后再登录',
+
+        self::USER_ERROR                        => '该用户已注销',
+        self::USER_IS_ENABLE_ERROR              => '当前用户已被禁用',
         self::USER_WALLETS_ERROR                => '用户钱包不存在',
-        self::BALANCE_CLOSING_BALANCE_ERROR     => '期末余额和钱包额度不匹配',
         self::USER_BALANCE_ERROR                => '钱包余额不允许支付',
-        self::SING_EXPIRED_ERROR                => '签名已过期',
+        self::BALANCE_CLOSING_BALANCE_ERROR     => '期末余额和钱包额度不匹配',
         self::TO_USER_WALLETS_ERROR             => '对方钱包不存在',
         self::TO_BALANCE_CLOSING_BALANCE_ERROR  => '对方期末余额和钱包额度不匹配',
 
+        // Member
+        self::MEMBER_FAIL                       => '当前成员不存在或者不属于当前用户',
+        self::MEMBER_ERROR                      => '该成员已注销',
+        self::MEMBER_IS_ENABLE_ERROR            => '当前成员已被禁用',
+        self::MEMBER_PASSWORD_INVALID           => '密码不正确',
+        self::MEMBER_EXPIRED_ERROR              => '成员已过期，无权操作该功能',
+        self::MEMBER_NO_PERMISSION              => '当前成员无权请求',
+        self::MEMBER_NAME_ERROR                 => '成员名称不允许重复',
+        self::UPDATE_TIME_ERROR                 => '指定天数内只能修改一次',
+        self::DISABLE_NAME_ERROR                => '名称存在禁用词',
+
+        // Member Mark
+        self::MARK_NOT_ENABLE                   => '未开启该项操作功能',
+        self::MARK_FOLLOW_ERROR                 => '不能对自己操作',
+        self::MARK_REPEAT_ERROR                 => '不允许重复操作',
+
+        // Member Role
+        self::ROLE_NO_CONFIG_ERROR              => '当前角色未配置权限，请联系管理员确认',
+        self::ROLE_NO_PERMISSION                => '当前角色无权请求',
+        self::ROLE_NO_PERMISSION_BROWSE         => '当前角色无权浏览',
+        self::ROLE_NO_PERMISSION_PUBLISH        => '当前角色无权发表',
+        self::ROLE_PUBLISH_LIMIT                => '当前角色发表内容有时间限制，请在规定的时间内再发表',
+        self::ROLE_PUBLISH_EMAIL_VERIFY         => '当前角色发表内容需要先绑定邮箱',
+        self::ROLE_PUBLISH_PHONE_VERIFY         => '当前角色发表内容需要先绑定手机号',
+        self::ROLE_PUBLISH_PROVE_VERIFY         => '当前角色发表内容需要先实名制认证',
+        self::ROLE_NO_PERMISSION_UPLOAD_IMAGE   => '当前角色无权上传图片',
+        self::ROLE_NO_PERMISSION_UPLOAD_VIDEO   => '当前角色无权上传视频',
+        self::ROLE_NO_PERMISSION_UPLOAD_AUDIO   => '当前角色无权上传音频',
+        self::ROLE_NO_PERMISSION_UPLOAD_DOC     => '当前角色无权上传文档',
+        self::ROLE_UPLOAD_FILES_SIZE_ERROR      => '文件大小超过当前角色限制',
+        self::ROLE_DIALOG_ERROR                 => '当前角色无私信权限',
+
+        // Dialog
+        self::DIALOG_ERROR                      => '会话异常或者该会话不属于当前成员',
+        self::DIALOG_MESSAGE_ERROR              => '消息已删除',
+        self::SEND_ME_ERROR                     => '自己不能给自己发送信息',
+        self::FILE_OR_TEXT_ERROR                => '单个消息只能「文件」或「文本」二选一',
+        self::DIALOG_LIMIT_2_ERROR              => '对方已设置仅允许 TA 关注的成员才能给 TA 发送消息',
+        self::DIALOG_LIMIT_3_ERROR              => '对方已设置仅允许 TA 关注的成员和已认证的成员才能给 TA 发送消息',
+        self::DIALOG_WORD_ERROR                 => '消息文本中含有禁用词，不能发送',
+        self::DIALOG_OR_MESSAGE_ERROR           => '会话和消息只能传其中一个，不能同时删除两种类型',
+        self::DELETE_NOTIFY_ERROR               => '只能删除自己的消息',
+
+        // Group Configs
+        self::GROUP_MARK_FOLLOW_ERROR           => '仅支持指定方式操作，本接口禁止操作',
+        self::GROUP_TYPE_ERROR                  => '小组分类下不允许发表',
+        self::GROUP_POST_ALLOW_ERROR            => '当前成员无该小组的发帖权限',
+        self::GROUP_COMMENTS_ALLOW_ERROR        => '当前成员无该小组的评论权限',
+
+        // Publish Configs
+        self::PUBLISH_EMAIL_VERIFY_ERROR        => '发表内容需要先绑定邮箱',
+        self::PUBLISH_PHONE_VERIFY_ERROR        => '发表内容需要先绑定手机号',
+        self::PUBLISH_PROVE_VERIFY_ERROR        => '发表内容需要先实名制认证',
+        self::PUBLISH_LIMIT_ERROR               => '系统已经开启发表时间限制，请在规定的时间内再发表',
+        self::POSTS_EDIT_ERROR                  => '不允许编辑帖子',
+        self::COMMENTS_EDIT_ERROR               => '不允许编辑评论',
+        self::EDIT_STICKY_ERROR                 => '置顶后不允许编辑',
+        self::EDIT_TIME_ERROR                   => '超出可编辑时间',
+        self::EDIT_ESSENCE_ERROR                => '加精后不允许编辑',
+        self::UPLOAD_FILES_SUFFIX_ERROR         => '该文件类型不在允许上传的范围内',
+        self::POST_BROWSE_ERROR                 => '该内容需要授权后才能浏览',
+
+        // Main Content
+        self::GROUP_EXIST_ERROR                 => '小组错误或者不存在',
+        self::HASHTAG_EXIST_ERROR               => '话题错误或者不存在',
+        self::POST_EXIST_ERROR                  => '帖子错误或者不存在',
+        self::COMMENT_EXIST_ERROR               => '评论错误或者不存在',
+        self::POST_LOG_EXIST_ERROR              => '帖子草稿错误或者不存在',
+        self::COMMENT_LOG_EXIST_ERROR           => '评论草稿错误或者不存在',
+        self::POST_APPEND_ERROR                 => '帖子异常，未找到帖子副表记录',
+        self::COMMENT_APPEND_ERROR              => '评论异常，未找到评论副表记录',
+        self::FILE_EXIST_ERROR                  => '文件错误或者不存在',
+        self::EXTEND_EXIST_ERROR                => '扩展错误或者不存在',
+        self::DELETE_CONTENT_ERROR              => '该内容不允许删除',
+        self::DELETE_POST_ERROR                 => '删除失败，帖子错误或者不存在',
+        self::DELETE_COMMENT_ERROR              => '删除失败，评论错误或者不存在',
+        self::DELETE_FILE_ERROR                 => '该文件正在被使用，不允许删除',
+        self::DELETE_EXTEND_ERROR               => '该扩展内容有其他人使用，不允许删除',
+
+        // Editor
+        self::POST_STATUS_2_ERROR               => '帖子审核中不可编辑',
+        self::POST_STATUS_3_ERROR               => '帖子已正式发表不可编辑',
+        self::COMMENT_STATUS_2_ERROR            => '评论审核中不可编辑',
+        self::COMMENT_STATUS_3_ERROR            => '评论已正式发表不可编辑',
+        self::POST_SUBMIT_STATUS_2_ERROR        => '处于审核状态的帖子不可再提交',
+        self::POST_SUBMIT_STATUS_3_ERROR        => '处于发布状态的帖子不可再提交',
+        self::COMMENT_SUBMIT_STATUS_2_ERROR     => '处于审核状态的评论不可再提交',
+        self::COMMENT_SUBMIT_STATUS_3_ERROR     => '处于发布状态的评论不可再提交',
+        self::POST_REMOKE_ERROR                 => '当前帖子并非审核状态，无需撤回',
+        self::COMMENT_REMOKE_ERROR              => '当前评论并非审核状态，无需撤回',
+        self::CONTENT_AUTHOR_ERROR              => '操作失败，请确认是作者本人',
+        self::POST_LOG_EXIST_ERROR              => '帖子异常，日志表对应的帖子未找到',
+        self::COMMENT_LOG_EXIST_ERROR           => '评论异常，日志表对应的评论未找到',
+        self::COMMENT_CREATE_ERROR              => '评论草稿创建失败，只有一级评论才能创建草稿',
+        
+        // Editor Check Parameters
+        self::MEMBER_LIST_JSON_ERROR            => 'memberListJson 格式错误或者数据异常',
+        self::COMMENT_SET_JSON_ERROR            => 'commentSetJson 格式错误或者数据异常',
+        self::ALLOW_JSON_ERROR                  => 'allowJson 格式错误或者数据异常',
+        self::LOCATION_JSON_ERROR               => 'locationJson 格式错误或者数据异常',
+        self::FILES_JSON_ERROR                  => 'filesJson 格式错误或者数据异常',
+        self::EXTENDS_JSON_ERROR                => 'extendsJson 格式错误或者数据异常',
+        self::EXTENDS_JSON_EID_ERROR            => 'extendsJson 中 eid 参数必填',
+        self::FILE_INFO_JSON_ERROR              => 'fileInfo 格式错误或者数据异常',
+        self::COMMENT_PID_ERROR                 => '发表评论，必传 PID 参数',
+        self::COMMENT_PID_EXIST_ERROR           => '评论失败，未找到帖子信息',
+        self::TITLE_ERROR                       => '标题过长，应小于 255 字符',
+        self::CONTENT_STOP_WORDS_ERROR          => '内容存在禁用词，请修改后再发表',
+        self::CONTENT_CHECK_PARAMS_ERROR        => '内容、文件、扩展内容，三种不可全部为空，至少其中一个有值',
+        self::CONTENT_TYPE_ERROR                => '内容类型参数错误或者字符数达到上限',
+        self::CONTENT_COUNT_ERROR               => '内容超过限制字数',
+
         // Console Error Message
-        self::CODE_LOGIN_ERROR                  => '用户名或密码错误',
-        self::CODE_CAPTCHA_ERROR                => '图片验证码错误',
-        self::ACCOUNT_ERROR                     => '账号必填',
-        self::ADMIN_ACCOUNT_ERROR               => '邮箱或手机号找不到',
-        self::BACKEND_PATH_ERROR                => '入口已被占用',
-        self::KEYS_NAME_ERROR                   => '密钥名称必填',
-        self::KEYS_PLAT_ERROR                   => '请选择密钥应用平台',
-        self::PLUGIN_PLAT_ERROR                 => '请选择插件',
-        self::DELETE_PACK_ERROR                 => '有部分删除无权限',
-        self::REPEAT_PARTNER_ERROR              => '无需重复添加',
-        self::DELETE_ADMIN                      => '不允许删除自己',
-        self::LANGUAGE_SETTING_ERROR            => '已存在，不可重复配置该语言',
+        self::BACKEND_PATH_ERROR                => '该入口命名已被占用',
+        self::DELETE_ADMIN_ERROR                => '不允许删除自己',
+        self::KEY_NAME_ERROR                    => '密钥名称必填',
+        self::KEY_PLATFORM_ERROR                => '请选择密钥应用平台',
+        self::KEY_PLUGIN_ERROR                  => '请选择关联插件',
 
-        self::DOWMLOAD_ERROR                    => '请下载或安装启用插件',
-        self::FILES_JSON_ERROR                  => '插件目录下文件缺失',
-        self::PLUGIN_ENABLE_ERROR               => '插件停用后才能卸载',
-        self::PLUGIN_UNIKEY_ERROR               => '插件unikey错误',
-        self::FILES_EMPTY_ERROR                 => '请输入文件名',
-        self::FILES_AUTH_ERROR                  => '未安装权限',
-
-        // Plugin Config Error Message
-        self::CONFIGS_SERVER_ERROR              => '未配置发信服务商',
-        self::PLUGINS_CLASS_ERROR               => '未找到插件类',
-        self::PLUGINS_TIMEOUT_ERROR             => '插件未响应',
-        self::CAPTCHA_ERROR                     => '验证码不正确或验证码已过期',
+        // Console Manage Extensions
+        self::PLUGIN_UNIKEY_ERROR               => 'UniKey 错误',
+        self::UNINSTALL_EXTENSION_ERROR         => '停用后才能卸载',
+        self::FOLDER_NAME_EMPTY_ERROR           => '文件夹名不能为空',
+        self::EXTENSION_DOWMLOAD_ERROR          => '扩展安装包下载失败',
     ];
 
     // Get Message

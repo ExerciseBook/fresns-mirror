@@ -101,7 +101,7 @@ class ValidateService
                 LogService::error('The calibration field is: ', $checkParamsArr);
 
                 return false;
-                // (new self)->error(ErrorCodeService::CODE_EXCEPTION, $data);
+                // (new self)->error(ErrorCodeService::DATA_EXCEPTION_ERROR, $data);
             }
         }
 

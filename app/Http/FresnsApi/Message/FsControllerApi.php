@@ -45,10 +45,10 @@ class FsControllerApi extends FresnsBaseApiController
         $member_id = $this->mid;
         $uid = $this->uid;
         if (empty($uid)) {
-            $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
         }
         if (empty($member_id)) {
-            $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
         }
         $type = $request->input('type');
         $page = $request->input('page', 1);
@@ -79,10 +79,10 @@ class FsControllerApi extends FresnsBaseApiController
         $member_id = $this->mid;
         $uid = $this->uid;
         if (empty($uid)) {
-            $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
         }
         if (empty($member_id)) {
-            $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
         }
         $member_id = GlobalService::getGlobalKey('member_id');
         $type = $request->input('type');
@@ -103,16 +103,16 @@ class FsControllerApi extends FresnsBaseApiController
         $member_id = $this->mid;
         $uid = $this->uid;
         if (empty($uid)) {
-            $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
         }
         if (empty($member_id)) {
-            $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
         }
         $member_id = GlobalService::getGlobalKey('member_id');
         $idArr = $request->input('notifyId');
         $result = self::isExsitMember($idArr, FresnsNotifiesConfig::CFG_TABLE, 'member_id', $member_id);
         if (! $result) {
-            $this->error(ErrorCodeService::DELETED_NOTIFY_ERROR);
+            $this->error(ErrorCodeService::DELETE_NOTIFY_ERROR);
         }
         FresnsNotifies::whereIn('id', $idArr)->delete();
         $this->success();
@@ -124,10 +124,10 @@ class FsControllerApi extends FresnsBaseApiController
         $uid = $this->uid;
         $member_id = $this->mid;
         if (empty($uid)) {
-            $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
         }
         if (empty($member_id)) {
-            $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
         }
         $member_id = GlobalService::getGlobalKey('member_id');
         // Query the set of dialog ids that the member is in
@@ -165,10 +165,10 @@ class FsControllerApi extends FresnsBaseApiController
         $uid = $this->uid;
         $member_id = $this->mid;
         if (empty($uid)) {
-            $this->error(ErrorCodeService::USER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
         }
         if (empty($member_id)) {
-            $this->error(ErrorCodeService::MEMBER_REQUIRED_ERROR);
+            $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
         }
         $mid = GlobalService::getGlobalKey('member_id');
         $dialogId = $request->input('dialogId');
@@ -296,7 +296,7 @@ class FsControllerApi extends FresnsBaseApiController
         if ($fid) {
             $filesInfo = FresnsFiles::Where('uuid', $fid)->first();
             if (! $filesInfo) {
-                $this->error(ErrorCodeService::FILES_ERROR);
+                $this->error(ErrorCodeService::FILE_EXIST_ERROR);
             }
             $fileId = $filesInfo->id;
             $fileType = $filesInfo->type;
@@ -459,20 +459,20 @@ class FsControllerApi extends FresnsBaseApiController
                 $count = FresnsDialogMessages::where('id', $messageId)->where('send_member_id', $mid)->count();
                 $recvCount = FresnsDialogMessages::where('id', $messageId)->where('recv_member_id', $mid)->count();
                 if ($count == 0 && $recvCount == 0) {
-                    $this->error(ErrorCodeService::DELETED_NOTIFY_ERROR);
+                    $this->error(ErrorCodeService::DELETE_NOTIFY_ERROR);
                 }
                 if ($count > 0) {
                     $dialogMessageCount = FresnsDialogMessages::where('id', $messageId)->where('send_deleted_at', '!=',
                         null)->count();
                     if ($dialogMessageCount > 0) {
-                        $this->error(ErrorCodeService::DIALOGS_MESSAGE_ERROR);
+                        $this->error(ErrorCodeService::DIALOG_MESSAGE_ERROR);
                     }
                     FresnsDialogMessages::where('id', $messageId)->update(['send_deleted_at' => date('Y-m-d H:i:s')]);
                 } else {
                     $dialogMessageCount = FresnsDialogMessages::where('id', $messageId)->where('recv_deleted_at', '!=',
                         null)->count();
                     if ($dialogMessageCount > 0) {
-                        $this->error(ErrorCodeService::DIALOGS_MESSAGE_ERROR);
+                        $this->error(ErrorCodeService::DIALOG_MESSAGE_ERROR);
                     }
                     FresnsDialogMessages::where('id', $messageId)->update(['recv_deleted_at' => date('Y-m-d H:i:s')]);
                 }

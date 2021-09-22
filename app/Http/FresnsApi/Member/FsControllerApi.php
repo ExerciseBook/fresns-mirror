@@ -96,7 +96,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         $checkMember = FsChecker::checkUserMember($mid, $uid);
         if ($checkMember == false) {
-            $this->error(ErrorCodeService::CODE_FAIL);
+            $this->error(ErrorCodeService::MEMBER_FAIL);
         }
 
         $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
@@ -121,13 +121,13 @@ class FsControllerApi extends FresnsBaseApiController
         ->count();
 
         if ($sessionCount >= 5) {
-            $this->error(ErrorCodeService::LOGIN_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_COUNT_ERROR);
         }
 
         $member = FresnsMembers::where('id', $mid)->first();
         if (! empty($member['password'])) {
             if (! Hash::check($password, $member['password'])) {
-                $this->error(ErrorCodeService::PASSWORD_INVALID);
+                $this->error(ErrorCodeService::MEMBER_PASSWORD_INVALID);
             }
         }
         $langTag = ApiLanguageHelper::getLangTagByHeader();
@@ -176,7 +176,7 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         if (empty($viewMid)) {
-            $this->error(ErrorCodeService::UID_EXIST_ERROR);
+            $this->error(ErrorCodeService::USER_CHECK_ERROR);
         }
 
         // Is it me
@@ -303,7 +303,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         $checkMember = FsChecker::checkUserMember($mid, $uid);
         if ($checkMember == false) {
-            $this->error(ErrorCodeService::CODE_FAIL);
+            $this->error(ErrorCodeService::MEMBER_FAIL);
         }
 
         $mname = $request->input('mname');
@@ -311,7 +311,7 @@ class FsControllerApi extends FresnsBaseApiController
         $bio = $request->input('bio');
         $member = FresnsMembers::where('id', $mid)->first();
         if (empty($member)) {
-            $this->error(ErrorCodeService::NO_RECORD);
+            $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
         }
         $last_name_at = $member['last_name_at'];
         $last_nickname_at = $member['last_nickname_at'];
@@ -330,7 +330,7 @@ class FsControllerApi extends FresnsBaseApiController
             $disableNames = FresnsConfigs::where('item_key', 'disable_names')->value('item_value');
             $disableNamesArr = json_decode($disableNames, true);
             if (in_array($mname, $disableNamesArr)) {
-                $this->error(ErrorCodeService::WXAPP_CONTENT_ERROR);
+                $this->error(ErrorCodeService::DISABLE_NAME_ERROR);
             }
             // Determine if the name is duplicated
             $memberCount = FresnsMembers::where('name', $mname)->count();
@@ -469,7 +469,7 @@ class FsControllerApi extends FresnsBaseApiController
         if (! in_array($type, $typeArr)) {
             $isMarkLists = FsChecker::checkMarkLists($type, $objectType);
             if ($isMarkLists == false) {
-                $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+                $this->error(ErrorCodeService::MEMBER_NO_PERMISSION);
             }
         }
 
@@ -658,7 +658,7 @@ class FsControllerApi extends FresnsBaseApiController
             if (! empty($midMember['expired_at'])) {
                 $time = date('Y-m-d H:i:s', time());
                 if ($time > $midMember['expired_at']) {
-                    $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+                    $this->error(ErrorCodeService::MEMBER_EXPIRED_ERROR);
                 }
             }
         }
@@ -672,7 +672,7 @@ class FsControllerApi extends FresnsBaseApiController
          */
         $checkerApi = FsChecker::checkMarkApi($markType, $markTarget);
         if ($checkerApi == false) {
-            $this->error(ErrorCodeService::API_NO_CALL_ERROR);
+            $this->error(ErrorCodeService::MARK_NOT_ENABLE);
         }
 
         // Member
@@ -682,10 +682,10 @@ class FsControllerApi extends FresnsBaseApiController
                 $info = [
                     'markId' => 'null',
                 ];
-                $this->error(ErrorCodeService::NO_RECORD, $info);
+                $this->error(ErrorCodeService::MEMBER_CHECK_ERROR, $info);
             }
             if ($markId == $mid) {
-                $this->error(ErrorCodeService::FOLLOW_ERROR);
+                $this->error(ErrorCodeService::MARK_FOLLOW_ERROR);
             }
         }
 
@@ -697,10 +697,10 @@ class FsControllerApi extends FresnsBaseApiController
                 $info = [
                     'markId' => 'null',
                 ];
-                $this->error(ErrorCodeService::NO_RECORD, $info);
+                $this->error(ErrorCodeService::GROUP_EXIST_ERROR, $info);
             }
             if ($groups['type_follow'] == 2) {
-                $this->error(ErrorCodeService::GROUP_MARK_FOLLOW_TYPE_ERROR);
+                $this->error(ErrorCodeService::GROUP_MARK_FOLLOW_ERROR);
             }
             $markId = $groups['id'];
         }
@@ -712,7 +712,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $info = [
                     'markId' => 'null',
                 ];
-                $this->error(ErrorCodeService::NO_RECORD, $info);
+                $this->error(ErrorCodeService::HASHTAG_EXIST_ERROR, $info);
             }
         }
 
@@ -723,12 +723,12 @@ class FsControllerApi extends FresnsBaseApiController
                 $info = [
                     'markId' => 'null',
                 ];
-                $this->error(ErrorCodeService::NO_RECORD, $info);
+                $this->error(ErrorCodeService::POST_EXIST_ERROR, $info);
             }
             $memberId = $posts['member_id'];
             $markId = $posts['id'];
             if ($memberId == $mid) {
-                $this->error(ErrorCodeService::FOLLOW_ERROR);
+                $this->error(ErrorCodeService::MARK_FOLLOW_ERROR);
             }
         }
 
@@ -739,12 +739,12 @@ class FsControllerApi extends FresnsBaseApiController
                 $info = [
                     'markId' => 'null',
                 ];
-                $this->error(ErrorCodeService::NO_RECORD, $info);
+                $this->error(ErrorCodeService::COMMENT_EXIST_ERROR, $info);
             }
             $memberId = $comment['member_id'];
             $markId = $comment['id'];
             if ($memberId == $mid) {
-                $this->error(ErrorCodeService::FOLLOW_ERROR);
+                $this->error(ErrorCodeService::MARK_FOLLOW_ERROR);
             }
         }
 
@@ -753,14 +753,14 @@ class FsControllerApi extends FresnsBaseApiController
             case 1:
                 $checkMark = FsChecker::checkMark($markType, $markTarget, $mid, $markId);
                 if ($checkMark === true) {
-                    $this->error(ErrorCodeService::MEMBER_MARK_ERROR);
+                    $this->error(ErrorCodeService::MARK_REPEAT_ERROR);
                 }
                 break;
 
             default:
                 $checkMark = FsChecker::checkMark($markType, $markTarget, $mid, $markId);
                 if ($checkMark === false) {
-                    $this->error(ErrorCodeService::MEMBER_MARK_ERROR);
+                    $this->error(ErrorCodeService::MARK_REPEAT_ERROR);
                 }
                 break;
         }
@@ -1015,7 +1015,7 @@ class FsControllerApi extends FresnsBaseApiController
         $data = [];
         if (empty($viewMid) && empty($viewMname)) {
             $info = [
-                'null body' => 'viewMid或viewMname为空',
+                'null body' => 'mid or mname is empty',
             ];
             $this->error(ErrorCodeService::CODE_PARAM_ERROR, $info);
         }
@@ -1027,9 +1027,9 @@ class FsControllerApi extends FresnsBaseApiController
 
         if (empty($mid)) {
             $info = [
-                'null member' => 'viewMid或viewMname',
+                'null member' => 'mid or mname',
             ];
-            $this->error(ErrorCodeService::NO_RECORD, $info);
+            $this->error(ErrorCodeService::MEMBER_CHECK_ERROR, $info);
         }
 
         $authMemberId = GlobalService::getGlobalKey('member_id');
@@ -1041,7 +1041,7 @@ class FsControllerApi extends FresnsBaseApiController
         if ($mid != $authMemberId) {
             $isMarkLists = FsChecker::checkMarkLists($viewType, $viewTarget);
             if ($isMarkLists == false) {
-                $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+                $this->error(ErrorCodeService::POST_BROWSE_ERROR);
             }
         }
 
@@ -1115,7 +1115,6 @@ class FsControllerApi extends FresnsBaseApiController
         $rule = [
             'type' => 'required|numeric|in:1,2',
             'uuid' => 'required',
-
         ];
         ValidateService::validateRule($request, $rule);
 
@@ -1127,14 +1126,14 @@ class FsControllerApi extends FresnsBaseApiController
             case 1:
                 $posts = FresnsPosts::where('uuid', $uuid)->first();
                 if (empty($posts)) {
-                    $this->error(ErrorCodeService::DELETE_FILE_ERROR);
+                    $this->error(ErrorCodeService::DELETE_POST_ERROR);
                 }
                 if ($posts['member_id'] != $mid) {
-                    $this->error(ErrorCodeService::NO_PERMISSION);
+                    $this->error(ErrorCodeService::MEMBER_NO_PERMISSION);
                 }
                 $postsAppend = FresnsPostAppends::where('post_id', $posts['id'])->first();
                 if ($postsAppend['can_delete'] == 0) {
-                    $this->error(ErrorCodeService::NO_PERMISSION);
+                    $this->error(ErrorCodeService::MEMBER_NO_PERMISSION);
                 }
                 FresnsPosts::where('id', $posts['id'])->delete();
                 FresnsPostAppends::where('id', $postsAppend['id'])->delete();
@@ -1147,12 +1146,12 @@ class FsControllerApi extends FresnsBaseApiController
                     $this->error(ErrorCodeService::DELETE_COMMENT_ERROR);
                 }
                 if ($comments['member_id'] != $mid) {
-                    $this->error(ErrorCodeService::NO_PERMISSION);
+                    $this->error(ErrorCodeService::MEMBER_NO_PERMISSION);
                 }
                 $commentsAppend = FresnsCommentAppends::where('comment_id', $comments['id'])->first();
                 if (! empty($commentsAppend)) {
                     if ($commentsAppend['can_delete'] == 0) {
-                        $this->error(ErrorCodeService::NO_PERMISSION);
+                        $this->error(ErrorCodeService::MEMBER_NO_PERMISSION);
                     }
                 }
 

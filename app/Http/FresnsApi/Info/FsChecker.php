@@ -27,7 +27,7 @@ class FsChecker extends FresnsBaseChecker
     const EMAIL_BAND_ERROR = 30080;
     const PHONE_BAND_ERROR = 30081;
     const COUNTRY_CODE_ERROR = 30082;
-    const TEAMPLAPE_ERROR = 30087;
+    const CODE_TEMPLATE_ERROR = 30087;
     const PLUGIN_SMS_ERROR = 30127;
     public $codeMap = [
         self::EMAIL_ERROR => '邮箱已被注册',
@@ -40,7 +40,7 @@ class FsChecker extends FresnsBaseChecker
         self::EMAIL_BAND_ERROR => '已绑定邮箱',
         self::PHONE_BAND_ERROR => '已绑定手机',
         self::COUNTRY_CODE_ERROR => '手机区号错误',
-        self::TEAMPLAPE_ERROR => '模板不存在',
+        self::CODE_TEMPLATE_ERROR => '模板不存在',
         self::PLUGIN_SMS_ERROR => '未配置插件服务商',
     ];
 
@@ -57,10 +57,10 @@ class FsChecker extends FresnsBaseChecker
             return self::checkInfo(self::PLUGIN_SMS_ERROR);
         }
         $countryCode = request()->input('countryCode');
-        $template = request()->input('template');
+        $templateId = request()->input('templateId');
         $templateBlade = ApiConfigHelper::getConfigByItemKey('verifycode_template'.$template);
         if (! $templateBlade) {
-            return self::checkInfo(self::TEAMPLAPE_ERROR);
+            return self::checkInfo(self::CODE_TEMPLATE_ERROR);
         }
         $templateData = json_decode($templateBlade, true);
         $emailArr = [];
@@ -75,17 +75,17 @@ class FsChecker extends FresnsBaseChecker
         }
         if ($type == 1) {
             if (! $emailArr) {
-                return self::checkInfo(self::TEAMPLAPE_ERROR);
+                return self::checkInfo(self::CODE_TEMPLATE_ERROR);
             }
             if (! $emailArr['isEnable']) {
-                return self::checkInfo(self::TEAMPLAPE_ERROR);
+                return self::checkInfo(self::CODE_TEMPLATE_ERROR);
             }
         } else {
             if (! $phoneArr) {
-                return self::checkInfo(self::TEAMPLAPE_ERROR);
+                return self::checkInfo(self::CODE_TEMPLATE_ERROR);
             }
             if (! $phoneArr['isEnable']) {
-                return self::checkInfo(self::TEAMPLAPE_ERROR);
+                return self::checkInfo(self::CODE_TEMPLATE_ERROR);
             }
         }
 

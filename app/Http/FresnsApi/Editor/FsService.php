@@ -181,7 +181,7 @@ class FsService
             foreach ($filesIdArr as $v) {
                 if (in_array($v, $postFidIdArr)) {
                     // Process terminated if used
-                    return ErrorCodeService::DELETE_FILES_ERROR;
+                    return ErrorCodeService::DELETE_FILE_ERROR;
                 }
             }
         }
@@ -203,7 +203,7 @@ class FsService
                 foreach ($filesIdArr as $v) {
                     if (in_array($v, $postLogFidArr)) {
                         // Process terminated if used
-                        return ErrorCodeService::DELETE_FILES_ERROR;
+                        return ErrorCodeService::DELETE_FILE_ERROR;
                     }
                 }
             }
@@ -240,7 +240,7 @@ class FsService
             foreach ($filesIdArr as $v) {
                 if (in_array($v, $commentFidIdArr)) {
                     // Process terminated if used
-                    return ErrorCodeService::DELETE_FILES_ERROR;
+                    return ErrorCodeService::DELETE_FILE_ERROR;
                 }
             }
         }
@@ -262,7 +262,7 @@ class FsService
                 foreach ($filesIdArr as $v) {
                     if (in_array($v, $commentLogFidArr)) {
                         // Process terminated if used
-                        return ErrorCodeService::DELETE_FILES_ERROR;
+                        return ErrorCodeService::DELETE_FILE_ERROR;
                     }
                 }
             }

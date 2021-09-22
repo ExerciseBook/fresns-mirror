@@ -60,7 +60,7 @@ class FresnsCrontablPlugin extends BasePlugin
             foreach ($item as $v) {
                 foreach ($configArr as $value) {
                     if ($v['subscribe_plugin_unikey'] == $value['subscribe_plugin_unikey'] && $v['subscribe_plugin_cmd'] == $value['subscribe_plugin_cmd'] && $v['subscribe_table_name'] == $value['subscribe_table_name']) {
-                        return $this->pluginError(ErrorCodeService::CODE_EXCEPTION, 'There are duplicate data');
+                        return $this->pluginError(ErrorCodeService::DATA_EXCEPTION_ERROR, 'There are duplicate data');
                     }
                 }
             }
@@ -86,7 +86,7 @@ class FresnsCrontablPlugin extends BasePlugin
         $item = $input['sub_table_plugin_item'];
         $config = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->first();
         if (empty($config['item_value'])) {
-            return $this->pluginError(ErrorCodeService::CODE_EXCEPTION, 'Data is empty');
+            return $this->pluginError(ErrorCodeService::DATA_EXCEPTION_ERROR, 'Data is empty');
         }
         $configArr = json_decode($config['item_value'], true);
         $dataArr = [];
@@ -119,7 +119,7 @@ class FresnsCrontablPlugin extends BasePlugin
             foreach ($item as $v) {
                 foreach ($configArr as $value) {
                     if ($v['crontab_plugin_unikey'] == $value['crontab_plugin_unikey'] && $v['crontab_plugin_cmd'] == $value['crontab_plugin_cmd']) {
-                        return $this->pluginError(ErrorCodeService::CODE_EXCEPTION, 'There are duplicate data');
+                        return $this->pluginError(ErrorCodeService::DATA_EXCEPTION_ERROR, 'There are duplicate data');
                     }
                 }
             }
@@ -143,7 +143,7 @@ class FresnsCrontablPlugin extends BasePlugin
         $config = FresnsConfigs::where('item_key', 'crontab_plugins')->first();
 
         if (empty($config['item_value'])) {
-            return $this->pluginError(ErrorCodeService::CODE_EXCEPTION, 'Data is empty');
+            return $this->pluginError(ErrorCodeService::DATA_EXCEPTION_ERROR, 'Data is empty');
         }
         $configArr = json_decode($config['item_value'], true);
         $dataArr = [];

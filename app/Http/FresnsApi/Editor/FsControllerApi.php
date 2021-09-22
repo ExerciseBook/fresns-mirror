@@ -135,7 +135,7 @@ class FsControllerApi extends FresnsBaseApiController
                 // means create a blank log, the pid must be filled, check if the pid exists for the log comment.
                 if (empty($uuid)) {
                     if (empty($pid)) {
-                        $this->errorInfo(ErrorCodeService::CODE_FAIL, ['info' => 'pid required']);
+                        $this->errorInfo(ErrorCodeService::MEMBER_FAIL, ['info' => 'pid required']);
                     }
                     // Verify added permissions
                     $createdCheck = FsChecker::checkPermission($type, 1, $user_id, $mid);
@@ -486,13 +486,13 @@ class FsControllerApi extends FresnsBaseApiController
             if (empty($pluginClass)) {
                 LogService::error('Plugin not found');
                 FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
-                $this->error(ErrorCodeService::FILE_SALE_ERROR);
+                $this->error(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
                 LogService::error('Plugin not found');
-                $this->error(ErrorCodeService::DOWMLOAD_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
             $paramsExist = false;
@@ -505,7 +505,7 @@ class FsControllerApi extends FresnsBaseApiController
             if ($paramsExist == false) {
                 LogService::error('插件信息未配置');
                 FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
-                $this->error(ErrorCodeService::FILE_SALE_ERROR);
+                $this->error(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
         }
 
@@ -606,13 +606,13 @@ class FsControllerApi extends FresnsBaseApiController
 
             if (empty($pluginClass)) {
                 LogService::error('Plugin not found');
-                $this->error(ErrorCodeService::FILE_SALE_ERROR);
+                $this->error(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
                 LogService::error('Plugin not found');
-                $this->error(ErrorCodeService::DOWMLOAD_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
 
             $file['file_type'] = $request->input('type', 1);
@@ -640,7 +640,7 @@ class FsControllerApi extends FresnsBaseApiController
 
             if ($paramsExist == false) {
                 LogService::error('Please configure the storage information first');
-                $this->error(ErrorCodeService::FILE_SALE_ERROR);
+                $this->error(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
 
             // Confirm Catalog
@@ -649,14 +649,14 @@ class FsControllerApi extends FresnsBaseApiController
             $storePath = FileSceneService::getEditorPath($options);
 
             if (! $storePath) {
-                $this->error(ErrorCodeService::CODE_FAIL);
+                $this->error(ErrorCodeService::MEMBER_FAIL);
             }
 
             // Get an instance of UploadFile
             $uploadFile = $request->file('file');
 
             if (empty($uploadFile)) {
-                $this->error(ErrorCodeService::FILES_ERROR);
+                $this->error(ErrorCodeService::FILE_EXIST_ERROR);
             }
 
             // Storage
@@ -672,7 +672,7 @@ class FsControllerApi extends FresnsBaseApiController
             $fileInfo = $request->input('fileInfo');
             $isJson = StrHelper::isJson($fileInfo);
             if ($isJson == false) {
-                $this->error(ErrorCodeService::FILES_INFO_ERROR);
+                $this->error(ErrorCodeService::FILE_INFO_JSON_ERROR);
             }
         }
 
@@ -756,14 +756,14 @@ class FsControllerApi extends FresnsBaseApiController
 
         if (empty($logs)) {
             if ($type == 1) {
-                $this->error(ErrorCodeService::DELETE_FILE_ERROR);
+                $this->error(ErrorCodeService::DELETE_POST_ERROR);
             } else {
                 $this->error(ErrorCodeService::DELETE_COMMENT_ERROR);
             }
         }
 
         if ($logs['member_id'] != $mid) {
-            $this->error(ErrorCodeService::POSTS_USER_ERROR);
+            $this->error(ErrorCodeService::CONTENT_AUTHOR_ERROR);
         }
 
         if ($deleteType == 2 || $deleteType == 3) {
@@ -781,7 +781,7 @@ class FsControllerApi extends FresnsBaseApiController
                     }
                 }
                 if (! in_array($deleteUuid, $filesIdArr)) {
-                    $this->error(ErrorCodeService::FILES_ERROR);
+                    $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
             }
 
@@ -795,13 +795,13 @@ class FsControllerApi extends FresnsBaseApiController
                 }
 
                 if (! in_array($deleteUuid, $eidArr)) {
-                    $this->error(ErrorCodeService::EXTEND_ERROR);
+                    $this->error(ErrorCodeService::EXTEND_EXIST_ERROR);
                 }
             }
         }
 
         if ($logs['status'] == 3) {
-            $this->error(ErrorCodeService::DELETED_ERROR);
+            $this->error(ErrorCodeService::DELETE_CONTENT_ERROR);
         }
 
         $checkDelete = $this->service->deletePostComment($uid, $mid, $logs, $type);
@@ -828,7 +828,7 @@ class FsControllerApi extends FresnsBaseApiController
         if ($type == 1) {
             $postLogs = FresnsPostLogs::find($logId);
             if (! $postLogs) {
-                $this->error(ErrorCodeService::POSTS_LOGS_EXISTS_ERROR);
+                $this->error(ErrorCodeService::POST_LOG_EXIST_ERROR);
             }
             if ($postLogs['status'] != 2) {
                 $this->error(ErrorCodeService::POST_REMOKE_ERROR);
@@ -838,7 +838,7 @@ class FsControllerApi extends FresnsBaseApiController
             // comment
             $commentLogs = FresnsCommentLogs::find($logId);
             if (! $commentLogs) {
-                $this->error(ErrorCodeService::COMMENT_LOGS_EXISTS_ERROR);
+                $this->error(ErrorCodeService::COMMENT_LOG_EXIST_ERROR);
             }
             if ($commentLogs['status'] != 2) {
                 $this->error(ErrorCodeService::COMMENT_REMOKE_ERROR);

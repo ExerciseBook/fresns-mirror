@@ -159,7 +159,7 @@ class FresnsPlugin extends BasePlugin
             FresnsVerifyCodes::where('id', $verifyInfo['id'])->update(['is_enable' => 0]);
             return $this->pluginSuccess();
         } else {
-            return $this->pluginError(ErrorCodeService::CAPTCHA_ERROR);
+            return $this->pluginError(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
         }
     }
 
@@ -450,8 +450,7 @@ class FresnsPlugin extends BasePlugin
 
         if (empty($memberId)) {
             // Verify Token
-            $uidToken = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('platform_id',
-                $platform)->where('user_id', $userId)->where('member_id', null)->first();
+            $uidToken = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('platform_id', $platform)->where('user_id', $userId)->where('member_id', null)->first();
 
             if (empty($uidToken)) {
                 return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
@@ -468,20 +467,19 @@ class FresnsPlugin extends BasePlugin
             }
         } else {
             // Verify Token
-            $midToken = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('platform_id',
-                $platform)->where('user_id', $userId)->where('member_id', $memberId)->first();
+            $midToken = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('platform_id', $platform)->where('user_id', $userId)->where('member_id', $memberId)->first();
             if (empty($midToken)) {
-                return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
+                return $this->pluginError(ErrorCodeService::MEMBER_TOKEN_ERROR);
             }
 
             if (! empty($midToken->expired_at)) {
                 if ($midToken->expired_at < $time) {
-                    return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
+                    return $this->pluginError(ErrorCodeService::MEMBER_TOKEN_ERROR);
                 }
             }
 
             if ($midToken->token != $token) {
-                return $this->pluginError(ErrorCodeService::USER_TOKEN_ERROR);
+                return $this->pluginError(ErrorCodeService::MEMBER_TOKEN_ERROR);
             }
         }
 
@@ -601,7 +599,7 @@ class FresnsPlugin extends BasePlugin
         if ($paramsExist == false) {
             LogService::error('Unconfigured Plugin');
 
-            return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
+            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
         }
 
         $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
@@ -722,7 +720,7 @@ class FresnsPlugin extends BasePlugin
         if ($paramsExist == false) {
             LogService::error('Unconfigured Plugin');
 
-            return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
+            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
         }
         if ($mode == 1) {
 
@@ -732,14 +730,14 @@ class FresnsPlugin extends BasePlugin
             $storePath = FileSceneService::getEditorPath($options);
 
             if (! $storePath) {
-                return $this->pluginError(ErrorCodeService::CODE_FAIL);
+                return $this->pluginError(ErrorCodeService::MEMBER_FAIL);
             }
 
             // Get an instance of UploadFile
             // $uploadFile = request()->file($uploadFile);
 
             if (empty($uploadFile)) {
-                return $this->pluginError(ErrorCodeService::FILES_ERROR);
+                return $this->pluginError(ErrorCodeService::FILE_EXIST_ERROR);
             }
             // Storage
             $path = $uploadFile->store($storePath);
@@ -913,7 +911,7 @@ class FresnsPlugin extends BasePlugin
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
         if (empty($files)) {
-            return $this->pluginError(ErrorCodeService::NO_RECORD);
+            return $this->pluginError(ErrorCodeService::FILE_EXIST_ERROR);
         }
 
         // Determine whether to turn on
@@ -951,7 +949,7 @@ class FresnsPlugin extends BasePlugin
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
-                return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
+                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
             $input = [];
@@ -985,7 +983,7 @@ class FresnsPlugin extends BasePlugin
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
         if (empty($files)) {
-            return $this->pluginError(ErrorCodeService::NO_RECORD);
+            return $this->pluginError(ErrorCodeService::FILE_EXIST_ERROR);
         }
 
         $append = FresnsFileAppends::where('file_id', $files['id'])->first();
@@ -1023,7 +1021,7 @@ class FresnsPlugin extends BasePlugin
 
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
-                return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
+                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
 
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_VIDEO;
@@ -1053,7 +1051,7 @@ class FresnsPlugin extends BasePlugin
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
         if (empty($files)) {
-            return $this->pluginError(ErrorCodeService::NO_RECORD);
+            return $this->pluginError(ErrorCodeService::FILE_EXIST_ERROR);
         }
 
         // Determine whether to turn on
@@ -1084,7 +1082,7 @@ class FresnsPlugin extends BasePlugin
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
-                return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
+                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
 
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_AUDIO;
@@ -1112,7 +1110,7 @@ class FresnsPlugin extends BasePlugin
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
         if (empty($files)) {
-            return $this->pluginError(ErrorCodeService::NO_RECORD);
+            return $this->pluginError(ErrorCodeService::FILE_EXIST_ERROR);
         }
 
         // Determine whether to turn on
@@ -1144,7 +1142,7 @@ class FresnsPlugin extends BasePlugin
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
-                return $this->pluginError(ErrorCodeService::FILE_SALE_ERROR);
+                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
             }
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
             $input = [];
@@ -1171,7 +1169,7 @@ class FresnsPlugin extends BasePlugin
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
         if (empty($files)) {
-            return $this->pluginError(ErrorCodeService::NO_RECORD);
+            return $this->pluginError(ErrorCodeService::FILE_EXIST_ERROR);
         }
 
         $basePath = base_path().'/storage/app/public'.$files['file_path'];
@@ -1540,7 +1538,7 @@ class FresnsPlugin extends BasePlugin
         $expiredMin = $min * 60;
         $now = time();
         if ($now - $timestamp > $expiredMin) {
-            return $this->pluginError(ErrorCodeService::SING_EXPIRED_ERROR);
+            return $this->pluginError(ErrorCodeService::HEADER_SIGN_EXPIRED);
         }
         LogService::info('Tips: ', $dataMap);
         $signKey = FresnsSessionKeys::where('app_id', $appId)->value('app_secret');
@@ -1552,7 +1550,7 @@ class FresnsPlugin extends BasePlugin
                 'sign' => $checkSignRes,
             ];
 
-            return $this->pluginError(ErrorCodeService::CODE_SIGN_ERROR, $info);
+            return $this->pluginError(ErrorCodeService::HEADER_SIGN_ERROR, $info);
         }
 
         return $this->pluginSuccess();
@@ -1575,17 +1573,17 @@ class FresnsPlugin extends BasePlugin
 
         $userId = FresnsUsers::where('uuid', $uid)->value('id');
         if (empty($userId)) {
-            return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
+            return $this->pluginError(ErrorCodeService::USER_CHECK_ERROR);
         }
         $memberId = null;
         if (! empty($mid)) {
             // If there is a pass mid then check if it belongs to uid
             $member = FresnsMembers::where('uuid', $mid)->first();
             if (empty($member)) {
-                return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
+                return $this->pluginError(ErrorCodeService::MEMBER_CHECK_ERROR);
             }
             if ($member['user_id'] !== $userId) {
-                return $this->pluginError(ErrorCodeService::CODE_FAIL);
+                return $this->pluginError(ErrorCodeService::MEMBER_FAIL);
             }
             $memberId = $member['id'];
         }
@@ -1609,7 +1607,7 @@ class FresnsPlugin extends BasePlugin
         if ($originUid) {
             $originUserId = FresnsUsers::where('uuid', $originUid)->value('id');
             if (empty($originUserId)) {
-                return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
+                return $this->pluginError(ErrorCodeService::USER_CHECK_ERROR);
             }
         }
 
@@ -1617,10 +1615,10 @@ class FresnsPlugin extends BasePlugin
         if ($originMid) {
             $originMember = FresnsMembers::where('uuid', $originMid)->first();
             if (empty($originMember)) {
-                return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
+                return $this->pluginError(ErrorCodeService::MEMBER_CHECK_ERROR);
             }
             if ($originMember['user_id'] !== $userId) {
-                return $this->pluginError(ErrorCodeService::CODE_FAIL);
+                return $this->pluginError(ErrorCodeService::MEMBER_FAIL);
             }
             $originMemberId = $originMember['id'];
         }
@@ -1726,17 +1724,17 @@ class FresnsPlugin extends BasePlugin
 
         $userId = FresnsUsers::where('uuid', $uid)->value('id');
         if (empty($userId)) {
-            return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
+            return $this->pluginError(ErrorCodeService::USER_CHECK_ERROR);
         }
         $memberId = null;
         if (! empty($mid)) {
             // If there is a pass mid then check if it belongs to uid
             $member = FresnsMembers::where('uuid', $mid)->first();
             if (empty($member)) {
-                return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
+                return $this->pluginError(ErrorCodeService::MEMBER_CHECK_ERROR);
             }
             if ($member['user_id'] !== $userId) {
-                return $this->pluginError(ErrorCodeService::CODE_FAIL);
+                return $this->pluginError(ErrorCodeService::MEMBER_FAIL);
             }
             $memberId = $member['id'];
         }
@@ -1745,7 +1743,7 @@ class FresnsPlugin extends BasePlugin
         if ($originUid) {
             $originUserId = FresnsUsers::where('uuid', $originUid)->value('id');
             if (empty($originUserId)) {
-                return $this->pluginError(ErrorCodeService::UID_EXIST_ERROR);
+                return $this->pluginError(ErrorCodeService::USER_CHECK_ERROR);
             }
         }
 
@@ -1753,10 +1751,10 @@ class FresnsPlugin extends BasePlugin
         if ($originMid) {
             $originMember = FresnsMembers::where('uuid', $originMid)->first();
             if (empty($originMember)) {
-                return $this->pluginError(ErrorCodeService::HEADER_EXSIT_MEMBER);
+                return $this->pluginError(ErrorCodeService::MEMBER_CHECK_ERROR);
             }
             if ($originMember['user_id'] !== $userId) {
-                return $this->pluginError(ErrorCodeService::CODE_FAIL);
+                return $this->pluginError(ErrorCodeService::MEMBER_FAIL);
             }
             $originMemberId = $originMember['id'];
         }

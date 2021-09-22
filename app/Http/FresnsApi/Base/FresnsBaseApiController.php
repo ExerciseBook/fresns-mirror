@@ -176,7 +176,7 @@ class FresnsBaseApiController extends BaseApiController
                 $info = [
                     'deviceInfo' => 'Please pass the reference in json format',
                 ];
-                $this->error(ErrorCodeService::HEADER_TYPE_ERROR, $info);
+                $this->error(ErrorCodeService::HEADER_INFO_ERROR, $info);
             }
         }
 
@@ -202,7 +202,7 @@ class FresnsBaseApiController extends BaseApiController
                     $info = [
                         'null user' => 'uid',
                     ];
-                    $this->error(ErrorCodeService::UID_EXIST_ERROR, $info);
+                    $this->error(ErrorCodeService::USER_CHECK_ERROR, $info);
                 }
                 // Verify the existence of deleted_at
                 if (! empty($user->phone)) {
@@ -211,7 +211,7 @@ class FresnsBaseApiController extends BaseApiController
                         $info = [
                             'null user' => 'uid',
                         ];
-                        $this->error(ErrorCodeService::NO_RECORD, $info);
+                        $this->error(ErrorCodeService::USER_CHECK_ERROR, $info);
                     }
                 }
                 if (! empty($user->email)) {
@@ -220,12 +220,12 @@ class FresnsBaseApiController extends BaseApiController
                         $info = [
                             'null user' => 'uid',
                         ];
-                        $this->error(ErrorCodeService::NO_RECORD, $info);
+                        $this->error(ErrorCodeService::USER_CHECK_ERROR, $info);
                     }
                 }
                 if ($user->is_enable == 0) {
                     if (! in_array($uri, FsConfig::CHECK_USER_IS_ENABLE_URI)) {
-                        $this->error(ErrorCodeService::HEADER_IS_ENABLE_ERROR);
+                        $this->error(ErrorCodeService::USER_IS_ENABLE_ERROR);
                     }
                 }
                 $userId = $user->id;
@@ -244,7 +244,7 @@ class FresnsBaseApiController extends BaseApiController
         } else {
             if (empty($uid) || empty($mid) || empty($token)) {
                 $info = [
-                    'missing header' => 'uid或mid或token',
+                    'missing header' => 'uid or mid or token',
                 ];
 
                 $this->error(ErrorCodeService::CODE_PARAM_ERROR, $info);
@@ -261,7 +261,7 @@ class FresnsBaseApiController extends BaseApiController
                 $info = [
                     'null user' => 'uid',
                 ];
-                $this->error(ErrorCodeService::UID_EXIST_ERROR, $info);
+                $this->error(ErrorCodeService::USER_CHECK_ERROR, $info);
             }
             // Check if the uid is deleted_at
             if (! empty($user->phone)) {
@@ -270,7 +270,7 @@ class FresnsBaseApiController extends BaseApiController
                     $info = [
                         'null user' => 'uid',
                     ];
-                    $this->error(ErrorCodeService::NO_RECORD, $info);
+                    $this->error(ErrorCodeService::USER_CHECK_ERROR, $info);
                 }
             }
             if (! empty($user->email)) {
@@ -279,13 +279,13 @@ class FresnsBaseApiController extends BaseApiController
                     $info = [
                         'null user' => 'uid',
                     ];
-                    $this->error(ErrorCodeService::NO_RECORD, $info);
+                    $this->error(ErrorCodeService::USER_CHECK_ERROR, $info);
                 }
             }
 
             if ($user->is_enable == 0) {
                 if (! in_array($uri, FsConfig::CHECK_USER_IS_ENABLE_URI)) {
-                    $this->error(ErrorCodeService::HEADER_IS_ENABLE_ERROR);
+                    $this->error(ErrorCodeService::USER_IS_ENABLE_ERROR);
                 }
             }
 
@@ -296,16 +296,16 @@ class FresnsBaseApiController extends BaseApiController
                 $info = [
                     'null member' => 'mid',
                 ];
-                $this->error(ErrorCodeService::HEADER_EXSIT_MEMBER, $info);
+                $this->error(ErrorCodeService::MEMBER_CHECK_ERROR, $info);
             }
             if ($member['is_enable'] == 0) {
-                $this->error(ErrorCodeService::HEADER_IS_ENABLE_ERROR);
+                $this->error(ErrorCodeService::TOKEN_IS_ENABLE_ERROR);
             }
             $memberId = $member['id'];
 
             $count = FresnsMembers::where('user_id', $userId)->where('id', $memberId)->count();
             if ($count == 0) {
-                $this->error(ErrorCodeService::CODE_FAIL);
+                $this->error(ErrorCodeService::MEMBER_FAIL);
             }
 
             // Verify token
@@ -334,7 +334,7 @@ class FresnsBaseApiController extends BaseApiController
                 $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
 
                 if (empty($roleId)) {
-                    $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+                    $this->error(ErrorCodeService::ROLE_NO_PERMISSION);
                 }
 
                 $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
@@ -344,10 +344,10 @@ class FresnsBaseApiController extends BaseApiController
                     if (! empty($permissionArr)) {
                         $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
                         if (empty($permissionMap)) {
-                            $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+                            $this->error(ErrorCodeService::ROLE_NO_PERMISSION);
                         }
                         if ($permissionMap['content_view'] == false) {
-                            $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+                            $this->error(ErrorCodeService::ROLE_NO_PERMISSION_BROWSE);
                         }
                     }
                 }
@@ -415,13 +415,13 @@ class FresnsBaseApiController extends BaseApiController
             $info = [
                 'platform' => 'Please enter an integer',
             ];
-            $this->error(ErrorCodeService::HEADER_TYPE_ERROR, $info);
+            $this->error(ErrorCodeService::HEADER_INFO_ERROR, $info);
         }
         if (! is_numeric($versionInt)) {
             $info = [
                 'versionInt' => 'Please enter an integer',
             ];
-            $this->error(ErrorCodeService::HEADER_TYPE_ERROR, $info);
+            $this->error(ErrorCodeService::HEADER_INFO_ERROR, $info);
         }
 
         /*
@@ -438,20 +438,20 @@ class FresnsBaseApiController extends BaseApiController
                 'appId' => 'App ID does not exist',
             ];
 
-            $this->error(ErrorCodeService::NO_RECORD, $info);
+            $this->error(ErrorCodeService::HEADER_APP_ID_ERROR, $info);
         }
         if ($sessionKeys['platform_id'] != $platform) {
             $info = [
                 'platform' => 'Platform ID does not exist',
             ];
 
-            $this->error(ErrorCodeService::NO_RECORD, $info);
+            $this->error(ErrorCodeService::HEADER_PLATFORM_ERROR, $info);
         }
         if ($sessionKeys['is_enable'] == 0) {
-            $this->error(ErrorCodeService::HEADER_IS_ENABLE_ERROR);
+            $this->error(ErrorCodeService::TOKEN_IS_ENABLE_ERROR);
         }
         if ($sessionKeys['type'] == 2) {
-            $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+            $this->error(ErrorCodeService::HEADER_KEY_ERROR);
         }
         $signKey = $sessionKeys['app_secret'];
         $dataMap = [];

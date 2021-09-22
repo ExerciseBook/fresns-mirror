@@ -90,7 +90,7 @@ class FsControllerWeb extends BaseFrontendController
         }
 
         if (empty($user)) {
-            $this->error(ErrorCodeService::CODE_LOGIN_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_ERROR);
         }
 
         $password = base64_decode($password, true);
@@ -101,7 +101,7 @@ class FsControllerWeb extends BaseFrontendController
 
         $result = $this->attemptLogin($credentials);
         if ($result == false) {
-            $this->error(ErrorCodeService::CODE_LOGIN_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_ERROR);
         }
 
         $user = User::find($user['id']);
@@ -134,10 +134,10 @@ class FsControllerWeb extends BaseFrontendController
         }
 
         if (empty($user)) {
-            $this->error(ErrorCodeService::CODE_LOGIN_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_ERROR);
         }
 
-        $sessionLogId = FresnsSessionLogsService::addConsoleSessionLogs(3, '控制台登录校验', $user->id);
+        $sessionLogId = FresnsSessionLogsService::addConsoleSessionLogs(3, 'Console Login Check', $user->id);
 
         if ($sessionLogId) {
             $sessionInput = [
@@ -158,7 +158,7 @@ class FsControllerWeb extends BaseFrontendController
 
         if ($sessionCount >= 5) {
             FresnsSessionLogsService::updateSessionLogs($sessionLogId, 1);
-            $this->error(ErrorCodeService::LOGIN_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_COUNT_ERROR);
         }
 
         $credentials = [
@@ -170,7 +170,7 @@ class FsControllerWeb extends BaseFrontendController
 
         if ($result == false) {
             FresnsSessionLogsService::updateSessionLogs($sessionLogId, 1);
-            $this->error(ErrorCodeService::CODE_LOGIN_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_ERROR);
         }
 
         FresnsSessionLogsService::updateSessionLogs($sessionLogId, 2);
@@ -410,7 +410,7 @@ class FsControllerWeb extends BaseFrontendController
     {
         $account = $request->input('account');
         if (empty($account)) {
-            $this->error(ErrorCodeService::ACCOUNT_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_IS_EMPTY_ERROR);
         }
 
         $user = FresnsUsers::where('is_enable', 1)->where('user_type', '!=', FsConfig::USER_TYPE_ADMIN)->where(function ($query) {
@@ -419,7 +419,7 @@ class FsControllerWeb extends BaseFrontendController
         })->first();
 
         if (empty($user)) {
-            $this->error(ErrorCodeService::ADMIN_ACCOUNT_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_CHECK_ERROR);
         }
 
         FresnsUsers::where('id', $user['id'])->update(['user_type' => FsConfig::USER_TYPE_ADMIN]);
@@ -433,7 +433,7 @@ class FsControllerWeb extends BaseFrontendController
         $uuid = $request->input('uuid');
         $user = Auth::user();
         if ($uuid == $user['uuid']) {
-            $this->error(ErrorCodeService::DELETE_ADMIN);
+            $this->error(ErrorCodeService::DELETE_ADMIN_ERROR);
         }
         FresnsUsers::where('uuid', $uuid)->update(['user_type' => FsConfig::USER_TYPE_USER]);
 
@@ -489,14 +489,14 @@ class FsControllerWeb extends BaseFrontendController
         $app_secret = strtolower(StrHelper::randString(32));
         $enAbleStatus = $request->input('enAbleStatus');
         if (! $keyName) {
-            $this->error(ErrorCodeService::KEYS_NAME_ERROR);
+            $this->error(ErrorCodeService::KEY_NAME_ERROR);
         }
         if ($platformId == 'Select a key application platform') {
-            $this->error(ErrorCodeService::KEYS_PLAT_ERROR);
+            $this->error(ErrorCodeService::KEY_PLATFORM_ERROR);
         }
         if ($type == 2) {
             if (! $plugin || $plugin == 'Select which plugin to use the key for') {
-                $this->error(ErrorCodeService::PLUGIN_PLAT_ERROR);
+                $this->error(ErrorCodeService::KEY_PLUGIN_ERROR);
             }
         }
         $input = [
@@ -531,14 +531,14 @@ class FsControllerWeb extends BaseFrontendController
         $plugin = ($type == 2) ? $request->input('plugin') : null;
         $enAbleStatus = $request->input('enAbleStatus');
         if (! $keyName) {
-            $this->error(ErrorCodeService::KEYS_NAME_ERROR);
+            $this->error(ErrorCodeService::KEY_NAME_ERROR);
         }
         if ($platformId == 'Select a key application platform') {
-            $this->error(ErrorCodeService::KEYS_PLAT_ERROR);
+            $this->error(ErrorCodeService::KEY_PLATFORM_ERROR);
         }
         if ($type == 2) {
             if (! $plugin || $plugin == 'Select which plugin to use the key for') {
-                $this->error(ErrorCodeService::PLUGIN_PLAT_ERROR);
+                $this->error(ErrorCodeService::KEY_PLUGIN_ERROR);
             }
         }
         $input = [
@@ -739,7 +739,7 @@ class FsControllerWeb extends BaseFrontendController
 
         $installer = InstallHelper::findInstaller($uniKey);
         if (empty($installer)) {
-            $this->error(ErrorCodeService::NO_RECORD);
+            $this->error(ErrorCodeService::HELPER_EXCEPTION_ERROR);
         }
         $installer->uninstall();
 
@@ -748,7 +748,7 @@ class FsControllerWeb extends BaseFrontendController
             $this->error(ErrorCodeService::PLUGIN_UNIKEY_ERROR);
         }
         if ($plugin['is_enable'] == 1) {
-            $this->error(ErrorCodeService::PLUGIN_ENABLE_ERROR);
+            $this->error(ErrorCodeService::UNINSTALL_EXTENSION_ERROR);
         }
 
         $info = PluginHelper::uninstallByUniKey($uniKey);
@@ -772,7 +772,7 @@ class FsControllerWeb extends BaseFrontendController
         ];
         $downloadFileName = implode(DIRECTORY_SEPARATOR, $pathArr);
         if (! file_exists($downloadFileName)) {
-            $this->error(ErrorCodeService::FILES_ERROR);
+            $this->error(ErrorCodeService::FILE_EXIST_ERROR);
         }
 
         $options = [];
@@ -786,7 +786,7 @@ class FsControllerWeb extends BaseFrontendController
         $installer = InstallHelper::findInstaller($unikey);
 
         if (empty($installer)) {
-            $this->error(ErrorCodeService::NO_RECORD);
+            $this->error(ErrorCodeService::HELPER_EXCEPTION_ERROR);
         }
 
         $installInfo = $installer->install();
@@ -803,12 +803,12 @@ class FsControllerWeb extends BaseFrontendController
     {
         $dirName = $request->input('dirName');
         if (empty($dirName)) {
-            $this->error(ErrorCodeService::FILES_EMPTY_ERROR);
+            $this->error(ErrorCodeService::FOLDER_NAME_EMPTY_ERROR);
         }
 
         $downloadFileName = InstallHelper::getPluginExtensionPath($dirName);
         if (! file_exists($downloadFileName)) {
-            $this->error(ErrorCodeService::FILES_ERROR);
+            $this->error(ErrorCodeService::FILE_EXIST_ERROR);
         }
 
         // 1. Check if the file information is secure
@@ -832,7 +832,7 @@ class FsControllerWeb extends BaseFrontendController
         if ($type != PluginConst::PLUGIN_TYPE_THEME) {
             $installer = InstallHelper::findInstaller($uniKey);
             if (empty($installer)) {
-                $this->error(ErrorCodeService::NO_RECORD);
+                $this->error(ErrorCodeService::HELPER_EXCEPTION_ERROR);
             }
 
             $installInfo = $installer->install();

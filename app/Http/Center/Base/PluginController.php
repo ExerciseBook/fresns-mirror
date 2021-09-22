@@ -46,7 +46,7 @@ class PluginController extends BaseController
         $fileSize = File::size($downloadFileName);
 
         if ($fileSize < 10) {
-            $this->error(ErrorCodeService::DOWMLOAD_ERROR, ['info' => '下载失败或者文件为空']);
+            $this->error(ErrorCodeService::EXTENSION_DOWMLOAD_ERROR);
         }
 
         // 1. Install files
@@ -63,7 +63,7 @@ class PluginController extends BaseController
         // 3. Execute the installation function of the plugin itself
         $installer = InstallHelper::findInstaller($uniKey);
         if (empty($installer)) {
-            $this->error(ErrorCodeService::NO_RECORD);
+            $this->error(ErrorCodeService::HELPER_EXCEPTION_ERROR);
         }
 
         $installInfo = $installer->install();
@@ -109,17 +109,17 @@ class PluginController extends BaseController
         $remoteVision = $request->input('remoteVision');
         $downloadUrl = $request->input('downloadUrl');
         if ($localVision == $remoteVisionInt) {
-            $this->errorInfo(ErrorCodeService::CODE_FAIL, ['info' => 'The current version is the same as the upgraded version']);
+            $this->errorInfo(ErrorCodeService::MEMBER_FAIL);
         }
         // Get install class
         $installer = InstallHelper::findInstaller($unikey);
         if (empty($installer)) {
-            $this->error(ErrorCodeService::NO_RECORD);
+            $this->error(ErrorCodeService::HELPER_EXCEPTION_ERROR);
         }
         // Perform installation
         $res = self::beforeUpgrade($unikey, $dirName, $downloadUrl);
         if (! $res) {
-            $this->error(ErrorCodeService::DOWMLOAD_ERROR, ['info' => '下载失败或者文件为空']);
+            $this->error(ErrorCodeService::EXTENSION_DOWMLOAD_ERROR);
         }
         $info = $installer->upgrade();
         // Update to the latest version
@@ -167,7 +167,7 @@ class PluginController extends BaseController
         $installer = InstallHelper::findInstaller($unikey);
         if (empty($installer)) {
             return false;
-            // $this->error(FresnsCode::NO_RECORD);
+            // $this->error(FresnsCode::HELPER_EXCEPTION_ERROR);
         }
 
         $installInfo = $installer->install();

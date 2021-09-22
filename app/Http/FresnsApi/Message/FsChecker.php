@@ -24,23 +24,23 @@ use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 class FsChecker extends BaseChecker
 {
     // Status Code
-    const MEMBER_ROLE_ERROR = 30083;
+    const ROLE_DIALOG_ERROR = 30083;
     const MEMBER_ERROR = 30032;
     const MEMBER_FOLLOW_ERROR = 30033;
-    const FILE_OR_MESSAGE_ERROR = 30031;
+    const FILE_OR_TEXT_ERROR = 30031;
     const DIALOG_WORD_ERROR = 30036;
     const VERIFIED_ERROR = 30034;
-    const MEMBER_ME_ERROR = 30089;
+    const SEND_ME_ERROR = 30089;
     const DIALOG_ERROR = 30028;
     const MEMBER_EXPIRED_ERROR = 30091;
     public $codeMap = [
-        self::MEMBER_ROLE_ERROR => '该成员无发送消息权限',
+        self::ROLE_DIALOG_ERROR => '该成员无发送消息权限',
         self::MEMBER_ERROR => '对方已注销',
         self::MEMBER_FOLLOW_ERROR => '需关注对方才能发送消息',
-        self::FILE_OR_MESSAGE_ERROR => '文件和消息只能传其一',
+        self::FILE_OR_TEXT_ERROR => '文件和消息只能传其一',
         self::DIALOG_WORD_ERROR => '存在屏蔽字，禁止发送',
         self::VERIFIED_ERROR => '需认证才能给对方发消息',
-        self::MEMBER_ME_ERROR => '自己不能给自己发送信息',
+        self::SEND_ME_ERROR => '自己不能给自己发送信息',
         self::DIALOG_ERROR => '已关闭私信功能，暂不能发送私信',
         self::MEMBER_EXPIRED_ERROR => '成员已过期，不能发送私信',
     ];
@@ -67,7 +67,7 @@ class FsChecker extends BaseChecker
         // Determine if the member master role has the right to send private messages (member_roles > permission > dialog=true)
         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($mid);
         if (empty($roleId)) {
-            return self::checkInfo(self::MEMBER_ROLE_ERROR);
+            return self::checkInfo(self::ROLE_DIALOG_ERROR);
         }
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
         if (! empty($memberRole)) {
@@ -76,17 +76,17 @@ class FsChecker extends BaseChecker
             if (! empty($permissionArr)) {
                 $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
                 if (empty($permissionMap)) {
-                    return self::checkInfo(self::MEMBER_ROLE_ERROR);
+                    return self::checkInfo(self::ROLE_DIALOG_ERROR);
                 }
             }
             if (! isset($permissionMap['dialog'])) {
-                return self::checkInfo(self::MEMBER_ROLE_ERROR);
+                return self::checkInfo(self::ROLE_DIALOG_ERROR);
             }
             if ($permissionMap['dialog'] == false) {
-                return self::checkInfo(self::MEMBER_ROLE_ERROR);
+                return self::checkInfo(self::ROLE_DIALOG_ERROR);
             }
         } else {
-            return self::checkInfo(self::MEMBER_ROLE_ERROR);
+            return self::checkInfo(self::ROLE_DIALOG_ERROR);
         }
 
         // Determine if the other party has deleted (members > deleted_at)
@@ -99,26 +99,24 @@ class FsChecker extends BaseChecker
         // Determine whether the dialog settings match each other (members > dialog_limit)
         $memberInfo = FresnsMembers::where('uuid', $recvMid)->first();
         if ($memberInfo['id'] == $mid) {
-            return self::checkInfo(self::MEMBER_ME_ERROR);
+            return self::checkInfo(self::SEND_ME_ERROR);
         }
         // dialog_limit = 2 / Only members that I am allowed to follow
         if ($memberInfo['dialog_limit'] == 2) {
-            $count = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id',
-                $memberInfo['id'])->count();
+            $count = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id', $memberInfo['id'])->count();
             if ($count == 0) {
-                return self::checkInfo(self::MEMBER_FOLLOW_ERROR);
+                return self::checkInfo(self::DIALOG_LIMIT_2_ERROR);
             }
         }
         // dialog_limit = 3 / Members I follow and members I have certified
         if ($memberInfo['dialog_limit'] == 3) {
-            $count = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id',
-                $memberInfo['id'])->count();
+            $count = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id', $memberInfo['id'])->count();
             if ($count == 0) {
-                return self::checkInfo(self::MEMBER_FOLLOW_ERROR);
+                return self::checkInfo(self::DIALOG_LIMIT_3_ERROR);
             }
             $myInfo = FresnsMembers::find($mid);
             if ($myInfo['verified_status'] == 1) {
-                return self::checkInfo(self::VERIFIED_ERROR);
+                return self::checkInfo(self::DIALOG_LIMIT_3_ERROR);
             }
         }
 
@@ -126,7 +124,7 @@ class FsChecker extends BaseChecker
         $message = request()->input('message', null);
         $fid = request()->input('fid', null);
         if ($message && $fid) {
-            return self::checkInfo(self::FILE_OR_MESSAGE_ERROR);
+            return self::checkInfo(self::FILE_OR_TEXT_ERROR);
         }
     }
 }

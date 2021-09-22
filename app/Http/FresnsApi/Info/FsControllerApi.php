@@ -428,7 +428,7 @@ class FsControllerApi extends FresnsBaseApiController
         if ($useType == 4) {
             $userInfo = FresnsUsers::find($user_id);
             if (empty($userInfo)) {
-                $this->error(ErrorCodeService::UID_EXIST_ERROR);
+                $this->error(ErrorCodeService::USER_CHECK_ERROR);
             }
             if ($type == 1) {
                 $account = $userInfo['email'];
@@ -474,57 +474,57 @@ class FsControllerApi extends FresnsBaseApiController
                 // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.
                 $typeData = FresnsPosts::where('uuid', $uuid)->first();
                 if (empty($typeData)) {
-                    $this->error(ErrorCodeService::FILES_ERROR);
+                    $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
 
                 $files = FresnsFiles::where('uuid', $fid)->where('table_name',
                     FresnsPostsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
                 if (empty($files)) {
-                    $this->error(ErrorCodeService::FILES_ERROR);
+                    $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
                 // Post attachments need to determine if the post has permission enabled posts > is_allow
                 if (! empty($typeData)) {
                     if ($typeData['is_allow'] != FresnsPostsConfig::IS_ALLOW_1) {
-                        $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+                        $this->error(ErrorCodeService::POST_BROWSE_ERROR);
                     }
                 }
                 // If the post has read access, determine if the member requesting the download itself and the member's primary role are in the authorization list post_allows table
                 $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type',
                     2)->where('object_id', $mid)->count();
                 if (empty($count)) {
-                    $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+                    $this->error(ErrorCodeService::POST_BROWSE_ERROR);
                 }
                 break;
             case 2:
                 // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.
                 $typeData = FresnsComments::where('uuid', $uuid)->first();
                 if (empty($typeData)) {
-                    $this->error(ErrorCodeService::FILES_ERROR);
+                    $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
 
                 $files = FresnsFiles::where('uuid', $fid)->where('table_name',
                     FresnsCommentsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
                 if (empty($files)) {
-                    $this->error(ErrorCodeService::FILES_ERROR);
+                    $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
                 break;
             default:
                 $typeData = FresnsExtends::where('uuid', $uuid)->first();
                 // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.
                 if (empty($typeData)) {
-                    $this->error(ErrorCodeService::FILES_ERROR);
+                    $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
 
                 $files = FresnsFiles::where('uuid', $fid)->where('table_name',
                     FresnsExtendsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
                 if (empty($files)) {
-                    $this->error(ErrorCodeService::FILES_ERROR);
+                    $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
                 break;
         }
 
         if (empty($typeData)) {
-            $this->error(ErrorCodeService::FILES_ERROR);
+            $this->error(ErrorCodeService::FILE_EXIST_ERROR);
         }
 
         $files = FresnsFiles::where('uuid', $fid)->first();

@@ -88,16 +88,16 @@ class FsControllerApi extends FresnsBaseApiController
 
         $siteMode = ApiConfigHelper::getConfigByItemKey('site_mode');
         if ($siteMode == 'private') {
-            $this->error(ErrorCodeService::API_NO_CALL_ERROR);
+            $this->error(ErrorCodeService::PRIVATE_MODE_ERROR);
         }
 
         $sitePublicClose = ApiConfigHelper::getConfigByItemKey('site_public_close');
         if ($sitePublicClose === false) {
-            $this->error(ErrorCodeService::API_NO_CALL_ERROR);
+            $this->error(ErrorCodeService::PRIVATE_MODE_ERROR);
         }
         $sitePublicService = ApiConfigHelper::getConfigByItemKey('site_public_service');
         if (! empty($sitePublicService)) {
-            $this->error(ErrorCodeService::API_NO_CALL_ERROR);
+            $this->error(ErrorCodeService::PRIVATE_MODE_ERROR);
         }
         if ($type == 1) {
             $codeAccount = $account;
@@ -159,7 +159,7 @@ class FsControllerApi extends FresnsBaseApiController
         $codeArr = FresnsVerifyCodes::where('type', $type)->where('account', $codeAccount)->where('expired_at', '>',
             $time)->pluck('code')->toArray();
         if (! in_array($verifyCode, $codeArr)) {
-            $this->error(ErrorCodeService::SMS_CODE_CHECK_ERROR);
+            $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
         }
 
         // Check if a user has registered
@@ -349,7 +349,7 @@ class FsControllerApi extends FresnsBaseApiController
         ValidateService::validateRule($request, $rule);
 
         if (empty($user)) {
-            $this->error(ErrorCodeService::CODE_PHONE_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_CHECK_ERROR);
         }
 
         $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
@@ -372,7 +372,7 @@ class FsControllerApi extends FresnsBaseApiController
         ->count();
 
         if ($sessionCount >= 5) {
-            $this->error(ErrorCodeService::LOGIN_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_COUNT_ERROR);
         }
         // One of the password or verification code is required
         if (empty($password) && empty($verifyCode)) {
@@ -399,19 +399,19 @@ class FsControllerApi extends FresnsBaseApiController
                 }
 
                 if (! in_array($verifyCode, $codeArr)) {
-                    $this->error(ErrorCodeService::SMS_CODE_CHECK_ERROR);
+                    $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
                 }
             }
 
             if ($password) {
                 if (! Hash::check($password, $user->password)) {
-                    $this->error(ErrorCodeService::PASSWORD_INVALID);
+                    $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
                 }
             }
         }
 
         if ($user->is_enable == 0) {
-            $this->error(ErrorCodeService::USERS_NOT_AUTHORITY_ERROR);
+            $this->error(ErrorCodeService::USER_IS_ENABLE_ERROR);
         }
 
         $langTag = ApiLanguageHelper::getLangTagByHeader();
@@ -460,7 +460,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         $user = FresnsUsers::where('id', $uid)->first();
         if (empty($user)) {
-            $this->error(ErrorCodeService::NO_RECORD);
+            $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
         }
 
         FresnsUsers::where('id', $user['id'])->delete();
@@ -488,13 +488,13 @@ class FsControllerApi extends FresnsBaseApiController
 
         $user = FresnsUsers::where('uuid', $uid)->first();
         if ($user) {
-            $this->error(ErrorCodeService::NO_RECORD);
+            $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
         }
 
         $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->first();
 
         if (empty($user)) {
-            $this->error(ErrorCodeService::NO_RECORD);
+            $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
         }
 
         $input['deleted_at'] = null;
@@ -574,7 +574,7 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         if (! in_array($verifyCode, $codeArr)) {
-            $this->error(ErrorCodeService::SMS_CODE_CHECK_ERROR);
+            $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
         }
 
         switch ($type) {
@@ -588,7 +588,7 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         if (empty($user)) {
-            $this->error(ErrorCodeService::CODE_PHONE_ERROR);
+            $this->error(ErrorCodeService::ACCOUNT_CHECK_ERROR);
         }
         $password = str_replace(' ', '', $newPassword);
         $passwordLength = ApiConfigHelper::getConfigByItemKey('password_length');
@@ -751,7 +751,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $time)->pluck('code')->toArray();
 
                 if (! in_array($verifyCode, $codeArr)) {
-                    $this->error(ErrorCodeService::SMS_CODE_CHECK_ERROR);
+                    $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
                 }
             }
         }
@@ -772,7 +772,7 @@ class FsControllerApi extends FresnsBaseApiController
         if ($editPassword) {
             if (! empty($password)) {
                 if (! Hash::check($password, $user['password'])) {
-                    $this->error(ErrorCodeService::PASSWORD_INVALID);
+                    $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
                 }
             }
 
@@ -783,11 +783,11 @@ class FsControllerApi extends FresnsBaseApiController
             $wallet = FresnsUserWallets::where('user_id', $user['id'])->first();
             if (empty($codeArr)) {
                 if (! Hash::check($password, $wallet['password'])) {
-                    $this->error(ErrorCodeService::PASSWORD_INVALID);
+                    $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
                 }
             }
             if (empty($wallet)) {
-                $this->error(ErrorCodeService::NO_RECORD);
+                $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
             }
             FresnsUserWallets::where('id', $wallet['id'])->update(['password' => bcrypt($editWalletPassword)]);
         }
