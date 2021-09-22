@@ -12,7 +12,7 @@ class ErrorCodeService
     const CODE_OK = 0;
 
     // Extensions
-    const CONFIGS_SERVER_ERROR = 30000;
+    const PLUGINS_CONFIG_ERROR = 30000;
     const PLUGINS_CLASS_ERROR = 30001;
     const PLUGINS_TIMEOUT_ERROR = 30002;
     const PLUGINS_IS_ENABLE_ERROR = 30003;
@@ -165,9 +165,7 @@ class ErrorCodeService
     const POST_REMOKE_ERROR = 30823;
     const COMMENT_REMOKE_ERROR = 30824;
     const CONTENT_AUTHOR_ERROR = 30825;
-    const POST_LOG_EXIST_ERROR = 30826;
-    const COMMENT_LOG_EXIST_ERROR = 30827;
-    const COMMENT_CREATE_ERROR = 30828;
+    const COMMENT_CREATE_ERROR = 30826;
     
     // Editor Check Parameters
     const MEMBER_LIST_JSON_ERROR = 30900;
@@ -203,7 +201,7 @@ class ErrorCodeService
         self::CODE_OK                           => 'ok',
 
         // Extensions
-        self::CONFIGS_SERVER_ERROR              => '未配置服务商',
+        self::PLUGINS_CONFIG_ERROR              => '未配置服务商',
         self::PLUGINS_CLASS_ERROR               => '服务商不存在',
         self::PLUGINS_TIMEOUT_ERROR             => '服务商未响应',
         self::PLUGINS_IS_ENABLE_ERROR           => '服务商未启用',
@@ -356,8 +354,6 @@ class ErrorCodeService
         self::POST_REMOKE_ERROR                 => '当前帖子并非审核状态，无需撤回',
         self::COMMENT_REMOKE_ERROR              => '当前评论并非审核状态，无需撤回',
         self::CONTENT_AUTHOR_ERROR              => '操作失败，请确认是作者本人',
-        self::POST_LOG_EXIST_ERROR              => '帖子异常，日志表对应的帖子未找到',
-        self::COMMENT_LOG_EXIST_ERROR           => '评论异常，日志表对应的评论未找到',
         self::COMMENT_CREATE_ERROR              => '评论草稿创建失败，只有一级评论才能创建草稿',
         
         // Editor Check Parameters

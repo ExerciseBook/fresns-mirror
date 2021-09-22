@@ -86,7 +86,7 @@ class FresnsPlugin extends BasePlugin
             $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_sms_service');
         }
         if (empty($pluginUniKey)) {
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Start Handle
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
@@ -191,7 +191,7 @@ class FresnsPlugin extends BasePlugin
         $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_email_service');
         if (empty($pluginUniKey)) {
             LogService::error("No outgoing service provider configured");
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_EMAIL;
@@ -224,7 +224,7 @@ class FresnsPlugin extends BasePlugin
         $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_sms_service');
         if (empty($pluginUniKey)) {
             LogService::error("No outgoing service provider configured");
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_SMS;
@@ -263,7 +263,7 @@ class FresnsPlugin extends BasePlugin
         $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_wechat_service');
         if (empty($pluginUniKey)) {
             LogService::error("No outgoing service provider configured");
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_WECHAT;
@@ -305,7 +305,7 @@ class FresnsPlugin extends BasePlugin
         $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_ios_service');
         if (empty($pluginUniKey)) {
             LogService::error("No outgoing service provider configured");
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_IOS;
@@ -346,7 +346,7 @@ class FresnsPlugin extends BasePlugin
         $pluginUniKey = ApiConfigHelper::getConfigByItemKey('send_android_service');
         if (empty($pluginUniKey)) {
             LogService::error("No outgoing service provider configured");
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
         $cmd = FresnsPluginConfig::PLG_CMD_SEND_ANDROID;
@@ -557,7 +557,7 @@ class FresnsPlugin extends BasePlugin
 
         if (empty($pluginClass)) {
             LogService::error('Plugin Class Not Found');
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
 
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
@@ -599,7 +599,7 @@ class FresnsPlugin extends BasePlugin
         if ($paramsExist == false) {
             LogService::error('Unconfigured Plugin');
 
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
 
         $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
@@ -677,7 +677,7 @@ class FresnsPlugin extends BasePlugin
         if (empty($pluginClass)) {
             LogService::error('Plugin Class Not Found');
 
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
 
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
@@ -720,7 +720,7 @@ class FresnsPlugin extends BasePlugin
         if ($paramsExist == false) {
             LogService::error('Unconfigured Plugin');
 
-            return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         if ($mode == 1) {
 
@@ -933,7 +933,7 @@ class FresnsPlugin extends BasePlugin
 
             if (empty($pluginClass)) {
                 LogService::error('Plugin Class Not Found');
-                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
@@ -949,7 +949,7 @@ class FresnsPlugin extends BasePlugin
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
-                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
             $input = [];
@@ -1003,7 +1003,7 @@ class FresnsPlugin extends BasePlugin
 
             if (empty($pluginClass)) {
                 LogService::error('Plugin Class Not Found');
-                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
@@ -1021,7 +1021,7 @@ class FresnsPlugin extends BasePlugin
 
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
-                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_VIDEO;
@@ -1066,7 +1066,7 @@ class FresnsPlugin extends BasePlugin
 
             if (empty($pluginClass)) {
                 LogService::error('Plugin Class Not Found');
-                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
@@ -1082,7 +1082,7 @@ class FresnsPlugin extends BasePlugin
                 ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
-                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_AUDIO;
@@ -1126,7 +1126,7 @@ class FresnsPlugin extends BasePlugin
 
             if (empty($pluginClass)) {
                 LogService::error('Plugin Class Not Found');
-                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
@@ -1142,7 +1142,7 @@ class FresnsPlugin extends BasePlugin
                 ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
-                return $this->pluginError(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
             $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
             $input = [];

@@ -486,7 +486,7 @@ class FsControllerApi extends FresnsBaseApiController
             if (empty($pluginClass)) {
                 LogService::error('Plugin not found');
                 FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
-                $this->error(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
@@ -505,7 +505,7 @@ class FsControllerApi extends FresnsBaseApiController
             if ($paramsExist == false) {
                 LogService::error('插件信息未配置');
                 FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
-                $this->error(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
         }
 
@@ -606,7 +606,7 @@ class FsControllerApi extends FresnsBaseApiController
 
             if (empty($pluginClass)) {
                 LogService::error('Plugin not found');
-                $this->error(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
@@ -640,7 +640,7 @@ class FsControllerApi extends FresnsBaseApiController
 
             if ($paramsExist == false) {
                 LogService::error('Please configure the storage information first');
-                $this->error(ErrorCodeService::CONFIGS_SERVER_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             // Confirm Catalog
