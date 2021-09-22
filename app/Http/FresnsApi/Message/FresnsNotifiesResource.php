@@ -36,10 +36,10 @@ class FresnsNotifiesResource extends BaseAdminResource
 
         // Notify Data
         $messageId = $this->id;
-        $type = $this->source_type;
-        $class = $this->source_class;
+        $sourceType = $this->source_type;
+        $sourceClass = $this->source_class;
         $sourceId = $this->source_id;
-        if ($class == 1) {
+        if ($sourceClass == 1) {
             $data = FresnsPosts::find($sourceId);
         } else {
             $data = FresnsComments::find($sourceId);
@@ -83,8 +83,8 @@ class FresnsNotifiesResource extends BaseAdminResource
         // Default Field
         $default = [
             'nitifyId' => $messageId,
-            'type' => $type,
-            'class' => $class,
+            'sourceType' => $sourceType,
+            'sourceClass' => $sourceClass,
             'sourceUuId' => $data['uuid'] ?? '',
             'sourceMember' => $sourceMember,
             'sourceBrief' => $sourceBrief,
