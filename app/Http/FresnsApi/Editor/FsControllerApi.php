@@ -574,7 +574,7 @@ class FsControllerApi extends FresnsBaseApiController
         if ($mode == 2) {
             if (empty($tableId) && empty($tableKey)) {
                 $input = [
-                    '参数错误：' => 'tableId或tableKey至少填一项',
+                    'Parameter Error: ' => 'Fill in at least one of tableId or tableKey',
                 ];
                 $this->error(ErrorCodeService::CODE_PARAM_ERROR, $input);
             }
@@ -707,7 +707,6 @@ class FsControllerApi extends FresnsBaseApiController
             'type' => 'required|in:1,2,3,4',
             'mode' => 'required|in:1,2',
             'scene' => 'required|numeric|in:1,2,3,4,5,6,7,8,9,10,11',
-
         ];
         ValidateService::validateRule($request, $rule);
 
