@@ -63,6 +63,9 @@ class FsService
 
         $connectsArr = DB::table(FresnsUserConnectsConfig::CFG_TABLE)->where('user_id', $uid)->get([
             'connect_id',
+            'connect_name',
+            'connect_nickname',
+            'connect_avatar',
             'is_enable',
         ])->toArray();
         $itemArr = [];
@@ -70,6 +73,9 @@ class FsService
             foreach ($connectsArr as $v) {
                 $item = [];
                 $item['id'] = $v->connect_id;
+                $item['name'] = $v->connect_name;
+                $item['nickname'] = $v->connect_nickname;
+                $item['avatar'] = $v->connect_avatar;
                 $item['status'] = $v->is_enable;
                 $itemArr[] = $item;
             }
