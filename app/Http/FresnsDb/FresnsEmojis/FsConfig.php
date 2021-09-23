@@ -26,15 +26,13 @@ class FsConfig extends BaseConfig
     // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',
+        'code' => 'code',
         'name' => 'name',
-        'rank_num' => 'rank_num',
-        'is_enable' => 'is_enable',
-        'type' => 'type',
         'image_file_id' => 'image_file_id',
         'image_file_url' => 'image_file_url',
-        'more_json' => 'more_json',
-        'code' => 'code',
         'type' => 'type',
         'parent_id' => 'parent_id',
+        'rank_num' => 'rank_num',
+        'is_enable' => 'is_enable',
     ];
 }
