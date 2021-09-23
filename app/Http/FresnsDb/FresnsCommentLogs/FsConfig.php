@@ -29,7 +29,7 @@ class FsConfig extends BaseConfig
         'comment_id' => 'comment_id',
         'post_id' => 'post_id',
         'platform_id' => 'platform_id',
-        'type' => 'type',
+        'types' => 'types',
         'content' => 'content',
         'is_markdown' => 'is_markdown',
         'is_anonymous' => 'is_anonymous',

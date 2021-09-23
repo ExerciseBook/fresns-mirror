@@ -211,7 +211,7 @@ class ContentLogsService
             'post_id' => $postInfo['id'],
             'platform_id' => $postAppend['platform_id'],
             'group_id' => $postInfo['group_id'],
-            'type' => $postInfo['type'],
+            'types' => $postInfo['types'],
             'title' => $postInfo['title'],
             'content' => $postAppend['content'],
             'is_markdown' => $postAppend['is_markdown'],
@@ -300,7 +300,7 @@ class ContentLogsService
             'comment_id' => $commentInfo['id'],
             'post_id' => $commentInfo['post_id'],
             'platform_id' => $commentAppend['platform_id'],
-            'type' => $commentInfo['type'],
+            'types' => $commentInfo['types'],
             'content' => $commentAppend['content'],
             'is_markdown' => $commentAppend['is_markdown'],
             'is_anonymous' => $commentInfo['is_anonymous'],
@@ -322,7 +322,7 @@ class ContentLogsService
         $request = request();
         $mid = $mid;
         $logId = $request->input('logId');
-        $type = $request->input('type', 'text') ?? 'text';
+        $types = $request->input('types', 'text') ?? 'text';
         $gid = $request->input('gid');
         $gid = FresnsGroups::where('uuid', $gid)->first();
         $title = $request->input('title');
@@ -351,7 +351,7 @@ class ContentLogsService
         $content = self::stopWords($content);
         $input = [
             'group_id' => $gid,
-            'type' => $type,
+            'types' => $types,
             'title' => $title,
             'group_id' => $gid['id'] ?? null,
             'content' => trim($content),
@@ -377,7 +377,7 @@ class ContentLogsService
         $request = request();
         $mid = $mid;
         $logId = $request->input('logId');
-        $type = $request->input('type', 'text') ?? 'text';
+        $types = $request->input('types', 'text') ?? 'text';
         $content = $request->input('content');
         $isMarkdown = $request->input('isMarkdown', 0);
         $isAnonymous = $request->input('isAnonymous', 0);
@@ -399,7 +399,7 @@ class ContentLogsService
         }
         $extendsJson = json_encode($extends);
         $input = [
-            'type' => $type,
+            'types' => $types,
             'content' => trim($content),
             'is_markdown' => $isMarkdown == 'false' ? 0 : 1,
             'is_anonymous' => $isAnonymous == 'false' ? 0 : 1,
@@ -459,9 +459,9 @@ class ContentLogsService
         }
         $typeArr = array_unique(array_merge($pluginTypeArr, $imageType));
         if (empty($typeArr)) {
-            $type = 'text';
+            $types = 'text';
         } else {
-            $type = implode(',', $typeArr);
+            $types = implode(',', $typeArr);
         }
         // Query Group
         $group_id = null;
@@ -477,7 +477,7 @@ class ContentLogsService
             'member_id' => $member_id,
             'title' => $postTitle,
             'content' => strip_tags(trim($content)),
-            'type' => $type,
+            'types' => $types,
             'is_markdown' => $isMarkdown,
             // 'is_anonymous' => $isAnonymous,
             'files_json' => json_encode($fileArr),
@@ -540,15 +540,15 @@ class ContentLogsService
         $typeArr = array_unique(array_merge($pluginTypeArr, $imageType));
 
         if (empty($typeArr)) {
-            $type = 'text';
+            $types = 'text';
         } else {
-            $type = implode(',', $typeArr);
+            $types = implode(',', $typeArr);
         }
         $content = self::stopWords($content);
         $input = [
             'platform_id' => $request->header('platform'),
             'member_id' => $member_id,
-            'type' => $type,
+            'types' => $types,
             'post_id' => $postInfo['id'],
             'content' => strip_tags(trim($content)),
             'is_markdown' => $isMarkdown,

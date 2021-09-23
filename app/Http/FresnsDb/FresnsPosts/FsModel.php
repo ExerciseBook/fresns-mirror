@@ -117,7 +117,7 @@ class FsModel extends BaseAdminModel
         $searchType = $request->input('searchType');
         if ($searchType) {
             if ($searchType != 'all') {
-                $query->where('post.type', 'like', "%{$searchType}%");
+                $query->where('post.types', 'like', "%{$searchType}%");
             }
         }
 

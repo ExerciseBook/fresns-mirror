@@ -89,7 +89,7 @@ class FsModel extends BaseCategoryModel
         // Search type (parameters of the search type extension config)
         $searchType = $request->input('searchType');
         if ($searchType) {
-            $query->where('comment.type', 'like', "%{$searchType}%");
+            $query->where('comment.types', 'like', "%{$searchType}%");
         }
 
         // Specify the range: Member

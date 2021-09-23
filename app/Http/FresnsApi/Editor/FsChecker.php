@@ -607,7 +607,7 @@ class FsChecker extends BaseChecker
         $logType = $request->input('logType');
         $logId = $request->input('logId');
         $gid = $request->input('gid');
-        $type = $request->input('type');
+        $types = $request->input('types');
         $memberListJson = $request->input('memberListJson');
         $commentSetJson = $request->input('commentSetJson');
         $allowJson = $request->input('allowJson');

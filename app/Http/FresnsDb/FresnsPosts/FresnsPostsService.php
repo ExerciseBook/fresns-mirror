@@ -111,7 +111,7 @@ class FresnsPostsService extends FsService
             'uuid' => $uuid,
             'member_id' => $draftPost['member_id'],
             'group_id' => $draftPost['group_id'],
-            'type' => $draftPost['type'],
+            'types' => $draftPost['types'],
             'title' => $draftPost['title'],
             'content' => $contentBrief,
             'is_anonymous' => $draftPost['is_anonymous'],
@@ -175,7 +175,7 @@ class FresnsPostsService extends FsService
         $more_json['files'] = json_decode($draftPost['files_json'], true);
         $input = [
             'group_id' => $draftPost['group_id'],
-            'type' => $draftPost['type'],
+            'types' => $draftPost['types'],
             'title' => $draftPost['title'],
             'content' => $contentBrief,
             'is_anonymous' => $draftPost['is_anonymous'],

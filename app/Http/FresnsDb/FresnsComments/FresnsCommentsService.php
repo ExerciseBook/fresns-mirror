@@ -225,7 +225,7 @@ class FresnsCommentsService extends FsService
             'uuid' => $uuid,
             'member_id' => $draftComment['member_id'],
             'post_id' => $draftComment['post_id'],
-            'type' => $draftComment['type'],
+            'types' => $draftComment['types'],
             'content' => $contentBrief,
             'is_brief' => $is_brief,
             'parent_id' => $commentCid,
@@ -280,7 +280,7 @@ class FresnsCommentsService extends FsService
         $more_json['files'] = json_decode($draftComment['files_json'], true);
 
         $commentInput = [
-            'type' => $draftComment['type'],
+            'types' => $draftComment['types'],
             'content' => $contentBrief,
             'is_brief' => $is_brief,
             // 'is_markdown' => $draftComment['is_markdown'],

@@ -31,7 +31,7 @@ class FsConfig extends BaseConfig
         'post_id' => 'post_id',
         'platform_id' => 'platform_id',
         'group_id' => 'group_id',
-        'type' => 'type',
+        'types' => 'types',
         'title' => 'title',
         'content' => 'content',
         'is_markdown' => 'is_markdown',

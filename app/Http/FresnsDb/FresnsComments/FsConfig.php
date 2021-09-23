@@ -41,7 +41,7 @@ class FsConfig extends BaseConfig
         'post_id' => 'post_id',
         'parent_id' => 'parent_id',
         'member_id' => 'member_id',
-        'type' => 'type',
+        'types' => 'types',
         'content' => 'content',
         'is_brief' => 'is_brief',
         'is_anonymous' => 'is_anonymous',

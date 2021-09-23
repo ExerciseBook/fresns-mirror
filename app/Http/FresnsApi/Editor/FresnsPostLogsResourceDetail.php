@@ -94,7 +94,7 @@ class FresnsPostLogsResourceDetail extends BaseAdminResource
             'id' => $this->id,
             'pid' => $postInfo['uuid'] ?? '',
             'gid' => $this->group_id,
-            'type' => $this->type,
+            'types' => $this->types,
             'title' => $this->title,
             'content' => $this->content,
             'isMarkdown' => $this->is_markdown,

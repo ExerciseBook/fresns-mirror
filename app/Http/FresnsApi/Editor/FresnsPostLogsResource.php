@@ -34,7 +34,7 @@ class FresnsPostLogsResource extends BaseAdminResource
         $default = [
             'id' => $this->id,
             'pid' => $postInfo['uuid'] ?? '',
-            'type' => $this->type,
+            'types' => $this->types,
             'title' => $this->title,
             'content' => mb_substr($this->content, 0, 140),
             'reason' => $this->reason,

@@ -88,7 +88,7 @@ class FresnsCommentLogsResourceDetail extends BaseAdminResource
         $default = [
             'id' => $this->id,
             'cid' => $commentInfo['uuid'] ?? '',
-            'type' => $this->type,
+            'types' => $this->types,
             'content' => $this->content,
             'isMarkdown' => $this->is_markdown,
             'isAnonymous' => $this->is_anonymous,
