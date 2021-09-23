@@ -301,7 +301,6 @@ class FsControllerApi extends FresnsBaseApiController
         $rule = [
             'type' => 'required|numeric|in:1,2,3',
             'account' => 'required',
-
         ];
 
         $type = $request->input('type');

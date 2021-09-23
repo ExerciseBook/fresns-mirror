@@ -705,14 +705,12 @@ class FsControllerApi extends FresnsBaseApiController
     {
         $rule = [
             'type' => 'required|in:1,2,3,4',
-            'mode' => 'required|in:1,2',
             'scene' => 'required|numeric|in:1,2,3,4,5,6,7,8,9,10,11',
         ];
         ValidateService::validateRule($request, $rule);
 
         $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
         $input['type'] = $request->input('type');
-        $input['mode'] = $request->input('mode');
         $input['scene'] = $request->input('scene');
 
         $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);

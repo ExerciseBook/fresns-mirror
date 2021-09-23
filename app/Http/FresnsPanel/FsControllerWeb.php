@@ -583,7 +583,6 @@ class FsControllerWeb extends BaseFrontendController
             'location' => $pluginArr,
             'title' => 'Admins',
             'lang_desc' => FsService::getLanguage($lang),
-
         ];
 
         return view('fresns.admins', $data);

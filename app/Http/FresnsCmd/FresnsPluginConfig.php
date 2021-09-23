@@ -76,7 +76,7 @@ class FresnsPluginConfig extends BasePluginConfig
     public const PLG_CMD_ANTI_LINK_DOC = 'plg_cmd_anti_link_doc';
 
     // Command Word: Delete physical file by fid
-    public const PLG_CMD_HARD_DELETE_FID = 'plg_cmd_hard_delete_fid';
+    public const PLG_CMD_PHYSICAL_DELETION_FILE = 'plg_cmd_physical_deletion_file';
 
     // Command Word: Submit content into the main form
     public const PLG_CMD_DIRECT_RELEASE_CONTENT = 'plg_cmd_direct_release_content';
@@ -111,7 +111,7 @@ class FresnsPluginConfig extends BasePluginConfig
         self::PLG_CMD_ANTI_LINK_VIDEO => 'plgCmdAntiLinkVideoHandler',
         self::PLG_CMD_ANTI_LINK_AUDIO => 'plgCmdAntiLinkAudioHandler',
         self::PLG_CMD_ANTI_LINK_DOC => 'plgCmdAntiLinkDocHandler',
-        self::PLG_CMD_HARD_DELETE_FID => 'plgCmdHardDeleteFidHandler',
+        self::PLG_CMD_PHYSICAL_DELETION_FILE => 'plgCmdPhysicalDeletionFileHandler',
         self::PLG_CMD_DELETE_CONTENT => 'deleteContentHandler',
         self::PLG_CMD_WALLET_INCREASE => 'plgCmdWalletIncreaseHandler',
         self::PLG_CMD_WALLET_DECREASE => 'plgCmdWalletDecreaseHandler',
@@ -279,9 +279,7 @@ class FresnsPluginConfig extends BasePluginConfig
     {
         $rule = [
             'type' => 'required|in:1,2,3,4',
-            'mode' => 'required|in:1,2',
             'scene' => 'required|numeric',
-
         ];
         return $rule;
     }
@@ -336,7 +334,7 @@ class FresnsPluginConfig extends BasePluginConfig
     }
 
     // Delete physical file by fid
-    public function plgCmdHardDeleteFidHandlerRule()
+    public function plgCmdPhysicalDeletionFileHandlerRule()
     {
         $rule = [
             'fid' => 'required',

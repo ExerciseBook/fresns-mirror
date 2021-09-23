@@ -236,7 +236,6 @@ class FsControllerApi extends FresnsBaseApiController
             'dialogId' => $dialogId,
             'member' => $member,
             'list' => $list['list'],
-
         ];
         $this->success($data);
     }

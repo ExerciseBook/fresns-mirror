@@ -294,7 +294,6 @@ class FsControllerApi extends FresnsBaseApiController
             'gender' => 'numeric|in:0,1,2',
             'dialogLimit' => 'numeric',
             'birthday' => 'date_format:"Y-m-n"',
-
         ];
         ValidateService::validateRule($request, $rule);
 
@@ -642,7 +641,6 @@ class FsControllerApi extends FresnsBaseApiController
             'markType' => 'required|numeric|in:1,2,3',
             'markTarget' => 'required|numeric|in:1,2,3,4,5',
             'markId' => 'required',
-
         ];
         ValidateService::validateRule($request, $rule);
 

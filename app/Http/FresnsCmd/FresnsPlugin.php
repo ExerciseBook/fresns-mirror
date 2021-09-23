@@ -535,7 +535,6 @@ class FresnsPlugin extends BasePlugin
     {
         $type = $input['type'];
         $scene = $input['scene'];
-        $mode = $input['mode'];
         switch ($type) {
             case 1:
                 $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
@@ -1164,7 +1163,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // Delete physical file by fid
-    public function plgCmdHardDeleteFidHandler($input)
+    public function plgCmdPhysicalDeletionFileHandler($input)
     {
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
@@ -1221,7 +1220,7 @@ class FresnsPlugin extends BasePlugin
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
                                     // Plugin handle logic.
-                                    $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
+                                    $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
                                     $input['fid'] = $extendsFileId;
                                     $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
                                     // Delete file data records from both "files" + "file_appends" tables.
@@ -1282,7 +1281,7 @@ class FresnsPlugin extends BasePlugin
                     if ($filesIdArr) {
                         // Delete physical files
                         foreach ($filesIdArr as $v) {
-                            $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
+                            $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
                             $input['fid'] = $v;
                             $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
                         }
@@ -1379,7 +1378,7 @@ class FresnsPlugin extends BasePlugin
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
                                     // Plugin handle logic.
-                                    $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
+                                    $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
                                     $input['fid'] = $extendsFileId;
                                     $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
 
@@ -1440,7 +1439,7 @@ class FresnsPlugin extends BasePlugin
                     if ($filesUuidArr) {
                         // Delete physical files
                         foreach ($filesUuidArr as $v) {
-                            $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
+                            $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
                             $input['fid'] = $v;
                             $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
                         }

@@ -357,7 +357,7 @@ class FresnsCrontablPlugin extends BasePlugin
         DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $id)->delete();
         $fileIdArr = DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('user_id', $id)->pluck('file_id')->toArray();
         $fileUuIdArr = DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('user_id', $id)->pluck('uuid')->toArray();
-        $cmd = FresnsPluginConfig::PLG_CMD_HARD_DELETE_FID;
+        $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
         // Physical Deletion: files
         foreach ($fileUuIdArr as $v) {
             $input = [];

@@ -17,11 +17,11 @@ class ErrorCodeService
     const PLUGINS_TIMEOUT_ERROR = 30002;
     const PLUGINS_IS_ENABLE_ERROR = 30003;
     const PLUGINS_HANDLE_ERROR = 30004;
-    const VERIFY_CODE_CHECK_ERROR = 30005;
-    const PRIVATE_MODE_ERROR = 30006;
-    const DATA_EXCEPTION_ERROR = 30007;
-    const HELPER_EXCEPTION_ERROR = 30008;
-    const CODE_PARAM_ERROR = 30009;
+    const CODE_PARAM_ERROR = 30005;
+    const DATA_EXCEPTION_ERROR = 30006;
+    const HELPER_EXCEPTION_ERROR = 30007;
+    const VERIFY_CODE_CHECK_ERROR = 30008;
+    const PRIVATE_MODE_ERROR = 30009;
 
     // Header
     const HEADER_ERROR = 30100;
@@ -206,11 +206,11 @@ class ErrorCodeService
         self::PLUGINS_TIMEOUT_ERROR             => '服务商未响应',
         self::PLUGINS_IS_ENABLE_ERROR           => '服务商未启用',
         self::PLUGINS_HANDLE_ERROR              => '服务商处理失败',
-        self::VERIFY_CODE_CHECK_ERROR           => '验证码不正确或验证码已过期',
-        self::PRIVATE_MODE_ERROR                => '私有模式禁止请求该接口',
+        self::CODE_PARAM_ERROR                  => '参数错误',
         self::DATA_EXCEPTION_ERROR              => '数据异常，查询不到或者数据重复',
         self::HELPER_EXCEPTION_ERROR            => '执行异常，文件丢失或者记录错误',
-        self::CODE_PARAM_ERROR                  => '参数错误',
+        self::VERIFY_CODE_CHECK_ERROR           => '验证码不正确或验证码已过期',
+        self::PRIVATE_MODE_ERROR                => '私有模式禁止请求该接口',
 
         // Header
         self::HEADER_ERROR                      => 'Header Error',

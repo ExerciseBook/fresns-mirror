@@ -569,7 +569,6 @@ class FresnsPostsResourceDetail extends BaseAdminResource
             'manages' => $manages,
             'editStatus' => $editStatus,
             // 'seoInfo' => $seoInfo
-
         ];
         
         // Merger
