@@ -271,7 +271,7 @@ class FresnsPostsService extends FsService
         $allowPluginUnikey = null;
         $allowBtnName = null;
         $proportion = null;
-        $web_proportion = ApiConfigHelper::getConfigByItemKey(FsConfig::WEB_PROPORTION) ?? 30;
+        $web_proportion = 0;
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
@@ -365,7 +365,7 @@ class FresnsPostsService extends FsService
         $content = $draftPost['content'];
         $content = $this->stopWords($content);
         // Removing html tags
-        $content = strip_tags($content);
+        // $content = strip_tags($content);
         $postAppendInput = [
             'post_id' => $postId,
             'platform_id' => $draftPost['platform_id'],
@@ -478,7 +478,7 @@ class FresnsPostsService extends FsService
         $allowPluginUnikey = '';
         $allowBtnName = null;
         $proportion = null;
-        $web_proportion = ApiConfigHelper::getConfigByItemKey(FsConfig::WEB_PROPORTION) ?? 30;
+        $web_proportion = 0;
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
@@ -588,7 +588,7 @@ class FresnsPostsService extends FsService
         $content = $draftPost['content'];
         $content = $this->stopWords($content);
         // Removing html tags
-        $content = strip_tags($content);
+        // $content = strip_tags($content);
         $postAppendInput = [
             'platform_id' => $draftPost['platform_id'],
             'content' => $content,
@@ -829,7 +829,7 @@ class FresnsPostsService extends FsService
         if ($draftPost['allow_json']) {
             $allow_json = json_decode($draftPost['allow_json'], true);
             if ($allow_json['isAllow'] == 1) {
-                $web_proportion = ApiConfigHelper::getConfigByItemKey(FsConfig::WEB_PROPORTION) ?? 30;
+                $web_proportion = 0;
                 if (! isset($allow_json['proportion'])) {
                     $proportion = $web_proportion;
                 } else {

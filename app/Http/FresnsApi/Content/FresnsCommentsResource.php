@@ -360,12 +360,35 @@ class FresnsCommentsResource extends BaseAdminResource
 
         // Attached Quantity
         $attachCount = [];
-        $attachCount['images'] = FresnsFiles::where('file_type', 1)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachCount['videos'] = FresnsFiles::where('file_type', 2)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachCount['audios'] = FresnsFiles::where('file_type', 3)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachCount['docs'] = FresnsFiles::where('file_type', 4)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        $attachCount['extends'] = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
-
+        // $attachCount['images'] = FresnsFiles::where('file_type', 1)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        // $attachCount['videos'] = FresnsFiles::where('file_type', 2)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        // $attachCount['audios'] = FresnsFiles::where('file_type', 3)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        // $attachCount['docs'] = FresnsFiles::where('file_type', 4)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
+        // 读取more_json
+        $attachCount['images'] = 0;
+        $attachCount['imvideosages'] = 0;
+        $attachCount['audios'] = 0;
+        $attachCount['docs'] = 0;
+        $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
+        $more_json_decode = json_decode($this->more_json, true);
+        if($more_json_decode){
+            if(isset($more_json_decode['files'])){
+                foreach($more_json_decode['files'] as $m){
+                    if($m['type'] == 1){
+                        $attachCount['images'] ++;
+                    }
+                    if($m['type'] == 2){
+                        $attachCount['videos'] ++;
+                    }
+                    if($m['type'] == 3){
+                        $attachCount['audios'] ++;
+                    }
+                    if($m['type'] == 4){
+                        $attachCount['docs'] ++;
+                    }
+                }
+            }
+        }
         // commentBtn
         $commentBtn = [];
         if ($mid == $this->member_id) {

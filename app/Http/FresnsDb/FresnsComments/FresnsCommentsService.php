@@ -11,7 +11,7 @@ namespace App\Http\FresnsDb\FresnsComments;
 use App\Helpers\StrHelper;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Helper\PluginRpcHelper;
-use App\Http\FresnsApi\Content\FresnsPostResource;
+use App\Http\FresnsApi\Content\FresnsPostsResource;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsCmd\FresnsSubPlugin;
 use App\Http\FresnsCmd\FresnsSubPluginConfig;
@@ -32,6 +32,7 @@ use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
+use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\FresnsDb\FresnsStopWords\FresnsStopWords;
 use Illuminate\Support\Facades\DB;
@@ -75,18 +76,32 @@ class FresnsCommentsService extends FsService
                     $arr['nickname'] = $memberInfo['nickname'];
                     $arr['avatar'] = $memberInfo['avatar_file_url'];
                     $arr['cid '] = $v['uuid'];
-                    $arr['content '] = FresnsPostResource::getContentView($v['content'], $comment_id, 2);
+                    $arr['content '] = FresnsPostsResource::getContentView($v['content'], $comment_id, 2);
                     $attachCount = [];
-                    $attachCount['image'] = FresnsFiles::where('file_type', 2)->where('table_name',
-                        FresnsCommentsConfig::CFG_TABLE)->where('table_id', $v['id'])->count();
-                    $attachCount['videos'] = FresnsFiles::where('file_type', 3)->where('table_name',
-                        FresnsCommentsConfig::CFG_TABLE)->where('table_id', $v['id'])->count();
-                    $attachCount['audios'] = FresnsFiles::where('file_type', 4)->where('table_name',
-                        FresnsCommentsConfig::CFG_TABLE)->where('table_id', $v['id'])->count();
-                    $attachCount['docs'] = FresnsFiles::where('file_type', 5)->where('table_name',
-                        FresnsCommentsConfig::CFG_TABLE)->where('table_id', $v['id'])->count();
-                    $attachCount['extends'] = Db::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type',
-                        2)->where('linked_id', $v['id'])->count();
+                    $attachCount['images'] = 0;
+                    $attachCount['imvideosages'] = 0;
+                    $attachCount['audios'] = 0;
+                    $attachCount['docs'] = 0;
+                    $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
+                    $more_json_decode = json_decode($this->more_json, true);
+                    if($more_json_decode){
+                        if(isset($more_json_decode['files'])){
+                            foreach($more_json_decode['files'] as $m){
+                                if($m['type'] == 1){
+                                    $attachCount['images'] ++;
+                                }
+                                if($m['type'] == 2){
+                                    $attachCount['videos'] ++;
+                                }
+                                if($m['type'] == 3){
+                                    $attachCount['audios'] ++;
+                                }
+                                if($m['type'] == 4){
+                                    $attachCount['docs'] ++;
+                                }
+                            }
+                        }
+                    }
                     $arr['attachCount'] = $attachCount;
 
                     // replyTo
@@ -203,6 +218,10 @@ class FresnsCommentsService extends FsService
         // dump($baseInfoArr);
         // Parse content information (determine whether the content needs to be truncated)
         $contentBrief = $this->parseDraftContent($draftId);
+
+        // Removing html tags
+        $contentBrief = strip_tags($contentBrief);
+
         // dd($contentBrief);
         $uuid = strtolower(StrHelper::randString(8));
         // Get the number of words in the brief of the comment
@@ -263,6 +282,9 @@ class FresnsCommentsService extends FsService
 
         // Parse content information (determine whether the content needs to be truncated)
         $contentBrief = $this->parseDraftContent($draftId);
+
+        // Removing html tags
+        $contentBrief = strip_tags($contentBrief);
 
         // Get the number of words in the brief of the comment
         $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
@@ -338,7 +360,7 @@ class FresnsCommentsService extends FsService
         $content = $draftComment['content'];
         $content = $this->stopWords($content);
         // Removing html tags
-        $content = strip_tags($content);
+        // $content = strip_tags($content);
         $commentAppendInput = [
             'comment_id' => $commentId,
             'platform_id' => $draftComment['platform_id'],
@@ -407,7 +429,7 @@ class FresnsCommentsService extends FsService
         $content = $draftComment['content'];
         $content = $this->stopWords($content);
         // Removing html tags
-        $content = strip_tags($content);
+        // $content = strip_tags($content);
         $commentAppendInput = [
             'platform_id' => $draftComment['platform_id'],
             'content' => $content,
@@ -743,9 +765,11 @@ class FresnsCommentsService extends FsService
 
         // preg_match("/<a href=.*?}></a>/", $content, $hrefMatches,PREG_OFFSET_CAPTURE);
         preg_match("/@.*?\s/", $content, $atMatches, PREG_OFFSET_CAPTURE);
-        $truncatedPos = $wordCount;
+        $truncatedPos = ceil($wordCount);
         $findTruncatedPos = false;
-        
+        // Get the number of characters corresponding to the matched data (the match is bytes)
+        $contentArr = FresnsPostsService::getString($content);
+        $charCounts = FresnsPostsService::getChar($contentArr, $truncatedPos);
         // Determine the position of the interval where this wordCount falls.
         // If there is a hit, find the corresponding truncation position and execute the truncation
         // https://www.php.net/manual/en/function.preg-match.php
@@ -754,7 +778,7 @@ class FresnsCommentsService extends FsService
             $matchStrStartPosition = $currMatch[1];
             $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
             // Hit
-            if ($matchStrStartPosition <= $wordCount && $matchStrEndPosition >= $wordCount) {
+            if ($matchStrStartPosition <= $charCounts && $matchStrEndPosition >= $charCounts) {
                 $findTruncatedPos = true;
                 $truncatedPos = $matchStrEndPosition;
             }
@@ -766,7 +790,7 @@ class FresnsCommentsService extends FsService
                 $matchStrStartPosition = $currMatch[1];
                 $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
                 // Hit
-                if ($matchStrStartPosition <= $wordCount && $matchStrEndPosition >= $wordCount) {
+                if ($matchStrStartPosition <= $charCounts && $matchStrEndPosition >= $charCounts) {
                     $findTruncatedPos = true;
                     $truncatedPos = $matchStrEndPosition;
                 }
@@ -776,9 +800,9 @@ class FresnsCommentsService extends FsService
             foreach ($atMatches as $currMatch) {
                 $matchStr = $currMatch[0];
                 $matchStrStartPosition = $currMatch[1];
-                $matchStrEndPosition = $currMatch[1] + mb_strlen($matchStr);
+                $matchStrEndPosition = $currMatch[1] + strlen($matchStr);
                 // Hit
-                if ($matchStrStartPosition <= $wordCount && $matchStrEndPosition >= $wordCount) {
+                if ($matchStrStartPosition <= $charCounts && $matchStrEndPosition >= $charCounts) {
                     $findTruncatedPos = true;
                     $truncatedPos = $matchStrEndPosition;
                 }
@@ -789,7 +813,14 @@ class FresnsCommentsService extends FsService
         $info = [];
         $info['find_truncated_pos'] = $findTruncatedPos;
         $info['truncated_pos'] = $truncatedPos;  // Truncation position
-        $info['truncated_content'] = Str::substr($content, 0, $truncatedPos); // Final content
+        if ($findTruncatedPos) {
+            // Byte count to word count
+            $chars = FresnsPostsService::getChars($content);
+            $strLen = FresnsPostsService::getStrLen($chars, $truncatedPos);
+        } else {
+            $strLen = $truncatedPos;
+        }
+        $info['truncated_content'] = Str::substr($content, 0, $strLen); // Final content
         // $info['double_pound_arr'] = $doublePoundMatches;
         $info['single_pound_arr'] = $singlePoundMatches;
         $info['link_pound_arr'] = $hrefMatches;

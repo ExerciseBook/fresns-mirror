@@ -20,7 +20,6 @@ class FsConfig extends BaseConfig
     const CHECK_CONTENT = 'check_content';
     const POST_EDITOR_WORD_COUNT = 'post_editor_word_count';
     const POST_EDITOR_BRIEF_COUNT = 'post_editor_brief_count';
-    const WEB_PROPORTION = 'web_proportion';
     const HASHTAG_SHOW = 'hashtag_show';
     const POST_COUNTS = 'post_counts';
     const HASHTAG_COUNTS = 'hashtag_counts';
