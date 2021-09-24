@@ -681,21 +681,6 @@ class FresnsPostsResource extends BaseAdminResource
         return $d * M_PI / 180.0;
     }
 
-    // Time
-    public function getTime($time)
-    {
-        $carbon = carbon::parse($time);
-        $minutesInt = (new Carbon)->diffInMinutes($carbon, true);
-        $int = (new Carbon)->diffInHours($carbon, true);
-        $int = (new Carbon)->diffInDays($carbon, true);
-        $int = (new Carbon)->diffInYears($carbon, true);
-        $timeStr = $carbon->diffForHumans(Carbon::now());
-        $timeStr = DateHelper::format_date(strtotime($time));
-        $timeStr = str_replace('ago', $timeStr);
-        // Less than 60 minutes
-        if ($minutesInt < 60) {
-        }
-    }
 
     // Content Data Export Operations
     public static function getContentView($content, $postId, $postType)
