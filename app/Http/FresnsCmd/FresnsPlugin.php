@@ -1534,7 +1534,7 @@ class FresnsPlugin extends BasePlugin
 
         // Jarvis Tang: Signature Expiration Date
         $min = 5; //Expiration time limit (unit: minutes)
-        //判断是秒时间戳还是毫秒时间戳
+        //Determine the timestamp type
         $timestampNum = strlen($timestamp);
         if($timestampNum == 10){
             $now = time();
@@ -1543,7 +1543,6 @@ class FresnsPlugin extends BasePlugin
             $now = intval(microtime(true)*1000);
             $expiredMin = $min * 60 * 1000;
         }
-        
         
         if ($now - $timestamp > $expiredMin) {
             return $this->pluginError(ErrorCodeService::HEADER_SIGN_EXPIRED);
