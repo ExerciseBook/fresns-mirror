@@ -724,7 +724,7 @@ class FresnsPostsResource extends BaseAdminResource
                 $memberInfo = FresnsMembers::where('name', $mname)->first();
                 if ($memberInfo) {
                     $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/$mname";
-                    $content = str_replace($m, "<a href='{$jumpUrl}' class='fresns_content_mention'>{$memberInfo['nickname']}</a> ", $content);
+                    $content = str_replace($m, "<a href='{$jumpUrl}' class='fresns_content_mention'>@{$memberInfo['nickname']}</a> ", $content);
                 }
             }
         }
