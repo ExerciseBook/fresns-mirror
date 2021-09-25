@@ -69,8 +69,6 @@ class FsConfig
     const COMMENT_EDIT_TIMELIMIT = 'comment_edit_timelimit';
     const COMMENT_EDIT_STICKY = 'comment_edit_sticky';
 
-    const SNS_PROPORTION = 'sns_proportion';
-
     // Site Config
     const SITE_MODEL = 'site_mode';
     const SITE_DOMAIN = 'site_domain';

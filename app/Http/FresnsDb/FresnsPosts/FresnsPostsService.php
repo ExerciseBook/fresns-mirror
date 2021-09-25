@@ -381,7 +381,7 @@ class FresnsPostsService extends FsService
             'member_list_plugin_unikey' => $member_list_plugin_unikey ?? null,
             'member_list_name' => json_encode($member_list_name) ?? null,
             'allow_btn_name' => json_encode($allowBtnName) ?? null,
-            'allow_proportion' => $proportion ?? null,
+            'allow_proportion' => $proportion ?? 0,
             'map_scale' => $scale,
             'map_poi' => $poi,
             'map_poi_id' => $poiId,

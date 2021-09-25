@@ -122,9 +122,6 @@ class FresnsPostsResource extends BaseAdminResource
                 $noAllow = 1;
             } else {
                 $allowProportion = $append['allow_proportion'];
-                if (! $allowProportion) {
-                    $allowProportion = ApiConfigHelper::getConfigByItemKey(FsConfig::SNS_PROPORTION);
-                }
                 $FresnsPostsService = new FresnsPostsService();
                 // Prevent @, hashtags, emojis, links and other messages from being truncated
                 $contentInfo = $FresnsPostsService->truncatedContentInfo($this->content);
