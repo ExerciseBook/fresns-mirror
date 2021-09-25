@@ -22,6 +22,10 @@ class ErrorCodeService
     const HELPER_EXCEPTION_ERROR = 30007;
     const VERIFY_CODE_CHECK_ERROR = 30008;
     const PRIVATE_MODE_ERROR = 30009;
+    const CALLBACK_ERROR = 30010;
+    const CALLBACK_UUID_ERROR = 30011;
+    const CALLBACK_TIME_ERROR = 30012;
+    const CALLBACK_STATUS_ERROR = 30013;
 
     // Header
     const HEADER_ERROR = 30100;
@@ -185,17 +189,17 @@ class ErrorCodeService
     const CONTENT_COUNT_ERROR = 30914;
 
     // Console Error Message
-    const BACKEND_PATH_ERROR = 31000;
-    const DELETE_ADMIN_ERROR = 31001;
-    const KEY_NAME_ERROR = 31002;
-    const KEY_PLATFORM_ERROR = 31003;
-    const KEY_PLUGIN_ERROR = 31004;
+    const BACKEND_PATH_ERROR = 40000;
+    const DELETE_ADMIN_ERROR = 40001;
+    const KEY_NAME_ERROR = 40002;
+    const KEY_PLATFORM_ERROR = 40003;
+    const KEY_PLUGIN_ERROR = 40004;
 
     // Console Manage Extensions
-    const UNINSTALL_EXTENSION_ERROR = 32004;
-    const PLUGIN_UNIKEY_ERROR = 32005;
-    const FOLDER_NAME_EMPTY_ERROR = 32100;
-    const EXTENSION_DOWMLOAD_ERROR = 32200;
+    const UNINSTALL_EXTENSION_ERROR = 40100;
+    const PLUGIN_UNIKEY_ERROR = 40101;
+    const FOLDER_NAME_EMPTY_ERROR = 40102;
+    const EXTENSION_DOWMLOAD_ERROR = 40103;
 
     private static $CODE_MSG_MAP = [
         self::CODE_OK                           => 'ok',
@@ -211,9 +215,13 @@ class ErrorCodeService
         self::HELPER_EXCEPTION_ERROR            => '执行异常，文件丢失或者记录错误',
         self::VERIFY_CODE_CHECK_ERROR           => '验证码不正确或验证码已过期',
         self::PRIVATE_MODE_ERROR                => '私有模式禁止请求该接口',
+        self::CALLBACK_ERROR                    => '回调异常',
+        self::CALLBACK_UUID_ERROR               => 'UUID 错误或者记录不存在',
+        self::CALLBACK_TIME_ERROR               => '记录已超时失效',
+        self::CALLBACK_STATUS_ERROR             => '记录已被使用过，请重新操作',
 
         // Header
-        self::HEADER_ERROR                      => 'Header Error',
+        self::HEADER_ERROR                      => 'Header 未知错误',
         self::HEADER_SIGN_ERROR                 => '签名错误',
         self::HEADER_SIGN_EXPIRED               => '签名已过期',
         self::HEADER_INFO_ERROR                 => '输入信息错误',
