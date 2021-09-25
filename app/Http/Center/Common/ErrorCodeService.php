@@ -185,7 +185,7 @@ class ErrorCodeService
     const TITLE_ERROR = 30910;
     const CONTENT_STOP_WORDS_ERROR = 30911;
     const CONTENT_CHECK_PARAMS_ERROR = 30912;
-    const CONTENT_TYPE_ERROR = 30913;
+    const CONTENT_TYPES_ERROR = 30913;
     const CONTENT_COUNT_ERROR = 30914;
 
     // Console Error Message
@@ -378,7 +378,7 @@ class ErrorCodeService
         self::TITLE_ERROR                       => '标题过长，应小于 255 字符',
         self::CONTENT_STOP_WORDS_ERROR          => '内容存在禁用词，请修改后再发表',
         self::CONTENT_CHECK_PARAMS_ERROR        => '内容、文件、扩展内容，三种不可全部为空，至少其中一个有值',
-        self::CONTENT_TYPE_ERROR                => '内容类型参数错误或者字符数达到上限',
+        self::CONTENT_TYPES_ERROR               => '内容类型参数错误或者字符数达到上限',
         self::CONTENT_COUNT_ERROR               => '内容超过限制字数',
 
         // Console Error Message

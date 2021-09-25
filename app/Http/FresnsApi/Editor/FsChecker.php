@@ -739,10 +739,10 @@ class FsChecker extends BaseChecker
             }
         }
         // type cannot be too long
-        if ($type) {
-            $strlen = mb_strlen($type);
+        if ($types) {
+            $strlen = mb_strlen($types);
             if ($strlen > 128) {
-                return self::checkInfo(ErrorCodeService::CONTENT_TYPE_ERROR);
+                return self::checkInfo(ErrorCodeService::CONTENT_TYPES_ERROR);
             }
         }
     }
