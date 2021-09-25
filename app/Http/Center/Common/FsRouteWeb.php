@@ -9,7 +9,3 @@
 Route::get('/', function () {
     return view('commons.welcome');
 });
-
-// View Log
-Route::get('log3', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-Route::get('clearLog', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
