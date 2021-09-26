@@ -305,7 +305,7 @@ class FresnsPostsResource extends BaseAdminResource
             // Attached Quantity
             $attachCount = [];
             $attachCount['images'] = 0;
-            $attachCount['imvideosages'] = 0;
+            $attachCount['videos'] = 0;
             $attachCount['audios'] = 0;
             $attachCount['docs'] = 0;
             $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
