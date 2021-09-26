@@ -64,7 +64,6 @@ class GlobalConfig extends BaseConfig
             // '/api/fresns/editor/publish',
             // '/api/fresns/editor/submit',
             '/api/fresns/editor/revoke',
-
         ],
         'Register' => [
             '/api/fresns/user/register',
@@ -139,7 +138,6 @@ class GlobalConfig extends BaseConfig
             // '/api/fresns/editor/publish',
             // '/api/fresns/editor/submit',
             '/api/fresns/editor/revoke',
-
         ],
         2 => [
             '/api/fresns/user/register',
@@ -247,7 +245,6 @@ class GlobalConfig extends BaseConfig
             '/api/fresns/info/downloadFile',
             '/api/fresns/editor/uploadToken',
             '/api/fresns/editor/upload',
-
         ],
         'App\Http\FresnsDb\FresnsUsers' => [
             '/api/fresns/user/register',
