@@ -14,3 +14,9 @@ yarn-error.log
 /.idea
 /.vscode
 .DS_Store
+
+# R&D Documents
+push.sh
+push_ignore.sh
+setup.sh
+composer.lock

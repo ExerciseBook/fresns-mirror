@@ -82,7 +82,7 @@ class GlobalService
         $uid = GlobalService::getGlobalKey('user_id');
         $mid = GlobalService::getGlobalKey('member_id');
         if ($deviceInfo) {
-            $map = GlobalConfig::URI_CONVERSION_OBJECT_TYPE;
+            $map = GlobalConfig::URI_CONVERSION_OBJECT_TYPE_NO;
             $uri = Request::getRequestUri();
             $objectType = '';
             foreach ($map as $k => $v) {
@@ -231,9 +231,8 @@ class GlobalService
                 }
             }
         }
-
         if ($checkRoleTime) {
-            if ($checkRole >= 0) {
+            if ($checkRole > 0) {
                 $checkRoleExpiredAt = date('Y-m-d H:i:s', strtotime("+$checkRole min", strtotime($checkRoleTime)));
                 if ($checkRoleExpiredAt > $time) {
                     $isCheckRole = false;
@@ -257,7 +256,7 @@ class GlobalService
         ->value('created_at');
 
         if ($checkDeleteTime) {
-            if ($checkDelete >= 0) {
+            if ($checkDelete > 0) {
                 $checkDeleteExpiredAt = date('Y-m-d H:i:s', strtotime('+8 hours', strtotime($checkDeleteTime)));
                 if ($checkDeleteExpiredAt > $time) {
                     $isCheckDelete = false;
