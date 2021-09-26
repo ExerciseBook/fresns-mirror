@@ -428,6 +428,7 @@ class FresnsPlugin extends BasePlugin
 
         $data = [];
         $data['token'] = $token;
+        $data['tokenExpiredTime'] = $expiredTime;
 
         return $this->pluginSuccess($data);
     }
