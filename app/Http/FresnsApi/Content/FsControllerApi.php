@@ -727,6 +727,7 @@ class FsControllerApi extends FresnsBaseApiController
         $request->offsetSet('pageSize', $pageSize);
         $FresnsPostsService->setResource(FresnsPostsResource::class);
         $list = $FresnsPostsService->searchData();
+        dd($list);
         $implants = FresnsImplantsService::getImplants($page, $pageSize, 1);
         $common['implants'] = $implants;
         $data = [
