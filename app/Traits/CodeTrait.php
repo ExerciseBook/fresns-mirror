@@ -30,6 +30,10 @@ trait CodeTrait
     }
     public static function checkInfo($code){
         $message = ErrorCodeService::getMsg($code);
-        dd($message);
+        $data = [
+            'code' => $code,
+            'msg' => $message ?? 'Function Check Anomalies'
+        ];
+        return $data;
     }
 }
