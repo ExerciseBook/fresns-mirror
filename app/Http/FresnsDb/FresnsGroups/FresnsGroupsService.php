@@ -61,11 +61,12 @@ class FresnsGroupsService extends FresnsBaseService
         }
 
         // Group Plugin Extensions
-        $extends = [];
+        $extendsArr = [];
         if ($group) {
             $pluginUsagesArr = FresnsPluginUsages::where('type', 6)->where('group_id', $group['id'])->get();
             if ($pluginUsagesArr) {
                 foreach($pluginUsagesArr as $pluginUsages){
+                    $extends= [];
                     $plugin = pluginUnikey::where('unikey', $pluginUsages['plugin_unikey'])->first();
                     $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $pluginUsages['plugin_unikey'])->first();
                     $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? '';
@@ -81,12 +82,11 @@ class FresnsGroupsService extends FresnsBaseService
                         $memberRoleArr = FresnsMemberRoleRels::where('member_id', $mid)->pluck('role_id')->toArray();
                         $memberPluginRolesArr = explode(',', $member_roles);
                         $status = array_intersect($memberRoleArr, $memberPluginRolesArr);
-                        if ($status) {
-                            $extends[] = $pluginUsages;
+                        if (! $status) {
+                            $extends = [];
                         }
-                    }else{
-                        $extends[] = $pluginUsages;
                     }
+                    $extendsArr[] = $extends;
                 }
             }
         }
