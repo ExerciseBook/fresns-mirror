@@ -173,7 +173,7 @@ class FresnsCrontablPlugin extends BasePlugin
     // Database Table: member_role_rels
     protected function crontabCheckRoleExpiredHandler($input)
     {
-        $sessionId = FresnsSessionLogsService::addSessionLogs('plg_cmd_crontab_check_role_expired', 'Timed Tasks: Check Role Expired');
+        $sessionId = FresnsSessionLogsService::addSessionLogs('plg_cmd_crontab_check_role_expired', 'Timed Tasks: Check Role Expired',null,null,null,null,15);
         $memberInfo = FresnsMemberRoleRels::where('type', 2)->where('expired_at', '!=', null)->get()->toArray();
         if ($memberInfo) {
             foreach ($memberInfo as $m) {
@@ -217,7 +217,7 @@ class FresnsCrontablPlugin extends BasePlugin
      */
     protected function crontabCheckDeleteUserHandler($input)
     {
-        $sessionId = FresnsSessionLogsService::addSessionLogs('plg_cmd_crontab_check_delete_user', 'Timed Tasks: Check Delete User');
+        $sessionId = FresnsSessionLogsService::addSessionLogs('plg_cmd_crontab_check_delete_user', 'Timed Tasks: Check Delete User',null,null,null,null,15);
         $deleteAccount = ApiConfigHelper::getConfigByItemKey('delete_account');
         $deleteAccountTodo = ApiConfigHelper::getConfigByItemKey('delete_account_todo') ?? 0;
         if ($deleteAccount == 1) {
