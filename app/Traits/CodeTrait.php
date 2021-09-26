@@ -16,6 +16,7 @@ trait CodeTrait
         $c = get_called_class();
         $m = new $c;
         $codeMap = $m->getCodeMap();
+        dd($codeMap);
         $data = [
             'code'  => $code,
             'msg'   => $codeMap[$code] ?? 'Function Check Anomalies',
