@@ -603,7 +603,7 @@ class FsControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // 回调返参查询
+    // Callback Info
     public function callbacks(Request $request){
         // Calibration parameters
         $rule = [
@@ -612,10 +612,9 @@ class FsControllerApi extends FresnsBaseApiController
         ];
         ValidateService::validateRule($request, $rule);
         $uuid = $request->input('uuid');
-        $checkInfo = FsChecker::checkPluginCallbacks($uuid);
+        $checkInfo = FsChecker::checkPluginCallback($uuid);
         if (is_array($checkInfo)) {
             return $this->errorCheckInfo($checkInfo);
         }
-        
     }
 }

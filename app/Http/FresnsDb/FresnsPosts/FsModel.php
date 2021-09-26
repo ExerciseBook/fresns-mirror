@@ -148,21 +148,16 @@ class FsModel extends BaseAdminModel
             $topicLinkArr = Db::table('hashtag_linkeds')->where('hashtag_id', $searchHuri)->where('linked_type', 1)->pluck('linked_id')->toArray();
             $query->whereIn('post.id', $topicLinkArr);
         }
-
         // essence_status
         $searchEssence = $request->input('searchEssence');
         if ($searchEssence) {
-            // $searchEssenceType = $searchEssence == 'false' ? [1] : [2,3];
-            // dd($searchEssenceType);
             $query->where('post.essence_status', $searchEssence);
         }
         // sticky_status
         $searchSticky = $request->input('searchSticky');
         if ($searchSticky) {
-            // $searchStickyType = $searchSticky == 'false' ? [1] : [2,3];
             $query->where('post.sticky_status', $searchSticky);
         }
-
         // viewCountGt
         $viewCountGt = $request->input('viewCountGt');
         if ($viewCountGt) {

@@ -634,7 +634,7 @@ class FresnsPostsResource extends BaseAdminResource
             'manages' => $manages,
             'editStatus' => $editStatus,
         ];
-
+        
         // Get posts from object to follow
         $uri = Request::getRequestUri();
         if($uri == '/api/fresns/post/follows'){
@@ -860,14 +860,13 @@ class FresnsPostsResource extends BaseAdminResource
         $followType = $request->input('followType');
         $mid = GlobalService::getGlobalKey('member_id');
         if(!$followType){
-            // Posts by following hashtags
             $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
             $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
             $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
             if(in_array($id,$postHashtagIdArr)){
                 $followType = 'hashtag';
             }
-            // Posts by following groups
+            // Only posts that have been added to the essence are exported under groups and hashtags
             $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
             $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
             if(in_array($id,$postGroupIdArr)){

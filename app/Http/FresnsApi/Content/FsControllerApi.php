@@ -142,7 +142,6 @@ class FsControllerApi extends FresnsBaseApiController
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 30);
         $FresnsDialogsService = new FresnsGroupsService();
-        // dd($FresnsDialogsService);
         $request->offsetSet('currentPage', $page);
         $request->offsetSet('pageSize', $pageSize);
         $FresnsDialogsService->setResource(FresnsGroupsResource::class);
@@ -683,7 +682,7 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         $postArr1 = self::distance1($longitude, $latitude, $distance);
-        // dd($postArr1);
+        
         $memberShieldsTable = FresnsMemberShieldsConfig::CFG_TABLE;
 
         // If it is a non-public group post, it is not a member of the group and is not exported.

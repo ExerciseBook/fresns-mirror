@@ -105,7 +105,6 @@ class BaseService
     // Detail
     public function detail($id)
     {
-        //dd($this->resourceDetail);
         $data['detail'] = new $this->resourceDetail($this->model->findById($id));
 
         // common data

@@ -87,12 +87,10 @@ trait ApiTrait
 
     public function errorCheckInfo($checkInfo, $header = [], $data = [])
     {
-        // $data = ['info' => 'error'];
         $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
         if ($sessionLogId) {
             FresnsSessionLogsService::updateSessionLogs($sessionLogId, 1);
         }
-        // dd($checkInfo);
         $plugin = FresnsCodeMessagesConfig::ERROR_CODE_DEFAULT_PLUGIN;
         $langTag = ApiLanguageHelper::getLangTag();
 
