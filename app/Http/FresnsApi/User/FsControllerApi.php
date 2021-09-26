@@ -803,7 +803,7 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         if($deleteConnectId){
-            DB::table(FresnsUserConnectsConfig::CFG_TABLE)->where('connect_id',$deleteConnectId)->delete();
+            DB::table(FresnsUserConnectsConfig::CFG_TABLE)->where('user_id',$user['id'])->where('connect_id',$deleteConnectId)->delete();
         }
 
         $sessionId = GlobalService::getGlobalSessionKey('session_log_id');
