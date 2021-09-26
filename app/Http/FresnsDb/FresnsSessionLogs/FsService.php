@@ -9,6 +9,7 @@
 namespace App\Http\FresnsDb\FresnsSessionLogs;
 
 use App\Base\Services\BaseAdminService;
+use App\Http\Center\Common\GlobalConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsCmd\FresnsCmdService;
@@ -36,7 +37,8 @@ class FsService extends BaseAdminService
         $userId = null,
         $memberId = null,
         $objectOrderId = null,
-        $uri = null
+        $uri = null,
+        $type = null
     ) {
         $deviceInfo = request()->header('deviceInfo');
         $platform_id = request()->header('platform');
@@ -47,12 +49,23 @@ class FsService extends BaseAdminService
             return true;
         }
 
-        $map = FsConfig::SESSION_OBJECT_TYPE_ARR;
-        $objectType = $map[$objectAction] ?? 1;
+        $requestUri = Request::getRequestUri();
+        $map = GlobalConfig::URI_CONVERSION_OBJECT_TYPE_NO;
+        $objectType = '';
+
+        if(empty($type)){
+            foreach ($map as $k => $v) {
+                if (in_array($requestUri, $v)) {
+                    $objectType = $k;
+                }
+            }
+        } else {
+            $objectType = $type;
+        }
         if ($objectType == 15) {
             $objectName = $objectName;
         } else {
-            $objectName = Request::getRequestUri();
+            $objectName = $requestUri;
         }
 
         $input = [
@@ -60,7 +73,7 @@ class FsService extends BaseAdminService
             'version' => $version,
             'version_int' => $versionInt,
             'lang_tag' => $langTag,
-            'object_type' => $objectType,
+            'object_type' => $objectType ?? 1,
             'object_name' => $objectName,
             'object_action' => $uri ?? $objectAction,
             'object_result' => 0,

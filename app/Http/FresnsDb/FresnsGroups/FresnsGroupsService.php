@@ -61,34 +61,38 @@ class FresnsGroupsService extends FresnsBaseService
         }
 
         // Group Plugin Extensions
-        $extends = [];
+        $extendsArr = [];
         if ($group) {
-            $pluginUsages = FresnsPluginUsages::where('type', 6)->where('group_id', $group['id'])->first();
-            if ($pluginUsages) {
-                $plugin = pluginUnikey::where('unikey', $pluginUsages['plugin_unikey'])->first();
-                $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $pluginUsages['plugin_unikey'])->first();
-                $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? '';
-                $name = InfoService::getlanguageField('name', $pluginUsages['id']);
-                $extends['name'] = $name == null ? '' : $name['lang_content'];
-                $extends['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($pluginUsages['icon_file_id'], $pluginUsages['icon_file_url']);
-                $extends['url'] = ApiFileHelper::getPluginUsagesUrl($pluginUsages['plugin_unikey'], $pluginUsages['id']);
-                $extends['badgesType'] = $pluginBadges['display_type'] ?? '';
-                $extends['badgesValue'] = ($pluginBadges['value_text'] ?? '') ?? ($pluginBadges['value_number'] ?? '');
-                // Determine if a member role has permissions
-                if ($pluginUsages['member_roles']) {
-                    $member_roles = $pluginUsages['member_roles'];
-                    $memberRoleArr = FresnsMemberRoleRels::where('member_id', $mid)->pluck('role_id')->toArray();
-                    $memberPluginRolesArr = explode(',', $member_roles);
-                    $status = array_intersect($memberRoleArr, $memberPluginRolesArr);
-                    if (! $status) {
-                        $extends = [];
+            $pluginUsagesArr = FresnsPluginUsages::where('type', 6)->where('group_id', $group['id'])->get();
+            if ($pluginUsagesArr) {
+                foreach($pluginUsagesArr as $pluginUsages){
+                    $extends= [];
+                    $plugin = pluginUnikey::where('unikey', $pluginUsages['plugin_unikey'])->first();
+                    $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $pluginUsages['plugin_unikey'])->first();
+                    $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? '';
+                    $name = InfoService::getlanguageField('name', $pluginUsages['id']);
+                    $extends['name'] = $name == null ? '' : $name['lang_content'];
+                    $extends['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($pluginUsages['icon_file_id'], $pluginUsages['icon_file_url']);
+                    $extends['url'] = ApiFileHelper::getPluginUsagesUrl($pluginUsages['plugin_unikey'], $pluginUsages['id']);
+                    $extends['badgesType'] = $pluginBadges['display_type'] ?? '';
+                    $extends['badgesValue'] = ($pluginBadges['value_text'] ?? '') ?? ($pluginBadges['value_number'] ?? '');
+                    // Determine if a member role has permissions
+                    if ($pluginUsages['member_roles']) {
+                        $member_roles = $pluginUsages['member_roles'];
+                        $memberRoleArr = FresnsMemberRoleRels::where('member_id', $mid)->pluck('role_id')->toArray();
+                        $memberPluginRolesArr = explode(',', $member_roles);
+                        $status = array_intersect($memberRoleArr, $memberPluginRolesArr);
+                        if (! $status) {
+                            $extends = [];
+                        }
                     }
+                    $extendsArr[] = $extends;
                 }
             }
         }
-        $common['extensions'] = $extends;
+        $common['extensions'] = $extendsArr;
         $common['seoInfo'] = (object) $common['seoInfo'];
-        $common['extensions'] = $common['extensions'];
+        // $common['extensions'] = $common['extensions'];
 
         return $common;
     }

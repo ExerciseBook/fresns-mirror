@@ -744,14 +744,14 @@ class FresnsPostsResource extends BaseAdminResource
                     'followType' => $followType,
                     'hashtag' => $hashtag,
                 ];
-            }
-
-            // Merger
-            $arr = $default;
-
-            return $arr;
+            } 
         }
+         // Merger
+        $arr = $default;
+
+        return $arr;
     }
+    
     // Distance Conversion
     public function GetDistance($lat1, $lng1, $lat2, $lng2, $distanceUnits)
     {
@@ -872,6 +872,7 @@ class FresnsPostsResource extends BaseAdminResource
             if(in_array($id,$postGroupIdArr)){
                 $followType = 'group';
             }
+            // Only posts that have been added to the essence are exported under groups and hashtags
             // Posts set as secondary essence, forced output
             $essenceIdArr = FresnsPosts::where('essence_status', 3)->pluck('id')->toArray();
             if(in_array($id,$essenceIdArr)){

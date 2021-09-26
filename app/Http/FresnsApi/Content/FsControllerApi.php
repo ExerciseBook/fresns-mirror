@@ -727,7 +727,7 @@ class FsControllerApi extends FresnsBaseApiController
         $FresnsPostsService->setResource(FresnsPostsResource::class);
         $list = $FresnsPostsService->searchData();
         $implants = FresnsImplantsService::getImplants($page, $pageSize, 1);
-        $common['implants'] = $implants;
+        $common = $implants;
         $data = [
             'pagination' => $list['pagination'],
             'list' => $list['list'],

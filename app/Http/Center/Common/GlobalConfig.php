@@ -64,7 +64,6 @@ class GlobalConfig extends BaseConfig
             // '/api/fresns/editor/publish',
             // '/api/fresns/editor/submit',
             '/api/fresns/editor/revoke',
-
         ],
         'Register' => [
             '/api/fresns/user/register',
@@ -85,6 +84,80 @@ class GlobalConfig extends BaseConfig
             '/api/fresns/member/auth',
         ],
         'Modify Member Info' => [
+            '/api/fresns/member/edit',
+        ],
+    ];
+
+    const URI_CONVERSION_OBJECT_TYPE_NO = [
+        1 => [
+            '/api/fresns/info/configs',
+            '/api/fresns/info/extensions',
+            '/api/fresns/info/summary',
+            '/api/fresns/info/emojis',
+            '/api/fresns/info/stopWords',
+            '/api/fresns/info/sendVerifyCode',
+            '/api/fresns/info/inputtips',
+            '/api/fresns/info/uploadLog',
+            '/api/fresns/info/downloadFile',
+            '/api/fresns/user/logout',
+            '/api/fresns/user/restore',
+            '/api/fresns/user/detail',
+            '/api/fresns/user/walletLogs',
+            '/api/fresns/member/mark',
+            '/api/fresns/member/delete',
+            '/api/fresns/member/detail',
+            '/api/fresns/member/lists',
+            '/api/fresns/member/interactions',
+            '/api/fresns/member/markLists',
+            '/api/fresns/notify/lists',
+            '/api/fresns/notify/read',
+            '/api/fresns/notify/delete',
+            '/api/fresns/dialog/lists',
+            '/api/fresns/dialog/messages',
+            '/api/fresns/dialog/read',
+            '/api/fresns/dialog/send',
+            '/api/fresns/dialog/delete',
+            '/api/fresns/group/trees',
+            '/api/fresns/group/lists',
+            '/api/fresns/group/detail',
+            '/api/fresns/hashtag/lists',
+            '/api/fresns/hashtag/detail',
+            '/api/fresns/post/lists',
+            '/api/fresns/post/detail',
+            '/api/fresns/post/follows',
+            '/api/fresns/post/nearbys',
+            '/api/fresns/comment/lists',
+            '/api/fresns/comment/detail',
+            '/api/fresns/editor/lists',
+            '/api/fresns/editor/detail',
+            // '/api/fresns/editor/create',
+            '/api/fresns/editor/uploadToken',
+            '/api/fresns/editor/upload',
+            '/api/fresns/editor/update',
+            '/api/fresns/editor/delete',
+            // '/api/fresns/editor/publish',
+            // '/api/fresns/editor/submit',
+            '/api/fresns/editor/revoke',
+        ],
+        2 => [
+            '/api/fresns/user/register',
+        ],
+        3 => [
+            '/api/fresns/user/login',
+        ],
+        4 => [
+            '/api/fresns/user/delete',
+        ],
+        5 => [
+            '/api/fresns/user/reset',
+        ],
+        6 => [
+            '/api/fresns/user/edit',
+        ],
+        7 => [
+            '/api/fresns/member/auth',
+        ],
+        8 => [
             '/api/fresns/member/edit',
         ],
     ];
@@ -172,7 +245,6 @@ class GlobalConfig extends BaseConfig
             '/api/fresns/info/downloadFile',
             '/api/fresns/editor/uploadToken',
             '/api/fresns/editor/upload',
-
         ],
         'App\Http\FresnsDb\FresnsUsers' => [
             '/api/fresns/user/register',
