@@ -224,7 +224,7 @@ class ApiConfigHelper
     public static function distanceUnits($langTag)
     {
         $language = self::getConfigsLanguageList();
-        dd($language);
+        // dd($language);
         $languageArr = FresnsConfigsService::getLanguageStatus();
         LogService::Info('language', $language);
         $distanceUnits = '';
