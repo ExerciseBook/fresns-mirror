@@ -637,7 +637,8 @@ class FresnsPostsResource extends BaseAdminResource
         $uri = Request::getRequestUri();
         if($uri == '/api/fresns/post/follows'){
             $followType = $this->contentByType($this->id);
-            array_push($default,$followType);
+            $follow = ['followType' => $followType];
+            array_push($default,$follow);
             if($followType == 'hashtag'){
                 $hashtagId= FresnsHashtagLinkeds::where('linked_type',1)->where('linked_id',$this->id)->first();
                 $hashTagInfo = "";
