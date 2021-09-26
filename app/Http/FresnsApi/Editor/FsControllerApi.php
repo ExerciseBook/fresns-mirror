@@ -473,6 +473,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         $fileInfo = $request->input('fileInfo');
         $checkInfo = FsChecker::checkPublish($member_id);
+        dd($checkInfo);
         if (is_array($checkInfo)) {
             FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
 
