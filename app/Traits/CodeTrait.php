@@ -14,6 +14,7 @@ trait CodeTrait
     public static function checkInfo($code)
     {
         $c = get_called_class();
+        dd($c);
         $m = new $c;
         $codeMap = $m->getCodeMap();
         dd($codeMap);
