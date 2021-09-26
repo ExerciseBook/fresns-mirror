@@ -438,50 +438,53 @@ class FresnsCommentsResource extends BaseAdminResource
         }
 
         // Comment Plugin Extensions
-        $manages = [];
-        $TweetPluginUsages = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%2%')->first();
-        if ($TweetPluginUsages) {
-            $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
-            $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-            $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
-            $manages['name'] = $name == null ? '' : $name['lang_content'];
-            $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
-            $manages['url'] = $plugin['access_path '].'/'.$TweetPluginUsages['parameter'];
-            // Is the group administrator dedicated
-            if ($TweetPluginUsages['is_group_admin'] != 0) {
-                // Query whether the current member is a group administrator
-                if (! $posts['group_id']) {
-                    $manages = [];
-                } else {
-                    $groupInfo = FresnsGroups::find($posts['group_id']);
-                    if (! $groupInfo) {
+        $managesArr = [];
+        $TweetPluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%2%')->get();
+        if ($TweetPluginUsagesArr) {
+            foreach($TweetPluginUsagesArr as $TweetPluginUsages){
+                $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
+                $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
+                $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
+                $manages['name'] = $name == null ? '' : $name['lang_content'];
+                $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
+                $manages['url'] = $plugin['access_path '].'/'.$TweetPluginUsages['parameter'];
+                // Is the group administrator dedicated
+                if ($TweetPluginUsages['is_group_admin'] != 0) {
+                    // Query whether the current member is a group administrator
+                    if (! $posts['group_id']) {
                         $manages = [];
                     } else {
-                        $permission = json_decode($groupInfo['permission'], true);
-                        if (isset($permission['admin_members'])) {
-                            if (! is_array($permission['admin_members'])) {
-                                $manages = [];
-                            } else {
-                                if (! in_array($mid, $permission['admin_members'])) {
-                                    $manages = [];
-                                }
-                            }
+                        $groupInfo = FresnsGroups::find($posts['group_id']);
+                        if (! $groupInfo) {
+                            $manages = [];
                         } else {
+                            $permission = json_decode($groupInfo['permission'], true);
+                            if (isset($permission['admin_members'])) {
+                                if (! is_array($permission['admin_members'])) {
+                                    $manages = [];
+                                } else {
+                                    if (! in_array($mid, $permission['admin_members'])) {
+                                        $manages = [];
+                                    }
+                                }
+                            } else {
+                                $manages = [];
+                            }
+                        }
+                    }
+                }
+                // Determine if the primary role of the current member is an administrator
+                if ($TweetPluginUsages['member_roles']) {
+                    $mroleRels = FresnsMemberRoleRels::where('member_id', $mid)->first();
+                    if ($mroleRels) {
+                        $pluMemberRoleArr = explode(',', $TweetPluginUsages['member_roles']);
+                        if (! in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
                             $manages = [];
                         }
                     }
                 }
             }
-            // Determine if the primary role of the current member is an administrator
-            if ($TweetPluginUsages['member_roles']) {
-                $mroleRels = FresnsMemberRoleRels::where('member_id', $mid)->first();
-                if ($mroleRels) {
-                    $pluMemberRoleArr = explode(',', $TweetPluginUsages['member_roles']);
-                    if (! in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
-                        $manages = [];
-                    }
-                }
-            }
+            $managesArr[] = $manages;
         }
 
         // Edit Status
@@ -553,7 +556,7 @@ class FresnsCommentsResource extends BaseAdminResource
             'extends' => $extends,
             'commentBtn' => $commentBtn,
             'post' => $post,
-            'manages' => $manages,
+            'manages' => $managesArr,
             'editStatus' => $editStatus,
         ];
 
