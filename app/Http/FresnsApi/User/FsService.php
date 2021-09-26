@@ -145,7 +145,27 @@ class FsService
             $item['status'] = $v->is_enable;
             $item['deactivate'] = DateHelper::fresnsOutputTimeToTimezone($v->deleted_at);
             $item['deactivateTime'] = DateHelper::fresnsOutputTimeToTimezone($v->deleted_at);
-            $item['multiple'] = '';
+            //判断该成员所有角色是否在“有权使用的角色”列表中"
+            $memberRoleIdArr = FresnsMemberRoleRels::where('member_id', $v->id)->where('type',1)->pluck('role_id')->toArray();
+            $memberRoleIdArr[] = $roleId;
+            $permissionsRoleIdJson = ApiConfigHelper::getConfigByItemKey('multi_member_roles');
+            $permissionsRoleIdArr = json_decode($permissionsRoleIdJson,true) ?? [];
+            $multiMemberServiceUrl = '';
+            if(!empty($permissionsRoleIdArr)){
+                $isPermissions = false;
+                foreach($memberRoleIdArr as $memberRoleId){
+                    if(in_array($memberRoleId,$permissionsRoleIdArr)){
+                        $isPermissions = true;
+                        break;
+                    }
+                }
+                if($isPermissions === true){
+                    $multiMemberServiceUnikey = ApiConfigHelper::getConfigByItemKey('multi_member_service');
+                    $multiMemberServiceUrl = FresnsPluginsService::getPluginUrlByUnikey($multiMemberServiceUnikey);
+                }
+            }
+            
+            $item['multiple'] = $multiMemberServiceUrl;
             $itemArr[] = $item;
         }
         $data['members'] = $itemArr;
