@@ -17,5 +17,6 @@ yarn-error.log
 
 # R&D Documents
 push.sh
+push_ignore.sh
 setup.sh
 composer.lock
