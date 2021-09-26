@@ -602,4 +602,20 @@ class FsControllerApi extends FresnsBaseApiController
         ];
         $this->success($data);
     }
+
+    // 回调返参查询
+    public function callbacks(Request $request){
+        // Calibration parameters
+        $rule = [
+            'unikey' => "required",
+            'uuid' => "required",
+        ];
+        ValidateService::validateRule($request, $rule);
+        $uuid = $request->input('uuid');
+        $checkInfo = FsChecker::checkPluginCallbacks($uuid);
+        if (is_array($checkInfo)) {
+            return $this->errorCheckInfo($checkInfo);
+        }
+        
+    }
 }

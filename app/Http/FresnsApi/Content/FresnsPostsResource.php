@@ -54,7 +54,8 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
+use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
 /**
  * List resource config handle
  */
@@ -587,19 +588,11 @@ class FresnsPostsResource extends BaseAdminResource
         // Default Field
         $default = [
             'pid' => $pid,
-            // 'titleIcon' => $titleIcon,
-            // 'isLike' => $isLike,
             'title' => $title,
             'content' => $content,
             'brief' => $brief,
             'sticky' => $sticky,
             'essence' => $essence,
-            // 'labelImg' => $labelImg,
-            // 'likeIcon' => $likeIcon,
-            // 'followIcon' => $followIcon,
-            // 'shareIcon' => $shareIcon,
-            // 'commentIcon' => $commentIcon,
-            // 'moreIcon' => $moreIcon,
             'postName' => $PostName,
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,
@@ -624,7 +617,6 @@ class FresnsPostsResource extends BaseAdminResource
             'timeFormat' => $timeFormat,
             'editTime' => $editTime,
             'editTimeFormat' => $editTimeFormat,
-            // 'canDelete' => $canDelete,
             'allowStatus' => $allowStatus,
             'allowProportion' => $allowProportion,
             'allowBtnName' => $allowBtnName,
@@ -640,13 +632,29 @@ class FresnsPostsResource extends BaseAdminResource
             'manages' => $manages,
             'editStatus' => $editStatus,
         ];
+        $uri = Request::getRequestUri();
+        if($uri == '/api/fresns/post/follows'){
+            $followType = $this->contentByType($this->id);
+            array_push($default,$followType);
+            if($followType == 'hashtag'){
+                $hashtagId= FresnsHashtagLinkeds::where('linked_type',1)->where('linked_id',$this->id)->first();
+                $hashTagInfo = "";
+                if($hashtagId){
+                    $hashTagInfo = FresnsHashtags::find($hashtagId['hashtag_id']);
+                }
+                $hashtag = [];
+                $hashtag['huri'] = $hashTagInfo['slug'] ?? "";
+                $hashtag['hname'] = $hashTagInfo['name'] ?? "";
+                $hashtag['cover'] = $hashTagInfo['cover_file_url'] ?? "";
+                array_push($default,$hashtag);
+            }
 
-        // Merger
-        $arr = $default;
+            // Merger
+            $arr = $default;
 
-        return $arr;
+            return $arr;
+        }
     }
-
     // Distance Conversion
     public function GetDistance($lat1, $lng1, $lat2, $lng2, $distanceUnits)
     {
@@ -746,5 +754,47 @@ class FresnsPostsResource extends BaseAdminResource
         }
 
         return $content;
+    }
+
+    // 判断当前内容来自哪个对象
+    public function contentByType($id){
+        $request = request();
+        $followType = "";
+        $followType = $request->input('followType');
+        $mid = $request->input('mid');
+        if(!$followType){
+            // $folloHashtagArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',3)->pluck('follow_id')->toArray();
+            $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
+            $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
+            $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
+            if(in_array($id,$postHashtagIdArr)){
+                $followType = 'hashtag';
+            }
+            // Only posts that have been added to the essence are exported under groups and hashtags
+            // $folloGroupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
+            $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
+            $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
+            if(in_array($id,$postGroupIdArr)){
+                $followType = 'group';
+            }
+            // Posts set as secondary essence, forced output
+            $essenceIdArr = FresnsPosts::where('essence_status', 3)->pluck('id')->toArray();
+            if(in_array($id,$essenceIdArr)){
+                $followType = 'group';
+            }
+            // My posts
+            $mePostsArr = FresnsPosts::where('member_id', $mid)->pluck('id')->toArray();
+            if(in_array($id,$mePostsArr)){
+                $followType = 'member';
+            }
+            // Posts by following members
+            // $followMemberArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',1)->pluck('follow_id')->toArray();
+            $followMemberArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 1)->pluck('follow_id')->toArray();
+            $postMemberIdArr = FresnsPosts::whereIn('member_id', $followMemberArr)->pluck('id')->toArray();
+            if(in_array($id,$postMemberIdArr)){
+                $followType = 'member';
+            } 
+        }
+        return $followType;
     }
 }
