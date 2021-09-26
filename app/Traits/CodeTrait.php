@@ -11,18 +11,6 @@ use App\Http\Center\Common\ErrorCodeService;
 
 trait CodeTrait
 {
-    public static function checkInfo1($code)
-    {
-        $c = get_called_class();
-        $m = new $c;
-        $codeMap = $m->getCodeMap();
-        $data = [
-            'code'  => $code,
-            'msg'   => $codeMap[$code] ?? 'Function Check Anomalies',
-        ];
-        return $data;
-    }
-
     public function getCodeMap()
     {
         return $this->codeMap;
