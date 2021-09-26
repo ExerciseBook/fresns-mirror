@@ -24,9 +24,9 @@ Route::group(['prefix' => 'fresns/info', 'namespace' => '\App\Http\FresnsApi\Inf
     Route::post('/inputTips', 'FsControllerApi@inputTips')->name('api.info.inputTips');
     // Upload Log
     Route::post('/uploadLog', 'FsControllerApi@uploadLog')->name('api.info.uploadLog');
+    // Callback Info
+    Route::post('/callbacks', 'FsControllerApi@callbacks')->name('api.info.callbacks');
     // Download File
     Route::post('/downloadFile', 'FsControllerApi@downloadFile')->name('api.info.downloadFile');
-    // 回调返参查询
-    Route::post('/callbacks', 'FsControllerApi@callbacks')->name('api.info.callbacks');
 
 });

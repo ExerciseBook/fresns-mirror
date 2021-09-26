@@ -1038,11 +1038,9 @@ class FsChecker extends BaseChecker
 
         foreach ($stopWordsArr as $v) {
             $str = strstr($text, $v['word']);
-            // dd($str);
             if ($str != false) {
                 if ($v['content_mode'] == 2) {
                     $text = str_replace($v['word'], $v['replace_word'], $text);
-
                     return $text;
                 }
                 if ($v['content_mode'] == 3) {

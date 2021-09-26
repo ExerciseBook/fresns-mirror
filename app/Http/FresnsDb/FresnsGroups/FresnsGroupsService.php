@@ -97,7 +97,6 @@ class FresnsGroupsService extends FresnsBaseService
     public static function publishRule($mid, $permission, $group_id)
     {
         $permissionArr = json_decode($permission, true);
-        // dd($permissionArr);
         $admin_member = $permissionArr['admin_members'];
         $publish_post = $permissionArr['publish_post'];
         $publish_post_roles = $permissionArr['publish_post_roles'];
@@ -105,7 +104,7 @@ class FresnsGroupsService extends FresnsBaseService
         $publish_comment = $permissionArr['publish_comment'];
         $publish_comment_roles = $permissionArr['publish_comment_roles'];
         $publish_comment_review = $permissionArr['publish_comment_review'];
-        // dd($permissionArr);
+
         $adminMemberArr = [];
         if ($admin_member) {
             foreach ($admin_member as $a) {
@@ -205,16 +204,14 @@ class FresnsGroupsService extends FresnsBaseService
     public static function adminData($permission)
     {
         $permissionArr = json_decode($permission, true);
-        // dd($permissionArr);
         $admin_member = $permissionArr['admin_members'];
-        // dump($admin_member);
         $publish_post = $permissionArr['publish_post'];
         $publish_post_roles = $permissionArr['publish_post_roles'];
         $publish_post_review = $permissionArr['publish_post_review'];
         $publish_comment = $permissionArr['publish_comment'];
         $publish_comment_roles = $permissionArr['publish_comment_roles'];
         $publish_comment_review = $permissionArr['publish_comment_review'];
-        // dd($permissionArr);
+        
         $adminMemberArr = [];
         if ($admin_member) {
             foreach ($admin_member as $a) {

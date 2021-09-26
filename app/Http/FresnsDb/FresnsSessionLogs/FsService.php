@@ -39,8 +39,6 @@ class FsService extends BaseAdminService
         $uri = null
     ) {
         $deviceInfo = request()->header('deviceInfo');
-        // $deviceInfoArr = json_decode($deviceInfo,true);
-        // dd(json_encode($deviceInfoArr));
         $platform_id = request()->header('platform');
         $version = request()->header('version');
         $versionInt = request()->header('versionInt');

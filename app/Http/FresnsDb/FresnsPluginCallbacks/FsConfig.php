@@ -20,17 +20,6 @@ class FsConfig extends BaseConfig
 
     ];
 
-    const ENABLE_FALSE = 0;
-    const ENABLE_TRUE = 1;
-
-    // Plugin download or not
-    const NO_DOWNLOAD = 0;
-    const DOWNLOAD = 1;
-    
-    // Is the new version
-    const NO_NEWVISION = 0;
-    const NEWVISION = 1;
-
     // Model Usage - Form Mapping
     const FORM_FIELDS_MAP = [
         'id' => 'id',

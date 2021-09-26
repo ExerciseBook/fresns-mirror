@@ -145,7 +145,8 @@ class FsService
             $item['status'] = $v->is_enable;
             $item['deactivate'] = DateHelper::fresnsOutputTimeToTimezone($v->deleted_at);
             $item['deactivateTime'] = DateHelper::fresnsOutputTimeToTimezone($v->deleted_at);
-            //判断该成员所有角色是否在“有权使用的角色”列表中"
+
+            // Determine if all roles of the member are in the "entitled roles" list
             $memberRoleIdArr = FresnsMemberRoleRels::where('member_id', $v->id)->where('type',1)->pluck('role_id')->toArray();
             $memberRoleIdArr[] = $roleId;
             $permissionsRoleIdJson = ApiConfigHelper::getConfigByItemKey('multi_member_roles');
