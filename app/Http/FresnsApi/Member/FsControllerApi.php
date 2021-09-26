@@ -146,9 +146,9 @@ class FsControllerApi extends FresnsBaseApiController
             if (PluginRpcHelper::isErrorPluginResp($resp)) {
                 $this->errorCheckInfo($resp);
             }
-            $token = $resp['output']['token'] ?? '';
-            $data['token'] = $token;
-            $data['tokenExpiredTime'] = '';
+            $output = $resp['output'];
+            $data['token'] = $output['token'] ?? '';
+            $data['tokenExpiredTime'] = $output['tokenExpiredTime'] ?? '';
         }
 
         $sessionId = GlobalService::getGlobalSessionKey('session_log_id');
