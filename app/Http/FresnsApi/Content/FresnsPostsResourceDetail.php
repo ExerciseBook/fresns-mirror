@@ -118,9 +118,6 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $noAllow = 1;
             } else {
                 $allowProportion = $append['allow_proportion'];
-                if (! $allowProportion) {
-                    $allowProportion = ApiConfigHelper::getConfigByItemKey(FsConfig::SNS_PROPORTION);
-                }
                 $FresnsPostsService = new FresnsPostsService();
                 // Prevent @, hashtags, emojis, links and other messages from being truncated
                 $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content']);
@@ -292,13 +289,9 @@ class FresnsPostsResourceDetail extends BaseAdminResource
 
         // Attached Quantity
         $attachCount = [];
-        // $attachCount['images'] = FresnsFiles::where('file_type', 1)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        // $attachCount['videos'] = FresnsFiles::where('file_type', 2)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        // $attachCount['audios'] = FresnsFiles::where('file_type', 3)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        // $attachCount['docs'] = FresnsFiles::where('file_type', 4)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $this->id)->count();
-        // 读取more_json
+        // posts > more_json > files
         $attachCount['images'] = 0;
-        $attachCount['imvideosages'] = 0;
+        $attachCount['videos'] = 0;
         $attachCount['audios'] = 0;
         $attachCount['docs'] = 0;
         $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();

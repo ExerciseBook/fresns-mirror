@@ -271,13 +271,13 @@ class FresnsPostsService extends FsService
         $allowPluginUnikey = null;
         $allowBtnName = null;
         $proportion = null;
-        $web_proportion = 0;
+        $allow_proportion = 0;
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
             $allowBtnName = $allosJsonDecode['btnName'] ?? null;
-            $proportion = $allosJsonDecode['proportion'] ?? $web_proportion;
-            $proportion = empty($proportion) ? $web_proportion : $proportion;
+            $proportion = $allosJsonDecode['proportion'] ?? $allow_proportion;
+            $proportion = empty($proportion) ? $allow_proportion : $proportion;
             // Btn names multilingual
             if ($allosJsonDecode['btnName']) {
                 $btnNameArr = $allosJsonDecode['btnName'];
@@ -381,7 +381,7 @@ class FresnsPostsService extends FsService
             'member_list_plugin_unikey' => $member_list_plugin_unikey ?? null,
             'member_list_name' => json_encode($member_list_name) ?? null,
             'allow_btn_name' => json_encode($allowBtnName) ?? null,
-            'allow_proportion' => $proportion ?? null,
+            'allow_proportion' => $proportion ?? 0,
             'map_scale' => $scale,
             'map_poi' => $poi,
             'map_poi_id' => $poiId,
@@ -478,13 +478,13 @@ class FresnsPostsService extends FsService
         $allowPluginUnikey = '';
         $allowBtnName = null;
         $proportion = null;
-        $web_proportion = 0;
+        $allow_proportion = 0;
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
             $allowBtnName = $allosJsonDecode['btnName'] ?? null;
-            $proportion = $allosJsonDecode['proportion'] ?? $web_proportion;
-            $proportion = empty($proportion) ? $web_proportion : $proportion;
+            $proportion = $allosJsonDecode['proportion'] ?? $allow_proportion;
+            $proportion = empty($proportion) ? $allow_proportion : $proportion;
             // Btn names multilingual
             if ($allosJsonDecode['btnName']) {
                 $btnNameArr = $allosJsonDecode['btnName'];
@@ -829,12 +829,12 @@ class FresnsPostsService extends FsService
         if ($draftPost['allow_json']) {
             $allow_json = json_decode($draftPost['allow_json'], true);
             if ($allow_json['isAllow'] == 1) {
-                $web_proportion = 0;
+                $allow_proportion = 0;
                 if (! isset($allow_json['proportion'])) {
-                    $proportion = $web_proportion;
+                    $proportion = $allow_proportion;
                 } else {
                     if (empty($allow_json['proportion'])) {
-                        $proportion = $web_proportion;
+                        $proportion = $allow_proportion;
                     } else {
                         $proportion = $allow_json['proportion'];
                     }

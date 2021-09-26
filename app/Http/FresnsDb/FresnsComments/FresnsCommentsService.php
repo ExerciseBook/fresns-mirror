@@ -79,7 +79,7 @@ class FresnsCommentsService extends FsService
                     $arr['content '] = FresnsPostsResource::getContentView($v['content'], $comment_id, 2);
                     $attachCount = [];
                     $attachCount['images'] = 0;
-                    $attachCount['imvideosages'] = 0;
+                    $attachCount['videos'] = 0;
                     $attachCount['audios'] = 0;
                     $attachCount['docs'] = 0;
                     $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
@@ -359,8 +359,7 @@ class FresnsCommentsService extends FsService
         }
         $content = $draftComment['content'];
         $content = $this->stopWords($content);
-        // Removing html tags
-        // $content = strip_tags($content);
+
         $commentAppendInput = [
             'comment_id' => $commentId,
             'platform_id' => $draftComment['platform_id'],
@@ -428,8 +427,7 @@ class FresnsCommentsService extends FsService
         }
         $content = $draftComment['content'];
         $content = $this->stopWords($content);
-        // Removing html tags
-        // $content = strip_tags($content);
+        
         $commentAppendInput = [
             'platform_id' => $draftComment['platform_id'],
             'content' => $content,
