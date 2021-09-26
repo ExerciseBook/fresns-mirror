@@ -343,9 +343,9 @@ class FresnsPostsResource extends BaseAdminResource
         $location['mapId'] = $this->map_id;
         $location['latitude'] = $this->map_latitude;
         $location['longitude'] = $this->map_longitude;
-        $location['scale'] = $append['map_scale'];
-        $location['poi'] = $append['map_poi'];
-        $location['poiId'] = $append['map_poi_id'];
+        $location['scale'] = $append['map_scale'] ?? "";
+        $location['poi'] = $append['map_poi'] ?? "";
+        $location['poiId'] = $append['map_poi_id'] ?? "";
         $location['distance'] = '';
         $longitude = request()->input('longitude', '');
         $latitude = request()->input('latitude', '');
