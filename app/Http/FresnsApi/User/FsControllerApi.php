@@ -31,6 +31,7 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\FresnsDb\FresnsSessionTokens\FresnsSessionTokensConfig;
 use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnects;
+use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnectsConfig;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use App\Http\FresnsDb\FresnsUserWalletLogs\FresnsUserWalletLogsService;
@@ -710,7 +711,7 @@ class FsControllerApi extends FresnsBaseApiController
         $editWalletPassword = $request->input('editWalletPassword');
         $editLastLoginTime = $request->input('editLastLoginTime');
         $deleteConnectId = $request->input('deleteConnectId');
-
+        
         $user = FresnsUsers::where('id', $uid)->first();
 
         $email = $user['email'];
@@ -802,7 +803,7 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         if($deleteConnectId){
-            FresnsUserConnects::where('deleteConnectId',$deleteConnectId)->delete();
+            DB::table(FresnsUserConnectsConfig::CFG_TABLE)->where('connect_id',$deleteConnectId)->delete();
         }
 
         $sessionId = GlobalService::getGlobalSessionKey('session_log_id');
