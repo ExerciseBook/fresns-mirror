@@ -56,6 +56,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
+use Illuminate\Support\Facades\Request;
+
 /**
  * List resource config handle
  */
