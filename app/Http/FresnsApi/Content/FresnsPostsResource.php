@@ -173,7 +173,7 @@ class FresnsPostsResource extends BaseAdminResource
         $allowStatus = $this->is_allow;
         $allowBtnName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
         $allowBtnName = $allowBtnName == null ? '' : $allowBtnName['lang_content'];
-        $allowBtnUrl = $append['allow_plugin_unikey'];
+        $allowBtnUrl = $append['allow_plugin_unikey'] ?? "";
         $memberListName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'member_list_name', $this->id);
         $memberListName = $memberListName == null ? '' : $memberListName['lang_content'];
         $memberListCount = Db::table('post_members')->where('post_id', $this->id)->count();
