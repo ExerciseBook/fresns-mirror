@@ -637,8 +637,53 @@ class FresnsPostsResource extends BaseAdminResource
         $uri = Request::getRequestUri();
         if($uri == '/api/fresns/post/follows'){
             $followType = $this->contentByType($this->id);
-            $follow = ['followType' => $followType];
-            array_push($default,$follow);
+            $default = [
+                'pid' => $pid,
+                'title' => $title,
+                'content' => $content,
+                'brief' => $brief,
+                'sticky' => $sticky,
+                'essence' => $essence,
+                'postName' => $PostName,
+                'likeSetting' => $likeSetting,
+                'likeName' => $likeName,
+                'likeStatus' => $likeStatus,
+                'followSetting' => $followSetting,
+                'followName' => $followName,
+                'followStatus' => $followStatus,
+                'shieldSetting' => $shieldSetting,
+                'shieldName' => $shieldName,
+                'shieldStatus' => $shieldStatus,
+                'memberListStatus' => $append['member_list_status'],
+                'memberListName' => $memberListName,
+                'memberListCount' => $memberListCount,
+                'memberListUrl' => $append['member_list_plugin_unikey'],
+                'viewCount' => $viewCount,
+                'likeCount' => $likeCount,
+                'followCount' => $followCount,
+                'shieldCount' => $shieldCount,
+                'commentCount' => $commentCount,
+                'commentLikeCount' => $commentLikeCount,
+                'time' => $time,
+                'timeFormat' => $timeFormat,
+                'editTime' => $editTime,
+                'editTimeFormat' => $editTimeFormat,
+                'allowStatus' => $allowStatus,
+                'allowProportion' => $allowProportion,
+                'allowBtnName' => $allowBtnName,
+                'allowBtnUrl' => $allowBtnUrl,
+                'member' => $member,
+                'icons' => $icons,
+                'commentSetting' => $comment,
+                'location' => $location,
+                'attachCount' => $attachCount,
+                'files' => $files,
+                'extends' => $extends,
+                'group' => $group,
+                'manages' => $manages,
+                'editStatus' => $editStatus,
+                'followType' => $followType,
+            ];
             if($followType == 'hashtag'){
                 $hashtagId= FresnsHashtagLinkeds::where('linked_type',1)->where('linked_id',$this->id)->first();
                 $hashTagInfo = "";
@@ -649,10 +694,54 @@ class FresnsPostsResource extends BaseAdminResource
                 $hashtag['huri'] = $hashTagInfo['slug'] ?? "";
                 $hashtag['hname'] = $hashTagInfo['name'] ?? "";
                 $hashtag['cover'] = $hashTagInfo['cover_file_url'] ?? "";
-                $hashtagArr = [
-                    'hashtag' => $hashtag
+                $default = [
+                    'pid' => $pid,
+                    'title' => $title,
+                    'content' => $content,
+                    'brief' => $brief,
+                    'sticky' => $sticky,
+                    'essence' => $essence,
+                    'postName' => $PostName,
+                    'likeSetting' => $likeSetting,
+                    'likeName' => $likeName,
+                    'likeStatus' => $likeStatus,
+                    'followSetting' => $followSetting,
+                    'followName' => $followName,
+                    'followStatus' => $followStatus,
+                    'shieldSetting' => $shieldSetting,
+                    'shieldName' => $shieldName,
+                    'shieldStatus' => $shieldStatus,
+                    'memberListStatus' => $append['member_list_status'],
+                    'memberListName' => $memberListName,
+                    'memberListCount' => $memberListCount,
+                    'memberListUrl' => $append['member_list_plugin_unikey'],
+                    'viewCount' => $viewCount,
+                    'likeCount' => $likeCount,
+                    'followCount' => $followCount,
+                    'shieldCount' => $shieldCount,
+                    'commentCount' => $commentCount,
+                    'commentLikeCount' => $commentLikeCount,
+                    'time' => $time,
+                    'timeFormat' => $timeFormat,
+                    'editTime' => $editTime,
+                    'editTimeFormat' => $editTimeFormat,
+                    'allowStatus' => $allowStatus,
+                    'allowProportion' => $allowProportion,
+                    'allowBtnName' => $allowBtnName,
+                    'allowBtnUrl' => $allowBtnUrl,
+                    'member' => $member,
+                    'icons' => $icons,
+                    'commentSetting' => $comment,
+                    'location' => $location,
+                    'attachCount' => $attachCount,
+                    'files' => $files,
+                    'extends' => $extends,
+                    'group' => $group,
+                    'manages' => $manages,
+                    'editStatus' => $editStatus,
+                    'followType' => $followType,
+                    'hashtag' => $hashtag,
                 ];
-                array_push($default,$hashtagArr);
             }
 
             // Merger
