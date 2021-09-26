@@ -77,7 +77,7 @@ class ErrorCodeService
     const BALANCE_CLOSING_BALANCE_ERROR = 30227;
     const TO_USER_WALLETS_ERROR = 30228;
     const TO_BALANCE_CLOSING_BALANCE_ERROR = 30229;
-
+    
     // Member
     const MEMBER_FAIL = 30300;
     const MEMBER_ERROR = 30301;

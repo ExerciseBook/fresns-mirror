@@ -32,6 +32,8 @@ class FsConfig
     const NO_READ = 1;
     const READED = 2;
 
+    // status1 
+    const NOT_USE_CALLBACKS = 1;
     // Configs Dictionary
     const CONFIGS_ITEM_KEY = [
         'platforms',

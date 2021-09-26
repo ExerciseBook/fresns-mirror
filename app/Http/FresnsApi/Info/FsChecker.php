@@ -13,7 +13,7 @@ use App\Http\Center\Common\ErrorCodeService;
 use App\Http\FresnsApi\Base\FresnsBaseChecker;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
-
+use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
 class FsChecker extends FresnsBaseChecker
 {
     // Check Verify Code
@@ -187,6 +187,21 @@ class FsChecker extends FresnsBaseChecker
                 }
                 break;
         }
+    }
+
+    // check Plugin Callbacks
+    public static function checkPluginCallbacks($uuid){
+        $callInfo = FresnsPluginCallbacks::where('uuid',$uuid)->first();
+        if(!$callInfo){
+            return self::checkInfo(ErrorCodeService::CALLBACK_UUID_ERROR);
+        }  
+        $createdTimes = strtotime($callInfo['created_at']) + ( 10 * 60 );
+        if($createdTimes < time()){
+            return self::checkInfo(ErrorCodeService::CALLBACK_TIME_ERROR);
+        }    
+        if($callInfo['status'] != FsConfig::NOT_USE_CALLBACKS){
+            return self::checkInfo(ErrorCodeService::CALLBACK_STATUS_ERROR);
+        }      
     }
 
     public static function RulePhone($phone)

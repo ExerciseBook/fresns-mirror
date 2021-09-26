@@ -54,6 +54,9 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
+use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
+use Illuminate\Support\Facades\Request;
 
 /**
  * List resource config handle
@@ -172,7 +175,7 @@ class FresnsPostsResource extends BaseAdminResource
         $allowStatus = $this->is_allow;
         $allowBtnName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
         $allowBtnName = $allowBtnName == null ? '' : $allowBtnName['lang_content'];
-        $allowBtnUrl = $append['allow_plugin_unikey'];
+        $allowBtnUrl = $append['allow_plugin_unikey'] ?? "";
         $memberListName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'member_list_name', $this->id);
         $memberListName = $memberListName == null ? '' : $memberListName['lang_content'];
         $memberListCount = Db::table('post_members')->where('post_id', $this->id)->count();
@@ -302,7 +305,7 @@ class FresnsPostsResource extends BaseAdminResource
             // Attached Quantity
             $attachCount = [];
             $attachCount['images'] = 0;
-            $attachCount['imvideosages'] = 0;
+            $attachCount['videos'] = 0;
             $attachCount['audios'] = 0;
             $attachCount['docs'] = 0;
             $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
@@ -342,9 +345,9 @@ class FresnsPostsResource extends BaseAdminResource
         $location['mapId'] = $this->map_id;
         $location['latitude'] = $this->map_latitude;
         $location['longitude'] = $this->map_longitude;
-        $location['scale'] = $append['map_scale'];
-        $location['poi'] = $append['map_poi'];
-        $location['poiId'] = $append['map_poi_id'];
+        $location['scale'] = $append['map_scale'] ?? "";
+        $location['poi'] = $append['map_poi'] ?? "";
+        $location['poiId'] = $append['map_poi_id'] ?? "";
         $location['distance'] = '';
         $longitude = request()->input('longitude', '');
         $latitude = request()->input('latitude', '');
@@ -587,19 +590,11 @@ class FresnsPostsResource extends BaseAdminResource
         // Default Field
         $default = [
             'pid' => $pid,
-            // 'titleIcon' => $titleIcon,
-            // 'isLike' => $isLike,
             'title' => $title,
             'content' => $content,
             'brief' => $brief,
             'sticky' => $sticky,
             'essence' => $essence,
-            // 'labelImg' => $labelImg,
-            // 'likeIcon' => $likeIcon,
-            // 'followIcon' => $followIcon,
-            // 'shareIcon' => $shareIcon,
-            // 'commentIcon' => $commentIcon,
-            // 'moreIcon' => $moreIcon,
             'postName' => $PostName,
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,
@@ -624,7 +619,6 @@ class FresnsPostsResource extends BaseAdminResource
             'timeFormat' => $timeFormat,
             'editTime' => $editTime,
             'editTimeFormat' => $editTimeFormat,
-            // 'canDelete' => $canDelete,
             'allowStatus' => $allowStatus,
             'allowProportion' => $allowProportion,
             'allowBtnName' => $allowBtnName,
@@ -640,13 +634,123 @@ class FresnsPostsResource extends BaseAdminResource
             'manages' => $manages,
             'editStatus' => $editStatus,
         ];
+        // 获取帖子关注的[列表] 需要加参数
+        $uri = Request::getRequestUri();
+        if($uri == '/api/fresns/post/follows'){
+            $followType = $this->contentByType($this->id);
+            $default = [
+                'pid' => $pid,
+                'title' => $title,
+                'content' => $content,
+                'brief' => $brief,
+                'sticky' => $sticky,
+                'essence' => $essence,
+                'postName' => $PostName,
+                'likeSetting' => $likeSetting,
+                'likeName' => $likeName,
+                'likeStatus' => $likeStatus,
+                'followSetting' => $followSetting,
+                'followName' => $followName,
+                'followStatus' => $followStatus,
+                'shieldSetting' => $shieldSetting,
+                'shieldName' => $shieldName,
+                'shieldStatus' => $shieldStatus,
+                'memberListStatus' => $append['member_list_status'],
+                'memberListName' => $memberListName,
+                'memberListCount' => $memberListCount,
+                'memberListUrl' => $append['member_list_plugin_unikey'],
+                'viewCount' => $viewCount,
+                'likeCount' => $likeCount,
+                'followCount' => $followCount,
+                'shieldCount' => $shieldCount,
+                'commentCount' => $commentCount,
+                'commentLikeCount' => $commentLikeCount,
+                'time' => $time,
+                'timeFormat' => $timeFormat,
+                'editTime' => $editTime,
+                'editTimeFormat' => $editTimeFormat,
+                'allowStatus' => $allowStatus,
+                'allowProportion' => $allowProportion,
+                'allowBtnName' => $allowBtnName,
+                'allowBtnUrl' => $allowBtnUrl,
+                'member' => $member,
+                'icons' => $icons,
+                'commentSetting' => $comment,
+                'location' => $location,
+                'attachCount' => $attachCount,
+                'files' => $files,
+                'extends' => $extends,
+                'group' => $group,
+                'manages' => $manages,
+                'editStatus' => $editStatus,
+                'followType' => $followType,
+            ];
+            if($followType == 'hashtag'){
+                $hashtagId= FresnsHashtagLinkeds::where('linked_type',1)->where('linked_id',$this->id)->first();
+                $hashTagInfo = "";
+                if($hashtagId){
+                    $hashTagInfo = FresnsHashtags::find($hashtagId['hashtag_id']);
+                }
+                $hashtag = [];
+                $hashtag['huri'] = $hashTagInfo['slug'] ?? "";
+                $hashtag['hname'] = $hashTagInfo['name'] ?? "";
+                $hashtag['cover'] = $hashTagInfo['cover_file_url'] ?? "";
+                $default = [
+                    'pid' => $pid,
+                    'title' => $title,
+                    'content' => $content,
+                    'brief' => $brief,
+                    'sticky' => $sticky,
+                    'essence' => $essence,
+                    'postName' => $PostName,
+                    'likeSetting' => $likeSetting,
+                    'likeName' => $likeName,
+                    'likeStatus' => $likeStatus,
+                    'followSetting' => $followSetting,
+                    'followName' => $followName,
+                    'followStatus' => $followStatus,
+                    'shieldSetting' => $shieldSetting,
+                    'shieldName' => $shieldName,
+                    'shieldStatus' => $shieldStatus,
+                    'memberListStatus' => $append['member_list_status'],
+                    'memberListName' => $memberListName,
+                    'memberListCount' => $memberListCount,
+                    'memberListUrl' => $append['member_list_plugin_unikey'],
+                    'viewCount' => $viewCount,
+                    'likeCount' => $likeCount,
+                    'followCount' => $followCount,
+                    'shieldCount' => $shieldCount,
+                    'commentCount' => $commentCount,
+                    'commentLikeCount' => $commentLikeCount,
+                    'time' => $time,
+                    'timeFormat' => $timeFormat,
+                    'editTime' => $editTime,
+                    'editTimeFormat' => $editTimeFormat,
+                    'allowStatus' => $allowStatus,
+                    'allowProportion' => $allowProportion,
+                    'allowBtnName' => $allowBtnName,
+                    'allowBtnUrl' => $allowBtnUrl,
+                    'member' => $member,
+                    'icons' => $icons,
+                    'commentSetting' => $comment,
+                    'location' => $location,
+                    'attachCount' => $attachCount,
+                    'files' => $files,
+                    'extends' => $extends,
+                    'group' => $group,
+                    'manages' => $manages,
+                    'editStatus' => $editStatus,
+                    'followType' => $followType,
+                    'hashtag' => $hashtag,
+                ];
+            }
 
-        // Merger
-        $arr = $default;
+            // Merger
+            $arr = $default;
 
-        return $arr;
+            return $arr;
+        }
     }
-
     // Distance Conversion
     public function GetDistance($lat1, $lng1, $lat2, $lng2, $distanceUnits)
     {
@@ -746,5 +850,47 @@ class FresnsPostsResource extends BaseAdminResource
         }
 
         return $content;
+    }
+
+    // 判断当前内容来自哪个对象
+    public function contentByType($id){
+        $request = request();
+        $followType = "";
+        $followType = $request->input('followType');
+        $mid = GlobalService::getGlobalKey('member_id');
+        if(!$followType){
+            // $folloHashtagArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',3)->pluck('follow_id')->toArray();
+            $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
+            $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
+            $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
+            if(in_array($id,$postHashtagIdArr)){
+                $followType = 'hashtag';
+            }
+            // Only posts that have been added to the essence are exported under groups and hashtags
+            // $folloGroupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
+            $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
+            $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
+            if(in_array($id,$postGroupIdArr)){
+                $followType = 'group';
+            }
+            // Posts set as secondary essence, forced output
+            $essenceIdArr = FresnsPosts::where('essence_status', 3)->pluck('id')->toArray();
+            if(in_array($id,$essenceIdArr)){
+                $followType = 'group';
+            }
+            // My posts
+            $mePostsArr = FresnsPosts::where('member_id', $mid)->pluck('id')->toArray();
+            if(in_array($id,$mePostsArr)){
+                $followType = 'member';
+            }
+            // Posts by following members
+            // $followMemberArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',1)->pluck('follow_id')->toArray();
+            $followMemberArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 1)->pluck('follow_id')->toArray();
+            $postMemberIdArr = FresnsPosts::whereIn('member_id', $followMemberArr)->pluck('id')->toArray();
+            if(in_array($id,$postMemberIdArr)){
+                $followType = 'member';
+            } 
+        }
+        return $followType;
     }
 }
