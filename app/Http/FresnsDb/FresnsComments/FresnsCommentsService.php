@@ -214,15 +214,13 @@ class FresnsCommentsService extends FsService
     {
         // Parsing basic information
         $draftComment = FresnsCommentLogs::find($draftId);
-        // $baseInfoArr = $this->parseDraftBaseInfo($draftId);
-        // dump($baseInfoArr);
+
         // Parse content information (determine whether the content needs to be truncated)
         $contentBrief = $this->parseDraftContent($draftId);
 
         // Removing html tags
         $contentBrief = strip_tags($contentBrief);
 
-        // dd($contentBrief);
         $uuid = strtolower(StrHelper::randString(8));
         // Get the number of words in the brief of the comment
         $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
@@ -910,11 +908,9 @@ class FresnsCommentsService extends FsService
 
         foreach ($stopWordsArr as $v) {
             $str = strstr($text, $v['word']);
-            // dd($str);
             if ($str != false) {
                 if ($v['content_mode'] == 2) {
                     $text = str_replace($v['word'], $v['replace_word'], $text);
-
                     return $text;
                 }
             }
