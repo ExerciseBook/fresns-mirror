@@ -16,4 +16,7 @@ yarn-error.log
 .DS_Store
 
 # R&D Documents
-
+push.sh
+push_ignore.sh
+setup.sh
+composer.lock
