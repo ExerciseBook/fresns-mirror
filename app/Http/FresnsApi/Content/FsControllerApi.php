@@ -734,7 +734,7 @@ class FsControllerApi extends FresnsBaseApiController
             'list' => $list['list'],
             'common' => $common,
         ];
-        $this->success($list);
+        $this->success($data);
     }
 
     // Calculate distance by latitude and longitude
