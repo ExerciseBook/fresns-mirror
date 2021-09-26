@@ -649,7 +649,10 @@ class FresnsPostsResource extends BaseAdminResource
                 $hashtag['huri'] = $hashTagInfo['slug'] ?? "";
                 $hashtag['hname'] = $hashTagInfo['name'] ?? "";
                 $hashtag['cover'] = $hashTagInfo['cover_file_url'] ?? "";
-                array_push($default,$hashtag);
+                $hashtagArr = [
+                    'hashtag' => $hashtag
+                ];
+                array_push($default,$hashtagArr);
             }
 
             // Merger
