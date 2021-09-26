@@ -698,10 +698,7 @@ class FsControllerApi extends FresnsBaseApiController
         $noPostHashtags = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $shieldshashtags)->pluck('linked_id')->toArray();
         $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 4)->where('deleted_at',null)->pluck('shield_id')->toArray();
         $postArr2 = FresnsPosts::whereNotIn('group_id', $noGroupArr)->whereNotIn('member_id', $memberShields)->whereNotIn('group_id', $GroupShields)->whereNotIn('id', $noPostHashtags)->whereNotIn('id', $commentShields)->pluck('id')->toArray();
-        dump($postArr1);
-        dump($postArr2);
         $idArr = array_intersect($postArr1, $postArr2);
-        dd($idArr);
         $searchType = $request->input('searchType', '');
         if ($searchType == 'all') {
             $request->offsetSet('searchType', '');
