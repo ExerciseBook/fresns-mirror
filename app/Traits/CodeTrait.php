@@ -7,17 +7,15 @@
  */
 
 namespace App\Traits;
-
+use App\Http\Center\Common\ErrorCodeService;
 trait CodeTrait
 {
     //
-    public static function checkInfo($code)
+    public static function checkInfo1($code)
     {
         $c = get_called_class();
-        dd($c);
         $m = new $c;
         $codeMap = $m->getCodeMap();
-        dd($codeMap);
         $data = [
             'code'  => $code,
             'msg'   => $codeMap[$code] ?? 'Function Check Anomalies',
@@ -29,5 +27,9 @@ trait CodeTrait
     public function getCodeMap()
     {
         return $this->codeMap;
+    }
+    public static function checkInfo($code){
+        $message = ErrorCodeService::getMsg($code);
+        dd($message);
     }
 }
