@@ -10,6 +10,7 @@ namespace App\Http\FresnsApi\Member;
 
 use App\Base\Resources\BaseAdminResource;
 use App\Helpers\DateHelper;
+use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsConfig;
@@ -21,6 +22,7 @@ use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikes;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesConfig;
+use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 
@@ -33,7 +35,10 @@ class FresnsMemberListsResource extends BaseAdminResource
     public function toArray($request)
     {
         $langTag = request()->input('langTag');
-        $mid = request()->input('mid');
+        $mid = request()->header('mid');
+        if($mid){
+            $mid = FresnsMembers::where('uuid',$mid)->value('id');
+        }
         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($this->id);
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
