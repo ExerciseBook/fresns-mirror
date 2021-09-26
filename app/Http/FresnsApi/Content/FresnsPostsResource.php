@@ -634,7 +634,7 @@ class FresnsPostsResource extends BaseAdminResource
             'manages' => $manages,
             'editStatus' => $editStatus,
         ];
-        dd($default);
+        // dd($default);
         // 获取帖子关注的[列表] 需要加参数
         $uri = Request::getRequestUri();
         if($uri == '/api/fresns/post/follows'){
