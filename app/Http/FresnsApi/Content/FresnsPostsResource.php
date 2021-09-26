@@ -744,13 +744,12 @@ class FresnsPostsResource extends BaseAdminResource
                     'followType' => $followType,
                     'hashtag' => $hashtag,
                 ];
-            }
-
-            // Merger
-            $arr = $default;
-
-            return $arr;
+            } 
         }
+         // Merger
+         $arr = $default;
+
+         return $arr;
     }
     // Distance Conversion
     public function GetDistance($lat1, $lng1, $lat2, $lng2, $distanceUnits)
