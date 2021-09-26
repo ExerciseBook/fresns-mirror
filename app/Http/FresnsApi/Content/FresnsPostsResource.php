@@ -634,6 +634,7 @@ class FresnsPostsResource extends BaseAdminResource
             'manages' => $manages,
             'editStatus' => $editStatus,
         ];
+        // 获取帖子关注的[列表] 需要加参数
         $uri = Request::getRequestUri();
         if($uri == '/api/fresns/post/follows'){
             $followType = $this->contentByType($this->id);
@@ -856,7 +857,7 @@ class FresnsPostsResource extends BaseAdminResource
         $request = request();
         $followType = "";
         $followType = $request->input('followType');
-        $mid = $request->input('mid');
+        $mid = GlobalService::getGlobalKey('member_id');
         if(!$followType){
             // $folloHashtagArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',3)->pluck('follow_id')->toArray();
             $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
