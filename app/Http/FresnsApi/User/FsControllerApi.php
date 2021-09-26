@@ -30,6 +30,7 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\FresnsDb\FresnsSessionTokens\FresnsSessionTokensConfig;
+use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnects;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use App\Http\FresnsDb\FresnsUserWalletLogs\FresnsUserWalletLogsService;
@@ -708,6 +709,8 @@ class FsControllerApi extends FresnsBaseApiController
         $editPassword = $request->input('editPassword');
         $editWalletPassword = $request->input('editWalletPassword');
         $editLastLoginTime = $request->input('editLastLoginTime');
+        $deleteConnectId = $request->input('deleteConnectId');
+
         $user = FresnsUsers::where('id', $uid)->first();
 
         $email = $user['email'];
@@ -796,6 +799,10 @@ class FsControllerApi extends FresnsBaseApiController
             ValidateService::validateRule($request, $rule);
             FresnsUsers::where('id',
                 $user['id'])->update(['last_login_at' => DateHelper::fresnsInputTimeToTimezone($editLastLoginTime)]);
+        }
+
+        if($deleteConnectId){
+            FresnsUserConnects::where('deleteConnectId',$deleteConnectId)->delete();
         }
 
         $sessionId = GlobalService::getGlobalSessionKey('session_log_id');
