@@ -846,12 +846,15 @@ class FresnsPostsResource extends BaseAdminResource
             foreach ($singlePoundMatches[0] as $s) {
                 // get hashtag huri
                 // no trim hashtag
-                $noTrimHashTags = trim($s);
-                $hashTags = trim(str_replace('#', '', $s));
+                $noTrimHashTags = rtrim($s);
                 $hashtagsInfo = FresnsHashtags::where('name', $hashTags)->first();
                 if ($hashtagsInfo) {
                     $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
-                    $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$noTrimHashTags</a>", $content);
+                    if($hashtagShow == 1){
+                        $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$noTrimHashTags</a>", $content);
+                    }else{
+                        $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$s</a>", $content);
+                    }
                 }
             }
         }
