@@ -803,7 +803,7 @@ class FresnsPostsResource extends BaseAdminResource
                         $title = $domainLinked->link_title;
                     }
                 }
-                $content = str_replace($h, "<a href='$h' class='fresns_content_link'>$title</a>", $content);
+                $content = str_replace($h, "<a href='$h' target='_blank' class='fresns_content_link'>$title</a>", $content);
             }
         }
 
@@ -829,7 +829,7 @@ class FresnsPostsResource extends BaseAdminResource
                 $trimName = trim($m);
                 $memberInfo = FresnsMembers::where('name', $mname)->first();
                 if ($memberInfo) {
-                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/$mname";
+                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/m/$mname";
                     $content = str_replace($m, "<a href='{$jumpUrl}' class='fresns_content_mention'>@{$memberInfo['nickname']}</a> ", $content);
                 }
             }
