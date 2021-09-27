@@ -36,6 +36,12 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
+use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
+use App\Http\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\FresnsApi\Info\FsService as FresnsService;
 
 class FsControllerApi extends FresnsBaseApiController
 {
@@ -844,5 +850,393 @@ class FsControllerApi extends FresnsBaseApiController
             FresnsCommentLogs::where('id', $logId)->update(['status' => 1, 'submit_at' => null]);
         }
         $this->success();
+    }
+
+    // 编辑器配置信息
+    public function configs(Request $request){
+        $rule = [
+            'type' => 'required|in:1,2',
+        ];
+        ValidateService::validateRule($request, $rule);
+        $type = $request->input('type');
+        $memberId = GlobalService::getGlobalKey('member_id');
+        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
+        switch ($type) {
+            case 1:
+                $publishPerm = [];
+                $editPerm = [];
+                $editPerm['status'] = ApiConfigHelper::getConfigByItemKey('post_edit');
+                $editPerm['timeLimit'] = ApiConfigHelper::getConfigByItemKey('post_edit_timelimit');
+                $editPerm['editSticky'] = ApiConfigHelper::getConfigByItemKey('post_edit_sticky');
+                $editPerm['editEssence'] = ApiConfigHelper::getConfigByItemKey('post_edit_essence');
+                $roleLimit = [];
+                $globalLimit = [];
+                $toolbar = [];
+                $toolbar['emoji'] = ApiConfigHelper::getConfigByItemKey('post_editor_emoji');
+                $image = [];
+                // 如果配置表 post_editor_image 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_image 配置值。
+                $postEditImage = ApiConfigHelper::getConfigByItemKey('post_editor_image');
+                $image['status'] = $postEditImage;
+                $image['maxSizze'] = "";
+                if($postEditImage){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'post_editor_image'){
+                                $image['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'images_max_size'){
+                                $image['maxSize'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                //配置表 images_service 键值的插件 URL，逻辑见下方开发说明。
+                $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $image['extensions'] = ApiConfigHelper::getConfigByItemKey('images_ext');
+                if(empty($image['maxSize'])){
+                    $image['maxSize'] = ApiConfigHelper::getConfigByItemKey('images_max_size');
+                }
+                $toolbar['image'] = $image;
+                //配置表 post_editor_video 键值等于 true 时（等于 false 时直接输出）输出成员主角色 post_editor_video 配置值
+                $video = [];
+                $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_video');
+                $video['status']= $postEditorVideo;
+                $video['maxSize'] = "";
+                $video['maxTime'] = "";
+                if($postEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'post_editor_video'){
+                                $video['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'videos_max_size'){
+                                $video['maxSize'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'videos_max_time'){
+                                $video['maxTime'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
+                $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $video['extensions'] = ApiConfigHelper::getConfigByItemKey('videos_ext');
+                //单位 MB；当成员主角色 videos_max_size 配置值为空时，输出配置表 videos_max_size 键值
+                if(empty($video['maxSize'])){
+                    $video['maxSize'] = ApiConfigHelper::getConfigByItemKey('videos_max_size');
+                }
+                //单位 秒；当成员主角色 videos_max_time 配置值为空时，输出配置表 videos_max_time 键值
+                if(empty($video['maxTime'])){
+                    $video['maxTime'] = ApiConfigHelper::getConfigByItemKey('videos_max_time');
+                }
+                $toolbar['video'] = $video;
+                $audio = [];
+                $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_audio');
+                $audio['status']= $postEditorVideo;
+                $audio['maxSize'] = "";
+                $audio['maxTime'] = "";
+                if($postEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'post_editor_audio'){
+                                $audio['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'audios_max_size'){
+                                $audio['maxSize'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'audios_max_time'){
+                                $audio['maxTime'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
+                $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $audio['extensions'] = ApiConfigHelper::getConfigByItemKey('audios_ext');
+                //单位 MB；当成员主角色 audios_max_size 配置值为空时，输出配置表 audios_max_size 键值
+                if(empty($audio['maxSize'])){
+                    $audio['maxSize'] = ApiConfigHelper::getConfigByItemKey('audios_max_size');
+                }
+                //单位 秒；当成员主角色 audios_max_time 配置值为空时，输出配置表 audios_max_time 键值
+                if(empty($audio['maxTime'])){
+                    $audio['maxTime'] = ApiConfigHelper::getConfigByItemKey('audios_max_time');
+                }
+                $toolbar['audio'] = $audio;
+                $doc = [];
+                $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_doc');
+                $doc['status']= $postEditorVideo;
+                $doc['maxSize'] = "";
+                $doc['maxTime'] = "";
+                if($postEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'post_editor_doc'){
+                                $doc['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'docs_max_size'){
+                                $doc['maxSize'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
+                $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $doc['extensions'] = ApiConfigHelper::getConfigByItemKey('docs_ext');
+                //单位 MB；当成员主角色 audios_max_size 配置值为空时，输出配置表 audios_max_size 键值
+                if(empty($doc['maxSize'])){
+                    $doc['maxSize'] = ApiConfigHelper::getConfigByItemKey('docs_max_size');
+                }
+                $toolbar['doc'] = $doc;
+                $title = [];
+                $title['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_title');
+                $title['view'] = ApiConfigHelper::getConfigByItemKey('post_editor_title_view');
+                $title['required'] = ApiConfigHelper::getConfigByItemKey('post_editor_title_required');
+                $title['wordCount'] = ApiConfigHelper::getConfigByItemKey('post_editor_title_word_count');
+                $toolbar['title'] = $title;
+                $toolbar['mention'] = ApiConfigHelper::getConfigByItemKey('post_editor_mention');
+                $hashtag = [];
+                $hashtag['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_hashtag');
+                $hashtag['showMode'] = ApiConfigHelper::getConfigByItemKey('hashtag_show');
+                $toolbar['hashtag'] = $hashtag;
+                $expand = [];
+                $expand['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_expand');
+                $list = [];
+                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%1%')->get();
+                foreach($tweetPluginUsagesArr as $t){
+                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $arr = [];
+                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['icon'] = $t['icon_file_url'];
+                    $arr['number'] = $t['editor_number'];
+                    $list[] = $arr;
+                }
+                $expand[] = $list;
+                $features = [];
+                $postGroup = [];
+                $postGroup['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_group');
+                $postGroup['required'] = ApiConfigHelper::getConfigByItemKey('post_editor_group_required');
+                $features['postGroup'] = $postGroup;
+                $isLbs = [];
+                $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_lbs');
+                $maps = [];
+                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get();
+                foreach($tweetPluginUsagesArr as $t){
+                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $arr = [];
+                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['icon'] = $t['icon_file_url'];
+                    $maps[] = $arr;
+                }
+                $isLbs['maps'] = $maps;
+                $features['isLbs'] = $isLbs;
+                $features['isAnonymous'] = ApiConfigHelper::getConfigByItemKey('post_editor_anonymous');
+                $features['contentWordCount'] = ApiConfigHelper::getConfigByItemKey('post_editor_word_count');
+                $data = [
+                    'publishPerm' => $publishPerm,
+                    'editPerm' => $editPerm,
+                    'roleLimit' => $roleLimit,
+                    'globalLimit' => $globalLimit,
+                    'toolbar' => $toolbar,
+                    'features' => $features,
+                ];
+                break;
+            
+            default:
+                $publishPerm = [];
+                $editPerm = [];
+                $editPerm['status'] = ApiConfigHelper::getConfigByItemKey('comment_edit');
+                $editPerm['timeLimit'] = ApiConfigHelper::getConfigByItemKey('comment_edit_timelimit');
+                $editPerm['editSticky'] = ApiConfigHelper::getConfigByItemKey('comment_edit_sticky');
+                $roleLimit = [];
+                $globalLimit = [];
+                $toolbar = [];
+                $toolbar['emoji'] = ApiConfigHelper::getConfigByItemKey('comment_editor_emoji');
+                $image = [];
+                // 如果配置表 post_editor_image 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_image 配置值。
+                $postEditImage = ApiConfigHelper::getConfigByItemKey('comment_editor_image');
+                $image['status'] = $postEditImage;
+                $image['maxSizze'] = "";
+                if($postEditImage){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'comment_editor_image '){
+                                $image['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'images_max_size'){
+                                $image['maxSize'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                //配置表 images_service 键值的插件 URL，逻辑见下方开发说明。
+                $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $image['extensions'] = ApiConfigHelper::getConfigByItemKey('images_ext');
+                if(empty($image['maxSize'])){
+                    $image['maxSize'] = ApiConfigHelper::getConfigByItemKey('images_max_size');
+                }
+                $toolbar['image'] = $image;
+                //配置表 post_editor_video 键值等于 true 时（等于 false 时直接输出）输出成员主角色 post_editor_video 配置值
+                $video = [];
+                $commentEditorVideo = ApiConfigHelper::getConfigByItemKey('comment_editor_video');
+                $video['status']= $commentEditorVideo;
+                $video['maxSize'] = "";
+                $video['maxTime'] = "";
+                if($commentEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'comment_editor_video'){
+                                $video['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'videos_max_size'){
+                                $video['maxSize'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'videos_max_time'){
+                                $video['maxTime'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
+                $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $video['extensions'] = ApiConfigHelper::getConfigByItemKey('videos_ext');
+                //单位 MB；当成员主角色 videos_max_size 配置值为空时，输出配置表 videos_max_size 键值
+                if(empty($video['maxSize'])){
+                    $video['maxSize'] = ApiConfigHelper::getConfigByItemKey('videos_max_size');
+                }
+                //单位 秒；当成员主角色 videos_max_time 配置值为空时，输出配置表 videos_max_time 键值
+                if(empty($video['maxTime'])){
+                    $video['maxTime'] = ApiConfigHelper::getConfigByItemKey('videos_max_time');
+                }
+                $toolbar['video'] = $video;
+                $audio = [];
+                $commentEditorVideo = ApiConfigHelper::getConfigByItemKey('comment_editor_audio');
+                $audio['status']= $commentEditorVideo;
+                $audio['maxSize'] = "";
+                $audio['maxTime'] = "";
+                if($commentEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'comment_editor_audio'){
+                                $audio['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'audios_max_size'){
+                                $audio['maxSize'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'audios_max_time'){
+                                $audio['maxTime'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
+                $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $audio['extensions'] = ApiConfigHelper::getConfigByItemKey('audios_ext');
+                //单位 MB；当成员主角色 audios_max_size 配置值为空时，输出配置表 audios_max_size 键值
+                if(empty($audio['maxSize'])){
+                    $audio['maxSize'] = ApiConfigHelper::getConfigByItemKey('audios_max_size');
+                }
+                //单位 秒；当成员主角色 audios_max_time 配置值为空时，输出配置表 audios_max_time 键值
+                if(empty($audio['maxTime'])){
+                    $audio['maxTime'] = ApiConfigHelper::getConfigByItemKey('audios_max_time');
+                }
+                $toolbar['audio'] = $audio;
+                $doc = [];
+                $postEditorVideo = ApiConfigHelper::getConfigByItemKey('comment_editor_doc');
+                $doc['status']= $postEditorVideo;
+                $doc['maxSize'] = "";
+                $doc['maxTime'] = "";
+                if($postEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'comment_editor_doc'){
+                                $doc['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'docs_max_size'){
+                                $doc['maxSize'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
+                $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $doc['extensions'] = ApiConfigHelper::getConfigByItemKey('docs_ext');
+                //单位 MB；当成员主角色 audios_max_size 配置值为空时，输出配置表 audios_max_size 键值
+                if(empty($doc['maxSize'])){
+                    $doc['maxSize'] = ApiConfigHelper::getConfigByItemKey('docs_max_size');
+                }
+                $toolbar['doc'] = $doc;
+                $toolbar['mention'] = ApiConfigHelper::getConfigByItemKey('comment_editor_mention');
+                $hashtag = [];
+                $hashtag['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_hashtag');
+                $hashtag['showMode'] = ApiConfigHelper::getConfigByItemKey('hashtag_show');
+                $toolbar['hashtag'] = $hashtag;
+                $expand = [];
+                $expand['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_expand');
+                $list = [];
+                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%2%')->get();
+                foreach($tweetPluginUsagesArr as $t){
+                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $arr = [];
+                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['icon'] = $t['icon_file_url'];
+                    $arr['number'] = $t['editor_number'];
+                    $list[] = $arr;
+                }
+                $expand[] = $list;
+                $features = [];
+                $isLbs = [];
+                $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_lbs');
+                $maps = [];
+                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get();
+                foreach($tweetPluginUsagesArr as $t){
+                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $arr = [];
+                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['icon'] = $t['icon_file_url'];
+                    $maps[] = $arr;
+                }
+                $isLbs['maps'] = $maps;
+                $features['isLbs'] = $isLbs;
+                $features['isAnonymous'] = ApiConfigHelper::getConfigByItemKey('comment_editor_anonymous');
+                $features['contentWordCount'] = ApiConfigHelper::getConfigByItemKey('comment_editor_word_count');
+                $data = [
+                    'publishPerm' => $publishPerm,
+                    'editPerm' => $editPerm,
+                    'roleLimit' => $roleLimit,
+                    'globalLimit' => $globalLimit,
+                    'toolbar' => $toolbar,
+                    'features' => $features,
+                ];
+                break;
+        }
+        $this->success($data);
     }
 }

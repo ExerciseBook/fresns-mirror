@@ -21,4 +21,6 @@ Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\FresnsApi\Editor']
     Route::post('/editor/uploadToken', 'FsControllerApi@uploadToken')->name('api.editor.uploadToken');
     Route::post('/editor/delete', 'FsControllerApi@delete')->name('api.editor.delete');
     Route::post('/editor/revoke', 'FsControllerApi@revoke')->name('api.editor.revoke');
+    Route::post('/editor/configs', 'FsControllerApi@configs')->name('api.editor.configs');
+
 });
