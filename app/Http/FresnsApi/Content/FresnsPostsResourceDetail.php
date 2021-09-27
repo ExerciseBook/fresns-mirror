@@ -480,8 +480,8 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                         }
                     }
                 }
-            }
             $managesArr[] = $manages;
+            }
         }
         
         // Edit Status

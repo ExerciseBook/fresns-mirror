@@ -483,8 +483,8 @@ class FresnsCommentsResource extends BaseAdminResource
                         }
                     }
                 }
-            }
             $managesArr[] = $manages;
+            }
         }
 
         // Edit Status
