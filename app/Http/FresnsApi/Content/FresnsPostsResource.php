@@ -847,6 +847,7 @@ class FresnsPostsResource extends BaseAdminResource
                 // get hashtag huri
                 // no trim hashtag
                 $noTrimHashTags = rtrim($s);
+                $hashTags = trim(str_replace('#', '', $s));
                 $hashtagsInfo = FresnsHashtags::where('name', $hashTags)->first();
                 if ($hashtagsInfo) {
                     $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
