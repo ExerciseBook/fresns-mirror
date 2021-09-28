@@ -14,6 +14,7 @@ use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtends;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtendsConfig;
+use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
 /**
  * List resource config handle
  */
@@ -22,12 +23,16 @@ class FresnsPluginCallbackResource extends BaseAdminResource
 {
     public function toArray($request)
     {
+
         // Form Field
         $formMap = FresnsPluginCallbacksConfig::FORM_FIELDS_MAP;
         $formMapFieldsArr = [];
         foreach ($formMap as $k => $dbField) {
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
+        // 更新 unikey
+        $unikey = $request->input('unikey');
+        FresnsPluginCallbacks::where('id',$this->id)->update(['use_plugin_unikey' => $unikey , 'status' => 2]);
         $content = json_decode($this->content,true);
         // dump($content);
         if($content){
