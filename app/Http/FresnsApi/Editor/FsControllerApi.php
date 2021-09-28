@@ -852,7 +852,7 @@ class FsControllerApi extends FresnsBaseApiController
         $this->success();
     }
 
-    // 编辑器配置信息
+    // Editor Configs
     public function configs(Request $request){
         $rule = [
             'type' => 'required|in:1,2',
@@ -862,23 +862,37 @@ class FsControllerApi extends FresnsBaseApiController
         $memberId = GlobalService::getGlobalKey('member_id');
         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
         switch ($type) {
+            // Post Editor
             case 1:
+                // publishPerm
                 $publishPerm = [];
+
+                // editPerm
                 $editPerm = [];
                 $editPerm['status'] = ApiConfigHelper::getConfigByItemKey('post_edit');
                 $editPerm['timeLimit'] = ApiConfigHelper::getConfigByItemKey('post_edit_timelimit');
                 $editPerm['editSticky'] = ApiConfigHelper::getConfigByItemKey('post_edit_sticky');
                 $editPerm['editEssence'] = ApiConfigHelper::getConfigByItemKey('post_edit_essence');
+
+                // roleLimit
                 $roleLimit = [];
+
+                // globalLimit
                 $globalLimit = [];
+
+                // toolbar
                 $toolbar = [];
+
+                // toolbar > emoji
                 $toolbar['emoji'] = ApiConfigHelper::getConfigByItemKey('post_editor_emoji');
+
+                // toolbar > image
+                // status 如果配置表 post_editor_image 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_image 配置值。
                 $image = [];
-                // 如果配置表 post_editor_image 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_image 配置值。
-                $postEditImage = ApiConfigHelper::getConfigByItemKey('post_editor_image');
-                $image['status'] = $postEditImage;
+                $postEditorImage = ApiConfigHelper::getConfigByItemKey('post_editor_image');
+                $image['status'] = $postEditorImage;
                 $image['maxSizze'] = "";
-                if($postEditImage){
+                if($postEditorImage){
                     $memberRoleInfo = FresnsMemberRoles::find($roleId);
                     if($memberRoleInfo){
                         foreach($memberRoleInfo['permission'] as $m){
@@ -891,7 +905,8 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                //配置表 images_service 键值的插件 URL，逻辑见下方开发说明。
+                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                 $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
@@ -900,7 +915,9 @@ class FsControllerApi extends FresnsBaseApiController
                     $image['maxSize'] = ApiConfigHelper::getConfigByItemKey('images_max_size');
                 }
                 $toolbar['image'] = $image;
-                //配置表 post_editor_video 键值等于 true 时（等于 false 时直接输出）输出成员主角色 post_editor_video 配置值
+
+                // toolbar > video
+                // status 如果配置表 post_editor_video 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_video 配置值。
                 $video = [];
                 $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_video');
                 $video['status']= $postEditorVideo;
@@ -922,20 +939,22 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
+                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                 $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
                 $video['extensions'] = ApiConfigHelper::getConfigByItemKey('videos_ext');
-                //单位 MB；当成员主角色 videos_max_size 配置值为空时，输出配置表 videos_max_size 键值
                 if(empty($video['maxSize'])){
                     $video['maxSize'] = ApiConfigHelper::getConfigByItemKey('videos_max_size');
                 }
-                //单位 秒；当成员主角色 videos_max_time 配置值为空时，输出配置表 videos_max_time 键值
                 if(empty($video['maxTime'])){
                     $video['maxTime'] = ApiConfigHelper::getConfigByItemKey('videos_max_time');
                 }
                 $toolbar['video'] = $video;
+
+                // toolbar > audio
+                // status 如果配置表 post_editor_audio 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_audio 配置值。
                 $audio = [];
                 $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_audio');
                 $audio['status']= $postEditorVideo;
@@ -957,20 +976,22 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
+                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                 $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
                 $audio['extensions'] = ApiConfigHelper::getConfigByItemKey('audios_ext');
-                //单位 MB；当成员主角色 audios_max_size 配置值为空时，输出配置表 audios_max_size 键值
                 if(empty($audio['maxSize'])){
                     $audio['maxSize'] = ApiConfigHelper::getConfigByItemKey('audios_max_size');
                 }
-                //单位 秒；当成员主角色 audios_max_time 配置值为空时，输出配置表 audios_max_time 键值
                 if(empty($audio['maxTime'])){
                     $audio['maxTime'] = ApiConfigHelper::getConfigByItemKey('audios_max_time');
                 }
                 $toolbar['audio'] = $audio;
+
+                // toolbar > doc
+                // status 如果配置表 post_editor_doc 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_doc 配置值。
                 $doc = [];
                 $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_doc');
                 $doc['status']= $postEditorVideo;
@@ -989,27 +1010,35 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
+                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                 $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
                 $doc['extensions'] = ApiConfigHelper::getConfigByItemKey('docs_ext');
-                //单位 MB；当成员主角色 audios_max_size 配置值为空时，输出配置表 audios_max_size 键值
                 if(empty($doc['maxSize'])){
                     $doc['maxSize'] = ApiConfigHelper::getConfigByItemKey('docs_max_size');
                 }
                 $toolbar['doc'] = $doc;
+
+                // toolbar > title
                 $title = [];
                 $title['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_title');
                 $title['view'] = ApiConfigHelper::getConfigByItemKey('post_editor_title_view');
                 $title['required'] = ApiConfigHelper::getConfigByItemKey('post_editor_title_required');
                 $title['wordCount'] = ApiConfigHelper::getConfigByItemKey('post_editor_title_word_count');
                 $toolbar['title'] = $title;
+
+                // toolbar > mention
                 $toolbar['mention'] = ApiConfigHelper::getConfigByItemKey('post_editor_mention');
+
+                // toolbar > hashtag
                 $hashtag = [];
                 $hashtag['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_hashtag');
                 $hashtag['showMode'] = ApiConfigHelper::getConfigByItemKey('hashtag_show');
                 $toolbar['hashtag'] = $hashtag;
+
+                // toolbar > expand
                 $expand = [];
                 $expand['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_expand');
                 $list = [];
@@ -1020,15 +1049,22 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
+                    // $arr['url']
+                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                     $arr['number'] = $t['editor_number'];
                     $list[] = $arr;
                 }
                 $expand[] = $list;
+
+                // features
                 $features = [];
+                // features > group
                 $postGroup = [];
                 $postGroup['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_group');
                 $postGroup['required'] = ApiConfigHelper::getConfigByItemKey('post_editor_group_required');
                 $features['postGroup'] = $postGroup;
+                // features > lbs
                 $isLbs = [];
                 $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_lbs');
                 $maps = [];
@@ -1039,12 +1075,19 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
+                    // $arr['url']
+                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;
                 $features['isLbs'] = $isLbs;
+                // features > anonymous
                 $features['isAnonymous'] = ApiConfigHelper::getConfigByItemKey('post_editor_anonymous');
+                // features > word count
                 $features['contentWordCount'] = ApiConfigHelper::getConfigByItemKey('post_editor_word_count');
+                
+                // Config Data
                 $data = [
                     'publishPerm' => $publishPerm,
                     'editPerm' => $editPerm,
@@ -1054,23 +1097,36 @@ class FsControllerApi extends FresnsBaseApiController
                     'features' => $features,
                 ];
                 break;
-            
+
+            // Comment Editor
             default:
+                // publishPerm
                 $publishPerm = [];
+
+                // editPerm
                 $editPerm = [];
                 $editPerm['status'] = ApiConfigHelper::getConfigByItemKey('comment_edit');
                 $editPerm['timeLimit'] = ApiConfigHelper::getConfigByItemKey('comment_edit_timelimit');
                 $editPerm['editSticky'] = ApiConfigHelper::getConfigByItemKey('comment_edit_sticky');
+
+                // roleLimit
                 $roleLimit = [];
+
+                // globalLimit
                 $globalLimit = [];
+
+                // toolbar
                 $toolbar = [];
+
+                // toolbar > emoji
                 $toolbar['emoji'] = ApiConfigHelper::getConfigByItemKey('comment_editor_emoji');
+
+                // toolbar > image
                 $image = [];
-                // 如果配置表 post_editor_image 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_image 配置值。
-                $postEditImage = ApiConfigHelper::getConfigByItemKey('comment_editor_image');
-                $image['status'] = $postEditImage;
+                $commentEditorImage = ApiConfigHelper::getConfigByItemKey('comment_editor_image');
+                $image['status'] = $commentEditorImage;
                 $image['maxSizze'] = "";
-                if($postEditImage){
+                if($commentEditorImage){
                     $memberRoleInfo = FresnsMemberRoles::find($roleId);
                     if($memberRoleInfo){
                         foreach($memberRoleInfo['permission'] as $m){
@@ -1083,7 +1139,6 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                //配置表 images_service 键值的插件 URL，逻辑见下方开发说明。
                 $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
@@ -1092,7 +1147,8 @@ class FsControllerApi extends FresnsBaseApiController
                     $image['maxSize'] = ApiConfigHelper::getConfigByItemKey('images_max_size');
                 }
                 $toolbar['image'] = $image;
-                //配置表 post_editor_video 键值等于 true 时（等于 false 时直接输出）输出成员主角色 post_editor_video 配置值
+
+                // toolbar > video
                 $video = [];
                 $commentEditorVideo = ApiConfigHelper::getConfigByItemKey('comment_editor_video');
                 $video['status']= $commentEditorVideo;
@@ -1114,20 +1170,19 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
                 $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
                 $video['extensions'] = ApiConfigHelper::getConfigByItemKey('videos_ext');
-                //单位 MB；当成员主角色 videos_max_size 配置值为空时，输出配置表 videos_max_size 键值
                 if(empty($video['maxSize'])){
                     $video['maxSize'] = ApiConfigHelper::getConfigByItemKey('videos_max_size');
                 }
-                //单位 秒；当成员主角色 videos_max_time 配置值为空时，输出配置表 videos_max_time 键值
                 if(empty($video['maxTime'])){
                     $video['maxTime'] = ApiConfigHelper::getConfigByItemKey('videos_max_time');
                 }
                 $toolbar['video'] = $video;
+
+                // toolbar > audio
                 $audio = [];
                 $commentEditorVideo = ApiConfigHelper::getConfigByItemKey('comment_editor_audio');
                 $audio['status']= $commentEditorVideo;
@@ -1149,20 +1204,19 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
                 $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
                 $audio['extensions'] = ApiConfigHelper::getConfigByItemKey('audios_ext');
-                //单位 MB；当成员主角色 audios_max_size 配置值为空时，输出配置表 audios_max_size 键值
                 if(empty($audio['maxSize'])){
                     $audio['maxSize'] = ApiConfigHelper::getConfigByItemKey('audios_max_size');
                 }
-                //单位 秒；当成员主角色 audios_max_time 配置值为空时，输出配置表 audios_max_time 键值
                 if(empty($audio['maxTime'])){
                     $audio['maxTime'] = ApiConfigHelper::getConfigByItemKey('audios_max_time');
                 }
                 $toolbar['audio'] = $audio;
+
+                // toolbar > doc
                 $doc = [];
                 $postEditorVideo = ApiConfigHelper::getConfigByItemKey('comment_editor_doc');
                 $doc['status']= $postEditorVideo;
@@ -1181,21 +1235,25 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                ///配置表 videos_service  键值的插件 URL，逻辑见下方开发说明。
                 $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
                 $doc['extensions'] = ApiConfigHelper::getConfigByItemKey('docs_ext');
-                //单位 MB；当成员主角色 audios_max_size 配置值为空时，输出配置表 audios_max_size 键值
                 if(empty($doc['maxSize'])){
                     $doc['maxSize'] = ApiConfigHelper::getConfigByItemKey('docs_max_size');
                 }
                 $toolbar['doc'] = $doc;
+
+                // toolbar > mention
                 $toolbar['mention'] = ApiConfigHelper::getConfigByItemKey('comment_editor_mention');
+
+                // toolbar > hashtag
                 $hashtag = [];
                 $hashtag['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_hashtag');
                 $hashtag['showMode'] = ApiConfigHelper::getConfigByItemKey('hashtag_show');
                 $toolbar['hashtag'] = $hashtag;
+
+                // toolbar > expand
                 $expand = [];
                 $expand['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_expand');
                 $list = [];
@@ -1206,11 +1264,18 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
+                    // $arr['url']
+                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                     $arr['number'] = $t['editor_number'];
                     $list[] = $arr;
                 }
                 $expand[] = $list;
+
+                // features
                 $features = [];
+
+                // features > lbs
                 $isLbs = [];
                 $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_lbs');
                 $maps = [];
@@ -1221,12 +1286,21 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
+                    // $arr['url']
+                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;
                 $features['isLbs'] = $isLbs;
+
+                // features > anonymous
                 $features['isAnonymous'] = ApiConfigHelper::getConfigByItemKey('comment_editor_anonymous');
+
+                // features > word count
                 $features['contentWordCount'] = ApiConfigHelper::getConfigByItemKey('comment_editor_word_count');
+
+                // Config Data
                 $data = [
                     'publishPerm' => $publishPerm,
                     'editPerm' => $editPerm,

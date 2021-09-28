@@ -844,11 +844,11 @@ class FresnsPostsResource extends BaseAdminResource
         }
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
-                // get hashtag huri
                 // no trim hashtag
                 $noTrimHashTags = rtrim($s);
                 $hashTags = trim(str_replace('#', '', $s));
                 $hashtagsInfo = FresnsHashtags::where('name', $hashTags)->first();
+                // hashtag info
                 if ($hashtagsInfo) {
                     $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
                     if($hashtagShow == 1){
@@ -870,13 +870,14 @@ class FresnsPostsResource extends BaseAdminResource
         $followType = $request->input('followType');
         $mid = GlobalService::getGlobalKey('member_id');
         if(!$followType){
+            // Posts by following hashtags
             $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
             $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
             $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
             if(in_array($id,$postHashtagIdArr)){
                 $followType = 'hashtag';
             }
-            // Only posts that have been added to the essence are exported under groups and hashtags
+            // Posts by following groups
             $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
             $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
             if(in_array($id,$postGroupIdArr)){
