@@ -31,7 +31,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
         $content = json_decode($this->content,true);
         // dump($content);
         if($content){
-            foreach($content as $t){
+            foreach($content as &$t){
                 // dd($t);
                 if($t['callbackType'] == 4){
                     $files = $t['dataValue'];
@@ -91,7 +91,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                                 $extends[] = $arr;
                             }
                         }
-                        dd($extends);
+                        // dd($extends);
                         $t['dataValue'] = $extends;
                     }
                 }
