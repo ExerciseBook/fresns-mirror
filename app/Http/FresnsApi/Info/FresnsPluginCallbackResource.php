@@ -41,11 +41,12 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                     $t['dataValue'] = $arr;
                 }
                 if($t['callbackType'] == 9){
+                    dd($t);
                     $extendsArr = $t['dataValue'];
                     $extends = [];
                     if($extendsArr){
                         foreach($extendsArr as $e){
-                            dd($e);
+                            // dd($e);
                             $arr = [];
                             $extendsInfo = FresnsExtends::where('uuid', $e['eid'])->first();
                             if ($extendsInfo) {
