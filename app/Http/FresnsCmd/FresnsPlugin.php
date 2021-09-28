@@ -2133,4 +2133,16 @@ class FresnsPlugin extends BasePlugin
         return $this->pluginSuccess($data);
 
     }
+
+    public function plgCmdUserDetailHandler($input)
+    {
+        $uid = $input['uid'];
+        $uid = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->value('id');
+
+        $langTag = request()->header('langTag');
+        $service = new FsUserService();
+        $data = $service->getUserDetail($uid, $langTag);
+        return $this->pluginSuccess($data);
+        
+    }
 }

@@ -539,13 +539,16 @@ class FsControllerApi extends FresnsBaseApiController
     public function detail(Request $request)
     {
         $uid = $request->header('uid');
-        $mid = $request->header('mid');
-        $uid = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->value('id');
-        $mid = DB::table(FresnsMembersConfig::CFG_TABLE)->where('uuid', $mid)->value('id');
+        $cmd = FresnsPluginConfig::PLG_CMD_USER_DETAIL;
+        $input = [
+            'uid' => $uid,
+        ];
+        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            return $this->pluginError($resp);
+        }
 
-        $langTag = $this->langTag;
-
-        $data = $this->service->getUserDetail($uid, $langTag, $mid);
+        $data = $resp['output'];
         $this->success($data);
     }
 

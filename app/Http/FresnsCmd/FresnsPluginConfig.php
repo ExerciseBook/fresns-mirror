@@ -96,7 +96,8 @@ class FresnsPluginConfig extends BasePluginConfig
     //登录
     public const PLG_CMD_USER_LOGIN = 'plg_cmd_user_login';
 
-
+    //用户基本信息
+    public const PLG_CMD_USER_DETAIL = 'plg_cmd_user_detail';
 
 
     // Command word callback mapping
@@ -126,6 +127,7 @@ class FresnsPluginConfig extends BasePluginConfig
         self::PLG_CMD_WALLET_DECREASE => 'plgCmdWalletDecreaseHandler',
         self::PLG_CMD_USER_REGISTER => 'plgCmdUserRegisterHandler',
         self::PLG_CMD_USER_LOGIN => 'plgCmdUserLoginHandler',
+        self::PLG_CMD_USER_DETAIL => 'plgCmdUserDetailHandler',
     ];
 
     // Send verification code
@@ -405,6 +407,14 @@ class FresnsPluginConfig extends BasePluginConfig
         $rule = [
             'type' => 'required|in:1,2',
             'account' => 'required',
+        ];
+        return $rule;
+    }
+
+    public function plgCmdUserDetailHandlerRule()
+    {
+        $rule = [
+            'uid' => 'required',
         ];
         return $rule;
     }
