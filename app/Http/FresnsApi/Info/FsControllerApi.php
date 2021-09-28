@@ -622,7 +622,7 @@ class FsControllerApi extends FresnsBaseApiController
         }
         $id = FresnsPluginCallbacks::where('uuid',$uuid)->first();
         $service = new FresnsPluginCallbacksService();
-        $service->setResourceDetail(FresnsPluginCallbackResource::class);
+        $service->setResourceDetail(FresnsPluginCallbacksResource::class);
         $detail = $service->detail($id['id']);
         $data = $detail['detail'];
         $this->success($data);

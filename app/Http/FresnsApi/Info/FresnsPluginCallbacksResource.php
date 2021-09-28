@@ -19,7 +19,7 @@ use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
  * List resource config handle
  */
 
-class FresnsPluginCallbackResource extends BaseAdminResource
+class FresnsPluginCallbacksResource extends BaseAdminResource
 {
     public function toArray($request)
     {
