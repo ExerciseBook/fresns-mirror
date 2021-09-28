@@ -767,7 +767,7 @@ class FresnsPlugin extends BasePlugin
             $file['uuid'] = ApiCommonHelper::createUuid();
             // Insert
             $retId = FresnsFiles::insertGetId($file);
-            FresnsCmdService::addSubTablePluginItem(FresnsFilesConfig::CFG_TABLE, $retId);
+            FresnsSubPluginService::addSubTablePluginItem(FresnsFilesConfig::CFG_TABLE, $retId);
 
             // $data['file_id'] = $retId;
             // $data['file_url'] = $domain . $file['file_path'];
@@ -819,7 +819,7 @@ class FresnsPlugin extends BasePlugin
                     $item['table_id'] = $tableId ?? null;
                     $item['table_key'] = $tableKey ?? null;
                     $fieldId = FresnsFiles::insertGetId($item);
-                    FresnsCmdService::addSubTablePluginItem(FresnsFilesConfig::CFG_TABLE, $fieldId);
+                    FresnsSubPluginService::addSubTablePluginItem(FresnsFilesConfig::CFG_TABLE, $fieldId);
                     $fileIdArr[] = $fieldId;
                     $fidArr[] = $item['uuid'];
                     $append = [];
@@ -1928,7 +1928,7 @@ class FresnsPlugin extends BasePlugin
         }
 
         $uid = FresnsUsers::insertGetId($input);
-        FresnsCmdService::addSubTablePluginItem(FresnsUsersConfig::CFG_TABLE, $uid);
+        FresnsSubPluginService::addSubTablePluginItem(FresnsUsersConfig::CFG_TABLE, $uid);
 
         $fileId = null;
         if($avatarFid){
@@ -1949,7 +1949,7 @@ class FresnsPlugin extends BasePlugin
         ];
 
         $mid = FresnsMembers::insertGetId($memberInput);
-        FresnsCmdService::addSubTablePluginItem(FresnsMembersConfig::CFG_TABLE, $mid);
+        FresnsSubPluginService::addSubTablePluginItem(FresnsMembersConfig::CFG_TABLE, $mid);
 
         $langTag = request()->header('langTag');
 

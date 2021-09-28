@@ -16,7 +16,7 @@ use App\Http\Center\Helper\PluginRpcHelper;
  * Class FresnsCrontabPlugin
  * cmd service.
  */
-class FresnsCmdService
+class FresnsSubPluginService
 {
     public static function addSubTablePluginItem($tableName, $insertId)
     {
