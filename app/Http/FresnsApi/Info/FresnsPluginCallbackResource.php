@@ -45,7 +45,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                 if($t['callbackType'] == 9){
                     // dd($t);
                     $extendsArr = $t['dataValue'];
-                    dd($extendsArr);
+                    // dd($extendsArr);
                     $extends = [];
                     if($extendsArr){
                         foreach($extendsArr as $e){
@@ -91,6 +91,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                                 $extends[] = $arr;
                             }
                         }
+                        dd($extends);
                         $t['dataValue'] = $extends;
                     }
                 }
