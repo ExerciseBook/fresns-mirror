@@ -36,13 +36,10 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                     $filesArr = [];
                     // dd($files);
                     if($files){
-                        foreach($files as $f){
-                            dd($f);
-                            $arr = ApiFileHelper::getMoreJsonSignUrl($f);
-                            $filesArr[] = $arr;
+                            $arr = ApiFileHelper::getMoreJsonSignUrl($files);
                         }
                     }
-                    $t['dataValue'] = $filesArr;
+                    $t['dataValue'] = $arr;
                 }
                 if($t['callbackType'] == 9){
                     $extendsArr = $t['dataValue'];
