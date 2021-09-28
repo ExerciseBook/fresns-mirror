@@ -27,35 +27,6 @@ class FsService extends BaseAdminService
         return $common;
     }
 
-    // Intercepting tags
-    public static function conversionLangTag($langTag)
-    {
-        if (strstr($langTag, 'zh-Hans') || strstr($langTag, 'zh-Hant')) {
-            $tagArr = explode('-', $langTag);
-            if (count($tagArr) == 3) {
-                $areaCode = array_pop($tagArr);
-                $langCode = str_replace("-$areaCode", '', $langTag);
-            } else {
-                $areaCode = null;
-                $langCode = $langTag;
-            }
-        } else {
-            $tagArr = explode('-', $langTag);
-            if (count($tagArr) == 2) {
-                $areaCode = array_pop($tagArr);
-                $langCode = str_replace("-$areaCode", '', $langTag);
-            } else {
-                $areaCode = null;
-                $langCode = $langTag;
-            }
-        }
-
-        $data['area_code'] = $areaCode;
-        $data['lang_code'] = $langCode;
-
-        return $data;
-    }
-
     // Get the corresponding multilingual
     public static function getLanguageByTableId($table, $field, $tableId, $langTag = null)
     {
@@ -85,8 +56,7 @@ class FsService extends BaseAdminService
     // Insert into table data
     public static function addLanguages($json, $tableName, $tableField, $tableId)
     {
-        FsModel::where('table_name', $tableName)->where('table_field', $tableField)->where('table_id',
-            $tableId)->delete();
+        FsModel::where('table_name', $tableName)->where('table_field', $tableField)->where('table_id', $tableId)->delete();
         $langArr = json_decode($json, true);
         $itemArr = [];
         foreach ($langArr as $lang) {
@@ -94,12 +64,7 @@ class FsService extends BaseAdminService
             $item['table_name'] = $tableName;
             $item['table_field'] = $tableField;
             $item['table_id'] = $tableId;
-            $tag = FresnsLanguagesService::conversionLangTag($lang['key']);
-            $langCode = $tag['lang_code'];
-            $areaCode = $tag['area_code'];
-            $item['lang_code'] = $langCode;
-            $item['area_code'] = $areaCode ?? null;
-            $item['lang_tag'] = $lang['key'];
+            $item['lang_tag'] = $lang['langTag'];
             $item['lang_content'] = $lang['lang_content'] ?? null;
             $itemArr[] = $item;
         }
