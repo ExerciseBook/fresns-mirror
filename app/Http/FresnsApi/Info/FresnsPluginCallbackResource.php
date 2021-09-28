@@ -18,6 +18,12 @@ class FresnsPluginCallbackResource extends BaseAdminResource
 {
     public function toArray($request)
     {
+        // Form Field
+        $formMap = FresnsPluginCallbacksConfig::FORM_FIELDS_MAP;
+        $formMapFieldsArr = [];
+        foreach ($formMap as $k => $dbField) {
+            $formMapFieldsArr[$dbField] = $this->$dbField;
+        }
         $content = $this->content;
         return $content;
     }
