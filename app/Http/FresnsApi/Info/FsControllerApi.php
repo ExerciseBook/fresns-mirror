@@ -47,7 +47,8 @@ use App\Http\FresnsDb\FresnsStopWords\FresnsStopWordsService;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
+use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacksService;
 class FsControllerApi extends FresnsBaseApiController
 {
     public function __construct()
@@ -616,5 +617,10 @@ class FsControllerApi extends FresnsBaseApiController
         if (is_array($checkInfo)) {
             return $this->errorCheckInfo($checkInfo);
         }
+        $id = FresnsPluginCallbacks::where('uuid',$uuid)->first();
+        $service = new FresnsPluginCallbacksService();
+        $service->setResourceDetail(FresnsPluginCallbackResource::class);
+        $detail = $service->detail($id);
+        $this->success($detail);
     }
 }
