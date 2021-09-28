@@ -479,8 +479,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
 
-                $files = FresnsFiles::where('uuid', $fid)->where('table_name',
-                    FresnsPostsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
+                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
@@ -491,8 +490,7 @@ class FsControllerApi extends FresnsBaseApiController
                     }
                 }
                 // If the post has read access, determine if the member requesting the download itself and the member's primary role are in the authorization list post_allows table
-                $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type',
-                    2)->where('object_id', $mid)->count();
+                $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type', 2)->where('object_id', $mid)->count();
                 if (empty($count)) {
                     $this->error(ErrorCodeService::POST_BROWSE_ERROR);
                 }
@@ -504,8 +502,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
 
-                $files = FresnsFiles::where('uuid', $fid)->where('table_name',
-                    FresnsCommentsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
+                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
@@ -517,8 +514,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
 
-                $files = FresnsFiles::where('uuid', $fid)->where('table_name',
-                    FresnsExtendsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
+                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsExtendsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
@@ -540,14 +536,11 @@ class FsControllerApi extends FresnsBaseApiController
         ];
         FresnsFileLogs::insert($input);
         $data = [];
-        $data['previewUrl'] = '';
         $filePath = $files['file_path'];
         switch ($files['file_type']) {
             case 1:
                 $host = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
-                $fileUrl = $host.$filePath;
-                $data['previewUrl'] = $fileUrl;
-                $downloadUrl = ApiFileHelper::getImageSignUrl($fileUrl);
+                $downloadUrl = $host.$filePath;
                 break;
             case 2:
                 $host = ApiConfigHelper::getConfigByItemKey('videos_bucket_domain');
@@ -556,7 +549,6 @@ class FsControllerApi extends FresnsBaseApiController
             case 3:
                 $host = ApiConfigHelper::getConfigByItemKey('audios_bucket_domain');
                 $downloadUrl = $host.$filePath;
-
                 break;
             default:
                 $host = ApiConfigHelper::getConfigByItemKey('docs_bucket_domain');
@@ -567,7 +559,6 @@ class FsControllerApi extends FresnsBaseApiController
         $data['downloadUrl'] = $downloadUrl;
         $data['originalUrl'] = FresnsFileAppends::where('file_id',$files['id'])->value('file_original_path');
         
-
         $this->success($data);
     }
 

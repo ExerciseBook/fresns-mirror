@@ -305,7 +305,7 @@ class GlobalConfig extends BaseConfig
         ],
     ];
 
-    //在此接口下才运行保存deviceInfo
+    // This API stores the header deviceInfo parameter
     CONST ADD_DEVICE_INFO_URI_ARR = [
         '/api/fresns/info/sendVerifyCode',
         '/api/fresns/info/uploadLog',
