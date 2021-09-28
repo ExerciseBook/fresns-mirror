@@ -29,6 +29,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
         $content = json_decode($this->content,true);
+        dump($content);
         if($content){
             foreach($content as $t){
                 dd($t);
