@@ -29,18 +29,18 @@ class FresnsPluginCallbackResource extends BaseAdminResource
             $formMapFieldsArr[$dbField] = $this->$dbField;
         }
         $content = json_decode($this->content,true);
-        dump($content);
+        // dump($content);
         if($content){
             foreach($content as $t){
-                dd($t);
+                // dd($t);
                 if($t['callbackType'] == 4){
                     $files = $t['dataValue'];
                     // dd($files);
                     if($files){
                             $arr = ApiFileHelper::getMoreJsonSignUrl($files);
                         }
+                        $t['dataValue'] = $arr;
                     }
-                    $t['dataValue'] = $arr;
                 }
                 if($t['callbackType'] == 9){
                     // dd($t);
@@ -90,8 +90,8 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                                 $extends[] = $arr;
                             }
                         }
+                        $t['dataValue'] = $extends;
                     }
-                    $t['dataValue'] = $extends;
                 }
             }
         return $content;
