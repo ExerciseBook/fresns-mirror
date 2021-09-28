@@ -90,6 +90,10 @@ class FresnsPluginConfig extends BasePluginConfig
     // Command Word: Wallet Trading (decrease)
     public const PLG_CMD_WALLET_DECREASE = 'plg_cmd_wallet_decrease';
 
+    //注册
+    public const PLG_CMD_USER_REGISTER = 'plg_cmd_user_register';
+
+
     // Command word callback mapping
     const PLG_CMD_HANDLE_MAP = [
         self::PLG_CMD_DEFAULT => 'defaultHandler',
@@ -115,6 +119,7 @@ class FresnsPluginConfig extends BasePluginConfig
         self::PLG_CMD_DELETE_CONTENT => 'deleteContentHandler',
         self::PLG_CMD_WALLET_INCREASE => 'plgCmdWalletIncreaseHandler',
         self::PLG_CMD_WALLET_DECREASE => 'plgCmdWalletDecreaseHandler',
+        self::PLG_CMD_USER_REGISTER => 'plgCmdUserRegisterHandler',
     ];
 
     // Send verification code
@@ -376,6 +381,15 @@ class FresnsPluginConfig extends BasePluginConfig
             'transactionFsount' => 'required|numeric',
             'systemFee' => 'required|numeric',
             'originName' => 'required',
+        ];
+        return $rule;
+    }
+
+    public function plgCmdUserRegisterHandlerRule()
+    {
+        $rule = [
+            'type' => 'required|in:1,2,3',
+            'nickname' => 'required',
         ];
         return $rule;
     }

@@ -12,6 +12,7 @@ use App\Helpers\SignHelper;
 use App\Helpers\StrHelper;
 use App\Http\Center\Base\BasePlugin;
 use App\Http\Center\Common\ErrorCodeService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\PluginHelper;
@@ -20,6 +21,7 @@ use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\FresnsApi\User\FsUserService;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -39,8 +41,10 @@ use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
 use App\Http\FresnsDb\FresnsHashtags\FresnsHashtags;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesConfig;
+use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
+use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 use App\Http\FresnsDb\FresnsMentions\FresnsMentionsConfig;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins as FresnsPluginFresnsPlugin;
 use App\Http\FresnsDb\FresnsPostAllows\FresnsPostAllowsConfig;
@@ -51,7 +55,9 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use App\Http\FresnsDb\FresnsSessionKeys\FresnsSessionKeys;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
+use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\FresnsDb\FresnsSessionTokens\FresnsSessionTokensConfig;
+use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnects;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use App\Http\FresnsDb\FresnsUserWalletLogs\FresnsUserWalletLogs;
@@ -1875,5 +1881,148 @@ class FresnsPlugin extends BasePlugin
         FresnsUserWallets::where('user_id', $userId)->update($userWalletsInput);
 
         return $this->pluginSuccess();
+    }
+
+    public function plgCmdUserRegisterHandler($inputData)
+    {
+        $type = $inputData['type'];
+        $account = $inputData['account'];
+        $countryCode = $inputData['countryCode'] ?? null;
+        $connectInfo = $inputData['connectInfo'] ?? null;
+        $password = $inputData['password'] ?? null;
+        $nickname = $inputData['nickname'];
+        $avatarFid = $inputData['avatarFid'] ?? null;
+        $avatarFileUrl = $inputData['avatarFileUrl'] ?? null;
+        $gender = $inputData['gender'] ?? 0;
+        $birthday = $inputData['birthday'] ?? null;
+        $timezone = $inputData['timezone'] ?? null;
+        $language = $inputData['language'] ?? null;
+        $input = [];
+        // Verify successful user creation
+        switch ($type) {
+            case 1:
+                $input = [
+                    'email' => $account,
+                ];
+                break;
+            case 2:
+                $input = [
+                    'country_code' => $countryCode,
+                    'pure_phone' => $account,
+                    'phone' => $countryCode.$account,
+                ];
+                break;
+            default:
+                // code...
+                break;
+        }
+        $userUuid = ApiCommonHelper::createUuid();
+        $input['api_token'] = StrHelper::createToken();
+        $input['uuid'] = $userUuid;
+        $input['last_login_at'] = date('Y-m-d H:i:s');
+        if ($password) {
+            $input['password'] = StrHelper::createPassword($password);
+        }
+
+        $uid = FresnsUsers::insertGetId($input);
+        FresnsCmdService::addSubTablePluginItem(FresnsUsersConfig::CFG_TABLE, $uid);
+
+        $fileId = null;
+        if($avatarFid){
+            $fileId = FresnsFiles::where('uuid',$avatarFid)->value('id');
+        }
+
+        $memberInput = [
+            'user_id' => $uid,
+            'name' => StrHelper::createToken(rand(6, 8)),
+            'nickname' => $nickname,
+            'uuid' => ApiCommonHelper::createMemberUuid(),
+            'verified_file_id' => $fileId,
+            'verified_file_url' => $avatarFileUrl,
+            'gender' => $gender,
+            'birthday' => $birthday,
+            'timezone' => $timezone,
+            'language' => $language,
+        ];
+
+        $mid = FresnsMembers::insertGetId($memberInput);
+        FresnsCmdService::addSubTablePluginItem(FresnsMembersConfig::CFG_TABLE, $mid);
+
+        $langTag = request()->header('langTag');
+
+        if ($type == 1) {
+            // Add Counts
+            $userCounts = ApiConfigHelper::getConfigByItemKey('user_counts');
+            if ($userCounts === null) {
+                $input = [
+                    'item_key' => 'user_counts',
+                    'item_value' => 1,
+                    'item_tag' => 'stats',
+                    'item_type' => 'number',
+                ];
+                FresnsConfigs::insert($input);
+            } else {
+                FresnsConfigs::where('item_key', 'user_counts')->update(['item_value' => $userCounts + 1]);
+            }
+            $memberCounts = ApiConfigHelper::getConfigByItemKey('member_counts');
+            if ($memberCounts === null) {
+                $input = [
+                    'item_key' => 'member_counts',
+                    'item_value' => 1,
+                    'item_tag' => 'stats',
+                    'item_type' => 'number',
+                ];
+                FresnsConfigs::insert($input);
+            } else {
+                FresnsConfigs::where('item_key', 'member_counts')->update(['item_value' => $memberCounts + 1]);
+            }
+        }
+
+        // Register successfully to add records to the table
+        $memberStatsInput = [
+            'member_id' => $mid,
+        ];
+        FresnsMemberStats::insert($memberStatsInput);
+        $userWalletsInput = [
+            'user_id' => $uid,
+            'balance' => 0,
+        ];
+        FresnsUserWallets::insert($userWalletsInput);
+        $defaultRoleId = ApiConfigHelper::getConfigByItemKey('default_role');
+        $memberRoleRelsInput = [
+            'member_id' => $mid,
+            'role_id' => $defaultRoleId,
+            'type' => 2,
+        ];
+        FresnsMemberRoleRels::insert($memberRoleRelsInput);
+
+        //如果connectInfo有值则添加到user_connects表
+        if($connectInfo){
+            $connectInfoArr = json_decode($connectInfo,true);
+            $itemArr = [];
+            foreach($connectInfoArr as $info){
+                $item = [];
+                $item['user_id'] = $uid;
+                $item['connect_id'] = $info['connectId'];
+                $item['connect_token'] = $info['connectToken'];
+                $item['connect_name'] = $info['connectName'];
+                $item['connect_nickname'] = $info['connectNickname'];
+                $item['connect_avatar'] = $info['connectAvatar'];
+                $item['plugin_unikey'] = 'plg_cmd_user_register';
+                $itemArr[] = $item;
+            }
+
+            FresnsUserConnects::insert($itemArr);
+        }
+
+        $sessionId = GlobalService::getGlobalSessionKey('session_log_id');
+        if ($sessionId) {
+            FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $uid, $mid, $uid);
+        }
+
+        $service = new FsUserService();
+        $data = $service->getUserDetail($uid, $langTag, $mid);
+        return $this->pluginSuccess($data);
+
     }
 }
