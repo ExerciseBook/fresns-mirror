@@ -281,9 +281,6 @@ class FsControllerApi extends FresnsBaseApiController
                     'account' => 'required|email',
                 ];
                 $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('email', $account)->first();
-                if (empty($user)) {
-                    $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('email', $account)->first();
-                }
                 break;
             case 2:
                 $rule = [
@@ -292,9 +289,6 @@ class FsControllerApi extends FresnsBaseApiController
                     'countryCode' => 'required|numeric',
                 ];
                 $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('phone', $countryCode.$account)->first();
-                if (empty($user)) {
-                    $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('phone', $countryCode.$account)->first();
-                }
                 break;
             default:
                 // code...
@@ -307,75 +301,22 @@ class FsControllerApi extends FresnsBaseApiController
             $this->error(ErrorCodeService::ACCOUNT_CHECK_ERROR);
         }
 
-        $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
-        if ($sessionLogId) {
-            $sessionInput = [
-                'object_order_id' => $user->id,
-                'user_id' => $user->id,
-            ];
-            FresnsSessionLogs::where('id', $sessionLogId)->update($sessionInput);
+
+        $cmd = FresnsPluginConfig::PLG_CMD_USER_LOGIN;
+        $input = [
+            'type' => $type,
+            'account' => $account,
+            'countryCode' => $countryCode,
+            'password' => $passwordBase64,
+            'verifyCode' => $verifyCode,
+        ];
+        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            return $this->errorCheckInfo($resp);
         }
 
-        // Check the user of login password errors in the last 1 hour for the user to whom the email or cell phone number belongs.
-        // If it reaches 5 times, the login will be restricted.
-        // session_logs > object_type=3
-        $startTime = date('Y-m-d H:i:s', strtotime('-1 hour'));
-        $sessionCount = FresnsSessionLogs::where('created_at', '>=', $startTime)
-        ->where('user_id', $user->id)
-        ->where('object_result', FresnsSessionLogsConfig::OBJECT_RESULT_ERROR)
-        ->where('object_type', FresnsSessionLogsConfig::OBJECT_TYPE_USER_LOGIN)
-        ->count();
-
-        if ($sessionCount >= 5) {
-            $this->error(ErrorCodeService::ACCOUNT_COUNT_ERROR);
-        }
-        // One of the password or verification code is required
-        if (empty($password) && empty($verifyCode)) {
-            $this->error(ErrorCodeService::CODE_PARAM_ERROR);
-        }
-
-        $time = date('Y-m-d H:i:s', time());
-        if ($type != 3) {
-            if ($verifyCode) {
-                switch ($type) {
-                    case 1:
-                        $codeArr = FresnsVerifyCodes::where('type', $type)->where('account',
-                            $account)->where('expired_at', '>', $time)->pluck('code')->toArray();
-                        break;
-                    case 2:
-                        $codeArr = FresnsVerifyCodes::where('type', $type)->where('account',
-                            $countryCode.$account)->where('expired_at', '>', $time)->pluck('code')->toArray();
-
-                        break;
-
-                    default:
-                        // code...
-                        break;
-                }
-
-                if (! in_array($verifyCode, $codeArr)) {
-                    $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
-                }
-            }
-
-            if ($password) {
-                if (! Hash::check($password, $user->password)) {
-                    $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
-                }
-            }
-        }
-
-        if ($user->is_enable == 0) {
-            $this->error(ErrorCodeService::USER_IS_ENABLE_ERROR);
-        }
-
-        $langTag = ApiLanguageHelper::getLangTagByHeader();
-
-        $data = $this->service->getUserDetail($user->id, $langTag);
+        $data = $resp['output'];
         if ($data) {
-            // Update the last_login_at field in the users table
-            FresnsUsers::where('id', $user->id)->update(['last_login_at' => date('Y-m-d H:i:s', time())]);
-
             $cmd = FresnsPluginConfig::PLG_CMD_CREATE_SESSION_TOKEN;
             $input['uid'] = $user->uuid;
             $input['platform'] = $request->header('platform');
@@ -388,10 +329,7 @@ class FsControllerApi extends FresnsBaseApiController
             $data['token'] = $output['token'] ?? '';
             $data['tokenExpiredTime'] = $output['tokenExpiredTime'] ?? '';
         }
-        $sessionId = GlobalService::getGlobalSessionKey('session_log_id');
-        if ($sessionId) {
-            FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $user->id, null, $user->id);
-        }
+        
 
         $this->success($data);
     }

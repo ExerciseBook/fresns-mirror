@@ -21,6 +21,7 @@ use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsApi\User\FsUserService;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
@@ -55,6 +56,7 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use App\Http\FresnsDb\FresnsSessionKeys\FresnsSessionKeys;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
+use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\FresnsDb\FresnsSessionTokens\FresnsSessionTokensConfig;
 use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnects;
@@ -64,6 +66,7 @@ use App\Http\FresnsDb\FresnsUserWalletLogs\FresnsUserWalletLogs;
 use App\Http\FresnsDb\FresnsUserWallets\FresnsUserWallets;
 use App\Http\FresnsDb\FresnsVerifyCodes\FresnsVerifyCodes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 
 class FresnsPlugin extends BasePlugin
@@ -2022,6 +2025,111 @@ class FresnsPlugin extends BasePlugin
 
         $service = new FsUserService();
         $data = $service->getUserDetail($uid, $langTag, $mid);
+        return $this->pluginSuccess($data);
+
+    }
+
+    public function plgCmdUserLoginHandler($input)
+    {
+        $type = $input['type'];
+        $account = $input['account'];
+        $countryCode = $input['countryCode'];
+        $verifyCode = $input['verifyCode'];
+        $passwordBase64 = $input['password'];
+
+        if ($passwordBase64) {
+            $password = base64_decode($passwordBase64, true);
+            if ($password == false) {
+                $password = $passwordBase64;
+            }
+        } else {
+            $password = null;
+        }
+
+        switch ($type) {
+            case 1:
+                $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('email', $account)->first();
+                break;
+            case 2:
+                $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('phone', $countryCode.$account)->first();
+                break;
+            default:
+                // code...
+                break;
+        }
+
+
+        $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
+        if ($sessionLogId) {
+            $sessionInput = [
+                'object_order_id' => $user->id,
+                'user_id' => $user->id,
+            ];
+            FresnsSessionLogs::where('id', $sessionLogId)->update($sessionInput);
+        }
+
+        // Check the user of login password errors in the last 1 hour for the user to whom the email or cell phone number belongs.
+        // If it reaches 5 times, the login will be restricted.
+        // session_logs > object_type=3
+        $startTime = date('Y-m-d H:i:s', strtotime('-1 hour'));
+        $sessionCount = FresnsSessionLogs::where('created_at', '>=', $startTime)
+        ->where('user_id', $user->id)
+        ->where('object_result', FresnsSessionLogsConfig::OBJECT_RESULT_ERROR)
+        ->where('object_type', FresnsSessionLogsConfig::OBJECT_TYPE_USER_LOGIN)
+        ->count();
+
+        if ($sessionCount >= 5) {
+            return $this->pluginError(ErrorCodeService::ACCOUNT_COUNT_ERROR);
+        }
+        // One of the password or verification code is required
+        if (empty($password) && empty($verifyCode)) {
+            return $this->pluginError(ErrorCodeService::CODE_PARAM_ERROR);
+        }
+
+        $time = date('Y-m-d H:i:s', time());
+        if ($type != 3) {
+            if ($verifyCode) {
+                switch ($type) {
+                    case 1:
+                        $codeArr = FresnsVerifyCodes::where('type', $type)->where('account',
+                            $account)->where('expired_at', '>', $time)->pluck('code')->toArray();
+                        break;
+                    case 2:
+                        $codeArr = FresnsVerifyCodes::where('type', $type)->where('account',
+                            $countryCode.$account)->where('expired_at', '>', $time)->pluck('code')->toArray();
+
+                        break;
+
+                    default:
+                        // code...
+                        break;
+                }
+
+                if (! in_array($verifyCode, $codeArr)) {
+                    return $this->pluginError(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
+                }
+            }
+
+            if ($password) {
+                if (! Hash::check($password, $user->password)) {
+                    return $this->pluginError(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
+                }
+            }
+        }
+
+        if ($user->is_enable == 0) {
+            return $this->pluginError(ErrorCodeService::USER_IS_ENABLE_ERROR);
+        }
+        $langTag = request()->header('langTag');
+        $service = new FsUserService();
+        $data = $service->getUserDetail($user->id,$langTag);
+        // Update the last_login_at field in the users table
+        FresnsUsers::where('id', $user->id)->update(['last_login_at' => date('Y-m-d H:i:s', time())]);
+
+        $sessionId = GlobalService::getGlobalSessionKey('session_log_id');
+        if ($sessionId) {
+            FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $user->id, null, $user->id);
+        }
         return $this->pluginSuccess($data);
 
     }

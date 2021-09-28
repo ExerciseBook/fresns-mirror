@@ -93,6 +93,11 @@ class FresnsPluginConfig extends BasePluginConfig
     //注册
     public const PLG_CMD_USER_REGISTER = 'plg_cmd_user_register';
 
+    //登录
+    public const PLG_CMD_USER_LOGIN = 'plg_cmd_user_login';
+
+
+
 
     // Command word callback mapping
     const PLG_CMD_HANDLE_MAP = [
@@ -120,6 +125,7 @@ class FresnsPluginConfig extends BasePluginConfig
         self::PLG_CMD_WALLET_INCREASE => 'plgCmdWalletIncreaseHandler',
         self::PLG_CMD_WALLET_DECREASE => 'plgCmdWalletDecreaseHandler',
         self::PLG_CMD_USER_REGISTER => 'plgCmdUserRegisterHandler',
+        self::PLG_CMD_USER_LOGIN => 'plgCmdUserLoginHandler',
     ];
 
     // Send verification code
@@ -390,6 +396,15 @@ class FresnsPluginConfig extends BasePluginConfig
         $rule = [
             'type' => 'required|in:1,2,3',
             'nickname' => 'required',
+        ];
+        return $rule;
+    }
+
+    public function plgCmdUserLoginHandlerRule()
+    {
+        $rule = [
+            'type' => 'required|in:1,2',
+            'account' => 'required',
         ];
         return $rule;
     }
