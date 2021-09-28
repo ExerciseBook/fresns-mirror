@@ -505,49 +505,53 @@ class FresnsPostsResource extends BaseAdminResource
         }
 
         // Post Plugin Extensions
-        $manages = [];
-        $TweetPluginUsages = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%1%')->first();
-        if ($TweetPluginUsages) {
-            $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
-            $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-            $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
-            $manages['name'] = $name == null ? '' : $name['lang_content'];
-            $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
-            $manages['url'] = ApiFileHelper::getPluginUsagesUrl($TweetPluginUsages['plugin_unikey'], $TweetPluginUsages['id']);
-            // Is the group administrator dedicated
-            if ($TweetPluginUsages['is_group_admin'] != 0) {
-                // Query whether the current member is a group administrator
-                if (! $this->group_id) {
-                    $manages = [];
-                } else {
-                    $groupInfo = FresnsGroups::find($this->group_id);
-                    if (! $groupInfo) {
+        $managesArr = [];
+        $TweetPluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%1%')->get();
+        if ($TweetPluginUsagesArr) {
+            foreach($TweetPluginUsagesArr as $TweetPluginUsages){
+                $manages = [];
+                $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
+                $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
+                $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
+                $manages['name'] = $name == null ? '' : $name['lang_content'];
+                $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
+                $manages['url'] = ApiFileHelper::getPluginUsagesUrl($TweetPluginUsages['plugin_unikey'], $TweetPluginUsages['id']);
+                // Is the group administrator dedicated
+                if ($TweetPluginUsages['is_group_admin'] != 0) {
+                    // Query whether the current member is a group administrator
+                    if (! $this->group_id) {
                         $manages = [];
                     } else {
-                        $permission = json_decode($groupInfo['permission'], true);
-                        if (isset($permission['admin_members'])) {
-                            if (! is_array($permission['admin_members'])) {
-                                $manages = [];
-                            } else {
-                                if (! in_array($mid, $permission['admin_members'])) {
-                                    $manages = [];
-                                }
-                            }
+                        $groupInfo = FresnsGroups::find($this->group_id);
+                        if (! $groupInfo) {
+                            $manages = [];
                         } else {
+                            $permission = json_decode($groupInfo['permission'], true);
+                            if (isset($permission['admin_members'])) {
+                                if (! is_array($permission['admin_members'])) {
+                                    $manages = [];
+                                } else {
+                                    if (! in_array($mid, $permission['admin_members'])) {
+                                        $manages = [];
+                                    }
+                                }
+                            } else {
+                                $manages = [];
+                            }
+                        }
+                    }
+                }
+                // Determine if the primary role of the current member is an administrator
+                if ($TweetPluginUsages['member_roles']) {
+                    $mroleRels = FresnsMemberRoleRels::where('member_id', $mid)->first();
+                    if ($mroleRels) {
+                        $pluMemberRoleArr = explode(',', $TweetPluginUsages['member_roles']);
+                        if (! in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
                             $manages = [];
                         }
                     }
                 }
-            }
-            // Determine if the primary role of the current member is an administrator
-            if ($TweetPluginUsages['member_roles']) {
-                $mroleRels = FresnsMemberRoleRels::where('member_id', $mid)->first();
-                if ($mroleRels) {
-                    $pluMemberRoleArr = explode(',', $TweetPluginUsages['member_roles']);
-                    if (! in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
-                        $manages = [];
-                    }
-                }
+                $managesArr[] = $manages;
             }
         }
         
@@ -631,7 +635,7 @@ class FresnsPostsResource extends BaseAdminResource
             'files' => $files,
             'extends' => $extends,
             'group' => $group,
-            'manages' => $manages,
+            'manages' => $managesArr,
             'editStatus' => $editStatus,
         ];
         
@@ -799,7 +803,7 @@ class FresnsPostsResource extends BaseAdminResource
                         $title = $domainLinked->link_title;
                     }
                 }
-                $content = str_replace($h, "<a href='$h' class='fresns_content_link'>$title</a>", $content);
+                $content = str_replace($h, "<a href='$h' target='_blank' class='fresns_content_link'>$title</a>", $content);
             }
         }
 
@@ -825,7 +829,7 @@ class FresnsPostsResource extends BaseAdminResource
                 $trimName = trim($m);
                 $memberInfo = FresnsMembers::where('name', $mname)->first();
                 if ($memberInfo) {
-                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/$mname";
+                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/m/$mname";
                     $content = str_replace($m, "<a href='{$jumpUrl}' class='fresns_content_mention'>@{$memberInfo['nickname']}</a> ", $content);
                 }
             }
@@ -840,12 +844,18 @@ class FresnsPostsResource extends BaseAdminResource
         }
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
-                // get hashtag huri
+                // no trim hashtag
+                $noTrimHashTags = rtrim($s);
                 $hashTags = trim(str_replace('#', '', $s));
                 $hashtagsInfo = FresnsHashtags::where('name', $hashTags)->first();
+                // hashtag info
                 if ($hashtagsInfo) {
                     $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
-                    $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$s</a>", $content);
+                    if($hashtagShow == 1){
+                        $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$noTrimHashTags</a> ", $content);
+                    }else{
+                        $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$s</a>", $content);
+                    }
                 }
             }
         }
@@ -860,13 +870,14 @@ class FresnsPostsResource extends BaseAdminResource
         $followType = $request->input('followType');
         $mid = GlobalService::getGlobalKey('member_id');
         if(!$followType){
+            // Posts by following hashtags
             $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
             $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
             $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
             if(in_array($id,$postHashtagIdArr)){
                 $followType = 'hashtag';
             }
-            // Only posts that have been added to the essence are exported under groups and hashtags
+            // Posts by following groups
             $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
             $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
             if(in_array($id,$postGroupIdArr)){

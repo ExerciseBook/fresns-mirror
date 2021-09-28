@@ -63,20 +63,21 @@ class ErrorCodeService
     const PHONE_BAND_ERROR = 30215;
     const COUNTRY_CODE_ERROR = 30216;
     const CODE_TEMPLATE_ERROR = 30217;
+    const CONNECT_TOKEN_ERROR = 30218;
 
-    const ACCOUNT_IS_EMPTY_ERROR = 30218;
-    const ACCOUNT_CHECK_ERROR = 30219;
-    const ACCOUNT_PASSWORD_INVALID = 30220;
-    const ACCOUNT_ERROR = 30221;
-    const ACCOUNT_COUNT_ERROR = 30222;
+    const ACCOUNT_IS_EMPTY_ERROR = 30219;
+    const ACCOUNT_CHECK_ERROR = 30220;
+    const ACCOUNT_PASSWORD_INVALID = 30221;
+    const ACCOUNT_ERROR = 30222;
+    const ACCOUNT_COUNT_ERROR = 30223;
 
-    const USER_ERROR = 30223;
-    const USER_IS_ENABLE_ERROR = 30224;
-    const USER_WALLETS_ERROR = 30225;
-    const USER_BALANCE_ERROR = 30226;
-    const BALANCE_CLOSING_BALANCE_ERROR = 30227;
-    const TO_USER_WALLETS_ERROR = 30228;
-    const TO_BALANCE_CLOSING_BALANCE_ERROR = 30229;
+    const USER_ERROR = 30224;
+    const USER_IS_ENABLE_ERROR = 30225;
+    const USER_WALLETS_ERROR = 30226;
+    const USER_BALANCE_ERROR = 30227;
+    const BALANCE_CLOSING_BALANCE_ERROR = 30228;
+    const TO_USER_WALLETS_ERROR = 30229;
+    const TO_BALANCE_CLOSING_BALANCE_ERROR = 30230;
     
     // Member
     const MEMBER_FAIL = 30300;
@@ -256,6 +257,7 @@ class ErrorCodeService
         self::PHONE_BAND_ERROR                  => '已绑定手机',
         self::COUNTRY_CODE_ERROR                => '国际区号错误',
         self::CODE_TEMPLATE_ERROR               => '验证码模板关闭或者不存在',
+        self::CONNECT_TOKEN_ERROR               => '互联 Token 已存在',
 
         self::ACCOUNT_IS_EMPTY_ERROR            => '账号不能为空',
         self::ACCOUNT_CHECK_ERROR               => '账号错误或者不存在',

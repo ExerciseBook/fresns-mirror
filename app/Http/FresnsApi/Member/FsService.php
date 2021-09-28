@@ -272,29 +272,29 @@ class FsService
             }
             // extcredits2
             $stats['extcredits2Status'] = ApiConfigHelper::getConfigByItemKey('extcredits2_status');
-            $stats['extcredits2Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits2_name', $langTag);
-            $stats['extcredits2Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits2_unit', $langTag);
+            $stats['extcredits2Name'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits2_name', $langTag);
+            $stats['extcredits2Unit'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits2_unit', $langTag);
             if ($stats['extcredits2Status'] == 3) {
                 $stats['extcredits2'] = $memberStats['extcredits2'];
             }
             // extcredits3
             $stats['extcredits3Status'] = ApiConfigHelper::getConfigByItemKey('extcredits3_status');
-            $stats['extcredits3Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits3_name', $langTag);
-            $stats['extcredits3Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits3_unit', $langTag);
+            $stats['extcredits3Name'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits3_name', $langTag);
+            $stats['extcredits3Unit'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits3_unit', $langTag);
             if ($stats['extcredits3Status'] == 3) {
                 $stats['extcredits3'] = $memberStats['extcredits3'];
             }
             // extcredits4
             $stats['extcredits4Status'] = ApiConfigHelper::getConfigByItemKey('extcredits4_status');
-            $stats['extcredits4Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits4_name', $langTag);
-            $stats['extcredits4Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits4_unit', $langTag);
+            $stats['extcredits4Name'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits4_name', $langTag);
+            $stats['extcredits4Unit'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits4_unit', $langTag);
             if ($stats['extcredits4Status'] == 3) {
                 $stats['extcredits4'] = $memberStats['extcredits4'];
             }
             // extcredits5
             $stats['extcredits5Status'] = ApiConfigHelper::getConfigByItemKey('extcredits5_status');
-            $stats['extcredits5Name'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits5_name', $langTag);
-            $stats['extcredits5Unit'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits5_unit', $langTag);
+            $stats['extcredits5Name'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits5_name', $langTag);
+            $stats['extcredits5Unit'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'extcredits5_unit', $langTag);
             if ($stats['extcredits5Status'] == 3) {
                 $stats['extcredits5'] = $memberStats['extcredits5'];
             }
@@ -317,13 +317,13 @@ class FsService
                 $draftCount['comments'] = FresnsCommentLogs::whereIn('status', [1, 4])->count();
                 $data['draftCount'] = $draftCount;
             }
-            $data['memberName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name', $langTag);
-            $data['memberIdName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_id_name', $langTag);
-            $data['memberNameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name_name', $langTag);
-            $data['memberNicknameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_nickname_name', $langTag);
-            $data['memberRoleName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_role_name', $langTag);
+            $data['memberName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name', $langTag);
+            $data['memberIdName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_id_name', $langTag);
+            $data['memberNameName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name_name', $langTag);
+            $data['memberNicknameName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_nickname_name', $langTag);
+            $data['memberRoleName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_role_name', $langTag);
             $data['followSetting'] = ApiConfigHelper::getConfigByItemKey('follow_member_setting');
-            $data['followName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'follow_member_name', $langTag);
+            $data['followName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'follow_member_name', $langTag);
             if ($isMe == false) {
                 $follow = FresnsMemberFollows::where('member_id', $mid)->where('follow_type', 1)->where('follow_id', $viewMid)->first();
                 $isFollow = 0;
@@ -342,7 +342,7 @@ class FsService
                 $data['followStatus'] = $isFollow;
             }
             $data['likeSetting'] = ApiConfigHelper::getConfigByItemKey('like_member_setting');
-            $data['likeName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'like_member_name', $langTag);
+            $data['likeName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'like_member_name', $langTag);
             if ($isMe == false) {
                 $isLike = 0;
                 $count = FresnsMemberLikes::where('member_id', $mid)->where('like_type', 1)->where('like_id', $viewMid)->count();
@@ -352,7 +352,7 @@ class FsService
                 $data['likeStatus'] = $isLike;
             }
             $data['shieldSetting'] = ApiConfigHelper::getConfigByItemKey('shield_member_setting');
-            $data['shieldName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'shield_member_name', $langTag);
+            $data['shieldName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'shield_member_name', $langTag);
             if ($isMe == false) {
                 $isShield = 0;
                 $count = FresnsMemberShields::where('member_id', $mid)->where('shield_type', 1)->where('shield_id', $viewMid)->count();

@@ -36,6 +36,12 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
+use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
+use App\Http\FresnsApi\Helpers\ApiFileHelper;
+use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\FresnsApi\Info\FsService as FresnsService;
 
 class FsControllerApi extends FresnsBaseApiController
 {
@@ -844,5 +850,467 @@ class FsControllerApi extends FresnsBaseApiController
             FresnsCommentLogs::where('id', $logId)->update(['status' => 1, 'submit_at' => null]);
         }
         $this->success();
+    }
+
+    // Editor Configs
+    public function configs(Request $request){
+        $rule = [
+            'type' => 'required|in:1,2',
+        ];
+        ValidateService::validateRule($request, $rule);
+        $type = $request->input('type');
+        $memberId = GlobalService::getGlobalKey('member_id');
+        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
+        switch ($type) {
+            // Post Editor
+            case 1:
+                // publishPerm
+                $publishPerm = [];
+
+                // editPerm
+                $editPerm = [];
+                $editPerm['status'] = ApiConfigHelper::getConfigByItemKey('post_edit');
+                $editPerm['timeLimit'] = ApiConfigHelper::getConfigByItemKey('post_edit_timelimit');
+                $editPerm['editSticky'] = ApiConfigHelper::getConfigByItemKey('post_edit_sticky');
+                $editPerm['editEssence'] = ApiConfigHelper::getConfigByItemKey('post_edit_essence');
+
+                // roleLimit
+                $roleLimit = [];
+
+                // globalLimit
+                $globalLimit = [];
+
+                // toolbar
+                $toolbar = [];
+
+                // toolbar > emoji
+                $toolbar['emoji'] = ApiConfigHelper::getConfigByItemKey('post_editor_emoji');
+
+                // toolbar > image
+                // status 如果配置表 post_editor_image 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_image 配置值。
+                $image = [];
+                $postEditorImage = ApiConfigHelper::getConfigByItemKey('post_editor_image');
+                $image['status'] = $postEditorImage;
+                $image['maxSizze'] = "";
+                if($postEditorImage){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'post_editor_image'){
+                                $image['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'images_max_size'){
+                                $image['maxSize'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $image['extensions'] = ApiConfigHelper::getConfigByItemKey('images_ext');
+                if(empty($image['maxSize'])){
+                    $image['maxSize'] = ApiConfigHelper::getConfigByItemKey('images_max_size');
+                }
+                $toolbar['image'] = $image;
+
+                // toolbar > video
+                // status 如果配置表 post_editor_video 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_video 配置值。
+                $video = [];
+                $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_video');
+                $video['status']= $postEditorVideo;
+                $video['maxSize'] = "";
+                $video['maxTime'] = "";
+                if($postEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'post_editor_video'){
+                                $video['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'videos_max_size'){
+                                $video['maxSize'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'videos_max_time'){
+                                $video['maxTime'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $video['extensions'] = ApiConfigHelper::getConfigByItemKey('videos_ext');
+                if(empty($video['maxSize'])){
+                    $video['maxSize'] = ApiConfigHelper::getConfigByItemKey('videos_max_size');
+                }
+                if(empty($video['maxTime'])){
+                    $video['maxTime'] = ApiConfigHelper::getConfigByItemKey('videos_max_time');
+                }
+                $toolbar['video'] = $video;
+
+                // toolbar > audio
+                // status 如果配置表 post_editor_audio 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_audio 配置值。
+                $audio = [];
+                $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_audio');
+                $audio['status']= $postEditorVideo;
+                $audio['maxSize'] = "";
+                $audio['maxTime'] = "";
+                if($postEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'post_editor_audio'){
+                                $audio['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'audios_max_size'){
+                                $audio['maxSize'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'audios_max_time'){
+                                $audio['maxTime'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $audio['extensions'] = ApiConfigHelper::getConfigByItemKey('audios_ext');
+                if(empty($audio['maxSize'])){
+                    $audio['maxSize'] = ApiConfigHelper::getConfigByItemKey('audios_max_size');
+                }
+                if(empty($audio['maxTime'])){
+                    $audio['maxTime'] = ApiConfigHelper::getConfigByItemKey('audios_max_time');
+                }
+                $toolbar['audio'] = $audio;
+
+                // toolbar > doc
+                // status 如果配置表 post_editor_doc 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_doc 配置值。
+                $doc = [];
+                $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_doc');
+                $doc['status']= $postEditorVideo;
+                $doc['maxSize'] = "";
+                $doc['maxTime'] = "";
+                if($postEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'post_editor_doc'){
+                                $doc['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'docs_max_size'){
+                                $doc['maxSize'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $doc['extensions'] = ApiConfigHelper::getConfigByItemKey('docs_ext');
+                if(empty($doc['maxSize'])){
+                    $doc['maxSize'] = ApiConfigHelper::getConfigByItemKey('docs_max_size');
+                }
+                $toolbar['doc'] = $doc;
+
+                // toolbar > title
+                $title = [];
+                $title['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_title');
+                $title['view'] = ApiConfigHelper::getConfigByItemKey('post_editor_title_view');
+                $title['required'] = ApiConfigHelper::getConfigByItemKey('post_editor_title_required');
+                $title['wordCount'] = ApiConfigHelper::getConfigByItemKey('post_editor_title_word_count');
+                $toolbar['title'] = $title;
+
+                // toolbar > mention
+                $toolbar['mention'] = ApiConfigHelper::getConfigByItemKey('post_editor_mention');
+
+                // toolbar > hashtag
+                $hashtag = [];
+                $hashtag['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_hashtag');
+                $hashtag['showMode'] = ApiConfigHelper::getConfigByItemKey('hashtag_show');
+                $toolbar['hashtag'] = $hashtag;
+
+                // toolbar > expand
+                $expand = [];
+                $expand['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_expand');
+                $list = [];
+                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%1%')->get();
+                foreach($tweetPluginUsagesArr as $t){
+                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $arr = [];
+                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['icon'] = $t['icon_file_url'];
+                    // $arr['url']
+                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                    $arr['number'] = $t['editor_number'];
+                    $list[] = $arr;
+                }
+                $expand[] = $list;
+
+                // features
+                $features = [];
+                // features > group
+                $postGroup = [];
+                $postGroup['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_group');
+                $postGroup['required'] = ApiConfigHelper::getConfigByItemKey('post_editor_group_required');
+                $features['postGroup'] = $postGroup;
+                // features > lbs
+                $isLbs = [];
+                $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_lbs');
+                $maps = [];
+                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get();
+                foreach($tweetPluginUsagesArr as $t){
+                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $arr = [];
+                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['icon'] = $t['icon_file_url'];
+                    // $arr['url']
+                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                    $maps[] = $arr;
+                }
+                $isLbs['maps'] = $maps;
+                $features['isLbs'] = $isLbs;
+                // features > anonymous
+                $features['isAnonymous'] = ApiConfigHelper::getConfigByItemKey('post_editor_anonymous');
+                // features > word count
+                $features['contentWordCount'] = ApiConfigHelper::getConfigByItemKey('post_editor_word_count');
+                
+                // Config Data
+                $data = [
+                    'publishPerm' => $publishPerm,
+                    'editPerm' => $editPerm,
+                    'roleLimit' => $roleLimit,
+                    'globalLimit' => $globalLimit,
+                    'toolbar' => $toolbar,
+                    'features' => $features,
+                ];
+                break;
+
+            // Comment Editor
+            default:
+                // publishPerm
+                $publishPerm = [];
+
+                // editPerm
+                $editPerm = [];
+                $editPerm['status'] = ApiConfigHelper::getConfigByItemKey('comment_edit');
+                $editPerm['timeLimit'] = ApiConfigHelper::getConfigByItemKey('comment_edit_timelimit');
+                $editPerm['editSticky'] = ApiConfigHelper::getConfigByItemKey('comment_edit_sticky');
+
+                // roleLimit
+                $roleLimit = [];
+
+                // globalLimit
+                $globalLimit = [];
+
+                // toolbar
+                $toolbar = [];
+
+                // toolbar > emoji
+                $toolbar['emoji'] = ApiConfigHelper::getConfigByItemKey('comment_editor_emoji');
+
+                // toolbar > image
+                $image = [];
+                $commentEditorImage = ApiConfigHelper::getConfigByItemKey('comment_editor_image');
+                $image['status'] = $commentEditorImage;
+                $image['maxSizze'] = "";
+                if($commentEditorImage){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'comment_editor_image '){
+                                $image['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'images_max_size'){
+                                $image['maxSize'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $image['extensions'] = ApiConfigHelper::getConfigByItemKey('images_ext');
+                if(empty($image['maxSize'])){
+                    $image['maxSize'] = ApiConfigHelper::getConfigByItemKey('images_max_size');
+                }
+                $toolbar['image'] = $image;
+
+                // toolbar > video
+                $video = [];
+                $commentEditorVideo = ApiConfigHelper::getConfigByItemKey('comment_editor_video');
+                $video['status']= $commentEditorVideo;
+                $video['maxSize'] = "";
+                $video['maxTime'] = "";
+                if($commentEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'comment_editor_video'){
+                                $video['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'videos_max_size'){
+                                $video['maxSize'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'videos_max_time'){
+                                $video['maxTime'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $video['extensions'] = ApiConfigHelper::getConfigByItemKey('videos_ext');
+                if(empty($video['maxSize'])){
+                    $video['maxSize'] = ApiConfigHelper::getConfigByItemKey('videos_max_size');
+                }
+                if(empty($video['maxTime'])){
+                    $video['maxTime'] = ApiConfigHelper::getConfigByItemKey('videos_max_time');
+                }
+                $toolbar['video'] = $video;
+
+                // toolbar > audio
+                $audio = [];
+                $commentEditorVideo = ApiConfigHelper::getConfigByItemKey('comment_editor_audio');
+                $audio['status']= $commentEditorVideo;
+                $audio['maxSize'] = "";
+                $audio['maxTime'] = "";
+                if($commentEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'comment_editor_audio'){
+                                $audio['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'audios_max_size'){
+                                $audio['maxSize'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'audios_max_time'){
+                                $audio['maxTime'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $audio['extensions'] = ApiConfigHelper::getConfigByItemKey('audios_ext');
+                if(empty($audio['maxSize'])){
+                    $audio['maxSize'] = ApiConfigHelper::getConfigByItemKey('audios_max_size');
+                }
+                if(empty($audio['maxTime'])){
+                    $audio['maxTime'] = ApiConfigHelper::getConfigByItemKey('audios_max_time');
+                }
+                $toolbar['audio'] = $audio;
+
+                // toolbar > doc
+                $doc = [];
+                $postEditorVideo = ApiConfigHelper::getConfigByItemKey('comment_editor_doc');
+                $doc['status']= $postEditorVideo;
+                $doc['maxSize'] = "";
+                $doc['maxTime'] = "";
+                if($postEditorVideo){
+                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
+                    if($memberRoleInfo){
+                        foreach($memberRoleInfo['permission'] as $m){
+                            if($m['permKey'] == 'comment_editor_doc'){
+                                $doc['status'] = $m['permValue'];
+                            }
+                            if($m['permKey'] == 'docs_max_size'){
+                                $doc['maxSize'] = $m['permValue'];
+                            }
+                        }
+                    }
+                }
+                $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
+                $unikey = FresnsPlugins::where('unikey',$imageService)->first();
+                $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $doc['extensions'] = ApiConfigHelper::getConfigByItemKey('docs_ext');
+                if(empty($doc['maxSize'])){
+                    $doc['maxSize'] = ApiConfigHelper::getConfigByItemKey('docs_max_size');
+                }
+                $toolbar['doc'] = $doc;
+
+                // toolbar > mention
+                $toolbar['mention'] = ApiConfigHelper::getConfigByItemKey('comment_editor_mention');
+
+                // toolbar > hashtag
+                $hashtag = [];
+                $hashtag['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_hashtag');
+                $hashtag['showMode'] = ApiConfigHelper::getConfigByItemKey('hashtag_show');
+                $toolbar['hashtag'] = $hashtag;
+
+                // toolbar > expand
+                $expand = [];
+                $expand['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_expand');
+                $list = [];
+                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%2%')->get();
+                foreach($tweetPluginUsagesArr as $t){
+                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $arr = [];
+                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['icon'] = $t['icon_file_url'];
+                    // $arr['url']
+                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                    $arr['number'] = $t['editor_number'];
+                    $list[] = $arr;
+                }
+                $expand[] = $list;
+
+                // features
+                $features = [];
+
+                // features > lbs
+                $isLbs = [];
+                $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_lbs');
+                $maps = [];
+                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get();
+                foreach($tweetPluginUsagesArr as $t){
+                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $arr = [];
+                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['icon'] = $t['icon_file_url'];
+                    // $arr['url']
+                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
+                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                    $maps[] = $arr;
+                }
+                $isLbs['maps'] = $maps;
+                $features['isLbs'] = $isLbs;
+
+                // features > anonymous
+                $features['isAnonymous'] = ApiConfigHelper::getConfigByItemKey('comment_editor_anonymous');
+
+                // features > word count
+                $features['contentWordCount'] = ApiConfigHelper::getConfigByItemKey('comment_editor_word_count');
+
+                // Config Data
+                $data = [
+                    'publishPerm' => $publishPerm,
+                    'editPerm' => $editPerm,
+                    'roleLimit' => $roleLimit,
+                    'globalLimit' => $globalLimit,
+                    'toolbar' => $toolbar,
+                    'features' => $features,
+                ];
+                break;
+        }
+        $this->success($data);
     }
 }

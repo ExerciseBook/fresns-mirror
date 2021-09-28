@@ -304,4 +304,24 @@ class GlobalConfig extends BaseConfig
             '/api/fresns/comment/detail',
         ],
     ];
+
+    // This API stores the header deviceInfo parameter
+    CONST ADD_DEVICE_INFO_URI_ARR = [
+        '/api/fresns/info/sendVerifyCode',
+        '/api/fresns/info/uploadLog',
+        '/api/fresns/info/downloadFile',
+        '/api/fresns/user/register',
+        '/api/fresns/user/login',
+        '/api/fresns/user/delete',
+        '/api/fresns/user/restore',
+        '/api/fresns/user/reset',
+        '/api/fresns/user/edit',
+        '/api/fresns/member/auth',
+        '/api/fresns/member/edit',
+        '/api/fresns/dialog/send',
+        '/api/fresns/editor/create',
+        '/api/fresns/editor/publish',
+        '/api/fresns/editor/submit'
+    ];
+
 }

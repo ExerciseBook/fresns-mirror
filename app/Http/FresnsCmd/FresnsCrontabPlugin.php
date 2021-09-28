@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\DB;
  * Class FresnsCrontabPlugin
  * Fresns (https://fresns.cn) Timed Tasks
  */
-class FresnsCrontablPlugin extends BasePlugin
+class FresnsCrontabPlugin extends BasePlugin
 {
     // Constructors
     public function __construct()
