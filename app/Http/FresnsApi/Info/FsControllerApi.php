@@ -29,6 +29,7 @@ use App\Http\FresnsDb\FresnsEmojis\FresnsEmojisConfig;
 use App\Http\FresnsDb\FresnsEmojis\FresnsEmojisService;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtends;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtendsConfig;
+use App\Http\FresnsDb\FresnsFileAppends\FresnsFileAppends;
 use App\Http\FresnsDb\FresnsFileLogs\FresnsFileLogs;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
@@ -564,6 +565,8 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         $data['downloadUrl'] = $downloadUrl;
+        $data['originalUrl'] = FresnsFileAppends::where('file_id',$files['id'])->value('file_original_path');
+        
 
         $this->success($data);
     }

@@ -969,10 +969,14 @@ class FresnsPlugin extends BasePlugin
             $imageSquareUrl = $imageSquareUrl;
             $imageBigUrl = $imageBigUrl;
         }
+
+
         $item['imageDefaultUrl'] = $imageDefaultUrl;
         $item['imageRatioUrl'] = $imageRatioUrl;
         $item['imageSquareUrl'] = $imageSquareUrl;
         $item['imageBigUrl'] = $imageBigUrl;
+        $item['originalUrl'] = FresnsFileAppends::where('file_id',$files['id'])->value('file_original_path');
+
 
         return $this->pluginSuccess($item);
     }
@@ -1041,6 +1045,8 @@ class FresnsPlugin extends BasePlugin
         $item['videoCover'] = $videoCover;
         $item['videoGif'] = $videoGif;
         $item['videoUrl'] = $videoUrl;
+        $item['originalUrl'] = FresnsFileAppends::where('file_id',$files['id'])->value('file_original_path');
+
 
         return $this->pluginSuccess($item);
     }
@@ -1100,6 +1106,8 @@ class FresnsPlugin extends BasePlugin
         }
 
         $item['audioUrl'] = $singUrl;
+        $item['originalUrl'] = FresnsFileAppends::where('file_id',$files['id'])->value('file_original_path');
+
 
         return $this->pluginSuccess($item);
     }
@@ -1159,6 +1167,8 @@ class FresnsPlugin extends BasePlugin
             $singUrl = $url;
         }
         $item['docUrl'] = $singUrl;
+        $item['originalUrl'] = FresnsFileAppends::where('file_id',$files['id'])->value('file_original_path');
+
 
         return $this->pluginSuccess($item);
     }
