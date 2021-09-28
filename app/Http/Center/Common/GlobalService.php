@@ -81,9 +81,14 @@ class GlobalService
         $deviceInfo = request()->header('deviceInfo');
         $uid = GlobalService::getGlobalKey('user_id');
         $mid = GlobalService::getGlobalKey('member_id');
+        $uri = Request::getRequestUri();
         if ($deviceInfo) {
+            $addDeviceInfoUrlArr = GlobalConfig::ADD_DEVICE_INFO_URI_ARR;
+            if(!in_array($uri,$addDeviceInfoUrlArr)){
+                return true;
+            }
             $map = GlobalConfig::URI_CONVERSION_OBJECT_TYPE_NO;
-            $uri = Request::getRequestUri();
+            
             $objectType = '';
             foreach ($map as $k => $v) {
                 if (in_array($uri, $v)) {
