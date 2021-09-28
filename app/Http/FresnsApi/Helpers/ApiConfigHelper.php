@@ -144,8 +144,7 @@ class ApiConfigHelper
 
         // When is_multilingual=1 means that the key is multilingual
         if ($data['isMultilingual'] == 1) {
-            $item['itemValue'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE,
-                'item_value', $item['itemKey'], $langTag);
+            $item['itemValue'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', $item['itemKey'], $langTag);
         }
         if ($data['itemType'] == 'number') {
             if (is_numeric($item['itemValue'])) {
