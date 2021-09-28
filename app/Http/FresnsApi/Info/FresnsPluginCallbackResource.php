@@ -45,6 +45,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                     $extends = [];
                     if($extendsArr){
                         foreach($extendsArr as $e){
+                            dd($e);
                             $arr = [];
                             $extendsInfo = FresnsExtends::where('uuid', $e['eid'])->first();
                             if ($extendsInfo) {
