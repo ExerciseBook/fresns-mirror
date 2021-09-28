@@ -33,7 +33,6 @@ class FresnsPluginCallbackResource extends BaseAdminResource
             foreach($content as &$t){
                 if($t['callbackType'] == 4){
                     $files = $t['dataValue'];
-                    $filesArr = [];
                     // dd($files);
                     if($files){
                             $arr = ApiFileHelper::getMoreJsonSignUrl($files);
@@ -91,7 +90,6 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                     $t['dataValue'] = $extends;
                 }
             }
-        }
         return $content;
     }
 }
