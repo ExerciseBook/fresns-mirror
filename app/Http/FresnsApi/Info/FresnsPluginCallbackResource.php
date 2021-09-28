@@ -34,6 +34,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                 if($t['callbackType'] == 4){
                     $files = $t['dataValue'];
                     $filesArr = [];
+                    dd($files);
                     if($files){
                         foreach($files as &$f){
                             $arr = ApiFileHelper::getMoreJsonSignUrl($f);
