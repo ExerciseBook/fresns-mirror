@@ -37,7 +37,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
         // dump($content);
         if($content){
             foreach($content as &$t){
-                // dd($t);
+                // 返参类型 callbackType=4 判断是否开启了防盗链，如果开启了，跟插件索要 URL
                 if($t['callbackType'] == 4){
                     $files = $t['dataValue'];
                     // dd($files);
@@ -47,6 +47,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                         $t['dataValue'] = $arr;
                     }
                 }
+                // 返参类型 callbackType=9 输出参数与 Editor Detail 接口的 extends 参数一样，是数组，以及更多内容输出和文件的防盗链处理。
                 if($t['callbackType'] == 9){
                     // dd($t);
                     $extendsArr = $t['dataValue'];
@@ -100,7 +101,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                         $t['dataValue'] = $extends;
                     }
                 }
-            }
+        }
         return $content;
     }
 }
