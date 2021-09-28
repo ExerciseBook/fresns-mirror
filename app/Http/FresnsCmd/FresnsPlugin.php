@@ -383,7 +383,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // Creating Token
-    public function plgCmdCreateSessionTokenHandler($input)
+    public function createSessionTokenHandler($input)
     {
         $uri = Request::getRequestUri();
 
@@ -443,7 +443,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // Verify Token
-    public function plgCmdVerifySessionTokenHandler($input)
+    public function verifySessionTokenHandler($input)
     {
         $userId = $input['uid'];
         $memberId = $input['mid'] ?? null;
@@ -497,7 +497,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // Upload log
-    public function plgCmdUploadSessionLogHandler($input)
+    public function uploadSessionLogHandler($input)
     {
         $platform = $input['platform'];
         $version = $input['version'];
@@ -541,7 +541,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // Get upload token
-    public function plgCmdGetUploadTokenHandler($input)
+    public function getUploadTokenHandler($input)
     {
         $type = $input['type'];
         $scene = $input['scene'];
@@ -628,7 +628,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // Upload file
-    public function plgCmdUploadFileHandler($input)
+    public function uploadFileHandler($input)
     {
         $t1 = time();
         $type = $input['type'];
@@ -915,7 +915,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // anti hotlinking (image)
-    public function plgCmdAntiLinkImageHandler($input)
+    public function antiLinkImageHandler($input)
     {
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
@@ -991,7 +991,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // anti hotlinking (video)
-    public function plgCmdAntiLinkVideoHandler($input)
+    public function antiLinkVideoHandler($input)
     {
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
@@ -1061,7 +1061,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // anti hotlinking (audio)
-    public function plgCmdAntiLinkAudioHandler($input)
+    public function antiLinkAudioHandler($input)
     {
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
@@ -1122,7 +1122,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // anti hotlinking (doc)
-    public function plgCmdAntiLinkDocHandler($input)
+    public function antiLinkDocHandler($input)
     {
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
@@ -1183,7 +1183,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // Delete physical file by fid
-    public function plgCmdPhysicalDeletionFileHandler($input)
+    public function physicalDeletionFileHandler($input)
     {
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
@@ -1520,7 +1520,7 @@ class FresnsPlugin extends BasePlugin
     }
 
     // Verify Sign
-    public function plgCmdVerifySignHandler($input)
+    public function verifySignHandler($input)
     {
         $platform = $input['platform'];
         $version = $input['version'] ?? null;
@@ -1585,7 +1585,7 @@ class FresnsPlugin extends BasePlugin
 
     // Wallet Trading (increase)
     // Note: When querying the last transaction record with is_enable=1, the default ending balance is 0 if no transaction record is queried.
-    public function plgCmdWalletIncreaseHandler($input)
+    public function walletIncreaseHandler($input)
     {
         $type = $input['type'];
         $uid = $input['uid'];
@@ -1736,7 +1736,7 @@ class FresnsPlugin extends BasePlugin
 
     // Wallet Trading (decrease)
     // Note: When querying the last transaction record with is_enable=1, the default ending balance is 0 if no transaction record is queried.
-    public function plgCmdWalletDecreaseHandler($input)
+    public function walletDecreaseHandler($input)
     {
         $type = $input['type'];
         $uid = $input['uid'];
@@ -1886,7 +1886,7 @@ class FresnsPlugin extends BasePlugin
         return $this->pluginSuccess();
     }
 
-    public function plgCmdUserRegisterHandler($inputData)
+    public function userRegisterHandler($inputData)
     {
         $type = $inputData['type'];
         $account = $inputData['account'];
@@ -2029,7 +2029,7 @@ class FresnsPlugin extends BasePlugin
 
     }
 
-    public function plgCmdUserLoginHandler($input)
+    public function userLoginHandler($input)
     {
         $type = $input['type'];
         $account = $input['account'];
@@ -2134,7 +2134,7 @@ class FresnsPlugin extends BasePlugin
 
     }
 
-    public function plgCmdUserDetailHandler($input)
+    public function userDetailHandler($input)
     {
         $uid = $input['uid'];
         $uid = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->value('id');
