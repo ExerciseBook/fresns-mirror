@@ -39,9 +39,10 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                         }
                     }
                     $t['dataValue'] = $arr;
+                    continue;
                 }
                 if($t['callbackType'] == 9){
-                    dd($t);
+                    // dd($t);
                     $extendsArr = $t['dataValue'];
                     $extends = [];
                     if($extendsArr){
@@ -90,6 +91,7 @@ class FresnsPluginCallbackResource extends BaseAdminResource
                         }
                     }
                     $t['dataValue'] = $extends;
+                    continue;
                 }
             }
         return $content;
