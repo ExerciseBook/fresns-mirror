@@ -18,7 +18,6 @@ use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsCmd\FresnsSubPluginService;
 use App\Http\FresnsCmd\FresnsCmdWords;
 use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
