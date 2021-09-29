@@ -278,7 +278,7 @@ class FsService
         return true;
     }
 
-    //编辑器配置信息 发布帖子权限封装
+    // Editor config info: Publish post perm
     public function publishPostPerm($user,$permission)
     {
         // Global checksum (post)
@@ -301,12 +301,10 @@ class FsService
                 return ErrorCodeService::PUBLISH_PROVE_VERIFY_ERROR;
             }
         }
-
         if ($permission) {
             $permissionArr = json_decode($permission, true);
             if ($permissionArr) {
                 $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
-
                 LogService::info('permissionMap-checkPermission', $permissionMap);
                 if($permissionMap['post_publish'] == false){
                     return ErrorCodeService::ROLE_NO_PERMISSION_PUBLISH;
@@ -331,11 +329,10 @@ class FsService
                 }
             }
         }
-
         return 0;
     }
 
-    //是否显示角色特殊权限
+    // Editor config info: Role limit permissions
     public function postRoleLimit($permissionMap){
         if ($permissionMap['post_limit_status'] == true) {
             $post_limit_rule = $permissionMap['post_limit_rule'];
@@ -360,28 +357,24 @@ class FsService
                 if ($post_limit_cycle_start < $post_limit_cycle_end) {
                     $post_limit_cycle_end = date('Y-m-d', time()).' '.$post_limit_cycle_end;
                 } else {
-                    $post_limit_cycle_end = date('Y-m-d',
-                            strtotime('+1 day')).' '.$post_limit_cycle_end;
+                    $post_limit_cycle_end = date('Y-m-d', strtotime('+1 day')).' '.$post_limit_cycle_end;
                 }
                 $time = date('Y-m-d H:i:s', time());
                 if ($post_limit_rule == 2) {
                     if ($post_limit_cycle_start <= $time && $post_limit_cycle_end >= $time) {
                         return true;
-
                     }
                 } else {
                     if ($time < $post_limit_cycle_start || $time > $post_limit_cycle_end) {
                         return true;
-
                     }
                 }
             }
         }
-
         return false;
     }
 
-    //是否显示全局特殊配置
+    // Editor config info: Global limit permissions
     public function postGlobalLimit($roleId){
         $post_limit_status = ApiConfigHelper::getConfigByItemKey('post_limit_status');
 
@@ -406,9 +399,7 @@ class FsService
             if ($post_limit_type == 1) {
                 $post_limit_period_start = ApiConfigHelper::getConfigByItemKey('post_limit_period_start');
                 $post_limit_period_end = ApiConfigHelper::getConfigByItemKey('post_limit_period_end');
-
                 $time = date('Y-m-d H:i:s', time());
-
                 if ($post_limit_rule == 2) {
                     if ($post_limit_period_start <= $time && $post_limit_period_end >= $time) {
                         return true;
@@ -427,12 +418,9 @@ class FsService
                 if ($post_limit_cycle_start < $post_limit_cycle_end) {
                     $post_limit_cycle_end = date('Y-m-d', time()).' '.$post_limit_cycle_end;
                 } else {
-                    $post_limit_cycle_end = date('Y-m-d',
-                            strtotime('+1 day')).' '.$post_limit_cycle_end;
+                    $post_limit_cycle_end = date('Y-m-d', strtotime('+1 day')).' '.$post_limit_cycle_end;
                 }
-
                 $time = date('Y-m-d H:i:s', time());
-
                 if ($post_limit_rule == 2) {
                     if ($post_limit_cycle_start <= $time && $post_limit_cycle_end >= $time) {
                         return true;
@@ -444,11 +432,10 @@ class FsService
                 }
             }
         }
-
         return false;
     }
 
-    //编辑器配置信息 发布评论权限封装
+    // Editor config info: Publish comment perm
     public function publishCommentPerm($user,$permission)
     {
         // Publish Comment Request - Email
@@ -472,17 +459,13 @@ class FsService
                 return ErrorCodeService::PUBLISH_PROVE_VERIFY_ERROR;
             }
         }
-
-
         if ($permission) {
             $permissionArr = json_decode($permission, true);
             $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
-
             // Publish Comment Permissions
             if ($permissionMap['comment_publish'] == false) {
                 return ErrorCodeService::ROLE_NO_PERMISSION_PUBLISH;
             }
-
             // Publish Comment Request - Email
             if ($permissionMap['comment_email_verify'] == true) {
                 if (empty($user->email)) {
@@ -503,11 +486,10 @@ class FsService
             }
             
         }
-
         return 0;
-
     }
 
+    // Editor config info: Role limit perm
     public function commentRoleLimit($permissionMap){
         if ($permissionMap['comment_limit_status'] == true) {
             $comment_limit_rule = $permissionMap['comment_limit_rule'];
@@ -535,11 +517,9 @@ class FsService
                 if ($comment_limit_cycle_start < $comment_limit_cycle_end) {
                     $post_limit_cycle_end = date('Y-m-d', time()).' '.$comment_limit_cycle_end;
                 } else {
-                    $post_limit_cycle_end = date('Y-m-d',
-                            strtotime('+1 day')).' '.$comment_limit_cycle_end;
+                    $post_limit_cycle_end = date('Y-m-d', strtotime('+1 day')).' '.$comment_limit_cycle_end;
                 }
                 $time = date('Y-m-d H:i:s', time());
-
                 if ($comment_limit_rule == 2) {
                     if ($comment_limit_cycle_start <= $time && $comment_limit_cycle_end >= $time) {
                         return true;
@@ -551,14 +531,13 @@ class FsService
                 }
             }
         }
-
         return false;
     }
 
+    // Editor config info: Global limit perm
     public function commentGlobalLimit($roleId){
         $comment_limit_status = ApiConfigHelper::getConfigByItemKey('comment_limit_status');
         // If the member master role is a whitelisted role, it is not subject to this permission requirement
-
         if ($comment_limit_status == true) {
             if (! empty($roleId)) {
                 // Get a list of whitelisted roles
@@ -600,11 +579,9 @@ class FsService
                 if ($comment_limit_cycle_start < $comment_limit_cycle_end) {
                     $post_limit_cycle_end = date('Y-m-d', time()).' '.$comment_limit_cycle_end;
                 } else {
-                    $post_limit_cycle_end = date('Y-m-d',
-                            strtotime('+1 day')).' '.$comment_limit_cycle_end;
+                    $post_limit_cycle_end = date('Y-m-d', strtotime('+1 day')).' '.$comment_limit_cycle_end;
                 }
                 $time = date('Y-m-d H:i:s', time());
-
                 if ($comment_limit_rule == 2) {
                     if ($comment_limit_cycle_start <= $time && $comment_limit_cycle_end >= $time) {
                         return true;
@@ -616,7 +593,6 @@ class FsService
                 }
             }
         }
-
         return false;
     }
 }

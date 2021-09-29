@@ -67,7 +67,6 @@ class FsControllerApi extends FresnsBaseApiController
                     'nickname' => 'required',
                 ];
                 break;
-
             case 2:
                 $rule = [
                     'type' => 'required|numeric|in:1,2',
@@ -77,7 +76,6 @@ class FsControllerApi extends FresnsBaseApiController
                 ];
                 break;
             case 3:
-               
                 break;
         }
         ValidateService::validateRule($request, $rule);
@@ -164,14 +162,11 @@ class FsControllerApi extends FresnsBaseApiController
             }
         }
 
-
         $time = date('Y-m-d H:i:s', time());
-        $codeArr = FresnsVerifyCodes::where('type', $type)->where('account', $codeAccount)->where('expired_at', '>',
-            $time)->pluck('code')->toArray();
+        $codeArr = FresnsVerifyCodes::where('type', $type)->where('account', $codeAccount)->where('expired_at', '>', $time)->pluck('code')->toArray();
         if (! in_array($verifyCode, $codeArr)) {
             $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
         }
-
 
         // Check if a user has registered
         switch ($type) {

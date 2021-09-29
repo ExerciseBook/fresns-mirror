@@ -177,7 +177,6 @@ class InstallHelper
         InstallHelper::freshSystem();
 
         $pluginConfig = PluginHelper::findPluginConfigClass($uniKey);
-        // dd($pluginConfig);
         $type = $pluginConfig->type;
 
         // extension info

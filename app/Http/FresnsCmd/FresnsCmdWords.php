@@ -1899,7 +1899,7 @@ class FresnsCmdWords extends BasePlugin
         $timezone = $inputData['timezone'] ?? null;
         $language = $inputData['language'] ?? null;
 
-        //如果有传值connectInfo则要校验connectToken
+        // If the connectInfo parameter is passed, check if the connectToken exists
         $connectInfoArr = [];
         if($connectInfo){
             $connectInfoArr = json_decode($connectInfo,true);
@@ -1913,7 +1913,6 @@ class FresnsCmdWords extends BasePlugin
                 return $this->pluginError(ErrorCodeService::CONNECT_TOKEN_ERROR);
             }
         }
-
 
         $input = [];
         // Verify successful user creation
@@ -2014,7 +2013,7 @@ class FresnsCmdWords extends BasePlugin
         ];
         FresnsMemberRoleRels::insert($memberRoleRelsInput);
 
-        //如果connectInfo有值则添加到user_connects表
+        // If the connectInfo parameter is passed, add it to the user_connects table
         if($connectInfoArr){
             $itemArr = [];
             foreach($connectInfoArr as $info){
@@ -2072,7 +2071,6 @@ class FresnsCmdWords extends BasePlugin
                 break;
         }
 
-
         $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
         if ($sessionLogId) {
             $sessionInput = [
@@ -2111,9 +2109,7 @@ class FresnsCmdWords extends BasePlugin
                     case 2:
                         $codeArr = FresnsVerifyCodes::where('type', $type)->where('account',
                             $countryCode.$account)->where('expired_at', '>', $time)->pluck('code')->toArray();
-
                         break;
-
                     default:
                         // code...
                         break;
