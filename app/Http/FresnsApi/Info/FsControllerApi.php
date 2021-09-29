@@ -8,7 +8,6 @@
 
 namespace App\Http\FresnsApi\Info;
 
-use App\Helpers\DateHelper;
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\ValidateService;
@@ -17,8 +16,6 @@ use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsCmd\FresnsCrontablPlugin;
-use App\Http\FresnsCmd\FresnsCrontabPluginConfig;
 use App\Http\FresnsCmd\FresnsPlugin;
 use App\Http\FresnsCmd\FresnsPluginConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -558,7 +555,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         $data['downloadUrl'] = $downloadUrl;
         $data['originalUrl'] = FresnsFileAppends::where('file_id',$files['id'])->value('file_original_path');
-        
+
         $this->success($data);
     }
 
