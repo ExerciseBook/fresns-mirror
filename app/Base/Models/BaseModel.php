@@ -252,7 +252,7 @@ class BaseModel extends Model
     }
 
     // Query by whereIn condition and return the array
-    public static function getValueArrByCondIn($key = 'id', $valueArr, $field = 'name')
+    public static function getValueArrByCondIn($key = 'id', $valueArr = [], $field = 'name')
     {
         return self::whereIn($key, $valueArr)->pluck($field)->toArray();
     }
@@ -498,7 +498,7 @@ class BaseModel extends Model
     }
 
     // Assemble drop-down box array query
-    public static function getBuildSelectOptions($key = 'id', $text = 'name', $fieldValue, $fieldName = 'id')
+    public static function getBuildSelectOptions($key = 'id', $text = 'name', $fieldValue = [], $fieldName = 'id')
     {
         $items = self::whereIn($fieldName, $fieldValue)->orderBy('rank_num', 'ASC')->get();
         $newItemArr = [];
