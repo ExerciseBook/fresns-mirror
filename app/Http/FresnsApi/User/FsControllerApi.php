@@ -13,14 +13,14 @@ use App\Helpers\StrHelper;
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\ValidateService;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsCmd\FresnsSubPluginService;
-use App\Http\FresnsCmd\FresnsPlugin;
-use App\Http\FresnsCmd\FresnsPluginConfig;
+use App\Http\FresnsCmd\FresnsCmdWords;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
@@ -193,7 +193,7 @@ class FsControllerApi extends FresnsBaseApiController
                 break;
         }
 
-        $cmd = FresnsPluginConfig::PLG_CMD_USER_REGISTER;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_USER_REGISTER;
         $input = [
             'type' => $type,
             'account' => $account,
@@ -208,17 +208,17 @@ class FsControllerApi extends FresnsBaseApiController
             'timezone' => $timezone,
             'language' => $language,
         ];
-        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp);
         }
         $data = $resp['output'];
         if ($data) {
-            $cmd = FresnsPluginConfig::PLG_CMD_CREATE_SESSION_TOKEN;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_CREATE_SESSION_TOKEN;
             $input['uid'] = $data['uid'];
             $input['platform'] = $request->header('platform');
-            $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 $this->errorCheckInfo($resp);
             }
 
@@ -282,7 +282,7 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
 
-        $cmd = FresnsPluginConfig::PLG_CMD_USER_LOGIN;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_USER_LOGIN;
         $input = [
             'type' => $type,
             'account' => $account,
@@ -290,21 +290,20 @@ class FsControllerApi extends FresnsBaseApiController
             'password' => $passwordBase64,
             'verifyCode' => $verifyCode,
         ];
-        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->errorCheckInfo($resp);
         }
 
         $data = $resp['output'];
         if ($data) {
-            $cmd = FresnsPluginConfig::PLG_CMD_CREATE_SESSION_TOKEN;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_CREATE_SESSION_TOKEN;
             $input['uid'] = $user->uuid;
             $input['platform'] = $request->header('platform');
-            $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 $this->errorCheckInfo($resp);
             }
-
             $output = $resp['output'];
             $data['token'] = $output['token'] ?? '';
             $data['tokenExpiredTime'] = $output['tokenExpiredTime'] ?? '';
@@ -519,15 +518,14 @@ class FsControllerApi extends FresnsBaseApiController
     public function detail(Request $request)
     {
         $uid = $request->header('uid');
-        $cmd = FresnsPluginConfig::PLG_CMD_USER_DETAIL;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_USER_DETAIL;
         $input = [
             'uid' => $uid,
         ];
-        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp);
         }
-
         $data = $resp['output'];
         $this->success($data);
     }

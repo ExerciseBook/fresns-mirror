@@ -15,13 +15,13 @@ use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsCmd\FresnsPlugin as FresnsCmdFresnsPlugin;
-use App\Http\FresnsCmd\FresnsPluginConfig;
+use App\Http\FresnsCmd\FresnsCmdWords;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsService;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -690,7 +690,7 @@ class FsControllerApi extends FresnsBaseApiController
             }
         }
 
-        $cmd = FresnsPluginConfig::PLG_CMD_UPLOAD_FILE;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_UPLOAD_FILE;
         $input['type'] = $request->input('type');
         $input['tableType'] = $request->input('tableType');
         $input['tableName'] = $request->input('tableName');
@@ -703,9 +703,8 @@ class FsControllerApi extends FresnsBaseApiController
         $input['platform'] = $request->header('platform');
         $input['uid'] = $request->header('uid');
         $input['mid'] = $request->header('mid');
-        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             $this->errorCheckInfo($resp);
         }
 
@@ -723,12 +722,11 @@ class FsControllerApi extends FresnsBaseApiController
         ];
         ValidateService::validateRule($request, $rule);
 
-        $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_GET_UPLOAD_TOKEN;
         $input['type'] = $request->input('type');
         $input['scene'] = $request->input('scene');
-
-        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             $this->errorCheckInfo($resp);
         }
         $output = $resp['output'];
