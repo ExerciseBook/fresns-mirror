@@ -10,7 +10,7 @@ namespace App\Http\FresnsCmd;
 
 use App\Base\Services\BaseService;
 use App\Http\Center\Common\LogService;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 
 /**
  * Class FresnsCrontabPlugin
@@ -28,7 +28,7 @@ class FresnsSubPluginService
         ];
         LogService::info('table_input', $input);
 
-        $resp = PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+        $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
 
         return $resp;
     }

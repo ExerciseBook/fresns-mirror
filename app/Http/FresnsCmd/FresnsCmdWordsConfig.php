@@ -11,7 +11,7 @@ namespace App\Http\FresnsCmd;
 use App\Http\Center\Base\BasePluginConfig;
 use Illuminate\Validation\Rule;
 
-class FresnsPluginConfig extends BasePluginConfig
+class FresnsCmdWordsConfig extends BasePluginConfig
 {
     /**
      * System Command Word

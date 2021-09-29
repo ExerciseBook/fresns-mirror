@@ -15,20 +15,15 @@ use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Info\FsService;
-use App\Http\FresnsCmd\FresnsPlugin;
-use App\Http\FresnsCmd\FresnsPluginConfig;
-use App\Http\FresnsCmd\FresnsSubPlugin;
-use App\Http\FresnsCmd\FresnsSubPluginConfig;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsService;
-use App\Http\FresnsDb\FresnsDownloads\FresnsDownloadsService;
 use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtendsService;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
@@ -279,7 +274,7 @@ class FsControllerApi extends FresnsBaseApiController
                 'header' => $this->getHeader($request->header()),
                 'body' => $request->all(),
             ];
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
             $this->success($resp['output']);
         }
         $mid = GlobalService::getGlobalKey('member_id');
@@ -815,7 +810,7 @@ class FsControllerApi extends FresnsBaseApiController
                         'header' => $this->getHeader($request->header()),
                         'body' => $request->all(),
                     ];
-                    $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
+                    $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
                     $this->success($resp['output']);
                 }
             }

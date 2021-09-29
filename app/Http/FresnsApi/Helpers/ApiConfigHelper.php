@@ -111,6 +111,7 @@ class ApiConfigHelper
             foreach ($map as $k => $v) {
                 if (isset($v[$itemKey])) {
                     $data = $v[$itemKey];
+                    break;
                 }
             }
         }
@@ -223,7 +224,6 @@ class ApiConfigHelper
     public static function distanceUnits($langTag)
     {
         $language = self::getConfigsLanguageList();
-        // dd($language);
         $languageArr = FresnsConfigsService::getLanguageStatus();
         LogService::Info('language', $language);
         $distanceUnits = '';

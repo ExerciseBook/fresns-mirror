@@ -10,13 +10,17 @@ namespace App\Http\FresnsApi\Editor;
 
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\LogService;
+use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtends;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
+use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
+use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesService;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
+use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use Illuminate\Support\Facades\DB;
 
 class FsService
@@ -272,5 +276,323 @@ class FsService
         FresnsFiles::whereIn('uuid', $filesIdArr)->delete();
 
         return true;
+    }
+
+    // Editor config info: Publish post perm
+    public function publishPostPerm($user,$permission)
+    {
+        // Global checksum (post)
+        // Email, Phone number, Real name
+        $post_email_verify = ApiConfigHelper::getConfigByItemKey('post_email_verify');
+        if ($post_email_verify == true) {
+            if (empty($user->email)) {
+                return ErrorCodeService::PUBLISH_EMAIL_VERIFY_ERROR;
+            }
+        }
+        $post_phone_verify = ApiConfigHelper::getConfigByItemKey('post_phone_verify');
+        if ($post_phone_verify == true) {
+            if (empty($user->phone)) {
+                return ErrorCodeService::PUBLISH_PHONE_VERIFY_ERROR;
+            }
+        }
+        $post_prove_verify = ApiConfigHelper::getConfigByItemKey('post_prove_verify');
+        if ($post_prove_verify == true) {
+            if ($user->prove_verify == 1) {
+                return ErrorCodeService::PUBLISH_PROVE_VERIFY_ERROR;
+            }
+        }
+        if ($permission) {
+            $permissionArr = json_decode($permission, true);
+            if ($permissionArr) {
+                $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
+                LogService::info('permissionMap-checkPermission', $permissionMap);
+                if($permissionMap['post_publish'] == false){
+                    return ErrorCodeService::ROLE_NO_PERMISSION_PUBLISH;
+                }
+                // Publish Post Request - Email
+                if ($permissionMap['post_email_verify'] == true) {
+                    if (empty($user->email)) {
+                        return ErrorCodeService::ROLE_PUBLISH_EMAIL_VERIFY;
+                    }
+                }
+                // Publish Post Request - Phone Number
+                if ($permissionMap['post_phone_verify'] == true) {
+                    if (empty($user->phone)) {
+                        return ErrorCodeService::ROLE_PUBLISH_PHONE_VERIFY;
+                    }
+                }
+                // Publish Post Request - Real name
+                if ($permissionMap['post_prove_verify'] == true) {
+                    if ($user->prove_verify == 1) {
+                        return ErrorCodeService::ROLE_PUBLISH_PROVE_VERIFY;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    // Editor config info: Role limit permissions
+    public function postRoleLimit($permissionMap){
+        if ($permissionMap['post_limit_status'] == true) {
+            $post_limit_rule = $permissionMap['post_limit_rule'];
+            if ($permissionMap['post_limit_type'] == 1) {
+                $post_limit_period_start = $permissionMap['post_limit_period_start'];
+                $post_limit_period_end = $permissionMap['post_limit_period_end'];
+                $time = date('Y-m-d H:i:s', time());
+                if ($post_limit_rule == 2) {
+                    if ($post_limit_period_start <= $time && $post_limit_period_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($post_limit_period_start > $time || $post_limit_period_end < $time) {
+                        return true;
+                    }
+                }
+            }
+            if ($permissionMap['post_limit_type'] == 2) {
+                $post_limit_cycle_start = $permissionMap['post_limit_cycle_start'];
+                $post_limit_cycle_end = $permissionMap['post_limit_cycle_end'];
+                $post_limit_cycle_start = date('Y-m-d', time()).' '.$post_limit_cycle_start;
+                if ($post_limit_cycle_start < $post_limit_cycle_end) {
+                    $post_limit_cycle_end = date('Y-m-d', time()).' '.$post_limit_cycle_end;
+                } else {
+                    $post_limit_cycle_end = date('Y-m-d', strtotime('+1 day')).' '.$post_limit_cycle_end;
+                }
+                $time = date('Y-m-d H:i:s', time());
+                if ($post_limit_rule == 2) {
+                    if ($post_limit_cycle_start <= $time && $post_limit_cycle_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($time < $post_limit_cycle_start || $time > $post_limit_cycle_end) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // Editor config info: Global limit permissions
+    public function postGlobalLimit($roleId){
+        $post_limit_status = ApiConfigHelper::getConfigByItemKey('post_limit_status');
+
+        if ($post_limit_status === true) {
+            if (! empty($roleId)) {
+                // Get a list of whitelisted roles
+                $post_limit_whitelist = ApiConfigHelper::getConfigByItemKey('post_limit_whitelist');
+                if (! empty($post_limit_whitelist)) {
+                    $post_limit_whitelist_arr = json_decode($post_limit_whitelist, true);
+                    if (in_array($roleId, $post_limit_whitelist_arr)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if ($post_limit_status === true) {
+            $post_limit_rule = ApiConfigHelper::getConfigByItemKey('post_limit_rule');
+            $post_limit_prompt = ApiConfigHelper::getConfigByItemKey('post_limit_prompt');
+            $post_limit_type = ApiConfigHelper::getConfigByItemKey('post_limit_type');
+            // 1.All-day limit on specified dates
+            if ($post_limit_type == 1) {
+                $post_limit_period_start = ApiConfigHelper::getConfigByItemKey('post_limit_period_start');
+                $post_limit_period_end = ApiConfigHelper::getConfigByItemKey('post_limit_period_end');
+                $time = date('Y-m-d H:i:s', time());
+                if ($post_limit_rule == 2) {
+                    if ($post_limit_period_start <= $time && $post_limit_period_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($post_limit_period_start > $time || $post_limit_period_end < $time) {
+                        return true;
+                    }
+                }
+            }
+            // 2.Specify a time period to set
+            if ($post_limit_type == 2) {
+                $post_limit_cycle_start = ApiConfigHelper::getConfigByItemKey('post_limit_cycle_start');
+                $post_limit_cycle_end = ApiConfigHelper::getConfigByItemKey('post_limit_cycle_end');
+                $post_limit_cycle_start = date('Y-m-d', time()).' '.$post_limit_cycle_start;
+                if ($post_limit_cycle_start < $post_limit_cycle_end) {
+                    $post_limit_cycle_end = date('Y-m-d', time()).' '.$post_limit_cycle_end;
+                } else {
+                    $post_limit_cycle_end = date('Y-m-d', strtotime('+1 day')).' '.$post_limit_cycle_end;
+                }
+                $time = date('Y-m-d H:i:s', time());
+                if ($post_limit_rule == 2) {
+                    if ($post_limit_cycle_start <= $time && $post_limit_cycle_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($time < $post_limit_cycle_start || $time > $post_limit_cycle_end) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // Editor config info: Publish comment perm
+    public function publishCommentPerm($user,$permission)
+    {
+        // Publish Comment Request - Email
+        $comment_email_verify = ApiConfigHelper::getConfigByItemKey('comment_email_verify');
+        if ($comment_email_verify == true) {
+            if (empty($user->email)) {
+                return ErrorCodeService::PUBLISH_EMAIL_VERIFY_ERROR;
+            }
+        }
+        // Publish Comment Request - Phone Number
+        $comment_phone_verify = ApiConfigHelper::getConfigByItemKey('comment_phone_verify');
+        if ($comment_phone_verify == true) {
+            if (empty($user->phone)) {
+                return ErrorCodeService::PUBLISH_PHONE_VERIFY_ERROR;
+            }
+        }
+        // Publish Comment Request - Real name
+        $comment_prove_verify = ApiConfigHelper::getConfigByItemKey('comment_prove_verify');
+        if ($comment_prove_verify == true) {
+            if ($user->prove_verify == 1) {
+                return ErrorCodeService::PUBLISH_PROVE_VERIFY_ERROR;
+            }
+        }
+        if ($permission) {
+            $permissionArr = json_decode($permission, true);
+            $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
+            // Publish Comment Permissions
+            if ($permissionMap['comment_publish'] == false) {
+                return ErrorCodeService::ROLE_NO_PERMISSION_PUBLISH;
+            }
+            // Publish Comment Request - Email
+            if ($permissionMap['comment_email_verify'] == true) {
+                if (empty($user->email)) {
+                    return ErrorCodeService::ROLE_PUBLISH_EMAIL_VERIFY;
+                }
+            }
+            // Publish Comment Request - Phone Number
+            if ($permissionMap['comment_phone_verify'] == true) {
+                if (empty($user->phone)) {
+                    return ErrorCodeService::ROLE_PUBLISH_PHONE_VERIFY;
+                }
+            }
+            // Publish Comment Request - Real name
+            if ($permissionMap['comment_prove_verify'] == true) {
+                if ($user->prove_verify == 1) {
+                    return ErrorCodeService::ROLE_PUBLISH_PROVE_VERIFY;
+                }
+            }
+            
+        }
+        return 0;
+    }
+
+    // Editor config info: Role limit perm
+    public function commentRoleLimit($permissionMap){
+        if ($permissionMap['comment_limit_status'] == true) {
+            $comment_limit_rule = $permissionMap['comment_limit_rule'];
+            $comment_limit_type = $permissionMap['comment_limit_type'];
+            // 1.All-day limit on specified dates
+            if ($comment_limit_type == 1) {
+                $comment_limit_period_start = $permissionMap['comment_limit_period_start'];
+                $comment_limit_period_end = $permissionMap['comment_limit_period_end'];
+                $time = date('Y-m-d H:i:s', time());
+                if ($comment_limit_rule == 2) {
+                    if ($comment_limit_period_start <= $time && $comment_limit_period_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($time < $comment_limit_period_start || $time > $comment_limit_period_end) {
+                        return true;
+                    }
+                }
+            }
+            // 2.Specify a time period to set
+            if ($comment_limit_type == 2) {
+                $comment_limit_cycle_start = $permissionMap['comment_limit_cycle_start'];
+                $comment_limit_cycle_end = $permissionMap['comment_limit_cycle_end'];
+                $comment_limit_cycle_start = date('Y-m-d', time()).' '.$comment_limit_cycle_start;
+                if ($comment_limit_cycle_start < $comment_limit_cycle_end) {
+                    $post_limit_cycle_end = date('Y-m-d', time()).' '.$comment_limit_cycle_end;
+                } else {
+                    $post_limit_cycle_end = date('Y-m-d', strtotime('+1 day')).' '.$comment_limit_cycle_end;
+                }
+                $time = date('Y-m-d H:i:s', time());
+                if ($comment_limit_rule == 2) {
+                    if ($comment_limit_cycle_start <= $time && $comment_limit_cycle_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($time < $comment_limit_cycle_start || $time > $comment_limit_cycle_end) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // Editor config info: Global limit perm
+    public function commentGlobalLimit($roleId){
+        $comment_limit_status = ApiConfigHelper::getConfigByItemKey('comment_limit_status');
+        // If the member master role is a whitelisted role, it is not subject to this permission requirement
+        if ($comment_limit_status == true) {
+            if (! empty($roleId)) {
+                // Get a list of whitelisted roles
+                $comment_limit_whitelist = ApiConfigHelper::getConfigByItemKey('comment_limit_whitelist');
+                if (! empty($comment_limit_whitelist)) {
+                    $comment_limit_whitelist_arr = json_decode($comment_limit_whitelist, true);
+                    if (in_array($roleId, $comment_limit_whitelist_arr)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // Check Special Rules - Opening Hours
+        if ($comment_limit_status == true) {
+            $comment_limit_rule = ApiConfigHelper::getConfigByItemKey('comment_limit_rule');
+            $comment_limit_prompt = ApiConfigHelper::getConfigByItemKey('comment_limit_prompt');
+            $comment_limit_type = ApiConfigHelper::getConfigByItemKey('comment_limit_type');
+            // 1.All-day limit on specified dates
+            if ($comment_limit_type == 1) {
+                $comment_limit_period_start = ApiConfigHelper::getConfigByItemKey('comment_limit_period_start');
+                $comment_limit_period_end = ApiConfigHelper::getConfigByItemKey('comment_limit_period_end');
+                $time = date('Y-m-d H:i:s', time());
+                if ($comment_limit_rule == 2) {
+                    if ($comment_limit_period_start <= $time && $comment_limit_period_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($time < $comment_limit_period_start || $time > $comment_limit_period_end) {
+                        return true;
+                    }
+                }
+            }
+            // 2.Specify a time period to set
+            if ($comment_limit_type == 2) {
+                $comment_limit_cycle_start = ApiConfigHelper::getConfigByItemKey('comment_limit_cycle_start');
+                $comment_limit_cycle_end = ApiConfigHelper::getConfigByItemKey('comment_limit_cycle_end');
+                $comment_limit_cycle_start = date('Y-m-d', time()).' '.$comment_limit_cycle_start;
+                if ($comment_limit_cycle_start < $comment_limit_cycle_end) {
+                    $post_limit_cycle_end = date('Y-m-d', time()).' '.$comment_limit_cycle_end;
+                } else {
+                    $post_limit_cycle_end = date('Y-m-d', strtotime('+1 day')).' '.$comment_limit_cycle_end;
+                }
+                $time = date('Y-m-d H:i:s', time());
+                if ($comment_limit_rule == 2) {
+                    if ($comment_limit_cycle_start <= $time && $comment_limit_cycle_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($time < $comment_limit_cycle_start || $time > $comment_limit_cycle_end) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

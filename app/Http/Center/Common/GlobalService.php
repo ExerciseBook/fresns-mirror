@@ -7,7 +7,7 @@
 
 namespace App\Http\Center\Common;
 
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsCmd\FresnsCrontabPlugin;
@@ -88,7 +88,7 @@ class GlobalService
                 return true;
             }
             $map = GlobalConfig::URI_CONVERSION_OBJECT_TYPE_NO;
-
+            
             $objectType = '';
             foreach ($map as $k => $v) {
                 if (in_array($uri, $v)) {
@@ -210,7 +210,7 @@ class GlobalService
         if ($uid) {
             $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_USER_ACTIVE;
             $input = [];
-            $resp = PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+            $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         }
         $time = date('Y-m-d H:i:s', time());
         $isCheckRole = true;
@@ -250,7 +250,7 @@ class GlobalService
         if ($isCheckRole == true) {
             $cmd = FresnsCrontabPluginConfig::PLG_CMD_CRONTAB_CHECK_ROLE_EXPIRED;
             $input = [];
-            $resp = PluginRpcHelper::call(FresnsCrontabPlugin::class, $cmd, $input);
+            $resp = CmdRpcHelper::call(FresnsCrontabPlugin::class, $cmd, $input);
         }
         $isCheckDelete = true;
 
@@ -274,7 +274,7 @@ class GlobalService
         if ($isCheckDelete == true) {
             $cmd = FresnsCrontabPluginConfig::PLG_CMD_CRONTAB_CHECK_DELETE_USER;
             $input = [];
-            $resp = PluginRpcHelper::call(FresnsCrontabPlugin::class, $cmd, $input);
+            $resp = CmdRpcHelper::call(FresnsCrontabPlugin::class, $cmd, $input);
         }
     }
 }

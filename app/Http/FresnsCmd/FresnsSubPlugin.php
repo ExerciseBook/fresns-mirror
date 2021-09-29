@@ -12,7 +12,7 @@ use App\Http\Center\Base\BasePlugin;
 use App\Http\Center\Base\BasePluginConfig;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
 
@@ -89,8 +89,8 @@ class FresnsSubPlugin extends BasePlugin
             'tableName' => $tableName,
             'insertId' => $insertId,
         ];
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp);
         }
 
@@ -114,8 +114,8 @@ class FresnsSubPlugin extends BasePlugin
                         $unikey = $s['subscribe_plugin_unikey'];
                         $pluginClass = PluginHelper::findPluginClass($unikey);
                         $input = [];
-                        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+                        if (CmdRpcHelper::isErrorCmdResp($resp)) {
                             return $this->pluginError($resp);
                         }
                     }

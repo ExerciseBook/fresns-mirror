@@ -14,10 +14,10 @@ use App\Helpers\StrHelper;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Common\ValidateService;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsCmd\FresnsPlugin;
-use App\Http\FresnsCmd\FresnsPluginConfig;
+use App\Http\FresnsCmd\FresnsCmdWords;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
@@ -231,13 +231,13 @@ class FresnsBaseApiController extends BaseApiController
                 $userId = $user->id;
 
                 // Verify token
-                $cmd = FresnsPluginConfig::PLG_CMD_VERIFY_SESSION_TOKEN;
+                $cmd = FresnsCmdWordsConfig::PLG_CMD_VERIFY_SESSION_TOKEN;
                 $input = [];
                 $input['uid'] = request()->header('uid');
                 $input['platform'] = request()->header('platform');
                 $input['token'] = $token;
-                $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-                if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
                     $this->errorCheckInfo($resp);
                 }
             }
@@ -309,18 +309,17 @@ class FresnsBaseApiController extends BaseApiController
             }
 
             // Verify token
-            $cmd = FresnsPluginConfig::PLG_CMD_VERIFY_SESSION_TOKEN;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_VERIFY_SESSION_TOKEN;
             $input = [];
             $input['uid'] = request()->header('uid');
             $input['platform'] = request()->header('platform');
             $input['mid'] = request()->header('mid');
             $input['token'] = $token;
-
-            $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 $this->errorCheckInfo($resp);
             }
+
             // Querying Role Permissions
             if (in_array($uri, FsConfig::NOTICE_CONTENT_URI)) {
                 /*
@@ -465,10 +464,9 @@ class FresnsBaseApiController extends BaseApiController
         $dataMap['sign'] = request()->header('sign');
         LogService::info('Verify Info: ', $dataMap);
 
-        $cmd = FresnsPluginConfig::PLG_CMD_VERIFY_SIGN;
-
-        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $dataMap);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_VERIFY_SIGN;
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $dataMap);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             $this->errorCheckInfo($resp, [], $resp['output']);
         }
 
