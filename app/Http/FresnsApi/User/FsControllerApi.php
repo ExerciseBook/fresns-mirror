@@ -54,7 +54,7 @@ class FsControllerApi extends FresnsBaseApiController
     public function register(Request $request)
     {
         $rule = [
-            'type' => 'required|numeric|in:1,2,3',
+            'type' => 'required|numeric|in:1,2',
             // 'account' => 'required',
             'nickname' => 'required',
         ];
@@ -63,7 +63,7 @@ class FsControllerApi extends FresnsBaseApiController
         switch ($type) {
             case 1:
                 $rule = [
-                    'type' => 'required|numeric|in:1,2,3',
+                    'type' => 'required|numeric|in:1,2',
                     'account' => 'required|email',
                     'nickname' => 'required',
                 ];
@@ -71,18 +71,14 @@ class FsControllerApi extends FresnsBaseApiController
 
             case 2:
                 $rule = [
-                    'type' => 'required|numeric|in:1,2,3',
+                    'type' => 'required|numeric|in:1,2',
                     'account' => 'required|numeric|regex:/^1[^0-2]\d{9}$/',
                     'nickname' => 'required',
                     'countryCode' => 'required|numeric',
                 ];
                 break;
             case 3:
-                $rule = [
-                    'type' => 'required|numeric|in:1,2,3',
-                    'nickname' => 'required',
-                    'connectInfo' => 'required|json',
-                ];
+               
                 break;
         }
         ValidateService::validateRule($request, $rule);
@@ -169,15 +165,14 @@ class FsControllerApi extends FresnsBaseApiController
             }
         }
 
-        if($type != 3){
-            $time = date('Y-m-d H:i:s', time());
-            $codeArr = FresnsVerifyCodes::where('type', $type)->where('account', $codeAccount)->where('expired_at', '>',
-                $time)->pluck('code')->toArray();
-            if (! in_array($verifyCode, $codeArr)) {
-                $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
-            }
+
+        $time = date('Y-m-d H:i:s', time());
+        $codeArr = FresnsVerifyCodes::where('type', $type)->where('account', $codeAccount)->where('expired_at', '>',
+            $time)->pluck('code')->toArray();
+        if (! in_array($verifyCode, $codeArr)) {
+            $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
         }
-        
+
 
         // Check if a user has registered
         switch ($type) {
@@ -197,21 +192,6 @@ class FsControllerApi extends FresnsBaseApiController
 
                 break;
         }
-
-        //如果有传值connectInfo则要校验connectToken
-        if($connectInfo){
-            $connectInfoArr = json_decode($connectInfo,true);
-            $connectTokenArr = [];
-            foreach($connectInfoArr as $v){
-                $connectTokenArr[] = $v['connectToken'];
-            }
-
-            $count = DB::table(FresnsUserConnectsConfig::CFG_TABLE)->whereIn('connect_token',$connectTokenArr)->count();
-            if($count > 0){
-                $this->error(ErrorCodeService::CONNECT_TOKEN_ERROR);
-            }
-        }
-
 
         $cmd = FresnsPluginConfig::PLG_CMD_USER_REGISTER;
         $input = [

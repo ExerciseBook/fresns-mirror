@@ -60,6 +60,7 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\FresnsDb\FresnsSessionTokens\FresnsSessionTokensConfig;
 use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnects;
+use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnectsConfig;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use App\Http\FresnsDb\FresnsUserWalletLogs\FresnsUserWalletLogs;
@@ -1900,6 +1901,22 @@ class FresnsPlugin extends BasePlugin
         $birthday = $inputData['birthday'] ?? null;
         $timezone = $inputData['timezone'] ?? null;
         $language = $inputData['language'] ?? null;
+
+        //如果有传值connectInfo则要校验connectToken
+        if($connectInfo){
+            $connectInfoArr = json_decode($connectInfo,true);
+            $connectTokenArr = [];
+            foreach($connectInfoArr as $v){
+                $connectTokenArr[] = $v['connectToken'];
+            }
+
+            $count = DB::table(FresnsUserConnectsConfig::CFG_TABLE)->whereIn('connect_token',$connectTokenArr)->count();
+            if($count > 0){
+                return $this->pluginError(ErrorCodeService::CONNECT_TOKEN_ERROR);
+            }
+        }
+
+
         $input = [];
         // Verify successful user creation
         switch ($type) {
