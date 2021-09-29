@@ -41,13 +41,11 @@ class PluginHelper
     public static function findPluginConfigClass($uniKey): ?BasePluginConfig
     {
         $configClass = "\\App\\Plugins\\{$uniKey}\\PluginConfig";
-        dd($configClass);
         if (! class_exists($configClass)) {
             LogService::error('Config Class: Does not exist', $configClass);
 
             return null;
         }
-        // dd(new $configClass());
         return new $configClass();
     }
 
