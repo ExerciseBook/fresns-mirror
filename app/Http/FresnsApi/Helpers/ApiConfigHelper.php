@@ -111,6 +111,7 @@ class ApiConfigHelper
             foreach ($map as $k => $v) {
                 if (isset($v[$itemKey])) {
                     $data = $v[$itemKey];
+                    break;
                 }
             }
         }
