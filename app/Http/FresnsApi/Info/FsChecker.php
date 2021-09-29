@@ -31,7 +31,7 @@ class FsChecker extends FresnsBaseChecker
         }
         $countryCode = request()->input('countryCode');
         $templateId = request()->input('templateId');
-        $templateBlade = ApiConfigHelper::getConfigByItemKey('verifycode_template'.$template);
+        $templateBlade = ApiConfigHelper::getConfigByItemKey('verifycode_template'.$templateId);
         if (! $templateBlade) {
             return self::checkInfo(ErrorCodeService::CODE_TEMPLATE_ERROR);
         }

@@ -50,6 +50,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
 use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacksService;
+use App\Helpers\StrHelper;
 class FsControllerApi extends FresnsBaseApiController
 {
     public function __construct()
