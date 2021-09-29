@@ -945,7 +945,7 @@ class FsControllerApi extends FresnsBaseApiController
 
                 // roleLimit
                 $roleLimit = [];
-                $status = $this->service->roleLimit($permissionMap);
+                $status = $this->service->postRoleLimit($permissionMap);
                 $roleLimit['status'] = $status;
                 $roleLimit['roleName'] = $memberRolesName;
                 $roleLimit['limitType'] = $permissionMap['post_limit_type'];
@@ -955,7 +955,7 @@ class FsControllerApi extends FresnsBaseApiController
 
                 // globalLimit
                 $globalLimit = [];
-                $status = $this->service->globalLimit($roleId);
+                $status = $this->service->postGlobalLimit($roleId);
                 $globalLimit['status'] = $status;
                 $postLimitType = ApiConfigHelper::getConfigByItemKey('post_limit_type');
                 $globalLimit['limitType'] = $postLimitType;
@@ -1185,7 +1185,45 @@ class FsControllerApi extends FresnsBaseApiController
             default:
                 // publishPerm
                 $publishPerm = [];
-
+                $errorCode = 0;
+                if($isExpired === false){
+                    $status = true;
+                    $errorCode = $this->service->publishCommentPerm($user,$memberPermissionJson);
+                    if($errorCode > 0){
+                        $status = false;
+                    }
+                } else {
+                    $status = false;
+                }
+                $publishPerm['status'] = $status;
+                $publishPerm['review'] = $permissionMap['post_review'] ?? false;
+                if($isExpired == true){
+                    $publishPerm['expired_at'] = FresnsCodeMessagesService::getCodeMessage($plugin, $langTag, ErrorCodeService::MEMBER_EXPIRED_ERROR);
+                } else {
+                    if($errorCode > 0){
+                        $message = FresnsCodeMessagesService::getCodeMessage($plugin, $langTag, $errorCode);
+                        if (empty($message)) {
+                            $message = ErrorCodeService::getMsg($errorCode);
+                        }
+                        switch ($errorCode) {
+                            case '30403':
+                                $publishPerm['comment_publish'] = $message;
+                                break;
+                            case '30700': 
+                                $publishPerm['comment_email_verify'] = $message;
+                                break;
+                            case '30701': 
+                                $publishPerm['comment_phone_verify'] = $message;
+                                break;
+                            case '30702': 
+                                $publishPerm['comment_prove_verify'] = $message;
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+                    }
+                }
                 // editPerm
                 $editPerm = [];
                 $editPerm['status'] = ApiConfigHelper::getConfigByItemKey('comment_edit');
@@ -1194,9 +1232,24 @@ class FsControllerApi extends FresnsBaseApiController
 
                 // roleLimit
                 $roleLimit = [];
+                $status = $this->service->commentRoleLimit($permissionMap);
+                $roleLimit['status'] = $status;
+                $roleLimit['roleName'] = $memberRolesName;
+                $roleLimit['limitType'] = $permissionMap['comment_limit_type'];
+                $roleLimit['limitTimeStart'] = $permissionMap['comment_limit_type'] == 1 ? $permissionMap['comment_limit_period_start'] : $permissionMap['comment_limit_cycle_start'];
+                $roleLimit['limitTimeEnd'] = $permissionMap['comment_limit_type'] == 1 ? $permissionMap['comment_limit_period_end'] : $permissionMap['comment_limit_cycle_end'];
+                $roleLimit['limitRule'] = $permissionMap['comment_limit_rule'];
 
                 // globalLimit
                 $globalLimit = [];
+                $status = $this->service->commentGlobalLimit($roleId);
+                $globalLimit['status'] = $status;
+                $commentLimitType = ApiConfigHelper::getConfigByItemKey('comment_limit_type');
+                $globalLimit['limitType'] = $commentLimitType;
+                $globalLimit['limitTimeStart'] = $commentLimitType == 1 ? ApiConfigHelper::getConfigByItemKey('comment_limit_period_start') : ApiConfigHelper::getConfigByItemKey('comment_limit_cycle_start');
+                $globalLimit['limitTimeEnd'] = $commentLimitType == 1 ? ApiConfigHelper::getConfigByItemKey('comment_limit_period_end') : ApiConfigHelper::getConfigByItemKey('comment_limit_cycle_end');
+                $globalLimit['limitRule'] = ApiConfigHelper::getConfigByItemKey('comment_limit_rule');
+                $globalLimit['limitPrompt'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'comment_limit_prompt', $langTag);
 
                 // toolbar
                 $toolbar = [];

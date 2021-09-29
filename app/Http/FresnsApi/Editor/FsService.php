@@ -336,7 +336,7 @@ class FsService
     }
 
     //是否显示角色特殊权限
-    public function roleLimit($permissionMap){
+    public function postRoleLimit($permissionMap){
         if ($permissionMap['post_limit_status'] == true) {
             $post_limit_rule = $permissionMap['post_limit_rule'];
             if ($permissionMap['post_limit_type'] == 1) {
@@ -382,7 +382,7 @@ class FsService
     }
 
     //是否显示全局特殊配置
-    public function globalLimit($roleId){
+    public function postGlobalLimit($roleId){
         $post_limit_status = ApiConfigHelper::getConfigByItemKey('post_limit_status');
 
         if ($post_limit_status === true) {
@@ -449,47 +449,129 @@ class FsService
     }
 
     //编辑器配置信息 发布评论权限封装
-    public function publishCommentPerm($userId,$memberId)
+    public function publishCommentPerm($user,$permission)
     {
-        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
         // Publish Comment Request - Email
         $comment_email_verify = ApiConfigHelper::getConfigByItemKey('comment_email_verify');
         if ($comment_email_verify == true) {
             if (empty($user->email)) {
-                return self::checkInfo(ErrorCodeService::PUBLISH_EMAIL_VERIFY_ERROR);
+                return ErrorCodeService::PUBLISH_EMAIL_VERIFY_ERROR;
             }
         }
         // Publish Comment Request - Phone Number
         $comment_phone_verify = ApiConfigHelper::getConfigByItemKey('comment_phone_verify');
         if ($comment_phone_verify == true) {
             if (empty($user->phone)) {
-                return self::checkInfo(ErrorCodeService::PUBLISH_PHONE_VERIFY_ERROR);
+                return ErrorCodeService::PUBLISH_PHONE_VERIFY_ERROR;
             }
         }
         // Publish Comment Request - Real name
         $comment_prove_verify = ApiConfigHelper::getConfigByItemKey('comment_prove_verify');
         if ($comment_prove_verify == true) {
             if ($user->prove_verify == 1) {
-                return self::checkInfo(ErrorCodeService::PUBLISH_PROVE_VERIFY_ERROR);
+                return ErrorCodeService::PUBLISH_PROVE_VERIFY_ERROR;
             }
         }
 
-        $comment_limit_status = ApiConfigHelper::getConfigByItemKey('comment_limit_status');
-        // If the member master role is a whitelisted role, it is not subject to this permission requirement
-        if (in_array($uri, $uriRuleArr)) {
-            if ($comment_limit_status == true) {
-                if (! empty($roleId)) {
-                    // Get a list of whitelisted roles
-                    $comment_limit_whitelist = ApiConfigHelper::getConfigByItemKey('comment_limit_whitelist');
-                    if (! empty($comment_limit_whitelist)) {
-                        $comment_limit_whitelist_arr = json_decode($comment_limit_whitelist, true);
-                        if (in_array($roleId, $comment_limit_whitelist_arr)) {
-                            $comment_limit_status = false;
-                        }
+
+        if ($permission) {
+            $permissionArr = json_decode($permission, true);
+            $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
+
+            // Publish Comment Permissions
+            if ($permissionMap['comment_publish'] == false) {
+                return ErrorCodeService::ROLE_NO_PERMISSION_PUBLISH;
+            }
+
+            // Publish Comment Request - Email
+            if ($permissionMap['comment_email_verify'] == true) {
+                if (empty($user->email)) {
+                    return ErrorCodeService::ROLE_PUBLISH_EMAIL_VERIFY;
+                }
+            }
+            // Publish Comment Request - Phone Number
+            if ($permissionMap['comment_phone_verify'] == true) {
+                if (empty($user->phone)) {
+                    return ErrorCodeService::ROLE_PUBLISH_PHONE_VERIFY;
+                }
+            }
+            // Publish Comment Request - Real name
+            if ($permissionMap['comment_prove_verify'] == true) {
+                if ($user->prove_verify == 1) {
+                    return ErrorCodeService::ROLE_PUBLISH_PROVE_VERIFY;
+                }
+            }
+            
+        }
+
+        return 0;
+
+    }
+
+    public function commentRoleLimit($permissionMap){
+        if ($permissionMap['comment_limit_status'] == true) {
+            $comment_limit_rule = $permissionMap['comment_limit_rule'];
+            $comment_limit_type = $permissionMap['comment_limit_type'];
+            // 1.All-day limit on specified dates
+            if ($comment_limit_type == 1) {
+                $comment_limit_period_start = $permissionMap['comment_limit_period_start'];
+                $comment_limit_period_end = $permissionMap['comment_limit_period_end'];
+                $time = date('Y-m-d H:i:s', time());
+                if ($comment_limit_rule == 2) {
+                    if ($comment_limit_period_start <= $time && $comment_limit_period_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($time < $comment_limit_period_start || $time > $comment_limit_period_end) {
+                        return true;
+                    }
+                }
+            }
+            // 2.Specify a time period to set
+            if ($comment_limit_type == 2) {
+                $comment_limit_cycle_start = $permissionMap['comment_limit_cycle_start'];
+                $comment_limit_cycle_end = $permissionMap['comment_limit_cycle_end'];
+                $comment_limit_cycle_start = date('Y-m-d', time()).' '.$comment_limit_cycle_start;
+                if ($comment_limit_cycle_start < $comment_limit_cycle_end) {
+                    $post_limit_cycle_end = date('Y-m-d', time()).' '.$comment_limit_cycle_end;
+                } else {
+                    $post_limit_cycle_end = date('Y-m-d',
+                            strtotime('+1 day')).' '.$comment_limit_cycle_end;
+                }
+                $time = date('Y-m-d H:i:s', time());
+
+                if ($comment_limit_rule == 2) {
+                    if ($comment_limit_cycle_start <= $time && $comment_limit_cycle_end >= $time) {
+                        return true;
+                    }
+                } else {
+                    if ($time < $comment_limit_cycle_start || $time > $comment_limit_cycle_end) {
+                        return true;
                     }
                 }
             }
         }
+
+        return false;
+    }
+
+    public function commentGlobalLimit($roleId){
+        $comment_limit_status = ApiConfigHelper::getConfigByItemKey('comment_limit_status');
+        // If the member master role is a whitelisted role, it is not subject to this permission requirement
+
+        if ($comment_limit_status == true) {
+            if (! empty($roleId)) {
+                // Get a list of whitelisted roles
+                $comment_limit_whitelist = ApiConfigHelper::getConfigByItemKey('comment_limit_whitelist');
+                if (! empty($comment_limit_whitelist)) {
+                    $comment_limit_whitelist_arr = json_decode($comment_limit_whitelist, true);
+                    if (in_array($roleId, $comment_limit_whitelist_arr)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
         // Check Special Rules - Opening Hours
         if ($comment_limit_status == true) {
             $comment_limit_rule = ApiConfigHelper::getConfigByItemKey('comment_limit_rule');
@@ -502,11 +584,11 @@ class FsService
                 $time = date('Y-m-d H:i:s', time());
                 if ($comment_limit_rule == 2) {
                     if ($comment_limit_period_start <= $time && $comment_limit_period_end >= $time) {
-                        return self::checkInfo(ErrorCodeService::PUBLISH_LIMIT_ERROR);
+                        return true;
                     }
                 } else {
                     if ($time < $comment_limit_period_start || $time > $comment_limit_period_end) {
-                        return self::checkInfo(ErrorCodeService::PUBLISH_LIMIT_ERROR);
+                        return true;
                     }
                 }
             }
@@ -525,96 +607,16 @@ class FsService
 
                 if ($comment_limit_rule == 2) {
                     if ($comment_limit_cycle_start <= $time && $comment_limit_cycle_end >= $time) {
-                        return self::checkInfo(ErrorCodeService::PUBLISH_LIMIT_ERROR);
+                        return true;
                     }
                 } else {
                     if ($time < $comment_limit_cycle_start || $time > $comment_limit_cycle_end) {
-                        return self::checkInfo(ErrorCodeService::PUBLISH_LIMIT_ERROR);
+                        return true;
                     }
                 }
             }
         }
-        // Global checks pass, checks role permissions
-        if (empty($roleId)) {
-            return self::checkInfo(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
-        }
 
-        $permission = FresnsMemberRoles::where('id', $roleId)->value('permission');
-        if ($permission) {
-            $permissionArr = json_decode($permission, true);
-            $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
-            if (empty($permissionMap)) {
-                return self::checkInfo(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
-            }
-
-            // Publish Comment Permissions
-            if ($permissionMap['comment_publish'] == false) {
-                return self::checkInfo(ErrorCodeService::ROLE_NO_PERMISSION_PUBLISH);
-            }
-
-            // Publish Comment Request - Email
-            if ($permissionMap['comment_email_verify'] == true) {
-                if (empty($user->email)) {
-                    return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_EMAIL_VERIFY);
-                }
-            }
-            // Publish Comment Request - Phone Number
-            if ($permissionMap['comment_phone_verify'] == true) {
-                if (empty($user->phone)) {
-                    return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_PHONE_VERIFY);
-                }
-            }
-            // Publish Comment Request - Real name
-            if ($permissionMap['comment_prove_verify'] == true) {
-                if ($user->prove_verify == 1) {
-                    return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_PROVE_VERIFY);
-                }
-            }
-
-            // Check Special Rules - Opening Hours
-            if ($permissionMap['comment_limit_status'] == true) {
-                $comment_limit_rule = $permissionMap['comment_limit_rule'];
-                // 1.All-day limit on specified dates
-                if ($comment_limit_type == 1) {
-                    $comment_limit_period_start = $permissionMap['comment_limit_period_start'];
-                    $comment_limit_period_end = $permissionMap['comment_limit_period_end'];
-                    $time = date('Y-m-d H:i:s', time());
-                    if ($comment_limit_rule == 2) {
-                        if ($comment_limit_period_start <= $time && $comment_limit_period_end >= $time) {
-                            return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
-                        }
-                    } else {
-                        if ($time < $comment_limit_period_start || $time > $comment_limit_period_end) {
-                            return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
-                        }
-                    }
-                }
-                // 2.Specify a time period to set
-                if ($comment_limit_type == 2) {
-                    $comment_limit_cycle_start = $permissionMap['comment_limit_cycle_start'];
-                    $comment_limit_cycle_end = $permissionMap['comment_limit_cycle_end'];
-                    $comment_limit_cycle_start = date('Y-m-d', time()).' '.$comment_limit_cycle_start;
-                    if ($comment_limit_cycle_start < $comment_limit_cycle_end) {
-                        $post_limit_cycle_end = date('Y-m-d', time()).' '.$comment_limit_cycle_end;
-                    } else {
-                        $post_limit_cycle_end = date('Y-m-d',
-                                strtotime('+1 day')).' '.$comment_limit_cycle_end;
-                    }
-                    $time = date('Y-m-d H:i:s', time());
-
-                    if ($comment_limit_rule == 2) {
-                        if ($comment_limit_cycle_start <= $time && $comment_limit_cycle_end >= $time) {
-                            return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
-                        }
-                    } else {
-                        if ($time < $comment_limit_cycle_start || $time > $comment_limit_cycle_end) {
-                            return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
-                        }
-                    }
-                }
-            }
-        } else {
-            return self::checkInfo(ErrorCodeService::ROLE_PUBLISH_LIMIT);
-        }
+        return false;
     }
 }

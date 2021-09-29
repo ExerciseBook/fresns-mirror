@@ -395,6 +395,7 @@ class FsChecker extends BaseChecker
                             // Check Special Rules - Opening Hours
                             if ($permissionMap['comment_limit_status'] == true) {
                                 $comment_limit_rule = $permissionMap['comment_limit_rule'];
+                                $comment_limit_type = $permissionMap['comment_limit_type'];
                                 // 1.All-day limit on specified dates
                                 if ($comment_limit_type == 1) {
                                     $comment_limit_period_start = $permissionMap['comment_limit_period_start'];
