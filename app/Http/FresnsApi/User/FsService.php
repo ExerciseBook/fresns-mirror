@@ -171,11 +171,11 @@ class FsService
         }
         $data['members'] = $itemArr;
 
-        $data['memberName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name', $langTag);
-        $data['memberIdName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_id_name', $langTag);
-        $data['memberNameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name_name', $langTag);
-        $data['memberNicknameName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_nickname_name', $langTag);
-        $data['memberRoleName'] = FresnsLanguagesService::getLanguageByConfigs(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_role_name', $langTag);
+        $data['memberName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name', $langTag);
+        $data['memberIdName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_id_name', $langTag);
+        $data['memberNameName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name_name', $langTag);
+        $data['memberNicknameName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_nickname_name', $langTag);
+        $data['memberRoleName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_role_name', $langTag);
 
         return $data;
     }

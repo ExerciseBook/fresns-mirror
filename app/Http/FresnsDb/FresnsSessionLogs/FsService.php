@@ -12,7 +12,7 @@ use App\Base\Services\BaseAdminService;
 use App\Http\Center\Common\GlobalConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsCmd\FresnsCmdService;
+use App\Http\FresnsCmd\FresnsSubPluginService;
 use Illuminate\Support\Facades\Request;
 
 class FsService extends BaseAdminService
@@ -84,7 +84,7 @@ class FsService extends BaseAdminService
         ];
 
         $id = FresnsSessionLogs::insertGetId($input);
-        FresnsCmdService::addSubTablePluginItem(FresnsSessionLogsConfig::CFG_TABLE, $id);
+        FresnsSubPluginService::addSubTablePluginItem(FresnsSessionLogsConfig::CFG_TABLE, $id);
 
         return $id;
     }

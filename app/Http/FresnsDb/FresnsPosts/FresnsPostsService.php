@@ -217,9 +217,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($member_list_name as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'member_list_name';
@@ -250,9 +247,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'comment_btn_name';
@@ -284,9 +278,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'allow_btn_name';
@@ -421,9 +412,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($member_list_name as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'member_list_name';
@@ -457,9 +445,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'comment_btn_name';
@@ -491,9 +476,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'allow_btn_name';
