@@ -1903,6 +1903,7 @@ class FresnsPlugin extends BasePlugin
         $language = $inputData['language'] ?? null;
 
         //如果有传值connectInfo则要校验connectToken
+        $connectInfoArr = [];
         if($connectInfo){
             $connectInfoArr = json_decode($connectInfo,true);
             $connectTokenArr = [];
@@ -2017,8 +2018,7 @@ class FresnsPlugin extends BasePlugin
         FresnsMemberRoleRels::insert($memberRoleRelsInput);
 
         //如果connectInfo有值则添加到user_connects表
-        if($connectInfo){
-            $connectInfoArr = json_decode($connectInfo,true);
+        if($connectInfoArr){
             $itemArr = [];
             foreach($connectInfoArr as $info){
                 $item = [];
