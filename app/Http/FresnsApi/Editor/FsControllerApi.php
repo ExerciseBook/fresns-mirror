@@ -873,7 +873,7 @@ class FsControllerApi extends FresnsBaseApiController
         $user = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->first();
         // Verify member role permissions
         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($memberId);
-        //如果是私有模式，成员过期 members > expired_at 导致的不可发表
+        // Get site model, determine member expiration time
         $site_mode = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_MODEL);
         $isExpired = false;
         if($site_mode == 'private'){
@@ -968,7 +968,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $toolbar['emoji'] = ApiConfigHelper::getConfigByItemKey('post_editor_emoji');
 
                 // toolbar > image
-                // status 如果配置表 post_editor_image 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_image 配置值。
+                // status: If the configs table key value is false, output it directly; if it is true, output the member master role permission parameter configuration value.
                 $image = [];
                 $postEditorImage = ApiConfigHelper::getConfigByItemKey('post_editor_image');
                 $image['status'] = $postEditorImage;
@@ -986,11 +986,11 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
-                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                // Get storage service plugin upload page
                 $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                
                 $image['extensions'] = ApiConfigHelper::getConfigByItemKey('images_ext');
                 if(empty($image['maxSize'])){
                     $image['maxSize'] = ApiConfigHelper::getConfigByItemKey('images_max_size');
@@ -998,7 +998,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $toolbar['image'] = $image;
 
                 // toolbar > video
-                // status 如果配置表 post_editor_video 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_video 配置值。
+                // status: If the configs table key value is false, output it directly; if it is true, output the member master role permission parameter configuration value.
                 $video = [];
                 $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_video');
                 $video['status']= $postEditorVideo;
@@ -1020,11 +1020,11 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
-                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                // Get storage service plugin upload page
                 $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+
                 $video['extensions'] = ApiConfigHelper::getConfigByItemKey('videos_ext');
                 if(empty($video['maxSize'])){
                     $video['maxSize'] = ApiConfigHelper::getConfigByItemKey('videos_max_size');
@@ -1035,7 +1035,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $toolbar['video'] = $video;
 
                 // toolbar > audio
-                // status 如果配置表 post_editor_audio 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_audio 配置值。
+                // status: If the configs table key value is false, output it directly; if it is true, output the member master role permission parameter configuration value.
                 $audio = [];
                 $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_audio');
                 $audio['status']= $postEditorVideo;
@@ -1057,11 +1057,11 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
-                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                // Get storage service plugin upload page
                 $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+
                 $audio['extensions'] = ApiConfigHelper::getConfigByItemKey('audios_ext');
                 if(empty($audio['maxSize'])){
                     $audio['maxSize'] = ApiConfigHelper::getConfigByItemKey('audios_max_size');
@@ -1072,7 +1072,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $toolbar['audio'] = $audio;
 
                 // toolbar > doc
-                // status 如果配置表 post_editor_doc 键值等于 false 直接输出；如果等于 true 则输出成员主角色权限参数 post_editor_doc 配置值。
+                // status: If the configs table key value is false, output it directly; if it is true, output the member master role permission parameter configuration value.
                 $doc = [];
                 $postEditorVideo = ApiConfigHelper::getConfigByItemKey('post_editor_doc');
                 $doc['status']= $postEditorVideo;
@@ -1091,11 +1091,11 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
-                // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                // Get storage service plugin upload page
                 $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
                 $unikey = FresnsPlugins::where('unikey',$imageService)->first();
                 $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+
                 $doc['extensions'] = ApiConfigHelper::getConfigByItemKey('docs_ext');
                 if(empty($doc['maxSize'])){
                     $doc['maxSize'] = ApiConfigHelper::getConfigByItemKey('docs_max_size');
@@ -1133,6 +1133,7 @@ class FsControllerApi extends FresnsBaseApiController
                     // $arr['url']
                     // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
                     // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                    // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
                     $arr['number'] = $t['editor_number'];
                     $list[] = $arr;
                 }
@@ -1159,6 +1160,7 @@ class FsControllerApi extends FresnsBaseApiController
                     // $arr['url']
                     // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
                     // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                    // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;
@@ -1401,6 +1403,7 @@ class FsControllerApi extends FresnsBaseApiController
                     // $arr['url']
                     // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
                     // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                    // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
                     $arr['number'] = $t['editor_number'];
                     $list[] = $arr;
                 }
@@ -1423,6 +1426,7 @@ class FsControllerApi extends FresnsBaseApiController
                     // $arr['url']
                     // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
                     // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
+                    // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;

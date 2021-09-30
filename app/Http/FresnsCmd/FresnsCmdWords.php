@@ -811,7 +811,8 @@ class FresnsCmdWords extends BasePlugin
                     $item['file_extension'] = $fileInfo['extension'];
                     $item['file_path'] = $fileInfo['path'];
                     $item['rank_num'] = $fileInfo['rankNum'];
-                    $item['uuid'] = ApiCommonHelper::createUuid();
+                    $uuid = $fileInfo['fid'] ?? ApiCommonHelper::createUuid();
+                    $item['uuid'] = $uuid;
                     $item['table_type'] = $tableType;
                     $item['table_name'] = $tableName;
                     $item['table_field'] = $tableField;
@@ -886,7 +887,7 @@ class FresnsCmdWords extends BasePlugin
                 if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
-                    $item['imageLong'] = $file['image_long'] ?? '';
+                    $item['imageLong'] = $append['image_long'] ?? 0;
                     $item['imageRatioUrl'] = $imagesHost.$file['file_path'].$imagesRatio;
                     $item['imageSquareUrl'] = $imagesHost.$file['file_path'].$imagesSquare;
                     $item['imageBigUrl'] = $imagesHost.$file['file_path'].$imagesBig;
