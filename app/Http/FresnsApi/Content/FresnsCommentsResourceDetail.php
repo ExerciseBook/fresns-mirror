@@ -323,8 +323,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
                 $arr['titleColor'] = $e['title_color'] ?? '';
                 $arr['descPrimary'] = '';
                 if (! empty($e)) {
-                    $descPrimary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'desc_primary',
-                        $e['id']);
+                    $descPrimary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $e['id']);
                     $descPrimary = $descPrimary == null ? '' : $descPrimary['lang_content'];
                     $arr['descPrimary'] = $descPrimary;
                 }
