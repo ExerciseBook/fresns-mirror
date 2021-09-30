@@ -28,5 +28,6 @@ Route::group(['prefix' => 'fresns/info', 'namespace' => '\App\Http\FresnsApi\Inf
     Route::post('/callbacks', 'FsControllerApi@callbacks')->name('api.info.callbacks');
     // Download File
     Route::post('/downloadFile', 'FsControllerApi@downloadFile')->name('api.info.downloadFile');
+    Route::post('/sendSms', 'FsControllerApi@sendSms')->name('api.info.sendSms');
 
 });
