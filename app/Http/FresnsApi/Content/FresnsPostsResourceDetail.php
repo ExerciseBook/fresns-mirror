@@ -131,15 +131,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $brief = $this->is_brief;
         $sticky = $this->sticky_status;
         $essence = $this->essence_status;
-        $more_json_decode = json_decode($this->more_json, true);
-        $labelImg = $more_json_decode['labelImg'] ?? '';
-        $titleIcon = $more_json_decode['titleIcon'] ?? '';
-        $likeIcon = $more_json_decode['likeIcon'] ?? '';
-        $followIcon = $more_json_decode['followIcon'] ?? '';
-        $commentIcon = $more_json_decode['commentIcon'] ?? '';
-        $shareIcon = $more_json_decode['shareIcon'] ?? '';
-        $moreIcon = $more_json_decode['moreIcon'] ?? '';
-
+        
         // Operation behavior status
         $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 4)->where('like_id', $this->id)->count();
         $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 4)->where('follow_id', $this->id)->count();
