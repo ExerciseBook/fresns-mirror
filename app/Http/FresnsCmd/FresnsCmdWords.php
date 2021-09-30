@@ -811,7 +811,8 @@ class FresnsCmdWords extends BasePlugin
                     $item['file_extension'] = $fileInfo['extension'];
                     $item['file_path'] = $fileInfo['path'];
                     $item['rank_num'] = $fileInfo['rankNum'];
-                    $item['uuid'] = ApiCommonHelper::createUuid();
+                    $uuid = $fileInfo['fid'] ?? ApiCommonHelper::createUuid();
+                    $item['uuid'] = $uuid;
                     $item['table_type'] = $tableType;
                     $item['table_name'] = $tableName;
                     $item['table_field'] = $tableField;
