@@ -56,7 +56,7 @@ class FsControllerWeb extends BaseFrontendController
     // Login Page
     public function index()
     {
-        $lang = request()->input('lang', 'zh-Hans');
+        $lang = request()->input('lang', 'en');
         $data = [
             'lang' => $lang,
             'location' => 'action',
@@ -70,7 +70,7 @@ class FsControllerWeb extends BaseFrontendController
     // After Login Status Expires
     public function loginIndex()
     {
-        $lang = request()->input('lang', 'zh-Hans');
+        $lang = request()->input('lang', 'en');
         $data = [
             'lang' => $lang,
         ];
@@ -108,9 +108,9 @@ class FsControllerWeb extends BaseFrontendController
 
         Auth::login($user);
 
-        $lang = $request->input('lang', 'zh-Hans');
+        $lang = $request->input('lang', 'en');
         if (empty($lang)) {
-            $lang = 'zh-Hans';
+            $lang = 'en';
         }
         Cache::forever('lang_tag_'.$user['id'], $lang);
 
@@ -196,7 +196,7 @@ class FsControllerWeb extends BaseFrontendController
     // Setting Language
     public function setLanguage(Request $request)
     {
-        $lang = $request->input('lang', 'zh-Hans');
+        $lang = $request->input('lang', 'en');
         $userId = Auth::id();
 
         Cache::forever('lang_tag_'.$userId, $lang);
@@ -732,7 +732,7 @@ class FsControllerWeb extends BaseFrontendController
         // Provide parameters for whether data should be deleted when the plugin is uninstalled
         // clear_plugin_data = 1 // Delete files and data
         // clear_plugin_data = 0 // Delete files only
-        $clear_plugin_data = $request->input('clear_plugin_data');//是否删除插件数据库数据
+        $clear_plugin_data = $request->input('clear_plugin_data');
 
         $uniKey = $request->input('unikey');
 
