@@ -624,7 +624,7 @@ class FsControllerApi extends FresnsBaseApiController
         $signName = $request->input('signName');
         $templateCode = $request->input('templateCode');
         $templateParam = $request->input('templateParam');
-        $cmd = FresnsPluginConfig::PLG_CMD_SEND_SMS;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_SMS;
         $input = [
             'countryCode' => $countryCode,
             'phoneNumber' => $phoneNumber,
@@ -632,8 +632,8 @@ class FsControllerApi extends FresnsBaseApiController
             'templateCode' => $templateCode,
             'templateParam' => $templateParam,
         ];
-        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             $this->errorCheckInfo($resp);
         }
         $this->success($resp['output']);
