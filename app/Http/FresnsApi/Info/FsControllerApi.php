@@ -618,7 +618,7 @@ class FsControllerApi extends FresnsBaseApiController
     }
 
     // sendSms
-    public function testSendSms(Request $request){
+    public function sendSms(Request $request){
         $countryCode = $request->input('countryCode');
         $phoneNumber = $request->input('phoneNumber');
         $signName = $request->input('signName');
