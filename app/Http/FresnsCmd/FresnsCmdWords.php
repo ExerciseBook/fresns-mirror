@@ -16,7 +16,7 @@ use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
@@ -70,19 +70,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 
-class FresnsPlugin extends BasePlugin
+class FresnsCmdWords extends BasePlugin
 {
     // Constructors
     public function __construct()
     {
-        $this->pluginConfig = new FresnsPluginConfig();
-        $this->pluginCmdHandlerMap = FresnsPluginConfig::PLG_CMD_HANDLE_MAP;
+        $this->pluginConfig = new FresnsCmdWordsConfig();
+        $this->pluginCmdHandlerMap = FresnsCmdWordsConfig::PLG_CMD_HANDLE_MAP;
     }
 
     // Get Status Code
     public function getCodeMap()
     {
-        return FresnsPluginConfig::CODE_MAP;
+        return FresnsCmdWordsConfig::CODE_MAP;
     }
 
     // Send Verification Code
@@ -105,7 +105,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
         LogService::info('Start Handle: ', $input);
-        $cmd = FresnsPluginConfig::PLG_CMD_SEND_CODE;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_CODE;
         // Preparation parameters
         $account = $input['account'];
         $templateId = $input['templateId'];
@@ -129,9 +129,9 @@ class FresnsPlugin extends BasePlugin
                 'langTag' => $langTag,
             ];
         }
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
 
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp['code']);
         }
 
@@ -204,7 +204,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsPluginConfig::PLG_CMD_SEND_EMAIL;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_EMAIL;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -215,8 +215,8 @@ class FresnsPlugin extends BasePlugin
             'title' => $title,
             'content' => $content,
         ];
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp['code']);
         }
 
@@ -237,7 +237,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsPluginConfig::PLG_CMD_SEND_SMS;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_SMS;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -250,8 +250,8 @@ class FresnsPlugin extends BasePlugin
             'templateCode' => $templateCode,
             'templateParam' => $templateParam,
         ];
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp['code']);
         }
 
@@ -276,7 +276,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsPluginConfig::PLG_CMD_SEND_WECHAT;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_WECHAT;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -293,8 +293,8 @@ class FresnsPlugin extends BasePlugin
             'linkType' => $linkType,
             'linkUrl' => $linkUrl,
         ];
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp['code']);
         }
 
@@ -318,7 +318,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsPluginConfig::PLG_CMD_SEND_IOS;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_IOS;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -334,8 +334,8 @@ class FresnsPlugin extends BasePlugin
             'link_type' => $linkType,
             'linkUrl' => $linkUrl,
         ];
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp['code']);
         }
 
@@ -359,7 +359,7 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsPluginConfig::PLG_CMD_SEND_ANDROID;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_ANDROID;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -375,8 +375,8 @@ class FresnsPlugin extends BasePlugin
             'linkType' => $linkType,
             'linkUrl' => $linkUrl,
         ];
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp['code']);
         }
 
@@ -612,13 +612,11 @@ class FresnsPlugin extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
 
-        $cmd = FresnsPluginConfig::PLG_CMD_GET_UPLOAD_TOKEN;
-        $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_GET_UPLOAD_TOKEN;
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp['code']);
         }
-
         $output = $resp['output'];
 
         $data['storageId'] = $output['storageId'] ?? 1;
@@ -856,13 +854,12 @@ class FresnsPlugin extends BasePlugin
         }
 
         if ($pluginClass) {
-            $cmd = FresnsPluginConfig::PLG_CMD_UPLOAD_FILE;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_UPLOAD_FILE;
             $input = [];
             $input['fid'] = json_encode($fidArr);
             $input['mode'] = $mode;
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return $this->pluginError($resp['code']);
             }
         }
@@ -961,11 +958,11 @@ class FresnsPlugin extends BasePlugin
                 LogService::error('Unconfigured Plugin');
                 return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
-            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_IMAGE;
             $input = [];
             $input['fid'] = $fid;
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return $this->pluginError($resp['code']);
             }
             $output = $resp['output'];
@@ -1038,15 +1035,15 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
-            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_VIDEO;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_VIDEO;
             $input = [];
             $input['fid'] = $fid;
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return $this->pluginError($resp['code']);
             }
             $output = $resp['output'];
+
             $videoCover = $output['videoCover'] ?? '';
             $videoGif = $output['videoGif'] ?? '';
             $videoUrl = $output['videoUrl'] ?? '';
@@ -1101,15 +1098,15 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
-            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_AUDIO;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_AUDIO;
             $input = [];
             $input['fid'] = $fid;
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return $this->pluginError($resp['code']);
             }
             $output = $resp['output'];
+
             $singUrl = $output['singUrl'] ?? '';
         } else {
             $singUrl = $url;
@@ -1162,16 +1159,16 @@ class FresnsPlugin extends BasePlugin
                 LogService::error('Unconfigured Plugin');
                 return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
-            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
+
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_DOC;
             $input = [];
             $input['fid'] = $fid;
-
-            $resp = PluginRpcHelper::call($pluginClass, $cmd, $input);
-
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return $this->pluginError($resp['code']);
             }
             $output = $resp['output'];
+
             $singUrl = $output['singUrl'] ?? '';
         } else {
             $singUrl = $url;
@@ -1241,9 +1238,9 @@ class FresnsPlugin extends BasePlugin
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
                                     // Plugin handle logic.
-                                    $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
+                                    $cmd = FresnsCmdWordsConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
                                     $input['fid'] = $extendsFileId;
-                                    $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+                                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
                                     // Delete file data records from both "files" + "file_appends" tables.
                                     DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('file_id', $file['id'])->delete();
                                 }
@@ -1302,9 +1299,9 @@ class FresnsPlugin extends BasePlugin
                     if ($filesIdArr) {
                         // Delete physical files
                         foreach ($filesIdArr as $v) {
-                            $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
+                            $cmd = FresnsCmdWordsConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
                             $input['fid'] = $v;
-                            $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+                            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
                         }
                         // Delete file data
                         DB::table(FresnsFilesConfig::CFG_TABLE)->whereIn('uuid', $filesIdArr)->delete();
@@ -1399,9 +1396,9 @@ class FresnsPlugin extends BasePlugin
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
                                     // Plugin handle logic.
-                                    $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
+                                    $cmd = FresnsCmdWordsConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
                                     $input['fid'] = $extendsFileId;
-                                    $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+                                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
 
                                     // Delete file data records from both "files" + "file_appends" tables.
                                     DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('file_id', $file['id'])->delete();
@@ -1460,9 +1457,9 @@ class FresnsPlugin extends BasePlugin
                     if ($filesUuidArr) {
                         // Delete physical files
                         foreach ($filesUuidArr as $v) {
-                            $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
+                            $cmd = FresnsCmdWordsConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
                             $input['fid'] = $v;
-                            $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+                            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
                         }
                         // Delete files
                         DB::table(FresnsFilesConfig::CFG_TABLE)->whereIn('id', $filesIdArr)->delete();
@@ -1902,7 +1899,7 @@ class FresnsPlugin extends BasePlugin
         $timezone = $inputData['timezone'] ?? null;
         $language = $inputData['language'] ?? null;
 
-        //如果有传值connectInfo则要校验connectToken
+        // If the connectInfo parameter is passed, check if the connectToken exists
         $connectInfoArr = [];
         if($connectInfo){
             $connectInfoArr = json_decode($connectInfo,true);
@@ -1916,7 +1913,6 @@ class FresnsPlugin extends BasePlugin
                 return $this->pluginError(ErrorCodeService::CONNECT_TOKEN_ERROR);
             }
         }
-
 
         $input = [];
         // Verify successful user creation
@@ -2017,7 +2013,7 @@ class FresnsPlugin extends BasePlugin
         ];
         FresnsMemberRoleRels::insert($memberRoleRelsInput);
 
-        //如果connectInfo有值则添加到user_connects表
+        // If the connectInfo parameter is passed, add it to the user_connects table
         if($connectInfoArr){
             $itemArr = [];
             foreach($connectInfoArr as $info){
@@ -2075,7 +2071,6 @@ class FresnsPlugin extends BasePlugin
                 break;
         }
 
-
         $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
         if ($sessionLogId) {
             $sessionInput = [
@@ -2114,9 +2109,7 @@ class FresnsPlugin extends BasePlugin
                     case 2:
                         $codeArr = FresnsVerifyCodes::where('type', $type)->where('account',
                             $countryCode.$account)->where('expired_at', '>', $time)->pluck('code')->toArray();
-
                         break;
-
                     default:
                         // code...
                         break;

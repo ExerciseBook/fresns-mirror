@@ -169,7 +169,7 @@ return [
     'uninstallInfo' => '點擊卸載',
     'deactivate' => '已啟用',
     'deactivateInfo' => '點擊停用',
-    'setting' => '進入',
+    'setting' => '設置',
     'settingInfo' => '進入設置頁面',
     'newVersion' => '有新版',
     'newVersionInfo' => '點擊進儀錶盤更新',

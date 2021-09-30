@@ -207,7 +207,6 @@ class DateHelper
         }
         $langTag = request()->header('langTag');
         $language = ApiConfigHelper::getConfigByItemKey('language_menus');
-        // dd($language);
         $langTag = ApiLanguageHelper::getLangTagByHeader();
         $langInfo = [];
         if($language){

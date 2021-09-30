@@ -10,7 +10,7 @@ namespace App\Http\FresnsDb\FresnsComments;
 
 use App\Helpers\StrHelper;
 use App\Http\Center\Common\LogService;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Content\FresnsPostsResource;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsCmd\FresnsSubPlugin;
@@ -459,7 +459,7 @@ class FresnsCommentsService extends FsService
             'insertId' => $commentId,
         ];
         LogService::info('table_input', $input);
-        PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+        CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftComment = FresnsCommentLogs::find($draftId);
         $content = $this->stopWords($draftComment['content']);
 
@@ -487,7 +487,7 @@ class FresnsCommentsService extends FsService
             'insertId' => $commentId,
         ];
         LogService::info('table_input', $input);
-        PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+        CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftComment = FresnsCommentLogs::find($draftId);
         $content = $this->stopWords($draftComment['content']);
 
