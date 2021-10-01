@@ -934,9 +934,7 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                if (! empty($tips)) {
-                    $publishPerm['tips'] = $tips;
-                }
+                $publishPerm['tips'] = $tips;
 
                 // editPerm
                 $editPerm = [];
@@ -1196,10 +1194,8 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
+                $publishPerm['tips'] = $tips;
 
-                if (! empty($tips)) {
-                    $publishPerm['tips'] = $tips;
-                }
                 // editPerm
                 $editPerm = [];
                 $editPerm['status'] = ApiConfigHelper::getConfigByItemKey('comment_edit');
