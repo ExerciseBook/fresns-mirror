@@ -112,6 +112,7 @@ class FsConfig
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
         '/api/fresns/editor/revoke',
+        '/api/fresns/editor/configs',
     ];
 
     // Site Mode = public
@@ -141,6 +142,7 @@ class FsConfig
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
         '/api/fresns/editor/revoke',
+        '/api/fresns/editor/configs',
     ];
 
     // Site Mode = public
@@ -178,6 +180,7 @@ class FsConfig
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
         '/api/fresns/editor/revoke',
+        '/api/fresns/editor/configs',
     ];
 
     // Site Mode = public
@@ -252,6 +255,7 @@ class FsConfig
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
         '/api/fresns/editor/revoke',
+        '/api/fresns/editor/configs',
     ];
 
     // Site Mode = private
@@ -301,6 +305,7 @@ class FsConfig
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
         '/api/fresns/editor/revoke',
+        '/api/fresns/editor/configs',
     ];
 
     // Site Mode = private
@@ -357,6 +362,7 @@ class FsConfig
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
         '/api/fresns/editor/revoke',
+        '/api/fresns/editor/configs',
     ];
 
     // Site Mode = private

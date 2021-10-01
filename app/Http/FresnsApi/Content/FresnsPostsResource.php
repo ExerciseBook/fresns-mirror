@@ -138,14 +138,6 @@ class FresnsPostsResource extends BaseAdminResource
         $brief = $this->is_brief;
         $sticky = $this->sticky_status;
         $essence = $this->essence_status;
-        $more_json_decode = json_decode($this->more_json, true);
-        $labelImg = $more_json_decode['labelImg'] ?? '';
-        $titleIcon = $more_json_decode['titleIcon'] ?? '';
-        $likeIcon = $more_json_decode['likeIcon'] ?? '';
-        $followIcon = $more_json_decode['followIcon'] ?? '';
-        $commentIcon = $more_json_decode['commentIcon'] ?? '';
-        $shareIcon = $more_json_decode['shareIcon'] ?? '';
-        $moreIcon = $more_json_decode['moreIcon'] ?? '';
 
         // Operation behavior status
         $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 4)->where('like_id', $this->id)->count();
@@ -803,7 +795,7 @@ class FresnsPostsResource extends BaseAdminResource
                         $title = $domainLinked->link_title;
                     }
                 }
-                $content = str_replace($h, "<a href='$h' class='fresns_content_link'>$title</a>", $content);
+                $content = str_replace($h, "<a href='$h' target='_blank' class='fresns_content_link'>$title</a>", $content);
             }
         }
 
@@ -829,7 +821,7 @@ class FresnsPostsResource extends BaseAdminResource
                 $trimName = trim($m);
                 $memberInfo = FresnsMembers::where('name', $mname)->first();
                 if ($memberInfo) {
-                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/$mname";
+                    $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/m/$mname";
                     $content = str_replace($m, "<a href='{$jumpUrl}' class='fresns_content_mention'>@{$memberInfo['nickname']}</a> ", $content);
                 }
             }
@@ -844,14 +836,18 @@ class FresnsPostsResource extends BaseAdminResource
         }
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
-                // get hashtag huri
                 // no trim hashtag
-                $noTrimHashTags = trim($s);
+                $noTrimHashTags = rtrim($s);
                 $hashTags = trim(str_replace('#', '', $s));
                 $hashtagsInfo = FresnsHashtags::where('name', $hashTags)->first();
+                // hashtag info
                 if ($hashtagsInfo) {
                     $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
-                    $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$noTrimHashTags</a>", $content);
+                    if($hashtagShow == 1){
+                        $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$noTrimHashTags</a> ", $content);
+                    }else{
+                        $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$s</a>", $content);
+                    }
                 }
             }
         }
@@ -866,13 +862,14 @@ class FresnsPostsResource extends BaseAdminResource
         $followType = $request->input('followType');
         $mid = GlobalService::getGlobalKey('member_id');
         if(!$followType){
+            // Posts by following hashtags
             $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
             $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
             $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
             if(in_array($id,$postHashtagIdArr)){
                 $followType = 'hashtag';
             }
-            // Only posts that have been added to the essence are exported under groups and hashtags
+            // Posts by following groups
             $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
             $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
             if(in_array($id,$postGroupIdArr)){

@@ -14,11 +14,16 @@
     "require": {
         "php": "^7.3|^8.0",
         "fruitcake/laravel-cors": "^2.0",
+<<<<<<< HEAD
         "guzzlehttp/guzzle": "^7.3",
         "laravel/framework": "^8.60",
+=======
+        "guzzlehttp/guzzle": "^7.0.1",
+        "laravel/framework": "^8.62",
+>>>>>>> cb50652cb6813ec76869fb97f02b039c2638d7ca
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^2.0",
+        "laravel/ui": "^3.3",
         "rap2hpoutre/laravel-log-viewer": "^1.7"
     },
     "require-dev": {

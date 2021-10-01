@@ -10,7 +10,7 @@ namespace App\Base\Models;
 
 use App\Base\Config\BaseConfig;
 use App\Http\Center\Common\LogService;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsCmd\FresnsSubPlugin;
 use App\Http\FresnsCmd\FresnsSubPluginConfig;
 use App\Traits\HookModelTrait;
@@ -101,7 +101,7 @@ class BaseModel extends Model
             'insertId' => $id,
         ];
         LogService::info('table_input', $input);
-        PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+        CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
 
         return $id;
     }
@@ -252,7 +252,7 @@ class BaseModel extends Model
     }
 
     // Query by whereIn condition and return the array
-    public static function getValueArrByCondIn($key = 'id', $valueArr, $field = 'name')
+    public static function getValueArrByCondIn($key = 'id', $valueArr = [], $field = 'name')
     {
         return self::whereIn($key, $valueArr)->pluck($field)->toArray();
     }
@@ -498,7 +498,7 @@ class BaseModel extends Model
     }
 
     // Assemble drop-down box array query
-    public static function getBuildSelectOptions($key = 'id', $text = 'name', $fieldValue, $fieldName = 'id')
+    public static function getBuildSelectOptions($key = 'id', $text = 'name', $fieldValue = [], $fieldName = 'id')
     {
         $items = self::whereIn($fieldName, $fieldValue)->orderBy('rank_num', 'ASC')->get();
         $newItemArr = [];

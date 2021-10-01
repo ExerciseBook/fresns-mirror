@@ -8,10 +8,10 @@
 
 namespace App\Http\FresnsApi\Helpers;
 
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Content\FsConfig as ContentConfig;
-use App\Http\FresnsCmd\FresnsPlugin as FresnsCmdFresnsPlugin;
-use App\Http\FresnsCmd\FresnsPluginConfig;
+use App\Http\FresnsCmd\FresnsCmdWords;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsDialogMessages\FresnsDialogMessages;
 use App\Http\FresnsDb\FresnsFileAppends\FresnsFileAppends;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
@@ -210,11 +210,10 @@ class ApiFileHelper
             $singUrl = $url;
         } else {
             $uuid = FresnsFiles::where('id', $url)->value('uuid');
-            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_IMAGE;
             $input['fid'] = $uuid;
-
-            $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return false;
             }
             $singUrl = $resp['output']['imageDefaultUrl'];
@@ -227,11 +226,10 @@ class ApiFileHelper
     public static function getImageSignUrlByFileId($fileId)
     {
         $uuid = FresnsFiles::where('id', $fileId)->value('uuid');
-        $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_IMAGE;
         $input['fid'] = $uuid;
-
-        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return false;
         }
         $singUrl = $resp['output']['imageDefaultUrl'];
@@ -252,11 +250,10 @@ class ApiFileHelper
                 return $fileUrl;
             }
             $uuid = FresnsFiles::where('id', $fileId)->value('uuid');
-            $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_IMAGE;
             $input['fid'] = $uuid;
-
-            $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return false;
             }
 
@@ -302,11 +299,10 @@ class ApiFileHelper
                 if ($m['fid']) {
                     // Image
                     if (isset($m['imageRatioUrl'])) {
-                        $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_IMAGE;
+                        $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_IMAGE;
                         $input['fid'] = $m['fid'];
-
-                        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                        if (CmdRpcHelper::isErrorCmdResp($resp)) {
                             return false;
                         }
                         $m['imageRatioUrl'] = $resp['output']['imageRatioUrl'];
@@ -315,11 +311,10 @@ class ApiFileHelper
                     }
                     // Video
                     if (isset($m['videoCover'])) {
-                        $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_VIDEO;
+                        $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_VIDEO;
                         $input['fid'] = $m['fid'];
-
-                        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                        if (CmdRpcHelper::isErrorCmdResp($resp)) {
                             return false;
                         }
                         $m['videoCover'] = $resp['output']['videoCover'];
@@ -328,22 +323,20 @@ class ApiFileHelper
                     }
                     // Audio
                     if (isset($m['audioUrl'])) {
-                        $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_AUDIO;
+                        $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_AUDIO;
                         $input['fid'] = $m['fid'];
-
-                        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                        if (CmdRpcHelper::isErrorCmdResp($resp)) {
                             return false;
                         }
                         $m['audioUrl'] = $resp['output']['audioUrl'];
                     }
                     // Doc
                     if (isset($m['docUrl'])) {
-                        $cmd = FresnsPluginConfig::PLG_CMD_ANTI_LINK_DOC;
+                        $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_DOC;
                         $input['fid'] = $m['fid'];
-
-                        $resp = PluginRpcHelper::call(FresnsCmdFresnsPlugin::class, $cmd, $input);
-                        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+                        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                        if (CmdRpcHelper::isErrorCmdResp($resp)) {
                             return false;
                         }
                         $m['docUrl'] = $resp['output']['docUrl'];

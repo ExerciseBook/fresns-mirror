@@ -10,7 +10,7 @@ namespace App\Http\FresnsDb\FresnsPosts;
 
 use App\Helpers\StrHelper;
 use App\Http\Center\Common\LogService;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsCmd\FresnsSubPlugin;
@@ -217,9 +217,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($member_list_name as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'member_list_name';
@@ -250,9 +247,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'comment_btn_name';
@@ -284,9 +278,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'allow_btn_name';
@@ -421,9 +412,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($member_list_name as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'member_list_name';
@@ -457,9 +445,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'comment_btn_name';
@@ -491,9 +476,6 @@ class FresnsPostsService extends FsService
                 $inputArr = [];
                 foreach ($btnNameArr as $v) {
                     $item = [];
-                    $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-                    $item['lang_code'] = $tagArr['lang_code'];
-                    $item['area_code'] = $tagArr['area_code'];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
                     $item['table_field'] = 'allow_btn_name';
@@ -629,7 +611,7 @@ class FresnsPostsService extends FsService
             'insertId' => $postId,
         ];
         LogService::info('table_input', $input);
-        PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+        CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $this->stopWords($draftPost['content']);
 
@@ -658,7 +640,7 @@ class FresnsPostsService extends FsService
             'insertId' => $postId,
         ];
         LogService::info('table_input', $input);
-        PluginRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+        CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $this->stopWords($draftPost['content']);
 

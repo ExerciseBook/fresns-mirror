@@ -12,15 +12,13 @@ use App\Helpers\DateHelper;
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\ValidateService;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsCmd\FresnsCrontablPlugin;
-use App\Http\FresnsCmd\FresnsCrontabPluginConfig;
-use App\Http\FresnsCmd\FresnsPlugin;
-use App\Http\FresnsCmd\FresnsPluginConfig;
+use App\Http\FresnsCmd\FresnsCmdWords;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
 use App\Http\FresnsDb\FresnsDialogMessages\FresnsDialogMessages;
@@ -29,6 +27,7 @@ use App\Http\FresnsDb\FresnsEmojis\FresnsEmojisConfig;
 use App\Http\FresnsDb\FresnsEmojis\FresnsEmojisService;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtends;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtendsConfig;
+use App\Http\FresnsDb\FresnsFileAppends\FresnsFileAppends;
 use App\Http\FresnsDb\FresnsFileLogs\FresnsFileLogs;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
@@ -47,6 +46,9 @@ use App\Http\FresnsDb\FresnsStopWords\FresnsStopWordsService;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
+use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacksService;
+use App\Helpers\StrHelper;
 
 class FsControllerApi extends FresnsBaseApiController
 {
@@ -138,7 +140,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         $langTag = ApiLanguageHelper::getLangTagByHeader();
 
-        $cmd = FresnsPluginConfig::PLG_CMD_UPLOAD_SESSION_LOG;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_UPLOAD_SESSION_LOG;
         $input['platform'] = $request->header('platform');
         $input['version'] = $request->header('version');
         $input['versionInt'] = $request->header('versionInt');
@@ -151,10 +153,8 @@ class FsControllerApi extends FresnsBaseApiController
         $input['deviceInfo'] = $request->header('deviceInfo');
         $input['uid'] = $this->uid;
         $input['mid'] = $this->mid;
-
-        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             $this->errorCheckInfo($resp);
         }
 
@@ -436,7 +436,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $account = $userInfo['pure_phone'];
             }
         }
-        $cmd = FresnsPluginConfig::PLG_CMD_SEND_CODE;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_CODE;
         $input = [
             'type' => $type,
             'templateId' => $templateId,
@@ -444,8 +444,8 @@ class FsControllerApi extends FresnsBaseApiController
             'langTag' => $langTag,
             'countryCode' => $countryCode,
         ];
-        $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-        if (PluginRpcHelper::isErrorPluginResp($resp)) {
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
             $this->errorCheckInfo($resp);
         }
         $this->success($resp['output']);
@@ -477,8 +477,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
 
-                $files = FresnsFiles::where('uuid', $fid)->where('table_name',
-                    FresnsPostsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
+                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
@@ -489,8 +488,7 @@ class FsControllerApi extends FresnsBaseApiController
                     }
                 }
                 // If the post has read access, determine if the member requesting the download itself and the member's primary role are in the authorization list post_allows table
-                $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type',
-                    2)->where('object_id', $mid)->count();
+                $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type', 2)->where('object_id', $mid)->count();
                 if (empty($count)) {
                     $this->error(ErrorCodeService::POST_BROWSE_ERROR);
                 }
@@ -502,8 +500,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
 
-                $files = FresnsFiles::where('uuid', $fid)->where('table_name',
-                    FresnsCommentsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
+                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
@@ -515,8 +512,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
 
-                $files = FresnsFiles::where('uuid', $fid)->where('table_name',
-                    FresnsExtendsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
+                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsExtendsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
@@ -538,14 +534,11 @@ class FsControllerApi extends FresnsBaseApiController
         ];
         FresnsFileLogs::insert($input);
         $data = [];
-        $data['previewUrl'] = '';
         $filePath = $files['file_path'];
         switch ($files['file_type']) {
             case 1:
                 $host = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
-                $fileUrl = $host.$filePath;
-                $data['previewUrl'] = $fileUrl;
-                $downloadUrl = ApiFileHelper::getImageSignUrl($fileUrl);
+                $downloadUrl = $host.$filePath;
                 break;
             case 2:
                 $host = ApiConfigHelper::getConfigByItemKey('videos_bucket_domain');
@@ -554,7 +547,6 @@ class FsControllerApi extends FresnsBaseApiController
             case 3:
                 $host = ApiConfigHelper::getConfigByItemKey('audios_bucket_domain');
                 $downloadUrl = $host.$filePath;
-
                 break;
             default:
                 $host = ApiConfigHelper::getConfigByItemKey('docs_bucket_domain');
@@ -563,7 +555,8 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         $data['downloadUrl'] = $downloadUrl;
-
+        $data['originalUrl'] = FresnsFileAppends::where('file_id',$files['id'])->value('file_original_path');
+        
         $this->success($data);
     }
 
@@ -616,5 +609,11 @@ class FsControllerApi extends FresnsBaseApiController
         if (is_array($checkInfo)) {
             return $this->errorCheckInfo($checkInfo);
         }
+        $id = FresnsPluginCallbacks::where('uuid',$uuid)->first();
+        $service = new FresnsPluginCallbacksService();
+        $service->setResourceDetail(FresnsPluginCallbacksResource::class);
+        $detail = $service->detail($id['id']);
+        $data = $detail['detail'];
+        $this->success($data);
     }
 }

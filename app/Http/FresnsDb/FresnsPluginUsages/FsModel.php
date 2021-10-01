@@ -47,9 +47,6 @@ class FsModel extends BaseAdminModel
         $inputArr = [];
         foreach ($nameArr as $v) {
             $item = [];
-            $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-            $item['lang_code'] = $tagArr['lang_code'];
-            $item['area_code'] = $tagArr['area_code'];
             $item['lang_tag'] = $v['langTag'];
             $item['lang_content'] = $v['lang_content'];
             $item['table_field'] = FsConfig::FORM_FIELDS_MAP['name'];
@@ -78,9 +75,6 @@ class FsModel extends BaseAdminModel
         FresnsLanguagesModel::where('table_name', FsConfig::CFG_TABLE)->where('table_field', FsConfig::FORM_FIELDS_MAP['name'])->where('table_id', $id)->delete();
         foreach ($nameArr as $v) {
             $item = [];
-            $tagArr = FresnsLanguagesService::conversionLangTag($v['langTag']);
-            $item['lang_code'] = $tagArr['lang_code'];
-            $item['area_code'] = $tagArr['area_code'];
             $item['lang_tag'] = $v['langTag'];
             $item['lang_content'] = $v['lang_content'];
             $item['table_field'] = FsConfig::FORM_FIELDS_MAP['name'];

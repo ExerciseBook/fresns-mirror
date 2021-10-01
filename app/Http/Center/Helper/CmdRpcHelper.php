@@ -8,20 +8,20 @@
 
 namespace App\Http\Center\Helper;
 
-class PluginRpcHelper
+class CmdRpcHelper
 {
     // rpc call
     public static function call($plugin, $cmd, $input, $option = [])
     {
         $plugin = new $plugin;
         $res = $plugin->handle($cmd, $input, $option);
-        $res = self::formatPluginResp($res);
+        $res = self::formatCmdResp($res);
 
         return $res;
     }
 
     // Check if the service return is invalid
-    public static function isErrorPluginResp($pluginResp)
+    public static function isErrorCmdResp($pluginResp)
     {
         $serverCode = $pluginResp['code'];
         if (intval($serverCode) == 0) {
@@ -32,7 +32,7 @@ class PluginRpcHelper
     }
 
     // Formatting server returns
-    private static function formatPluginResp($pluginResp)
+    private static function formatCmdResp($pluginResp)
     {
         $code = $pluginResp['plugin_code'];
         $msg = $pluginResp['plugin_msg'];

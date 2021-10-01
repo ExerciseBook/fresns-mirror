@@ -10,7 +10,7 @@ namespace App\Http\FresnsCmd;
 
 use App\Http\Center\Base\BasePlugin;
 use App\Http\Center\Common\ErrorCodeService;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\DB;
  * Class FresnsCrontabPlugin
  * Fresns (https://fresns.cn) Timed Tasks
  */
-class FresnsCrontablPlugin extends BasePlugin
+class FresnsCrontabPlugin extends BasePlugin
 {
     // Constructors
     public function __construct()
@@ -357,12 +357,12 @@ class FresnsCrontablPlugin extends BasePlugin
         DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $id)->delete();
         $fileIdArr = DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('user_id', $id)->pluck('file_id')->toArray();
         $fileUuIdArr = DB::table(FresnsFileAppendsConfig::CFG_TABLE)->where('user_id', $id)->pluck('uuid')->toArray();
-        $cmd = FresnsPluginConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
         // Physical Deletion: files
         foreach ($fileUuIdArr as $v) {
             $input = [];
             $input['fid'] = $v;
-            $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
         }
         DB::table(FresnsFilesConfig::CFG_TABLE)->whereIn('id', $fileIdArr)->delete();
         DB::table(FresnsFileAppendsConfig::CFG_TABLE)->whereIn('file_id', $fileIdArr)->delete();
@@ -372,23 +372,23 @@ class FresnsCrontablPlugin extends BasePlugin
         // Physical Deletion: post data
         $postIdArr = DB::table(FresnsPostsConfig::CFG_TABLE)->whereIn('member_id', $memberIdArr)->pluck('id')->toArray();
         if ($postIdArr) {
-            $cmd = FresnsPluginConfig::PLG_CMD_DELETE_CONTENT;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_DELETE_CONTENT;
             foreach ($postIdArr as $v) {
                 $input = [];
                 $input['type'] = 1;
                 $input['content'] = $v;
-                $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
             }
         }
         // Physical Deletion: comment data
         $commentIdArr = DB::table(FresnsCommentsConfig::CFG_TABLE)->whereIn('member_id', $memberIdArr)->pluck('id')->toArray();
         if ($commentIdArr) {
-            $cmd = FresnsPluginConfig::PLG_CMD_DELETE_CONTENT;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_DELETE_CONTENT;
             foreach ($commentIdArr as $v) {
                 $input = [];
                 $input['type'] = 2;
                 $input['content'] = $v;
-                $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
             }
         }
         // Handle Dialogs

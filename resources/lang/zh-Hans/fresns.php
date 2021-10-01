@@ -167,7 +167,7 @@ return [
     'uninstallInfo' => '点击卸载',
     'deactivate' => '已启用',
     'deactivateInfo' => '点击停用',
-    'setting' => '进入',
+    'setting' => '设置',
     'settingInfo' => '进入设置页面',
     'newVersion' => '有新版',
     'newVersionInfo' => '点击进仪表盘更新',

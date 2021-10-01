@@ -11,7 +11,6 @@ namespace App\Http\FresnsPanel;
 use App\Base\Resources\BaseAdminResource;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsCmd\FresnsPlugin;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins as TweetPlugin;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsConfig;
 

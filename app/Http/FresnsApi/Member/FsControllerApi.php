@@ -12,7 +12,7 @@ use App\Helpers\DateHelper;
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\ValidateService;
-use App\Http\Center\Helper\PluginRpcHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Content\FresnsGroupsResource;
 use App\Http\FresnsApi\Content\FresnsHashtagsResource;
@@ -20,8 +20,8 @@ use App\Http\FresnsApi\Content\FresnsCommentsResource;
 use App\Http\FresnsApi\Content\FresnsPostsResource;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsCmd\FresnsPlugin;
-use App\Http\FresnsCmd\FresnsPluginConfig;
+use App\Http\FresnsCmd\FresnsCmdWords;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsService;
@@ -137,13 +137,12 @@ class FsControllerApi extends FresnsBaseApiController
 
         $data = $this->service->getMemberDetail($mid, $mid, true, $langTag);
         if ($data) {
-            $cmd = FresnsPluginConfig::PLG_CMD_CREATE_SESSION_TOKEN;
+            $cmd = FresnsCmdWordsConfig::PLG_CMD_CREATE_SESSION_TOKEN;
             $input['uid'] = $request->header('uid');
             $input['platform'] = $request->header('platform');
             $input['mid'] = $member['uuid'];
-
-            $resp = PluginRpcHelper::call(FresnsPlugin::class, $cmd, $input);
-            if (PluginRpcHelper::isErrorPluginResp($resp)) {
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 $this->errorCheckInfo($resp);
             }
             $output = $resp['output'];

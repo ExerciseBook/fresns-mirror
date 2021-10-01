@@ -46,7 +46,6 @@ class PluginHelper
 
             return null;
         }
-
         return new $configClass();
     }
 

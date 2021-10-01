@@ -8,6 +8,8 @@
 
 // Fresns Editor API
 Route::group(['prefix' => 'fresns', 'namespace' => '\App\Http\FresnsApi\Editor'], function () {
+    // Configs
+    Route::post('/editor/configs', 'FsControllerApi@configs')->name('api.editor.configs');
     // Pull
     Route::post('/editor/create', 'FsControllerApi@create')->name('api.editor.create');
     Route::post('/editor/lists', 'FsControllerApi@lists')->name('api.editor.lists');
