@@ -906,8 +906,9 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 $publishPerm['status'] = $status;
                 $publishPerm['review'] = $permissionMap['post_review'] ?? false;
+                $tips = [];
                 if($isExpired == true){
-                    $publishPerm['expired_at'] = FresnsCodeMessagesService::getCodeMessage($plugin, $langTag, ErrorCodeService::MEMBER_EXPIRED_ERROR);
+                    $tips['expired_at'] = FresnsCodeMessagesService::getCodeMessage($plugin, $langTag, ErrorCodeService::MEMBER_EXPIRED_ERROR);
                 } else {
                     if($errorCode > 0){
                         $message = FresnsCodeMessagesService::getCodeMessage($plugin, $langTag, $errorCode);
@@ -916,22 +917,25 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                         switch ($errorCode) {
                             case '30403':
-                                $publishPerm['post_publish'] = $message;
+                                $tips['post_publish'] = $message;
                                 break;
                             case '30700': 
-                                $publishPerm['post_email_verify'] = $message;
+                                $tips['post_email_verify'] = $message;
                                 break;
                             case '30701': 
-                                $publishPerm['post_phone_verify'] = $message;
+                                $tips['post_phone_verify'] = $message;
                                 break;
                             case '30702': 
-                                $publishPerm['post_prove_verify'] = $message;
+                                $tips['post_prove_verify'] = $message;
                                 break;
                             default:
                                 # code...
                                 break;
                         }
                     }
+                }
+                if(!empty($tips)){
+                    $publishPerm['tips'] = $tips;
                 }
                 
                 // editPerm
@@ -1197,8 +1201,9 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 $publishPerm['status'] = $status;
                 $publishPerm['review'] = $permissionMap['post_review'] ?? false;
+                $tips = [];
                 if($isExpired == true){
-                    $publishPerm['expired_at'] = FresnsCodeMessagesService::getCodeMessage($plugin, $langTag, ErrorCodeService::MEMBER_EXPIRED_ERROR);
+                    $tips['expired_at'] = FresnsCodeMessagesService::getCodeMessage($plugin, $langTag, ErrorCodeService::MEMBER_EXPIRED_ERROR);
                 } else {
                     if($errorCode > 0){
                         $message = FresnsCodeMessagesService::getCodeMessage($plugin, $langTag, $errorCode);
@@ -1207,22 +1212,26 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                         switch ($errorCode) {
                             case '30403':
-                                $publishPerm['comment_publish'] = $message;
+                                $tips['comment_publish'] = $message;
                                 break;
                             case '30700': 
-                                $publishPerm['comment_email_verify'] = $message;
+                                $tips['comment_email_verify'] = $message;
                                 break;
                             case '30701': 
-                                $publishPerm['comment_phone_verify'] = $message;
+                                $tips['comment_phone_verify'] = $message;
                                 break;
                             case '30702': 
-                                $publishPerm['comment_prove_verify'] = $message;
+                                $tips['comment_prove_verify'] = $message;
                                 break;
                             default:
                                 # code...
                                 break;
                         }
                     }
+                }
+
+                if(!empty($tips)){
+                    $publishPerm['tips'] = $tips;
                 }
                 // editPerm
                 $editPerm = [];
