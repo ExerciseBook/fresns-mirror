@@ -503,7 +503,7 @@ class FresnsPostsResource extends BaseAdminResource
                 $manages = [];
                 $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
                 $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-                $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
+                $name = FsService::getLanguageField('name', $TweetPluginUsages['id']);
                 $manages['name'] = $name == null ? '' : $name['lang_content'];
                 $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
                 $manages['url'] = ApiFileHelper::getPluginUsagesUrl($TweetPluginUsages['plugin_unikey'], $TweetPluginUsages['id']);

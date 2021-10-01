@@ -408,7 +408,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             foreach ($TweetPluginUsagesArr as $TweetPluginUsages) {
                 $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
                 $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-                $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
+                $name = FsService::getLanguageField('name', $TweetPluginUsages['id']);
                 $manages['name'] = $name == null ? '' : $name['lang_content'];
                 $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
                 $manages['url'] = $plugin['access_path '].'/'.$TweetPluginUsages['parameter'];
