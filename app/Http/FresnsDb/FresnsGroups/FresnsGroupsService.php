@@ -70,7 +70,7 @@ class FresnsGroupsService extends FresnsBaseService
                     $plugin = pluginUnikey::where('unikey', $pluginUsages['plugin_unikey'])->first();
                     $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $pluginUsages['plugin_unikey'])->first();
                     $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? '';
-                    $name = InfoService::getlanguageField('name', $pluginUsages['id']);
+                    $name = InfoService::getLanguageField('name', $pluginUsages['id']);
                     $extends['name'] = $name == null ? '' : $name['lang_content'];
                     $extends['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($pluginUsages['icon_file_id'], $pluginUsages['icon_file_url']);
                     $extends['url'] = ApiFileHelper::getPluginUsagesUrl($pluginUsages['plugin_unikey'], $pluginUsages['id']);

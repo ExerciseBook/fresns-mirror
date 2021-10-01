@@ -934,9 +934,7 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                if (! empty($tips)) {
-                    $publishPerm['tips'] = $tips;
-                }
+                $publishPerm['tips'] = $tips;
 
                 // editPerm
                 $editPerm = [];
@@ -1107,7 +1105,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $list = [];
                 $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%1%')->get()->toArray();
                 foreach ($tweetPluginUsagesArr as $t) {
-                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $name = FresnsService::getLanguageField('name', $t['id']);
                     $arr = [];
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
@@ -1131,7 +1129,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $maps = [];
                 $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
                 foreach ($tweetPluginUsagesArr as $t) {
-                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $name = FresnsService::getLanguageField('name', $t['id']);
                     $arr = [];
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
@@ -1201,10 +1199,8 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
+                $publishPerm['tips'] = $tips;
 
-                if (! empty($tips)) {
-                    $publishPerm['tips'] = $tips;
-                }
                 // editPerm
                 $editPerm = [];
                 $editPerm['status'] = ApiConfigHelper::getConfigByItemKey('comment_edit');
@@ -1355,7 +1351,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $list = [];
                 $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%2%')->get()->toArray();
                 foreach ($tweetPluginUsagesArr as $t) {
-                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $name = FresnsService::getLanguageField('name', $t['id']);
                     $arr = [];
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
@@ -1375,7 +1371,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $maps = [];
                 $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
                 foreach ($tweetPluginUsagesArr as $t) {
-                    $name = FresnsService::getlanguageField('name', $t['id']);
+                    $name = FresnsService::getLanguageField('name', $t['id']);
                     $arr = [];
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
