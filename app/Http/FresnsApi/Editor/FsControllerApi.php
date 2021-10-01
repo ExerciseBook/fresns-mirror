@@ -1130,7 +1130,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
-                    // $arr['url']
+                    $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
                     // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
                     // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                     // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
@@ -1157,7 +1157,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
-                    // $arr['url']
+                    $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
                     // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
                     // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                     // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
@@ -1400,7 +1400,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
-                    // $arr['url']
+                    $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
                     // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
                     // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                     // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
@@ -1423,7 +1423,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
-                    // $arr['url']
+                    $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
                     // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
                     // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
                     // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
