@@ -987,7 +987,8 @@ class FsControllerApi extends FresnsBaseApiController
                 // Get storage service plugin upload page
                 $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
                 $unikey = FresnsPlugins::where('unikey', $imageService)->first();
-                $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                // $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $image['url'] = $this->service->replacePluginsUrl($unikey);
 
                 $image['extensions'] = ApiConfigHelper::getConfigByItemKey('images_ext');
                 if (empty($image['maxSize'])) {
@@ -1013,7 +1014,8 @@ class FsControllerApi extends FresnsBaseApiController
                 // Get storage service plugin upload page
                 $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
                 $unikey = FresnsPlugins::where('unikey', $imageService)->first();
-                $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                // $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $video['url'] = $this->service->replacePluginsUrl($unikey);
 
                 $video['extensions'] = ApiConfigHelper::getConfigByItemKey('videos_ext');
                 if (empty($video['maxSize'])) {
@@ -1043,7 +1045,9 @@ class FsControllerApi extends FresnsBaseApiController
                 // Get storage service plugin upload page
                 $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
                 $unikey = FresnsPlugins::where('unikey', $imageService)->first();
-                $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                // $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $audio['url'] = $this->service->replacePluginsUrl($unikey);
+                
 
                 $audio['extensions'] = ApiConfigHelper::getConfigByItemKey('audios_ext');
                 if (empty($audio['maxSize'])) {
@@ -1071,7 +1075,8 @@ class FsControllerApi extends FresnsBaseApiController
                 // Get storage service plugin upload page
                 $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
                 $unikey = FresnsPlugins::where('unikey', $imageService)->first();
-                $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                // $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $doc['url'] = $this->service->replacePluginsUrl($unikey);
 
                 $doc['extensions'] = ApiConfigHelper::getConfigByItemKey('docs_ext');
                 if (empty($doc['maxSize'])) {
@@ -1247,7 +1252,8 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
                 $unikey = FresnsPlugins::where('unikey', $imageService)->first();
-                $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                // $image['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $image['url'] = $this->service->replacePluginsUrl($unikey);
                 $image['extensions'] = ApiConfigHelper::getConfigByItemKey('images_ext');
                 if (empty($image['maxSize'])) {
                     $image['maxSize'] = ApiConfigHelper::getConfigByItemKey('images_max_size');
@@ -1270,7 +1276,8 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
                 $unikey = FresnsPlugins::where('unikey', $imageService)->first();
-                $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                // $video['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $video['url'] = $this->service->replacePluginsUrl($unikey);
                 $video['extensions'] = ApiConfigHelper::getConfigByItemKey('videos_ext');
                 if (empty($video['maxSize'])) {
                     $video['maxSize'] = ApiConfigHelper::getConfigByItemKey('videos_max_size');
@@ -1297,7 +1304,8 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
                 $unikey = FresnsPlugins::where('unikey', $imageService)->first();
-                $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                // $audio['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $audio['url'] = $this->service->replacePluginsUrl($unikey);
                 $audio['extensions'] = ApiConfigHelper::getConfigByItemKey('audios_ext');
                 if (empty($audio['maxSize'])) {
                     $audio['maxSize'] = ApiConfigHelper::getConfigByItemKey('audios_max_size');
@@ -1324,7 +1332,8 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
                 $unikey = FresnsPlugins::where('unikey', $imageService)->first();
-                $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                // $doc['url'] = ApiFileHelper::getPluginUsagesUrl($imageService, $unikey);
+                $doc['url'] = $this->service->replacePluginsUrl($unikey);
                 $doc['extensions'] = ApiConfigHelper::getConfigByItemKey('docs_ext');
                 if (empty($doc['maxSize'])) {
                     $doc['maxSize'] = ApiConfigHelper::getConfigByItemKey('docs_max_size');
