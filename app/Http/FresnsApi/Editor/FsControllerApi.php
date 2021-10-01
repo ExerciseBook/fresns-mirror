@@ -19,6 +19,7 @@ use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
+use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
@@ -1095,7 +1096,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
-                    $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
+                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
                     $arr['number'] = $t['editor_number'];
                     $list[] = $arr;
                 }
@@ -1120,7 +1121,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
-                    $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
+                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;
@@ -1328,7 +1329,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
-                    $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
+                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
                     $arr['number'] = $t['editor_number'];
                     $list[] = $arr;
                 }
@@ -1349,7 +1350,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $t['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
-                    $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
+                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;

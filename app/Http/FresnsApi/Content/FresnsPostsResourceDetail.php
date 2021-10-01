@@ -11,6 +11,7 @@ namespace App\Http\FresnsApi\Content;
 use App\Base\Resources\BaseAdminResource;
 use App\Helpers\DateHelper;
 use App\Http\Center\Common\GlobalService;
+use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
@@ -435,7 +436,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $name = FsService::getLanguageField('name', $FsPluginUsages['id']);
                 $manages['name'] = $name == null ? '' : $name['lang_content'];
                 $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsPluginUsages['icon_file_id'], $FsPluginUsages['icon_file_url']);
-                $manages['url'] = ApiFileHelper::getPluginUsagesUrl($FsPluginUsages['plugin_unikey'], $FsPluginUsages['id']);
+                $manages['url'] = ApiCommonHelper::getPluginUsagesUrl($FsPluginUsages['plugin_unikey'], $FsPluginUsages['id']);
                 // Is the group administrator dedicated
                 if ($FsPluginUsages['is_group_admin'] != 0) {
                     // Query whether the current member is a group administrator
