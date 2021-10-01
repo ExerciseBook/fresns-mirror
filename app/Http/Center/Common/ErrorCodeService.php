@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Fresns (https://fresns.cn)
  * Copyright (C) 2021-Present 唐杰
@@ -78,7 +79,7 @@ class ErrorCodeService
     const BALANCE_CLOSING_BALANCE_ERROR = 30228;
     const TO_USER_WALLETS_ERROR = 30229;
     const TO_BALANCE_CLOSING_BALANCE_ERROR = 30230;
-    
+
     // Member
     const MEMBER_FAIL = 30300;
     const MEMBER_ERROR = 30301;
@@ -171,7 +172,7 @@ class ErrorCodeService
     const COMMENT_REMOKE_ERROR = 30824;
     const CONTENT_AUTHOR_ERROR = 30825;
     const COMMENT_CREATE_ERROR = 30826;
-    
+
     // Editor Check Parameters
     const MEMBER_LIST_JSON_ERROR = 30900;
     const COMMENT_SET_JSON_ERROR = 30901;
@@ -365,7 +366,7 @@ class ErrorCodeService
         self::COMMENT_REMOKE_ERROR              => '当前评论并非审核状态，无需撤回',
         self::CONTENT_AUTHOR_ERROR              => '操作失败，请确认是作者本人',
         self::COMMENT_CREATE_ERROR              => '评论草稿创建失败，只有一级评论才能创建草稿',
-        
+
         // Editor Check Parameters
         self::MEMBER_LIST_JSON_ERROR            => 'memberListJson 格式错误或者数据异常',
         self::COMMENT_SET_JSON_ERROR            => 'commentSetJson 格式错误或者数据异常',
