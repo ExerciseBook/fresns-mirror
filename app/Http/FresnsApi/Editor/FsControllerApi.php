@@ -1088,8 +1088,8 @@ class FsControllerApi extends FresnsBaseApiController
                 $expand = [];
                 $expand['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_expand');
                 $list = [];
-                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%1%')->get()->toArray();
-                foreach ($tweetPluginUsagesArr as $t) {
+                $FsPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%1%')->get()->toArray();
+                foreach ($FsPluginUsagesArr as $t) {
                     $name = FresnsService::getLanguageField('name', $t['id']);
                     $arr = [];
                     $arr['plugin'] = $t['plugin_unikey'];
@@ -1113,8 +1113,8 @@ class FsControllerApi extends FresnsBaseApiController
                 $isLbs = [];
                 $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_lbs');
                 $maps = [];
-                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
-                foreach ($tweetPluginUsagesArr as $t) {
+                $FsPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
+                foreach ($FsPluginUsagesArr as $t) {
                     $name = FresnsService::getLanguageField('name', $t['id']);
                     $arr = [];
                     $arr['plugin'] = $t['plugin_unikey'];
@@ -1321,8 +1321,8 @@ class FsControllerApi extends FresnsBaseApiController
                 $expand = [];
                 $expand['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_expand');
                 $list = [];
-                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%2%')->get()->toArray();
-                foreach ($tweetPluginUsagesArr as $t) {
+                $FsPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%2%')->get()->toArray();
+                foreach ($FsPluginUsagesArr as $t) {
                     $name = FresnsService::getLanguageField('name', $t['id']);
                     $arr = [];
                     $arr['plugin'] = $t['plugin_unikey'];
@@ -1342,8 +1342,8 @@ class FsControllerApi extends FresnsBaseApiController
                 $isLbs = [];
                 $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_lbs');
                 $maps = [];
-                $tweetPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
-                foreach ($tweetPluginUsagesArr as $t) {
+                $FsPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
+                foreach ($FsPluginUsagesArr as $t) {
                     $name = FresnsService::getLanguageField('name', $t['id']);
                     $arr = [];
                     $arr['plugin'] = $t['plugin_unikey'];
