@@ -977,16 +977,9 @@ class FsControllerApi extends FresnsBaseApiController
                 $image['status'] = $postEditorImage;
                 $image['maxSizze'] = "";
                 if($postEditorImage){
-                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
-                    if($memberRoleInfo){
-                        foreach($memberRoleInfo['permission'] as $m){
-                            if($m['permKey'] == 'post_editor_image'){
-                                $image['status'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'images_max_size'){
-                                $image['maxSize'] = $m['permValue'];
-                            }
-                        }
+                    if($permissionMap){
+                        $image['status'] = $permissionMap['post_editor_image'];
+                        $image['maxSize'] = $permissionMap['images_max_size'];
                     }
                 }
                 // Get storage service plugin upload page
@@ -1008,19 +1001,10 @@ class FsControllerApi extends FresnsBaseApiController
                 $video['maxSize'] = "";
                 $video['maxTime'] = "";
                 if($postEditorVideo){
-                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
-                    if($memberRoleInfo){
-                        foreach($memberRoleInfo['permission'] as $m){
-                            if($m['permKey'] == 'post_editor_video'){
-                                $video['status'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'videos_max_size'){
-                                $video['maxSize'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'videos_max_time'){
-                                $video['maxTime'] = $m['permValue'];
-                            }
-                        }
+                    if($permissionMap){
+                        $video['status'] = $permissionMap['post_editor_video'];
+                        $video['maxSize'] = $permissionMap['videos_max_size'];
+                        $video['maxTime'] = $permissionMap['videos_max_time'];
                     }
                 }
                 // Get storage service plugin upload page
@@ -1045,19 +1029,11 @@ class FsControllerApi extends FresnsBaseApiController
                 $audio['maxSize'] = "";
                 $audio['maxTime'] = "";
                 if($postEditorVideo){
-                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
-                    if($memberRoleInfo){
-                        foreach($memberRoleInfo['permission'] as $m){
-                            if($m['permKey'] == 'post_editor_audio'){
-                                $audio['status'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'audios_max_size'){
-                                $audio['maxSize'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'audios_max_time'){
-                                $audio['maxTime'] = $m['permValue'];
-                            }
-                        }
+
+                    if($permissionMap){
+                        $audio['status'] = $permissionMap['post_editor_audio'];
+                        $audio['maxSize'] = $permissionMap['audios_max_size'];
+                        $audio['maxTime'] = $permissionMap['audios_max_time'];
                     }
                 }
                 // Get storage service plugin upload page
@@ -1082,16 +1058,10 @@ class FsControllerApi extends FresnsBaseApiController
                 $doc['maxSize'] = "";
                 $doc['maxTime'] = "";
                 if($postEditorVideo){
-                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
-                    if($memberRoleInfo){
-                        foreach($memberRoleInfo['permission'] as $m){
-                            if($m['permKey'] == 'post_editor_doc'){
-                                $doc['status'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'docs_max_size'){
-                                $doc['maxSize'] = $m['permValue'];
-                            }
-                        }
+                    if($permissionMap){
+                        $doc['status'] = $permissionMap['post_editor_doc'];
+                        $doc['maxSize'] = $permissionMap['docs_max_size'];
+                        $doc['maxTime'] = $permissionMap['docs_max_time'] ?? false;
                     }
                 }
                 // Get storage service plugin upload page
@@ -1265,16 +1235,9 @@ class FsControllerApi extends FresnsBaseApiController
                 $image['status'] = $commentEditorImage;
                 $image['maxSizze'] = "";
                 if($commentEditorImage){
-                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
-                    if($memberRoleInfo){
-                        foreach($memberRoleInfo['permission'] as $m){
-                            if($m['permKey'] == 'comment_editor_image '){
-                                $image['status'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'images_max_size'){
-                                $image['maxSize'] = $m['permValue'];
-                            }
-                        }
+                    if($permissionMap){
+                        $image['status'] = $permissionMap['comment_editor_image'] ?? false;
+                        $image['maxSize'] = $permissionMap['images_max_size'];
                     }
                 }
                 $imageService = ApiConfigHelper::getConfigByItemKey('images_service');
@@ -1293,19 +1256,10 @@ class FsControllerApi extends FresnsBaseApiController
                 $video['maxSize'] = "";
                 $video['maxTime'] = "";
                 if($commentEditorVideo){
-                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
-                    if($memberRoleInfo){
-                        foreach($memberRoleInfo['permission'] as $m){
-                            if($m['permKey'] == 'comment_editor_video'){
-                                $video['status'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'videos_max_size'){
-                                $video['maxSize'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'videos_max_time'){
-                                $video['maxTime'] = $m['permValue'];
-                            }
-                        }
+                    if($permissionMap){
+                        $video['status'] = $permissionMap['comment_editor_video'] ?? false;
+                        $video['maxSize'] = $permissionMap['videos_max_size'];
+                        $video['maxTime'] = $permissionMap['videos_max_time'];
                     }
                 }
                 $imageService = ApiConfigHelper::getConfigByItemKey('videos_service');
@@ -1327,19 +1281,10 @@ class FsControllerApi extends FresnsBaseApiController
                 $audio['maxSize'] = "";
                 $audio['maxTime'] = "";
                 if($commentEditorVideo){
-                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
-                    if($memberRoleInfo){
-                        foreach($memberRoleInfo['permission'] as $m){
-                            if($m['permKey'] == 'comment_editor_audio'){
-                                $audio['status'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'audios_max_size'){
-                                $audio['maxSize'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'audios_max_time'){
-                                $audio['maxTime'] = $m['permValue'];
-                            }
-                        }
+                    if($permissionMap){
+                        $audio['status'] = $permissionMap['comment_editor_audio'] ?? false;
+                        $audio['maxSize'] = $permissionMap['audios_max_size'];
+                        $audio['maxTime'] = $permissionMap['audios_max_time'];
                     }
                 }
                 $imageService = ApiConfigHelper::getConfigByItemKey('audios_service');
@@ -1361,16 +1306,10 @@ class FsControllerApi extends FresnsBaseApiController
                 $doc['maxSize'] = "";
                 $doc['maxTime'] = "";
                 if($postEditorVideo){
-                    $memberRoleInfo = FresnsMemberRoles::find($roleId);
-                    if($memberRoleInfo){
-                        foreach($memberRoleInfo['permission'] as $m){
-                            if($m['permKey'] == 'comment_editor_doc'){
-                                $doc['status'] = $m['permValue'];
-                            }
-                            if($m['permKey'] == 'docs_max_size'){
-                                $doc['maxSize'] = $m['permValue'];
-                            }
-                        }
+                    if($permissionMap){
+                        $doc['status'] = $permissionMap['comment_editor_doc'] ?? false;
+                        $doc['maxSize'] = $permissionMap['docs_max_size'];
+                        $doc['maxTime'] = $permissionMap['docs_max_time'] ?? false;
                     }
                 }
                 $imageService = ApiConfigHelper::getConfigByItemKey('docs_service');
