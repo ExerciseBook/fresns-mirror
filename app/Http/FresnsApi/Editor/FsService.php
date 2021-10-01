@@ -604,16 +604,4 @@ class FsService
 
         return false;
     }
-
-    //替换参数
-    public function replacePluginsUrl($unikey)
-    {
-        if(!empty($unikey['plugin_domain'])){
-            $backend_domain = $unikey['plugin_domain'];
-        } else {
-            $backend_domain = ApiConfigHelper::getConfigByItemKey('backend_domain');
-        }
-
-        return $backend_domain . $unikey['access_path'];
-    }
 }
