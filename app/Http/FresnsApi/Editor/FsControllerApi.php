@@ -511,13 +511,12 @@ class FsControllerApi extends FresnsBaseApiController
 
             $paramsExist = false;
 
-            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value',
-                'item_key')->toArray();
+            $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value', 'item_key')->toArray();
             $paramsExist = ValidateService::validParamExist($configMapInDB,
                 ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
 
             if ($paramsExist == false) {
-                LogService::error('插件信息未配置');
+                LogService::error('Plugin not found');
                 FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
                 $this->error(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
@@ -1131,9 +1130,6 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
                     $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
-                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
-                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
-                    // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
                     $arr['number'] = $t['editor_number'];
                     $list[] = $arr;
                 }
@@ -1158,9 +1154,6 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
                     $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
-                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
-                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
-                    // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;
@@ -1401,9 +1394,6 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
                     $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
-                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
-                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
-                    // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
                     $arr['number'] = $t['editor_number'];
                     $list[] = $arr;
                 }
@@ -1424,9 +1414,6 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = $t['icon_file_url'];
                     $arr['url'] = ApiFileHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
-                    // 插件完整的 URL 地址，由域名字段 plugin_domain 加路径字段 access_path 拼接完成
-                    // 当 plugin_domain 为空时，与后端地址（配置表键名 backend_domain）拼接成完整 URL 地址
-                    // 如果地址有 {parameter} 变量名，使用该记录 plugin_usages > parameter 字段值替换
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;
