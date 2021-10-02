@@ -161,14 +161,14 @@ class ErrorCodeService
     const DELETE_EXTEND_ERROR = 30814;
 
     // Editor
-    const POST_STATUS_2_ERROR = 30815;
-    const POST_STATUS_3_ERROR = 30816;
-    const COMMENT_STATUS_2_ERROR = 30817;
-    const COMMENT_STATUS_3_ERROR = 30818;
-    const POST_SUBMIT_STATUS_2_ERROR = 30819;
-    const POST_SUBMIT_STATUS_3_ERROR = 30820;
-    const COMMENT_SUBMIT_STATUS_2_ERROR = 30821;
-    const COMMENT_SUBMIT_STATUS_3_ERROR = 30822;
+    const POST_STATE_2_ERROR = 30815;
+    const POST_STATE_3_ERROR = 30816;
+    const COMMENT_STATE_2_ERROR = 30817;
+    const COMMENT_STATE_3_ERROR = 30818;
+    const POST_SUBMIT_STATE_2_ERROR = 30819;
+    const POST_SUBMIT_STATE_3_ERROR = 30820;
+    const COMMENT_SUBMIT_STATE_2_ERROR = 30821;
+    const COMMENT_SUBMIT_STATE_3_ERROR = 30822;
     const POST_REMOKE_ERROR = 30823;
     const COMMENT_REMOKE_ERROR = 30824;
     const CONTENT_AUTHOR_ERROR = 30825;
@@ -356,14 +356,14 @@ class ErrorCodeService
         self::DELETE_EXTEND_ERROR               => '该扩展内容有其他人使用，不允许删除',
 
         // Editor
-        self::POST_STATUS_2_ERROR               => '帖子审核中不可编辑',
-        self::POST_STATUS_3_ERROR               => '帖子已正式发表不可编辑',
-        self::COMMENT_STATUS_2_ERROR            => '评论审核中不可编辑',
-        self::COMMENT_STATUS_3_ERROR            => '评论已正式发表不可编辑',
-        self::POST_SUBMIT_STATUS_2_ERROR        => '处于审核状态的帖子不可再提交',
-        self::POST_SUBMIT_STATUS_3_ERROR        => '处于发布状态的帖子不可再提交',
-        self::COMMENT_SUBMIT_STATUS_2_ERROR     => '处于审核状态的评论不可再提交',
-        self::COMMENT_SUBMIT_STATUS_3_ERROR     => '处于发布状态的评论不可再提交',
+        self::POST_STATE_2_ERROR                => '帖子审核中不可编辑',
+        self::POST_STATE_3_ERROR                => '帖子已正式发表不可编辑',
+        self::COMMENT_STATE_2_ERROR             => '评论审核中不可编辑',
+        self::COMMENT_STATE_3_ERROR             => '评论已正式发表不可编辑',
+        self::POST_SUBMIT_STATE_2_ERROR         => '处于审核状态的帖子不可再提交',
+        self::POST_SUBMIT_STATE_3_ERROR         => '处于发布状态的帖子不可再提交',
+        self::COMMENT_SUBMIT_STATE_2_ERROR      => '处于审核状态的评论不可再提交',
+        self::COMMENT_SUBMIT_STATE_3_ERROR      => '处于发布状态的评论不可再提交',
         self::POST_REMOKE_ERROR                 => '当前帖子并非审核状态，无需撤回',
         self::COMMENT_REMOKE_ERROR              => '当前评论并非审核状态，无需撤回',
         self::CONTENT_AUTHOR_ERROR              => '操作失败，请确认是作者本人',

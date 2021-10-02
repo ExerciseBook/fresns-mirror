@@ -93,8 +93,8 @@ class FresnsCommentLogsResourceDetail extends BaseAdminResource
             'isAnonymous' => $this->is_anonymous,
             'isPluginEdit' => $this->is_plugin_edit,
             'pluginUnikey' => $this->plugin_unikey,
-            // 'editor' => json_decode($this->editor_json,true),
-            'location' => json_decode($this->location_json, true) ?? [],
+            'editor' => json_decode($this->editor_json,true) ?? null,
+            'location' => json_decode($this->location_json, true) ?? null,
             'files' => json_decode($this->files_json, true) ?? [],
             'extends' => $extends,
         ];

@@ -119,13 +119,11 @@ class FresnsPostsService extends FsService
             'content' => $contentBrief,
             'is_anonymous' => $draftPost['is_anonymous'],
             'is_brief' => $is_brief,
-            // 'status' => 3,
             'is_allow' => $is_allow,
             'is_lbs' => $isLbs,
             'map_id' => $mapId,
             'map_latitude' => $latitude,
             'map_longitude' => $longitude,
-            // 'release_at'  => date('Y-m-d H:i:s'),
             'more_json' => json_encode($more_json),
         ];
         $postId = (new FresnsPosts())->store($postInput);
@@ -619,7 +617,7 @@ class FresnsPostsService extends FsService
         $content = $this->stopWords($draftPost['content']);
 
         // Log updated to published
-        FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId, 'content' => $content]);
+        FresnsPostLogs::where('id', $draftId)->update(['state' => 3, 'post_id' => $postId, 'content' => $content]);
         // Add stats: groups > post_count
         FresnsGroups::where('id', $draftPost['group_id'])->increment('post_count');
         // Notification
@@ -648,7 +646,7 @@ class FresnsPostsService extends FsService
         $content = $this->stopWords($draftPost['content']);
 
         // Log updated to published
-        FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId, 'content' => $content]);
+        FresnsPostLogs::where('id', $draftId)->update(['state' => 3, 'post_id' => $postId, 'content' => $content]);
         // Add stats: groups > post_count
         FresnsGroups::where('id', $draftPost['group_id'])->increment('post_count');
         // Add stats: post_appends > edit_count
@@ -987,7 +985,7 @@ class FresnsPostsService extends FsService
     public function parseToReview($draftId)
     {
         // post
-        FresnsPostLogs::where('id', $draftId)->update(['status' => 2, 'submit_at' => date('Y-m-d H:i:s')]);
+        FresnsPostLogs::where('id', $draftId)->update(['state' => 2, 'submit_at' => date('Y-m-d H:i:s')]);
 
         return true;
     }
