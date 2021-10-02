@@ -202,8 +202,8 @@ class FresnsPostsService extends FsService
     {
         $draftPost = FresnsPostLogs::find($draftId);
         // Editor Config
-        $pluginEdit = $draftPost['is_plugin_edit'];
-        $pluginUnikey = $draftPost['plugin_unikey'];
+        $isPluginEditor = $draftPost['is_plugin_editor'];
+        $editorUnikey = $draftPost['editor_unikey'];
 
         // Specific members config
         $member_list_json = $draftPost['member_list_json'];
@@ -363,8 +363,8 @@ class FresnsPostsService extends FsService
             'platform_id' => $draftPost['platform_id'],
             'content' => $content,
             'is_markdown' => $draftPost['is_markdown'],
-            'is_plugin_edit' => $pluginEdit,
-            'plugin_unikey' => $pluginUnikey,
+            'is_plugin_editor' => $isPluginEditor,
+            'editor_unikey' => $editorUnikey,
             'comment_btn_status' => $commentBtnStatus,
             'comment_btn_plugin_unikey' => $commentPluginUnikey,
             'comment_btn_name' => json_encode($commentBtnName),
@@ -394,8 +394,8 @@ class FresnsPostsService extends FsService
     {
         $draftPost = FresnsPostLogs::find($draftId);
         // Editor Config
-        $pluginEdit = $draftPost['is_plugin_edit'];
-        $pluginUnikey = $draftPost['plugin_unikey'];
+        $isPluginEditor = $draftPost['is_plugin_editor'];
+        $editorUnikey = $draftPost['editor_unikey'];
         // Specific members config
         $member_list_json = $draftPost['member_list_json'];
         $member_list_name = [];
@@ -576,8 +576,8 @@ class FresnsPostsService extends FsService
             'platform_id' => $draftPost['platform_id'],
             'content' => $content,
             'is_markdown' => $draftPost['is_markdown'],
-            'is_plugin_edit' => $pluginEdit,
-            'plugin_unikey' => $pluginUnikey,
+            'is_plugin_editor' => $isPluginEditor,
+            'editor_unikey' => $editorUnikey,
             'comment_btn_status' => $commentBtnStatus,
             'comment_btn_plugin_unikey' => $commentPluginUnikey,
             'comment_btn_name' => json_encode($commentBtnName),

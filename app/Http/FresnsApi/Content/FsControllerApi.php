@@ -306,8 +306,8 @@ class FsControllerApi extends FresnsBaseApiController
                 $detail['detail'] = [];
             }
         }
-        $shieldshashtags = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 3)->where('deleted_at', null)->pluck('shield_id')->toArray();
-        $noPostHashtags = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('deleted_at', null)->whereIn('hashtag_id', $shieldshashtags)->pluck('linked_id')->toArray();
+        $hashtagShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 3)->where('deleted_at', null)->pluck('shield_id')->toArray();
+        $noPostHashtags = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('deleted_at', null)->whereIn('hashtag_id', $hashtagShields)->pluck('linked_id')->toArray();
         if (in_array($detail['detail']['id'], $noPostHashtags)) {
             $detail['detail'] = [];
         }
@@ -688,8 +688,8 @@ class FsControllerApi extends FresnsBaseApiController
         // Filter the posts of blocked objects (members, groups, hashtags, posts), and the posts of blocked objects are not output.
         $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 1)->where('deleted_at', null)->pluck('shield_id')->toArray();
         $GroupShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 2)->where('deleted_at', null)->pluck('shield_id')->toArray();
-        $shieldshashtags = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 3)->where('deleted_at', null)->pluck('shield_id')->toArray();
-        $noPostHashtags = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $shieldshashtags)->pluck('linked_id')->toArray();
+        $hashtagShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 3)->where('deleted_at', null)->pluck('shield_id')->toArray();
+        $noPostHashtags = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $hashtagShields)->pluck('linked_id')->toArray();
         $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 4)->where('deleted_at', null)->pluck('shield_id')->toArray();
         $postArr2 = FresnsPosts::whereNotIn('group_id', $noGroupArr)->whereNotIn('member_id', $memberShields)->whereNotIn('group_id', $GroupShields)->whereNotIn('id', $noPostHashtags)->whereNotIn('id', $commentShields)->pluck('id')->toArray();
         $idArr = array_intersect($postArr1, $postArr2);

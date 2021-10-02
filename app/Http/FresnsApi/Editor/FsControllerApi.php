@@ -142,7 +142,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $request->offsetSet('id', $postLogId);
                 $request->offsetUnset('type');
                 $FresnsPostLogsService->setResource(FresnsPostLogsResourceDetail::class);
-                $list = $FresnsPostLogsService->searchData();
+                $detail = $FresnsPostLogsService->searchData();
                 break;
             // type=2
             default:
@@ -195,11 +195,11 @@ class FsControllerApi extends FresnsBaseApiController
                 $request->offsetSet('id', $commentLogId);
                 $request->offsetUnset('type');
                 $FresnsCommentLogsService->setResource(FresnsCommentLogsResourceDetail::class);
-                $list = $FresnsCommentLogsService->searchData();
+                $detail = $FresnsCommentLogsService->searchData();
                 break;
         }
         $data = [
-            'detail' => $list['list'],
+            'detail' => $detail['list'][0] ?? null,
         ];
         $this->success($data);
     }
@@ -223,19 +223,19 @@ class FsControllerApi extends FresnsBaseApiController
                 $request->offsetUnset('type');
                 $request->offsetSet('member_id', $mid);
                 $FresnsPostLogsService->setResource(FresnsPostLogsResourceDetail::class);
-                $list = $FresnsPostLogsService->searchData();
+                $detail = $FresnsPostLogsService->searchData();
                 break;
             default:
                 $FresnsCommentLogsService = new FresnsCommentLogsService();
                 $request->offsetUnset('type');
                 $request->offsetSet('member_id', $mid);
                 $FresnsCommentLogsService->setResource(FresnsCommentLogsResourceDetail::class);
-                $list = $FresnsCommentLogsService->searchData();
+                $detail = $FresnsCommentLogsService->searchData();
                 break;
         }
 
         $data = [
-            'detail' => $list['list'][0] ?? null,
+            'detail' => $detail['list'][0] ?? null,
         ];
         $this->success($data);
     }
