@@ -251,11 +251,8 @@ class FresnsCommentsService extends FsService
             'content' => $contentBrief,
             'is_brief' => $is_brief,
             'parent_id' => $commentCid,
-            // 'is_markdown' => $draftComment['is_markdown'],
             'is_anonymous' => $draftComment['is_anonymous'],
-            // 'status' => 3,
             'is_lbs' => $isLbs,
-            // 'release_at'  => date('Y-m-d H:i:s'),
             'more_json' => json_encode($more_json),
         ];
         LogService::info('postInput', $postInput);
@@ -469,7 +466,7 @@ class FresnsCommentsService extends FsService
         $content = $this->stopWords($draftComment['content']);
 
         // Log updated to published
-        FresnsCommentLogs::where('id', $draftId)->update(['status' => 3, 'comment_id' => $commentId, 'content' => $content]);
+        FresnsCommentLogs::where('id', $draftId)->update(['state' => 3, 'comment_id' => $commentId, 'content' => $content]);
         // Notification
         $this->sendAtMessages($commentId, $draftId);
         $this->sendCommentMessages($commentId, $draftId);
@@ -497,7 +494,7 @@ class FresnsCommentsService extends FsService
         $content = $this->stopWords($draftComment['content']);
 
         // Log updated to published
-        FresnsCommentLogs::where('id', $draftId)->update(['status' => 3, 'content'=> $content]);
+        FresnsCommentLogs::where('id', $draftId)->update(['state' => 3, 'content'=> $content]);
         FresnsCommentAppends::where('comment_id', $commentId)->increment('edit_count');
         // Notification
         $this->sendAtMessages($commentId, $draftId, 2);

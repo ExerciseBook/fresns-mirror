@@ -17,7 +17,6 @@ class FsConfig extends BaseConfig
 
     // Additional search columns in the main table
     const ADDED_SEARCHABLE_FIELDS = [
-        'inStatus' => ['field' => 'status', 'op' => 'IN'],
         'logId' => ['field' => 'id', 'op' => '='],
         'ids' => ['field' => 'id', 'op' => 'IN'],
         'post_id' => ['field' => 'post_id', 'op' => '='],
@@ -42,7 +41,7 @@ class FsConfig extends BaseConfig
         'location_json' => 'location_json',
         'files_json' => 'files_json',
         'extends_json' => 'extends_json',
-        'status' => 'status',
+        'state' => 'state',
         'reason' => 'reason',
         'submit_at' => 'submit_at',
     ];
