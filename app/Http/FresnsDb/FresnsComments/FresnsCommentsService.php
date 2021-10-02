@@ -259,7 +259,7 @@ class FresnsCommentsService extends FsService
 
         // $commentId = DB::table('comments')->insertGetId($postInput);
         $commentId = (new FresnsComments())->store($postInput);
-        $AppendStore = $this->postAppendStore($commentId, $draftId);
+        $AppendStore = $this->commentAppendStore($commentId, $draftId);
         if ($AppendStore) {
             FresnsSessionLogs::where('id', $sessionLodsId)->update([
                 'object_result' => 2,
@@ -320,12 +320,12 @@ class FresnsCommentsService extends FsService
     }
 
     // comment_appends (add)
-    public function postAppendStore($commentId, $draftId)
+    public function commentAppendStore($commentId, $draftId)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
         // Editor Config
-        $pluginEdit = $draftComment['is_plugin_edit'];
-        $pluginUnikey = $draftComment['plugin_unikey'];
+        $isPluginEditor = $draftComment['is_plugin_editor'];
+        $editorUnikey = $draftComment['editor_unikey'];
         // Location Config
         $locationJson = json_decode($draftComment['location_json'], true);
         $mapId = $locationJson['mapId'] ?? null;
@@ -365,8 +365,8 @@ class FresnsCommentsService extends FsService
             'platform_id' => $draftComment['platform_id'],
             'content' => $content,
             'is_markdown' => $draftComment['is_markdown'],
-            'is_plugin_edit' => $pluginEdit,
-            'plugin_unikey' => $pluginUnikey,
+            'is_plugin_editor' => $isPluginEditor,
+            'editor_unikey' => $editorUnikey,
             'map_id' => $mapId,
             'map_latitude' => $latitude,
             'map_longitude' => $longitude,
@@ -390,8 +390,8 @@ class FresnsCommentsService extends FsService
     {
         $draftComment = FresnsCommentLogs::find($draftId);
         // Editor Config
-        $pluginEdit = $draftComment['is_plugin_edit'];
-        $pluginUnikey = $draftComment['plugin_unikey'];
+        $isPluginEditor = $draftComment['is_plugin_editor'];
+        $editorUnikey = $draftComment['editor_unikey'];
         // Location Config
         $locationJson = json_decode($draftComment['location_json'], true);
         $mapId = $locationJson['mapId'] ?? null;
@@ -431,8 +431,8 @@ class FresnsCommentsService extends FsService
         $commentAppendInput = [
             'platform_id' => $draftComment['platform_id'],
             'content' => $content,
-            'is_plugin_edit' => $pluginEdit,
-            'plugin_unikey' => $pluginUnikey,
+            'is_plugin_editor' => $isPluginEditor,
+            'editor_unikey' => $editorUnikey,
             'map_id' => $mapId,
             'map_latitude' => $latitude,
             'map_longitude' => $longitude,

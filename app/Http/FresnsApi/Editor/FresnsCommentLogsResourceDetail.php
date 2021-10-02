@@ -15,6 +15,7 @@ use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtends;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtendsConfig;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 
@@ -86,17 +87,17 @@ class FresnsCommentLogsResourceDetail extends BaseAdminResource
         // Default Field
         $default = [
             'id' => $this->id,
-            'cid' => $commentInfo['uuid'] ?? '',
+            'cid' => $commentInfo['uuid'] ?? null,
+            'isPluginEditor' => $this->is_plugin_editor,
+            'editorUrl' => FresnsPluginsService::getPluginUrlByUnikey($this->editor_unikey),
             'types' => $this->types,
             'content' => $this->content,
             'isMarkdown' => $this->is_markdown,
             'isAnonymous' => $this->is_anonymous,
-            'isPluginEdit' => $this->is_plugin_edit,
-            'pluginUnikey' => $this->plugin_unikey,
-            'editor' => json_decode($this->editor_json,true) ?? null,
             'location' => json_decode($this->location_json, true) ?? null,
             'files' => json_decode($this->files_json, true) ?? [],
             'extends' => $extends,
+            'state' => $this->state,
         ];
 
         return $default;

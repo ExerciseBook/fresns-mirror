@@ -668,7 +668,7 @@ class FsChecker extends BaseChecker
         if ($pluginUnikey) {
             $pluginCount = FresnsPlugins::Where('unikey', $pluginUnikey)->where('is_enable', 1)->count();
             if ($pluginCount == 0) {
-                return self::checkInfo(ErrorCodeService::PLUGIN_ERROR);
+                return self::checkInfo(ErrorCodeService::PLUGINS_CLASS_ERROR);
             }
         }
         // Site mode verification
