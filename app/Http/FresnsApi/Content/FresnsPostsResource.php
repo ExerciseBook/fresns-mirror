@@ -136,8 +136,8 @@ class FresnsPostsResource extends BaseAdminResource
             $noAllow = 1;
         }
         $brief = $this->is_brief;
-        $sticky = $this->sticky_status;
-        $essence = $this->essence_status;
+        $sticky = $this->sticky_state;
+        $essence = $this->essence_state;
 
         // Operation behavior status
         $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 4)->where('like_id', $this->id)->count();
@@ -562,13 +562,13 @@ class FresnsPostsResource extends BaseAdminResource
                 $postEdit = false;
             }
             // Post top edit permission
-            if ($this->sticky_status != 0) {
+            if ($this->sticky_state != 0) {
                 if (! $editSticky) {
                     $postEdit = false;
                 }
             }
             // Post editing privileges after adding essence
-            if ($this->essence_status != 0) {
+            if ($this->essence_state != 0) {
                 if (! $editEssence) {
                     $postEdit = false;
                 }
@@ -865,19 +865,19 @@ class FresnsPostsResource extends BaseAdminResource
             // Posts by following hashtags
             $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
             $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
-            $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
+            $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_state', '!=', 1)->pluck('id')->toArray();
             if (in_array($id, $postHashtagIdArr)) {
                 $followType = 'hashtag';
             }
             // Posts by following groups
             $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
-            $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
+            $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_state', '!=', 1)->pluck('id')->toArray();
             if (in_array($id, $postGroupIdArr)) {
                 $followType = 'group';
             }
             // Only posts that have been added to the essence are exported under groups and hashtags
             // Posts set as secondary essence, forced output
-            $essenceIdArr = FresnsPosts::where('essence_status', 3)->pluck('id')->toArray();
+            $essenceIdArr = FresnsPosts::where('essence_state', 3)->pluck('id')->toArray();
             if (in_array($id, $essenceIdArr)) {
                 $followType = 'group';
             }

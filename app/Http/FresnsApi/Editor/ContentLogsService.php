@@ -623,7 +623,7 @@ class ContentLogsService
             'file_mime' => $uploadFile->getMimeType(),
             'file_size' => $uploadFile->getSize(),
             'platform_id' => $platformId,
-            'transcoding_status' => 1,
+            'transcoding_state' => 1,
             'user_id' => $uid,
             'member_id' => $mid,
             // 'file_original_path' => Storage::url($path),
@@ -691,7 +691,7 @@ class ContentLogsService
                 $append['video_cover'] = empty($v['videoCover']) ? null : $v['videoCover'];
                 $append['video_gif'] = empty($v['videoGif']) ? null : $v['videoGif'];
                 $append['audio_time'] = empty($v['audioTime']) ? null : $v['audioTime'];
-                $append['transcoding_status'] = empty($v['transcodingStatus']) ? 1 : $v['transcodingStatus'];
+                $append['transcoding_state'] = empty($v['transcodingState']) ? 1 : $v['transcodingState'];
                 $append['platform_id'] = $platformId;
                 FresnsFileAppends::insert($append);
             }
@@ -742,7 +742,7 @@ class ContentLogsService
                 if ($type == 3) {
                     $item['audioTime'] = $append['audio_time'] ?? '';
                     $item['audioUrl'] = $audiosHost.$file['file_path'];
-                    $item['transcodingStatus'] = $append['transcoding_status'];
+                    $item['transcodingState'] = $append['transcoding_state'];
                 }
                 if ($type == 4) {
                     $item['docUrl'] = $docsHost.$file['file_path'];

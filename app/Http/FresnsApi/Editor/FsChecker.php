@@ -253,14 +253,14 @@ class FsChecker extends BaseChecker
                         }
                         $post_edit_sticky = ApiConfigHelper::getConfigByItemKey('post_edit_sticky');
                         // Determine edit permissions after post topping
-                        if ($posts['sticky_status'] != 1) {
+                        if ($posts['sticky_state'] != 1) {
                             if ($post_edit_sticky == false) {
                                 return self::checkInfo(ErrorCodeService::EDIT_STICKY_ERROR);
                             }
                         }
                         $post_edit_essence = ApiConfigHelper::getConfigByItemKey('post_edit_essence');
                         // Determine the editing permissions after the post is refined
-                        if ($posts['essence_status'] != 1) {
+                        if ($posts['essence_state'] != 1) {
                             if ($post_edit_essence == false) {
                                 return self::checkInfo(ErrorCodeService::EDIT_ESSENCE_ERROR);
                             }
