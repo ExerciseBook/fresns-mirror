@@ -211,11 +211,13 @@ class FsControllerApi extends FresnsBaseApiController
     {
         $rule = [
             'type' => 'required|in:1,2',
+            'logId' => 'required'
         ];
         ValidateService::validateRule($request, $rule);
 
         $mid = GlobalService::getGlobalKey('member_id');
         $type = $request->input('type');
+        // $logId = $request->input('logId');
 
         switch ($type) {
             case '1':
@@ -236,8 +238,9 @@ class FsControllerApi extends FresnsBaseApiController
                 $list = $FresnsCommentLogsService->searchData();
                 break;
         }
+
         $data = [
-            'detail' => $list['list'],
+            'detail' => $list['list'][0] ?? null,
         ];
         $this->success($data);
     }
