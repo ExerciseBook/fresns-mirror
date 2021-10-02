@@ -119,7 +119,6 @@ class ApiCommonHelper
         } else {
             $url = $plugin['plugin_domain'].$uri;
         }
-        $url = self::getImageSignUrl($url);
 
         return $url;
     }
