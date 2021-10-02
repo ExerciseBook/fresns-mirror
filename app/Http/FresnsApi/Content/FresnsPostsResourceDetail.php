@@ -129,8 +129,8 @@ class FresnsPostsResourceDetail extends BaseAdminResource
             $noAllow = 1;
         }
         $brief = $this->is_brief;
-        $sticky = $this->sticky_status;
-        $essence = $this->essence_status;
+        $sticky = $this->sticky_state;
+        $essence = $this->essence_state;
 
         // Operation behavior status
         $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 4)->where('like_id', $this->id)->count();
@@ -491,13 +491,13 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $postEdit = false;
             }
             // Post top edit permission
-            if ($this->sticky_status != 0) {
+            if ($this->sticky_state != 0) {
                 if (! $editSticky) {
                     $postEdit = false;
                 }
             }
             // Post editing privileges after adding essence
-            if ($this->essence_status != 0) {
+            if ($this->essence_state != 0) {
                 if (! $editEssence) {
                     $postEdit = false;
                 }

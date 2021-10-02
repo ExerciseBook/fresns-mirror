@@ -588,15 +588,15 @@ class FsControllerApi extends FresnsBaseApiController
                 // Only posts that have been added to the essence are exported under groups and hashtags
                 // $folloGroupArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',2)->pluck('follow_id')->toArray();
                 $folloGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->where('deleted_at', null)->pluck('follow_id')->toArray();
-                $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
+                $postGroupIdArr = FresnsPosts::whereIn('group_id', $folloGroupArr)->where('essence_state', '!=', 1)->pluck('id')->toArray();
 
                 // $folloHashtagArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',3)->pluck('follow_id')->toArray();
                 $folloHashtagArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 3)->where('deleted_at', null)->pluck('follow_id')->toArray();
                 $postIdArr = FresnsHashtagLinkeds::where('linked_type', 1)->whereIn('hashtag_id', $folloHashtagArr)->pluck('linked_id')->toArray();
-                $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_status', '!=', 1)->pluck('id')->toArray();
+                $postHashtagIdArr = FresnsPosts::whereIn('id', $postIdArr)->where('essence_state', '!=', 1)->pluck('id')->toArray();
 
                 // Posts set as secondary essence, forced output
-                $essenceIdArr = FresnsPosts::where('essence_status', 3)->pluck('id')->toArray();
+                $essenceIdArr = FresnsPosts::where('essence_state', 3)->pluck('id')->toArray();
                 $idArr = array_merge($mePostsArr, $postMemberIdArr, $postGroupIdArr, $postHashtagIdArr, $essenceIdArr);
                 $ids = implode(',', $idArr);
                 break;
