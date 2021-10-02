@@ -37,6 +37,19 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 | 排序规则 | utf8mb4_0900_ai_ci |
 | 存储引擎 | InnoDB |
 
+## 使用说明
+
+本仓库为研发代码仓库，没有 Vendor 引用库文件，如果使用本仓库代码包安装，需要基于命令行执行 Composer 命令安装 Vendor 引用库文件。
+
+- 1、下载本仓库发行版代码包，上传到业务服务器解压；
+- 2、在「主程序根目录」执行命令行 `composer install`；
+    - 请先确保服务器已经安装 [Composer](https://github.com/composer/composer) 软体包管理工具；
+    - 如果因为网络问题无法下载引用库，可先执行命令 `composer config repo.packagist composer https://mirrors.aliyun.com/composer/` 将当前工程配置使用阿里云镜像地址；
+    - 配置使用阿里云镜像地址之后，再执行 `composer install` 下载引用库。
+- 3、下载完引用库之后，其余配置流程同官网[安装教程](https://fresns.cn/guide/install.html)一致。
+
+*官方完整版安装包已经包含引用库文件，无需再执行命令行下载。*
+
 ## 加入我们
 
 Fresns 的开源社区正在急速增长中，如果你认可我们的开源软件，有兴趣为 Fresns 的发展做贡献，竭诚欢迎[加入我们](https://fresns.cn/community/join.html)一起开发完善。无论是[报告错误](https://fresns.cn/guide/feedback.html)或是 Pull Request 开发，那怕是修改一个错别字也是对我们莫大的帮助。
