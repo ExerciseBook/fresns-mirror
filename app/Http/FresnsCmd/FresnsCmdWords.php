@@ -753,7 +753,7 @@ class FresnsCmdWords extends BasePlugin
                 'file_mime' => $uploadFile->getMimeType(),
                 'file_size' => $uploadFile->getSize(),
                 'platform_id' => $platformId,
-                'transcoding_status' => 1,
+                'transcoding_state' => 1,
                 'user_id' => $userId,
                 'member_id' => $memberId,
                 'image_is_long' => 0,
@@ -823,7 +823,7 @@ class FresnsCmdWords extends BasePlugin
                     $append['video_gif'] = $fileInfo['videoGif'] == '' ? null : $fileInfo['videoGif'];
                     $append['audio_time'] = $fileInfo['audioTime'] == '' ? null : $fileInfo['audioTime'];
                     $append['platform_id'] = $platformId;
-                    $append['transcoding_status'] = $fileInfo['transcodingStatus'] == '' ? 2 : $fileInfo['transcodingStatus'];
+                    $append['transcoding_state'] = $fileInfo['transcodingState'] == '' ? 2 : $fileInfo['transcodingState'];
                     $append['more_json'] = json_encode($fileInfo['moreJson']);
 
                     FresnsFileAppends::insert($append);
