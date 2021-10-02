@@ -314,8 +314,8 @@ class FsService
             $data['icons'] = $iconsArr;
             $data['draftCount'] = null;
             if ($isMe == true) {
-                $draftCount['posts'] = FresnsPostLogs::whereIn('status', [1, 4])->count();
-                $draftCount['comments'] = FresnsCommentLogs::whereIn('status', [1, 4])->count();
+                $draftCount['posts'] = FresnsPostLogs::whereIn('state', [1, 4])->count();
+                $draftCount['comments'] = FresnsCommentLogs::whereIn('state', [1, 4])->count();
                 $data['draftCount'] = $draftCount;
             }
             $data['memberName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name', $langTag);
