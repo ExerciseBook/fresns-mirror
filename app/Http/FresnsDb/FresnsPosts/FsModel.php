@@ -64,8 +64,8 @@ class FsModel extends BaseAdminModel
         // Filter the posts of blocked objects (members, groups, hashtags, posts), and the posts of blocked objects are not output.
         $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 1)->pluck('shield_id')->toArray();
         $GroupShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 2)->pluck('shield_id')->toArray();
-        $shieldshashtags = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 3)->pluck('shield_id')->toArray();
-        $noPostHashtags = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('deleted_at', null)->whereIn('hashtag_id', $shieldshashtags)->pluck('linked_id')->toArray();
+        $hashtagShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 3)->pluck('shield_id')->toArray();
+        $noPostHashtags = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('deleted_at', null)->whereIn('hashtag_id', $hashtagShields)->pluck('linked_id')->toArray();
         $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 4)->pluck('shield_id')->toArray();
         $query = DB::table("$postTable as post")->select('post.*')
             ->join("$append as append", 'post.id', '=', 'append.post_id')
