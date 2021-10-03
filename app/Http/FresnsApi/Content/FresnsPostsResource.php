@@ -678,7 +678,7 @@ class FresnsPostsResource extends BaseAdminResource
                 'files' => $files,
                 'extends' => $extends,
                 'group' => $group,
-                'manages' => $manages,
+                'manages' => $managesArr,
                 'editStatus' => $editStatus,
                 'followType' => $followType,
             ];
@@ -735,7 +735,7 @@ class FresnsPostsResource extends BaseAdminResource
                     'files' => $files,
                     'extends' => $extends,
                     'group' => $group,
-                    'manages' => $manages,
+                    'manages' => $managesArr,
                     'editStatus' => $editStatus,
                     'followType' => $followType,
                     'hashtag' => $hashtag,

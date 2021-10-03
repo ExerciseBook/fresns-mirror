@@ -298,7 +298,7 @@ class FsControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
-    // update log
+    // update post and comment log
     public function update(Request $request)
     {
         $rule = [
@@ -496,29 +496,25 @@ class FsControllerApi extends FresnsBaseApiController
             $pluginUniKey = ApiConfigHelper::getConfigByItemKey('images_service');
             // Perform Upload
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
-
             if (empty($pluginClass)) {
                 LogService::error('Plugin not found');
                 FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
                 $this->error(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
-
+            // Is Plugin
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
                 LogService::error('Plugin not found');
-                $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
             }
 
             $paramsExist = false;
-
             $configMapInDB = FresnsConfigs::whereIn('item_key', ['images_secret_id', 'images_secret_key', 'images_bucket_domain'])->pluck('item_value', 'item_key')->toArray();
-            $paramsExist = ValidateService::validParamExist($configMapInDB,
-                ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
-
+            $paramsExist = ValidateService::validParamExist($configMapInDB, ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Plugin not found');
                 FresnsSessionLogs::where('id', $logsId)->update(['object_result' => FsConfig::OBJECT_DEFAIL]);
-                $this->error(ErrorCodeService::PLUGINS_CONFIG_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
         }
 
@@ -569,6 +565,31 @@ class FsControllerApi extends FresnsBaseApiController
         $this->success();
     }
 
+    // Get Upload Token
+    public function uploadToken(Request $request)
+    {
+        $rule = [
+            'type' => 'required|in:1,2,3,4',
+            'scene' => 'required|numeric|in:1,2,3,4,5,6,7,8,9,10,11',
+        ];
+        ValidateService::validateRule($request, $rule);
+
+        $cmd = FresnsCmdWordsConfig::PLG_CMD_GET_UPLOAD_TOKEN;
+        $input['type'] = $request->input('type');
+        $input['scene'] = $request->input('scene');
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
+            $this->errorCheckInfo($resp);
+        }
+        $output = $resp['output'];
+
+        $data['storageId'] = $output['storageId'] ?? 1;
+        $data['token'] = $output['token'] ?? null;
+        $data['expireTime'] = DateHelper::fresnsOutputTimeToTimezone($output['expireTime']) ?? null;
+
+        $this->success($data);
+    }
+
     // Upload File
     public function upload(Request $request)
     {
@@ -616,7 +637,6 @@ class FsControllerApi extends FresnsBaseApiController
 
             // Perform Upload
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
-
             if (empty($pluginClass)) {
                 LogService::error('Plugin not found');
                 $this->error(ErrorCodeService::PLUGINS_CONFIG_ERROR);
@@ -625,7 +645,7 @@ class FsControllerApi extends FresnsBaseApiController
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
                 LogService::error('Plugin not found');
-                $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
             }
 
             $file['file_type'] = $request->input('type', 1);
@@ -650,10 +670,9 @@ class FsControllerApi extends FresnsBaseApiController
                 $configMapInDB = FresnsConfigs::whereIn('item_key', ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain'])->pluck('item_value', 'item_key')->toArray();
                 $paramsExist = ValidateService::validParamExist($configMapInDB, ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
             }
-
             if ($paramsExist == false) {
                 LogService::error('Please configure the storage information first');
-                $this->error(ErrorCodeService::PLUGINS_CONFIG_ERROR);
+                $this->error(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
             // Confirm Catalog
@@ -708,31 +727,6 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         $data = $resp['output'];
-
-        $this->success($data);
-    }
-
-    // Get Upload Token
-    public function uploadToken(Request $request)
-    {
-        $rule = [
-            'type' => 'required|in:1,2,3,4',
-            'scene' => 'required|numeric|in:1,2,3,4,5,6,7,8,9,10,11',
-        ];
-        ValidateService::validateRule($request, $rule);
-
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_GET_UPLOAD_TOKEN;
-        $input['type'] = $request->input('type');
-        $input['scene'] = $request->input('scene');
-        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
-        if (CmdRpcHelper::isErrorCmdResp($resp)) {
-            $this->errorCheckInfo($resp);
-        }
-        $output = $resp['output'];
-
-        $data['storageId'] = $output['storageId'] ?? 1;
-        $data['token'] = $output['token'] ?? '';
-        $data['expireTime'] = DateHelper::fresnsOutputTimeToTimezone($output['expireTime']) ?? '';
 
         $this->success($data);
     }
@@ -934,7 +928,7 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                $publishPerm['tips'] = $tips;
+                $publishPerm['tips'] = !empty($tips) ? $tips : null;
 
                 // editPerm
                 $editPerm = [];
@@ -1184,7 +1178,7 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                $publishPerm['tips'] = $tips;
+                $publishPerm['tips'] = !empty($tips) ? $tips : null;
 
                 // editPerm
                 $editPerm = [];
