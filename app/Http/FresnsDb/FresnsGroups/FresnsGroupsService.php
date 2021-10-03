@@ -11,6 +11,7 @@ namespace App\Http\FresnsDb\FresnsGroups;
 use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Base\FresnsBaseService;
 use App\Http\FresnsApi\Content\FsConfig as ContentConfig;
+use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Info\FsService as InfoService;
@@ -65,15 +66,15 @@ class FresnsGroupsService extends FresnsBaseService
         if ($group) {
             $pluginUsagesArr = FresnsPluginUsages::where('type', 6)->where('group_id', $group['id'])->get();
             if ($pluginUsagesArr) {
-                foreach($pluginUsagesArr as $pluginUsages){
-                    $extends= [];
+                foreach ($pluginUsagesArr as $pluginUsages) {
+                    $extends = [];
                     $plugin = pluginUnikey::where('unikey', $pluginUsages['plugin_unikey'])->first();
                     $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $pluginUsages['plugin_unikey'])->first();
                     $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? '';
-                    $name = InfoService::getlanguageField('name', $pluginUsages['id']);
+                    $name = InfoService::getLanguageField('name', $pluginUsages['id']);
                     $extends['name'] = $name == null ? '' : $name['lang_content'];
                     $extends['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($pluginUsages['icon_file_id'], $pluginUsages['icon_file_url']);
-                    $extends['url'] = ApiFileHelper::getPluginUsagesUrl($pluginUsages['plugin_unikey'], $pluginUsages['id']);
+                    $extends['url'] = ApiCommonHelper::getPluginUsagesUrl($pluginUsages['plugin_unikey'], $pluginUsages['id']);
                     $extends['badgesType'] = $pluginBadges['display_type'] ?? '';
                     $extends['badgesValue'] = ($pluginBadges['value_text'] ?? '') ?? ($pluginBadges['value_number'] ?? '');
                     // Determine if a member role has permissions
@@ -215,7 +216,7 @@ class FresnsGroupsService extends FresnsBaseService
         $publish_comment = $permissionArr['publish_comment'];
         $publish_comment_roles = $permissionArr['publish_comment_roles'];
         $publish_comment_review = $permissionArr['publish_comment_review'];
-        
+
         $adminMemberArr = [];
         if ($admin_member) {
             foreach ($admin_member as $a) {

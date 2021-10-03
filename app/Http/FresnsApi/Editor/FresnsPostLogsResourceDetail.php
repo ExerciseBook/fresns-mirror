@@ -13,13 +13,14 @@ use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtends;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtendsConfig;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
+use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 
 /**
- * Detail resource config handle
+ * Detail resource config handle.
  */
-
 class FresnsPostLogsResourceDetail extends BaseAdminResource
 {
     public function toArray($request)
@@ -33,6 +34,8 @@ class FresnsPostLogsResourceDetail extends BaseAdminResource
 
         // Post Info
         $postInfo = FresnsPosts::find($this->post_id);
+        // Group Info
+        $groupInfo = FresnsGroups::find($this->group_id);
 
         // Extend Info
         $extends_json = json_decode($this->extends_json, true);
@@ -92,19 +95,22 @@ class FresnsPostLogsResourceDetail extends BaseAdminResource
         // Default Field
         $default = [
             'id' => $this->id,
-            'pid' => $postInfo['uuid'] ?? '',
-            'gid' => $this->group_id,
+            'pid' => $postInfo['uuid'] ?? null,
+            'isPluginEditor' => $this->is_plugin_editor,
+            'editorUrl' => FresnsPluginsService::getPluginUrlByUnikey($this->editor_unikey),
+            'gid' => $groupInfo['uuid'] ?? null,
             'types' => $this->types,
             'title' => $this->title,
             'content' => $this->content,
             'isMarkdown' => $this->is_markdown,
             'isAnonymous' => $this->is_anonymous,
-            'editor' => json_decode($this->editor_json, true) ?? [],
-            'allow' => json_decode($this->allow_json, true) ?? [],
-            'commentSetting' => json_decode($this->comment_set_json, true) ?? [],
-            'location' => json_decode($this->location_json, true) ?? [],
+            'memberList' => json_decode($this->member_list_json, true) ?? null,
+            'commentSetting' => json_decode($this->comment_set_json, true) ?? null,
+            'allow' => json_decode($this->allow_json, true) ?? null,
+            'location' => json_decode($this->location_json, true) ?? null,
             'files' => $files,
             'extends' => $extends,
+            'state' => $this->state,
         ];
 
         return $default;

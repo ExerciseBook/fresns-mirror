@@ -51,9 +51,8 @@ class FsModel extends BaseAdminModel
 
         /**
          * API Logic
-         * https://fresns.org/api/content/post-lists.html
+         * https://fresns.cn/api/content/post-lists.html.
          */
-        
         $request = request();
         $mid = GlobalService::getGlobalKey('member_id');
 
@@ -65,8 +64,8 @@ class FsModel extends BaseAdminModel
         // Filter the posts of blocked objects (members, groups, hashtags, posts), and the posts of blocked objects are not output.
         $memberShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 1)->pluck('shield_id')->toArray();
         $GroupShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 2)->pluck('shield_id')->toArray();
-        $shieldshashtags = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 3)->pluck('shield_id')->toArray();
-        $noPostHashtags = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('deleted_at', null)->whereIn('hashtag_id', $shieldshashtags)->pluck('linked_id')->toArray();
+        $hashtagShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 3)->pluck('shield_id')->toArray();
+        $noPostHashtags = DB::table(FresnsHashtagLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('deleted_at', null)->whereIn('hashtag_id', $hashtagShields)->pluck('linked_id')->toArray();
         $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('deleted_at', null)->where('shield_type', 4)->pluck('shield_id')->toArray();
         $query = DB::table("$postTable as post")->select('post.*')
             ->join("$append as append", 'post.id', '=', 'append.post_id')
@@ -74,7 +73,7 @@ class FsModel extends BaseAdminModel
             ->whereNotIn('post.id', $noPostHashtags)
             ->whereNotIn('post.id', $commentShields)
             ->where('post.deleted_at', null);
-        
+
         // Posts from the Powerless Group
         if (! empty($noGroupArr)) {
             $postgroupIdArr = FresnsPosts::whereNotIn('group_id', $noGroupArr)->pluck('id')->toArray();
@@ -148,15 +147,15 @@ class FsModel extends BaseAdminModel
             $topicLinkArr = Db::table('hashtag_linkeds')->where('hashtag_id', $searchHuri)->where('linked_type', 1)->pluck('linked_id')->toArray();
             $query->whereIn('post.id', $topicLinkArr);
         }
-        // essence_status
+        // essence_state
         $searchEssence = $request->input('searchEssence');
         if ($searchEssence) {
-            $query->where('post.essence_status', $searchEssence);
+            $query->where('post.essence_state', $searchEssence);
         }
-        // sticky_status
+        // sticky_state
         $searchSticky = $request->input('searchSticky');
         if ($searchSticky) {
-            $query->where('post.sticky_status', $searchSticky);
+            $query->where('post.sticky_state', $searchSticky);
         }
         // viewCountGt
         $viewCountGt = $request->input('viewCountGt');

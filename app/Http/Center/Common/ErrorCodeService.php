@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Fresns (https://fresns.cn)
  * Copyright (C) 2021-Present 唐杰
@@ -16,16 +17,17 @@ class ErrorCodeService
     const PLUGINS_CLASS_ERROR = 30001;
     const PLUGINS_TIMEOUT_ERROR = 30002;
     const PLUGINS_IS_ENABLE_ERROR = 30003;
-    const PLUGINS_HANDLE_ERROR = 30004;
-    const CODE_PARAM_ERROR = 30005;
-    const DATA_EXCEPTION_ERROR = 30006;
-    const HELPER_EXCEPTION_ERROR = 30007;
-    const VERIFY_CODE_CHECK_ERROR = 30008;
-    const PRIVATE_MODE_ERROR = 30009;
-    const CALLBACK_ERROR = 30010;
-    const CALLBACK_UUID_ERROR = 30011;
-    const CALLBACK_TIME_ERROR = 30012;
-    const CALLBACK_STATUS_ERROR = 30013;
+    const PLUGINS_PARAM_ERROR = 30004;
+    const PLUGINS_HANDLE_ERROR = 30005;
+    const CODE_PARAM_ERROR = 30006;
+    const DATA_EXCEPTION_ERROR = 30007;
+    const HELPER_EXCEPTION_ERROR = 30008;
+    const VERIFY_CODE_CHECK_ERROR = 30009;
+    const PRIVATE_MODE_ERROR = 30010;
+    const CALLBACK_ERROR = 30011;
+    const CALLBACK_UUID_ERROR = 30012;
+    const CALLBACK_TIME_ERROR = 30013;
+    const CALLBACK_STATUS_ERROR = 30014;
 
     // Header
     const HEADER_ERROR = 30100;
@@ -78,7 +80,7 @@ class ErrorCodeService
     const BALANCE_CLOSING_BALANCE_ERROR = 30228;
     const TO_USER_WALLETS_ERROR = 30229;
     const TO_BALANCE_CLOSING_BALANCE_ERROR = 30230;
-    
+
     // Member
     const MEMBER_FAIL = 30300;
     const MEMBER_ERROR = 30301;
@@ -159,19 +161,19 @@ class ErrorCodeService
     const DELETE_EXTEND_ERROR = 30814;
 
     // Editor
-    const POST_STATUS_2_ERROR = 30815;
-    const POST_STATUS_3_ERROR = 30816;
-    const COMMENT_STATUS_2_ERROR = 30817;
-    const COMMENT_STATUS_3_ERROR = 30818;
-    const POST_SUBMIT_STATUS_2_ERROR = 30819;
-    const POST_SUBMIT_STATUS_3_ERROR = 30820;
-    const COMMENT_SUBMIT_STATUS_2_ERROR = 30821;
-    const COMMENT_SUBMIT_STATUS_3_ERROR = 30822;
+    const POST_STATE_2_ERROR = 30815;
+    const POST_STATE_3_ERROR = 30816;
+    const COMMENT_STATE_2_ERROR = 30817;
+    const COMMENT_STATE_3_ERROR = 30818;
+    const POST_SUBMIT_STATE_2_ERROR = 30819;
+    const POST_SUBMIT_STATE_3_ERROR = 30820;
+    const COMMENT_SUBMIT_STATE_2_ERROR = 30821;
+    const COMMENT_SUBMIT_STATE_3_ERROR = 30822;
     const POST_REMOKE_ERROR = 30823;
     const COMMENT_REMOKE_ERROR = 30824;
     const CONTENT_AUTHOR_ERROR = 30825;
     const COMMENT_CREATE_ERROR = 30826;
-    
+
     // Editor Check Parameters
     const MEMBER_LIST_JSON_ERROR = 30900;
     const COMMENT_SET_JSON_ERROR = 30901;
@@ -210,6 +212,7 @@ class ErrorCodeService
         self::PLUGINS_CLASS_ERROR               => '服务商不存在',
         self::PLUGINS_TIMEOUT_ERROR             => '服务商未响应',
         self::PLUGINS_IS_ENABLE_ERROR           => '服务商未启用',
+        self::PLUGINS_PARAM_ERROR               => '服务商配置参数为空',
         self::PLUGINS_HANDLE_ERROR              => '服务商处理失败',
         self::CODE_PARAM_ERROR                  => '参数错误',
         self::DATA_EXCEPTION_ERROR              => '数据异常，查询不到或者数据重复',
@@ -353,19 +356,19 @@ class ErrorCodeService
         self::DELETE_EXTEND_ERROR               => '该扩展内容有其他人使用，不允许删除',
 
         // Editor
-        self::POST_STATUS_2_ERROR               => '帖子审核中不可编辑',
-        self::POST_STATUS_3_ERROR               => '帖子已正式发表不可编辑',
-        self::COMMENT_STATUS_2_ERROR            => '评论审核中不可编辑',
-        self::COMMENT_STATUS_3_ERROR            => '评论已正式发表不可编辑',
-        self::POST_SUBMIT_STATUS_2_ERROR        => '处于审核状态的帖子不可再提交',
-        self::POST_SUBMIT_STATUS_3_ERROR        => '处于发布状态的帖子不可再提交',
-        self::COMMENT_SUBMIT_STATUS_2_ERROR     => '处于审核状态的评论不可再提交',
-        self::COMMENT_SUBMIT_STATUS_3_ERROR     => '处于发布状态的评论不可再提交',
+        self::POST_STATE_2_ERROR                => '帖子审核中不可编辑',
+        self::POST_STATE_3_ERROR                => '帖子已正式发表不可编辑',
+        self::COMMENT_STATE_2_ERROR             => '评论审核中不可编辑',
+        self::COMMENT_STATE_3_ERROR             => '评论已正式发表不可编辑',
+        self::POST_SUBMIT_STATE_2_ERROR         => '处于审核状态的帖子不可再提交',
+        self::POST_SUBMIT_STATE_3_ERROR         => '处于发布状态的帖子不可再提交',
+        self::COMMENT_SUBMIT_STATE_2_ERROR      => '处于审核状态的评论不可再提交',
+        self::COMMENT_SUBMIT_STATE_3_ERROR      => '处于发布状态的评论不可再提交',
         self::POST_REMOKE_ERROR                 => '当前帖子并非审核状态，无需撤回',
         self::COMMENT_REMOKE_ERROR              => '当前评论并非审核状态，无需撤回',
         self::CONTENT_AUTHOR_ERROR              => '操作失败，请确认是作者本人',
         self::COMMENT_CREATE_ERROR              => '评论草稿创建失败，只有一级评论才能创建草稿',
-        
+
         // Editor Check Parameters
         self::MEMBER_LIST_JSON_ERROR            => 'memberListJson 格式错误或者数据异常',
         self::COMMENT_SET_JSON_ERROR            => 'commentSetJson 格式错误或者数据异常',

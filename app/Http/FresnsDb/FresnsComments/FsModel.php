@@ -46,10 +46,10 @@ class FsModel extends BaseCategoryModel
         $commentTable = FresnsCommentsConfig::CFG_TABLE;
         $commentAppendTable = FresnsCommentAppendsConfig::CFG_TABLE;
         $postTable = FresnsPostsConfig::CFG_TABLE;
-        
+
         /**
          * API Logic
-         * https://fresns.org/api/content/comment-lists.html
+         * https://fresns.cn/api/content/comment-lists.html.
          */
 
         // Target fields to be masked
@@ -148,10 +148,9 @@ class FsModel extends BaseCategoryModel
             $query->where('comment.parent_id', '=', 0);
         }
 
-        // sticky status
+        // sticky state
         $searchSticky = $request->input('searchSticky');
         if (! empty($searchSticky)) {
-            // $searchEssenceType = $searchEssence == false ? 0 : 1;
             $query->where('comment.is_sticky', '=', $searchSticky);
         }
         if ($searchSticky == '0') {
@@ -243,6 +242,7 @@ class FsModel extends BaseCategoryModel
                 $query->orderBy('comment.created_at', $sortWayType);
                 break;
         }
+
         return $query;
     }
 

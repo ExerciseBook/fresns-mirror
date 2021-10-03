@@ -50,9 +50,8 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Detail resource config handle
+ * Detail resource config handle.
  */
-
 class FresnsCommentsResourceDetail extends BaseAdminResource
 {
     public function toArray($request)
@@ -247,7 +246,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         /*
          * replyTo is output when searchCid has a value.
          * Represents the output of sub-level comments, and only sub-level comments have replyTo information, representing that A replied to B.
-         * https://fresns.org/api/content/comment-lists.html
+         * https://fresns.cn/api/content/comment-lists.html
          * If the parent_id of the comment is the current comment (parameter searchCid) and represents a secondary comment, the following information is not output.
          * The parent_id of the comment is not the current comment (parameter searchCid), representing three or more levels, showing the interaction under the comment and outputting the following information about his parent's comment.
          */
@@ -362,20 +361,20 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $attachCount['docs'] = 0;
         $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
         $more_json_decode = json_decode($this->more_json, true);
-        if($more_json_decode){
-            if(isset($more_json_decode['files'])){
-                foreach($more_json_decode['files'] as $m){
-                    if($m['type'] == 1){
-                        $attachCount['images'] ++;
+        if ($more_json_decode) {
+            if (isset($more_json_decode['files'])) {
+                foreach ($more_json_decode['files'] as $m) {
+                    if ($m['type'] == 1) {
+                        $attachCount['images']++;
                     }
-                    if($m['type'] == 2){
-                        $attachCount['videos'] ++;
+                    if ($m['type'] == 2) {
+                        $attachCount['videos']++;
                     }
-                    if($m['type'] == 3){
-                        $attachCount['audios'] ++;
+                    if ($m['type'] == 3) {
+                        $attachCount['audios']++;
                     }
-                    if($m['type'] == 4){
-                        $attachCount['docs'] ++;
+                    if ($m['type'] == 4) {
+                        $attachCount['docs']++;
                     }
                 }
             }
@@ -404,17 +403,17 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
 
         // Comment Plugin Extensions
         $managesArr = [];
-        $TweetPluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%2%')->get();
-        if ($TweetPluginUsagesArr) {
-            foreach($TweetPluginUsagesArr as $TweetPluginUsages){
-                $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
-                $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-                $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
+        $FsPluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%2%')->get();
+        if ($FsPluginUsagesArr) {
+            foreach ($FsPluginUsagesArr as $FsPluginUsages) {
+                $manages['plugin'] = $FsPluginUsages['plugin_unikey'];
+                $plugin = FresnsPlugins::where('unikey', $FsPluginUsages['plugin_unikey'])->first();
+                $name = FsService::getLanguageField('name', $FsPluginUsages['id']);
                 $manages['name'] = $name == null ? '' : $name['lang_content'];
-                $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
-                $manages['url'] = $plugin['access_path '].'/'.$TweetPluginUsages['parameter'];
+                $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsPluginUsages['icon_file_id'], $FsPluginUsages['icon_file_url']);
+                $manages['url'] = $plugin['access_path '].'/'.$FsPluginUsages['parameter'];
                 // Is the group administrator dedicated
-                if ($TweetPluginUsages['is_group_admin'] != 0) {
+                if ($FsPluginUsages['is_group_admin'] != 0) {
                     // Query whether the current member is a group administrator
                     if (! $posts['group_id']) {
                         $manages = [];
@@ -439,16 +438,16 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
                     }
                 }
                 // Determine if the primary role of the current member is an administrator
-                if ($TweetPluginUsages['member_roles']) {
+                if ($FsPluginUsages['member_roles']) {
                     $mroleRels = FresnsMemberRoleRels::where('member_id', $mid)->first();
                     if ($mroleRels) {
-                        $pluMemberRoleArr = explode(',', $TweetPluginUsages['member_roles']);
+                        $pluMemberRoleArr = explode(',', $FsPluginUsages['member_roles']);
                         if (! in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
                             $manages = [];
                         }
                     }
                 }
-            $managesArr[] = $manages;
+                $managesArr[] = $manages;
             }
         }
 

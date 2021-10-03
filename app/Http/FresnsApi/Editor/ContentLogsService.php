@@ -42,8 +42,8 @@ class ContentLogsService
         $postAppend = FresnsPostAppends::findAppend('post_id', $postInfo['id']);
 
         // Get editor config
-        $is_plugin_edit = $postAppend['is_plugin_edit'];
-        $plugin_unikey = $postAppend['plugin_unikey'];
+        $is_plugin_editor = $postAppend['is_plugin_editor'];
+        $editor_unikey = $postAppend['editor_unikey'];
 
         // Members Settings
         $member_list_json = [];
@@ -216,8 +216,8 @@ class ContentLogsService
             'content' => $postAppend['content'],
             'is_markdown' => $postAppend['is_markdown'],
             'is_anonymous' => $postInfo['is_anonymous'],
-            'is_plugin_edit' => $is_plugin_edit,
-            'plugin_unikey' => $plugin_unikey,
+            'is_plugin_editor' => $is_plugin_editor,
+            'editor_unikey' => $editor_unikey,
             'member_list_json' => $member_list_json,
             'comment_set_json' => $comment_set_json,
             'allow_json' => $allow_json,
@@ -239,8 +239,8 @@ class ContentLogsService
         $postInfo = FresnsPosts::find($commentInfo['post_id']);
 
         // Get editor config
-        $is_plugin_edit = $commentAppend['is_plugin_edit'];
-        $plugin_unikey = $commentAppend['plugin_unikey'];
+        $is_plugin_editor = $commentAppend['is_plugin_editor'];
+        $editor_unikey = $commentAppend['editor_unikey'];
 
         // Location Settings
         $location_json = [];
@@ -304,8 +304,8 @@ class ContentLogsService
             'content' => $commentAppend['content'],
             'is_markdown' => $commentAppend['is_markdown'],
             'is_anonymous' => $commentInfo['is_anonymous'],
-            'is_plugin_edit' => $is_plugin_edit,
-            'plugin_unikey' => $plugin_unikey,
+            'is_plugin_editor' => $is_plugin_editor,
+            'editor_unikey' => $editor_unikey,
             'location_json' => $location_json,
             'files_json' => $files,
             'extends_json' => $extends_json,
@@ -329,8 +329,8 @@ class ContentLogsService
         $content = $request->input('content');
         $isMarkdown = $request->input('isMarkdown', 0);
         $isAnonymous = $request->input('isAnonymous', 0);
-        $is_plugin_edit = $request->input('isPluginEdit', 0);
-        $plugin_unikey = $request->input('pluginUnikey');
+        $is_plugin_editor = $request->input('isPluginEditor', 0);
+        $editor_unikey = $request->input('editorUnikey');
         $commentSetJson = $request->input('commentSetJson') ?? null;
         $memberListJson = $request->input('memberListJson') ?? null;
         $allowJson = $request->input('allowJson') ?? null;
@@ -357,8 +357,8 @@ class ContentLogsService
             'content' => trim($content),
             'is_markdown' => $isMarkdown,
             'is_anonymous' => $isAnonymous,
-            'is_plugin_edit' => $is_plugin_edit,
-            'plugin_unikey' => $plugin_unikey,
+            'is_plugin_editor' => $is_plugin_editor,
+            'editor_unikey' => $editor_unikey,
             'comment_set_json' => $commentSetJson,
             'member_list_json' => $memberListJson,
             'allow_json' => $allowJson,
@@ -381,8 +381,8 @@ class ContentLogsService
         $content = $request->input('content');
         $isMarkdown = $request->input('isMarkdown', 0);
         $isAnonymous = $request->input('isAnonymous', 0);
-        $is_plugin_edit = $request->input('isPluginEdit', 0);
-        $plugin_unikey = $request->input('pluginUnikey');
+        $is_plugin_editor = $request->input('isPluginEditor', 0);
+        $editor_unikey = $request->input('editorUnikey');
         $locationJson = $request->input('locationJson');
         $filesJson = $request->input('filesJson');
         $extends_json = json_decode($request->input('extendsJson'), true);
@@ -403,8 +403,8 @@ class ContentLogsService
             'content' => trim($content),
             'is_markdown' => $isMarkdown == 'false' ? 0 : 1,
             'is_anonymous' => $isAnonymous == 'false' ? 0 : 1,
-            'is_plugin_edit' => $is_plugin_edit,
-            'plugin_unikey' => $plugin_unikey,
+            'is_plugin_editor' => $is_plugin_editor,
+            'editor_unikey' => $editor_unikey,
             'location_json' => $locationJson,
             'files_json' => $filesJson,
             'extends_json' => $extendsJson,
@@ -566,7 +566,7 @@ class ContentLogsService
     }
 
     /**
-     * Upload File
+     * Upload File.
      *
      * @param [type] $type 1-Post 2-Comment
      * @return void
@@ -623,7 +623,7 @@ class ContentLogsService
             'file_mime' => $uploadFile->getMimeType(),
             'file_size' => $uploadFile->getSize(),
             'platform_id' => $platformId,
-            'transcoding_status' => 1,
+            'transcoding_state' => 1,
             'user_id' => $uid,
             'member_id' => $mid,
             // 'file_original_path' => Storage::url($path),
@@ -691,7 +691,7 @@ class ContentLogsService
                 $append['video_cover'] = empty($v['videoCover']) ? null : $v['videoCover'];
                 $append['video_gif'] = empty($v['videoGif']) ? null : $v['videoGif'];
                 $append['audio_time'] = empty($v['audioTime']) ? null : $v['audioTime'];
-                $append['transcoding_status'] = empty($v['transcodingStatus']) ? 1 : $v['transcodingStatus'];
+                $append['transcoding_state'] = empty($v['transcodingState']) ? 1 : $v['transcodingState'];
                 $append['platform_id'] = $platformId;
                 FresnsFileAppends::insert($append);
             }
@@ -742,7 +742,7 @@ class ContentLogsService
                 if ($type == 3) {
                     $item['audioTime'] = $append['audio_time'] ?? '';
                     $item['audioUrl'] = $audiosHost.$file['file_path'];
-                    $item['transcodingStatus'] = $append['transcoding_status'];
+                    $item['transcodingState'] = $append['transcoding_state'];
                 }
                 if ($type == 4) {
                     $item['docUrl'] = $docsHost.$file['file_path'];

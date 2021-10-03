@@ -49,9 +49,8 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use Illuminate\Support\Facades\DB;
 
 /**
- * List resource config handle
+ * List resource config handle.
  */
-
 class FresnsCommentsResource extends BaseAdminResource
 {
     public function toArray($request)
@@ -109,7 +108,7 @@ class FresnsCommentsResource extends BaseAdminResource
         $likeCount = $this->like_count;
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
-        
+
         // Operation behavior status
         $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 5)->where('like_id', $this->id)->count();
         $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 5)->where('follow_id', $this->id)->count();
@@ -151,7 +150,7 @@ class FresnsCommentsResource extends BaseAdminResource
         $member['roleIcon'] = '';
         $member['roleIconDisplay'] = '';
         $member['avatar'] = $memberInfo->avatar_file_url ?? '';
-        
+
         // Default avatar when members have no avatar
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
@@ -241,7 +240,6 @@ class FresnsCommentsResource extends BaseAdminResource
         $commentSetting['lists'] = [];
         if (! $searchCid) {
             if ($previewStatus && $previewStatus != 0) {
-                
                 $fresnsCommentsService = new FresnsCommentsService();
                 $commentList = $fresnsCommentsService->getCommentPreviewList($this->id, $previewStatus, $mid);
                 $commentSetting['lists'] = $commentList;
@@ -251,7 +249,7 @@ class FresnsCommentsResource extends BaseAdminResource
         /*
          * replyTo is output when searchCid has a value.
          * Represents the output of sub-level comments, and only sub-level comments have replyTo information, representing that A replied to B.
-         * https://fresns.org/api/content/comment-lists.html
+         * https://fresns.cn/api/content/comment-lists.html
          * If the parent_id of the comment is the current comment (parameter searchCid) and represents a secondary comment, the following information is not output.
          * The parent_id of the comment is not the current comment (parameter searchCid), representing three or more levels, showing the interaction under the comment and outputting the following information about his parent's comment.
          */
@@ -368,20 +366,20 @@ class FresnsCommentsResource extends BaseAdminResource
         $attachCount['docs'] = 0;
         $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
         $more_json_decode = json_decode($this->more_json, true);
-        if($more_json_decode){
-            if(isset($more_json_decode['files'])){
-                foreach($more_json_decode['files'] as $m){
-                    if($m['type'] == 1){
-                        $attachCount['images'] ++;
+        if ($more_json_decode) {
+            if (isset($more_json_decode['files'])) {
+                foreach ($more_json_decode['files'] as $m) {
+                    if ($m['type'] == 1) {
+                        $attachCount['images']++;
                     }
-                    if($m['type'] == 2){
-                        $attachCount['videos'] ++;
+                    if ($m['type'] == 2) {
+                        $attachCount['videos']++;
                     }
-                    if($m['type'] == 3){
-                        $attachCount['audios'] ++;
+                    if ($m['type'] == 3) {
+                        $attachCount['audios']++;
                     }
-                    if($m['type'] == 4){
-                        $attachCount['docs'] ++;
+                    if ($m['type'] == 4) {
+                        $attachCount['docs']++;
                     }
                 }
             }
@@ -400,15 +398,15 @@ class FresnsCommentsResource extends BaseAdminResource
         // means that the comment is output independently from the post, so it needs to be accompanied by the post parameter and the information of the post to which the comment belongs
         $searchPid = request()->input('searchPid');
         $post = [];
-        if (!$searchPid) {
+        if (! $searchPid) {
             $post['pid'] = $posts['uuid'];
             $post['title'] = $posts['title'];
             $post['content'] = $posts['content'];
             $post['status'] = $posts['is_enable'];
-            $post['gname'] = "";
-            $post['gid'] = "";
-            $post['cover'] = "";
-            if($groupInfo){
+            $post['gname'] = '';
+            $post['gid'] = '';
+            $post['cover'] = '';
+            if ($groupInfo) {
                 $gname = ApiLanguageHelper::getLanguages('groups', 'name', $groupInfo['id']);
                 $gname = $gname == null ? '' : $gname['lang_content'];
                 $post['gname'] = $gname;
@@ -439,17 +437,17 @@ class FresnsCommentsResource extends BaseAdminResource
 
         // Comment Plugin Extensions
         $managesArr = [];
-        $TweetPluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%2%')->get();
-        if ($TweetPluginUsagesArr) {
-            foreach($TweetPluginUsagesArr as $TweetPluginUsages){
-                $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
-                $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-                $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
+        $FsPluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%2%')->get();
+        if ($FsPluginUsagesArr) {
+            foreach ($FsPluginUsagesArr as $FsPluginUsages) {
+                $manages['plugin'] = $FsPluginUsages['plugin_unikey'];
+                $plugin = FresnsPlugins::where('unikey', $FsPluginUsages['plugin_unikey'])->first();
+                $name = FsService::getLanguageField('name', $FsPluginUsages['id']);
                 $manages['name'] = $name == null ? '' : $name['lang_content'];
-                $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
-                $manages['url'] = $plugin['access_path '].'/'.$TweetPluginUsages['parameter'];
+                $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsPluginUsages['icon_file_id'], $FsPluginUsages['icon_file_url']);
+                $manages['url'] = $plugin['access_path '].'/'.$FsPluginUsages['parameter'];
                 // Is the group administrator dedicated
-                if ($TweetPluginUsages['is_group_admin'] != 0) {
+                if ($FsPluginUsages['is_group_admin'] != 0) {
                     // Query whether the current member is a group administrator
                     if (! $posts['group_id']) {
                         $manages = [];
@@ -474,16 +472,16 @@ class FresnsCommentsResource extends BaseAdminResource
                     }
                 }
                 // Determine if the primary role of the current member is an administrator
-                if ($TweetPluginUsages['member_roles']) {
+                if ($FsPluginUsages['member_roles']) {
                     $mroleRels = FresnsMemberRoleRels::where('member_id', $mid)->first();
                     if ($mroleRels) {
-                        $pluMemberRoleArr = explode(',', $TweetPluginUsages['member_roles']);
+                        $pluMemberRoleArr = explode(',', $FsPluginUsages['member_roles']);
                         if (! in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
                             $manages = [];
                         }
                     }
                 }
-            $managesArr[] = $manages;
+                $managesArr[] = $manages;
             }
         }
 
