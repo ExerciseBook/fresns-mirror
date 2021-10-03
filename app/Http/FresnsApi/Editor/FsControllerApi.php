@@ -934,7 +934,7 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                $publishPerm['tips'] = $tips;
+                $publishPerm['tips'] = !empty($tips) ? $tips : null;
 
                 // editPerm
                 $editPerm = [];
@@ -1184,7 +1184,7 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                $publishPerm['tips'] = $tips;
+                $publishPerm['tips'] = !empty($tips) ? $tips : null;
 
                 // editPerm
                 $editPerm = [];
