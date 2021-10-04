@@ -194,9 +194,9 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
                     $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? 0;
 
                     $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
-                    $member['gender'] = $memberInfo->gender ?? '';
+                    $member['gender'] = $memberInfo->gender ?? 0;
                     $member['bio'] = $memberInfo->bio ?? '';
-                    $member['verifiedStatus'] = $memberInfo->verified_status ?? '';
+                    $member['verifiedStatus'] = $memberInfo->verified_status ?? 1;
                     $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
                     $icons = [];
                     $icons['icon'] = $memberIcon['icon_file_url'] ?? '';
