@@ -70,7 +70,6 @@ class FsService
                     ->pluck('follow_id')
                     ->whereIn('follow_id', $idArr)
                     ->toArray();
-
                 break;
             case 4:
                 $followIdArr = FresnsMemberFollows::where('member_id', $mid)
@@ -81,7 +80,6 @@ class FsService
                 break;
             case 5:
                 $followIdArr = FresnsExtends::whereIn('id', $idArr)->where('member_id', $mid)->pluck('id')->toArray();
-
                 break;
             default:
                 $followIdArr = [];
@@ -92,7 +90,6 @@ class FsService
             // Quantity per output
             $count = FresnsMemberFollowsConfig::INPUTTIPS_COUNT;
             $followCount = count($followIdArr);
-
             if ($followCount == $count) {
                 $data = $followIdArr;
             }

@@ -190,21 +190,20 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
                     $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
                     $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRoleRelsConfig::CFG_TABLE, 'name', $memberRole['id']);
                     $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? 0;
-                    $member['roleIcon'] = $memberRole['icon_file_url'] ?? '';
+                    $member['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
                     $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? 0;
-
                     $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
                     $member['gender'] = $memberInfo->gender ?? 0;
                     $member['bio'] = $memberInfo->bio ?? '';
                     $member['verifiedStatus'] = $memberInfo->verified_status ?? 1;
                     $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
+
                     $icons = [];
                     $icons['icon'] = $memberIcon['icon_file_url'] ?? '';
                     if ($icons['icon']) {
                         $icons['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberIcon['icon_file_id'], $memberIcon['icon_file_url']);
                     }
                     $icons['name'] = '';
-
                     if (! empty($memberIcon)) {
                         $icons['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
                     }

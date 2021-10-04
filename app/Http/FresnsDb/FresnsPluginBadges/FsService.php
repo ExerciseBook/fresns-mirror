@@ -40,7 +40,7 @@ class FsService extends BaseAdminService
             $item = [];
             $item['plugin'] = $v['plugin_unikey'];
             $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
-            $item['icon'] = $v['icon_file_url'];
+            $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
             $plugins = FresnsPlugins::where('unikey', $v['plugin_unikey'])->first();
             $item['url'] = $plugins['access_path'].$v['parameter'];
             $badges = FresnsPluginBadges::where('member_id', $member_id)->where('plugin_unikey', $v['plugin_unikey'])->first();

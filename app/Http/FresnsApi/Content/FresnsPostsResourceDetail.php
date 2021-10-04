@@ -217,7 +217,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
                 $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
                 $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? 0;
-                $member['roleIcon'] = $memberRole['icon_file_url'] ?? '';
+                $member['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
                 $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? 0;
                 $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
                 $member['gender'] = $memberInfo->gender ?? 0;

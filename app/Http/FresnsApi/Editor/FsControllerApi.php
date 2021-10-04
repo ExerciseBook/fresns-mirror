@@ -1082,14 +1082,14 @@ class FsControllerApi extends FresnsBaseApiController
                 $expand['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_expand');
                 $list = [];
                 $FsPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%1%')->get()->toArray();
-                foreach ($FsPluginUsagesArr as $t) {
-                    $name = FresnsService::getLanguageField('name', $t['id']);
+                foreach ($FsPluginUsagesArr as $FsUsage) {
+                    $name = FresnsService::getLanguageField('name', $FsUsage['id']);
                     $arr = [];
-                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['plugin'] = $FsUsage['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
-                    $arr['icon'] = $t['icon_file_url'];
-                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
-                    $arr['number'] = $t['editor_number'];
+                    $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
+                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
+                    $arr['number'] = $FsUsage['editor_number'];
                     $list[] = $arr;
                 }
                 $expand['list'] = $list;
@@ -1107,13 +1107,13 @@ class FsControllerApi extends FresnsBaseApiController
                 $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('post_editor_lbs');
                 $maps = [];
                 $FsPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
-                foreach ($FsPluginUsagesArr as $t) {
-                    $name = FresnsService::getLanguageField('name', $t['id']);
+                foreach ($FsPluginUsagesArr as $FsUsage) {
+                    $name = FresnsService::getLanguageField('name', $FsUsage['id']);
                     $arr = [];
-                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['plugin'] = $FsUsage['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
-                    $arr['icon'] = $t['icon_file_url'];
-                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
+                    $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
+                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;
@@ -1315,14 +1315,14 @@ class FsControllerApi extends FresnsBaseApiController
                 $expand['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_expand');
                 $list = [];
                 $FsPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%2%')->get()->toArray();
-                foreach ($FsPluginUsagesArr as $t) {
-                    $name = FresnsService::getLanguageField('name', $t['id']);
+                foreach ($FsPluginUsagesArr as $FsUsage) {
+                    $name = FresnsService::getLanguageField('name', $FsUsage['id']);
                     $arr = [];
-                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['plugin'] = $FsUsage['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
-                    $arr['icon'] = $t['icon_file_url'];
-                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
-                    $arr['number'] = $t['editor_number'];
+                    $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
+                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
+                    $arr['number'] = $FsUsage['editor_number'];
                     $list[] = $arr;
                 }
                 $expand['list'] = $list;
@@ -1336,13 +1336,13 @@ class FsControllerApi extends FresnsBaseApiController
                 $isLbs['status'] = ApiConfigHelper::getConfigByItemKey('comment_editor_lbs');
                 $maps = [];
                 $FsPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
-                foreach ($FsPluginUsagesArr as $t) {
-                    $name = FresnsService::getLanguageField('name', $t['id']);
+                foreach ($FsPluginUsagesArr as $FsUsage) {
+                    $name = FresnsService::getLanguageField('name', $FsUsage['id']);
                     $arr = [];
-                    $arr['plugin'] = $t['plugin_unikey'];
+                    $arr['plugin'] = $FsUsage['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
-                    $arr['icon'] = $t['icon_file_url'];
-                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($t['plugin_unikey'], $t['id']);
+                    $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
+                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;

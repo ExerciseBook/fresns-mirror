@@ -234,7 +234,7 @@ class FsService
                 $item = [];
                 $item['type'] = FresnsMemberRoleRels::where('member_id', $mid)->where('role_id', $v['id'])->value('type');
                 $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
-                $item['icon'] = $v['icon_file_url'];
+                $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
                 $item['nicknameColor'] = $v['nickname_color'];
                 $item['permission'] = json_decode($v['permission'], true);
                 $rolesArr[] = $item;
@@ -305,7 +305,7 @@ class FsService
             $iconsArr = [];
             foreach ($memberIconsArr as $v) {
                 $item = [];
-                $item['icon'] = $v['icon_file_url'];
+                $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
                 $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                 $item['type'] = $v['type'];
                 $item['url'] = '';
@@ -371,7 +371,7 @@ class FsService
                     $item = [];
                     $item['plugin'] = $v['plugin_unikey'];
                     $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
-                    $item['icon'] = $v['icon_file_url'];
+                    $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
                     $plugins = FresnsPlugins::where('unikey', $v['plugin_unikey'])->first();
                     $item['url'] = $plugins['access_path'].$v['parameter'];
 
