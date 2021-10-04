@@ -19,7 +19,6 @@ use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsApi\Info\FsService;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
@@ -125,13 +124,13 @@ class FsControllerApi extends FresnsBaseApiController
         $groupArr = FresnsGroups::whereNotIn('id', $noGroupArr)->pluck('id')->toArray();
         $ids = implode(',', $groupArr);
         $request->offsetSet('ids', $ids);
-        $parentId = $request->input('parentGId');
+        $parentId = $request->input('parentGid');
         if ($parentId) {
-            $group = FresnsGroups::where('uuid', $parentId)->first();
-            if ($group) {
-                $request->offsetSet('pid', $group['id']);
+            $groupParentId = FresnsGroups::where('uuid', $parentId)->first();
+            if ($groupParentId) {
+                $request->offsetSet('parentId', $groupParentId['id']);
             } else {
-                $request->offsetSet('pid', 0);
+                $request->offsetSet('parentId', 0);
             }
         }
         $page = $request->input('page', 1);

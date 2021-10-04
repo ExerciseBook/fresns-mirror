@@ -12,7 +12,6 @@ use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneService;
-use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
@@ -136,19 +135,19 @@ class ContentLogsService
 
         // Location Settings
         $location_json = [];
-        $location_json['isLbs'] = $postInfo['is_lbs'] ?? '';
-        $location_json['mapId'] = $postInfo['map_id'] ?? '';
-        $location_json['latitude'] = $postInfo['map_latitude'] ?? '';
-        $location_json['longitude'] = $postInfo['map_longitude'] ?? '';
-        $location_json['scale'] = $postAppend['map_scale'] ?? '';
-        $location_json['poi'] = $postAppend['map_poi'] ?? '';
-        $location_json['poiId'] = $postAppend['map_poi_id'] ?? '';
-        $location_json['nation'] = $postAppend['map_nation'] ?? '';
-        $location_json['province'] = $postAppend['map_province'] ?? '';
-        $location_json['city'] = $postAppend['map_city'] ?? '';
-        $location_json['district'] = $postAppend['map_district'] ?? '';
-        $location_json['adcode'] = $postAppend['map_adcode'] ?? '';
-        $location_json['address'] = $postAppend['map_address'] ?? '';
+        $location_json['isLbs'] = $postInfo['is_lbs'] ?? 0;
+        $location_json['mapId'] = $postInfo['map_id'] ?? null;
+        $location_json['latitude'] = $postInfo['map_latitude'] ?? null;
+        $location_json['longitude'] = $postInfo['map_longitude'] ?? null;
+        $location_json['scale'] = $postAppend['map_scale'] ?? null;
+        $location_json['poi'] = $postAppend['map_poi'] ?? null;
+        $location_json['poiId'] = $postAppend['map_poi_id'] ?? null;
+        $location_json['nation'] = $postAppend['map_nation'] ?? null;
+        $location_json['province'] = $postAppend['map_province'] ?? null;
+        $location_json['city'] = $postAppend['map_city'] ?? null;
+        $location_json['district'] = $postAppend['map_district'] ?? null;
+        $location_json['adcode'] = $postAppend['map_adcode'] ?? null;
+        $location_json['address'] = $postAppend['map_address'] ?? null;
 
         // Files Settings
         $more_json = json_decode($postInfo['more_json'], true);
@@ -160,8 +159,7 @@ class ContentLogsService
         // Extends Settings
         $extends_json = [];
         $result = [];
-        $extendLink = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id',
-            $postInfo['id'])->get()->toArray();
+        $extendLink = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id', $postInfo['id'])->get()->toArray();
         if ($extendLink) {
             $arr = [];
             foreach ($extendLink as $e) {
@@ -244,19 +242,19 @@ class ContentLogsService
 
         // Location Settings
         $location_json = [];
-        $location_json['isLbs'] = $commentInfo['is_lbs'];
-        $location_json['mapId'] = $commentAppend['map_id'];
-        $location_json['latitude'] = $commentAppend['map_latitude'];
-        $location_json['longitude'] = $commentAppend['map_longitude'];
-        $location_json['scale'] = $commentAppend['map_scale'];
-        $location_json['poi'] = $commentAppend['map_poi'];
-        $location_json['poiId'] = $commentAppend['map_poi_id'];
-        $location_json['nation'] = $commentAppend['map_nation'];
-        $location_json['province'] = $commentAppend['map_province'];
-        $location_json['city'] = $commentAppend['map_city'];
-        $location_json['district'] = $commentAppend['map_district'];
-        $location_json['adcode'] = $commentAppend['map_adcode'];
-        $location_json['address'] = $commentAppend['map_address'];
+        $location_json['isLbs'] = $commentInfo['is_lbs'] ?? 0;
+        $location_json['mapId'] = $commentAppend['map_id'] ?? null;
+        $location_json['latitude'] = $commentAppend['map_latitude'] ?? null;
+        $location_json['longitude'] = $commentAppend['map_longitude'] ?? null;
+        $location_json['scale'] = $commentAppend['map_scale'] ?? null;
+        $location_json['poi'] = $commentAppend['map_poi'] ?? null;
+        $location_json['poiId'] = $commentAppend['map_poi_id'] ?? null;
+        $location_json['nation'] = $commentAppend['map_nation'] ?? null;
+        $location_json['province'] = $commentAppend['map_province'] ?? null;
+        $location_json['city'] = $commentAppend['map_city'] ?? null;
+        $location_json['district'] = $commentAppend['map_district'] ?? null;
+        $location_json['adcode'] = $commentAppend['map_adcode'] ?? null;
+        $location_json['address'] = $commentAppend['map_address'] ?? null;
 
         // Files Settings
         $more_json = json_decode($commentInfo['more_json'], true);
@@ -330,7 +328,7 @@ class ContentLogsService
         $isMarkdown = $request->input('isMarkdown', 0);
         $isAnonymous = $request->input('isAnonymous', 0);
         $is_plugin_editor = $request->input('isPluginEditor', 0);
-        $editor_unikey = $request->input('editorUnikey');
+        $editor_unikey = $request->input('editorUnikey') ?? null;
         $commentSetJson = $request->input('commentSetJson') ?? null;
         $memberListJson = $request->input('memberListJson') ?? null;
         $allowJson = $request->input('allowJson') ?? null;
@@ -613,7 +611,7 @@ class ContentLogsService
         LogService::info('File Storage Local Success ', $file);
         $t2 = time();
 
-        $file['uuid'] = ApiCommonHelper::createUuid();
+        $file['uuid'] = StrHelper::createUuid();
         // Insert data
         $retId = FresnsFiles::insertGetId($file);
 
@@ -656,7 +654,7 @@ class ContentLogsService
         if (is_array($fileInfo)) {
             foreach ($fileInfo as $v) {
                 $item = [];
-                $item['uuid'] = ApiCommonHelper::createUuid();
+                $item['uuid'] = StrHelper::createUuid();
                 $item['file_name'] = $v['name'];
                 $item['file_type'] = $v['type'];
                 $item['table_type'] = $v['tableType'];
