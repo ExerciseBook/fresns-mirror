@@ -136,19 +136,19 @@ class ContentLogsService
 
         // Location Settings
         $location_json = [];
-        $location_json['isLbs'] = $postInfo['is_lbs'] ?? '';
-        $location_json['mapId'] = $postInfo['map_id'] ?? '';
-        $location_json['latitude'] = $postInfo['map_latitude'] ?? '';
-        $location_json['longitude'] = $postInfo['map_longitude'] ?? '';
-        $location_json['scale'] = $postAppend['map_scale'] ?? '';
-        $location_json['poi'] = $postAppend['map_poi'] ?? '';
-        $location_json['poiId'] = $postAppend['map_poi_id'] ?? '';
-        $location_json['nation'] = $postAppend['map_nation'] ?? '';
-        $location_json['province'] = $postAppend['map_province'] ?? '';
-        $location_json['city'] = $postAppend['map_city'] ?? '';
-        $location_json['district'] = $postAppend['map_district'] ?? '';
-        $location_json['adcode'] = $postAppend['map_adcode'] ?? '';
-        $location_json['address'] = $postAppend['map_address'] ?? '';
+        $location_json['isLbs'] = $postInfo['is_lbs'] ?? 0;
+        $location_json['mapId'] = $postInfo['map_id'] ?? null;
+        $location_json['latitude'] = $postInfo['map_latitude'] ?? null;
+        $location_json['longitude'] = $postInfo['map_longitude'] ?? null;
+        $location_json['scale'] = $postAppend['map_scale'] ?? null;
+        $location_json['poi'] = $postAppend['map_poi'] ?? null;
+        $location_json['poiId'] = $postAppend['map_poi_id'] ?? null;
+        $location_json['nation'] = $postAppend['map_nation'] ?? null;
+        $location_json['province'] = $postAppend['map_province'] ?? null;
+        $location_json['city'] = $postAppend['map_city'] ?? null;
+        $location_json['district'] = $postAppend['map_district'] ?? null;
+        $location_json['adcode'] = $postAppend['map_adcode'] ?? null;
+        $location_json['address'] = $postAppend['map_address'] ?? null;
 
         // Files Settings
         $more_json = json_decode($postInfo['more_json'], true);
@@ -330,7 +330,7 @@ class ContentLogsService
         $isMarkdown = $request->input('isMarkdown', 0);
         $isAnonymous = $request->input('isAnonymous', 0);
         $is_plugin_editor = $request->input('isPluginEditor', 0);
-        $editor_unikey = $request->input('editorUnikey');
+        $editor_unikey = $request->input('editorUnikey') ?? null;
         $commentSetJson = $request->input('commentSetJson') ?? null;
         $memberListJson = $request->input('memberListJson') ?? null;
         $allowJson = $request->input('allowJson') ?? null;
