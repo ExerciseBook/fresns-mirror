@@ -118,11 +118,11 @@ class FresnsCommentsResource extends BaseAdminResource
         $followSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_COMMENT_SETTING);
         $shieldSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::SHIELD_COMMENT_SETTING);
         // Operation behavior naming
-        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_COMMENT_NAME) ?? 'Like';
-        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_COMMENT_NAME) ?? 'Save comment';
-        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_COMMENT_NAME) ?? 'Hide comment';
+        $likeName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_COMMENT_NAME) ?? 'Like';
+        $followName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_COMMENT_NAME) ?? 'Save comment';
+        $shieldName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_COMMENT_NAME) ?? 'Hide comment';
         // Content Naming
-        $commentName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::COMMENT_NAME) ?? 'Comment';
+        $commentName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::COMMENT_NAME) ?? 'Comment';
 
         // member_shields: query the table to confirm if the object is blocked
         $shieldMemberStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 1)->where('shield_id', $this->member_id)->count();
@@ -195,7 +195,7 @@ class FresnsCommentsResource extends BaseAdminResource
 
                     $roleName = '';
                     if (! empty($memberRole)) {
-                        $roleName = ApiLanguageHelper::getLanguages(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
+                        $roleName = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
                         $roleName = $roleName == null ? '' : $roleName['lang_content'];
                     }
                     $member['roleName'] = $roleName;
@@ -216,7 +216,7 @@ class FresnsCommentsResource extends BaseAdminResource
 
                     $icons['name'] = '';
                     if (! empty($memberIcon)) {
-                        $iconName = ApiLanguageHelper::getLanguages(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
+                        $iconName = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
                         $iconName = $iconName == null ? '' : $iconName['lang_content'];
                         $icons['name'] = $iconName;
                     }
@@ -321,21 +321,21 @@ class FresnsCommentsResource extends BaseAdminResource
                 }
                 $arr['title'] = '';
                 if (! empty($e)) {
-                    $title = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'title', $e['id']);
+                    $title = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'title', $e['id']);
                     $title = $title == null ? '' : $title['lang_content'];
                     $arr['title'] = $title;
                 }
                 $arr['titleColor'] = $e['title_color'] ?? '';
                 $arr['descPrimary'] = '';
                 if (! empty($e)) {
-                    $descPrimary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $e['id']);
+                    $descPrimary = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $e['id']);
                     $descPrimary = $descPrimary == null ? '' : $descPrimary['lang_content'];
                     $arr['descPrimary'] = $descPrimary;
                 }
                 $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
                 $arr['descSecondary'] = '';
                 if (! empty($e)) {
-                    $descSecondary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $e['id']);
+                    $descSecondary = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $e['id']);
                     $descSecondary = $descSecondary == null ? '' : $descSecondary['lang_content'];
                     $arr['descSecondary'] = $descSecondary;
                 }
@@ -343,7 +343,7 @@ class FresnsCommentsResource extends BaseAdminResource
                 $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
                 $arr['btnName'] = '';
                 if (! empty($e)) {
-                    $btnName = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $e['id']);
+                    $btnName = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $e['id']);
                     $btnName = $btnName == null ? '' : $btnName['lang_content'];
                     $arr['btnName'] = $btnName;
                 }
@@ -388,7 +388,7 @@ class FresnsCommentsResource extends BaseAdminResource
         $commentBtn = [];
         if ($mid == $this->member_id) {
             $commentBtn['status'] = $postAppends['comment_btn_status'];
-            $btnName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'comment_btn_name', $posts['id']);
+            $btnName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'comment_btn_name', $posts['id']);
             $btnName = $btnName == null ? '' : $btnName['lang_content'];
             $commentBtn['name'] = $btnName;
             $commentBtn['url'] = $postAppends['comment_btn_plugin_unikey'];
@@ -407,7 +407,7 @@ class FresnsCommentsResource extends BaseAdminResource
             $post['gid'] = '';
             $post['cover'] = '';
             if ($groupInfo) {
-                $gname = ApiLanguageHelper::getLanguages('groups', 'name', $groupInfo['id']);
+                $gname = ApiLanguageHelper::getLanguagesByTableId('groups', 'name', $groupInfo['id']);
                 $gname = $gname == null ? '' : $gname['lang_content'];
                 $post['gname'] = $gname;
                 $post['gid'] = $groupInfo['uuid'];
@@ -523,7 +523,6 @@ class FresnsCommentsResource extends BaseAdminResource
             'sticky' => $sticky,
             // 'isLike' => $isLike,
             // 'isShield' => $isShield,
-            // 'labelImg' => $labelImg,
             'commentName' => $commentName,
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,

@@ -32,7 +32,7 @@ class FresnsPluginUsagesResource extends BaseAdminResource
 
         // Extensions List Info
         $langTag = request()->header('langTag', '');
-        $name = ApiLanguageHelper::getLanguages(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $this->id);
+        $name = ApiLanguageHelper::getLanguagesByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $this->id);
         $type = $this->type;
         $plugin = $this->plugin_unikey;
         $pluginInfo = FresnsPlugins::where('unikey', $plugin)->first();

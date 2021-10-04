@@ -123,8 +123,7 @@ class FresnsMemberListsResource extends BaseAdminResource
         foreach ($memberIconsArr as $v) {
             $item = [];
             $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
-            $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name',
-                $v['id'], $langTag);
+            $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $v['id'], $langTag);
             $iconsArr[] = $item;
         }
 

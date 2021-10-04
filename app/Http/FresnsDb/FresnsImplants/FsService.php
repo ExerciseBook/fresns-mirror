@@ -36,7 +36,7 @@ class FsService extends BaseAdminService
         // Determine if it is expired
         if ($data) {
             foreach ($data as &$v) {
-                $name = ApiLanguageHelper::getLanguages(FsConfig::CFG_TABLE, 'name', $v['id']);
+                $name = ApiLanguageHelper::getLanguagesByTableId(FsConfig::CFG_TABLE, 'name', $v['id']);
                 $v['template'] = $v['implant_template'];
                 $v['name'] = $name == null ? '' : $name['lang_content'];
                 $v['position'] = $v['position'];

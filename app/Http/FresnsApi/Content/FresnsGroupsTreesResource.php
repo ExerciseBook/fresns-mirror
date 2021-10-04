@@ -47,8 +47,8 @@ class FresnsGroupsTreesResource extends BaseAdminResource
         $gid = $this->uuid;
         $type = $this->type;
         $parentId = $this->parent_id;
-        $name = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
-        $description = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'description', $this->id);
+        $name = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
+        $description = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'description', $this->id);
         $gname = $name == null ? '' : $name['lang_content'];
         $description = $description == null ? '' : $description['lang_content'];
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
@@ -64,8 +64,8 @@ class FresnsGroupsTreesResource extends BaseAdminResource
             $arr = [];
             foreach ($cGroups as $c) {
                 $arr['gid'] = $c['uuid'];
-                $cname = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'name', $c['id']);
-                $cdescription = ApiLanguageHelper::getLanguages(FresnsGroupsConfig::CFG_TABLE, 'description', $c['id']);
+                $cname = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $c['id']);
+                $cdescription = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'description', $c['id']);
                 $arr['gname'] = $cname == null ? '' : $cname['lang_content'];
                 $arr['type'] = $c['type'];
                 $arr['description'] = $cdescription == null ? '' : $cdescription['lang_content'];
@@ -84,11 +84,11 @@ class FresnsGroupsTreesResource extends BaseAdminResource
                 $arr['followSetting'] = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_GROUP_SETTING);
                 $arr['shieldSetting'] = ApiConfigHelper::getConfigByItemKey(FsConfig::SHIELD_GROUP_SETTING);
                 // Operation behavior naming
-                $arr['likeName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_GROUP_NAME) ?? 'Like';
-                $arr['followName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_GROUP_NAME) ?? 'Join';
-                $arr['shieldName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_GROUP_NAME) ?? 'Block';
+                $arr['likeName'] = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_GROUP_NAME) ?? 'Like';
+                $arr['followName'] = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_GROUP_NAME) ?? 'Join';
+                $arr['shieldName'] = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_GROUP_NAME) ?? 'Block';
                 // Content Naming
-                $arr['groupName'] = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::GROUP_NAME) ?? 'Group';
+                $arr['groupName'] = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::GROUP_NAME) ?? 'Group';
 
                 $arr['viewCount'] = $c['view_count'];
                 $arr['likeCount'] = $c['like_count'];
