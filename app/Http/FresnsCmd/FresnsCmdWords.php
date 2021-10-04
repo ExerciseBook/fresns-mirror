@@ -740,7 +740,7 @@ class FresnsCmdWords extends BasePlugin
             LogService::info('File Storage Local Success', $file);
             $t2 = time();
 
-            $file['uuid'] = ApiCommonHelper::createUuid();
+            $file['uuid'] = StrHelper::createUuid();
             // Insert
             $retId = FresnsFiles::insertGetId($file);
             FresnsSubPluginService::addSubTablePluginItem(FresnsFilesConfig::CFG_TABLE, $retId);
@@ -785,7 +785,7 @@ class FresnsCmdWords extends BasePlugin
                     $item['file_extension'] = $fileInfo['extension'];
                     $item['file_path'] = $fileInfo['path'];
                     $item['rank_num'] = $fileInfo['rankNum'];
-                    $uuid = $fileInfo['fid'] ?? ApiCommonHelper::createUuid();
+                    $uuid = $fileInfo['fid'] ?? StrHelper::createUuid();
                     $item['uuid'] = $uuid;
                     $item['table_type'] = $tableType;
                     $item['table_name'] = $tableName;
@@ -1912,7 +1912,7 @@ class FresnsCmdWords extends BasePlugin
                 // code...
                 break;
         }
-        $userUuid = ApiCommonHelper::createUuid();
+        $userUuid = StrHelper::createUuid();
         $input['api_token'] = StrHelper::createToken();
         $input['uuid'] = $userUuid;
         $input['last_login_at'] = date('Y-m-d H:i:s');

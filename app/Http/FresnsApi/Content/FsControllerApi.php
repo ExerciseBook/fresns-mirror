@@ -19,7 +19,6 @@ use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsApi\Info\FsService;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;

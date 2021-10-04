@@ -15,7 +15,6 @@ use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
-use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsCmd\FresnsCmdWords;

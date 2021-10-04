@@ -22,7 +22,6 @@ use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsApi\Info\FsService as FresnsService;
 use App\Http\FresnsCmd\FresnsCmdWords;
 use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsCodeMessages\FresnsCodeMessagesConfig;
@@ -41,6 +40,7 @@ use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesService;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogsService;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
@@ -1081,10 +1081,9 @@ class FsControllerApi extends FresnsBaseApiController
                 $list = [];
                 $FsPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%1%')->get()->toArray();
                 foreach ($FsPluginUsagesArr as $FsUsage) {
-                    $name = FresnsService::getLanguageField('name', $FsUsage['id']);
                     $arr = [];
                     $arr['plugin'] = $FsUsage['plugin_unikey'];
-                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $FsUsage['id']);
                     $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
                     $arr['url'] = FresnsPluginsService::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $arr['number'] = $FsUsage['editor_number'];
@@ -1106,10 +1105,9 @@ class FsControllerApi extends FresnsBaseApiController
                 $maps = [];
                 $FsPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
                 foreach ($FsPluginUsagesArr as $FsUsage) {
-                    $name = FresnsService::getLanguageField('name', $FsUsage['id']);
                     $arr = [];
                     $arr['plugin'] = $FsUsage['plugin_unikey'];
-                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $FsUsage['id']);
                     $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
                     $arr['url'] = FresnsPluginsService::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $maps[] = $arr;
@@ -1314,10 +1312,9 @@ class FsControllerApi extends FresnsBaseApiController
                 $list = [];
                 $FsPluginUsagesArr = FresnsPluginUsages::where('type', 3)->where('scene', 'like', '%2%')->get()->toArray();
                 foreach ($FsPluginUsagesArr as $FsUsage) {
-                    $name = FresnsService::getLanguageField('name', $FsUsage['id']);
                     $arr = [];
                     $arr['plugin'] = $FsUsage['plugin_unikey'];
-                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $FsUsage['id']);
                     $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
                     $arr['url'] = FresnsPluginsService::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $arr['number'] = $FsUsage['editor_number'];
@@ -1335,10 +1332,9 @@ class FsControllerApi extends FresnsBaseApiController
                 $maps = [];
                 $FsPluginUsagesArr = FresnsPluginUsages::where('type', 9)->get()->toArray();
                 foreach ($FsPluginUsagesArr as $FsUsage) {
-                    $name = FresnsService::getLanguageField('name', $FsUsage['id']);
                     $arr = [];
                     $arr['plugin'] = $FsUsage['plugin_unikey'];
-                    $arr['name'] = $name == null ? '' : $name['lang_content'];
+                    $arr['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $FsUsage['id']);
                     $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
                     $arr['url'] = FresnsPluginsService::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $maps[] = $arr;

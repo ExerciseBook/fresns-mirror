@@ -12,7 +12,6 @@ use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneService;
-use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
@@ -612,7 +611,7 @@ class ContentLogsService
         LogService::info('File Storage Local Success ', $file);
         $t2 = time();
 
-        $file['uuid'] = ApiCommonHelper::createUuid();
+        $file['uuid'] = StrHelper::createUuid();
         // Insert data
         $retId = FresnsFiles::insertGetId($file);
 
@@ -655,7 +654,7 @@ class ContentLogsService
         if (is_array($fileInfo)) {
             foreach ($fileInfo as $v) {
                 $item = [];
-                $item['uuid'] = ApiCommonHelper::createUuid();
+                $item['uuid'] = StrHelper::createUuid();
                 $item['file_name'] = $v['name'];
                 $item['file_type'] = $v['type'];
                 $item['table_type'] = $v['tableType'];

@@ -14,7 +14,6 @@ use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsApi\Info\FsService;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -42,6 +41,7 @@ use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppends;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
@@ -420,8 +420,7 @@ class FresnsCommentsResource extends BaseAdminResource
         if ($FsPluginUsagesArr) {
             foreach ($FsPluginUsagesArr as $FsPluginUsages) {
                 $manages['plugin'] = $FsPluginUsages['plugin_unikey'];
-                $name = FsService::getLanguageField('name', $FsPluginUsages['id']);
-                $manages['name'] = $name == null ? '' : $name['lang_content'];
+                $manages['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $FsPluginUsages['id']);
                 $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsPluginUsages['icon_file_id'], $FsPluginUsages['icon_file_url']);
                 $manages['url'] = FresnsPluginsService::getPluginUsagesUrl($FsPluginUsages['plugin_unikey'], $FsPluginUsages['id']);
                 // Is the group administrator dedicated

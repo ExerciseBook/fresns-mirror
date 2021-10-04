@@ -13,7 +13,6 @@ use App\Http\FresnsApi\Base\FresnsBaseService;
 use App\Http\FresnsApi\Content\FsConfig as ContentConfig;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
-use App\Http\FresnsApi\Info\FsService as InfoService;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
@@ -68,8 +67,7 @@ class FresnsGroupsService extends FresnsBaseService
                     $extends = [];
                     $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $pluginUsages['plugin_unikey'])->first();
                     $extends['plugin'] = $pluginUsages['plugin_unikey'] ?? '';
-                    $name = InfoService::getLanguageField('name', $pluginUsages['id']);
-                    $extends['name'] = $name == null ? '' : $name['lang_content'];
+                    $manages['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $pluginUsages['id']);
                     $extends['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($pluginUsages['icon_file_id'], $pluginUsages['icon_file_url']);
                     $extends['url'] = FresnsPluginsService::getPluginUsagesUrl($pluginUsages['plugin_unikey'], $pluginUsages['id']);
                     $extends['badgesType'] = $pluginBadges['display_type'] ?? '';
