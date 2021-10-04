@@ -40,9 +40,8 @@ use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
-use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesService;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppends;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
@@ -365,7 +364,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         if ($mid == $this->member_id) {
             $commentBtn['status'] = $postAppends['comment_btn_status'];
             $commentBtn['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'comment_btn_name', $posts['id']);
-            $commentBtn['url'] = $postAppends['comment_btn_plugin_unikey'];
+            $commentBtn['url'] = FresnsPluginsService::getPluginUrlByUnikey($postAppends['comment_btn_plugin_unikey']);
         }
 
         // If searchPid is empty, output
@@ -385,11 +384,10 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         if ($FsPluginUsagesArr) {
             foreach ($FsPluginUsagesArr as $FsPluginUsages) {
                 $manages['plugin'] = $FsPluginUsages['plugin_unikey'];
-                $plugin = FresnsPlugins::where('unikey', $FsPluginUsages['plugin_unikey'])->first();
                 $name = FsService::getLanguageField('name', $FsPluginUsages['id']);
                 $manages['name'] = $name == null ? '' : $name['lang_content'];
                 $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsPluginUsages['icon_file_id'], $FsPluginUsages['icon_file_url']);
-                $manages['url'] = $plugin['access_path '].'/'.$FsPluginUsages['parameter'];
+                $manages['url'] = FresnsPluginsService::getPluginUsagesUrl($FsPluginUsages['plugin_unikey'], $FsPluginUsages['id']);
                 // Is the group administrator dedicated
                 if ($FsPluginUsages['is_group_admin'] != 0) {
                     // Query whether the current member is a group administrator

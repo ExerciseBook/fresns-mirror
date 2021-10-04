@@ -19,7 +19,6 @@ use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
-use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
@@ -40,7 +39,6 @@ use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesService;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
 use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
@@ -1088,7 +1086,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $FsUsage['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
-                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
+                    $arr['url'] = FresnsPluginsService::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $arr['number'] = $FsUsage['editor_number'];
                     $list[] = $arr;
                 }
@@ -1113,7 +1111,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $FsUsage['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
-                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
+                    $arr['url'] = FresnsPluginsService::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;
@@ -1321,7 +1319,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $FsUsage['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
-                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
+                    $arr['url'] = FresnsPluginsService::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $arr['number'] = $FsUsage['editor_number'];
                     $list[] = $arr;
                 }
@@ -1342,7 +1340,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $arr['plugin'] = $FsUsage['plugin_unikey'];
                     $arr['name'] = $name == null ? '' : $name['lang_content'];
                     $arr['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsUsage['icon_file_id'], $FsUsage['icon_file_url']);
-                    $arr['url'] = ApiCommonHelper::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
+                    $arr['url'] = FresnsPluginsService::getPluginUsagesUrl($FsUsage['plugin_unikey'], $FsUsage['id']);
                     $maps[] = $arr;
                 }
                 $isLbs['maps'] = $maps;

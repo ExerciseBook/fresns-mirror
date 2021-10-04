@@ -9,7 +9,6 @@
 namespace App\Http\FresnsApi\Member;
 
 use App\Helpers\DateHelper;
-use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
@@ -30,7 +29,7 @@ use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 use App\Http\FresnsDb\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\FresnsDb\FresnsPluginBadges\FresnsPluginBadgesService;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
+use App\Http\FresnsDb\FresnsPluginsService\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
@@ -67,7 +66,7 @@ class FsService
                 $item['plugin'] = $v['plugin_unikey'];
                 $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                 $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
-                $item['url'] = ApiCommonHelper::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
+                $item['url'] = FresnsPluginsService::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
                 $managesArr[] = $item;
             }
         }
@@ -91,7 +90,7 @@ class FsService
                     $item['plugin'] = $v['plugin_unikey'];
                     $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                     $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
-                    $item['url'] = ApiCommonHelper::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
+                    $item['url'] = FresnsPluginsService::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
                     $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $v['plugin_unikey'])->where('member_id', $mid)->first();
                     $item['badgesType'] = $pluginBadges['display_type'] ?? '';
                     $item['badgesValue'] = $pluginBadges['value_text'] ?? '';
@@ -120,7 +119,7 @@ class FsService
                     $item['plugin'] = $v['plugin_unikey'];
                     $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                     $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
-                    $item['url'] = ApiCommonHelper::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
+                    $item['url'] = FresnsPluginsService::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
                     $pluginBadges = FresnsPluginBadges::where('plugin_unikey', $v['plugin_unikey'])->where('member_id', $mid)->first();
                     $item['badgesType'] = $pluginBadges['display_type'] ?? '';
                     $item['badgesValue'] = $pluginBadges['value_text'] ?? '';
@@ -308,7 +307,7 @@ class FsService
                 $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
                 $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                 $item['type'] = $v['type'];
-                $item['url'] = '';
+                $item['url'] = FresnsPluginsService::getPluginUrlByUnikey($v['plugin_unikey']);
                 $iconsArr[] = $item;
             }
             $data['icons'] = $iconsArr;
@@ -372,8 +371,7 @@ class FsService
                     $item['plugin'] = $v['plugin_unikey'];
                     $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
                     $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
-                    $plugins = FresnsPlugins::where('unikey', $v['plugin_unikey'])->first();
-                    $item['url'] = $plugins['access_path'].$v['parameter'];
+                    $item['url'] = FresnsPluginsService::getPluginUsagesUrl($v['plugin_unikey'], $v['id']);
 
                     $expandsArr[] = $item;
                 }

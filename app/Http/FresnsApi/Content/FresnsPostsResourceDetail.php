@@ -11,7 +11,6 @@ namespace App\Http\FresnsApi\Content;
 use App\Base\Resources\BaseAdminResource;
 use App\Helpers\DateHelper;
 use App\Http\Center\Common\GlobalService;
-use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
@@ -42,8 +41,7 @@ use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
-use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\FresnsDb\FresnsPluginsService\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesService;
 use App\Http\FresnsDb\FresnsPostAllows\FresnsPostAllowsConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppends;
@@ -411,11 +409,10 @@ class FresnsPostsResourceDetail extends BaseAdminResource
             foreach ($FsPluginUsagesArr as $FsPluginUsages) {
                 $manages = [];
                 $manages['plugin'] = $FsPluginUsages['plugin_unikey'];
-                $plugin = FresnsPlugins::where('unikey', $FsPluginUsages['plugin_unikey'])->first();
                 $name = FsService::getLanguageField('name', $FsPluginUsages['id']);
                 $manages['name'] = $name == null ? '' : $name['lang_content'];
                 $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsPluginUsages['icon_file_id'], $FsPluginUsages['icon_file_url']);
-                $manages['url'] = ApiCommonHelper::getPluginUsagesUrl($FsPluginUsages['plugin_unikey'], $FsPluginUsages['id']);
+                $manages['url'] = FresnsPluginsService::getPluginUsagesUrl($FsPluginUsages['plugin_unikey'], $FsPluginUsages['id']);
                 // Is the group administrator dedicated
                 if ($FsPluginUsages['is_group_admin'] != 0) {
                     // Query whether the current member is a group administrator

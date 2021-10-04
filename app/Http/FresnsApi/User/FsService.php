@@ -95,8 +95,8 @@ class FsService
             $wallet['bankAccount'] = ApiCommonHelper::encryptIdNumber($userWallets['bank_account'], 4, -2);
         }
         $wallet['bankStatus'] = $userWallets['bank_status'] ?? '';
-        $wallet['payExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, FsConfig::PLUGIN_USAGERS_TYPE_1, $langTag);
-        $wallet['withdrawExpands'] = FresnsPluginBadgesService::getPluginExpand($mid, FsConfig::PLUGIN_USAGERS_TYPE_2, $langTag);
+        $wallet['payExpands'] = FresnsPluginBadgesService::getWalletPluginExpands($mid, FsConfig::PLUGIN_USAGERS_TYPE_1, $langTag);
+        $wallet['withdrawExpands'] = FresnsPluginBadgesService::getWalletPluginExpands($mid, FsConfig::PLUGIN_USAGERS_TYPE_2, $langTag);
         $data['wallet'] = $wallet;
 
         $memberArr = DB::table('members')->where('user_id', $uid)->get()->toArray();
