@@ -192,17 +192,10 @@ class FresnsCommentsResource extends BaseAdminResource
                     $member['mname'] = $memberInfo->name ?? '';
                     $member['nickname'] = $memberInfo->nickname ?? '';
                     $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
-
-                    $roleName = '';
-                    if (! empty($memberRole)) {
-                        $roleName = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
-                        $roleName = $roleName == null ? '' : $roleName['lang_content'];
-                    }
-                    $member['roleName'] = $roleName;
-                    $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? '';
+                    $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
+                    $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? 0;
                     $member['roleIcon'] = $memberRole['icon_file_url'] ?? '';
-                    $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? '';
-
+                    $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? 0;
                     $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
                     $member['gender'] = $memberInfo->gender ?? '';
                     $member['bio'] = $memberInfo->bio ?? '';
@@ -216,9 +209,7 @@ class FresnsCommentsResource extends BaseAdminResource
 
                     $icons['name'] = '';
                     if (! empty($memberIcon)) {
-                        $iconName = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
-                        $iconName = $iconName == null ? '' : $iconName['lang_content'];
-                        $icons['name'] = $iconName;
+                        $icons['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
                     }
                     if (empty($icons['name']) && empty($icons['icon'])) {
                         $icons = [];
@@ -321,31 +312,23 @@ class FresnsCommentsResource extends BaseAdminResource
                 }
                 $arr['title'] = '';
                 if (! empty($e)) {
-                    $title = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'title', $e['id']);
-                    $title = $title == null ? '' : $title['lang_content'];
-                    $arr['title'] = $title;
+                    $arr['title'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'title', $e['id']);
                 }
                 $arr['titleColor'] = $e['title_color'] ?? '';
                 $arr['descPrimary'] = '';
                 if (! empty($e)) {
-                    $descPrimary = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $e['id']);
-                    $descPrimary = $descPrimary == null ? '' : $descPrimary['lang_content'];
-                    $arr['descPrimary'] = $descPrimary;
+                    $arr['descPrimary'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $e['id']);
                 }
                 $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
                 $arr['descSecondary'] = '';
                 if (! empty($e)) {
-                    $descSecondary = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $e['id']);
-                    $descSecondary = $descSecondary == null ? '' : $descSecondary['lang_content'];
-                    $arr['descSecondary'] = $descSecondary;
+                    $arr['descSecondary'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $e['id']);
                 }
                 $arr['descSecondaryColor'] = $e['desc_secondary_color'] ?? '';
                 $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
                 $arr['btnName'] = '';
                 if (! empty($e)) {
-                    $btnName = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $e['id']);
-                    $btnName = $btnName == null ? '' : $btnName['lang_content'];
-                    $arr['btnName'] = $btnName;
+                    $arr['btnName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $e['id']);
                 }
                 $arr['btnColor'] = $e['btn_color'] ?? '';
                 $arr['type'] = $e['extend_type'] ?? '';
@@ -388,9 +371,7 @@ class FresnsCommentsResource extends BaseAdminResource
         $commentBtn = [];
         if ($mid == $this->member_id) {
             $commentBtn['status'] = $postAppends['comment_btn_status'];
-            $btnName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'comment_btn_name', $posts['id']);
-            $btnName = $btnName == null ? '' : $btnName['lang_content'];
-            $commentBtn['name'] = $btnName;
+            $commentBtn['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'comment_btn_name', $posts['id']);
             $commentBtn['url'] = $postAppends['comment_btn_plugin_unikey'];
         }
 
@@ -407,9 +388,7 @@ class FresnsCommentsResource extends BaseAdminResource
             $post['gid'] = '';
             $post['cover'] = '';
             if ($groupInfo) {
-                $gname = ApiLanguageHelper::getLanguagesByTableId('groups', 'name', $groupInfo['id']);
-                $gname = $gname == null ? '' : $gname['lang_content'];
-                $post['gname'] = $gname;
+                $post['gname'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $groupInfo['id']);
                 $post['gid'] = $groupInfo['uuid'];
                 $post['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
             }

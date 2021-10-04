@@ -51,10 +51,8 @@ class FresnsGroupsResourceDetail extends BaseAdminResource
         $type = $this->type;
         $parentId = $this->parent_id;
         $langTag = request()->header('langTag');
-        $name = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
+        $gname = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
         $description = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'description', $this->id);
-        $gname = $name == null ? '' : $name['lang_content'];
-        $description = $description == null ? '' : $description['lang_content'];
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
         $banner = ApiFileHelper::getImageSignUrlByFileIdUrl($this->banner_file_id, $this->banner_file_url);
         $recommend = $this->is_recommend;
@@ -83,21 +81,13 @@ class FresnsGroupsResourceDetail extends BaseAdminResource
         $groupName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::GROUP_NAME) ?? 'Group';
 
         $extends = [];
+        
         $parentInfo = [];
         $parentGroup = FresnsGroups::find($this->parent_id);
         if ($parentGroup) {
             $parentInfo['gid'] = $parentGroup['uuid'] ?? '';
-            $pname = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
-            $parentInfo['pname'] = $pname == null ? '' : $pname['lang_content'];
-            $parentInfo['cover'] = $parentGroup['cover_file_url'] ?? '';
-        }
-        $parentInfo = [];
-        if ($parentGroup) {
-            $parentInfo['gid'] = $parentGroup['uuid'] ?? '';
-            $pname = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
-            $parentInfo['gname'] = $pname == null ? '' : $pname['lang_content'];
-            $parentInfo['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($parentGroup['cover_file_id'],
-                $parentGroup['cover_file_url']);
+            $parentInfo['gname'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
+            $parentInfo['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($parentGroup['cover_file_id'], $parentGroup['cover_file_url']);
         }
         $admins = [];
         if ($type != 1) {

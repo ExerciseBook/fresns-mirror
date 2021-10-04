@@ -160,10 +160,8 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $canDelete = $append['can_delete'];
         $allowStatus = $this->is_allow;
         $allowBtnName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
-        $allowBtnName = $allowBtnName == null ? '' : $allowBtnName['lang_content'];
         $allowBtnUrl = $append['allow_plugin_unikey'];
         $memberListName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'member_list_name', $this->id);
-        $memberListName = $memberListName == null ? '' : $memberListName['lang_content'];
         $memberListCount = Db::table('post_members')->where('post_id', $this->id)->count();
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
@@ -217,23 +215,16 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $member['mname'] = $memberInfo->name ?? '';
                 $member['nickname'] = $memberInfo->nickname ?? '';
                 $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
-
-                $roleName = '';
-                if (! empty($memberRole)) {
-                    $roleName = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name',
-                        $memberRole['id']);
-                    $roleName = $roleName == null ? '' : $roleName['lang_content'];
-                }
-                $member['roleName'] = $roleName;
-                $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? '';
+                $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
+                $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? 0;
                 $member['roleIcon'] = $memberRole['icon_file_url'] ?? '';
-                $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? '';
-
+                $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? 0;
                 $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
                 $member['gender'] = $memberInfo->gender ?? '';
                 $member['bio'] = $memberInfo->bio ?? '';
                 $member['verifiedStatus'] = $memberInfo->verified_status ?? '';
                 $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
+
                 $icons = [];
                 $icons['icon'] = $memberIcon['icon_file_url'] ?? '';
                 if ($icons['icon']) {
@@ -241,9 +232,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 }
                 $icons['name'] = '';
                 if ($memberIcon) {
-                    $iconName = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
-                    $iconName = $iconName == null ? '' : $iconName['lang_content'];
-                    $icons['name'] = $iconName;
+                    $icons['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
                 }
                 if (empty($icons['name']) && empty($icons['icon'])) {
                     $icons = [];
@@ -341,31 +330,23 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                     }
                     $arr['title'] = '';
                     if (! empty($e)) {
-                        $title = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'title', $e['id']);
-                        $title = $title == null ? '' : $title['lang_content'];
-                        $arr['title'] = $title;
+                        $arr['title'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'title', $e['id']);
                     }
                     $arr['titleColor'] = $e['title_color'] ?? '';
                     $arr['descPrimary'] = '';
                     if (! empty($e)) {
-                        $descPrimary = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $e['id']);
-                        $descPrimary = $descPrimary == null ? '' : $descPrimary['lang_content'];
-                        $arr['descPrimary'] = $descPrimary;
+                        $arr['descPrimary'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $e['id']);
                     }
                     $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
                     $arr['descSecondary'] = '';
                     if (! empty($e)) {
-                        $descSecondary = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $e['id']);
-                        $descSecondary = $descSecondary == null ? '' : $descSecondary['lang_content'];
-                        $arr['descSecondary'] = $descSecondary;
+                        $arr['descSecondary'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $e['id']);
                     }
                     $arr['descSecondaryColor'] = $e['desc_secondary_color'] ?? '';
                     $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
                     $arr['btnName'] = '';
                     if (! empty($e)) {
-                        $btnName = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $e['id']);
-                        $btnName = $btnName == null ? '' : $btnName['lang_content'];
-                        $arr['btnName'] = $btnName;
+                        $arr['btnName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $e['id']);
                     }
                     $arr['btnColor'] = $e['btn_color'] ?? '';
                     $arr['type'] = $e['extend_type'] ?? '';
@@ -382,10 +363,8 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $group = [];
         if ($groupInfo) {
             $group['gid'] = $groupInfo['uuid'] ?? '';
-            $name = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->group_id);
-            $group['gname'] = $name == null ? '' : $name['lang_content'];
-            $description = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'description', $this->group_id);
-            $group['description'] = $description == null ? '' : $description['lang_content'];
+            $group['gname'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->group_id);
+            $group['description'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'description', $this->group_id);
             $group['cover'] = $groupInfo['cover_file_url'] ?? '';
             // Whether the current member has the right to comment in the group
             $permission = $groupInfo['permission'] ?? '';

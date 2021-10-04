@@ -214,7 +214,7 @@ class ApiFileHelper
             if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return false;
             }
-            $singUrl = $resp['output']['imageDefaultUrl'];
+            $singUrl = $resp['output']['imageBigUrl'];
         }
 
         return $singUrl;
@@ -230,7 +230,7 @@ class ApiFileHelper
         if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return false;
         }
-        $singUrl = $resp['output']['imageDefaultUrl'];
+        $singUrl = $resp['output']['imageBigUrl'];
 
         return $singUrl;
     }
@@ -255,7 +255,7 @@ class ApiFileHelper
                 return false;
             }
 
-            return $resp['output']['imageDefaultUrl'];
+            return $resp['output']['imageBigUrl'];
         } else {
             return $fileUrl;
         }

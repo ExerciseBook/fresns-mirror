@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ApiLanguageHelper
 {
+    // table_id
     public static function getLanguagesByTableId($table, $table_field, $table_id)
     {
         if (! $table_id) {
@@ -30,17 +31,18 @@ class ApiLanguageHelper
             'table_id' => $table_id,
             'lang_tag' => $langTag,
         ];
-        $name = FresnsLanguages::where($input)->first();
-        if (! $name) {
+        $langContent = FresnsLanguages::where($input)->first();
+        if (! $langContent) {
             $input = [
                 'table_name' => $table,
                 'table_field' => $table_field,
                 'table_id' => $table_id,
             ];
-            $name = FresnsLanguages::where($input)->first();
+            $langContent = FresnsLanguages::where($input)->first();
         }
+        $content = $langContent['lang_content'] ?? '';
 
-        return $name;
+        return $content;
     }
 
     // table_key
@@ -57,16 +59,16 @@ class ApiLanguageHelper
             'table_key' => $table_key,
             'lang_tag' => $langTag,
         ];
-        $name = FresnsLanguages::where($input)->first();
-        if (! $name) {
+        $langContent = FresnsLanguages::where($input)->first();
+        if (! $langContent) {
             $input = [
                 'table_name' => $table,
                 // 'table_field' => 'item_key',
                 'table_key' => $table_key,
             ];
-            $name = FresnsLanguages::where($input)->first();
+            $langContent = FresnsLanguages::where($input)->first();
         }
-        $content = $name['lang_content'] ?? '';
+        $content = $langContent['lang_content'] ?? '';
 
         return $content;
     }

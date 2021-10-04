@@ -46,10 +46,8 @@ class FresnsGroupsResource extends BaseAdminResource
         $parentGroupInfo = FresnsGroups::where('id', $parentId)->first();
         $parentId = $parentGroupInfo['uuid'] ?? '';
         $mid = GlobalService::getGlobalKey('member_id');
-        $name = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
+        $gname = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
         $description = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'description', $this->id);
-        $gname = $name == null ? '' : $name['lang_content'];
-        $description = $description == null ? '' : $description['lang_content'];
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
         $banner = ApiFileHelper::getImageSignUrlByFileIdUrl($this->banner_file_id, $this->banner_file_url);
         $recommend = $this->is_recommend;
@@ -77,12 +75,11 @@ class FresnsGroupsResource extends BaseAdminResource
         // Content Naming
         $groupName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::GROUP_NAME) ?? 'Group';
 
-        $parentGroup = FresnsGroups::find($this->parent_id);
         $parentInfo = [];
+        $parentGroup = FresnsGroups::find($this->parent_id);
         if ($parentGroup) {
             $parentInfo['gid'] = $parentGroup['uuid'] ?? '';
-            $pname = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
-            $parentInfo['gname'] = $pname == null ? '' : $pname['lang_content'];
+            $parentInfo['gname'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
             $parentInfo['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($parentGroup['cover_file_id'], $parentGroup['cover_file_url']);
         }
         $admins = [];

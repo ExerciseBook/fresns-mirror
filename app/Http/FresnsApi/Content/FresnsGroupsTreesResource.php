@@ -47,28 +47,24 @@ class FresnsGroupsTreesResource extends BaseAdminResource
         $gid = $this->uuid;
         $type = $this->type;
         $parentId = $this->parent_id;
-        $name = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
+        $gname = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $this->id);
         $description = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'description', $this->id);
-        $gname = $name == null ? '' : $name['lang_content'];
-        $description = $description == null ? '' : $description['lang_content'];
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
         $banner = ApiFileHelper::getImageSignUrlByFileIdUrl($this->banner_file_id, $this->banner_file_url);
         $groups = [];
         $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
         $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->pluck('follow_id')->toArray();
         $noGroupArr = array_diff($FresnsGroups, $groupMember);
-        $cGroups = FresnsGroups::where('parent_id', $this->id)->whereNotIn('id', $noGroupArr)->limit($groupSize)->orderby('rank_num', 'asc')->get()->toArray();
-        $groupCount = count($cGroups);
+        $TreesGroups = FresnsGroups::where('parent_id', $this->id)->whereNotIn('id', $noGroupArr)->limit($groupSize)->orderby('rank_num', 'asc')->get()->toArray();
+        $groupCount = count($TreesGroups);
 
-        if ($cGroups) {
+        if ($TreesGroups) {
             $arr = [];
-            foreach ($cGroups as $c) {
+            foreach ($TreesGroups as $c) {
                 $arr['gid'] = $c['uuid'];
-                $cname = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $c['id']);
-                $cdescription = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'description', $c['id']);
-                $arr['gname'] = $cname == null ? '' : $cname['lang_content'];
                 $arr['type'] = $c['type'];
-                $arr['description'] = $cdescription == null ? '' : $cdescription['lang_content'];
+                $arr['gname'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $c['id']);
+                $arr['description'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'description', $c['id']);
                 $arr['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($c['cover_file_id'], $c['cover_file_url']);
                 $arr['banner'] = ApiFileHelper::getImageSignUrlByFileIdUrl($c['banner_file_id'], $c['banner_file_url']);
                 $arr['recommend'] = $c['is_recommend'];

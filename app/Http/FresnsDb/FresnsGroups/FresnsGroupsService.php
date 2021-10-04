@@ -50,8 +50,7 @@ class FresnsGroupsService extends FresnsBaseService
             $langTag = FresnsPluginUsagesService::getDefaultLanguage();
         }
         if ($group) {
-            $seo = DB::table('seo')->where('linked_type', 2)->where('linked_id', $group['id'])->where('lang_tag',
-                $langTag)->where('deleted_at', null)->first();
+            $seo = DB::table('seo')->where('linked_type', 2)->where('linked_id', $group['id'])->where('lang_tag', $langTag)->where('deleted_at', null)->first();
             $seoInfo = [];
             if ($seo) {
                 $seoInfo['title'] = $seo->title;

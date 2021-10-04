@@ -63,7 +63,7 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         $default = [
             'type' => $type,
             'plugin' => $plugin,
-            'name' => $name == null ? '' : $name['lang_content'],
+            'name' => $name,
             'icon' => $icon == null ? '' : $icon,
             'url' => $url,
             'number' => $number,
