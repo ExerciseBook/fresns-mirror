@@ -160,8 +160,7 @@ class ContentLogsService
         // Extends Settings
         $extends_json = [];
         $result = [];
-        $extendLink = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id',
-            $postInfo['id'])->get()->toArray();
+        $extendLink = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 1)->where('linked_id', $postInfo['id'])->get()->toArray();
         if ($extendLink) {
             $arr = [];
             foreach ($extendLink as $e) {
@@ -244,19 +243,19 @@ class ContentLogsService
 
         // Location Settings
         $location_json = [];
-        $location_json['isLbs'] = $commentInfo['is_lbs'];
-        $location_json['mapId'] = $commentAppend['map_id'];
-        $location_json['latitude'] = $commentAppend['map_latitude'];
-        $location_json['longitude'] = $commentAppend['map_longitude'];
-        $location_json['scale'] = $commentAppend['map_scale'];
-        $location_json['poi'] = $commentAppend['map_poi'];
-        $location_json['poiId'] = $commentAppend['map_poi_id'];
-        $location_json['nation'] = $commentAppend['map_nation'];
-        $location_json['province'] = $commentAppend['map_province'];
-        $location_json['city'] = $commentAppend['map_city'];
-        $location_json['district'] = $commentAppend['map_district'];
-        $location_json['adcode'] = $commentAppend['map_adcode'];
-        $location_json['address'] = $commentAppend['map_address'];
+        $location_json['isLbs'] = $commentInfo['is_lbs'] ?? 0;
+        $location_json['mapId'] = $commentAppend['map_id'] ?? null;
+        $location_json['latitude'] = $commentAppend['map_latitude'] ?? null;
+        $location_json['longitude'] = $commentAppend['map_longitude'] ?? null;
+        $location_json['scale'] = $commentAppend['map_scale'] ?? null;
+        $location_json['poi'] = $commentAppend['map_poi'] ?? null;
+        $location_json['poiId'] = $commentAppend['map_poi_id'] ?? null;
+        $location_json['nation'] = $commentAppend['map_nation'] ?? null;
+        $location_json['province'] = $commentAppend['map_province'] ?? null;
+        $location_json['city'] = $commentAppend['map_city'] ?? null;
+        $location_json['district'] = $commentAppend['map_district'] ?? null;
+        $location_json['adcode'] = $commentAppend['map_adcode'] ?? null;
+        $location_json['address'] = $commentAppend['map_address'] ?? null;
 
         // Files Settings
         $more_json = json_decode($commentInfo['more_json'], true);

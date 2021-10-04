@@ -219,37 +219,35 @@ class FresnsCommentsService extends FsService
     {
         // Parsing basic information
         $draftComment = FresnsCommentLogs::find($draftId);
+        $uuid = strtolower(StrHelper::randString(8));
 
         // Parse content information (determine whether the content needs to be truncated)
         $contentBrief = $this->parseDraftContent($draftId);
-
         // Removing html tags
         $contentBrief = strip_tags($contentBrief);
-
-        $uuid = strtolower(StrHelper::randString(8));
         // Get the number of words in the brief of the comment
         $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
         if (mb_strlen($draftComment['content']) > $commentEditorBriefCount) {
-            $is_brief = 1;
+            $isBrief = 1;
         } else {
-            $is_brief = 0;
+            $isBrief = 0;
         }
-        $allosJsonDecode = json_decode($draftComment['allow_json'], true);
-        $is_allow = $allosJsonDecode['isAllow'] ?? 0;
-        // Location Information
+
         $locationJson = json_decode($draftComment['location_json'], true);
         $isLbs = $locationJson['isLbs'] ?? 0;
+
         $more_json = [];
         $more_json['files'] = json_decode($draftComment['files_json'], true);
         LogService::info('draftComment', $draftComment);
         LogService::info('more_json', $more_json);
+
         $postInput = [
             'uuid' => $uuid,
             'member_id' => $draftComment['member_id'],
             'post_id' => $draftComment['post_id'],
             'types' => $draftComment['types'],
             'content' => $contentBrief,
-            'is_brief' => $is_brief,
+            'is_brief' => $isBrief,
             'parent_id' => $commentCid,
             'is_anonymous' => $draftComment['is_anonymous'],
             'is_lbs' => $isLbs,
@@ -257,7 +255,6 @@ class FresnsCommentsService extends FsService
         ];
         LogService::info('postInput', $postInput);
 
-        // $commentId = DB::table('comments')->insertGetId($postInput);
         $commentId = (new FresnsComments())->store($postInput);
         $AppendStore = $this->commentAppendStore($commentId, $draftId);
         if ($AppendStore) {
@@ -282,30 +279,27 @@ class FresnsCommentsService extends FsService
 
         // Parse content information (determine whether the content needs to be truncated)
         $contentBrief = $this->parseDraftContent($draftId);
-
         // Removing html tags
         $contentBrief = strip_tags($contentBrief);
-
         // Get the number of words in the brief of the comment
         $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_WORD_COUNT) ?? 280;
         if (mb_strlen($draftComment['content']) > $commentEditorBriefCount) {
-            $is_brief = 1;
+            $isBrief = 1;
         } else {
-            $is_brief = 0;
+            $isBrief = 0;
         }
-        $allosJsonDecode = json_decode($draftComment['allow_json'], true);
-        $is_allow = $allosJsonDecode['isAllow'] ?? 0;
+        
         // Location Information
         $locationJson = json_decode($draftComment['location_json'], true);
         $isLbs = $locationJson['isLbs'] ?? '';
+        
         $more_json = [];
         $more_json['files'] = json_decode($draftComment['files_json'], true);
 
         $commentInput = [
             'types' => $draftComment['types'],
             'content' => $contentBrief,
-            'is_brief' => $is_brief,
-            // 'is_markdown' => $draftComment['is_markdown'],
+            'is_brief' => $isBrief,
             'is_anonymous' => $draftComment['is_anonymous'],
             'is_lbs' => $isLbs,
             'latest_edit_at' => date('Y-m-d H:i:s'),
