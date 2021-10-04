@@ -572,6 +572,12 @@ class FresnsPostsService extends FsService
         $content = $this->stopWords($content);
         // Removing html tags
         // $content = strip_tags($content);
+
+        // fix bug
+        if(empty($proportion)){
+            $proportion = 0;
+        }
+
         $postAppendInput = [
             'platform_id' => $draftPost['platform_id'],
             'content' => $content,
