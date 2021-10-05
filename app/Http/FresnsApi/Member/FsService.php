@@ -29,7 +29,7 @@ use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 use App\Http\FresnsDb\FresnsPluginBadges\FresnsPluginBadges;
 use App\Http\FresnsDb\FresnsPluginBadges\FresnsPluginBadgesService;
-use App\Http\FresnsDb\FresnsPluginsService\FresnsPluginsService;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
@@ -298,8 +298,8 @@ class FsService
             if ($stats['extcredits5Status'] == 3) {
                 $stats['extcredits5'] = $memberStats['extcredits5'];
             }
-
             $data['stats'] = $stats;
+
             $memberIconsArr = FresnsMemberIcons::where('member_id', $viewMid)->get()->toArray();
             $iconsArr = [];
             foreach ($memberIconsArr as $v) {
@@ -311,12 +311,14 @@ class FsService
                 $iconsArr[] = $item;
             }
             $data['icons'] = $iconsArr;
+
             $data['draftCount'] = null;
             if ($isMe == true) {
                 $draftCount['posts'] = FresnsPostLogs::whereIn('state', [1, 4])->count();
                 $draftCount['comments'] = FresnsCommentLogs::whereIn('state', [1, 4])->count();
                 $data['draftCount'] = $draftCount;
             }
+
             $data['memberName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name', $langTag);
             $data['memberIdName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_id_name', $langTag);
             $data['memberNameName'] = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', 'member_name_name', $langTag);
