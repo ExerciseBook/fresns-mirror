@@ -36,7 +36,7 @@
 - API：删除注册和登录接口的第三方互联相关功能
 - API：新增全局概述接口，合并未读消息数
 - API：完善主角色权限继承说明
-- 命令字：将内容入主表的逻辑封装为 plg_cmd_direct_release_content 命令字
+- 命令字：将内容入主表的逻辑封装为 fresns_cmd_direct_release_content 命令字
 - 数据库：角色表 permission 权限字段，JSON 结构修改
 
 **BREAKING CHANGES**

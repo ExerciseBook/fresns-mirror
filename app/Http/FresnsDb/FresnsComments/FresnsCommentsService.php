@@ -449,7 +449,7 @@ class FresnsCommentsService extends FsService
     public function afterStoreToDb($commentId, $draftId)
     {
         // Call the plugin to subscribe to the command word
-        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsCommentsConfig::CFG_TABLE,
             'insertId' => $commentId,
@@ -477,7 +477,7 @@ class FresnsCommentsService extends FsService
     public function afterUpdateToDb($commentId, $draftId)
     {
         // Call the plugin to subscribe to the command word
-        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsCommentsConfig::CFG_TABLE,
             'insertId' => $commentId,
