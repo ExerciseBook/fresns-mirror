@@ -25,9 +25,9 @@ use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
 use App\Http\FresnsDb\FresnsHashtags\FresnsHashtags;
-use App\Http\FresnsDb\FresnsLanguages\FsModel as FresnsLanguagesModel;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguages;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
+use App\Http\FresnsDb\FresnsLanguages\FsModel as FresnsLanguagesModel;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
@@ -56,6 +56,7 @@ class FresnsPostsService extends FsService
 
             return false;
         }
+
         return $releaseResult;
     }
 
@@ -66,6 +67,7 @@ class FresnsPostsService extends FsService
         $draftPost = FresnsPostLogs::find($draftId);
         if (! $draftPost) {
             LogService::formatInfo('Post log does not exist');
+
             return false;
         }
         // Type
@@ -76,6 +78,7 @@ class FresnsPostsService extends FsService
             // edit
             $res = $this->updateDb($draftId, $sessionLogsId);
         }
+
         return true;
     }
 
@@ -92,12 +95,12 @@ class FresnsPostsService extends FsService
         // Get the number of words in the brief of the post
         $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_WORD_COUNT) ?? 280;
         if (mb_strlen($draftPost['content']) > $postEditorBriefCount) {
-            $is_brief = 1;
+            $isBrief = 1;
         } else {
-            $is_brief = 0;
+            $isBrief = 0;
         }
         $allosJsonDecode = json_decode($draftPost['allow_json'], true);
-        $is_allow = $allosJsonDecode['isAllow'] ?? 0;
+        $isAllow = $allosJsonDecode['isAllow'] ?? 0;
 
         // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
@@ -105,8 +108,19 @@ class FresnsPostsService extends FsService
         $mapId = $locationJson['mapId'] ?? null;
         $latitude = $locationJson['latitude'] ?? null;
         $longitude = $locationJson['longitude'] ?? null;
+        if(empty($mapId)) {
+            $mapId = null;
+        }
+        if(empty($latitude)) {
+            $latitude = null;
+        }
+        if(empty($longitude)) {
+            $longitude = null;
+        }
+        
         $more_json = [];
         $more_json['files'] = json_decode($draftPost['files_json'], true);
+
         $postInput = [
             'uuid' => $uuid,
             'member_id' => $draftPost['member_id'],
@@ -115,14 +129,12 @@ class FresnsPostsService extends FsService
             'title' => $draftPost['title'],
             'content' => $contentBrief,
             'is_anonymous' => $draftPost['is_anonymous'],
-            'is_brief' => $is_brief,
-            // 'status' => 3,
-            'is_allow' => $is_allow,
+            'is_brief' => $isBrief,
+            'is_allow' => $isAllow,
             'is_lbs' => $isLbs,
             'map_id' => $mapId,
             'map_latitude' => $latitude,
             'map_longitude' => $longitude,
-            // 'release_at'  => date('Y-m-d H:i:s'),
             'more_json' => json_encode($more_json),
         ];
         $postId = (new FresnsPosts())->store($postInput);
@@ -155,14 +167,14 @@ class FresnsPostsService extends FsService
         // Get the number of words in the brief of the post
         $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_WORD_COUNT) ?? 280;
         if (mb_strlen($draftPost['content']) > $postEditorBriefCount) {
-            $is_brief = 1;
+            $isBrief = 1;
         } else {
-            $is_brief = 0;
+            $isBrief = 0;
         }
 
         // Allow Config
         $allosJsonDecode = json_decode($draftPost['allow_json'], true);
-        $is_allow = $allosJsonDecode['isAllow'] ?? 0;
+        $isAllow = $allosJsonDecode['isAllow'] ?? 0;
 
         // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
@@ -170,17 +182,27 @@ class FresnsPostsService extends FsService
         $mapId = $locationJson['mapId'] ?? null;
         $latitude = $locationJson['latitude'] ?? null;
         $longitude = $locationJson['longitude'] ?? null;
+        if(empty($mapId)) {
+            $mapId = null;
+        }
+        if(empty($latitude)) {
+            $latitude = null;
+        }
+        if(empty($latitude)) {
+            $latitude = null;
+        }
 
         $more_json = json_decode($post['more_json'], true) ?? null;
         $more_json['files'] = json_decode($draftPost['files_json'], true);
+
         $input = [
             'group_id' => $draftPost['group_id'],
             'types' => $draftPost['types'],
             'title' => $draftPost['title'],
             'content' => $contentBrief,
             'is_anonymous' => $draftPost['is_anonymous'],
-            'is_brief' => $is_brief,
-            'is_allow' => $is_allow,
+            'is_brief' => $isBrief,
+            'is_allow' => $isAllow,
             'is_lbs' => $isLbs,
             'map_id' => $mapId,
             'map_latitude' => $latitude,
@@ -201,21 +223,22 @@ class FresnsPostsService extends FsService
     {
         $draftPost = FresnsPostLogs::find($draftId);
         // Editor Config
-        $pluginEdit = $draftPost['is_plugin_edit'];
-        $pluginUnikey = $draftPost['plugin_unikey'];
+        $isPluginEditor = $draftPost['is_plugin_editor'];
+        $editorUnikey = $draftPost['editor_unikey'];
 
         // Specific members config
-        $member_list_json = $draftPost['member_list_json'];
-        $member_list_name = [];
-        if ($member_list_json) {
-            $member_list_decode = json_decode($member_list_json, true);
-            $member_list_status = $member_list_decode['memberListStatus'] ?? 0;
-            $member_list_plugin_unikey = $member_list_decode['pluginUnikey'] ?? [];
-            $member_list_name = $member_list_decode['memberListName'] ?? [];
+        $memberListJson = $draftPost['memberListJson'];
+        $memberListStatus = 0;
+        $memberListPluginUnikey = null;
+        $memberListName = [];
+        if ($memberListJson) {
+            $memberListDecode = json_decode($memberListJson, true);
+            $memberListStatus = $memberListDecode['memberListStatus'] ?? 0;
+            $memberListPluginUnikey = $memberListDecode['pluginUnikey'] ?? null;
+            $memberListName = $memberListDecode['memberListName'] ?? [];
             // Specific member names multilingual
-            if ($member_list_name) {
-                $inputArr = [];
-                foreach ($member_list_name as $v) {
+            if ($memberListName) {
+                foreach ($memberListName as $v) {
                     $item = [];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
@@ -226,26 +249,23 @@ class FresnsPostsService extends FsService
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
-                    $inputArr[] = $item;
                 }
             }
         }
 
         // Comment Config
-        $commentConfig = $draftPost['comment_set_json'];
+        $commentSetJson = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
-        $commentPluginUnikey = null;
-        $commentBtnName = null;
-        if ($commentConfig) {
-            $commentConfig_decode = json_decode($commentConfig, true);
-            $commentBtnStatus = $commentConfig_decode['btnStatus'] ?? 0;
-            $commentPluginUnikey = $commentConfig_decode['pluginUnikey'] ?? null;
-            $commentBtnName = $commentConfig_decode['btnName'] ?? null;
+        $commentBtnPluginUnikey = null;
+        $commentBtnName = [];
+        if ($commentSetJson) {
+            $commentSetDecode = json_decode($commentSetJson, true);
+            $commentBtnStatus = $commentSetDecode['btnStatus'] ?? 0;
+            $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? null;
+            $commentBtnName = $commentSetDecode['btnName'] ?? [];
             // Btn names multilingual
-            if ($commentConfig_decode['btnName']) {
-                $btnNameArr = $commentConfig_decode['btnName'];
-                $inputArr = [];
-                foreach ($btnNameArr as $v) {
+            if ($commentBtnName) {
+                foreach ($commentBtnName as $v) {
                     $item = [];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
@@ -263,20 +283,16 @@ class FresnsPostsService extends FsService
         // Read Allow Config
         $allowJson = $draftPost['allow_json'];
         $allowPluginUnikey = null;
-        $allowBtnName = null;
-        $proportion = null;
-        $allow_proportion = 0;
+        $allowProportion = 0;
+        $allowBtnName = [];
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
-            $allowBtnName = $allosJsonDecode['btnName'] ?? null;
-            $proportion = $allosJsonDecode['proportion'] ?? $allow_proportion;
-            $proportion = empty($proportion) ? $allow_proportion : $proportion;
+            $allowProportion = $allosJsonDecode['proportion'] ?? 0;
+            $allowBtnName = $allosJsonDecode['btnName'] ?? [];
             // Btn names multilingual
-            if ($allosJsonDecode['btnName']) {
-                $btnNameArr = $allosJsonDecode['btnName'];
-                $inputArr = [];
-                foreach ($btnNameArr as $v) {
+            if ($allowBtnName) {
+                foreach ($allowBtnName as $v) {
                     $item = [];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
@@ -325,15 +341,42 @@ class FresnsPostsService extends FsService
 
         // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
-        $scale = $locationJson['scale'] ?? '';
-        $poi = $locationJson['poi'] ?? '';
-        $poiId = $locationJson['poiId'] ?? '';
-        $nation = $locationJson['nation'] ?? '';
-        $province = $locationJson['province'] ?? '';
-        $city = $locationJson['city'] ?? '';
-        $district = $locationJson['district'] ?? '';
-        $adcode = $locationJson['adcode'] ?? '';
-        $address = $locationJson['address'] ?? '';
+        $scale = $locationJson['scale'] ?? null;
+        $poi = $locationJson['poi'] ?? null;
+        $poiId = $locationJson['poiId'] ?? null;
+        $nation = $locationJson['nation'] ?? null;
+        $province = $locationJson['province'] ?? null;
+        $city = $locationJson['city'] ?? null;
+        $district = $locationJson['district'] ?? null;
+        $adcode = $locationJson['adcode'] ?? null;
+        $address = $locationJson['address'] ?? null;
+        if(empty($scale)) {
+            $scale = null;
+        }
+        if(empty($poi)) {
+            $poi = null;
+        }
+        if(empty($poiId)) {
+            $poiId = null;
+        }
+        if(empty($nation)) {
+            $nation = null;
+        }
+        if(empty($province)) {
+            $province = null;
+        }
+        if(empty($city)) {
+            $city = null;
+        }
+        if(empty($district)) {
+            $district = null;
+        }
+        if(empty($adcode)) {
+            $adcode = null;
+        }
+        if(empty($address)) {
+            $address = null;
+        }
 
         // Extends
         $extendsJson = json_decode($draftPost['extends_json'], true);
@@ -355,24 +398,23 @@ class FresnsPostsService extends FsService
         // Existence of replacement words
         $content = $draftPost['content'];
         $content = $this->stopWords($content);
-        // Removing html tags
-        // $content = strip_tags($content);
+
         $postAppendInput = [
             'post_id' => $postId,
             'platform_id' => $draftPost['platform_id'],
             'content' => $content,
             'is_markdown' => $draftPost['is_markdown'],
-            'is_plugin_edit' => $pluginEdit,
-            'plugin_unikey' => $pluginUnikey,
+            'is_plugin_editor' => $isPluginEditor,
+            'editor_unikey' => $editorUnikey,
             'comment_btn_status' => $commentBtnStatus,
             'comment_btn_plugin_unikey' => $commentPluginUnikey,
             'comment_btn_name' => json_encode($commentBtnName),
             'allow_plugin_unikey' => $allowPluginUnikey,
-            'member_list_status' => $member_list_status ?? 0,
-            'member_list_plugin_unikey' => $member_list_plugin_unikey ?? null,
-            'member_list_name' => json_encode($member_list_name) ?? null,
-            'allow_btn_name' => json_encode($allowBtnName) ?? null,
-            'allow_proportion' => $proportion ?? 0,
+            'allow_proportion' => $allowProportion,
+            'allow_btn_name' => json_encode($allowBtnName),
+            'member_list_status' => $memberListStatus,
+            'member_list_plugin_unikey' => $memberListPluginUnikey,
+            'member_list_name' => json_encode($memberListName),
             'map_scale' => $scale,
             'map_poi' => $poi,
             'map_poi_id' => $poiId,
@@ -392,25 +434,26 @@ class FresnsPostsService extends FsService
     public function postAppendUpdate($postId, $draftId)
     {
         $draftPost = FresnsPostLogs::find($draftId);
+
         // Editor Config
-        $pluginEdit = $draftPost['is_plugin_edit'];
-        $pluginUnikey = $draftPost['plugin_unikey'];
+        $isPluginEditor = $draftPost['is_plugin_editor'];
+        $editorUnikey = $draftPost['editor_unikey'];
+
         // Specific members config
-        $member_list_json = $draftPost['member_list_json'];
-        $member_list_name = [];
-        $member_list_status = 0;
-        if ($member_list_json) {
+        $memberListJson = $draftPost['memberListJson'];
+        $memberListStatus = 0;
+        $memberListPluginUnikey = null;
+        $memberListName = [];
+        if ($memberListJson) {
             // Delete the old data first (empty the multilingual table)
-            FresnsLanguages::where('table_name', FsConfig::CFG_TABLE)->where('table_id', $postId)->where('table_field',
-                'member_list_name')->delete();
-            $member_list_decode = json_decode($member_list_json, true);
-            $member_list_status = $member_list_decode['memberListStatus'] ?? 0;
-            $member_list_plugin_unikey = $member_list_decode['pluginUnikey'] ?? [];
-            $member_list_name = $member_list_decode['memberListName'] ?? [];
+            FresnsLanguages::where('table_name', FsConfig::CFG_TABLE)->where('table_id', $postId)->where('table_field', 'member_list_name')->delete();
+            $memberListDecode = json_decode($memberListJson, true);
+            $memberListStatus = $memberListDecode['memberListStatus'] ?? 0;
+            $memberListPluginUnikey = $memberListDecode['pluginUnikey'] ?? null;
+            $memberListName = $memberListDecode['memberListName'] ?? [];
             // Specific member names multilingual
-            if ($member_list_name) {
-                $inputArr = [];
-                foreach ($member_list_name as $v) {
+            if ($memberListName) {
+                foreach ($memberListName as $v) {
                     $item = [];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
@@ -421,29 +464,25 @@ class FresnsPostsService extends FsService
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
-                    $inputArr[] = $item;
                 }
             }
         }
 
         // Comment Config
-        $commentConfig = $draftPost['comment_set_json'];
+        $commentSetJson = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
         $commentPluginUnikey = null;
-        $commentBtnName = null;
-        if ($commentConfig) {
-            $commentConfig_decode = json_decode($commentConfig, true);
-            $commentBtnStatus = $commentConfig_decode['btnStatus'] ?? 0;
-            $commentPluginUnikey = $commentConfig_decode['pluginUnikey'] ?? null;
-            $commentBtnName = $commentConfig_decode['btnName'] ?? null;
+        $commentBtnName = [];
+        if ($commentSetJson) {
+            $commentSetDecode = json_decode($commentSetJson, true);
+            $commentBtnStatus = $commentSetDecode['btnStatus'] ?? 0;
+            $commentPluginUnikey = $commentSetDecode['pluginUnikey'] ?? null;
+            $commentBtnName = $commentSetDecode['btnName'] ?? [];
             // Btn names multilingual
-            if ($commentConfig_decode['btnName']) {
+            if ($commentBtnName) {
                 // Delete the old data first (empty the multilingual table)
-                FresnsLanguages::where('table_name', FsConfig::CFG_TABLE)->where('table_id',
-                    $postId)->where('table_field', 'comment_btn_name')->delete();
-                $btnNameArr = $commentConfig_decode['btnName'];
-                $inputArr = [];
-                foreach ($btnNameArr as $v) {
+                FresnsLanguages::where('table_name', FsConfig::CFG_TABLE)->where('table_id', $postId)->where('table_field', 'comment_btn_name')->delete();
+                foreach ($commentBtnName as $v) {
                     $item = [];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
@@ -460,21 +499,19 @@ class FresnsPostsService extends FsService
 
         // Read Allow Config
         $allowJson = $draftPost['allow_json'];
-        $allowPluginUnikey = '';
-        $allowBtnName = null;
-        $proportion = null;
-        $allow_proportion = 0;
+        $allowPluginUnikey = null;
+        $allowProportion = 0;
+        $allowBtnName = [];
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
-            $allowBtnName = $allosJsonDecode['btnName'] ?? null;
-            $proportion = $allosJsonDecode['proportion'] ?? $allow_proportion;
-            $proportion = empty($proportion) ? $allow_proportion : $proportion;
+            $allowProportion = $allosJsonDecode['proportion'] ?? 0;
+            $allowBtnName = $allosJsonDecode['btnName'] ?? [];
             // Btn names multilingual
-            if ($allosJsonDecode['btnName']) {
-                $btnNameArr = $allosJsonDecode['btnName'];
-                $inputArr = [];
-                foreach ($btnNameArr as $v) {
+            if ($allowBtnName) {
+                // Delete the old data first (empty the multilingual table)
+                FresnsLanguages::where('table_name', FsConfig::CFG_TABLE)->where('table_id', $postId)->where('table_field', 'allow_btn_name')->delete();
+                foreach ($allowBtnName as $v) {
                     $item = [];
                     $item['lang_tag'] = $v['langTag'];
                     $item['lang_content'] = $v['name'];
@@ -485,7 +522,6 @@ class FresnsPostsService extends FsService
                     if ($count == 0) {
                         FresnsLanguagesModel::insert($item);
                     }
-                    $inputArr[] = $item;
                 }
             }
             // postAllow data
@@ -497,8 +533,7 @@ class FresnsPostsService extends FsService
                         foreach ($allowMemberArr as $m) {
                             $memberInfo = FresnsMembers::where('uuid', $m['mid'])->first();
                             if ($memberInfo) {
-                                $count = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $postId)->where('type',
-                                    1)->where('object_id', $memberInfo['id'])->count();
+                                $count = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $postId)->where('type', 1)->where('object_id', $memberInfo['id'])->count();
                                 if ($count == 0) {
                                     DB::table(FresnsPostAllowsConfig::CFG_TABLE)->insert([
                                         'post_id' => $postId,
@@ -519,8 +554,7 @@ class FresnsPostsService extends FsService
                         foreach ($allowRolesArr as $r) {
                             $memberRolesInfo = FresnsMemberRoles::find($r['rid']);
                             if ($memberRolesInfo) {
-                                $count = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $postId)->where('type',
-                                    2)->where('object_id', $memberRolesInfo['id'])->count();
+                                $count = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $postId)->where('type', 2)->where('object_id', $memberRolesInfo['id'])->count();
                                 if ($count == 0) {
                                     DB::table(FresnsPostAllowsConfig::CFG_TABLE)->insert([
                                         'post_id' => $postId,
@@ -537,15 +571,42 @@ class FresnsPostsService extends FsService
 
         // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
-        $scale = $locationJson['scale'] ?? '';
-        $poi = $locationJson['poi'] ?? '';
-        $poiId = $locationJson['poiId'] ?? '';
-        $nation = $locationJson['nation'] ?? '';
-        $province = $locationJson['province'] ?? '';
-        $city = $locationJson['city'] ?? '';
-        $district = $locationJson['district'] ?? '';
-        $adcode = $locationJson['adcode'] ?? '';
-        $address = $locationJson['address'] ?? '';
+        $scale = $locationJson['scale'] ?? null;
+        $poi = $locationJson['poi'] ?? null;
+        $poiId = $locationJson['poiId'] ?? null;
+        $nation = $locationJson['nation'] ?? null;
+        $province = $locationJson['province'] ?? null;
+        $city = $locationJson['city'] ?? null;
+        $district = $locationJson['district'] ?? null;
+        $adcode = $locationJson['adcode'] ?? null;
+        $address = $locationJson['address'] ?? null;
+        if(empty($scale)) {
+            $scale = null;
+        }
+        if(empty($poi)) {
+            $poi = null;
+        }
+        if(empty($poiId)) {
+            $poiId = null;
+        }
+        if(empty($nation)) {
+            $nation = null;
+        }
+        if(empty($province)) {
+            $province = null;
+        }
+        if(empty($city)) {
+            $city = null;
+        }
+        if(empty($district)) {
+            $district = null;
+        }
+        if(empty($adcode)) {
+            $adcode = null;
+        }
+        if(empty($address)) {
+            $address = null;
+        }
 
         // Extends
         $extendsJson = json_decode($draftPost['extends_json'], true);
@@ -569,23 +630,22 @@ class FresnsPostsService extends FsService
         // Existence of replacement words
         $content = $draftPost['content'];
         $content = $this->stopWords($content);
-        // Removing html tags
-        // $content = strip_tags($content);
+
         $postAppendInput = [
             'platform_id' => $draftPost['platform_id'],
             'content' => $content,
             'is_markdown' => $draftPost['is_markdown'],
-            'is_plugin_edit' => $pluginEdit,
-            'plugin_unikey' => $pluginUnikey,
+            'is_plugin_editor' => $isPluginEditor,
+            'editor_unikey' => $editorUnikey,
             'comment_btn_status' => $commentBtnStatus,
             'comment_btn_plugin_unikey' => $commentPluginUnikey,
             'comment_btn_name' => json_encode($commentBtnName),
+            'member_list_status' => $memberListStatus,
+            'member_list_plugin_unikey' => $memberListPluginUnikey,
+            'member_list_name' => json_encode($memberListName),
             'allow_plugin_unikey' => $allowPluginUnikey,
-            'member_list_status' => $member_list_status ?? 0,
-            'member_list_plugin_unikey' => $member_list_plugin_unikey ?? null,
-            'member_list_name' => json_encode($member_list_name) ?? null,
-            'allow_btn_name' => json_encode($allowBtnName) ?? null,
-            'allow_proportion' => $proportion,
+            'allow_proportion' => $allowProportion,
+            'allow_btn_name' => json_encode($allowBtnName),
             'map_scale' => $scale,
             'map_poi' => $poi,
             'map_poi_id' => $poiId,
@@ -616,7 +676,7 @@ class FresnsPostsService extends FsService
         $content = $this->stopWords($draftPost['content']);
 
         // Log updated to published
-        FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId, 'content' => $content]);
+        FresnsPostLogs::where('id', $draftId)->update(['state' => 3, 'post_id' => $postId, 'content' => $content]);
         // Add stats: groups > post_count
         FresnsGroups::where('id', $draftPost['group_id'])->increment('post_count');
         // Notification
@@ -645,7 +705,7 @@ class FresnsPostsService extends FsService
         $content = $this->stopWords($draftPost['content']);
 
         // Log updated to published
-        FresnsPostLogs::where('id', $draftId)->update(['status' => 3, 'post_id' => $postId, 'content' => $content]);
+        FresnsPostLogs::where('id', $draftId)->update(['state' => 3, 'post_id' => $postId, 'content' => $content]);
         // Add stats: groups > post_count
         FresnsGroups::where('id', $draftPost['group_id'])->increment('post_count');
         // Add stats: post_appends > edit_count
@@ -737,7 +797,7 @@ class FresnsPostsService extends FsService
     /**
      * Parsing Hashtag (insert hashtags table)
      * $params
-     * updateType 1.add 2.edit
+     * updateType 1.add 2.edit.
      */
     public function analisisHashtag($draftId, $updateType = 1)
     {
@@ -846,7 +906,7 @@ class FresnsPostsService extends FsService
     /**
      * Domain Link Table
      * $params
-     * updateType 1.add 2.edit
+     * updateType 1.add 2.edit.
      */
     public function domainStore($postId, $draftId, $updateType = 1)
     {
@@ -896,7 +956,7 @@ class FresnsPostsService extends FsService
     }
 
     // "@", "#", "Link" Location information of the three in the full text
-    
+
     // If the content exceeds the set number of words, the brief is stored.
     // If the last content of the brief is "@", "#", and "Link", it should be kept in full and not truncated.
     // The maximum number of words in the brief can be exceeded when preserving.
@@ -914,7 +974,7 @@ class FresnsPostsService extends FsService
          * preg_match("/<a .*?>.*?<\/a>/",$content,$hrefMatches,PREG_OFFSET_CAPTURE);.
          */
         preg_match("/http[s]{0,1}:\/\/.*?\s/", $content, $hrefMatches, PREG_OFFSET_CAPTURE);
-        
+
         // preg_match("/<a href=.*?}></a>/", $content, $hrefMatches,PREG_OFFSET_CAPTURE);
         preg_match("/@.*?\s/", $content, $atMatches, PREG_OFFSET_CAPTURE);
         $truncatedPos = ceil($wordCount);
@@ -976,6 +1036,7 @@ class FresnsPostsService extends FsService
         $info['single_pound_arr'] = $singlePoundMatches;
         $info['link_pound_arr'] = $hrefMatches;
         $info['at_arr'] = $atMatches;
+
         return $info;
     }
 
@@ -983,7 +1044,7 @@ class FresnsPostsService extends FsService
     public function parseToReview($draftId)
     {
         // post
-        FresnsPostLogs::where('id', $draftId)->update(['status' => 2, 'submit_at' => date('Y-m-d H:i:s')]);
+        FresnsPostLogs::where('id', $draftId)->update(['state' => 2, 'submit_at' => date('Y-m-d H:i:s')]);
 
         return true;
     }
@@ -1007,6 +1068,7 @@ class FresnsPostsService extends FsService
                 $charPos = $charPos + 1;
             }
         }
+
         return $utf8posCharPosMap;
     }
 
@@ -1079,27 +1141,27 @@ class FresnsPostsService extends FsService
         // Domain name suffix
         $iana_root = [
             // gTLDs
-            'com','net','org','edu','gov','int','mil','arpa','biz','info','pro','name','coop','travel','xxx','idv','aero','museum','mobi','asia','tel','post','jobs','cat',
+            'com', 'net', 'org', 'edu', 'gov', 'int', 'mil', 'arpa', 'biz', 'info', 'pro', 'name', 'coop', 'travel', 'xxx', 'idv', 'aero', 'museum', 'mobi', 'asia', 'tel', 'post', 'jobs', 'cat',
             // ccTLDs
-            'ad','ae','af','ag','ai','al','am','an','ao','aq','ar','as','at','au','aw','az','ba','bb','bd','be','bf','bg','bh','bi','bj','bm','bn','bo','br','bs','bt','bv','bw','by','bz','ca','cc','cd','cf','cg','ch','ci','ck','cl','cm','cn','co','cr','cu','cv','cx','cy','cz','de','dj','dk','dm','do','dz','ec','ee','eg','eh','er','es','et','eu','fi','fj','fk','fm','fo','fr','ga','gd','ge','gf','gg','gh','gi','gl','gm','gn','gp','gq','gr','gs','gt','gu','gw','gy','hk','hm','hn','hr','ht','hu','id','ie','il','im','in','io','iq','ir','is','it','je','jm','jo','jp','ke','kg','kh','ki','km','kn','kp','kr','kw','ky','kz','la','lb','lc','li','lk','lr','ls','ma','mc','md','me','mg','mh','mk','ml','mm','mn','mo','mp','mq','mr','ms','mt','mu','mv','mw','mx','my','mz','na','nc','ne','nf','ng','ni','nl','no','np','nr','nu','nz','om','pa','pe','pf','pg','ph','pk','pl','pm','pn','pr','ps','pt','pw','py','qa','re','ro','ru','rw','sa','sb','sc','sd','se','sg','sh','si','sj','sk','sm','sn','so','sr','st','sv','sy','sz','tc','td','tf','tg','th','tj','tk','tl','tm','tn','to','tp','tr','tt','tv','tw','tz','ua','ug','uk','um','us','uy','uz','va','vc','ve','vg','vi','vn','vu','wf','ws','ye','yt','yu','yr','za','zm','zw',
+            'ad', 'ae', 'af', 'ag', 'ai', 'al', 'am', 'an', 'ao', 'aq', 'ar', 'as', 'at', 'au', 'aw', 'az', 'ba', 'bb', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bm', 'bn', 'bo', 'br', 'bs', 'bt', 'bv', 'bw', 'by', 'bz', 'ca', 'cc', 'cd', 'cf', 'cg', 'ch', 'ci', 'ck', 'cl', 'cm', 'cn', 'co', 'cr', 'cu', 'cv', 'cx', 'cy', 'cz', 'de', 'dj', 'dk', 'dm', 'do', 'dz', 'ec', 'ee', 'eg', 'eh', 'er', 'es', 'et', 'eu', 'fi', 'fj', 'fk', 'fm', 'fo', 'fr', 'ga', 'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gl', 'gm', 'gn', 'gp', 'gq', 'gr', 'gs', 'gt', 'gu', 'gw', 'gy', 'hk', 'hm', 'hn', 'hr', 'ht', 'hu', 'id', 'ie', 'il', 'im', 'in', 'io', 'iq', 'ir', 'is', 'it', 'je', 'jm', 'jo', 'jp', 'ke', 'kg', 'kh', 'ki', 'km', 'kn', 'kp', 'kr', 'kw', 'ky', 'kz', 'la', 'lb', 'lc', 'li', 'lk', 'lr', 'ls', 'ma', 'mc', 'md', 'me', 'mg', 'mh', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms', 'mt', 'mu', 'mv', 'mw', 'mx', 'my', 'mz', 'na', 'nc', 'ne', 'nf', 'ng', 'ni', 'nl', 'no', 'np', 'nr', 'nu', 'nz', 'om', 'pa', 'pe', 'pf', 'pg', 'ph', 'pk', 'pl', 'pm', 'pn', 'pr', 'ps', 'pt', 'pw', 'py', 'qa', 're', 'ro', 'ru', 'rw', 'sa', 'sb', 'sc', 'sd', 'se', 'sg', 'sh', 'si', 'sj', 'sk', 'sm', 'sn', 'so', 'sr', 'st', 'sv', 'sy', 'sz', 'tc', 'td', 'tf', 'tg', 'th', 'tj', 'tk', 'tl', 'tm', 'tn', 'to', 'tp', 'tr', 'tt', 'tv', 'tw', 'tz', 'ua', 'ug', 'uk', 'um', 'us', 'uy', 'uz', 'va', 'vc', 've', 'vg', 'vi', 'vn', 'vu', 'wf', 'ws', 'ye', 'yt', 'yu', 'yr', 'za', 'zm', 'zw',
             // new gTLDs (Business)
-            'accountant','club','coach','college','company','construction','consulting','contractors','cooking','corp','credit','creditcard','dance','dealer','democrat','dental','dentist','design','diamonds','direct','doctor','drive','eco','education','energy','engineer','engineering','equipment','events','exchange','expert','express','faith','farm','farmers','fashion','finance','financial','fish','fit','fitness','flights','florist','flowers','food','football','forsale','furniture','game','games','garden','gmbh','golf','health','healthcare','hockey','holdings','holiday','home','hospital','hotel','hotels','house','inc','industries','insurance','insure','investments','islam','jewelry','justforu','kid','kids','law','lawyer','legal','lighting','limited','live','llc','llp','loft','ltd','ltda','managment','marketing','media','medical','men','money','mortgage','moto','motorcycles','music','mutualfunds','ngo','partners','party','pharmacy','photo','photography','photos','physio','pizza','plumbing','press','prod','productions','radio','rehab','rent','repair','report','republican','restaurant','room','rugby','safe','sale','sarl','save','school','secure','security','services','shoes','show','soccer','spa','sport','sports','spot','srl','storage','studio','tattoo','taxi','team','tech','technology','thai','tips','tour','tours','toys','trade','trading','travelers','university','vacations','ventures','versicherung','versicherung','vet','wedding','wine','winners','work','works','yachts','zone',
+            'accountant', 'club', 'coach', 'college', 'company', 'construction', 'consulting', 'contractors', 'cooking', 'corp', 'credit', 'creditcard', 'dance', 'dealer', 'democrat', 'dental', 'dentist', 'design', 'diamonds', 'direct', 'doctor', 'drive', 'eco', 'education', 'energy', 'engineer', 'engineering', 'equipment', 'events', 'exchange', 'expert', 'express', 'faith', 'farm', 'farmers', 'fashion', 'finance', 'financial', 'fish', 'fit', 'fitness', 'flights', 'florist', 'flowers', 'food', 'football', 'forsale', 'furniture', 'game', 'games', 'garden', 'gmbh', 'golf', 'health', 'healthcare', 'hockey', 'holdings', 'holiday', 'home', 'hospital', 'hotel', 'hotels', 'house', 'inc', 'industries', 'insurance', 'insure', 'investments', 'islam', 'jewelry', 'justforu', 'kid', 'kids', 'law', 'lawyer', 'legal', 'lighting', 'limited', 'live', 'llc', 'llp', 'loft', 'ltd', 'ltda', 'managment', 'marketing', 'media', 'medical', 'men', 'money', 'mortgage', 'moto', 'motorcycles', 'music', 'mutualfunds', 'ngo', 'partners', 'party', 'pharmacy', 'photo', 'photography', 'photos', 'physio', 'pizza', 'plumbing', 'press', 'prod', 'productions', 'radio', 'rehab', 'rent', 'repair', 'report', 'republican', 'restaurant', 'room', 'rugby', 'safe', 'sale', 'sarl', 'save', 'school', 'secure', 'security', 'services', 'shoes', 'show', 'soccer', 'spa', 'sport', 'sports', 'spot', 'srl', 'storage', 'studio', 'tattoo', 'taxi', 'team', 'tech', 'technology', 'thai', 'tips', 'tour', 'tours', 'toys', 'trade', 'trading', 'travelers', 'university', 'vacations', 'ventures', 'versicherung', 'versicherung', 'vet', 'wedding', 'wine', 'winners', 'work', 'works', 'yachts', 'zone',
             // new gTLDs (Construction & Real Estate)
-            'archi','architect','casa','contruction','estate','haus','house','immo','immobilien','lighting','loft','mls','realty',
+            'archi', 'architect', 'casa', 'contruction', 'estate', 'haus', 'house', 'immo', 'immobilien', 'lighting', 'loft', 'mls', 'realty',
             // new gTLDs (Community & Religion)
-            'academy','arab','bible','care','catholic','charity','christmas','church','college','community','contact','degree','education','faith','foundation','gay','halal','hiv','indiands','institute','irish','islam','kiwi','latino','mba','meet','memorial','ngo','phd','prof','school','schule','science','singles','social','swiss','thai','trust','university','uno',
+            'academy', 'arab', 'bible', 'care', 'catholic', 'charity', 'christmas', 'church', 'college', 'community', 'contact', 'degree', 'education', 'faith', 'foundation', 'gay', 'halal', 'hiv', 'indiands', 'institute', 'irish', 'islam', 'kiwi', 'latino', 'mba', 'meet', 'memorial', 'ngo', 'phd', 'prof', 'school', 'schule', 'science', 'singles', 'social', 'swiss', 'thai', 'trust', 'university', 'uno',
             // new gTLDs (E-commerce & Shopping)
-            'auction','best','bid','boutique','center','cheap','compare','coupon','coupons','deal','deals','diamonds','discount','fashion','forsale','free','gift','gold','gratis','hot','jewelry','kaufen','luxe','luxury','market','moda','pay','promo','qpon','review','reviews','rocks','sale','shoes','shop','shopping','store','tienda','top','toys','watch','zero',
+            'auction', 'best', 'bid', 'boutique', 'center', 'cheap', 'compare', 'coupon', 'coupons', 'deal', 'deals', 'diamonds', 'discount', 'fashion', 'forsale', 'free', 'gift', 'gold', 'gratis', 'hot', 'jewelry', 'kaufen', 'luxe', 'luxury', 'market', 'moda', 'pay', 'promo', 'qpon', 'review', 'reviews', 'rocks', 'sale', 'shoes', 'shop', 'shopping', 'store', 'tienda', 'top', 'toys', 'watch', 'zero',
             // new gTLDs (Dining)
-            'bar','bio','cafe','catering','coffee','cooking','diet','eat','food','kitchen','menu','organic','pizza','pub','rest','restaurant','vodka','wine',
+            'bar', 'bio', 'cafe', 'catering', 'coffee', 'cooking', 'diet', 'eat', 'food', 'kitchen', 'menu', 'organic', 'pizza', 'pub', 'rest', 'restaurant', 'vodka', 'wine',
             // new gTLDs (Travel)
-            'abudhabi','africa','alsace','amsterdam','barcelona','bayern','berlin','boats','booking','boston','brussels','budapest','caravan','casa','catalonia','city','club','cologne','corsica','country','cruise','cruises','deal','deals','doha','dubai','durban','earth','flights','fly','fun','gent','guide','hamburg','helsinki','holiday','hotel','hoteles','hotels','ist','istanbul','joburg','koeln','land','london','madrid','map','melbourne','miami','moscow','nagoya','nrw','nyc','osaka','paris','party','persiangulf','place','quebec','reise','reisen','rio','roma','room','ruhr','saarland','stockholm','swiss','sydney','taipei','tickets','tirol','tokyo','tour','tours','town','travelers','vacations','vegas','wales','wien','world','yokohama','zuerich',
+            'abudhabi', 'africa', 'alsace', 'amsterdam', 'barcelona', 'bayern', 'berlin', 'boats', 'booking', 'boston', 'brussels', 'budapest', 'caravan', 'casa', 'catalonia', 'city', 'club', 'cologne', 'corsica', 'country', 'cruise', 'cruises', 'deal', 'deals', 'doha', 'dubai', 'durban', 'earth', 'flights', 'fly', 'fun', 'gent', 'guide', 'hamburg', 'helsinki', 'holiday', 'hotel', 'hoteles', 'hotels', 'ist', 'istanbul', 'joburg', 'koeln', 'land', 'london', 'madrid', 'map', 'melbourne', 'miami', 'moscow', 'nagoya', 'nrw', 'nyc', 'osaka', 'paris', 'party', 'persiangulf', 'place', 'quebec', 'reise', 'reisen', 'rio', 'roma', 'room', 'ruhr', 'saarland', 'stockholm', 'swiss', 'sydney', 'taipei', 'tickets', 'tirol', 'tokyo', 'tour', 'tours', 'town', 'travelers', 'vacations', 'vegas', 'wales', 'wien', 'world', 'yokohama', 'zuerich',
             // new gTLDs (Sports & Hobbies)
-            'art','auto','autos','baby','band','baseball','beats','beauty','beknown','bike','book','boutique','broadway','car','cars','club','coach','contact','cool','cricket','dad','dance','date','dating','design','dog','events','family','fan','fans','fashion','film','final','fishing','football','fun','furniture','futbol','gallery','game','games','garden','gay','golf','guru','hair','hiphop','hockey','home','horse','icu','joy','kid','kids','life','lifestyle','like','living','lol','makeup','meet','men','moda','moi','mom','movie','movistar','music','party','pet','pets','photo','photography','photos','pics','pictures','play','poker','rodeo','rugby','run','salon','singles','ski','skin','smile','soccer','social','song','soy','sport','sports','star','style','surf','tatoo','tennis','theater','theatre','tunes','vip','wed','wedding','winwinners','yoga','you',
+            'art', 'auto', 'autos', 'baby', 'band', 'baseball', 'beats', 'beauty', 'beknown', 'bike', 'book', 'boutique', 'broadway', 'car', 'cars', 'club', 'coach', 'contact', 'cool', 'cricket', 'dad', 'dance', 'date', 'dating', 'design', 'dog', 'events', 'family', 'fan', 'fans', 'fashion', 'film', 'final', 'fishing', 'football', 'fun', 'furniture', 'futbol', 'gallery', 'game', 'games', 'garden', 'gay', 'golf', 'guru', 'hair', 'hiphop', 'hockey', 'home', 'horse', 'icu', 'joy', 'kid', 'kids', 'life', 'lifestyle', 'like', 'living', 'lol', 'makeup', 'meet', 'men', 'moda', 'moi', 'mom', 'movie', 'movistar', 'music', 'party', 'pet', 'pets', 'photo', 'photography', 'photos', 'pics', 'pictures', 'play', 'poker', 'rodeo', 'rugby', 'run', 'salon', 'singles', 'ski', 'skin', 'smile', 'soccer', 'social', 'song', 'soy', 'sport', 'sports', 'star', 'style', 'surf', 'tatoo', 'tennis', 'theater', 'theatre', 'tunes', 'vip', 'wed', 'wedding', 'winwinners', 'yoga', 'you',
             // new gTLDs (Network Technology)
-            'analytics','antivirus','app','blog','call','camera','channel','chat','click','cloud','computer','contact','data','dev','digital','direct','docs','domains','dot','download','email','foo','forum','graphics','guide','help','home','host','hosting','idn','link','lol','mail','mobile','network','online','open','page','phone','pin','search','site','software','webcam',
+            'analytics', 'antivirus', 'app', 'blog', 'call', 'camera', 'channel', 'chat', 'click', 'cloud', 'computer', 'contact', 'data', 'dev', 'digital', 'direct', 'docs', 'domains', 'dot', 'download', 'email', 'foo', 'forum', 'graphics', 'guide', 'help', 'home', 'host', 'hosting', 'idn', 'link', 'lol', 'mail', 'mobile', 'network', 'online', 'open', 'page', 'phone', 'pin', 'search', 'site', 'software', 'webcam',
             // new gTLDs (Other)
-            'airforce','army','black','blue','box','buzz','casa','cool','day','discover','donuts','exposed','fast','finish','fire','fyi','global','green','help','here','how','international','ira','jetzt','jot','like','live','kim','navy','new','news','next','ninja','now','one','ooo','pink','plus','red','solar','tips','today','weather','wow','wtf','xyz','abogado','adult','anquan','aquitaine','attorney','audible','autoinsurance','banque','bargains','bcn','beer','bet','bingo','blackfriday','bom','boo','bot','broker','builders','business','bzh','cab','cal','cam','camp','cancerresearch','capetown','carinsurance','casino','ceo','cfp','circle','claims','cleaning','clothing','codes','condos','connectors','courses','cpa','cymru','dds','delivery','desi','directory','diy','dvr','ecom','enterprises','esq','eus','fail','feedback','financialaid','frontdoor','fund','gal','gifts','gives','giving','glass','gop','got','gripe','grocery','group','guitars','hangout','homegoods','homes','homesense','hotels','ing','ink','juegos','kinder','kosher','kyoto','lat','lease','lgbt','liason','loan','loans','locker','lotto','love','maison','markets','matrix','meme','mov','okinawa','ong','onl','origins','parts','patch','pid','ping','porn','progressive','properties','property','protection','racing','read','realestate','realtor','recipes','rentals','sex','sexy','shopyourway','shouji','silk','solutions','stroke','study','sucks','supplies','supply','tax','tires','total','training','translations','travelersinsurcance','ventures','viajes','villas','vin','vivo','voyage','vuelos','wang','watches',
+            'airforce', 'army', 'black', 'blue', 'box', 'buzz', 'casa', 'cool', 'day', 'discover', 'donuts', 'exposed', 'fast', 'finish', 'fire', 'fyi', 'global', 'green', 'help', 'here', 'how', 'international', 'ira', 'jetzt', 'jot', 'like', 'live', 'kim', 'navy', 'new', 'news', 'next', 'ninja', 'now', 'one', 'ooo', 'pink', 'plus', 'red', 'solar', 'tips', 'today', 'weather', 'wow', 'wtf', 'xyz', 'abogado', 'adult', 'anquan', 'aquitaine', 'attorney', 'audible', 'autoinsurance', 'banque', 'bargains', 'bcn', 'beer', 'bet', 'bingo', 'blackfriday', 'bom', 'boo', 'bot', 'broker', 'builders', 'business', 'bzh', 'cab', 'cal', 'cam', 'camp', 'cancerresearch', 'capetown', 'carinsurance', 'casino', 'ceo', 'cfp', 'circle', 'claims', 'cleaning', 'clothing', 'codes', 'condos', 'connectors', 'courses', 'cpa', 'cymru', 'dds', 'delivery', 'desi', 'directory', 'diy', 'dvr', 'ecom', 'enterprises', 'esq', 'eus', 'fail', 'feedback', 'financialaid', 'frontdoor', 'fund', 'gal', 'gifts', 'gives', 'giving', 'glass', 'gop', 'got', 'gripe', 'grocery', 'group', 'guitars', 'hangout', 'homegoods', 'homes', 'homesense', 'hotels', 'ing', 'ink', 'juegos', 'kinder', 'kosher', 'kyoto', 'lat', 'lease', 'lgbt', 'liason', 'loan', 'loans', 'locker', 'lotto', 'love', 'maison', 'markets', 'matrix', 'meme', 'mov', 'okinawa', 'ong', 'onl', 'origins', 'parts', 'patch', 'pid', 'ping', 'porn', 'progressive', 'properties', 'property', 'protection', 'racing', 'read', 'realestate', 'realtor', 'recipes', 'rentals', 'sex', 'sexy', 'shopyourway', 'shouji', 'silk', 'solutions', 'stroke', 'study', 'sucks', 'supplies', 'supply', 'tax', 'tires', 'total', 'training', 'translations', 'travelersinsurcance', 'ventures', 'viajes', 'villas', 'vin', 'vivo', 'voyage', 'vuelos', 'wang', 'watches',
         ];
         $sub_domain = explode('.', $domain);
         $top_domain = '';

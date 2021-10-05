@@ -10,12 +10,11 @@ namespace App\Http\FresnsApi\User;
 
 use App\Helpers\DateHelper;
 use App\Helpers\StrHelper;
-use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
-use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsCmd\FresnsCmdWords;
@@ -275,7 +274,6 @@ class FsControllerApi extends FresnsBaseApiController
             $this->error(ErrorCodeService::ACCOUNT_CHECK_ERROR);
         }
 
-
         $cmd = FresnsCmdWordsConfig::PLG_CMD_USER_LOGIN;
         $input = [
             'type' => $type,
@@ -302,7 +300,6 @@ class FsControllerApi extends FresnsBaseApiController
             $data['token'] = $output['token'] ?? '';
             $data['tokenExpiredTime'] = $output['tokenExpiredTime'] ?? '';
         }
-        
 
         $this->success($data);
     }
@@ -579,7 +576,7 @@ class FsControllerApi extends FresnsBaseApiController
         $editWalletPassword = $request->input('editWalletPassword');
         $editLastLoginTime = $request->input('editLastLoginTime');
         $deleteConnectId = $request->input('deleteConnectId');
-        
+
         $user = FresnsUsers::where('id', $uid)->first();
 
         $email = $user['email'];
@@ -670,8 +667,8 @@ class FsControllerApi extends FresnsBaseApiController
                 $user['id'])->update(['last_login_at' => DateHelper::fresnsInputTimeToTimezone($editLastLoginTime)]);
         }
 
-        if($deleteConnectId){
-            DB::table(FresnsUserConnectsConfig::CFG_TABLE)->where('user_id',$user['id'])->where('connect_id',$deleteConnectId)->delete();
+        if ($deleteConnectId) {
+            DB::table(FresnsUserConnectsConfig::CFG_TABLE)->where('user_id', $user['id'])->where('connect_id', $deleteConnectId)->delete();
         }
 
         $sessionId = GlobalService::getGlobalSessionKey('session_log_id');

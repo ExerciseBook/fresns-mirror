@@ -11,7 +11,6 @@ namespace App\Http\FresnsApi\Message;
 use App\Base\Checkers\BaseChecker;
 use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\LogService;
-use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
@@ -39,6 +38,7 @@ class FsChecker extends BaseChecker
             $memberInfo = FresnsMembers::find($mid);
             if ($memberInfo['expired_at'] && ($memberInfo['expired_at'] <= date('Y-m-d H:i:s'))) {
                 LogService::info('Your account status has expired', $memberInfo);
+
                 return self::checkInfo(ErrorCodeService::MEMBER_EXPIRED_ERROR);
             }
         }

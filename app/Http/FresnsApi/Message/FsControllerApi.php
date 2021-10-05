@@ -8,8 +8,8 @@
 
 namespace App\Http\FresnsApi\Message;
 
-use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ErrorCodeService;
+use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\ValidateService;
 use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Content\FsConfig as ContentConfig;
@@ -87,8 +87,7 @@ class FsControllerApi extends FresnsBaseApiController
         $member_id = GlobalService::getGlobalKey('member_id');
         $type = $request->input('type');
         // Set all the notifications I received under this type to read.
-        $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type',
-            $type)->update(['status' => FsConfig::READED]);
+        $system_count = FresnsNotifies::where('member_id', $member_id)->where('source_type', $type)->update(['status' => FsConfig::READED]);
         $this->success();
     }
 
@@ -316,7 +315,7 @@ class FsControllerApi extends FresnsBaseApiController
             }
         }
         if ($message) {
-            $message = ApiCommonHelper::stopWords($message);
+            $message = ApiCommonHelper::messageStopWords($message);
             if (! $message) {
                 $this->error(ErrorCodeService::DIALOG_WORD_ERROR);
             }

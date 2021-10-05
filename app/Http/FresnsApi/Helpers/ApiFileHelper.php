@@ -17,8 +17,6 @@ use App\Http\FresnsDb\FresnsFileAppends\FresnsFileAppends;
 use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
-use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use Illuminate\Support\Facades\DB;
 
 class ApiFileHelper
@@ -59,7 +57,7 @@ class ApiFileHelper
                 $file['imageSquareUrl'] = $imagesRatio.$fileInfo['file_path'].$imagesSquare;
                 $file['imageBigUrl'] = $imagesSquare.$fileInfo['file_path'].$imagesBig;
             }
-            
+
             // Video Type
             $video_setting = ApiConfigHelper::getConfigByItemTag(FsConfig::VIDEO_SETTING);
             // Video Properties
@@ -216,7 +214,7 @@ class ApiFileHelper
             if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return false;
             }
-            $singUrl = $resp['output']['imageDefaultUrl'];
+            $singUrl = $resp['output']['imageBigUrl'];
         }
 
         return $singUrl;
@@ -232,14 +230,14 @@ class ApiFileHelper
         if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return false;
         }
-        $singUrl = $resp['output']['imageDefaultUrl'];
+        $singUrl = $resp['output']['imageBigUrl'];
 
         return $singUrl;
     }
 
     /**
      * Anti Hotlinking
-     * https://fresns.org/extensions/anti-hotlinking.html
+     * https://fresns.cn/extensions/anti-hotlinking.html.
      */
     public static function getImageSignUrlByFileIdUrl($fileId, $fileUrl)
     {
@@ -257,37 +255,10 @@ class ApiFileHelper
                 return false;
             }
 
-            return $resp['output']['imageDefaultUrl'];
+            return $resp['output']['imageBigUrl'];
         } else {
             return $fileUrl;
         }
-    }
-
-    // Handling Custom Parameters for Plugin Usages
-    public static function getPluginUsagesUrl($pluginUnikey, $pluginUsagesid)
-    {
-        $bucketDomain = ApiConfigHelper::getConfigByItemKey(FsConfig::BACKEND_DOMAIN);
-        $pluginUsages = FresnsPluginUsages::find($pluginUsagesid);
-        $plugin = FresnsPlugins::where('unikey', $pluginUnikey)->first();
-        $url = '';
-        if (! $plugin || ! $pluginUsages) {
-            return $url;
-        }
-        $access_path = $plugin['access_path'];
-        $str = strstr($access_path, '{parameter}');
-        if ($str) {
-            $uri = str_replace('{parameter}', $pluginUsages['parameter'], $access_path);
-        } else {
-            $uri = $access_path;
-        }
-        if (empty($plugin['plugin_url'])) {
-            $url = $bucketDomain.$uri;
-        } else {
-            $url = $plugin['plugin_domain'].$uri;
-        }
-        $url = self::getImageSignUrl($url);
-
-        return $url;
     }
 
     // Anti Hotlinking (Get the url of the file in the more_json field)

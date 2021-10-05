@@ -20,9 +20,8 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use Illuminate\Support\Facades\DB;
 
 /**
- * List resource config handle
+ * List resource config handle.
  */
-
 class FresnsNotifiesResource extends BaseAdminResource
 {
     public function toArray($request)
@@ -72,7 +71,7 @@ class FresnsNotifiesResource extends BaseAdminResource
                     'nickname' => $member->nickname ?? '',
                     'avatar' => $avatar,
                     'decorate' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->decorate_file_id, $member->decorate_file_url),
-                    'verifiedStatus' => $member->verified_status ?? '',
+                    'verifiedStatus' => $member->verified_status ?? 1,
                     'verifiedIcon' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->verified_file_id, $member->verified_file_url),
                 ],
             ];

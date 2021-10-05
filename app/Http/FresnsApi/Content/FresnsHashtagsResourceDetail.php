@@ -26,9 +26,8 @@ use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesService;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Detail resource config handle
+ * Detail resource config handle.
  */
-
 class FresnsHashtagsResourceDetail extends BaseAdminResource
 {
     public function toArray($request)
@@ -43,7 +42,7 @@ class FresnsHashtagsResourceDetail extends BaseAdminResource
         // Hashtag Info
         $mid = GlobalService::getGlobalKey('member_id');
         $langTag = $request->header('langTag');
-        $description = ApiLanguageHelper::getLanguages(FresnsHashtagsConfig::CFG_TABLE, 'description', $this->id);
+        $description = ApiLanguageHelper::getLanguagesByTableId(FresnsHashtagsConfig::CFG_TABLE, 'description', $this->id);
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
 
         // Operation behavior status
@@ -55,11 +54,11 @@ class FresnsHashtagsResourceDetail extends BaseAdminResource
         $shieldSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::SHIELD_HASHTAG_SETTING);
         $followSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_HASHTAG_SETTING);
         // Operation behavior naming
-        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_HASHTAG_NAME) ?? 'Like';
-        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_HASHTAG_NAME) ?? 'Watching';
-        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_HASHTAG_NAME) ?? 'Block';
+        $likeName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_HASHTAG_NAME) ?? 'Like';
+        $followName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_HASHTAG_NAME) ?? 'Watching';
+        $shieldName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_HASHTAG_NAME) ?? 'Block';
         // Content Naming
-        $hashtagName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::HASHTAG_NAME) ?? 'Hashtag';
+        $hashtagName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::HASHTAG_NAME) ?? 'Hashtag';
 
         // member_shields: query the table to confirm if the object is blocked
         $shieldMemberStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 1)->where('shield_id', $this->member_id)->count();
@@ -103,7 +102,7 @@ class FresnsHashtagsResourceDetail extends BaseAdminResource
             // 'likeName' => $likeName,
             // 'shieldName' => $shieldName,
         ];
-        
+
         // Merger
         $arr = $default;
 

@@ -27,17 +27,16 @@ use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 
 /**
- * List resource config handle
+ * List resource config handle.
  */
-
 class FresnsMemberListsResource extends BaseAdminResource
 {
     public function toArray($request)
     {
         $langTag = request()->input('langTag');
         $mid = request()->header('mid');
-        if($mid){
-            $mid = FresnsMembers::where('uuid',$mid)->value('id');
+        if ($mid) {
+            $mid = FresnsMembers::where('uuid', $mid)->value('id');
         }
         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($this->id);
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
@@ -121,11 +120,10 @@ class FresnsMemberListsResource extends BaseAdminResource
 
         $memberIconsArr = FresnsMemberIcons::where('member_id', $this->id)->get()->toArray();
         $iconsArr = [];
-        foreach ($memberIconsArr as $v) {
+        foreach ($memberIconsArr as $mIcon) {
             $item = [];
-            $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
-            $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name',
-                $v['id'], $langTag);
+            $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($mIcon['icon_file_id'], $mIcon['icon_file_url']);
+            $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $mIcon['id'], $langTag);
             $iconsArr[] = $item;
         }
 

@@ -10,7 +10,7 @@ namespace App\Http\FresnsDb\FresnsPluginBadges;
 
 use App\Base\Services\BaseAdminService;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguagesService;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 
@@ -26,11 +26,12 @@ class FsService extends BaseAdminService
     public function common()
     {
         $common = parent::common();
+
         return $common;
     }
 
     // Get Plugin
-    public static function getPluginExpand($member_id, $type, $langTag)
+    public static function getWalletPluginExpands($member_id, $type, $langTag)
     {
         $unikeyArr = FresnsPluginBadges::where('member_id', $member_id)->pluck('plugin_unikey')->toArray();
         $payArr = FresnsPluginUsages::whereIn('plugin_unikey', $unikeyArr)->where('type', $type)->get()->toArray();
@@ -39,9 +40,8 @@ class FsService extends BaseAdminService
             $item = [];
             $item['plugin'] = $v['plugin_unikey'];
             $item['name'] = FresnsLanguagesService::getLanguageByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $v['id'], $langTag);
-            $item['icon'] = $v['icon_file_url'];
-            $plugins = FresnsPlugins::where('unikey', $v['plugin_unikey'])->first();
-            $item['url'] = $plugins['access_path'].$v['parameter'];
+            $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
+            $item['url'] = FresnsPluginsService::getPluginUsagesUrl($pluginUsages['plugin_unikey'], $v['id']);
             $badges = FresnsPluginBadges::where('member_id', $member_id)->where('plugin_unikey', $v['plugin_unikey'])->first();
             $item['badgesType'] = $badges['display_type'];
             $item['badgesValue'] = $badges['value_text'];

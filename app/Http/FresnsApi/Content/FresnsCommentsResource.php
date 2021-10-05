@@ -14,7 +14,6 @@ use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsApi\Info\FsService;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -40,8 +39,9 @@ use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
+use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppends;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
@@ -49,9 +49,8 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use Illuminate\Support\Facades\DB;
 
 /**
- * List resource config handle
+ * List resource config handle.
  */
-
 class FresnsCommentsResource extends BaseAdminResource
 {
     public function toArray($request)
@@ -109,7 +108,7 @@ class FresnsCommentsResource extends BaseAdminResource
         $likeCount = $this->like_count;
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
-        
+
         // Operation behavior status
         $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 5)->where('like_id', $this->id)->count();
         $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 5)->where('follow_id', $this->id)->count();
@@ -119,11 +118,11 @@ class FresnsCommentsResource extends BaseAdminResource
         $followSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_COMMENT_SETTING);
         $shieldSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::SHIELD_COMMENT_SETTING);
         // Operation behavior naming
-        $likeName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_COMMENT_NAME) ?? 'Like';
-        $followName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_COMMENT_NAME) ?? 'Save comment';
-        $shieldName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_COMMENT_NAME) ?? 'Hide comment';
+        $likeName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::LIKE_COMMENT_NAME) ?? 'Like';
+        $followName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::FOLLOW_COMMENT_NAME) ?? 'Save comment';
+        $shieldName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::SHIELD_COMMENT_NAME) ?? 'Hide comment';
         // Content Naming
-        $commentName = ApiLanguageHelper::getLanguagesByItemKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::COMMENT_NAME) ?? 'Comment';
+        $commentName = ApiLanguageHelper::getLanguagesByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', FsConfig::COMMENT_NAME) ?? 'Comment';
 
         // member_shields: query the table to confirm if the object is blocked
         $shieldMemberStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 1)->where('shield_id', $this->member_id)->count();
@@ -151,7 +150,7 @@ class FresnsCommentsResource extends BaseAdminResource
         $member['roleIcon'] = '';
         $member['roleIconDisplay'] = '';
         $member['avatar'] = $memberInfo->avatar_file_url ?? '';
-        
+
         // Default avatar when members have no avatar
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
@@ -193,33 +192,24 @@ class FresnsCommentsResource extends BaseAdminResource
                     $member['mname'] = $memberInfo->name ?? '';
                     $member['nickname'] = $memberInfo->nickname ?? '';
                     $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
-
-                    $roleName = '';
-                    if (! empty($memberRole)) {
-                        $roleName = ApiLanguageHelper::getLanguages(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
-                        $roleName = $roleName == null ? '' : $roleName['lang_content'];
-                    }
-                    $member['roleName'] = $roleName;
-                    $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? '';
-                    $member['roleIcon'] = $memberRole['icon_file_url'] ?? '';
-                    $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? '';
-
+                    $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
+                    $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? 0;
+                    $member['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
+                    $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? 0;
                     $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
-                    $member['gender'] = $memberInfo->gender ?? '';
+                    $member['gender'] = $memberInfo->gender ?? 0;
                     $member['bio'] = $memberInfo->bio ?? '';
-                    $member['verifiedStatus'] = $memberInfo->verified_status ?? '';
+                    $member['verifiedStatus'] = $memberInfo->verified_status ?? 1;
                     $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
+
                     $icons = [];
                     $icons['icon'] = $memberIcon['icon_file_url'] ?? '';
                     if ($icons['icon']) {
                         $icons['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberIcon['icon_file_id'], $memberIcon['icon_file_url']);
                     }
-
                     $icons['name'] = '';
                     if (! empty($memberIcon)) {
-                        $iconName = ApiLanguageHelper::getLanguages(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
-                        $iconName = $iconName == null ? '' : $iconName['lang_content'];
-                        $icons['name'] = $iconName;
+                        $icons['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
                     }
                     if (empty($icons['name']) && empty($icons['icon'])) {
                         $icons = [];
@@ -241,7 +231,6 @@ class FresnsCommentsResource extends BaseAdminResource
         $commentSetting['lists'] = [];
         if (! $searchCid) {
             if ($previewStatus && $previewStatus != 0) {
-                
                 $fresnsCommentsService = new FresnsCommentsService();
                 $commentList = $fresnsCommentsService->getCommentPreviewList($this->id, $previewStatus, $mid);
                 $commentSetting['lists'] = $commentList;
@@ -251,7 +240,7 @@ class FresnsCommentsResource extends BaseAdminResource
         /*
          * replyTo is output when searchCid has a value.
          * Represents the output of sub-level comments, and only sub-level comments have replyTo information, representing that A replied to B.
-         * https://fresns.org/api/content/comment-lists.html
+         * https://fresns.cn/api/content/comment-lists.html
          * If the parent_id of the comment is the current comment (parameter searchCid) and represents a secondary comment, the following information is not output.
          * The parent_id of the comment is not the current comment (parameter searchCid), representing three or more levels, showing the interaction under the comment and outputting the following information about his parent's comment.
          */
@@ -323,31 +312,23 @@ class FresnsCommentsResource extends BaseAdminResource
                 }
                 $arr['title'] = '';
                 if (! empty($e)) {
-                    $title = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'title', $e['id']);
-                    $title = $title == null ? '' : $title['lang_content'];
-                    $arr['title'] = $title;
+                    $arr['title'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'title', $e['id']);
                 }
                 $arr['titleColor'] = $e['title_color'] ?? '';
                 $arr['descPrimary'] = '';
                 if (! empty($e)) {
-                    $descPrimary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $e['id']);
-                    $descPrimary = $descPrimary == null ? '' : $descPrimary['lang_content'];
-                    $arr['descPrimary'] = $descPrimary;
+                    $arr['descPrimary'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $e['id']);
                 }
                 $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
                 $arr['descSecondary'] = '';
                 if (! empty($e)) {
-                    $descSecondary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $e['id']);
-                    $descSecondary = $descSecondary == null ? '' : $descSecondary['lang_content'];
-                    $arr['descSecondary'] = $descSecondary;
+                    $arr['descSecondary'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $e['id']);
                 }
                 $arr['descSecondaryColor'] = $e['desc_secondary_color'] ?? '';
                 $arr['descPrimaryColor'] = $e['desc_primary_color'] ?? '';
                 $arr['btnName'] = '';
                 if (! empty($e)) {
-                    $btnName = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $e['id']);
-                    $btnName = $btnName == null ? '' : $btnName['lang_content'];
-                    $arr['btnName'] = $btnName;
+                    $arr['btnName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $e['id']);
                 }
                 $arr['btnColor'] = $e['btn_color'] ?? '';
                 $arr['type'] = $e['extend_type'] ?? '';
@@ -368,20 +349,20 @@ class FresnsCommentsResource extends BaseAdminResource
         $attachCount['docs'] = 0;
         $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
         $more_json_decode = json_decode($this->more_json, true);
-        if($more_json_decode){
-            if(isset($more_json_decode['files'])){
-                foreach($more_json_decode['files'] as $m){
-                    if($m['type'] == 1){
-                        $attachCount['images'] ++;
+        if ($more_json_decode) {
+            if (isset($more_json_decode['files'])) {
+                foreach ($more_json_decode['files'] as $m) {
+                    if ($m['type'] == 1) {
+                        $attachCount['images']++;
                     }
-                    if($m['type'] == 2){
-                        $attachCount['videos'] ++;
+                    if ($m['type'] == 2) {
+                        $attachCount['videos']++;
                     }
-                    if($m['type'] == 3){
-                        $attachCount['audios'] ++;
+                    if ($m['type'] == 3) {
+                        $attachCount['audios']++;
                     }
-                    if($m['type'] == 4){
-                        $attachCount['docs'] ++;
+                    if ($m['type'] == 4) {
+                        $attachCount['docs']++;
                     }
                 }
             }
@@ -390,28 +371,24 @@ class FresnsCommentsResource extends BaseAdminResource
         $commentBtn = [];
         if ($mid == $this->member_id) {
             $commentBtn['status'] = $postAppends['comment_btn_status'];
-            $btnName = ApiLanguageHelper::getLanguages(FresnsPostsConfig::CFG_TABLE, 'comment_btn_name', $posts['id']);
-            $btnName = $btnName == null ? '' : $btnName['lang_content'];
-            $commentBtn['name'] = $btnName;
-            $commentBtn['url'] = $postAppends['comment_btn_plugin_unikey'];
+            $commentBtn['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'comment_btn_name', $posts['id']);
+            $commentBtn['url'] = FresnsPluginsService::getPluginUrlByUnikey($postAppends['comment_btn_plugin_unikey']);
         }
 
         // If searchPid is empty, output
         // means that the comment is output independently from the post, so it needs to be accompanied by the post parameter and the information of the post to which the comment belongs
         $searchPid = request()->input('searchPid');
         $post = [];
-        if (!$searchPid) {
+        if (! $searchPid) {
             $post['pid'] = $posts['uuid'];
             $post['title'] = $posts['title'];
             $post['content'] = $posts['content'];
             $post['status'] = $posts['is_enable'];
-            $post['gname'] = "";
-            $post['gid'] = "";
-            $post['cover'] = "";
-            if($groupInfo){
-                $gname = ApiLanguageHelper::getLanguages('groups', 'name', $groupInfo['id']);
-                $gname = $gname == null ? '' : $gname['lang_content'];
-                $post['gname'] = $gname;
+            $post['gname'] = '';
+            $post['gid'] = '';
+            $post['cover'] = '';
+            if ($groupInfo) {
+                $post['gname'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $groupInfo['id']);
                 $post['gid'] = $groupInfo['uuid'];
                 $post['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
             }
@@ -439,17 +416,15 @@ class FresnsCommentsResource extends BaseAdminResource
 
         // Comment Plugin Extensions
         $managesArr = [];
-        $TweetPluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%2%')->get();
-        if ($TweetPluginUsagesArr) {
-            foreach($TweetPluginUsagesArr as $TweetPluginUsages){
-                $manages['plugin'] = $TweetPluginUsages['plugin_unikey'];
-                $plugin = FresnsPlugins::where('unikey', $TweetPluginUsages['plugin_unikey'])->first();
-                $name = FsService::getlanguageField('name', $TweetPluginUsages['id']);
-                $manages['name'] = $name == null ? '' : $name['lang_content'];
-                $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($TweetPluginUsages['icon_file_id'], $TweetPluginUsages['icon_file_url']);
-                $manages['url'] = $plugin['access_path '].'/'.$TweetPluginUsages['parameter'];
+        $FsPluginUsagesArr = FresnsPluginUsages::where('type', 5)->where('scene', 'like', '%2%')->get();
+        if ($FsPluginUsagesArr) {
+            foreach ($FsPluginUsagesArr as $FsPluginUsages) {
+                $manages['plugin'] = $FsPluginUsages['plugin_unikey'];
+                $manages['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $FsPluginUsages['id']);
+                $manages['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($FsPluginUsages['icon_file_id'], $FsPluginUsages['icon_file_url']);
+                $manages['url'] = FresnsPluginsService::getPluginUsagesUrl($FsPluginUsages['plugin_unikey'], $FsPluginUsages['id']);
                 // Is the group administrator dedicated
-                if ($TweetPluginUsages['is_group_admin'] != 0) {
+                if ($FsPluginUsages['is_group_admin'] != 0) {
                     // Query whether the current member is a group administrator
                     if (! $posts['group_id']) {
                         $manages = [];
@@ -474,16 +449,16 @@ class FresnsCommentsResource extends BaseAdminResource
                     }
                 }
                 // Determine if the primary role of the current member is an administrator
-                if ($TweetPluginUsages['member_roles']) {
+                if ($FsPluginUsages['member_roles']) {
                     $mroleRels = FresnsMemberRoleRels::where('member_id', $mid)->first();
                     if ($mroleRels) {
-                        $pluMemberRoleArr = explode(',', $TweetPluginUsages['member_roles']);
+                        $pluMemberRoleArr = explode(',', $FsPluginUsages['member_roles']);
                         if (! in_array($mroleRels['role_id'], $pluMemberRoleArr)) {
                             $manages = [];
                         }
                     }
                 }
-            $managesArr[] = $manages;
+                $managesArr[] = $manages;
             }
         }
 
@@ -525,7 +500,6 @@ class FresnsCommentsResource extends BaseAdminResource
             'sticky' => $sticky,
             // 'isLike' => $isLike,
             // 'isShield' => $isShield,
-            // 'labelImg' => $labelImg,
             'commentName' => $commentName,
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,

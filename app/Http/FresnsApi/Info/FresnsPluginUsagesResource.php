@@ -12,13 +12,12 @@ use App\Base\Resources\BaseAdminResource;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsDb\FresnsPluginBadges\FresnsPluginBadges;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 
 /**
- * List resource config handle
+ * List resource config handle.
  */
-
 class FresnsPluginUsagesResource extends BaseAdminResource
 {
     public function toArray($request)
@@ -32,15 +31,11 @@ class FresnsPluginUsagesResource extends BaseAdminResource
 
         // Extensions List Info
         $langTag = request()->header('langTag', '');
-        $name = ApiLanguageHelper::getLanguages(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $this->id);
+        $name = ApiLanguageHelper::getLanguagesByTableId(FresnsPluginUsagesConfig::CFG_TABLE, 'name', $this->id);
         $type = $this->type;
         $plugin = $this->plugin_unikey;
-        $pluginInfo = FresnsPlugins::where('unikey', $plugin)->first();
         $icon = ApiFileHelper::getImageSignUrlByFileIdUrl($this->icon_file_id, $this->icon_file_url);
-        $url = '';
-        if ($pluginInfo) {
-            $url = ApiFileHelper::getPluginUsagesUrl($plugin, $this->id);
-        }
+        $url = FresnsPluginsService::getPluginUsagesUrl($plugin, $this->id);
         $number = $this->editor_number;
         $badgesType = '';
         $badgesValue = '';
@@ -63,7 +58,7 @@ class FresnsPluginUsagesResource extends BaseAdminResource
         $default = [
             'type' => $type,
             'plugin' => $plugin,
-            'name' => $name == null ? '' : $name['lang_content'],
+            'name' => $name,
             'icon' => $icon == null ? '' : $icon,
             'url' => $url,
             'number' => $number,

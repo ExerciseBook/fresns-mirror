@@ -9,17 +9,16 @@
 namespace App\Http\FresnsApi\Info;
 
 use App\Base\Resources\BaseAdminResource;
-use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacksConfig;
 use App\Http\FresnsApi\Helpers\ApiFileHelper;
-use App\Http\FresnsDb\FresnsExtends\FresnsExtends;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\FresnsDb\FresnsExtends\FresnsExtends;
 use App\Http\FresnsDb\FresnsExtends\FresnsExtendsConfig;
 use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
+use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacksConfig;
 
 /**
- * List resource config handle
+ * List resource config handle.
  */
-
 class FresnsPluginCallbacksResource extends BaseAdminResource
 {
     public function toArray($request)
@@ -32,15 +31,15 @@ class FresnsPluginCallbacksResource extends BaseAdminResource
         }
         // Insert unikey
         $unikey = $request->input('unikey');
-        FresnsPluginCallbacks::where('id',$this->id)->update(['use_plugin_unikey' => $unikey , 'status' => 2]);
-        $content = json_decode($this->content,true);
-        if($content){
-            foreach($content as &$t){
+        FresnsPluginCallbacks::where('id', $this->id)->update(['use_plugin_unikey' => $unikey, 'status' => 2]);
+        $content = json_decode($this->content, true);
+        if ($content) {
+            foreach ($content as &$t) {
                 // callbackType=4
                 // Handle file anti hotlinking URL
-                if($t['callbackType'] == 4){
+                if ($t['callbackType'] == 4) {
                     $files = $t['dataValue'];
-                    if($files){
+                    if ($files) {
                         $arr = ApiFileHelper::getMoreJsonSignUrl($files);
                     }
                     $t['dataValue'] = $arr;
@@ -48,11 +47,11 @@ class FresnsPluginCallbacksResource extends BaseAdminResource
             }
             // callbackType=9
             // Get all extended content data
-            if($t['callbackType'] == 9){
+            if ($t['callbackType'] == 9) {
                 $extendsArr = $t['dataValue'];
                 $extends = [];
-                if($extendsArr){
-                    foreach($extendsArr as $e){
+                if ($extendsArr) {
+                    foreach ($extendsArr as $e) {
                         $arr = [];
                         $extendsInfo = FresnsExtends::where('uuid', $e['eid'])->first();
                         if ($extendsInfo) {
@@ -70,21 +69,13 @@ class FresnsPluginCallbacksResource extends BaseAdminResource
                                 }
                             }
                             $arr['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($extendsInfo['cover_file_id'], $extendsInfo['cover_file_url']);
-                            $title = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'title', $extendsInfo['id']);
-                            $title = $title == null ? '' : $title['lang_content'];
-                            $arr['title'] = $title;
+                            $arr['title'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'title', $extendsInfo['id']);
                             $arr['titleColor'] = $extendsInfo['title_color'] ?? '';
-                            $descPrimary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $extendsInfo['id']);
-                            $descPrimary = $descPrimary == null ? '' : $descPrimary['lang_content'];
-                            $arr['descPrimary'] = $descPrimary;
+                            $arr['descPrimary'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_primary', $extendsInfo['id']);
                             $arr['descPrimaryColor'] = $extendsInfo['desc_primary_color'] ?? '';
-                            $descSecondary = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $extendsInfo['id']);
-                            $descSecondary = $descSecondary == null ? '' : $descSecondary['lang_content'];
-                            $arr['descSecondary'] = $descSecondary;
+                            $arr['descSecondary'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'desc_secondary', $extendsInfo['id']);
                             $arr['descSecondaryColor'] = $extendsInfo['desc_secondary_color'] ?? '';
-                            $btnName = ApiLanguageHelper::getLanguages(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $extendsInfo['id']);
-                            $btnName = $btnName == null ? '' : $btnName['lang_content'];
-                            $arr['btnName'] = $btnName;
+                            $arr['btnName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsExtendsConfig::CFG_TABLE, 'btn_name', $extendsInfo['id']);
                             $arr['btnColor'] = $extendsInfo['btn_color'] ?? '';
                             $arr['type'] = $extendsInfo['extend_type'] ?? '';
                             $arr['target'] = $extendsInfo['extend_target'] ?? '';
@@ -98,6 +89,7 @@ class FresnsPluginCallbacksResource extends BaseAdminResource
                 }
             }
         }
+
         return $content;
     }
 }

@@ -17,7 +17,6 @@ use App\Http\Center\Common\ErrorCodeService;
 use App\Http\Center\Common\LogService;
 use App\Http\Center\Helper\InstallHelper;
 use App\Http\Center\Helper\PluginHelper;
-use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
@@ -306,10 +305,10 @@ class FsControllerWeb extends BaseFrontendController
             $v['phone_desc'] = 'null';
             $v['email_desc'] = 'null';
             if (! empty($v['pure_phone'])) {
-                $v['phone_desc'] = '+'.$v['country_code'].ApiCommonHelper::encryptPhone($v['pure_phone']);
+                $v['phone_desc'] = '+'.$v['country_code'].StrHelper::encryptPhone($v['pure_phone']);
             }
             if (! empty($v['email'])) {
-                $v['email_desc'] = ApiCommonHelper::encryptPhone($v['email']);
+                $v['email_desc'] = StrHelper::encryptPhone($v['email']);
             }
         }
 
@@ -732,7 +731,7 @@ class FsControllerWeb extends BaseFrontendController
         // Provide parameters for whether data should be deleted when the plugin is uninstalled
         // clear_plugin_data = 1 // Delete files and data
         // clear_plugin_data = 0 // Delete files only
-        $clear_plugin_data = $request->input('clear_plugin_data');//是否删除插件数据库数据
+        $clear_plugin_data = $request->input('clear_plugin_data');
 
         $uniKey = $request->input('unikey');
 
