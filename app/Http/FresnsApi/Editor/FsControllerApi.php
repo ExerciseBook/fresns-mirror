@@ -572,7 +572,7 @@ class FsControllerApi extends FresnsBaseApiController
         ];
         ValidateService::validateRule($request, $rule);
 
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_GET_UPLOAD_TOKEN;
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_GET_UPLOAD_TOKEN;
         $input['type'] = $request->input('type');
         $input['scene'] = $request->input('scene');
         $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
@@ -706,7 +706,7 @@ class FsControllerApi extends FresnsBaseApiController
             }
         }
 
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_UPLOAD_FILE;
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_UPLOAD_FILE;
         $input['type'] = $request->input('type');
         $input['tableType'] = $request->input('tableType');
         $input['tableName'] = $request->input('tableName');

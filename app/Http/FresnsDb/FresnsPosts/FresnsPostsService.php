@@ -665,7 +665,7 @@ class FresnsPostsService extends FsService
     public function afterStoreToDb($postId, $draftId)
     {
         // Call the plugin to subscribe to the command word
-        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsPostsConfig::CFG_TABLE,
             'insertId' => $postId,
@@ -694,7 +694,7 @@ class FresnsPostsService extends FsService
     public function afterUpdateToDb($postId, $draftId)
     {
         // Call the plugin to subscribe to the command word
-        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsPostsConfig::CFG_TABLE,
             'insertId' => $postId,

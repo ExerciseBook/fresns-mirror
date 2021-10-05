@@ -137,7 +137,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         $data = $this->service->getMemberDetail($mid, $mid, true, $langTag);
         if ($data) {
-            $cmd = FresnsCmdWordsConfig::PLG_CMD_CREATE_SESSION_TOKEN;
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_CREATE_SESSION_TOKEN;
             $input['uid'] = $request->header('uid');
             $input['platform'] = $request->header('platform');
             $input['mid'] = $member['uuid'];
