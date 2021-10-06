@@ -137,6 +137,7 @@ class FresnsCommentsResource extends BaseAdminResource
             $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
         }
         $member = [];
+        $member['anonymous'] = $this->is_anonymous;
         $member['deactivate'] = false;
         $member['isAuthor'] = '';
         $member['mid'] = '';
@@ -172,16 +173,16 @@ class FresnsCommentsResource extends BaseAdminResource
         $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
 
         $member['decorate'] = '';
-        $member['gender'] = '';
+        $member['gender'] = 0;
         $member['bio'] = '';
-        $member['verifiedStatus'] = '';
+        $member['verifiedStatus'] = 1;
         $member['verifiedIcon'] = '';
         $member['icons'] = [];
         if ($this->is_anonymous == 0) {
             if ($memberInfo) {
                 if ($memberInfo->deleted_at == null && $memberInfo) {
                     $member['anonymous'] = $this->is_anonymous;
-                    $member['deactivate'] = true;
+                    $member['deactivate'] = false;
                     $member['isAuthor'] = $this->member_id == $mid ? true : false;
                     $member['mid'] = $memberInfo->uuid ?? '';
                     $member['mname'] = $memberInfo->name ?? '';
@@ -362,8 +363,8 @@ class FresnsCommentsResource extends BaseAdminResource
         }
         // commentBtn
         $commentBtn = [];
+        $commentBtn['status'] = $postAppends['comment_btn_status'];
         if ($mid == $this->member_id) {
-            $commentBtn['status'] = $postAppends['comment_btn_status'];
             $commentBtn['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'comment_btn_name', $posts['id']);
             $commentBtn['url'] = FresnsPluginsService::getPluginUrlByUnikey($postAppends['comment_btn_plugin_unikey']);
         }

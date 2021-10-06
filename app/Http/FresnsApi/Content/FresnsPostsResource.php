@@ -210,7 +210,7 @@ class FresnsPostsResource extends BaseAdminResource
         if ($this->is_anonymous == 0) {
             if ($memberInfo->deleted_at == null && $memberInfo) {
                 $member['anonymous'] = $this->is_anonymous;
-                $member['deactivate'] = true;
+                $member['deactivate'] = false;
                 $member['mid'] = $memberInfo->uuid ?? '';
                 $member['mname'] = $memberInfo->name ?? '';
                 $member['nickname'] = $memberInfo->nickname ?? '';
