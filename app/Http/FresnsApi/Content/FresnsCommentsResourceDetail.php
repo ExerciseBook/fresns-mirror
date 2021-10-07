@@ -491,7 +491,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             'extends' => $extends,
             'commentBtn' => $commentBtn,
             'post' => $post,
-            'manages' => $manages,
+            'manages' => $managesArr,
             'editStatus' => $editStatus,
             // 'seoInfo' => $seoInfo
         ];
