@@ -573,12 +573,14 @@ class FresnsCmdWords extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin Class Not Found');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
 
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
         if ($isPlugin == false) {
             LogService::error('Plugin Class Not Found');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
         }
 
@@ -602,6 +604,7 @@ class FresnsCmdWords extends BasePlugin
         }
         if ($paramsExist == false) {
             LogService::error('Unconfigured Plugin');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
         }
 
@@ -648,6 +651,7 @@ class FresnsCmdWords extends BasePlugin
                 $input = [
                     'Parameter error: ' => 'fill in at least one of tableId or tableKey',
                 ];
+
                 return $this->pluginError(ErrorCodeService::CODE_PARAM_ERROR);
             }
         }
@@ -673,12 +677,14 @@ class FresnsCmdWords extends BasePlugin
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin Class Not Found');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
 
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
         if ($isPlugin == false) {
             LogService::error('Plugin Class Not Found');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
         }
 
@@ -703,6 +709,7 @@ class FresnsCmdWords extends BasePlugin
         }
         if ($paramsExist == false) {
             LogService::error('Unconfigured Plugin');
+
             return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
         }
 
@@ -807,7 +814,7 @@ class FresnsCmdWords extends BasePlugin
                     if (! empty($fileInfo['image_width']) >= 700) {
                         if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 4) {
                             $imageLong = 1;
-                        }else {
+                        } else {
                             $imageLong = 0;
                         }
                     }
@@ -915,12 +922,14 @@ class FresnsCmdWords extends BasePlugin
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
             if (empty($pluginClass)) {
                 LogService::error('Plugin Class Not Found');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
                 LogService::error('Plugin Class Not Found');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
             }
 
@@ -928,6 +937,7 @@ class FresnsCmdWords extends BasePlugin
             $paramsExist = ValidateService::validParamExist($configMapInDB, ['images_secret_id', 'images_secret_key', 'images_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
@@ -989,12 +999,14 @@ class FresnsCmdWords extends BasePlugin
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
             if (empty($pluginClass)) {
                 LogService::error('Plugin Class Not Found');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
                 LogService::error('Plugin Class Not Found');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
             }
 
@@ -1002,6 +1014,7 @@ class FresnsCmdWords extends BasePlugin
             $paramsExist = ValidateService::validParamExist($configMapInDB, ['videos_secret_id', 'videos_secret_key', 'videos_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
@@ -1056,12 +1069,14 @@ class FresnsCmdWords extends BasePlugin
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
             if (empty($pluginClass)) {
                 LogService::error('Plugin Class Not Found');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
                 LogService::error('Plugin Class Not Found');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
             }
 
@@ -1069,6 +1084,7 @@ class FresnsCmdWords extends BasePlugin
             $paramsExist = ValidateService::validParamExist($configMapInDB, ['audios_secret_id', 'audios_secret_key', 'audios_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
@@ -1117,12 +1133,14 @@ class FresnsCmdWords extends BasePlugin
             $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
             if (empty($pluginClass)) {
                 LogService::error('Plugin Class Not Found');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
             }
 
             $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
             if ($isPlugin == false) {
                 LogService::error('Plugin Class Not Found');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
             }
 
@@ -1130,6 +1148,7 @@ class FresnsCmdWords extends BasePlugin
             $paramsExist = ValidateService::validParamExist($configMapInDB, ['docs_secret_id', 'docs_secret_key', 'docs_bucket_domain']);
             if ($paramsExist == false) {
                 LogService::error('Unconfigured Plugin');
+
                 return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
@@ -1177,7 +1196,7 @@ class FresnsCmdWords extends BasePlugin
      * Delete official content
      * type: 1.post / 2.comment
      * contentId: primary key ID
-     * https://fresns.cn/extensions/delete.html.
+     * https://fresns.org/extensions/delete.html.
      */
     public function deleteContentHandler($input)
     {
@@ -1525,7 +1544,7 @@ class FresnsCmdWords extends BasePlugin
         }
         $dataMap['sign'] = $sign;
 
-        // 唐杰: Signature Expiration Date
+        // Jarvis Tang: Signature Expiration Date
         $min = 5; //Expiration time limit (unit: minutes)
         //Determine the timestamp type
         $timestampNum = strlen($timestamp);
