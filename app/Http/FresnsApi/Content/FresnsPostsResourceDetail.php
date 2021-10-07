@@ -40,7 +40,8 @@ use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
-use App\Http\FresnsDb\FresnsPluginsService\FresnsPluginsService;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
+use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesService;
 use App\Http\FresnsDb\FresnsPostAllows\FresnsPostAllowsConfig;
@@ -73,8 +74,6 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         if (! empty($roleRels)) {
             $memberRole = FresnsMemberRoles::find($roleRels['role_id']);
         }
-        // Data Table: member_icons
-        $memberIcon = FresnsMemberIcons::where('member_id', $this->member_id)->first();
         // Data Table: comments
         $comments = DB::table('comments as c')->select('c.*')
             ->leftJoin('members as m', 'c.member_id', '=', 'm.id')
@@ -201,14 +200,11 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $member['bio'] = '';
         $member['verifiedStatus'] = '';
         $member['verifiedIcon'] = '';
-        $icons = [];
-        $icons['icon'] = '';
-        $icons['name'] = '';
-        $member['icons'] = $icons;
+        $member['icons'] = [];
         if ($this->is_anonymous == 0) {
             if ($memberInfo->deleted_at == null && $memberInfo) {
                 $member['anonymous'] = $this->is_anonymous;
-                $member['deactivate'] = true;
+                $member['deactivate'] = false;
                 $member['mid'] = $memberInfo->uuid ?? '';
                 $member['mname'] = $memberInfo->name ?? '';
                 $member['nickname'] = $memberInfo->nickname ?? '';
@@ -223,19 +219,17 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $member['verifiedStatus'] = $memberInfo->verified_status ?? 1;
                 $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
 
-                $icons = [];
-                $icons['icon'] = $memberIcon['icon_file_url'] ?? '';
-                if ($icons['icon']) {
-                    $icons['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberIcon['icon_file_id'], $memberIcon['icon_file_url']);
+                $memberIconsArr = FresnsMemberIcons::where('member_id', $mid)->get()->toArray();
+                $iconsArr = [];
+                foreach ($memberIconsArr as $v) {
+                    $item = [];
+                    $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
+                    $item['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $v['id']);
+                    $item['type'] = $v['type'];
+                    $item['url'] = FresnsPluginsService::getPluginUrlByUnikey($v['plugin_unikey']);
+                    $iconsArr[] = $item;
                 }
-                $icons['name'] = '';
-                if ($memberIcon) {
-                    $icons['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
-                }
-                if (empty($icons['name']) && empty($icons['icon'])) {
-                    $icons = [];
-                }
-                $member['icons'] = $icons;
+                $member['icons'] = $iconsArr;
             }
         }
 

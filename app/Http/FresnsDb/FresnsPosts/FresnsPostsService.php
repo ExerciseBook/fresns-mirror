@@ -407,7 +407,7 @@ class FresnsPostsService extends FsService
             'is_plugin_editor' => $isPluginEditor,
             'editor_unikey' => $editorUnikey,
             'comment_btn_status' => $commentBtnStatus,
-            'comment_btn_plugin_unikey' => $commentPluginUnikey,
+            'comment_btn_plugin_unikey' => $commentBtnPluginUnikey,
             'comment_btn_name' => json_encode($commentBtnName),
             'allow_plugin_unikey' => $allowPluginUnikey,
             'allow_proportion' => $allowProportion,
@@ -471,12 +471,12 @@ class FresnsPostsService extends FsService
         // Comment Config
         $commentSetJson = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
-        $commentPluginUnikey = null;
+        $commentBtnPluginUnikey = null;
         $commentBtnName = [];
         if ($commentSetJson) {
             $commentSetDecode = json_decode($commentSetJson, true);
             $commentBtnStatus = $commentSetDecode['btnStatus'] ?? 0;
-            $commentPluginUnikey = $commentSetDecode['pluginUnikey'] ?? null;
+            $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? null;
             $commentBtnName = $commentSetDecode['btnName'] ?? [];
             // Btn names multilingual
             if ($commentBtnName) {
@@ -638,7 +638,7 @@ class FresnsPostsService extends FsService
             'is_plugin_editor' => $isPluginEditor,
             'editor_unikey' => $editorUnikey,
             'comment_btn_status' => $commentBtnStatus,
-            'comment_btn_plugin_unikey' => $commentPluginUnikey,
+            'comment_btn_plugin_unikey' => $commentBtnPluginUnikey,
             'comment_btn_name' => json_encode($commentBtnName),
             'member_list_status' => $memberListStatus,
             'member_list_plugin_unikey' => $memberListPluginUnikey,

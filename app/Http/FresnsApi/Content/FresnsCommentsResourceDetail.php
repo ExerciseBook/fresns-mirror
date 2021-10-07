@@ -73,8 +73,6 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         if (! empty($roleRels)) {
             $memberRole = FresnsMemberRoles::find($roleRels['role_id']);
         }
-        // Data Table: member_icons
-        $memberIcon = FresnsMemberIcons::where('member_id', $this->member_id)->first();
         // Data Table: posts
         $posts = FresnsPosts::find($this->post_id);
         // Data Table: post_appends
@@ -134,6 +132,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
         $member = [];
+        $member['anonymous'] = $this->is_anonymous;
         $member['deactivate'] = false;
         $member['isAuthor'] = '';
         $member['mid'] = '';
@@ -173,15 +172,12 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $member['bio'] = '';
         $member['verifiedStatus'] = '';
         $member['verifiedIcon'] = '';
-        $icons = [];
-        $icons['icon'] = '';
-        $icons['name'] = '';
-        $member['icons'] = $icons;
+        $member['icons'] = [];
         if ($this->is_anonymous == 0) {
             if ($memberInfo) {
                 if ($memberInfo->deleted_at == null && $memberInfo) {
                     $member['anonymous'] = $this->is_anonymous;
-                    $member['deactivate'] = true;
+                    $member['deactivate'] = false;
                     $member['isAuthor'] = $this->member_id == $mid ? true : false;
                     $member['mid'] = $memberInfo->uuid ?? '';
                     $member['mname'] = $memberInfo->name ?? '';
@@ -197,19 +193,17 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
                     $member['verifiedStatus'] = $memberInfo->verified_status ?? 1;
                     $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
 
-                    $icons = [];
-                    $icons['icon'] = $memberIcon['icon_file_url'] ?? '';
-                    if ($icons['icon']) {
-                        $icons['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberIcon['icon_file_id'], $memberIcon['icon_file_url']);
+                    $memberIconsArr = FresnsMemberIcons::where('member_id', $mid)->get()->toArray();
+                    $iconsArr = [];
+                    foreach ($memberIconsArr as $v) {
+                        $item = [];
+                        $item['icon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($v['icon_file_id'], $v['icon_file_url']);
+                        $item['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $v['id']);
+                        $item['type'] = $v['type'];
+                        $item['url'] = FresnsPluginsService::getPluginUrlByUnikey($v['plugin_unikey']);
+                        $iconsArr[] = $item;
                     }
-                    $icons['name'] = '';
-                    if (! empty($memberIcon)) {
-                        $icons['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberIconsConfig::CFG_TABLE, 'name', $memberIcon['id']);
-                    }
-                    if (empty($icons['name']) && empty($icons['icon'])) {
-                        $icons = [];
-                    }
-                    $member['icons'] = $icons;
+                    $member['icons'] = $iconsArr;
                 }
             }
         }
@@ -361,8 +355,8 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
 
         // commentBtn
         $commentBtn = [];
+        $commentBtn['status'] = $postAppends['comment_btn_status'];
         if ($mid == $this->member_id) {
-            $commentBtn['status'] = $postAppends['comment_btn_status'];
             $commentBtn['name'] = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'comment_btn_name', $posts['id']);
             $commentBtn['url'] = FresnsPluginsService::getPluginUrlByUnikey($postAppends['comment_btn_plugin_unikey']);
         }
@@ -497,7 +491,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             'extends' => $extends,
             'commentBtn' => $commentBtn,
             'post' => $post,
-            'manages' => $manages,
+            'manages' => $managesArr,
             'editStatus' => $editStatus,
             // 'seoInfo' => $seoInfo
         ];
