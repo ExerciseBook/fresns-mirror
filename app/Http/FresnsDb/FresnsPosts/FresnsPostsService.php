@@ -115,7 +115,7 @@ class FresnsPostsService extends FsService
         if(empty($longitude)) {
             $longitude = NULL;
         }
-        
+
         $more_json = [];
         $more_json['files'] = json_decode($draftPost['files_json'], true);
 
