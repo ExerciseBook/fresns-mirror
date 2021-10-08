@@ -257,9 +257,8 @@ class FresnsPostsService extends FsService
         $commentSetJson = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
         $commentBtnPluginUnikey = NULL;
-        $commentBtnName = NULL;
+        $commentBtnName = [];
         if ($commentSetJson) {
-            $commentBtnName = [];
             $commentSetDecode = json_decode($commentSetJson, true);
             $commentBtnStatus = $commentSetDecode['btnStatus'] ?? 0;
             $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? NULL;
@@ -285,9 +284,8 @@ class FresnsPostsService extends FsService
         $allowJson = $draftPost['allow_json'];
         $allowPluginUnikey = NULL;
         $allowProportion = 0;
-        $allowBtnName = NULL;
+        $allowBtnName = [];
         if ($allowJson) {
-            $allowBtnName = [];
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? NULL;
             $allowProportion = $allosJsonDecode['proportion'] ?? 0;
@@ -379,7 +377,9 @@ class FresnsPostsService extends FsService
         if(empty($address)) {
             $address = NULL;
         }
-
+       $allowBtnName = empty($allowBtnName) ? NULL : json_decode($allowBtnName);
+       $commentBtnName = empty($commentBtnName) ? NULL : json_decode($commentBtnName);
+       $memberListName = empty($memberListName) ? NULL : json_decode($memberListName);
         // Extends
         $extendsJson = json_decode($draftPost['extends_json'], true);
         if ($extendsJson) {
@@ -410,13 +410,13 @@ class FresnsPostsService extends FsService
             'editor_unikey' => $editorUnikey,
             'comment_btn_status' => $commentBtnStatus,
             'comment_btn_plugin_unikey' => $commentBtnPluginUnikey,
-            'comment_btn_name' => json_encode($commentBtnName),
+            'comment_btn_name' => $commentBtnName,
             'allow_plugin_unikey' => $allowPluginUnikey,
             'allow_proportion' => $allowProportion,
-            'allow_btn_name' => json_encode($allowBtnName),
+            'allow_btn_name' => $allowBtnName,
             'member_list_status' => $memberListStatus,
             'member_list_plugin_unikey' => $memberListPluginUnikey,
-            'member_list_name' => json_encode($memberListName),
+            'member_list_name' => $memberListName,
             'map_scale' => $scale,
             'map_poi' => $poi,
             'map_poi_id' => $poiId,
@@ -427,7 +427,6 @@ class FresnsPostsService extends FsService
             'map_adcode' => $adcode,
             'map_address' => $address,
         ];
-        dd($postAppendInput);
         DB::table(FresnsPostAppendsConfig::CFG_TABLE)->insert($postAppendInput);
 
         return true;
@@ -475,9 +474,8 @@ class FresnsPostsService extends FsService
         $commentSetJson = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
         $commentBtnPluginUnikey = NULL;
-        $commentBtnName = NULL;
+        $commentBtnName = [];
         if ($commentSetJson) {
-            $commentBtnName = [];
             $commentSetDecode = json_decode($commentSetJson, true);
             $commentBtnStatus = $commentSetDecode['btnStatus'] ?? 0;
             $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? NULL;
@@ -505,10 +503,8 @@ class FresnsPostsService extends FsService
         $allowJson = $draftPost['allow_json'];
         $allowPluginUnikey = NULL;
         $allowProportion = 0;
-        $allowBtnName = NULL;
+        $allowBtnName = [];
         if ($allowJson) {
-        $allowBtnName = NULL;
-            $allowBtnName = [];
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? NULL;
             $allowProportion = $allosJsonDecode['proportion'] ?? 0;
