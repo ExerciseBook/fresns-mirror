@@ -1042,15 +1042,6 @@ class FresnsPostsService extends FsService
         return $info;
     }
 
-    // Perform Review Operations
-    public function parseToReview($draftId)
-    {
-        // post
-        FresnsPostLogs::where('id', $draftId)->update(['state' => 2, 'submit_at' => date('Y-m-d H:i:s')]);
-
-        return true;
-    }
-
     public static function getString($content)
     {
         $utf8posCharPosMap = [];
