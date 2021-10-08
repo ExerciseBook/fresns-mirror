@@ -76,7 +76,7 @@ class FresnsCmdWords extends BasePlugin
     public function __construct()
     {
         $this->pluginConfig = new FresnsCmdWordsConfig();
-        $this->pluginCmdHandlerMap = FresnsCmdWordsConfig::PLG_CMD_HANDLE_MAP;
+        $this->pluginCmdHandlerMap = FresnsCmdWordsConfig::FRESNS_CMD_HANDLE_MAP;
     }
 
     // Get Status Code
@@ -106,7 +106,7 @@ class FresnsCmdWords extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CLASS_ERROR);
         }
         LogService::info('Start Handle: ', $input);
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_CODE;
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_SEND_CODE;
         // Preparation parameters
         $account = $input['account'];
         $templateId = $input['templateId'];
@@ -207,7 +207,7 @@ class FresnsCmdWords extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_EMAIL;
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_SEND_EMAIL;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -242,7 +242,7 @@ class FresnsCmdWords extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_SMS;
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_SEND_SMS;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -283,7 +283,7 @@ class FresnsCmdWords extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_WECHAT;
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_SEND_WECHAT;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -327,7 +327,7 @@ class FresnsCmdWords extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_IOS;
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_SEND_IOS;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -370,7 +370,7 @@ class FresnsCmdWords extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
         // Command
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_SEND_ANDROID;
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_SEND_ANDROID;
         $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
         if (empty($pluginClass)) {
             LogService::error('Plugin class not found');
@@ -412,13 +412,11 @@ class FresnsCmdWords extends BasePlugin
             $memberId = DB::table(FresnsMembersConfig::CFG_TABLE)->where('uuid', $memberId)->value('id');
         }
         if (empty($memberId)) {
-            $tokenCount = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $userId)->where('member_id',
-                null)->where('platform_id', $platform)->count();
+            $tokenCount = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $userId)->where('member_id', null)->where('platform_id', $platform)->count();
             $token = StrHelper::createToken();
 
             if ($tokenCount > 0) {
-                DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $userId)->where('member_id',
-                    null)->where('platform_id', $platform)->delete();
+                DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $userId)->where('member_id', null)->where('platform_id', $platform)->delete();
             }
             $input = [];
             $input['platform_id'] = $platform;
@@ -429,12 +427,10 @@ class FresnsCmdWords extends BasePlugin
             }
             DB::table(FresnsSessionTokensConfig::CFG_TABLE)->insert($input);
         } else {
-            $sessionToken = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id',
-                $userId)->where('member_id', $memberId)->where('platform_id', $platform)->first();
+            $sessionToken = DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $userId)->where('member_id', $memberId)->where('platform_id', $platform)->first();
             $token = StrHelper::createToken();
             if ($sessionToken) {
-                DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $userId)->where('member_id',
-                    $memberId)->where('platform_id', $platform)->delete();
+                DB::table(FresnsSessionTokensConfig::CFG_TABLE)->where('user_id', $userId)->where('member_id', $memberId)->where('platform_id', $platform)->delete();
             }
             $input = [];
             $input['token'] = $token;
@@ -609,7 +605,7 @@ class FresnsCmdWords extends BasePlugin
             return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
         }
 
-        $cmd = FresnsCmdWordsConfig::PLG_CMD_GET_UPLOAD_TOKEN;
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_GET_UPLOAD_TOKEN;
         $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
         if (CmdRpcHelper::isErrorCmdResp($resp)) {
             return $this->pluginError($resp['code']);
@@ -830,7 +826,7 @@ class FresnsCmdWords extends BasePlugin
         }
 
         if ($pluginClass) {
-            $cmd = FresnsCmdWordsConfig::PLG_CMD_UPLOAD_FILE;
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_UPLOAD_FILE;
             $input = [];
             $input['fid'] = json_encode($fidArr);
             $input['mode'] = $mode;
@@ -935,7 +931,7 @@ class FresnsCmdWords extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
-            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_IMAGE;
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_IMAGE;
             $input = [];
             $input['fid'] = $fid;
             $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
@@ -1009,7 +1005,7 @@ class FresnsCmdWords extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
-            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_VIDEO;
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_VIDEO;
             $input = [];
             $input['fid'] = $fid;
             $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
@@ -1076,7 +1072,7 @@ class FresnsCmdWords extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
-            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_AUDIO;
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_AUDIO;
             $input = [];
             $input['fid'] = $fid;
             $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
@@ -1137,7 +1133,7 @@ class FresnsCmdWords extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
-            $cmd = FresnsCmdWordsConfig::PLG_CMD_ANTI_LINK_DOC;
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_DOC;
             $input = [];
             $input['fid'] = $fid;
             $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
@@ -1217,7 +1213,7 @@ class FresnsCmdWords extends BasePlugin
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
                                     // Plugin handle logic.
-                                    $cmd = FresnsCmdWordsConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
+                                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_PHYSICAL_DELETION_FILE;
                                     $input['fid'] = $extendsFileId;
                                     $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
                                     // Delete file data records from both "files" + "file_appends" tables.
@@ -1278,7 +1274,7 @@ class FresnsCmdWords extends BasePlugin
                     if ($filesIdArr) {
                         // Delete physical files
                         foreach ($filesIdArr as $v) {
-                            $cmd = FresnsCmdWordsConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
+                            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_PHYSICAL_DELETION_FILE;
                             $input['fid'] = $v;
                             $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
                         }
@@ -1375,7 +1371,7 @@ class FresnsCmdWords extends BasePlugin
                                     $extendsFileId = $file['uuid'];
                                     $extendsFileType = $file['file_type'];
                                     // Plugin handle logic.
-                                    $cmd = FresnsCmdWordsConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
+                                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_PHYSICAL_DELETION_FILE;
                                     $input['fid'] = $extendsFileId;
                                     $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
 
@@ -1436,7 +1432,7 @@ class FresnsCmdWords extends BasePlugin
                     if ($filesUuidArr) {
                         // Delete physical files
                         foreach ($filesUuidArr as $v) {
-                            $cmd = FresnsCmdWordsConfig::PLG_CMD_PHYSICAL_DELETION_FILE;
+                            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_PHYSICAL_DELETION_FILE;
                             $input['fid'] = $v;
                             $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
                         }
@@ -2003,7 +1999,7 @@ class FresnsCmdWords extends BasePlugin
                 $item['connect_name'] = $info['connectName'];
                 $item['connect_nickname'] = $info['connectNickname'];
                 $item['connect_avatar'] = $info['connectAvatar'];
-                $item['plugin_unikey'] = 'plg_cmd_user_register';
+                $item['plugin_unikey'] = 'fresns_cmd_user_register';
                 $itemArr[] = $item;
             }
 

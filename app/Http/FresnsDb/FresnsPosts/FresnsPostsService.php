@@ -638,7 +638,7 @@ class FresnsPostsService extends FsService
             'is_plugin_editor' => $isPluginEditor,
             'editor_unikey' => $editorUnikey,
             'comment_btn_status' => $commentBtnStatus,
-            'comment_btn_plugin_unikey' => $commentPluginUnikey,
+            'comment_btn_plugin_unikey' => $commentBtnPluginUnikey,
             'comment_btn_name' => json_encode($commentBtnName),
             'member_list_status' => $memberListStatus,
             'member_list_plugin_unikey' => $memberListPluginUnikey,
@@ -665,7 +665,7 @@ class FresnsPostsService extends FsService
     public function afterStoreToDb($postId, $draftId)
     {
         // Call the plugin to subscribe to the command word
-        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsPostsConfig::CFG_TABLE,
             'insertId' => $postId,
@@ -694,7 +694,7 @@ class FresnsPostsService extends FsService
     public function afterUpdateToDb($postId, $draftId)
     {
         // Call the plugin to subscribe to the command word
-        $cmd = FresnsSubPluginConfig::PLG_CMD_SUB_ADD_TABLE;
+        $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ADD_TABLE;
         $input = [
             'tableName' => FresnsPostsConfig::CFG_TABLE,
             'insertId' => $postId,

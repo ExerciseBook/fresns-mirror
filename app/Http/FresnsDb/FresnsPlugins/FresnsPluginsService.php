@@ -39,7 +39,7 @@ class FresnsPluginsService extends FsService
      */
     public static function getPluginUsagesUrl($pluginUnikey, $pluginUsagesid)
     {
-        $bucketDomain = ApiConfigHelper::getConfigByItemKey(FsConfig::BACKEND_DOMAIN);
+        $bucketDomain = ApiConfigHelper::getConfigByItemKey('backend_domain');
         $pluginUsages = FresnsPluginUsages::find($pluginUsagesid);
         $plugin = FresnsPlugins::where('unikey', $pluginUnikey)->first();
         $url = '';

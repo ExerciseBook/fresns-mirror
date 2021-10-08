@@ -262,7 +262,7 @@ class FsControllerApi extends FresnsBaseApiController
         // Data source: whether provided by the plugin
         $post_detail_config = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_DETAIL_SERVICE);
         if ($post_detail_config) {
-            $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
+            $cmd = BasePluginConfig::FRESNS_CMD_DEFAULT;
             $pluginClass = PluginHelper::findPluginClass($post_detail_config);
             if (empty($pluginClass)) {
                 LogService::error('Plugin not found');
@@ -803,7 +803,7 @@ class FsControllerApi extends FresnsBaseApiController
                         LogService::error('Plugin not found');
                         $this->error(ErrorCodeService::PLUGINS_CLASS_ERROR);
                     }
-                    $cmd = BasePluginConfig::PLG_CMD_DEFAULT;
+                    $cmd = BasePluginConfig::FRESNS_CMD_DEFAULT;
                     $pluginClass = PluginHelper::findPluginClass($pluginUnikey);
                     $input = [
                         'type' => $apiName,
