@@ -609,7 +609,9 @@ class FresnsPostsService extends FsService
         if(empty($address)) {
             $address = NULL;
         }
-
+        $allowBtnName = empty($allowBtnName) ? NULL : json_decode($allowBtnName);
+        $commentBtnName = empty($commentBtnName) ? NULL : json_decode($commentBtnName);
+        $memberListName = empty($memberListName) ? NULL : json_decode($memberListName);
         // Extends
         $extendsJson = json_decode($draftPost['extends_json'], true);
         if ($extendsJson) {
@@ -641,13 +643,13 @@ class FresnsPostsService extends FsService
             'editor_unikey' => $editorUnikey,
             'comment_btn_status' => $commentBtnStatus,
             'comment_btn_plugin_unikey' => $commentBtnPluginUnikey,
-            'comment_btn_name' => json_encode($commentBtnName),
+            'comment_btn_name' => $commentBtnName,
             'member_list_status' => $memberListStatus,
             'member_list_plugin_unikey' => $memberListPluginUnikey,
-            'member_list_name' => json_encode($memberListName),
+            'member_list_name' => $memberListName,
             'allow_plugin_unikey' => $allowPluginUnikey,
             'allow_proportion' => $allowProportion,
-            'allow_btn_name' => json_encode($allowBtnName),
+            'allow_btn_name' => $allowBtnName,
             'map_scale' => $scale,
             'map_poi' => $poi,
             'map_poi_id' => $poiId,
