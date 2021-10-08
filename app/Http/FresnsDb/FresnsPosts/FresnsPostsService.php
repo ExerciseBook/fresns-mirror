@@ -257,8 +257,9 @@ class FresnsPostsService extends FsService
         $commentSetJson = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
         $commentBtnPluginUnikey = NULL;
-        $commentBtnName = [];
+        $commentBtnName = NULL;
         if ($commentSetJson) {
+            $commentBtnName = [];
             $commentSetDecode = json_decode($commentSetJson, true);
             $commentBtnStatus = $commentSetDecode['btnStatus'] ?? 0;
             $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? NULL;
@@ -284,8 +285,9 @@ class FresnsPostsService extends FsService
         $allowJson = $draftPost['allow_json'];
         $allowPluginUnikey = NULL;
         $allowProportion = 0;
-        $allowBtnName = [];
+        $allowBtnName = NULL;
         if ($allowJson) {
+            $allowBtnName = [];
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? NULL;
             $allowProportion = $allosJsonDecode['proportion'] ?? 0;
@@ -471,12 +473,13 @@ class FresnsPostsService extends FsService
         // Comment Config
         $commentSetJson = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
-        $commentPluginUnikey = NULL;
-        $commentBtnName = [];
+        $commentBtnPluginUnikey = NULL;
+        $commentBtnName = NULL;
         if ($commentSetJson) {
+            $commentBtnName = [];
             $commentSetDecode = json_decode($commentSetJson, true);
             $commentBtnStatus = $commentSetDecode['btnStatus'] ?? 0;
-            $commentPluginUnikey = $commentSetDecode['pluginUnikey'] ?? NULL;
+            $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? NULL;
             $commentBtnName = $commentSetDecode['btnName'] ?? [];
             // Btn names multilingual
             if ($commentBtnName) {
@@ -501,8 +504,10 @@ class FresnsPostsService extends FsService
         $allowJson = $draftPost['allow_json'];
         $allowPluginUnikey = NULL;
         $allowProportion = 0;
-        $allowBtnName = [];
+        $allowBtnName = NULL;
         if ($allowJson) {
+        $allowBtnName = NULL;
+            $allowBtnName = [];
             $allosJsonDecode = json_decode($allowJson, true);
             $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? NULL;
             $allowProportion = $allosJsonDecode['proportion'] ?? 0;
