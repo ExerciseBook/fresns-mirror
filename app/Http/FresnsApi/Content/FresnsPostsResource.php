@@ -554,7 +554,9 @@ class FresnsPostsResource extends BaseAdminResource
         // more_json
         $more_json = json_decode($this->more_json, true);
         $icons = $more_json['icons'] ?? [];
-
+        if ($more_json) {
+            $icons = ApiFileHelper::getIconsSignUrl($icons);
+        }
         // Default Field
         $default = [
             'pid' => $pid,
