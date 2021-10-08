@@ -427,6 +427,7 @@ class FresnsPostsService extends FsService
             'map_adcode' => $adcode,
             'map_address' => $address,
         ];
+        dd($postAppendInput);
         DB::table(FresnsPostAppendsConfig::CFG_TABLE)->insert($postAppendInput);
 
         return true;
