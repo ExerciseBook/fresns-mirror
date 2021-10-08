@@ -41,8 +41,6 @@ use App\Http\FresnsDb\FresnsStopWords\FresnsStopWords;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-header('Content-Type:text/html;charset=utf-8');
-
 class FresnsPostsService extends FsService
 {
     // Publish post
