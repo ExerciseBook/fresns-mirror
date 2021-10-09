@@ -79,9 +79,9 @@ class FsChecker extends FresnsBaseChecker
                         return self::checkInfo(ErrorCodeService::EMAIL_ERROR);
                     }
                 } else {
-                    if ($countryCode != FsConfig::COUNTRYCODE) {
-                        return self::checkInfo(ErrorCodeService::COUNTRY_CODE_ERROR);
-                    }
+                    // if ($countryCode != FsConfig::COUNTRYCODE) {
+                    //     return self::checkInfo(ErrorCodeService::COUNTRY_CODE_ERROR);
+                    // }
                     $result = self::RulePhone($account);
                     if (! $result) {
                         return self::checkInfo(ErrorCodeService::PHONE_REGEX_ERROR);
@@ -104,9 +104,9 @@ class FsChecker extends FresnsBaseChecker
                         return self::checkInfo(ErrorCodeService::EMAIL_EXIST_ERROR);
                     }
                 } else {
-                    if ($countryCode != FsConfig::COUNTRYCODE) {
-                        return self::checkInfo(ErrorCodeService::COUNTRY_CODE_ERROR);
-                    }
+                    // if ($countryCode != FsConfig::COUNTRYCODE) {
+                    //     return self::checkInfo(ErrorCodeService::COUNTRY_CODE_ERROR);
+                    // }
                     $result = self::RulePhone($account);
                     if (! $result) {
                         return self::checkInfo(ErrorCodeService::PHONE_REGEX_ERROR);
@@ -135,9 +135,9 @@ class FsChecker extends FresnsBaseChecker
                         return self::checkInfo(ErrorCodeService::EMAIL_BAND_ERROR);
                     }
                 } else {
-                    if ($countryCode != FsConfig::COUNTRYCODE) {
-                        return self::checkInfo(ErrorCodeService::COUNTRY_CODE_ERROR);
-                    }
+                    // if ($countryCode != FsConfig::COUNTRYCODE) {
+                    //     return self::checkInfo(ErrorCodeService::COUNTRY_CODE_ERROR);
+                    // }
                     $result = self::RulePhone($account);
                     if (! $result) {
                         return self::checkInfo(ErrorCodeService::PHONE_REGEX_ERROR);
@@ -178,9 +178,9 @@ class FsChecker extends FresnsBaseChecker
                         return self::checkInfo(ErrorCodeService::EMAIL_REGEX_ERROR);
                     }
                 } else {
-                    if ($countryCode != FsConfig::COUNTRYCODE) {
-                        return self::checkInfo(ErrorCodeService::COUNTRY_CODE_ERROR);
-                    }
+                    // if ($countryCode != FsConfig::COUNTRYCODE) {
+                    //     return self::checkInfo(ErrorCodeService::COUNTRY_CODE_ERROR);
+                    // }
                     $result = self::RulePhone($account);
                     if (! $result) {
                         return self::checkInfo(ErrorCodeService::PHONE_REGEX_ERROR);
