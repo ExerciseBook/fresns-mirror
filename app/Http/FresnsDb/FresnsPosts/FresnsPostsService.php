@@ -103,19 +103,19 @@ class FresnsPostsService extends FsService
         // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
         $isLbs = $locationJson['isLbs'] ?? 0;
-        $mapId = $locationJson['mapId'] ?? NULL;
-        $latitude = $locationJson['latitude'] ?? NULL;
-        $longitude = $locationJson['longitude'] ?? NULL;
-        if(empty($mapId)) {
-            $mapId = NULL;
+        $mapId = $locationJson['mapId'] ?? null;
+        $latitude = $locationJson['latitude'] ?? null;
+        $longitude = $locationJson['longitude'] ?? null;
+        if (empty($mapId)) {
+            $mapId = null;
         }
-        if(empty($latitude)) {
-            $latitude = NULL;
+        if (empty($latitude)) {
+            $latitude = null;
         }
-        if(empty($longitude)) {
-            $longitude = NULL;
+        if (empty($longitude)) {
+            $longitude = null;
         }
-        
+
         $more_json = [];
         $more_json['files'] = json_decode($draftPost['files_json'], true);
 
@@ -177,20 +177,20 @@ class FresnsPostsService extends FsService
         // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
         $isLbs = $locationJson['isLbs'] ?? 0;
-        $mapId = $locationJson['mapId'] ?? NULL;
-        $latitude = $locationJson['latitude'] ?? NULL;
-        $longitude = $locationJson['longitude'] ?? NULL;
-        if(empty($mapId)) {
-            $mapId = NULL;
+        $mapId = $locationJson['mapId'] ?? null;
+        $latitude = $locationJson['latitude'] ?? null;
+        $longitude = $locationJson['longitude'] ?? null;
+        if (empty($mapId)) {
+            $mapId = null;
         }
-        if(empty($latitude)) {
-            $latitude = NULL;
+        if (empty($latitude)) {
+            $latitude = null;
         }
-        if(empty($latitude)) {
-            $latitude = NULL;
+        if (empty($latitude)) {
+            $latitude = null;
         }
 
-        $more_json = json_decode($post['more_json'], true) ?? NULL;
+        $more_json = json_decode($post['more_json'], true) ?? null;
         $more_json['files'] = json_decode($draftPost['files_json'], true);
 
         $input = [
@@ -227,12 +227,12 @@ class FresnsPostsService extends FsService
         // Specific members config
         $memberListJson = $draftPost['memberListJson'];
         $memberListStatus = 0;
-        $memberListPluginUnikey = NULL;
+        $memberListPluginUnikey = null;
         $memberListName = [];
         if ($memberListJson) {
             $memberListDecode = json_decode($memberListJson, true);
             $memberListStatus = $memberListDecode['memberListStatus'] ?? 0;
-            $memberListPluginUnikey = $memberListDecode['pluginUnikey'] ?? NULL;
+            $memberListPluginUnikey = $memberListDecode['pluginUnikey'] ?? null;
             $memberListName = $memberListDecode['memberListName'] ?? [];
             // Specific member names multilingual
             if ($memberListName) {
@@ -254,12 +254,12 @@ class FresnsPostsService extends FsService
         // Comment Config
         $commentSetJson = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
-        $commentBtnPluginUnikey = NULL;
+        $commentBtnPluginUnikey = null;
         $commentBtnName = [];
         if ($commentSetJson) {
             $commentSetDecode = json_decode($commentSetJson, true);
             $commentBtnStatus = $commentSetDecode['btnStatus'] ?? 0;
-            $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? NULL;
+            $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? null;
             $commentBtnName = $commentSetDecode['btnName'] ?? [];
             // Btn names multilingual
             if ($commentBtnName) {
@@ -280,12 +280,12 @@ class FresnsPostsService extends FsService
 
         // Read Allow Config
         $allowJson = $draftPost['allow_json'];
-        $allowPluginUnikey = NULL;
+        $allowPluginUnikey = null;
         $allowProportion = 0;
         $allowBtnName = [];
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
-            $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? NULL;
+            $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
             $allowProportion = $allosJsonDecode['proportion'] ?? 0;
             $allowBtnName = $allosJsonDecode['btnName'] ?? [];
             // Btn names multilingual
@@ -339,45 +339,45 @@ class FresnsPostsService extends FsService
 
         // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
-        $scale = $locationJson['scale'] ?? NULL;
-        $poi = $locationJson['poi'] ?? NULL;
-        $poiId = $locationJson['poiId'] ?? NULL;
-        $nation = $locationJson['nation'] ?? NULL;
-        $province = $locationJson['province'] ?? NULL;
-        $city = $locationJson['city'] ?? NULL;
-        $district = $locationJson['district'] ?? NULL;
-        $adcode = $locationJson['adcode'] ?? NULL;
-        $address = $locationJson['address'] ?? NULL;
-        if(empty($scale)) {
-            $scale = NULL;
+        $scale = $locationJson['scale'] ?? null;
+        $poi = $locationJson['poi'] ?? null;
+        $poiId = $locationJson['poiId'] ?? null;
+        $nation = $locationJson['nation'] ?? null;
+        $province = $locationJson['province'] ?? null;
+        $city = $locationJson['city'] ?? null;
+        $district = $locationJson['district'] ?? null;
+        $adcode = $locationJson['adcode'] ?? null;
+        $address = $locationJson['address'] ?? null;
+        if (empty($scale)) {
+            $scale = null;
         }
-        if(empty($poi)) {
-            $poi = NULL;
+        if (empty($poi)) {
+            $poi = null;
         }
-        if(empty($poiId)) {
-            $poiId = NULL;
+        if (empty($poiId)) {
+            $poiId = null;
         }
-        if(empty($nation)) {
-            $nation = NULL;
+        if (empty($nation)) {
+            $nation = null;
         }
-        if(empty($province)) {
-            $province = NULL;
+        if (empty($province)) {
+            $province = null;
         }
-        if(empty($city)) {
-            $city = NULL;
+        if (empty($city)) {
+            $city = null;
         }
-        if(empty($district)) {
-            $district = NULL;
+        if (empty($district)) {
+            $district = null;
         }
-        if(empty($adcode)) {
-            $adcode = NULL;
+        if (empty($adcode)) {
+            $adcode = null;
         }
-        if(empty($address)) {
-            $address = NULL;
+        if (empty($address)) {
+            $address = null;
         }
-       $allowBtnName = empty($allowBtnName) ? NULL : json_decode($allowBtnName);
-       $commentBtnName = empty($commentBtnName) ? NULL : json_decode($commentBtnName);
-       $memberListName = empty($memberListName) ? NULL : json_decode($memberListName);
+        $allowBtnName = empty($allowBtnName) ? null : json_decode($allowBtnName);
+        $commentBtnName = empty($commentBtnName) ? null : json_decode($commentBtnName);
+        $memberListName = empty($memberListName) ? null : json_decode($memberListName);
         // Extends
         $extendsJson = json_decode($draftPost['extends_json'], true);
         if ($extendsJson) {
@@ -442,14 +442,14 @@ class FresnsPostsService extends FsService
         // Specific members config
         $memberListJson = $draftPost['memberListJson'];
         $memberListStatus = 0;
-        $memberListPluginUnikey = NULL;
+        $memberListPluginUnikey = null;
         $memberListName = [];
         if ($memberListJson) {
             // Delete the old data first (empty the multilingual table)
             FresnsLanguages::where('table_name', FsConfig::CFG_TABLE)->where('table_id', $postId)->where('table_field', 'member_list_name')->delete();
             $memberListDecode = json_decode($memberListJson, true);
             $memberListStatus = $memberListDecode['memberListStatus'] ?? 0;
-            $memberListPluginUnikey = $memberListDecode['pluginUnikey'] ?? NULL;
+            $memberListPluginUnikey = $memberListDecode['pluginUnikey'] ?? null;
             $memberListName = $memberListDecode['memberListName'] ?? [];
             // Specific member names multilingual
             if ($memberListName) {
@@ -471,12 +471,12 @@ class FresnsPostsService extends FsService
         // Comment Config
         $commentSetJson = $draftPost['comment_set_json'];
         $commentBtnStatus = 0;
-        $commentBtnPluginUnikey = NULL;
+        $commentBtnPluginUnikey = null;
         $commentBtnName = [];
         if ($commentSetJson) {
             $commentSetDecode = json_decode($commentSetJson, true);
             $commentBtnStatus = $commentSetDecode['btnStatus'] ?? 0;
-            $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? NULL;
+            $commentBtnPluginUnikey = $commentSetDecode['pluginUnikey'] ?? null;
             $commentBtnName = $commentSetDecode['btnName'] ?? [];
             // Btn names multilingual
             if ($commentBtnName) {
@@ -499,12 +499,12 @@ class FresnsPostsService extends FsService
 
         // Read Allow Config
         $allowJson = $draftPost['allow_json'];
-        $allowPluginUnikey = NULL;
+        $allowPluginUnikey = null;
         $allowProportion = 0;
         $allowBtnName = [];
         if ($allowJson) {
             $allosJsonDecode = json_decode($allowJson, true);
-            $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? NULL;
+            $allowPluginUnikey = $allosJsonDecode['pluginUnikey'] ?? null;
             $allowProportion = $allosJsonDecode['proportion'] ?? 0;
             $allowBtnName = $allosJsonDecode['btnName'] ?? [];
             // Btn names multilingual
@@ -571,45 +571,45 @@ class FresnsPostsService extends FsService
 
         // Location Config
         $locationJson = json_decode($draftPost['location_json'], true);
-        $scale = $locationJson['scale'] ?? NULL;
-        $poi = $locationJson['poi'] ?? NULL;
-        $poiId = $locationJson['poiId'] ?? NULL;
-        $nation = $locationJson['nation'] ?? NULL;
-        $province = $locationJson['province'] ?? NULL;
-        $city = $locationJson['city'] ?? NULL;
-        $district = $locationJson['district'] ?? NULL;
-        $adcode = $locationJson['adcode'] ?? NULL;
-        $address = $locationJson['address'] ?? NULL;
-        if(empty($scale)) {
-            $scale = NULL;
+        $scale = $locationJson['scale'] ?? null;
+        $poi = $locationJson['poi'] ?? null;
+        $poiId = $locationJson['poiId'] ?? null;
+        $nation = $locationJson['nation'] ?? null;
+        $province = $locationJson['province'] ?? null;
+        $city = $locationJson['city'] ?? null;
+        $district = $locationJson['district'] ?? null;
+        $adcode = $locationJson['adcode'] ?? null;
+        $address = $locationJson['address'] ?? null;
+        if (empty($scale)) {
+            $scale = null;
         }
-        if(empty($poi)) {
-            $poi = NULL;
+        if (empty($poi)) {
+            $poi = null;
         }
-        if(empty($poiId)) {
-            $poiId = NULL;
+        if (empty($poiId)) {
+            $poiId = null;
         }
-        if(empty($nation)) {
-            $nation = NULL;
+        if (empty($nation)) {
+            $nation = null;
         }
-        if(empty($province)) {
-            $province = NULL;
+        if (empty($province)) {
+            $province = null;
         }
-        if(empty($city)) {
-            $city = NULL;
+        if (empty($city)) {
+            $city = null;
         }
-        if(empty($district)) {
-            $district = NULL;
+        if (empty($district)) {
+            $district = null;
         }
-        if(empty($adcode)) {
-            $adcode = NULL;
+        if (empty($adcode)) {
+            $adcode = null;
         }
-        if(empty($address)) {
-            $address = NULL;
+        if (empty($address)) {
+            $address = null;
         }
-        $allowBtnName = empty($allowBtnName) ? NULL : json_decode($allowBtnName);
-        $commentBtnName = empty($commentBtnName) ? NULL : json_decode($commentBtnName);
-        $memberListName = empty($memberListName) ? NULL : json_decode($memberListName);
+        $allowBtnName = empty($allowBtnName) ? null : json_decode($allowBtnName);
+        $commentBtnName = empty($commentBtnName) ? null : json_decode($commentBtnName);
+        $memberListName = empty($memberListName) ? null : json_decode($memberListName);
         // Extends
         $extendsJson = json_decode($draftPost['extends_json'], true);
         if ($extendsJson) {
@@ -1040,15 +1040,6 @@ class FresnsPostsService extends FsService
         $info['at_arr'] = $atMatches;
 
         return $info;
-    }
-
-    // Perform Review Operations
-    public function parseToReview($draftId)
-    {
-        // post
-        FresnsPostLogs::where('id', $draftId)->update(['state' => 2, 'submit_at' => date('Y-m-d H:i:s')]);
-
-        return true;
     }
 
     public static function getString($content)
