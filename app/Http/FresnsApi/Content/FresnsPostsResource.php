@@ -168,6 +168,7 @@ class FresnsPostsResource extends BaseAdminResource
         $memberListCount = Db::table('post_members')->where('post_id', $this->id)->count();
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
+        // Not deactivated = false, Deactivated = true
         $member['deactivate'] = false;
         $member['mid'] = '';
         $member['mname'] = '';
@@ -190,14 +191,8 @@ class FresnsPostsResource extends BaseAdminResource
             $member['avatar'] = $anonymousAvatar;
         }
         // The avatar displayed when a member has been deleted
-        $member['deactivate'] = true;
-        if ($memberInfo) {
-            if ($memberInfo->deleted_at != null) {
-                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
-                $member['avatar'] = $deactivateAvatar;
-                $member['deactivate'] = false;
-            }
-        } else {
+        // Not deactivated = false, Deactivated = true
+        if ($memberInfo->deleted_at != null) {
             $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
             $member['avatar'] = $deactivateAvatar;
             $member['deactivate'] = true;

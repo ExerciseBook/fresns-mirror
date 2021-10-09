@@ -138,6 +138,7 @@ class FresnsCommentsResource extends BaseAdminResource
         }
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
+        // Not deactivated = false, Deactivated = true
         $member['deactivate'] = false;
         $member['isAuthor'] = '';
         $member['mid'] = '';
@@ -161,14 +162,11 @@ class FresnsCommentsResource extends BaseAdminResource
             $member['avatar'] = $anonymousAvatar;
         }
         // The avatar displayed when a member has been deleted
-        if ($memberInfo) {
-            if ($memberInfo->deleted_at != null) {
-                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
-                $member['avatar'] = $deactivateAvatar;
-            }
-        } else {
+        // Not deactivated = false, Deactivated = true
+        if ($memberInfo->deleted_at != null) {
             $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
             $member['avatar'] = $deactivateAvatar;
+            $member['deactivate'] = true;
         }
         $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
 
@@ -182,7 +180,6 @@ class FresnsCommentsResource extends BaseAdminResource
             if ($memberInfo) {
                 if ($memberInfo->deleted_at == null && $memberInfo) {
                     $member['anonymous'] = $this->is_anonymous;
-                    $member['deactivate'] = false;
                     $member['isAuthor'] = $this->member_id == $mid ? true : false;
                     $member['mid'] = $memberInfo->uuid ?? '';
                     $member['mname'] = $memberInfo->name ?? '';
@@ -401,6 +398,7 @@ class FresnsCommentsResource extends BaseAdminResource
                 $post['avatar'] = $anonymousAvatar;
             }
             // The avatar displayed when a member has been deleted
+            // Not deactivated = false, Deactivated = true
             if ($memberInfo->deleted_at != null) {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
                 $post['avatar'] = $deactivateAvatar;
