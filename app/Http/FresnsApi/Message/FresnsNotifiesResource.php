@@ -43,7 +43,7 @@ class FresnsNotifiesResource extends BaseAdminResource
         } else {
             $data = FresnsComments::find($sourceId);
         }
-        $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $this->source_mid)->first();
+        $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $this->source_member_id)->first();
         $sourceMember = [];
         $avatar = $member->avatar_file_url ?? '';
         if ($member) {
@@ -63,8 +63,8 @@ class FresnsNotifiesResource extends BaseAdminResource
                 $avatar = $deactivateAvatar;
             }
             $avatar = ApiFileHelper::getImageSignUrl($avatar);
-            $member = FresnsMembers::find($this->source_mid);
-            $sourceMember = [
+            $member = FresnsMembers::find($this->source_member_id);
+            $sourceMember = 
                 [
                     'mid' => $member['uuid'] ?? '',
                     'mname' => $member->name ?? '',
@@ -73,7 +73,6 @@ class FresnsNotifiesResource extends BaseAdminResource
                     'decorate' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->decorate_file_id, $member->decorate_file_url),
                     'verifiedStatus' => $member->verified_status ?? 1,
                     'verifiedIcon' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->verified_file_id, $member->verified_file_url),
-                ],
             ];
         }
         $sourceBrief = $this->source_brief;
