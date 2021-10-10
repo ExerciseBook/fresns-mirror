@@ -43,7 +43,7 @@ class FresnsNotifiesResource extends BaseAdminResource
         } else {
             $data = FresnsComments::find($sourceId);
         }
-        $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $this->source_mid)->first();
+        $member = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $this->source_member_id)->first();
         $sourceMember = [];
         $avatar = $member->avatar_file_url ?? '';
         if ($member) {
