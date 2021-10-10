@@ -81,7 +81,10 @@ class FresnsCommentsResource extends BaseAdminResource
             $postAppends = get_object_vars($postAppends);
         }
         // Data Table: groups
-        $groupInfo = FresnsGroups::find($posts['group_id']);
+        $groupInfo = [];
+        if($posts['group_id']){
+            $groupInfo = FresnsGroups::find($posts['group_id']);
+        }
 
         // Comment Info
         $cid = $this->uuid;
@@ -423,7 +426,7 @@ class FresnsCommentsResource extends BaseAdminResource
                     if (! $posts['group_id']) {
                         $manages = [];
                     } else {
-                        $groupInfo = FresnsGroups::find($posts['group_id']);
+                        // $groupInfo = FresnsGroups::find($posts['group_id']);
                         if (! $groupInfo) {
                             $manages = [];
                         } else {
