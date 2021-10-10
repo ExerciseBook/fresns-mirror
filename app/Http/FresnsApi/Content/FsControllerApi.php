@@ -622,7 +622,7 @@ class FsControllerApi extends FresnsBaseApiController
         if ($searchType == 'all') {
             $request->offsetSet('searchType', '');
         }
-        // 过滤副表
+        // Filter Table
         $idArr = FresnsPostAppends::whereIn('post_id',$idArr)->pluck('post_id')->toArray();
         $ids = implode(',', $idArr);
 
