@@ -138,7 +138,7 @@ class FresnsCommentsResource extends BaseAdminResource
         }
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
-        $member['deactivate'] = false;
+        $member['deactivate'] = false; //Not deactivated = false, Deactivated = true
         $member['isAuthor'] = '';
         $member['mid'] = '';
         $member['mname'] = '';
@@ -149,18 +149,17 @@ class FresnsCommentsResource extends BaseAdminResource
         $member['roleIcon'] = '';
         $member['roleIconDisplay'] = '';
         $member['avatar'] = $memberInfo->avatar_file_url ?? '';
-
-        // Default avatar when members have no avatar
+        // Default Avatar
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }
-        // Anonymous content for avatar
+        // Anonymous Avatar
         if ($this->is_anonymous == 1) {
             $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::ANONYMOUS_AVATAR);
             $member['avatar'] = $anonymousAvatar;
         }
-        // The avatar displayed when a member has been deleted
+        // Deactivate Avatar
         if ($memberInfo) {
             if ($memberInfo->deleted_at != null) {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
@@ -182,7 +181,7 @@ class FresnsCommentsResource extends BaseAdminResource
             if ($memberInfo) {
                 if ($memberInfo->deleted_at == null && $memberInfo) {
                     $member['anonymous'] = $this->is_anonymous;
-                    $member['deactivate'] = false;
+                    $member['deactivate'] = true; //Not deactivated = false, Deactivated = true
                     $member['isAuthor'] = $this->member_id == $mid ? true : false;
                     $member['mid'] = $memberInfo->uuid ?? '';
                     $member['mname'] = $memberInfo->name ?? '';
