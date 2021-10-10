@@ -59,6 +59,7 @@ class FsModel extends BaseCategoryModel
         $commentShields = DB::table($memberShieldsTable)->where('member_id', $mid)->where('shield_type', 5)->pluck('shield_id')->toArray();
         $query = DB::table("$commentTable as comment")->select('comment.*')
             ->join("$commentAppendTable as append", 'comment.id', '=', 'append.comment_id')
+            ->join('posts as p','comment.post_id','=','posts.id')
             ->whereNotIn('comment.member_id', $memberShields)
             ->whereNotIn('comment.id', $commentShields)
             ->where('comment.deleted_at', null);
