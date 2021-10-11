@@ -800,7 +800,7 @@ class FresnsPostsResource extends BaseAdminResource
         // Hashtag
         $hashtagShow = ApiConfigHelper::getConfigByItemKey('hashtag_show') ?? 2;
         // 查找帖子是否有关联的话题
-        $postHash = FresnsHashtagLinkeds::where('linked_type',1)->where('linked_id',$postId)->pluck('hashtag_id')->toArray();
+        $postHash = FresnsHashtagLinkeds::where('linked_type',$postType)->where('linked_id',$postId)->pluck('hashtag_id')->toArray();
         if($postHash){
             foreach($postHash as $p){
                 // 获取话题信息
