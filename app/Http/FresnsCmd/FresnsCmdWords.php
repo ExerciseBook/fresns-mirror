@@ -824,7 +824,7 @@ class FresnsCmdWords extends BasePlugin
                     $append['video_gif'] = $fileInfo['videoGif'] == '' ? null : $fileInfo['videoGif'];
                     $append['audio_time'] = $fileInfo['audioTime'] == '' ? null : $fileInfo['audioTime'];
                     $append['platform_id'] = $platformId;
-                    $append['transcoding_state'] = $fileInfo['transcodingState'] == '' ? 2 : $fileInfo['transcodingState'];
+                    $append['transcoding_state'] = $fileInfo['transcodingState'] ?? 2;
                     $append['more_json'] = json_encode($fileInfo['moreJson']);
 
                     FresnsFileAppends::insert($append);
@@ -914,7 +914,6 @@ class FresnsCmdWords extends BasePlugin
         $imageSquareUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbSquare;
         $imageBigUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbBig;
         $originalUrl = $imagesBucketDomain.$append['file_original_path'];
-
         if ($imagesStatus == true) {
             $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
             $pluginUniKey = $unikey;
