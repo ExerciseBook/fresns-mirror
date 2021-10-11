@@ -669,7 +669,7 @@ class FresnsCommentsService extends FsService
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $draftComment['content'], $singlePoundMatches);
         } else {
-            preg_match_all('/#.*?#/', $draftComment['content'], $singlePoundMatches);
+            preg_match_all('/#[\S].*?[\S]#/', $draftComment['content'], $singlePoundMatches);
         }
         if ($type == 2) {
             // Removing Hashtag Associations
@@ -749,7 +749,7 @@ class FresnsCommentsService extends FsService
         if ($hashtagShow == 1) {
             preg_match("/#.*?\s/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         } else {
-            preg_match('/#.*?#/', $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
+            preg_match('/#[\S].*?[\S]#/', $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         }
         /**
          * preg_match("/<a .*?>.*?<\/a>/",$content,$hrefMatches,PREG_OFFSET_CAPTURE);.

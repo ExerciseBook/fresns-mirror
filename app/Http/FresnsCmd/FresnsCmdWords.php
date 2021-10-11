@@ -811,11 +811,13 @@ class FresnsCmdWords extends BasePlugin
                     $append['image_width'] = $fileInfo['imageWidth'] == '' ? null : $fileInfo['imageWidth'];
                     $append['image_height'] = $fileInfo['imageHeight'] == '' ? null : $fileInfo['imageHeight'];
                     $imageLong = 0;
-                    if (! empty($fileInfo['image_width']) >= 700) {
-                        if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 4) {
-                            $imageLong = 1;
-                        } else {
-                            $imageLong = 0;
+                    if (! empty($fileInfo['image_width'])) {
+                        if($fileInfo['image_width'] >= 700){
+                            if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 4) {
+                                $imageLong = 1;
+                            } else {
+                                $imageLong = 0;
+                            }
                         }
                     }
                     $append['image_is_long'] = $imageLong;
@@ -824,7 +826,7 @@ class FresnsCmdWords extends BasePlugin
                     $append['video_gif'] = $fileInfo['videoGif'] == '' ? null : $fileInfo['videoGif'];
                     $append['audio_time'] = $fileInfo['audioTime'] == '' ? null : $fileInfo['audioTime'];
                     $append['platform_id'] = $platformId;
-                    $append['transcoding_state'] = $fileInfo['transcodingState'] == '' ? 2 : $fileInfo['transcodingState'];
+                    $append['transcoding_state'] = $fileInfo['transcodingState'] ?? 2;
                     $append['more_json'] = json_encode($fileInfo['moreJson']);
 
                     FresnsFileAppends::insert($append);
@@ -914,7 +916,6 @@ class FresnsCmdWords extends BasePlugin
         $imageSquareUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbSquare;
         $imageBigUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbBig;
         $originalUrl = $imagesBucketDomain.$append['file_original_path'];
-
         if ($imagesStatus == true) {
             $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
             $pluginUniKey = $unikey;
@@ -950,7 +951,7 @@ class FresnsCmdWords extends BasePlugin
             }
             $output = $resp['output'];
 
-            $imageDefaultUrl = $imageDefaultUrl;
+            $imageDefaultUrl = $output['imageDefaultUrl'] ?? $imageDefaultUrl;
             $imageAvatarUrl = $output['imageAvatarUrl'] ?? '';
             $imageRatioUrl = $output['imageRatioUrl'] ?? '';
             $imageSquareUrl = $output['imageSquareUrl'] ?? '';
@@ -1563,7 +1564,7 @@ class FresnsCmdWords extends BasePlugin
         $signKey = FresnsSessionKeys::where('app_id', $appId)->value('app_secret');
 
         $checkSignRes = SignHelper::checkSign($dataMap, $signKey);
-
+        // dd($checkSignRes);
         if ($checkSignRes !== true) {
             $info = [
                 'sign' => $checkSignRes,
