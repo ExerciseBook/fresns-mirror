@@ -970,7 +970,7 @@ class FresnsPostsService extends FsService
         if ($hashtagShow == 1) {
             preg_match("/#.*?\s/", $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         } else {
-            preg_match('/#.*?#/', $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
+            preg_match('/#[^\s].*?[^\s]#/', $content, $singlePoundMatches, PREG_OFFSET_CAPTURE);
         }
         /**
          * preg_match("/<a .*?>.*?<\/a>/",$content,$hrefMatches,PREG_OFFSET_CAPTURE);.
