@@ -817,7 +817,7 @@ class FresnsPostsService extends FsService
         if ($hashtagShow == 1) {
             preg_match_all("/#.*?\s/", $draftPost['content'], $singlePoundMatches);
         } else {
-            preg_match_all('/#.*?#/', $draftPost['content'], $singlePoundMatches);
+            preg_match_all('/#[\S].*?[\S]#/', $draftPost['content'], $singlePoundMatches);
         }
 
         if ($singlePoundMatches[0]) {
