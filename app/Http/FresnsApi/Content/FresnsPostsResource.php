@@ -820,7 +820,8 @@ class FresnsPostsResource extends BaseAdminResource
                         if($findCount !== false){
                             $content = str_replace($twohashName,"<a href='{$jumpUrl}' class='fresns_content_hashtag'>$twohashName</a>", $content);
                         }else{
-                            $content = str_replace($onehashName,"<a href='{$jumpUrl}' class='fresns_content_hashtag'>$twohashName</a>", $content);
+                            $onehashNameNotrim = '#' . $hashTagInfo['name'] . ' ';
+                            $content = str_replace($onehashNameNotrim,"<a href='{$jumpUrl}' class='fresns_content_hashtag'>$twohashName</a>", $content);
                         }
                     }
                 }
