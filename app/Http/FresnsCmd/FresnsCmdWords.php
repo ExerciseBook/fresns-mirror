@@ -811,11 +811,13 @@ class FresnsCmdWords extends BasePlugin
                     $append['image_width'] = $fileInfo['imageWidth'] == '' ? null : $fileInfo['imageWidth'];
                     $append['image_height'] = $fileInfo['imageHeight'] == '' ? null : $fileInfo['imageHeight'];
                     $imageLong = 0;
-                    if (! empty($fileInfo['image_width']) >= 700) {
-                        if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 4) {
-                            $imageLong = 1;
-                        } else {
-                            $imageLong = 0;
+                    if (! empty($fileInfo['image_width'])) {
+                        if($fileInfo['image_width'] >= 700){
+                            if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 4) {
+                                $imageLong = 1;
+                            } else {
+                                $imageLong = 0;
+                            }
                         }
                     }
                     $append['image_is_long'] = $imageLong;
@@ -1546,23 +1548,23 @@ class FresnsCmdWords extends BasePlugin
         // Jarvis Tang: Signature Expiration Date
         $min = 5; //Expiration time limit (unit: minutes)
         //Determine the timestamp type
-        $timestampNum = strlen($timestamp);
-        if ($timestampNum == 10) {
-            $now = time();
-            $expiredMin = $min * 60;
-        } else {
-            $now = intval(microtime(true) * 1000);
-            $expiredMin = $min * 60 * 1000;
-        }
+        // $timestampNum = strlen($timestamp);
+        // if ($timestampNum == 10) {
+        //     $now = time();
+        //     $expiredMin = $min * 60;
+        // } else {
+        //     $now = intval(microtime(true) * 1000);
+        //     $expiredMin = $min * 60 * 1000;
+        // }
 
-        if ($now - $timestamp > $expiredMin) {
-            return $this->pluginError(ErrorCodeService::HEADER_SIGN_EXPIRED);
-        }
+        // if ($now - $timestamp > $expiredMin) {
+        //     return $this->pluginError(ErrorCodeService::HEADER_SIGN_EXPIRED);
+        // }
         LogService::info('Tips: ', $dataMap);
         $signKey = FresnsSessionKeys::where('app_id', $appId)->value('app_secret');
 
         $checkSignRes = SignHelper::checkSign($dataMap, $signKey);
-
+        // dd($checkSignRes);
         if ($checkSignRes !== true) {
             $info = [
                 'sign' => $checkSignRes,
