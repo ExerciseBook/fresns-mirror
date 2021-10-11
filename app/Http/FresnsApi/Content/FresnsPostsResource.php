@@ -799,11 +799,11 @@ class FresnsPostsResource extends BaseAdminResource
 
         // Hashtag
         $hashtagShow = ApiConfigHelper::getConfigByItemKey('hashtag_show') ?? 2;
-        // 查找帖子是否有关联的话题
+        // Find if a post has a related hashtag
         $postHash = FresnsHashtagLinkeds::where('linked_type',$postType)->where('linked_id',$postId)->pluck('hashtag_id')->toArray();
         if($postHash){
             foreach($postHash as $p){
-                // 获取话题信息
+                // Get hashtag information
                 $hashTagInfo = FresnsHashtags::find($p);
                 if($hashTagInfo){
                     $onehashName = '#' . $hashTagInfo['name'];
@@ -827,28 +827,6 @@ class FresnsPostsResource extends BaseAdminResource
                 }
             }
         }
-        // if ($hashtagShow == 1) {
-        //     preg_match_all("/#.*?\s/", $content, $singlePoundMatches);
-        // } else {
-        //     preg_match_all('/#.*?#/', $content, $singlePoundMatches);
-        // }
-        // if ($singlePoundMatches[0]) {
-        //     foreach ($singlePoundMatches[0] as $s) {
-        //         // no trim hashtag
-        //         $noTrimHashTags = rtrim($s);
-        //         $hashTags = trim(str_replace('#', '', $s));
-        //         $hashtagsInfo = FresnsHashtags::where('name', $hashTags)->first();
-        //         // hashtag info
-        //         if ($hashtagsInfo) {
-        //             $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/hashtag/{$hashtagsInfo['slug']}";
-        //             if ($hashtagShow == 1) {
-        //                 $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$noTrimHashTags</a> ", $content);
-        //             } else {
-        //                 $content = str_replace($s, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$s</a>", $content);
-        //             }
-        //         }
-        //     }
-        // }
 
         return $content;
     }
