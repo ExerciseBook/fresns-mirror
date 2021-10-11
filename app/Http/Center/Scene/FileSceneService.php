@@ -335,8 +335,7 @@ class FileSceneService extends BaseService
             base_path(),
             'storage', 'app', 'public',
         ];
-        $realPath = implode(DIRECTORY_SEPARATOR, $suffixArr);
-
+        $realPath = implode(DIRECTORY_SEPARATOR, array_merge($basePathArr, $suffixArr));
         // Create a directory
         if (! FileHelper::assetDir($realPath)) {
             LogService::error('Failed to create a directory:', $realPath);
