@@ -76,6 +76,7 @@ class FresnsNotifiesResource extends BaseAdminResource
             ];
         }
         $sourceBrief = $this->source_brief;
+        $accessUrl = $this->access_url;
         $status = $this->status;
 
         // Default Field
@@ -83,9 +84,10 @@ class FresnsNotifiesResource extends BaseAdminResource
             'nitifyId' => $messageId,
             'sourceType' => $sourceType,
             'sourceClass' => $sourceClass,
-            'sourceUuId' => $data['uuid'] ?? '',
+            'sourceUuid' => $data['uuid'] ?? null,
             'sourceMember' => $sourceMember,
             'sourceBrief' => $sourceBrief,
+            'accessUrl' => $accessUrl,
             'status' => $status,
         ];
 
