@@ -189,7 +189,7 @@ class FresnsCmdWords extends BasePlugin
             case 1:
                 $result = $FresnsPostsService->releaseByDraft($logId,$sessionLogsId);
                 $postId = FresnsPostLogs::find($logId);
-                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_CMD;
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
                 $input = [
                     'tableName' => 'posts',
                     'insertId' => $postId['post_id'],
@@ -200,7 +200,7 @@ class FresnsCmdWords extends BasePlugin
             case 2:
                 $result = $fresnsCommentService->releaseByDraft($logId,$commentCid,$sessionLogsId);
                 $commentInfo = FresnsCommentLogs::find($logId);
-                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_CMD;
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
                 $input = [
                     'tableName' => 'comments',
                     'insertId' => $commentInfo['comment_id'],
@@ -1212,7 +1212,7 @@ class FresnsCmdWords extends BasePlugin
         return $this->pluginSuccess();
     }
 
-    //删除文件
+    // Physical deletion file by fid
     public function physicalDeletionFileHandler($input)
     {
         $fid = $input['fid'];
