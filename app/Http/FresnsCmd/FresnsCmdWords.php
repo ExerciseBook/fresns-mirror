@@ -1175,8 +1175,8 @@ class FresnsCmdWords extends BasePlugin
         return $this->pluginSuccess($item);
     }
 
-    // Delete physical file by fid
-    public function physicalDeletionFileHandler($input)
+    // Physical deletion temp file by fid
+    public function physicalDeletionTempFileHandler($input)
     {
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
