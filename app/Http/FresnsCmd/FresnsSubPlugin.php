@@ -132,13 +132,14 @@ class FresnsSubPlugin extends BasePlugin
         return $this->pluginSuccess();
     }
 
-    protected function subActiveCommandWordHandler($input){
+    protected function subActiveCmdHandler($input){
         $tableName = $input['tableName'];
         $insertId = $input['insertId'];
         $commandWord = $input['commandWord'];
         // Query subscription information (configs > item_key: subscribe_plugins)
         $subscribe = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->where('is_enable',
             1)->first();
+        dump($subscribe);
         if (! empty($subscribe)) {
             // $subscribeInfo = json_decode($subscribe['item_value'], true);
             $subscribeInfo = $subscribe['item_value'];

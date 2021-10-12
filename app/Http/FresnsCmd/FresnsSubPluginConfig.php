@@ -25,11 +25,12 @@ class FresnsSubPluginConfig extends BasePluginConfig
     // Subscribe to user activity status
     public const FRESNS_CMD_SUB_USER_ACTIVE = 'fresns_cmd_sub_user_active';
 
-    public const FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD = 'fresns_cmd_sub_active_command_word';
+    public const FRESNS_CMD_SUB_ACTIVE_CMD = 'fresns_cmd_sub_active_cmd';
 
     const FRESNS_CMD_HANDLE_MAP = [
         self::FRESNS_CMD_SUB_ADD_TABLE => 'subAddTableHandler',
         self::FRESNS_CMD_SUB_USER_ACTIVE => 'subUserActiveHandler',
+        self::FRESNS_CMD_SUB_ACTIVE_CMD => 'subActiveCmdHandler',
     ];
 
     public function subAddTableHandlerRule()

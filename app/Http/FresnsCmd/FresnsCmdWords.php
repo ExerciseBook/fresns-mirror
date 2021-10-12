@@ -189,7 +189,7 @@ class FresnsCmdWords extends BasePlugin
             case 1:
                 $result = $FresnsPostsService->releaseByDraft($logId,$sessionLogsId);
                 $postId = FresnsPostLogs::find($logId);
-                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_CMD;
                 $input = [
                     'tableName' => 'posts',
                     'insertId' => $postId['post_id'],
@@ -198,13 +198,13 @@ class FresnsCmdWords extends BasePlugin
                 $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
 
                 if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                    return $this->pluginError($resp['code']);
+                    return $this->pluginError($resp);
                 }
                 break;
             case 2:
                 $result = $fresnsCommentService->releaseByDraft($logId,$commentCid,$sessionLogsId);
                 $commentInfo = FresnsCommentLogs::find($logId);
-                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_CMD;
                 $input = [
                     'tableName' => 'comments',
                     'insertId' => $commentInfo['comment_id'],
@@ -212,7 +212,7 @@ class FresnsCmdWords extends BasePlugin
                 ];
                 $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
                 if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                    return $this->pluginError($resp['code']);
+                    return $this->pluginError($resp);
                 }
                 break;
         }
