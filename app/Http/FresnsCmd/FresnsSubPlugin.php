@@ -101,7 +101,7 @@ class FresnsSubPlugin extends BasePlugin
         }
         
 
-        return $this->pluginSuccess($resp);
+        return $this->pluginSuccess();
     }
 
     // Subscribe to user activity status
