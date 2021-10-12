@@ -1219,6 +1219,57 @@ class FresnsCmdWords extends BasePlugin
         return $this->pluginSuccess();
     }
 
+    //删除文件
+    public function physicalDeletionFileHandler($input)
+    {
+        $fid = $input['fid'];
+        $files = FresnsFiles::where('uuid', $fid)->first();
+        if (empty($files)) {
+            return $this->pluginError(ErrorCodeService::FILE_EXIST_ERROR);
+        }
+        $type = $files['file_type'];
+        switch ($type) {
+            case 1:
+                $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
+                break;
+            case 2:
+                $unikey = ApiConfigHelper::getConfigByItemKey('videos_service');
+                break;
+            case 3:
+                $unikey = ApiConfigHelper::getConfigByItemKey('audios_service');
+                break;
+            default:
+                $unikey = ApiConfigHelper::getConfigByItemKey('docs_service');
+                break;
+        }
+        $pluginUniKey = $unikey;
+
+        $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+        if (empty($pluginClass)) {
+            LogService::error('Plugin Class Not Found');
+
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
+        }
+
+        $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
+        if ($isPlugin == false) {
+            LogService::error('Plugin Class Not Found');
+
+            return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
+        }
+
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_PHYSICAL_DELETION_FILE;
+        $input = [];
+        $input['fid'] = $fid;
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
+            return $this->pluginError($resp['code']);
+        }
+
+        return $this->pluginSuccess();
+
+    }
+
     /**
      * Delete official content
      * type: 1.post / 2.comment
