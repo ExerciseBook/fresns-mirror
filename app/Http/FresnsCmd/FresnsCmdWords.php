@@ -69,7 +69,8 @@ use App\Http\FresnsDb\FresnsVerifyCodes\FresnsVerifyCodes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
-
+use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
+use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 class FresnsCmdWords extends BasePlugin
 {
     // Constructors
@@ -187,9 +188,32 @@ class FresnsCmdWords extends BasePlugin
         switch ($type) {
             case 1:
                 $result = $FresnsPostsService->releaseByDraft($logId,$sessionLogsId);
+                $postId = FresnsPostLogs::find($logId);
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
+                $input = [
+                    'tableName' => 'posts',
+                    'insertId' => $postId['post_id'],
+                    'commandWord' => 'fresns_cmd_direct_release_content',
+                ];
+                $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    return $this->pluginError($resp['code']);
+                }
                 break;
             case 2:
                 $result = $fresnsCommentService->releaseByDraft($logId,$commentCid,$sessionLogsId);
+                $commentInfo = FresnsCommentLogs::find($logId);
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
+                $input = [
+                    'tableName' => 'comments',
+                    'insertId' => $commentInfo['comment_id'],
+                    'commandWord' => 'fresns_cmd_direct_release_content',
+                ];
+                $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    return $this->pluginError($resp['code']);
+                }
                 break;
         }
         // dd($result);
