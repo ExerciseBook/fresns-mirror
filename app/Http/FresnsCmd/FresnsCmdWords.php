@@ -196,10 +196,6 @@ class FresnsCmdWords extends BasePlugin
                     'commandWord' => 'fresns_cmd_direct_release_content',
                 ];
                 $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
-
-                if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                    return $this->pluginError($resp);
-                }
                 break;
             case 2:
                 $result = $fresnsCommentService->releaseByDraft($logId,$commentCid,$sessionLogsId);
@@ -211,9 +207,6 @@ class FresnsCmdWords extends BasePlugin
                     'commandWord' => 'fresns_cmd_direct_release_content',
                 ];
                 $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
-                if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                    return $this->pluginError($resp);
-                }
                 break;
         }
         // dd($result);
