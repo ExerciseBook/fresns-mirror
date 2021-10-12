@@ -240,7 +240,7 @@ class FileSceneService extends BaseService
         return implode(DIRECTORY_SEPARATOR, $suffixArr);
     }
 
-    //正式路径
+    // Official file storage path
     public static function getFormalEditorPath($options)
     {
         $t = time();
