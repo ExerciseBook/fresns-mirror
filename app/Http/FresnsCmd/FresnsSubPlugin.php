@@ -47,14 +47,6 @@ class FresnsSubPlugin extends BasePlugin
         if ($subscribe) {
             // $subscribeArr = $subscribe['item_value'];
             $subscribeArr = json_decode($subscribe['item_value'], true);
-            // LogService::Info('subscribeInfo', $subscribeInfo);
-            // if ($subscribeInfo) {
-            //     foreach ($subscribeInfo as $s) {
-            //         if ($tableName == $s['subscribe_table_name']) {
-            //             $subscribeArr = $s;
-            //         }
-            //     }
-            // }
         }
         // Get the cmd and unikey of the sent command word
         $cmd = '';
@@ -72,12 +64,6 @@ class FresnsSubPlugin extends BasePlugin
                 if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE3 && $s['subscribe_table_name'] == $tableName) {
                     $cmd = $s['subscribe_plugin_cmd'];
                     $unikey = $s['subscribe_plugin_unikey'];
-                    // if (empty($cmd)) {
-                    //     return $this->pluginError(BasePluginConfig::CODE_PARAMS_ERROR);
-                    // }
-                    // if (empty($unikey)) {
-                    //     return $this->pluginError(BasePluginConfig::CODE_PARAMS_ERROR);
-                    // }
                     $pluginClass = PluginHelper::findPluginClass($unikey);
                     if(!$pluginClass){
                         return $this->pluginSuccess();
@@ -87,18 +73,7 @@ class FresnsSubPlugin extends BasePlugin
                         'insertId' => $insertId,
                     ];
                     $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
-                    // if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                    //     return $this->pluginError($resp['code']);
-                    // }
                 }
-                // Subscription type: 5
-                // Execute subscribe_plugin_cmd for subscribe_plugin_unikey
-                // if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE5) {
-                //     $cmd = $s['subscribe_plugin_cmd'];
-                //     $unikey = $s['subscribe_plugin_unikey'];
-                // }
-                
-                
             }
             
         }
@@ -119,9 +94,6 @@ class FresnsSubPlugin extends BasePlugin
             // dd($subscribeInfo);
             if ($subscribeInfo) {
                 foreach ($subscribeInfo as $s) {
-                    // dd($s);
-                    // Subscription type: 4
-                    // Execute subscribe_plugin_cmd for subscribe_plugin_unikey
                     if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE4) {
                         $cmd = $s['subscribe_plugin_cmd'];
                         $unikey = $s['subscribe_plugin_unikey'];
@@ -134,9 +106,6 @@ class FresnsSubPlugin extends BasePlugin
                             'mid' => request()->header('mid'),
                         ];
                         $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
-                        // if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                        //     return $this->pluginError($resp);
-                        // }
                     }
                 }
             }
@@ -172,9 +141,6 @@ class FresnsSubPlugin extends BasePlugin
                             'insertId' => $insertId,
                         ];
                         $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
-                        // if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                        //     return $this->pluginError($resp['code']);
-                        // }
                     }
                 }
             }
