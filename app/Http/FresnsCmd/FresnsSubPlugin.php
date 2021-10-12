@@ -87,9 +87,9 @@ class FresnsSubPlugin extends BasePlugin
                         'insertId' => $insertId,
                     ];
                     $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
-                    if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                        return $this->pluginError($resp['code']);
-                    }
+                    // if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    //     return $this->pluginError($resp['code']);
+                    // }
                 }
                 // Subscription type: 5
                 // Execute subscribe_plugin_cmd for subscribe_plugin_unikey
@@ -134,9 +134,9 @@ class FresnsSubPlugin extends BasePlugin
                             'mid' => request()->header('mid'),
                         ];
                         $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
-                        if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                            return $this->pluginError($resp);
-                        }
+                        // if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        //     return $this->pluginError($resp);
+                        // }
                     }
                 }
             }
@@ -172,9 +172,9 @@ class FresnsSubPlugin extends BasePlugin
                             'insertId' => $insertId,
                         ];
                         $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
-                        if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                            return $this->pluginError($resp['code']);
-                        }
+                        // if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        //     return $this->pluginError($resp['code']);
+                        // }
                     }
                 }
             }
