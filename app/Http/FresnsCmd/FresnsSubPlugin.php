@@ -110,6 +110,7 @@ class FresnsSubPlugin extends BasePlugin
 
             if ($subscribeInfo) {
                 foreach ($subscribe as $s) {
+                    dd($s);
                     // Subscription type: 4
                     // Execute subscribe_plugin_cmd for subscribe_plugin_unikey
                     if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE4) {
@@ -139,7 +140,6 @@ class FresnsSubPlugin extends BasePlugin
         // Query subscription information (configs > item_key: subscribe_plugins)
         $subscribe = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->where('is_enable',
             1)->first();
-        dump($subscribe);
         if (! empty($subscribe)) {
             // $subscribeInfo = json_decode($subscribe['item_value'], true);
             $subscribeInfo = $subscribe['item_value'];
