@@ -112,7 +112,7 @@ class FresnsSubPlugin extends BasePlugin
             1)->first();
         if (! empty($subscribe)) {
             // $subscribeInfo = json_decode($subscribe['item_value'], true);
-            $subscribeInfo = $subscribe['item_value'];
+            $subscribeInfo = json_decode($subscribe['item_value'],true);
             dd($subscribeInfo);
             if ($subscribeInfo) {
                 foreach ($subscribeInfo as $s) {
