@@ -180,17 +180,19 @@ class FresnsCmdWords extends BasePlugin
     {
         $type = $input['type'];
         $logId = $input['logId'];
+        $sessionLogsId = $input['sessionLogsId'];
+        $commentCid = $input['commentCid'];
         $FresnsPostsService = new FresnsPostsService();
         $fresnsCommentService = new FresnsCommentsService();
         switch ($type) {
             case 1:
-                $result = $FresnsPostsService->releaseByDraft($logId);
+                $result = $FresnsPostsService->releaseByDraft($logId,$sessionLogsId);
                 break;
             case 2:
-                $result = $fresnsCommentService->releaseByDraft($logId);
+                $result = $fresnsCommentService->releaseByDraft($logId,$commentCid,$sessionLogsId);
                 break;
         }
-        dd($result);
+        // dd($result);
         return $this->pluginSuccess();
     }
 
