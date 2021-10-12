@@ -539,7 +539,8 @@ class FsControllerApi extends FresnsBaseApiController
                     $this->success();
                 }
                 // Call Release
-                $FresnsPostsService->releaseByDraft($draftId, $logsId);
+                $data = $FresnsPostsService->releaseByDraft($draftId, $logsId);
+                dd($data);
                 break;
             default:
                 if ($commentCid) {
