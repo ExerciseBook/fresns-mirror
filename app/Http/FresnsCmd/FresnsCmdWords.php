@@ -181,7 +181,7 @@ class FresnsCmdWords extends BasePlugin
         $type = $input['type'];
         $logId = $input['logId'];
         $sessionLogsId = $input['sessionLogsId'];
-        $commentCid = $input['commentCid'];
+        $commentCid = $input['commentCid'] ?? 0;
         $FresnsPostsService = new FresnsPostsService();
         $fresnsCommentService = new FresnsCommentsService();
         switch ($type) {

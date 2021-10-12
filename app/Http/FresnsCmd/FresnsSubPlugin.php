@@ -116,7 +116,10 @@ class FresnsSubPlugin extends BasePlugin
                         $cmd = $s['subscribe_plugin_cmd'];
                         $unikey = $s['subscribe_plugin_unikey'];
                         $pluginClass = PluginHelper::findPluginClass($unikey);
-                        $input = [];
+                        $input = [
+                            'uid' => request()->header('uid'),
+                            'mid' => request()->header('mid'),
+                        ];
                         $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
                         if (CmdRpcHelper::isErrorCmdResp($resp)) {
                             return $this->pluginError($resp);
