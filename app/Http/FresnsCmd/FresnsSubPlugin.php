@@ -72,13 +72,16 @@ class FresnsSubPlugin extends BasePlugin
                 if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE3 && $s['subscribe_table_name'] == $tableName) {
                     $cmd = $s['subscribe_plugin_cmd'];
                     $unikey = $s['subscribe_plugin_unikey'];
-                    if (empty($cmd)) {
-                        return $this->pluginError(BasePluginConfig::CODE_PARAMS_ERROR);
-                    }
-                    if (empty($unikey)) {
-                        return $this->pluginError(BasePluginConfig::CODE_PARAMS_ERROR);
-                    }
+                    // if (empty($cmd)) {
+                    //     return $this->pluginError(BasePluginConfig::CODE_PARAMS_ERROR);
+                    // }
+                    // if (empty($unikey)) {
+                    //     return $this->pluginError(BasePluginConfig::CODE_PARAMS_ERROR);
+                    // }
                     $pluginClass = PluginHelper::findPluginClass($unikey);
+                    if(!$pluginClass){
+                        return $this->pluginSuccess();
+                    }
                     $input = [
                         'tableName' => $tableName,
                         'insertId' => $insertId,
@@ -123,6 +126,9 @@ class FresnsSubPlugin extends BasePlugin
                         $cmd = $s['subscribe_plugin_cmd'];
                         $unikey = $s['subscribe_plugin_unikey'];
                         $pluginClass = PluginHelper::findPluginClass($unikey);
+                        if(!$pluginClass){
+                            return $this->pluginSuccess();
+                        }
                         $input = [
                             'uid' => request()->header('uid'),
                             'mid' => request()->header('mid'),
@@ -158,6 +164,9 @@ class FresnsSubPlugin extends BasePlugin
                         $cmd = $s['subscribe_plugin_cmd'];
                         $unikey = $s['subscribe_plugin_unikey'];
                         $pluginClass = PluginHelper::findPluginClass($unikey);
+                        if(!$pluginClass){
+                            return $this->pluginSuccess();
+                        }
                         $input = [
                             'tableName' => $tableName,
                             'insertId' => $insertId,
