@@ -822,6 +822,27 @@ class FresnsPostsService extends FsService
 
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
+                //双#号 中间允许有单个空格（不能连续空格）
+                if($hashtagShow == 2){
+                    preg_match_all("/\s(?=\s)/", $s, $spaceMatchArr);
+                    if(count($spaceMatchArr) > 0  && is_array($spaceMatchArr[0]) && count($spaceMatchArr[0]) > 0){
+                        // $this->error(ErrorCodeService::CODE_PARAM_ERROR, ['info' => '中间允许有单个空格（不能连续空格）']);
+                        continue;
+                    }
+                }
+                // 话题不支持标点符号
+                // 英文标点符号
+                $topic = trim($s, "#");
+                $removePunctEnglish = preg_replace("#[[:punct:]]#", "", $topic);
+                $data['topic_a'] = $topic;
+                if(strlen($topic) != strlen($removePunctEnglish)){
+                    continue;
+                }
+                // 中文标点符号
+                $removePunctChinese = str_replace(['？', '，'], '', $topic);
+                if(strlen($topic) != strlen($removePunctChinese)){
+                    continue;
+                }
                 // Remove the # sign from Hashtag
                 $s = trim(str_replace('#', '', $s));
                 // Existence of Hashtag
