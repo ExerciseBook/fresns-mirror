@@ -190,7 +190,7 @@ class FresnsCmdWords extends BasePlugin
                 $result = $fresnsCommentService->releaseByDraft($logId);
                 break;
         }
-
+        dd($result);
         return $this->pluginSuccess();
     }
 

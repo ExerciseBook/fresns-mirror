@@ -45,15 +45,16 @@ class FresnsSubPlugin extends BasePlugin
         $subscribe = FresnsConfigs::where('item_key', FresnsSubPluginConfig::SUB_ADD_TABLE_PLUGINS)->where('is_enable', 1)->first();
         $subscribeArr = '';
         if ($subscribe) {
-            $subscribeInfo = json_decode($subscribe['item_value'], true);
-            LogService::Info('subscribeInfo', $subscribeInfo);
-            if ($subscribeInfo) {
-                foreach ($subscribeInfo as $s) {
-                    if ($tableName == $s['subscribe_table_name']) {
-                        $subscribeArr = $s;
-                    }
-                }
-            }
+            $subscribeArr = $subscribe['item_value'];
+            // $subscribeInfo = json_decode($subscribe['item_value'], true);
+            // LogService::Info('subscribeInfo', $subscribeInfo);
+            // if ($subscribeInfo) {
+            //     foreach ($subscribeInfo as $s) {
+            //         if ($tableName == $s['subscribe_table_name']) {
+            //             $subscribeArr = $s;
+            //         }
+            //     }
+            // }
         }
         // Get the cmd and unikey of the sent command word
         $cmd = '';
@@ -67,7 +68,7 @@ class FresnsSubPlugin extends BasePlugin
             }
             // Subscription type: 3
             // Execute subscribe_plugin_cmd for subscribe_plugin_unikey
-            if ($subscribeArr['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE3) {
+            if ($subscribeArr['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE3 && $subscribeArr['subscribe_table_name'] == $tableName) {
                 $cmd = $subscribeArr['subscribe_plugin_cmd'];
                 $unikey = $subscribeArr['subscribe_plugin_unikey'];
             }
