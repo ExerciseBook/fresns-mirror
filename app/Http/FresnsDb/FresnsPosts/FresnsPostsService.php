@@ -822,6 +822,26 @@ class FresnsPostsService extends FsService
 
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
+                // Double #: single space allowed in between (no consecutive spaces)
+                if($hashtagShow == 2){
+                    preg_match_all("/\s(?=\s)/", $s, $spaceMatchArr);
+                    if(count($spaceMatchArr) > 0  && is_array($spaceMatchArr[0]) && count($spaceMatchArr[0]) > 0){
+                        continue;
+                    }
+                }
+                // Hashtag do not support punctuation
+                // English punctuation
+                $topic = trim($s, "#");
+                $removePunctEnglish = preg_replace("#[[:punct:]]#", "", $topic);
+                $data['topic_a'] = $topic;
+                if(strlen($topic) != strlen($removePunctEnglish)){
+                    continue;
+                }
+                // Chinese punctuation
+                $removePunctChinese = str_replace(['？', '，'], '', $topic);
+                if(strlen($topic) != strlen($removePunctChinese)){
+                    continue;
+                }
                 // Remove the # sign from Hashtag
                 $s = trim(str_replace('#', '', $s));
                 // Existence of Hashtag

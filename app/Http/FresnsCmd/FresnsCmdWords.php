@@ -69,7 +69,8 @@ use App\Http\FresnsDb\FresnsVerifyCodes\FresnsVerifyCodes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
-
+use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
+use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 class FresnsCmdWords extends BasePlugin
 {
     // Constructors
@@ -180,17 +181,35 @@ class FresnsCmdWords extends BasePlugin
     {
         $type = $input['type'];
         $logId = $input['logId'];
+        $sessionLogsId = $input['sessionLogsId'];
+        $commentCid = $input['commentCid'] ?? 0;
         $FresnsPostsService = new FresnsPostsService();
         $fresnsCommentService = new FresnsCommentsService();
         switch ($type) {
             case 1:
-                $result = $FresnsPostsService->releaseByDraft($logId);
+                $result = $FresnsPostsService->releaseByDraft($logId,$sessionLogsId);
+                $postId = FresnsPostLogs::find($logId);
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
+                $input = [
+                    'tableName' => 'posts',
+                    'insertId' => $postId['post_id'],
+                    'commandWord' => 'fresns_cmd_direct_release_content',
+                ];
+                $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
                 break;
             case 2:
-                $result = $fresnsCommentService->releaseByDraft($logId);
+                $result = $fresnsCommentService->releaseByDraft($logId,$commentCid,$sessionLogsId);
+                $commentInfo = FresnsCommentLogs::find($logId);
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
+                $input = [
+                    'tableName' => 'comments',
+                    'insertId' => $commentInfo['comment_id'],
+                    'commandWord' => 'fresns_cmd_direct_release_content',
+                ];
+                $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
                 break;
         }
-
+        // dd($result);
         return $this->pluginSuccess();
     }
 
@@ -1175,8 +1194,8 @@ class FresnsCmdWords extends BasePlugin
         return $this->pluginSuccess($item);
     }
 
-    // Delete physical file by fid
-    public function physicalDeletionFileHandler($input)
+    // Physical deletion temp file by fid
+    public function physicalDeletionTempFileHandler($input)
     {
         $fid = $input['fid'];
         $files = FresnsFiles::where('uuid', $fid)->first();
@@ -1191,6 +1210,57 @@ class FresnsCmdWords extends BasePlugin
         }
 
         return $this->pluginSuccess();
+    }
+
+    // Physical deletion file by fid
+    public function physicalDeletionFileHandler($input)
+    {
+        $fid = $input['fid'];
+        $files = FresnsFiles::where('uuid', $fid)->first();
+        if (empty($files)) {
+            return $this->pluginError(ErrorCodeService::FILE_EXIST_ERROR);
+        }
+        $type = $files['file_type'];
+        switch ($type) {
+            case 1:
+                $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
+                break;
+            case 2:
+                $unikey = ApiConfigHelper::getConfigByItemKey('videos_service');
+                break;
+            case 3:
+                $unikey = ApiConfigHelper::getConfigByItemKey('audios_service');
+                break;
+            default:
+                $unikey = ApiConfigHelper::getConfigByItemKey('docs_service');
+                break;
+        }
+        $pluginUniKey = $unikey;
+
+        $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+        if (empty($pluginClass)) {
+            LogService::error('Plugin Class Not Found');
+
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
+        }
+
+        $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
+        if ($isPlugin == false) {
+            LogService::error('Plugin Class Not Found');
+
+            return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
+        }
+
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_PHYSICAL_DELETION_FILE;
+        $input = [];
+        $input['fid'] = $fid;
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
+            return $this->pluginError($resp['code']);
+        }
+
+        return $this->pluginSuccess();
+
     }
 
     /**

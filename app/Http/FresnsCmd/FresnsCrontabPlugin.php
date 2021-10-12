@@ -59,7 +59,8 @@ class FresnsCrontabPlugin extends BasePlugin
             $configArr = json_decode($config['item_value'], true);
             foreach ($item as $v) {
                 foreach ($configArr as $value) {
-                    if ($v['subscribe_plugin_unikey'] == $value['subscribe_plugin_unikey'] && $v['subscribe_plugin_cmd'] == $value['subscribe_plugin_cmd'] && $v['subscribe_table_name'] == $value['subscribe_table_name']) {
+                    if ($v['subscribe_plugin_unikey'] == $value['subscribe_plugin_unikey'] && $v['subscribe_plugin_cmd'] == $value['subscribe_plugin_cmd']) {
+                    // if ($v['subscribe_plugin_unikey'] == $value['subscribe_plugin_unikey'] && $v['subscribe_plugin_cmd'] == $value['subscribe_plugin_cmd'] && $v['subscribe_table_name'] == $value['subscribe_table_name']) {
                         return $this->pluginError(ErrorCodeService::DATA_EXCEPTION_ERROR, 'There are duplicate data');
                     }
                 }
@@ -93,7 +94,8 @@ class FresnsCrontabPlugin extends BasePlugin
         foreach ($configArr as $v) {
             $isDel = 0;
             foreach ($item as $value) {
-                if ($v['subscribe_plugin_unikey'] == $value['subscribe_plugin_unikey'] && $v['subscribe_plugin_cmd'] == $value['subscribe_plugin_cmd'] && $v['subscribe_table_name'] == $value['subscribe_table_name']) {
+                if ($v['subscribe_plugin_unikey'] == $value['subscribe_plugin_unikey']) {
+                // if ($v['subscribe_plugin_unikey'] == $value['subscribe_plugin_unikey'] && $v['subscribe_plugin_cmd'] == $value['subscribe_plugin_cmd'] && $v['subscribe_table_name'] == $value['subscribe_table_name']) {
                     $isDel = 1;
                     break;
                 }
