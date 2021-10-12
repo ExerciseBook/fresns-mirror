@@ -88,7 +88,7 @@ class FresnsSubPlugin extends BasePlugin
                     ];
                     $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
                     if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                        return $this->pluginError($resp);
+                        return $this->pluginError($resp['code']);
                     }
                 }
                 // Subscription type: 5
@@ -173,7 +173,7 @@ class FresnsSubPlugin extends BasePlugin
                         ];
                         $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
                         if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                            return $this->pluginError($resp);
+                            return $this->pluginError($resp['code']);
                         }
                     }
                 }
