@@ -112,6 +112,7 @@ class ErrorCodeService
     const ROLE_NO_PERMISSION_UPLOAD_DOC = 30411;
     const ROLE_UPLOAD_FILES_SIZE_ERROR = 30412;
     const ROLE_DIALOG_ERROR = 30413;
+    const ROLE_DOWNLOAD_ERROR = 30414;
 
     // Dialog
     const DIALOG_ERROR = 30500;
@@ -307,6 +308,7 @@ class ErrorCodeService
         self::ROLE_NO_PERMISSION_UPLOAD_DOC     => '当前角色无权上传文档',
         self::ROLE_UPLOAD_FILES_SIZE_ERROR      => '文件大小超过当前角色限制',
         self::ROLE_DIALOG_ERROR                 => '当前角色无私信权限',
+        self::ROLE_DOWNLOAD_ERROR               => '当前角色已经达到今天下载次数上限，请明天再下载',
 
         // Dialog
         self::DIALOG_ERROR                      => '会话异常或者该会话不属于当前成员',

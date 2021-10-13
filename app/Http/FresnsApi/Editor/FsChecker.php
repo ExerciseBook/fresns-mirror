@@ -1083,7 +1083,7 @@ class FsChecker extends BaseChecker
             return ErrorCodeService::ROLE_NO_PERMISSION;
         }
 
-        //如果传入后缀则将后缀转为小写再进行比较
+        // Change file extensions to lowercase letters
         if(!empty($suffix)){
             $suffix = mb_strtolower($suffix);
         }

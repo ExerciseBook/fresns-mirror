@@ -483,7 +483,7 @@ class FsControllerApi extends FresnsBaseApiController
                 if (empty($typeData)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
-                //查询主表对应的日志表id
+                // Query the log table id corresponding to the main table
                 $postLogsIdArr = FresnsPostLogs::where('post_id',$typeData['id'])->pluck('id')->toArray();
                 // dd($typeData);
                 $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsPostLogsConfig::CFG_TABLE)->whereIn('table_id', $postLogsIdArr)->first();
@@ -508,7 +508,7 @@ class FsControllerApi extends FresnsBaseApiController
                 if (empty($typeData)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
-                //查询主表对应的日志表id
+                // Query the log table id corresponding to the main table
                 $commentLogsIdArr = FresnsCommentLogs::where('post_id',$typeData['id'])->pluck('id')->toArray();
                 $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsCommentLogsConfig::CFG_TABLE)->whereIn('table_id', $commentLogsIdArr)->first();
                 if (empty($files)) {
@@ -544,13 +544,12 @@ class FsControllerApi extends FresnsBaseApiController
             $this->error(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
         }
         $downloadFileCount = $permissionMap['download_file_count'];
-        //计算近 24 小时内，下载次数是否达到了上限
+        // Calculate whether the maximum number of downloads has been reached in the last 24 hours
         $start = date('Y-m-d H:i:s',strtotime("-1 day"));
         $end = date('Y-m-d H:i:s',time());
         $logCount = FresnsFileLogs::where('user_id',$uid)->where('member_id',$mid)->where('created_at','>=',$start)->where('created_at','<=',$end)->count();
         if($logCount >= $downloadFileCount){
-            //替换错误码
-            $this->error(ErrorCodeService::ACCOUNT_COUNT_ERROR);
+            $this->error(ErrorCodeService::ROLE_DOWNLOAD_ERROR);
         }
 
         $files = FresnsFiles::where('uuid', $fid)->first(); 
