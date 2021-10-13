@@ -876,6 +876,7 @@ class FresnsCmdWords extends BasePlugin
             $filesArr = FresnsFiles::whereIn('id', $fileIdArr)->get()->toArray();
             foreach ($filesArr as $file) {
                 $item = [];
+                $uuid = $file['uuid'];
                 $append = FresnsFileAppends::where('file_id', $file['id'])->first();
                 $item['fid'] = $file['uuid'];
                 $item['type'] = $file['file_type'];
@@ -886,23 +887,51 @@ class FresnsCmdWords extends BasePlugin
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
                     $item['imageLong'] = $append['image_long'] ?? 0;
-                    $item['imageDefaultUrl'] = $imagesHost.$file['file_path'];
-                    $item['imageRatioUrl'] = $imagesHost.$file['file_path'].$imagesRatio;
-                    $item['imageSquareUrl'] = $imagesHost.$file['file_path'].$imagesSquare;
-                    $item['imageBigUrl'] = $imagesHost.$file['file_path'].$imagesBig;
+                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_IMAGE;
+                    $input['fid'] = $uuid;
+                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                    if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        return $this->pluginError($resp['code']);
+                    }
+                    $output = $resp['output'];
+                    $item['imageDefaultUrl'] = $output['imageDefaultUrl'];
+                    $item['imageRatioUrl'] = $output['imageRatioUrl'];
+                    $item['imageSquareUrl'] = $output['imageSquareUrl'];
+                    $item['imageBigUrl'] = $output['imageBigUrl'];
                 }
                 if ($type == 2) {
                     $item['videoTime'] = $append['video_time'] ?? '';
-                    $item['videoCover'] = $videosHost.$append['video_cover'] ?? '';
-                    $item['videoGif'] = $videosHost.$append['video_gif'] ?? '';
-                    $item['videoUrl'] = $videosHost.$file['file_path'];
+                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_VIDEO;
+                    $input['fid'] = $uuid;
+                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                    if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        return $this->pluginError($resp['code']);
+                    }
+                    $output = $resp['output'];
+                    $item['videoCover'] = $output['videoCover'];
+                    $item['videoGif'] = $output['videoGif'];
+                    $item['videoUrl'] = $output['videoUrl'];
                 }
                 if ($type == 3) {
                     $item['audioTime'] = $append['audio_time'] ?? '';
-                    $item['audioUrl'] = $audiosHost.$file['file_path'];
+                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_AUDIO;
+                    $input['fid'] = $uuid;
+                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                    if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        return $this->pluginError($resp['code']);
+                    }
+                    $output = $resp['output'];
+                    $item['audioUrl'] = $output['audioUrl'];
                 }
                 if ($type == 4) {
-                    $item['docUrl'] = $docsHost.$file['file_path'];
+                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_DOC;
+                    $input['fid'] = $uuid;
+                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                    if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        return $this->pluginError($resp['code']);
+                    }
+                    $output = $resp['output'];
+                    $item['docUrl'] = $output['docUrl'];
                 }
                 $item['moreJson'] = json_decode($append['more_json'], true);
                 $data['files'][] = $item;
