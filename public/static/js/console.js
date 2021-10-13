@@ -1,10 +1,10 @@
 //install extensions
-$(".installLocal").click(function(){
+$("#localInstallActionModal").on('show.bs.modal',function(){
     var dirName = $(".installDirName").val();
-    $('#localInstallActionModal').addClass('show');
-    $('#localInstallActionModal').css({
-        'display': 'block'
-    });
+    // $('#localInstallActionModal').addClass('show');
+    // $('#localInstallActionModal').css({
+    //     'display': 'block'
+    // });
     var isAdd = true;
     $.ajax({
         async: false,
@@ -48,10 +48,10 @@ $(".installLocal").click(function(){
                     window.location.reload();
                 },1800)
             }else{
-                $('#localInstallActionModal').removeClass('show');
-                $('#localInstallActionModal').css({
-                    'display': 'none'
-                });
+                // $('#localInstallActionModal').removeClass('show');
+                // $('#localInstallActionModal').css({
+                //     'display': 'none'
+                // });
                 alert(data.message);
             }
         }
