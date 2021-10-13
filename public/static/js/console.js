@@ -2,6 +2,9 @@
 $(".installLocal").click(function(){
     var dirName = $(".installDirName").val();
     $('#localInstallActionModal').addClass('show');
+    $('#localInstallActionModal').css({
+        'display':'block',
+    });
     var isAdd = true;
     $.ajax({
         async: false,
@@ -45,6 +48,9 @@ $(".installLocal").click(function(){
                     window.location.reload();
                 },1800)
             }else{
+                $('#localInstallActionModal').css({
+                    'display': 'none'
+                });
                 $('#localInstallActionModal').removeClass('show');
                 alert(data.message);
             }
