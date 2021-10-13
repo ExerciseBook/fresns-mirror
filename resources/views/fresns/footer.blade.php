@@ -1,5 +1,5 @@
 <!--Action Modal local install-->
-<div class="modal fade" id="localInstallActionModal" tabindex="-1" aria-labelledby="localInstallActionModal" aria-hidden="true">
+<div class="modal fade" id="localInstallActionModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
