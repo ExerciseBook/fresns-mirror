@@ -1,5 +1,5 @@
 <!--Action Modal local install-->
-<div class="modal fade" id="localInstallActionModal" tabindex="-1" aria-labelledby="localInstall" aria-hidden="true">
+<div class="modal fade" id="localInstallActionModal" tabindex="-1" aria-labelledby="localInstallActionModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -23,7 +23,7 @@
 </div>
 
 <!--Action Modal code install-->
-<div class="modal fade" id="codeInstallActionModal" tabindex="-1" aria-labelledby="codeInstall" aria-hidden="true">
+<div class="modal fade" id="codeInstallActionModal" tabindex="-1" aria-labelledby="codeInstallActionModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
