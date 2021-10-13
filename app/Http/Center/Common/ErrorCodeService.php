@@ -193,11 +193,15 @@ class ErrorCodeService
     const CONTENT_COUNT_ERROR = 30914;
 
     // Console Error Message
-    const BACKEND_PATH_ERROR = 40000;
-    const DELETE_ADMIN_ERROR = 40001;
-    const KEY_NAME_ERROR = 40002;
-    const KEY_PLATFORM_ERROR = 40003;
-    const KEY_PLUGIN_ERROR = 40004;
+    const SETTING_ERROR = 40000;
+    const SAVE_ERROR = 40001;
+    const DELETE_ERROR = 40002;
+    const LANGUAGE_SETTING_ERROR = 40003;
+    const BACKEND_PATH_ERROR = 40004;
+    const DELETE_ADMIN_ERROR = 40005;
+    const KEY_NAME_ERROR = 40006;
+    const KEY_PLATFORM_ERROR = 40007;
+    const KEY_PLUGIN_ERROR = 40008;
 
     // Console Manage Extensions
     const UNINSTALL_EXTENSION_ERROR = 40100;
@@ -389,6 +393,10 @@ class ErrorCodeService
         self::CONTENT_COUNT_ERROR               => '内容超过限制字数',
 
         // Console Error Message
+        self::SETTING_ERROR                     => '设置出错',
+        self::SAVE_ERROR                        => '保存失败',
+        self::DELETE_ERROR                      => '删除失败',
+        self::LANGUAGE_SETTING_ERROR            => '多语言设置错误',
         self::BACKEND_PATH_ERROR                => '该入口命名已被占用',
         self::DELETE_ADMIN_ERROR                => '不允许删除自己',
         self::KEY_NAME_ERROR                    => '密钥名称必填',
