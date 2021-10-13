@@ -102,13 +102,12 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $likeCount = $this->like_count;
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
-        $time = DateHelper::fresnsOutputTimeToTimezone($this->created_at);
-        $timeFormat = DateHelper::format_date_langTag(strtotime($time));
-        $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
-        $editTimeFormat = '';
-        if ($editTime) {
-            $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
-        }
+        // $time = DateHelper::fresnsOutputTimeToTimezone($this->created_at);
+        $time = $this->created_at;
+        $timeFormat = DateHelper::format_date_langTag(strtotime($this->created_at));
+        $editTime = $this->latest_edit_at;
+        // $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
+        $editTimeFormat = DateHelper::format_date_langTag(strtotime($this->latest_edit_at));
 
         // Operation behavior status
         $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 5)->where('like_id', $this->id)->count();

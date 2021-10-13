@@ -157,10 +157,12 @@ class FresnsPostsResource extends BaseAdminResource
         $shieldCount = $this->shield_count;
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
-        $time = DateHelper::fresnsOutputTimeToTimezone($this->created_at);
-        $timeFormat = DateHelper::format_date_langTag(strtotime($time));
-        $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
-        $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
+        // $time = DateHelper::fresnsOutputTimeToTimezone($this->created_at);
+        $time = $this->created_at;
+        $timeFormat = DateHelper::format_date_langTag(strtotime($this->created_at));
+        $editTime = $this->latest_edit_at;
+        // $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
+        $editTimeFormat = DateHelper::format_date_langTag(strtotime($this->latest_edit_at));
         $allowStatus = $this->is_allow;
         $allowBtnName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
         $allowBtnUrl = $append['allow_plugin_unikey'] ?? '';
