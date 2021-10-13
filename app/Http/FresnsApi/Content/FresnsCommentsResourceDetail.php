@@ -103,11 +103,13 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $commentCount = $this->comment_count;
         $commentLikeCount = $this->comment_like_count;
         $time = DateHelper::fresnsOutputTimeToTimezone($this->created_at);
-        $timeFormat = DateHelper::format_date_langTag(strtotime($time));
+        // $time = $this->created_at;
+        $timeFormat = DateHelper::format_date_langTag(strtotime($this->created_at));
+        // $editTime = $this->latest_edit_at;
         $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
-        $editTimeFormat = '';
-        if ($editTime) {
-            $editTimeFormat = DateHelper::format_date_langTag(strtotime($editTime));
+        $editTimeFormat = NULL;
+        if(!empty($editTime)){
+            $editTimeFormat = DateHelper::format_date_langTag(strtotime($this->latest_edit_at));
         }
 
         // Operation behavior status
