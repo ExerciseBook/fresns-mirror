@@ -20,6 +20,8 @@ use App\Http\FresnsApi\Helpers\ApiFileHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
 use App\Http\FresnsCmd\FresnsCmdWords;
 use App\Http\FresnsCmd\FresnsCmdWordsConfig;
+use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
+use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
 use App\Http\FresnsDb\FresnsDialogMessages\FresnsDialogMessages;
@@ -43,6 +45,8 @@ use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
 use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacksService;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Http\FresnsDb\FresnsPluginUsages\FresnsPluginUsagesService;
+use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
+use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsStopWords\FresnsStopWordsService;
@@ -476,8 +480,10 @@ class FsControllerApi extends FresnsBaseApiController
                 if (empty($typeData)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
+                //查询主表对应的日志表id
+                $postLogsIdArr = FresnsPostLogs::where('post_id',$typeData['id'])->pluck('id')->toArray();
                 // dd($typeData);
-                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsPostsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
+                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsPostLogsConfig::CFG_TABLE)->whereIn('table_id', $postLogsIdArr)->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
@@ -499,8 +505,9 @@ class FsControllerApi extends FresnsBaseApiController
                 if (empty($typeData)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
-
-                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsCommentsConfig::CFG_TABLE)->where('table_id', $typeData['id'])->first();
+                //查询主表对应的日志表id
+                $commentLogsIdArr = FresnsCommentLogs::where('post_id',$typeData['id'])->pluck('id')->toArray();
+                $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsCommentLogsConfig::CFG_TABLE)->whereIn('table_id', $commentLogsIdArr)->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
                 }
