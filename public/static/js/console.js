@@ -48,10 +48,10 @@ $(".installLocal").click(function(){
                     window.location.reload();
                 },1800)
             }else{
-                $('#localInstallActionModal').removeClass('show');
                 $('#localInstallActionModal').css({
                     'display': 'none'
                 });
+                $('#localInstallActionModal').removeClass('show');
                 alert(data.message);
             }
         }
