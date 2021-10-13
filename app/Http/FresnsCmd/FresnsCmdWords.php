@@ -21,15 +21,12 @@ use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsApi\User\FsUserService;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsService;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
-use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\FresnsDb\FresnsDomainLinks\FresnsDomainLinksConfig;
 use App\Http\FresnsDb\FresnsDomains\FresnsDomains;
 use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
@@ -47,7 +44,6 @@ use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 use App\Http\FresnsDb\FresnsMentions\FresnsMentionsConfig;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins as FresnsPluginFresnsPlugin;
 use App\Http\FresnsDb\FresnsPostAllows\FresnsPostAllowsConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogsConfig;
@@ -71,6 +67,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
+use App\Http\FresnsDb\FresnsUsers\FresnsUsersService;
+
 class FresnsCmdWords extends BasePlugin
 {
     // Constructors
@@ -2130,7 +2128,7 @@ class FresnsCmdWords extends BasePlugin
             FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $uid, $mid, $uid);
         }
 
-        $service = new FsUserService();
+        $service = new FresnsUsersService();
         $data = $service->getUserDetail($uid, $langTag, $mid);
 
         return $this->pluginSuccess($data);
@@ -2225,7 +2223,7 @@ class FresnsCmdWords extends BasePlugin
             return $this->pluginError(ErrorCodeService::USER_IS_ENABLE_ERROR);
         }
         $langTag = request()->header('langTag');
-        $service = new FsUserService();
+        $service = new FresnsUsersService();
         $data = $service->getUserDetail($user->id, $langTag);
         // Update the last_login_at field in the users table
         FresnsUsers::where('id', $user->id)->update(['last_login_at' => date('Y-m-d H:i:s', time())]);
@@ -2244,7 +2242,7 @@ class FresnsCmdWords extends BasePlugin
         $uid = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->value('id');
 
         $langTag = request()->header('langTag');
-        $service = new FsUserService();
+        $service = new FresnsUsersService();
         $data = $service->getUserDetail($uid, $langTag);
 
         return $this->pluginSuccess($data);
