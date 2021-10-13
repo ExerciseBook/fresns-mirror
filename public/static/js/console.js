@@ -1,5 +1,5 @@
 //install extensions
-$("#localInstallActionModal").on('show.bs.modal',function(){
+$("#localInstallActionModal").on('shown.bs.modal',function(){
     var dirName = $(".installDirName").val();
     // $('#localInstallActionModal').addClass('show');
     // $('#localInstallActionModal').css({
