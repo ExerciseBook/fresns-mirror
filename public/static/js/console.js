@@ -3,7 +3,8 @@ $(".installLocal").click(function(){
     var dirName = $(".installDirName").val();
     $('#localInstallActionModal').addClass('show');
     $('#localInstallActionModal').css({
-        'display': 'block'
+        'display':'block',
+        'background':'red'
     });
     var isAdd = true;
     $.ajax({
