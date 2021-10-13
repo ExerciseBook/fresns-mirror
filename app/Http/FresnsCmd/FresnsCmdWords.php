@@ -21,15 +21,12 @@ use App\Http\Center\Scene\FileSceneConfig;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
-use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
-use App\Http\FresnsApi\User\FsUserService;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsService;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
-use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\FresnsDb\FresnsDomainLinks\FresnsDomainLinksConfig;
 use App\Http\FresnsDb\FresnsDomains\FresnsDomains;
 use App\Http\FresnsDb\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
@@ -47,7 +44,6 @@ use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 use App\Http\FresnsDb\FresnsMentions\FresnsMentionsConfig;
-use App\Http\FresnsDb\FresnsPlugins\FresnsPlugins as FresnsPluginFresnsPlugin;
 use App\Http\FresnsDb\FresnsPostAllows\FresnsPostAllowsConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogsConfig;
@@ -71,6 +67,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
+use App\Http\FresnsDb\FresnsUsers\FresnsUsersService;
+
 class FresnsCmdWords extends BasePlugin
 {
     // Constructors
@@ -876,6 +874,7 @@ class FresnsCmdWords extends BasePlugin
             $filesArr = FresnsFiles::whereIn('id', $fileIdArr)->get()->toArray();
             foreach ($filesArr as $file) {
                 $item = [];
+                $uuid = $file['uuid'];
                 $append = FresnsFileAppends::where('file_id', $file['id'])->first();
                 $item['fid'] = $file['uuid'];
                 $item['type'] = $file['file_type'];
@@ -886,23 +885,51 @@ class FresnsCmdWords extends BasePlugin
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
                     $item['imageLong'] = $append['image_long'] ?? 0;
-                    $item['imageDefaultUrl'] = $imagesHost.$file['file_path'];
-                    $item['imageRatioUrl'] = $imagesHost.$file['file_path'].$imagesRatio;
-                    $item['imageSquareUrl'] = $imagesHost.$file['file_path'].$imagesSquare;
-                    $item['imageBigUrl'] = $imagesHost.$file['file_path'].$imagesBig;
+                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_IMAGE;
+                    $input['fid'] = $uuid;
+                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                    if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        return $this->pluginError($resp['code']);
+                    }
+                    $output = $resp['output'];
+                    $item['imageDefaultUrl'] = $output['imageDefaultUrl'];
+                    $item['imageRatioUrl'] = $output['imageRatioUrl'];
+                    $item['imageSquareUrl'] = $output['imageSquareUrl'];
+                    $item['imageBigUrl'] = $output['imageBigUrl'];
                 }
                 if ($type == 2) {
                     $item['videoTime'] = $append['video_time'] ?? '';
-                    $item['videoCover'] = $videosHost.$append['video_cover'] ?? '';
-                    $item['videoGif'] = $videosHost.$append['video_gif'] ?? '';
-                    $item['videoUrl'] = $videosHost.$file['file_path'];
+                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_VIDEO;
+                    $input['fid'] = $uuid;
+                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                    if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        return $this->pluginError($resp['code']);
+                    }
+                    $output = $resp['output'];
+                    $item['videoCover'] = $output['videoCover'];
+                    $item['videoGif'] = $output['videoGif'];
+                    $item['videoUrl'] = $output['videoUrl'];
                 }
                 if ($type == 3) {
                     $item['audioTime'] = $append['audio_time'] ?? '';
-                    $item['audioUrl'] = $audiosHost.$file['file_path'];
+                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_AUDIO;
+                    $input['fid'] = $uuid;
+                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                    if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        return $this->pluginError($resp['code']);
+                    }
+                    $output = $resp['output'];
+                    $item['audioUrl'] = $output['audioUrl'];
                 }
                 if ($type == 4) {
-                    $item['docUrl'] = $docsHost.$file['file_path'];
+                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_DOC;
+                    $input['fid'] = $uuid;
+                    $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                    if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                        return $this->pluginError($resp['code']);
+                    }
+                    $output = $resp['output'];
+                    $item['docUrl'] = $output['docUrl'];
                 }
                 $item['moreJson'] = json_decode($append['more_json'], true);
                 $data['files'][] = $item;
@@ -2101,7 +2128,7 @@ class FresnsCmdWords extends BasePlugin
             FresnsSessionLogsService::updateSessionLogs($sessionId, 2, $uid, $mid, $uid);
         }
 
-        $service = new FsUserService();
+        $service = new FresnsUsersService();
         $data = $service->getUserDetail($uid, $langTag, $mid);
 
         return $this->pluginSuccess($data);
@@ -2196,7 +2223,7 @@ class FresnsCmdWords extends BasePlugin
             return $this->pluginError(ErrorCodeService::USER_IS_ENABLE_ERROR);
         }
         $langTag = request()->header('langTag');
-        $service = new FsUserService();
+        $service = new FresnsUsersService();
         $data = $service->getUserDetail($user->id, $langTag);
         // Update the last_login_at field in the users table
         FresnsUsers::where('id', $user->id)->update(['last_login_at' => date('Y-m-d H:i:s', time())]);
@@ -2215,7 +2242,7 @@ class FresnsCmdWords extends BasePlugin
         $uid = DB::table(FresnsUsersConfig::CFG_TABLE)->where('uuid', $uid)->value('id');
 
         $langTag = request()->header('langTag');
-        $service = new FsUserService();
+        $service = new FresnsUsersService();
         $data = $service->getUserDetail($uid, $langTag);
 
         return $this->pluginSuccess($data);
