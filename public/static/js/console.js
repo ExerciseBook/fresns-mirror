@@ -49,6 +49,9 @@ $(".installLocal").click(function(){
                 },1800)
             }else{
                 $('#localInstallActionModal').removeClass('show');
+                $('#localInstallActionModal').css({
+                    'display': 'none'
+                });
                 alert(data.message);
             }
         }
