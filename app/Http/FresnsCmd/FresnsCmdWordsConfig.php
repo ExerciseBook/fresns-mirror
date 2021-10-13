@@ -56,7 +56,7 @@ class FresnsCmdWordsConfig extends BasePluginConfig
 
     // Command Word: Content
     public const FRESNS_CMD_DIRECT_RELEASE_CONTENT = 'fresns_cmd_direct_release_content';
-    public const FRESNS_CMD_DELETE_CONTENT = 'fresns_cmd_delete_content';
+    public const FRESNS_CMD_DELETE_CONTENT = 'fresns_cmd_delete_content'; //Logical Deletion
 
     // Command word callback mapping
     const FRESNS_CMD_HANDLE_MAP = [

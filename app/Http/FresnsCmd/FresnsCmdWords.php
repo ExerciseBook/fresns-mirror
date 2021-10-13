@@ -1291,7 +1291,7 @@ class FresnsCmdWords extends BasePlugin
     }
 
     /**
-     * Delete official content
+     * Delete official content (Logical Deletion)
      * type: 1.post / 2.comment
      * contentId: primary key ID
      * https://fresns.org/extensions/delete.html.
