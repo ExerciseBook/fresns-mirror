@@ -39,6 +39,9 @@ use App\Http\FresnsDb\FresnsHashtags\FresnsHashtags;
 use App\Http\FresnsDb\FresnsLanguages\FresnsLanguages;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRelsService;
+use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesService;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsNotifies\FresnsNotifies;
 use App\Http\FresnsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
@@ -528,6 +531,26 @@ class FsControllerApi extends FresnsBaseApiController
 
         if (empty($typeData)) {
             $this->error(ErrorCodeService::FILE_EXIST_ERROR);
+        }
+
+        $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($mid);
+        $permission = FresnsMemberRoles::where('id', $roleId)->value('permission');
+        if(empty($permission)){
+            $this->error(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
+        }
+        $permissionArr = json_decode($permission, true);
+        $permissionMap = FresnsMemberRolesService::getPermissionMap($permissionArr);
+        if (empty($permissionMap)) {
+            $this->error(ErrorCodeService::ROLE_NO_CONFIG_ERROR);
+        }
+        $downloadFileCount = $permissionMap['download_file_count'];
+        //计算近 24 小时内，下载次数是否达到了上限
+        $start = date('Y-m-d H:i:s',strtotime("-1 day"));
+        $end = date('Y-m-d H:i:s',time());
+        $logCount = FresnsFileLogs::where('user_id',$uid)->where('member_id',$mid)->where('created_at','>=',$start)->where('created_at','<=',$end)->count();
+        if($logCount >= $downloadFileCount){
+            //替换错误码
+            $this->error(ErrorCodeService::ACCOUNT_COUNT_ERROR);
         }
 
         $files = FresnsFiles::where('uuid', $fid)->first(); 
