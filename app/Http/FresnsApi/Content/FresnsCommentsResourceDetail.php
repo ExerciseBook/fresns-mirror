@@ -161,6 +161,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             if ($memberInfo->deleted_at != null) {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
                 $member['avatar'] = $deactivateAvatar;
+                $member['deactivate'] = true;
             }
         } else {
             $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
@@ -178,7 +179,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             if ($memberInfo) {
                 if ($memberInfo->deleted_at == null && $memberInfo) {
                     $member['anonymous'] = $this->is_anonymous;
-                    $member['deactivate'] = true; //Not deactivated = false, Deactivated = true
+                    $member['deactivate'] = false;
                     $member['isAuthor'] = $this->member_id == $mid ? true : false;
                     $member['mid'] = $memberInfo->uuid ?? '';
                     $member['mname'] = $memberInfo->name ?? '';
