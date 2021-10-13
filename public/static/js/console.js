@@ -52,6 +52,7 @@ $("#localInstallActionModal").on('shown.bs.modal',function(){
                 // $('#localInstallActionModal').css({
                 //     'display': 'none'
                 // });
+                $('#localInstallActionModal').modal('hide')
                 alert(data.message);
             }
         }
