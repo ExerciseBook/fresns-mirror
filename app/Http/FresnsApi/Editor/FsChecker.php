@@ -1083,6 +1083,11 @@ class FsChecker extends BaseChecker
             return ErrorCodeService::ROLE_NO_PERMISSION;
         }
 
+        //如果传入后缀则将后缀转为小写再进行比较
+        if(!empty($suffix)){
+            $suffix = mb_strtolower($suffix);
+        }
+
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
         if (! empty($memberRole)) {
             $permission = $memberRole['permission'];
