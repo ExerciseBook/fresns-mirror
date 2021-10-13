@@ -23,7 +23,7 @@
 </div>
 
 <!--Action Modal code install-->
-<div class="modal fade" id="codeInstallActionModal" tabindex="-1" aria-labelledby="codeInstallActionModal" aria-hidden="true">
+<div class="modal fade" id="codeInstallActionModal" tabindex="-1" aria-labelledby="codeInstall" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
