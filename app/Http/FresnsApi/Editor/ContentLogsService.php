@@ -11,10 +11,12 @@ namespace App\Http\FresnsApi\Editor;
 use App\Helpers\StrHelper;
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\LogService;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -633,13 +635,27 @@ class ContentLogsService
         $input['image_height'] = $imageSize[1] ?? null;
         $input['image_is_long'] = 0;
         if (! empty($input['image_width']) && ! empty($input['image_height'])) {
-            if ($input['image_height'] >= $input['image_width'] * 4) {
-                $input['image_is_long'] = 1;
+            if($input['image_width'] >= 700){
+                if ($input['image_height'] >= $input['image_width'] * 4) {
+                    $input['image_is_long'] = 1;
+                }
             }
+            
         }
 
         $file['file_size'] = $input['file_size'];
         FresnsFileAppends::insert($input);
+
+        if ($pluginClass) {
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_UPLOAD_FILE;
+            $input = [];
+            $input['fid'] = json_encode([$file['uuid']]);
+            $input['mode'] = 1;
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                
+            }
+        }
 
         return [$retId];
     }
@@ -651,7 +667,14 @@ class ContentLogsService
         $mid = GlobalService::getGlobalKey('member_id');
         $platformId = request()->header('platform');
         $fileInfo = json_decode($fileInfo, true);
+        $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
+
+        $pluginUniKey = $unikey;
+        // Perform Upload
+        $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+
         $retIdArr = [];
+        $retUuidArr = [];
         if (is_array($fileInfo)) {
             foreach ($fileInfo as $v) {
                 $item = [];
@@ -665,6 +688,7 @@ class ContentLogsService
                 $item['file_path'] = $v['path'];
                 $item['rank_num'] = $v['rankNum'] ?? 9;
                 $retId = FresnsFiles::insertGetId($item);
+                $retUuidArr[] = $item['uuid'];
                 $retIdArr[] = $retId;
                 $append = [];
                 $append['file_id'] = $retId;
@@ -693,6 +717,18 @@ class ContentLogsService
                 $append['transcoding_state'] = empty($v['transcodingState']) ? 1 : $v['transcodingState'];
                 $append['platform_id'] = $platformId;
                 FresnsFileAppends::insert($append);
+
+            }
+        }
+
+        if ($pluginClass) {
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_UPLOAD_FILE;
+            $input = [];
+            $input['fid'] = json_encode([$retUuidArr]);
+            $input['mode'] = 2;
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                
             }
         }
 
