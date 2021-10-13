@@ -189,7 +189,7 @@ class FresnsCmdWords extends BasePlugin
             case 1:
                 $result = $FresnsPostsService->releaseByDraft($logId,$sessionLogsId);
                 $postId = FresnsPostLogs::find($logId);
-                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_CMD;
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
                 $input = [
                     'tableName' => 'posts',
                     'insertId' => $postId['post_id'],
@@ -200,7 +200,7 @@ class FresnsCmdWords extends BasePlugin
             case 2:
                 $result = $fresnsCommentService->releaseByDraft($logId,$commentCid,$sessionLogsId);
                 $commentInfo = FresnsCommentLogs::find($logId);
-                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_CMD;
+                $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
                 $input = [
                     'tableName' => 'comments',
                     'insertId' => $commentInfo['comment_id'],
@@ -1210,6 +1210,57 @@ class FresnsCmdWords extends BasePlugin
         }
 
         return $this->pluginSuccess();
+    }
+
+    // Physical deletion file by fid
+    public function physicalDeletionFileHandler($input)
+    {
+        $fid = $input['fid'];
+        $files = FresnsFiles::where('uuid', $fid)->first();
+        if (empty($files)) {
+            return $this->pluginError(ErrorCodeService::FILE_EXIST_ERROR);
+        }
+        $type = $files['file_type'];
+        switch ($type) {
+            case 1:
+                $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
+                break;
+            case 2:
+                $unikey = ApiConfigHelper::getConfigByItemKey('videos_service');
+                break;
+            case 3:
+                $unikey = ApiConfigHelper::getConfigByItemKey('audios_service');
+                break;
+            default:
+                $unikey = ApiConfigHelper::getConfigByItemKey('docs_service');
+                break;
+        }
+        $pluginUniKey = $unikey;
+
+        $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+        if (empty($pluginClass)) {
+            LogService::error('Plugin Class Not Found');
+
+            return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
+        }
+
+        $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
+        if ($isPlugin == false) {
+            LogService::error('Plugin Class Not Found');
+
+            return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
+        }
+
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_PHYSICAL_DELETION_FILE;
+        $input = [];
+        $input['fid'] = $fid;
+        $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
+            return $this->pluginError($resp['code']);
+        }
+
+        return $this->pluginSuccess();
+
     }
 
     /**
