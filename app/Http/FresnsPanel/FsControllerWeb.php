@@ -55,7 +55,7 @@ class FsControllerWeb extends BaseFrontendController
     // Login Page
     public function index()
     {
-        $lang = request()->input('lang', 'zh-Hans');
+        $lang = request()->input('lang', 'en');
         $data = [
             'lang' => $lang,
             'location' => 'action',
@@ -69,7 +69,7 @@ class FsControllerWeb extends BaseFrontendController
     // After Login Status Expires
     public function loginIndex()
     {
-        $lang = request()->input('lang', 'zh-Hans');
+        $lang = request()->input('lang', 'en');
         $data = [
             'lang' => $lang,
         ];
@@ -107,9 +107,9 @@ class FsControllerWeb extends BaseFrontendController
 
         Auth::login($user);
 
-        $lang = $request->input('lang', 'zh-Hans');
+        $lang = $request->input('lang', 'en');
         if (empty($lang)) {
-            $lang = 'zh-Hans';
+            $lang = 'en';
         }
         Cache::forever('lang_tag_'.$user['id'], $lang);
 
@@ -195,7 +195,7 @@ class FsControllerWeb extends BaseFrontendController
     // Setting Language
     public function setLanguage(Request $request)
     {
-        $lang = $request->input('lang', 'zh-Hans');
+        $lang = $request->input('lang', 'en');
         $userId = Auth::id();
 
         Cache::forever('lang_tag_'.$userId, $lang);
