@@ -697,14 +697,14 @@ class FresnsCmdWords extends BasePlugin
 
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
-
+       
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
         if ($isPlugin == false) {
             LogService::error('Plugin Class Not Found');
 
             return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
         }
-
+    
         $file['file_type'] = $type;
         $paramsExist = false;
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
@@ -863,13 +863,7 @@ class FresnsCmdWords extends BasePlugin
         }
 
         $data['files'] = [];
-        $imagesHost = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
-        $imagesRatio = ApiConfigHelper::getConfigByItemKey('images_thumb_ratio');
-        $imagesSquare = ApiConfigHelper::getConfigByItemKey('images_thumb_square');
-        $imagesBig = ApiConfigHelper::getConfigByItemKey('images_thumb_big');
-        $videosHost = ApiConfigHelper::getConfigByItemKey('videos_bucket_domain');
-        $audiosHost = ApiConfigHelper::getConfigByItemKey('audios_bucket_domain');
-        $docsHost = ApiConfigHelper::getConfigByItemKey('docs_bucket_domain');
+         
         if ($fileIdArr) {
             $filesArr = FresnsFiles::whereIn('id', $fileIdArr)->get()->toArray();
             foreach ($filesArr as $file) {
