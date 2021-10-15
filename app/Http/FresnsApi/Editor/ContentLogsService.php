@@ -350,8 +350,6 @@ class ContentLogsService
         }
         return true;
         // $request = request();
-        // $mid = $mid;
-
         // $logId = $request->input('logId');
         // $types = $request->input('types', 'text') ?? 'text';
         // $gid = $request->input('gid');
@@ -431,7 +429,6 @@ class ContentLogsService
             FresnsCommentLogs::where('id', $logId)->update($input);
         }
         return true;
-        // $mid = $mid;
         // $logId = $request->input('logId');
         // $types = $request->input('types', 'text') ?? 'text';
         // $content = $request->input('content');
