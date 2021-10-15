@@ -405,44 +405,69 @@ class ContentLogsService
     public static function updateCommentLog($mid)
     {
         $request = request();
-
-        $mid = $mid;
         $logId = $request->input('logId');
-        $types = $request->input('types', 'text') ?? 'text';
-        $content = $request->input('content');
-        $isMarkdown = $request->input('isMarkdown', 0);
-        $isAnonymous = $request->input('isAnonymous', 0);
-        $is_plugin_editor = $request->input('isPluginEditor', 0);
-        $editor_unikey = $request->input('editorUnikey');
-        $locationJson = $request->input('locationJson');
-        $filesJson = $request->input('filesJson');
-        $extends_json = json_decode($request->input('extendsJson'), true);
-        $content = self::stopWords($content);
-        $extends = [];
-        if ($extends_json) {
-            $arr = [];
-            foreach ($extends_json as $v) {
-                $arr['eid'] = $v['eid'];
-                $arr['rankNum'] = $v['rankNum'] ?? 9;
-                $arr['canDelete'] = $v['canDelete'] ?? true;
-                $extends[] = $arr;
+        $input = self::convertFormRequestToInput();
+        if($input){
+            foreach($input as $k => &$i){
+                if($k == 'extends_json'){
+                    $extends_json = json_decode($request->input('extendsJson'), true);
+                    $extends = [];
+                    if ($extends_json) {
+                        $arr = [];
+                        foreach ($extends_json as $v) {
+                            $arr['eid'] = $v['eid'];
+                            $arr['rankNum'] = $v['rankNum'] ?? 9;
+                            $arr['canDelete'] = $v['canDelete'] ?? true;
+                            $extends[] = $arr;
+                        }
+                    }
+                    $i = json_encode($extends);
+                }
+                if($k == 'content'){
+                    $content = $request->input('content');
+                    $i = self::stopWords($content);
+                }
             }
+            FresnsCommentLogs::where('id', $logId)->update($input);
         }
-        $extendsJson = json_encode($extends);
-        $input = [
-            'types' => $types,
-            'content' => trim($content),
-            'is_markdown' => $isMarkdown == 'false' ? 0 : 1,
-            'is_anonymous' => $isAnonymous == 'false' ? 0 : 1,
-            'is_plugin_editor' => $is_plugin_editor,
-            'editor_unikey' => $editor_unikey,
-            'location_json' => $locationJson,
-            'files_json' => $filesJson,
-            'extends_json' => $extendsJson,
-        ];
-        FresnsCommentLogs::where('id', $logId)->update($input);
-
         return true;
+        // $mid = $mid;
+        // $logId = $request->input('logId');
+        // $types = $request->input('types', 'text') ?? 'text';
+        // $content = $request->input('content');
+        // $isMarkdown = $request->input('isMarkdown', 0);
+        // $isAnonymous = $request->input('isAnonymous', 0);
+        // $is_plugin_editor = $request->input('isPluginEditor', 0);
+        // $editor_unikey = $request->input('editorUnikey');
+        // $locationJson = $request->input('locationJson');
+        // $filesJson = $request->input('filesJson');
+        // $extends_json = json_decode($request->input('extendsJson'), true);
+        // $content = self::stopWords($content);
+        // $extends = [];
+        // if ($extends_json) {
+        //     $arr = [];
+        //     foreach ($extends_json as $v) {
+        //         $arr['eid'] = $v['eid'];
+        //         $arr['rankNum'] = $v['rankNum'] ?? 9;
+        //         $arr['canDelete'] = $v['canDelete'] ?? true;
+        //         $extends[] = $arr;
+        //     }
+        // }
+        // $extendsJson = json_encode($extends);
+        // $input = [
+        //     'types' => $types,
+        //     'content' => trim($content),
+        //     'is_markdown' => $isMarkdown == 'false' ? 0 : 1,
+        //     'is_anonymous' => $isAnonymous == 'false' ? 0 : 1,
+        //     'is_plugin_editor' => $is_plugin_editor,
+        //     'editor_unikey' => $editor_unikey,
+        //     'location_json' => $locationJson,
+        //     'files_json' => $filesJson,
+        //     'extends_json' => $extendsJson,
+        // ];
+        // FresnsCommentLogs::where('id', $logId)->update($input);
+
+        // return true;
     }
 
     // Publish Created (Post)
