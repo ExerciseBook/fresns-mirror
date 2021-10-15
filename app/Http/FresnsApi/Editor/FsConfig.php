@@ -29,7 +29,8 @@ class FsConfig
         '/api/fresns/editor/publish',
         '/api/fresns/editor/submit',
     ];
-    // 更新草稿专用（不可删）
+
+    // Update Log Config
     CONST FORM_FIELDS_UPDATE_LOGS_MAP = [
         'gid' => 'group_id',
         'types' => 'types',
