@@ -9,12 +9,8 @@
 namespace App\Base\Services;
 
 use App\Base\Config\BaseConfig;
-use App\Base\Models\BaseExport;
 use App\Base\Models\BaseQuery;
-use App\Helpers\CommonHelper;
 use App\Traits\HookServiceTrait;
-use Maatwebsite\Excel\Facades\Excel;
-
 
 class BaseService
 {
@@ -67,10 +63,6 @@ class BaseService
         return $data;
     }
 
-    public function setExportModel(BaseExport $class){
-        $this->modelExport = $class;
-    }
-
     // New
     public function store()
     {
@@ -119,35 +111,6 @@ class BaseService
         $data['common'] = $this->common();
 
         return $data;
-    }
-
-    // 导出数据
-    public function exportData(){
-
-        $baseQuery = new BaseQuery($this->model);
-        $result = $baseQuery->executeQueryAll();
-
-        $fileName = "export_" . date('Ymd_His') . ".xlsx";
-
-        // 文件目录不存在则创建
-        $basePath = base_path();
-        $saveDir = implode(DIRECTORY_SEPARATOR, [
-            $basePath, 'storage', 'app', 'public', 'export'
-        ]);
-
-        if(!is_dir($saveDir)){
-            mkdir($saveDir, 0777);
-        }
-
-        // 导出
-        Excel::store(new $this->modelExport($result), '/public/export/'. $fileName);
-
-        $ret = [];
-        $ret['export_file_url'] = implode(DIRECTORY_SEPARATOR, [
-            CommonHelper::domain(), 'storage', 'export', $fileName
-        ]);
-
-        return $ret;
     }
 
     // Delete
