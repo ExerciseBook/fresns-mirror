@@ -1,5 +1,27 @@
 # Release Notes
 
+## 1.0.0 (2021-10-15)
+
+**Bug Fixes**
+
+- 控制台：安装扩展出错未关闭模态框层问题
+- 控制台：卸载插件是否删除数据未传参问题
+- API：表情包未按 rank_num 升序排列
+- API：修复帖子和评论接口的 icons 图标问题
+- API：话题解析输出的逻辑问题
+
+**Features**
+
+- API：新增编辑器配置参数接口 /api/fresns/editor/configs
+- API：新增回调返参接口 /api/fresns/info/callbacks
+- API：下载接口判断成员下载次数计算
+
+**BREAKING CHANGES**
+
+- 状态命名，有状态迁移关系使用 state，没有状态迁移关系使用 status
+- 修改帖子和评论编辑器字段命名，修改为 editor_unikey
+- 命令字使用 fresns 前缀名
+
 ## Beta (2021-08-05)
 
 **Bug Fixes**
