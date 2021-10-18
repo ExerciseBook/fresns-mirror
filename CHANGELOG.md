@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.0.1 (2021-10-18)
+
+**Bug Fixes**
+
+- API：不输出「未启用」的小组分类和小组
+- API：获取帖子列表，传参 searchGid 为小组 uuid 字段，因查询 id 字段导致无数据
+- API：帖子和评论的详情页 content 参数读取附属表
+
 ## 1.0.0 (2021-10-15)
 
 **Bug Fixes**
