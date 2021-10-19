@@ -118,7 +118,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $FresnsPostsService = new FresnsPostsService();
                 // Prevent @, hashtags, emojis, links and other messages from being truncated
                 $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content']);
-                $content = FresnsPostsResource::getContentView(($append['content']), ($this->id), 1);
+                $content = FresnsPostsResource::getContentView(($append['content']), ($this->id), 1, $append['is_markdown']);
 
                 $allowStatus = 0;
             }
