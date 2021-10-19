@@ -106,7 +106,7 @@
                     <p>@lang('fresns.systemAdminUserId'): <span class="app_id">uid</span></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-dismiss="modal">@lang('fresns.confirmDelete')</button>
+                    <button type="button" class="btn btn-danger-set" data-bs-toggle="modal" data-bs-dismiss="modal">@lang('fresns.confirmDelete')</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('fresns.cancel')</button>
                 </div>
             </div>
@@ -200,9 +200,9 @@
         $('.delete').on('click', function() {
             var uuid = $(this).attr('data-uuid');
             $('#confirmDelete .app_id').text(uuid);
-            $(".btn-danger").attr('data-uuid', uuid);
+            $(".btn-danger-set").attr('data-uuid', uuid);
         })
-        $(".btn-danger").click(function() {
+        $(".btn-danger-set").click(function() {
             var uuid = $(this).attr('data-uuid');
             $.ajax({
                 async: false,
