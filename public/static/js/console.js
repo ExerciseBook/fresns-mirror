@@ -162,9 +162,9 @@ $('.uninstallUnikey').on('click', function () {
     var name = $(this).attr('data-name');
     $('#confirmUninstall .modal-title').text(name);
     var unikey = $(this).attr('unikey');
-    $(".btn-danger").attr('unikey', unikey);
+    $("#btn-danger-delete").attr('unikey', unikey);
 });
-$(".btn-danger").click(function () {
+$("#btn-danger-delete").click(function () {
     var unikey = $(this).attr('unikey');
     var clear_plugin_data = $('#is-delete-data').is(':checked') ? 1 : 0;
 
