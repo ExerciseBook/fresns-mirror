@@ -781,7 +781,7 @@ class FresnsCmdWords extends BasePlugin
                 $input['image_width'] = $imageSize[0] ?? null;
                 $input['image_height'] = $imageSize[1] ?? null;
                 if (! empty($input['image_width']) >= 700) {
-                    if ($input['image_height'] >= $input['image_width'] * 4) {
+                    if ($input['image_height'] >= $input['image_width'] * 3.5) {
                         $input['image_is_long'] = 1;
                     }
                 }
@@ -830,7 +830,7 @@ class FresnsCmdWords extends BasePlugin
                     $imageLong = 0;
                     if (! empty($fileInfo['image_width'])) {
                         if ($fileInfo['image_width'] >= 700) {
-                            if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 4) {
+                            if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 3.5) {
                                 $imageLong = 1;
                             } else {
                                 $imageLong = 0;
