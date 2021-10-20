@@ -80,6 +80,8 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         if ($postAppends) {
             $postAppends = get_object_vars($postAppends);
         }
+        // Data Table: groups
+        $groupInfo = FresnsGroups::find($posts['group_id']);
 
         // Comment Info
         $cid = $this->uuid;
@@ -372,6 +374,35 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             $post['title'] = $posts['title'];
             $post['content'] = $posts['content'];
             $post['status'] = $posts['is_enable'];
+            $post['gname'] = '';
+            $post['gid'] = '';
+            $post['cover'] = '';
+            if ($groupInfo) {
+                $post['gname'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $groupInfo['id']);
+                $post['gid'] = $groupInfo['uuid'];
+                $post['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
+            }
+            $postMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $posts['member_id'])->first();
+            $post['mid'] = $postMemberInfo->uuid ?? '';
+            $post['mname'] = $postMemberInfo->name ?? '';
+            $post['nickname'] = $postMemberInfo->nickname ?? '';
+            $post['avatar'] = $postMemberInfo->avatar_file_url ?? '';
+            // Default avatar when members have no avatar
+            if (empty($post['avatar'])) {
+                $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
+                $post['avatar'] = $defaultIcon;
+            }
+            // Anonymous content for avatar
+            if ($this->is_anonymous == 1) {
+                $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::ANONYMOUS_AVATAR);
+                $post['avatar'] = $anonymousAvatar;
+            }
+            // The avatar displayed when a member has been deleted
+            if ($memberInfo->deleted_at != null) {
+                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
+                $post['avatar'] = $deactivateAvatar;
+            }
+            $post['avatar'] = ApiFileHelper::getImageSignUrl($post['avatar']);
         }
 
         // Comment Plugin Extensions
