@@ -388,7 +388,7 @@ class FresnsCommentsResource extends BaseAdminResource
                 $post['gid'] = $groupInfo['uuid'];
                 $post['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
             }
-            $postMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $post['member_id'])->first();
+            $postMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $posts['member_id'])->first();
             $post['mid'] = $postMemberInfo->uuid ?? '';
             $post['mname'] = $postMemberInfo->name ?? '';
             $post['nickname'] = $postMemberInfo->nickname ?? '';
