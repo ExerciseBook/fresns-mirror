@@ -37,6 +37,7 @@ class ApiFileHelper
             $file['fileType'] = $fileInfo['file_type'];
             $file['fileName'] = $fileInfo['file_name'];
             $file['fileExtension'] = $fileInfo['file_extension'];
+            $file['fileMime'] = $fileAppend['file_mime'] ?? '';
             $file['fileSize'] = $fileAppend['file_extension'] ?? '';
 
             // Image Type

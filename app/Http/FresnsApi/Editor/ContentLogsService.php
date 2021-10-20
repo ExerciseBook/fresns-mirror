@@ -696,6 +696,7 @@ class ContentLogsService
                 $item['type'] = $file['file_type'];
                 $item['name'] = $file['file_name'];
                 $item['extension'] = $file['file_extension'];
+                $item['mime'] = $append['file_mime'];
                 $item['size'] = $append['file_size'];
                 if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
