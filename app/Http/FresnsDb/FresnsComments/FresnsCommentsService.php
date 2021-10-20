@@ -463,7 +463,7 @@ class FresnsCommentsService extends FsService
         FresnsCommentLogs::where('id', $draftId)->update(['state' => 3, 'comment_id' => $commentId, 'content' => $content]);
         // Notification
         $this->sendAtMessages($commentId, $draftId);
-        $this->sendCommentMessages($commentId, $draftId);
+        $this->sendCommentMessages($commentId, $draftId,1);
         // Add stats: member_stats > post_publish_count
         $this->memberStats($draftId);
         // Analyze the hashtag and domain
@@ -492,7 +492,7 @@ class FresnsCommentsService extends FsService
         FresnsCommentAppends::where('comment_id', $commentId)->increment('edit_count');
         // Notification
         $this->sendAtMessages($commentId, $draftId, 2);
-        $this->sendCommentMessages($commentId, $draftId);
+        $this->sendCommentMessages($commentId, $draftId,1);
         // Add stats: member_stats > post_publish_count
         // Analyze the hashtag
         $this->analisisHashtag($draftId, 2);
@@ -579,10 +579,13 @@ class FresnsCommentsService extends FsService
     // The comment then determines whether the parent is itself, and generates a notification for the other party if it is not itself.
     // A first-level comment generates a notification for the author of the post (the author of the post is not himself).
     // Call MessageService to process
-    public function sendCommentMessages($commentId, $draftId)
+    public function sendCommentMessages($commentId, $draftId,$type = 1)
     {
         $draftComment = FresnsCommentLogs::find($draftId);
         $postInfo = FresnsPosts::find($draftComment['post_id']);
+        if($type == 1){
+            FresnsPosts::where('id',$draftComment['post_id'])->increment('comment_count');
+        }
         $comment = FresnsComments::where('id', $draftComment['comment_id'])->first();
         // First-level comments to post authors (post authors who are not themselves) generate notifications.
         if (($draftComment['member_id'] != $postInfo['member_id']) && $comment['parent_id'] == 0) {
