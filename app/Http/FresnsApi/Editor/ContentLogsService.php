@@ -573,9 +573,14 @@ class ContentLogsService
 
         // Storage
         $path = $uploadFile->store($storePath);
+        $basePath = base_path();
+        $basePath = $basePath .'/storage/app/';
+        $newPath = $storePath . '/' . StrHelper::createToken(8) . '.' . $uploadFile->getClientOriginalExtension();
+        copy($basePath . $path, $basePath . $newPath);
+        unlink($basePath . $path);
         $file['file_name'] = $uploadFile->getClientOriginalName();
         $file['file_extension'] = $uploadFile->getClientOriginalExtension();
-        $file['file_path'] = str_replace('public', '', $path);
+        $file['file_path'] = str_replace('public', '', $newPath);
         $file['rank_num'] = 9;
         $file['table_type'] = 8;
         $file['file_type'] = 1;
@@ -590,7 +595,7 @@ class ContentLogsService
         // Insert data
         $retId = FresnsFiles::insertGetId($file);
 
-        $file['real_path'] = $path;
+        $file['real_path'] = $newPath;
         $input = [
             'file_id' => $retId,
             'file_mime' => $uploadFile->getMimeType(),
