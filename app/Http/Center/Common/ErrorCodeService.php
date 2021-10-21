@@ -39,11 +39,14 @@ class ErrorCodeService
     const HEADER_KEY_ERROR = 30106;
     const UID_REQUIRED_ERROR = 30107;
     const MID_REQUIRED_ERROR = 30108;
-    const USER_CHECK_ERROR = 30109;
-    const MEMBER_CHECK_ERROR = 30110;
-    const USER_TOKEN_ERROR = 30111;
-    const MEMBER_TOKEN_ERROR = 30112;
-    const TOKEN_IS_ENABLE_ERROR = 30113;
+    const TOKEN_REQUIRED_ERROR = 30109;
+    const DEVICE_INFO_REQUIRED_ERROR = 30110;
+    const USER_CHECK_ERROR = 30111;
+    const MEMBER_CHECK_ERROR = 30112;
+    const USER_TOKEN_ERROR = 30113;
+    const MEMBER_TOKEN_ERROR = 30114;
+    const TOKEN_IS_ENABLE_ERROR = 30115;
+    const DEVICE_INFO_ERROR = 30116;
 
     // User
     const REGISTER_EMAIL_ERROR = 30200;
@@ -239,11 +242,14 @@ class ErrorCodeService
         self::HEADER_KEY_ERROR                  => '密钥无权请求本接口',
         self::UID_REQUIRED_ERROR                => 'UID 必传',
         self::MID_REQUIRED_ERROR                => 'MID 必传',
+        self::TOKEN_REQUIRED_ERROR              => 'Token 必传',
+        self::DEVICE_INFO_REQUIRED_ERROR        => '设备信息必传',
         self::USER_CHECK_ERROR                  => '用户错误或者不存在',
         self::MEMBER_CHECK_ERROR                => '成员错误或者不存在',
         self::USER_TOKEN_ERROR                  => '用户 Token 不正确',
         self::MEMBER_TOKEN_ERROR                => '成员 Token 不正确',
         self::TOKEN_IS_ENABLE_ERROR             => 'Token 未启用',
+        self::DEVICE_INFO_ERROR                 => '设备信息格式错误',
 
         // User
         self::REGISTER_EMAIL_ERROR              => '不支持邮箱注册',

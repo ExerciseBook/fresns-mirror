@@ -162,8 +162,8 @@ class FresnsPostsResource extends BaseAdminResource
         $timeFormat = DateHelper::format_date_langTag(strtotime($this->created_at));
         // $editTime = $this->latest_edit_at;
         $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
-        $editTimeFormat = NULL;
-        if(!empty($editTime)){
+        $editTimeFormat = null;
+        if (! empty($editTime)) {
             $editTimeFormat = DateHelper::format_date_langTag(strtotime($this->latest_edit_at));
         }
         $allowStatus = $this->is_allow;
@@ -753,25 +753,26 @@ class FresnsPostsResource extends BaseAdminResource
     }
 
     // Content Data Export Operations
-    public static function getContentView($content, $postId, $postType)
+    public static function getContentView($content, $postId, $postType, $content_markdown=0)
     {
         $request = request();
-
-        // Link
-        preg_match_all("/http[s]{0,1}:\/\/.*?\s/", $content, $hrefMatches);
-        if ($hrefMatches[0]) {
-            foreach ($hrefMatches[0] as &$h) {
-                $h = trim($h);
-                // Does the link association table exist title
-                $domainLinked = DB::table(FresnsDomainLinksConfig::CFG_TABLE)->where('link_url',
-                    $h)->where('linked_type', $postType)->where('linked_id', $postId)->first();
-                $title = $h;
-                if (! empty($domainLinked)) {
-                    if ($domainLinked->link_title) {
-                        $title = $domainLinked->link_title;
+        if(!$content_markdown){
+            // Link
+            preg_match_all("/http[s]{0,1}:\/\/.*?\s/", $content, $hrefMatches);
+            if ($hrefMatches[0]) {
+                foreach ($hrefMatches[0] as &$h) {
+                    $h = trim($h);
+                    // Does the link association table exist title
+                    $domainLinked = DB::table(FresnsDomainLinksConfig::CFG_TABLE)->where('link_url',
+                        $h)->where('linked_type', $postType)->where('linked_id', $postId)->first();
+                    $title = $h;
+                    if (! empty($domainLinked)) {
+                        if ($domainLinked->link_title) {
+                            $title = $domainLinked->link_title;
+                        }
                     }
+                    $content = str_replace($h, "<a href='$h' target='_blank' class='fresns_content_link'>$title</a>", $content);
                 }
-                $content = str_replace($h, "<a href='$h' target='_blank' class='fresns_content_link'>$title</a>", $content);
             }
         }
 
@@ -806,28 +807,28 @@ class FresnsPostsResource extends BaseAdminResource
         // Hashtag
         $hashtagShow = ApiConfigHelper::getConfigByItemKey('hashtag_show') ?? 2;
         // Find if a post has a related hashtag
-        $postHash = FresnsHashtagLinkeds::where('linked_type',$postType)->where('linked_id',$postId)->pluck('hashtag_id')->toArray();
-        if($postHash){
-            foreach($postHash as $p){
+        $postHash = FresnsHashtagLinkeds::where('linked_type', $postType)->where('linked_id', $postId)->pluck('hashtag_id')->toArray();
+        if ($postHash) {
+            foreach ($postHash as $p) {
                 // Get hashtag information
                 $hashTagInfo = FresnsHashtags::find($p);
-                if($hashTagInfo){
-                    $onehashName = '#' . $hashTagInfo['name'];
-                    $twohashName = '#' . $hashTagInfo['name'] . '#';
-                    $findCount = strpos($content,$twohashName);
+                if ($hashTagInfo) {
+                    $onehashName = '#'.$hashTagInfo['name'];
+                    $twohashName = '#'.$hashTagInfo['name'].'#';
+                    $findCount = strpos($content, $twohashName);
                     $jumpUrl = ApiConfigHelper::getConfigByItemKey(FsConfig::SITE_DOMAIN)."/hashtag/{$hashTagInfo['slug']}";
-                    if($hashtagShow == 1){
-                        if($findCount !== false){
-                            $content = str_replace($twohashName,"<a href='{$jumpUrl}' class='fresns_content_hashtag'>$onehashName</a>", $content);
-                        }else{
-                            $content = str_replace($onehashName,"<a href='{$jumpUrl}' class='fresns_content_hashtag'>$onehashName</a>", $content);
+                    if ($hashtagShow == 1) {
+                        if ($findCount !== false) {
+                            $content = str_replace($twohashName, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$onehashName</a>", $content);
+                        } else {
+                            $content = str_replace($onehashName, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$onehashName</a>", $content);
                         }
-                    }else{
-                        if($findCount !== false){
-                            $content = str_replace($twohashName,"<a href='{$jumpUrl}' class='fresns_content_hashtag'>$twohashName</a>", $content);
-                        }else{
-                            $onehashNameNotrim = '#' . $hashTagInfo['name'] . ' ';
-                            $content = str_replace($onehashNameNotrim,"<a href='{$jumpUrl}' class='fresns_content_hashtag'>$twohashName</a>", $content);
+                    } else {
+                        if ($findCount !== false) {
+                            $content = str_replace($twohashName, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$twohashName</a>", $content);
+                        } else {
+                            $onehashNameNotrim = '#'.$hashTagInfo['name'].' ';
+                            $content = str_replace($onehashNameNotrim, "<a href='{$jumpUrl}' class='fresns_content_hashtag'>$twohashName</a>", $content);
                         }
                     }
                 }

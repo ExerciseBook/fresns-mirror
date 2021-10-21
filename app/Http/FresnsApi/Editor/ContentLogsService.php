@@ -8,12 +8,15 @@
 
 namespace App\Http\FresnsApi\Editor;
 
+use App\Helpers\StrHelper;
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\LogService;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -31,9 +34,6 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsStopWords\FresnsStopWords;
 use Illuminate\Support\Facades\DB;
-use App\Helpers\StrHelper;
-use App\Http\Center\Helper\CmdRpcHelper;
-use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 
 class ContentLogsService
 {
@@ -323,14 +323,14 @@ class ContentLogsService
         $request = request();
         $logId = $request->input('logId');
         $input = self::convertFormRequestToInput();
-        if($input){
-            foreach($input as $k => &$i){
-                if($k == 'group_id'){
+        if ($input) {
+            foreach ($input as $k => &$i) {
+                if ($k == 'group_id') {
                     $gid = $request->input('gid');
                     $groupInfo = FresnsGroups::where('uuid', $gid)->first();
                     $i = $groupInfo['id'];
                 }
-                if($k == 'extends_json'){
+                if ($k == 'extends_json') {
                     $extends_json = json_decode($request->input('extendsJson'), true);
                     $extends = [];
                     if ($extends_json) {
@@ -344,13 +344,14 @@ class ContentLogsService
                     }
                     $i = json_encode($extends);
                 }
-                if($k == 'content'){
+                if ($k == 'content') {
                     $content = $request->input('content');
                     $i = self::stopWords($content);
                 }
             }
             FresnsPostLogs::where('id', $logId)->update($input);
         }
+
         return true;
     }
 
@@ -360,9 +361,9 @@ class ContentLogsService
         $request = request();
         $logId = $request->input('logId');
         $input = self::convertFormRequestToInput();
-        if($input){
-            foreach($input as $k => &$i){
-                if($k == 'extends_json'){
+        if ($input) {
+            foreach ($input as $k => &$i) {
+                if ($k == 'extends_json') {
                     $extends_json = json_decode($request->input('extendsJson'), true);
                     $extends = [];
                     if ($extends_json) {
@@ -376,13 +377,14 @@ class ContentLogsService
                     }
                     $i = json_encode($extends);
                 }
-                if($k == 'content'){
+                if ($k == 'content') {
                     $content = $request->input('content');
                     $i = self::stopWords($content);
                 }
             }
             FresnsCommentLogs::where('id', $logId)->update($input);
         }
+
         return true;
     }
 
@@ -394,7 +396,7 @@ class ContentLogsService
         $postGid = $request->input('postGid');
         $postTitle = $request->input('postTitle');
         $isMarkdown = $request->input('isMarkdown');
-        $isAnonymous = $request->input('isAnonymous',0);
+        $isAnonymous = $request->input('isAnonymous', 0);
         $file = request()->file('file');
         $fileInfo = $request->input('fileInfo');
         $eid = $request->input('eid');
@@ -471,7 +473,7 @@ class ContentLogsService
         $commentPid = $request->input('commentPid');
         $commentCid = $request->input('commentCid');
         $content = $request->input('content');
-        $isAnonymous = $request->input('isAnonymous',0);
+        $isAnonymous = $request->input('isAnonymous', 0);
         $isMarkdown = $request->input('isMarkdown');
         $file = request()->file('file');
 
@@ -733,6 +735,7 @@ class ContentLogsService
                 $item['type'] = $file['file_type'];
                 $item['name'] = $file['file_name'];
                 $item['extension'] = $file['file_extension'];
+                $item['mime'] = $append['file_mime'];
                 $item['size'] = $append['file_size'];
                 if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
@@ -815,7 +818,6 @@ class ContentLogsService
 
     public static function convertFormRequestToInput()
     {
-
         $req = request();
         $fieldMap = FsConfig::FORM_FIELDS_UPDATE_LOGS_MAP;
         // dd($fieldMap);
@@ -827,12 +829,12 @@ class ContentLogsService
                     $input[$tbField] = $srcValue;
                 }
 
-
-                if ($srcValue === false || !empty($req->input($inputField, ''))) {
+                if ($srcValue === false || ! empty($req->input($inputField, ''))) {
                     $input[$tbField] = $req->input($inputField);
                 }
             }
         }
+
         return $input;
     }
 }

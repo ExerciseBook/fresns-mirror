@@ -37,6 +37,7 @@ class ApiFileHelper
             $file['fileType'] = $fileInfo['file_type'];
             $file['fileName'] = $fileInfo['file_name'];
             $file['fileExtension'] = $fileInfo['file_extension'];
+            $file['fileMime'] = $fileAppend['file_mime'] ?? '';
             $file['fileSize'] = $fileAppend['file_extension'] ?? '';
 
             // Image Type
@@ -230,7 +231,8 @@ class ApiFileHelper
         $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
         if (CmdRpcHelper::isErrorCmdResp($resp)) {
             $domain = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
-            return $domain . $file['file_path'];
+
+            return $domain.$file['file_path'];
         }
         $singUrl = $resp['output']['imageDefaultUrl'];
 

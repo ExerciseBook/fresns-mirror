@@ -80,6 +80,8 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         if ($postAppends) {
             $postAppends = get_object_vars($postAppends);
         }
+        // Data Table: groups
+        $groupInfo = FresnsGroups::find($posts['group_id']);
 
         // Comment Info
         $cid = $this->uuid;
@@ -96,7 +98,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $shieldsCount = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 5)->where('shield_id', $this->id)->count();
         $isShield = $shieldsCount == 0 ? false : true;
 
-        $content = FresnsPostsResource::getContentView($append->content, $this->id, 2);
+        $content = FresnsPostsResource::getContentView($append->content, $this->id, 2,$append->is_markdown);
         $brief = $this->is_brief;
         $sticky = $this->is_sticky;
         $likeCount = $this->like_count;
@@ -107,8 +109,8 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $timeFormat = DateHelper::format_date_langTag(strtotime($this->created_at));
         // $editTime = $this->latest_edit_at;
         $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
-        $editTimeFormat = NULL;
-        if(!empty($editTime)){
+        $editTimeFormat = null;
+        if (! empty($editTime)) {
             $editTimeFormat = DateHelper::format_date_langTag(strtotime($this->latest_edit_at));
         }
 
@@ -372,6 +374,35 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             $post['title'] = $posts['title'];
             $post['content'] = $posts['content'];
             $post['status'] = $posts['is_enable'];
+            $post['gname'] = '';
+            $post['gid'] = '';
+            $post['cover'] = '';
+            if ($groupInfo) {
+                $post['gname'] = ApiLanguageHelper::getLanguagesByTableId(FresnsGroupsConfig::CFG_TABLE, 'name', $groupInfo['id']);
+                $post['gid'] = $groupInfo['uuid'];
+                $post['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
+            }
+            $postMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $posts['member_id'])->first();
+            $post['mid'] = $postMemberInfo->uuid ?? '';
+            $post['mname'] = $postMemberInfo->name ?? '';
+            $post['nickname'] = $postMemberInfo->nickname ?? '';
+            $post['avatar'] = $postMemberInfo->avatar_file_url ?? '';
+            // Default avatar when members have no avatar
+            if (empty($post['avatar'])) {
+                $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
+                $post['avatar'] = $defaultIcon;
+            }
+            // Anonymous content for avatar
+            if ($this->is_anonymous == 1) {
+                $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::ANONYMOUS_AVATAR);
+                $post['avatar'] = $anonymousAvatar;
+            }
+            // The avatar displayed when a member has been deleted
+            if ($memberInfo->deleted_at != null) {
+                $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
+                $post['avatar'] = $deactivateAvatar;
+            }
+            $post['avatar'] = ApiFileHelper::getImageSignUrl($post['avatar']);
         }
 
         // Comment Plugin Extensions
