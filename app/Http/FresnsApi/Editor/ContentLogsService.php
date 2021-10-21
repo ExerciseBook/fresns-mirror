@@ -697,7 +697,7 @@ class ContentLogsService
                 if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
-                    $item['imageLong'] = $file['image_long'] ?? '';
+                    $item['imageLong'] = $file['image_long'] ?? 0;
                     $item['imageRatioUrl'] = $imagesHost.$file['file_path'].$imagesRatio;
                     $item['imageSquareUrl'] = $imagesHost.$file['file_path'].$imagesSquare;
                     $item['imageBigUrl'] = $imagesHost.$file['file_path'].$imagesBig;
