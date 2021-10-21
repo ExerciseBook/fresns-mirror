@@ -141,7 +141,7 @@ class FresnsCommentsResource extends BaseAdminResource
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
         $member['deactivate'] = false; //Not deactivated = false, Deactivated = true
-        $member['isAuthor'] = '';
+        $member['isAuthor'] = false;
         $member['mid'] = '';
         $member['mname'] = '';
         $member['nickname'] = '';
@@ -185,7 +185,7 @@ class FresnsCommentsResource extends BaseAdminResource
                 if ($memberInfo->deleted_at == null && $memberInfo) {
                     $member['anonymous'] = $this->is_anonymous;
                     $member['deactivate'] = false;
-                    $member['isAuthor'] = $this->member_id == $mid ? true : false;
+                    $member['isAuthor'] = ($this->member_id == $posts['member_id']) ? true : false;
                     $member['mid'] = $memberInfo->uuid ?? '';
                     $member['mname'] = $memberInfo->name ?? '';
                     $member['nickname'] = $memberInfo->nickname ?? '';
