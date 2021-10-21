@@ -176,6 +176,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $member['bio'] = '';
         $member['verifiedStatus'] = '';
         $member['verifiedIcon'] = '';
+        $member['verifiedDesc'] = '';
         $member['icons'] = [];
         if ($this->is_anonymous == 0) {
             if ($memberInfo) {
@@ -196,6 +197,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
                     $member['bio'] = $memberInfo->bio ?? '';
                     $member['verifiedStatus'] = $memberInfo->verified_status ?? 1;
                     $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
+                    $member['verifiedDesc'] = $memberInfo->verified_desc ?? '';
 
                     $memberIconsArr = FresnsMemberIcons::where('member_id', $mid)->get()->toArray();
                     $iconsArr = [];

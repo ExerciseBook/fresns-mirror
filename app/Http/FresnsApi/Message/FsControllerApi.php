@@ -207,6 +207,7 @@ class FsControllerApi extends FresnsBaseApiController
         $member['decorate'] = '';
         $member['verifiedStatus'] = '';
         $member['verifiedIcon'] = '';
+        $member['verifiedDesc'] = '';
         if ($memberInfo) {
             if ($memberInfo->deleted_at == null) {
                 $member['deactivate'] = true;
@@ -216,6 +217,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
                 $member['verifiedStatus'] = $memberInfo->verified_status;
                 $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
+                $member['verifiedDesc'] = $memberInfo->verified_desc;
             }
         }
 
