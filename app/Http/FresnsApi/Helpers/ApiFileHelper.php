@@ -53,7 +53,7 @@ class ApiFileHelper
             $imagesBig = ApiConfigHelper::getConfigByItemKey('images_thumb_big');
             // Image Properties
             if ($fileInfo['file_type'] == 1) {
-                $file['imageLong'] = $fileAppend['image_is_long'] ?? '';
+                $file['imageLong'] = $fileAppend['image_is_long'] ?? 0;
                 $file['imageThumbUrl'] = $imagesHost.$fileInfo['file_path'].$imagesRatio;
                 $file['imageSquareUrl'] = $imagesRatio.$fileInfo['file_path'].$imagesSquare;
                 $file['imageBigUrl'] = $imagesSquare.$fileInfo['file_path'].$imagesBig;
@@ -140,7 +140,7 @@ class ApiFileHelper
                 $file['imageHeight'] = $fileAppend['image_height'] ?? '';
                 $image_setting = ApiConfigHelper::getConfigByItemTag(FsConfig::IMAGE_SETTING);
                 if ($v['file_type'] == 1) {
-                    $file['imageLong'] = $fileAppend['image_is_long'] ?? '';
+                    $file['imageLong'] = $fileAppend['image_is_long'] ?? 0;
                     $file['imageThumbUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_ratio'];
                     $file['imageSquareUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_square'];
                     $file['imageBigUrl'] = $image_setting['images_bucket_domain'].$v['file_path'].$image_setting['images_thumb_big'];
