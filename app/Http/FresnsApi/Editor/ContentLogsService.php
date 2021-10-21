@@ -32,6 +32,9 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsStopWords\FresnsStopWords;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\StrHelper;
+use App\Http\Center\Helper\CmdRpcHelper;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
+
 class ContentLogsService
 {
     // Get the existing content of the post to create a draft.
@@ -582,7 +585,8 @@ class ContentLogsService
         LogService::info('File Storage Local Success ', $file);
         $t2 = time();
 
-        $file['uuid'] = StrHelper::createUuid();
+        $uuid = StrHelper::createUuid();
+        $file['uuid'] = $uuid;
         // Insert data
         $retId = FresnsFiles::insertGetId($file);
 
@@ -611,6 +615,17 @@ class ContentLogsService
         $file['file_size'] = $input['file_size'];
         FresnsFileAppends::insert($input);
 
+        if ($pluginClass) {
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_UPLOAD_FILE;
+            $input = [];
+            $input['fid'] = json_encode([$uuid]);
+            $input['mode'] = 1;
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                
+            }
+        }
+
         return [$retId];
     }
 
@@ -621,11 +636,20 @@ class ContentLogsService
         $mid = GlobalService::getGlobalKey('member_id');
         $platformId = request()->header('platform');
         $fileInfo = json_decode($fileInfo, true);
+        $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
+
+        $pluginUniKey = $unikey;
+        // Perform Upload
+        $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+
         $retIdArr = [];
+        $uuidArr = [];
         if (is_array($fileInfo)) {
             foreach ($fileInfo as $v) {
                 $item = [];
-                $item['uuid'] = StrHelper::createUuid();
+                $uuid = StrHelper::createUuid();
+                $uuidArr[] = $uuid;
+                $item['uuid'] = $uuid;
                 $item['file_name'] = $v['name'];
                 $item['file_type'] = $v['type'];
                 $item['table_type'] = $v['tableType'];
@@ -663,6 +687,17 @@ class ContentLogsService
                 $append['transcoding_state'] = empty($v['transcodingState']) ? 1 : $v['transcodingState'];
                 $append['platform_id'] = $platformId;
                 FresnsFileAppends::insert($append);
+            }
+        }
+
+        if ($pluginClass && $uuidArr) {
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_UPLOAD_FILE;
+            $input = [];
+            $input['fid'] = json_encode($uuidArr);
+            $input['mode'] = 1;
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                
             }
         }
 
