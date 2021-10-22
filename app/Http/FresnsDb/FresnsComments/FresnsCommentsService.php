@@ -489,7 +489,7 @@ class FresnsCommentsService extends FsService
 
         // Log updated to published
         FresnsCommentLogs::where('id', $draftId)->update(['state' => 3, 'content'=> $content]);
-        FresnsCommentAppends::where('comment_id', $commentId)->increment('edit_count');
+        FresnsCommentAppends::where('comment_id', $commentId)->increment('edit_count'); 
         // Notification
         $this->sendAtMessages($commentId, $draftId, 2);
         $this->sendCommentMessages($commentId, $draftId,1);
@@ -587,9 +587,11 @@ class FresnsCommentsService extends FsService
             FresnsPosts::where('id',$draftComment['post_id'])->increment('comment_count');
         }
         $comment = FresnsComments::where('id', $draftComment['comment_id'])->first();
+        if($comment){
+            FresnsComments::where('id', $comment['parent_id'])->increment('comment_count');
+        }
         // First-level comments to post authors (post authors who are not themselves) generate notifications.
         if (($draftComment['member_id'] != $postInfo['member_id']) && $comment['parent_id'] == 0) {
-            FresnsComments::where('id', $commentId)->increment('comment_count');
             $input = [
                 'source_id' => $commentId,
                 'source_brief' => $draftComment['content'],
