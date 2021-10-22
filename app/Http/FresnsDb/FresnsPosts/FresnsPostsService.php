@@ -890,8 +890,12 @@ class FresnsPostsService extends FsService
     {
         $draftPost = FresnsPostLogs::find($draftId);
         $content = $draftPost['content'];
+        $rtrimContent = rtrim($content);
+        if(mb_strlen($rtrimContent) != mb_strlen($content)){
+            $content = $content . ' ';
+        } 
         $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_BRIEF_COUNT) ?? 280;
-        if (mb_strlen(trim($draftPost['content'])) > $postEditorBriefCount) {
+        if (mb_strlen($content) > $postEditorBriefCount) {
             $contentInfo = $this->truncatedContentInfo($content, $postEditorBriefCount);
             $content = $contentInfo['truncated_content'];
             if ($draftPost['allow_json']) {
@@ -907,7 +911,7 @@ class FresnsPostsService extends FsService
                             $proportion = $allow_json['proportion'];
                         }
                     }
-                    $proportionCount = (mb_strlen(trim($draftPost['content'])) * $proportion) / 100;
+                    $proportionCount = (mb_strlen($content) * $proportion) / 100;
     
                     // Get the maximum number of words for the post brief
                     $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_BRIEF_COUNT) ?? 280;
@@ -921,7 +925,7 @@ class FresnsPostsService extends FsService
                 }
             }
         } else {
-            $content = $draftPost['content'];
+            $content = $content;
         }
         
         // Existence of replacement words
