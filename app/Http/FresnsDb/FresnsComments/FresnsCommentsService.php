@@ -587,7 +587,7 @@ class FresnsCommentsService extends FsService
             FresnsPosts::where('id',$draftComment['post_id'])->increment('comment_count');
         }
         $comment = FresnsComments::where('id', $draftComment['comment_id'])->first();
-        if($comment){
+        if($comment && $comment['parent_id'] != 0){
             FresnsComments::where('id', $comment['parent_id'])->increment('comment_count');
         }
         // First-level comments to post authors (post authors who are not themselves) generate notifications.
@@ -604,7 +604,6 @@ class FresnsCommentsService extends FsService
         }
         // The comment determines whether the parent is itself, and if not, generates a notification for the other party
         if ($comment['parent_id'] != 0 && ($comment['parent_id'] != $draftComment['member_id'])) {
-            FresnsComments::where('id', $comment['parent_id'])->increment('comment_count');
             $input = [
                 'source_id' => $commentId,
                 'source_brief' => $draftComment['content'],
