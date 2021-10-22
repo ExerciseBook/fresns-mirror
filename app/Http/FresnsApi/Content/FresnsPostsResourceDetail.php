@@ -162,7 +162,8 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $canDelete = $append['can_delete'];
         $allowStatus = $this->is_allow;
         $allowBtnName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
-        $allowBtnUrl = $append['allow_plugin_unikey'];
+        $allowBtnUrl = FresnsPluginsService::getPluginUrlByUnikey($append['allow_plugin_unikey']);
+
         $memberListName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'member_list_name', $this->id);
         $memberListCount = Db::table('post_members')->where('post_id', $this->id)->count();
         $member = [];
