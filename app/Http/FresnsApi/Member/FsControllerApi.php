@@ -1087,7 +1087,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $data = $FresnsPostsService->searchData();
                 break;
             default:
-                $commentArr = FsService::getPostList($request);
+                $commentArr = FsService::getCommentList($request);
                 $commentIds = implode(',', $commentArr);
                 $FresnsCommentsService = new FresnsCommentsService();
                 $request->offsetSet('ids', $commentIds);

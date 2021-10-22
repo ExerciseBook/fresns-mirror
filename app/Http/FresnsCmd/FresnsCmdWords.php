@@ -883,7 +883,7 @@ class FresnsCmdWords extends BasePlugin
                 if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
-                    $item['imageLong'] = $append['image_long'] ?? 0;
+                    $item['imageLong'] = $append['image_is_long'] ?? 0;
                     $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_IMAGE;
                     $input['fid'] = $uuid;
                     $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);

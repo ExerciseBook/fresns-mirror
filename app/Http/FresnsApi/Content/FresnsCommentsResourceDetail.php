@@ -115,9 +115,9 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         }
 
         // Operation behavior status
-        $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 5)->where('like_id', $this->id)->count();
-        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 5)->where('follow_id', $this->id)->count();
-        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 5)->where('shield_id', $this->id)->count();
+        $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 5)->where('like_id', $this->id)->where('deleted_at',NULL)->count();
+        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 5)->where('follow_id', $this->id)->where('deleted_at',NULL)->count();
+        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 5)->where('shield_id', $this->id)->where('deleted_at',NULL)->count();
         // Operation behavior settings
         $likeSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::LIKE_COMMENT_SETTING);
         $followSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_COMMENT_SETTING);
@@ -137,7 +137,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $commentLikeCount = $this->comment_like_count;
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
-        $member['deactivate'] = false; //Not deactivated = false, Deactivated = true
+        $member['deactivate'] = true; //Not deactivated = false, Deactivated = true
         $member['isAuthor'] = false;
         $member['mid'] = '';
         $member['mname'] = '';
@@ -171,7 +171,6 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         }
         $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
 
-        $member['decorate'] = '';
         $member['gender'] = '';
         $member['bio'] = '';
         $member['verifiedStatus'] = '';
