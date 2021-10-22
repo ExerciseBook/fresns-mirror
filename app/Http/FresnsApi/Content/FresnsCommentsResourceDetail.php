@@ -137,7 +137,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $commentLikeCount = $this->comment_like_count;
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
-        $member['deactivate'] = true; //Not deactivated = false, Deactivated = true
+        $member['deactivate'] = false; //Not deactivated = false, Deactivated = true
         $member['isAuthor'] = false;
         $member['mid'] = '';
         $member['mname'] = '';

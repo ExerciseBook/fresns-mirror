@@ -140,7 +140,7 @@ class FresnsCommentsResource extends BaseAdminResource
         }
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
-        $member['deactivate'] = true; //Not deactivated = false, Deactivated = true
+        $member['deactivate'] = false; //Not deactivated = false, Deactivated = true
         $member['isAuthor'] = false;
         $member['mid'] = '';
         $member['mname'] = '';
