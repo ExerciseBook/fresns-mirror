@@ -444,13 +444,16 @@ class ContentLogsService
             $group_id = $group['id'] ?? null;
         }
         $content = self::stopWords($content);
-
+        $rtrimContent = rtrim($content);
+        if(mb_strlen($rtrimContent) != mb_strlen($content)){
+            $content = $rtrimContent . ' ';
+        } 
         $input = [
             'group_id' => $group_id,
             'platform_id' => $request->header('platform'),
             'member_id' => $member_id,
             'title' => $postTitle,
-            'content' => strip_tags(trim($content)),
+            'content' => strip_tags(ltrim($content)),
             'types' => $types,
             'is_markdown' => $isMarkdown,
             'is_anonymous' => $isAnonymous,
@@ -519,12 +522,16 @@ class ContentLogsService
             $types = implode(',', $typeArr);
         }
         $content = self::stopWords($content);
+        $rtrimContent = rtrim($content);
+        if(mb_strlen($rtrimContent) != mb_strlen($content)){
+            $content = $rtrimContent . ' ';
+        } 
         $input = [
             'platform_id' => $request->header('platform'),
             'member_id' => $member_id,
             'types' => $types,
             'post_id' => $postInfo['id'],
-            'content' => strip_tags(trim($content)),
+            'content' => strip_tags(ltrim($content)),
             'is_markdown' => $isMarkdown,
             'is_anonymous' => $isAnonymous,
             'files_json' => json_encode($fileArr),

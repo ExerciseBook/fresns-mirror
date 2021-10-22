@@ -889,13 +889,7 @@ class FresnsPostsService extends FsService
     public function parseDraftContent($draftId)
     {
         $draftPost = FresnsPostLogs::find($draftId);
-        $content = $draftPost['content'];
-        $rtrimContent = rtrim($content);
-        if(mb_strlen($rtrimContent) != mb_strlen($content)){
-            dump($rtrimContent);
-            $content = $content . ' ';
-        } 
-        dd($content);
+        $content = $draftPost['content']; 
         $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_BRIEF_COUNT) ?? 280;
         if (mb_strlen($content) > $postEditorBriefCount) {
             $contentInfo = $this->truncatedContentInfo($content, $postEditorBriefCount);

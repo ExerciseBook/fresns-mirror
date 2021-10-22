@@ -749,7 +749,7 @@ class FresnsCommentsService extends FsService
 
         // Get the maximum number of words for the comment brief
         $commentEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_EDITOR_BRIEF_COUNT) ?? 280;
-        if (mb_strlen(trim($draftComment['content'])) > $commentEditorBriefCount) {
+        if (mb_strlen($draftComment['content']) > $commentEditorBriefCount) {
             $contentInfo = $this->truncatedContentInfo($content, $commentEditorBriefCount);
             $content = $contentInfo['truncated_content'];
         } else {
