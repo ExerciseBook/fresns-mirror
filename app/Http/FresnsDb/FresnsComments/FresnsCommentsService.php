@@ -159,7 +159,7 @@ class FresnsCommentsService extends FsService
                         if(!$parentMemberInfo){
                             $reply['deactivate'] = true;
                         }else{
-                            if($parentMemberInfo['deleted_at'] != null){
+                            if($parentMemberInfo->deleted_at != null){
                                 $reply['deactivate'] = true;
                             }
                         }
