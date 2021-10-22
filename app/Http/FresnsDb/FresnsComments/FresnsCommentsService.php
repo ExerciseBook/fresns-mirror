@@ -170,7 +170,7 @@ class FresnsCommentsService extends FsService
                             $reply['nickname'] = $parentMemberInfo->nickname ?? '';
                         }
                     }
-                    $replyTo[] = $reply;
+                    $replyTo = $reply;
                 }
             }
         }
