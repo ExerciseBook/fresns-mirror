@@ -151,23 +151,32 @@ class FresnsCommentsService extends FsService
         if ($comments) {
             foreach ($comments as $c) {
                 $reply = [];
+                $reply['deactivate'] = false;
                 if ($c['parent_id'] != $comment_id) {
                     $parentCommentInfo = FresnsComments::find($c['parent_id']);
                     if ($parentCommentInfo) {
                         $parentMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $parentCommentInfo['member_id'])->first();
+                        if(!$parentMemberInfo){
+                            $reply['deactivate'] = true;
+                        }else{
+                            if($parentMemberInfo['deleted_at'] != null){
+                                $reply['deactivate'] = true;
+                            }
+                        }
                     }
                     $reply['cid'] = $parentCommentInfo['uuid'] ?? '';
                     $reply['anonymous'] = $parentCommentInfo['is_anonymous'];
-                    $reply['deactivate'] = false;
                     $reply['mid'] = '';
                     $reply['mname'] = '';
                     $reply['nickname'] = '';
                     if ($parentCommentInfo['is_anonymous'] == 0) {
                         if ($parentMemberInfo->deleted_at == null) {
-                            $reply['deactivate'] = true;
+                            $reply['deactivate'] = false;
                             $reply['mid'] = $parentMemberInfo->uuid ?? '';
                             $reply['mname'] = $parentMemberInfo->name ?? '';
                             $reply['nickname'] = $parentMemberInfo->nickname ?? '';
+                        }else{
+                            $reply['deactivate'] = true;
                         }
                     }
                     $replyTo = $reply;

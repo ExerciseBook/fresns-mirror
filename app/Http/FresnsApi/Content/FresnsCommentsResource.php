@@ -140,7 +140,7 @@ class FresnsCommentsResource extends BaseAdminResource
         }
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
-        $member['deactivate'] = true; //Not deactivated = false, Deactivated = true
+        $member['deactivate'] = false; //Not deactivated = false, Deactivated = true
         $member['isAuthor'] = false;
         $member['mid'] = '';
         $member['mname'] = '';
@@ -377,10 +377,10 @@ class FresnsCommentsResource extends BaseAdminResource
         $searchPid = request()->input('searchPid');
         $post = [];
         if (! $searchPid) {
-            $post['pid'] = $posts['uuid'];
-            $post['title'] = $posts['title'];
-            $post['content'] = $posts['content'];
-            $post['status'] = $posts['is_enable'];
+            $post['pid'] = $posts['uuid'] ?? "";
+            $post['title'] = $posts['title'] ?? "";
+            $post['content'] = $posts['content'] ?? "";
+            $post['status'] = $posts['is_enable'] ?? "";
             $post['gname'] = '';
             $post['gid'] = '';
             $post['cover'] = '';
@@ -389,25 +389,32 @@ class FresnsCommentsResource extends BaseAdminResource
                 $post['gid'] = $groupInfo['uuid'];
                 $post['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($groupInfo['cover_file_id'], $groupInfo['cover_file_url']);
             }
+            $post['anonymous'] = $posts['is_anonymous'] ?? 0;
+            $post['deactivate'] = false; //Not deactivated = false, Deactivated = true
             $postMemberInfo = DB::table(FresnsMembersConfig::CFG_TABLE)->where('id', $posts['member_id'])->first();
             $post['mid'] = $postMemberInfo->uuid ?? '';
             $post['mname'] = $postMemberInfo->name ?? '';
             $post['nickname'] = $postMemberInfo->nickname ?? '';
             $post['avatar'] = $postMemberInfo->avatar_file_url ?? '';
-            // Default avatar when members have no avatar
+            // Default Avatar
             if (empty($post['avatar'])) {
                 $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
                 $post['avatar'] = $defaultIcon;
             }
-            // Anonymous content for avatar
+            // Anonymous Avatar
             if ($this->is_anonymous == 1) {
+                $post['anonymous'] = 1;
+                $post['mid'] = '';
+                $post['mname'] = '';
+                $post['nickname'] = '';
                 $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::ANONYMOUS_AVATAR);
                 $post['avatar'] = $anonymousAvatar;
             }
-            // The avatar displayed when a member has been deleted
+            // Deactivate Avatar
             if ($memberInfo->deleted_at != null) {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
                 $post['avatar'] = $deactivateAvatar;
+                $post['deactivate'] = true;
             }
             $post['avatar'] = ApiFileHelper::getImageSignUrl($post['avatar']);
         }

@@ -226,7 +226,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
                 $member['verifiedDesc'] = $memberInfo->verified_desc ?? '';
 
-                $memberIconsArr = FresnsMemberIcons::where('member_id', $mid)->get()->toArray();
+                $memberIconsArr = FresnsMemberIcons::where('member_id', $this->member_id)->get()->toArray();
                 $iconsArr = [];
                 foreach ($memberIconsArr as $v) {
                     $item = [];

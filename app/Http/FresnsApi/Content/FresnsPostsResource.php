@@ -233,7 +233,7 @@ class FresnsPostsResource extends BaseAdminResource
                 $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
                 $member['verifiedDesc'] = $memberInfo->verified_desc ?? '';
 
-                $memberIconsArr = FresnsMemberIcons::where('member_id', $memberInfo->id)->get()->toArray();
+                $memberIconsArr = FresnsMemberIcons::where('member_id', $this->member_id)->get()->toArray();
                 $iconsArr = [];
                 foreach ($memberIconsArr as $v) {
                     $item = [];
@@ -266,12 +266,12 @@ class FresnsPostsResource extends BaseAdminResource
                 $comment['nickname'] = $commentMemberInfo['nickname'] ?? '';
             }
 
-            // Default avatar when members have no avatar
+            // Default Avatar
             if (empty($commentStatus['avatar'])) {
                 $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
                 $comment['avatar'] = $defaultIcon;
             }
-            // Anonymous content for avatar
+            // Anonymous Avatar
             if ($comments->is_anonymous == 1) {
                 $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::ANONYMOUS_AVATAR);
                 $comment['avatar'] = $anonymousAvatar;
