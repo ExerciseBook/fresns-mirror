@@ -140,7 +140,7 @@ class FresnsCommentsResource extends BaseAdminResource
         }
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
-        $member['deactivate'] = false; //Not deactivated = false, Deactivated = true
+        $member['deactivate'] = true; //Not deactivated = false, Deactivated = true
         $member['isAuthor'] = false;
         $member['mid'] = '';
         $member['mname'] = '';
@@ -174,7 +174,6 @@ class FresnsCommentsResource extends BaseAdminResource
         }
         $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
 
-        $member['decorate'] = '';
         $member['gender'] = 0;
         $member['bio'] = '';
         $member['verifiedStatus'] = 1;
