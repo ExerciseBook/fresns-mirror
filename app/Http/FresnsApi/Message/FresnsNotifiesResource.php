@@ -73,6 +73,7 @@ class FresnsNotifiesResource extends BaseAdminResource
                     'decorate' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->decorate_file_id, $member->decorate_file_url),
                     'verifiedStatus' => $member->verified_status ?? 1,
                     'verifiedIcon' => ApiFileHelper::getImageSignUrlByFileIdUrl($member->verified_file_id, $member->verified_file_url),
+                    'verifiedDesc' => $member->verified_desc ?? '',
                 ];
         }
         $sourceBrief = $this->source_brief;

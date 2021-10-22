@@ -2185,7 +2185,7 @@ class FresnsCmdWords extends BasePlugin
         }
         // One of the password or verification code is required
         if (empty($password) && empty($verifyCode)) {
-            return $this->pluginError(ErrorCodeService::CODE_PARAM_ERROR);
+            return $this->pluginError(ErrorCodeService::ACCOUNT_CHECK_ERROR);
         }
 
         $time = date('Y-m-d H:i:s', time());

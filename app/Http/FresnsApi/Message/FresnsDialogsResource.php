@@ -55,6 +55,7 @@ class FresnsDialogsResource extends BaseAdminResource
         $member['decorate'] = '';
         $member['verifiedStatus'] = '';
         $member['verifiedIcon'] = '';
+        $member['verifiedDesc'] = '';
         // Default Avatar
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
@@ -75,6 +76,7 @@ class FresnsDialogsResource extends BaseAdminResource
                 $member['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->decorate_file_id, $memberInfo->decorate_file_url);
                 $member['verifiedStatus'] = $memberInfo->verified_status;
                 $member['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberInfo->verified_file_id, $memberInfo->verified_file_url);
+                $member['verifiedDesc'] = $memberInfo->verified_desc;
             }
         }
         $messageId = $this->latest_message_id;

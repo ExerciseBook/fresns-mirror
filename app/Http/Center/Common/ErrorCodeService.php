@@ -274,7 +274,7 @@ class ErrorCodeService
         self::CONNECT_TOKEN_ERROR               => '互联 Token 已存在',
 
         self::ACCOUNT_IS_EMPTY_ERROR            => '账号不能为空',
-        self::ACCOUNT_CHECK_ERROR               => '账号错误或者不存在',
+        self::ACCOUNT_CHECK_ERROR               => '账号密码或者验证码不能全部为空',
         self::ACCOUNT_PASSWORD_INVALID          => '账号密码不正确',
         self::ACCOUNT_ERROR                     => '账号不正确或者密码错误',
         self::ACCOUNT_COUNT_ERROR               => '错误已超系统限制，请 1 小时后再登录',
