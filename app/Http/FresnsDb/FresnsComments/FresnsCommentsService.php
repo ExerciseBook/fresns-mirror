@@ -175,6 +175,8 @@ class FresnsCommentsService extends FsService
                             $reply['mid'] = $parentMemberInfo->uuid ?? '';
                             $reply['mname'] = $parentMemberInfo->name ?? '';
                             $reply['nickname'] = $parentMemberInfo->nickname ?? '';
+                        }else{
+                            $reply['deactivate'] = true;
                         }
                     }
                     $replyTo = $reply;
