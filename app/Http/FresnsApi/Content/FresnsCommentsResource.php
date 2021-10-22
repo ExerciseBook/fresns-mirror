@@ -399,6 +399,9 @@ class FresnsCommentsResource extends BaseAdminResource
             }
             // Anonymous content for avatar
             if ($this->is_anonymous == 1) {
+                $post['mid'] = '';
+                $post['mname'] = '';
+                $post['nickname'] = '';
                 $anonymousAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::ANONYMOUS_AVATAR);
                 $post['avatar'] = $anonymousAvatar;
             }
