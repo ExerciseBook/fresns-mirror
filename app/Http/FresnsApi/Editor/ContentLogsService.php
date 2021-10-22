@@ -444,10 +444,13 @@ class ContentLogsService
             $group_id = $group['id'] ?? null;
         }
         $content = self::stopWords($content);
+        dump($content);
         $rtrimContent = rtrim($content);
         if(mb_strlen($rtrimContent) != mb_strlen($content)){
             $content = $rtrimContent . ' ';
         } 
+        dump($rtrimContent);
+        dd($content);
         $input = [
             'group_id' => $group_id,
             'platform_id' => $request->header('platform'),
