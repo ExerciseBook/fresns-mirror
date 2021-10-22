@@ -892,8 +892,10 @@ class FresnsPostsService extends FsService
         $content = $draftPost['content'];
         $rtrimContent = rtrim($content);
         if(mb_strlen($rtrimContent) != mb_strlen($content)){
+            dump($rtrimContent);
             $content = $content . ' ';
         } 
+        dd($content);
         $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_BRIEF_COUNT) ?? 280;
         if (mb_strlen($content) > $postEditorBriefCount) {
             $contentInfo = $this->truncatedContentInfo($content, $postEditorBriefCount);
