@@ -8,12 +8,15 @@
 
 namespace App\Http\FresnsApi\Editor;
 
+use App\Helpers\StrHelper;
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\LogService;
+use App\Http\Center\Helper\CmdRpcHelper;
 use App\Http\Center\Helper\PluginHelper;
 use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsApi\Helpers\ApiLanguageHelper;
+use App\Http\FresnsCmd\FresnsCmdWordsConfig;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppends;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
@@ -31,7 +34,7 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsStopWords\FresnsStopWords;
 use Illuminate\Support\Facades\DB;
-use App\Helpers\StrHelper;
+
 class ContentLogsService
 {
     // Get the existing content of the post to create a draft.
@@ -320,14 +323,14 @@ class ContentLogsService
         $request = request();
         $logId = $request->input('logId');
         $input = self::convertFormRequestToInput();
-        if($input){
-            foreach($input as $k => &$i){
-                if($k == 'group_id'){
+        if ($input) {
+            foreach ($input as $k => &$i) {
+                if ($k == 'group_id') {
                     $gid = $request->input('gid');
                     $groupInfo = FresnsGroups::where('uuid', $gid)->first();
                     $i = $groupInfo['id'];
                 }
-                if($k == 'extends_json'){
+                if ($k == 'extends_json') {
                     $extends_json = json_decode($request->input('extendsJson'), true);
                     $extends = [];
                     if ($extends_json) {
@@ -341,13 +344,14 @@ class ContentLogsService
                     }
                     $i = json_encode($extends);
                 }
-                if($k == 'content'){
+                if ($k == 'content') {
                     $content = $request->input('content');
                     $i = self::stopWords($content);
                 }
             }
             FresnsPostLogs::where('id', $logId)->update($input);
         }
+
         return true;
     }
 
@@ -357,9 +361,9 @@ class ContentLogsService
         $request = request();
         $logId = $request->input('logId');
         $input = self::convertFormRequestToInput();
-        if($input){
-            foreach($input as $k => &$i){
-                if($k == 'extends_json'){
+        if ($input) {
+            foreach ($input as $k => &$i) {
+                if ($k == 'extends_json') {
                     $extends_json = json_decode($request->input('extendsJson'), true);
                     $extends = [];
                     if ($extends_json) {
@@ -373,13 +377,14 @@ class ContentLogsService
                     }
                     $i = json_encode($extends);
                 }
-                if($k == 'content'){
+                if ($k == 'content') {
                     $content = $request->input('content');
                     $i = self::stopWords($content);
                 }
             }
             FresnsCommentLogs::where('id', $logId)->update($input);
         }
+
         return true;
     }
 
@@ -391,7 +396,7 @@ class ContentLogsService
         $postGid = $request->input('postGid');
         $postTitle = $request->input('postTitle');
         $isMarkdown = $request->input('isMarkdown');
-        $isAnonymous = $request->input('isAnonymous',0);
+        $isAnonymous = $request->input('isAnonymous', 0);
         $file = request()->file('file');
         $fileInfo = $request->input('fileInfo');
         $eid = $request->input('eid');
@@ -468,7 +473,7 @@ class ContentLogsService
         $commentPid = $request->input('commentPid');
         $commentCid = $request->input('commentCid');
         $content = $request->input('content');
-        $isAnonymous = $request->input('isAnonymous',0);
+        $isAnonymous = $request->input('isAnonymous', 0);
         $isMarkdown = $request->input('isMarkdown');
         $file = request()->file('file');
 
@@ -570,9 +575,14 @@ class ContentLogsService
 
         // Storage
         $path = $uploadFile->store($storePath);
+        $basePath = base_path();
+        $basePath = $basePath .'/storage/app/';
+        $newPath = $storePath . '/' . StrHelper::createToken(8) . '.' . $uploadFile->getClientOriginalExtension();
+        copy($basePath . $path, $basePath . $newPath);
+        unlink($basePath . $path);
         $file['file_name'] = $uploadFile->getClientOriginalName();
         $file['file_extension'] = $uploadFile->getClientOriginalExtension();
-        $file['file_path'] = str_replace('public', '', $path);
+        $file['file_path'] = str_replace('public', '', $newPath);
         $file['rank_num'] = 9;
         $file['table_type'] = 8;
         $file['file_type'] = 1;
@@ -582,11 +592,12 @@ class ContentLogsService
         LogService::info('File Storage Local Success ', $file);
         $t2 = time();
 
-        $file['uuid'] = StrHelper::createUuid();
+        $uuid = StrHelper::createUuid();
+        $file['uuid'] = $uuid;
         // Insert data
         $retId = FresnsFiles::insertGetId($file);
 
-        $file['real_path'] = $path;
+        $file['real_path'] = $newPath;
         $input = [
             'file_id' => $retId,
             'file_mime' => $uploadFile->getMimeType(),
@@ -611,6 +622,17 @@ class ContentLogsService
         $file['file_size'] = $input['file_size'];
         FresnsFileAppends::insert($input);
 
+        if ($pluginClass) {
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_UPLOAD_FILE;
+            $input = [];
+            $input['fid'] = json_encode([$uuid]);
+            $input['mode'] = 1;
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                
+            }
+        }
+
         return [$retId];
     }
 
@@ -621,11 +643,20 @@ class ContentLogsService
         $mid = GlobalService::getGlobalKey('member_id');
         $platformId = request()->header('platform');
         $fileInfo = json_decode($fileInfo, true);
+        $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
+
+        $pluginUniKey = $unikey;
+        // Perform Upload
+        $pluginClass = PluginHelper::findPluginClass($pluginUniKey);
+
         $retIdArr = [];
+        $uuidArr = [];
         if (is_array($fileInfo)) {
             foreach ($fileInfo as $v) {
                 $item = [];
-                $item['uuid'] = StrHelper::createUuid();
+                $uuid = StrHelper::createUuid();
+                $uuidArr[] = $uuid;
+                $item['uuid'] = $uuid;
                 $item['file_name'] = $v['name'];
                 $item['file_type'] = $v['type'];
                 $item['table_type'] = $v['tableType'];
@@ -666,6 +697,17 @@ class ContentLogsService
             }
         }
 
+        if ($pluginClass && $uuidArr) {
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_UPLOAD_FILE;
+            $input = [];
+            $input['fid'] = json_encode($uuidArr);
+            $input['mode'] = 1;
+            $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                
+            }
+        }
+
         return $retIdArr;
     }
 
@@ -693,11 +735,12 @@ class ContentLogsService
                 $item['type'] = $file['file_type'];
                 $item['name'] = $file['file_name'];
                 $item['extension'] = $file['file_extension'];
+                $item['mime'] = $append['file_mime'];
                 $item['size'] = $append['file_size'];
                 if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
-                    $item['imageLong'] = $file['image_long'] ?? '';
+                    $item['imageLong'] = $file['image_long'] ?? 0;
                     $item['imageRatioUrl'] = $imagesHost.$file['file_path'].$imagesRatio;
                     $item['imageSquareUrl'] = $imagesHost.$file['file_path'].$imagesSquare;
                     $item['imageBigUrl'] = $imagesHost.$file['file_path'].$imagesBig;
@@ -775,7 +818,6 @@ class ContentLogsService
 
     public static function convertFormRequestToInput()
     {
-
         $req = request();
         $fieldMap = FsConfig::FORM_FIELDS_UPDATE_LOGS_MAP;
         // dd($fieldMap);
@@ -787,12 +829,12 @@ class ContentLogsService
                     $input[$tbField] = $srcValue;
                 }
 
-
-                if ($srcValue === false || !empty($req->input($inputField, ''))) {
+                if ($srcValue === false || ! empty($req->input($inputField, ''))) {
                     $input[$tbField] = $req->input($inputField);
                 }
             }
         }
+
         return $input;
     }
 }

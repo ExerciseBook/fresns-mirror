@@ -97,7 +97,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $count = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where($input)->count();
         $isLike = $count == 0 ? false : true;
         $title = $this->title;
-        $content = FresnsPostsResource::getContentView(($append['content']), ($this->id), 1);
+        $content = FresnsPostsResource::getContentView(($append['content']), ($this->id), 1,$append['is_markdown']);
         // Read permission required or not
         $allowStatus = $this->is_allow;
         $allowProportion = 10;
@@ -118,7 +118,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $FresnsPostsService = new FresnsPostsService();
                 // Prevent @, hashtags, emojis, links and other messages from being truncated
                 $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content']);
-                $content = FresnsPostsResource::getContentView(($append['content']), ($this->id), 1);
+                $content = FresnsPostsResource::getContentView(($append['content']), ($this->id), 1, $append['is_markdown']);
 
                 $allowStatus = 0;
             }
@@ -155,8 +155,8 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $timeFormat = DateHelper::format_date_langTag(strtotime($this->created_at));
         // $editTime = $this->latest_edit_at;
         $editTime = DateHelper::fresnsOutputTimeToTimezone($this->latest_edit_at);
-        $editTimeFormat = NULL;
-        if(!empty($editTime)){
+        $editTimeFormat = null;
+        if (! empty($editTime)) {
             $editTimeFormat = DateHelper::format_date_langTag(strtotime($this->latest_edit_at));
         }
         $canDelete = $append['can_delete'];
@@ -178,7 +178,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $member['roleIconDisplay'] = '';
         $member['avatar'] = $memberInfo->avatar_file_url ?? '';
         // Default Avatar
-        if (empty($member['avatar_file_url'])) {
+        if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(FsConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }

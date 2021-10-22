@@ -22,6 +22,7 @@ use App\Http\Center\Scene\FileSceneService;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
+use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
@@ -46,6 +47,7 @@ use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 use App\Http\FresnsDb\FresnsMentions\FresnsMentionsConfig;
 use App\Http\FresnsDb\FresnsPostAllows\FresnsPostAllowsConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
+use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
 use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPosts;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
@@ -59,15 +61,13 @@ use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnects;
 use App\Http\FresnsDb\FresnsUserConnects\FresnsUserConnectsConfig;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
+use App\Http\FresnsDb\FresnsUsers\FresnsUsersService;
 use App\Http\FresnsDb\FresnsUserWalletLogs\FresnsUserWalletLogs;
 use App\Http\FresnsDb\FresnsUserWallets\FresnsUserWallets;
 use App\Http\FresnsDb\FresnsVerifyCodes\FresnsVerifyCodes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
-use App\Http\FresnsDb\FresnsPostLogs\FresnsPostLogs;
-use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
-use App\Http\FresnsDb\FresnsUsers\FresnsUsersService;
 
 class FresnsCmdWords extends BasePlugin
 {
@@ -185,7 +185,7 @@ class FresnsCmdWords extends BasePlugin
         $fresnsCommentService = new FresnsCommentsService();
         switch ($type) {
             case 1:
-                $result = $FresnsPostsService->releaseByDraft($logId,$sessionLogsId);
+                $result = $FresnsPostsService->releaseByDraft($logId, $sessionLogsId);
                 $postId = FresnsPostLogs::find($logId);
                 $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
                 $input = [
@@ -196,7 +196,7 @@ class FresnsCmdWords extends BasePlugin
                 $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
                 break;
             case 2:
-                $result = $fresnsCommentService->releaseByDraft($logId,$commentCid,$sessionLogsId);
+                $result = $fresnsCommentService->releaseByDraft($logId, $commentCid, $sessionLogsId);
                 $commentInfo = FresnsCommentLogs::find($logId);
                 $cmd = FresnsSubPluginConfig::FRESNS_CMD_SUB_ACTIVE_COMMAND_WORD;
                 $input = [
@@ -697,14 +697,14 @@ class FresnsCmdWords extends BasePlugin
 
             return $this->pluginError(ErrorCodeService::PLUGINS_CONFIG_ERROR);
         }
-       
+
         $isPlugin = PluginHelper::pluginCanUse($pluginUniKey);
         if ($isPlugin == false) {
             LogService::error('Plugin Class Not Found');
 
             return $this->pluginError(ErrorCodeService::PLUGINS_IS_ENABLE_ERROR);
         }
-    
+
         $file['file_type'] = $type;
         $paramsExist = false;
         if ($file['file_type'] == FileSceneConfig::FILE_TYPE_1) {
@@ -746,10 +746,14 @@ class FresnsCmdWords extends BasePlugin
             }
             // Storage
             $path = $uploadFile->store($storePath);
-
+            $basePath = base_path();
+            $basePath = $basePath .'/storage/app/';
+            $newPath = $storePath . '/' . StrHelper::createToken(8) . '.' . $uploadFile->getClientOriginalExtension();
+            copy($basePath . $path, $basePath . $newPath);
+            unlink($basePath . $path);
             $file['file_name'] = $uploadFile->getClientOriginalName();
             $file['file_extension'] = $uploadFile->getClientOriginalExtension();
-            $file['file_path'] = str_replace('public', '', $path);
+            $file['file_path'] = str_replace('public', '', $newPath);
             $file['rank_num'] = 9;
             $file['table_type'] = $tableType;
             $file['table_name'] = $tableName;
@@ -765,7 +769,7 @@ class FresnsCmdWords extends BasePlugin
             $retId = FresnsFiles::insertGetId($file);
             FresnsSubPluginService::addSubTablePluginItem(FresnsFilesConfig::CFG_TABLE, $retId);
 
-            $file['real_path'] = $path;
+            $file['real_path'] = $newPath;
             $input = [
                 'file_id' => $retId,
                 'file_mime' => $uploadFile->getMimeType(),
@@ -781,7 +785,7 @@ class FresnsCmdWords extends BasePlugin
                 $input['image_width'] = $imageSize[0] ?? null;
                 $input['image_height'] = $imageSize[1] ?? null;
                 if (! empty($input['image_width']) >= 700) {
-                    if ($input['image_height'] >= $input['image_width'] * 4) {
+                    if ($input['image_height'] >= $input['image_width'] * 3) {
                         $input['image_is_long'] = 1;
                     }
                 }
@@ -829,8 +833,8 @@ class FresnsCmdWords extends BasePlugin
                     $append['image_height'] = $fileInfo['imageHeight'] == '' ? null : $fileInfo['imageHeight'];
                     $imageLong = 0;
                     if (! empty($fileInfo['image_width'])) {
-                        if($fileInfo['image_width'] >= 700){
-                            if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 4) {
+                        if ($fileInfo['image_width'] >= 700) {
+                            if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 3) {
                                 $imageLong = 1;
                             } else {
                                 $imageLong = 0;
@@ -863,7 +867,7 @@ class FresnsCmdWords extends BasePlugin
         }
 
         $data['files'] = [];
-         
+
         if ($fileIdArr) {
             $filesArr = FresnsFiles::whereIn('id', $fileIdArr)->get()->toArray();
             foreach ($filesArr as $file) {
@@ -874,6 +878,7 @@ class FresnsCmdWords extends BasePlugin
                 $item['type'] = $file['file_type'];
                 $item['name'] = $file['file_name'];
                 $item['extension'] = $file['file_extension'];
+                $item['mime'] = $append['file_mime'];
                 $item['size'] = $append['file_size'];
                 if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
@@ -1281,7 +1286,6 @@ class FresnsCmdWords extends BasePlugin
         }
 
         return $this->pluginSuccess();
-
     }
 
     /**
