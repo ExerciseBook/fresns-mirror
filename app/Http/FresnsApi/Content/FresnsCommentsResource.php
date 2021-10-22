@@ -375,10 +375,10 @@ class FresnsCommentsResource extends BaseAdminResource
         $searchPid = request()->input('searchPid');
         $post = [];
         if (! $searchPid) {
-            $post['pid'] = $posts['uuid'];
-            $post['title'] = $posts['title'];
-            $post['content'] = $posts['content'];
-            $post['status'] = $posts['is_enable'];
+            $post['pid'] = $posts['uuid'] ?? "";
+            $post['title'] = $posts['title'] ?? "";
+            $post['content'] = $posts['content'] ?? "";
+            $post['status'] = $posts['is_enable'] ?? "";
             $post['gname'] = '';
             $post['gid'] = '';
             $post['cover'] = '';
