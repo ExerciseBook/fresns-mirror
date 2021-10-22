@@ -82,8 +82,8 @@ class FresnsCommentsService extends FsService
                     $attachCount['videos'] = 0;
                     $attachCount['audios'] = 0;
                     $attachCount['docs'] = 0;
-                    $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $this->id)->count();
-                    $more_json_decode = json_decode($this->more_json, true);
+                    $attachCount['extends'] = DB::table(FresnsExtendLinkedsConfig::CFG_TABLE)->where('linked_type', 2)->where('linked_id', $v['id'])->count();
+                    $more_json_decode = json_decode($v['more_json'], true);
                     if ($more_json_decode) {
                         if (isset($more_json_decode['files'])) {
                             foreach ($more_json_decode['files'] as $m) {
