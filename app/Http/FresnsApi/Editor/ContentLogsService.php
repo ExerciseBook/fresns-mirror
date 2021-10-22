@@ -621,9 +621,12 @@ class ContentLogsService
         $input['image_height'] = $imageSize[1] ?? null;
         $input['image_is_long'] = 0;
         if (! empty($input['image_width']) && ! empty($input['image_height'])) {
-            if ($input['image_height'] >= $input['image_width'] * 4) {
-                $input['image_is_long'] = 1;
+            if($input['image_width'] >= 700){
+                if ($input['image_height'] >= $input['image_width'] * 3) {
+                    $input['image_is_long'] = 1;
+                }
             }
+            
         }
 
         $file['file_size'] = $input['file_size'];
