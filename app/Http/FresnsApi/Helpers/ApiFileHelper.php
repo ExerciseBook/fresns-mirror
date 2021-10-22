@@ -100,12 +100,12 @@ class ApiFileHelper
         $fileArr['sendMid'] = $sendMemberInfo['uuid'] ?? '';
         $fileArr['sendAvatar'] = $memberInfo->avatar_file_url;
 
-        // Default avatar when members have no avatar
+        // Default Avatar
         if (empty($memberInfo->avatar_file_url)) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEFAULT_AVATAR);
             $fileArr['sendAvatar'] = $defaultIcon;
         }
-        // The avatar displayed when a member has been deleted
+        // Deactivate Avatar
         if ($memberInfo) {
             if ($memberInfo->deleted_at != null) {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEACTIVATE_AVATAR);
