@@ -193,12 +193,12 @@ class FsControllerApi extends FresnsBaseApiController
         $member['mname'] = '';
         $member['nickname'] = '';
         $member['avatar'] = $memberInfo->avatar_file_url ?? '';
-        // Default avatar when members have no avatar
+        // Default Avatar
         if (empty($member['avatar'])) {
             $defaultIcon = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEFAULT_AVATAR);
             $member['avatar'] = $defaultIcon;
         }
-        // The avatar displayed when a member has been deleted
+        // Deactivate Avatar
         if ($memberInfo->deleted_at != null) {
             $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(ContentConfig::DEACTIVATE_AVATAR);
             $member['avatar'] = $deactivateAvatar;
