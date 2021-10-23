@@ -166,11 +166,15 @@ class FresnsPostsResource extends BaseAdminResource
         if (! empty($editTime)) {
             $editTimeFormat = DateHelper::format_date_langTag(strtotime($this->latest_edit_at));
         }
+
         $allowStatus = $this->is_allow;
         $allowBtnName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
-        $allowBtnUrl = $append['allow_plugin_unikey'] ?? '';
+        $allowBtnUrl = FresnsPluginsService::getPluginUrlByUnikey($append['allow_plugin_unikey']);
+        
         $memberListName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'member_list_name', $this->id);
         $memberListCount = Db::table('post_members')->where('post_id', $this->id)->count();
+        $memberListUrl = FresnsPluginsService::getPluginUrlByUnikey($append['member_list_plugin_unikey']);
+
         $member = [];
         $member['anonymous'] = $this->is_anonymous;
         $member['deactivate'] = false; //Not deactivated = false, Deactivated = true
@@ -583,7 +587,7 @@ class FresnsPostsResource extends BaseAdminResource
             'memberListStatus' => $append['member_list_status'],
             'memberListName' => $memberListName,
             'memberListCount' => $memberListCount,
-            'memberListUrl' => $append['member_list_plugin_unikey'],
+            'memberListUrl' => $memberListUrl,
             'viewCount' => $viewCount,
             'likeCount' => $likeCount,
             'followCount' => $followCount,
@@ -634,7 +638,7 @@ class FresnsPostsResource extends BaseAdminResource
                 'memberListStatus' => $append['member_list_status'],
                 'memberListName' => $memberListName,
                 'memberListCount' => $memberListCount,
-                'memberListUrl' => $append['member_list_plugin_unikey'],
+                'memberListUrl' => $memberListUrl,
                 'viewCount' => $viewCount,
                 'likeCount' => $likeCount,
                 'followCount' => $followCount,
@@ -691,7 +695,7 @@ class FresnsPostsResource extends BaseAdminResource
                     'memberListStatus' => $append['member_list_status'],
                     'memberListName' => $memberListName,
                     'memberListCount' => $memberListCount,
-                    'memberListUrl' => $append['member_list_plugin_unikey'],
+                    'memberListUrl' => $memberListUrl,
                     'viewCount' => $viewCount,
                     'likeCount' => $likeCount,
                     'followCount' => $followCount,

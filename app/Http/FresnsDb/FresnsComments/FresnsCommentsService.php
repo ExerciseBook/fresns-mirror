@@ -74,9 +74,8 @@ class FresnsCommentsService extends FsService
                     $arr['mid'] = $memberInfo['uuid'];
                     $arr['mname'] = $memberInfo['name'];
                     $arr['nickname'] = $memberInfo['nickname'];
-                    $arr['avatar'] = $memberInfo['avatar_file_url'];
-                    $arr['cid '] = $v['uuid'];
-                    $arr['content '] = FresnsPostsResource::getContentView($v['content'], $comment_id, 2);
+                    $arr['cid'] = $v['uuid'];
+                    $arr['content'] = FresnsPostsResource::getContentView($v['content'], $comment_id, 2);
                     $attachCount = [];
                     $attachCount['images'] = 0;
                     $attachCount['videos'] = 0;
@@ -113,7 +112,7 @@ class FresnsCommentsService extends FsService
                     if (! empty($replyComment) && ($v['parent_id'] != $comment_id)) {
                         $replyMEmberInfo = FresnsMembers::find($replyComment['member_id']);
                         $replyTo['cid'] = $replyComment['uuid'] ?? '';
-                        $replyTo['anonymous'] = $replyComment['uuid'] ?? '';
+                        $replyTo['anonymous'] = $replyComment['is_anonymous'] ?? '';
                         $replyTo['deactivate'] = $replyComment['deleted_at'] == null ? true : false;
                         $replyTo['mid'] = $replyMEmberInfo['uuid'] ?? '';
                         $replyTo['mname'] = $replyMEmberInfo['name'] ?? '';
@@ -159,7 +158,7 @@ class FresnsCommentsService extends FsService
                         if(!$parentMemberInfo){
                             $reply['deactivate'] = true;
                         }else{
-                            if($parentMemberInfo['deleted_at'] != null){
+                            if($parentMemberInfo->deleted_at != null){
                                 $reply['deactivate'] = true;
                             }
                         }

@@ -221,7 +221,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $previewStatus = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_PREVIEW);
         if (! $searchCid) {
             if ($previewStatus && $previewStatus != 0) {
-                $commentSetting['status'] = $previewStatus;
+                $commentSetting['preview'] = intval($previewStatus);
                 // Calculate how many sub-level comments there are under this comment
                 $commentSetting['count'] = FresnsComments::where('parent_id', $this->id)->count();
                 $fresnsCommentsService = new FresnsCommentsService();
