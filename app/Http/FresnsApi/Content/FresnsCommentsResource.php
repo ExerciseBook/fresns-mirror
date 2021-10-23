@@ -216,21 +216,15 @@ class FresnsCommentsResource extends BaseAdminResource
             }
         }
 
-        // The commentSetting is output when the searchCid is empty.
-        $commentSetting = [];
+        // The commentPreviews is output when the searchCid is empty.
+        $commentPreviews = [];
         $searchCid = request()->input('searchCid');
-        // If the configuration table key name comment_preview is not 0, it means the output is on
-        // The number represents the number of output bars, up to 3 bars (in reverse order according to the number of likes)
         $previewStatus = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_PREVIEW);
-        $commentSetting['preview'] = intval($previewStatus);
-        // Calculate how many sub-level comments there are under this comment
-        $commentSetting['count'] = FresnsComments::where('parent_id', $this->id)->count();
-        $commentSetting['lists'] = [];
         if (! $searchCid) {
             if ($previewStatus && $previewStatus != 0) {
                 $fresnsCommentsService = new FresnsCommentsService();
                 $commentList = $fresnsCommentsService->getCommentPreviewList($this->id, $previewStatus, $mid);
-                $commentSetting['lists'] = $commentList;
+                $commentPreviews = $commentList;
             }
         }
 
@@ -507,8 +501,6 @@ class FresnsCommentsResource extends BaseAdminResource
             'content' => $content,
             'brief' => $brief,
             'sticky' => $sticky,
-            // 'isLike' => $isLike,
-            // 'isShield' => $isShield,
             'commentName' => $commentName,
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,
@@ -532,7 +524,7 @@ class FresnsCommentsResource extends BaseAdminResource
             'editTimeFormat' => $editTimeFormat,
             'member' => $member,
             'icons' => $icons,
-            'commentSetting' => $commentSetting,
+            'commentPreviews' => $commentPreviews,
             'replyTo' => $replyTo,
             'location' => $location,
             'attachCount' => $attachCount,

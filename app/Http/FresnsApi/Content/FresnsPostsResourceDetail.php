@@ -509,12 +509,9 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         // Default Field
         $default = [
             'pid' => $pid,
-            // 'titleIcon' => $titleIcon,
-            // 'isLike' => $isLike,
             'title' => $title,
             'content' => $content,
             'isMarkdown' => $append['is_markdown'],
-            // 'brief' => $brief,
             'sticky' => $sticky,
             'essence' => $essence,
             'postName' => $PostName,
@@ -542,14 +539,12 @@ class FresnsPostsResourceDetail extends BaseAdminResource
             'editTime' => $editTime,
             'editTimeFormat' => $editTimeFormat,
             'editCount' => $append['edit_count'],
-            // 'canDelete' => $canDelete,
             'allowStatus' => $allowStatus,
             'allowProportion' => $allowProportion,
             'allowBtnName' => $allowBtnName,
             'allowBtnUrl' => $allowBtnUrl,
             'member' => $member,
             'icons' => $icons,
-            // 'commentSetting' => $comment,
             'location' => $location,
             'attachCount' => $attachCount,
             'files' => $files,
@@ -557,7 +552,6 @@ class FresnsPostsResourceDetail extends BaseAdminResource
             'group' => $group,
             'manages' => $managesArr,
             'editStatus' => $editStatus,
-            // 'seoInfo' => $seoInfo
         ];
 
         // Merger
