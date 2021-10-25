@@ -768,7 +768,6 @@ class ContentLogsService
                     $item['audioTime'] = $append['audio_time'] ?? '';
                     $item['audioUrl'] = $audiosHost.$file['file_path'];
                     $item['transcodingState'] = $append['transcoding_state'];
-                    $item['transcodingState'] = $append['transcoding_state'];
                 }
                 if ($type == 4) {
                     $item['docUrl'] = $docsHost.$file['file_path'];
