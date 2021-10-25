@@ -190,7 +190,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
             $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
             $member['avatar'] = $deactivateAvatar;
         }
-        $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
+        $member['avatar'] = ApiFileHelper::getImageAvatarUrl($member['avatar']);
 
         $member['decorate'] = '';
         $member['gender'] = '';

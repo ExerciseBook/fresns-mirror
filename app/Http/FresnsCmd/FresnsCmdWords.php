@@ -953,12 +953,14 @@ class FresnsCmdWords extends BasePlugin
 
         $imagesStatus = ApiConfigHelper::getConfigByItemKey('images_url_status');
         $imagesBucketDomain = ApiConfigHelper::getConfigByItemKey('images_bucket_domain');
+        $imagesThumbConfig = ApiConfigHelper::getConfigByItemKey('images_thumb_config');
         $imagesThumbAvatar = ApiConfigHelper::getConfigByItemKey('images_thumb_avatar');
         $imagesThumbRatio = ApiConfigHelper::getConfigByItemKey('images_thumb_ratio');
         $imagesThumbSquare = ApiConfigHelper::getConfigByItemKey('images_thumb_square');
         $imagesThumbBig = ApiConfigHelper::getConfigByItemKey('images_thumb_big');
 
         $imageDefaultUrl = $imagesBucketDomain.$files['file_path'];
+        $imageConfigUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbConfig;
         $imageAvatarUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbAvatar;
         $imageRatioUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbRatio;
         $imageSquareUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbSquare;
@@ -1000,6 +1002,7 @@ class FresnsCmdWords extends BasePlugin
             $output = $resp['output'];
 
             $imageDefaultUrl = $output['imageDefaultUrl'] ?? $imageDefaultUrl;
+            $imageConfigUrl = $output['imageConfigUrl'] ?? '';
             $imageAvatarUrl = $output['imageAvatarUrl'] ?? '';
             $imageRatioUrl = $output['imageRatioUrl'] ?? '';
             $imageSquareUrl = $output['imageSquareUrl'] ?? '';
@@ -1007,6 +1010,7 @@ class FresnsCmdWords extends BasePlugin
             $originalUrl = $output['originalUrl'] ?? '';
         } else {
             $imageDefaultUrl = $imageDefaultUrl;
+            $imageConfigUrl = $imageConfigUrl;
             $imageAvatarUrl = $imageAvatarUrl;
             $imageRatioUrl = $imageRatioUrl;
             $imageSquareUrl = $imageSquareUrl;
@@ -1015,6 +1019,8 @@ class FresnsCmdWords extends BasePlugin
         }
 
         $item['imageDefaultUrl'] = $imageDefaultUrl;
+        $item['imageConfigUrl'] = $imageConfigUrl;
+        $item['imageAvatarUrl'] = $imageAvatarUrl;
         $item['imageRatioUrl'] = $imageRatioUrl;
         $item['imageSquareUrl'] = $imageSquareUrl;
         $item['imageBigUrl'] = $imageBigUrl;
