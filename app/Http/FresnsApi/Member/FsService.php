@@ -205,7 +205,7 @@ class FsService
                     $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
                     $memberAvatar = ApiFileHelper::getImageAvatarUrl($defaultAvatar);
                 } else {
-                    $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($member['avatar_file_id'], $member['avatar_file_url']);
+                    $memberAvatar = ApiFileHelper::getImageAvatarUrlByFileIdUrl($member['avatar_file_id'], $member['avatar_file_url']);
                 }
             } else {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey('deactivate_avatar');

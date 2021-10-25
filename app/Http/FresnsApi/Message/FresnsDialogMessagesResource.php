@@ -83,7 +83,7 @@ class FresnsDialogMessagesResource extends BaseAdminResource
         // File Helper
         $fileInfo = [];
         if ($this->file_id) {
-            $fileInfo = ApiFileHelper::getFileInfo($this->id, $this->file_id, $mid);
+            $fileInfo = ApiFileHelper::getMessageFileInfo($this->id, $this->file_id, $mid);
         }
 
         // Default Field

@@ -146,7 +146,7 @@ class FresnsMemberListsResource extends BaseAdminResource
             $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
             $memberAvatar = ApiFileHelper::getImageAvatarUrl($defaultAvatar);
         } else {
-            $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($this->avatar_file_id, $this->avatar_file_url);
+            $memberAvatar = ApiFileHelper::getImageAvatarUrlByFileIdUrl($this->avatar_file_id, $this->avatar_file_url);
         }
 
         // Default Field
