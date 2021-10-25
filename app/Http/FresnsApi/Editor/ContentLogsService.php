@@ -747,6 +747,7 @@ class ContentLogsService
                 $item['extension'] = $file['file_extension'];
                 $item['mime'] = $append['file_mime'];
                 $item['size'] = $append['file_size'];
+                $item['rankNum'] = $file['rank_num'];
                 if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
@@ -760,10 +761,13 @@ class ContentLogsService
                     $item['videoCover'] = $append['video_cover'] ?? '';
                     $item['videoGif'] = $append['video_gif'] ?? '';
                     $item['videoUrl'] = $videosHost.$file['file_path'];
+                    $item['transcodingState'] = $append['transcoding_state'];
+                    
                 }
                 if ($type == 3) {
                     $item['audioTime'] = $append['audio_time'] ?? '';
                     $item['audioUrl'] = $audiosHost.$file['file_path'];
+                    $item['transcodingState'] = $append['transcoding_state'];
                     $item['transcodingState'] = $append['transcoding_state'];
                 }
                 if ($type == 4) {
