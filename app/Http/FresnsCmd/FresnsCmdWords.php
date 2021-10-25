@@ -880,6 +880,7 @@ class FresnsCmdWords extends BasePlugin
                 $item['extension'] = $file['file_extension'];
                 $item['mime'] = $append['file_mime'];
                 $item['size'] = $append['file_size'];
+                $item['rankNum'] = $file['rank_num'];
                 if ($type == 1) {
                     $item['imageWidth'] = $append['image_width'] ?? '';
                     $item['imageHeight'] = $append['image_height'] ?? '';
@@ -908,6 +909,7 @@ class FresnsCmdWords extends BasePlugin
                     $item['videoCover'] = $output['videoCover'];
                     $item['videoGif'] = $output['videoGif'];
                     $item['videoUrl'] = $output['videoUrl'];
+                    $item['transcodingState'] = $append['transcoding_state'];
                 }
                 if ($type == 3) {
                     $item['audioTime'] = $append['audio_time'] ?? '';
@@ -919,6 +921,7 @@ class FresnsCmdWords extends BasePlugin
                     }
                     $output = $resp['output'];
                     $item['audioUrl'] = $output['audioUrl'];
+                    $item['transcodingState'] = $append['transcoding_state'];
                 }
                 if ($type == 4) {
                     $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_DOC;
@@ -960,7 +963,7 @@ class FresnsCmdWords extends BasePlugin
         $imageRatioUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbRatio;
         $imageSquareUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbSquare;
         $imageBigUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbBig;
-        $originalUrl = $imagesBucketDomain.$append['file_original_path'];
+        $originalUrl = $imagesBucketDomain.($append['file_original_path'] ?? '');
         if ($imagesStatus == true) {
             $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
             $pluginUniKey = $unikey;

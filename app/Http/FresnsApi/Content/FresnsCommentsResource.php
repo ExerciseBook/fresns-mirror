@@ -396,8 +396,8 @@ class FresnsCommentsResource extends BaseAdminResource
                 $post['avatar'] = $defaultIcon;
             }
             // Anonymous Avatar
-            if ($this->is_anonymous == 1) {
-                $post['anonymous'] = $this->is_anonymous;
+            if ($posts['is_anonymous'] == 1) {
+                $post['anonymous'] = 1;
                 $post['mid'] = '';
                 $post['mname'] = '';
                 $post['nickname'] = '';
