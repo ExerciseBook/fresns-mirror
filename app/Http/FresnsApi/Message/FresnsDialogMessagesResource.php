@@ -76,7 +76,7 @@ class FresnsDialogMessagesResource extends BaseAdminResource
                 $messageArr['sendAvatar'] = $deactivateAvatar;
             }
 
-            $messageArr['sendAvatar'] = ApiFileHelper::getImageSignUrl($messageArr['sendAvatar']);
+            $messageArr['sendAvatar'] = ApiFileHelper::getImageAvatarUrl($messageArr['sendAvatar']);
             $messageArr['sendTime'] = $this->created_at;
         }
 

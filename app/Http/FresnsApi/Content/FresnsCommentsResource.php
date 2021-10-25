@@ -172,7 +172,7 @@ class FresnsCommentsResource extends BaseAdminResource
             $deactivateAvatar = ApiConfigHelper::getConfigByItemKey(FsConfig::DEACTIVATE_AVATAR);
             $member['avatar'] = $deactivateAvatar;
         }
-        $member['avatar'] = ApiFileHelper::getImageSignUrl($member['avatar']);
+        $member['avatar'] = ApiFileHelper::getImageAvatarUrl($member['avatar']);
 
         $member['gender'] = 0;
         $member['bio'] = '';
@@ -416,7 +416,7 @@ class FresnsCommentsResource extends BaseAdminResource
                 $post['avatar'] = $deactivateAvatar;
                 $post['deactivate'] = true;
             }
-            $post['avatar'] = ApiFileHelper::getImageSignUrl($post['avatar']);
+            $post['avatar'] = ApiFileHelper::getImageAvatarUrl($post['avatar']);
         }
 
         // Comment Plugin Extensions

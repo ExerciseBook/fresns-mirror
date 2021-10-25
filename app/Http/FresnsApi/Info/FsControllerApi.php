@@ -209,7 +209,7 @@ class FsControllerApi extends FresnsBaseApiController
                     $item['followStatus'] = $followStatus;
                     if (empty($v['avatar_file_url']) && empty($v['avatar_file_id'])) {
                         $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
-                        $memberAvatar = ApiFileHelper::getImageSignUrl($defaultAvatar);
+                        $memberAvatar = ApiFileHelper::getImageAvatarUrl($defaultAvatar);
                     } else {
                         $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($v['avatar_file_id'], $v['avatar_file_url']);
                     }

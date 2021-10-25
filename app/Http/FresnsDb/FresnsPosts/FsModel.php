@@ -14,6 +14,7 @@ use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkeds;
 use App\Http\FresnsDb\FresnsHashtagLinkeds\FresnsHashtagLinkedsConfig;
+use App\Http\FresnsDb\FresnsHashtags\FresnsHashtags;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollows;
 use App\Http\FresnsDb\FresnsMemberFollows\FresnsMemberFollowsConfig;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
@@ -149,8 +150,11 @@ class FsModel extends BaseAdminModel
         // Specify the range: Hashtag
         $searchHuri = $request->input('searchHuri');
         if ($searchHuri) {
-            $topicLinkArr = Db::table('hashtag_linkeds')->where('hashtag_id', $searchHuri)->where('linked_type', 1)->pluck('linked_id')->toArray();
-            $query->whereIn('post.id', $topicLinkArr);
+            $hashtagInfo = FresnsHashtags::where('slug', $searchHuri)->first();
+            if ($hashtagInfo) {
+                $hashtagLinkedArr = Db::table('hashtag_linkeds')->where('hashtag_id', $hashtagInfo['id'])->where('linked_type', 1)->pluck('linked_id')->toArray();
+                $query->whereIn('post.id', $hashtagLinkedArr);
+            }
         }
         // essence_state
         $searchEssence = $request->input('searchEssence');

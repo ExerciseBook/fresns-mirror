@@ -215,10 +215,29 @@ class ApiFileHelper
             if (CmdRpcHelper::isErrorCmdResp($resp)) {
                 return $url;
             }
-            $singUrl = $resp['output']['imageDefaultUrl'];
+            $singUrl = $resp['output']['imageConfigUrl'];
         }
 
         return $singUrl;
+    }
+
+    // Get avatar image link by fid
+    public static function getImageAvatarUrl($url)
+    {
+        if (! is_numeric($url)) {
+            $avatarUrl = $url;
+        } else {
+            $uuid = FresnsFiles::where('id', $url)->value('uuid');
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_IMAGE;
+            $input['fid'] = $uuid;
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                return $url;
+            }
+            $avatarUrl = $resp['output']['imageAvatarUrl'];
+        }
+
+        return $avatarUrl;
     }
 
     // Get image link by fid
