@@ -222,7 +222,7 @@ class FresnsCommentsResource extends BaseAdminResource
         // If the configuration table key name comment_preview is not 0, it means the output is on
         // The number represents the number of output bars, up to 3 bars (in reverse order according to the number of likes)
         $previewStatus = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_PREVIEW);
-        $commentSetting['status'] = $previewStatus;
+        $commentSetting['preview'] = intval($previewStatus);
         // Calculate how many sub-level comments there are under this comment
         $commentSetting['count'] = FresnsComments::where('parent_id', $this->id)->count();
         $commentSetting['lists'] = [];
