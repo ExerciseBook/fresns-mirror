@@ -331,12 +331,13 @@ class ApiFileHelper
                 if (isset($i['fileId'])) {
                     if (! empty($i['fileId'])) {
                         $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_IMAGE;
-                        $input['fid'] = $i['fileId'];
+                        $fid = FresnsFiles::where('id',$i['fileId'])->value('uuid');
+                        $input['fid'] = $fid;
                         $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
                         if (CmdRpcHelper::isErrorCmdResp($resp)) {
                             return false;
                         }
-                        $i['fileUrl'] = $resp['output']['imageRatioUrl'];
+                        $i['fileUrl'] = $resp['output']['imageDefaultUrl'];
                     }
                 }
             }

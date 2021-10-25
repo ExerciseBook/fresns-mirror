@@ -963,7 +963,7 @@ class FresnsCmdWords extends BasePlugin
         $imageRatioUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbRatio;
         $imageSquareUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbSquare;
         $imageBigUrl = $imagesBucketDomain.$files['file_path'].$imagesThumbBig;
-        $originalUrl = $imagesBucketDomain.$append['file_original_path'];
+        $originalUrl = $imagesBucketDomain.($append['file_original_path'] ?? '');
         if ($imagesStatus == true) {
             $unikey = ApiConfigHelper::getConfigByItemKey('images_service');
             $pluginUniKey = $unikey;
