@@ -150,10 +150,10 @@ class FsModel extends BaseAdminModel
         // Specify the range: Hashtag
         $searchHuri = $request->input('searchHuri');
         if ($searchHuri) {
-            $topic = FresnsHashtags::where('slug',$searchHuri)->first();
-            if($topic){
-                $topicLinkArr = Db::table('hashtag_linkeds')->where('hashtag_id', $topic['id'])->where('linked_type', 1)->pluck('linked_id')->toArray();
-                $query->whereIn('post.id', $topicLinkArr);
+            $hashtagInfo = FresnsHashtags::where('slug', $searchHuri)->first();
+            if($hashtagInfo){
+                $hashtagLinkedArr = Db::table('hashtag_linkeds')->where('hashtag_id', $hashtagInfo['id'])->where('linked_type', 1)->pluck('linked_id')->toArray();
+                $query->whereIn('post.id', $hashtagLinkedArr);
             }else{
                 $query->where('post.id', 0);
             }
