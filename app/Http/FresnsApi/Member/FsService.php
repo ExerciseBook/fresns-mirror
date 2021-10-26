@@ -314,8 +314,8 @@ class FsService
 
             $data['draftCount'] = null;
             if ($isMe == true) {
-                $draftCount['posts'] = FresnsPostLogs::whereIn('state', [1, 4])->count();
-                $draftCount['comments'] = FresnsCommentLogs::whereIn('state', [1, 4])->count();
+                $draftCount['posts'] = FresnsPostLogs::where('member_id',$member['id'])->whereIn('state', [1, 4])->count();
+                $draftCount['comments'] = FresnsCommentLogs::where('member_id',$member['id'])->whereIn('state', [1, 4])->count();
                 $data['draftCount'] = $draftCount;
             }
 

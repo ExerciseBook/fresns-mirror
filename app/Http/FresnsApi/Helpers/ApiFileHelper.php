@@ -239,7 +239,7 @@ class ApiFileHelper
             return $fileUrl;
         }
     }
-    
+
     // Anti Hotlinking (Get the url of the file in the more_json field)
     public static function getMoreJsonSignUrl($moreJson)
     {
