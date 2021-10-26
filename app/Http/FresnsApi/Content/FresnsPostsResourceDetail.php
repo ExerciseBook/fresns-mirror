@@ -108,9 +108,10 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $allowProportion = $append['allow_proportion'];
                 $FresnsPostsService = new FresnsPostsService();
                 // Prevent @, hashtags, emojis, links and other messages from being truncated
-                $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content'],mb_strlen($append['content']) * $allowProportion / 100 );
-                $content = FresnsPostsResource::getContentView(($contentInfo['truncated_content']), ($this->id), 1, $append['is_markdown']);
-
+                if($allowProportion != 0 && !empty($allowProportion)){
+                    $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content'],mb_strlen($append['content']) * $allowProportion / 100 );
+                    $content = FresnsPostsResource::getContentView(($contentInfo['truncated_content']), ($this->id), 1, $append['is_markdown']);
+                }
                 $allowStatus = 0;
             }
         } else {
