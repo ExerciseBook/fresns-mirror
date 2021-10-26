@@ -20,7 +20,7 @@ use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\FresnsDb\FresnsHashtags\FresnsHashtags;
 class FsModel extends BaseAdminModel
 {
     protected $table = FsConfig::CFG_TABLE;
@@ -149,8 +149,13 @@ class FsModel extends BaseAdminModel
         // Specify the range: Hashtag
         $searchHuri = $request->input('searchHuri');
         if ($searchHuri) {
-            $topicLinkArr = Db::table('hashtag_linkeds')->where('hashtag_id', $searchHuri)->where('linked_type', 1)->pluck('linked_id')->toArray();
-            $query->whereIn('post.id', $topicLinkArr);
+            $topic = FresnsHashtags::where('slug',$searchHuri)->first();
+            if($topic){
+                $topicLinkArr = Db::table('hashtag_linkeds')->where('hashtag_id', $topic['id'])->where('linked_type', 1)->pluck('linked_id')->toArray();
+                $query->whereIn('post.id', $topicLinkArr);
+            }else{
+                $query->where('post.id', 0);
+            }
         }
         // essence_state
         $searchEssence = $request->input('searchEssence');
