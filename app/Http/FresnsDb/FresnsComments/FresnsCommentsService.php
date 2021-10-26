@@ -679,7 +679,7 @@ class FresnsCommentsService extends FsService
         // The currently configured Hashtag display mode
         $hashtagShow = ApiConfigHelper::getConfigByItemKey(FsConfig::HASHTAG_SHOW) ?? 2;
         if ($hashtagShow == 1) {
-            preg_match_all("/#.*?\s/", $draftComment['content'], $singlePoundMatches);
+            preg_match_all("/#[\S].*?\s/", $draftComment['content'], $singlePoundMatches);
         } else {
             preg_match_all('/#[\S].*?[\S]#/', $draftComment['content'], $singlePoundMatches);
         }
