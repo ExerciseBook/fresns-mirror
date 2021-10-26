@@ -844,6 +844,9 @@ class FresnsPostsService extends FsService
                 }
                 // Remove the # sign from Hashtag
                 $s = trim(str_replace('#', '', $s));
+                if(empty($s)){
+                    continue;
+                }
                 // Existence of Hashtag
                 $hashInfo = FresnsHashtags::where('name', $s)->first();
                 if ($hashInfo) {
