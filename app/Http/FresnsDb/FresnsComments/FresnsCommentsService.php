@@ -713,12 +713,12 @@ class FresnsCommentsService extends FsService
                 if (strlen($topic) != strlen($removePunctChinese)) {
                     continue;
                 }
-                dd($topic);
-                if(empty($topic)){
-                    continue;
-                }
+                // dd($topic);
                 // Remove the # sign from Hashtag
                 $s = trim(str_replace('#', '', $s));
+                if(empty($s)){
+                    continue;
+                }
                 // Existence of Hashtag
                 $hashInfo = FresnsHashtags::where('name', $s)->first();
                 if ($hashInfo) {
