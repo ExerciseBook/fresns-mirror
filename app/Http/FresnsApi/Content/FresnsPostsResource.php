@@ -57,7 +57,7 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
-
+use App\Helpers\ArrayHelper;
 /**
  * List resource config handle.
  */
@@ -390,6 +390,9 @@ class FresnsPostsResource extends BaseAdminResource
             $more_json = json_decode($this->more_json, true);
             if ($more_json) {
                 $files = ApiFileHelper::getMoreJsonSignUrl($more_json['files']);
+                if($files){
+                    $files =  ArrayHelper::arraySort($files,'rank_num',SORT_ASC);
+                }
             }
             if (! empty($extendsInfo)) {
                 $extends = [];
