@@ -21,7 +21,7 @@ use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
 use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use Illuminate\Support\Facades\DB;
-use App\Http\FresnsDb\FresnsHashtags\FresnsHashtags;
+
 class FsModel extends BaseAdminModel
 {
     protected $table = FsConfig::CFG_TABLE;
