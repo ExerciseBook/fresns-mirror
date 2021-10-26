@@ -203,13 +203,13 @@ class FsService
             if (empty($users->deleted_at)) {
                 if (empty($member['avatar_file_url']) && empty($member['avatar_file_id'])) {
                     $defaultAvatar = ApiConfigHelper::getConfigByItemKey('default_avatar');
-                    $memberAvatar = ApiFileHelper::getImageSignUrl($defaultAvatar);
+                    $memberAvatar = ApiFileHelper::getImageAvatarUrl($defaultAvatar);
                 } else {
-                    $memberAvatar = ApiFileHelper::getImageSignUrlByFileIdUrl($member['avatar_file_id'], $member['avatar_file_url']);
+                    $memberAvatar = ApiFileHelper::getImageAvatarUrlByFileIdUrl($member['avatar_file_id'], $member['avatar_file_url']);
                 }
             } else {
                 $deactivateAvatar = ApiConfigHelper::getConfigByItemKey('deactivate_avatar');
-                $memberAvatar = ApiFileHelper::getImageSignUrl($deactivateAvatar);
+                $memberAvatar = ApiFileHelper::getImageAvatarUrl($deactivateAvatar);
             }
             $data['avatar'] = $memberAvatar;
             $data['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($member['decorate_file_id'], $member['decorate_file_url']);
