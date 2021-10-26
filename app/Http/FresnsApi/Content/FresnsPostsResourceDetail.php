@@ -90,12 +90,15 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $allowStatus = $this->is_allow;
         $allowProportion = 10;
         $noAllow = 0;
+        // dump($allowStatus);
         if ($allowStatus == 1) {
             $memberCount = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $this->id)->where('type', 1)->where('object_id', $mid)->count();
             $memberoleCount = 0;
             if (! empty($roleRels)) {
                 $memberoleCount = DB::table(FresnsPostAllowsConfig::CFG_TABLE)->where('post_id', $this->id)->where('type', 2)->where('object_id', $roleRels['role_id'])->count();
             }
+            // dump($memberCount);
+            // dump($memberoleCount);
             // Read access
             if ($memberCount > 0 || $memberoleCount > 0) {
                 $allowStatus = 1;
@@ -105,7 +108,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $allowProportion = $append['allow_proportion'];
                 $FresnsPostsService = new FresnsPostsService();
                 // Prevent @, hashtags, emojis, links and other messages from being truncated
-                $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content'],mb_strlen($append['content']));
+                $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content'],mb_strlen($append['content']) * $allowProportion / 100 );
                 $content = FresnsPostsResource::getContentView(($contentInfo['truncated_content']), ($this->id), 1, $append['is_markdown']);
 
                 $allowStatus = 0;
