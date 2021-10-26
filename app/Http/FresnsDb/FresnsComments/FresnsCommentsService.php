@@ -713,6 +713,7 @@ class FresnsCommentsService extends FsService
                 if (strlen($topic) != strlen($removePunctChinese)) {
                     continue;
                 }
+                dd($topic);
                 if(empty($topic)){
                     continue;
                 }
