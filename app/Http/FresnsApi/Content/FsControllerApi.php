@@ -585,7 +585,7 @@ class FsControllerApi extends FresnsBaseApiController
 
                 // Posts by following members
                 // $followMemberArr = FresnsMemberFollows::where('member_id',$mid)->where('follow_type',1)->pluck('follow_id')->toArray();
-                $followMemberArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 1)->pluck('follow_id')->toArray();
+                $followMemberArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 1)->where('deleted_at', null)->pluck('follow_id')->toArray();
                 $postMemberIdArr = FresnsPosts::whereIn('member_id', $followMemberArr)->pluck('id')->toArray();
 
                 // Only posts that have been added to the essence are exported under groups and hashtags
