@@ -100,7 +100,7 @@ class FsService extends BaseAdminService
         $userWallets = FresnsUserWallets::where('user_id', $uid)->first();
         $wallet['status'] = $userWallets['is_enable'] ?? '';
         $wallet['balance'] = $userWallets['balance'] ?? '';
-        $wallet['freezeFsount'] = $userWallets['freeze_amount'] ?? '';
+        $wallet['freezeAmount'] = $userWallets['freeze_amount'] ?? '';
         $wallet['bankName'] = $userWallets['bank_name'] ?? '';
         $wallet['swiftCode'] = $userWallets['swift_code'] ?? '';
         $wallet['bankAddress'] = $userWallets['bank_address'] ?? '';
@@ -122,12 +122,14 @@ class FsService extends BaseAdminService
             $item['nickname'] = $v->nickname;
             $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($v->id);
             $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
+            $item['rid'] = '';
             $item['nicknameColor'] = '';
             $item['roleName'] = '';
             $item['roleNameDisplay'] = '';
             $item['roleIcon'] = '';
             $item['roleIconDisplay'] = '';
             if ($memberRole) {
+                $item['rid'] = $memberRole['id'];
                 $item['nicknameColor'] = $memberRole['nickname_color'];
                 $item['roleName'] = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id'], $langTag);
                 $item['roleNameDisplay'] = $memberRole['is_display_name'];

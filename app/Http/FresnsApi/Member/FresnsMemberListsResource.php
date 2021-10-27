@@ -42,12 +42,14 @@ class FresnsMemberListsResource extends BaseAdminResource
         $roleId = FresnsMemberRoleRelsService::getMemberRoleRels($this->id);
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
         $memberRole = FresnsMemberRoles::where('id', $roleId)->first();
+        $rid = '';
         $nicknameColor = '';
         $roleName = '';
         $roleNameDisplay = '';
         $roleIcon = '';
         $roleIconDisplay = '';
         if ($memberRole) {
+            $rid = $memberRole['id'];
             $nicknameColor = $memberRole['nickname_color'];
             $roleName = FresnsLanguagesService::getLanguageByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id'], $langTag);
             $roleNameDisplay = $memberRole['is_display_name'];
@@ -135,6 +137,7 @@ class FresnsMemberListsResource extends BaseAdminResource
             'mid' => $this->uuid,
             'mname' => $this->name,
             'nickname' => $this->nickname,
+            'rid' => $rid,
             'nicknameColor' => $nicknameColor,
             'roleName' => $roleName,
             'roleNameDisplay' => $roleNameDisplay,

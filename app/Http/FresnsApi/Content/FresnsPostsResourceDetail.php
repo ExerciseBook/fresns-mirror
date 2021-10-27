@@ -86,7 +86,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $count = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where($input)->count();
         $isLike = $count == 0 ? false : true;
         $title = $this->title;
-        $content = FresnsPostsResource::getContentView(($append['content']), ($this->id), 1,$append['is_markdown']);
+        $content = FresnsPostsResource::getContentView(($append['content']), ($this->id), 1, $append['is_markdown']);
         // Read permission required or not
         $allowStatus = $this->is_allow;
         $allowProportion = 10;
@@ -124,8 +124,8 @@ class FresnsPostsResourceDetail extends BaseAdminResource
 
         // Operation behavior status
         $likeStatus = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 4)->where('like_id', $this->id)->where('deleted_at', null)->count();
-        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 4)->where('follow_id', $this->id)->where('deleted_at', null))->count();
-        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 4)->where('shield_id', $this->id)->where('deleted_at', null))->count();
+        $followStatus = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 4)->where('follow_id', $this->id)->where('deleted_at', null)->count();
+        $shieldStatus = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 4)->where('shield_id', $this->id)->where('deleted_at', null)->count();
         // Operation behavior settings
         $likeSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::LIKE_POST_SETTING);
         $followSetting = ApiConfigHelper::getConfigByItemKey(FsConfig::FOLLOW_POST_SETTING);
@@ -168,6 +168,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $member['mid'] = '';
         $member['mname'] = '';
         $member['nickname'] = '';
+        $member['rid'] = '';
         $member['nicknameColor'] = '';
         $member['roleName'] = '';
         $member['roleNameDisplay'] = '';
@@ -211,6 +212,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $member['mid'] = $memberInfo->uuid ?? '';
                 $member['mname'] = $memberInfo->name ?? '';
                 $member['nickname'] = $memberInfo->nickname ?? '';
+                $member['rid'] = $memberRole['id'] ?? '';
                 $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
                 $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
                 $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? 0;
@@ -505,12 +507,9 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         // Default Field
         $default = [
             'pid' => $pid,
-            // 'titleIcon' => $titleIcon,
-            // 'isLike' => $isLike,
             'title' => $title,
             'content' => $content,
             'isMarkdown' => $append['is_markdown'],
-            // 'brief' => $brief,
             'sticky' => $sticky,
             'essence' => $essence,
             'postName' => $PostName,
@@ -538,14 +537,12 @@ class FresnsPostsResourceDetail extends BaseAdminResource
             'editTime' => $editTime,
             'editTimeFormat' => $editTimeFormat,
             'editCount' => $append['edit_count'],
-            // 'canDelete' => $canDelete,
             'allowStatus' => $allowStatus,
             'allowProportion' => $allowProportion,
             'allowBtnName' => $allowBtnName,
             'allowBtnUrl' => $allowBtnUrl,
             'member' => $member,
             'icons' => $icons,
-            // 'commentSetting' => $comment,
             'location' => $location,
             'attachCount' => $attachCount,
             'files' => $files,
@@ -553,7 +550,6 @@ class FresnsPostsResourceDetail extends BaseAdminResource
             'group' => $group,
             'manages' => $managesArr,
             'editStatus' => $editStatus,
-            // 'seoInfo' => $seoInfo
         ];
 
         // Merger

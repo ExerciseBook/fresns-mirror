@@ -170,7 +170,7 @@ class FresnsPostsResource extends BaseAdminResource
         $allowStatus = $this->is_allow;
         $allowBtnName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'allow_btn_name', $this->id);
         $allowBtnUrl = FresnsPluginsService::getPluginUrlByUnikey($append['allow_plugin_unikey']);
-        
+
         $memberListName = ApiLanguageHelper::getLanguagesByTableId(FresnsPostsConfig::CFG_TABLE, 'member_list_name', $this->id);
         $memberListCount = Db::table('post_members')->where('post_id', $this->id)->count();
         $memberListUrl = FresnsPluginsService::getPluginUrlByUnikey($append['member_list_plugin_unikey']);
@@ -181,6 +181,7 @@ class FresnsPostsResource extends BaseAdminResource
         $member['mid'] = '';
         $member['mname'] = '';
         $member['nickname'] = '';
+        $member['rid'] = '';
         $member['nicknameColor'] = '';
         $member['roleName'] = '';
         $member['roleNameDisplay'] = '';
@@ -224,6 +225,7 @@ class FresnsPostsResource extends BaseAdminResource
                 $member['mid'] = $memberInfo->uuid ?? '';
                 $member['mname'] = $memberInfo->name ?? '';
                 $member['nickname'] = $memberInfo->nickname ?? '';
+                $member['rid'] = $memberRole['id'] ?? '';
                 $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
                 $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
                 $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? 0;
@@ -763,10 +765,10 @@ class FresnsPostsResource extends BaseAdminResource
     }
 
     // Content Data Export Operations
-    public static function getContentView($content, $postId, $postType, $content_markdown=0)
+    public static function getContentView($content, $postId, $postType, $content_markdown = 0)
     {
         $request = request();
-        if(!$content_markdown){
+        if (! $content_markdown) {
             // Link
             preg_match_all("/http[s]{0,1}:\/\/.*?\s/", $content, $hrefMatches);
             if ($hrefMatches[0]) {

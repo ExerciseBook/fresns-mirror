@@ -146,6 +146,7 @@ class FresnsCommentsResource extends BaseAdminResource
         $member['mid'] = '';
         $member['mname'] = '';
         $member['nickname'] = '';
+        $member['rid'] = '';
         $member['nicknameColor'] = '';
         $member['roleName'] = '';
         $member['roleNameDisplay'] = '';
@@ -190,6 +191,7 @@ class FresnsCommentsResource extends BaseAdminResource
                     $member['mid'] = $memberInfo->uuid ?? '';
                     $member['mname'] = $memberInfo->name ?? '';
                     $member['nickname'] = $memberInfo->nickname ?? '';
+                    $member['rid'] = $memberRole['id'] ?? '';
                     $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
                     $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
                     $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? 0;
@@ -217,21 +219,15 @@ class FresnsCommentsResource extends BaseAdminResource
             }
         }
 
-        // The commentSetting is output when the searchCid is empty.
-        $commentSetting = [];
+        // The commentPreviews is output when the searchCid is empty.
+        $commentPreviews = [];
         $searchCid = request()->input('searchCid');
-        // If the configuration table key name comment_preview is not 0, it means the output is on
-        // The number represents the number of output bars, up to 3 bars (in reverse order according to the number of likes)
         $previewStatus = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_PREVIEW);
-        $commentSetting['preview'] = intval($previewStatus);
-        // Calculate how many sub-level comments there are under this comment
-        $commentSetting['count'] = FresnsComments::where('parent_id', $this->id)->count();
-        $commentSetting['lists'] = [];
         if (! $searchCid) {
             if ($previewStatus && $previewStatus != 0) {
                 $fresnsCommentsService = new FresnsCommentsService();
                 $commentList = $fresnsCommentsService->getCommentPreviewList($this->id, $previewStatus, $mid);
-                $commentSetting['lists'] = $commentList;
+                $commentPreviews = $commentList;
             }
         }
 
@@ -381,10 +377,10 @@ class FresnsCommentsResource extends BaseAdminResource
         $searchPid = request()->input('searchPid');
         $post = [];
         if (! $searchPid) {
-            $post['pid'] = $posts['uuid'] ?? "";
-            $post['title'] = $posts['title'] ?? "";
-            $post['content'] = $posts['content'] ?? "";
-            $post['status'] = $posts['is_enable'] ?? "";
+            $post['pid'] = $posts['uuid'] ?? '';
+            $post['title'] = $posts['title'] ?? '';
+            $post['content'] = $posts['content'] ?? '';
+            $post['status'] = $posts['is_enable'] ?? '';
             $post['gname'] = '';
             $post['gid'] = '';
             $post['cover'] = '';
@@ -511,8 +507,6 @@ class FresnsCommentsResource extends BaseAdminResource
             'content' => $content,
             'brief' => $brief,
             'sticky' => $sticky,
-            // 'isLike' => $isLike,
-            // 'isShield' => $isShield,
             'commentName' => $commentName,
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,
@@ -536,7 +530,7 @@ class FresnsCommentsResource extends BaseAdminResource
             'editTimeFormat' => $editTimeFormat,
             'member' => $member,
             'icons' => $icons,
-            'commentSetting' => $commentSetting,
+            'commentPreviews' => $commentPreviews,
             'replyTo' => $replyTo,
             'location' => $location,
             'attachCount' => $attachCount,
