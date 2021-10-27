@@ -70,7 +70,7 @@ class FsControllerApi extends FresnsBaseApiController
             case 2:
                 $rule = [
                     'type' => 'required|numeric|in:1,2',
-                    'account' => 'required|numeric|regex:/^1[^0-2]\d{9}$/',
+                    'account' => 'required|numeric',
                     'nickname' => 'required',
                     'countryCode' => 'required|numeric',
                 ];
