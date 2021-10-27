@@ -24,6 +24,7 @@ use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikesConfig;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
+use App\Http\FresnsDb\FresnsPlugins\FresnsPluginsService;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -70,7 +71,7 @@ class FresnsGroupsTreesResource extends BaseAdminResource
                 $arr['mode'] = $c['type_mode'];
                 $arr['find'] = $c['type_find'];
                 $arr['followType'] = $c['type_follow'];
-                $arr['followUrl'] = $c['plugin_unikey'];
+                $arr['followUrl'] = FresnsPluginsService::getPluginUrlByUnikey($c['plugin_unikey']);
 
                 // Operation behavior status
                 $arr['likeStatus'] = DB::table(FresnsMemberLikesConfig::CFG_TABLE)->where('member_id', $mid)->where('like_type', 2)->where('like_id', $c['id'])->where('deleted_at', null)->count();
