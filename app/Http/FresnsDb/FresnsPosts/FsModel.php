@@ -87,7 +87,7 @@ class FsModel extends BaseAdminModel
         if (! empty($GroupShields)) {
             $postIdArr = FresnsPosts::whereNotIn('group_id', $GroupShields)->pluck('id')->toArray();
             $noPostgroupIdArr = FresnsPosts::where('group_id', null)->pluck('id')->toArray();
-            $postIdArr = array_merge($postgroupIdArr, $noPostgroupIdArr);
+            $postIdArr = array_merge($postIdArr, $noPostgroupIdArr);
             $query->whereIn('post.id', $postIdArr);
         }
 
