@@ -67,6 +67,8 @@ class FresnsGroupsTreesResource extends BaseAdminResource
                 $arr['cover'] = ApiFileHelper::getImageSignUrlByFileIdUrl($c['cover_file_id'], $c['cover_file_url']);
                 $arr['banner'] = ApiFileHelper::getImageSignUrlByFileIdUrl($c['banner_file_id'], $c['banner_file_url']);
                 $arr['recommend'] = $c['is_recommend'];
+                $arr['mode'] = $c['type_mode'];
+                $arr['find'] = $c['type_find'];
                 $arr['followType'] = $c['type_follow'];
                 $arr['followUrl'] = $c['plugin_unikey'];
 
