@@ -123,6 +123,8 @@ class FsControllerApi extends FresnsBaseApiController
 
         // Verify Password
         if ($password) {
+            $password = base64_decode($password, true);
+
             $passwordLength = ApiConfigHelper::getConfigByItemKey('password_length');
             if ($passwordLength > 0) {
                 if ($passwordLength > strlen($password)) {
@@ -578,6 +580,18 @@ class FsControllerApi extends FresnsBaseApiController
         $editLastLoginTime = $request->input('editLastLoginTime');
         $deleteConnectId = $request->input('deleteConnectId');
 
+        if($password){
+            $password = base64_decode($password, true);
+        }
+        if($walletPassword){
+            $walletPassword = base64_decode($walletPassword, true);
+        }
+        if($editPassword){
+            $editPassword = base64_decode($editPassword, true);
+        }
+        if($editWalletPassword){
+            $editWalletPassword = base64_decode($editWalletPassword, true);
+        }
         $user = FresnsUsers::where('id', $uid)->first();
 
         $email = $user['email'];
