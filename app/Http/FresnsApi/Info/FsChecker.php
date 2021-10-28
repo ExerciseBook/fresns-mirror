@@ -64,7 +64,7 @@ class FsChecker extends FresnsBaseChecker
 
         /*
          * Code Usage
-         * https://fresns.cn/api/info/sendVerifyCode.html
+         * https://fresns.org/api/info/sendVerifyCode.html
          */
         switch ($useType) {
             // useType=1

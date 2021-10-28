@@ -49,7 +49,7 @@ class FsModel extends BaseCategoryModel
 
         /**
          * API Logic
-         * https://fresns.cn/api/content/comment-lists.html.
+         * https://fresns.org/api/content/comment-lists.html.
          */
 
         // Target fields to be masked

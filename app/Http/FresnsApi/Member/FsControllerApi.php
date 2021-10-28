@@ -460,7 +460,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         /**
          * Whether to output data when viewing other people's information
-         * https://fresns.cn/database/keyname/interactives.html
+         * https://fresns.org/database/keyname/interactives.html
          * View other people's content settings.
          */
         $typeArr = [4, 5];
@@ -475,7 +475,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         /**
          * Whether to output data when viewing other people's information
-         * https://fresns.cn/database/keyname/interactives.html
+         * https://fresns.org/database/keyname/interactives.html
          * View other people's content settings.
          *
          * type=1 Get a list of all members liked by objectType > objectId (query member_likes table)
@@ -653,7 +653,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         /**
          * Whether the right to operate
-         * https://fresns.cn/database/keyname/interactives.html
+         * https://fresns.org/database/keyname/interactives.html
          * Interactive behavior settings.
          *
          * Tag members can not be themselves, as well as their own published posts, comments
@@ -1023,7 +1023,7 @@ class FsControllerApi extends FresnsBaseApiController
         $authMemberId = GlobalService::getGlobalKey('member_id');
         /**
          * Whether to output data when viewing other people's information
-         * https://fresns.cn/database/keyname/interactives.html
+         * https://fresns.org/database/keyname/interactives.html
          * View other people's content settings.
          */
         if ($mid != $authMemberId) {

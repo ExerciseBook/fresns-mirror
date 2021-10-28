@@ -15,7 +15,7 @@ class FresnsCmdWordsConfig extends BasePluginConfig
 {
     /**
      * System Command Word
-     * https://fresns.cn/extensions/command.html.
+     * https://fresns.org/extensions/command.html.
      */
 
     // unikey

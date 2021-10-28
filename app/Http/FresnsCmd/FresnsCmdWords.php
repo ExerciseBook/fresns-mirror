@@ -207,7 +207,7 @@ class FresnsCmdWords extends BasePlugin
                 $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
                 break;
         }
-        // dd($result);
+
         return $this->pluginSuccess();
     }
 
@@ -1649,7 +1649,7 @@ class FresnsCmdWords extends BasePlugin
         }
         $dataMap['sign'] = $sign;
 
-        // Jarvis Tang: Signature Expiration Date
+        // Header Signature Expiration Date
         $min = 5; //Expiration time limit (unit: minutes)
         //Determine the timestamp type
         $timestampNum = strlen($timestamp);
@@ -1668,7 +1668,6 @@ class FresnsCmdWords extends BasePlugin
         $signKey = FresnsSessionKeys::where('app_id', $appId)->value('app_secret');
 
         $checkSignRes = SignHelper::checkSign($dataMap, $signKey);
-        // dd($checkSignRes);
         if ($checkSignRes !== true) {
             $info = [
                 'sign' => $checkSignRes,

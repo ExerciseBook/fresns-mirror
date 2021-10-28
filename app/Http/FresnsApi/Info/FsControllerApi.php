@@ -468,7 +468,6 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 // Query the log table id corresponding to the main table
                 $postLogsIdArr = FresnsPostLogs::where('post_id', $typeData['id'])->pluck('id')->toArray();
-                // dd($typeData);
                 $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsPostLogsConfig::CFG_TABLE)->whereIn('table_id', $postLogsIdArr)->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
@@ -483,7 +482,7 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                
+
                 break;
             case 2:
                 // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.

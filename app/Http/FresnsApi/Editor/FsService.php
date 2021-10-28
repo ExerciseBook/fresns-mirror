@@ -27,7 +27,7 @@ class FsService
 {
     /**
      * post_logs > post_id and comment_logs > comment_id
-     * https://fresns.cn/api/editor/delete.html.
+     * https://fresns.org/api/editor/delete.html.
      *
      * What's New content: empty, representing new content.
      * Edit existing content: With value, means edit content.

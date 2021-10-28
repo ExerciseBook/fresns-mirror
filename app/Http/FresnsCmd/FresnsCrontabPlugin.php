@@ -190,7 +190,7 @@ class FresnsCrontabPlugin extends BasePlugin
 
     /**
      * Perform user role expiration time detection every 10 minutes
-     * https://fresns.cn/contributing/information/task.html.
+     * https://fresns.org/contributing/information/task.html.
      */
     // Database Table: member_role_rels
     protected function crontabCheckRoleExpiredHandler($input)
@@ -235,7 +235,7 @@ class FresnsCrontabPlugin extends BasePlugin
      * 1.Delete function is not enabled
      * 2.Logical Deletion
      * 3.Physical Deletion
-     * https://fresns.cn/contributing/information/task.html.
+     * https://fresns.org/contributing/information/task.html.
      */
     protected function crontabCheckDeleteUserHandler($input)
     {
@@ -349,7 +349,7 @@ class FresnsCrontabPlugin extends BasePlugin
      * post_logs
      * comments
      * comment_logs
-     * https://fresns.cn/extensions/delete.html
+     * https://fresns.org/extensions/delete.html
      */
     public function hardDelete($data)
     {

@@ -50,7 +50,7 @@ class FsChecker extends FresnsBaseChecker
 
     /**
      * Whether the right to operate
-     * https://fresns.cn/database/keyname/interactives.html
+     * https://fresns.org/database/keyname/interactives.html
      * Interactive behavior settings.
      *
      * markType 1.like / 2.follow / 3.block
@@ -124,7 +124,7 @@ class FsChecker extends FresnsBaseChecker
 
     /**
      * Whether to output data when viewing other people's information
-     * https://fresns.cn/database/keyname/interactives.html
+     * https://fresns.org/database/keyname/interactives.html
      * View other people's content settings.
      *
      * markType 1.like / 2.follow / 3.block

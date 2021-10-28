@@ -690,7 +690,6 @@ class FresnsCommentsService extends FsService
             FresnsHashtags::whereIn('id', $hashtagIdArr)->decrement('comment_count');
             FresnsHashtagLinkeds::where('linked_type', 2)->where('linked_id', $draftComment['post_id'])->delete();
         }
-        // dd($singlePoundMatches);
         if ($singlePoundMatches[0]) {
             foreach ($singlePoundMatches[0] as $s) {
                 // Double #: single space allowed in between (no consecutive spaces)
@@ -713,10 +712,9 @@ class FresnsCommentsService extends FsService
                 if (strlen($topic) != strlen($removePunctChinese)) {
                     continue;
                 }
-                // dd($topic);
                 // Remove the # sign from Hashtag
                 $s = trim(str_replace('#', '', $s));
-                if(empty($s)){
+                if (empty($s)) {
                     continue;
                 }
                 // Existence of Hashtag

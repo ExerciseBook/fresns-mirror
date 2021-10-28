@@ -324,7 +324,7 @@ class FresnsBaseApiController extends BaseApiController
             if (in_array($uri, FsConfig::NOTICE_CONTENT_URI)) {
                 /*
                  * Member Master Role Permission
-                 * https://fresns.cn/api/header.html
+                 * https://fresns.org/api/header.html
                  * member master role permission member_roles > permission > content_view whether to allow the view, if the view is prohibited, the "content class" and "message class" interfaces cannot be requested.
                  * If the primary role has an expiration time and has expired, then the inherited role permission is primary.
                  * If there is no inherited role (or the inherited ID cannot be found for the role), then the role permissions of the configuration table default_role key name key value prevails.
@@ -403,7 +403,7 @@ class FresnsBaseApiController extends BaseApiController
 
     /*
      * Verify Signature
-     * https://fresns.cn/api/header.html
+     * https://fresns.org/api/header.html
      */
     public function checkSign()
     {
@@ -425,7 +425,7 @@ class FresnsBaseApiController extends BaseApiController
 
         /*
          * Verify the appId and platform parameters
-         * https://fresns.cn/api/header.html
+         * https://fresns.org/api/header.html
          *
          * Does session_keys > app_id exist
          * Does it match session_keys > platform_id
