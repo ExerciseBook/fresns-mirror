@@ -475,15 +475,15 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 // Post attachments need to determine if the post has permission enabled posts > is_allow
                 if (! empty($typeData)) {
-                    if ($typeData['is_allow'] != FresnsPostsConfig::IS_ALLOW_1) {
-                        $this->error(ErrorCodeService::POST_BROWSE_ERROR);
+                    if ($typeData['is_allow'] == FresnsPostsConfig::IS_ALLOW_1) {
+                        // If the post has read access, determine if the member requesting the download itself and the member's primary role are in the authorization list post_allows table
+                        $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type', 2)->where('object_id', $mid)->count();
+                        if (empty($count)) {
+                            $this->error(ErrorCodeService::POST_BROWSE_ERROR);
+                        }
                     }
                 }
-                // If the post has read access, determine if the member requesting the download itself and the member's primary role are in the authorization list post_allows table
-                $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type', 2)->where('object_id', $mid)->count();
-                if (empty($count)) {
-                    $this->error(ErrorCodeService::POST_BROWSE_ERROR);
-                }
+                
                 break;
             case 2:
                 // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.
