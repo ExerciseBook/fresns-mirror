@@ -74,8 +74,10 @@ class FsControllerApi extends FresnsBaseApiController
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
-        // If it is a non-public group post, it is not a member of the group and is not exported.
-        $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
+
+        // type_find = 2 (Hidden: Only members can find this group.)
+        $FresnsGroups = FresnsGroups::where('type_find', 2)->pluck('id')->toArray();
+        // $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
         $noGroupArr = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->pluck('follow_id')->toArray();
 
         $groupArr = FresnsGroups::whereNotIn('id', $noGroupArr)->where('parent_id', null)->pluck('id')->toArray();
@@ -118,8 +120,10 @@ class FsControllerApi extends FresnsBaseApiController
             }
         }
         $mid = GlobalService::getGlobalKey('member_id');
-        // If it is a non-public group post, it is not a member of the group and is not exported.
-        $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
+
+        // type_find = 2 (Hidden: Only members can find this group.)
+        $FresnsGroups = FresnsGroups::where('type_find', 2)->pluck('id')->toArray();
+        // $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
         $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->pluck('follow_id')->toArray();
 
         $noGroupArr = array_diff($FresnsGroups, $groupMember);
@@ -287,8 +291,9 @@ class FsControllerApi extends FresnsBaseApiController
         $FresnsPostsService->setResourceDetail(FresnsPostsResourceDetail::class);
         $detail = $FresnsPostsService->detail($postId['id']);
 
-        // If it is a non-public group post, it is not a member of the group and is not exported.
-        $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
+        // type_mode = 2 (Private: Only members can see who's in the group and what they post.)
+        $FresnsGroups = FresnsGroups::where('type_mode', 2)->pluck('id')->toArray();
+        // $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
         $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('deleted_at', null)->where('follow_type', 2)->pluck('follow_id')->toArray();
         $noGroupArr = array_diff($FresnsGroups, $groupMember);
         if (! empty($detail['detail']['group_id'])) {
@@ -685,8 +690,9 @@ class FsControllerApi extends FresnsBaseApiController
 
         $memberShieldsTable = FresnsMemberShieldsConfig::CFG_TABLE;
 
-        // If it is a non-public group post, it is not a member of the group and is not exported.
-        $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
+        // type_mode = 2 (Private: Only members can see who's in the group and what they post.)
+        $FresnsGroups = FresnsGroups::where('type_mode', 2)->pluck('id')->toArray();
+        // $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
         $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('deleted_at', null)->where('follow_type', 2)->pluck('follow_id')->toArray();
         $noGroupArr = array_diff($FresnsGroups, $groupMember);
 
