@@ -1,5 +1,23 @@
 # Release Notes
 
+## 1.1.0 (2021-10-28)
+
+**Bug Fixes**
+
+- API：修正帖子和评论 icons 输出有误
+- API：修正评论列表和详情页，主帖匿名信息有误
+- API：修正发表摘要状态变更
+- API：修正有权限要求的帖子输出，按百分比截断
+- API：快速发表单个图片文件，修复后缀判断
+- API：修复 transactionAmount 参数错误
+
+**Features**
+
+- API：修改评论列表接口子级评论预览结构
+- API：涉及成员信息的接口，增加成员主角色 rid 参数
+- API：成员列表和详情增加 followMeStatus 参数
+- 框架：升级到 Laravel Framework 8.68.1
+
 ## 1.0.2 (2021-10-23)
 
 **Bug Fixes**
