@@ -52,7 +52,9 @@ class FresnsGroupsTreesResource extends BaseAdminResource
         $cover = ApiFileHelper::getImageSignUrlByFileIdUrl($this->cover_file_id, $this->cover_file_url);
         $banner = ApiFileHelper::getImageSignUrlByFileIdUrl($this->banner_file_id, $this->banner_file_url);
         $groups = [];
-        $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
+        // type_find = 2 (Hidden: Only members can find this group.)
+        $FresnsGroups = FresnsGroups::where('type_find', 2)->pluck('id')->toArray();
+        // $FresnsGroups = FresnsGroups::where('type_mode', 2)->where('type_find', 2)->pluck('id')->toArray();
         $groupMember = DB::table(FresnsMemberFollowsConfig::CFG_TABLE)->where('member_id', $mid)->where('follow_type', 2)->pluck('follow_id')->toArray();
         $noGroupArr = array_diff($FresnsGroups, $groupMember);
         $TreesGroups = FresnsGroups::where('parent_id', $this->id)->where('is_enable', 1)->whereNotIn('id', $noGroupArr)->limit($groupSize)->orderby('rank_num', 'asc')->get()->toArray();
