@@ -455,6 +455,7 @@ class FsControllerApi extends FresnsBaseApiController
         if (empty($user)) {
             $this->error(ErrorCodeService::USER_CHECK_ERROR);
         }
+        $newPassword = base64_decode($newPassword, true);
         $password = str_replace(' ', '', $newPassword);
         $passwordLength = ApiConfigHelper::getConfigByItemKey('password_length');
         if ($passwordLength > 0) {
