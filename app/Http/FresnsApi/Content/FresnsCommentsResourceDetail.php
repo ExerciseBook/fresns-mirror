@@ -34,8 +34,8 @@ use App\Http\FresnsDb\FresnsMemberIcons\FresnsMemberIconsConfig;
 use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikes;
 use App\Http\FresnsDb\FresnsMemberLikes\FresnsMemberLikesConfig;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
-use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRelsConfig;
 use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRoles;
+use App\Http\FresnsDb\FresnsMemberRoles\FresnsMemberRolesConfig;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShields;
 use App\Http\FresnsDb\FresnsMemberShields\FresnsMemberShieldsConfig;
@@ -99,7 +99,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $shieldsCount = DB::table(FresnsMemberShieldsConfig::CFG_TABLE)->where('member_id', $mid)->where('shield_type', 5)->where('shield_id', $this->id)->count();
         $isShield = $shieldsCount == 0 ? false : true;
 
-        $content = FresnsPostsResource::getContentView($append->content, $this->id, 2,$append->is_markdown);
+        $content = FresnsPostsResource::getContentView($append->content, $this->id, 2, $append->is_markdown);
         $brief = $this->is_brief;
         $sticky = $this->is_sticky;
         $likeCount = $this->like_count;
@@ -143,6 +143,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $member['mid'] = '';
         $member['mname'] = '';
         $member['nickname'] = '';
+        $member['rid'] = '';
         $member['nicknameColor'] = '';
         $member['roleName'] = '';
         $member['roleNameDisplay'] = '';
@@ -187,8 +188,9 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
                     $member['mid'] = $memberInfo->uuid ?? '';
                     $member['mname'] = $memberInfo->name ?? '';
                     $member['nickname'] = $memberInfo->nickname ?? '';
+                    $member['rid'] = $memberRole['id'] ?? '';
                     $member['nicknameColor'] = $memberRole['nickname_color'] ?? '';
-                    $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRoleRelsConfig::CFG_TABLE, 'name', $memberRole['id']);
+                    $member['roleName'] = ApiLanguageHelper::getLanguagesByTableId(FresnsMemberRolesConfig::CFG_TABLE, 'name', $memberRole['id']);
                     $member['roleNameDisplay'] = $memberRole['is_display_name'] ?? 0;
                     $member['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($memberRole['icon_file_id'], $memberRole['icon_file_url']);
                     $member['roleIconDisplay'] = $memberRole['is_display_icon'] ?? 0;
@@ -212,39 +214,6 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
                     $member['icons'] = $iconsArr;
                 }
             }
-        }
-
-        // The commentSetting is output when the searchCid is empty.
-        $commentSetting = [];
-        $searchCid = request()->input('searchCid');
-        // If the configuration table key name comment_preview is not 0, it means the output is on
-        // The number represents the number of output bars, up to 3 bars (in reverse order according to the number of likes)
-        $previewStatus = ApiConfigHelper::getConfigByItemKey(FsConfig::COMMENT_PREVIEW);
-        if (! $searchCid) {
-            if ($previewStatus && $previewStatus != 0) {
-                $commentSetting['preview'] = intval($previewStatus);
-                // Calculate how many sub-level comments there are under this comment
-                $commentSetting['count'] = FresnsComments::where('parent_id', $this->id)->count();
-                $fresnsCommentsService = new FresnsCommentsService();
-                $commentList = $fresnsCommentsService->getCommentPreviewList($this->id, $previewStatus, $mid);
-                $commentSetting['lists'] = $commentList;
-            }
-        }
-
-        /*
-         * replyTo is output when searchCid has a value.
-         * Represents the output of sub-level comments, and only sub-level comments have replyTo information, representing that A replied to B.
-         * https://fresns.cn/api/content/comment-lists.html
-         * If the parent_id of the comment is the current comment (parameter searchCid) and represents a secondary comment, the following information is not output.
-         * The parent_id of the comment is not the current comment (parameter searchCid), representing three or more levels, showing the interaction under the comment and outputting the following information about his parent's comment.
-         */
-        $replyTo = [];
-        if ($searchCid) {
-            // Get the comment id corresponding to searchCid
-            $commentCid = FresnsComments::where('uuid', $searchCid)->first();
-            $parentComment = FresnsComments::where('id', $this->parent_id)->first();
-            $fresnsCommentsService = new FresnsCommentsService();
-            $replyTo = $fresnsCommentsService->getReplyToPreviewList($this->id, $mid);
         }
 
         $location = [];
@@ -375,10 +344,10 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $searchPid = request()->input('searchPid');
         $post = [];
         if (! $searchPid) {
-            $post['pid'] = $posts['uuid'] ?? "";
-            $post['title'] = $posts['title'] ?? "";
-            $post['content'] = $posts['content'] ?? "";
-            $post['status'] = $posts['is_enable'] ?? "";
+            $post['pid'] = $posts['uuid'] ?? '';
+            $post['title'] = $posts['title'] ?? '';
+            $post['content'] = $posts['content'] ?? '';
+            $post['status'] = $posts['is_enable'] ?? '';
             $post['gname'] = '';
             $post['gid'] = '';
             $post['cover'] = '';
@@ -505,12 +474,8 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             'pid' => $posts['uuid'],
             'cid' => $cid,
             'content' => $content,
-            // 'brief' => $brief,
             'sticky' => $sticky,
             'isMarkdown' => $append->is_markdown ?? 0,
-            // 'isLike' => $isLike,
-            // 'isShield' => $isShield,
-            // 'labelImg' => $labelImg,
             'commentName' => $commentName,
             'likeSetting' => $likeSetting,
             'likeName' => $likeName,
@@ -533,7 +498,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             'editTimeFormat' => $editTimeFormat,
             'member' => $member,
             'icons' => $icons,
-            // 'commentSetting' => $commentSetting,
+            // 'commentPreviews' => $commentPreviews,
             // 'replyTo' => $replyTo,
             'location' => $location,
             'attachCount' => $attachCount,
@@ -543,7 +508,6 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             'post' => $post,
             'manages' => $managesArr,
             'editStatus' => $editStatus,
-            // 'seoInfo' => $seoInfo
         ];
 
         // Merger

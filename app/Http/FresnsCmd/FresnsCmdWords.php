@@ -747,10 +747,10 @@ class FresnsCmdWords extends BasePlugin
             // Storage
             $path = $uploadFile->store($storePath);
             $basePath = base_path();
-            $basePath = $basePath .'/storage/app/';
-            $newPath = $storePath . '/' . StrHelper::createToken(8) . '.' . $uploadFile->getClientOriginalExtension();
-            copy($basePath . $path, $basePath . $newPath);
-            unlink($basePath . $path);
+            $basePath = $basePath.'/storage/app/';
+            $newPath = $storePath.'/'.StrHelper::createToken(8).'.'.$uploadFile->getClientOriginalExtension();
+            copy($basePath.$path, $basePath.$newPath);
+            unlink($basePath.$path);
             $file['file_name'] = $uploadFile->getClientOriginalName();
             $file['file_extension'] = $uploadFile->getClientOriginalExtension();
             $file['file_path'] = str_replace('public', '', $newPath);
@@ -1688,7 +1688,7 @@ class FresnsCmdWords extends BasePlugin
         $uid = $input['uid'];
         $mid = $input['mid'] ?? null;
         $amount = $input['amount'];
-        $transactionFsount = $input['transactionFsount'];
+        $transactionAmount = $input['transactionAmount'];
         $systemFee = $input['systemFee'];
         $originUid = $input['originUid'] ?? null;
         $originMid = $input['originMid'] ?? null;
@@ -1787,7 +1787,7 @@ class FresnsCmdWords extends BasePlugin
                 'member_id' => $originMemberId,
                 'object_type' => $decreaseType,
                 'amount' => $amount,
-                'transaction_amount' => $transactionFsount,
+                'transaction_amount' => $transactionAmount,
                 'system_fee' => $systemFee,
                 'object_user_id' => $userId,
                 'object_member_id' => $memberId,
@@ -1811,20 +1811,20 @@ class FresnsCmdWords extends BasePlugin
             'member_id' => $memberId,
             'object_type' => $type,
             'amount' => $amount,
-            'transaction_amount' => $transactionFsount,
+            'transaction_amount' => $transactionAmount,
             'system_fee' => $systemFee,
             'object_user_id' => $originUserId,
             'object_member_id' => $originMemberId,
             'object_name' => $originName,
             'object_id' => $originId,
             'opening_balance' => $balance,
-            'closing_balance' => $balance + $transactionFsount,
+            'closing_balance' => $balance + $transactionAmount,
         ];
 
         FresnsUserWalletLogs::insert($input);
         // Update User Wallet
         $userWalletsInput = [
-            'balance' => $balance + $transactionFsount,
+            'balance' => $balance + $transactionAmount,
         ];
         FresnsUserWallets::where('user_id', $userId)->update($userWalletsInput);
 
@@ -1839,7 +1839,7 @@ class FresnsCmdWords extends BasePlugin
         $uid = $input['uid'];
         $mid = $input['mid'] ?? null;
         $amount = $input['amount'];
-        $transactionFsount = $input['transactionFsount'];
+        $transactionAmount = $input['transactionAmount'];
         $systemFee = $input['systemFee'];
         $originUid = $input['originUid'] ?? null;
         $originMid = $input['originMid'] ?? null;
@@ -1935,20 +1935,20 @@ class FresnsCmdWords extends BasePlugin
                 'member_id' => $originMemberId,
                 'object_type' => $decreaseType,
                 'amount' => $amount,
-                'transaction_amount' => $transactionFsount,
+                'transaction_amount' => $transactionAmount,
                 'system_fee' => $systemFee,
                 'object_user_id' => $userId,
                 'object_member_id' => $memberId,
                 'object_name' => $originName,
                 'object_id' => $originId,
                 'opening_balance' => $originBalance,
-                'closing_balance' => $originBalance + $transactionFsount,
+                'closing_balance' => $originBalance + $transactionAmount,
             ];
 
             FresnsUserWalletLogs::insert($input);
             // Update User Wallet
             $originWalletsInput = [
-                'balance' => $originBalance + $transactionFsount,
+                'balance' => $originBalance + $transactionAmount,
             ];
             FresnsUserWallets::where('user_id', $originUserId)->update($originWalletsInput);
         }
@@ -1963,7 +1963,7 @@ class FresnsCmdWords extends BasePlugin
             'member_id' => $memberId,
             'object_type' => $type,
             'amount' => $amount,
-            'transaction_amount' => $transactionFsount,
+            'transaction_amount' => $transactionAmount,
             'system_fee' => $systemFee,
             'object_user_id' => $originUserId,
             'object_member_id' => $originMemberId,

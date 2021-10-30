@@ -892,7 +892,7 @@ class FresnsPostsService extends FsService
     public function parseDraftContent($draftId)
     {
         $draftPost = FresnsPostLogs::find($draftId);
-        $content = $draftPost['content']; 
+        $content = $draftPost['content'];
         $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_BRIEF_COUNT) ?? 280;
         if (mb_strlen($content) > $postEditorBriefCount) {
             $contentInfo = $this->truncatedContentInfo($content, $postEditorBriefCount);
@@ -911,7 +911,7 @@ class FresnsPostsService extends FsService
                         }
                     }
                     $proportionCount = (mb_strlen($content) * $proportion) / 100;
-    
+
                     // Get the maximum number of words for the post brief
                     $postEditorBriefCount = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDITOR_BRIEF_COUNT) ?? 280;
                     if ($proportionCount > $postEditorBriefCount) {
@@ -926,7 +926,7 @@ class FresnsPostsService extends FsService
         } else {
             $content = $content;
         }
-        
+
         // Existence of replacement words
         $content = $this->stopWords($content);
         // Removing html tags

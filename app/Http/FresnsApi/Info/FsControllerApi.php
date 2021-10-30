@@ -24,6 +24,8 @@ use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogs;
 use App\Http\FresnsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Http\FresnsDb\FresnsComments\FresnsComments;
 use App\Http\FresnsDb\FresnsComments\FresnsCommentsConfig;
+use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
+use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsService;
 use App\Http\FresnsDb\FresnsDialogMessages\FresnsDialogMessages;
 use App\Http\FresnsDb\FresnsDialogs\FresnsDialogs;
 use App\Http\FresnsDb\FresnsEmojis\FresnsEmojisConfig;
@@ -70,33 +72,34 @@ class FsControllerApi extends FresnsBaseApiController
     {
         $itemTag = $request->input('itemTag');
         $itemKey = $request->input('itemKey');
-        $data = [];
-        if (empty($itemTag) && empty($itemKey)) {
-            $data = ApiConfigHelper::getConfigsListsApi();
-        } else {
-            if (! empty($itemTag)) {
+        $pageSize = $request->input('pageSize', 100);
+        $currentPage = $request->input('page', 1);
+
+        $request->offsetSet('is_restful',1);
+        if (!empty($itemTag) || !empty($itemKey)) {
+            $intersectIdArr = [];
+            if(!empty($itemTag)){
                 $itemTagArr = explode(',', $itemTag);
-                foreach ($itemTagArr as $v) {
-                    $data = array_merge($data, ApiConfigHelper::getConfigByItemTagApi($v));
-                }
+                $intersectIdArr[] = FresnsConfigs::whereIn('item_tag',$itemTagArr)->pluck('id')->toArray();
             }
-            if (! empty($itemKey)) {
+            if(!empty($itemKey)){
                 $itemKeyArr = explode(',', $itemKey);
-                foreach ($itemKeyArr as $v) {
-                    $data = array_merge($data, ApiConfigHelper::getConfigByItemKeyApi($v));
-                }
+                $intersectIdArr[] = FresnsConfigs::whereIn('item_key',$itemKeyArr)->pluck('id')->toArray();
             }
+            $idArr = StrHelper::SearchIntersect($intersectIdArr);
+
+            $request->offsetSet('ids',$idArr);
         }
+        $request->offsetSet('currentPage', $currentPage);
+        $request->offsetSet('pageSize', $pageSize);
+        $FresnsConfigsService = new FresnsConfigsService();
 
-        $item = [];
-        $item['list'] = $data;
-        $pagination['total'] = count($data);
-        $pagination['current'] = 1;
-        $pagination['pageSize'] = count($data);
-        $pagination['lastPage'] = 1;
-        $item['pagination'] = $pagination;
+        $FresnsConfigsService->setResource(FresnsConfigsResource::class);
+        $data = $FresnsConfigsService->searchData();
 
-        $this->success($item);
+        $this->success($data);
+
+
     }
 
     // Emojis
@@ -475,15 +478,15 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 // Post attachments need to determine if the post has permission enabled posts > is_allow
                 if (! empty($typeData)) {
-                    if ($typeData['is_allow'] != FresnsPostsConfig::IS_ALLOW_1) {
-                        $this->error(ErrorCodeService::POST_BROWSE_ERROR);
+                    if ($typeData['is_allow'] == FresnsPostsConfig::IS_ALLOW_1) {
+                        // If the post has read access, determine if the member requesting the download itself and the member's primary role are in the authorization list post_allows table
+                        $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type', 2)->where('object_id', $mid)->count();
+                        if (empty($count)) {
+                            $this->error(ErrorCodeService::POST_BROWSE_ERROR);
+                        }
                     }
                 }
-                // If the post has read access, determine if the member requesting the download itself and the member's primary role are in the authorization list post_allows table
-                $count = DB::table('post_allows')->where('post_id', $typeData['id'])->where('type', 2)->where('object_id', $mid)->count();
-                if (empty($count)) {
-                    $this->error(ErrorCodeService::POST_BROWSE_ERROR);
-                }
+                
                 break;
             case 2:
                 // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.
