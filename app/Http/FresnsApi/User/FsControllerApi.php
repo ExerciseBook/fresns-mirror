@@ -165,8 +165,8 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         $time = date('Y-m-d H:i:s', time());
-        $codeArr = FresnsVerifyCodes::where('type', $type)->where('account', $codeAccount)->where('expired_at', '>', $time)->pluck('code')->toArray();
-        if (! in_array($verifyCode, $codeArr)) {
+        $verifyCodeArr = FresnsVerifyCodes::where('type', $type)->where('account', $codeAccount)->where('expired_at', '>', $time)->pluck('code')->toArray();
+        if (! in_array($verifyCode, $verifyCodeArr)) {
             $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
         }
 
@@ -410,9 +410,7 @@ class FsControllerApi extends FresnsBaseApiController
                     'countryCode' => 'required|numeric',
                     'newPassword' => 'required',
                     'verifyCode' => 'required',
-
                 ];
-
                 break;
             default:
                 // code...
@@ -424,21 +422,17 @@ class FsControllerApi extends FresnsBaseApiController
         $time = date('Y-m-d H:i:s', time());
         switch ($type) {
             case 1:
-                $codeArr = FresnsVerifyCodes::where('type', $type)->where('account', $account)->where('expired_at', '>',
-                    $time)->pluck('code')->toArray();
+                $verifyCodeArr = FresnsVerifyCodes::where('type', $type)->where('account', $account)->where('expired_at', '>', $time)->pluck('code')->toArray();
                 break;
             case 2:
-                $codeArr = FresnsVerifyCodes::where('type', $type)->where('account',
-                    $countryCode.$account)->where('expired_at', '>', $time)->pluck('code')->toArray();
-
+                $verifyCodeArr = FresnsVerifyCodes::where('type', $type)->where('account', $countryCode.$account)->where('expired_at', '>', $time)->pluck('code')->toArray();
                 break;
-
             default:
                 // code...
                 break;
         }
 
-        if (! in_array($verifyCode, $codeArr)) {
+        if (! in_array($verifyCode, $verifyCodeArr)) {
             $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
         }
 
@@ -558,6 +552,44 @@ class FsControllerApi extends FresnsBaseApiController
         $this->success($data);
     }
 
+    // User Verification
+    public function verification(Request $request)
+    {
+        $rule = [
+            'codeType' => 'numeric|in:1,2',
+            'verifyCode' => 'required',
+        ];
+        ValidateService::validateRule($request, $rule);
+        $codeType = $request->input('codeType');
+        $verifyCode = $request->input('verifyCode');
+
+        $user_id = GlobalService::getGlobalKey('user_id');
+        $userInfo = FresnsUsers::find($user_id);
+        if (empty($userInfo)) {
+            $this->error(ErrorCodeService::USER_CHECK_ERROR);
+        }
+        if ($codeType == 1) {
+            $account = $userInfo['email'];
+            $countryCode = null;
+        } else {
+            $account = $userInfo['pure_phone'];
+            $countryCode = $userInfo['country_code'];
+        }
+
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_CHECK_CODE;
+        $input = [
+            'type' => $codeType,
+            'account' => $account,
+            'countryCode' => $countryCode,
+            'verifyCode' => $verifyCode
+        ];
+        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+        if (CmdRpcHelper::isErrorCmdResp($resp)) {
+            $this->errorCheckInfo($resp);
+        }
+        $this->success($resp['output']);
+    }
+
     // Edit User Info
     public function edit(Request $request)
     {
@@ -569,17 +601,18 @@ class FsControllerApi extends FresnsBaseApiController
         ValidateService::validateRule($request, $rule);
         $uid = GlobalService::getGlobalKey('user_id');
 
-        $verifyCode = $request->input('verifyCode');
         $codeType = $request->input('codeType');
-        $password = $request->input('password');
-        $walletPassword = $request->input('walletPassword');
+        $verifyCode = $request->input('verifyCode');
         $editEmail = $request->input('editEmail');
         $editPhone = $request->input('editPhone');
         $editCountryCode = $request->input('editCountryCode');
+        $newVerifyCode = $request->input('newVerifyCode');
+        $password = $request->input('password');
         $editPassword = $request->input('editPassword');
+        $walletPassword = $request->input('walletPassword');
         $editWalletPassword = $request->input('editWalletPassword');
-        $editLastLoginTime = $request->input('editLastLoginTime');
         $deleteConnectId = $request->input('deleteConnectId');
+        $editLastLoginTime = $request->input('editLastLoginTime');
 
         if ($password) {
             $password = base64_decode($password, true);
@@ -624,15 +657,12 @@ class FsControllerApi extends FresnsBaseApiController
             }
         }
 
-        $codeArr = null;
-
+        $verifyCodeArr = null;
         if (empty($editLastLoginTime)) {
             if (empty($password) && empty($walletPassword)) {
                 $time = date('Y-m-d H:i:s', time());
-                $codeArr = FresnsVerifyCodes::where('account', $account)->where('expired_at', '>',
-                    $time)->pluck('code')->toArray();
-
-                if (! in_array($verifyCode, $codeArr)) {
+                $verifyCodeArr = FresnsVerifyCodes::where('account', $account)->where('expired_at', '>', $time)->pluck('code')->toArray();
+                if (! in_array($verifyCode, $verifyCodeArr)) {
                     $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
                 }
             }
@@ -663,7 +693,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         if ($editWalletPassword) {
             $wallet = FresnsUserWallets::where('user_id', $user['id'])->first();
-            if (empty($codeArr)) {
+            if (empty($verifyCodeArr)) {
                 if (! Hash::check($password, $wallet['password'])) {
                     $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
                 }
