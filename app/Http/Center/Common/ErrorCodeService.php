@@ -101,9 +101,9 @@ class ErrorCodeService
     const DISABLE_NAME_ERROR = 30312;
 
     // Member Mark
-    const MARK_NOT_ENABLE = 30309;
-    const MARK_FOLLOW_ERROR = 30310;
-    const MARK_REPEAT_ERROR = 30311;
+    const MARK_NOT_ENABLE = 30330;
+    const MARK_FOLLOW_ERROR = 30331;
+    const MARK_REPEAT_ERROR = 30332;
 
     // Member Role
     const ROLE_NO_CONFIG_ERROR = 30400;
