@@ -570,24 +570,30 @@ class FsControllerApi extends FresnsBaseApiController
         }
         if ($codeType == 1) {
             $account = $userInfo['email'];
-            $countryCode = null;
         } else {
             $account = $userInfo['pure_phone'];
             $countryCode = $userInfo['country_code'];
         }
 
-        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_CHECK_CODE;
-        $input = [
-            'type' => $codeType,
-            'account' => $account,
-            'countryCode' => $countryCode,
-            'verifyCode' => $verifyCode
-        ];
-        $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
-        if (CmdRpcHelper::isErrorCmdResp($resp)) {
-            $this->errorCheckInfo($resp);
+        // Check the verify code, but do not modify the verify code status(is_enable)
+        $time = date('Y-m-d H:i:s', time());
+        switch ($codeType) {
+            case 1:
+                $verifyCodeArr = FresnsVerifyCodes::where('type', $codeType)->where('account', $account)->where('expired_at', '>', $time)->pluck('code')->toArray();
+                break;
+            case 2:
+                $verifyCodeArr = FresnsVerifyCodes::where('type', $codeType)->where('account', $countryCode.$account)->where('expired_at', '>', $time)->pluck('code')->toArray();
+                break;
+            default:
+                // code...
+                break;
         }
-        $this->success($resp['output']);
+
+        if (! in_array($verifyCode, $verifyCodeArr)) {
+            $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
+        }
+
+        $this->success();
     }
 
     // Edit User Info
