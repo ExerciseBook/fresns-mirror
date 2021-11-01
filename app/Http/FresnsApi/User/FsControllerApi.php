@@ -715,11 +715,13 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         if ($editPassword) {
-            if (!empty($password)) {//password check type
+            if (!empty($password)) {
+                //password check type
                 if (! Hash::check($password, $user['password'])) {
                     $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
                 }
-            }elseif ($codeType && $verifyCode){//verify code check type
+            }elseif ($codeType && $verifyCode){
+                //verify code check type
                 $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input);
                 if (CmdRpcHelper::isErrorCmdResp($resp)) {
                     $this->errorCheckInfo($resp);
@@ -733,11 +735,13 @@ class FsControllerApi extends FresnsBaseApiController
             if (empty($wallet)) {
                 $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
             }
-            if(!empty($walletPassword)){//password check type
+            if(!empty($walletPassword)){
+                //password check type
                 if (! Hash::check($walletPassword, $wallet['password'])) {
                     $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
                 }
-            }elseif ($codeType && $verifyCode){//verify code check type
+            }elseif ($codeType && $verifyCode){
+                //verify code check type
                 $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input);
                 if (CmdRpcHelper::isErrorCmdResp($resp)) {
                     $this->errorCheckInfo($resp);
