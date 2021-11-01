@@ -1,5 +1,25 @@
 # Release Notes
 
+## 1.2.0 (2021-11-01)
+
+**Bug Fixes**
+
+- API：修复配置接口无法翻页问题
+- API：修复内容编辑权限判断错误问题
+- API：修复配置信息接口无法翻页问题
+- API：修复主帖删除导致评论列表报错问题
+
+**Features**
+
+- API：用户资料接口，增加用户密码和钱包密码状态参数
+- API：通知消息增加时间参数
+- API：新增身份验证接口
+- API：成员修改资料接口，头像传参名变更
+    - avatarFileId 修改为 avatarFid
+    - avatarFileUrl 修改为 avatarUrl
+- API：上传图片返参增加 imageConfigUrl 和 imageAvatarUrl 参数
+- 命令字：用户注册功能 avatarFileUrl 参数修改为 avatarUrl
+
 ## 1.1.0 (2021-10-28)
 
 **Bug Fixes**
