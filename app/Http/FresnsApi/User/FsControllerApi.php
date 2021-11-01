@@ -665,6 +665,11 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         if($editEmail){
+            // Verify Parameters
+            $rule = [
+                'newVerifyCode' => 'required',
+            ];
+            ValidateService::validateRule($request, $rule);
             if($user['email']){
                 // verify old email
                 $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input);
@@ -684,6 +689,7 @@ class FsControllerApi extends FresnsBaseApiController
         if($editPhone){
             // Verify Parameters
             $rule = [
+                'newVerifyCode' => 'required',
                 'editCountryCode' => 'required|numeric',
             ];
             ValidateService::validateRule($request, $rule);
@@ -727,8 +733,8 @@ class FsControllerApi extends FresnsBaseApiController
             if (empty($wallet)) {
                 $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
             }
-            if(!empty($password)){//password check type
-                if (! Hash::check($password, $wallet['password'])) {
+            if(!empty($walletPassword)){//password check type
+                if (! Hash::check($walletPassword, $wallet['password'])) {
                     $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
                 }
             }elseif ($codeType && $verifyCode){//verify code check type
