@@ -628,51 +628,92 @@ class FsControllerApi extends FresnsBaseApiController
         }
         $user = FresnsUsers::where('id', $uid)->first();
 
-        $email = $user['email'];
+        $cmd = FresnsCmdWordsConfig::FRESNS_CMD_CHECK_CODE;
 
         if ($codeType == 1) {
-            $account = $email;
+            $verify_input = [
+                'type' => 1,
+                'account' => $user['email'],
+                'countryCode' => null,
+                'verifyCode' => $verifyCode
+            ];
         } else {
-            $account = $user['phone'];
+            $verify_input = [
+                'type' => 2,
+                'account' => $user['pure_phone'],
+                'countryCode' => $user['country_code'],
+                'verifyCode' => $verifyCode
+            ];
         }
 
-        if ($editEmail) {
-            if (empty($email)) {
-                $account = $editEmail;
-            } else {
-                $account = $email;
+        if($editEmail){
+            if($user['email']){
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    $this->errorCheckInfo($resp);
+                }
+                $input = [
+                    'type' => 1,
+                    'account' => $editEmail,
+                    'countryCode' => null,
+                    'verifyCode' => $newVerifyCode
+                ];
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    $this->errorCheckInfo($resp);
+                }
+            }else{
+                $input = [
+                    'type' => 1,
+                    'account' => $editEmail,
+                    'countryCode' => null,
+                    'verifyCode' => $verifyCode
+                ];
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    $this->errorCheckInfo($resp);
+                }
             }
+            //update userinfo
+            FresnsUsers::where('id', $user['id'])->update(['email' => $editEmail]);
         }
 
-        if ($editPhone) {
+        if($editPhone){
             // Verify Parameters
             $rule = [
                 'editCountryCode' => 'required|numeric',
             ];
             ValidateService::validateRule($request, $rule);
-            if (empty($user['phone'])) {
-                $account = $editCountryCode.$editPhone;
-            } else {
-                $account = $user['phone'];
-            }
-        }
-
-        $verifyCodeArr = null;
-        if (empty($editLastLoginTime)) {
-            if (empty($password) && empty($walletPassword)) {
-                $time = date('Y-m-d H:i:s', time());
-                $verifyCodeArr = FresnsVerifyCodes::where('account', $account)->where('expired_at', '>', $time)->pluck('code')->toArray();
-                if (! in_array($verifyCode, $verifyCodeArr)) {
-                    $this->error(ErrorCodeService::VERIFY_CODE_CHECK_ERROR);
+            if ($user['phone']) {
+                // verify old phone
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    $this->errorCheckInfo($resp);
+                }
+                //verify new phone
+                $input = [
+                    'type' => 2,
+                    'account' => $editPhone,
+                    'countryCode' => $editCountryCode,
+                    'verifyCode' => $newVerifyCode
+                ];
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    $this->errorCheckInfo($resp);
+                }
+            }else{
+                $input = [
+                    'type' => 2,
+                    'account' => $editPhone,
+                    'countryCode' => $editCountryCode,
+                    'verifyCode' => $verifyCode
+                ];
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    $this->errorCheckInfo($resp);
                 }
             }
-        }
-
-        if ($editEmail) {
-            FresnsUsers::where('id', $user['id'])->update(['email' => $editEmail]);
-        }
-
-        if ($editPhone) {
+            //update userinfo
             $input = [
                 'country_code' => $editCountryCode,
                 'pure_phone' => $editPhone,
@@ -682,24 +723,33 @@ class FsControllerApi extends FresnsBaseApiController
         }
 
         if ($editPassword) {
-            if (! empty($password)) {
+            if (!empty($password)) {//password check type
                 if (! Hash::check($password, $user['password'])) {
                     $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
                 }
+            }elseif ($codeType && $verifyCode){//verify code check type
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    $this->errorCheckInfo($resp);
+                }
             }
-
             FresnsUsers::where('id', $user['id'])->update(['password' => bcrypt($editPassword)]);
         }
 
         if ($editWalletPassword) {
             $wallet = FresnsUserWallets::where('user_id', $user['id'])->first();
-            if (empty($verifyCodeArr)) {
+            if (empty($wallet)) {
+                $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
+            }
+            if(!empty($password)){//password check type
                 if (! Hash::check($password, $wallet['password'])) {
                     $this->error(ErrorCodeService::ACCOUNT_PASSWORD_INVALID);
                 }
-            }
-            if (empty($wallet)) {
-                $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
+            }elseif ($codeType && $verifyCode){//verify code check type
+                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input);
+                if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                    $this->errorCheckInfo($resp);
+                }
             }
             FresnsUserWallets::where('id', $wallet['id'])->update(['password' => bcrypt($editWalletPassword)]);
         }
@@ -709,8 +759,7 @@ class FsControllerApi extends FresnsBaseApiController
                 'editLastLoginTime' => 'date_format:Y-m-d H:i:s',
             ];
             ValidateService::validateRule($request, $rule);
-            FresnsUsers::where('id',
-                $user['id'])->update(['last_login_at' => DateHelper::fresnsInputTimeToTimezone($editLastLoginTime)]);
+            FresnsUsers::where('id', $user['id'])->update(['last_login_at' => DateHelper::fresnsInputTimeToTimezone($editLastLoginTime)]);
         }
 
         if ($deleteConnectId) {
