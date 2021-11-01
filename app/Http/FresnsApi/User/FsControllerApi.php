@@ -643,6 +643,12 @@ class FsControllerApi extends FresnsBaseApiController
                 'countryCode' => null,
                 'verifyCode' => $verifyCode
             ];
+            $verify_input_new = [
+                'type' => 1,
+                'account' => $editEmail,
+                'countryCode' => null,
+                'verifyCode' => $newVerifyCode
+            ];
         } else {
             $verify_input = [
                 'type' => 2,
@@ -650,35 +656,26 @@ class FsControllerApi extends FresnsBaseApiController
                 'countryCode' => $user['country_code'],
                 'verifyCode' => $verifyCode
             ];
+            $verify_input_new = [
+                'type' => 2,
+                'account' => $editPhone,
+                'countryCode' => $editCountryCode,
+                'verifyCode' => $newVerifyCode
+            ];
         }
 
         if($editEmail){
             if($user['email']){
+                // verify old email
                 $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input);
                 if (CmdRpcHelper::isErrorCmdResp($resp)) {
                     $this->errorCheckInfo($resp);
                 }
-                $input = [
-                    'type' => 1,
-                    'account' => $editEmail,
-                    'countryCode' => null,
-                    'verifyCode' => $newVerifyCode
-                ];
-                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
-                if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                    $this->errorCheckInfo($resp);
-                }
-            }else{
-                $input = [
-                    'type' => 1,
-                    'account' => $editEmail,
-                    'countryCode' => null,
-                    'verifyCode' => $verifyCode
-                ];
-                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
-                if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                    $this->errorCheckInfo($resp);
-                }
+            }
+            // verify new email
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input_new);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                $this->errorCheckInfo($resp);
             }
             //update userinfo
             FresnsUsers::where('id', $user['id'])->update(['email' => $editEmail]);
@@ -696,28 +693,11 @@ class FsControllerApi extends FresnsBaseApiController
                 if (CmdRpcHelper::isErrorCmdResp($resp)) {
                     $this->errorCheckInfo($resp);
                 }
-                //verify new phone
-                $input = [
-                    'type' => 2,
-                    'account' => $editPhone,
-                    'countryCode' => $editCountryCode,
-                    'verifyCode' => $newVerifyCode
-                ];
-                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
-                if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                    $this->errorCheckInfo($resp);
-                }
-            }else{
-                $input = [
-                    'type' => 2,
-                    'account' => $editPhone,
-                    'countryCode' => $editCountryCode,
-                    'verifyCode' => $verifyCode
-                ];
-                $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
-                if (CmdRpcHelper::isErrorCmdResp($resp)) {
-                    $this->errorCheckInfo($resp);
-                }
+            }
+            //verify new phone
+            $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $verify_input_new);
+            if (CmdRpcHelper::isErrorCmdResp($resp)) {
+                $this->errorCheckInfo($resp);
             }
             //update userinfo
             $input = [
