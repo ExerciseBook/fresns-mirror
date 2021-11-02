@@ -12,23 +12,6 @@ class ErrorCodeService
 {
     const CODE_OK = 0;
 
-    // Extensions
-    const PLUGINS_CONFIG_ERROR = 30000;
-    const PLUGINS_CLASS_ERROR = 30001;
-    const PLUGINS_TIMEOUT_ERROR = 30002;
-    const PLUGINS_IS_ENABLE_ERROR = 30003;
-    const PLUGINS_PARAM_ERROR = 30004;
-    const PLUGINS_HANDLE_ERROR = 30005;
-    const CODE_PARAM_ERROR = 30006;
-    const DATA_EXCEPTION_ERROR = 30007;
-    const HELPER_EXCEPTION_ERROR = 30008;
-    const VERIFY_CODE_CHECK_ERROR = 30009;
-    const PRIVATE_MODE_ERROR = 30010;
-    const CALLBACK_ERROR = 30011;
-    const CALLBACK_UUID_ERROR = 30012;
-    const CALLBACK_TIME_ERROR = 30013;
-    const CALLBACK_STATUS_ERROR = 30014;
-
     // Header
     const HEADER_ERROR = 30100;
     const HEADER_SIGN_ERROR = 30101;
@@ -47,6 +30,24 @@ class ErrorCodeService
     const MEMBER_TOKEN_ERROR = 30114;
     const TOKEN_IS_ENABLE_ERROR = 30115;
     const DEVICE_INFO_ERROR = 30116;
+
+    // Extensions
+    const PLUGINS_CONFIG_ERROR = 30000;
+    const PLUGINS_CLASS_ERROR = 30001;
+    const PLUGINS_TIMEOUT_ERROR = 30002;
+    const PLUGINS_IS_ENABLE_ERROR = 30003;
+    const PLUGINS_PARAM_ERROR = 30004;
+    const PLUGINS_HANDLE_ERROR = 30005;
+    const DATA_EXCEPTION_ERROR = 30006;
+    const HELPER_EXCEPTION_ERROR = 30007;
+    const VERIFY_CODE_CHECK_ERROR = 30008;
+    const PRIVATE_MODE_ERROR = 30009;
+    const CALLBACK_ERROR = 30010;
+    const CALLBACK_UUID_ERROR = 30011;
+    const CALLBACK_TIME_ERROR = 30012;
+    const CALLBACK_STATUS_ERROR = 30013;
+    const CODE_PARAM_ERROR = 30014;
+    const EMPTY_ERROR = 30015;
 
     // User
     const REGISTER_EMAIL_ERROR = 30200;
@@ -91,14 +92,18 @@ class ErrorCodeService
     const MEMBER_PASSWORD_INVALID = 30303;
     const MEMBER_EXPIRED_ERROR = 30304;
     const MEMBER_NO_PERMISSION = 30305;
-    const MEMBER_NAME_ERROR = 30306;
-    const UPDATE_TIME_ERROR = 30307;
-    const DISABLE_NAME_ERROR = 30308;
+    const MEMBER_NICKNAME_ERROR = 30306;
+    const MEMBER_NICKNAME_LENGTH_ERROR = 30307;
+    const MEMBER_NAME_ERROR = 30308;
+    const MEMBER_NAME_USED_ERROR = 30309;
+    const MEMBER_NAME_LENGTH_ERROR = 30310;
+    const UPDATE_TIME_ERROR = 30311;
+    const DISABLE_NAME_ERROR = 30312;
 
     // Member Mark
-    const MARK_NOT_ENABLE = 30309;
-    const MARK_FOLLOW_ERROR = 30310;
-    const MARK_REPEAT_ERROR = 30311;
+    const MARK_NOT_ENABLE = 30330;
+    const MARK_FOLLOW_ERROR = 30331;
+    const MARK_REPEAT_ERROR = 30332;
 
     // Member Role
     const ROLE_NO_CONFIG_ERROR = 30400;
@@ -215,23 +220,6 @@ class ErrorCodeService
     private static $CODE_MSG_MAP = [
         self::CODE_OK                           => 'ok',
 
-        // Extensions
-        self::PLUGINS_CONFIG_ERROR              => '未配置服务商',
-        self::PLUGINS_CLASS_ERROR               => '服务商不存在',
-        self::PLUGINS_TIMEOUT_ERROR             => '服务商未响应',
-        self::PLUGINS_IS_ENABLE_ERROR           => '服务商未启用',
-        self::PLUGINS_PARAM_ERROR               => '服务商配置参数为空',
-        self::PLUGINS_HANDLE_ERROR              => '服务商处理失败',
-        self::CODE_PARAM_ERROR                  => '参数错误',
-        self::DATA_EXCEPTION_ERROR              => '数据异常，查询不到或者数据重复',
-        self::HELPER_EXCEPTION_ERROR            => '执行异常，文件丢失或者记录错误',
-        self::VERIFY_CODE_CHECK_ERROR           => '验证码不正确或验证码已过期',
-        self::PRIVATE_MODE_ERROR                => '私有模式禁止请求该接口',
-        self::CALLBACK_ERROR                    => '回调异常',
-        self::CALLBACK_UUID_ERROR               => 'UUID 错误或者记录不存在',
-        self::CALLBACK_TIME_ERROR               => '记录已超时失效',
-        self::CALLBACK_STATUS_ERROR             => '记录已被使用过，请重新操作',
-
         // Header
         self::HEADER_ERROR                      => 'Header 未知错误',
         self::HEADER_SIGN_ERROR                 => '签名错误',
@@ -250,6 +238,24 @@ class ErrorCodeService
         self::MEMBER_TOKEN_ERROR                => '成员 Token 不正确',
         self::TOKEN_IS_ENABLE_ERROR             => 'Token 未启用',
         self::DEVICE_INFO_ERROR                 => '设备信息格式错误',
+
+        // Extensions
+        self::PLUGINS_CONFIG_ERROR              => '未配置服务商',
+        self::PLUGINS_CLASS_ERROR               => '服务商不存在',
+        self::PLUGINS_TIMEOUT_ERROR             => '服务商未响应',
+        self::PLUGINS_IS_ENABLE_ERROR           => '服务商未启用',
+        self::PLUGINS_PARAM_ERROR               => '服务商配置参数为空',
+        self::PLUGINS_HANDLE_ERROR              => '服务商处理失败',
+        self::DATA_EXCEPTION_ERROR              => '数据异常，查询不到或者数据重复',
+        self::HELPER_EXCEPTION_ERROR            => '执行异常，文件丢失或者记录错误',
+        self::VERIFY_CODE_CHECK_ERROR           => '验证码不正确或验证码已过期',
+        self::PRIVATE_MODE_ERROR                => '私有模式禁止请求该接口',
+        self::CALLBACK_ERROR                    => '回调异常',
+        self::CALLBACK_UUID_ERROR               => 'UUID 错误或者记录不存在',
+        self::CALLBACK_TIME_ERROR               => '记录已超时失效',
+        self::CALLBACK_STATUS_ERROR             => '记录已被使用过，请重新操作',
+        self::CODE_PARAM_ERROR                  => '参数错误',
+        self::EMPTY_ERROR                       => '不能为空',
 
         // User
         self::REGISTER_EMAIL_ERROR              => '不支持邮箱注册',
@@ -294,7 +300,11 @@ class ErrorCodeService
         self::MEMBER_PASSWORD_INVALID           => '密码不正确',
         self::MEMBER_EXPIRED_ERROR              => '成员已过期，无权操作该功能',
         self::MEMBER_NO_PERMISSION              => '当前成员无权请求',
-        self::MEMBER_NAME_ERROR                 => '成员名称不允许重复',
+        self::MEMBER_NICKNAME_ERROR             => '昵称格式错误，请勿使用特殊字符',
+        self::MEMBER_NICKNAME_LENGTH_ERROR      => '昵称长度超出限制',
+        self::MEMBER_NAME_ERROR                 => '名称格式错误，请勿使用特殊字符',
+        self::MEMBER_NAME_USED_ERROR            => '该名称已被使用',
+        self::MEMBER_NAME_LENGTH_ERROR          => '名称长度超出限制',
         self::UPDATE_TIME_ERROR                 => '指定天数内只能修改一次',
         self::DISABLE_NAME_ERROR                => '名称存在禁用词',
 
