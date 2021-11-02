@@ -9,6 +9,7 @@
 namespace App\Http\FresnsInstall;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class FsControllerWeb
@@ -24,14 +25,7 @@ class FsControllerWeb
     // choose language
     public function index()
     {
-        $lang = request()->input('lang', 'zh-Hans');
-        $data = [
-            'lang' => $lang,
-            'location' => 'action',
-            'choose' => 'index',
-            'title' => 'Home',
-        ];
-        return view('install.index', $data);
+        return view('install.index');
     }
 
     // install desc
@@ -59,15 +53,17 @@ class FsControllerWeb
     }
 
     // finish tips
-    public function finish()
+    public function step5()
     {
-        return view('install.finish');
+        return view('install.step5');
     }
 
     // env detect
-    public function env()
+    public function env(Request $request)
     {
-
+        $name = $request->input('name');
+        $result = InstallService::envDetect($name);
+        return Response::json($result);
     }
 
 
