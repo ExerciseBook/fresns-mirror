@@ -8,17 +8,25 @@
 
 namespace App\Http\FresnsInstall;
 
+use App\Helpers\StrHelper;
+use App\Http\FresnsApi\Helpers\ApiCommonHelper;
+use App\Http\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\FresnsCmd\FresnsSubPluginService;
+use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
+use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
+use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
+use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
+use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
+use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
+use App\Http\FresnsDb\FresnsUserWallets\FresnsUserWallets;
+use Illuminate\Support\Facades\DB;
+
 class InstallService
 {
     const INSTALL_EXTENSIONS = ['fileinfo'];
     const INSTALL_FUNCTIONS  = ['putenv', 'symlink', 'readlink', 'proc_open'];
 
-    // Get the current setting language
-    public static function getLanguage($lang)
-    {
-        $map = FsConfig::LANGUAGE_MAP;
-        return $map[$lang] ?? 'English - English';
-    }
 
     /**
      * 环境检测
@@ -116,18 +124,6 @@ class InstallService
         }
     }
 
-    /**
-     * @param $db_host
-     * @param $db_port
-     * @param $db_name
-     * @param $db_user
-     * @param $db_pwd
-     * @param $db_prefix
-     * @return string
-     */
-    public static function mysqlDetect($db_host,$db_port,$db_name,$db_user,$db_pwd,$db_prefix){
-
-    }
 
     /**
      * set env mysql Configuration
@@ -177,9 +173,95 @@ class InstallService
 
 
     /**
-     * insert init manager user
+     * init manager user
      */
-    public static function initManager(){
+    public static function registerUser($params=[]){
+        try{
+            $input = [
+                'email' => $params['email'],
+                'country_code' => $params['countryCode'],
+                'pure_phone' => $params['purePhone'],
+                'phone' => $params['countryCode'].$params['purePhone'],
+                'api_token' => StrHelper::createToken(),
+                'uuid' => StrHelper::createUuid(),
+                'last_login_at' => date('Y-m-d H:i:s'),
+                'password' => StrHelper::createPassword($params['password']),
+            ];
+            $uid = FresnsUsers::insertGetId($input);
+            FresnsSubPluginService::addSubTablePluginItem(FresnsUsersConfig::CFG_TABLE, $uid);
+            $memberInput = [
+                'user_id' => $uid,
+                'name' => StrHelper::createToken(rand(6, 8)),
+                'nickname' => $params['nickname'],
+                'uuid' => ApiCommonHelper::createMemberUuid(),
+            ];
+            $mid = FresnsMembers::insertGetId($memberInput);
+            FresnsSubPluginService::addSubTablePluginItem(FresnsMembersConfig::CFG_TABLE, $mid);
+            //成员总数
+            $userCounts = ApiConfigHelper::getConfigByItemKey('user_counts');
+            if ($userCounts === null) {
+                $input = [
+                    'item_key' => 'user_counts',
+                    'item_value' => 1,
+                    'item_tag' => 'stats',
+                    'item_type' => 'number',
+                ];
+                FresnsConfigs::insert($input);
+            } else {
+                FresnsConfigs::where('item_key', 'user_counts')->update(['item_value' => $userCounts + 1]);
+            }
+            $memberCounts = ApiConfigHelper::getConfigByItemKey('member_counts');
+            if ($memberCounts === null) {
+                $input = [
+                    'item_key' => 'member_counts',
+                    'item_value' => 1,
+                    'item_tag' => 'stats',
+                    'item_type' => 'number',
+                ];
+                FresnsConfigs::insert($input);
+            } else {
+                FresnsConfigs::where('item_key', 'member_counts')->update(['item_value' => $memberCounts + 1]);
+            }
 
+            // Register successfully to add records to the table
+            $memberStatsInput = [
+                'member_id' => $mid,
+            ];
+            FresnsMemberStats::insert($memberStatsInput);
+            $userWalletsInput = [
+                'user_id' => $uid,
+                'balance' => 0,
+            ];
+            FresnsUserWallets::insert($userWalletsInput);
+            $defaultRoleId = ApiConfigHelper::getConfigByItemKey('default_role');
+            $memberRoleRelsInput = [
+                'member_id' => $mid,
+                'role_id' => $defaultRoleId,
+                'type' => 2,
+            ];
+            FresnsMemberRoleRels::insert($memberRoleRelsInput);
+
+            return ['code' => '000000', 'message' => 'success'];
+        } catch (\Exception $e) {
+            return ['code' => $e->getCode(), 'message' => '服务失败'];
+        }
+    }
+
+    /**
+     * @param $itemKey
+     * @param string $itemValue
+     * @param string $item_type
+     * @param string $item_tag
+     */
+    public static function insertConfigs($itemKey, $itemValue = '',$item_type='string',$item_tag='backends')
+    {
+        try{
+            $cond = ['item_key'   => $itemKey];
+            $upInfo = ['item_value'   => $itemValue,'item_type'=>$item_type,'item_tag'=>$item_tag];
+            DB::table('configs')->updateOrInsert($cond, $upInfo);
+            return ['code' => '000000', 'message' => 'success'];
+        } catch (\Exception $e) {
+            return ['code' => $e->getCode(), 'message' => '服务失败'];
+        }
     }
 }
