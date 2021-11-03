@@ -28,19 +28,20 @@
     <main class="container">
         <div class="card mx-auto my-5" style="max-width:800px;">
             <div class="card-body p-5">
-                <h3 class="card-title">@lang('install.step2Title')</h3>
-                <p class="mt-2">@lang('install.step2Desc')</p>
-                <form class="my-4">
-                    <div class="alert alert-danger" role="alert" id="install_error_msg" style="display: none;">
-                        @lang('install.step3CheckDatabaseFailure')
-                    </div>
-                    <div class="row mt-4">
-                        <label class="col-sm-3 col-form-label"></label>
-                        <div class="col-sm-9">
-                            <button type="button" id="submit" class="btn btn-outline-primary">@lang('install.step3Btn')</button>
-                        </div>
-                    </div>
-                </form>
+                <h3 class="card-title">@lang('install.step3Title')</h3>
+                <ul class="list-group list-group-flush my-4">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>mysql 版本不低于5.7</span>
+                        <span id="mysql_version_status">-</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>mysql 数据表导入</span>
+                        <span id="mysql_db_status">-</span>
+                    </li>
+                </ul>
+                <a href="{{ route('install.step4') }}" class="btn btn-outline-primary ms-3">@lang('install.step3Btn')</a>
+                <!-- 不满足条件，点击「重试」按钮重新检测，符合条件则是「确认」按钮-->
+                <button type="button" class="btn btn-outline-info ms-3" onclick="window.location.reload()">@lang('install.step2CheckBtn')</button>
             </div>
         </div>
     </main>

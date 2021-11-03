@@ -20,6 +20,7 @@ use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use App\Http\FresnsDb\FresnsUserWallets\FresnsUserWallets;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class InstallService
@@ -113,6 +114,27 @@ class InstallService
                         $disabled = implode('&nbsp;&nbsp;', $value);
                         $html = '<span><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
                         $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                    }
+                    break;
+                case 'mysql_version':
+                    $value = '9.0';
+                    if ($value !== '' && version_compare($value, '8.0', '>=')) {
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                    } else {
+                        $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                    }
+                    break;
+                case 'mysql_db':
+                    Artisan::call('migrate');
+                    $value = '9.0';
+                    if ($value !== '' && version_compare($value, '8.0', '>=')) {
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                    } else {
+                        $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
                     break;

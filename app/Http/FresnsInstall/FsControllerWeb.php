@@ -69,14 +69,6 @@ class FsControllerWeb
         return Response::json($result);
     }
 
-
-    //
-    public function initMysql(Request $request){
-        Artisan::call('migrate');
-        return Response::json(['code'=>'000000','message'=>'success']);
-    }
-
-
     //
     public function initManage(Request $request){
         $back_host = $request->input('backend_host');
