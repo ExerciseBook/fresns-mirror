@@ -9,7 +9,8 @@
 namespace App\Http\FresnsInstall;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Response;
 
 class FsControllerWeb
 {
@@ -24,14 +25,7 @@ class FsControllerWeb
     // choose language
     public function index()
     {
-        $lang = request()->input('lang', 'zh-Hans');
-        $data = [
-            'lang' => $lang,
-            'location' => 'action',
-            'choose' => 'index',
-            'title' => 'Home',
-        ];
-        return view('install.index', $data);
+        return view('install.index');
     }
 
     // install desc
@@ -59,75 +53,54 @@ class FsControllerWeb
     }
 
     // finish tips
-    public function finish()
+    public function step5()
     {
-        return view('install.finish');
+        $file    = storage_path('install/install.txt');
+        $content = date('Y-m-d H:i:s');
+        file_put_contents($file,$content);
+        return view('install.step5');
     }
 
     // env detect
-    public function env()
+    public function env(Request $request)
     {
-
+        $name = $request->input('name');
+        $result = InstallService::envDetect($name);
+        return Response::json($result);
     }
-
 
     //
-    public function optMysql(Request $request){
-        $rule = [
-            'db_host' => 'required',
-            'db_port' => 'required',
-            'db_name' => 'required',
-            'db_user' => 'required',
-            'db_pwd' => 'required',
-            'db_prefix' => 'required',
-        ];
-        $validator = Validator::make($request->all(), $rule);
-        if ($validator->fails()) {
-
+    public function initManage(Request $request){
+        $back_host = $request->input('backend_host');
+        $email = $request->input('email');
+        $pure_phone = $request->input('pure_phone');
+        $country_code = $request->input('country_code');
+        $password = $request->input('password');
+        $nickname = $request->input('nickname');
+        // register config
+        $result = InstallService::insertConfigs('backend_domain',$back_host);
+        if($result['code'] != '000000'){
+            return Response::json($result);
         }
-        $db_host = $request->input('db_host');
-        $db_port = $request->input('db_port');
-        $db_name = $request->input('db_name');
-        $db_user = $request->input('db_user');
-        $db_pwd = $request->input('db_pwd');
-        $db_prefix = $request->input('db_prefix');
-        // config 设置配置参数，测试连接
-            config(['']);
-        //创建数据库
+        // register user
+        $input = [
+            'email' => $email,
+            'purePhone' => $pure_phone,
+            'countryCode' => $country_code,
+            'password' => $password,
+            'nickname' => $nickname,
+        ];
+        $result = InstallService::registerUser($input);
+        if($result['code'] != '000000'){
+            return Response::json($result);
+        }
+        // Soft link
+        Artisan::call('storage:link');
 
-        //执行migrate
-
-        // replace env
-        InstallService::envUpdate('db_host',$db_host);
-        InstallService::envUpdate('db_port',$db_port);
-        InstallService::envUpdate('db_name',$db_name);
-        InstallService::envUpdate('db_user',$db_user);
-        InstallService::envUpdate('db_pwd',$db_pwd);
-        InstallService::envUpdate('db_prefix',$db_prefix);
+        return Response::json(['code'=>'000000','message'=>'success']);
     }
 
 
-    //
-    public function optManager(Request $request){
-        $rule = [
-            'email' => 'required',
-            'pure_phone' => 'required',
-            'country_code' => 'required',
-            'password' => 'required',
-            'nickname' => 'required',
-        ];
-
-        $validator = Validator::make($request->all(), $rule);
-        if ($validator->fails()) {
-
-        }
-        //fs_config
-
-        //fs_user
-
-        //fs_member
-
-    }
 
 
 

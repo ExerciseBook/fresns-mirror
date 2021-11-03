@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ $lang }}">
+<html lang="{{ App::getLocale() }}">
 
 <head>
     <meta charset="utf-8">
@@ -39,7 +39,5 @@
         </div>
     </main>
 
-    <script src="assets/javascript/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

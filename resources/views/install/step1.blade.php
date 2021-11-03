@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ $lang }}">
+<html lang="{{ App::getLocale() }}">
 
 <head>
     <meta charset="utf-8">
@@ -38,12 +38,10 @@
                     <li>@lang('install.step1DatabaseTablePrefix')</li>
                 </ul>
                 <p>@lang('install.step1DatabaseDesc')</p>
-                <a href="/install/step2" class="btn btn-outline-primary mt-2">@lang('install.step1Btn')</a>
+                <a href="{{ route('install.step2') }}" class="btn btn-outline-primary mt-2">@lang('install.step1Btn')</a>
             </div>
         </div>
     </main>
 
-    <script src="assets/javascript/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

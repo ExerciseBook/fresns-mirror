@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ $lang }}">
+<html lang="{{ App::getLocale() }}">
 
 <head>
     <meta charset="utf-8">
@@ -28,50 +28,54 @@
     <main class="container">
         <div class="card mx-auto my-5" style="max-width:800px;">
             <div class="card-body p-5">
-                <h3 class="card-title">@lang('install.step2Title')</h3>
-                <p class="mt-2">@lang('install.step2Desc')</p>
-                <form class="my-4">
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label">@lang('install.step3DatabaseName')</label>
-                        <div class="col-sm-5"><input type="text" class="form-control" placeholder="fresns" required></div>
-                        <div class="col-sm-4 form-text">@lang('install.step3DatabaseNameIntro')</div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label">@lang('install.step3DatabaseUsername')</label>
-                        <div class="col-sm-5"><input type="text" class="form-control" placeholder="username" required></div>
-                        <div class="col-sm-4 form-text pt-1">@lang('install.step3DatabaseUsernameIntro')</div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label">@lang('install.step3DatabasePassword')</label>
-                        <div class="col-sm-5"><input type="text" class="form-control" placeholder="password" required></div>
-                        <div class="col-sm-4 form-text pt-1">@lang('install.step3DatabasePasswordIntro')</div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label">@lang('install.step3DatabaseHost')</label>
-                        <div class="col-sm-5"><input type="text" class="form-control" placeholder="localhost" required></div>
-                        <div class="col-sm-4 form-text">@lang('install.step3DatabaseHostIntro')</div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label">@lang('install.step3DatabaseTablePrefix')</label>
-                        <div class="col-sm-5"><input type="text" class="form-control" placeholder="fs_" value="fs_" required></div>
-                        <div class="col-sm-4 form-text">@lang('install.step3DatabaseTablePrefixIntro')</div>
-                    </div>
-                    <div class="alert alert-danger" role="alert">
-                        <!--连接失败提示-->
-                        @lang('install.step3CheckDatabaseFailure')
-                    </div>
-                    <div class="row mt-4">
-                        <label class="col-sm-3 col-form-label"></label>
-                        <div class="col-sm-9">
-                            <button type="submit" class="btn btn-outline-primary">@lang('install.step3Btn')</button>
-                        </div>
-                    </div>
-                </form>
+                <h3 class="card-title">@lang('install.step3Title')</h3>
+                <ul class="list-group list-group-flush my-4">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>mysql 版本不低于5.7</span>
+                        <span id="mysql_version_status">-</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>mysql 数据表导入</span>
+                        <span id="mysql_db_status">-</span>
+                    </li>
+                </ul>
+                <a href="{{ route('install.step4') }}" class="btn btn-outline-primary ms-3">@lang('install.step3Btn')</a>
+                <!-- 不满足条件，点击「重试」按钮重新检测，符合条件则是「确认」按钮-->
+                <button type="button" class="btn btn-outline-info ms-3" onclick="window.location.reload()">@lang('install.step2CheckBtn')</button>
             </div>
         </div>
     </main>
 
-    <script src="assets/javascript/bootstrap.bundle.min.js"></script>
-</body>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <script>
+        var items = [
+            "mysql_version",
+            "mysql_db",
+        ];
 
+        //检测
+        (function detect() {
+            var name = items[0];
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                url: '<?php echo route('install.env'); ?>',
+                data: {name: name},
+                success: function (data) {
+                    if ($('#' + name + '_status').length && data.result !== undefined) {
+                        $('#' + name + '_status').html(data.result);
+                    }
+                },
+                complete: function () {
+                    items.shift();
+                    if (items.length) {
+                        setTimeout(function () {detect();}, 20);
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
 </html>

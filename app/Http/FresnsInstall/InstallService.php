@@ -8,44 +8,26 @@
 
 namespace App\Http\FresnsInstall;
 
+use App\Helpers\StrHelper;
+use App\Http\FresnsApi\Helpers\ApiCommonHelper;
+use App\Http\FresnsApi\Helpers\ApiConfigHelper;
+use App\Http\FresnsCmd\FresnsSubPluginService;
+use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
+use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
+use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
+use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
+use App\Http\FresnsDb\FresnsMemberStats\FresnsMemberStats;
+use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
+use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
+use App\Http\FresnsDb\FresnsUserWallets\FresnsUserWallets;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 class InstallService
 {
-    // Get the current setting language
-    public static function getLanguage($lang)
-    {
-        $map = FsConfig::LANGUAGE_MAP;
+    const INSTALL_EXTENSIONS = ['fileinfo'];
+    const INSTALL_FUNCTIONS  = ['putenv', 'symlink', 'readlink', 'proc_open'];
 
-        return $map[$lang] ?? 'English - English';
-    }
-
-    /**
-     *  path must writeable
-     */
-    function dirDetect(){
-        $items = [
-            ['dir',  '可写', 'success', app_path('Plugins')],
-            ['dir',  '可写', 'success', public_path('assets')],
-            ['dir',  '可写', 'success', resource_path('views')],
-            ['dir',  '可写', 'success', storage_path('logs')],
-            ['dir',  '可写', 'success', database_path('migrations')],
-        ];
-
-        foreach ($items as &$val) {
-            if(!is_writable($val[3])) {
-                if(is_dir($val[3])) {
-                    $val[1] = '可读';
-                    $val[2] = 'error';
-                    session('error', true);
-                } else {
-                    $val[1] = '不存在';
-                    $val[2] = 'error';
-                    session('error', true);
-                }
-            }
-        }
-        return $items;
-    }
 
     /**
      * 环境检测
@@ -54,141 +36,106 @@ class InstallService
     {
         try {
             switch ($name) {
-                case 'server_host_name':
-                    $os = explode(" ", php_uname());
-                    $value = '/' == DIRECTORY_SEPARATOR ? $os[1] : $os[2];
-                    if ($value !== '') {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => $value, 'status' => '<span class="text-success">√ 正常</span>']];
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-danger">× 错误</span>']];
-                    }
-                    break;
-                case 'server_name':
-                    $value = $_SERVER['SERVER_NAME'];
-                    if ($value !== '') {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => $value, 'status' => '<span class="text-success">√ 正常</span>']];
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-danger">× 错误</span>']];
-                    }
-                    break;
-                case 'server_addr':
-                    $value = '/' == DIRECTORY_SEPARATOR ? $_SERVER['SERVER_ADDR'] : @gethostbyname($_SERVER['SERVER_NAME']);
-                    if ($value !== '') {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => $value, 'status' => '<span class="text-success">√ 正常</span>']];
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-danger">× 错误</span>']];
-                    }
-                    break;
-                case 'document_root':
-                    $value = $_SERVER['DOCUMENT_ROOT'] ? str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']) : str_replace('\\', '/', dirname(__FILE__));
-                    if ($value !== '') {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => $value, 'status' => '<span class="text-success">√ 正常</span>']];
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-danger">× 错误</span>']];
-                    }
-                    break;
-                case 'server_time':
-                    $value = date("Y-m-d H:i:s");
-                    if ($value !== '') {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => $value, 'status' => '<span class="text-success">√ 正常</span>']];
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-danger">× 错误</span>']];
-                    }
-                    break;
-                case 'df':
-                    $value = round(@disk_free_space(".") / (1024 * 1024 * 1024), 3);
-                    if ($value !== '') {
-                        if ($value > 10) {
-                            return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => $value . ' GB', 'status' => '<span class="text-success">√ 正常</span>']];
-                        } else {
-                            return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => $value . ' GB', 'status' => '<span class="text-danger">× 错误</span>&nbsp;&nbsp;剩余空间需要大于&nbsp;&nbsp;10 GB']];
-                        }
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-danger">× 错误</span>']];
-                    }
-                    break;
-                case 'dns':
-                    $value = @gethostbyname('www.huijiaoyun.com');
-                    if ($value !== '') {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => 'www.huijiaoyun.com(' . $value . ')', 'status' => '<span class="text-success">√ 正常</span>']];
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-warning">! 警告</span>']];
-                    }
-                    break;
                 case 'php_version':
                     $value = PHP_VERSION;
-                    if ($value !== '') {
-                        if (version_compare(PHP_VERSION, '7.0', '>=')) {
-                            return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => $value, 'status' => '<span class="text-success">√ 正常</span>']];
-                        } else {
-                            return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => $value, 'status' => '<span class="text-danger">× 错误</span>&nbsp;&nbsp;PHP版本需要大于&nbsp;&nbsp;7.0']];
-                        }
+                    if ($value !== '' && version_compare(PHP_VERSION, '8.0', '>=')) {
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-danger">× 错误</span>']];
+                        $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
                     break;
-                case 'curl':
-                    $value = (function_exists('curl_init') !== false) ? true : false;
-                    if ($value === true) {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => '支持', 'status' => '<span class="text-success">√ 正常</span>']];
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '不支持', 'status' => '<span class="text-danger">× 错误</span>&nbsp;&nbsp;需要支持Curl']];
+                case 'https':
+                    $value = (new \Illuminate\Http\Request)->server('REQUEST_SCHEME','http');
+                    if($value == 'https'){
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                    }else{
+                        $html = '<span class="badge bg-warning rounded-pill">'.trans('install.step2CheckStatusWarning').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
                     break;
-                case 'cookie':
-                    if (isset($_COOKIE)) {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => '支持', 'status' => '<span class="text-success">√ 正常</span>']];
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '不支持', 'status' => '<span class="text-danger">× 错误</span>&nbsp;&nbsp;需要支持Cookie']];
-                    }
-                    break;
-                case 'session':
-                    $value = (function_exists('session_start') !== false) ? true : false;
-                    if ($value === true) {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => '支持', 'status' => '<span class="text-success">√ 正常</span>']];
-                    } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '不支持', 'status' => '<span class="text-danger">× 错误</span>&nbsp;&nbsp;需要支持Session']];
-                    }
-                    break;
-                case 'all_extensions':
+                case 'folder':
                     $value = [];
-                    $able = get_loaded_extensions();
-                    foreach ($able as $k => $v) {
-                        $value[] = $v;
+                    $items = [
+                        app_path('Plugins'),
+                        public_path('assets'),
+                        resource_path('views'),
+                        storage_path('logs'),
+                        database_path('migrations'),
+                    ];
+                    foreach ($items as $v) {
+                        if(!is_writable($v)) {
+                            $value[] = $v;
+                        }
                     }
-                    if ($value) {
-                        sort($value);
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => implode('&nbsp;&nbsp;', $value), 'status' => '<span class="text-success">√ 正常</span>']];
+                    if (empty($value)) {
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-danger">× 错误</span>']];
+                        //$disabled = implode('&nbsp;&nbsp;', $value);
+                        //$html = '<span><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
+                        $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
                     break;
-                case 'disable_functions':
+                case 'extensions':
+                    $value = [];
+                    $extensions = get_loaded_extensions();
+                    foreach (self::INSTALL_EXTENSIONS as $v) {
+                        if(!in_array($v,$extensions)){
+                            $value[] = $v;
+                        }
+                    }
+                    if (empty($value)) {
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                    } else {
+                        $disabled = implode('&nbsp;&nbsp;', $value);
+                        $html = '<span><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
+                        $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                    }
+                    break;
+                case 'functions':
                     $value = [];
                     $disable = get_cfg_var("disable_functions");
                     $disable = explode(',', $disable);
-                    foreach ($disable as $k => $v) {
-                        $value[] = $v;
+                    foreach ($disable as $v) {
+                        if(in_array($v,self::INSTALL_FUNCTIONS)){
+                            $value[] = $v;
+                        }
                     }
-                    if ($value) {
-                        sort($value);
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => implode('&nbsp;&nbsp;', $value), 'status' => '<span class="text-success">√ 正常</span>']];
+                    if (empty($value)) {
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => '<span class="text-muted">-</span>', 'status' => '<span class="text-danger">× 错误</span>']];
+                        $disabled = implode('&nbsp;&nbsp;', $value);
+                        $html = '<span><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
+                        $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
                     break;
-                case 'mysql':
-                    $dsn = isset(Yii::$app->db->dsn) ? Yii::$app->db->dsn : '';
-                    $message = '';
-                    try {
-                        Yii::$app->db->open();
-                    } catch (\Exception $e) {
-                        $message = $e->getMessage();
-                    }
-                    if ($message === '') {
-                        return ['code' => '000000', 'message' => '检测成功', 'result' => ['info' => 'dsn ' . $dsn, 'status' => '<span class="text-success">√ 正常</span>']];
+                case 'mysql_version':
+                    $value = '9.0';
+                    if ($value !== '' && version_compare($value, '8.0', '>=')) {
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        return ['code' => '100000', 'message' => '检测失败', 'result' => ['info' => 'dsn ' . $dsn, 'status' => '<span class="text-danger">× 错误</span>&nbsp;&nbsp;' . $message]];
+                        $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                    }
+                    break;
+                case 'mysql_db':
+                    Artisan::call('migrate');
+                    $value = '9.0';
+                    if ($value !== '' && version_compare($value, '8.0', '>=')) {
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                    } else {
+                        $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
                     break;
                 default:
@@ -199,18 +146,6 @@ class InstallService
         }
     }
 
-    /**
-     * @param $db_host
-     * @param $db_port
-     * @param $db_name
-     * @param $db_user
-     * @param $db_pwd
-     * @param $db_prefix
-     * @return string
-     */
-    public static function mysqlDetect($db_host,$db_port,$db_name,$db_user,$db_pwd,$db_prefix){
-
-    }
 
     /**
      * set env mysql Configuration
@@ -260,9 +195,95 @@ class InstallService
 
 
     /**
-     * insert init manager user
+     * init manager user
      */
-    public static function initManager(){
+    public static function registerUser($params=[]){
+        try{
+            $input = [
+                'email' => $params['email'],
+                'country_code' => $params['countryCode'],
+                'pure_phone' => $params['purePhone'],
+                'phone' => $params['countryCode'].$params['purePhone'],
+                'api_token' => StrHelper::createToken(),
+                'uuid' => StrHelper::createUuid(),
+                'last_login_at' => date('Y-m-d H:i:s'),
+                'password' => StrHelper::createPassword($params['password']),
+            ];
+            $uid = FresnsUsers::insertGetId($input);
+            FresnsSubPluginService::addSubTablePluginItem(FresnsUsersConfig::CFG_TABLE, $uid);
+            $memberInput = [
+                'user_id' => $uid,
+                'name' => StrHelper::createToken(rand(6, 8)),
+                'nickname' => $params['nickname'],
+                'uuid' => ApiCommonHelper::createMemberUuid(),
+            ];
+            $mid = FresnsMembers::insertGetId($memberInput);
+            FresnsSubPluginService::addSubTablePluginItem(FresnsMembersConfig::CFG_TABLE, $mid);
+            //成员总数
+            $userCounts = ApiConfigHelper::getConfigByItemKey('user_counts');
+            if ($userCounts === null) {
+                $input = [
+                    'item_key' => 'user_counts',
+                    'item_value' => 1,
+                    'item_tag' => 'stats',
+                    'item_type' => 'number',
+                ];
+                FresnsConfigs::insert($input);
+            } else {
+                FresnsConfigs::where('item_key', 'user_counts')->update(['item_value' => $userCounts + 1]);
+            }
+            $memberCounts = ApiConfigHelper::getConfigByItemKey('member_counts');
+            if ($memberCounts === null) {
+                $input = [
+                    'item_key' => 'member_counts',
+                    'item_value' => 1,
+                    'item_tag' => 'stats',
+                    'item_type' => 'number',
+                ];
+                FresnsConfigs::insert($input);
+            } else {
+                FresnsConfigs::where('item_key', 'member_counts')->update(['item_value' => $memberCounts + 1]);
+            }
 
+            // Register successfully to add records to the table
+            $memberStatsInput = [
+                'member_id' => $mid,
+            ];
+            FresnsMemberStats::insert($memberStatsInput);
+            $userWalletsInput = [
+                'user_id' => $uid,
+                'balance' => 0,
+            ];
+            FresnsUserWallets::insert($userWalletsInput);
+            $defaultRoleId = ApiConfigHelper::getConfigByItemKey('default_role');
+            $memberRoleRelsInput = [
+                'member_id' => $mid,
+                'role_id' => $defaultRoleId,
+                'type' => 2,
+            ];
+            FresnsMemberRoleRels::insert($memberRoleRelsInput);
+
+            return ['code' => '000000', 'message' => 'success'];
+        } catch (\Exception $e) {
+            return ['code' => $e->getCode(), 'message' => '服务失败'];
+        }
+    }
+
+    /**
+     * @param $itemKey
+     * @param string $itemValue
+     * @param string $item_type
+     * @param string $item_tag
+     */
+    public static function insertConfigs($itemKey, $itemValue = '',$item_type='string',$item_tag='backends')
+    {
+        try{
+            $cond = ['item_key'   => $itemKey];
+            $upInfo = ['item_value'   => $itemValue,'item_type'=>$item_type,'item_tag'=>$item_tag];
+            DB::table('configs')->updateOrInsert($cond, $upInfo);
+            return ['code' => '000000', 'message' => 'success'];
+        } catch (\Exception $e) {
+            return ['code' => $e->getCode(), 'message' => '服务失败'];
+        }
     }
 }

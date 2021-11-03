@@ -12,14 +12,15 @@ if ($appName == 'Fresns') {
     Route::group(['prefix' => 'install', 'namespace' => '\App\Http\FresnsInstall'], function () {
         // step page
         Route::get('/index', 'FsControllerWeb@index')->name('install.index');
-        Route::get('/step1', 'FsControllerWeb@settings')->name('install.step1');
-        Route::get('/step2', 'FsControllerWeb@keys')->name('install.step2');
-        Route::get('/step3', 'FsControllerWeb@admins')->name('install.step3');
-        Route::get('/step4', 'FsControllerWeb@websites')->name('install.step4');
-        Route::get('/finish', 'FsControllerWeb@apps')->name('install.finish');
+        Route::get('/step1', 'FsControllerWeb@step1')->name('install.step1');
+        Route::get('/step2', 'FsControllerWeb@step2')->name('install.step2');
+        Route::get('/step3', 'FsControllerWeb@step3')->name('install.step3');
+        Route::get('/step4', 'FsControllerWeb@step4')->name('install.step4');
+        Route::get('/step5', 'FsControllerWeb@step5')->name('install.step5');
 
         // operation request
         Route::post('/env', 'FsControllerWeb@env')->name('install.env');
-
+        Route::post('/mysql', 'FsControllerWeb@initMysql')->name('install.mysql');
+        Route::post('/manage', 'FsControllerWeb@initManage')->name('install.manage');
     });
 }

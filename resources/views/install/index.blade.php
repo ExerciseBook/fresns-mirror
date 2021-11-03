@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ $lang }}">
+<html lang="{{ App::getLocale() }}">
 
 <head>
     <meta charset="utf-8">
@@ -43,14 +43,21 @@
                 </select>
                 <div class="clearfix mt-3">
                     <div class="float-end">
-                        <a href="/install/step1" class="btn btn-outline-primary"><i class="bi bi-arrow-right"></i></a>
+                        <a data-href="{{ route('install.step1') }}" onclick="install_step1()" id="submit" class="btn btn-outline-primary"><i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="assets/javascript/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <script>
+        function install_step1(){
+            var href = $('#submit').data('href');
+            var lang = $('.form-select option:selected').val();
+            location.href = href+'?lang='+lang
+        }
+    </script>
 </body>
-
 </html>
