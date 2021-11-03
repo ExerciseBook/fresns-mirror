@@ -711,7 +711,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $this->errorCheckInfo($resp);
             }
             // check new phone
-            $countUser = FresnsUsers::where('phone', $editPhone)->count();
+            $countUser = FresnsUsers::where('phone', $editCountryCode.$editPhone)->count();
             if($countUser){
                 $this->error(ErrorCodeService::PHONE_ERROR);
             }
