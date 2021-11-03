@@ -67,8 +67,8 @@
                     <div class="row mt-4">
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
-                            <input type="hidden" id="install_mysql" value="{{ route('install.mysql') }}" >
-                            <input type="hidden" id="install_step4" value="{{ route('install.step4') }}" >
+                            <input type="hidden" id="install_submit" value="{{ route('install.mysql') }}" >
+                            <input type="hidden" id="install_next" value="{{ route('install.step4') }}" >
                             <button type="button" id="submit" class="btn btn-outline-primary">@lang('install.step3Btn')</button>
                         </div>
                     </div>
@@ -88,8 +88,8 @@
             var db_pwd = $('input[name="db_pwd"]').val();
             var db_prefix = $('input[name="db_prefix"]').val();
 
-            var submit_url = $('#install_mysql').val();
-            var next_url = $('#install_step4').val();
+            var submit_url = $('#install_submit').val();
+            var next_url = $('#install_next').val();
             $.ajax({
                 async: false,
                 type: "post",
