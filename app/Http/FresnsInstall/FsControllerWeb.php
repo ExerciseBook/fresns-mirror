@@ -10,7 +10,7 @@ namespace App\Http\FresnsInstall;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 
 class FsControllerWeb
@@ -20,47 +20,61 @@ class FsControllerWeb
 
     // check install
     public function __construct(){
-        $this->lock_file = storage_path('install/install.lock');
+        $this->lock_file = storage_path('app/install.lock');
         if(is_file($this->lock_file)){
-            return redirect('/');
+            header('Location: /');exit;
+        }else{
+            $result = InstallService::checkPermission();
+            if($result['code'] != '000000'){
+                header('Location: '.$result['url']);exit;
+            }
         }
     }
 
     // choose language
     public function index()
     {
+        Cache::put('install_index',1);
         return view('install.index');
     }
 
     // install desc
     public function step1()
     {
+        Cache::put('install_step1',1);
         return view('install.step1');
     }
 
     // check env
     public function step2()
     {
+        Cache::put('install_step2',1);
         return view('install.step2');
     }
 
     // check mysql
     public function step3()
     {
+        Cache::put('install_step3',1);
         return view('install.step3');
     }
 
     // init manager
     public function step4()
     {
+        Cache::put('install_step4',1);
         return view('install.step4');
     }
 
     // finish tips
     public function step5()
     {
-        $content = date('Y-m-d H:i:s');
-        file_put_contents($this->lock_file,$content);
+        file_put_contents($this->lock_file,date('Y-m-d H:i:s'));
+        Cache::forget('install_index');
+        Cache::forget('install_step1');
+        Cache::forget('install_step2');
+        Cache::forget('install_step3');
+        Cache::forget('install_step4');
         return view('install.step5');
     }
 
@@ -102,8 +116,6 @@ class FsControllerWeb
 
         return Response::json(['code'=>'000000','message'=>'success']);
     }
-
-
 
 
 

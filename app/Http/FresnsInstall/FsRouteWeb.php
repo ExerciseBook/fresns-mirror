@@ -20,7 +20,6 @@ if ($appName == 'Fresns') {
 
         // operation request
         Route::post('/env', 'FsControllerWeb@env')->name('install.env');
-        Route::post('/mysql', 'FsControllerWeb@initMysql')->name('install.mysql');
         Route::post('/manage', 'FsControllerWeb@initManage')->name('install.manage');
     });
 }

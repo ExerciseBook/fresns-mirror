@@ -59,7 +59,7 @@
                         <div class="col-sm-9"><input type="text" name="password" class="form-control" ></div>
                     </div>
                     <div class="alert alert-danger" role="alert" id="install_error_msg" style="display: none;">
-                        @lang('install.step4CheckAccount')
+
                     </div>
                     <div class="row mt-4">
                         <label class="col-sm-3 col-form-label"></label>
@@ -80,7 +80,8 @@
         $("#submit").click(function() {
             var backend_host = $.trim($('input[name="backend_host"]').val());
             var nickname = $.trim($('input[name="nickname"]').val());
-            var country_code = $.trim($('input[name="country_code"]').val());
+            var email = $.trim($('input[name="email"]').val());
+            var country_code = $.trim($('select[name="country_code"]').val());
             var pure_phone = $.trim($('input[name="pure_phone"]').val());
             var password = $.trim($('input[name="password"]').val());
             if(backend_host == ''){
@@ -95,8 +96,8 @@
                 alert('country_code input must not empty');
                 return false;
             }
-            if(pure_phone == ''){
-                alert('phone input must not empty');
+            if(pure_phone == '' && email == ''){
+                alert('email or phone must input at least one');
                 return false;
             }
             if(password == ''){
@@ -113,6 +114,7 @@
                 data: {
                     'backend_host': backend_host,
                     'nickname': nickname,
+                    'email': email,
                     'country_code': country_code,
                     'pure_phone': pure_phone,
                     'password': password,
@@ -125,7 +127,7 @@
                         $('#install_error_msg').hide();
                         location.href = next_url;
                     } else {
-                        $('#install_error_msg').show();
+                        $('#install_error_msg').text(data.message).show();
                     }
                 }
             })

@@ -39,7 +39,7 @@
                         <span id="mysql_db_status">-</span>
                     </li>
                 </ul>
-                <a href="{{ route('install.step4') }}" class="btn btn-outline-primary ms-3">@lang('install.step3Btn')</a>
+                <a href="{{ route('install.step4') }}" class="btn btn-outline-primary ms-3" id="next_step" style="display: none;">@lang('install.step3Btn')</a>
                 <!-- 不满足条件，点击「重试」按钮重新检测，符合条件则是「确认」按钮-->
                 <button type="button" class="btn btn-outline-info ms-3" onclick="window.location.reload()">@lang('install.step2CheckBtn')</button>
             </div>
@@ -53,7 +53,7 @@
             "mysql_version",
             "mysql_db",
         ];
-
+        var counts = 0;
         //检测
         (function detect() {
             var name = items[0];
@@ -64,6 +64,9 @@
                 url: '<?php echo route('install.env'); ?>',
                 data: {name: name},
                 success: function (data) {
+                    if(data.code == '000000'){
+                        counts++;
+                    }
                     if ($('#' + name + '_status').length && data.result !== undefined) {
                         $('#' + name + '_status').html(data.result);
                     }
@@ -72,6 +75,10 @@
                     items.shift();
                     if (items.length) {
                         setTimeout(function () {detect();}, 20);
+                    }else{
+                        if (counts === 2){
+                            $('#next_step').show();
+                        }
                     }
                 }
             });

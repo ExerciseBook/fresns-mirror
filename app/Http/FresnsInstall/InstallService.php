@@ -21,6 +21,7 @@ use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsersConfig;
 use App\Http\FresnsDb\FresnsUserWallets\FresnsUserWallets;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class InstallService
@@ -28,9 +29,55 @@ class InstallService
     const INSTALL_EXTENSIONS = ['fileinfo'];
     const INSTALL_FUNCTIONS  = ['putenv', 'symlink', 'readlink', 'proc_open'];
 
+    /**
+     * check install order
+     */
+    public static function checkPermission(){
+        $path = request()->path();
+        switch ($path){
+            case 'install/step1';
+                if(Cache::get('install_index')){
+                    return ['code'=>'000000'];
+                }else{
+                    return ['code'=>'200000','url'=>route('install.index')];
+                }
+                break;
+            case 'install/step2';
+                if(Cache::get('install_step1')){
+                    return ['code'=>'000000'];
+                }else{
+                    return ['code'=>'200000','url'=>route('install.step1')];
+                }
+                break;
+            case 'install/step3';
+                if(Cache::get('install_step2')){
+                    return ['code'=>'000000'];
+                }else{
+                    return ['code'=>'200000','url'=>route('install.step2')];
+                }
+                break;
+            case 'install/step4';
+                if(Cache::get('install_step3')){
+                    return ['code'=>'000000'];
+                }else{
+                    return ['code'=>'200000','url'=>route('install.step3')];
+                }
+                break;
+            case 'install/step5';
+                if(Cache::get('install_step4')){
+                    return ['code'=>'000000'];
+                }else{
+                    return ['code'=>'200000','url'=>route('install.step4')];
+                }
+                break;
+            default ;
+                    return ['code'=>'000000'];
+                break;
+        }
+    }
 
     /**
-     * 环境检测
+     * check env
      */
     public static function envDetect($name = '')
     {
@@ -38,10 +85,11 @@ class InstallService
             switch ($name) {
                 case 'php_version':
                     $value = PHP_VERSION;
-                    if ($value !== '' && version_compare(PHP_VERSION, '8.0', '>=')) {
+                    if ($value !== '' && version_compare(PHP_VERSION, '7.0', '>=')) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
+                        Cache::forget('install_step2');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
@@ -53,7 +101,7 @@ class InstallService
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     }else{
                         $html = '<span class="badge bg-warning rounded-pill">'.trans('install.step2CheckStatusWarning').'</span>';
-                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '000000', 'message' => '检测失败','result'=>$html];
                     }
                     break;
                 case 'folder':
@@ -62,6 +110,7 @@ class InstallService
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
+                        Cache::forget('install_step2');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
@@ -78,6 +127,7 @@ class InstallService
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
+                        Cache::forget('install_step2');
                         $disabled = implode('&nbsp;&nbsp;', $value);
                         $html = '<span><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
                         $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
@@ -97,6 +147,7 @@ class InstallService
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
+                        Cache::forget('install_step2');
                         $disabled = implode('&nbsp;&nbsp;', $value);
                         $html = '<span><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
                         $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
@@ -110,6 +161,7 @@ class InstallService
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
+                        Cache::forget('install_step3');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
@@ -124,6 +176,7 @@ class InstallService
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
+                        Cache::forget('install_step3');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
@@ -136,67 +189,20 @@ class InstallService
         }
     }
 
-
-    /**
-     * set env mysql Configuration
-     */
-    public static function envUpdate($key,$val){
-        $envFilePath = base_path('.env');
-        switch ($key){
-            case 'db_host';
-                $escaped = preg_quote('='.config('database.connections.mysql.host'), '/');
-                $pattern = "/^DB_HOST{$escaped}/m";
-                $replacement = 'DB_HOST='.$val;
-            break;
-            case 'db_port';
-                $escaped = preg_quote('='.config('database.connections.mysql.port'), '/');
-                $pattern = "/^DB_PORT{$escaped}/m";
-                $replacement = 'DB_PORT='.$val;
-                break;
-            case 'db_name';
-                $escaped = preg_quote('='.config('database.connections.mysql.database'), '/');
-                $pattern = "/^DB_DATABASE{$escaped}/m";
-                $replacement = 'DB_DATABASE='.$val;
-                break;
-            case 'db_user';
-                $escaped = preg_quote('='.config('database.connections.mysql.username'), '/');
-                $pattern = "/^DB_USERNAME{$escaped}/m";
-                $replacement = 'DB_USERNAME='.$val;
-                break;
-            case 'db_pwd';
-                $escaped = preg_quote('='.config('database.connections.mysql.password'), '/');
-                $pattern = "/^DB_PASSWORD{$escaped}/m";
-                $replacement = 'DB_PASSWORD='.$val;
-                break;
-            case 'db_prefix';
-                $escaped = preg_quote('='.config('database.connections.mysql.prefix'), '/');
-                $pattern = "/^DB_PREFIX{$escaped}/m";
-                $replacement = 'DB_PREFIX='.$val;
-                break;
-            default:
-                $pattern = "";
-                $replacement = "";
-                break;
-        }
-        if($pattern && $replacement){
-            file_put_contents($envFilePath, preg_replace($pattern, $replacement, file_get_contents($envFilePath)));
-        }
-    }
-
-
     /**
      * init manager user
      */
     public static function registerUser($params=[]){
         try{
             $input = [
-                'email' => $params['email'],
-                'country_code' => $params['countryCode'],
-                'pure_phone' => $params['purePhone'],
-                'phone' => $params['countryCode'].$params['purePhone'],
+                'email' => $params['email'] ?: null,
+                'country_code' => $params['purePhone'] ? $params['countryCode'] : null,
+                'pure_phone' => $params['purePhone'] ?: null,
+                'phone' => $params['purePhone'] ? $params['countryCode'].$params['purePhone'] : null,
                 'api_token' => StrHelper::createToken(),
                 'uuid' => StrHelper::createUuid(),
                 'last_login_at' => date('Y-m-d H:i:s'),
+                'user_type' => 1,
                 'password' => StrHelper::createPassword($params['password']),
             ];
             $uid = FresnsUsers::insertGetId($input);
@@ -208,6 +214,7 @@ class InstallService
                 'uuid' => ApiCommonHelper::createMemberUuid(),
             ];
             $mid = FresnsMembers::insertGetId($memberInput);
+
             FresnsSubPluginService::addSubTablePluginItem(FresnsMembersConfig::CFG_TABLE, $mid);
             //成员总数
             $userCounts = ApiConfigHelper::getConfigByItemKey('user_counts');
@@ -236,34 +243,23 @@ class InstallService
             }
 
             // Register successfully to add records to the table
-            $memberStatsInput = [
-                'member_id' => $mid,
-            ];
+            $memberStatsInput = ['member_id' => $mid];
             FresnsMemberStats::insert($memberStatsInput);
-            $userWalletsInput = [
-                'user_id' => $uid,
-                'balance' => 0,
-            ];
+
+            $userWalletsInput = ['user_id' => $uid, 'balance' => 0];
             FresnsUserWallets::insert($userWalletsInput);
-            $defaultRoleId = ApiConfigHelper::getConfigByItemKey('default_role');
-            $memberRoleRelsInput = [
-                'member_id' => $mid,
-                'role_id' => $defaultRoleId,
-                'type' => 2,
-            ];
+
+            $memberRoleRelsInput = ['member_id' => $mid, 'role_id' => 1, 'type' => 2];
             FresnsMemberRoleRels::insert($memberRoleRelsInput);
 
             return ['code' => '000000', 'message' => 'success'];
         } catch (\Exception $e) {
-            return ['code' => $e->getCode(), 'message' => '服务失败'];
+            return ['code' => $e->getCode(), 'message' => $e->getMessage()];
         }
     }
 
     /**
-     * @param $itemKey
-     * @param string $itemValue
-     * @param string $item_type
-     * @param string $item_tag
+     * init config
      */
     public static function insertConfigs($itemKey, $itemValue = '',$item_type='string',$item_tag='backends')
     {
@@ -273,14 +269,12 @@ class InstallService
             DB::table('configs')->updateOrInsert($cond, $upInfo);
             return ['code' => '000000', 'message' => 'success'];
         } catch (\Exception $e) {
-            return ['code' => $e->getCode(), 'message' => '服务失败'];
+            return ['code' => $e->getCode(), 'message' => $e->getMessage()];
         }
     }
 
     /**
      * permission
-     * @param $file
-     * @return false|string
      */
     public static function file_perms($file)
     {
