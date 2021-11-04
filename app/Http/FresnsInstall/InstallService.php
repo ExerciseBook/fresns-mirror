@@ -106,7 +106,7 @@ class InstallService
                     break;
                 case 'folder':
                     $value = self::file_perms(base_path());
-                    if ($value < 755) {
+                    if ($value >= 755) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
