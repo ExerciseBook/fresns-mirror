@@ -10,14 +10,18 @@ namespace App\Http\FresnsInstall;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class FsControllerWeb
 {
+
+    private $lock_file = '';
+
     // check install
     public function __construct(){
-        $lock_file = storage_path('install/install.lock');
-        if(is_file($lock_file)){
+        $this->lock_file = storage_path('install/install.lock');
+        if(is_file($this->lock_file)){
             return redirect('/');
         }
     }
@@ -55,9 +59,8 @@ class FsControllerWeb
     // finish tips
     public function step5()
     {
-        $file    = storage_path('install/install.txt');
         $content = date('Y-m-d H:i:s');
-        file_put_contents($file,$content);
+        file_put_contents($this->lock_file,$content);
         return view('install.step5');
     }
 
@@ -69,7 +72,7 @@ class FsControllerWeb
         return Response::json($result);
     }
 
-    //
+    // register manager
     public function initManage(Request $request){
         $back_host = $request->input('backend_host');
         $email = $request->input('email');

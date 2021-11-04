@@ -57,25 +57,11 @@ class InstallService
                     }
                     break;
                 case 'folder':
-                    $value = [];
-                    $items = [
-                        app_path('Plugins'),
-                        public_path('assets'),
-                        resource_path('views'),
-                        storage_path('logs'),
-                        database_path('migrations'),
-                    ];
-                    foreach ($items as $v) {
-                        if(!is_writable($v)) {
-                            $value[] = $v;
-                        }
-                    }
-                    if (empty($value)) {
+                    $value = self::file_perms(base_path());
+                    if (empty($value) || $value != 755) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        //$disabled = implode('&nbsp;&nbsp;', $value);
-                        //$html = '<span><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
@@ -118,7 +104,8 @@ class InstallService
                     }
                     break;
                 case 'mysql_version':
-                    $value = '9.0';
+                    $versionObj  = DB::selectOne('select version()  as version;');
+                    $value = $versionObj->version;
                     if ($value !== '' && version_compare($value, '8.0', '>=')) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
@@ -128,9 +115,12 @@ class InstallService
                     }
                     break;
                 case 'mysql_db':
+                    // execute migrate
                     Artisan::call('migrate');
-                    $value = '9.0';
-                    if ($value !== '' && version_compare($value, '8.0', '>=')) {
+                    // get count tables
+                    $tables = DB::select('show tables');
+                    $value = sizeof($tables);
+                    if ($value > 0 ) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
@@ -285,5 +275,18 @@ class InstallService
         } catch (\Exception $e) {
             return ['code' => $e->getCode(), 'message' => '服务失败'];
         }
+    }
+
+    /**
+     * permission
+     * @param $file
+     * @return false|string
+     */
+    public static function file_perms($file)
+    {
+        clearstatcache();
+        if(!file_exists($file)) return false;
+        $perms = fileperms($file);
+        return substr(decoct($perms), -3);
     }
 }
