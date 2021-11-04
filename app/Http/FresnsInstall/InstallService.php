@@ -85,7 +85,7 @@ class InstallService
             switch ($name) {
                 case 'php_version':
                     $value = PHP_VERSION;
-                    if ($value !== '' && version_compare(PHP_VERSION, '7.0', '>=')) {
+                    if ($value !== '' && version_compare(PHP_VERSION, '8.0', '>=')) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
@@ -106,7 +106,7 @@ class InstallService
                     break;
                 case 'folder':
                     $value = self::file_perms(base_path());
-                    if (empty($value) || $value != 755) {
+                    if ($value < 755) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
@@ -157,7 +157,7 @@ class InstallService
                 case 'mysql_version':
                     $versionObj  = DB::selectOne('select version()  as version;');
                     $value = $versionObj->version;
-                    if ($value !== '' && version_compare($value, '8.0', '>=')) {
+                    if ($value !== '' && version_compare($value, '5.7', '>=')) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {

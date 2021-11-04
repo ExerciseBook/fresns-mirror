@@ -75,6 +75,10 @@ class FsControllerWeb
         Cache::forget('install_step2');
         Cache::forget('install_step3');
         Cache::forget('install_step4');
+
+        // Soft link
+        Artisan::call('storage:link');
+
         return view('install.step5');
     }
 
@@ -111,8 +115,6 @@ class FsControllerWeb
         if($result['code'] != '000000'){
             return Response::json($result);
         }
-        // Soft link
-        Artisan::call('storage:link');
 
         return Response::json(['code'=>'000000','message'=>'success']);
     }
