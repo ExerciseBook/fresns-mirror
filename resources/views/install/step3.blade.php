@@ -31,12 +31,20 @@
                 <h3 class="card-title">@lang('install.step3Title')</h3>
                 <ul class="list-group list-group-flush my-4">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>mysql 版本不低于5.7</span>
-                        <span id="mysql_version_status">-</span>
+                        <span>@lang('install.step3CheckMySqlVersion')</span>
+                        <span id="mysql_version_status"></span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>mysql 数据表导入</span>
-                        <span id="mysql_db_status">-</span>
+                        <span>@lang('install.step3DatabaseTablePrefix')</span>
+                        <span id="database_table_prefix"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@lang('install.step3DatabaseMigrations')</span>
+                        <span id="database_migrate_status"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@lang('install.step3DatabaseSeeders')</span>
+                        <span id="database_seed_status"></span>
                     </li>
                 </ul>
                 <a href="{{ route('install.step4') }}" class="btn btn-outline-primary ms-3" id="next_step" style="display: none;">@lang('install.step3Btn')</a>

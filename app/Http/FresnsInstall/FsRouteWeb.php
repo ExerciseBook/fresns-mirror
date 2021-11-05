@@ -11,7 +11,7 @@ $appName = env('APP_NAME');
 if ($appName == 'Fresns') {
     Route::group(['prefix' => 'install', 'namespace' => '\App\Http\FresnsInstall'], function () {
         // step page
-        Route::get('/index', 'FsControllerWeb@index')->name('install.index');
+        Route::get('/fresns', 'FsControllerWeb@index')->name('install.index');
         Route::get('/step1', 'FsControllerWeb@step1')->name('install.step1');
         Route::get('/step2', 'FsControllerWeb@step2')->name('install.step2');
         Route::get('/step3', 'FsControllerWeb@step3')->name('install.step3');

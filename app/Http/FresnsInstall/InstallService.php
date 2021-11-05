@@ -40,7 +40,7 @@ class InstallService
      */
     public static function mode(){
         $path = request()->path();
-        if(in_array($path,['install/index','install/step1','install/step2','install/step3','install/step4','install/step5','install/env','install/manage'])){
+        if(in_array($path,['install/fresns','install/step1','install/step2','install/step3','install/step4','install/step5','install/env','install/manage'])){
             return true;
         }
         return false;
@@ -102,7 +102,7 @@ class InstallService
             switch ($name) {
                 case 'php_version':
                     $value = PHP_VERSION;
-                    if ($value !== '' && version_compare(PHP_VERSION, '7.0', '>=')) {
+                    if ($value !== '' && version_compare(PHP_VERSION, '7.3', '>=')) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
@@ -146,7 +146,7 @@ class InstallService
                     } else {
                         Cache::forget('install_step2');
                         $disabled = implode('&nbsp;&nbsp;', $value);
-                        $html = '<span><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
+                        $html = '<span class="me-3"><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
                         $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
@@ -166,7 +166,7 @@ class InstallService
                     } else {
                         Cache::forget('install_step2');
                         $disabled = implode('&nbsp;&nbsp;', $value);
-                        $html = '<span><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
+                        $html = '<span class="me-3"><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
                         $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
