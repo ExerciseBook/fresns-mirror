@@ -23,7 +23,6 @@ use App\Http\FresnsDb\FresnsUserWallets\FresnsUserWallets;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 class InstallService
 {
@@ -187,10 +186,19 @@ class InstallService
                 case 'mysql_db':
                     // execute migrate
                     Artisan::call('migrate');
-                    $db_tables = DB::select('show databases;');
-                    $db_tables_count = sizeof($db_tables);
-                    $sys_tables_count = sizeof(self::INSTALL_TABLES);
-                    $value = $db_tables_count >= $sys_tables_count;
+
+                    $value = true;
+                    $database = config('database.connections.mysql.database');
+                    $prefix   = config('database.connections.mysql.prefix');
+                    $db_tables = DB::select('show tables;');
+                    $db_tables = collect($db_tables)->pluck('Tables_in_'.$database)->values()->toArray();
+                    foreach (self::INSTALL_TABLES as $table){
+                        if(!in_array($prefix.$table,$db_tables)){
+                            $value = false;
+                            break;
+                        }
+                    }
+
                     if ($value) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
