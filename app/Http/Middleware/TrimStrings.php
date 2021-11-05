@@ -45,14 +45,13 @@ class TrimStrings extends Middleware
             }
             $request->offsetSet('is_enable', $isEnable);
         }
+        // Switching time
+        DateHelper::initTimezone();
+
+        // Switching languages
+        LangHelper::initLocale();
 
         if(InstallService::mode() === false){
-            // Switching time
-            DateHelper::initTimezone();
-
-            // Switching languages
-            LangHelper::initLocale();
-
             // Initialize global data
             GlobalService::loadData();
         }
