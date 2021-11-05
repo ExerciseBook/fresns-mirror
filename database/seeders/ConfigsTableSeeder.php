@@ -1226,7 +1226,7 @@ class ConfigsTableSeeder extends Seeder
             array (
                 'id' => 87,
                 'item_key' => 'default_avatar',
-                'item_value' => 'https://cdn.fresns.cn/images/default_avatar.png',
+                'item_value' => 'https://cdn.fresns.cn/images/default-avatar.png',
                 'item_type' => 'file',
                 'item_tag' => 'users',
                 'is_multilingual' => 0,
@@ -1240,7 +1240,7 @@ class ConfigsTableSeeder extends Seeder
             array (
                 'id' => 88,
                 'item_key' => 'anonymous_avatar',
-                'item_value' => 'https://cdn.fresns.cn/images/anonymous_avatar.png',
+                'item_value' => 'https://cdn.fresns.cn/images/anonymous-avatar.png',
                 'item_type' => 'file',
                 'item_tag' => 'users',
                 'is_multilingual' => 0,
@@ -1254,7 +1254,7 @@ class ConfigsTableSeeder extends Seeder
             array (
                 'id' => 89,
                 'item_key' => 'deactivate_avatar',
-                'item_value' => 'https://cdn.fresns.cn/images/deactivate_avatar.png',
+                'item_value' => 'https://cdn.fresns.cn/images/deactivate-avatar.png',
                 'item_type' => 'file',
                 'item_tag' => 'users',
                 'is_multilingual' => 0,
@@ -2514,7 +2514,7 @@ class ConfigsTableSeeder extends Seeder
             array (
                 'id' => 179,
                 'item_key' => 'repair_image',
-                'item_value' => 'https://cdn.fresns.cn/images/repair_image.jpg',
+                'item_value' => 'https://cdn.fresns.cn/images/repair-image.jpg',
                 'item_type' => 'file',
                 'item_tag' => 'storages',
                 'is_multilingual' => 0,
@@ -2528,7 +2528,7 @@ class ConfigsTableSeeder extends Seeder
             array (
                 'id' => 180,
                 'item_key' => 'repair_video',
-                'item_value' => 'https://cdn.fresns.cn/images/repair_video.jpg',
+                'item_value' => 'https://cdn.fresns.cn/images/repair-video.jpg',
                 'item_type' => 'file',
                 'item_tag' => 'storages',
                 'is_multilingual' => 0,
@@ -2542,7 +2542,7 @@ class ConfigsTableSeeder extends Seeder
             array (
                 'id' => 181,
                 'item_key' => 'repair_audio',
-                'item_value' => 'https://cdn.fresns.cn/images/repair_audio.jpg',
+                'item_value' => 'https://cdn.fresns.cn/images/repair-audio.jpg',
                 'item_type' => 'file',
                 'item_tag' => 'storages',
                 'is_multilingual' => 0,
@@ -2556,7 +2556,7 @@ class ConfigsTableSeeder extends Seeder
             array (
                 'id' => 182,
                 'item_key' => 'repair_doc',
-                'item_value' => 'https://cdn.fresns.cn/images/repair_doc.jpg',
+                'item_value' => 'https://cdn.fresns.cn/images/repair-doc.jpg',
                 'item_type' => 'file',
                 'item_tag' => 'storages',
                 'is_multilingual' => 0,
