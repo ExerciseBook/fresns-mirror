@@ -36,6 +36,17 @@ class InstallService
     ];
 
     /**
+     * install  mode
+     */
+    public static function mode(){
+        $path = request()->path();
+        if(in_array($path,['install/index','install/step1','install/step2','install/step3','install/step4','install/step5'])){
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * check install order
      */
     public static function checkPermission(){
