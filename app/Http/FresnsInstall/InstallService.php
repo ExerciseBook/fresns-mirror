@@ -186,6 +186,8 @@ class InstallService
                 case 'mysql_db':
                     // execute migrate
                     set_time_limit(0);
+                    defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
+
 
                     Artisan::call('migrate');
                     Artisan::call('db:seed');
