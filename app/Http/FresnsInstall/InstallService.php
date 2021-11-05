@@ -185,7 +185,10 @@ class InstallService
                     break;
                 case 'mysql_db':
                     // execute migrate
+                    set_time_limit(0);
+
                     Artisan::call('migrate');
+                    Artisan::call('db:seed');
 
                     $value = true;
                     $database = config('database.connections.mysql.database');
@@ -212,7 +215,7 @@ class InstallService
                     return ['code' => '200000', 'message' => 'name参数错误'];
             }
         } catch (\Exception $e) {
-            return ['code' => '999999', 'message' => '服务失败'];
+            return ['code' => '999999', 'message' => $e->getMessage()];
         }
     }
 
