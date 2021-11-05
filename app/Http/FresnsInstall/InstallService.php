@@ -112,8 +112,8 @@ class InstallService
                     }
                     break;
                 case 'https':
-                    $value = (new \Illuminate\Http\Request)->server('REQUEST_SCHEME','http');
-                    if($value == 'https'){
+                    $value = self::is_https();
+                    if($value){
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     }else{
@@ -312,5 +312,16 @@ class InstallService
         if(!file_exists($file)) return false;
         $perms = fileperms($file);
         return substr(decoct($perms), -3);
+    }
+
+    public static function is_https() {
+        if ( !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+            return true;
+        } elseif ( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
+            return true;
+        } elseif ( !empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') {
+            return true;
+        }
+        return false;
     }
 }
