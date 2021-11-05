@@ -77,6 +77,7 @@ class FsControllerWeb
         Cache::forget('install_step4');
 
         // Soft link
+        Artisan::call('key:generate');
         Artisan::call('storage:link');
 
         return view('install.step5');
@@ -99,10 +100,15 @@ class FsControllerWeb
         $password = $request->input('password');
         $nickname = $request->input('nickname');
         // register config
-        $result = InstallService::insertConfigs('backend_domain',$back_host);
+        $result = InstallService::updateOrInsertConfig('backend_domain',$back_host,'string','backends');
         if($result['code'] != '000000'){
             return Response::json($result);
         }
+        $result = InstallService::updateOrInsertConfig('install_time',date('Y-m-d H:i:s'),'string','systems');
+        if($result['code'] != '000000'){
+            return Response::json($result);
+        }
+
         // register user
         $input = [
             'email' => $email,

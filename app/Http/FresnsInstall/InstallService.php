@@ -28,6 +28,12 @@ class InstallService
 {
     const INSTALL_EXTENSIONS = ['fileinfo'];
     const INSTALL_FUNCTIONS  = ['putenv', 'symlink', 'readlink', 'proc_open'];
+    const INSTALL_TABLES = [
+        'code_messages','configs','languages','session_keys','session_tokens','session_logs','verify_codes','users','user_connects','user_wallets','user_wallet_logs',
+        'files','file_appends','file_logs','plugins','plugin_usages','plugin_badges','plugin_callbacks','members','member_stats','member_roles','member_role_rels', 'member_icons',
+        'member_likes','member_follows','member_shields','emojis','stop_words','dialogs','dialog_messages','notifies','implants','seo','groups','posts','post_appends',
+        'post_allows','post_members','post_logs','comments','comment_appends','comment_logs','extends','extend_linkeds','hashtags','hashtag_linkeds','domains','domain_links','mentions'
+    ];
 
     /**
      * check install order
@@ -170,9 +176,11 @@ class InstallService
                     // execute migrate
                     Artisan::call('migrate');
                     // get count tables
-                    $tables = DB::select('show tables');
-                    $value = sizeof($tables);
-                    if ($value > 0 ) {
+                    $db_tables = DB::select('show tables');
+                    $db_tables_count = sizeof($db_tables);
+                    $sys_tables_count = sizeof(self::INSTALL_TABLES);
+                    $value = $db_tables_count >= $sys_tables_count;
+                    if ($value) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
@@ -261,7 +269,7 @@ class InstallService
     /**
      * init config
      */
-    public static function insertConfigs($itemKey, $itemValue = '',$item_type='string',$item_tag='backends')
+    public static function updateOrInsertConfig($itemKey, $itemValue = '',$item_type='string',$item_tag='backends')
     {
         try{
             $cond = ['item_key'   => $itemKey];
