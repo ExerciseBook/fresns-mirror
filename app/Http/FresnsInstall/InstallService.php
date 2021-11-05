@@ -188,9 +188,8 @@ class InstallService
                     set_time_limit(0);
                     defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 
-
-                    Artisan::call('migrate');
-                    Artisan::call('db:seed');
+                    Artisan::call('migrate', ['--force' => true ]);
+                    Artisan::call('db:seed', ['--force' => true ]);
 
                     $value = true;
                     $database = config('database.connections.mysql.database');
