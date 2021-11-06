@@ -10,9 +10,7 @@ namespace App\Http\FresnsInstall;
 
 use App\Helpers\StrHelper;
 use App\Http\FresnsApi\Helpers\ApiCommonHelper;
-use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsCmd\FresnsSubPluginService;
-use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
 use App\Http\FresnsDb\FresnsMemberRoleRels\FresnsMemberRoleRels;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembers;
 use App\Http\FresnsDb\FresnsMembers\FresnsMembersConfig;
@@ -248,30 +246,8 @@ class InstallService
 
             FresnsSubPluginService::addSubTablePluginItem(FresnsMembersConfig::CFG_TABLE, $mid);
             //成员总数
-            $userCounts = ApiConfigHelper::getConfigByItemKey('user_counts');
-            if ($userCounts === null) {
-                $input = [
-                    'item_key' => 'user_counts',
-                    'item_value' => 1,
-                    'item_tag' => 'stats',
-                    'item_type' => 'number',
-                ];
-                FresnsConfigs::insert($input);
-            } else {
-                FresnsConfigs::where('item_key', 'user_counts')->update(['item_value' => $userCounts + 1]);
-            }
-            $memberCounts = ApiConfigHelper::getConfigByItemKey('member_counts');
-            if ($memberCounts === null) {
-                $input = [
-                    'item_key' => 'member_counts',
-                    'item_value' => 1,
-                    'item_tag' => 'stats',
-                    'item_type' => 'number',
-                ];
-                FresnsConfigs::insert($input);
-            } else {
-                FresnsConfigs::where('item_key', 'member_counts')->update(['item_value' => $memberCounts + 1]);
-            }
+            self::updateOrInsertConfig('user_counts',1,'number','stats');
+            self::updateOrInsertConfig('member_counts',1,'number','stats');
 
             // Register successfully to add records to the table
             $memberStatsInput = ['member_id' => $mid];
@@ -290,9 +266,9 @@ class InstallService
     }
 
     /**
-     * init config
+     * set configs
      */
-    public static function updateOrInsertConfig($itemKey, $itemValue = '',$item_type='string',$item_tag='backends')
+    public static function updateOrInsertConfig($itemKey, $itemValue = '',$item_type='string',$item_tag='systems')
     {
         try{
             $cond = ['item_key'   => $itemKey];
