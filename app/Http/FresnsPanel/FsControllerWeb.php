@@ -9,6 +9,7 @@
 namespace App\Http\FresnsPanel;
 
 use App\Base\Controllers\BaseFrontendController;
+use App\Helpers\FileHelper;
 use App\Helpers\HttpHelper;
 use App\Helpers\StrHelper;
 use App\Http\Auth\User;
@@ -33,11 +34,14 @@ use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogs;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsConfig;
 use App\Http\FresnsDb\FresnsSessionLogs\FresnsSessionLogsService;
 use App\Http\FresnsDb\FresnsUsers\FresnsUsers;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 
 class FsControllerWeb extends BaseFrontendController
@@ -914,5 +918,72 @@ class FsControllerWeb extends BaseFrontendController
             FresnsConfigs::where('item_key', $websiteUnikey.'_Mobile')->delete();
         }
         $this->success();
+    }
+
+    // todo update system program
+    public function updateSystem(Request $request){
+        $version = $request->input('version','1');
+        try{
+            //download file
+            LogService::info('Upgrade start');
+            $upgradeUrl = 'https://apps.fresns.cn/';
+            $downloadDir  = storage_path('app/upgrade/v_'.$version.'/');
+            $filename = date('Y-m-d').'.zip';
+            $downloadFile = $downloadDir.$filename;
+            FileHelper::assetDir($downloadFile);
+            LogService::info('Upgrade get content');
+            $content = file_get_contents($upgradeUrl);
+            file_put_contents($downloadFile, $content);
+            LogService::info('Upgrade write content');
+            $fileSize = File::size($downloadFile);
+            if ($fileSize < 10) {
+                $this->errorInfo(2,'系统升级包下载失败');
+            }
+            //unzip file
+            $status = FileHelper::unzip($downloadFile, $downloadDir);
+            if ($status == false){
+                $this->errorInfo(3,'系统升级包加压失败');
+            }
+            // Distribution of documents
+            $coverPath = ['Http', 'static', 'views','lang','migrations','seeders'];
+            foreach ($coverPath as $subDir) {
+                if($subDir == 'Http'){
+                    $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                    (new Filesystem)->copyDirectory($upDir,app_path('Http'));
+                }elseif ($subDir == 'static'){
+                    $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                    (new Filesystem)->copyDirectory($upDir,public_path('Http'));
+                }elseif ($subDir == 'views'){
+                    $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                    (new Filesystem)->copyDirectory($upDir,resource_path('views'));
+                }elseif ($subDir == 'lang'){
+                    $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                    (new Filesystem)->copyDirectory($upDir,resource_path('lang'));
+                }elseif ($subDir == 'migrations'){
+                    $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                    (new Filesystem)->copyDirectory($upDir,database_path('migrations'));
+                }elseif ($subDir == 'seeders'){
+                    $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                    (new Filesystem)->copyDirectory($upDir,database_path('seeders'));
+                }
+            }
+            // Initialization file loading
+            InstallHelper::freshSystem();
+            // migration and seeder
+            LogService::info('Upgrade migration');
+            Artisan::call('migrate', ['--force' => true]);
+            LogService::info('Upgrade seeder');
+            Artisan::call('db:seed', ['--force' => true,'--class'=>'Database\Seeders\UpgradeSeeder']);
+            // 3. Execute the special script
+            $upClass = "\\App\\Http\\UpgradeController";
+            if (class_exists($upClass)) {
+                LogService::info('Upgrade script');
+                (new $upClass)->init();
+            }
+            LogService::info('Upgrade end');
+            $this->success();
+        } catch (\Exception $e) {
+            $this->errorInfo(5000,$e->getMessage());
+        }
     }
 }
