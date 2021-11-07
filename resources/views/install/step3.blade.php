@@ -32,15 +32,15 @@
                 <form class="my-4">
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label">@lang('install.step3BackendHost')</label>
-                        <div class="col-sm-9"><input type="url" name="backend_host" class="form-control" placeholder="https://fresns.org" ></div>
+                        <div class="col-sm-9"><input type="url" name="backend_host" class="form-control" placeholder="https://fresns.org" required></div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label">@lang('install.step3MemberNickname')</label>
-                        <div class="col-sm-9"><input type="text" name="nickname" class="form-control" ></div>
+                        <div class="col-sm-9"><input type="text" name="nickname" class="form-control" required></div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label">@lang('install.step3AccountEmail')</label>
-                        <div class="col-sm-9"><input type="email" name="email" class="form-control" ></div>
+                        <div class="col-sm-9"><input type="email" name="email" class="form-control"></div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label">@lang('install.step3AccountPhoneNumber')</label>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label">@lang('install.step3AccountPassword')</label>
-                        <div class="col-sm-9"><input type="text" name="password" class="form-control" ></div>
+                        <div class="col-sm-9"><input type="text" name="password" class="form-control" required></div>
                     </div>
                     <div class="alert alert-danger" role="alert" id="install_error_msg" style="display: none;"></div>
                     <div class="row mt-4">
