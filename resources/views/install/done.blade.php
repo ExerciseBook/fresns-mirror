@@ -28,13 +28,13 @@
     <main class="container">
         <div class="card mx-auto my-5" style="max-width:800px;">
             <div class="card-body p-5">
-                <h3 class="card-title mt-3">@lang('install.step5Title')</h3>
-                <p class="mt-4">@lang('install.step5Desc')</p>
+                <h3 class="card-title mt-3">@lang('install.doneTitle')</h3>
+                <p class="mt-4">@lang('install.doneDesc')</p>
                 <ul class="list-group">
-                    <li class="list-group-item">@lang('install.step5Account')</li>
-                    <li class="list-group-item">@lang('install.step5Password')</li>
+                    <li class="list-group-item">@lang('install.doneAccount')</li>
+                    <li class="list-group-item">@lang('install.donePassword')</li>
                 </ul>
-                <p class="mt-4"><a href="/fresns/admin" class="btn btn-outline-primary">@lang('install.step5Btn')</a></p>
+                <p class="mt-4"><a href="/fresns/admin" class="btn btn-outline-primary">@lang('install.doneBtn')</a></p>
             </div>
         </div>
     </main>

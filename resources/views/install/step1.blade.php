@@ -29,19 +29,77 @@
         <div class="card mx-auto my-5" style="max-width:800px;">
             <div class="card-body p-5">
                 <h3 class="card-title">@lang('install.step1Title')</h3>
-                <p class="mt-4">@lang('install.step1Desc')</p>
-                <ul>
-                    <li>@lang('install.step1DatabaseName')</li>
-                    <li>@lang('install.step1DatabaseUsername')</li>
-                    <li>@lang('install.step1DatabasePassword')</li>
-                    <li>@lang('install.step1DatabaseHost')</li>
-                    <li>@lang('install.step1DatabaseTablePrefix')</li>
+                <ul class="list-group list-group-flush my-4">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@lang('install.step1CheckPhpVersion')</span>
+                        <span id="php_version_status">-</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@lang('install.step1CheckHttps')</span>
+                        <span id="https_status">-</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@lang('install.step1CheckFolderOwnership')</span>
+                        <span id="folder_status">-</span>
+                    </li>
+                    <!--Extensions: fileinfo-->
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@lang('install.step1CheckPhpExtensions')</span>
+                        <span id="extensions_status">-</span>
+                    </li>
+                    <!--Functions: putenv,symlink,readlink,proc_open-->
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@lang('install.step1CheckPhpFunctions') </span>
+                        <span id="functions_status">-</span>
+                    </li>
                 </ul>
-                <p>@lang('install.step1DatabaseDesc')</p>
-                <a href="{{ route('install.step2') }}" class="btn btn-outline-primary mt-2">@lang('install.step1Btn')</a>
+                <button type="button" class="btn btn-outline-info ms-3" onclick="window.location.reload()">@lang('install.step1CheckBtn')</button>
+                <a href="{{ route('install.step2') }}" class="btn btn-outline-primary" id="next_step" style="display: none;">@lang('install.step1Btn')</a>
             </div>
         </div>
     </main>
 
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <script>
+        var items = [
+            "php_version",
+            "https",
+            "folder",
+            "extensions",
+            "functions",
+        ];
+        var counts = 0;
+
+        //检测
+        (function detect() {
+            var name = items[0];
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                url: '<?php echo route('install.env'); ?>',
+                data: {name: name},
+                success: function (data) {
+                    if(data.code == '000000'){
+                        counts++;
+                    }
+                    if ($('#' + name + '_status').length && data.result !== undefined) {
+                        $('#' + name + '_status').html(data.result);
+                    }
+                },
+                complete: function () {
+                    items.shift();
+                    if (items.length) {
+                        setTimeout(function () {detect();}, 20);
+                    }else{
+                        if (counts === 5){
+                            $('#next_step').show();
+                        }
+                    }
+                }
+            });
+        })();
+    </script>
 </body>
 </html>

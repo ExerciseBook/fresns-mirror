@@ -31,30 +31,23 @@
                 <h3 class="card-title">@lang('install.step2Title')</h3>
                 <ul class="list-group list-group-flush my-4">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>@lang('install.step2CheckPhpVersion')</span>
-                        <span id="php_version_status">-</span>
+                        <span>@lang('install.step2CheckMySqlVersion')</span>
+                        <span id="mysql_version_status">-</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>@lang('install.step2CheckHttps')</span>
-                        <span id="https_status">-</span>
+                        <span>@lang('install.step2CheckTablePrefix')</span>
+                        <span id="database_table_prefix">-</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>@lang('install.step2CheckFolderOwnership')</span>
-                        <span id="folder_status">-</span>
+                        <span>@lang('install.step2CheckMigrations')</span>
+                        <span id="database_migrate_status">-</span>
                     </li>
-                    <!--Extensions: fileinfo-->
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>@lang('install.step2CheckPhpExtensions')</span>
-                        <span id="extensions_status">-</span>
-                    </li>
-                    <!--Functions: putenv,symlink,readlink,proc_open-->
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>@lang('install.step2CheckPhpFunctions') </span>
-                        <span id="functions_status">-</span>
+                        <span>@lang('install.step2CheckSeeders')</span>
+                        <span id="database_seed_status">-</span>
                     </li>
                 </ul>
                 <a href="{{ route('install.step3') }}" class="btn btn-outline-primary ms-3" id="next_step" style="display: none;">@lang('install.step2Btn')</a>
-                <!-- 不满足条件，点击「重试」按钮重新检测，符合条件则是「确认」按钮-->
                 <button type="button" class="btn btn-outline-info ms-3" onclick="window.location.reload()">@lang('install.step2CheckBtn')</button>
             </div>
         </div>
@@ -64,14 +57,10 @@
     <script src="/static/js/jquery-3.6.0.min.js"></script>
     <script>
         var items = [
-            "php_version",
-            "https",
-            "folder",
-            "extensions",
-            "functions",
+            "mysql_version",
+            "mysql_db",
         ];
         var counts = 0;
-
         //检测
         (function detect() {
             var name = items[0];
@@ -94,7 +83,7 @@
                     if (items.length) {
                         setTimeout(function () {detect();}, 20);
                     }else{
-                        if (counts === 5){
+                        if (counts === 2){
                             $('#next_step').show();
                         }
                     }

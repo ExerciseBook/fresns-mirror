@@ -38,49 +38,41 @@ class FsControllerWeb
         return view('install.index');
     }
 
-    // install desc
+    // check env
     public function step1()
     {
         Cache::put('install_step1',1);
         return view('install.step1');
     }
 
-    // check env
+    // check mysql
     public function step2()
     {
         Cache::put('install_step2',1);
         return view('install.step2');
     }
 
-    // check mysql
+    // init manager
     public function step3()
     {
         Cache::put('install_step3',1);
         return view('install.step3');
     }
 
-    // init manager
-    public function step4()
-    {
-        Cache::put('install_step4',1);
-        return view('install.step4');
-    }
-
     // finish tips
-    public function step5()
+    public function done()
     {
         file_put_contents($this->lock_file,date('Y-m-d H:i:s'));
         Cache::forget('install_index');
         Cache::forget('install_step1');
         Cache::forget('install_step2');
         Cache::forget('install_step3');
-        Cache::forget('install_step4');
 
         // Soft link
         Artisan::call('key:generate');
         Artisan::call('storage:link');
 
-        return view('install.step5');
+        return view('install.done');
     }
 
     // env detect
