@@ -27,7 +27,7 @@
 
     <main class="container">
         <div class="card mx-auto my-5" style="max-width:800px;">
-            <div class="card-body p-5">
+            <div class="card-body p-lg-5">
                 <h3 class="card-title mt-3">@lang('install.doneTitle')</h3>
                 <p class="mt-4">@lang('install.doneDesc')</p>
                 <ul class="list-group">

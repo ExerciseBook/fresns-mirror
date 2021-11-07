@@ -26,7 +26,7 @@
 
     <main class="container">
         <div class="card mx-auto my-5" style="max-width:800px;">
-            <div class="card-body p-5">
+            <div class="card-body p-lg-5">
                 <h3 class="card-title">@lang('install.step3Title')</h3>
                 <p class="mt-2">@lang('install.step3Desc')</p>
                 <form class="my-4">
@@ -58,9 +58,7 @@
                         <label class="col-sm-3 col-form-label">@lang('install.step3AccountPassword')</label>
                         <div class="col-sm-9"><input type="text" name="password" class="form-control" ></div>
                     </div>
-                    <div class="alert alert-danger" role="alert" id="install_error_msg" style="display: none;">
-
-                    </div>
+                    <div class="alert alert-danger" role="alert" id="install_error_msg" style="display: none;"></div>
                     <div class="row mt-4">
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">

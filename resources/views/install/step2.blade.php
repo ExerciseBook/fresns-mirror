@@ -27,7 +27,7 @@
 
     <main class="container">
         <div class="card mx-auto my-5" style="max-width:800px;">
-            <div class="card-body p-5">
+            <div class="card-body p-lg-5">
                 <h3 class="card-title">@lang('install.step2Title')</h3>
                 <ul class="list-group list-group-flush my-4">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -47,8 +47,10 @@
                         <span id="database_seed_status">-</span>
                     </li>
                 </ul>
-                <a href="{{ route('install.step3') }}" class="btn btn-outline-primary ms-3" id="next_step" style="display: none;">@lang('install.step2Btn')</a>
-                <button type="button" class="btn btn-outline-info ms-3" onclick="window.location.reload()">@lang('install.step2CheckBtn')</button>
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-primary ms-3" onclick="window.location.reload()">@lang('install.checkBtn')</button>
+                    <a class="btn btn-primary me-3" href="{{ route('install.step3') }}" id="next_step" style="display: none;">@lang('install.nextBtn')</a>
+                </div>
             </div>
         </div>
     </main>
