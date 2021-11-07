@@ -36,7 +36,7 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>@lang('install.step2CheckTablePrefix')</span>
-                        <span id="database_table_prefix">-</span>
+                        <span id="database_table_prefix_status">-</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>@lang('install.step2CheckMigrations')</span>
@@ -58,7 +58,9 @@
     <script>
         var items = [
             "mysql_version",
-            "mysql_db",
+            "database_table_prefix",
+            "database_migrate",
+            "database_seed",
         ];
         var counts = 0;
         //检测
@@ -83,7 +85,7 @@
                     if (items.length) {
                         setTimeout(function () {detect();}, 20);
                     }else{
-                        if (counts === 2){
+                        if (counts === 4){
                             $('#next_step').show();
                         }
                     }

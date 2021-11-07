@@ -38,7 +38,7 @@ class InstallService
      */
     public static function mode(){
         $path = request()->path();
-        if(in_array($path,['install/fresns','install/step1','install/step2','install/step3','install/step4','install/step5','install/env','install/manage'])){
+        if(in_array($path,['install/fresns','install/step1','install/step2','install/step3','install/done','install/env','install/manage'])){
             return true;
         }
         return false;
@@ -65,24 +65,17 @@ class InstallService
                 }
                 break;
             case 'install/step3';
-                if(Cache::get('install_step2')){
+                if(Cache::get('install_step1')){
                     return ['code'=>'000000'];
                 }else{
                     return ['code'=>'200000','url'=>route('install.step2')];
                 }
                 break;
-            case 'install/step4';
+            case 'install/done';
                 if(Cache::get('install_step3')){
                     return ['code'=>'000000'];
                 }else{
                     return ['code'=>'200000','url'=>route('install.step3')];
-                }
-                break;
-            case 'install/step5';
-                if(Cache::get('install_step4')){
-                    return ['code'=>'000000'];
-                }else{
-                    return ['code'=>'200000','url'=>route('install.step4')];
                 }
                 break;
             default ;
@@ -104,13 +97,13 @@ class InstallService
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        Cache::forget('install_step2');
+                        Cache::forget('install_step1');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
                     break;
                 case 'https':
-                    $value = self::is_https();
+                    $value = self::isHttps();
                     if($value){
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
@@ -120,12 +113,12 @@ class InstallService
                     }
                     break;
                 case 'folder':
-                    $value = self::file_perms(base_path());
+                    $value = self::filePerms(base_path());
                     if ($value >= 755) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        Cache::forget('install_step2');
+                        Cache::forget('install_step1');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
@@ -142,7 +135,7 @@ class InstallService
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        Cache::forget('install_step2');
+                        Cache::forget('install_step1');
                         $disabled = implode('&nbsp;&nbsp;', $value);
                         $html = '<span class="me-3"><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
                         $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
@@ -162,7 +155,7 @@ class InstallService
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        Cache::forget('install_step2');
+                        Cache::forget('install_step1');
                         $disabled = implode('&nbsp;&nbsp;', $value);
                         $html = '<span class="me-3"><small class="text-muted">'.trans('install.step2StatusNotEnabled').': '.$disabled.'</small></span>';
                         $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
@@ -176,18 +169,14 @@ class InstallService
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        Cache::forget('install_step3');
+                        Cache::forget('install_step2');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
                     break;
-                case 'mysql_db':
-                    // execute migrate
+                case 'database_table_prefix':
                     set_time_limit(0);
                     defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
-
-                    Artisan::call('migrate', ['--force' => true ]);
-                    Artisan::call('db:seed', ['--force' => true ]);
 
                     $value = true;
                     $database = config('database.connections.mysql.database');
@@ -202,10 +191,40 @@ class InstallService
                     }
 
                     if ($value) {
-                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        $html = '<span class="me-3"><small class="text-muted">'.$prefix.'</small></span>';
+                        $html .= '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
                         return ['code' => '000000', 'message' => '检测成功','result'=>$html];
                     } else {
-                        Cache::forget('install_step3');
+                        Cache::forget('install_step2');
+                        $html = '<span class="me-3"><small class="text-muted">'.$prefix.'</small></span>';
+                        $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                    }
+                    break;
+                case 'database_migrate':
+                    set_time_limit(0);
+                    try {
+                        defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
+                        Artisan::call('migrate', ['--force' => true ]);
+
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                    }catch (\Exception $e){
+                        Cache::forget('install_step2');
+                        $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
+                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                    }
+                    break;
+                case 'database_seed':
+                    set_time_limit(0);
+                    try{
+                        defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
+                        Artisan::call('db:seed', ['--force' => true ]);
+
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.step2CheckStatusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                    }catch (\Exception $e){
+                        Cache::forget('install_step2');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.step2CheckStatusFailure').'</span>';
                         return ['code' => '100000', 'message' => '检测失败','result'=>$html];
                     }
@@ -283,7 +302,7 @@ class InstallService
     /**
      * permission
      */
-    public static function file_perms($file)
+    public static function filePerms($file)
     {
         clearstatcache();
         if(!file_exists($file)) return false;
@@ -291,7 +310,7 @@ class InstallService
         return substr(decoct($perms), -3);
     }
 
-    public static function is_https() {
+    public static function isHttps() {
         if ( !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
             return true;
         } elseif ( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
