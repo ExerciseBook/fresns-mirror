@@ -34,7 +34,7 @@ class InstallService
     ];
 
     /**
-     * install  mode
+     * install mode
      */
     public static function mode(){
         $path = request()->path();
@@ -95,32 +95,32 @@ class InstallService
                     $value = PHP_VERSION;
                     if ($value !== '' && version_compare(PHP_VERSION, '7.3', '>=')) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     } else {
                         Cache::forget('install_step1');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
-                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
                 case 'https':
                     $value = self::isHttps();
                     if($value){
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     }else{
                         $html = '<span class="badge bg-warning rounded-pill">'.trans('install.statusWarning').'</span>';
-                        return ['code' => '000000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
                 case 'folder':
                     $value = self::filePerms(base_path());
                     if ($value >= 755) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     } else {
                         Cache::forget('install_step1');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
-                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
                 case 'extensions':
@@ -133,13 +133,13 @@ class InstallService
                     }
                     if (empty($value)) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     } else {
                         Cache::forget('install_step1');
                         $disabled = implode('&nbsp;&nbsp;', $value);
                         $html = '<span class="me-3"><small class="text-muted">'.trans('install.statusNotEnabled').': '.$disabled.'</small></span>';
                         $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
-                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
                 case 'functions':
@@ -153,13 +153,13 @@ class InstallService
                     }
                     if (empty($value)) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     } else {
                         Cache::forget('install_step1');
                         $disabled = implode('&nbsp;&nbsp;', $value);
                         $html = '<span class="me-3"><small class="text-muted">'.trans('install.statusNotEnabled').': '.$disabled.'</small></span>';
                         $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
-                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
                 case 'mysql_version':
@@ -167,11 +167,11 @@ class InstallService
                     $value = $versionObj->version;
                     if ($value !== '' && version_compare($value, '5.7', '>=')) {
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     } else {
                         Cache::forget('install_step2');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
-                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
                 case 'database_table_prefix':
@@ -192,11 +192,11 @@ class InstallService
 
                     if ($value) {
                         $html = '<span class="badge bg-info rounded-pill">'.$prefix.'</span>';
-                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     } else {
                         Cache::forget('install_step2');
                         $html = '<span class="badge bg-warning rounded-pill">'.$prefix.'</span>';
-                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
                 case 'database_migrate':
@@ -206,11 +206,11 @@ class InstallService
                         Artisan::call('migrate', ['--force' => true ]);
 
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     }catch (\Exception $e){
                         Cache::forget('install_step2');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
-                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
                 case 'database_seed':
@@ -220,15 +220,15 @@ class InstallService
                         Artisan::call('db:seed', ['--force' => true ]);
 
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                        return ['code' => '000000', 'message' => '检测成功','result'=>$html];
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     }catch (\Exception $e){
                         Cache::forget('install_step2');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
-                        return ['code' => '100000', 'message' => '检测失败','result'=>$html];
+                        return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
                 default:
-                    return ['code' => '200000', 'message' => 'name参数错误'];
+                    return ['code' => '200000', 'message' => 'Name parameter error'];
             }
         } catch (\Exception $e) {
             return ['code' => '999999', 'message' => $e->getMessage()];
