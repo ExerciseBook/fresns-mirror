@@ -6,7 +6,11 @@
             <div class="card mt-4 mb-4 p-2 p-lg-4">
                 <div class="card-body">
                     <h1 class="fs-3 fw-normal">@lang('fresns.welcome')</h1>
-                    <p class="text-secondary pb-4">@lang('fresns.currentVersion') <span data-bs-toggle="tooltip" data-bs-placement="top" title="Database: v{{$version}}">v1.2.0</span></p>
+                    <p class="text-secondary pb-4">
+                        @lang('fresns.currentVersion')
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Database: v{{$version}}">v1.2.0</span>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#upgrade" class="btn btn-outline-primary btn-sm ms-3">升级 v1.3.0</button>
+                    </p>
                     <div class="row">
                         <div class="col-md mb-4 pe-lg-5">
                             <h3 class="h6">@lang('fresns.overview')</h3>
@@ -135,6 +139,26 @@
                         </div>
                         <div class="form-text"><i class="bi bi-info-circle"></i> @lang('fresns.codeInstallInfo')</div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--upgrade Modal-->
+    <div class="modal fade" id="upgrade" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-laptop"></i> Fresns <span class="badge bg-secondary">1.2.0</span> to <span class="badge bg-danger">1.3.0</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ps-5">
+                    <p><i class="bi bi-x-lg text-danger me-2"></i>初始化验证 <span class="badge bg-secondary">'当前行为名'+'inputError'</span></p>
+                    <p><i class="bi bi-check-lg text-success me-2"></i>下载应用包</p>
+                    <p><i class="bi bi-check-lg text-success me-2"></i>解压应用包</p>
+                    <p><i class="spinner-border spinner-border-sm me-2" role="status"></i>安装应用</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2"></i>清空缓存</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2"></i>完成</p>
                 </div>
             </div>
         </div>
