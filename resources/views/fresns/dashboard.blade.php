@@ -9,7 +9,7 @@
                     <p class="text-secondary pb-4">
                         @lang('fresns.currentVersion')
                         <span data-bs-toggle="tooltip" data-bs-placement="top" title="Database: v{{$version}}">v{{ $appVersion['currentVersion'] }}</span>
-                        @if($appVersion['canUpgrade'] == false)
+                        @if($appVersion['canUpgrade'])
                         <button type="button" data-bs-toggle="modal" id="app_upgrade" class="btn btn-outline-primary btn-sm ms-3">升级 v{{ $appVersion['upgradeVersion'] }}</button>
                         @endif
                     </p>
