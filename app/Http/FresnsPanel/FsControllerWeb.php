@@ -288,7 +288,8 @@ class FsControllerWeb extends BaseFrontendController
             'title' => 'Dashboard',
             'total' => $total,
             'notice_arr' => $noticeArr,
-            'lang_desc' => FsService::getLanguage($langTag),
+            'lang_desc'  => FsService::getLanguage($langTag),
+            'appVersion' => FsService::getVersionInfo(),
         ];
 
         return view('fresns.dashboard', $data);
@@ -920,51 +921,48 @@ class FsControllerWeb extends BaseFrontendController
         $this->success();
     }
 
-    // todo update system program
-    public function updateSystem(Request $request){
-        $version = $request->input('version','1');
+    // upgrade system
+    public function upgrade(){
+        set_time_limit(0);
         try{
+            $versionInfo = FsService::getVersionInfo();
+            if(!$versionInfo['canUpgrade']){
+                $this->errorInfo(501,'没有需要升级的安装包');
+            }
             //download file
             LogService::info('Upgrade start');
-            $upgradeUrl = 'https://apps.fresns.cn/';
-            $downloadDir  = storage_path('app/upgrade/v_'.$version.'/');
+            $downloadDir  = storage_path('app/upgrade/v_'.$versionInfo['upgradeVersion'].'/');
             $filename = date('Y-m-d').'.zip';
             $downloadFile = $downloadDir.$filename;
             FileHelper::assetDir($downloadFile);
             LogService::info('Upgrade get content');
-            $content = file_get_contents($upgradeUrl);
+            $content = file_get_contents($versionInfo['upgradePackage']);
             file_put_contents($downloadFile, $content);
             LogService::info('Upgrade write content');
             $fileSize = File::size($downloadFile);
             if ($fileSize < 10) {
-                $this->errorInfo(2,'系统升级包下载失败');
+                $this->errorInfo(502,'系统升级包下载失败');
             }
             //unzip file
             $status = FileHelper::unzip($downloadFile, $downloadDir);
             if ($status == false){
-                $this->errorInfo(3,'系统升级包加压失败');
+                $this->errorInfo(503,'系统升级包加压失败');
             }
             // Distribution of documents
-            $coverPath = ['Http', 'static', 'views','lang','migrations','seeders'];
+            $coverPath = ['Base','Console','Exceptions','Helpers','Http','Listeners','Providers','Traits', 'static', 'views','lang','migrations','seeders'];
             foreach ($coverPath as $subDir) {
-                if($subDir == 'Http'){
+                if(in_array($subDir,['Base','Console','Exceptions','Helpers','Http','Listeners','Providers','Traits'])){
                     $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
-                    (new Filesystem)->copyDirectory($upDir,app_path('Http'));
+                    (new Filesystem)->copyDirectory($upDir,app_path($subDir));
                 }elseif ($subDir == 'static'){
                     $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
-                    (new Filesystem)->copyDirectory($upDir,public_path('Http'));
-                }elseif ($subDir == 'views'){
+                    (new Filesystem)->copyDirectory($upDir,public_path($subDir));
+                }elseif (in_array($subDir,['views','lang'])){
                     $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
-                    (new Filesystem)->copyDirectory($upDir,resource_path('views'));
-                }elseif ($subDir == 'lang'){
+                    (new Filesystem)->copyDirectory($upDir,resource_path($subDir));
+                }elseif (in_array($subDir,['migrations','seeders'])){
                     $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
-                    (new Filesystem)->copyDirectory($upDir,resource_path('lang'));
-                }elseif ($subDir == 'migrations'){
-                    $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
-                    (new Filesystem)->copyDirectory($upDir,database_path('migrations'));
-                }elseif ($subDir == 'seeders'){
-                    $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
-                    (new Filesystem)->copyDirectory($upDir,database_path('seeders'));
+                    (new Filesystem)->copyDirectory($upDir,database_path($subDir));
                 }
             }
             // Initialization file loading
@@ -983,7 +981,7 @@ class FsControllerWeb extends BaseFrontendController
             LogService::info('Upgrade end');
             $this->success();
         } catch (\Exception $e) {
-            $this->errorInfo(5000,$e->getMessage());
+            $this->errorInfo(505,$e->getMessage());
         }
     }
 }

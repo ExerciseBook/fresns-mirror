@@ -8,8 +8,10 @@
                     <h1 class="fs-3 fw-normal">@lang('fresns.welcome')</h1>
                     <p class="text-secondary pb-4">
                         @lang('fresns.currentVersion')
-                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Database: v{{$version}}">v1.2.0</span>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#upgrade" class="btn btn-outline-primary btn-sm ms-3">升级 v1.3.0</button>
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Database: v{{$version}}">v{{ $appVersion['currentVersion'] }}</span>
+                        @if($appVersion['canUpgrade'] == false)
+                        <button type="button" data-bs-toggle="modal" id="app_upgrade" class="btn btn-outline-primary btn-sm ms-3">升级 v{{ $appVersion['upgradeVersion'] }}</button>
+                        @endif
                     </p>
                     <div class="row">
                         <div class="col-md mb-4 pe-lg-5">
@@ -149,22 +151,83 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-laptop"></i> Fresns <span class="badge bg-secondary">1.2.0</span> to <span class="badge bg-danger">1.3.0</span></h5>
+                    <h5 class="modal-title"><i class="bi bi-laptop"></i> Fresns <span class="badge bg-secondary">{{ $appVersion['currentVersion'] }}</span> to <span class="badge bg-danger">{{ $appVersion['upgradeVersion'] }}</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body ps-5">
-                    <p><i class="bi bi-x-lg text-danger me-2"></i>初始化验证 <span class="badge bg-secondary">'当前行为名'+'inputError'</span></p>
-                    <p><i class="bi bi-check-lg text-success me-2"></i>下载应用包</p>
-                    <p><i class="bi bi-check-lg text-success me-2"></i>解压应用包</p>
-                    <p><i class="spinner-border spinner-border-sm me-2" role="status"></i>安装应用</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2"></i>清空缓存</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2"></i>完成</p>
+                    <p><i class="spinner-border spinner-border-sm me-2 step1"></i>@lang('fresns.codeInstallStep1')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step2"></i>@lang('fresns.codeInstallStep2')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step3"></i>@lang('fresns.codeInstallStep3')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step4"></i>@lang('fresns.codeInstallStep4')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.codeInstallStep5')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step6"></i>@lang('fresns.codeInstallStep6')</p>
                 </div>
             </div>
         </div>
     </div>
 
+
 @include('fresns.footer')
+
+
+<script>
+    //upgrade program
+    $("#app_upgrade").click(function () {
+        $.ajax({
+            async: false,
+            type: "post",
+            url: "/fresns/upgrade",
+            beforeSend: function (request) {
+                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
+            },
+            success: function (data) {
+                console.log(data);
+                if (data.code == 0) {
+                    $('#upgrade').addClass('show');
+                    $('#upgrade').css({
+                        'display': 'block',
+                    });
+                    setTimeout(function () {
+                        $('.step1').removeClass("spinner-border spinner-border-sm")
+                        $('.step1').addClass("bi bi-check-lg text-success")
+                        $('.step2').removeClass("bi bi-hourglass text-secondary")
+                        $('.step2').addClass("spinner-border spinner-border-sm")
+                    }, 300)
+                    setTimeout(function () {
+                        $('.step2').removeClass("spinner-border spinner-border-sm")
+                        $('.step2').addClass("bi bi-check-lg text-success")
+                        $('.step3').removeClass("bi bi-hourglass text-secondary")
+                        $('.step3').addClass("spinner-border spinner-border-sm")
+                    }, 600)
+                    setTimeout(function () {
+                        $('.step3').removeClass("spinner-border spinner-border-sm")
+                        $('.step3').addClass("bi bi-check-lg text-success")
+                        $('.step4').removeClass("bi bi-hourglass text-secondary")
+                        $('.step4').addClass("spinner-border spinner-border-sm")
+                    }, 900)
+                    setTimeout(function () {
+                        $('.step4').removeClass("spinner-border spinner-border-sm")
+                        $('.step4').addClass("bi bi-check-lg text-success")
+                        $('.step5').removeClass("bi bi-hourglass text-secondary")
+                        $('.step5').addClass("spinner-border spinner-border-sm")
+                    }, 1200)
+                    setTimeout(function () {
+                        $('.step5').removeClass("spinner-border spinner-border-sm")
+                        $('.step5').addClass("bi bi-check-lg text-success")
+                        $('.step6').removeClass("bi bi-hourglass text-secondary")
+                        $('.step6').addClass("spinner-border spinner-border-sm")
+                    }, 1500)
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1800)
+                } else {
+                    alert(data.message);
+                }
+            }
+        })
+    });
+</script>
+
 
 </body>
 </html>
