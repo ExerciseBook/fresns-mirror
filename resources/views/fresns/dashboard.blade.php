@@ -10,7 +10,7 @@
                         @lang('fresns.currentVersion')
                         <span data-bs-toggle="tooltip" data-bs-placement="top" title="Database: v{{$version}}">v{{ $appVersion['currentVersion'] }}</span>
                         @if($appVersion['canUpgrade'])
-                        <button type="button" data-bs-toggle="modal" id="app_upgrade" class="btn btn-outline-primary btn-sm ms-3">升级 v{{ $appVersion['upgradeVersion'] }}</button>
+                            <button type="button" data-bs-toggle="modal" id="app_upgrade" class="btn btn-outline-primary btn-sm ms-3">@lang('fresns.updateBtn') v{{ $appVersion['upgradeVersion'] }}</button>
                         @endif
                     </p>
                     <div class="row">
@@ -155,79 +155,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body ps-5">
-                    <p><i class="spinner-border spinner-border-sm me-2 step1"></i>@lang('fresns.codeInstallStep1')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step2"></i>@lang('fresns.codeInstallStep2')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step3"></i>@lang('fresns.codeInstallStep3')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step4"></i>@lang('fresns.codeInstallStep4')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.codeInstallStep5')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step6"></i>@lang('fresns.codeInstallStep6')</p>
+                    <p><i class="spinner-border spinner-border-sm me-2 step1"></i>@lang('fresns.updateStep1')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step2"></i>@lang('fresns.updateStep2')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step3"></i>@lang('fresns.updateStep3')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step4"></i>@lang('fresns.updateStep4')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.updateStep5')</p>
+                    <p><i class="bi bi-hourglass text-secondary me-2 step6"></i>@lang('fresns.updateStep6')</p>
                 </div>
             </div>
         </div>
     </div>
 
-
-@include('fresns.footer')
-
-
-<script>
-    //upgrade program
-    $("#app_upgrade").click(function () {
-        $.ajax({
-            async: false,
-            type: "post",
-            url: "/fresns/upgrade",
-            beforeSend: function (request) {
-                return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-            },
-            success: function (data) {
-                console.log(data);
-                if (data.code == 0) {
-                    $('#upgrade').addClass('show');
-                    $('#upgrade').css({
-                        'display': 'block',
-                    });
-                    setTimeout(function () {
-                        $('.step1').removeClass("spinner-border spinner-border-sm")
-                        $('.step1').addClass("bi bi-check-lg text-success")
-                        $('.step2').removeClass("bi bi-hourglass text-secondary")
-                        $('.step2').addClass("spinner-border spinner-border-sm")
-                    }, 300)
-                    setTimeout(function () {
-                        $('.step2').removeClass("spinner-border spinner-border-sm")
-                        $('.step2').addClass("bi bi-check-lg text-success")
-                        $('.step3').removeClass("bi bi-hourglass text-secondary")
-                        $('.step3').addClass("spinner-border spinner-border-sm")
-                    }, 600)
-                    setTimeout(function () {
-                        $('.step3').removeClass("spinner-border spinner-border-sm")
-                        $('.step3').addClass("bi bi-check-lg text-success")
-                        $('.step4').removeClass("bi bi-hourglass text-secondary")
-                        $('.step4').addClass("spinner-border spinner-border-sm")
-                    }, 900)
-                    setTimeout(function () {
-                        $('.step4').removeClass("spinner-border spinner-border-sm")
-                        $('.step4').addClass("bi bi-check-lg text-success")
-                        $('.step5').removeClass("bi bi-hourglass text-secondary")
-                        $('.step5').addClass("spinner-border spinner-border-sm")
-                    }, 1200)
-                    setTimeout(function () {
-                        $('.step5').removeClass("spinner-border spinner-border-sm")
-                        $('.step5').addClass("bi bi-check-lg text-success")
-                        $('.step6').removeClass("bi bi-hourglass text-secondary")
-                        $('.step6').addClass("spinner-border spinner-border-sm")
-                    }, 1500)
-                    setTimeout(function () {
-                        window.location.reload();
-                    }, 1800)
-                } else {
-                    alert(data.message);
-                }
-            }
-        })
-    });
-</script>
-
+    @include('fresns.footer')
 
 </body>
 </html>
