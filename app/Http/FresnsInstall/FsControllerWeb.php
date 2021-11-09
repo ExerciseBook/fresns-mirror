@@ -21,6 +21,8 @@ class FsControllerWeb
 
     // check install
     public function __construct(){
+        defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
+
         $this->lock_file = public_path('install.lock');
         if(is_file($this->lock_file)){
             header('Location: /');exit;

@@ -190,8 +190,6 @@ class InstallService
                 case 'database_migrate':
                     set_time_limit(0);
                     try {
-                        defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
-
                         $value = true;
                         $database = config('database.connections.mysql.database');
                         $prefix = config('database.connections.mysql.prefix');
@@ -219,7 +217,6 @@ class InstallService
                 case 'database_seed':
                     set_time_limit(0);
                     try{
-                        defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
                         Artisan::call('db:seed', ['--force' => true ]);
 
                         $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
