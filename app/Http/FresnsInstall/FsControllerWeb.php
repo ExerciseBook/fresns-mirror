@@ -54,6 +54,8 @@ class FsControllerWeb
     public function step2()
     {
         Cache::put('install_step2',1);
+        $lang = Cache::get('install_lang');
+        App::setLocale($lang);
         return view('install.step2');
     }
 
@@ -61,13 +63,16 @@ class FsControllerWeb
     public function step3()
     {
         Cache::put('install_step3',1);
+        $lang = Cache::get('install_lang');
+        App::setLocale($lang);
         return view('install.step3');
     }
 
     // finish tips
     public function done()
     {
-        Cache::forget('install_lang');
+        $lang = Cache::get('install_lang');
+        App::setLocale($lang);
         file_put_contents($this->lock_file,date('Y-m-d H:i:s'));
         Cache::forget('install_index');
         Cache::forget('install_step1');

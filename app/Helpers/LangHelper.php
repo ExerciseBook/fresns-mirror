@@ -20,12 +20,7 @@ class LangHelper
         // Language Tags (langTag)
         // Leave blank to output the default language content
         // If no default language is queried, the first entry is output
-        $input_locale = request()->input('lang', '');
-        $cache_locale = Cache::get('install_lang');
-        if($cache_locale){
-            App::setLocale($cache_locale);
-        } elseif ($input_locale){
-            App::setLocale($input_locale);
-        }
+        $locale = request()->input('lang', 'zh-Hans');
+        App::setLocale($locale);
     }
 }
