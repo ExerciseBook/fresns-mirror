@@ -10,6 +10,7 @@ namespace App\Http\FresnsInstall;
 
 use App\Http\UpgradeController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
@@ -42,8 +43,9 @@ class FsControllerWeb
     }
 
     // check env
-    public function step1()
+    public function step1(Request $request)
     {
+        Cache::put('install_lang',$request->input('lang'));
         Cache::put('install_step1',1);
         return view('install.step1');
     }
@@ -65,6 +67,7 @@ class FsControllerWeb
     // finish tips
     public function done()
     {
+        Cache::forget('install_lang');
         file_put_contents($this->lock_file,date('Y-m-d H:i:s'));
         Cache::forget('install_index');
         Cache::forget('install_step1');

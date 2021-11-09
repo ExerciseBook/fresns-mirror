@@ -10,6 +10,7 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class LangHelper
 {
@@ -19,8 +20,12 @@ class LangHelper
         // Language Tags (langTag)
         // Leave blank to output the default language content
         // If no default language is queried, the first entry is output
-        $default_lang = App::getLocale() ?? 'zh-Hans';
-        $locale = request()->input('lang', $default_lang);
-        App::setLocale($locale);
+        $input_locale = request()->input('lang', '');
+        $cache_locale = Cache::get('install_lang');
+        if($cache_locale){
+            App::setLocale($cache_locale);
+        } elseif ($input_locale){
+            App::setLocale($input_locale);
+        }
     }
 }
