@@ -936,7 +936,7 @@ class FsControllerWeb extends BaseFrontendController
             $downloadFile = $downloadDir.$filename;
             FileHelper::assetDir($downloadFile);
             LogService::info('Upgrade get content');
-            $content = file_get_contents($versionInfo['upgradePackage']);
+            $content = FsService::httpGet($versionInfo['upgradePackage'],600);
             file_put_contents($downloadFile, $content);
             LogService::info('Upgrade write content');
             $fileSize = File::size($downloadFile);
