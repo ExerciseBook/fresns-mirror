@@ -745,7 +745,7 @@ class FsControllerApi extends FresnsBaseApiController
     // Calculate distance by latitude and longitude
     public static function distance1($longitude, $latitude, $distance)
     {
-        $prefix = env('DB_PREFIX');
+        $tableName = env('DB_PREFIX').'posts';
         $sql = "SELECT id,
         ROUND(
             6378.138 * 2 * ASIN(
@@ -769,7 +769,7 @@ class FsControllerApi extends FresnsBaseApiController
             ) * 1000
         ) AS juli
         FROM
-            $prefix . _posts
+            $tableName
         HAVING
             juli < $distance
         ORDER BY
