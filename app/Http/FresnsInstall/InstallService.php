@@ -177,25 +177,13 @@ class InstallService
                 case 'database_table_prefix':
                     set_time_limit(0);
                     defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
-
-                    $value = true;
-                    $database = config('database.connections.mysql.database');
-                    $prefix = config('database.connections.mysql.prefix');
-                    $db_tables = DB::select('show tables;');
-                    $db_tables = collect($db_tables)->pluck('Tables_in_'.$database)->values()->toArray();
-                    foreach (self::INSTALL_TABLES as $table){
-                        if(!in_array($prefix.$table,$db_tables)){
-                            $value = false;
-                            break;
-                        }
-                    }
-
+                    $value = config('database.connections.mysql.prefix');
                     if ($value) {
-                        $html = '<span class="badge bg-info rounded-pill">'.$prefix.'</span>';
+                        $html = '<span class="badge bg-info rounded-pill">'.$value.'</span>';
                         return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     } else {
                         Cache::forget('install_step2');
-                        $html = '<span class="badge bg-warning rounded-pill">'.$prefix.'</span>';
+                        $html = '<span class="badge bg-warning rounded-pill">'.$value.'</span>';
                         return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
@@ -203,10 +191,28 @@ class InstallService
                     set_time_limit(0);
                     try {
                         defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
-                        Artisan::call('migrate', ['--force' => true ]);
 
-                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
+                        $value = true;
+                        $database = config('database.connections.mysql.database');
+                        $prefix = config('database.connections.mysql.prefix');
+                        $db_tables = DB::select('show tables;');
+                        $db_tables = collect($db_tables)->pluck('Tables_in_'.$database)->values()->toArray();
+                        foreach (self::INSTALL_TABLES as $table){
+                            if(!in_array($prefix.$table,$db_tables)){
+                                $value = false;
+                                break;
+                            }
+                        }
+
+                        if(!$value){
+                            Artisan::call('migrate', ['--force' => true ]);
+                            $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
+                            return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
+                        }else{
+                            Cache::forget('install_step2');
+                            $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
+                            return ['code' => '100000', 'message' => 'already has tables','result'=>$html];
+                        }
                     }catch (\Exception $e){
                         Cache::forget('install_step2');
                         $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';

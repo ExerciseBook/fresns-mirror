@@ -20,7 +20,7 @@ class FsControllerWeb
 
     // check install
     public function __construct(){
-        $this->lock_file = storage_path('app/install.lock');
+        $this->lock_file = public_path('install.lock');
         if(is_file($this->lock_file)){
             header('Location: /');exit;
         }else{
@@ -91,6 +91,14 @@ class FsControllerWeb
         $country_code = $request->input('country_code');
         $password = $request->input('password');
         $nickname = $request->input('nickname');
+
+        if($email){
+            $preg_email = '/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@([a-zA-Z0-9]+[-.])+([a-z]{2,5})$/ims';
+            if(preg_match($preg_email, $email) == false){
+                return Response::json(['code'=>'200000','message'=>'email type error']);
+            }
+        }
+
         // register config
         $result = InstallService::updateOrInsertConfig('backend_domain',$back_host,'string','backends');
         if($result['code'] != '000000'){
