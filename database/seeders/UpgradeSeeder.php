@@ -1,7 +1,9 @@
 <?php
-/**
- * User: yuchong
- * Date: 2021/11/8
+
+/*
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
+ * Released under the Apache-2.0 License.
  */
 
 namespace Database\Seeders;
