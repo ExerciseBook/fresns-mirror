@@ -123,6 +123,10 @@ class FsControllerWeb
         if($result['code'] != '000000'){
             return Response::json($result);
         }
+        $result = InstallService::updateOrInsertConfig('fresns_version_int',UpgradeController::$versionInt,'number','systems');
+        if($result['code'] != '000000'){
+            return Response::json($result);
+        }
 
         // register user
         $input = [
