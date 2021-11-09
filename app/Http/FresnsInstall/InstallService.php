@@ -206,14 +206,9 @@ class InstallService
 
                         if(!$value){
                             Artisan::call('migrate', ['--force' => true ]);
-                            $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
-                            return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
-                        }else{
-                            Cache::forget('install_step2');
-                            $html = '<span class="me-3"><small class="text-muted">already has tables</small></span>';
-                            $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
-                            return ['code' => '100000', 'message' => 'already has tables','result'=>$html];
                         }
+                        $html = '<span class="badge bg-success rounded-pill">'.trans('install.statusSuccess').'</span>';
+                        return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     }catch (\Exception $e){
                         Cache::forget('install_step2');
                         $html = '<span class="me-3"><small class="text-muted">'.$e->getMessage().'</small></span>';
