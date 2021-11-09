@@ -210,12 +210,14 @@ class InstallService
                             return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                         }else{
                             Cache::forget('install_step2');
-                            $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
+                            $html = '<span class="me-3"><small class="text-muted">already has tables</small></span>';
+                            $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
                             return ['code' => '100000', 'message' => 'already has tables','result'=>$html];
                         }
                     }catch (\Exception $e){
                         Cache::forget('install_step2');
-                        $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
+                        $html = '<span class="me-3"><small class="text-muted">'.$e->getMessage().'</small></span>';
+                        $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
                         return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;
@@ -229,7 +231,8 @@ class InstallService
                         return ['code' => '000000', 'message' => 'Check Success','result'=>$html];
                     }catch (\Exception $e){
                         Cache::forget('install_step2');
-                        $html = '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
+                        $html = '<span class="me-3"><small class="text-muted">'.$e->getMessage().'</small></span>';
+                        $html .= '<span class="badge bg-danger rounded-pill">'.trans('install.statusFailure').'</span>';
                         return ['code' => '100000', 'message' => 'Check Failure','result'=>$html];
                     }
                     break;

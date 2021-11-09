@@ -19,8 +19,8 @@ class LangHelper
         // Language Tags (langTag)
         // Leave blank to output the default language content
         // If no default language is queried, the first entry is output
-        $locale = request()->header('langTag', 'zh-Hans');
-        $locale = request()->input('lang', 'zh-Hans');
+        $default_lang = App::getLocale() ?? 'zh-Hans';
+        $locale = request()->input('lang', $default_lang);
         App::setLocale($locale);
     }
 }
