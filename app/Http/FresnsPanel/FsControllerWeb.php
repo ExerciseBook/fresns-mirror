@@ -894,7 +894,7 @@ class FsControllerWeb extends BaseFrontendController
                     'item_key' => $websiteUnikey.'_Pc',
                     'item_tag' => 'themes',
                     'item_value' => $subjectUnikeyPc,
-                    'item_type' => 'plugin',
+                    'item_type' => 'string',
                 ];
                 FresnsConfigs::insert($input);
             }
@@ -911,7 +911,7 @@ class FsControllerWeb extends BaseFrontendController
                     'item_key' => $websiteUnikey.'_Mobile',
                     'item_tag' => 'themes',
                     'item_value' => $subjectUnikeyMobile,
-                    'item_type' => 'plugin',
+                    'item_type' => 'string',
                 ];
                 FresnsConfigs::insert($input);
             }
