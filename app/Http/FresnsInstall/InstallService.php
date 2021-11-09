@@ -65,7 +65,7 @@ class InstallService
                 }
                 break;
             case 'install/step3';
-                if(Cache::get('install_step1')){
+                if(Cache::get('install_step2')){
                     return ['code'=>'000000'];
                 }else{
                     return ['code'=>'200000','url'=>route('install.step2')];
