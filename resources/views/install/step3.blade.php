@@ -83,23 +83,23 @@
             var pure_phone = $.trim($('input[name="pure_phone"]').val());
             var password = $.trim($('input[name="password"]').val());
             if(backend_host == ''){
-                alert('backend_host input must not empty');
+                alert('Backend host input must not empty');
                 return false;
             }
             if(nickname ==''){
-                alert('nickname input must not empty');
+                alert('Nickname input must not empty');
                 return false;
             }
             if(country_code == ''){
-                alert('country_code input must not empty');
+                alert('Country code input must not empty');
                 return false;
             }
             if(pure_phone == '' && email == ''){
-                alert('email or phone must input at least one');
+                alert('Email or Phone must input at least one');
                 return false;
             }
             if(password == ''){
-                alert('password input must not empty');
+                alert('Password input must not empty');
                 return false;
             }
 

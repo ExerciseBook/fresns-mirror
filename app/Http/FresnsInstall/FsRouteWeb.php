@@ -6,7 +6,6 @@
  * Released under the Apache-2.0 License.
  */
 
-
 $appName = env('APP_NAME');
 if ($appName == 'Fresns') {
     Route::group(['prefix' => 'install', 'namespace' => '\App\Http\FresnsInstall'], function () {

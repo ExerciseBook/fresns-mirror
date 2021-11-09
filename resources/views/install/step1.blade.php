@@ -73,7 +73,7 @@
         ];
         var counts = 0;
 
-        //检测
+        //check
         (function detect() {
             var name = items[0];
             $.ajax({
