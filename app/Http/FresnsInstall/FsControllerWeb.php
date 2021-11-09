@@ -8,6 +8,7 @@
 
 namespace App\Http\FresnsInstall;
 
+use App\Http\UpgradeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -105,6 +106,10 @@ class FsControllerWeb
             return Response::json($result);
         }
         $result = InstallService::updateOrInsertConfig('install_time',date('Y-m-d H:i:s'),'string','systems');
+        if($result['code'] != '000000'){
+            return Response::json($result);
+        }
+        $result = InstallService::updateOrInsertConfig('fresns_version',UpgradeController::$version,'string','systems');
         if($result['code'] != '000000'){
             return Response::json($result);
         }
