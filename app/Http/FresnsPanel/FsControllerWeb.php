@@ -288,7 +288,7 @@ class FsControllerWeb extends BaseFrontendController
             'title' => 'Dashboard',
             'total' => $total,
             'notice_arr' => $noticeArr,
-            'lang_desc'  => FsService::getLanguage($langTag),
+            'lang_desc' => FsService::getLanguage($langTag),
             'appVersion' => FsService::getVersionInfo(),
         ];
 
