@@ -219,62 +219,6 @@ $("#btn-danger-delete").click(function () {
     })
 });
 
-//Upgrade
-$("#app_upgrade").click(function () {
-    $.ajax({
-        async: false,
-        type: "post",
-        url: "/fresns/upgrade",
-        beforeSend: function (request) {
-            return request.setRequestHeader('X-CSRF-Token', "{{ csrf_token() }}");
-        },
-        success: function (data) {
-            console.log(data);
-            if (data.code == 0) {
-                $('#upgrade').addClass('show');
-                $('#upgrade').css({
-                    'display': 'block',
-                });
-                setTimeout(function () {
-                    $('.step1').removeClass("spinner-border spinner-border-sm")
-                    $('.step1').addClass("bi bi-check-lg text-success")
-                    $('.step2').removeClass("bi bi-hourglass text-secondary")
-                    $('.step2').addClass("spinner-border spinner-border-sm")
-                }, 300)
-                setTimeout(function () {
-                    $('.step2').removeClass("spinner-border spinner-border-sm")
-                    $('.step2').addClass("bi bi-check-lg text-success")
-                    $('.step3').removeClass("bi bi-hourglass text-secondary")
-                    $('.step3').addClass("spinner-border spinner-border-sm")
-                }, 600)
-                setTimeout(function () {
-                    $('.step3').removeClass("spinner-border spinner-border-sm")
-                    $('.step3').addClass("bi bi-check-lg text-success")
-                    $('.step4').removeClass("bi bi-hourglass text-secondary")
-                    $('.step4').addClass("spinner-border spinner-border-sm")
-                }, 900)
-                setTimeout(function () {
-                    $('.step4').removeClass("spinner-border spinner-border-sm")
-                    $('.step4').addClass("bi bi-check-lg text-success")
-                    $('.step5').removeClass("bi bi-hourglass text-secondary")
-                    $('.step5').addClass("spinner-border spinner-border-sm")
-                }, 1200)
-                setTimeout(function () {
-                    $('.step5').removeClass("spinner-border spinner-border-sm")
-                    $('.step5').addClass("bi bi-check-lg text-success")
-                    $('.step6').removeClass("bi bi-hourglass text-secondary")
-                    $('.step6').addClass("spinner-border spinner-border-sm")
-                }, 1500)
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1800)
-            } else {
-                alert(data.message);
-            }
-        }
-    })
-});
-
 //Plugin List Tab
 $(".pluginList li").click(function () {
     var type = $(this).find('a').attr('data-type');

@@ -29,12 +29,11 @@ class FsService extends BaseAdminService
         $url = 'https://fresns.cn/version.json';
         $rs = self::httpGet($url);
         $api_version =  !empty($rs) ? json_decode($rs,true) : [];
-        $current_version = UpgradeController::$version;
-        if($api_version){
-            $upgrade = version_compare($api_version['version'], $current_version, '>');
-            return ['currentVersion'=>$current_version,'canUpgrade'=>$upgrade,'upgradeVersion'=>$api_version['version'],'upgradePackage'=>$api_version['upgradePackage']];
+        $current_version = UpgradeController::$versionInt;
+        if(isset($api_version['versionInt']) && $api_version['versionInt'] > $current_version){
+            return ['currentVersion'=>UpgradeController::$version,'canUpgrade'=>true,'upgradeVersion'=>$api_version['version'],'upgradePackage'=>$api_version['upgradePackage']];
         }else{
-            return ['currentVersion'=>$current_version,'canUpgrade'=>false,'upgradeVersion'=>$current_version,'upgradePackage'=>''];
+            return ['currentVersion'=>UpgradeController::$version,'canUpgrade'=>false,'upgradeVersion'=>UpgradeController::$version,'upgradePackage'=>''];
         }
     }
 
@@ -81,4 +80,24 @@ class FsService extends BaseAdminService
         Log::info('upgrate-http',$log);
         return $sContent;
     }
+
+    public static function downFile($url,$filePath,$timeout=600)
+    {
+        $ch = curl_init();
+        if (stripos($url, "https://") !== FALSE) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        }
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $content = curl_exec($ch);
+        curl_close($ch);
+
+        file_put_contents($filePath, $content);
+        unset($content);
+        return true;
+    }
+
+
 }

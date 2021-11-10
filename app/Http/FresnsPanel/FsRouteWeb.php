@@ -62,7 +62,5 @@ if ($appName == 'Fresns' && InstallService::mode() === false) {
         Route::post('/localInstall', 'FsControllerWeb@localInstall')->name('admin.fresnsConsole.localInstall');
         Route::post('/enableUnikeyStatus', 'FsControllerWeb@enableUnikeyStatus')->name('admin.fresnsConsole.install');
         Route::post('/websiteLinkSubject', 'FsControllerWeb@websiteLinkSubject')->name('admin.fresnsConsole.websiteLinkSubject');
-        Route::post('/upgrade', 'FsControllerWeb@upgrade')->name('admin.fresnsConsole.upgrade');
-
     });
 }
