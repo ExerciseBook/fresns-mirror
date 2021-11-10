@@ -10,7 +10,7 @@
                         @lang('fresns.currentVersion')
                         <span data-bs-toggle="tooltip" data-bs-placement="top" title="Database: v{{$version}}">v{{ $appVersion['currentVersion'] }}</span>
                         @if($appVersion['canUpgrade'])
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#upgrade" class="btn btn-outline-primary btn-sm ms-3">@lang('fresns.updateBtn') v{{ $appVersion['upgradeVersion'] }}</button>
+                            <a href="/fresns/iframe?url=https://fresns.cn/guide/upgrade.html" class="btn btn-outline-danger btn-sm" role="button">@lang('fresns.updateBtn') v{{ $appVersion['upgradeVersion'] }}</a>
                         @endif
                     </p>
                     <div class="row">
@@ -141,26 +141,6 @@
                         </div>
                         <div class="form-text"><i class="bi bi-info-circle"></i> @lang('fresns.codeInstallInfo')</div>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--upgrade Modal-->
-    <div class="modal fade" id="upgrade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-laptop"></i> Fresns <span class="badge bg-secondary">{{ $appVersion['currentVersion'] }}</span> to <span class="badge bg-danger">{{ $appVersion['upgradeVersion'] }}</span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body ps-5">
-                    <p><i class="spinner-border spinner-border-sm me-2 step1"></i>@lang('fresns.updateStep1')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step2"></i>@lang('fresns.updateStep2')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step3"></i>@lang('fresns.updateStep3')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step4"></i>@lang('fresns.updateStep4')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step5"></i>@lang('fresns.updateStep5')</p>
-                    <p><i class="bi bi-hourglass text-secondary me-2 step6"></i>@lang('fresns.updateStep6')</p>
                 </div>
             </div>
         </div>

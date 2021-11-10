@@ -26,7 +26,7 @@ class FsService extends BaseAdminService
      * version check
      */
     public static function getVersionInfo(){
-        $url = 'https://fresns.cn/version.json';
+        $url = FsConfig::VERSION_URL;
         $rs = self::httpGet($url);
         $api_version =  !empty($rs) ? json_decode($rs,true) : [];
         $current_version = UpgradeController::$versionInt;
