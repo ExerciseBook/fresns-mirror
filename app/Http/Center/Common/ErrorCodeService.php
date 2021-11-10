@@ -304,7 +304,7 @@ class ErrorCodeService
         self::MEMBER_NICKNAME_LENGTH_ERROR      => '昵称长度超出限制',
         self::MEMBER_NAME_ERROR                 => '名称格式错误，请勿使用特殊字符',
         self::MEMBER_NAME_USED_ERROR            => '该名称已被使用',
-        self::MEMBER_NAME_LENGTH_ERROR          => '名称长度超出限制',
+        self::MEMBER_NAME_LENGTH_ERROR          => '名称长度不符合要求',
         self::UPDATE_TIME_ERROR                 => '指定天数内只能修改一次',
         self::DISABLE_NAME_ERROR                => '名称存在禁用词',
 
