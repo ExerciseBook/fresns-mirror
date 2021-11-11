@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Helpers\FileHelper;
+use App\Helpers\Http;
 use App\Http\Center\Helper\InstallHelper;
 use App\Http\FresnsPanel\FsService;
 use Illuminate\Console\Command;
@@ -47,22 +48,27 @@ class UpgradeCommand extends Command
         $this->line("step1: check version");
         $versionInfo = FsService::getVersionInfo();
         if(!$versionInfo['canUpgrade']){
-            $this->error("there is no new version");
+            $this->error("there is no new version");exit;
         }
         $this->line("step2: download package");
-        $downloadDir  = storage_path('app/upgrade/v_'.$versionInfo['upgradeVersion'].'/');
-        $filename = date('YmdH').'.zip';
-        $downloadFile = $downloadDir.$filename;
-        FileHelper::assetDir($downloadFile);
-        FsService::downFile($versionInfo['upgradePackage'],$downloadFile);
+        $downloadDir  = storage_path('app/temp');
+        FileHelper::assetDir($downloadDir);
+        $downloadFile = $downloadDir.'/'.date('Ymd').'.zip';
+        $result = Http::get($versionInfo['upgradePackage'],function ($http) use ($downloadFile) {
+            $http->timeout(600);
+            $http->toFile($downloadFile);
+        });
+        if ($result->code != 200) {
+            $this->error("download package fail");exit;
+        }
         $fileSize = File::size($downloadFile);
         if ($fileSize < 10) {
-            $this->error("download package fail");
+            $this->error("download package fail");exit;
         }
         $this->line("step3: unzip package");
         $status = FileHelper::unzip($downloadFile, $downloadDir);
         if ($status == false){
-            $this->error('unzip package fail');
+            $this->error('unzip package fail');exit;
         }
         $this->line("step4: copy document");
         $coverPath = ['Base','Console','Exceptions','Helpers','Http','Listeners','Providers','Traits', 'static', 'views','lang','migrations','seeders'];
