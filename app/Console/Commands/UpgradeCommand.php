@@ -59,7 +59,7 @@ class UpgradeCommand extends Command
         $this->line('step2: download package');
         $downloadDir  = storage_path('app/temp');
         FileHelper::assetDir($downloadDir);
-        $downloadFile = $downloadDir.'/'.md5(date('Ymd')).'.zip';
+        $downloadFile = $downloadDir.'/upgrade_'.md5(time()).'.zip';
         $result = Http::get($versionInfo['upgradePackage'],function ($http) use ($downloadFile) {
             $http->timeout(600);
             $http->toFile($downloadFile);
