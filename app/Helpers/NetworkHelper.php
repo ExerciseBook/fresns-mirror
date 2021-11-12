@@ -1,10 +1,15 @@
 <?php
 
+/*
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
+ * Released under the Apache-2.0 License.
+ */
+
 namespace App\Helpers;
 
-
 /**
- * HTTP Network Access
+ * HTTP Network Access.
  *
  * Used as a cURL wrapper for the HTTP protocol.
  *
@@ -54,10 +59,8 @@ namespace App\Helpers;
  *       $http->setOption(CURLOPT_SSL_VERIFYHOST, false);
  *
  *   });
- *
  */
-
-class Http
+class NetworkHelper
 {
     const METHOD_GET = 'GET';
     const METHOD_POST = 'POST';
@@ -142,10 +145,11 @@ class Http
     protected $redirectCount = null;
 
     /**
-     * Make the object with common properties
-     * @param string   $url     HTTP request address
-     * @param string   $method  Request method (GET, POST, PUT, DELETE, etc)
-     * @param callable $options Callable helper function to modify the object
+     * Make the object with common properties.
+     *
+     * @param  string  $url  HTTP request address
+     * @param  string  $method  Request method (GET, POST, PUT, DELETE, etc)
+     * @param  callable  $options  Callable helper function to modify the object
      */
     public static function make($url, $method, $options = null)
     {
@@ -162,83 +166,96 @@ class Http
 
     /**
      * Make a HTTP GET call.
-     * @param string $url
-     * @param callable $options
+     *
+     * @param  string  $url
+     * @param  callable  $options
      * @return self
      */
     public static function get($url, $options = null)
     {
         $http = self::make($url, self::METHOD_GET, $options);
+
         return $http->send();
     }
 
     /**
      * Make a HTTP POST call.
-     * @param string $url
-     * @param callable $options
+     *
+     * @param  string  $url
+     * @param  callable  $options
      * @return self
      */
     public static function post($url, $options = null)
     {
         $http = self::make($url, self::METHOD_POST, $options);
+
         return $http->send();
     }
 
     /**
      * Make a HTTP DELETE call.
-     * @param string $url
-     * @param callable $options
+     *
+     * @param  string  $url
+     * @param  callable  $options
      * @return self
      */
     public static function delete($url, $options = null)
     {
         $http = self::make($url, self::METHOD_DELETE, $options);
+
         return $http->send();
     }
 
     /**
      * Make a HTTP PATCH call.
-     * @param string $url
-     * @param callable $options
+     *
+     * @param  string  $url
+     * @param  callable  $options
      * @return self
      */
     public static function patch($url, $options = null)
     {
         $http = self::make($url, self::METHOD_PATCH, $options);
+
         return $http->send();
     }
 
     /**
      * Make a HTTP PUT call.
-     * @param string $url
-     * @param callable $options
+     *
+     * @param  string  $url
+     * @param  callable  $options
      * @return self
      */
     public static function put($url, $options = null)
     {
         $http = self::make($url, self::METHOD_PUT, $options);
+
         return $http->send();
     }
 
     /**
      * Make a HTTP OPTIONS call.
-     * @param string $url
-     * @param callable $options
+     *
+     * @param  string  $url
+     * @param  callable  $options
      * @return self
      */
     public static function options($url, $options = null)
     {
         $http = self::make($url, self::METHOD_OPTIONS, $options);
+
         return $http->send();
     }
 
     /**
      * Execute the HTTP request.
+     *
      * @return string response body
      */
     public function send()
     {
-        if (!function_exists('curl_init')) {
+        if (! function_exists('curl_init')) {
             echo 'cURL PHP extension required.'.PHP_EOL;
             exit(1);
         }
@@ -253,7 +270,7 @@ class Http
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 
-        if (defined('CURLOPT_FOLLOWLOCATION') && !ini_get('open_basedir')) {
+        if (defined('CURLOPT_FOLLOWLOCATION') && ! ini_get('open_basedir')) {
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($curl, CURLOPT_MAXREDIRS, $this->maxRedirects);
         }
@@ -267,8 +284,7 @@ class Http
          */
         if ($this->method == self::METHOD_POST) {
             curl_setopt($curl, CURLOPT_POST, true);
-        }
-        elseif ($this->method !== self::METHOD_GET) {
+        } elseif ($this->method !== self::METHOD_GET) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $this->method);
         }
 
@@ -278,9 +294,8 @@ class Http
         if ($this->requestData) {
             if (in_array($this->method, [self::METHOD_POST, self::METHOD_PATCH, self::METHOD_PUT])) {
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $this->getRequestData());
-            }
-            elseif ($this->method == self::METHOD_GET) {
-                curl_setopt($curl, CURLOPT_URL, $this->url . '?' . $this->getRequestData());
+            } elseif ($this->method == self::METHOD_GET) {
+                curl_setopt($curl, CURLOPT_URL, $this->url.'?'.$this->getRequestData());
             }
         }
 
@@ -290,7 +305,7 @@ class Http
         if ($this->requestHeaders) {
             $requestHeaders = [];
             foreach ($this->requestHeaders as $key => $value) {
-                $requestHeaders[] = $key . ': ' . $value;
+                $requestHeaders[] = $key.': '.$value;
             }
 
             curl_setopt($curl, CURLOPT_HTTPHEADER, $requestHeaders);
@@ -333,14 +348,15 @@ class Http
         /*
          * Emulate FOLLOW LOCATION behavior
          */
-        if (!defined('CURLOPT_FOLLOWLOCATION') || ini_get('open_basedir')) {
+        if (! defined('CURLOPT_FOLLOWLOCATION') || ini_get('open_basedir')) {
             if ($this->redirectCount === null) {
                 $this->redirectCount = $this->maxRedirects;
             }
             if (in_array($this->code, [301, 302])) {
                 $this->url = array_get($this->info, 'url');
-                if (!empty($this->url) && $this->redirectCount > 0) {
+                if (! empty($this->url) && $this->redirectCount > 0) {
                     $this->redirectCount -= 1;
+
                     return $this->send();
                 }
             }
@@ -351,6 +367,7 @@ class Http
 
     /**
      * Return the request data set.
+     *
      * @return string
      */
     public function getRequestData()
@@ -362,15 +379,17 @@ class Http
         ) {
             return $this->requestOptions[CURLOPT_POSTFIELDS];
         }
-        if (!empty($this->requestData)) {
+        if (! empty($this->requestData)) {
             return http_build_query($this->requestData, '', $this->argumentSeparator);
         }
+
         return '';
     }
 
     /**
      * Turn a header string into an array.
-     * @param string $header
+     *
+     * @param  string  $header
      * @return array
      */
     protected function headerToArray($header)
@@ -383,8 +402,7 @@ class Http
                 $key = substr($singleHeader, 0, $delimiter);
                 $val = substr($singleHeader, $delimiter + 2);
                 $headers[$key] = $val;
-            }
-            else {
+            } else {
                 $delimiter = strpos($singleHeader, ' ');
                 if ($delimiter !== false) {
                     $key = substr($singleHeader, 0, $delimiter);
@@ -393,12 +411,14 @@ class Http
                 }
             }
         }
+
         return $headers;
     }
 
     /**
      * Add a data to the request.
-     * @param string $value
+     *
+     * @param  string  $value
      * @return self
      */
     public function data($key, $value = null)
@@ -407,16 +427,19 @@ class Http
             foreach ($key as $_key => $_value) {
                 $this->data($_key, $_value);
             }
+
             return $this;
         }
 
         $this->requestData[$key] = $value;
+
         return $this;
     }
 
     /**
      * Add a header to the request.
-     * @param string $value
+     *
+     * @param  string  $value
      * @return self
      */
     public function header($key, $value = null)
@@ -425,32 +448,32 @@ class Http
             foreach ($key as $_key => $_value) {
                 $this->header($_key, $_value);
             }
+
             return $this;
         }
 
         $this->requestHeaders[$key] = $value;
+
         return $this;
     }
 
     /**
-     * Sets a proxy to use with this request
+     * Sets a proxy to use with this request.
      */
     public function proxy($type, $host, $port, $username = null, $password = null)
     {
         if ($type === 'http') {
             $this->setOption(CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
-        }
-        elseif ($type === 'socks4') {
+        } elseif ($type === 'socks4') {
             $this->setOption(CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-        }
-        elseif ($type === 'socks5') {
+        } elseif ($type === 'socks5') {
             $this->setOption(CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
         }
 
-        $this->setOption(CURLOPT_PROXY, $host . ':' . $port);
+        $this->setOption(CURLOPT_PROXY, $host.':'.$port);
 
         if ($username && $password) {
-            $this->setOption(CURLOPT_PROXYUSERPWD, $username . ':' . $password);
+            $this->setOption(CURLOPT_PROXYUSERPWD, $username.':'.$password);
         }
 
         return $this;
@@ -458,57 +481,63 @@ class Http
 
     /**
      * Adds authentication to the comms.
-     * @param string $user
-     * @param string $pass
+     *
+     * @param  string  $user
+     * @param  string  $pass
      * @return self
      */
     public function auth($user, $pass = null)
     {
-        if (strpos($user, ':') !== false && !$pass) {
-            list($user, $pass) = explode(':', $user);
+        if (strpos($user, ':') !== false && ! $pass) {
+            [$user, $pass] = explode(':', $user);
         }
 
         $this->setOption(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        $this->setOption(CURLOPT_USERPWD, $user . ':' . $pass);
+        $this->setOption(CURLOPT_USERPWD, $user.':'.$pass);
 
         return $this;
     }
 
     /**
-     * Disable follow location (redirects)
+     * Disable follow location (redirects).
      */
     public function noRedirect()
     {
         $this->setOption(CURLOPT_FOLLOWLOCATION, false);
+
         return $this;
     }
 
     /**
-     * Enable SSL verification
+     * Enable SSL verification.
      */
     public function verifySSL()
     {
         $this->setOption(CURLOPT_SSL_VERIFYPEER, true);
         $this->setOption(CURLOPT_SSL_VERIFYHOST, true);
+
         return $this;
     }
 
     /**
      * Sets the request timeout.
-     * @param string $timeout
+     *
+     * @param  string  $timeout
      * @return self
      */
     public function timeout($timeout)
     {
         $this->setOption(CURLOPT_CONNECTTIMEOUT, $timeout);
         $this->setOption(CURLOPT_TIMEOUT, $timeout);
+
         return $this;
     }
 
     /**
-     * Write the response to a file
-     * @param  string $path   Path to file
-     * @param  string $filter Stream filter as listed in stream_get_filters()
+     * Write the response to a file.
+     *
+     * @param  string  $path  Path to file
+     * @param  string  $filter  Stream filter as listed in stream_get_filters()
      * @return self
      */
     public function toFile($path, $filter = null)
@@ -524,8 +553,9 @@ class Http
 
     /**
      * Add a single option to the request.
-     * @param string $option
-     * @param string $value
+     *
+     * @param  string  $option
+     * @param  string  $value
      * @return self
      */
     public function setOption($option, $value = null)
@@ -534,6 +564,7 @@ class Http
             foreach ($option as $_option => $_value) {
                 $this->setOption($_option, $_value);
             }
+
             return $this;
         }
 
@@ -560,6 +591,7 @@ class Http
 
     /**
      * Handy if this object is called directly.
+     *
      * @return string The last response.
      */
     public function __toString()

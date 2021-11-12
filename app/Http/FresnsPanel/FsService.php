@@ -9,8 +9,8 @@
 namespace App\Http\FresnsPanel;
 
 use App\Base\Services\BaseAdminService;
+use App\Helpers\NetworkHelper;
 use App\Http\UpgradeController;
-use App\Helpers\Http;
 
 class FsService extends BaseAdminService
 {
@@ -28,11 +28,11 @@ class FsService extends BaseAdminService
     public static function getVersionInfo()
     {
         $url = FsConfig::VERSION_URL;
-        $result = Http::get($url);
+        $result = NetworkHelper::get($url);
         if ($result->code != 200) {
-            return ['currentVersion'=>UpgradeController::$version,'canUpgrade'=>false,'upgradeVersion'=>UpgradeController::$version,'upgradePackage'=>''];
+            return ['currentVersion'=>UpgradeController::$version, 'canUpgrade'=>false, 'upgradeVersion'=>UpgradeController::$version, 'upgradePackage'=>''];
         }
-        $api_version = json_decode($result->body,true);
+        $api_version = json_decode($result->body, true);
         $current_version = UpgradeController::$versionInt;
         if (isset($api_version['versionInt']) && $api_version['versionInt'] > $current_version) {
             return ['currentVersion'=>UpgradeController::$version, 'canUpgrade'=>true, 'upgradeVersion'=>$api_version['version'], 'upgradePackage'=>$api_version['upgradePackage']];
@@ -40,6 +40,4 @@ class FsService extends BaseAdminService
             return ['currentVersion'=>UpgradeController::$version, 'canUpgrade'=>false, 'upgradeVersion'=>UpgradeController::$version, 'upgradePackage'=>''];
         }
     }
-
-
 }
