@@ -104,7 +104,7 @@ class FsControllerWeb
     // register manager
     public function initManage(Request $request)
     {
-        $back_host = $request->input('backend_host');
+        $back_host = rtrim($request->input('backend_host'),'/');
         $email = $request->input('email');
         $pure_phone = $request->input('pure_phone');
         $country_code = $request->input('country_code');
