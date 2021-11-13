@@ -78,7 +78,7 @@ class UpgradeCommand extends Command
         }
         //Step 3
         $this->line('step3: unzip package');
-        $status = FileHelper::unzip($downloadFile, $downloadDir);
+        $status = FileHelper::unzip($downloadFile, dirname($downloadDir));
         if ($status == false) {
             $this->error('unzip package fail');
             exit;
