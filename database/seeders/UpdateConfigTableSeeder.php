@@ -21,7 +21,7 @@ class UpdateConfigTableSeeder extends Seeder
      */
     public function run()
     {
-        $this->updateOrInsertConfig('fresns_version', '1.22', 'string', 'systems');
+        $this->updateOrInsertConfig('fresns_version', '1.3.0', 'string', 'systems');
         $this->updateOrInsertConfig('fresns_version_int', 4, 'number', 'systems');
     }
 
@@ -31,12 +31,13 @@ class UpdateConfigTableSeeder extends Seeder
     public static function updateOrInsertConfig($itemKey, $itemValue = '', $item_type = 'string', $item_tag = 'systems')
     {
         try {
-            $cond = ['item_key'   => $itemKey];
-            $upInfo = ['item_value'   => $itemValue, 'item_type'=>$item_type, 'item_tag'=>$item_tag];
+            $cond = ['item_key' => $itemKey];
+            $upInfo = ['item_value' => $itemValue, 'item_type'=>$item_type, 'item_tag'=>$item_tag];
             DB::table('configs')->updateOrInsert($cond, $upInfo);
 
             return ['code' => '000000', 'message' => 'success'];
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             return ['code' => $e->getCode(), 'message' => $e->getMessage()];
         }
     }

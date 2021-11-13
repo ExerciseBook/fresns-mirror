@@ -1,5 +1,26 @@
 # Release Notes
 
+All notable changes to this project will be documented in this file.
+
+## 1.3.0 (2021-11-13)
+
+**Bug Fixes**
+
+- API：上传文件，修复 tableId 传参未做转换的问题
+
+**Features**
+
+- 实现可视化安装和升级
+- 实现成员昵称和名称的规则要求
+- 框架：Composer 升级到 v2.1.12
+- 框架：Laravel Framework 升级到 v8.70.2
+- 框架：Bootstrap Icons 升级到 v1.7.0
+
+**BREAKING CHANGES**
+
+- build: laravel migrations
+- build: laravel seeders
+
 ## 1.2.0 (2021-11-01)
 
 **Bug Fixes**
