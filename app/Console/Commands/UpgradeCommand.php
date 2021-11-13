@@ -88,16 +88,16 @@ class UpgradeCommand extends Command
         $coverPath = ['Base', 'Console', 'Exceptions', 'Helpers', 'Http', 'Listeners', 'Providers', 'Traits', 'static', 'views', 'lang', 'migrations', 'seeders'];
         foreach ($coverPath as $subDir) {
             if (in_array($subDir, ['Base', 'Console', 'Exceptions', 'Helpers', 'Http', 'Listeners', 'Providers', 'Traits'])) {
-                $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, 'app', $subDir]);
                 (new Filesystem)->copyDirectory($upDir, app_path($subDir));
             } elseif ($subDir == 'static') {
-                $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, 'public', $subDir]);
                 (new Filesystem)->copyDirectory($upDir, public_path($subDir));
             } elseif (in_array($subDir, ['views', 'lang'])) {
-                $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, 'resources', $subDir]);
                 (new Filesystem)->copyDirectory($upDir, resource_path($subDir));
             } elseif (in_array($subDir, ['migrations', 'seeders'])) {
-                $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, $subDir]);
+                $upDir = implode(DIRECTORY_SEPARATOR, [$downloadDir, 'database', $subDir]);
                 (new Filesystem)->copyDirectory($upDir, database_path($subDir));
             }
         }
