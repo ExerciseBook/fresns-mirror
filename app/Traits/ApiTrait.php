@@ -26,7 +26,7 @@ trait ApiTrait
     protected $errorMsg = 0;
     protected $data = null;
 
-    public function success($data = null, $header = [])
+    public function success($data = [], $header = [])
     {
         $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
         if ($sessionLogId) {
@@ -41,7 +41,7 @@ trait ApiTrait
 
         $this->errorCode = ErrorCodeService::CODE_OK;
         $this->errorMsg = $message;
-        $this->data = $data;
+        $this->data = $data == [] ? null : $data;
         $this->respond($header);
     }
 
