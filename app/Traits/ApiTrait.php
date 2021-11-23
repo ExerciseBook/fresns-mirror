@@ -26,7 +26,7 @@ trait ApiTrait
     protected $errorMsg = 0;
     protected $data = null;
 
-    public function success($data = [], $header = [])
+    public function success($data = null, $header = [])
     {
         $sessionLogId = GlobalService::getGlobalSessionKey('session_log_id');
         if ($sessionLogId) {
