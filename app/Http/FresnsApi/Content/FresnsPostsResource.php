@@ -1,14 +1,15 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
 namespace App\Http\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
+use App\Helpers\ArrayHelper;
 use App\Helpers\DateHelper;
 use App\Http\Center\Common\GlobalService;
 use App\Http\Center\Common\LogService;
@@ -57,7 +58,7 @@ use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
-use App\Helpers\ArrayHelper;
+
 /**
  * List resource config handle.
  */
@@ -392,8 +393,8 @@ class FresnsPostsResource extends BaseAdminResource
             $more_json = json_decode($this->more_json, true);
             if ($more_json) {
                 $files = ApiFileHelper::getMoreJsonSignUrl($more_json['files']);
-                if($files){
-                    $files =  ArrayHelper::arraySort($files,'rank_num',SORT_ASC);
+                if ($files) {
+                    $files = ArrayHelper::arraySort($files, 'rank_num', SORT_ASC);
                 }
             }
             if (! empty($extendsInfo)) {
@@ -537,31 +538,30 @@ class FresnsPostsResource extends BaseAdminResource
         $editStatus = [];
         // Is the current member an author
         $editStatus['isMe'] = $this->member_id == $mid ? true : false;
-        // Post editing privileges
+        // Edit Status
         $postEdit = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT) ?? false;
         $editTimeRole = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT_TIMELIMIT) ?? 5;
         $editSticky = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT_STICKY) ?? false;
         $editEssence = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT_ESSENCE) ?? false;
         if ($postEdit) {
             // How long you can edit
-            if (strtotime($this->created_at) + ($editTimeRole * 60) > time()) {
+            if (strtotime($this->created_at) + ($editTimeRole * 60) < time()) {
                 $postEdit = false;
             }
             // Post top edit permission
-            if ($this->sticky_state != 0) {
+            if ($this->sticky_state != 1) {
                 if (! $editSticky) {
                     $postEdit = false;
                 }
             }
             // Post editing privileges after adding essence
-            if ($this->essence_state != 0) {
+            if ($this->essence_state != 1) {
                 if (! $editEssence) {
                     $postEdit = false;
                 }
             }
         }
         $editStatus['canEdit'] = $postEdit;
-
         // Delete Status
         $editStatus['canDelete'] = $append['can_delete'] == 1 ? true : false;
 
@@ -571,6 +571,7 @@ class FresnsPostsResource extends BaseAdminResource
         if ($more_json) {
             $icons = ApiFileHelper::getIconsSignUrl($icons);
         }
+
         // Default Field
         $default = [
             'pid' => $pid,
@@ -614,7 +615,7 @@ class FresnsPostsResource extends BaseAdminResource
             'attachCount' => $attachCount,
             'files' => $files,
             'extends' => $extends,
-            'group' => (object)$group,
+            'group' => (object) $group,
             'manages' => $managesArr,
             'editStatus' => $editStatus,
         ];
@@ -666,8 +667,8 @@ class FresnsPostsResource extends BaseAdminResource
                 'attachCount' => $attachCount,
                 'files' => $files,
                 'extends' => $extends,
-                'group' => (object)$group,
-                'hashtag' => (object)[],
+                'group' => (object) $group,
+                'hashtag' => (object) [],
                 'manages' => $managesArr,
                 'editStatus' => $editStatus,
             ];
@@ -724,8 +725,8 @@ class FresnsPostsResource extends BaseAdminResource
                     'attachCount' => $attachCount,
                     'files' => $files,
                     'extends' => $extends,
-                    'group' => (object)$group,
-                    'hashtag' => (object)$hashtag,
+                    'group' => (object) $group,
+                    'hashtag' => (object) $hashtag,
                     'manages' => $managesArr,
                     'editStatus' => $editStatus,
                 ];

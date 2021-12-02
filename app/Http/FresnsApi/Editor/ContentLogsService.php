@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -829,7 +829,6 @@ class ContentLogsService
     {
         $req = request();
         $fieldMap = FsConfig::FORM_FIELDS_UPDATE_LOGS_MAP;
-        // dd($fieldMap);
         $input = [];
         foreach ($fieldMap as $inputField => $tbField) {
             if ($req->has($inputField)) {

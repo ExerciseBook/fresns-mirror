@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -14,8 +14,7 @@ class FsConfig
     const MEMBER_EDIT = [
         'mname' => 'name',
         'nickname' => 'nickname',
-        'avatarFileId' => 'avatar_file_id',
-        'avatarFileUrl' => 'avatar_file_url',
+        'avatarUrl' => 'avatar_file_url',
         'gender' => 'gender',
         'birthday' => 'birthday',
         'bio' => 'bio',

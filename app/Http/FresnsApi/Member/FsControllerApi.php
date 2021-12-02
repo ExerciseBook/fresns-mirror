@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -29,6 +29,7 @@ use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsConfig;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsService;
 use App\Http\FresnsDb\FresnsFileLogs\FresnsFileLogsConfig;
+use App\Http\FresnsDb\FresnsFiles\FresnsFiles;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroups;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroupsConfig;
 use App\Http\FresnsDb\FresnsGroups\FresnsGroupsService;
@@ -293,7 +294,7 @@ class FsControllerApi extends FresnsBaseApiController
         $rule = [
             'gender' => 'numeric|in:0,1,2',
             'dialogLimit' => 'numeric',
-            'birthday' => 'date_format:"Y-m-n"',
+            'birthday' => 'date_format:"Y-m-d H:i:s"',
         ];
         ValidateService::validateRule($request, $rule);
 
@@ -307,13 +308,14 @@ class FsControllerApi extends FresnsBaseApiController
 
         $mname = $request->input('mname');
         $nickname = $request->input('nickname');
+        $avatarFid = $request->input('avatarFid');
         $bio = $request->input('bio');
         $member = FresnsMembers::where('id', $mid)->first();
         if (empty($member)) {
             $this->error(ErrorCodeService::MEMBER_CHECK_ERROR);
         }
+
         $last_name_at = $member['last_name_at'];
-        $last_nickname_at = $member['last_nickname_at'];
         if ($mname) {
             $itemValue = FresnsConfigs::where('item_key', FresnsConfigsConfig::MNAME_EDIT)->value('item_value');
             if ($itemValue > 0) {
@@ -328,23 +330,28 @@ class FsControllerApi extends FresnsBaseApiController
             }
 
             $isError = preg_match('/^[A-Za-z0-9-]+$/', $mname);
-            if($isError == 0){
-                $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);
+            if ($isError == 0) {
+                $this->error(ErrorCodeService::MEMBER_NAME_ERROR);
             }
 
             $isNumeric = is_numeric($mname);
-            if($isNumeric == true){
-                $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);
+            if ($isNumeric == true) {
+                $this->error(ErrorCodeService::MEMBER_NAME_ERROR);
             }
 
-            $substrCount = substr_count($mname,'-');
-            if($substrCount > 1){
-                $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);
+            $substrCount = substr_count($mname, '-');
+            if ($substrCount > 1) {
+                $this->error(ErrorCodeService::MEMBER_NAME_ERROR);
             }
 
+            $mnameMin = FresnsConfigs::where('item_key', FresnsConfigsConfig::MNAME_MIN)->value('item_value');
+            $mnameMax = FresnsConfigs::where('item_key', FresnsConfigsConfig::MNAME_MAX)->value('item_value');
             $count = strlen($mname);
-            if($count > 64){
-                $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);
+            if ($count < $mnameMin) {
+                $this->error(ErrorCodeService::MEMBER_NAME_LENGTH_ERROR);
+            }
+            if ($count > $mnameMax) {
+                $this->error(ErrorCodeService::MEMBER_NAME_LENGTH_ERROR);
             }
 
             $disableNames = FresnsConfigs::where('item_key', 'disable_names')->value('item_value');
@@ -356,14 +363,15 @@ class FsControllerApi extends FresnsBaseApiController
             $memberCount = FresnsMembers::where('name', $mname)->count();
 
             if ($memberCount > 0) {
-                $this->error(ErrorCodeService::MEMBER_NAME_ERROR);
+                $this->error(ErrorCodeService::MEMBER_NAME_USED_ERROR);
             }
         }
 
+        $last_nickname_at = $member['last_nickname_at'];
         if ($nickname) {
             $itemValue = FresnsConfigs::where('item_key', FresnsConfigsConfig::NICKNAME_EDIT)->value('item_value');
             if ($itemValue > 0) {
-                if ($last_name_at) {
+                if ($last_nickname_at) {
                     $begin_date = strtotime($last_nickname_at);
                     $end_date = strtotime(date('Y-m-d', time()));
                     $days = round(($end_date - $begin_date) / 3600 / 24);
@@ -375,23 +383,23 @@ class FsControllerApi extends FresnsBaseApiController
 
             trim($nickname);
             $isError = preg_match('/^[\x{4e00}-\x{9fa5} A-Za-z0-9]+$/u', $nickname);
-            if($isError == 0){
-                $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);
+            if ($isError == 0) {
+                $this->error(ErrorCodeService::MEMBER_NICKNAME_ERROR);
             }
-            $nicknameExplodeArr = explode(' ',$nickname);
+            $nicknameExplodeArr = explode(' ', $nickname);
             $nicknameArr = [];
-            foreach($nicknameExplodeArr as $v){
-                if(empty($v)){
+            foreach ($nicknameExplodeArr as $v) {
+                if (empty($v)) {
                     continue;
                 }
                 $nicknameArr[] = $v;
             }
-            
-            $nickname = implode(' ',$nicknameArr);
+
+            $nickname = implode(' ', $nicknameArr);
 
             $count = strlen($nickname);
-            if($count > 64){
-                $this->error(ErrorCodeService::PASSWORD_SYMBOL_ERROR);
+            if ($count > 64) {
+                $this->error(ErrorCodeService::MEMBER_NICKNAME_LENGTH_ERROR);
             }
 
             $stopWordsArr = FresnsStopWords::get()->toArray();
@@ -408,7 +416,11 @@ class FsControllerApi extends FresnsBaseApiController
                     }
                 }
             }
-            
+        }
+
+        if ($avatarFid) {
+            $avatarFileId = FresnsFiles::where('uuid', $avatarFid)->value('id');
+            FresnsMembers::where('id', $mid)->update(['avatar_file_id' => $avatarFileId]);
         }
 
         if ($bio) {
@@ -504,7 +516,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         /**
          * Whether to output data when viewing other people's information
-         * https://fresns.cn/database/keyname/interactives.html
+         * https://fresns.org/database/keyname/interactives.html
          * View other people's content settings.
          */
         $typeArr = [4, 5];
@@ -519,7 +531,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         /**
          * Whether to output data when viewing other people's information
-         * https://fresns.cn/database/keyname/interactives.html
+         * https://fresns.org/database/keyname/interactives.html
          * View other people's content settings.
          *
          * type=1 Get a list of all members liked by objectType > objectId (query member_likes table)
@@ -697,7 +709,7 @@ class FsControllerApi extends FresnsBaseApiController
 
         /**
          * Whether the right to operate
-         * https://fresns.cn/database/keyname/interactives.html
+         * https://fresns.org/database/keyname/interactives.html
          * Interactive behavior settings.
          *
          * Tag members can not be themselves, as well as their own published posts, comments
@@ -1067,7 +1079,7 @@ class FsControllerApi extends FresnsBaseApiController
         $authMemberId = GlobalService::getGlobalKey('member_id');
         /**
          * Whether to output data when viewing other people's information
-         * https://fresns.cn/database/keyname/interactives.html
+         * https://fresns.org/database/keyname/interactives.html
          * View other people's content settings.
          */
         if ($mid != $authMemberId) {

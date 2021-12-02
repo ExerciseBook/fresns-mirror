@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -280,7 +280,6 @@ class BaseQuery
     {
         // Data Table Prefix
         $dbPrefix = env('DB_PREFIX');
-        // $dbPrefix = '';
         LogService::info("DB PREFIX [$dbPrefix]");
         $table = Str::startsWith($dbPrefix, $table) ? $table : $dbPrefix.$table;
 

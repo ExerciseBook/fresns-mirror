@@ -1,7 +1,8 @@
 <?php
+
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -27,6 +28,7 @@ class GlobalConfig extends BaseConfig
             '/api/fresns/info/downloadFile',
             '/api/fresns/user/logout',
             '/api/fresns/user/restore',
+            '/api/fresns/user/verification',
             '/api/fresns/user/detail',
             '/api/fresns/user/walletLogs',
             '/api/fresns/member/mark',
@@ -101,6 +103,7 @@ class GlobalConfig extends BaseConfig
             '/api/fresns/info/downloadFile',
             '/api/fresns/user/logout',
             '/api/fresns/user/restore',
+            '/api/fresns/user/verification',
             '/api/fresns/user/detail',
             '/api/fresns/user/walletLogs',
             '/api/fresns/member/mark',
@@ -179,6 +182,7 @@ class GlobalConfig extends BaseConfig
         '/api/fresns/user/delete'           => 'API User Delete',
         '/api/fresns/user/restore'          => 'API User Restore',
         '/api/fresns/user/reset'            => 'API User Reset Password',
+        '/api/fresns/user/verification'     => 'API User Verification',
         '/api/fresns/user/detail'           => 'API User Detail',
         '/api/fresns/user/edit'             => 'API User Edit',
         '/api/fresns/user/walletLogs'       => 'API User Wallet Logs',
@@ -254,6 +258,7 @@ class GlobalConfig extends BaseConfig
             '/api/fresns/user/restore',
             '/api/fresns/user/restore',
             '/api/fresns/user/reset',
+            '/api/fresns/user/verification',
             '/api/fresns/user/detail',
             '/api/fresns/user/edit',
         ],

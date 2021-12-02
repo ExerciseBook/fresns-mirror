@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -75,20 +75,20 @@ class FsControllerApi extends FresnsBaseApiController
         $pageSize = $request->input('pageSize', 100);
         $currentPage = $request->input('page', 1);
 
-        $request->offsetSet('is_restful',1);
-        if (!empty($itemTag) || !empty($itemKey)) {
+        $request->offsetSet('is_restful', 1);
+        if (! empty($itemTag) || ! empty($itemKey)) {
             $intersectIdArr = [];
-            if(!empty($itemTag)){
+            if (! empty($itemTag)) {
                 $itemTagArr = explode(',', $itemTag);
-                $intersectIdArr[] = FresnsConfigs::whereIn('item_tag',$itemTagArr)->pluck('id')->toArray();
+                $intersectIdArr[] = FresnsConfigs::whereIn('item_tag', $itemTagArr)->pluck('id')->toArray();
             }
-            if(!empty($itemKey)){
+            if (! empty($itemKey)) {
                 $itemKeyArr = explode(',', $itemKey);
-                $intersectIdArr[] = FresnsConfigs::whereIn('item_key',$itemKeyArr)->pluck('id')->toArray();
+                $intersectIdArr[] = FresnsConfigs::whereIn('item_key', $itemKeyArr)->pluck('id')->toArray();
             }
             $idArr = StrHelper::SearchIntersect($intersectIdArr);
 
-            $request->offsetSet('ids',$idArr);
+            $request->offsetSet('ids', $idArr);
         }
         $request->offsetSet('currentPage', $currentPage);
         $request->offsetSet('pageSize', $pageSize);
@@ -98,8 +98,6 @@ class FsControllerApi extends FresnsBaseApiController
         $data = $FresnsConfigsService->searchData();
 
         $this->success($data);
-
-
     }
 
     // Emojis
@@ -427,6 +425,7 @@ class FsControllerApi extends FresnsBaseApiController
                 $account = $userInfo['email'];
             } else {
                 $account = $userInfo['pure_phone'];
+                $countryCode = $userInfo['country_code'];
             }
         }
         $cmd = FresnsCmdWordsConfig::FRESNS_CMD_SEND_CODE;
@@ -471,7 +470,6 @@ class FsControllerApi extends FresnsBaseApiController
                 }
                 // Query the log table id corresponding to the main table
                 $postLogsIdArr = FresnsPostLogs::where('post_id', $typeData['id'])->pluck('id')->toArray();
-                // dd($typeData);
                 $files = FresnsFiles::where('uuid', $fid)->where('table_name', FresnsPostLogsConfig::CFG_TABLE)->whereIn('table_id', $postLogsIdArr)->first();
                 if (empty($files)) {
                     $this->error(ErrorCodeService::FILE_EXIST_ERROR);
@@ -486,7 +484,7 @@ class FsControllerApi extends FresnsBaseApiController
                         }
                     }
                 }
-                
+
                 break;
             case 2:
                 // It is necessary to verify that the file belongs to the corresponding source target, such as whether the file belongs to the post.

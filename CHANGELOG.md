@@ -1,5 +1,64 @@
 # Release Notes
 
+All notable changes to this project will be documented in this file.
+
+## 1.3.0 (2021-11-13)
+
+**Bug Fixes**
+
+- API：上传文件，修复 tableId 传参未做转换的问题
+
+**Features**
+
+- 实现可视化安装和升级
+- 实现成员昵称和名称的规则要求
+- 框架：Composer 升级到 v2.1.12
+- 框架：Laravel Framework 升级到 v8.70.2
+- 框架：Bootstrap Icons 升级到 v1.7.0
+
+**BREAKING CHANGES**
+
+- build: laravel migrations
+- build: laravel seeders
+
+## 1.2.0 (2021-11-01)
+
+**Bug Fixes**
+
+- API：修复配置接口无法翻页问题
+- API：修复内容编辑权限判断错误问题
+- API：修复配置信息接口无法翻页问题
+- API：修复主帖删除导致评论列表报错问题
+
+**Features**
+
+- API：用户资料接口，增加用户密码和钱包密码状态参数
+- API：通知消息增加时间参数
+- API：新增身份验证接口
+- API：成员修改资料接口，头像传参名变更
+    - avatarFileId 修改为 avatarFid
+    - avatarFileUrl 修改为 avatarUrl
+- API：上传图片返参增加 imageConfigUrl 和 imageAvatarUrl 参数
+- 命令字：用户注册功能 avatarFileUrl 参数修改为 avatarUrl
+
+## 1.1.0 (2021-10-28)
+
+**Bug Fixes**
+
+- API：修正帖子和评论 icons 输出有误
+- API：修正评论列表和详情页，主帖匿名信息有误
+- API：修正发表摘要状态变更
+- API：修正有权限要求的帖子输出，按百分比截断
+- API：快速发表单个图片文件，修复后缀判断
+- API：修复 transactionAmount 参数错误
+
+**Features**
+
+- API：修改评论列表接口子级评论预览结构
+- API：涉及成员信息的接口，增加成员主角色 rid 参数
+- API：成员列表和详情增加 followMeStatus 参数
+- 框架：升级到 Laravel Framework 8.68.1
+
 ## 1.0.2 (2021-10-23)
 
 **Bug Fixes**

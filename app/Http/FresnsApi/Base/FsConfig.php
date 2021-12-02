@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -84,6 +84,7 @@ class FsConfig
         '/api/fresns/user/logout',
         '/api/fresns/user/delete',
         '/api/fresns/user/restore',
+        '/api/fresns/user/verification',
         '/api/fresns/user/detail',
         '/api/fresns/user/edit',
         '/api/fresns/user/walletLogs',
@@ -150,6 +151,7 @@ class FsConfig
         '/api/fresns/user/logout',
         '/api/fresns/user/delete',
         '/api/fresns/user/restore',
+        '/api/fresns/user/verification',
         '/api/fresns/user/detail',
         '/api/fresns/user/edit',
         '/api/fresns/user/walletLogs',
@@ -209,6 +211,7 @@ class FsConfig
         '/api/fresns/user/logout',
         '/api/fresns/user/delete',
         '/api/fresns/user/restore',
+        '/api/fresns/user/verification',
         '/api/fresns/user/detail',
         '/api/fresns/user/edit',
         '/api/fresns/user/walletLogs',
@@ -314,6 +317,7 @@ class FsConfig
         '/api/fresns/user/logout',
         '/api/fresns/user/delete',
         '/api/fresns/user/restore',
+        '/api/fresns/user/verification',
         '/api/fresns/user/detail',
         '/api/fresns/user/edit',
         '/api/fresns/user/walletLogs',

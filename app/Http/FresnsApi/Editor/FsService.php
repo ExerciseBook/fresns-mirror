@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -27,7 +27,7 @@ class FsService
 {
     /**
      * post_logs > post_id and comment_logs > comment_id
-     * https://fresns.cn/api/editor/delete.html.
+     * https://fresns.org/api/editor/delete.html.
      *
      * What's New content: empty, representing new content.
      * Edit existing content: With value, means edit content.

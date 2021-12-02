@@ -1,9 +1,9 @@
 <p align="center"><a href="https://fresns.cn" target="_blank"><img src="https://cdn.fresns.cn/images/logo.png" width="300"></a></p>
 
 <p align="center">
-<img src="https://img.shields.io/badge/Fresns-1.0-yellow" alt="Fresns">
+<img src="https://img.shields.io/badge/Fresns-1.x-yellow" alt="Fresns">
 <img src="https://img.shields.io/badge/PHP-%5E8.0-blue" alt="PHP">
-<img src="https://img.shields.io/badge/MySQL-%5E8.0-orange" alt="MySQL">
+<img src="https://img.shields.io/badge/MySQL-%5E5.7%7C%5E8.0-orange" alt="MySQL">
 <img src="https://img.shields.io/badge/License-Apache--2.0-green" alt="License">
 </p>
 
@@ -24,18 +24,22 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 
 | 框架 | 版本 | 用途 |
 | --- | --- | --- |
-| [Composer](https://github.com/composer/composer) | 2.1.9 | 软体包管理系统 |
-| [Laravel Framework](https://github.com/laravel/framework) | 8.67.0 | 主程序框架 |
+| [Composer](https://github.com/composer/composer) | 2.1.12 | 软体包管理系统 |
+| [Laravel Framework](https://github.com/laravel/framework) | 8.73.2 | 主程序框架 |
 | [Bootstrap](https://getbootstrap.com/) | 5.1.3 | 内置前端框架 |
-| [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.6.1 | 内置前端图标字体库 |
+| [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.7.1 | 内置前端图标字体库 |
 | [jQuery](https://github.com/jquery/jquery) | 3.6.0 | 内置 JS 库 |
 | [Base64 JS](https://github.com/dankogai/js-base64) | 3.7.2 | 内置 Base64 转码器 |
 
-| 数据库 | 版本 |
+| 配置 | 要求支持或启用 |
 | --- | --- |
-| MySQL | 8.x |
-| 排序规则 | utf8mb4_0900_ai_ci |
-| 存储引擎 | InnoDB |
+| PHP 扩展 | `fileinfo` |
+| PHP 函数 | `putenv` `symlink` `readlink` `proc_open` |
+
+| 数据库 | MySQL 5.7 | MySQL 8.x |
+| --- | --- | --- |
+| 排序规则 | `utf8mb4_unicode_520_ci` | `utf8mb4_0900_ai_ci` |
+| 存储引擎 | InnoDB | InnoDB |
 
 ## 使用说明
 
@@ -46,15 +50,15 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 ### 开发部署
 
 - 1、下载本仓库发行版代码包，上传到业务服务器解压；
-- 2、在「主程序根目录」执行命令行 `composer install`；
-- 3、将主程序根目录 `.env.debug` 文件重命名为 `.env`，根据官网[安装教程](https://fresns.cn/guide/install.html)配置数据库信息；
+- 2、将主程序根目录 `.env.debug` 文件重命名为 `.env`，根据官网[安装教程](https://fresns.cn/guide/install.html)配置数据库信息；
+- 3、在「主程序根目录」执行命令行 `composer install`；
 - 4、其余配置流程同官网[安装教程](https://fresns.cn/guide/install.html)一致。
 
 ### 生产部署
 
 - 1、下载本仓库发行版代码包，上传到业务服务器解压；
-- 2、在「主程序根目录」执行命令行 `composer install --optimize-autoloader --no-dev`；
-- 3、将主程序根目录 `.env.example` 文件重命名为 `.env`，根据官网[安装教程](https://fresns.cn/guide/install.html)配置数据库信息；
+- 2、将主程序根目录 `.env.example` 文件重命名为 `.env`，根据官网[安装教程](https://fresns.cn/guide/install.html)配置数据库信息；
+- 3、在「主程序根目录」执行命令行 `composer install --optimize-autoloader --no-dev`；
 - 4、其余配置流程同官网[安装教程](https://fresns.cn/guide/install.html)一致。
 
 ## 加入我们

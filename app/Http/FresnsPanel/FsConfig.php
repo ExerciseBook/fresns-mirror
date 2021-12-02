@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -15,6 +15,7 @@ class FsConfig extends BaseConfig
     const ENABLE_FALSE = 0;
 
     const NOTICE_URL = 'https://fresns.cn/news.json';
+    const VERSION_URL = 'https://fresns.cn/version.json';
 
     const PLUGIN_TYPE1 = 1;
     const PLUGIN_TYPE2 = 2;

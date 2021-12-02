@@ -1,19 +1,19 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
 use App\Http\Center\Common\GlobalService;
-use App\Http\FresnsApi\Base\FresnsBaseApiController;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
 use App\Http\FresnsDb\FresnsConfigs\FresnsConfigsConfig;
+use App\Http\FresnsInstall\InstallService;
 
 $appName = env('APP_NAME');
 
-if ($appName == 'Fresns') {
+if ($appName == 'Fresns' && InstallService::mode() === false) {
     GlobalService::loadGlobalData();
     $adminPath = ApiConfigHelper::getConfigByItemKey(FresnsConfigsConfig::BACKEND_PATH) ?? 'admin';
     $adminPath = '/fresns'."/$adminPath";

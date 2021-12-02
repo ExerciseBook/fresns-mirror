@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -142,7 +142,7 @@ class FresnsCmdWords extends BasePlugin
     }
 
     // Verify the verification code
-    public function checkedCodeHandler($input)
+    public function checkCodeHandler($input)
     {
         $type = $input['type'];
         $account = $input['account'];
@@ -208,7 +208,7 @@ class FresnsCmdWords extends BasePlugin
                 $resp = CmdRpcHelper::call(FresnsSubPlugin::class, $cmd, $input);
                 break;
         }
-        // dd($result);
+
         return $this->pluginSuccess();
     }
 
@@ -657,9 +657,9 @@ class FresnsCmdWords extends BasePlugin
         $userId = $input['uid'] ?? null;
         $memberId = $input['mid'] ?? null;
 
-        if($tableId){
-            if(Schema::hasColumn($tableName,'uuid')){
-                $tableId = DB::table($tableName)->where('uuid',$tableId)->value('id');
+        if($tableId) {
+            if(Schema::hasColumn($tableName, 'uuid')) {
+                $tableId = DB::table($tableName)->where('uuid', $tableId)->value('id');
             }
         }
         if ($userId) {
@@ -899,6 +899,8 @@ class FresnsCmdWords extends BasePlugin
                     }
                     $output = $resp['output'];
                     $item['imageDefaultUrl'] = $output['imageDefaultUrl'];
+                    $item['imageConfigUrl'] = $output['imageConfigUrl'];
+                    $item['imageAvatarUrl'] = $output['imageAvatarUrl'];
                     $item['imageRatioUrl'] = $output['imageRatioUrl'];
                     $item['imageSquareUrl'] = $output['imageSquareUrl'];
                     $item['imageBigUrl'] = $output['imageBigUrl'];
@@ -1655,7 +1657,7 @@ class FresnsCmdWords extends BasePlugin
         }
         $dataMap['sign'] = $sign;
 
-        // Jarvis Tang: Signature Expiration Date
+        // Header Signature Expiration Date
         $min = 5; //Expiration time limit (unit: minutes)
         //Determine the timestamp type
         $timestampNum = strlen($timestamp);
@@ -1674,7 +1676,6 @@ class FresnsCmdWords extends BasePlugin
         $signKey = FresnsSessionKeys::where('app_id', $appId)->value('app_secret');
 
         $checkSignRes = SignHelper::checkSign($dataMap, $signKey);
-        // dd($checkSignRes);
         if ($checkSignRes !== true) {
             $info = [
                 'sign' => $checkSignRes,
@@ -1998,7 +1999,7 @@ class FresnsCmdWords extends BasePlugin
         $password = $inputData['password'] ?? null;
         $nickname = $inputData['nickname'];
         $avatarFid = $inputData['avatarFid'] ?? null;
-        $avatarFileUrl = $inputData['avatarFileUrl'] ?? null;
+        $avatarUrl = $inputData['avatarUrl'] ?? null;
         $gender = $inputData['gender'] ?? 0;
         $birthday = $inputData['birthday'] ?? null;
         $timezone = $inputData['timezone'] ?? null;
@@ -2059,8 +2060,8 @@ class FresnsCmdWords extends BasePlugin
             'name' => StrHelper::createToken(rand(6, 8)),
             'nickname' => $nickname,
             'uuid' => ApiCommonHelper::createMemberUuid(),
-            'verified_file_id' => $fileId,
-            'verified_file_url' => $avatarFileUrl,
+            'avatar_file_id' => $fileId,
+            'avatar_file_url' => $avatarUrl,
             'gender' => $gender,
             'birthday' => $birthday,
             'timezone' => $timezone,

@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -578,7 +578,6 @@ class FsControllerApi extends FresnsBaseApiController
                 if (CmdRpcHelper::isErrorCmdResp($resp)) {
                     $this->errorCheckInfo($resp);
                 }
-                // dd($data);
                 break;
             default:
                 if ($commentCid) {

@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -19,7 +19,7 @@ use App\Http\FresnsDb\FresnsConfigs\FresnsConfigs;
 /**
  * Class FresnsCrontabPlugin
  * Subscription Event handle
- * https://fresns.cn/extensions/basis.html.
+ * https://fresns.org/extensions/basis.html.
  */
 class FresnsSubPlugin extends BasePlugin
 {
@@ -88,7 +88,6 @@ class FresnsSubPlugin extends BasePlugin
         if (! empty($subscribe)) {
             // $subscribeInfo = json_decode($subscribe['item_value'], true);
             $subscribeInfo = json_decode($subscribe['item_value'], true);
-            // dd($subscribeInfo);
             if ($subscribeInfo) {
                 foreach ($subscribeInfo as $s) {
                     if ($s['subscribe_type'] == FresnsSubPluginConfig::SUBSCRITE_TYPE4) {

@@ -1,14 +1,15 @@
 <?php
 
 /*
- * Fresns (https://fresns.cn)
- * Copyright (C) 2021-Present 唐杰
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
 namespace App\Http\FresnsApi\Content;
 
 use App\Base\Resources\BaseAdminResource;
+use App\Helpers\ArrayHelper;
 use App\Helpers\DateHelper;
 use App\Http\Center\Common\GlobalService;
 use App\Http\FresnsApi\Helpers\ApiConfigHelper;
@@ -38,7 +39,6 @@ use App\Http\FresnsDb\FresnsPostAppends\FresnsPostAppendsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsConfig;
 use App\Http\FresnsDb\FresnsPosts\FresnsPostsService;
 use Illuminate\Support\Facades\DB;
-use App\Helpers\ArrayHelper;
 
 /**
  * Detail resource config handle.
@@ -109,8 +109,8 @@ class FresnsPostsResourceDetail extends BaseAdminResource
                 $allowProportion = $append['allow_proportion'];
                 $FresnsPostsService = new FresnsPostsService();
                 // Prevent @, hashtags, emojis, links and other messages from being truncated
-                if($allowProportion != 0 && !empty($allowProportion)){
-                    $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content'],mb_strlen($append['content']) * $allowProportion / 100 );
+                if ($allowProportion != 0 && ! empty($allowProportion)) {
+                    $contentInfo = $FresnsPostsService->truncatedContentInfo($append['content'], mb_strlen($append['content']) * $allowProportion / 100);
                     $content = FresnsPostsResource::getContentView(($contentInfo['truncated_content']), ($this->id), 1, $append['is_markdown']);
                 }
                 $allowStatus = 0;
@@ -309,8 +309,8 @@ class FresnsPostsResourceDetail extends BaseAdminResource
             $more_json = json_decode($this->more_json, true);
             if ($more_json) {
                 $files = ApiFileHelper::getMoreJsonSignUrl($more_json['files']);
-                if($files){
-                    $files =  ArrayHelper::arraySort($files,'rank_num',SORT_ASC);
+                if ($files) {
+                    $files = ArrayHelper::arraySort($files, 'rank_num', SORT_ASC);
                 }
             }
             if (! empty($extendsInfo)) {
@@ -458,33 +458,33 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         $editStatus = [];
         // Is the current member an author
         $editStatus['isMe'] = $this->member_id == $mid ? true : false;
-        // Post editing privileges
+        // Edit Status
         $postEdit = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT) ?? false;
         $editTimes = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT_TIMELIMIT) ?? 5;
         $editSticky = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT_STICKY) ?? false;
         $editEssence = ApiConfigHelper::getConfigByItemKey(FsConfig::POST_EDIT_ESSENCE) ?? false;
         if ($postEdit) {
             // How long you can edit
-            if (strtotime($this->created_at) + ($editTimes * 60) > time()) {
+            if (strtotime($this->created_at) + ($editTimes * 60) < time()) {
                 $postEdit = false;
             }
             // Post top edit permission
-            if ($this->sticky_state != 0) {
+            if ($this->sticky_state != 1) {
                 if (! $editSticky) {
                     $postEdit = false;
                 }
             }
             // Post editing privileges after adding essence
-            if ($this->essence_state != 0) {
+            if ($this->essence_state != 1) {
                 if (! $editEssence) {
                     $postEdit = false;
                 }
             }
         }
         $editStatus['canEdit'] = $postEdit;
-
         // Delete Status
         $editStatus['canDelete'] = $append['can_delete'] == 1 ? true : false;
+
         if (! $langTag) {
             $langTag = FresnsPluginUsagesService::getDefaultLanguage();
         }
@@ -504,6 +504,7 @@ class FresnsPostsResourceDetail extends BaseAdminResource
         if ($more_json) {
             $icons = ApiFileHelper::getIconsSignUrl($icons);
         }
+
         // Default Field
         $default = [
             'pid' => $pid,
