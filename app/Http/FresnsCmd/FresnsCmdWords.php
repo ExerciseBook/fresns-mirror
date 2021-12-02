@@ -68,6 +68,7 @@ use App\Http\FresnsDb\FresnsVerifyCodes\FresnsVerifyCodes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Schema;
 
 class FresnsCmdWords extends BasePlugin
 {
@@ -657,7 +658,9 @@ class FresnsCmdWords extends BasePlugin
         $memberId = $input['mid'] ?? null;
 
         if($tableId){
-            $tableId = DB::table($tableName)->where('uuid',$tableId)->value('id');
+            if(Schema::hasColumn($tableName,'uuid')){
+                $tableId = DB::table($tableName)->where('uuid',$tableId)->value('id');
+            }
         }
         if ($userId) {
             $userId = FresnsUsers::where('uuid', $userId)->value('id');
