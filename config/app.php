@@ -175,6 +175,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // fresns Provider
+        App\Http\FresnsApi\Providers\FresnsApiServiceProvider::class,
+        App\Http\FresnsPanel\FresnsPanelServiceProvider::class,
+        App\Http\FresnsInstall\FresnsInstallServiceProvider::class,
     ],
 
     /*

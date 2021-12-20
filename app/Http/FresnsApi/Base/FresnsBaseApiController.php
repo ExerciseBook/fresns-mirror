@@ -52,7 +52,7 @@ class FresnsBaseApiController extends BaseApiController
 
     public function __construct()
     {
-        $this->checkRequest();
+        //$this->checkRequest();
         $this->initData();
     }
 

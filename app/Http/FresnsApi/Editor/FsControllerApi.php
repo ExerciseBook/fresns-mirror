@@ -56,8 +56,8 @@ class FsControllerApi extends FresnsBaseApiController
     public function __construct()
     {
         $this->service = new FsService();
-        $this->checkRequest();
-        $this->initData();
+        //$this->checkRequest();
+        //$this->initData();
         parent::__construct();
     }
 
