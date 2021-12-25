@@ -19,3 +19,4 @@ yarn-error.log
 push.sh
 push_ignore.sh
 setup.sh
+install.lock

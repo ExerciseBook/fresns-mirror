@@ -177,8 +177,9 @@ return [
 
         // fresns Provider
         App\Http\FresnsApi\Providers\FresnsApiServiceProvider::class,
-        App\Http\FresnsPanel\FresnsPanelServiceProvider::class,
-        App\Http\FresnsInstall\FresnsInstallServiceProvider::class,
+        App\Fresns\Panel\Providers\AdminServiceProvider::class,
+        //App\Http\FresnsPanel\FresnsPanelServiceProvider::class,
+        //App\Http\FresnsInstall\FresnsInstallServiceProvider::class,
     ],
 
     /*
