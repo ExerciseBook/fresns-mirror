@@ -45,9 +45,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::prefix('admin')
-            ->middleware('web')
+        Route::middlewareGroup('panel', config('panel.middleware', []));
+
+        Route::prefix('panel')
+            ->middleware('panel')
             ->namespace($this->namespace)
-            ->group(__DIR__.'/../routes/admin.php');
+            ->group(__DIR__.'/../routes/panel.php');
     }
 }

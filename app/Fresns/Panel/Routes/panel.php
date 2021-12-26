@@ -14,11 +14,10 @@ use App\Fresns\Panel\Http\Controllers\LoginController;
 |
 */
 
-//Route::get('login', [LoginController::class, 'showLoginForm'])->name('login.form');
-Route::get('login', [LoginController::class, 'login'])->name('login.form');
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login.form');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 
-Route::middleware(['auth:admin'])->group(function() {
+Route::middleware(['auth'])->group(function() {
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::resources([

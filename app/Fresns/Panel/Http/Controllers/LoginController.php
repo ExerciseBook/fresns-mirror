@@ -9,8 +9,12 @@ class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
+    public function showLoginForm()
+    {
+        return view('panel::auth.login');
+    }
+
     public function login()
     {
-        return view('admin::foo');
     }
 }
