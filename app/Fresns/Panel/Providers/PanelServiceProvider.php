@@ -14,6 +14,11 @@ class PanelServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerViews();
 
+        \Config::set('auth.guards.panel', [
+            'driver' => 'session',
+            'provider' => 'users',
+        ]);
+
         $this->loadRoutesFrom(__DIR__.'/../Routes/panel.php');
     }
 

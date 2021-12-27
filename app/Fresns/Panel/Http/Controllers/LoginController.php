@@ -9,12 +9,31 @@ class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
-    public function showLoginForm()
+    protected $redirectTo = 'panel/dashboard';
+
+    public function username()
     {
-        return view('panel::auth.login');
+        return 'username';
     }
 
-    public function login()
+    protected function credentials(Request $request)
     {
+        $username = $request->username;
+
+        filter_var($username, FILTER_VALIDATE_EMAIL) ?
+            $credentials['email'] = $username :
+            $credentials['phone'] = $username;
+
+        $credentials['password'] = $request->password;
+
+        return $credentials;
+    }
+
+
+    public function showLoginForm()
+    {
+        $langs = config('panel.langs');
+        $locale = \App::getLocale();
+        return view('panel::auth.login', compact('langs', 'locale'));
     }
 }

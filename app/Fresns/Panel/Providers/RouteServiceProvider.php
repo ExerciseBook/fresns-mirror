@@ -48,6 +48,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::middlewareGroup('panel', config('panel.middleware', []));
 
         Route::prefix('panel')
+            ->name('panel.')
             ->middleware('panel')
             ->namespace($this->namespace)
             ->group(__DIR__.'/../routes/panel.php');

@@ -17,13 +17,13 @@ use App\Fresns\Panel\Http\Controllers\LoginController;
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login.form');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth:panel'])->group(function() {
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::resources([
     ]);
 
-    Route::get('user', function() {
+    Route::get('dashboard', function() {
         dd(request()->user());
     });
 });
