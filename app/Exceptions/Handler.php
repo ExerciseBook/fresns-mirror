@@ -64,10 +64,6 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof Exception) {
 
-            if ($exception instanceof ValidationException) {
-                return $this->convertValidationExceptionToResponse($exception, $request);
-            }
-
             $msg = $exception->getMessage();
             $traceMsgArr = $exception->getTrace();
 

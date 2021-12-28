@@ -2,7 +2,10 @@
 
 namespace App\Fresns\Panel\Providers;
 
+use App\Fresns\Panel\Http\Exceptions\Handler;
 use Illuminate\Support\ServiceProvider;
+use App\Fresns\Panel\Http\Middleware\Authenticate;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 
 class PanelServiceProvider extends ServiceProvider
 {
@@ -16,10 +19,22 @@ class PanelServiceProvider extends ServiceProvider
 
         \Config::set('auth.guards.panel', [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'panel',
+        ]);
+
+        \Config::set('auth.providers.panel', [
+            'driver' => 'eloquent',
+            'model' => \App\Models\User::class,
         ]);
 
         $this->loadRoutesFrom(__DIR__.'/../Routes/panel.php');
+        \Route::aliasMiddleware('panelAuth', Authenticate::class);
+
+        // register exception hanlder
+        $this->app->bind(
+            ExceptionHandler::class,
+            Handler::class
+        );
     }
 
     /**
