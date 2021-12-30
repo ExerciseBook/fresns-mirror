@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\LoginController;
 use App\Fresns\Panel\Http\Controllers\DashboardController;
+use App\Fresns\Panel\Http\Controllers\ManageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,11 @@ Route::middleware(['panelAuth'])->group(function() {
 
     // dashboard
     Route::get('dashboard', [DashboardController::class, 'show'])->name('dashboard');
+
+    // manage
+    Route::get('manage/keys', [ManageController::class, 'keyIndex'])->name('manage.keys');
+    Route::get('manage/configs', [ManageController::class, 'configIndex'])->name('manage.configs');
+    Route::get('manage/admins', [ManageController::class, 'adminIndex'])->name('manage.admins');
 
     Route::resources([
     ]);

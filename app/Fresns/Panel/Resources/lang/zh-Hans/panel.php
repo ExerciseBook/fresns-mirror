@@ -7,4 +7,8 @@ return [
     'account' => '账号',
     'password' => '密码',
     'enter' => '进入',
+    'manage' => '管理',
+    'manageKey' => '密钥管理',
+    'manageConfig' => '后端配置',
+    'admin' => '管理员',
 ];

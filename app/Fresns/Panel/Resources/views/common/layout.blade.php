@@ -14,12 +14,7 @@
   </head>
 
   <body>
-    @include('panel::common.header')
-    <main>
-      @yield('content')
-    </main>
-
-    @include('panel::common.footer')
+    @yield('body')
 
     <script src="{{ @asset('/assets/panel/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ @asset('/assets/panel/js/backend.js') }}"></script>

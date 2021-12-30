@@ -1,4 +1,4 @@
-@extends('panel::common.layout')
+@extends('panel::common.baseLayout')
 
 @section('content')
   <div class="container-lg">
