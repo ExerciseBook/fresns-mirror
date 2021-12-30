@@ -9,7 +9,10 @@ class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
-    protected $redirectTo = 'panel/dashboard';
+    public function __construct()
+    {
+        $this->redirectTo = route('panel.dashboard');
+    }
 
     public function username()
     {
@@ -29,11 +32,32 @@ class LoginController extends Controller
         return $credentials;
     }
 
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        // check user_type
+        $user = $this->guard()->getProvider()->retrieveByCredentials($this->credentials($request));
+        if (!$user || $user->user_type != 1) {
+            return false;
+        }
+
+        return $this->guard()->attempt(
+            $this->credentials($request), $request->filled('remember')
+        );
+    }
 
     public function showLoginForm()
     {
-        $langs = config('panel.langs');
-        $locale = \App::getLocale();
-        return view('panel::auth.login', compact('langs', 'locale'));
+        return view('panel::auth.login');
+    }
+
+    public function loggedOut(Request $request)
+    {
+        return redirect(route('panel.login.form'));
     }
 }

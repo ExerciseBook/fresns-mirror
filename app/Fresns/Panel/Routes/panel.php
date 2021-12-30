@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\LoginController;
+use App\Fresns\Panel\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +19,13 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('login.form
 Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::middleware(['panelAuth'])->group(function() {
-    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+    // dashboard
+    Route::get('dashboard', [DashboardController::class, 'show'])->name('dashboard');
 
     Route::resources([
     ]);
 
-    Route::get('dashboard', function() {
-        dd(request()->user());
-    })->name('dashboard');
 });
 

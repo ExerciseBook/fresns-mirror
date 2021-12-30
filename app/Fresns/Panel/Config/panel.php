@@ -3,6 +3,7 @@
 use App\Fresns\Panel\Http\Middleware\ChangeLocale;
 
 return [
+    'news_url' => 'https://fresns.cn/news.json',
     'middleware' => [
         'web',
         ChangeLocale::class,

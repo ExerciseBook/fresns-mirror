@@ -8,10 +8,16 @@ class ChangeLocale
 {
     public function handle($request, Closure $next)
     {
-        $locale = $request->get('lang', 'zh-Hans');
+        if ($request->lang) {
+            $cookie = \Cookie::forever('lang', $request->lang);
+
+            return back()->exceptInput('lang')->withCookie($cookie);
+        }
+        $locale = \Cookie::get('lang', 'zh-Hans');
 
         \App::setLocale($locale);
 
+        \View::share('locale', \App::getLocale());
         return $next($request);
     }
 }
