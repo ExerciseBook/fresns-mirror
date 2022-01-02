@@ -12,7 +12,8 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Fresns\Panel\Http\Controllers';
+    //protected $namespace = '\App\Fresns\Panel\Http\Controllers';
+    protected $namespace = null;
 
     /**
      * Called before routes are registered.

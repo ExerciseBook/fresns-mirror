@@ -33,32 +33,39 @@
         </tr>
       </thead>
       <tbody>
+        @foreach($sessionKeys as $key)
         <tr>
-          <th scope="row" class="py-3">PC Web</th>
-          <td>独立网站</td>
-          <td>twvhl69n2uqygnox</td>
-          <td>5rmahjlqpe9q69mljrcvd6xr2upidmdb</td>
-          <td>主程序</td>
-          <td><i class="bi bi-check-lg text-success"></i></td>
+          <th scope="row" class="py-3">{{ $key->name }}</th></th>
+          <td>{{ $key->platformName($platforms) }}</td>
+          <td>{{ $key->app_id }}</td>
+          <td>{{ $key->app_secret }}</td>
+          <td>{{ $typeLabels[$key->type] ?? '' }}</td>
+          <td><i class="bi {{ $key->is_enable ? 'bi-check-lg text-success' : 'bi-dash-lg text-secondary' }}"></i></td>
           <td>
-            <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#createKey">编辑</button>
-            <button type="button" class="btn btn-outline-primary btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#resetModal">重置 Key</button>
-            <button type="button" class="btn btn-link btn-sm text-danger fresns-link" data-bs-toggle="modal" data-bs-target="#deleteModal">删除</button>
+            <button type="button" class="btn btn-outline-success btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#updateKey"
+              data-id="{{ $key->id }}"
+              data-name="{{ $key->name }}"
+              data-type="{{ $key->type }}"
+              data-platform_id="{{ $key->platform_id }}"
+              data-plugin_unikey ="{{ $key->plugin_unikey }}"
+              data-is_enable ="{{ $key->is_enable }}"
+              data-action="{{ route('panel.sessionKeys.update', ['sessionKey' => $key]) }}"
+              >编辑</button>
+            <button type="button" class="btn btn-outline-primary btn-sm mx-2"
+              data-bs-toggle="modal"
+              data-app_id="{{ $key->app_id }}"
+              data-action="{{ route('panel.sessionKeys.reset', ['sessionKey' => $key]) }}"
+              data-bs-target="#resetKey">重置 Key</button>
+            <button type="button" class="btn btn-link btn-sm text-danger fresns-link"
+              data-bs-toggle="modal"
+              data-app_id="{{ $key->app_id }}"
+              data-action="{{ route('panel.sessionKeys.destroy', ['sessionKey' => $key]) }}"
+              data-bs-target="#deleteKey">删除</button>
           </td>
         </tr>
-        <tr>
-          <th scope="row" class="py-3">PC Web</th>
-          <td>控制面板</td>
-          <td>twvhl69n2uqygnox</td>
-          <td>5rmahjlqpe9q69mljrcvd6xr2upidmdb</td>
-          <td>插件 <span class="badge bg-light text-dark">Fresns CP API</span></td>
-          <td><i class="bi bi-dash-lg text-secondary"></i></td>
-          <td>
-            <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#createKey">编辑</button>
-            <button type="button" class="btn btn-outline-primary btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#resetModal">重置 Key</button>
-            <button type="button" class="btn btn-link btn-sm text-danger fresns-link" data-bs-toggle="modal" data-bs-target="#deleteModal">删除</button>
-          </td>
-        </tr>
+        @endforeach
       </tbody>
     </table>
   </div>
@@ -75,55 +82,46 @@
         </div>
         <div class="modal-body">
           <!--创建密钥表单 开始-->
-          <form>
+          <form action="{{ route('panel.sessionKeys.store')}}" method="post">
+            @csrf
             <div class="input-group mb-3">
               <span class="input-group-text">平台</span>
-              <select class="form-select" id="key_platform">
+              <select name="platform_id" class="form-select" required id="key_platform">
                 <option selected disabled>选择密钥应用平台</option>
-                <option value="1">Other</option>
-                <option value="2">PC Web</option>
-                <option value="3">Mobile Web</option>
-                <option value="4">Responsive Web</option>
-                <option value="5">iOS App</option>
-                <option value="6">Android App</option>
-                <option value="7">WeChat Web</option>
-                <option value="8">WeChat MiniProgram</option>
-                <option value="9">QQ MiniProgram</option>
-                <option value="10">Alipay MiniApp</option>
-                <option value="11">ByteDance MicroApp</option>
-                <option value="12">Quick App</option>
-                <option value="13">Baidu SmartProgram</option>
-                <option value="14">360 MiniApp</option>
+                @foreach($platforms as $platform)
+                  <option value="{{ $platform['id'] }}">{{ $platform['name'] }}</option>
+                @endforeach
               </select>
             </div>
             <div class="input-group mb-3">
-              <span class="input-group-text">名称</span>
-              <input type="text" class="form-control" id="key_name">
+              <span class="input-group-text">{{ __('panel::panel.name') }}</span>
+              <input type="text" name="name" required class="form-control" id="key_name">
             </div>
             <div class="input-group mb-3">
-              <span class="input-group-text">类型</span>
+              <span class="input-group-text">{{ __('panel::panel.type' )}}</span>
               <div class="form-control bg-white">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="key_type" id="fresns_key" value="false" data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting" checked>
-                  <label class="form-check-label" for="fresns_key">主程序</label>
+                  <input class="form-check-input" type="radio" name="type" value="1" id="fresns_key"  data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting" checked>
+                  <label class="form-check-label" for="fresns_key">{{ __('panel::panel.mainApi')}}</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="key_type" id="admin_key" value="false" data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting">
-                  <label class="form-check-label" for="admin_key">管理功能</label>
+                  <input class="form-check-input" type="radio" name="type" value="2" id="admin_key"  data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting">
+                  <label class="form-check-label" for="admin_key">{{ __('panel::panel.manageApi') }}</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="key_type" id="plugin_key" value="true" data-bs-toggle="collapse" data-bs-target="#key_plugin_setting:not(.show)" aria-expanded="false" aria-controls="key_plugin_setting">
-                  <label class="form-check-label" for="plugin_key">插件</label>
+                  <input class="form-check-input" type="radio" name="type" value="3" id="plugin_key" data-bs-toggle="collapse" data-bs-target="#key_plugin_setting:not(.show)" aria-expanded="false" aria-controls="key_plugin_setting">
+                  <label class="form-check-label" for="plugin_key">{{ __('panel::panel.pluginApi') }}</label>
                 </div>
               </div>
             </div>
             <!--类型设置 开始-->
             <div class="input-group mb-3 collapse" id="key_plugin_setting">
               <span class="input-group-text">关联插件<i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="该密钥不允许请求主程序 API"></i></span>
-              <select class="form-select" id="key_plugin">
+              <select class="form-select" name="plugin_unikey" id="key_plugin">
                 <option selected disabled>选择密钥用于哪个插件</option>
-                <option value="1">xx插件</option>
-                <option value="2">zz插件</option>
+                @foreach($plugins as $plugin)
+                  <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
+                @endforeach
               </select>
             </div>
             <!--类型设置 结束-->
@@ -131,11 +129,11 @@
               <span class="input-group-text">状态</span>
               <div class="form-control bg-white">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                  <input class="form-check-input" type="radio" name="is_enable" id="inlineRadio1" value="1">
                   <label class="form-check-label" for="inlineRadio1">启用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                  <input class="form-check-input" checked type="radio" name="is_enable" id="inlineRadio2" value="0">
                   <label class="form-check-label" for="inlineRadio2">停用</label>
                 </div>
               </div>
@@ -151,40 +149,126 @@
     </div>
   </div>
 
-  <!-- Reset Modal -->
-  <div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
+  <!-- Modal -->
+  <div class="modal fade" id="updateKey" tabindex="-1" aria-labelledby="updateKeyLabel" aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">该名称名称</h5>
+          <h5 class="modal-title" id="updateKeyLabel">编辑密钥</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>App ID: twvhl69n2uqygnox</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">重置 Key</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <!--创建密钥表单 开始-->
+          <form action="" method="post">
+            @csrf
+            @method('PUT')
+            <div class="input-group mb-3">
+              <span class="input-group-text">平台</span>
+              <select name="platform_id" class="form-select" required id="key_platform">
+                <option selected disabled>选择密钥应用平台</option>
+                @foreach($platforms as $platform)
+                  <option value="{{ $platform['id'] }}">{{ $platform['name'] }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">{{ __('panel::panel.name') }}</span>
+              <input type="text" name="name" required class="form-control" id="key_name">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">{{ __('panel::panel.type' )}}</span>
+              <div class="form-control bg-white">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="type" value="1" id="fresns_key"  data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting" checked>
+                  <label class="form-check-label" for="fresns_key">{{ __('panel::panel.mainApi')}}</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="type" value="2" id="admin_key"  data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting">
+                  <label class="form-check-label" for="admin_key">{{ __('panel::panel.manageApi') }}</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="type" value="3" id="plugin_key" data-bs-toggle="collapse" data-bs-target="#key_plugin_setting:not(.show)" aria-expanded="false" aria-controls="key_plugin_setting">
+                  <label class="form-check-label" for="plugin_key">{{ __('panel::panel.pluginApi') }}</label>
+                </div>
+              </div>
+            </div>
+            <!--类型设置 开始-->
+            <div class="input-group mb-3 collapse" id="key_plugin_setting">
+              <span class="input-group-text">关联插件<i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="该密钥不允许请求主程序 API"></i></span>
+              <select class="form-select" name="plugin_unikey" id="key_plugin">
+                <option selected disabled>选择密钥用于哪个插件</option>
+                @foreach($plugins as $plugin)
+                  <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
+                @endforeach
+              </select>
+            </div>
+            <!--类型设置 结束-->
+            <div class="input-group mb-3">
+              <span class="input-group-text">状态</span>
+              <div class="form-control bg-white">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="is_enable" id="inlineRadio1" value="1">
+                  <label class="form-check-label" for="inlineRadio1">启用</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" checked type="radio" name="is_enable" id="inlineRadio2" value="0">
+                  <label class="form-check-label" for="inlineRadio2">停用</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">提交编辑</button>
+            </div>
+          </form>
+          <!--创建密钥表单 结束-->
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Reset Modal -->
+  <div class="modal fade" id="resetKey" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <form action="" method="post">
+        @csrf
+        @method('put')
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">该名称名称</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>App ID: <span class="app-id"></span></p>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">重置 Key</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Delete Modal -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal fade" id="deleteKey" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">该名称名称</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>App ID: twvhl69n2uqygnox</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-dismiss="modal">确认删除</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-        </div>
+        <form action="" method="post">
+          @csrf
+          @method('delete')
+          <div class="modal-header">
+            <h5 class="modal-title">该名称名称</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <p>App ID: <span class="app-id"></span></p>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-dismiss="modal">确认删除</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

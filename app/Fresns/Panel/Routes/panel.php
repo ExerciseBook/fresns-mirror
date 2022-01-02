@@ -1,8 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Fresns\Panel\Http\Controllers\LoginController;
-use App\Fresns\Panel\Http\Controllers\DashboardController;
+use App\Fresns\Panel\Http\Controllers\{
+    LoginController,
+    AdminController,
+    ConfigController,
+    DashboardController,
+    SessionKeyController,
+};
 use App\Fresns\Panel\Http\Controllers\ManageController;
 
 /*
@@ -25,13 +30,19 @@ Route::middleware(['panelAuth'])->group(function() {
     // dashboard
     Route::get('dashboard', [DashboardController::class, 'show'])->name('dashboard');
 
-    // manage
-    Route::get('manage/keys', [ManageController::class, 'keyIndex'])->name('manage.keys');
-    Route::get('manage/configs', [ManageController::class, 'configIndex'])->name('manage.configs');
-    Route::get('manage/admins', [ManageController::class, 'adminIndex'])->name('manage.admins');
+    Route::prefix('manage')->group(function() {
+        Route::resource('sessionKeys', SessionKeyController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
+        Route::put('sessionKeys/{sessionKey}/reset', [SessionKeyController::class, 'reset'])->name('sessionKeys.reset');
 
-    Route::resources([
-    ]);
+        Route::resource('configs', ConfigController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
+        Route::resource('admins', AdminController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
+    });
 
 });
 

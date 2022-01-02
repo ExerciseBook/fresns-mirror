@@ -7,8 +7,14 @@
       </button>
       <div class="collapse navbar-collapse" id="headerNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link active" href="dashboard.html">仪表盘</a></li>
-          <li class="nav-item"><a class="nav-link" href="manage-keys.html">管理</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.dashboard') ? 'active' : '' }}" href="{{ route('panel.dashboard') }}">仪表盘</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is([
+              'panel.configs.*',
+              'panel.admins.*',
+              'panel.sessionKeys.*'
+            ]) ? 'active' : '' }}"
+              href="{{ route('panel.sessionKeys.index') }}">管理</a>
+          </li>
           <li class="nav-item"><a class="nav-link" href="system-language.html">系统</a></li>
           <li class="nav-item"><a class="nav-link" href="operating-rename.html">运营</a></li>
           <li class="nav-item"><a class="nav-link" href="expand-editor.html">扩展</a></li>

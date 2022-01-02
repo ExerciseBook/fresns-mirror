@@ -16,7 +16,12 @@
   <body>
     @yield('body')
 
+    <div class="fresns-tips">
+      @include('panel::common.tips')
+    </div>
+
     <script src="{{ @asset('/assets/panel/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ @asset('/assets/panel/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ @asset('/assets/panel/js/backend.js') }}"></script>
     @yield('js')
   </body>
