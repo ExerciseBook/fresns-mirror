@@ -28,36 +28,36 @@
         </tr>
       </thead>
       <tbody>
+        @foreach($admins as $admin)
         <tr>
-          <td>1</td>
+          <td>{{ $admin->id }} </td>
           <td>
-            <span class="badge bg-light text-dark"><i class="bi bi-envelope"></i> jar***@foxmail.com</span>
-            <span class="badge bg-light text-dark"><i class="bi bi-phone"></i> +86 139****5678</span>
+            <span class="badge bg-light text-dark"><i class="bi bi-envelope"></i>
+              @if ($admin->email)
+                {{ $admin->secret_email }}
+              @else
+                  NULL
+              @endif
+            </span>
+            <span class="badge bg-light text-dark"><i class="bi bi-phone"></i>
+              @if ($admin->pure_phone)
+                +{{ $admin->country_code }} {{ $admin->secret_pure_phone }}
+              @else
+                NULL
+              @endif
+            </span>
           </td>
           <td>
-            <button type="button" class="btn btn-link btn-sm text-danger fresns-link">删除</button>
+            @if($admin->id != \Auth::user()->id)
+            <form action="{{route('panel.admins.destroy', ['admin' => $admin])}}" class="mb-3" method="post">
+              @csrf
+              @method('delete')
+              <button type="submit" class="btn btn-link btn-sm text-danger fresns-link">删除</button>
+            </form>
+            @endif
           </td>
         </tr>
-        <tr>
-          <td>18</td>
-          <td>
-            <span class="badge bg-light text-dark"><i class="bi bi-envelope"></i> jie***@qq.com</span>
-            <span class="badge bg-light text-dark"><i class="bi bi-phone"></i> Null</span>
-          </td>
-          <td>
-            <button type="button" class="btn btn-link btn-sm text-danger fresns-link">删除</button>
-          </td>
-        </tr>
-        <tr>
-          <td>9527</td>
-          <td>
-            <span class="badge bg-light text-dark"><i class="bi bi-envelope"></i> Null</span>
-            <span class="badge bg-light text-dark"><i class="bi bi-phone"></i> +1 626***9527</span>
-          </td>
-          <td>
-            <button type="button" class="btn btn-link btn-sm text-danger fresns-link">删除</button>
-          </td>
-        </tr>
+        @endforeach
       </tbody>
     </table>
   </div>
@@ -72,10 +72,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form class="mb-3">
+          <form action="{{route('panel.admins.store')}}" class="mb-3" method="post">
+            @csrf
             <div class="input-group">
               <span class="input-group-text">账号</span>
-              <input type="text" class="form-control" placeholder="邮箱或者手机号">
+              <input type="text" name="username" class="form-control" placeholder="邮箱或者手机号">
               <button class="btn btn-outline-secondary" type="submit" id="folderInstall-button">搜索并增加</button>
             </div>
             <div class="form-text"><i class="bi bi-info-circle"></i> 手机号必须为带国际区号的完整号码</div>

@@ -17,15 +17,17 @@
     </div>
   </div>
   <!--配置 开始-->
-  <form>
+  <form action="{{ route('panel.configs.update') }}" method="post">
+    @csrf
+    @method('patch')
     <div class="row mb-3">
       <label for="backend_url" class="col-lg-2 col-form-label text-lg-end">后端网址：</label>
-      <div class="col-lg-6"><input type="url" class="form-control" id="backend_url" placeholder="https://"></div>
+      <div class="col-lg-6"><input type="url" class="form-control" id="backend_url" name="domain" value="{{ $domain }}" placeholder="https://"></div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 主程序 API 和插件默认访问地址，结尾不带 /</div>
     </div>
     <div class="row mb-3">
       <label for="backend_url" class="col-lg-2 col-form-label text-lg-end">安全入口：</label>
-      <div class="col-lg-6"><input type="url" class="form-control" id="backend_url" placeholder="admin"></div>
+      <div class="col-lg-6"><input type="text" class="form-control" id="backend_url" name="path" value="{{ $path }}" placeholder="admin"></div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 设置后只能通过指定安全入口登录控制台</div>
     </div>
     <div class="row mb-3">

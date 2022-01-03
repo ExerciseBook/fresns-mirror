@@ -31,18 +31,20 @@ Route::middleware(['panelAuth'])->group(function() {
     Route::get('dashboard', [DashboardController::class, 'show'])->name('dashboard');
 
     Route::prefix('manage')->group(function() {
+        // session key
         Route::resource('sessionKeys', SessionKeyController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);
-        Route::put('sessionKeys/{sessionKey}/reset', [SessionKeyController::class, 'reset'])->name('sessionKeys.reset');
+        Route::patch('sessionKeys/{sessionKey}/reset', [SessionKeyController::class, 'reset'])->name('sessionKeys.reset');
 
-        Route::resource('configs', ConfigController::class)->only([
-            'index', 'store', 'update', 'destroy'
-        ]);
+        // config
+        Route::get('configs/show', [ConfigController::class, 'show'])->name('configs.show');
+        Route::patch('configs/update', [ConfigController::class, 'update'])->name('configs.update');
+
+        // admin
         Route::resource('admins', AdminController::class)->only([
-            'index', 'store', 'update', 'destroy'
+            'index', 'store', 'destroy'
         ]);
     });
-
 });
 

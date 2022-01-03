@@ -4,9 +4,14 @@ namespace App\Models;
 
 class Config extends Model
 {
-    protected $casts = [
-        'item_value' => 'array',
-    ];
+    public function getItemValueAttribute($value)
+    {
+        if ($this->item_type == 'array') {
+            return json_decode($value, true);
+        }
+
+        return $value;
+    }
 
     public function scopePlatform($query)
     {

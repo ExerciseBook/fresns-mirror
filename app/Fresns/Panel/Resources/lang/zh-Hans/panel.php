@@ -19,4 +19,6 @@ return [
     'type' => '类型',
     'status' => '状态',
     'associatePlugin' => '关联插件',
+    'backendDomain' => '后端网址',
+    'safePath' => '安全入口',
 ];

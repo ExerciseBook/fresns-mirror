@@ -32,6 +32,30 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function scopeOfAdmin($query)
+    {
+        return $query->where('user_type', 1);
+    }
+
+    public function getSecretPurePhoneAttribute(): string
+    {
+        if (!$this->pure_phone) {
+            return '';
+        }
+        return \Str::mask($this->pure_phone, '*', -8, 4);
+    }
+
+    public function getSecretEmailAttribute(): string
+    {
+        if (!$this->email) {
+            return '';
+        }
+
+        list($prefix, $end) = explode('@', $this->email);
+        $len = ceil(strlen($prefix) / 2);
+        return \Str::mask($prefix, '*', -1 * $len, $len) .'@'. $end;
+    }
+
     public function isAdmin()
     {
         return $this->user_type == 1;
