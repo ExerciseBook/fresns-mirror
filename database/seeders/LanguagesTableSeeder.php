@@ -1122,9 +1122,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_setting_profile',
+                'table_key' => 'menu_dialogs',
                 'lang_tag' => 'en',
-                'lang_content' => 'Profile',
+                'lang_content' => 'Dialogs',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1135,9 +1135,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_setting_preference',
+                'table_key' => 'menu_messages',
                 'lang_tag' => 'en',
-                'lang_content' => 'Preference',
+                'lang_content' => 'Messages',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1148,9 +1148,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_setting_account',
+                'table_key' => 'menu_notifies',
                 'lang_tag' => 'en',
-                'lang_content' => 'Account',
+                'lang_content' => 'Notification',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1161,9 +1161,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_dialogs',
+                'table_key' => 'menu_notify_systems',
                 'lang_tag' => 'en',
-                'lang_content' => 'Dialogs',
+                'lang_content' => 'Systems',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1174,9 +1174,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_messages',
+                'table_key' => 'menu_notify_recommends',
                 'lang_tag' => 'en',
-                'lang_content' => 'Messages',
+                'lang_content' => 'Recommends',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1187,9 +1187,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notification',
+                'table_key' => 'menu_notify_follows',
                 'lang_tag' => 'en',
-                'lang_content' => 'Notification',
+                'lang_content' => 'Follows',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1200,9 +1200,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_systems',
+                'table_key' => 'menu_notify_likes',
                 'lang_tag' => 'en',
-                'lang_content' => 'Systems',
+                'lang_content' => 'Likes',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1213,9 +1213,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_recommends',
+                'table_key' => 'menu_notify_comments',
                 'lang_tag' => 'en',
-                'lang_content' => 'Recommends',
+                'lang_content' => 'Comments',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1226,9 +1226,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_follows',
+                'table_key' => 'menu_notify_mentions',
                 'lang_tag' => 'en',
-                'lang_content' => 'Follows',
+                'lang_content' => 'Mentions',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1239,9 +1239,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_likes',
+                'table_key' => 'menu_search',
                 'lang_tag' => 'en',
-                'lang_content' => 'Likes',
+                'lang_content' => 'Search',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1252,9 +1252,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_comments',
+                'table_key' => 'menu_editor_functions',
                 'lang_tag' => 'en',
-                'lang_content' => 'Comments',
+                'lang_content' => 'Editor',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1265,9 +1265,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_mentions',
+                'table_key' => 'menu_editor_drafts',
                 'lang_tag' => 'en',
-                'lang_content' => 'Mentions',
+                'lang_content' => 'Drafts',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1278,9 +1278,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_search',
+                'table_key' => 'menu_profile_likes',
                 'lang_tag' => 'en',
-                'lang_content' => 'Search',
+                'lang_content' => 'Likes',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1291,9 +1291,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_editor_function',
+                'table_key' => 'menu_profile_followers',
                 'lang_tag' => 'en',
-                'lang_content' => 'Editor',
+                'lang_content' => 'Followers',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1304,9 +1304,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_editor_drafts',
+                'table_key' => 'menu_profile_shielders',
                 'lang_tag' => 'en',
-                'lang_content' => 'Drafts',
+                'lang_content' => 'Blockers',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1317,9 +1317,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_likes',
+                'table_key' => 'menu_profile_like_members',
                 'lang_tag' => 'en',
-                'lang_content' => 'Likes',
+                'lang_content' => 'It like members',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1330,9 +1330,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_followers',
+                'table_key' => 'menu_profile_like_groups',
                 'lang_tag' => 'en',
-                'lang_content' => 'Followers',
+                'lang_content' => 'It like groups',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1343,9 +1343,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_shielders',
+                'table_key' => 'menu_profile_like_hashtags',
                 'lang_tag' => 'en',
-                'lang_content' => 'Blockers',
+                'lang_content' => 'It like hashtags',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1356,9 +1356,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_members',
+                'table_key' => 'menu_profile_like_posts',
                 'lang_tag' => 'en',
-                'lang_content' => 'It like members',
+                'lang_content' => 'It like post',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1369,9 +1369,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_groups',
+                'table_key' => 'menu_profile_like_comments',
                 'lang_tag' => 'en',
-                'lang_content' => 'It like groups',
+                'lang_content' => 'It like comments',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1382,9 +1382,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_hashtags',
+                'table_key' => 'menu_profile_follow_members',
                 'lang_tag' => 'en',
-                'lang_content' => 'It like hashtags',
+                'lang_content' => 'It follow members',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1395,9 +1395,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_posts',
+                'table_key' => 'menu_profile_follow_groups',
                 'lang_tag' => 'en',
-                'lang_content' => 'It like post',
+                'lang_content' => 'It follow groups',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1408,9 +1408,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_comments',
+                'table_key' => 'menu_profile_follow_hashtags',
                 'lang_tag' => 'en',
-                'lang_content' => 'It like comments',
+                'lang_content' => 'It follow hashtags',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1421,9 +1421,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_members',
+                'table_key' => 'menu_profile_follow_posts',
                 'lang_tag' => 'en',
-                'lang_content' => 'It follow members',
+                'lang_content' => 'It follow post',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1434,9 +1434,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_groups',
+                'table_key' => 'menu_profile_follow_comments',
                 'lang_tag' => 'en',
-                'lang_content' => 'It follow groups',
+                'lang_content' => 'It follow comments',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1447,9 +1447,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_hashtags',
+                'table_key' => 'menu_profile_shield_members',
                 'lang_tag' => 'en',
-                'lang_content' => 'It follow hashtags',
+                'lang_content' => 'It block members',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1460,9 +1460,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_posts',
+                'table_key' => 'menu_profile_shield_groups',
                 'lang_tag' => 'en',
-                'lang_content' => 'It follow post',
+                'lang_content' => 'It block groups',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1473,9 +1473,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_comments',
+                'table_key' => 'menu_profile_shield_hashtags',
                 'lang_tag' => 'en',
-                'lang_content' => 'It follow comments',
+                'lang_content' => 'It block hashtags',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1486,9 +1486,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_members',
+                'table_key' => 'menu_profile_shield_posts',
                 'lang_tag' => 'en',
-                'lang_content' => 'It block members',
+                'lang_content' => 'It block post',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1499,45 +1499,6 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_groups',
-                'lang_tag' => 'en',
-                'lang_content' => 'It block groups',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            114 => 
-            array (
-                'id' => 115,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_hashtags',
-                'lang_tag' => 'en',
-                'lang_content' => 'It block hashtags',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            115 => 
-            array (
-                'id' => 116,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_posts',
-                'lang_tag' => 'en',
-                'lang_content' => 'It block post',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            116 => 
-            array (
-                'id' => 117,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
                 'table_key' => 'menu_profile_shield_comments',
                 'lang_tag' => 'en',
                 'lang_content' => 'It block comments',
@@ -1545,9 +1506,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            117 => 
+            114 => 
             array (
-                'id' => 118,
+                'id' => 115,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 1,
@@ -1558,9 +1519,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            118 => 
+            115 => 
             array (
-                'id' => 119,
+                'id' => 116,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 2,
@@ -1571,9 +1532,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            119 => 
+            116 => 
             array (
-                'id' => 120,
+                'id' => 117,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 3,
@@ -1584,9 +1545,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            120 => 
+            117 => 
             array (
-                'id' => 121,
+                'id' => 118,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 4,
@@ -1597,9 +1558,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            121 => 
+            118 => 
             array (
-                'id' => 122,
+                'id' => 119,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 1,
@@ -1610,9 +1571,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            122 => 
+            119 => 
             array (
-                'id' => 123,
+                'id' => 120,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 2,
@@ -1623,9 +1584,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            123 => 
+            120 => 
             array (
-                'id' => 124,
+                'id' => 121,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 3,
@@ -1636,9 +1597,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            124 => 
+            121 => 
             array (
-                'id' => 125,
+                'id' => 122,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 4,
@@ -1649,9 +1610,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            125 => 
+            122 => 
             array (
-                'id' => 126,
+                'id' => 123,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 5,
@@ -1662,9 +1623,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            126 => 
+            123 => 
             array (
-                'id' => 127,
+                'id' => 124,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 6,
@@ -1675,9 +1636,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            127 => 
+            124 => 
             array (
-                'id' => 128,
+                'id' => 125,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1688,9 +1649,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            128 => 
+            125 => 
             array (
-                'id' => 129,
+                'id' => 126,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1701,9 +1662,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            129 => 
+            126 => 
             array (
-                'id' => 130,
+                'id' => 127,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1714,9 +1675,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            130 => 
+            127 => 
             array (
-                'id' => 131,
+                'id' => 128,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1727,9 +1688,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            131 => 
+            128 => 
             array (
-                'id' => 132,
+                'id' => 129,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1740,9 +1701,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            132 => 
+            129 => 
             array (
-                'id' => 133,
+                'id' => 130,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1753,9 +1714,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            133 => 
+            130 => 
             array (
-                'id' => 134,
+                'id' => 131,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1766,9 +1727,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            134 => 
+            131 => 
             array (
-                'id' => 135,
+                'id' => 132,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1779,9 +1740,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            135 => 
+            132 => 
             array (
-                'id' => 136,
+                'id' => 133,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1792,9 +1753,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            136 => 
+            133 => 
             array (
-                'id' => 137,
+                'id' => 134,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1805,9 +1766,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            137 => 
+            134 => 
             array (
-                'id' => 138,
+                'id' => 135,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1818,9 +1779,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            138 => 
+            135 => 
             array (
-                'id' => 139,
+                'id' => 136,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1831,9 +1792,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            139 => 
+            136 => 
             array (
-                'id' => 140,
+                'id' => 137,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1844,9 +1805,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            140 => 
+            137 => 
             array (
-                'id' => 141,
+                'id' => 138,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -1857,13 +1818,52 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
+            138 => 
+            array (
+                'id' => 139,
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_id' => NULL,
+                'table_key' => 'like_group_name',
+                'lang_tag' => 'zh-Hans',
+                'lang_content' => '赞',
+                'created_at' => '2021-10-08 10:00:00',
+                'updated_at' => '2021-10-08 10:00:00',
+                'deleted_at' => NULL,
+            ),
+            139 => 
+            array (
+                'id' => 140,
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_id' => NULL,
+                'table_key' => 'like_hashtag_name',
+                'lang_tag' => 'zh-Hans',
+                'lang_content' => '赞',
+                'created_at' => '2021-10-08 10:00:00',
+                'updated_at' => '2021-10-08 10:00:00',
+                'deleted_at' => NULL,
+            ),
+            140 => 
+            array (
+                'id' => 141,
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_id' => NULL,
+                'table_key' => 'like_post_name',
+                'lang_tag' => 'zh-Hans',
+                'lang_content' => '赞',
+                'created_at' => '2021-10-08 10:00:00',
+                'updated_at' => '2021-10-08 10:00:00',
+                'deleted_at' => NULL,
+            ),
             141 => 
             array (
                 'id' => 142,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'like_group_name',
+                'table_key' => 'like_comment_name',
                 'lang_tag' => 'zh-Hans',
                 'lang_content' => '赞',
                 'created_at' => '2021-10-08 10:00:00',
@@ -1876,9 +1876,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'like_hashtag_name',
+                'table_key' => 'follow_member_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '赞',
+                'lang_content' => '关注',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1889,9 +1889,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'like_post_name',
+                'table_key' => 'follow_group_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '赞',
+                'lang_content' => '加入',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1902,9 +1902,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'like_comment_name',
+                'table_key' => 'follow_hashtag_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '赞',
+                'lang_content' => '订阅',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1915,9 +1915,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'follow_member_name',
+                'table_key' => 'follow_post_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注',
+                'lang_content' => '收藏',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1928,9 +1928,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'follow_group_name',
+                'table_key' => 'follow_comment_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '加入',
+                'lang_content' => '收藏',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1941,9 +1941,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'follow_hashtag_name',
+                'table_key' => 'shield_member_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '订阅',
+                'lang_content' => '拉黑',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1954,9 +1954,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'follow_post_name',
+                'table_key' => 'shield_group_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '收藏',
+                'lang_content' => '屏蔽',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1967,9 +1967,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'follow_comment_name',
+                'table_key' => 'shield_hashtag_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '收藏',
+                'lang_content' => '不感兴趣',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1980,9 +1980,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'shield_member_name',
+                'table_key' => 'shield_post_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '拉黑',
+                'lang_content' => '不想看到',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -1993,9 +1993,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'shield_group_name',
+                'table_key' => 'shield_comment_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '屏蔽',
+                'lang_content' => '不想看到',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2006,9 +2006,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'shield_hashtag_name',
+                'table_key' => 'menu_portal_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '不感兴趣',
+                'lang_content' => '门户',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2019,9 +2019,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'shield_post_name',
+                'table_key' => 'menu_portal_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '不想看到',
+                'lang_content' => '门户',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2032,9 +2032,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'shield_comment_name',
+                'table_key' => 'menu_member_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '不想看到',
+                'lang_content' => '成员主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2045,9 +2045,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_portal_name',
+                'table_key' => 'menu_member_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '门户',
+                'lang_content' => '成员主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2058,9 +2058,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_portal_title',
+                'table_key' => 'menu_group_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '门户',
+                'lang_content' => '小组主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2071,9 +2071,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_member_name',
+                'table_key' => 'menu_group_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '成员主页',
+                'lang_content' => '小组主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2084,9 +2084,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_member_title',
+                'table_key' => 'menu_hashtag_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '成员主页',
+                'lang_content' => '话题主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2097,9 +2097,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_group_name',
+                'table_key' => 'menu_hashtag_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '小组主页',
+                'lang_content' => '话题主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2110,9 +2110,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_group_title',
+                'table_key' => 'menu_post_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '小组主页',
+                'lang_content' => '帖子主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2123,9 +2123,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_hashtag_name',
+                'table_key' => 'menu_post_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '话题主页',
+                'lang_content' => '帖子主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2136,9 +2136,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_hashtag_title',
+                'table_key' => 'menu_comment_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '话题主页',
+                'lang_content' => '评论主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2149,9 +2149,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_name',
+                'table_key' => 'menu_comment_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '帖子主页',
+                'lang_content' => '评论主页',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2162,9 +2162,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_title',
+                'table_key' => 'menu_member_list_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '帖子主页',
+                'lang_content' => '成员列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2175,9 +2175,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_name',
+                'table_key' => 'menu_member_list_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '评论主页',
+                'lang_content' => '成员列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2188,9 +2188,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_title',
+                'table_key' => 'menu_group_list_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '评论主页',
+                'lang_content' => '小组列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2201,9 +2201,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_member_list_name',
+                'table_key' => 'menu_group_list_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '成员列表',
+                'lang_content' => '小组列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2214,9 +2214,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_member_list_title',
+                'table_key' => 'menu_hashtag_list_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '成员列表',
+                'lang_content' => '话题列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2227,9 +2227,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_group_list_name',
+                'table_key' => 'menu_hashtag_list_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '小组列表',
+                'lang_content' => '话题列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2240,9 +2240,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_group_list_title',
+                'table_key' => 'menu_post_list_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '小组列表',
+                'lang_content' => '帖子列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2253,9 +2253,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_hashtag_list_name',
+                'table_key' => 'menu_post_list_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '话题列表',
+                'lang_content' => '帖子列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2266,9 +2266,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_hashtag_list_title',
+                'table_key' => 'menu_comment_list_name',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '话题列表',
+                'lang_content' => '评论列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2279,9 +2279,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_list_name',
+                'table_key' => 'menu_comment_list_title',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '帖子列表',
+                'lang_content' => '评论列表',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2292,9 +2292,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_list_title',
+                'table_key' => 'menu_like_members',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '帖子列表',
+                'lang_content' => '我点赞的成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2305,9 +2305,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_list_name',
+                'table_key' => 'menu_follow_members',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '评论列表',
+                'lang_content' => '我关注的成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2318,9 +2318,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_list_title',
+                'table_key' => 'menu_shield_members',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '评论列表',
+                'lang_content' => '我屏蔽的成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2331,9 +2331,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_like_members',
+                'table_key' => 'menu_post_from_follow_members',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我点赞的成员',
+                'lang_content' => '关注成员的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2344,9 +2344,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_follow_members',
+                'table_key' => 'menu_comment_from_follow_members',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我关注的成员',
+                'lang_content' => '关注成员的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2357,9 +2357,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_shield_members',
+                'table_key' => 'menu_like_groups',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我屏蔽的成员',
+                'lang_content' => '我点赞的小组',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2370,9 +2370,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_from_follow_members',
+                'table_key' => 'menu_follow_groups',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注成员的帖子',
+                'lang_content' => '我关注的小组',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2383,9 +2383,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_from_follow_members',
+                'table_key' => 'menu_shield_groups',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注成员的评论',
+                'lang_content' => '我屏蔽的小组',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2396,9 +2396,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_like_groups',
+                'table_key' => 'menu_post_from_follow_groups',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我点赞的小组',
+                'lang_content' => '关注小组的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2409,9 +2409,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_follow_groups',
+                'table_key' => 'menu_comment_from_follow_groups',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我关注的小组',
+                'lang_content' => '关注小组的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2422,9 +2422,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_shield_groups',
+                'table_key' => 'menu_like_hashtags',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我屏蔽的小组',
+                'lang_content' => '我点赞的话题',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2435,9 +2435,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_from_follow_groups',
+                'table_key' => 'menu_follow_hashtags',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注小组的帖子',
+                'lang_content' => '我关注的话题',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2448,9 +2448,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_from_follow_groups',
+                'table_key' => 'menu_shield_hashtags',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注小组的评论',
+                'lang_content' => '我屏蔽的话题',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2461,9 +2461,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_like_hashtags',
+                'table_key' => 'menu_post_from_follow_hashtags',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我点赞的话题',
+                'lang_content' => '关注话题的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2474,9 +2474,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_follow_hashtags',
+                'table_key' => 'menu_comment_from_follow_hashtags',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我关注的话题',
+                'lang_content' => '关注话题的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2487,9 +2487,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_shield_hashtags',
+                'table_key' => 'menu_like_posts',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我屏蔽的话题',
+                'lang_content' => '我点赞的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2500,9 +2500,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_from_follow_hashtags',
+                'table_key' => 'menu_follow_posts',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注话题的帖子',
+                'lang_content' => '我关注的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2513,9 +2513,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_from_follow_hashtags',
+                'table_key' => 'menu_shield_posts',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注话题的评论',
+                'lang_content' => '我屏蔽的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2526,9 +2526,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_like_posts',
+                'table_key' => 'menu_post_from_follow_all',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我点赞的帖子',
+                'lang_content' => '关注对象的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2539,9 +2539,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_follow_posts',
+                'table_key' => 'menu_post_from_nearby',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我关注的帖子',
+                'lang_content' => '附近的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2552,9 +2552,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_shield_posts',
+                'table_key' => 'menu_post_from_location',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我屏蔽的帖子',
+                'lang_content' => '周边的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2565,9 +2565,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_from_follow_all',
+                'table_key' => 'menu_like_comments',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注对象的帖子',
+                'lang_content' => '我点赞的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2578,9 +2578,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_from_nearby',
+                'table_key' => 'menu_follow_comments',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '附近的帖子',
+                'lang_content' => '我关注的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2591,9 +2591,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_post_from_location',
+                'table_key' => 'menu_shield_comments',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '周边的帖子',
+                'lang_content' => '我屏蔽的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2604,9 +2604,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_like_comments',
+                'table_key' => 'menu_comment_from_follow_all',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我点赞的评论',
+                'lang_content' => '关注对象的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2617,9 +2617,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_follow_comments',
+                'table_key' => 'menu_comment_from_nearby',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我关注的评论',
+                'lang_content' => '附近的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2630,9 +2630,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_shield_comments',
+                'table_key' => 'menu_comment_from_location',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '我屏蔽的评论',
+                'lang_content' => '周边的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2643,9 +2643,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_from_follow_all',
+                'table_key' => 'menu_user_center',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注对象的评论',
+                'lang_content' => '用户中心',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2656,9 +2656,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_from_nearby',
+                'table_key' => 'menu_user_register',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '附近的评论',
+                'lang_content' => '注册',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2669,9 +2669,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_comment_from_location',
+                'table_key' => 'menu_user_login',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '周边的评论',
+                'lang_content' => '登录',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2682,9 +2682,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_center',
+                'table_key' => 'menu_user_reset_password',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '用户中心',
+                'lang_content' => '忘记密码',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2695,9 +2695,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_register',
+                'table_key' => 'menu_user_members',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '注册',
+                'lang_content' => '成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2708,9 +2708,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_login',
+                'table_key' => 'menu_user_wallet',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '登录',
+                'lang_content' => '钱包',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2721,9 +2721,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_reset_password',
+                'table_key' => 'menu_user_settings',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '忘记密码',
+                'lang_content' => '设置',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2734,9 +2734,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_members',
+                'table_key' => 'menu_dialogs',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '成员',
+                'lang_content' => '会话',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2747,9 +2747,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_wallet',
+                'table_key' => 'menu_messages',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '钱包',
+                'lang_content' => '消息',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2760,9 +2760,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_settings',
+                'table_key' => 'menu_notifies',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '设置',
+                'lang_content' => '通知',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2773,9 +2773,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_setting_profile',
+                'table_key' => 'menu_notify_systems',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '资料',
+                'lang_content' => '系统',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2786,9 +2786,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_setting_preference',
+                'table_key' => 'menu_notify_recommends',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '偏好',
+                'lang_content' => '推荐',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2799,9 +2799,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_setting_account',
+                'table_key' => 'menu_notify_follows',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '账号',
+                'lang_content' => '关注',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2812,9 +2812,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_dialogs',
+                'table_key' => 'menu_notify_likes',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '会话',
+                'lang_content' => '点赞',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2825,9 +2825,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_messages',
+                'table_key' => 'menu_notify_comments',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '消息',
+                'lang_content' => '评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2838,9 +2838,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notification',
+                'table_key' => 'menu_notify_mentions',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '通知',
+                'lang_content' => '提及',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2851,9 +2851,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_systems',
+                'table_key' => 'menu_search',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '系统',
+                'lang_content' => '搜索',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2864,9 +2864,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_recommends',
+                'table_key' => 'menu_editor_functions',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '推荐',
+                'lang_content' => '编辑器',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2877,9 +2877,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_follows',
+                'table_key' => 'menu_editor_drafts',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注',
+                'lang_content' => '草稿箱',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2890,9 +2890,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_likes',
+                'table_key' => 'menu_profile_likes',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '点赞',
+                'lang_content' => '点赞 TA 的成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2903,9 +2903,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_comments',
+                'table_key' => 'menu_profile_followers',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '评论',
+                'lang_content' => '关注 TA 的成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2916,9 +2916,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_mentions',
+                'table_key' => 'menu_profile_shielders',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '提及',
+                'lang_content' => '屏蔽 TA 的成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2929,9 +2929,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_search',
+                'table_key' => 'menu_profile_like_members',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '搜索',
+                'lang_content' => 'TA 点赞的成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2942,9 +2942,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_editor_function',
+                'table_key' => 'menu_profile_like_groups',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '编辑器',
+                'lang_content' => 'TA 点赞的小组',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2955,9 +2955,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_editor_drafts',
+                'table_key' => 'menu_profile_like_hashtags',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '草稿箱',
+                'lang_content' => 'TA 点赞的话题',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2968,9 +2968,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_likes',
+                'table_key' => 'menu_profile_like_posts',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '点赞 TA 的成员',
+                'lang_content' => 'TA 点赞的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2981,9 +2981,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_followers',
+                'table_key' => 'menu_profile_like_comments',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '关注 TA 的成员',
+                'lang_content' => 'TA 点赞的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -2994,9 +2994,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_shielders',
+                'table_key' => 'menu_profile_follow_members',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => '屏蔽 TA 的成员',
+                'lang_content' => 'TA 关注的成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -3007,9 +3007,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_members',
+                'table_key' => 'menu_profile_follow_groups',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 点赞的成员',
+                'lang_content' => 'TA 关注的小组',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -3020,9 +3020,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_groups',
+                'table_key' => 'menu_profile_follow_hashtags',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 点赞的小组',
+                'lang_content' => 'TA 关注的话题',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -3033,9 +3033,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_hashtags',
+                'table_key' => 'menu_profile_follow_posts',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 点赞的话题',
+                'lang_content' => 'TA 关注的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -3046,9 +3046,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_posts',
+                'table_key' => 'menu_profile_follow_comments',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 点赞的帖子',
+                'lang_content' => 'TA 关注的评论',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -3059,9 +3059,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_comments',
+                'table_key' => 'menu_profile_shield_members',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 点赞的评论',
+                'lang_content' => 'TA 屏蔽的成员',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -3072,9 +3072,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_members',
+                'table_key' => 'menu_profile_shield_groups',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 关注的成员',
+                'lang_content' => 'TA 屏蔽的小组',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -3085,9 +3085,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_groups',
+                'table_key' => 'menu_profile_shield_hashtags',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 关注的小组',
+                'lang_content' => 'TA 屏蔽的话题',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -3098,9 +3098,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_hashtags',
+                'table_key' => 'menu_profile_shield_posts',
                 'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 关注的话题',
+                'lang_content' => 'TA 屏蔽的帖子',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -3111,84 +3111,6 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_posts',
-                'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 关注的帖子',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            238 => 
-            array (
-                'id' => 239,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_comments',
-                'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 关注的评论',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            239 => 
-            array (
-                'id' => 240,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_members',
-                'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 屏蔽的成员',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            240 => 
-            array (
-                'id' => 241,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_groups',
-                'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 屏蔽的小组',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            241 => 
-            array (
-                'id' => 242,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_hashtags',
-                'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 屏蔽的话题',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            242 => 
-            array (
-                'id' => 243,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_posts',
-                'lang_tag' => 'zh-Hans',
-                'lang_content' => 'TA 屏蔽的帖子',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            243 => 
-            array (
-                'id' => 244,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
                 'table_key' => 'menu_profile_shield_comments',
                 'lang_tag' => 'zh-Hans',
                 'lang_content' => 'TA 屏蔽的评论',
@@ -3196,9 +3118,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            244 => 
+            238 => 
             array (
-                'id' => 245,
+                'id' => 239,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 1,
@@ -3209,9 +3131,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            245 => 
+            239 => 
             array (
-                'id' => 246,
+                'id' => 240,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 2,
@@ -3222,9 +3144,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            246 => 
+            240 => 
             array (
-                'id' => 247,
+                'id' => 241,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 3,
@@ -3235,9 +3157,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            247 => 
+            241 => 
             array (
-                'id' => 248,
+                'id' => 242,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 4,
@@ -3248,9 +3170,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            248 => 
+            242 => 
             array (
-                'id' => 249,
+                'id' => 243,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 1,
@@ -3261,9 +3183,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            249 => 
+            243 => 
             array (
-                'id' => 250,
+                'id' => 244,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 2,
@@ -3274,9 +3196,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            250 => 
+            244 => 
             array (
-                'id' => 251,
+                'id' => 245,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 3,
@@ -3287,9 +3209,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            251 => 
+            245 => 
             array (
-                'id' => 252,
+                'id' => 246,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 4,
@@ -3300,9 +3222,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            252 => 
+            246 => 
             array (
-                'id' => 253,
+                'id' => 247,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 5,
@@ -3313,9 +3235,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            253 => 
+            247 => 
             array (
-                'id' => 254,
+                'id' => 248,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 6,
@@ -3326,9 +3248,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            254 => 
+            248 => 
             array (
-                'id' => 255,
+                'id' => 249,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3339,9 +3261,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            255 => 
+            249 => 
             array (
-                'id' => 256,
+                'id' => 250,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3352,9 +3274,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            256 => 
+            250 => 
             array (
-                'id' => 257,
+                'id' => 251,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3365,9 +3287,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            257 => 
+            251 => 
             array (
-                'id' => 258,
+                'id' => 252,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3378,9 +3300,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            258 => 
+            252 => 
             array (
-                'id' => 259,
+                'id' => 253,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3391,9 +3313,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            259 => 
+            253 => 
             array (
-                'id' => 260,
+                'id' => 254,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3404,9 +3326,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            260 => 
+            254 => 
             array (
-                'id' => 261,
+                'id' => 255,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3417,9 +3339,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            261 => 
+            255 => 
             array (
-                'id' => 262,
+                'id' => 256,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3430,9 +3352,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            262 => 
+            256 => 
             array (
-                'id' => 263,
+                'id' => 257,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3443,9 +3365,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            263 => 
+            257 => 
             array (
-                'id' => 264,
+                'id' => 258,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3456,9 +3378,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            264 => 
+            258 => 
             array (
-                'id' => 265,
+                'id' => 259,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3469,9 +3391,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            265 => 
+            259 => 
             array (
-                'id' => 266,
+                'id' => 260,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3482,9 +3404,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            266 => 
+            260 => 
             array (
-                'id' => 267,
+                'id' => 261,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3495,9 +3417,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            267 => 
+            261 => 
             array (
-                'id' => 268,
+                'id' => 262,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3508,9 +3430,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            268 => 
+            262 => 
             array (
-                'id' => 269,
+                'id' => 263,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3521,9 +3443,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            269 => 
+            263 => 
             array (
-                'id' => 270,
+                'id' => 264,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3534,9 +3456,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            270 => 
+            264 => 
             array (
-                'id' => 271,
+                'id' => 265,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3547,9 +3469,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            271 => 
+            265 => 
             array (
-                'id' => 272,
+                'id' => 266,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3560,9 +3482,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            272 => 
+            266 => 
             array (
-                'id' => 273,
+                'id' => 267,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3573,9 +3495,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            273 => 
+            267 => 
             array (
-                'id' => 274,
+                'id' => 268,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3586,9 +3508,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            274 => 
+            268 => 
             array (
-                'id' => 275,
+                'id' => 269,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3599,9 +3521,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            275 => 
+            269 => 
             array (
-                'id' => 276,
+                'id' => 270,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3612,9 +3534,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            276 => 
+            270 => 
             array (
-                'id' => 277,
+                'id' => 271,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3625,9 +3547,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            277 => 
+            271 => 
             array (
-                'id' => 278,
+                'id' => 272,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3638,9 +3560,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            278 => 
+            272 => 
             array (
-                'id' => 279,
+                'id' => 273,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3651,9 +3573,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            279 => 
+            273 => 
             array (
-                'id' => 280,
+                'id' => 274,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3664,9 +3586,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            280 => 
+            274 => 
             array (
-                'id' => 281,
+                'id' => 275,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3677,9 +3599,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            281 => 
+            275 => 
             array (
-                'id' => 282,
+                'id' => 276,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3690,9 +3612,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            282 => 
+            276 => 
             array (
-                'id' => 283,
+                'id' => 277,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3703,9 +3625,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            283 => 
+            277 => 
             array (
-                'id' => 284,
+                'id' => 278,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3716,9 +3638,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            284 => 
+            278 => 
             array (
-                'id' => 285,
+                'id' => 279,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3729,9 +3651,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            285 => 
+            279 => 
             array (
-                'id' => 286,
+                'id' => 280,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3742,9 +3664,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            286 => 
+            280 => 
             array (
-                'id' => 287,
+                'id' => 281,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3755,9 +3677,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            287 => 
+            281 => 
             array (
-                'id' => 288,
+                'id' => 282,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3768,9 +3690,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            288 => 
+            282 => 
             array (
-                'id' => 289,
+                'id' => 283,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3781,9 +3703,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            289 => 
+            283 => 
             array (
-                'id' => 290,
+                'id' => 284,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3794,9 +3716,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            290 => 
+            284 => 
             array (
-                'id' => 291,
+                'id' => 285,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3807,9 +3729,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            291 => 
+            285 => 
             array (
-                'id' => 292,
+                'id' => 286,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3820,9 +3742,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            292 => 
+            286 => 
             array (
-                'id' => 293,
+                'id' => 287,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3833,9 +3755,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            293 => 
+            287 => 
             array (
-                'id' => 294,
+                'id' => 288,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3846,9 +3768,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            294 => 
+            288 => 
             array (
-                'id' => 295,
+                'id' => 289,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3859,9 +3781,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            295 => 
+            289 => 
             array (
-                'id' => 296,
+                'id' => 290,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3872,9 +3794,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            296 => 
+            290 => 
             array (
-                'id' => 297,
+                'id' => 291,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3885,9 +3807,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            297 => 
+            291 => 
             array (
-                'id' => 298,
+                'id' => 292,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3898,9 +3820,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            298 => 
+            292 => 
             array (
-                'id' => 299,
+                'id' => 293,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3911,9 +3833,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            299 => 
+            293 => 
             array (
-                'id' => 300,
+                'id' => 294,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3924,9 +3846,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            300 => 
+            294 => 
             array (
-                'id' => 301,
+                'id' => 295,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3937,9 +3859,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            301 => 
+            295 => 
             array (
-                'id' => 302,
+                'id' => 296,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3950,9 +3872,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            302 => 
+            296 => 
             array (
-                'id' => 303,
+                'id' => 297,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3963,9 +3885,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            303 => 
+            297 => 
             array (
-                'id' => 304,
+                'id' => 298,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3976,9 +3898,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            304 => 
+            298 => 
             array (
-                'id' => 305,
+                'id' => 299,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -3989,9 +3911,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            305 => 
+            299 => 
             array (
-                'id' => 306,
+                'id' => 300,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4002,9 +3924,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            306 => 
+            300 => 
             array (
-                'id' => 307,
+                'id' => 301,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4015,9 +3937,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            307 => 
+            301 => 
             array (
-                'id' => 308,
+                'id' => 302,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4028,9 +3950,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            308 => 
+            302 => 
             array (
-                'id' => 309,
+                'id' => 303,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4041,9 +3963,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            309 => 
+            303 => 
             array (
-                'id' => 310,
+                'id' => 304,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4054,9 +3976,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            310 => 
+            304 => 
             array (
-                'id' => 311,
+                'id' => 305,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4067,9 +3989,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            311 => 
+            305 => 
             array (
-                'id' => 312,
+                'id' => 306,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4080,9 +4002,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            312 => 
+            306 => 
             array (
-                'id' => 313,
+                'id' => 307,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4093,9 +4015,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            313 => 
+            307 => 
             array (
-                'id' => 314,
+                'id' => 308,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4106,9 +4028,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            314 => 
+            308 => 
             array (
-                'id' => 315,
+                'id' => 309,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4119,9 +4041,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            315 => 
+            309 => 
             array (
-                'id' => 316,
+                'id' => 310,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4132,9 +4054,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            316 => 
+            310 => 
             array (
-                'id' => 317,
+                'id' => 311,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4145,9 +4067,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            317 => 
+            311 => 
             array (
-                'id' => 318,
+                'id' => 312,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4158,9 +4080,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            318 => 
+            312 => 
             array (
-                'id' => 319,
+                'id' => 313,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4171,9 +4093,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            319 => 
+            313 => 
             array (
-                'id' => 320,
+                'id' => 314,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4184,9 +4106,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            320 => 
+            314 => 
             array (
-                'id' => 321,
+                'id' => 315,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4197,9 +4119,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            321 => 
+            315 => 
             array (
-                'id' => 322,
+                'id' => 316,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4210,9 +4132,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            322 => 
+            316 => 
             array (
-                'id' => 323,
+                'id' => 317,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4223,9 +4145,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            323 => 
+            317 => 
             array (
-                'id' => 324,
+                'id' => 318,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4236,9 +4158,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            324 => 
+            318 => 
             array (
-                'id' => 325,
+                'id' => 319,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4249,9 +4171,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            325 => 
+            319 => 
             array (
-                'id' => 326,
+                'id' => 320,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4262,9 +4184,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            326 => 
+            320 => 
             array (
-                'id' => 327,
+                'id' => 321,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4275,9 +4197,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            327 => 
+            321 => 
             array (
-                'id' => 328,
+                'id' => 322,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4288,9 +4210,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            328 => 
+            322 => 
             array (
-                'id' => 329,
+                'id' => 323,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4301,9 +4223,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            329 => 
+            323 => 
             array (
-                'id' => 330,
+                'id' => 324,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4314,9 +4236,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            330 => 
+            324 => 
             array (
-                'id' => 331,
+                'id' => 325,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4327,9 +4249,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            331 => 
+            325 => 
             array (
-                'id' => 332,
+                'id' => 326,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4340,9 +4262,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            332 => 
+            326 => 
             array (
-                'id' => 333,
+                'id' => 327,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4353,9 +4275,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            333 => 
+            327 => 
             array (
-                'id' => 334,
+                'id' => 328,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4366,9 +4288,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            334 => 
+            328 => 
             array (
-                'id' => 335,
+                'id' => 329,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4379,9 +4301,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            335 => 
+            329 => 
             array (
-                'id' => 336,
+                'id' => 330,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4392,9 +4314,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            336 => 
+            330 => 
             array (
-                'id' => 337,
+                'id' => 331,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4405,9 +4327,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            337 => 
+            331 => 
             array (
-                'id' => 338,
+                'id' => 332,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
@@ -4418,15 +4340,93 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
+            332 => 
+            array (
+                'id' => 333,
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_id' => NULL,
+                'table_key' => 'menu_dialogs',
+                'lang_tag' => 'zh-Hant',
+                'lang_content' => '會話',
+                'created_at' => '2021-10-08 10:00:00',
+                'updated_at' => '2021-10-08 10:00:00',
+                'deleted_at' => NULL,
+            ),
+            333 => 
+            array (
+                'id' => 334,
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_id' => NULL,
+                'table_key' => 'menu_messages',
+                'lang_tag' => 'zh-Hant',
+                'lang_content' => '消息',
+                'created_at' => '2021-10-08 10:00:00',
+                'updated_at' => '2021-10-08 10:00:00',
+                'deleted_at' => NULL,
+            ),
+            334 => 
+            array (
+                'id' => 335,
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_id' => NULL,
+                'table_key' => 'menu_notifies',
+                'lang_tag' => 'zh-Hant',
+                'lang_content' => '通知',
+                'created_at' => '2021-10-08 10:00:00',
+                'updated_at' => '2021-10-08 10:00:00',
+                'deleted_at' => NULL,
+            ),
+            335 => 
+            array (
+                'id' => 336,
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_id' => NULL,
+                'table_key' => 'menu_notify_systems',
+                'lang_tag' => 'zh-Hant',
+                'lang_content' => '系統',
+                'created_at' => '2021-10-08 10:00:00',
+                'updated_at' => '2021-10-08 10:00:00',
+                'deleted_at' => NULL,
+            ),
+            336 => 
+            array (
+                'id' => 337,
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_id' => NULL,
+                'table_key' => 'menu_notify_recommends',
+                'lang_tag' => 'zh-Hant',
+                'lang_content' => '推薦',
+                'created_at' => '2021-10-08 10:00:00',
+                'updated_at' => '2021-10-08 10:00:00',
+                'deleted_at' => NULL,
+            ),
+            337 => 
+            array (
+                'id' => 338,
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_id' => NULL,
+                'table_key' => 'menu_notify_follows',
+                'lang_tag' => 'zh-Hant',
+                'lang_content' => '跟隨',
+                'created_at' => '2021-10-08 10:00:00',
+                'updated_at' => '2021-10-08 10:00:00',
+                'deleted_at' => NULL,
+            ),
             338 => 
             array (
                 'id' => 339,
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_setting_profile',
+                'table_key' => 'menu_notify_likes',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '資料',
+                'lang_content' => '讚',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4437,9 +4437,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_setting_preference',
+                'table_key' => 'menu_notify_comments',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '偏好',
+                'lang_content' => '留言',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4450,9 +4450,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_user_setting_account',
+                'table_key' => 'menu_notify_mentions',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '賬號',
+                'lang_content' => '提及',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4463,9 +4463,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_dialogs',
+                'table_key' => 'menu_search',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '會話',
+                'lang_content' => '搜索',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4476,9 +4476,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_messages',
+                'table_key' => 'menu_editor_functions',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '消息',
+                'lang_content' => '編輯器',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4489,9 +4489,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notification',
+                'table_key' => 'menu_editor_drafts',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '通知',
+                'lang_content' => '草稿箱',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4502,9 +4502,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_systems',
+                'table_key' => 'menu_profile_likes',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '系統',
+                'lang_content' => '讚 TA 的成員',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4515,9 +4515,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_recommends',
+                'table_key' => 'menu_profile_followers',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '推薦',
+                'lang_content' => '跟隨 TA 的成員',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4528,9 +4528,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_follows',
+                'table_key' => 'menu_profile_shielders',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '跟隨',
+                'lang_content' => '封鎖 TA 的成員',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4541,9 +4541,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_likes',
+                'table_key' => 'menu_profile_like_members',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '讚',
+                'lang_content' => 'TA 讚的成員',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4554,9 +4554,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_comments',
+                'table_key' => 'menu_profile_like_groups',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '留言',
+                'lang_content' => 'TA 讚的社團',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4567,9 +4567,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_message_notify_mentions',
+                'table_key' => 'menu_profile_like_hashtags',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '提及',
+                'lang_content' => 'TA 讚的話題',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4580,9 +4580,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_search',
+                'table_key' => 'menu_profile_like_posts',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '搜索',
+                'lang_content' => 'TA 讚的貼文',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4593,9 +4593,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_editor_function',
+                'table_key' => 'menu_profile_like_comments',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '編輯器',
+                'lang_content' => 'TA 讚的留言',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4606,9 +4606,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_editor_drafts',
+                'table_key' => 'menu_profile_follow_members',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '草稿箱',
+                'lang_content' => 'TA 跟隨的成員',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4619,9 +4619,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_likes',
+                'table_key' => 'menu_profile_follow_groups',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '讚 TA 的成員',
+                'lang_content' => 'TA 跟隨的社團',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4632,9 +4632,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_followers',
+                'table_key' => 'menu_profile_follow_hashtags',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '跟隨 TA 的成員',
+                'lang_content' => 'TA 跟隨的話題',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4645,9 +4645,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_shielders',
+                'table_key' => 'menu_profile_follow_posts',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => '封鎖 TA 的成員',
+                'lang_content' => 'TA 跟隨的貼文',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4658,9 +4658,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_members',
+                'table_key' => 'menu_profile_follow_comments',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 讚的成員',
+                'lang_content' => 'TA 跟隨的留言',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4671,9 +4671,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_groups',
+                'table_key' => 'menu_profile_shield_members',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 讚的社團',
+                'lang_content' => 'TA 封鎖的成員',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4684,9 +4684,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_hashtags',
+                'table_key' => 'menu_profile_shield_groups',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 讚的話題',
+                'lang_content' => 'TA 封鎖的社團',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4697,9 +4697,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_posts',
+                'table_key' => 'menu_profile_shield_hashtags',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 讚的貼文',
+                'lang_content' => 'TA 封鎖的話題',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4710,9 +4710,9 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_like_comments',
+                'table_key' => 'menu_profile_shield_posts',
                 'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 讚的留言',
+                'lang_content' => 'TA 封鎖的貼文',
                 'created_at' => '2021-10-08 10:00:00',
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
@@ -4723,123 +4723,6 @@ class LanguagesTableSeeder extends Seeder
                 'table_name' => 'configs',
                 'table_field' => 'item_value',
                 'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_members',
-                'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 跟隨的成員',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            362 => 
-            array (
-                'id' => 363,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_groups',
-                'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 跟隨的社團',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            363 => 
-            array (
-                'id' => 364,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_hashtags',
-                'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 跟隨的話題',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            364 => 
-            array (
-                'id' => 365,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_posts',
-                'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 跟隨的貼文',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            365 => 
-            array (
-                'id' => 366,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_follow_comments',
-                'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 跟隨的留言',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            366 => 
-            array (
-                'id' => 367,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_members',
-                'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 封鎖的成員',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            367 => 
-            array (
-                'id' => 368,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_groups',
-                'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 封鎖的社團',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            368 => 
-            array (
-                'id' => 369,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_hashtags',
-                'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 封鎖的話題',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            369 => 
-            array (
-                'id' => 370,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
-                'table_key' => 'menu_profile_shield_posts',
-                'lang_tag' => 'zh-Hant',
-                'lang_content' => 'TA 封鎖的貼文',
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
-                'deleted_at' => NULL,
-            ),
-            370 => 
-            array (
-                'id' => 371,
-                'table_name' => 'configs',
-                'table_field' => 'item_value',
-                'table_id' => NULL,
                 'table_key' => 'menu_profile_shield_comments',
                 'lang_tag' => 'zh-Hant',
                 'lang_content' => 'TA 封鎖的留言',
@@ -4847,9 +4730,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            371 => 
+            362 => 
             array (
-                'id' => 372,
+                'id' => 363,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 1,
@@ -4860,9 +4743,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            372 => 
+            363 => 
             array (
-                'id' => 373,
+                'id' => 364,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 2,
@@ -4873,9 +4756,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            373 => 
+            364 => 
             array (
-                'id' => 374,
+                'id' => 365,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 3,
@@ -4886,9 +4769,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            374 => 
+            365 => 
             array (
-                'id' => 375,
+                'id' => 366,
                 'table_name' => 'member_roles',
                 'table_field' => 'name',
                 'table_id' => 4,
@@ -4899,9 +4782,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            375 => 
+            366 => 
             array (
-                'id' => 376,
+                'id' => 367,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 1,
@@ -4912,9 +4795,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            376 => 
+            367 => 
             array (
-                'id' => 377,
+                'id' => 368,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 2,
@@ -4925,9 +4808,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            377 => 
+            368 => 
             array (
-                'id' => 378,
+                'id' => 369,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 3,
@@ -4938,9 +4821,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            378 => 
+            369 => 
             array (
-                'id' => 379,
+                'id' => 370,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 4,
@@ -4951,9 +4834,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            379 => 
+            370 => 
             array (
-                'id' => 380,
+                'id' => 371,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 5,
@@ -4964,9 +4847,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            380 => 
+            371 => 
             array (
-                'id' => 381,
+                'id' => 372,
                 'table_name' => 'plugin_usages',
                 'table_field' => 'name',
                 'table_id' => 6,
@@ -4977,9 +4860,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            381 => 
+            372 => 
             array (
-                'id' => 382,
+                'id' => 373,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 1,
@@ -4990,9 +4873,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            382 => 
+            373 => 
             array (
-                'id' => 383,
+                'id' => 374,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 2,
@@ -5003,9 +4886,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            383 => 
+            374 => 
             array (
-                'id' => 384,
+                'id' => 375,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 3,
@@ -5016,9 +4899,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            384 => 
+            375 => 
             array (
-                'id' => 385,
+                'id' => 376,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 4,
@@ -5029,9 +4912,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            385 => 
+            376 => 
             array (
-                'id' => 386,
+                'id' => 377,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 1,
@@ -5042,9 +4925,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            386 => 
+            377 => 
             array (
-                'id' => 387,
+                'id' => 378,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 2,
@@ -5055,9 +4938,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            387 => 
+            378 => 
             array (
-                'id' => 388,
+                'id' => 379,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 3,
@@ -5068,9 +4951,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            388 => 
+            379 => 
             array (
-                'id' => 389,
+                'id' => 380,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 4,
@@ -5081,9 +4964,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            389 => 
+            380 => 
             array (
-                'id' => 390,
+                'id' => 381,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 1,
@@ -5094,9 +4977,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            390 => 
+            381 => 
             array (
-                'id' => 391,
+                'id' => 382,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 2,
@@ -5107,9 +4990,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            391 => 
+            382 => 
             array (
-                'id' => 392,
+                'id' => 383,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 3,
@@ -5120,9 +5003,9 @@ class LanguagesTableSeeder extends Seeder
                 'updated_at' => '2021-10-08 10:00:00',
                 'deleted_at' => NULL,
             ),
-            392 => 
+            383 => 
             array (
-                'id' => 393,
+                'id' => 384,
                 'table_name' => 'emojis',
                 'table_field' => 'name',
                 'table_id' => 4,
