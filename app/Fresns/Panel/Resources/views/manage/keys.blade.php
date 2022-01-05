@@ -161,7 +161,7 @@
           <!--创建密钥表单 开始-->
           <form action="" method="post">
             @csrf
-            @method('patch')
+            @method('put')
             <div class="input-group mb-3">
               <span class="input-group-text">平台</span>
               <select name="platform_id" class="form-select" required id="key_platform">
@@ -232,7 +232,7 @@
     <div class="modal-dialog modal-sm modal-dialog-centered">
       <form action="" method="post">
         @csrf
-        @method('patch')
+        @method('put')
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">该名称名称</h5>

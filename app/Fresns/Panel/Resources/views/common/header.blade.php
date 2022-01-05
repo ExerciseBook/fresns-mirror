@@ -1,7 +1,7 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fresns-navbar">
     <div class="container-fluid">
-      <a class="navbar-brand" href="dashboard.html"><img src="{{ @asset('/assets/panel/images/logo.png') }}" alt="Fresns" height="30"></a>
+      <a class="navbar-brand" href="dashboard.html"><img src="{{ @asset('/static/images/logo.png') }}" alt="Fresns" height="30"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#headerNavbar" aria-controls="headerNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -15,7 +15,9 @@
             ]) ? 'active' : '' }}"
               href="{{ route('panel.sessionKeys.index') }}">管理</a>
           </li>
-          <li class="nav-item"><a class="nav-link" href="system-language.html">系统</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is([
+            'panel.languages.*'
+          ])}}" href="{{ route('panel.languages.index') }}">系统</a></li>
           <li class="nav-item"><a class="nav-link" href="operating-rename.html">运营</a></li>
           <li class="nav-item"><a class="nav-link" href="expand-editor.html">扩展</a></li>
           <li class="nav-item"><a class="nav-link" href="plugins.html">插件</a></li>

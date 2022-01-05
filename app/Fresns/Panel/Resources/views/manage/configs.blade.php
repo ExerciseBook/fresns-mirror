@@ -19,7 +19,7 @@
   <!--配置 开始-->
   <form action="{{ route('panel.configs.update') }}" method="post">
     @csrf
-    @method('patch')
+    @method('put')
     <div class="row mb-3">
       <label for="backend_url" class="col-lg-2 col-form-label text-lg-end">后端网址：</label>
       <div class="col-lg-6"><input type="url" class="form-control" id="backend_url" name="domain" value="{{ $domain }}" placeholder="https://"></div>

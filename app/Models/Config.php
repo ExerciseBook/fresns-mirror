@@ -13,6 +13,14 @@ class Config extends Model
         return $value;
     }
 
+    public function setItemValueAttribute($value)
+    {
+        if ($this->item_type == 'array' || is_array($value)) {
+            $value = json_encode($value);
+        }
+        $this->attributes['item_value'] = $value;
+    }
+
     public function scopePlatform($query)
     {
         return $query->where('item_key', 'platforms');

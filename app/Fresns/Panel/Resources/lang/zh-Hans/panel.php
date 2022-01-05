@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'updateSuccess' => '修改成功',
+    'createSuccess' => '创建成功',
+    'deleteSuccess' => '删除成功',
     'panelControl' => '控制面板',
     'language' => '语言',
     'login' => '登录',
@@ -21,4 +24,5 @@ return [
     'associatePlugin' => '关联插件',
     'backendDomain' => '后端网址',
     'safePath' => '安全入口',
+    'defaultLanguage' => '默认语言',
 ];
