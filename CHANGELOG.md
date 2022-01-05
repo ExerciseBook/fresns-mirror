@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.4.0 (2022-01-05)
+
+**Bug Fixes**
+
+- API：修改注册关闭时提示不准确
+- API：修复配置参数布尔型错误问题
+- API：报错时 data 默认返回 null
+- API：上传文件 tableId 传参处理问题
+
+**Features**
+
+- 控制台：无设置时不显示按钮
+- 框架：Laravel Framework 升级到 v8.78.0
+- 框架：Bootstrap Icons 升级到 v1.7.2
+- 数据库：初始化多语言配置
+
 ## 1.3.0 (2021-11-13)
 
 **Bug Fixes**
