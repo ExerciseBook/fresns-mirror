@@ -12,11 +12,14 @@ class UpdatePolicyRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_terms_close' => 'required',
-            'account_privacy_close' => 'required',
-            'account_cookie_close' => 'required',
-            'account_delete_close' => 'required',
-            'delete_account' => 'required'
+            'send_email_service' => 'string|nullable',
+            'send_sms_service' => 'string|nullable',
+            'send_sms_code' => 'string|nullable',
+            'send_sms_code_more' => 'string|nullable',
+            'send_ios_service' => 'string|nullable',
+            'send_android_service' => 'string|nullable',
+            'send_wechat_service' => 'string|nullable',
+
         ];
     }
 

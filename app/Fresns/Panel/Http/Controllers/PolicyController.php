@@ -63,18 +63,6 @@ class PolicyController extends Controller
                 $continue;
             }
 
-            if (!$request->has($configKey)) {
-                if ($config->item_type == 'boolean') {
-                    $config->item_value = 'false';
-                }  else if ($config->item_type == 'number') {
-                    $config->item_value = 'false';
-                } else {
-                    $config->item_value = NULl;
-                }
-                $config->save();
-                continue;
-            }
-
             $config->item_value = $request->$configKey;
             $config->save();
         }

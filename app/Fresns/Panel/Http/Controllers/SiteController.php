@@ -83,7 +83,7 @@ class SiteController extends Controller
                 if ($config->item_type == 'boolean') {
                     $config->item_value = 'false';
                 }  else if ($config->item_type == 'number') {
-                    $config->item_value = 'false';
+                    $config->item_value = 0;
                 } else {
                     $config->item_value = NULl;
                 }

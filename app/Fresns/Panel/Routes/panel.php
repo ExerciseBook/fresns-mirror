@@ -1,17 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\{
+    SiteController,
+    SendController,
     LoginController,
     AdminController,
     ConfigController,
+    PolicyController,
+    LanguageController,
     DashboardController,
     SessionKeyController,
-    LanguageController,
     LanguageMenuController,
-    SiteController,
-    PolicyController,
 };
+use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
 
 /*
@@ -69,6 +70,10 @@ Route::middleware(['panelAuth'])->group(function() {
         // policy
         Route::get('policy', [PolicyController::class, 'show'])->name('policy.show');
         Route::put('policy', [PolicyController::class, 'update'])->name('policy.update');
+        // send
+        Route::get('send', [SendController::class, 'show'])->name('send.show');
+        Route::put('send', [SendController::class, 'update'])->name('send.update');
+        // verify code
     });
 });
 
