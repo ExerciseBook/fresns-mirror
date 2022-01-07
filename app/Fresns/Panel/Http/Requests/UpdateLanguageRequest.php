@@ -12,19 +12,7 @@ class UpdateLanguageRequest extends FormRequest
     public function rules()
     {
         return [
-            'rank_num' => 'required|string',
-            'lang_code' => 'required|string',
-            'old_lang_tag' => 'required|string',
-            'continent_id' => 'int',
-            'area_code' => 'string',
-            'area_status' => 'required|boolean',
-            'length_units' => 'required|string',
-            'date_format' => 'required|string',
-            'time_format_minute' => 'required|string',
-            'time_format_hour' => 'required|string',
-            'time_format_day' => 'required|string',
-            'time_format_month' => 'required|string',
-            'is_enable' => 'required|boolean',
+            'languages' => 'required|array',
         ];
     }
 

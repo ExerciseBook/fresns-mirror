@@ -14,7 +14,7 @@
     <div class="col-lg-5">
       <div class="input-group mt-2 mb-4 justify-content-lg-end">
         <span class="input-group-text" data-bs-toggle="tooltip" data-bs-placement="top" title="多语言状态"><i class="bi bi-translate me-1"></i>{{ $status ? '启用' : '停用' }} </span>
-        <form action="{{ route('panel.languages.status.switch') }}" method="post">
+        <form action="{{ route('panel.languageMenus.status.switch') }}" method="post">
           @csrf
           @method('put')
           <button class="btn btn-warning" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="点击停用">{{ $status ? '停用' : '启用' }}</button>
@@ -47,12 +47,12 @@
             <tr>
               <td>
                 <input type="number"
-                       data-action="{{ route('panel.languages.rank.update', ['langTag' => $language['langTag']])}}"
+                       data-action="{{ route('panel.languageMenus.rank.update', ['langTag' => $language['langTag']])}}"
                        class="form-control input-number rank-num"
                        value="{{ $language['rankNum'] }}"></td>
               <td>
                   <input
-                       data-action="{{ route('panel.languages.default.update')}}"
+                       data-action="{{ route('panel.languageMenus.default.update')}}"
                         class="form-check-input" i
                         type="radio"
                         name="default_language"
@@ -66,12 +66,12 @@
               <td>{{ $language['writingDirection'] }}</td>
               <td><i class="bi {{ $language['isEnable'] ? 'bi-check-lg text-success' : 'bi-dash-lg text-secondary'}} "></i></td>
               <td>
-                <form action="{{ route('panel.languages.destroy', ['langTag' => $language['langTag']]) }}" method="post">
+                <form action="{{ route('panel.languageMenus.destroy', ['langTag' => $language['langTag']]) }}" method="post">
                   @csrf
                   @method('delete')
                   <button type="button" class="btn btn-outline-primary btn-sm"
                     data-language="{{ json_encode($language) }}"
-                    data-action="{{ route('panel.languages.update', ['langTag' => $language['langTag']]) }}"
+                    data-action="{{ route('panel.languageMenus.update', ['langTag' => $language['langTag']]) }}"
                     data-bs-toggle="modal"
                     data-bs-target="#updateLanguage">修改</button>
                   <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
@@ -93,7 +93,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="{{ route('panel.languages.store') }}" method="post">
+          <form action="{{ route('panel.languageMenus.store') }}" method="post">
             @csrf
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">显示顺序</label>

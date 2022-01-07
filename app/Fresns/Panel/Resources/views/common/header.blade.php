@@ -17,7 +17,7 @@
           </li>
           <li class="nav-item"><a class="nav-link {{ \Route::is([
             'panel.languages.*'
-          ])}}" href="{{ route('panel.languages.index') }}">系统</a></li>
+          ])}}" href="{{ route('panel.languageMenus.index') }}">系统</a></li>
           <li class="nav-item"><a class="nav-link" href="operating-rename.html">运营</a></li>
           <li class="nav-item"><a class="nav-link" href="expand-editor.html">扩展</a></li>
           <li class="nav-item"><a class="nav-link" href="plugins.html">插件</a></li>

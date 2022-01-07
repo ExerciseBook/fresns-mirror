@@ -109,7 +109,6 @@ $('input.rank-num').change(function() {
 
 // update language
 $("#updateLanguage").on('show.bs.modal', function (e) {
-  console.log('123');
   let button = $(e.relatedTarget),
     language = button.data('language'),
     action = button.data('action');

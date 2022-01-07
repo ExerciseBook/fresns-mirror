@@ -8,6 +8,8 @@ use App\Fresns\Panel\Http\Controllers\{
     DashboardController,
     SessionKeyController,
     LanguageController,
+    LanguageMenuController,
+    SiteController,
 };
 use App\Fresns\Panel\Http\Controllers\ManageController;
 
@@ -50,13 +52,19 @@ Route::middleware(['panelAuth'])->group(function() {
 
     Route::prefix('system')->group(function() {
         // set language
-        Route::put('languages/status/switch', [LanguageController::class, 'switchStatus'])->name('languages.status.switch');
-        Route::put('default/languages/update', [LanguageController::class, 'updateDefaultLanguage'])->name('languages.default.update');
-        Route::get('languages', [LanguageController::class, 'index'])->name('languages.index');
-        Route::post('languages', [LanguageController::class, 'store'])->name('languages.store');
-        Route::put('languages/{langTag}', [LanguageController::class, 'update'])->name('languages.update');
-        Route::put('languages/{langTag}/rank', [LanguageController::class, 'updateRank'])->name('languages.rank.update');
-        Route::delete('languages/{langTag}', [LanguageController::class, 'destroy'])->name('languages.destroy');
+        Route::put('languageMenus/status/switch', [LanguageMenuController::class, 'switchStatus'])->name('languageMenus.status.switch');
+        Route::put('default/languages/update', [LanguageMenuController::class, 'updateDefaultLanguage'])->name('languageMenus.default.update');
+        Route::get('languageMenus', [LanguageMenuController::class, 'index'])->name('languageMenus.index');
+        Route::post('languageMenus', [LanguageMenuController::class, 'store'])->name('languageMenus.store');
+        Route::put('languageMenus/{langTag}', [LanguageMenuController::class, 'update'])->name('languageMenus.update');
+        Route::put('languageMeus/{langTag}/rank', [LanguageMenuController::class, 'updateRank'])->name('languageMenus.rank.update');
+        Route::delete('languageMenus/{langTag}', [LanguageMenuController::class, 'destroy'])->name('languageMenus.destroy');
+
+
+        // site
+        Route::get('site', [SiteController::class, 'show'])->name('site.show');
+        Route::put('site', [SiteController::class, 'update'])->name('site.update');
+        Route::put('batch/languages/{itemKey}', [LanguageController::class, 'batchUpdate'])->name('language.batch.update');
 
     });
 });

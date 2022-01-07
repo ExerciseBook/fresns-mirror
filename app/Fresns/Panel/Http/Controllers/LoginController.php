@@ -11,6 +11,7 @@ class LoginController extends Controller
 
     public function __construct()
     {
+        \View::share('langs', config('panel.langs'));
         $this->redirectTo = route('panel.dashboard');
     }
 

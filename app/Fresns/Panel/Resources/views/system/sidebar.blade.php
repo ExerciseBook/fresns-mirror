@@ -8,8 +8,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav d-flex flex-column">
-          <li class="nav-item"><a class="nav-link active" href="system-language.html">语言设置</a></li>
-          <li class="nav-item"><a class="nav-link" href="system-site.html">站点设置</a></li>
+          <li class="nav-item"><a class="nav-link  {{ \Route::is('panel.languageMenus.*') ? 'active' : ''}}" href="{{ route('panel.languageMenus.index') }}">语言设置</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.site.*') ? 'active' : ''}}" href="{{ route('panel.site.show') }}">站点设置</a></li>
           <li class="nav-item"><a class="nav-link" href="system-policies.html">政策设置</a></li>
           <li class="nav-item"><a class="nav-link" href="system-send.html">发信设置</a></li>
           <li class="nav-item"><a class="nav-link" href="system-user.html">用户设置</a></li>
