@@ -9,6 +9,30 @@ use App\Fresns\Panel\Http\Requests\UpdateLanguageRequest;
 
 class LanguageController extends Controller
 {
+    public function update($itemKey, Request $request)
+    {
+        $language = Language::ofConfig()
+            ->where('table_key', $itemKey)
+            ->where('lang_tag', $request->lang_tag)
+            ->first();
+
+        if (!$language) {
+            // create but no content
+            $language = new Language();
+            $language->fill([
+                'table_name' => 'configs',
+                'table_field' => 'item_value',
+                'table_key' => $itemKey,
+                'lang_tag' => $request->lang_tag,
+            ]);
+        }
+
+        $language->lang_content = $request->content;
+        $language->save();
+
+        return $this->updateSuccess();
+    }
+
     public function batchUpdate($itemKey, Request $request)
     {
         $configContent = null;
@@ -34,9 +58,6 @@ class LanguageController extends Controller
 
             $language->lang_content = $content;
             $language->save();
-
-            if ($content) {
-            }
         }
 
         if ($request->update_config) {

@@ -107,8 +107,8 @@ $('input.rank-num').change(function() {
   });
 });
 
-// update language
-$("#updateLanguage").on('show.bs.modal', function (e) {
+// update language menu
+$("#updateLanguageMenu").on('show.bs.modal', function (e) {
   let button = $(e.relatedTarget),
     language = button.data('language'),
     action = button.data('action');
@@ -131,4 +131,18 @@ $("#updateLanguage").on('show.bs.modal', function (e) {
   $(this).find('input[name=time_format_month]').val(language.timeFormatMonth);
   $(this).find('input:radio[name=is_enable][value="'+isEnable+'"]').prop('checked', true).click();
 
+});
+
+// update language
+$("#updateLanguage").on('show.bs.modal', function (e) {
+  let button = $(e.relatedTarget),
+    langTag = button.data('lang_tag'),
+    langTagDesc = button.data('lang_tag_desc'),
+    content = button.data('content'),
+    action = button.data('action');
+
+  $(this).find('form').attr('action', action);
+  $(this).find('.lang-label').text(langTagDesc);
+  $(this).find('input[name=lang_tag]').val(langTag);
+  $(this).find('textarea[name=content]').val(content);
 });

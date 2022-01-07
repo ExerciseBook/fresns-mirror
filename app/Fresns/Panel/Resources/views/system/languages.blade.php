@@ -73,7 +73,7 @@
                     data-language="{{ json_encode($language) }}"
                     data-action="{{ route('panel.languageMenus.update', ['langTag' => $language['langTag']]) }}"
                     data-bs-toggle="modal"
-                    data-bs-target="#updateLanguage">修改</button>
+                    data-bs-target="#updateLanguageMenu">修改</button>
                   <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
                 </form>
               </td>
@@ -218,7 +218,7 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="updateLanguage" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+  <div class="modal fade" id="updateLanguageMenu" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">

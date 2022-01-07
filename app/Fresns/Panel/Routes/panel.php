@@ -10,6 +10,7 @@ use App\Fresns\Panel\Http\Controllers\{
     LanguageController,
     LanguageMenuController,
     SiteController,
+    PolicyController,
 };
 use App\Fresns\Panel\Http\Controllers\ManageController;
 
@@ -60,12 +61,14 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::put('languageMeus/{langTag}/rank', [LanguageMenuController::class, 'updateRank'])->name('languageMenus.rank.update');
         Route::delete('languageMenus/{langTag}', [LanguageMenuController::class, 'destroy'])->name('languageMenus.destroy');
 
-
+        Route::put('batch/languages/{itemKey}', [LanguageController::class, 'batchUpdate'])->name('language.batch.update');
+        Route::put('languages/{itemKey}', [LanguageController::class, 'update'])->name('language.update');
         // site
         Route::get('site', [SiteController::class, 'show'])->name('site.show');
         Route::put('site', [SiteController::class, 'update'])->name('site.update');
-        Route::put('batch/languages/{itemKey}', [LanguageController::class, 'batchUpdate'])->name('language.batch.update');
-
+        // policy
+        Route::get('policy', [PolicyController::class, 'show'])->name('policy.show');
+        Route::put('policy', [PolicyController::class, 'update'])->name('policy.update');
     });
 });
 
