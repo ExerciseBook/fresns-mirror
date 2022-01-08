@@ -12,7 +12,7 @@ const setTimeoutToastHide = () => {
         }, 1500);
     });
 }
-setTimeoutToastHide();
+//setTimeoutToastHide();
 
 // tips
 window.tips = function (message, code = 200) {
@@ -146,3 +146,13 @@ $("#updateLanguage").on('show.bs.modal', function (e) {
   $(this).find('input[name=lang_tag]').val(langTag);
   $(this).find('textarea[name=content]').val(content);
 });
+
+// user connect
+$('#addConnect').click(function() {
+  let template = $('#connectTemplate');
+  $('.connect-box').append(template.html());
+});
+
+$(document).on('click', '.delete-connect', function() {
+  $(this).parent().remove();
+})

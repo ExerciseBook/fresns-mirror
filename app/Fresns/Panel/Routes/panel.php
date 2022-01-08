@@ -12,6 +12,7 @@ use App\Fresns\Panel\Http\Controllers\{
     SessionKeyController,
     LanguageMenuController,
     VerifyCodeController,
+    UserConfigController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -54,7 +55,7 @@ Route::middleware(['panelAuth'])->group(function() {
     });
 
     Route::prefix('system')->group(function() {
-        // set language
+        // set language menus
         Route::put('languageMenus/status/switch', [LanguageMenuController::class, 'switchStatus'])->name('languageMenus.status.switch');
         Route::put('default/languages/update', [LanguageMenuController::class, 'updateDefaultLanguage'])->name('languageMenus.default.update');
         Route::get('languageMenus', [LanguageMenuController::class, 'index'])->name('languageMenus.index');
@@ -63,6 +64,7 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::put('languageMeus/{langTag}/rank', [LanguageMenuController::class, 'updateRank'])->name('languageMenus.rank.update');
         Route::delete('languageMenus/{langTag}', [LanguageMenuController::class, 'destroy'])->name('languageMenus.destroy');
 
+        // update language
         Route::put('batch/languages/{itemKey}', [LanguageController::class, 'batchUpdate'])->name('language.batch.update');
         Route::put('languages/{itemKey}', [LanguageController::class, 'update'])->name('language.update');
         // site
@@ -78,6 +80,9 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::get('verifyCodes', [VerifyCodeController::class, 'index'])->name('verifyCodes.index');
         Route::get('verifyCodes/{itemKey}/edit', [VerifyCodeController::class, 'edit'])->name('verifyCodes.edit');
         Route::put('verifyCodes/{itemKey}', [VerifyCodeController::class, 'update'])->name('verifyCodes.update');
+        // user
+        Route::get('userConfigs', [UserConfigController::class, 'show'])->name('userConfigs.show');
+        Route::put('userConfigs', [UserConfigController::class, 'update'])->name('userConfigs.update');
     });
 });
 

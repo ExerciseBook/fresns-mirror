@@ -89,7 +89,7 @@ class VerifyCodeController extends Controller
                 'template' => $smsTemplates,
             ],
         ];
-        //dd($value, $request->all());
+
         $config->item_value = $value;
         $config->save();
 
