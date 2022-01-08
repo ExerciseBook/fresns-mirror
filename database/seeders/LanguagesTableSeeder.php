@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
+ * Released under the Apache-2.0 License.
+ */
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -14,7 +20,6 @@ class LanguagesTableSeeder extends Seeder
      */
     public function run()
     {
-        
 
         \DB::table('languages')->delete();
         
@@ -5192,7 +5197,6 @@ To be edited',
                 'updated_at' => '2021-10-08 10:00:00',
             ),
         ));
-        
-        
+
     }
 }
