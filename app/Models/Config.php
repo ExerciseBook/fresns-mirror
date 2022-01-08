@@ -25,4 +25,17 @@ class Config extends Model
     {
         return $query->where('item_key', 'platforms');
     }
+
+    public function setDefaultValue()
+    {
+        if ($this->item_type == 'boolean') {
+            $this->item_value = 'false';
+        }  else if ($this->item_type == 'number') {
+            $this->item_value = 0;
+        } else {
+            $this->item_value = NULl;
+        }
+
+        return $this;
+    }
 }

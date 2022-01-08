@@ -13,6 +13,7 @@ use App\Fresns\Panel\Http\Controllers\{
     LanguageMenuController,
     VerifyCodeController,
     UserConfigController,
+    WalletConfigController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -83,6 +84,9 @@ Route::middleware(['panelAuth'])->group(function() {
         // user
         Route::get('userConfigs', [UserConfigController::class, 'show'])->name('userConfigs.show');
         Route::put('userConfigs', [UserConfigController::class, 'update'])->name('userConfigs.update');
+        // wallet
+        Route::get('walletConfigs', [WalletConfigController::class, 'show'])->name('walletConfigs.show');
+        Route::put('walletConfigs', [WalletConfigController::class, 'update'])->name('walletConfigs.update');
     });
 });
 
