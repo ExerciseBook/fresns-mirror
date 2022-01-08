@@ -11,6 +11,7 @@ use App\Fresns\Panel\Http\Controllers\{
     DashboardController,
     SessionKeyController,
     LanguageMenuController,
+    VerifyCodeController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -74,6 +75,9 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::get('send', [SendController::class, 'show'])->name('send.show');
         Route::put('send', [SendController::class, 'update'])->name('send.update');
         // verify code
+        Route::get('verifyCodes', [VerifyCodeController::class, 'index'])->name('verifyCodes.index');
+        Route::get('verifyCodes/{itemKey}/edit', [VerifyCodeController::class, 'edit'])->name('verifyCodes.edit');
+        Route::put('verifyCodes/{itemKey}', [VerifyCodeController::class, 'update'])->name('verifyCodes.update');
     });
 });
 

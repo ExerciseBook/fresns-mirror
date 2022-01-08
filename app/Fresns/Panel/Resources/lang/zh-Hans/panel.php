@@ -25,4 +25,5 @@ return [
     'backendDomain' => '后端网址',
     'safePath' => '安全入口',
     'defaultLanguage' => '默认语言',
+    'verifycodeTemplate1' => '通用验证码',
 ];

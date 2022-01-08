@@ -11,7 +11,7 @@
           <li class="nav-item"><a class="nav-link  {{ \Route::is('panel.languageMenus.*') ? 'active' : ''}}" href="{{ route('panel.languageMenus.index') }}">语言设置</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.site.*') ? 'active' : ''}}" href="{{ route('panel.site.show') }}">站点设置</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.policy.*') ? 'active' : ''}}" href="{{ route('panel.policy.show') }}">政策设置</a></li>
-          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.send.*') ? 'active' : ''}}" href="{{ route('panel.send.show') }}">发信设置</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is(['panel.send.*', 'panel.verifyCodes.*']) ? 'active' : ''}}" href="{{ route('panel.send.show') }}">发信设置</a></li>
           <li class="nav-item"><a class="nav-link" href="system-user.html">用户设置</a></li>
           <li class="nav-item"><a class="nav-link" href="system-wallet.html">钱包设置</a></li>
           <li class="nav-item"><a class="nav-link" href="system-storage-image.html">存储设置</a></li>

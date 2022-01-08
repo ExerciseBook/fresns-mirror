@@ -17,8 +17,8 @@
       </div>
     </div>
     <ul class="nav nav-tabs">
-      <li class="nav-item"><a class="nav-link active" href="system-send.html">发信服务商</a></li>
-      <li class="nav-item"><a class="nav-link" href="system-verifycode.html">验证码模板</a></li>
+      <li class="nav-item"><a class="nav-link active" href="{{ route('panel.send.show') }}">发信服务商</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{ route('panel.verifyCodes.index')}}">验证码模板</a></li>
     </ul>
   </div>
   <!--表单 开始-->
