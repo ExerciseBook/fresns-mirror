@@ -10,11 +10,13 @@ use App\Fresns\Panel\Http\Controllers\{
     StorageController,
     LanguageController,
     DashboardController,
+    MapConfigController,
     SessionKeyController,
     VerifyCodeController,
     UserConfigController,
     LanguageMenuController,
     WalletConfigController,
+    PluginUsageController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -55,6 +57,11 @@ Route::middleware(['panelAuth'])->group(function() {
             'index', 'store', 'destroy'
         ]);
     });
+
+    // plugin usage
+    Route::resource('pluginUsages', PluginUsageController::class)->only([
+        'store', 'update', 'destroy'
+    ]);
 
     Route::prefix('system')->group(function() {
         // set language menus
@@ -102,6 +109,13 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::put('storage/image', [StorageController::class, 'imageUpdate'])->name('storage.image.update');
 
         // video
+
+
+        // map
+        //Route::get('mapConfigs', [MapConfigController::class, 'index'])->name('mapConfigs.index');
+        Route::resource('mapConfigs', MapConfigController::class)->only([
+            'index', 'store', 'update'
+        ]);
     });
 });
 

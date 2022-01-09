@@ -6,7 +6,7 @@ class Config extends Model
 {
     public function getItemValueAttribute($value)
     {
-        if (in_array($this->item_type,  ['array', 'plugins'])) {
+        if (in_array($this->item_type,  ['array', 'plugins', 'object'])) {
             return json_decode($value, true);
         }
 
@@ -15,7 +15,7 @@ class Config extends Model
 
     public function setItemValueAttribute($value)
     {
-        if ($this->item_type == 'array' || is_array($value)) {
+        if (in_array($this->item_type, ['array', 'plugins', 'object']) || is_array($value)) {
             $value = json_encode($value);
         }
         $this->attributes['item_value'] = $value;

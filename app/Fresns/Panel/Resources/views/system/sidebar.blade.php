@@ -19,7 +19,7 @@
             'panel.walletWithdrawConfigs.*'
           ]) ? 'active' : ''}}" href="{{ route('panel.walletConfigs.show')}}">钱包设置</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.storage.*') ? 'active' : ''}}" href="{{ route('panel.storage.image.show') }}">存储设置</a></li>
-          <li class="nav-item"><a class="nav-link" href="system-map.html">地图设置</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.mapConfigs.*') ? 'active' : ''}}" href="{{ route('panel.mapConfigs.index') }}">地图设置</a></li>
           <li class="nav-item d-block d-lg-none my-3 text-secondary">Powered by Fresns</li>
         </ul>
       </div>

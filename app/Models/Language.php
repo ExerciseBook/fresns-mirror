@@ -10,4 +10,9 @@ class Language extends Model
     {
         return $query->where('table_name', 'configs');
     }
+
+    public function scopeTableName($query, $tableName)
+    {
+        return $query->where('table_name', $tableName);
+    }
 }
