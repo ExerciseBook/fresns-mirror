@@ -7,12 +7,13 @@ use App\Fresns\Panel\Http\Controllers\{
     AdminController,
     ConfigController,
     PolicyController,
+    StorageController,
     LanguageController,
     DashboardController,
     SessionKeyController,
-    LanguageMenuController,
     VerifyCodeController,
     UserConfigController,
+    LanguageMenuController,
     WalletConfigController,
 };
 use Illuminate\Support\Facades\Route;
@@ -87,6 +88,20 @@ Route::middleware(['panelAuth'])->group(function() {
         // wallet
         Route::get('walletConfigs', [WalletConfigController::class, 'show'])->name('walletConfigs.show');
         Route::put('walletConfigs', [WalletConfigController::class, 'update'])->name('walletConfigs.update');
+
+        Route::get('walletPayConfigs', [WalletConfigController::class, 'payIndex'])->name('walletPayConfigs.index');
+        Route::post('walletPayConfigs', [WalletConfigController::class, 'payStore'])->name('walletPayConfigs.payStore');
+        Route::put('walletPayConfigs/{id}', [WalletConfigController::class, 'payUpdate'])->name('walletPayConfigs.update');
+
+        Route::get('walletWithdrawConfigs', [WalletConfigController::class, 'withdrawIndex'])->name('walletWithdrawConfigs.index');
+        Route::put('walletWithdrawConfigs/{id}', [WalletConfigController::class, 'withdrawUpdate'])->name('walletWithdrawConfigs.update');
+
+        // sotrage
+        // image
+        Route::get('storage/image', [StorageController::class, 'imageShow'])->name('storage.image.show');
+        Route::put('storage/image', [StorageController::class, 'imageUpdate'])->name('storage.image.update');
+
+        // video
     });
 });
 

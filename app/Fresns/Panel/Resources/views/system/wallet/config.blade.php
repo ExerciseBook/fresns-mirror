@@ -17,9 +17,9 @@
       </div>
     </div>
     <ul class="nav nav-tabs">
-      <li class="nav-item"><a class="nav-link active" href="system-wallet.html">功能设置</a></li>
-      <li class="nav-item"><a class="nav-link" href="system-wallet-pay.html">充值服务商</a></li>
-      <li class="nav-item"><a class="nav-link" href="system-wallet-withdraw.html">提现服务商</a></li>
+      <li class="nav-item"><a class="nav-link active" href="{{ route('panel.walletConfigs.show') }}">功能设置</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{ route('panel.walletPayConfigs.index')}}">充值服务商</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{ route('panel.walletWithdrawConfigs.index')}}">提现服务商</a></li>
     </ul>
   </div>
   <!--表单 开始-->

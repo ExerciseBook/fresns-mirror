@@ -3,7 +3,9 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Models\Config;
+use App\Models\Plugin;
 use App\Models\Language;
+use App\Models\PluginUsage;
 use Illuminate\Http\Request;
 
 class WalletConfigController extends Controller
@@ -30,7 +32,6 @@ class WalletConfigController extends Controller
         foreach($configs as $config) {
             $params[$config->item_key] = $config->item_value;
         }
-        //dd($params);
 
         return view('panel::system.wallet.config', compact('params'));
     }
@@ -68,5 +69,40 @@ class WalletConfigController extends Controller
         }
 
         return $this->updateSuccess();
+    }
+
+
+    public function payIndex()
+    {
+        $plugins = Plugin::all();
+
+        $pluginUsages = PluginUsage::where('type', 1)
+            ->with('plugin')
+            ->get();
+
+        return view('panel::system.wallet.pay', compact('pluginUsages', 'plugins'));
+    }
+
+    public function payStore(Request $request)
+    {
+        $pluginUsage = new PluginUsage;
+        $pluginUsage->type = 1;
+        $pluginUsage->name = '';
+        $pluginUsage->plugin_unikey = $request->plugin_unikey;
+        $pluginUsage->parameter = $request->parameter;
+        $pluginUsage->is_enable = $request->is_enable;
+        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->save();
+
+        return $this->createSuccess();
+    }
+
+    public function withdrawIndex()
+    {
+        $pluginUsages = PluginUsage::where('type', 1)
+            ->with('plugin')
+            ->get();
+
+        return view('panel::system.wallet.withdraw', compact('pluginUsages'));
     }
 }

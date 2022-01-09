@@ -13,8 +13,12 @@
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.policy.*') ? 'active' : ''}}" href="{{ route('panel.policy.show') }}">政策设置</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is(['panel.send.*', 'panel.verifyCodes.*']) ? 'active' : ''}}" href="{{ route('panel.send.show') }}">发信设置</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.userConfigs.*') ? 'active' : ''}}" href="{{ route('panel.userConfigs.show') }}">用户设置</a></li>
-          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.wallet.*') ? 'active' : ''}}" href="{{ route('panel.walletConfigs.show')}}">钱包设置</a></li>
-          <li class="nav-item"><a class="nav-link" href="system-storage-image.html">存储设置</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is([
+            'panel.walletConfigs.*',
+            'panel.walletPayConfigs.*',
+            'panel.walletWithdrawConfigs.*'
+          ]) ? 'active' : ''}}" href="{{ route('panel.walletConfigs.show')}}">钱包设置</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.storage.*') ? 'active' : ''}}" href="{{ route('panel.storage.image.show') }}">存储设置</a></li>
           <li class="nav-item"><a class="nav-link" href="system-map.html">地图设置</a></li>
           <li class="nav-item d-block d-lg-none my-3 text-secondary">Powered by Fresns</li>
         </ul>
