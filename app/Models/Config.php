@@ -38,4 +38,11 @@ class Config extends Model
 
         return $this;
     }
+
+    public function languages()
+    {
+        return $this->hasMany(Language::class, 'table_key', 'item_key')
+            ->where('table_name', 'configs');
+    }
+
 }

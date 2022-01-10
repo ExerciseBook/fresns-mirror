@@ -26,9 +26,9 @@
         <button class="btn btn-outline-secondary text-start rename-btn" type="button"
           data-bs-toggle="modal"
           data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_name'])}}"
-          data-languages="{{ json_encode($langParams['member_name'] ?? [])}}"
+          data-languages="{{ optional($configs['member_name'])->languages->toJson() }}"
           data-item_key="member_name"
-          data-bs-target="#langModal">{{ $params['member_name'] ?? '' }}</button>
+          data-bs-target="#langModal">{{ $configs['member_name']['item_value'] ?? '' }}</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“账号”、“用户”、“会员”等命名</div>

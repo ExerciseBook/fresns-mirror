@@ -25,6 +25,8 @@ use App\Fresns\Panel\Http\Controllers\{
 	AppController,
 	RenameConfigController,
 	InteractiveConfigController,
+    EmojiController,
+    EmojiGroupController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -121,7 +123,6 @@ Route::middleware(['panelAuth'])->group(function() {
 
 
         // map
-        //Route::get('mapConfigs', [MapConfigController::class, 'index'])->name('mapConfigs.index');
         Route::resource('mapConfigs', MapConfigController::class)->only([
             'index', 'store', 'update'
         ]);
@@ -135,6 +136,15 @@ Route::middleware(['panelAuth'])->group(function() {
         // interactive config
         Route::get('interactiveConfigs', [InteractiveConfigController::class, 'show'])->name('interactiveConfigs.show');
         Route::put('interactiveConfigs', [InteractiveConfigController::class, 'update'])->name('interactiveConfigs.update');
+
+        // emoji
+        Route::resource('emoji', EmojiController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
+        // emoji group
+        Route::resource('emojiGroups', EmojiGroupController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
     });
 
     // client

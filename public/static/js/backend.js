@@ -222,7 +222,6 @@ $('#langModal').on('show.bs.modal', function(e) {
     itemKey = button.data('item_key'),
     action = button.data('action');
 
-
   $(this).find('form').attr('action', action);
   $(this).find('input[name=update_config]').val(itemKey);
 
@@ -232,6 +231,5 @@ $('#langModal').on('show.bs.modal', function(e) {
       $this.find("input[name='languages["+language.lang_tag+"]'").val(language.lang_content);
     });
   }
-
 });
 

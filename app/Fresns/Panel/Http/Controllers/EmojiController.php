@@ -7,25 +7,12 @@ use App\Models\Language;
 use Illuminate\Http\Request;
 use App\Fresns\Panel\Http\Requests\UpdateSiteRequest;
 
-class RenameConfigController extends Controller
+class EmojiController extends Controller
 {
     public function show()
     {
-        // config keys
-        $configKeys = [
-            'member_name',
-            'member_multiple',
-        ];
 
-        $configs = Config::whereIn('item_key', $configKeys)
-            ->with('languages')
-            ->get();
-
-        $configs = $configs->mapWithKeys(function($config) {
-            return [$config->item_key => $config];
-        });
-
-        return view('panel::operation.rename', compact('configs'));
+        return view('panel::operation.emoji', compact('params', 'langParams'));
     }
 
     public function update(UpdateSiteRequest $request)
