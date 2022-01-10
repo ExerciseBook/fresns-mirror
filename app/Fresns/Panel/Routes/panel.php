@@ -24,6 +24,7 @@ use App\Fresns\Panel\Http\Controllers\{
 	ThemeController,
 	AppController,
 	RenameConfigController,
+	InteractiveConfigController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -128,7 +129,12 @@ Route::middleware(['panelAuth'])->group(function() {
 
     // operating
     Route::prefix('operation')->group(function() {
+        // rename config
         Route::get('renameConfigs', [RenameConfigController::class, 'show'])->name('renameConfigs.show');
+
+        // interactive config
+        Route::get('interactiveConfigs', [InteractiveConfigController::class, 'show'])->name('interactiveConfigs.show');
+        Route::put('interactiveConfigs', [InteractiveConfigController::class, 'update'])->name('interactiveConfigs.update');
     });
 
     // client
