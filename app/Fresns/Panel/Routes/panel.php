@@ -16,7 +16,14 @@ use App\Fresns\Panel\Http\Controllers\{
     UserConfigController,
     LanguageMenuController,
     WalletConfigController,
-    PluginUsageController,
+	PluginUsageController,
+	ClientMenuController,
+	ColumnController,
+	LanguagePackController,
+	EngineController,
+	ThemeController,
+	AppController,
+
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -117,5 +124,32 @@ Route::middleware(['panelAuth'])->group(function() {
             'index', 'store', 'update'
         ]);
     });
-});
 
+
+	Route::prefix('client')->group(function() {
+		// set meuns
+		Route::get('clientMenus', [ClientMenuController::class, 'index'])->name('clientMenus.index');
+		Route::put('clientMenus/{id}', [ClientMenuController::class, 'update'])->name('clientMenus.update');
+		// set columns
+		Route::get('columns', [ColumnController::class, 'index'])->name('columns.index');
+		Route::put('columns/{id}', [ColumnController::class, 'update'])->name('columns.update');
+		//set language pack
+		Route::get('languagePack', [LanguagePackController::class, 'index'])->name('languagePack.index');
+		Route::get('languagePack/{id}/config', [LanguagePackController::class, 'show'])->name('languagePack.show');
+		Route::post('languagePack/{id}/config', [LanguagePackController::class, 'store'])->name('languagePack.store');
+		Route::delete('languagePack/{id}/config/{config_id}', [LanguagePackController::class, 'destroy'])->name('languagePack.destroy');
+		//set engines
+		Route::get('engines', [EngineController::class, 'index'])->name('engines.index');
+		Route::put('engines/{id}/status', [EngineController::class, 'status'])->name('engines.status');
+        Route::put('engines/{id}/relation', [EngineController::class, 'relation'])->name('engines.relation');
+		Route::put('engines/{id}/uninstall', [EngineController::class, 'uninstall'])->name('engines.uninstall');
+		// set themes
+		Route::get('themes', [ThemeController::class, 'index'])->name('themes.index');
+		Route::put('themes/{id}/status', [ThemeController::class, 'status'])->name('themes.status');
+		Route::put('themes/{id}/uninstall', [ThemeController::class, 'uninstall'])->name('themes.uninstall');
+		// set apps
+		Route::get('apps', [AppController::class, 'index'])->name('apps.index');
+		Route::put('apps/{id}/status', [AppController::class, 'status'])->name('apps.status');
+		Route::put('apps/{id}/uninstall', [AppController::class, 'uninstall'])->name('apps.uninstall');
+	});
+});
