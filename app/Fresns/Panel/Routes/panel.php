@@ -23,7 +23,7 @@ use App\Fresns\Panel\Http\Controllers\{
 	EngineController,
 	ThemeController,
 	AppController,
-
+	RenameConfigController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -70,6 +70,10 @@ Route::middleware(['panelAuth'])->group(function() {
         'store', 'update', 'destroy'
     ]);
 
+    // update language
+    Route::put('batch/languages/{itemKey}', [LanguageController::class, 'batchUpdate'])->name('languages.batch.update');
+    Route::put('languages/{itemKey}', [LanguageController::class, 'update'])->name('languages.update');
+
     Route::prefix('system')->group(function() {
         // set language menus
         Route::put('languageMenus/status/switch', [LanguageMenuController::class, 'switchStatus'])->name('languageMenus.status.switch');
@@ -80,9 +84,6 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::put('languageMeus/{langTag}/rank', [LanguageMenuController::class, 'updateRank'])->name('languageMenus.rank.update');
         Route::delete('languageMenus/{langTag}', [LanguageMenuController::class, 'destroy'])->name('languageMenus.destroy');
 
-        // update language
-        Route::put('batch/languages/{itemKey}', [LanguageController::class, 'batchUpdate'])->name('language.batch.update');
-        Route::put('languages/{itemKey}', [LanguageController::class, 'update'])->name('language.update');
         // site
         Route::get('site', [SiteController::class, 'show'])->name('site.show');
         Route::put('site', [SiteController::class, 'update'])->name('site.update');
@@ -125,7 +126,12 @@ Route::middleware(['panelAuth'])->group(function() {
         ]);
     });
 
+    // operating
+    Route::prefix('operation')->group(function() {
+        Route::get('renameConfigs', [RenameConfigController::class, 'show'])->name('renameConfigs.show');
+    });
 
+    // client
 	Route::prefix('client')->group(function() {
 		// set meuns
 		Route::get('clientMenus', [ClientMenuController::class, 'index'])->name('clientMenus.index');

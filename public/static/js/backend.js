@@ -215,3 +215,23 @@ $("#mapLangModal").on('show.bs.modal', function (e) {
     }
   });
 });
+
+$('#langModal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget),
+    languages = button.data('languages'),
+    itemKey = button.data('item_key'),
+    action = button.data('action');
+
+
+  $(this).find('form').attr('action', action);
+  $(this).find('input[name=update_config]').val(itemKey);
+
+  if (languages) {
+    let $this = $(this);
+    languages.map(function(language, index) {
+      $this.find("input[name='languages["+language.lang_tag+"]'").val(language.lang_content);
+    });
+  }
+
+});
+

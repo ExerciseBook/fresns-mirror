@@ -146,7 +146,7 @@
             <td><button type="button" class="btn btn-outline-primary btn-sm"
                                       data-bs-toggle="modal"
                                       data-bs-target="#updateLanguage"
-                                      data-action="{{ route('panel.language.update', ['itemKey' => 'account_terms'] )}}"
+                                      data-action="{{ route('panel.languages.update', ['itemKey' => 'account_terms'] )}}"
                                       data-lang_tag_desc="{{ $langName }}"
                                       data-lang_tag="{{ $lang['langTag'] }}"
                                       data-content="{{ $langParams['account_terms'][$lang['langTag']] ?? '' }}"

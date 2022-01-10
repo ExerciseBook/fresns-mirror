@@ -191,7 +191,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="{{ route('panel.language.batch.update', ['itemKey' => 'site_name']) }}" method="post">
+          <form action="{{ route('panel.languages.batch.update', ['itemKey' => 'site_name']) }}" method="post">
             @csrf
             @method('put')
             <input type="hidden" name="update_config" value="site_name">
@@ -234,7 +234,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="{{ route('panel.language.batch.update', ['itemKey' => 'site_desc']) }}" method="post">
+          <form action="{{ route('panel.languages.batch.update', ['itemKey' => 'site_desc']) }}" method="post">
             @csrf
             @method('put')
             <input type="hidden" name="update_config" value="site_desc">
