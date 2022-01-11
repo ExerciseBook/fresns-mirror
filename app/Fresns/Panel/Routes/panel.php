@@ -28,6 +28,14 @@ use App\Fresns\Panel\Http\Controllers\{
     EmojiController,
     EmojiGroupController,
     PublishConfigController,
+	PluginController,
+	ExpandEditorController,
+	ExpandTypeController,
+	ExpandPostController,
+	ExpandManageController,
+	ExpandGroupController,
+	ExpandFeatureController,
+	ExpandProfileController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -182,5 +190,56 @@ Route::middleware(['panelAuth'])->group(function() {
 		Route::get('apps', [AppController::class, 'index'])->name('apps.index');
 		Route::put('apps/{id}/status', [AppController::class, 'status'])->name('apps.status');
 		Route::put('apps/{id}/uninstall', [AppController::class, 'uninstall'])->name('apps.uninstall');
+	});
+
+	//plugin
+	Route::prefix('plugin')->group(function() {
+		// set plugins
+		Route::get('plugins', [PluginController::class, 'index'])->name('plugins.index');
+		Route::put('plugins/{id}/status', [PluginController::class, 'status'])->name('plugins.status');
+		Route::put('plugins/{id}/uninstall', [PluginController::class, 'uninstall'])->name('plugins.uninstall');
+	});
+
+	//expand
+	Route::prefix('expand')->group(function() {
+		// set editor
+		Route::resource('expandEditor', ExpandEditorController::class)->only([
+			'index', 'store', 'update', 'destroy'
+		]);
+		Route::put('expandEditor/{id}/rank', [ExpandEditorController::class, 'updateRank'])->name('expandEditor.rank');
+		// set type
+		Route::resource('expandType', ExpandTypeController::class)->only([
+			'index', 'store', 'update', 'destroy'
+		]);
+		Route::put('expandType/{id}/rank', [ExpandTypeController::class, 'updateRank'])->name('expandType.rank');
+		Route::put('expandType/{id}/source', [ExpandTypeController::class, 'source'])->name('expandType.source');
+		// set post
+		Route::resource('expandPost', ExpandPostController::class)->only([
+			'index', 'update'
+		]);
+		// set manage
+		Route::resource('expandManage', ExpandManageController::class)->only([
+			'index', 'store', 'update', 'destroy'
+		]);
+		Route::put('expandManage/{id}/rank', [ExpandManageController::class, 'updateRank'])->name('expandManage.rank');
+		// set group
+		Route::resource('expandGroup', ExpandGroupController::class)->only([
+			'index', 'store', 'update', 'destroy'
+		]);
+		Route::put('expandGroup/{id}/rank', [ExpandGroupController::class, 'updateRank'])->name('expandGroup.rank');
+
+		// set userfeature
+		Route::resource('expandFeature', ExpandFeatureController::class)->only([
+			'index', 'store', 'update', 'destroy'
+		]);
+		Route::put('expandFeature/{id}/rank', [ExpandFeatureController::class, 'updateRank'])->name('expandFeature.rank');
+
+		// set userprofile
+		Route::resource('expandProfile', ExpandProfileController::class)->only([
+			'index', 'store', 'update', 'destroy'
+		]);
+		Route::put('expandProfile/{id}/rank', [ExpandProfileController::class, 'updateRank'])->name('expandProfile.rank');
+
+
 	});
 });
