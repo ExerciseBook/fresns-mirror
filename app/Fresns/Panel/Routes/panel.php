@@ -27,6 +27,7 @@ use App\Fresns\Panel\Http\Controllers\{
 	InteractiveConfigController,
     EmojiController,
     EmojiGroupController,
+    PublishConfigController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -145,6 +146,14 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::resource('emojiGroups', EmojiGroupController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);
+
+        // publsh config
+        // post
+        Route::get('postConfigs', [PublishConfigController::class, 'postShow'])->name('postConfigs.show');
+        Route::put('postConfigs', [PublishConfigController::class, 'postUpdate'])->name('postConfigs.update');
+
+        Route::get('commentConfigs', [PublishConfigController::class, 'commentShow'])->name('commentConfigs.show');
+        Route::put('commentConfigs', [PublishConfigController::class, 'commentUpdate'])->name('commentConfigs.update');
     });
 
     // client
