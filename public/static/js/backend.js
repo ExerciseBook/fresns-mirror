@@ -158,6 +158,7 @@ $(document).on('click', '.delete-connect', function() {
   $(this).parent().remove();
 })
 
+// map config
 $('#createMap').on('show.bs.modal', function(e) {
   if ($(this).data('is_back')) {
     return;
@@ -216,7 +217,7 @@ $("#mapLangModal").on('show.bs.modal', function (e) {
   });
 });
 
-$('#langModal').on('show.bs.modal', function(e) {
+$('#configLangModal').on('show.bs.modal', function(e) {
   let button = $(e.relatedTarget),
     languages = button.data('languages'),
     itemKey = button.data('item_key'),
@@ -233,3 +234,92 @@ $('#langModal').on('show.bs.modal', function(e) {
   }
 });
 
+// 通用处理，名称多语言 start
+$('.name-lang-parent').on('show.bs.modal', function(e) {
+  if ($(this).data('is_back')) {
+    return;
+  }
+
+  let button = $(e.relatedTarget);
+  let action = button.data('action');
+  let params = button.data('params');
+  let names = button.data('names');
+
+  $(this).parent('form').attr('action', action);
+
+  $(this).parent('form').find('input[name=_method]').val(params ? 'put' : 'post');
+
+  if (!params) {
+    $(this).parent('form').trigger("reset");
+    $(this).find('.name-button').text('名称');
+    return;
+  }
+
+  if (names) {
+    names.map((name, index) => {
+      $(this).parent('form').find("input[name='names["+name.lang_tag+"]'").val(name.lang_content);
+    });
+  }
+});
+
+$('.name-lang-parent').on('hide.bs.modal', function(e) {
+  $(this).data('is_back', false)
+});
+
+$(".name-lang-modal").on('show.bs.modal', function (e) {
+  if ($(this).data('is_back')) {
+    return;
+  }
+
+  let button = $(e.relatedTarget);
+  var parent = button.data('parent');
+  if (!parent) {
+    return;
+  }
+
+  var $this = $(this)
+  $(this).on('hide.bs.modal', function (e) {
+    if (parent) {
+      $(parent).data('is_back', true)
+      $(parent).modal('show');
+    }
+  });
+});
+// 通用处理，名称多语言 end
+
+
+$('#emojiGroupCreateModal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget);
+  let params = button.data('params');
+
+  if (!params) {
+    return;
+  }
+
+  $(this).find('input[name=rank_num]').val(params.rank_num);
+  $(this).find('input[name=code]').val(params.code);
+  $(this).find('.name-button').text(params.name);
+  $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+});
+
+$('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
+  let button = $(e.relatedTarget);
+  let emojis = button.data('emojis');
+  $('#emojiList').empty();
+
+  if (!emojis) {
+    return;
+  }
+
+  let template = $('#emojiData').contents();
+  emojis.map((emoji) => {
+    let emojiTemplate = template.clone();
+    emojiTemplate.find('input[name=rank_num]').val(emoji.rank_num);
+    emojiTemplate.find('.emoji-img').attr('src', emoji.image_file_url);
+    emojiTemplate.find('.emoji-code').html(emoji.code);
+    if (emoji.is_enable) {
+      emojiTemplate.find('input[name=is_enable]').attr('checked', 'checked');
+    }
+    $('#emojiList').append(emojiTemplate);
+  });
+});

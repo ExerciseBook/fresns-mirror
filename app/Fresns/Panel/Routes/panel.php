@@ -138,7 +138,7 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::put('interactiveConfigs', [InteractiveConfigController::class, 'update'])->name('interactiveConfigs.update');
 
         // emoji
-        Route::resource('emoji', EmojiController::class)->only([
+        Route::resource('emojis', EmojiController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);
         // emoji group

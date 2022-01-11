@@ -32,21 +32,8 @@ class RenameConfigController extends Controller
     {
         $configKeys = [
             'site_domain',
-            'site_copyright',
-            'site_copyright_years',
-            'default_timezone',
-            'site_mode',
-            'site_public_close',
-            //'site_public_service',
-            'site_register_email',
-            'site_register_phone',
-            'site_private_close',
-            //'site_private_service',
-            'site_private_end',
-            'site_email',
         ];
 
-        //dd($request->all());
         $configs = Config::whereIn('item_key', $configKeys)->get();
 
         foreach($configKeys as $configKey) {
