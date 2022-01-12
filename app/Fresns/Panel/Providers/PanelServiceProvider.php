@@ -2,10 +2,11 @@
 
 namespace App\Fresns\Panel\Providers;
 
-use App\Fresns\Panel\Http\Exceptions\Handler;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
-use App\Fresns\Panel\Http\Middleware\Authenticate;
+use App\Fresns\Panel\Http\Exceptions\Handler;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use App\Fresns\Panel\Http\Middleware\Authenticate;
 
 class PanelServiceProvider extends ServiceProvider
 {
@@ -14,6 +15,8 @@ class PanelServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useBootstrap();
+
         $this->registerTranslations();
         $this->registerViews();
 

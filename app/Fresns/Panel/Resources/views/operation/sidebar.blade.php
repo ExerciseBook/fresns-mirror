@@ -12,7 +12,7 @@
           <li class="nav-item"><a class="nav-link" href="{{ route('panel.interactiveConfigs.show') }}">互动配置</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('panel.emojiGroups.index' )}}">表情配置</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('panel.postConfigs.show') }}">发表配置</a></li>
-          <li class="nav-item"><a class="nav-link" href="operating-filter.html">过滤配置</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ route('panel.stopWords.index') }}">过滤配置</a></li>
           <li class="nav-item"><a class="nav-link" href="operating-role.html">用户角色</a></li>
           <li class="nav-item"><a class="nav-link" href="operating-group.html">内容小组</a></li>
           <li class="nav-item d-block d-lg-none my-3 text-secondary">Powered by Fresns</li>

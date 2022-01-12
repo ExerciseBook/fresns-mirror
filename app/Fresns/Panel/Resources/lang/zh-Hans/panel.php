@@ -26,4 +26,5 @@ return [
     'safePath' => '安全入口',
     'defaultLanguage' => '默认语言',
     'verifycodeTemplate1' => '通用验证码',
+    'doNotHandle' => '不处理',
 ];

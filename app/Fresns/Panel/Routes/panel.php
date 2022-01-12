@@ -36,6 +36,7 @@ use App\Fresns\Panel\Http\Controllers\{
 	ExpandGroupController,
 	ExpandFeatureController,
 	ExpandProfileController,
+    StopWordController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -162,6 +163,11 @@ Route::middleware(['panelAuth'])->group(function() {
 
         Route::get('commentConfigs', [PublishConfigController::class, 'commentShow'])->name('commentConfigs.show');
         Route::put('commentConfigs', [PublishConfigController::class, 'commentUpdate'])->name('commentConfigs.update');
+
+        // stop words
+        Route::resource('stopWords', StopWordController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
     });
 
     // client

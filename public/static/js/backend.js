@@ -323,3 +323,24 @@ $('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
     $('#emojiList').append(emojiTemplate);
   });
 });
+
+
+$('#createStopWordModal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget);
+  let params = button.data('params');
+  let action = button.data('action');
+
+  $(this).find('form').attr('action', action);
+  $(this).find('form').find('input[name=_method]').val(params ? 'put' : 'post');
+
+  if (!params) {
+    $(this).find('form').trigger("reset");
+    return;
+  }
+
+  $(this).find('input[name=word]').val(params.word);
+  $(this).find('input[name=replace_word]').val(params.replace_word);
+  $(this).find('select[name=content_mode]').val(params.content_mode);
+  $(this).find('select[name=member_mode]').val(params.member_mode);
+  $(this).find('select[name=dialog_mode]').val(params.dialog_mode);
+});
