@@ -21,6 +21,8 @@ use App\Fresns\Panel\Http\Controllers\{
 	ColumnController,
 	LanguagePackController,
 	EngineController,
+    StopWordController,
+    MemberRoleController,
 	ThemeController,
 	AppController,
 	RenameConfigController,
@@ -36,7 +38,6 @@ use App\Fresns\Panel\Http\Controllers\{
 	ExpandGroupController,
 	ExpandFeatureController,
 	ExpandProfileController,
-    StopWordController,
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
@@ -166,6 +167,10 @@ Route::middleware(['panelAuth'])->group(function() {
 
         // stop words
         Route::resource('stopWords', StopWordController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
+
+        Route::resource('memberRoles', MemberRoleController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);
     });

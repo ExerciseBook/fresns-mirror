@@ -344,3 +344,29 @@ $('#createStopWordModal').on('show.bs.modal', function(e) {
   $(this).find('select[name=member_mode]').val(params.member_mode);
   $(this).find('select[name=dialog_mode]').val(params.dialog_mode);
 });
+
+$('#createRoleModal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget);
+  let params = button.data('params');
+
+  if (!params) {
+    return;
+  }
+
+  $(this).find('select[name=type]').val(params.type);
+  $(this).find('input[name=rank_num]').val(params.rank_num);
+  $(this).find('input[name=name]').val(params.name);
+  if (params.is_display_name) {
+    $(this).find('input[name=is_display_name]').attr('checked', 'checked');
+  }
+  if (params.is_display_icon) {
+    $(this).find('input[name=is_display_icon]').attr('checked', 'checked');
+  }
+
+  if (params.nickname_color) {
+    $(this).find('input[name=nickname_color]').val(params.nickname_color);
+  } else {
+    $(this).find('input[name=no_color]').attr('checked', 'checked');
+  }
+  $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+});
