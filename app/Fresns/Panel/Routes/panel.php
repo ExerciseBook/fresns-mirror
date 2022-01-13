@@ -23,6 +23,7 @@ use App\Fresns\Panel\Http\Controllers\{
 	EngineController,
     StopWordController,
     MemberRoleController,
+    GroupController,
 	ThemeController,
 	AppController,
 	RenameConfigController,
@@ -173,6 +174,13 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::resource('memberRoles', MemberRoleController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);
+
+        Route::resource('groups', GroupController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
+        Route::get('recommendGroups', [GroupController::class, 'recommendIndex'])->name('recommendGroups.index');
+        Route::get('disableGroups', [GroupController::class, 'disableIndex'])->name('disableGroups.index');
+        Route::put('groups/{group}/enable', [GroupController::class, 'updateEnable'])->name('groups.enable.update');
     });
 
     // client
