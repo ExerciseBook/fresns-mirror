@@ -11,7 +11,7 @@
           <li class="nav-item"><a class="nav-link active" href="{{ route('panel.renameConfigs.show') }}">命名配置</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('panel.interactiveConfigs.show') }}">互动配置</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('panel.emojiGroups.index' )}}">表情配置</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('panel.postConfigs.show') }}">发表配置</a></li>
+          <li class="nav-item"><a class="nav-link  {{ \Route::is('panel.postConfigs.*','panel.commentConfigs.*') ? 'active' : ''}}" href="{{ route('panel.postConfigs.show') }}">发表配置</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('panel.stopWords.index') }}">过滤配置</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('panel.memberRoles.index') }}">用户角色</a></li>
           <li class="nav-item"><a class="nav-link" href="operating-group.html">内容小组</a></li>
