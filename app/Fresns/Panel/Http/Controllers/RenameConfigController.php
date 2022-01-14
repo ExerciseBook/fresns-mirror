@@ -14,14 +14,38 @@ class RenameConfigController extends Controller
         // config keys
         $configKeys = [
             'member_name',
-            'member_multiple',
+            'member_id_name',
+            'member_name_name',
+            'member_nickname_name',
+            'member_role_name',
+            'group_name',
+            'hashtag_name',
+            'post_name',
+            'comment_name',
+            'publish_post_name',
+            'publish_comment_name',
+            'like_member_name',
+            'like_group_name',
+            'like_hashtag_name',
+            'like_post_name',
+            'like_comment_name',
+            'follow_member_name',
+            'follow_group_name',
+            'follow_hashtag_name',
+            'follow_post_name',
+            'follow_comment_name',
+            'shield_member_name',
+            'shield_group_name',
+            'shield_hashtag_name',
+            'shield_post_name',
+            'shield_comment_name',
         ];
 
         $configs = Config::whereIn('item_key', $configKeys)
             ->with('languages')
             ->get();
 
-        $configs = $configs->mapWithKeys(function($config) {
+        $configs = $configs->mapWithKeys(function ($config) {
             return [$config->item_key => $config];
         });
 
@@ -31,12 +55,37 @@ class RenameConfigController extends Controller
     public function update(UpdateSiteRequest $request)
     {
         $configKeys = [
-            'site_domain',
+            'member_name',
+            'member_id_name',
+            'member_name_name',
+            'member_nickname_name',
+            'member_role_name',
+            'group_name',
+            'hashtag_name',
+            'post_name',
+            'comment_name',
+            'publish_post_name',
+            'publish_comment_name',
+            'like_member_name',
+            'like_group_name',
+            'like_hashtag_name',
+            'like_post_name',
+            'like_comment_name',
+            'follow_member_name',
+            'follow_group_name',
+            'follow_hashtag_name',
+            'follow_post_name',
+            'follow_comment_name',
+            'shield_member_name',
+            'shield_group_name',
+            'shield_hashtag_name',
+            'shield_post_name',
+            'shield_comment_name',
         ];
 
         $configs = Config::whereIn('item_key', $configKeys)->get();
 
-        foreach($configKeys as $configKey) {
+        foreach ($configKeys as $configKey) {
             $config = $configs->where('item_key', $configKey)->first();
             if (!$config) {
                 $continue;
@@ -45,10 +94,10 @@ class RenameConfigController extends Controller
             if (!$request->has($configKey)) {
                 if ($config->item_type == 'boolean') {
                     $config->item_value = 'false';
-                }  else if ($config->item_type == 'number') {
+                } elseif ($config->item_type == 'number') {
                     $config->item_value = 0;
                 } else {
-                    $config->item_value = NULl;
+                    $config->item_value = null;
                 }
                 $config->save();
                 continue;

@@ -22,13 +22,14 @@
     <label class="col-lg-2 col-form-label text-lg-end">成员命名设置：</label>
     <div class="col-lg-6">
       <div class="input-group">
-        <label class="input-group-text rename-label">身份自定义名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button"
-          data-bs-toggle="modal"
-          data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_name'])}}"
-          data-languages="{{ optional($configs['member_name'])->languages->toJson() }}"
-          data-item_key="member_name"
-          data-bs-target="#configLangModal">{{ $configs['member_name']['item_value'] ?? '' }}</button>
+	        <label class="input-group-text rename-label">身份自定义名称</label>
+	        <button class="btn btn-outline-secondary text-start rename-btn" type="button"
+	          data-bs-toggle="modal"
+	          data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_name'])}}"
+	          data-languages="{{ optional($configs['member_name'])->languages->toJson() }}"
+	          data-item_key="member_name"
+	          data-bs-target="#configLangModal">{{ $configs['member_name']['item_value'] ?? '' }}
+		  	</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“账号”、“用户”、“会员”等命名</div>
@@ -37,8 +38,14 @@
     <label class="col-lg-2"></label>
     <div class="col-lg-6">
       <div class="input-group">
-        <label class="input-group-text rename-label">ID 自定义名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">UID</button>
+			<label class="input-group-text rename-label">ID 自定义名称</label>
+			<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+	            data-bs-toggle="modal"
+	            data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_id_name'])}}"
+	            data-languages="{{ optional($configs['member_id_name'])->languages->toJson() }}"
+	            data-item_key="member_id_name"
+	            data-bs-target="#configLangModal">{{ $configs['member_id_name']['item_value'] ?? '' }}
+	  	  	</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“mid”、“uid”、“aid”等命名</div>
@@ -48,7 +55,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">名称自定义名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">用户名</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_name_name'])}}"
+			data-languages="{{ optional($configs['member_name_name'])->languages->toJson() }}"
+			data-item_key="member_name_name"
+			data-bs-target="#configLangModal">{{ $configs['member_name_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“用户名”、“成员名”、“账号”等命名</div>
@@ -58,7 +71,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">昵称自定义名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">用户昵称</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_nickname_name'])}}"
+			data-languages="{{ optional($configs['member_nickname_name'])->languages->toJson() }}"
+			data-item_key="member_nickname_name"
+			data-bs-target="#configLangModal">{{ $configs['member_nickname_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“用户昵称”、“花名”、“代号”等命名</div>
@@ -68,7 +87,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">角色自定义名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">用户角色</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_role_name'])}}"
+			data-languages="{{ optional($configs['member_role_name'])->languages->toJson() }}"
+			data-item_key="member_role_name"
+			data-bs-target="#configLangModal">{{ $configs['member_role_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“用户角色”、“用户组”、“用户群”等命名</div>
@@ -79,7 +104,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">小组自定义名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">小组</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'group_name'])}}"
+			data-languages="{{ optional($configs['group_name'])->languages->toJson() }}"
+			data-item_key="group_name"
+			data-bs-target="#configLangModal">{{ $configs['group_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“版区”、“圈子”、“分类”等命名</div>
@@ -89,7 +120,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">话题自定义名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">话题</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'hashtag_name'])}}"
+			data-languages="{{ optional($configs['hashtag_name'])->languages->toJson() }}"
+			data-item_key="hashtag_name"
+			data-bs-target="#configLangModal">{{ $configs['hashtag_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“超话”、“标签”、“话题”等命名</div>
@@ -99,7 +136,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">帖子自定义名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">帖子</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'post_name'])}}"
+			data-languages="{{ optional($configs['post_name'])->languages->toJson() }}"
+			data-item_key="post_name"
+			data-bs-target="#configLangModal">{{ $configs['post_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“帖子”、“动态”、“说说”等命名</div>
@@ -109,7 +152,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">评论自定义名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">评论</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'comment_name'])}}"
+			data-languages="{{ optional($configs['comment_name'])->languages->toJson() }}"
+			data-item_key="comment_name"
+			data-bs-target="#configLangModal">{{ $configs['comment_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“评论”、“回复”、“互动”等命名</div>
@@ -120,7 +169,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">发表帖子行为名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">发表</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'publish_post_name'])}}"
+			data-languages="{{ optional($configs['publish_post_name'])->languages->toJson() }}"
+			data-item_key="publish_post_name"
+			data-bs-target="#configLangModal">{{ $configs['publish_post_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“发表”、“投稿”、“反馈”等命名</div>
@@ -130,7 +185,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">发表评论行为名称</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">评论</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'publish_comment_name'])}}"
+			data-languages="{{ optional($configs['publish_comment_name'])->languages->toJson() }}"
+			data-item_key="publish_comment_name"
+			data-bs-target="#configLangModal">{{ $configs['publish_comment_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“回复”、“回帖”、“跟帖”等命名</div>
@@ -141,7 +202,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">点赞用户行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">喜欢</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_member_name'])}}"
+			data-languages="{{ optional($configs['like_member_name'])->languages->toJson() }}"
+			data-item_key="like_member_name"
+			data-bs-target="#configLangModal">{{ $configs['like_member_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“点赞”、“喜欢”、“投一票”等命名</div>
@@ -151,7 +218,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">点赞小组行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">点赞</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_group_name'])}}"
+			data-languages="{{ optional($configs['like_group_name'])->languages->toJson() }}"
+			data-item_key="like_group_name"
+			data-bs-target="#configLangModal">{{ $configs['like_group_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“点赞”、“喜欢”、“投一票”等命名</div>
@@ -161,7 +234,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">点赞话题行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">点赞</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_hashtag_name'])}}"
+			data-languages="{{ optional($configs['like_hashtag_name'])->languages->toJson() }}"
+			data-item_key="like_hashtag_name"
+			data-bs-target="#configLangModal">{{ $configs['like_hashtag_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“点赞”、“喜欢”、“投一票”等命名</div>
@@ -171,7 +250,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">点赞帖子行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">点赞</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_post_name'])}}"
+			data-languages="{{ optional($configs['like_post_name'])->languages->toJson() }}"
+			data-item_key="like_post_name"
+			data-bs-target="#configLangModal">{{ $configs['like_post_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“点赞”、“喜欢”、“顶一顶”等命名</div>
@@ -181,7 +266,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">点赞评论行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">点赞</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_comment_name'])}}"
+			data-languages="{{ optional($configs['like_comment_name'])->languages->toJson() }}"
+			data-item_key="like_comment_name"
+			data-bs-target="#configLangModal">{{ $configs['like_comment_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“点赞”、“喜欢”、“顶一顶”等命名</div>
@@ -192,7 +283,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">关注用户行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">关注</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_member_name'])}}"
+			data-languages="{{ optional($configs['follow_member_name'])->languages->toJson() }}"
+			data-item_key="follow_member_name"
+			data-bs-target="#configLangModal">{{ $configs['follow_member_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“关注”、“喜欢”、“跟进”等命名</div>
@@ -202,7 +299,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">关注小组行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">加入</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_group_name'])}}"
+			data-languages="{{ optional($configs['follow_group_name'])->languages->toJson() }}"
+			data-item_key="follow_group_name"
+			data-bs-target="#configLangModal">{{ $configs['follow_group_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“关注”、“加入”、“订阅”等命名</div>
@@ -212,7 +315,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">关注话题行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">订阅</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_hashtag_name'])}}"
+			data-languages="{{ optional($configs['follow_hashtag_name'])->languages->toJson() }}"
+			data-item_key="follow_hashtag_name"
+			data-bs-target="#configLangModal">{{ $configs['follow_hashtag_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“关注”、“订阅”、“跟进”等命名</div>
@@ -222,7 +331,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">关注帖子行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">收藏</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_post_name'])}}"
+			data-languages="{{ optional($configs['follow_post_name'])->languages->toJson() }}"
+			data-item_key="follow_post_name"
+			data-bs-target="#configLangModal">{{ $configs['follow_post_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“收藏”、“喜欢”、“保存”等命名</div>
@@ -232,7 +347,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">关注评论行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">收藏</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_comment_name'])}}"
+			data-languages="{{ optional($configs['follow_comment_name'])->languages->toJson() }}"
+			data-item_key="follow_comment_name"
+			data-bs-target="#configLangModal">{{ $configs['follow_comment_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“收藏”、“喜欢”、“保存”等命名</div>
@@ -243,7 +364,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">屏蔽用户行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">拉黑</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_member_name'])}}"
+			data-languages="{{ optional($configs['shield_member_name'])->languages->toJson() }}"
+			data-item_key="shield_member_name"
+			data-bs-target="#configLangModal">{{ $configs['shield_member_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“拉黑”、“屏蔽”、“讨厌”等命名</div>
@@ -253,7 +380,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">屏蔽小组行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">屏蔽</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_group_name'])}}"
+			data-languages="{{ optional($configs['shield_group_name'])->languages->toJson() }}"
+			data-item_key="shield_group_name"
+			data-bs-target="#configLangModal">{{ $configs['shield_group_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“不喜欢”、“不感兴趣”、“屏蔽”等命名</div>
@@ -263,7 +396,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">屏蔽话题行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">不感兴趣</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_hashtag_name'])}}"
+			data-languages="{{ optional($configs['shield_hashtag_name'])->languages->toJson() }}"
+			data-item_key="shield_hashtag_name"
+			data-bs-target="#configLangModal">{{ $configs['shield_hashtag_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“不喜欢”、“不感兴趣”、“屏蔽”等命名</div>
@@ -273,7 +412,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">屏蔽帖子行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">不喜欢</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_post_name'])}}"
+			data-languages="{{ optional($configs['shield_post_name'])->languages->toJson() }}"
+			data-item_key="shield_post_name"
+			data-bs-target="#configLangModal">{{ $configs['shield_post_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“不喜欢”、“不感兴趣”、“踩一踩”等命名</div>
@@ -283,7 +428,13 @@
     <div class="col-lg-6">
       <div class="input-group">
         <label class="input-group-text rename-label">屏蔽评论行为</label>
-        <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal" data-bs-target="#configLangModal">不喜欢</button>
+		<button class="btn btn-outline-secondary text-start rename-btn" type="button"
+			data-bs-toggle="modal"
+			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_comment_name'])}}"
+			data-languages="{{ optional($configs['shield_comment_name'])->languages->toJson() }}"
+			data-item_key="shield_comment_name"
+			data-bs-target="#configLangModal">{{ $configs['shield_comment_name']['item_value'] ?? '' }}
+		</button>
       </div>
     </div>
     <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 例如“不喜欢”、“不感兴趣”、“踩一踩”等命名</div>
