@@ -89,6 +89,7 @@ $('input[name="default_language"]').change(function() {
     },
     success:function(response){
       window.tips(response.message)
+      location.reload();
     }
   });
 });
@@ -392,4 +393,34 @@ $("#comment_limit_type").change(function(){
 		$('#comment_time_setting').removeAttr('style');
 		$('#comment_date_setting').css('display','none');
 	}
+});
+
+// plugin setting
+$('.uninstall-plugin').click(function(){
+  $.ajax({
+    method:'post',
+    url: $(this).data('action'),
+    data: {
+      _method: 'delete',
+    },
+    success:function(response){
+      window.tips(response.message)
+      location.reload();
+    }
+  });
+});
+
+$('.plugin-update').click(function(){
+  $.ajax({
+    method:'post',
+    url: $(this).data('action'),
+    data: {
+      _method: 'patch',
+      is_enable: $(this).data('enable')
+    },
+    success:function(response){
+      window.tips(response.message)
+      location.reload();
+    }
+  });
 });

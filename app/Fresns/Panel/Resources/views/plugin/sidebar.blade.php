@@ -9,8 +9,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav d-flex flex-column">
           <li class="nav-item"><a class="nav-link  {{ \Route::is('panel.plugins.*') ? 'active' : ''}}" href="{{ route('panel.plugins.index') }}">插件管理</a></li>
-		  <li><hr class="dropdown-divider"></li>
-          <li class="nav-item"><a class="nav-link">投票</a></li>
+          <li><hr class="dropdown-divider"></li>
+          @foreach($enablePlugins as $plugin)
+            <li class="nav-item"><a href="{{ url($plugin->access_path) }}"  class="nav-link">{{$plugin->name}}</a></li>
+          @endforeach
         </ul>
       </div>
     </div>

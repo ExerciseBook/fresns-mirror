@@ -214,9 +214,9 @@ Route::middleware(['panelAuth'])->group(function() {
 	//plugin
 	Route::prefix('plugin')->group(function() {
 		// set plugins
-		Route::get('plugins', [PluginController::class, 'index'])->name('plugins.index');
-		Route::put('plugins/{id}/status', [PluginController::class, 'status'])->name('plugins.status');
-		Route::put('plugins/{id}/uninstall', [PluginController::class, 'uninstall'])->name('plugins.uninstall');
+		Route::resource('plugins', PluginController::class)->only([
+			'index', 'update', 'destroy'
+		]);
 	});
 
 	//expand
