@@ -4,6 +4,8 @@ namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Models\Config;
 use App\Models\Language;
+use App\Models\Plugin;
+use App\Models\MemberRole;
 use Illuminate\Http\Request;
 
 class PublishConfigController extends Controller
@@ -53,10 +55,16 @@ class PublishConfigController extends Controller
         foreach ($configs as $config) {
             $params[$config->item_key] = $config->item_value;
         }
-        // dd($params);
         $languages = Language::ofConfig()->where('table_key', 'post_limit_prompt')->get();
 
-        return view('panel::operation.post', compact('params', 'languages'));
+        $plugins = Plugin::all();
+        $plugins = $plugins->filter(function ($plugin) {
+            return in_array('editor', $plugin->scene);
+        });
+
+        $roles = MemberRole::all();
+
+        return view('panel::operation.post', compact('params', 'languages', 'plugins', 'roles'));
     }
 
     public function postUpdate(Request $request)
@@ -122,6 +130,32 @@ class PublishConfigController extends Controller
             $config->save();
         }
 
+        foreach ($request->post_limit_prompt as $langTag => $content) {
+            $language = Language::tableName('configs')
+                ->where('table_id', $config->id)
+                ->where('table_key', 'post_limit_prompt')
+                ->where('lang_tag', $langTag)
+                ->first();
+
+            if (!$language) {
+                // create but no content
+                if (!$content) {
+                    continue;
+                }
+                $language = new Language();
+                $language->fill([
+                    'table_name' => 'configs',
+                    'table_field' => 'item_value',
+                    'table_key' => 'post_limit_prompt',
+                    'table_id' => $config->id,
+                    'lang_tag' => $langTag,
+                ]);
+            }
+
+            $language->lang_content = $content;
+            $language->save();
+        }
+
         return $this->updateSuccess();
     }
 
@@ -130,6 +164,33 @@ class PublishConfigController extends Controller
         // config keys
         $configKeys = [
             'comment_email_verify',
+            'comment_phone_verify',
+            'comment_prove_verify',
+            'comment_limit_status',
+            'comment_limit_type',
+            'comment_limit_period_start',
+            'comment_limit_period_end',
+            'comment_limit_cycle_start',
+            'comment_limit_cycle_end',
+            'comment_limit_rule',
+            'comment_limit_prompt',
+            'comment_limit_whitelist',
+            'comment_edit',
+            'comment_edit_timelimit',
+            'comment_edit_sticky',
+            'comment_editor_service',
+            'comment_editor_emoji',
+            'comment_editor_image',
+            'comment_editor_video',
+            'comment_editor_audio',
+            'comment_editor_doc',
+            'comment_editor_mention',
+            'comment_editor_hashtag',
+            'comment_editor_expand',
+            'comment_editor_lbs',
+            'comment_editor_anonymous',
+            'comment_editor_word_count',
+            'comment_editor_brief_count',
         ];
 
         $configs = Config::whereIn('item_key', $configKeys)->get();
@@ -140,13 +201,47 @@ class PublishConfigController extends Controller
 
         $languages = Language::ofConfig()->where('table_key', 'comment_limit_prompt')->get();
 
-        return view('panel::operation.comment', compact('params', 'languages'));
+        $plugins = Plugin::all();
+        $plugins = $plugins->filter(function ($plugin) {
+            return in_array('editor', $plugin->scene);
+        });
+
+        $roles = MemberRole::all();
+
+        return view('panel::operation.comment', compact('params', 'languages', 'plugins', 'roles'));
     }
 
-    public function commentUpdate(UpdateSiteRequest $request)
+    public function commentUpdate(Request $request)
     {
         $configKeys = [
-            'post_email_verify',
+            'comment_email_verify',
+            'comment_phone_verify',
+            'comment_prove_verify',
+            'comment_limit_status',
+            'comment_limit_type',
+            'comment_limit_period_start',
+            'comment_limit_period_end',
+            'comment_limit_cycle_start',
+            'comment_limit_cycle_end',
+            'comment_limit_rule',
+            'comment_limit_prompt',
+            'comment_limit_whitelist',
+            'comment_edit',
+            'comment_edit_timelimit',
+            'comment_edit_sticky',
+            'comment_editor_service',
+            'comment_editor_emoji',
+            'comment_editor_image',
+            'comment_editor_video',
+            'comment_editor_audio',
+            'comment_editor_doc',
+            'comment_editor_mention',
+            'comment_editor_hashtag',
+            'comment_editor_expand',
+            'comment_editor_lbs',
+            'comment_editor_anonymous',
+            'comment_editor_word_count',
+            'comment_editor_brief_count',
         ];
 
         $configs = Config::whereIn('item_key', $configKeys)->get();
@@ -172,6 +267,33 @@ class PublishConfigController extends Controller
             $config->item_value = $request->$configKey;
             $config->save();
         }
+        
+        foreach ($request->comment_limit_prompt as $langTag => $content) {
+            $language = Language::tableName('configs')
+                ->where('table_id', $config->id)
+                ->where('table_key', 'comment_limit_prompt')
+                ->where('lang_tag', $langTag)
+                ->first();
+
+            if (!$language) {
+                // create but no content
+                if (!$content) {
+                    continue;
+                }
+                $language = new Language();
+                $language->fill([
+                    'table_name' => 'configs',
+                    'table_field' => 'item_value',
+                    'table_key' => 'comment_limit_prompt',
+                    'table_id' => $config->id,
+                    'lang_tag' => $langTag,
+                ]);
+            }
+
+            $language->lang_content = $content;
+            $language->save();
+        }
+
 
         return $this->updateSuccess();
     }

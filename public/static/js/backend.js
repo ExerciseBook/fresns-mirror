@@ -370,3 +370,26 @@ $('#createRoleModal').on('show.bs.modal', function(e) {
   }
   $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
 });
+
+// config post select
+$("#post_limit_type").change(function(){
+	var value = $("#post_limit_type  option:selected").val();
+	if(value == 1){
+		$('#post_time_setting').css('display','none');
+		$('#post_date_setting').removeAttr('style');
+	}else{
+		$('#post_time_setting').removeAttr('style');
+		$('#post_date_setting').css('display','none');
+	}
+});
+
+$("#comment_limit_type").change(function(){
+	var value = $("#comment_limit_type  option:selected").val();
+	if(value == 1){
+		$('#comment_time_setting').css('display','none');
+		$('#comment_date_setting').removeAttr('style');
+	}else{
+		$('#comment_time_setting').removeAttr('style');
+		$('#comment_date_setting').css('display','none');
+	}
+});

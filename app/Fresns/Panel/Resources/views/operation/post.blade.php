@@ -56,7 +56,7 @@
           <label class="form-check-label" for="post_limit_status_1">开启特殊规则</label>
         </div>
         <!--发表帖子特殊规则配置 开始-->
-        <div class="collapse mt-3 {{ $params['post_limit_status']=='false' ? '' : 'show'}}" id="post_limit_setting">
+        <div class="collapse mt-3 {{ $params['post_limit_status']=='true' ? 'show' : ''}}" id="post_limit_setting">
           <div class="input-group mb-3">
             <label class="input-group-text fresns-label">规则类型</label>
             <select class="form-select" id="post_limit_type" name="post_limit_type">
@@ -64,12 +64,12 @@
               <option value="2"  {{ $params['post_limit_type']=='2' ? 'selected' : ''}}>指定每天的某个时间段范围内循环生效</option>
             </select>
           </div>
-          <div class="input-group mb-3" id="post_date_setting">
+          <div class="input-group mb-3" id="post_date_setting" @if($params['post_limit_type']=='2') style="display:none;" @endif>
             <label class="input-group-text fresns-label">日期范围</label>
             <input type="date" name="post_limit_period_start" value="{{$params['post_limit_period_start']}}" class="form-control" placeholder="2021/01/01">
             <input type="date" name="post_limit_period_end" value="{{$params['post_limit_period_end']}}" class="form-control" placeholder="2021/01/05">
           </div>
-          <div class="input-group mb-3" id="post_time_setting" style="display:none;" >
+          <div class="input-group mb-3" id="post_time_setting" @if($params['post_limit_type']=='1') style="display:none;" @endif>
             <label class="input-group-text fresns-label">时间范围</label>
             <input type="time" name="post_limit_cycle_start" value="{{$params['post_limit_cycle_start']}}" class="form-control" placeholder="22:30:00">
             <input type="time" name="post_limit_cycle_end" value="{{$params['post_limit_cycle_end']}}" class="form-control" placeholder="08:30:00">
@@ -93,11 +93,13 @@
           </div>
           <div class="input-group mb-3">
             <label class="input-group-text fresns-label">白名单角色</label>
-            <select class="form-select" name="post_limit_whitelist">
+            <select class="form-select" name="post_limit_whitelist[]">
               <option selected disabled>这是 liveSearch 多选框，暂未加载样式组件，所以原型显示为单选下拉框</option>
-              <option value="4">角色名</option>
-              <option value="1">角色名</option>
-              <option value="2">角色名</option>
+			  @foreach($roles as $role)
+			  	<option value="{{$role->id}}" @if($params['post_limit_whitelist'] && is_array($params['post_limit_whitelist']) && in_array($role->id,$params['post_limit_whitelist'])) selected @endif>
+					{{$role->name}}
+				</option>
+			  @endforeach
             </select>
           </div>
         </div>
@@ -160,9 +162,9 @@
       <label class="col-lg-2 col-form-label text-lg-end">编辑器选择：</label>
       <div class="col-lg-6">
         <select class="form-select" name="post_editor_service" id="post_editor">
-          <option value="1" selected>默认编辑器</option>
-          <option value="2">zz编辑器</option>
-          <option value="3">xx编辑器</option>
+		  @foreach($plugins as $plugin)
+		   <option value="{{$plugin->unikey}}" @if($plugin->unikey == $params['post_editor_service']) selected @endif>{{$plugin->name}}</option>
+		  @endforeach
         </select>
       </div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 发表帖子的编辑器</div>
