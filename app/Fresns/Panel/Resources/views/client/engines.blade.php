@@ -30,68 +30,49 @@
 			</tr>
 		</thead>
 		<tbody>
+      @foreach($engines as $engine)
 			<tr>
-				<th scope="row" class="py-3">账号中心 <span class="badge bg-secondary plugin-version">1.0.0</span></th>
-				<td><a href="#" class="link-info fresns-link fs-7">唐杰</a></td>
+        <th scope="row" class="py-3">{{ $engine->name }}<span class="badge bg-secondary plugin-version">{{ $engine->version }}</span>
+          @if ($engine->is_upgrade)
+          <a href="{{ route('panel.dashboard')}}"><span class="badge rounded-pill bg-danger plugin-version">有新版</span></a>
+          @endif
+        </th>
+        <td><a href="#" class="link-info fresns-link fs-7">{{ $engine->author }}</a></td>
 				<td>
 					<span class="badge bg-light text-dark"><i class="bi bi-laptop"></i> Demo</span>
 					<span class="badge bg-light text-dark"><i class="bi bi-phone"></i> Demo</span>
 				</td>
 				<td class="text-end">
-					<button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击停用">已启用</button>
-					<button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#themeSetting">关联主题</button>
-					<a href="iframe.html" class="btn btn-primary btn-sm">设置</a>
+          @if ($engine->is_enable)
+            <button type="button"
+                    data-action="{{ route('panel.plugins.update', ['plugin' => $engine->id]) }}"
+                    data-enable="0"
+                    class="btn btn-outline-success btn-sm plugin-update"
+                    title="点击停用">已启用</button>
+            <button type="button" class="btn btn-warning btn-sm"
+                                  data-bs-toggle="modal"
+                                  data-action="{{ route('panel.plugins.engines.theme.update', ['engine' => $engine->id])}}"
+                                  data-params="{{ $engine->toJson() }}"
+                                  data-pc_plugin="{{ optional($configs->where('item_key', $engine->unikey.'_Pc')->first())->item_value }}"
+                                  data-mobile_plugin="{{ optional($configs->where('item_key', $engine->unikey.'_Mobile')->first())->item_value }}"
+                                  data-bs-target="#themeSetting">关联主题</button>
+            @if ($engine->setting_path)
+              <a href="{{ url($engine->setting_path) }}" class="btn btn-primary btn-sm" title="进入插件设置">设置</a>
+            @endif
+          @else
+            <button type="button"
+              class="btn btn-outline-secondary btn-sm plugin-update"
+              data-action="{{ route('panel.plugins.update', ['plugin' => $engine->id]) }}"
+              data-enable="1"
+              title="点击启用">启用</button>
+            <button type="button"
+                    data-action="{{ route('panel.plugins.destroy', ['plugin' => $engine->id]) }}"
+                    class="btn btn-link btn-sm ms-2 text-danger fresns-link uninstall-plugin"
+              >卸载</button>
+          @endif
 				</td>
 			</tr>
-			<tr>
-				<th scope="row" class="py-3">Fresns <span class="badge bg-secondary plugin-version">1.0.0</span></th>
-				<td><a href="#" class="link-info fresns-link fs-7">唐杰</a></td>
-				<td>
-					<span class="badge bg-light text-dark"><i class="bi bi-laptop"></i> Discuz X</span>
-					<span class="badge bg-light text-dark"><i class="bi bi-phone"></i> Demo</span>
-				</td>
-				<td class="text-end">
-					<button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击停用">已启用</button>
-					<button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#themeSetting">关联主题</button>
-					<a href="iframe.html" class="btn btn-primary btn-sm">设置</a>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row" class="py-3">CMS <span class="badge bg-secondary plugin-version">1.0.0</span></th>
-				<td><a href="#" class="link-info fresns-link fs-7">唐杰</a></td>
-				<td>
-					<span class="badge bg-light text-dark"><i class="bi bi-laptop"></i> Discuz X</span>
-					<span class="badge bg-light text-secondary fw-normal"><i class="bi bi-phone"></i> 未设置</span>
-				</td>
-				<td class="text-end">
-					<button type="button" class="btn btn-outline-secondary btn-sm me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="点击启用">启用</button>
-					<button type="button" class="btn btn-link btn-sm text-danger fresns-link">卸载</button>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row" class="py-3">Blog <span class="badge bg-secondary plugin-version">1.0.0</span> <a href="dashboard.html"><span class="badge rounded-pill bg-danger plugin-version">有新版</span></a></th>
-				<td><a href="#" class="link-info fresns-link fs-7">唐杰</a></td>
-				<td>
-					<span class="badge bg-light text-dark"><i class="bi bi-laptop"></i> WordPress 主题</span>
-					<span class="badge bg-light text-dark"><i class="bi bi-phone"></i> WordPress 主题</span>
-				</td>
-				<td class="text-end">
-					<button type="button" class="btn btn-outline-secondary btn-sm me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="点击启用">启用</button>
-					<button type="button" class="btn btn-link btn-sm text-danger fresns-link">卸载</button>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row" class="py-3">伪拼多多团购商城（带 API 功能，可供移动应用使用） <span class="badge bg-secondary plugin-version">1.0.0</span></th>
-				<td><a href="#" class="link-info fresns-link fs-7">唐杰</a></td>
-				<td>
-					<span class="badge bg-light text-secondary fw-normal"><i class="bi bi-laptop"></i> 未设置</span>
-					<span class="badge bg-light text-secondary fw-normal"><i class="bi bi-phone"></i> 未设置</span>
-				</td>
-				<td class="text-end">
-					<button type="button" class="btn btn-outline-secondary btn-sm me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="点击启用">启用</button>
-					<button type="button" class="btn btn-link btn-sm text-danger fresns-link">卸载</button>
-				</td>
-			</tr>
+      @endforeach
 		</tbody>
 	</table>
 </div>
@@ -106,28 +87,24 @@
 			</div>
 			<div class="modal-body">
 				<!--网站设置 开始-->
-				<form>
+				<form method="post">
+          @csrf
+          @method('put')
 					<div class="form-floating mb-3">
-						<select class="form-select" id="PCTheme" aria-label="Floating label select example">
-							<option value="">不使用</option>
-							<option value="1">Demo</option>
-							<option value="2" selected>Discuz X</option>
-							<option value="3">知识星球</option>
-							<option value="4">WordPress 主题</option>
-							<option value="5">Instagram 主题</option>
-							<option value="6">小红书</option>
+						<select class="form-select" id="pcTheme" aria-label="Floating label select example" name="">
+							<option value="" selected>不使用</option>
+              @foreach($themes as $theme)
+                <option value="{{ $theme->unikey }}">{{ $theme->name }}</option>
+              @endforeach
 						</select>
 						<label for="PCtheme"><i class="bi bi-laptop"></i> 电脑端主题</label>
 					</div>
 					<div class="form-floating mb-4">
 						<select class="form-select" id="mobileTheme" aria-label="Floating label select example">
-							<option value="">不使用</option>
-							<option value="1" selected>Demo</option>
-							<option value="2">Discuz X</option>
-							<option value="3">知识星球</option>
-							<option value="4">WordPress 主题</option>
-							<option value="5">Instagram 主题</option>
-							<option value="6">小红书</option>
+							<option value="" selected>不使用</option>
+              @foreach($themes as $theme)
+                <option value="{{ $theme->unikey }}">{{ $theme->name }}</option>
+              @endforeach
 						</select>
 						<label for="mobileTheme"><i class="bi bi-phone"></i> 手机端主题</label>
 					</div>

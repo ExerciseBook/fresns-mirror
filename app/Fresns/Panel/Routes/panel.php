@@ -20,12 +20,9 @@ use App\Fresns\Panel\Http\Controllers\{
 	ClientMenuController,
 	ColumnController,
 	LanguagePackController,
-	EngineController,
     StopWordController,
     MemberRoleController,
     GroupController,
-	ThemeController,
-	AppController,
 	RenameConfigController,
 	InteractiveConfigController,
     EmojiController,
@@ -197,18 +194,12 @@ Route::middleware(['panelAuth'])->group(function() {
 		Route::post('languagePack/{id}/config', [LanguagePackController::class, 'store'])->name('languagePack.store');
 		Route::delete('languagePack/{id}/config/{config_id}', [LanguagePackController::class, 'destroy'])->name('languagePack.destroy');
 		//set engines
-		Route::get('engines', [EngineController::class, 'index'])->name('engines.index');
-		Route::put('engines/{id}/status', [EngineController::class, 'status'])->name('engines.status');
-        Route::put('engines/{id}/relation', [EngineController::class, 'relation'])->name('engines.relation');
-		Route::put('engines/{id}/uninstall', [EngineController::class, 'uninstall'])->name('engines.uninstall');
+		Route::get('engines', [PluginController::class, 'engineIndex'])->name('plugins.engines.index');
+		Route::put('engines/{engine}/theme', [PluginController::class, 'updateEngineTheme'])->name('plugins.engines.theme.update');
 		// set themes
-		Route::get('themes', [ThemeController::class, 'index'])->name('themes.index');
-		Route::put('themes/{id}/status', [ThemeController::class, 'status'])->name('themes.status');
-		Route::put('themes/{id}/uninstall', [ThemeController::class, 'uninstall'])->name('themes.uninstall');
+		Route::get('themes', [PluginController::class, 'themeIndex'])->name('plugins.themes.index');
 		// set apps
-		Route::get('apps', [AppController::class, 'index'])->name('apps.index');
-		Route::put('apps/{id}/status', [AppController::class, 'status'])->name('apps.status');
-		Route::put('apps/{id}/uninstall', [AppController::class, 'uninstall'])->name('apps.uninstall');
+		Route::get('apps', [PluginController::class, 'appIndex'])->name('plugins.apps.index');
 	});
 
 	//plugin
@@ -258,7 +249,5 @@ Route::middleware(['panelAuth'])->group(function() {
 			'index', 'store', 'update', 'destroy'
 		]);
 		Route::put('expandProfile/{id}/rank', [ExpandProfileController::class, 'updateRank'])->name('expandProfile.rank');
-
-
 	});
 });

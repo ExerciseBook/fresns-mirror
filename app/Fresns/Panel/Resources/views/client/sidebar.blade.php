@@ -12,9 +12,9 @@
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.columns.*') ? 'active' : ''}}" href="{{ route('panel.columns.index') }}">栏目配置</a></li>
 		  <li class="nav-item"><a class="nav-link  {{ \Route::is('panel.languagePack.*') ? 'active' : ''}}" href="{{ route('panel.languagePack.index') }}">语言包配置</a></li>
 		  <li><hr class="dropdown-divider"></li>
-          <li class="nav-item"><a class="nav-link  {{ \Route::is('panel.engines.*') ? 'active' : ''}}" href="{{ route('panel.engines.index') }}">网站引擎</a></li>
-          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.themes.*') ? 'active' : ''}}" href="{{ route('panel.themes.index') }}">主题模板</a></li>
-          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.apps.*') ? 'active' : ''}}" href="{{ route('panel.apps.index') }}">移动应用</a></li>
+          <li class="nav-item"><a class="nav-link  {{ \Route::is('panel.plugins.engines.*') ? 'active' : ''}}" href="{{ route('panel.plugins.engines.index') }}">网站引擎</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.plugins.themes.*') ? 'active' : ''}}" href="{{ route('panel.plugins.themes.index') }}">主题模板</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.plugins.apps.*') ? 'active' : ''}}" href="{{ route('panel.plugins.apps.index') }}">移动应用</a></li>
         </ul>
       </div>
     </div>

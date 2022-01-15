@@ -424,3 +424,21 @@ $('.plugin-update').click(function(){
     }
   });
 });
+
+$('#themeSetting').on('show.bs.modal', function(e){
+  let button = $(e.relatedTarget);
+  let action = button.data('action');
+  let params = button.data('params');
+  let pcPlugin= button.data('pc_plugin');
+  let mobilePlugin= button.data('mobile_plugin');
+  console.log(pcPlugin);
+
+
+  $(this).find('form').attr('action', action);
+  $(this).find('#pcTheme').attr('name', params.unikey + '_Pc');
+  $(this).find('#mobileTheme').attr('name', params.unikey + '_Mobile');
+
+  $(this).find('#pcTheme').val(pcPlugin);
+  $(this).find('#mobileTheme').val(mobilePlugin);
+
+});

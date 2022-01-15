@@ -21,108 +21,45 @@
 <!--主题 开始-->
 <div class="row">
 	<!--主题列表 开始-->
-	<div class="col-sm-6 col-xl-3 mb-4">
-		<div class="card">
-			<div class="position-relative">
-				<img src="../assets/images/temp/screenshot.png" class="card-img-top" alt="网站主题">
-			</div>
-			<div class="card-body">
-				<h5 class="text-nowrap overflow-hidden">Demo <span class="badge bg-secondary align-middle fs-9">1.0.0</span></h5>
-				<p class="card-text text-height">Fresns 官方开发的主题框架，展示网站端功能和交互流程。</p>
-				<div>
-					<button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击停用">已启用</button>
-					<a href="iframe.html" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="进入主题设置">设置</a>
-				</div>
-			</div>
-			<div class="card-footer fs-8">开发者：<a href="#" class="link-info fresns-link">唐杰</a></div>
-		</div>
-	</div>
-	<!--分隔线-->
-	<div class="col-sm-6 col-xl-3 mb-4">
-		<div class="card">
-			<div class="position-relative">
-				<img src="../assets/images/temp/screenshot.png" class="card-img-top" alt="网站主题">
-				<div class="position-absolute top-0 start-100 translate-middle"><a href="dashboard.html"><span class="badge rounded-pill bg-danger">更新</span></a></div>
-			</div>
-			<div class="card-body">
-				<h5 class="text-nowrap overflow-hidden">Discuz X <span class="badge bg-secondary align-middle fs-9">1.0.0</span></h5>
-				<p class="card-text text-height">Fresns 官方开发的主题框架，展示网站端功能和交互流程。</p>
-				<div>
-					<button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击停用">已启用</button>
-					<a href="iframe.html" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="进入主题设置">设置</a>
-				</div>
-			</div>
-			<div class="card-footer fs-8">开发者：<a href="#" class="link-info fresns-link">唐杰</a></div>
-		</div>
-	</div>
-	<!--分隔线-->
-	<div class="col-sm-6 col-xl-3 mb-4">
-		<div class="card">
-			<div class="position-relative">
-				<img src="../assets/images/temp/screenshot.png" class="card-img-top" alt="网站主题">
-			</div>
-			<div class="card-body">
-				<h5 class="text-nowrap overflow-hidden">知识星球 <span class="badge bg-secondary align-middle fs-9">1.0.0</span></h5>
-				<p class="card-text text-height">Fresns 官方开发的主题框架，展示网站端功能和交互流程。</p>
-				<div>
-					<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击启用">启用</button>
-					<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击卸载">卸载</button>
-				</div>
-			</div>
-			<div class="card-footer fs-8">开发者：<a href="#" class="link-info fresns-link">唐杰</a></div>
-		</div>
-	</div>
-	<!--分隔线-->
-	<div class="col-sm-6 col-xl-3 mb-4">
-		<div class="card">
-			<div class="position-relative">
-				<img src="../assets/images/temp/screenshot.png" class="card-img-top" alt="网站主题">
-			</div>
-			<div class="card-body">
-				<h5 class="text-nowrap overflow-hidden">WordPress 主题 <span class="badge bg-secondary align-middle fs-9">1.0.0</span></h5>
-				<p class="card-text text-height">Fresns 官方开发的主题框架，展示网站端功能和交互流程。</p>
-				<div>
-					<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击启用">启用</button>
-					<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击卸载">卸载</button>
-				</div>
-			</div>
-			<div class="card-footer fs-8">开发者：<a href="#" class="link-info fresns-link">唐杰</a></div>
-		</div>
-	</div>
-	<!--分隔线-->
-	<div class="col-sm-6 col-xl-3 mb-4">
-		<div class="card">
-			<div class="position-relative">
-				<img src="../assets/images/temp/screenshot.png" class="card-img-top" alt="网站主题">
-			</div>
-			<div class="card-body">
-				<h5 class="text-nowrap overflow-hidden">Instagram 模式 <span class="badge bg-secondary align-middle fs-9">1.0.0</span></h5>
-				<p class="card-text text-height">Fresns 官方开发的主题框架，展示网站端功能和交互流程。</p>
-				<div>
-					<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击启用">启用</button>
-					<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击卸载">卸载</button>
-				</div>
-			</div>
-			<div class="card-footer fs-8">开发者：<a href="#" class="link-info fresns-link">唐杰</a></div>
-		</div>
-	</div>
-	<!--分隔线-->
-	<div class="col-sm-6 col-xl-3 mb-4">
-		<div class="card">
-			<div class="position-relative">
-				<img src="../assets/images/temp/screenshot.png" class="card-img-top" alt="网站主题">
-			</div>
-			<div class="card-body">
-				<h5 class="text-nowrap overflow-hidden">小红书 <span class="badge bg-secondary align-middle fs-9">1.0.0</span></h5>
-				<p class="card-text text-height">Fresns 官方开发的主题框架，展示网站端功能和交互流程。</p>
-				<div>
-					<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击启用">启用</button>
-					<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="点击卸载">卸载</button>
-				</div>
-			</div>
-			<div class="card-footer fs-8">开发者：<a href="#" class="link-info fresns-link">唐杰</a></div>
-		</div>
-	</div>
+  @foreach($themes as $theme)
+    <div class="col-sm-6 col-xl-3 mb-4">
+      <div class="card">
+        <div class="position-relative">
+          <img src="{{ $theme->image }}" class="card-img-top" alt="网站主题">
+          @if ($theme->is_upgrade)
+          <div class="position-absolute top-0 start-100 translate-middle"><a href="{{ route('panel.dashboard') }}"><span class="badge rounded-pill bg-danger">更新</span></a></div>
+          @endif
+        </div>
+        <div class="card-body">
+          <h5 class="text-nowrap overflow-hidden">Demo <span class="badge bg-secondary align-middle fs-9">{{ $theme->version }}</span></h5>
+          <p class="card-text text-height">{{ $theme->description }}</p>
+          <div>
+            @if ($theme->is_enable)
+              <button type="button"
+                      data-action="{{ route('panel.plugins.update', ['plugin' => $theme->id]) }}"
+                      data-enable="0"
+                      class="btn btn-outline-success btn-sm plugin-update"
+                      title="点击停用">已启用</button>
+              @if ($theme->setting_path)
+                <a href="{{ url($theme->setting_path) }}" class="btn btn-primary btn-sm" title="进入插件设置">设置</a>
+              @endif
+            @else
+              <button type="button"
+                      class="btn btn-outline-secondary btn-sm plugin-update"
+                      data-action="{{ route('panel.plugins.update', ['plugin' => $theme->id]) }}"
+                      data-enable="1"
+                      title="点击启用">启用</button>
+              <button type="button"
+                      data-action="{{ route('panel.plugins.destroy', ['plugin' => $theme->id]) }}"
+                      class="btn btn-link btn-sm ms-2 text-danger fresns-link uninstall-plugin"
+                      >卸载</button>
+                    @endif
+          </div>
+        </div>
+        <div class="card-footer fs-8">开发者：<a href="#" class="link-info fresns-link">{{ $theme->author }}</a></div>
+      </div>
+    </div>
+  @endforeach
 	<!--主题列表 结束-->
 </div>
 <!--主题结束-->
