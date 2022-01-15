@@ -9,7 +9,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav d-flex flex-column">
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.sessionKeys.*') ? 'active' : ''}} " href="{{ route('panel.sessionKeys.index') }}">{{ __('panel::panel.manageKey') }}</a></li>
-          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.configs.*') ? 'active' : '' }}" href="{{ route('panel.configs.show')}}">{{ __('panel::panel.manageConfig') }}</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.manageConfigs.*') ? 'active' : '' }}" href="{{ route('panel.manageConfigs.show')}}">{{ __('panel::panel.manageConfig') }}</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.admins.*') ? 'active' : '' }}" href="{{ route('panel.admins.index') }}">{{ __('panel::panel.admin') }}</a></li>
           <li class="nav-item d-block d-lg-none my-3 text-secondary">Powered by Fresns</li>
         </ul>

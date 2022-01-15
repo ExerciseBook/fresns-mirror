@@ -18,6 +18,10 @@ class Config extends Model
         if (in_array($this->item_type, ['array', 'plugins', 'object']) || is_array($value)) {
             $value = json_encode($value);
         }
+
+        if ($this->item_type == 'boolean') {
+            $value = ($value || $value == 'true') ? 'true' : 'false';
+        }
         $this->attributes['item_value'] = $value;
     }
 

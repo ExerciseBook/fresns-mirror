@@ -40,6 +40,7 @@ class SiteController extends Controller
 
         $languages = Language::ofConfig()->whereIn('table_key', $langKeys)->get();
 
+        $params = [];
         foreach($configs as $config) {
             $params[$config->item_key] = $config->item_value;
         }

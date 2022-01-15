@@ -17,7 +17,7 @@
     </div>
   </div>
   <!--配置 开始-->
-  <form action="{{ route('panel.configs.update') }}" method="post">
+  <form action="{{ route('panel.manageConfigs.update') }}" method="post">
     @csrf
     @method('put')
     <div class="row mb-3">

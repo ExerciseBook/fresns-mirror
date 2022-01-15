@@ -6,6 +6,7 @@ use App\Fresns\Panel\Http\Controllers\{
     LoginController,
     AdminController,
     ConfigController,
+    ManageConfigController,
     PolicyController,
     StorageController,
     LanguageController,
@@ -59,6 +60,8 @@ Route::middleware(['panelAuth'])->group(function() {
 
     // dashboard
     Route::get('dashboard', [DashboardController::class, 'show'])->name('dashboard');
+    // update config
+    Route::put('configs/{config:item_key}', [ConfigController::class, 'update'])->name('configs.update');
 
     Route::prefix('manage')->group(function() {
         // session key
@@ -68,8 +71,8 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::put('sessionKeys/{sessionKey}/reset', [SessionKeyController::class, 'reset'])->name('sessionKeys.reset');
 
         // config
-        Route::get('configs/show', [ConfigController::class, 'show'])->name('configs.show');
-        Route::put('configs/update', [ConfigController::class, 'update'])->name('configs.update');
+        Route::get('manageConfigs/show', [ManageConfigController::class, 'show'])->name('manageConfigs.show');
+        Route::put('manageConfigs/update', [ManageConfigController::class, 'update'])->name('manageConfigs.update');
 
         // admin
         Route::resource('admins', AdminController::class)->only([
@@ -193,7 +196,8 @@ Route::middleware(['panelAuth'])->group(function() {
 	Route::prefix('client')->group(function() {
 		// set meuns
 		Route::get('clientMenus', [ClientMenuController::class, 'index'])->name('clientMenus.index');
-		Route::put('clientMenus/{id}', [ClientMenuController::class, 'update'])->name('clientMenus.update');
+		Route::put('clientMenus/{key}/update', [ClientMenuController::class, 'update'])->name('clientMenus.update');
+
 		// set columns
 		Route::get('columns', [ColumnController::class, 'index'])->name('columns.index');
 		Route::put('columns/{id}', [ColumnController::class, 'update'])->name('columns.update');

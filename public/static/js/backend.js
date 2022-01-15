@@ -89,7 +89,6 @@ $('input[name="default_language"]').change(function() {
     },
     success:function(response){
       window.tips(response.message)
-      location.reload();
     }
   });
 });
@@ -442,3 +441,42 @@ $('#themeSetting').on('show.bs.modal', function(e){
   $(this).find('#mobileTheme').val(mobilePlugin);
 
 });
+
+// change default homepage
+$('.update-config').change(function() {
+  $.ajax({
+    method:'post',
+    url: $(this).data('action'),
+    data: {
+      _method: 'put',
+      item_value: $(this).data('item_value')
+    },
+    success:function(response){
+      window.tips(response.message)
+    }
+  });
+});
+
+// menu edit
+$('#menuEdit').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget),
+    isEnable = button.data('is_enable'),
+    nameLanguage = button.data('name_languages'),
+    titleLanguage = button.data('title_languages'),
+    descriptionLanguage = button.data('description_languages'),
+    keywordsLanguage = button.data('keywords_languages');
+    noParams= button.data('no_params');
+    action = button.data('action');
+    config = button.data('config');
+
+  if (noParams) {
+    $(this).find('.default-params').hide();
+  } else {
+    $(this).find('.default-params').show();
+  }
+
+  $(this).find('form').attr('action', action);
+  $(this).find('textarea[name=config]').val(JSON.stringify(config));
+  $(this).find('input:radio[name=is_enable][value="'+isEnable+'"]').prop('checked', true);
+});
+

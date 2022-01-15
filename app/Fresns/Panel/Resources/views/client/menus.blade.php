@@ -35,127 +35,50 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td><input class="form-check-input" type="radio" name="default_homepage" id="portal" value="portal"></td>
-				<td>门户</td>
-				<td>/portal</td>
-				<td>榜单</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="门户">编辑</button></td>
-			</tr>
-			<tr>
-				<td><input class="form-check-input" type="radio" name="default_homepage" id="members" value="members"></td>
-				<td>成员</td>
-				<td>/members</td>
-				<td>用户</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-dash-lg text-secondary"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="成员">编辑</button></td>
-			</tr>
-			<tr>
-				<td><input class="form-check-input" type="radio" name="default_homepage" id="groups" value="groups" checked></td>
-				<td>小组</td>
-				<td>/groups</td>
-				<td>论坛</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="小组">编辑</button></td>
-			</tr>
-			<tr>
-				<td><input class="form-check-input" type="radio" name="default_homepage" id="hashtags" value="hashtags"></td>
-				<td>话题</td>
-				<td>/hashtags</td>
-				<td>标签</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="话题">编辑</button></td>
-			</tr>
-			<tr>
-				<td><input class="form-check-input" type="radio" name="default_homepage" id="posts" value="posts"></td>
-				<td>帖子</td>
-				<td>/posts</td>
-				<td>广场</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="帖子">编辑</button></td>
-			</tr>
-			<tr>
-				<td><input class="form-check-input" type="radio" name="default_homepage" id="comments" value="comments"></td>
-				<td>评论</td>
-				<td>/comments</td>
-				<td>动态</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="评论">编辑</button></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>成员列表页</td>
-				<td>/members/list</td>
-				<td>排行榜</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-dash-lg text-secondary"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="成员">编辑</button></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>小组列表页</td>
-				<td>/groups/list</td>
-				<td>全部版区</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="小组">编辑</button></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>话题列表页</td>
-				<td>/hashtags/list</td>
-				<td>全部标签</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="话题">编辑</button></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>帖子列表页</td>
-				<td>/posts/list</td>
-				<td>全部帖子</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="帖子">编辑</button></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>评论列表页</td>
-				<td>/comments/list</td>
-				<td>全部评论</td>
-				<td>SEO 标题</td>
-				<td>SEO 描述</td>
-				<td>SEO 关键词</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit" data-bs-whatever="评论">编辑</button></td>
-			</tr>
+      @foreach($menus as $key => $menu)
+        <tr>
+          <td>
+            @if ($menu['select'])
+              <input class="form-check-input update-config"
+                     type="radio"
+                     name="default_homepage"
+                     data-action="{{ route('panel.configs.update', ['config' => 'default_homepage']) }}"
+                     data-item_value="{{ $menu['url'] }}"
+                     value="portal" {{ $params['default_homepage'] == $menu['url'] ? 'checked' : '' }}>
+            @endif
+          </td>
+          <td>{{ $menu['name'] }}</td>
+          <td>/{{ $menu['url'] ?? '' }}</td>
+          <td>{{ $params['menu_'.$key.'_name'] }}</td>
+          <td>{{ $params['menu_'.$key.'_title'] }}</td>
+          <td>{{ $params['menu_'.$key.'_description'] }}</td>
+          <td>{{ $params['menu_'.$key.'_keywords'] }}</td>
+          <td>
+            @if ($params['menu_'.$key.'_status'] == 'true')
+              <i class="bi bi-check-lg text-success"></i>
+            @else
+              <i class="bi bi-dash-lg text-secondary"></i>
+            @endif
+          </td>
+          <td><button type="button"
+                      class="btn btn-outline-primary btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#menuEdit"
+                      data-name_languages="{{ json_encode($langParams['menu_'.$key.'_name'] ?? []) }}"
+                      data-title_languages="{{ json_encode($langParams['menu_'.$key.'_name'] ?? []) }}"
+                      data-description_languages="{{ json_encode($langParams['menu_'.$key.'_name'] ?? []) }}"
+                      data-keywords_languages="{{ json_encode($langParams['menu_'.$key.'_name'] ?? []) }}"
+                      data-config="{{ json_encode($params['menu_'.$key.'_config'] ?? []) }}"
+                      data-no_params="{{ $key == 'portal' ? 1 : 0}}"
+                      data-is_enable="{{ $params['menu_'.$key.'_status'] ?? 'false' }}"
+                      data-action="{{ route('panel.clientMenus.update', ['key' => $key]) }}"
+                      data-name-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_name']) }}"
+                      data-title-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_title']) }}"
+                      data-description-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_description']) }}"
+                      data-keywords-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_keywords']) }}"
+                      data-bs-whatever="{{ $menu['name'] }}">编辑</button></td>
+        </tr>
+      @endforeach
 		</tbody>
 	</table>
 </div>
@@ -171,46 +94,48 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form>
+				<form action=""  method="post">
+          @csrf
+          @method('put')
 					<div class="mb-3 row">
 						<label class="col-sm-3 col-form-label">导航名称</label>
 						<div class="col-sm-9">
-							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#langModal">导航名称</button>
+							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start name-lang" data-bs-toggle="modal" data-bs-target="#menuLangModal">导航名称</button>
 						</div>
 					</div>
 					<div class="mb-3 row">
 						<label class="col-sm-3 col-form-label">SEO 标题</label>
 						<div class="col-sm-9">
-							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#langModal">SEO 标题</button>
+							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start title-lang" data-bs-toggle="modal" data-bs-target="#menuLangModal">SEO 标题</button>
 						</div>
 					</div>
 					<div class="mb-3 row">
 						<label class="col-sm-3 col-form-label">SEO 描述</label>
 						<div class="col-sm-9">
-							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#langDescModal">SEO 描述</button>
+							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start description-lang" data-bs-toggle="modal" data-bs-target="#menuLangModal">SEO 描述</button>
 						</div>
 					</div>
 					<div class="mb-3 row">
 						<label class="col-sm-3 col-form-label">SEO 关键词</label>
 						<div class="col-sm-9">
-							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#langDescModal">SEO 关键词</button>
+							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start " data-bs-toggle="modal" data-bs-target="#menuLangModal">SEO 关键词</button>
 						</div>
 					</div>
-					<div class="mb-3 row">
+					<div class="mb-3 row default-params">
 						<label class="col-sm-3 col-form-label">默认参数</label>
 						<div class="col-sm-9">
-							<textarea class="form-control" rows="3"></textarea>
+							<textarea class="form-control" name="config" rows="3"></textarea>
 						</div>
 					</div>
 					<div class="mb-3 row">
 						<label class="col-sm-3 col-form-label">启用状态</label>
 						<div class="col-sm-9 pt-2">
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="status" id="status_true" value="true" checked>
+								<input class="form-check-input" type="radio" name="is_enable" id="status_true" value="true" checked>
 								<label class="form-check-label" for="status_true">启用</label>
 							</div>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="status" id="status_false" value="false">
+								<input class="form-check-input" type="radio" name="is_enable" id="status_false" value="false">
 								<label class="form-check-label" for="status_false">不启用</label>
 							</div>
 						</div>
@@ -223,6 +148,53 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- Language Modal -->
+<div class="modal fade" id="menuLangModal" tabindex="-1" aria-labelledby="menuLangModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">多语言设置</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          @csrf
+          @method('put')
+          <div class="table-responsive">
+            <table class="table table-hover align-middle text-nowrap">
+              <thead>
+                <tr class="table-info">
+                  <th scope="col" class="w-25">语言标签</th>
+                  <th scope="col" class="w-25">语言名称</th>
+                  <th scope="col" class="w-50">内容</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($optionalLanguages as $lang)
+                  <tr>
+                    <td>
+                      {{ $lang['langTag'] }}
+                      @if($lang['langTag'] == $defaultLanguage)
+                        <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="默认语言"></i>
+                      @endif
+                    </td>
+                    <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
+                    <td><textarea class="form-control" name="languages[{{ $lang['langTag'] }}" rows="3"></textarea></td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+          <!--保存按钮-->
+          <div class="text-center">
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">确认</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 <!--设置区域 结束-->
 @endsection
