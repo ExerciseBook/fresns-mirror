@@ -15,13 +15,7 @@
         <a class="btn btn-outline-secondary" href="#" role="button">帮助说明</a>
       </div>
     </div>
-    <ul class="nav nav-tabs nav-fill">
-      <li class="nav-item"><a class="nav-link active" href="system-storage-image.html">图片存储设置</a></li>
-      <li class="nav-item"><a class="nav-link" href="system-storage-video.html">视频存储设置</a></li>
-      <li class="nav-item"><a class="nav-link" href="system-storage-audio.html">音频存储设置</a></li>
-      <li class="nav-item"><a class="nav-link" href="system-storage-doc.html">文档存储设置</a></li>
-      <li class="nav-item"><a class="nav-link" href="system-storage-repair.html">补位图设置</a></li>
-    </ul>
+    @include('panel::system.storage.tab')
   </div>
   <!--表单 开始-->
   <form action="{{ route('panel.storage.image.update') }}" method="post">

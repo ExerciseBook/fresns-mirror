@@ -33,7 +33,7 @@ class StorageController extends Controller
 
         $configs = Config::whereIn('item_key', $configKeys)->get();
 
-        foreach($configs as $config) {
+        foreach ($configs as $config) {
             $params[$config->item_key] = $config->item_value;
         }
 
@@ -44,8 +44,8 @@ class StorageController extends Controller
         $plugins = Plugin::all();
 
         $pluginParams = [];
-        foreach($pluginScenes as $scene) {
-            $pluginParams[$scene] = $plugins->filter(function($plugin) use ($scene) {
+        foreach ($pluginScenes as $scene) {
+            $pluginParams[$scene] = $plugins->filter(function ($plugin) use ($scene) {
                 return in_array($scene, $plugin->scene);
             });
         }
@@ -76,7 +76,297 @@ class StorageController extends Controller
 
         $configs = Config::whereIn('item_key', $configKeys)->get();
 
-        foreach($configKeys as $configKey) {
+        foreach ($configKeys as $configKey) {
+            $config = $configs->where('item_key', $configKey)->first();
+            if (!$config) {
+                $continue;
+            }
+
+            $value = $request->$configKey;
+            $config->item_value = $value;
+            $config->save();
+        }
+
+        return $this->updateSuccess();
+    }
+
+
+    public function videoShow()
+    {
+        // config keys
+        $configKeys = [
+            'videos_service',
+            'videos_secret_id',
+            'videos_secret_key',
+            'videos_bucket_name',
+            'videos_bucket_area',
+            'videos_bucket_domain',
+            'videos_ext',
+            'videos_max_size',
+            'videos_max_time',
+            'videos_url_status',
+            'videos_url_key',
+            'videos_url_expire',
+            'videos_transcode',
+            'videos_watermark',
+            'videos_screenshot',
+            'videos_gift',
+        ];
+
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+
+        foreach ($configs as $config) {
+            $params[$config->item_key] = $config->item_value;
+        }
+
+        $pluginScenes = [
+            'storage',
+        ];
+
+        $plugins = Plugin::all();
+
+        $pluginParams = [];
+        foreach ($pluginScenes as $scene) {
+            $pluginParams[$scene] = $plugins->filter(function ($plugin) use ($scene) {
+                return in_array($scene, $plugin->scene);
+            });
+        }
+
+        return view('panel::system.storage.video', compact('params', 'pluginParams'));
+    }
+
+    public function videoUpdate(Request $request)
+    {
+        $configKeys = [
+            'videos_service',
+            'videos_secret_id',
+            'videos_secret_key',
+            'videos_bucket_name',
+            'videos_bucket_area',
+            'videos_bucket_domain',
+            'videos_ext',
+            'videos_max_size',
+            'videos_max_time',
+            'videos_url_status',
+            'videos_url_key',
+            'videos_url_expire',
+            'videos_transcode',
+            'videos_watermark',
+            'videos_screenshot',
+            'videos_gift',
+        ];
+
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+
+        foreach ($configKeys as $configKey) {
+            $config = $configs->where('item_key', $configKey)->first();
+            if (!$config) {
+                $continue;
+            }
+
+            $value = $request->$configKey;
+            $config->item_value = $value;
+            $config->save();
+        }
+
+        return $this->updateSuccess();
+    }
+
+
+    public function audioShow()
+    {
+        // config keys
+        $configKeys = [
+            'audios_service',
+            'audios_secret_id',
+            'audios_secret_key',
+            'audios_bucket_name',
+            'audios_bucket_area',
+            'audios_bucket_domain',
+            'audios_ext',
+            'audios_max_size',
+            'audios_max_time',
+            'audios_url_status',
+            'audios_url_key',
+            'audios_url_expire',
+            'audios_transcode',
+        ];
+
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+
+        foreach ($configs as $config) {
+            $params[$config->item_key] = $config->item_value;
+        }
+
+        $pluginScenes = [
+            'storage',
+        ];
+
+        $plugins = Plugin::all();
+
+        $pluginParams = [];
+        foreach ($pluginScenes as $scene) {
+            $pluginParams[$scene] = $plugins->filter(function ($plugin) use ($scene) {
+                return in_array($scene, $plugin->scene);
+            });
+        }
+
+        return view('panel::system.storage.audio', compact('params', 'pluginParams'));
+    }
+
+    public function audioUpdate(Request $request)
+    {
+        $configKeys = [
+            'audios_service',
+            'audios_secret_id',
+            'audios_secret_key',
+            'audios_bucket_name',
+            'audios_bucket_area',
+            'audios_bucket_domain',
+            // 'audios_ext',
+            'audios_max_size',
+            'audios_max_time',
+            'audios_url_status',
+            'audios_url_key',
+            'audios_url_expire',
+            'audios_transcode',
+        ];
+
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+
+        foreach ($configKeys as $configKey) {
+            $config = $configs->where('item_key', $configKey)->first();
+            if (!$config) {
+                $continue;
+            }
+
+            $value = $request->$configKey;
+            $config->item_value = $value;
+            $config->save();
+        }
+
+        return $this->updateSuccess();
+    }
+
+
+    public function docShow()
+    {
+        // config keys
+        $configKeys = [
+            'docs_service',
+            'docs_secret_id',
+            'docs_secret_key',
+            'docs_bucket_name',
+            'docs_bucket_area',
+            'docs_bucket_domain',
+            'docs_ext',
+            'docs_max_size',
+            'docs_url_status',
+            'docs_url_key',
+            'docs_url_expire',
+            'docs_online_preview',
+            'docs_preview_ext',
+        ];
+
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+        foreach ($configs as $config) {
+            $params[$config->item_key] = $config->item_value;
+        }
+        $pluginScenes = [
+            'storage',
+        ];
+
+        $plugins = Plugin::all();
+
+        $pluginParams = [];
+        foreach ($pluginScenes as $scene) {
+            $pluginParams[$scene] = $plugins->filter(function ($plugin) use ($scene) {
+                return in_array($scene, $plugin->scene);
+            });
+        }
+
+        return view('panel::system.storage.doc', compact('params', 'pluginParams'));
+    }
+
+    public function docUpdate(Request $request)
+    {
+        $configKeys = [
+            'docs_service',
+            'docs_secret_id',
+            'docs_secret_key',
+            'docs_bucket_name',
+            'docs_bucket_area',
+            'docs_bucket_domain',
+            'docs_ext',
+            'docs_max_size',
+            'docs_url_status',
+            'docs_url_key',
+            'docs_url_expire',
+            'docs_online_preview',
+            'docs_preview_ext',
+        ];
+
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+
+        foreach ($configKeys as $configKey) {
+            $config = $configs->where('item_key', $configKey)->first();
+            if (!$config) {
+                $continue;
+            }
+
+            $value = $request->$configKey;
+            $config->item_value = $value;
+            $config->save();
+        }
+
+        return $this->updateSuccess();
+    }
+
+
+    public function repairShow()
+    {
+        // config keys
+        $configKeys = [
+            'repair_image',
+            'repair_video',
+            'repair_audio',
+            'repair_doc',
+        ];
+
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+
+        foreach ($configs as $config) {
+            $params[$config->item_key] = $config->item_value;
+        }
+
+        $pluginScenes = [
+            'storage',
+        ];
+
+        // $plugins = Plugin::all();
+        //
+        // $pluginParams = [];
+        // foreach ($pluginScenes as $scene) {
+        //     $pluginParams[$scene] = $plugins->filter(function ($plugin) use ($scene) {
+        //         return in_array($scene, $plugin->scene);
+        //     });
+        // }
+
+        return view('panel::system.storage.repair', compact('params'));
+    }
+
+    public function repairUpdate(Request $request)
+    {
+        $configKeys = [
+            'repair_image',
+            'repair_video',
+            'repair_audio',
+            'repair_doc',
+        ];
+
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+
+        foreach ($configKeys as $configKey) {
             $config = $configs->where('item_key', $configKey)->first();
             if (!$config) {
                 $continue;

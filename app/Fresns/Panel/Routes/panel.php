@@ -127,9 +127,18 @@ Route::middleware(['panelAuth'])->group(function() {
         // image
         Route::get('storage/image', [StorageController::class, 'imageShow'])->name('storage.image.show');
         Route::put('storage/image', [StorageController::class, 'imageUpdate'])->name('storage.image.update');
-
-        // video
-
+		// video
+		Route::get('storage/video', [StorageController::class, 'videoShow'])->name('storage.video.show');
+        Route::put('storage/video', [StorageController::class, 'videoUpdate'])->name('storage.video.update');
+		// audio
+		Route::get('storage/audio', [StorageController::class, 'audioShow'])->name('storage.audio.show');
+		Route::put('storage/audio', [StorageController::class, 'audioUpdate'])->name('storage.audio.update');
+		// doc
+		Route::get('storage/doc', [StorageController::class, 'docShow'])->name('storage.doc.show');
+		Route::put('storage/doc', [StorageController::class, 'docUpdate'])->name('storage.doc.update');
+		// repair
+		Route::get('storage/repair', [StorageController::class, 'repairShow'])->name('storage.repair.show');
+		Route::put('storage/repair', [StorageController::class, 'repairUpdate'])->name('storage.repair.update');
 
         // map
         Route::resource('mapConfigs', MapConfigController::class)->only([
