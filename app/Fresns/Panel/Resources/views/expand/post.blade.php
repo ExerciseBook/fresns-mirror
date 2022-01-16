@@ -18,14 +18,16 @@
 	</div>
 </div>
 <!--操作列表-->
-<form>
+<form action="{{ route('panel.expandPost.update','post_detail_service') }}" method="post">
+  @csrf
+  @method('put')
 	<div class="row mb-5">
 		<label class="col-lg-2 col-form-label text-lg-end">关联插件：</label>
 		<div class="col-lg-6">
-			<select class="form-select" id="post_editor">
-				<option value="1" selected>默认</option>
-				<option value="2">zz 插件</option>
-				<option value="3">xx 插件</option>
+			<select class="form-select" id="post_editor" name="plugin_unikey">
+				@foreach($pluginParams['restful'] as $plugin)
+				  <option value="{{ $plugin->unikey }}" @if($pluginUsage) {{$pluginUsage->plugin_unikey == $plugin->unikey ? 'selected' : '' }} @endif>{{ $plugin->name }}</option>
+				@endforeach
 			</select>
 		</div>
 	</div>
