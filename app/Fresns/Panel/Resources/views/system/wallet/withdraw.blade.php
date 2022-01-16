@@ -13,7 +13,7 @@
     </div>
     <div class="col-lg-5">
       <div class="input-group mt-2 mb-4 justify-content-lg-end">
-        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createModal"><i class="bi bi-plus-circle-dotted"></i> 新增服务商</button>
+        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createWithdrawModal"><i class="bi bi-plus-circle-dotted"></i> 新增服务商</button>
         <a class="btn btn-outline-secondary" href="#" role="button">帮助说明</a>
       </div>
     </div>
@@ -41,8 +41,13 @@
           <tr>
             <td><input type="number" class="form-control input-number" value="{{ $item['rank_num']}}"></td>
             <td>{{ optional($item->plugin)->name }}</td>
-            <td><img src="../assets/images/temp/placeholder_icon.png" width="24" height="24">{{ $item['name'] }}</td>
-            <td>{{ $item['parameter'] }}</td>
+            <td>
+              @if($item->icon_file_url)
+                <img src="{{ $item->icon_file_url }}" width="24" height="24">
+              @endif
+              {{ $item['name'] }}
+            </td>
+            <td>{{ $item->parameter }}</td>
             <td>
               @if($item['is_enable'])
                 <i class="bi bi-check-lg text-success"></i>
@@ -51,7 +56,12 @@
               @endif
             </td>
             <td>
-              <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createModal">修改</button>
+              <button type="button" class="btn btn-outline-primary btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-names="{{ $item->names->toJson() }}"
+                                    data-params="{{ json_encode($item->attributesToArray()) }}"
+                                    data-action="{{ route('panel.walletWithdrawConfigs.update', ['pluginUsage' => $item->id]) }}"
+                                    data-bs-target="#createWithdrawModal">修改</button>
               <button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
             </td>
           </tr>
@@ -60,30 +70,33 @@
     </table>
   </div>
 
-
-  <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">提现服务商设置</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
+  <form action="" method="post">
+    @csrf
+    @method('post')
+    <input type="hidden" name="update_name" value="0">
+    <!-- Update Modal -->
+    <div class="modal fade name-lang-parent wallet-modal" id="createWithdrawModal" tabindex="-1" aria-labelledby="createWithdrawModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">充值服务商设置</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">显示顺序</label>
               <div class="col-sm-9">
-                <input type="number" class="form-control input-number">
+                <input type="number" class="form-control input-number" required name="rank_num">
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">关联插件</label>
               <div class="col-sm-9">
-                <select class="form-select">
+                <select class="form-select" name="plugin_unikey" required>
                   <option selected disabled>请选择插件</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  @foreach($plugins as $plugin)
+                    <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
+                  @endforeach
                 </select>
               </div>
             </div>
@@ -96,24 +109,28 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">显示名称</label>
               <div class="col-sm-9">
-                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#langModal">显示名称</button>
+                <button type="button"
+                        class="name-button btn btn-outline-secondary btn-modal w-100 text-start"
+                        data-parent="#createWithdrawModal"
+                        data-bs-toggle="modal"
+                        data-bs-target="#langModal">显示名称</button>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">自定义参数</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="parameter">
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">启用状态</label>
               <div class="col-sm-9 pt-2">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="status" id="status_true" value="true" checked>
+                  <input class="form-check-input" type="radio" name="is_enable" id="status_true" value="1" checked>
                   <label class="form-check-label" for="status_true">启用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="status" id="status_false" value="false">
+                  <input class="form-check-input" type="radio" name="is_enable" id="status_false" value="0">
                   <label class="form-check-label" for="status_false">不启用</label>
                 </div>
               </div>
@@ -122,22 +139,21 @@
               <label class="col-sm-3 col-form-label"></label>
               <div class="col-sm-9"><button type="submit" class="btn btn-primary">提交</button></div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Language Modal -->
-  <div class="modal fade" id="langModal" tabindex="-1" aria-labelledby="langModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">多语言设置</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
+
+    <!-- Language Modal -->
+    <div class="modal fade name-lang-modal" id="langModal" tabindex="-1" aria-labelledby="langModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">多语言设置</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
             <div class="table-responsive">
               <table class="table table-hover align-middle text-nowrap">
                 <thead>
@@ -148,36 +164,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>zh-Hans-CN</td>
-                    <td>简体中文(内地)</td>
-                    <td><input type="text" class="form-control" value="显示名称"></td>
-                  </tr>
-                  <tr>
-                    <td>zh-Hans-SG</td>
-                    <td>简体中文(新加坡)</td>
-                    <td><input type="text" class="form-control" value="显示名称"></td>
-                  </tr>
-                  <tr>
-                    <td>zh-Hans-HK</td>
-                    <td>繁體中文(香港)</td>
-                    <td><input type="text" class="form-control" value="顯示名稱"></td>
-                  </tr>
-                  <tr>
-                    <td>en-US <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="默认语言"></i></td>
-                    <td>English(United States)</td>
-                    <td><input type="text" class="form-control" value="display name"></td>
-                  </tr>
-                  <tr>
-                    <td>ja</td>
-                    <td>日本語</td>
-                    <td><input type="text" class="form-control" value="表示名"></td>
-                  </tr>
-                  <tr>
-                    <td>ko-KR</td>
-                    <td>한국어(대한민국)</td>
-                    <td><input type="text" class="form-control" value="이름 표시하기"></td>
-                  </tr>
+                  @foreach($optionalLanguages as $lang)
+                    <tr>
+                      <td>{{ $lang['langTag'] }}</td>
+                      <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
+                      <td><input type="text" name="names[{{ $lang['langTag'] }}]" class="form-control" value="{{ $langParams['site_name'][$lang['langTag']] ?? '' }}"></td>
+                    </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>
@@ -185,9 +178,10 @@
             <div class="text-center">
               <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">确认</button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
+
 @endsection

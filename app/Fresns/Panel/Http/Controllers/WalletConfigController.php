@@ -76,8 +76,12 @@ class WalletConfigController extends Controller
     {
         $plugins = Plugin::all();
 
+        $plugins = $plugins->filter(function ($plugin) {
+            return in_array('pay', $plugin->scene);
+        });
+
         $pluginUsages = PluginUsage::where('type', 1)
-            ->with('plugin')
+            ->with('plugin', 'names')
             ->get();
 
         return view('panel::system.wallet.pay', compact('pluginUsages', 'plugins'));
@@ -87,14 +91,80 @@ class WalletConfigController extends Controller
     {
         $pluginUsage = new PluginUsage;
         $pluginUsage->type = 1;
-        $pluginUsage->name = '';
+        $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rank_num = $request->rank_num;
         $pluginUsage->save();
 
+        if ($request->update_name) {
+            foreach($request->names as $langTag => $content) {
+
+                $language = Language::tableName('plugin_usages')
+                    ->where('table_id', $pluginUsage->id)
+                    ->where('lang_tag', $langTag)
+                    ->first();
+
+                if (!$language) {
+                    // create but no content
+                    if (!$content){
+                        continue;
+                    }
+                    $language = new Language();
+                    $language->fill([
+                        'table_name' => 'plugin_usages',
+                        'table_field' => 'name',
+                        'table_id' => $pluginUsage->id,
+                        'lang_tag' => $langTag,
+                    ]);
+                }
+
+                $language->lang_content = $content;
+                $language->save();
+            }
+        }
+
         return $this->createSuccess();
+    }
+
+    public function payUpdate(PluginUsage $pluginUsage, Request $request)
+    {
+        $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
+        $pluginUsage->plugin_unikey = $request->plugin_unikey;
+        $pluginUsage->parameter = $request->parameter;
+        $pluginUsage->is_enable = $request->is_enable;
+        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->save();
+
+        if ($request->update_name) {
+            foreach($request->names as $langTag => $content) {
+
+                $language = Language::tableName('plugin_usages')
+                    ->where('table_id', $pluginUsage->id)
+                    ->where('lang_tag', $langTag)
+                    ->first();
+
+                if (!$language) {
+                    // create but no content
+                    if (!$content){
+                        continue;
+                    }
+                    $language = new Language();
+                    $language->fill([
+                        'table_name' => 'plugin_usages',
+                        'table_field' => 'name',
+                        'table_id' => $pluginUsage->id,
+                        'lang_tag' => $langTag,
+                    ]);
+                }
+
+                $language->lang_content = $content;
+                $language->save();
+            }
+        }
+
+        return $this->updateSuccess();
     }
 
     public function withdrawIndex()
@@ -103,6 +173,11 @@ class WalletConfigController extends Controller
             ->with('plugin')
             ->get();
 
-        return view('panel::system.wallet.withdraw', compact('pluginUsages'));
+        $plugins = Plugin::all();
+        $plugins = $plugins->filter(function ($plugin) {
+            return in_array('withdraw', $plugin->scene);
+        });
+
+        return view('panel::system.wallet.withdraw', compact('pluginUsages', 'plugins'));
     }
 }

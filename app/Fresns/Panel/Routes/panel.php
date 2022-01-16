@@ -120,11 +120,12 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::put('walletConfigs', [WalletConfigController::class, 'update'])->name('walletConfigs.update');
 
         Route::get('walletPayConfigs', [WalletConfigController::class, 'payIndex'])->name('walletPayConfigs.index');
-        Route::post('walletPayConfigs', [WalletConfigController::class, 'payStore'])->name('walletPayConfigs.payStore');
-        Route::put('walletPayConfigs/{id}', [WalletConfigController::class, 'payUpdate'])->name('walletPayConfigs.update');
+        Route::post('walletPayConfigs', [WalletConfigController::class, 'payStore'])->name('walletPayConfigs.store');
+        Route::put('walletPayConfigs/{pluginUsage}', [WalletConfigController::class, 'payUpdate'])->name('walletPayConfigs.update');
 
         Route::get('walletWithdrawConfigs', [WalletConfigController::class, 'withdrawIndex'])->name('walletWithdrawConfigs.index');
-        Route::put('walletWithdrawConfigs/{id}', [WalletConfigController::class, 'withdrawUpdate'])->name('walletWithdrawConfigs.update');
+        Route::post('walletWithdrawConfigs', [WalletConfigController::class, 'withdrawStore'])->name('walletWithdrawConfigs.store');
+        Route::put('walletWithdrawConfigs/{pluginUsage}', [WalletConfigController::class, 'withdrawUpdate'])->name('walletWithdrawConfigs.update');
 
         // sotrage
         // image

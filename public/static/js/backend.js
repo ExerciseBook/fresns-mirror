@@ -246,7 +246,7 @@ $('.name-lang-parent').on('show.bs.modal', function(e) {
   let names = button.data('names');
 
   $(this).parent('form').attr('action', action);
-
+  $(this).parent('form').find('input[name=update_name]').val(0);
   $(this).parent('form').find('input[name=_method]').val(params ? 'put' : 'post');
 
   if (!params) {
@@ -281,6 +281,7 @@ $(".name-lang-modal").on('show.bs.modal', function (e) {
   $(this).on('hide.bs.modal', function (e) {
     if (parent) {
       $(parent).data('is_back', true)
+      $this.parent('form').find('input[name=update_name]').val(1);
       $(parent).modal('show');
     }
   });
@@ -514,4 +515,22 @@ $(document).on('click', '.delete-lang-pack', function() {
 $('#addLangPack').click(function() {
   let template = $('#languagePackTemplate')
   $('.lang-pack-box').append(template.html());
+});
+
+// wallet pay
+$('.wallet-modal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget);
+  let params = button.data('params');
+
+  if (!params) {
+    return;
+  }
+
+  $(this).find('input[name=rank_num]').val(params.rank_num);
+  $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
+  $(this).find('input[name=parameter]').val(params.parameter);
+  if (params.name) {
+    $(this).find('.name-button').text(params.name);
+  }
+  $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
 });
