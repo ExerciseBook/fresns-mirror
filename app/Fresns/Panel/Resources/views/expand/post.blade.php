@@ -24,9 +24,9 @@
 	<div class="row mb-5">
 		<label class="col-lg-2 col-form-label text-lg-end">关联插件：</label>
 		<div class="col-lg-6">
-			<select class="form-select" id="post_editor" name="plugin_unikey">
+			<select class="form-select" id="post_editor" name="post_detail_service">
 				@foreach($pluginParams['restful'] as $plugin)
-				  <option value="{{ $plugin->unikey }}" @if($pluginUsage) {{$pluginUsage->plugin_unikey == $plugin->unikey ? 'selected' : '' }} @endif>{{ $plugin->name }}</option>
+				  <option value="{{ $plugin->unikey }}" {{$params['post_detail_service'] == $plugin->unikey ? 'selected' : '' }} >{{ $plugin->name }}</option>
 				@endforeach
 			</select>
 		</div>
