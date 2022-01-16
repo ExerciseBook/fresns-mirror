@@ -461,22 +461,48 @@ $('.update-config').change(function() {
 $('#menuEdit').on('show.bs.modal', function(e) {
   let button = $(e.relatedTarget),
     isEnable = button.data('is_enable'),
-    nameLanguage = button.data('name_languages'),
-    titleLanguage = button.data('title_languages'),
-    descriptionLanguage = button.data('description_languages'),
-    keywordsLanguage = button.data('keywords_languages');
-    noParams= button.data('no_params');
+    nameLanguages = button.data('name_languages'),
+    titleLanguages = button.data('title_languages'),
+    descriptionLanguages = button.data('description_languages'),
+    keywordsLanguages = button.data('keywords_languages');
+    noConfig = button.data('no_config');
     action = button.data('action');
     config = button.data('config');
 
-  if (noParams) {
-    $(this).find('.default-params').hide();
+  if (noConfig) {
+    $(this).find('.default-config').hide();
   } else {
-    $(this).find('.default-params').show();
+    $(this).find('.default-config').show();
   }
 
   $(this).find('form').attr('action', action);
   $(this).find('textarea[name=config]').val(JSON.stringify(config));
   $(this).find('input:radio[name=is_enable][value="'+isEnable+'"]').prop('checked', true);
+
+  $(this).find('.name-lang').data('languages', nameLanguages)
+  $(this).find('.name-lang').data('action', button.data('name_action'))
+
+  $(this).find('.title-lang').data('languages', titleLanguages)
+  $(this).find('.title-lang').data('action', button.data('title_action'))
+
+  $(this).find('.description-lang').data('languages', descriptionLanguages)
+  $(this).find('.description-lang').data('action', button.data('description_action'))
+
+  $(this).find('.keywords-lang').data('languages', keywordsLanguages)
+  $(this).find('.keywords-lang').data('action', button.data('keywords_action'))
 });
 
+$('#menuLangModal').on('shown.bs.modal', function (e) {
+  let button = $(e.relatedTarget),
+  languages = button.data('languages'),
+  action = button.data('action');
+
+  $(this).find('form').trigger("reset");
+  $(this).find('form').attr('action', action);
+
+  if (languages) {
+    languages.map((language, index) => {
+      $(this).find("textarea[name='languages["+language.lang_tag+"]'").val(language.lang_content);
+    });
+  }
+});

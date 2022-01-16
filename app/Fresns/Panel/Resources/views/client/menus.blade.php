@@ -44,17 +44,17 @@
                      name="default_homepage"
                      data-action="{{ route('panel.configs.update', ['config' => 'default_homepage']) }}"
                      data-item_value="{{ $menu['url'] }}"
-                     value="portal" {{ $params['default_homepage'] == $menu['url'] ? 'checked' : '' }}>
+                     value="portal" {{ optional($configs['default_homepage'])->item_value == $menu['url'] ? 'checked' : '' }}>
             @endif
           </td>
           <td>{{ $menu['name'] }}</td>
           <td>/{{ $menu['url'] ?? '' }}</td>
-          <td>{{ $params['menu_'.$key.'_name'] }}</td>
-          <td>{{ $params['menu_'.$key.'_title'] }}</td>
-          <td>{{ $params['menu_'.$key.'_description'] }}</td>
-          <td>{{ $params['menu_'.$key.'_keywords'] }}</td>
+          <td>{{ optional($configs['menu_'.$key.'_name'])->item_value }}</td>
+          <td>{{ optional($configs['menu_'.$key.'_title'])->item_value }}</td>
+          <td>{{ optional($configs['menu_'.$key.'_description'])->item_value }}</td>
+          <td>{{ optional($configs['menu_'.$key.'_keywords'])->item_value }}</td>
           <td>
-            @if ($params['menu_'.$key.'_status'] == 'true')
+            @if (optional($configs['menu_'.$key.'_status'])->item_value == 'true')
               <i class="bi bi-check-lg text-success"></i>
             @else
               <i class="bi bi-dash-lg text-secondary"></i>
@@ -64,18 +64,18 @@
                       class="btn btn-outline-primary btn-sm"
                       data-bs-toggle="modal"
                       data-bs-target="#menuEdit"
-                      data-name_languages="{{ json_encode($langParams['menu_'.$key.'_name'] ?? []) }}"
-                      data-title_languages="{{ json_encode($langParams['menu_'.$key.'_name'] ?? []) }}"
-                      data-description_languages="{{ json_encode($langParams['menu_'.$key.'_name'] ?? []) }}"
-                      data-keywords_languages="{{ json_encode($langParams['menu_'.$key.'_name'] ?? []) }}"
-                      data-config="{{ json_encode($params['menu_'.$key.'_config'] ?? []) }}"
-                      data-no_params="{{ $key == 'portal' ? 1 : 0}}"
-                      data-is_enable="{{ $params['menu_'.$key.'_status'] ?? 'false' }}"
+                      data-name_languages="{{ optional($configs['menu_'.$key.'_name'])->languages->toJson() }}"
+                      data-title_languages="{{  optional($configs['menu_'.$key.'_title'])->languages->toJson() }}"
+                      data-description_languages="{{  optional($configs['menu_'.$key.'_description'])->languages->toJson() }}"
+                      data-keywords_languages="{{  optional($configs['menu_'.$key.'_keywords'])->languages->toJson() }}"
+                      data-config="{{ json_encode(optional($configs['menu_'.$key.'_config'] ?? [])->item_value) }}"
+                      data-no_config="{{ $key == 'portal' ? 1 : 0}}"
+                      data-is_enable="{{ optional($configs['menu_'.$key.'_status'])->item_value }}"
                       data-action="{{ route('panel.clientMenus.update', ['key' => $key]) }}"
-                      data-name-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_name']) }}"
-                      data-title-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_title']) }}"
-                      data-description-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_description']) }}"
-                      data-keywords-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_keywords']) }}"
+                      data-name_action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_name']) }}"
+                      data-title_action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_title']) }}"
+                      data-description_action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_description']) }}"
+                      data-keywords_action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_'.$key.'_keywords']) }}"
                       data-bs-whatever="{{ $menu['name'] }}">编辑</button></td>
         </tr>
       @endforeach
@@ -118,10 +118,10 @@
 					<div class="mb-3 row">
 						<label class="col-sm-3 col-form-label">SEO 关键词</label>
 						<div class="col-sm-9">
-							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start " data-bs-toggle="modal" data-bs-target="#menuLangModal">SEO 关键词</button>
+							<button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start keywords-lang" data-bs-toggle="modal" data-bs-target="#menuLangModal">SEO 关键词</button>
 						</div>
 					</div>
-					<div class="mb-3 row default-params">
+					<div class="mb-3 row default-config">
 						<label class="col-sm-3 col-form-label">默认参数</label>
 						<div class="col-sm-9">
 							<textarea class="form-control" name="config" rows="3"></textarea>
@@ -162,6 +162,7 @@
         <form method="post">
           @csrf
           @method('put')
+          <input type="hidden" name="sync_config" value="1">
           <div class="table-responsive">
             <table class="table table-hover align-middle text-nowrap">
               <thead>
@@ -181,7 +182,7 @@
                       @endif
                     </td>
                     <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                    <td><textarea class="form-control" name="languages[{{ $lang['langTag'] }}" rows="3"></textarea></td>
+                    <td><textarea class="form-control" name="languages[{{ $lang['langTag'] }}]" rows="3"></textarea></td>
                   </tr>
                 @endforeach
               </tbody>
@@ -189,7 +190,7 @@
           </div>
           <!--保存按钮-->
           <div class="text-center">
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">确认</button>
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">确认</button>
           </div>
         </form>
       </div>

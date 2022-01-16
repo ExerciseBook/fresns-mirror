@@ -81,20 +81,13 @@ class ClientMenuController extends Controller
 
         $langKeys = $configKeys;
 
-        $configs = Config::whereIn('item_key', $configKeys)->get();
-        $params = [];
+        $configs = Config::whereIn('item_key', $configKeys)
+            ->with('languages')
+            ->get();
 
-        foreach($configs as $config) {
-            $params[$config->item_key] = $config->item_value;
-        }
-
-        $languages = Language::ofConfig()->whereIn('table_key', $langKeys)->get();
-
-        $langParams = [];
-        foreach($langKeys as $langKey) {
-            $langParams[$langKey] = $languages->where('table_key', $langKey)->pluck('lang_content', 'lang_tag')->toArray();
-        }
-
+        $configs = $configs->mapWithKeys(function ($config) {
+            return [$config->item_key => $config];
+        });
 
         $menus = [
             // url => key name
@@ -156,7 +149,7 @@ class ClientMenuController extends Controller
         ];
 
 
-        return view('panel::client.menus', compact('menus', 'params', 'langParams'));
+        return view('panel::client.menus', compact('menus', 'configs'));
     }
 
     public function update($key, Request $request)

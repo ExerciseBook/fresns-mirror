@@ -60,8 +60,9 @@ class LanguageController extends Controller
             $language->save();
         }
 
-        if ($request->update_config) {
-            $config = Config::where('item_key', $request->update_config)->first();
+        if ($request->update_config || $request->sync_config) {
+            $key = $request->update_config ?: $itemKey;
+            $config = Config::where('item_key', $key)->first();
             $content = $request->languages[$this->defaultLanguage] ?? current(array_filter($request->languages));
 
             if ($config && $content) {
