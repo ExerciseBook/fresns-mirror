@@ -223,7 +223,7 @@ class StorageController extends Controller
             'audios_bucket_name',
             'audios_bucket_area',
             'audios_bucket_domain',
-            // 'audios_ext',
+            'audios_ext',
             'audios_max_size',
             'audios_max_time',
             'audios_url_status',
@@ -237,7 +237,12 @@ class StorageController extends Controller
         foreach ($configKeys as $configKey) {
             $config = $configs->where('item_key', $configKey)->first();
             if (!$config) {
-                $continue;
+                $config = new Config();
+                $config->item_key = $configKey;
+                $config->item_type = 'number';
+                $config->item_tag = 'storageAudios';
+                $config->is_enable = 1;
+                $config->is_restful = 1;
             }
 
             $value = $request->$configKey;

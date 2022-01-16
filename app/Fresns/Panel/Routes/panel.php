@@ -197,10 +197,8 @@ Route::middleware(['panelAuth'])->group(function() {
 		// set meuns
 		Route::get('clientMenus', [ClientMenuController::class, 'index'])->name('clientMenus.index');
 		Route::put('clientMenus/{key}/update', [ClientMenuController::class, 'update'])->name('clientMenus.update');
-
 		// set columns
 		Route::get('columns', [ColumnController::class, 'index'])->name('columns.index');
-		Route::put('columns/{id}', [ColumnController::class, 'update'])->name('columns.update');
 		//set language pack
 		Route::get('languagePack', [LanguagePackController::class, 'index'])->name('languagePack.index');
 		Route::get('languagePack/{id}/config', [LanguagePackController::class, 'show'])->name('languagePack.show');
