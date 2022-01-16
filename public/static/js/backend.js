@@ -506,3 +506,12 @@ $('#menuLangModal').on('shown.bs.modal', function (e) {
     });
   }
 });
+
+$(document).on('click', '.delete-lang-pack', function() {
+  $(this).closest('tr').remove();
+})
+
+$('#addLangPack').click(function() {
+  let template = $('#languagePackTemplate')
+  $('.lang-pack-box').append(template.html());
+});

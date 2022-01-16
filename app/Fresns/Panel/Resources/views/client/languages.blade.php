@@ -29,60 +29,36 @@
 			</tr>
 		</thead>
 		<tbody>
+      @foreach($optionalLanguages as $lang)
+        <?php
+          $langName = $lang['langName'];
+          $langWriting = $lang['writingDirection'];
+          $isEnable = $lang['isEnable'];
+          if ($lang['areaCode']) {
+            $langName .= '('. optional($areaCodes->where('code', $lang['areaCode'])->first())['localName'] .')';
+          }
+        ?>
 			<tr>
-				<td>zh-Hans</td>
-				<td>简体中文</td>
-				<td>ltr</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
+        <td>
+          {{ $lang['langTag'] }}
+          @if($lang['langTag'] == $defaultLanguage)
+            <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="默认语言" aria-label="默认语言"></i>
+          @endif
+        </td>
+        <td>{{ $langName }}</td>
+				<td>{{ $langWriting}}</td>
 				<td>
-					<a class="btn btn-outline-primary btn-sm text-decoration-none" href="{{ route('panel.languagePack.show', ['id' => 1]) }}" role="button">配置语言包</a>
+          @if ($isEnable)
+            <i class="bi bi-check-lg text-success"></i>
+          @else
+            <i class="bi bi-dash-lg text-secondary"></i>
+          @endif
+        </td>
+				<td>
+					<a class="btn btn-outline-primary btn-sm text-decoration-none" href="{{ route('panel.languagePack.edit', ['langTag' => $lang['langTag']]) }}" role="button">配置语言包</a>
 				</td>
 			</tr>
-			<tr>
-				<td>zh-Hans-SG</td>
-				<td>简体中文(新加坡)</td>
-				<td>ltr</td>
-				<td><i class="bi bi-dash-lg text-secondary"></i></td>
-				<td>
-					<a class="btn btn-outline-primary btn-sm text-decoration-none" href="{{ route('panel.languagePack.show', ['id' => 1]) }}" role="button">配置语言包</a>
-				</td>
-			</tr>
-			<tr>
-				<td>zh-Hant-HK</td>
-				<td>繁體中文(香港)</td>
-				<td>ltr</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td>
-					<a class="btn btn-outline-primary btn-sm text-decoration-none" href="{{ route('panel.languagePack.show', ['id' => 1]) }}" role="button">配置语言包</a>
-				</td>
-			</tr>
-			<tr>
-				<td>en-US <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="默认语言" aria-label="默认语言"></i></td>
-				<td>English(United States)</td>
-				<td>ltr</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td>
-					<a class="btn btn-outline-primary btn-sm text-decoration-none" href="{{ route('panel.languagePack.show', ['id' => 1]) }}" role="button">配置语言包</a>
-				</td>
-			</tr>
-			<tr>
-				<td>ja</td>
-				<td>日本語</td>
-				<td>ltr</td>
-				<td><i class="bi bi-check-lg text-success"></i></td>
-				<td>
-					<a class="btn btn-outline-primary btn-sm text-decoration-none" href="{{ route('panel.languagePack.show', ['id' => 1]) }}" role="button">配置语言包</a>
-				</td>
-			</tr>
-			<tr>
-				<td>ko-KR</td>
-				<td>한국어(대한민국)</td>
-				<td>ltr</td>
-				<td><i class="bi bi-dash-lg text-secondary"></i></td>
-				<td>
-					<a class="btn btn-outline-primary btn-sm text-decoration-none" href="{{ route('panel.languagePack.show', ['id' => 1]) }}" role="button">配置语言包</a>
-				</td>
-			</tr>
+      @endforeach
 		</tbody>
 	</table>
 </div>

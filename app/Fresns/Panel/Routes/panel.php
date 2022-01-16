@@ -201,9 +201,8 @@ Route::middleware(['panelAuth'])->group(function() {
 		Route::get('columns', [ColumnController::class, 'index'])->name('columns.index');
 		//set language pack
 		Route::get('languagePack', [LanguagePackController::class, 'index'])->name('languagePack.index');
-		Route::get('languagePack/{id}/config', [LanguagePackController::class, 'show'])->name('languagePack.show');
-		Route::post('languagePack/{id}/config', [LanguagePackController::class, 'store'])->name('languagePack.store');
-		Route::delete('languagePack/{id}/config/{config_id}', [LanguagePackController::class, 'destroy'])->name('languagePack.destroy');
+		Route::get('languagePack/{langTag}/edit', [LanguagePackController::class, 'edit'])->name('languagePack.edit');
+		Route::put('languagePack/{langTag}', [LanguagePackController::class, 'update'])->name('languagePack.update');
 		//set engines
 		Route::get('engines', [PluginController::class, 'engineIndex'])->name('plugins.engines.index');
 		Route::put('engines/{engine}/theme', [PluginController::class, 'updateEngineTheme'])->name('plugins.engines.theme.update');

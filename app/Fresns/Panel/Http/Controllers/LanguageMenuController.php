@@ -74,7 +74,7 @@ class LanguageMenuController extends Controller
         return $this->updateSuccess();
     }
 
-    public function store(UpdateLanguageRequest $request)
+    public function store(UpdateLanguageMenuRequest $request)
     {
         $codeConfig = Config::where('item_key', 'language_codes')->firstOrFail();
         $codes = $codeConfig->item_value;
@@ -125,7 +125,7 @@ class LanguageMenuController extends Controller
         return $this->createSuccess();
     }
 
-    public function update(UpdateLanguageRequest $request, string $langTag)
+    public function update(UpdateLanguageMenuRequest $request, string $langTag)
     {
         $codeConfig = Config::where('item_key', 'language_codes')->firstOrFail();
         $codes = $codeConfig->item_value;

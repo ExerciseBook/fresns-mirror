@@ -9,39 +9,88 @@ class LanguagePackController extends Controller
 {
     public function index()
     {
-        $languageConfig = Config::where('item_key', 'language_menus')->firstOrFail();
-        $languages = $languageConfig->item_value;
+        return view('panel::client.languages');
+    }
 
-        $defaultLanguageConfig = Config::where('item_key', 'default_language')->firstOrFail();
-        $defaultLanguage = $defaultLanguageConfig->item_value;
+    public function edit($langTag)
+    {
+        $languagePack = Config::tag('languages')->where('item_key', 'language_pack')->first();
+        $languageKeys = $languagePack ? $languagePack->item_value : [];
 
-        $statusConfig = Config::where('item_key', 'language_status')->firstOrFail();
-        $status = $statusConfig->item_value == 'true';
+        $config = Config::tag('languages')->where('item_key', $langTag)->first();
+        $languages = $config ? $config->item_value : [];
 
-        $codeConfig = Config::where('item_key', 'language_codes')->firstOrFail();
-        $codes = $codeConfig->item_value;
+        $languages = collect($languages)
+            ->mapWithKeys(function($language) {
+                return [ $language['name'] => $language['content']];
+            });
 
-        $continentConfig = Config::where('item_key', 'continents')->firstOrFail();
-        $continents = $continentConfig->item_value;
+        if ($langTag != $this->defaultLanguage) {
+            $defaultConfig = Config::tag('languages')->where('item_key', $this->defaultLanguage)->first();
+            $defaultLanguages = $defaultConfig ? $defaultConfig->item_value : [];
 
-        return view('panel::client.languages', compact(
-            'languages',
-            'defaultLanguage',
-            'status',
-            'codes',
-            'continents'
+            $defaultLanguages = collect($defaultLanguages)
+                ->mapWithKeys(function($language) {
+                    return [$language['name'] => $language['content']];
+                });
+        } else {
+            $defaultLanguages = $languages;
+        }
+
+        return view('panel::client.languages_config', compact(
+            'languages', 'defaultLanguages', 'languageKeys', 'langTag'
         ));
     }
 
-
-    public function show($id)
+    public function update($langTag ,Request $request)
     {
-        return view('panel::client.languages_config');
-    }
+        $languagePack = Config::tag('languages')->where('item_key', 'language_pack')->first();
+        $defaultKeys = $languagePack->item_value;
 
-    public function store($id)
-    {
-        return $this->createSuccess();
+        $keys = $request->contents;
+        $contents = $request->contents;
+
+        // delete keys
+        $defaultKeys = collect($defaultKeys)->reject(function($defaultKey) use ($keys) {
+            return $defaultKey['canDelete'] && !in_array($defaultKey['name'], $keys);
+        });
+        $defaultKeyNames = $defaultKeys->pluck('name');
+
+        $languages = [];
+
+        $config = Config::tag('languages')->where('item_key', $langTag)->first();
+        if (!$config) {
+            $config = new Config;
+            $config->item_key = $langTag;
+            $config->item_type = 'array';
+            $config->item_tag = 'languages';
+            $config->is_enable = 1;
+        }
+
+        foreach($request->keys as $key => $langKey) {
+            if (!$defaultKeyNames->contains($langKey)) {
+                $defaultKeys->push([
+                    'name' => $langKey,
+                    'canDelete' => true,
+                ]);
+            }
+            if (!isset($contents[$key]) || !$contents[$key]) {
+                continue;
+            }
+
+            $languages[] = [
+                'name' => $langKey,
+                'content' => $contents[$key],
+            ];
+        }
+
+        $languagePack->item_value = $defaultKeys->toArray();
+        $languagePack->save();
+
+        $config->item_value = $languages;
+        $config->save();
+
+        return $this->updateSuccess();
     }
 
     public function destroy($id, $configId)

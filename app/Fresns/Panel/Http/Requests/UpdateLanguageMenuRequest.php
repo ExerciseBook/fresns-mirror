@@ -2,7 +2,7 @@
 
 namespace App\Fresns\Panel\Http\Requests;
 
-class UpdateMenuLanguageRequest extends FormRequest
+class UpdateLanguageMenuRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
