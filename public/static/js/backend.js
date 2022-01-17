@@ -534,3 +534,38 @@ $('.wallet-modal').on('show.bs.modal', function(e) {
   }
   $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
 });
+
+//expend-edit-modal
+$('.expend-edit-modal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget);
+  let params = button.data('params');
+
+  if (!params) {
+    return;
+  }
+  $(this).find('input[name=rank_num]').val(params.rank_num);
+  $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
+  $(this).find('input[name=parameter]').val(params.parameter);
+  $(this).find('input[name=editor_number]').val(params.editor_number);
+  if(params.member_roles){
+	with (document.getElementById('member_roles')) {
+	    for (var i=0; i<options.length; i++) {
+	        options[i].selected = (','+params.member_roles+',').indexOf(','+options[i].value+',')>-1;
+	    }
+	}
+  }
+  scene = params.scene.split(",");
+  for (var i=0; i<scene.length; i++) {
+	if(scene[i] == 1){
+ 		$("#inlineCheckbox1").attr("checked","checked");
+	}
+	if(scene[i] == 2){
+ 		$("#inlineCheckbox2").attr("checked","checked");
+	}
+  }
+
+  if (params.name) {
+    $(this).find('.name-button').text(params.name);
+  }
+  $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+});
