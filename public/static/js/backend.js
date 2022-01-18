@@ -543,6 +543,8 @@ $('.expend-edit-modal').on('show.bs.modal', function(e) {
   if (!params) {
     return;
   }
+  $("#inlineCheckbox1").removeAttr("checked");
+  $("#inlineCheckbox2").removeAttr("checked");
   $(this).find('input[name=rank_num]').val(params.rank_num);
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
   $(this).find('input[name=parameter]').val(params.parameter);
@@ -561,6 +563,85 @@ $('.expend-edit-modal').on('show.bs.modal', function(e) {
 	}
 	if(scene[i] == 2){
  		$("#inlineCheckbox2").attr("checked","checked");
+	}
+  }
+
+  if (params.name) {
+    $(this).find('.name-button').text(params.name);
+  }
+  $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+});
+
+
+
+//expend-manage-modal
+$('.expend-manage-modal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget);
+  let params = button.data('params');
+
+  if (!params) {
+    return;
+  }
+  	$("#inlineCheckbox1").removeAttr("checked");
+	$("#inlineCheckbox2").removeAttr("checked");
+	$("#inlineCheckbox3").removeAttr("checked");
+
+  console.log(params);
+  $(this).find('input[name=rank_num]').val(params.rank_num);
+  $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
+  $(this).find('input[name=parameter]').val(params.parameter);
+  if(params.member_roles){
+	with (document.getElementById('member_roles')) {
+	    for (var i=0; i<options.length; i++) {
+	        options[i].selected = (','+params.member_roles+',').indexOf(','+options[i].value+',')>-1;
+	    }
+	}
+  }
+  scene = params.scene.split(",");
+  for (var i=0; i<scene.length; i++) {
+	if(scene[i] == 1){
+ 		$("#inlineCheckbox1").attr("checked","checked");
+	}
+	if(scene[i] == 2){
+ 		$("#inlineCheckbox2").attr("checked","checked");
+	}
+	if(scene[i] == 3){
+ 		$("#inlineCheckbox3").attr("checked","checked");
+	}
+  }
+
+  if (params.name) {
+    $(this).find('.name-button').text(params.name);
+  }
+  $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+
+  $(this).find('input:radio[name=is_group_admin][value="'+params.is_group_admin+'"]').prop('checked', true).click();
+
+	if(params.is_group_admin == 1){
+		$("#usage_setting").addClass("show");
+	}else{
+		$("#usage_setting").removeClass("show");
+	}
+});
+
+
+//expend-profile-modal
+$('.expend-profile-modal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget);
+  let params = button.data('params');
+
+  if (!params) {
+    return;
+  }
+  console.log(params);
+  $(this).find('input[name=rank_num]').val(params.rank_num);
+  $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
+  $(this).find('input[name=parameter]').val(params.parameter);
+  if(params.member_roles){
+	with (document.getElementById('member_roles')) {
+	    for (var i=0; i<options.length; i++) {
+	        options[i].selected = (','+params.member_roles+',').indexOf(','+options[i].value+',')>-1;
+	    }
 	}
   }
 
