@@ -462,10 +462,6 @@ $('.update-config').change(function() {
 $('#menuEdit').on('show.bs.modal', function(e) {
   let button = $(e.relatedTarget),
     isEnable = button.data('is_enable'),
-    nameLanguages = button.data('name_languages'),
-    titleLanguages = button.data('title_languages'),
-    descriptionLanguages = button.data('description_languages'),
-    keywordsLanguages = button.data('keywords_languages');
     noConfig = button.data('no_config');
     action = button.data('action');
     config = button.data('config');
@@ -479,18 +475,6 @@ $('#menuEdit').on('show.bs.modal', function(e) {
   $(this).find('form').attr('action', action);
   $(this).find('textarea[name=config]').val(JSON.stringify(config));
   $(this).find('input:radio[name=is_enable][value="'+isEnable+'"]').prop('checked', true);
-
-  $(this).find('.name-lang').data('languages', nameLanguages)
-  $(this).find('.name-lang').data('action', button.data('name_action'))
-
-  $(this).find('.title-lang').data('languages', titleLanguages)
-  $(this).find('.title-lang').data('action', button.data('title_action'))
-
-  $(this).find('.description-lang').data('languages', descriptionLanguages)
-  $(this).find('.description-lang').data('action', button.data('description_action'))
-
-  $(this).find('.keywords-lang').data('languages', keywordsLanguages)
-  $(this).find('.keywords-lang').data('action', button.data('keywords_action'))
 });
 
 $('#menuLangModal').on('shown.bs.modal', function (e) {
@@ -659,7 +643,6 @@ $('.expend-feature-modal').on('show.bs.modal', function(e) {
   if (!params) {
     return;
   }
-  console.log(params);
   $(this).find('input[name=rank_num]').val(params.rank_num);
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
   $(this).find('input[name=parameter]').val(params.parameter);
