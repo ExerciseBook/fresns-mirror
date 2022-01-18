@@ -650,3 +650,29 @@ $('.expend-profile-modal').on('show.bs.modal', function(e) {
   }
   $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
 });
+
+//expend-feature-modal
+$('.expend-feature-modal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget);
+  let params = button.data('params');
+
+  if (!params) {
+    return;
+  }
+  console.log(params);
+  $(this).find('input[name=rank_num]').val(params.rank_num);
+  $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
+  $(this).find('input[name=parameter]').val(params.parameter);
+  if(params.member_roles){
+	with (document.getElementById('member_roles')) {
+	    for (var i=0; i<options.length; i++) {
+	        options[i].selected = (','+params.member_roles+',').indexOf(','+options[i].value+',')>-1;
+	    }
+	}
+  }
+
+  if (params.name) {
+    $(this).find('.name-button').text(params.name);
+  }
+  $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+});
