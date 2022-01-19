@@ -22,22 +22,29 @@
 </div>
 <div class="row mb-3">
 	<div class="col-lg-8">
+
+		<form action="" method="get">
+		  @csrf
 		<div class="input-group">
 			<span class="input-group-text">小组筛选</span>
-			<select class="form-select">
-				<option selected>父级小组</option>
-				<option value="1">One</option>
-				<option value="2">Two</option>
-				<option value="3">Three</option>
+			<select class="form-select" id="search_group_id">
+				<option>父级小组</option>
+				@foreach($groups as $group)
+				<option @if($groupSelect && $groupSelect->parent_id == $group->id) selected @endif value="{{ $group->id }}">{{ $group->name }}</option>
+				@endforeach
 			</select>
-			<select class="form-select">
-				<option selected>小组</option>
-				<option value="1">One</option>
-				<option value="2">Two</option>
-				<option value="3">Three</option>
+
+			<select  class="form-select groupallsearch" name="group_id" >
+				<option value="">选择小组</option>
+				@foreach($groups as $group)
+					@foreach($group->groups as $res)
+					 <option @if($groupId == $res->id) selected  @else  style="display:none;" @endif class="childsearch{{$group->id}} alloption" value="{{ $res->id }}">{{ $res->name }}</option>
+					@endforeach
+				@endforeach
 			</select>
-			<button class="btn btn-outline-secondary" type="button">确认</button>
+			<button class="btn btn-outline-secondary" type="submit">确认</button>
 		</div>
+	</form>
 	</div>
 	<div class="col-lg-6">
 	</div>

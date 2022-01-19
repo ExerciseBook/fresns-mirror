@@ -677,10 +677,10 @@ $('#search_group_id').on('change',function(){
 	$('.groupallsearch option').each(function(){
 		$(this).prop("selected",'');
 	});
+	$('.alloption').css('display','none');
 	let search_group_id = $('#search_group_id option:selected').val();
-	$('.groupallsearch').css('display','none');
 	if(search_group_id){
-		$('#childsearch'+search_group_id).removeAttr('style');
+		$('.childsearch'+search_group_id).removeAttr('style');
 	}
 });
 

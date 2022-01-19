@@ -12,25 +12,28 @@ use App\Models\Group;
 
 class ExpandGroupController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $plugins = Plugin::all();
 
         $plugins = $plugins->filter(function ($plugin) {
             return in_array('pay', $plugin->scene);
         });
-
-        $pluginUsages = PluginUsage::where('type', 6)
-            ->with('plugin', 'names', 'group')
-            ->paginate();
+        $groupId = $request->get('group_id')??0;
+        $pluginUsages = PluginUsage::where('type', 6);
+        if ($groupId) {
+            $pluginUsages = $pluginUsages->where('group_id', $groupId);
+        }
+        $pluginUsages = $pluginUsages->with('plugin', 'names', 'group')->paginate();
 
         $memberRoles = MemberRole::all();
 
         $groups = Group::where('parent_id', 0)
             ->with('groups')
             ->get();
+        $groupSelect = Group::find($groupId);
 
-        return view('panel::expand.group', compact('pluginUsages', 'plugins', 'memberRoles', 'groups'));
+        return view('panel::expand.group', compact('pluginUsages', 'plugins', 'memberRoles', 'groups', 'groupId', 'groupSelect'));
     }
 
     public function store(Request $request)
@@ -44,7 +47,7 @@ class ExpandGroupController extends Controller
         $pluginUsage->rank_num = $request->rank_num;
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):$pluginUsage->member_roles;
         $groupId = implode(',', array_filter($request->group_id));
-        $pluginUsage->group_id = $groupId?:$request->parent_group_id;
+        $pluginUsage->group_id = $groupId?:0;
         $pluginUsage->save();
 
         if ($request->update_name) {
@@ -88,7 +91,7 @@ class ExpandGroupController extends Controller
         $pluginUsage->rank_num = $request->rank_num;
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):$pluginUsage->member_roles;
         $groupId = implode(',', array_filter($request->group_id));
-        $pluginUsage->group_id = $groupId?:$request->parent_group_id;
+        $pluginUsage->group_id = $groupId?:0;
         $pluginUsage->save();
 
         if ($request->update_name) {
