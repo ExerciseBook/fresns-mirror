@@ -17,4 +17,9 @@ class PluginUsage extends Model
                     ->where('table_field', 'name')
                     ->where('table_name', 'plugin_usages');
     }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'group_id', 'id');
+    }
 }

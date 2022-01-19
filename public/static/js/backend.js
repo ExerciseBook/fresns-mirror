@@ -617,7 +617,6 @@ $('.expend-profile-modal').on('show.bs.modal', function(e) {
   if (!params) {
     return;
   }
-  console.log(params);
   $(this).find('input[name=rank_num]').val(params.rank_num);
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
   $(this).find('input[name=parameter]').val(params.parameter);
@@ -658,4 +657,82 @@ $('.expend-feature-modal').on('show.bs.modal', function(e) {
     $(this).find('.name-button').text(params.name);
   }
   $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+});
+
+
+
+$('#parent_group_id').on('change',function(){
+	$('.groupall option').each(function(){
+		$(this).prop("selected",'');
+	});
+	let parent_group_id = $('#parent_group_id option:selected').val();
+	$('.groupall').css('display','none');
+	if(parent_group_id){
+		$('#child'+parent_group_id).removeAttr('style');
+	}
+});
+
+
+$('#search_group_id').on('change',function(){
+	$('.groupallsearch option').each(function(){
+		$(this).prop("selected",'');
+	});
+	let search_group_id = $('#search_group_id option:selected').val();
+	$('.groupallsearch').css('display','none');
+	if(search_group_id){
+		$('#childsearch'+search_group_id).removeAttr('style');
+	}
+});
+
+
+
+//expend-group-modal
+$('.expend-group-modal').on('show.bs.modal', function(e) {
+	let button = $(e.relatedTarget);
+	let params = button.data('params');
+	if (!params) {
+		return;
+	}
+
+	$('.groupall').css('display','none');
+	$(".groupall").prop("checked",'');
+
+	var parent_id ='';
+	var flag = false;
+	$('#selectGroup option').each(function(){
+		if( $(this).val() == params.group_id){
+			parent_id = $(this).parent().data('parent-id');
+			$('#child'+parent_id).removeAttr('style');
+			$('#child'+parent_id).val(params.group_id);
+			if(parent_id){
+				flag = true;
+			}
+
+		}
+	});
+	console.log(params.group_id);
+	if(parent_id){
+		$(this).find('select[name=parent_group_id]').val(parent_id);
+	}
+	if(!flag){
+		 $('#parent_group_id').val(params.group_id);
+	}
+
+
+	$(this).find('input[name=rank_num]').val(params.rank_num);
+	$(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
+	$(this).find('input[name=parameter]').val(params.parameter);
+
+	if(params.member_roles){
+		with (document.getElementById('member_roles')) {
+		for (var i=0; i<options.length; i++) {
+			options[i].selected = (','+params.member_roles+',').indexOf(','+options[i].value+',')>-1;
+			}
+		}
+	}
+
+	if (params.name) {
+		$(this).find('.name-button').text(params.name);
+	}
+	$(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
 });
