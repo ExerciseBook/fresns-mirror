@@ -736,3 +736,11 @@ $('.expend-group-modal').on('show.bs.modal', function(e) {
 	}
 	$(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
 });
+
+//upload file change
+$(".infoli li").click(function() {
+	let inputname = $(this).data('name');
+	$('#showIcon').text($(this).text());
+	$("#showIcon").siblings('input').css('display','none');
+	$("."+inputname).removeAttr('style');
+});

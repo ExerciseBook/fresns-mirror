@@ -114,7 +114,15 @@
 				<div class="mb-3 row">
 					<label class="col-sm-3 col-form-label">显示图标</label>
 					<div class="col-sm-9">
-						<input type="file" class="form-control" id="inputGroupFile01">
+						<div class="input-group">
+							<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="showIcon">上传图片</button>
+							<ul class="dropdown-menu infoli">
+								<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+								<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+							</ul>
+							<input type="file" class="form-control inputFile" name="file">
+							<input type="text" style="display:none;" class="form-control inputUrl" name="icon_file_url">
+						</div>
 					</div>
 				</div>
 				<div class="mb-3 row">
