@@ -60,7 +60,8 @@
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasEmoji"
                   data-action="{{ route('panel.emojis.store')}}"
-                  data-emojis={{ $group->emojis->toJson() }}
+                  data-emojis="{{ $group->emojis->toJson() }}"
+				  data-parent_id="{{ $group->id }}"
                   aria-controls="offcanvasEmoji">配置表情图</button>
                 <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
               </form>
@@ -93,7 +94,15 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">表情组图标</label>
               <div class="col-sm-9">
-                <input type="file" class="form-control" id="inputGroupFile01">
+				  <div class="input-group">
+  				  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="showIcon">上传图片</button>
+  				  <ul class="dropdown-menu infoli">
+  					  <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+  					  <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+  				  </ul>
+  				  <input type="file" class="form-control inputFile" name="file">
+  				  <input type="text" style="display:none;" class="form-control inputUrl" name="icon_file_url">
+  			  </div>
               </div>
             </div>
             <div class="mb-3 row">
@@ -157,7 +166,7 @@
                     <?php
                       $langName = $lang['langName'];
                       if ($lang['areaCode']) {
-                        $langName .= '('. optional($areaCodes->where('code', $lang['areaCode'])->first())['localName'] .')';
+                          $langName .= '('. optional($areaCodes->where('code', $lang['areaCode'])->first())['localName'] .')';
                       }
                     ?>
                   <tr>
@@ -181,11 +190,15 @@
   </form>
 
 
-
   <!-- Offcanvas -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasEmoji" aria-labelledby="offcanvasEmojiLabel">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasEmojiLabel">表情管理<button class="btn btn-info btn-sm ms-3" type="button" data-bs-toggle="modal" data-bs-target="#emojiModal"><i class="bi bi-plus-circle-dotted"></i> 新增表情图</button></h5>
+      <h5 class="offcanvas-title" id="offcanvasEmojiLabel">表情管理
+		  <button class="btn btn-info btn-sm ms-3" type="button"
+		  data-bs-toggle="modal"
+		  data-parent_id=""
+		  data-bs-target="#emojiModal"><i class="bi bi-plus-circle-dotted"></i> 新增表情图</button>
+	  </h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
@@ -216,9 +229,24 @@
       <td><input type="number" name="rank_num" class="form-control input-number" value="1"></td>
       <td><img class="emoji-img" src="" width="28" height="28"></td>
       <td>[<span class="emoji-code"></span>]</td>
-      <td><div class="form-check form-switch"><input name="is_enable" class="form-check-input" type="checkbox"></div></td>
-      <td><button type="button" class="delete-emoji btn btn-link link-danger ms-1 fresns-link fs-7">删除</button></td>
+      <td>
+		  <form action="" method="post">
+			@csrf
+			@method('put')
+		  <div class="form-check form-switch">
+		  <input name="is_enable" class="form-check-input" type="checkbox"></div>
+		  </form>
+	  </td>
+      <td>
+		  <form action="" method="post">
+			@csrf
+			@method('delete')
+		  <button type="submit" class="delete-emoji btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
+		  </form>
+	  </td>
+
     </tr>
+
   </template>
 
 
@@ -237,20 +265,21 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">顺序</label>
               <div class="col-sm-9">
-                <input type="number" class="form-control input-number">
+                <input type="number" class="form-control input-number" name="rank_num" required>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">表情图</label>
               <div class="col-sm-9">
-                <div class="input-group">
-                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">上传图片</a></li>
-                    <li><a class="dropdown-item" href="#">图片地址</a></li>
-                  </ul>
-                  <input type="file" class="form-control" id="inputGroupFile01">
-                </div>
+				  <div class="input-group">
+  					<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="showIcon1">上传图片</button>
+  					<ul class="dropdown-menu infoli">
+  						<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+  						<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+  					</ul>
+  					<input type="file" class="form-control inputFile" name="file">
+  					<input type="text" style="display:none;" class="form-control inputUrl" name="image_file_url">
+  				</div>
               </div>
             </div>
             <div class="mb-3 row">
@@ -258,7 +287,7 @@
               <div class="col-sm-9">
                 <div class="input-group mb-3">
                   <span class="input-group-text">[</span>
-                  <input type="text" class="form-control">
+                  <input type="text" class="form-control" name="code">
                   <span class="input-group-text">]</span>
                 </div>
               </div>
@@ -267,11 +296,11 @@
               <label class="col-sm-3 col-form-label">是否启用</label>
               <div class="col-sm-9 pt-2">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="emoji_status" id="emoji_status_true" value="true" checked>
+                  <input class="form-check-input" type="radio" name="is_enable" id="emoji_status_true" value="1" checked>
                   <label class="form-check-label" for="emoji_status_true">启用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="emoji_status" id="emoji_status_false" value="false">
+                  <input class="form-check-input" type="radio" name="is_enable" id="emoji_status_false" value="0">
                   <label class="form-check-label" for="emoji_status_false">不启用</label>
                 </div>
               </div>

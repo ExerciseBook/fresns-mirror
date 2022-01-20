@@ -134,26 +134,30 @@
               <label class="col-sm-3 col-form-label">分类图标</label>
               <div class="col-sm-9">
                 <div class="input-group">
-                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">上传图片</a></li>
-                    <li><a class="dropdown-item" href="#">图片地址</a></li>
-                  </ul>
-                  <input type="file" class="form-control" id="inputGroupFile01">
+					<div class="input-group">
+  					  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="showIcon">上传图片</button>
+  					  <ul class="dropdown-menu infoli">
+  						  <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+  						  <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+  					  </ul>
+  					  <input type="file" class="form-control inputFile" name="file">
+  					  <input type="text" style="display:none;" class="form-control inputUrl" name="icon_file_url">
+  				  </div>
                 </div>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">分类条幅</label>
               <div class="col-sm-9">
-                <div class="input-group">
-                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">上传图片</a></li>
-                    <li><a class="dropdown-item" href="#">图片地址</a></li>
-                  </ul>
-                  <input type="file" class="form-control" id="inputGroupFile01">
-                </div>
+				  <div class="input-group">
+  					<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="showIcon">上传图片</button>
+  					<ul class="dropdown-menu infoli">
+  						<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+  						<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+  					</ul>
+  					<input type="file" class="form-control inputFile" name="file">
+  					<input type="text" style="display:none;" class="form-control inputUrl" name="icon_file_url">
+  				</div>
               </div>
             </div>
             <div class="mb-3 row">
@@ -221,27 +225,29 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-md-2 col-form-label">小组图标</label>
               <div class="col-sm-9 col-md-10">
-                <div class="input-group">
-                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">上传图片</a></li>
-                    <li><a class="dropdown-item" href="#">图片地址</a></li>
-                  </ul>
-                  <input type="file" class="form-control" id="inputGroupFile01">
-                </div>
+				  <div class="input-group">
+  					<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="showIcon">上传图片</button>
+  					<ul class="dropdown-menu infoli">
+  						<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+  						<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+  					</ul>
+  					<input type="file" class="form-control inputFile" name="file">
+  					<input type="text" style="display:none;" class="form-control inputUrl" name="icon_file_url">
+  				</div>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-md-2 col-form-label">小组条幅</label>
               <div class="col-sm-9 col-md-10">
-                <div class="input-group">
-                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">上传图片</a></li>
-                    <li><a class="dropdown-item" href="#">图片地址</a></li>
-                  </ul>
-                  <input type="file" class="form-control" id="inputGroupFile01">
-                </div>
+				  <div class="input-group">
+  					<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="showIcon">上传图片</button>
+  					<ul class="dropdown-menu infoli">
+  						<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+  						<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+  					</ul>
+  					<input type="file" class="form-control inputFile" name="file">
+  					<input type="text" style="display:none;" class="form-control inputUrl" name="icon_file_url">
+  				</div>
               </div>
             </div>
             <div class="mb-3 row">

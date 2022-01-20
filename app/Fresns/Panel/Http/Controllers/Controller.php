@@ -21,7 +21,7 @@ class Controller extends BaseController
 
         try {
             // 默认语言
-            $defaultLanguageConfig = Config::where('item_key','default_language')->first();
+            $defaultLanguageConfig = Config::where('item_key', 'default_language')->first();
 
             $defaultLanguage = $defaultLanguageConfig ? $defaultLanguageConfig->item_value : 'zh-hans';
             $this->defaultLanguage = $defaultLanguage;
@@ -36,7 +36,8 @@ class Controller extends BaseController
             $areaCodeConfig = Config::where('item_key', 'area_codes')->first();
             $areaCodes = $areaCodeConfig ? $areaCodeConfig->item_value : [];
             View::share('areaCodes', collect($areaCodes));
-        } catch(\Exception $e) {}
+        } catch (\Exception $e) {
+        }
     }
 
     public function createSuccess()

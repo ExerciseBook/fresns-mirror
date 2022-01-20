@@ -306,23 +306,38 @@ $('#emojiGroupCreateModal').on('show.bs.modal', function(e) {
 $('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
   let button = $(e.relatedTarget);
   let emojis = button.data('emojis');
+  let parent_id = button.data('parent_id');
   $('#emojiList').empty();
-
+  $('#offcanvasEmojiLabel button').attr('data-parent_id',parent_id)
   if (!emojis) {
     return;
   }
-
   let template = $('#emojiData').contents();
+
   emojis.map((emoji) => {
     let emojiTemplate = template.clone();
+	let href ="/panel/operation/emojis/"+emoji.id
+	emojiTemplate.find('form').attr('action', href);
     emojiTemplate.find('input[name=rank_num]').val(emoji.rank_num);
     emojiTemplate.find('.emoji-img').attr('src', emoji.image_file_url);
     emojiTemplate.find('.emoji-code').html(emoji.code);
+
     if (emoji.is_enable) {
       emojiTemplate.find('input[name=is_enable]').attr('checked', 'checked');
     }
     $('#emojiList').append(emojiTemplate);
   });
+});
+
+$('#offcanvasEmoji').on('hidden.bs.offcanvas', function(e) {
+ location.reload();
+});
+
+$('#emojiModal').on('show.bs.modal', function(e) {
+let button = $(e.relatedTarget);
+ console.log(button);
+  let parent_id = button.data('parent_id');
+   $(this).find('input[name=emoji_group_id]').val(parent_id);
 });
 
 
@@ -742,5 +757,7 @@ $(".infoli li").click(function() {
 	let inputname = $(this).data('name');
 	$('#showIcon').text($(this).text());
 	$("#showIcon").siblings('input').css('display','none');
+	$('#showIcon1').text($(this).text());
+	$("#showIcon1").siblings('input').css('display','none');
 	$("."+inputname).removeAttr('style');
 });
