@@ -2,9 +2,9 @@
 
 <p align="center">
 <img src="https://img.shields.io/badge/Fresns-1.x-yellow" alt="Fresns">
-<img src="https://img.shields.io/badge/PHP-%5E8.0-blue" alt="PHP">
+<img src="https://img.shields.io/badge/PHP-%5E7.4%7C%5E8.0-blue" alt="PHP">
 <img src="https://img.shields.io/badge/MySQL-%5E5.7%7C%5E8.0-orange" alt="MySQL">
-<img src="https://img.shields.io/badge/License-Apache--2.0-green" alt="License">
+<img src="https://img.shields.io/badge/License-GPL--3.0-green" alt="License">
 </p>
 
 ## 介绍
@@ -12,9 +12,9 @@
 Fresns 是一款免费开源的社交网络服务软件，专为跨平台而打造的通用型社区产品，支持灵活多样的内容形态，可以满足多种运营场景，符合时代潮流，更开放且更易于二次开发。
 
 - [点击了解产品 16 个功能特色](https://fresns.cn/guide/features.html)
-- 使用者请阅读[安装教程](https://fresns.cn/guide/install.html)和[运营文档](https://fresns.cn/operating/)；
-- 扩展插件开发者请阅读[扩展文档](https://fresns.cn/extensions/)和[数据字典](https://fresns.cn/database/)；
-- 客户端开发者（网站端、小程序、App）请阅读 [API 文档](https://fresns.cn/api/)。
+- 使用者请阅读[安装教程](https://fresns.cn/guide/install.html)和[运营文档](https://fresns.cn/guide/operating.html)
+- 扩展插件开发者请阅读[扩展文档](https://fresns.cn/extensions/)和[数据字典](https://fresns.cn/database/)
+- 客户端开发者（网站端、小程序、App）请阅读 [API 文档](https://fresns.cn/api/)
 
 ## 免责申明
 
@@ -24,8 +24,9 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 
 | 框架 | 版本 | 用途 |
 | --- | --- | --- |
-| [Composer](https://github.com/composer/composer) | 2.2.3 | 软体包管理系统 |
-| [Laravel Framework](https://github.com/laravel/framework) | 8.78.0 | 主程序框架 |
+| [Composer](https://github.com/composer/composer) | 2.2.5 | 软体包管理系统 |
+| [Laravel Framework](https://github.com/laravel/framework) | 8.80.0 | 主程序框架 |
+| [Laravel Lang](https://github.com/Laravel-Lang/lang) | 10.3.0 | 框架语言文档 |
 | [Bootstrap](https://getbootstrap.com/) | 5.1.3 | 内置前端框架 |
 | [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.7.2 | 内置前端图标字体库 |
 | [jQuery](https://github.com/jquery/jquery) | 3.6.0 | 内置 JS 库 |
@@ -79,4 +80,4 @@ Fresns 的开源社区正在急速增长中，如果你认可我们的开源软�
 
 ## 许可协议
 
-Fresns 是根据 [Apache-2.0](https://opensource.org/licenses/Apache-2.0) 授权的开源软件。
+Fresns 主程序是根据 [GPL-3.0](https://github.com/fresns/fresns/blob/main/LICENSE) 授权的开源软件。
