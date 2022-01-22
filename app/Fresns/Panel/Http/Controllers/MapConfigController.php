@@ -49,7 +49,6 @@ class MapConfigController extends Controller
         $mapConfig = PluginUsage::where('parameter', $request->parameter)
             ->where('type', 9)
             ->first();
-
         if ($mapConfig) {
             return back()->with('failure', __('panel::panel.mapExists'));
         }
@@ -57,6 +56,7 @@ class MapConfigController extends Controller
         $mapConfig = new PluginUsage;
         $mapConfig->plugin_unikey = $request->plugin_unikey;
         $mapConfig->is_enable = $request->is_enable;
+		$mapConfig->icon_file_url = $request->icon_file_url;
         $mapConfig->rank_num = $request->rank_num;
         $mapConfig->parameter = $request->parameter;
         $mapConfig->type = 9;
@@ -116,6 +116,7 @@ class MapConfigController extends Controller
         $mapConfig->is_enable = $request->is_enable;
         $mapConfig->rank_num = $request->rank_num;
         $mapConfig->parameter = $request->parameter;
+		$mapConfig->icon_file_url = $request->icon_file_url;
         $mapConfig->type = 9;
         $mapConfig->name = $request->languages[$this->defaultLanguage] ?? (current(array_filter($request->languages)) ?: '');
         $mapConfig->save();

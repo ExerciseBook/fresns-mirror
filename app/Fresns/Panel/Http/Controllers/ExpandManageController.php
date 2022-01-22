@@ -41,6 +41,7 @@ class ExpandManageController extends Controller
         $pluginUsage->is_group_admin = $request->is_group_admin;
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):$pluginUsage->member_roles;
         $pluginUsage->scene = $request->scene?implode(',', $request->scene):'';
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
         if ($request->update_name) {
@@ -85,6 +86,7 @@ class ExpandManageController extends Controller
         $pluginUsage->is_group_admin = $request->is_group_admin;
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):$pluginUsage->member_roles;
         $pluginUsage->scene = $request->scene?implode(',', $request->scene):'';
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
         if ($request->update_name) {
@@ -116,8 +118,11 @@ class ExpandManageController extends Controller
         return $this->updateSuccess();
     }
 
-    public function destroy()
+    public function destroy($id)
     {
+        $pluginUsage = PluginUsage::findOrFail($id);
+        $pluginUsage->delete();
+
         return $this->deleteSuccess();
     }
 

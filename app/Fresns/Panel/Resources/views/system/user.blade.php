@@ -121,40 +121,59 @@
       </div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 注册后默认用户角色</div>
     </div>
-    <div class="row mb-2">
-      <label class="col-lg-2 col-form-label text-lg-end"></label>
-      <div class="col-lg-6">
-        <div class="input-group">
-          <label class="input-group-text">默认用户头像</label>
-          <input type="file" class="form-control" id="default_avatar">
-          <button class="btn btn-outline-secondary" type="button">查看</button>
-          </select>
-        </div>
-      </div>
-      <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 用户未设置头像时的默认头像图</div>
-    </div>
-    <div class="row mb-2">
-      <label class="col-lg-2 col-form-label text-lg-end"></label>
-      <div class="col-lg-6">
-        <div class="input-group">
-          <label class="input-group-text">匿名用户头像</label>
-          <input type="file" class="form-control" id="anonymous_avatar">
-          <button class="btn btn-outline-secondary" type="button">查看</button>
-        </div>
-      </div>
-      <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 内容发表匿名者的头像图</div>
-    </div>
-    <div class="row mb-4">
-      <label class="col-lg-2 col-form-label text-lg-end"></label>
-      <div class="col-lg-6">
-        <div class="input-group">
-          <label class="input-group-text">已停用用户头像</label>
-          <input type="file" class="form-control" id="deactivate_avatar">
-          <button class="btn btn-outline-secondary" type="button">查看</button>
-        </div>
-      </div>
-      <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 用户注销删除后的头像图</div>
-    </div>
+
+	<div class="row mb-2">
+		<label class="col-lg-2 col-form-label text-lg-end"></label>
+		<div class="col-lg-6">
+			<div class="input-group">
+				<label class="input-group-text">默认用户头像</label>
+				<button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">@if($params['default_avatar']) 图片地址 @else 上传图片 @endif</button>
+				<ul class="dropdown-menu selectImageTyle">
+					<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+					<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+				</ul>
+				<input type="file" class="form-control inputFile" name="default_avatar_file" @if($params['default_avatar']) style="display:none;" @endif>
+			 <input type="text" class="form-control inputUrl" name="default_avatar" value="{{ $params['default_avatar'] }}" @if(!$params['default_avatar']) style="display:none;" @endif>
+				<button class="btn btn-outline-secondary" type="button">查看</button>
+			</div>
+		</div>
+		<div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 用户未设置头像时的默认头像图</div>
+	</div>
+	<div class="row mb-2">
+		<label class="col-lg-2 col-form-label text-lg-end"></label>
+		<div class="col-lg-6">
+			<div class="input-group">
+				<label class="input-group-text">匿名用户头像</label>
+				<button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">@if($params['anonymous_avatar']) 图片地址 @else 上传图片 @endif</button>
+				<ul class="dropdown-menu selectImageTyle">
+					<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+					<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+				</ul>
+				<input type="file" class="form-control inputFile" name="default_avatar_file" @if($params['anonymous_avatar']) style="display:none;" @endif>
+			 <input type="text" class="form-control inputUrl" name="anonymous_avatar" value="{{ $params['anonymous_avatar'] }}" @if(!$params['anonymous_avatar']) style="display:none;" @endif>
+				<button class="btn btn-outline-secondary" type="button">查看</button>
+
+			</div>
+		</div>
+		<div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 内容发表匿名者的头像图</div>
+	</div>
+	<div class="row mb-4">
+		<label class="col-lg-2 col-form-label text-lg-end"></label>
+		<div class="col-lg-6">
+			<div class="input-group">
+				<label class="input-group-text">已停用用户头像</label>
+				<button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">@if($params['deactivate_avatar']) 图片地址 @else 上传图片 @endif</button>
+				<ul class="dropdown-menu selectImageTyle">
+					<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+					<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+				</ul>
+				<input type="file" class="form-control inputFile" name="default_avatar_file" @if($params['deactivate_avatar']) style="display:none;" @endif>
+			 <input type="text" class="form-control inputUrl" name="deactivate_avatar" value="{{ $params['deactivate_avatar'] }}" @if(!$params['deactivate_avatar']) style="display:none;" @endif>
+				<button class="btn btn-outline-secondary" type="button">查看</button>
+			</div>
+		</div>
+		<div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 用户注销或停用后的头像图</div>
+	</div>
 
     <!--密码设置-->
     <div class="row mb-4">

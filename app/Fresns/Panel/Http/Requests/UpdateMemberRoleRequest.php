@@ -15,8 +15,8 @@ class UpdateMemberRoleRequest extends FormRequest
     {
         return [
             'type' => 'required|int',
-            'is_display_name' => 'required|int',
-            'is_display_name' => 'required|int',
+            // 'is_display_name' => 'required|int',
+            // 'is_display_name' => 'required|int',
             'nickname_color' => 'string',
             'rank_num' => 'required|string',
         ];

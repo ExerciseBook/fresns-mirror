@@ -42,18 +42,30 @@
 
     <div class="row mb-4">
       <label for="site_img" class="col-lg-2 col-form-label text-lg-end">站点标志：</label>
-      <div class="col-lg-6">
-        <div class="input-group mb-1">
-          <label class="input-group-text font-monospace" for="ICON">ICON</label>
-          <input type="file" class="form-control" id="site_icon">
-          <button class="btn btn-outline-secondary" type="button">查看</button>
-        </div>
-        <div class="input-group">
-          <label class="input-group-text font-monospace" for="LOGO">LOGO</label>
-          <input type="file" class="form-control" id="site_logo">
-          <button class="btn btn-outline-secondary" type="button">查看</button>
-        </div>
-      </div>
+	  <div class="col-lg-6">
+		  <div class="input-group mb-1">
+			  <label class="input-group-text font-monospace" for="ICON">ICON</label>
+			  <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">@if($params['site_icon']) 图片地址 @else 上传图片 @endif</button>
+			  <ul class="dropdown-menu selectImageTyle">
+				  <li  data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+				  <li  data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+			  </ul>
+			  <input type="file" class="form-control inputFile" name="site_icon_file" @if($params['site_icon']) style="display:none;" @endif>
+			    <input type="text" class="form-control inputUrl" name="site_icon" value="{{ $params['site_icon'] }}" @if(!$params['site_icon']) style="display:none;" @endif>
+			  <button class="btn btn-outline-secondary" type="button">查看</button>
+		  </div>
+		  <div class="input-group">
+			  <label class="input-group-text font-monospace" for="LOGO">LOGO</label>
+			  <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">@if($params['site_logo']) 图片地址 @else 上传图片 @endif</button>
+			  <ul class="dropdown-menu selectImageTyle">
+				  <li  data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+				  <li  data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+			  </ul>
+			  <input type="file" class="form-control inputFile" name="site_logo_file" @if($params['site_logo']) style="display:none;" @endif>
+			  <input type="text" class="form-control inputUrl" name="site_logo" value="{{ $params['site_logo'] }}" @if(!$params['site_logo']) style="display:none;" @endif>
+			  <button class="btn btn-outline-secondary" type="button">查看</button>
+		  </div>
+	  </div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 图片文件，必须配置了<a href="system-storage-image.html">存储设置</a>中的信息才能上传。</div>
     </div>
 

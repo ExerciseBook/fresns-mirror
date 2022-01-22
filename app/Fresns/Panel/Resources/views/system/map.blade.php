@@ -106,7 +106,15 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">显示图标</label>
               <div class="col-sm-9">
-                <input type="file" class="form-control" id="inputGroupFile01">
+				  <div class="input-group">
+  				  <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
+  				  <ul class="dropdown-menu selectImageTyle">
+  					  <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+  					  <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+  				  </ul>
+  				  <input type="file" class="form-control inputFile" name="icon_file_url_file">
+  			   <input type="text" class="form-control inputUrl"     name="icon_file_url" value="" style="display:none;">
+  			  </div>
               </div>
             </div>
             <div class="mb-3 row">
@@ -184,7 +192,7 @@
                     <?php
                       $langName = $lang['langName'];
                       if ($lang['areaCode']) {
-                        $langName .= '('. optional($areaCodes->where('code', $lang['areaCode'])->first())['localName'] .')';
+                          $langName .= '('. optional($areaCodes->where('code', $lang['areaCode'])->first())['localName'] .')';
                       }
                     ?>
                   <tr>

@@ -22,7 +22,7 @@ class EmojiGroupController extends Controller
         $emojiGroup->rank_num = $request->rank_num;
         $emojiGroup->code = $request->code;
         $emojiGroup->is_enable = $request->is_enable;
-        $emojiGroup->image_file_url = '';
+        $emojiGroup->image_file_url = $request->image_file_url;
         $emojiGroup->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $emojiGroup->type = 2;
         $emojiGroup->save();
@@ -59,6 +59,7 @@ class EmojiGroupController extends Controller
         $emojiGroup->rank_num = $request->rank_num;
         $emojiGroup->code = $request->code;
         $emojiGroup->is_enable = $request->is_enable;
+        $emojiGroup->image_file_url = $request->image_file_url;
         $emojiGroup->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $emojiGroup->save();
 

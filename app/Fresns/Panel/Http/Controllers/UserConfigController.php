@@ -20,9 +20,9 @@ class UserConfigController extends Controller
             'multi_member_service',
             'multi_member_roles',
             'default_role',
-            //'default_avatar',
-            //'anonymous_avatar',
-            //'deactivate_avatar',
+            'default_avatar',
+            'anonymous_avatar',
+            'deactivate_avatar',
             'password_length',
             'password_strength',
             'mname_min',
@@ -35,7 +35,7 @@ class UserConfigController extends Controller
         $configs = Config::whereIn('item_key', $configKeys)->get();
 
         $params = [];
-        foreach($configs as $config) {
+        foreach ($configs as $config) {
             $value = $config->item_value;
             if ($config->item_key == 'password_strength') {
                 $value = explode(',', $value);
@@ -52,8 +52,8 @@ class UserConfigController extends Controller
         $plugins = Plugin::all();
 
         $pluginParams = [];
-        foreach($pluginScenes as $scene) {
-            $pluginParams[$scene] = $plugins->filter(function($plugin) use ($scene) {
+        foreach ($pluginScenes as $scene) {
+            $pluginParams[$scene] = $plugins->filter(function ($plugin) use ($scene) {
                 return in_array($scene, $plugin->scene);
             });
         }
@@ -71,9 +71,9 @@ class UserConfigController extends Controller
             'multi_member_service',
             'multi_member_roles',
             'default_role',
-            ////'default_avatar',
-            ////'anonymous_avatar',
-            ////'deactivate_avatar',
+            'default_avatar',
+            'anonymous_avatar',
+            'deactivate_avatar',
             'password_length',
             'password_strength',
             'mname_min',
@@ -84,7 +84,7 @@ class UserConfigController extends Controller
 
         $configs = Config::whereIn('item_key', $configKeys)->get();
 
-        foreach($configKeys as $configKey) {
+        foreach ($configKeys as $configKey) {
             $config = $configs->where('item_key', $configKey)->first();
             if (!$config) {
                 $continue;
@@ -93,10 +93,10 @@ class UserConfigController extends Controller
             if (!$request->has($configKey)) {
                 if ($config->item_type == 'boolean') {
                     $config->item_value = 'false';
-                }  else if ($config->item_type == 'number') {
+                } elseif ($config->item_type == 'number') {
                     $config->item_value = 0;
                 } else {
-                    $config->item_value = NULl;
+                    $config->item_value = null;
                 }
                 $config->save();
                 continue;

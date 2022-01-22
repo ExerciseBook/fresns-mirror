@@ -754,14 +754,14 @@ $('.expend-group-modal').on('show.bs.modal', function(e) {
 });
 
 //upload file change
-$(".infoli li").click(function() {
-	let inputname = $(this).data('name');
-	$('#showIcon').text($(this).text());
-	$("#showIcon").siblings('input').css('display','none');
-	$('#showIcon1').text($(this).text());
-	$("#showIcon1").siblings('input').css('display','none');
-	$("."+inputname).removeAttr('style');
-});
+// $(".infoli li").click(function() {
+// 	let inputname = $(this).data('name');
+// 	$('#showIcon').text($(this).text());
+// 	$("#showIcon").siblings('input').css('display','none');
+// 	$('#showIcon1').text($(this).text());
+// 	$("#showIcon1").siblings('input').css('display','none');
+// 	$("."+inputname).removeAttr('style');
+// });
 
 // explan type edit
 $('#createTypeModal').on('show.bs.modal', function(e) {
@@ -802,4 +802,14 @@ $('#sortNumberModal').on('show.bs.modal', function(e) {
   //params.map(function(param) {
   //})
   console.log(params);
+});
+
+
+//selectImageTyle
+$(".selectImageTyle li").click(function() {
+	let inputname = $(this).data('name');
+	console.log($(this).parent().siblings('.'+inputname));
+	$(this).parent().siblings('.showSelectTypeName').text($(this).text());
+	$(this).parent().siblings('input').css('display','none');
+	$(this).parent().siblings('.'+inputname).removeAttr('style');
 });

@@ -16,6 +16,8 @@ class SiteController extends Controller
             'site_domain',
             'site_name',
             'site_desc',
+            'site_icon',
+            'site_logo',
             'site_copyright',
             'site_copyright_years',
             'default_timezone',
@@ -41,12 +43,12 @@ class SiteController extends Controller
         $languages = Language::ofConfig()->whereIn('table_key', $langKeys)->get();
 
         $params = [];
-        foreach($configs as $config) {
+        foreach ($configs as $config) {
             $params[$config->item_key] = $config->item_value;
         }
 
         $langParams = [];
-        foreach($langKeys as $langKey) {
+        foreach ($langKeys as $langKey) {
             $langParams[$langKey] = $languages->where('table_key', $langKey)->pluck('lang_content', 'lang_tag')->toArray();
         }
 
@@ -58,6 +60,8 @@ class SiteController extends Controller
         $configKeys = [
             'site_domain',
             'site_copyright',
+            'site_icon',
+            'site_logo',
             'site_copyright_years',
             'default_timezone',
             'site_mode',
@@ -74,7 +78,7 @@ class SiteController extends Controller
         //dd($request->all());
         $configs = Config::whereIn('item_key', $configKeys)->get();
 
-        foreach($configKeys as $configKey) {
+        foreach ($configKeys as $configKey) {
             $config = $configs->where('item_key', $configKey)->first();
             if (!$config) {
                 $continue;
@@ -83,10 +87,10 @@ class SiteController extends Controller
             if (!$request->has($configKey)) {
                 if ($config->item_type == 'boolean') {
                     $config->item_value = 'false';
-                }  else if ($config->item_type == 'number') {
+                } elseif ($config->item_type == 'number') {
                     $config->item_value = 0;
                 } else {
-                    $config->item_value = NULl;
+                    $config->item_value = null;
                 }
                 $config->save();
                 continue;

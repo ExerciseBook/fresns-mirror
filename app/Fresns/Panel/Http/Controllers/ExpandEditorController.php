@@ -40,6 +40,7 @@ class ExpandEditorController extends Controller
         $pluginUsage->editor_number = $request->editor_number;
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):'';
         $pluginUsage->scene = $request->scene?implode(',', $request->scene):'';
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
         if ($request->update_name) {
@@ -82,6 +83,7 @@ class ExpandEditorController extends Controller
         $pluginUsage->editor_number = $request->editor_number;
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):'';
         $pluginUsage->scene = $request->scene?implode(',', $request->scene):'';
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
         if ($request->update_name) {
@@ -113,8 +115,11 @@ class ExpandEditorController extends Controller
         return $this->updateSuccess();
     }
 
-    public function destroy()
+    public function destroy($id)
     {
+        $pluginUsage = PluginUsage::findOrFail($id);
+        $pluginUsage->delete();
+
         return $this->deleteSuccess();
     }
 

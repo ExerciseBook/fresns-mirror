@@ -38,6 +38,7 @@ class ExpandFeatureController extends Controller
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rank_num = $request->rank_num;
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):$pluginUsage->member_roles;
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
         if ($request->update_name) {
@@ -81,6 +82,7 @@ class ExpandFeatureController extends Controller
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rank_num = $request->rank_num;
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):$pluginUsage->member_roles;
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
         if ($request->update_name) {
@@ -113,8 +115,11 @@ class ExpandFeatureController extends Controller
         return $this->updateSuccess();
     }
 
-    public function destroy()
+    public function destroy($id)
     {
+        $pluginUsage = PluginUsage::findOrFail($id);
+        $pluginUsage->delete();
+
         return $this->deleteSuccess();
     }
 

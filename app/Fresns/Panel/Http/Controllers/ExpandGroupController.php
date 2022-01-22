@@ -48,6 +48,7 @@ class ExpandGroupController extends Controller
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):$pluginUsage->member_roles;
         $groupId = implode(',', array_filter($request->group_id));
         $pluginUsage->group_id = $groupId?:0;
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
         if ($request->update_name) {
@@ -92,6 +93,7 @@ class ExpandGroupController extends Controller
         $pluginUsage->member_roles = $request->member_roles?implode(',', $request->member_roles):$pluginUsage->member_roles;
         $groupId = implode(',', array_filter($request->group_id));
         $pluginUsage->group_id = $groupId?:0;
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
         if ($request->update_name) {
@@ -122,8 +124,11 @@ class ExpandGroupController extends Controller
         return $this->updateSuccess();
     }
 
-    public function destroy()
+    public function destroy($id)
     {
+        $pluginUsage = PluginUsage::findOrFail($id);
+        $pluginUsage->delete();
+
         return $this->deleteSuccess();
     }
 
