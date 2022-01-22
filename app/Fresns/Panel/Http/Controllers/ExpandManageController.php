@@ -75,10 +75,8 @@ class ExpandManageController extends Controller
 
     public function update($id, Request $request)
     {
-        $pluginUsage = PluginUsage::find($id);
-        if (!$pluginUsage) {
-            return $this->updateSuccess();
-        }
+        $pluginUsage = PluginUsage::findOrFail($id);
+
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
@@ -123,8 +121,12 @@ class ExpandManageController extends Controller
         return $this->deleteSuccess();
     }
 
-    public function updateRank()
+    public function updateRank($id, Request $request)
     {
+        $pluginUsage = PluginUsage::findOrFail($id);
+        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->save();
+
         return $this->updateSuccess();
     }
 }

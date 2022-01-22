@@ -27,8 +27,7 @@ class EmojiGroupController extends Controller
         $emojiGroup->type = 2;
         $emojiGroup->save();
 
-        foreach($request->names as $langTag => $content) {
-
+        foreach ($request->names as $langTag => $content) {
             $language = Language::tableName('emojis')
                 ->where('table_id', $emojiGroup->id)
                 ->where('lang_tag', $langTag)
@@ -36,7 +35,7 @@ class EmojiGroupController extends Controller
 
             if (!$language) {
                 // create but no content
-                if (!$content){
+                if (!$content) {
                     continue;
                 }
                 $language = new Language();
@@ -63,8 +62,7 @@ class EmojiGroupController extends Controller
         $emojiGroup->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $emojiGroup->save();
 
-        foreach($request->names as $langTag => $content) {
-
+        foreach ($request->names as $langTag => $content) {
             $language = Language::tableName('emojis')
                 ->where('table_id', $emojiGroup->id)
                 ->where('lang_tag', $langTag)
@@ -72,7 +70,7 @@ class EmojiGroupController extends Controller
 
             if (!$language) {
                 // create but no content
-                if (!$content){
+                if (!$content) {
                     continue;
                 }
                 $language = new Language();
@@ -95,5 +93,14 @@ class EmojiGroupController extends Controller
         $emojiGroup->delete();
 
         return $this->deleteSuccess();
+    }
+
+    public function updateRank($id, Request $request)
+    {
+        $emoji = Emoji::findOrFail($id);
+        $emoji->rank_num = $request->rank_num;
+        $emoji->save();
+
+        return $this->updateSuccess();
     }
 }

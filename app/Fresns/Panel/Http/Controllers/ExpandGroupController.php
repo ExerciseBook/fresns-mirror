@@ -127,8 +127,12 @@ class ExpandGroupController extends Controller
         return $this->deleteSuccess();
     }
 
-    public function updateRank()
+    public function updateRank($id, Request $request)
     {
+        $pluginUsage = PluginUsage::findOrFail($id);
+        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->save();
+
         return $this->updateSuccess();
     }
 }

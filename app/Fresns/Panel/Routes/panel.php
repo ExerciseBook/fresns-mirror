@@ -167,6 +167,7 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::resource('emojiGroups', EmojiGroupController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);
+		Route::put('emojiGroups/{id}/rank', [EmojiGroupController::class, 'updateRank'])->name('emojiGroups.rank');
 
         // publsh config
         // post
@@ -184,6 +185,7 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::resource('memberRoles', MemberRoleController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);
+		Route::put('memberRoles/{id}/rank', [MemberRoleController::class, 'updateRank'])->name('memberRoles.rank');
 
         Route::resource('groups', GroupController::class)->only([
             'index', 'store', 'update', 'destroy'

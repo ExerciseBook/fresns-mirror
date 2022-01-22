@@ -20,7 +20,8 @@ class MemberRoleController extends Controller
         ];
 
         return view('panel::operation.role', compact(
-            'roles', 'typeLabels'
+            'roles',
+            'typeLabels'
         ));
     }
 
@@ -29,13 +30,12 @@ class MemberRoleController extends Controller
         $memberRole->fill($request->all());
         $memberRole->permission = [];
         if ($request->no_color) {
-            $memberRole->nickname_color = NULL;
+            $memberRole->nickname_color = null;
         }
         $memberRole->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $memberRole->save();
 
-        foreach($request->names as $langTag => $content) {
-
+        foreach ($request->names as $langTag => $content) {
             $language = Language::tableName('member_roles')
                 ->where('table_id', $memberRole->id)
                 ->where('lang_tag', $langTag)
@@ -43,7 +43,7 @@ class MemberRoleController extends Controller
 
             if (!$language) {
                 // create but no content
-                if (!$content){
+                if (!$content) {
                     continue;
                 }
                 $language = new Language();
@@ -66,13 +66,12 @@ class MemberRoleController extends Controller
     {
         $memberRole->update($request->all());
         if ($request->no_color) {
-            $memberRole->nickname_color = NULL;
+            $memberRole->nickname_color = null;
         }
         $memberRole->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $memberRole->save();
 
-        foreach($request->names as $langTag => $content) {
-
+        foreach ($request->names as $langTag => $content) {
             $language = Language::tableName('member_roles')
                 ->where('table_id', $memberRole->id)
                 ->where('lang_tag', $langTag)
@@ -80,7 +79,7 @@ class MemberRoleController extends Controller
 
             if (!$language) {
                 // create but no content
-                if (!$content){
+                if (!$content) {
                     continue;
                 }
                 $language = new Language();
@@ -102,5 +101,15 @@ class MemberRoleController extends Controller
     {
         $memberRole->delete();
         return $this->deleteSuccess();
+    }
+
+
+    public function updateRank($id, Request $request)
+    {
+        $memberRole = MemberRole::findOrFail($id);
+        $memberRole->rank_num = $request->rank_num;
+        $memberRole->save();
+
+        return $this->updateSuccess();
     }
 }

@@ -39,7 +39,7 @@
 		<tbody>
 			@foreach($pluginUsages as $item)
 			<tr>
-				<td><input type="number" class="form-control input-number" value="{{ $item['rank_num']}}"></td>
+				<td><input type="number"  data-action="{{ route('panel.expandManage.rank',$item->id) }}" class="form-control input-number rank-num" value="{{ $item['rank_num']}}"></td>
 				<td>{{ optional($item->plugin)->name }}</td>
 				<td>
 					@if($item->icon_file_url)

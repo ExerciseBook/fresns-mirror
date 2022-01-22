@@ -319,6 +319,7 @@ $('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
 	let href ="/panel/operation/emojis/"+emoji.id
 	emojiTemplate.find('form').attr('action', href);
     emojiTemplate.find('input[name=rank_num]').val(emoji.rank_num);
+	emojiTemplate.find('input[name=rank_num]').attr('data-action',"/panel/operation/emojiGroups/"+emoji.id+'/rank');
     emojiTemplate.find('.emoji-img').attr('src', emoji.image_file_url);
     emojiTemplate.find('.emoji-code').html(emoji.code);
 

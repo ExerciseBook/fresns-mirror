@@ -36,7 +36,7 @@
       <tbody>
         @foreach($groups as $group)
           <tr>
-            <td><input type="number" class="form-control input-number" value="{{ $group->rank_num }}"></td>
+			<td><input type="number"  data-action="{{ route('panel.emojiGroups.rank',$group->id) }}" class="form-control input-number rank-num" value="{{  $group->rank_num}}"></td>
             <td><img src="{{ $group->image_file_url }}" width="24" height="24"> {{ $group->name }}</td>
             <td>{{ $group->emojis->count() }}</td>
             <td>
@@ -226,7 +226,7 @@
 
   <template id="emojiData">
     <tr>
-      <td><input type="number" name="rank_num" class="form-control input-number" value="1"></td>
+	  <td><input type="number" data-action="" name="rank_num" class="form-control input-number rank-num" value="1"></td>
       <td><img class="emoji-img" src="" width="28" height="28"></td>
       <td>[<span class="emoji-code"></span>]</td>
       <td>
