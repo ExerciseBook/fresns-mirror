@@ -6,6 +6,10 @@ use Illuminate\Support\Collection;
 
 class PluginUsage extends Model
 {
+    protected $casts = [
+        'data_sources' => 'json',
+    ];
+
     public function plugin()
     {
         return $this->belongsTo(Plugin::class, 'plugin_unikey', 'unikey');

@@ -762,3 +762,44 @@ $(".infoli li").click(function() {
 	$("#showIcon1").siblings('input').css('display','none');
 	$("."+inputname).removeAttr('style');
 });
+
+// explan type edit
+$('#createTypeModal').on('show.bs.modal', function(e) {
+	let button = $(e.relatedTarget);
+	let params = button.data('params');
+	if (!params) {
+		return;
+	}
+
+  let dataSources = params.data_sources;
+  let postList = dataSources.postLists ? dataSources.postLists.pluginUnikey : null;
+  let postFollow =  dataSources.postFollows ? dataSources.postFollows.pluginUnikey : null;
+  let postNearby =  dataSources.postNearbys ? dataSources.postNearbys.pluginUnikey : null;
+
+  $(this).find('input[name=rank_num]').val(params.rank_num);
+  $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
+  if (postList) {
+    $(this).find('select[name=post_list]').val(postList);
+  }
+  if (postFollow) {
+    $(this).find('select[name=post_follow]').val(postFollow);
+  }
+  if (postNearby) {
+    $(this).find('select[name=post_nearby]').val(postNearby);
+  }
+
+	$(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true);
+});
+
+
+// panel types edit
+$('#sortNumberModal').on('show.bs.modal', function(e) {
+	let button = $(e.relatedTarget);
+	let params = button.data('params');
+
+  //let template = $('#languagePackTemplate')
+
+  //params.map(function(param) {
+  //})
+  console.log(params);
+});

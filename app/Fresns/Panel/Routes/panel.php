@@ -234,6 +234,7 @@ Route::middleware(['panelAuth'])->group(function() {
 		Route::resource('expandType', ExpandTypeController::class)->only([
 			'index', 'store', 'update', 'destroy'
 		]);
+		Route::put('expandType/{id}/dataSources/{key}', [ExpandTypeController::class, 'updateSource'])->name('expandType.source');
 		Route::put('expandType/{id}/rank', [ExpandTypeController::class, 'updateRank'])->name('expandType.rank');
 		Route::put('expandType/{id}/source', [ExpandTypeController::class, 'source'])->name('expandType.source');
 		// set post
