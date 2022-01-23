@@ -12,7 +12,7 @@ const setTimeoutToastHide = () => {
         }, 1500);
     });
 }
-//setTimeoutToastHide();
+setTimeoutToastHide();
 
 // tips
 window.tips = function (message, code = 200) {
@@ -319,7 +319,8 @@ $('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
     let href ="/panel/operation/emojis/"+emoji.id
     emojiTemplate.find('form').attr('action', href);
     emojiTemplate.find('input[name=rank_num]').val(emoji.rank_num);
-    emojiTemplate.find('input[name=rank_num]').attr('data-action',"/panel/operation/emojiGroups/"+emoji.id+'/rank');
+    //todo
+    emojiTemplate.find('input[name=rank_num]').data('action',"/panel/operation/emojiGroups/"+emoji.id+'/rank');
     emojiTemplate.find('.emoji-img').attr('src', emoji.image_file_url);
     emojiTemplate.find('.emoji-code').html(emoji.code);
 
@@ -531,6 +532,66 @@ $('.wallet-modal').on('show.bs.modal', function(e) {
     $(this).find('.name-button').text(params.name);
   }
   $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+});
+
+// group edit
+$('.edit-group-category').click(function() {
+  let action = $(this).data('action');
+  let params = $(this).data('params');
+
+  console.log($(this).parent('form'))
+  $('#createGroupModal').parent('form').find('input[name=_method]').val(params ? 'put' : 'post');
+  $('#createGroupModal').parent('form').attr('action', action);
+  $('#createGroupModal').parent('form').trigger("reset");
+
+  if (params) {
+    $('#createGroupModal').find('input[name=rank_num]').val(params.rank_num)
+    $('#createGroupModal').find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true);
+	  $(".showSelectTypeName").text('图片地址');
+	  $(".inputFile").css('display','none');
+	  $('#createGroupModal').find('input[name=cover_file_url]').val(params.cover_file_url);
+	  $('#createGroupModal').find('input[name=cover_file_url]').css('display','block');
+	  $('#createGroupModal').find('input[name=banner_file_url]').val(params.banner_file_url);
+	  $('#createGroupModal').find('input[name=banner_file_url]').css('display','block');
+
+    let names = $(this).data('names');
+    let descriptions = $(this).data('descriptions');
+    if ( names ) {
+      names.map(name => {
+        $('#createGroupModal').parent('form').find("input[name='names["+name.lang_tag+"]'").val(name.lang_content);
+      });
+    }
+    if ( descriptions) {
+      descriptions.map(description=> {
+        $('#createGroupModal').parent('form').find("input[name='langdesc["+description.lang_tag+"]'").val(description.lang_content);
+      });
+    }
+  }
+  $('#createGroupModal').modal('show');
+
+  return false;
+});
+
+$('.delete-group-category').click(function() {
+  $.ajax({
+    method:'post',
+    url: $(this).data('action'),
+    data: {
+      _method: 'delete',
+    },
+    success:function(response){
+      window.tips(response.message)
+      location.reload();
+    }
+  });
+  return false;
+});
+
+$('#moveModal').on('shown.bs.modal', function(e) {
+  let button = $(e.relatedTarget);
+  let action = button.data('action');
+
+  $(this).find('form').attr('action', action);
 });
 
 //expend-edit-modal

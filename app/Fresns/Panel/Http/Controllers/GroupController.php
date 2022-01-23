@@ -36,7 +36,7 @@ class GroupController extends Controller
             $groups = Group::typeGroup()
                 ->where('parent_id', $parentId)
                 ->where('is_enable', 1)
-                ->with('member', 'plugin')
+                ->with('member', 'plugin', 'names', 'descriptions')
                 ->paginate();
         }
 
@@ -92,28 +92,30 @@ class GroupController extends Controller
         ));
     }
 
-    public function store(Group $gorup, Request $request)
+    public function store(Group $group, Request $request)
     {
-        $gorup->uuid     = time();
-        $gorup->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
-        $gorup->rank_num = $request->rank_num;
-        $gorup->cover_file_url = $request->cover_file_url;
-        $gorup->banner_file_url = $request->banner_file_url;
-        $gorup->is_enable = $request->is_enable;
+        $group->uuid = \Str::uuid();
+        $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
+        $group->description = $request->langdesc[$this->defaultLanguage] ?? (current(array_filter($request->langdesc)) ?: '');
+        $group->rank_num = $request->rank_num;
+        $group->cover_file_url = $request->cover_file_url;
+        $group->banner_file_url = $request->banner_file_url;
+        $group->permission = [];
+        $group->is_enable = $request->is_enable;
         if ($request->is_category) {
-            $gorup->type = 1;
+            $group->type = 1;
         } else {
-            $gorup->type = 2;
+            $group->type = 2;
         }
-        $gorup->save();
-
+        $group->save();
 
         if ($request->update_name) {
             foreach ($request->names as $langTag => $content) {
-                $language = Language::tableName('plugin_usages')
-                  ->where('table_id', $pluginUsage->id)
-                  ->where('lang_tag', $langTag)
-                  ->first();
+                $language = Language::tableName('groups')
+                    ->where('table_id', $group->id)
+                    ->where('table_field', 'name')
+                    ->where('lang_tag', $langTag)
+                    ->first();
 
                 if (!$language) {
                     // create but no content
@@ -122,9 +124,9 @@ class GroupController extends Controller
                     }
                     $language = new Language();
                     $language->fill([
-                      'table_name' => 'plugin_usages',
+                      'table_name' => 'groups',
                       'table_field' => 'name',
-                      'table_id' => $pluginUsage->id,
+                      'table_id' => $group->id,
                       'lang_tag' => $langTag,
                   ]);
                 }
@@ -135,11 +137,11 @@ class GroupController extends Controller
         }
 
 
-
         if ($request->update_name) {
             foreach ($request->langdesc as $langTag => $content) {
-                $language = Language::tableName('plugin_usages')
-                    ->where('table_id', $pluginUsage->id)
+                $language = Language::tableName('groups')
+                    ->where('table_id', $group->id)
+                    ->where('table_field', 'description')
                     ->where('lang_tag', $langTag)
                     ->first();
 
@@ -151,8 +153,75 @@ class GroupController extends Controller
                     $language = new Language();
                     $language->fill([
                         'table_name' => 'plugin_usages',
-                        'table_field' => 'name',
-                        'table_id' => $pluginUsage->id,
+                        'table_field' => 'description',
+                        'table_id' => $group->id,
+                        'lang_tag' => $langTag,
+                    ]);
+                }
+
+                $language->lang_content = $content;
+                $language->save();
+            }
+        }
+
+        return $this->createSuccess();
+    }
+
+    public function update(Group $group, Request $request)
+    {
+        $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
+        $group->description = $request->langdesc[$this->defaultLanguage] ?? (current(array_filter($request->langdesc)) ?: '');
+        $group->rank_num = $request->rank_num;
+        $group->cover_file_url = $request->cover_file_url;
+        $group->banner_file_url = $request->banner_file_url;
+        $group->is_enable = $request->is_enable;
+        $group->save();
+
+        if ($request->update_name) {
+            foreach ($request->names as $langTag => $content) {
+                $language = Language::tableName('groups')
+                    ->where('table_id', $group->id)
+                    ->where('table_field', 'name')
+                    ->where('lang_tag', $langTag)
+                    ->first();
+
+                if (!$language) {
+                    // create but no content
+                    if (!$content) {
+                        continue;
+                    }
+                    $language = new Language();
+                    $language->fill([
+                      'table_name' => 'groups',
+                      'table_field' => 'name',
+                      'table_id' => $group->id,
+                      'lang_tag' => $langTag,
+                  ]);
+                }
+
+                $language->lang_content = $content;
+                $language->save();
+            }
+        }
+
+        if ($request->update_name) {
+            foreach ($request->langdesc as $langTag => $content) {
+                $language = Language::tableName('groups')
+                    ->where('table_id', $group->id)
+                    ->where('table_field', 'description')
+                    ->where('lang_tag', $langTag)
+                    ->first();
+
+                if (!$language) {
+                    // create but no content
+                    if (!$content) {
+                        continue;
+                    }
+                    $language = new Language();
+                    $language->fill([
+                        'table_name' => 'plugin_usages',
+                        'table_field' => 'description',
+                        'table_id' => $group->id,
                         'lang_tag' => $langTag,
                     ]);
                 }
@@ -163,17 +232,33 @@ class GroupController extends Controller
         }
 
 
-        return $this->createSuccess();
-    }
-
-    public function update(Group $Group, $request)
-    {
+        return $this->updateSuccess();
     }
 
     public function updateEnable(Group $group, Request $request)
     {
         $group->is_enable = $request->is_enable ?: 0;
         $group->save();
+        return $this->updateSuccess();
+    }
+
+    public function destroy(Group $group)
+    {
+        // 分类
+        if ($group->type == 1 ) {
+            $group->groups()->delete();
+        }
+        $group->delete();
+        return $this->deleteSuccess();
+    }
+
+    public function changeCategory(Group $group, Request $request)
+    {
+        if ($request->category_id) {
+            $group->parent_id = $request->category_id;
+            $group->save();
+        }
+
         return $this->updateSuccess();
     }
 }
