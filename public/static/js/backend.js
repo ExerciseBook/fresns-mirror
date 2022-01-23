@@ -547,6 +547,17 @@ $('.expend-edit-modal').on('show.bs.modal', function(e) {
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
   $(this).find('input[name=parameter]').val(params.parameter);
   $(this).find('input[name=editor_number]').val(params.editor_number);
+
+  $(".inputUrl").css('display','none');
+  $(".inputFile").removeAttr('style');
+  $(".showSelectTypeName").text('上传图片');
+  if(params.icon_file_url){
+	  $(this).find('input[name=icon_file_url]').val(params.icon_file_url);
+	  $(this).find('input[name=icon_file_url]').removeAttr('style');
+	   $(".showSelectTypeName").text('图片地址');
+	  $(".inputFile").css('display','none');
+  }
+
   if(params.member_roles){
 	with (document.getElementById('member_roles')) {
 	    for (var i=0; i<options.length; i++) {
@@ -587,6 +598,17 @@ $('.expend-manage-modal').on('show.bs.modal', function(e) {
   $(this).find('input[name=rank_num]').val(params.rank_num);
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
   $(this).find('input[name=parameter]').val(params.parameter);
+
+  $(".inputUrl").css('display','none');
+  $(".inputFile").removeAttr('style');
+  $(".showSelectTypeName").text('上传图片');
+  if(params.icon_file_url){
+	$(this).find('input[name=icon_file_url]').val(params.icon_file_url);
+	$(this).find('input[name=icon_file_url]').removeAttr('style');
+	 $(".showSelectTypeName").text('图片地址');
+	$(".inputFile").css('display','none');
+  }
+
   if(params.member_roles){
 	with (document.getElementById('member_roles')) {
 	    for (var i=0; i<options.length; i++) {
@@ -633,6 +655,17 @@ $('.expend-profile-modal').on('show.bs.modal', function(e) {
   $(this).find('input[name=rank_num]').val(params.rank_num);
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
   $(this).find('input[name=parameter]').val(params.parameter);
+
+  $(".inputUrl").css('display','none');
+  $(".inputFile").removeAttr('style');
+  $(".showSelectTypeName").text('上传图片');
+  if(params.icon_file_url){
+	$(this).find('input[name=icon_file_url]').val(params.icon_file_url);
+	$(this).find('input[name=icon_file_url]').removeAttr('style');
+	 $(".showSelectTypeName").text('图片地址');
+	$(".inputFile").css('display','none');
+  }
+
   if(params.member_roles){
 	with (document.getElementById('member_roles')) {
 	    for (var i=0; i<options.length; i++) {
@@ -658,6 +691,17 @@ $('.expend-feature-modal').on('show.bs.modal', function(e) {
   $(this).find('input[name=rank_num]').val(params.rank_num);
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
   $(this).find('input[name=parameter]').val(params.parameter);
+
+  $(".inputUrl").css('display','none');
+  $(".inputFile").removeAttr('style');
+  $(".showSelectTypeName").text('上传图片');
+  if(params.icon_file_url){
+	$(this).find('input[name=icon_file_url]').val(params.icon_file_url);
+	$(this).find('input[name=icon_file_url]').removeAttr('style');
+	 $(".showSelectTypeName").text('图片地址');
+	$(".inputFile").css('display','none');
+  }
+
   if(params.member_roles){
 	with (document.getElementById('member_roles')) {
 	    for (var i=0; i<options.length; i++) {
@@ -734,6 +778,16 @@ $('.expend-group-modal').on('show.bs.modal', function(e) {
 	$(this).find('input[name=rank_num]').val(params.rank_num);
 	$(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
 	$(this).find('input[name=parameter]').val(params.parameter);
+
+	$(".inputUrl").css('display','none');
+	$(".inputFile").removeAttr('style');
+	$(".showSelectTypeName").text('上传图片');
+	if(params.icon_file_url){
+		$(this).find('input[name=icon_file_url]').val(params.icon_file_url);
+		$(this).find('input[name=icon_file_url]').removeAttr('style');
+		 $(".showSelectTypeName").text('图片地址');
+		$(".inputFile").css('display','none');
+	}
 
 	if(params.member_roles){
 		with (document.getElementById('member_roles')) {

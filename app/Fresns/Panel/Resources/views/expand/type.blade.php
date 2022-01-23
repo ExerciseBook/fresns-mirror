@@ -33,7 +33,9 @@
       <tbody>
         @foreach($pluginUsages as $item)
           <tr>
-            <td><input type="number" class="form-control input-number" value="{{ $item->rank_num }}"></td>
+
+            <td><input type="number"  data-action="{{ route('panel.expandType.rank',$item->id) }}" class="form-control input-number rank-num" value="{{ $item['rank_num']}}"></td>
+
             <td>{{ optional($item->plugin)->name}}</td>
             <td>{{ $item->name }}</td>
             <td>
@@ -72,6 +74,7 @@
             <td>
               <form method="post" action="{{ route('panel.pluginUsages.destroy', $item->id) }}">
                 @csrf
+				@method('delete')
                 <button type="button"
                         class="btn btn-outline-primary btn-sm"
                         data-names="{{ $item->names->toJson() }}"

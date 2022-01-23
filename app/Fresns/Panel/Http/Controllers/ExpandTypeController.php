@@ -140,13 +140,21 @@ class ExpandTypeController extends Controller
         return $this->createSuccess();
     }
 
-    public function destroy()
+
+    public function destroy($id)
     {
+        $pluginUsage = PluginUsage::findOrFail($id);
+        $pluginUsage->delete();
+
         return $this->deleteSuccess();
     }
 
-    public function updateRank()
+    public function updateRank($id, Request $request)
     {
+        $pluginUsage = PluginUsage::findOrFail($id);
+        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->save();
+
         return $this->updateSuccess();
     }
 
@@ -159,11 +167,11 @@ class ExpandTypeController extends Controller
         $requestDescriptions = $request->descriptions ?: [];
 
         $data = [];
-        foreach($request->ids as $itemKey => $id) {
+        foreach ($request->ids as $itemKey => $id) {
             $intro = [];
             $titles = json_decode($requestTitles[$itemKey] ?? '', true) ?: [];
             $descriptions = json_decode($requestDescriptions[$itemKey] ?? '', true) ?: [];
-            foreach($this->optionalLanguages as $language) {
+            foreach ($this->optionalLanguages as $language) {
                 $title = $titles[$language['langTag']] ?? '';
                 $description = $descriptions[$language['langTag']] ?? '';
                 if (!$title && !$description) {
