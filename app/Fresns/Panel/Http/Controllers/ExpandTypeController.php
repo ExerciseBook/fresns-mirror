@@ -150,8 +150,41 @@ class ExpandTypeController extends Controller
         return $this->updateSuccess();
     }
 
-    public function source()
+    public function updateSource($id, $key, Request $request)
     {
+        $pluginUsage = PluginUsage::findOrFail($id);
+        $dataSources = $pluginUsage->data_sources;
+
+        $requestTitles = $request->titles ?: [];
+        $requestDescriptions = $request->descriptions ?: [];
+
+        $data = [];
+        foreach($request->ids as $itemKey => $id) {
+            $intro = [];
+            $titles = json_decode($requestTitles[$itemKey] ?? '', true) ?: [];
+            $descriptions = json_decode($requestDescriptions[$itemKey] ?? '', true) ?: [];
+            foreach($this->optionalLanguages as $language) {
+                $title = $titles[$language['langTag']] ?? '';
+                $description = $descriptions[$language['langTag']] ?? '';
+                if (!$title && !$description) {
+                    continue;
+                }
+                $intro[] = [
+                    'title' => $title,
+                    'description' => $description,
+                    'langTag' => $language['langTag'],
+                ];
+            }
+
+            $data[] = [
+                'id' => $id,
+                'intro' => $intro
+            ];
+        }
+
+        $dataSources[$key]['sortNumber'] = $data;
+        $pluginUsage->data_sources = $dataSources;
+        $pluginUsage->save();
         return $this->updateSuccess();
     }
 }

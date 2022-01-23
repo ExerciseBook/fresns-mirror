@@ -316,10 +316,10 @@ $('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
 
   emojis.map((emoji) => {
     let emojiTemplate = template.clone();
-	let href ="/panel/operation/emojis/"+emoji.id
-	emojiTemplate.find('form').attr('action', href);
+    let href ="/panel/operation/emojis/"+emoji.id
+    emojiTemplate.find('form').attr('action', href);
     emojiTemplate.find('input[name=rank_num]').val(emoji.rank_num);
-	emojiTemplate.find('input[name=rank_num]').attr('data-action',"/panel/operation/emojiGroups/"+emoji.id+'/rank');
+    emojiTemplate.find('input[name=rank_num]').attr('data-action',"/panel/operation/emojiGroups/"+emoji.id+'/rank');
     emojiTemplate.find('.emoji-img').attr('src', emoji.image_file_url);
     emojiTemplate.find('.emoji-code').html(emoji.code);
 
@@ -336,7 +336,6 @@ $('#offcanvasEmoji').on('hidden.bs.offcanvas', function(e) {
 
 $('#emojiModal').on('show.bs.modal', function(e) {
 let button = $(e.relatedTarget);
- console.log(button);
   let parent_id = button.data('parent_id');
    $(this).find('input[name=emoji_group_id]').val(parent_id);
 });
@@ -447,7 +446,6 @@ $('#themeSetting').on('show.bs.modal', function(e){
   let params = button.data('params');
   let pcPlugin= button.data('pc_plugin');
   let mobilePlugin= button.data('mobile_plugin');
-  console.log(pcPlugin);
 
 
   $(this).find('form').attr('action', action);
@@ -586,7 +584,6 @@ $('.expend-manage-modal').on('show.bs.modal', function(e) {
 	$("#inlineCheckbox2").removeAttr("checked");
 	$("#inlineCheckbox3").removeAttr("checked");
 
-  console.log(params);
   $(this).find('input[name=rank_num]').val(params.rank_num);
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
   $(this).find('input[name=parameter]').val(params.parameter);
@@ -726,7 +723,6 @@ $('.expend-group-modal').on('show.bs.modal', function(e) {
 
 		}
 	});
-	console.log(params.group_id);
 	if(parent_id){
 		$(this).find('select[name=parent_group_id]').val(parent_id);
 	}
@@ -794,14 +790,43 @@ $('#createTypeModal').on('show.bs.modal', function(e) {
 
 // panel types edit
 $('#sortNumberModal').on('show.bs.modal', function(e) {
+  if ($(this).data('is_back')) {
+    return;
+  }
 	let button = $(e.relatedTarget);
 	let params = button.data('params');
+	let action = button.data('action');
 
-  //let template = $('#languagePackTemplate')
+  $(this).find('.sort-item').remove();
+  $(this).find('form').attr('action', action);
 
-  //params.map(function(param) {
-  //})
+  let template = $('#sortTemplate').contents();
+  params = JSON.parse(params);
+  $(this).data('languages', null);
   console.log(params);
+  console.log(params);
+
+
+  params.map(param => {
+
+    let titles = new Object;
+    let descriptions = new Object;
+    param.intro.map(item => {
+      titles[item.langTag] = item.title
+      descriptions[item.langTag] = item.description
+    });
+
+    let sortTemplate = template.clone();
+    sortTemplate.find('input[name="ids[]"]').val(param.id);
+    sortTemplate.find('.sort-title').data('languages', param.intro);
+    sortTemplate.find('input[name="titles[]"]').val(JSON.stringify(titles));
+    sortTemplate.find('.sort-description').data('languages', param.intro);
+    sortTemplate.find('input[name="descriptions[]"]').val(JSON.stringify(descriptions));
+
+    sortTemplate.insertBefore($(this).find('.add-sort-tr'));
+  })
+
+  $('#sortNumberTitleLangModal')
 });
 
 
@@ -813,3 +838,75 @@ $(".selectImageTyle li").click(function() {
 	$(this).parent().siblings('input').css('display','none');
 	$(this).parent().siblings('.'+inputname).removeAttr('style');
 });
+
+$('#sortNumberModal .add-sort').click(function() {
+  let template = $('#sortTemplate').clone();
+
+  $(template.html()).insertBefore($('#sortNumberModal').find('.add-sort-tr'));
+});
+
+$(document).on('click', '.delete-sort-number', function() {
+  $(this).closest('tr').remove();
+});
+
+$("#sortNumberTitleLangModal").on('show.bs.modal', function (e) {
+	let button = $(e.relatedTarget);
+  let languages = button.data('languages');
+  $(this).find('form').trigger("reset");
+  $(this).data('button', e.relatedTarget)
+
+  if (! languages) {
+    return;
+  }
+
+  languages.map(language => {
+    $(this).find("input[name="+language.langTag).val(language.title);
+  });
+});
+
+$("#sortNumberTitleLangModal").on('hide.bs.modal', function (e) {
+  let button = $($(this).data('button'));
+  $('#sortNumberModal').data('is_back', true);
+  $('#sortNumberModal').modal('show');
+
+  let titles = $(this).find('form').serializeArray();
+  let data = new Object;
+  titles.map(title => {
+    data[title.name] = title.value
+  })
+  button.siblings('input').val(JSON.stringify(data));
+});
+
+$("#sortNumberDescLangModal").on('show.bs.modal', function (e) {
+	let button = $(e.relatedTarget);
+  let languages = button.data('languages');
+  $(this).find('form').trigger("reset");
+  $(this).data('button', e.relatedTarget)
+
+  if (! languages) {
+    return;
+  }
+
+  languages.map(language => {
+    $(this).find("input[name="+language.langTag).val(language.description);
+  });
+});
+
+$("#sortNumberDescLangModal").on('hide.bs.modal', function (e) {
+  let button = $($(this).data('button'));
+  $('#sortNumberModal').data('is_back', true);
+  $('#sortNumberModal').modal('show');
+
+  let descriptions = $(this).find('form').serializeArray();
+  let data = new Object;
+  descriptions.map(description => {
+    data[description.name] = description.value
+  })
+  button.siblings('input').val(JSON.stringify(data));
+});
+
+$('#sortNumberModal').on('hide.bs.modal', function(e) {
+  $(this).data('is_back', false)
+});
+
+// panel types edit end

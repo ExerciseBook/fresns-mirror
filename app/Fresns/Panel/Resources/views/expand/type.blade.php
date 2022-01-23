@@ -236,7 +236,9 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form id="sortNumberForm" method="post">
+            @csrf
+            @method('put')
             <div class="table-responsive">
               <table class="table table-hover align-middle text-nowrap">
                 <thead>
@@ -248,26 +250,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td><input type="number" class="form-control input-number" value="123"></td>
-                    <td><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#sortNumberTitleLangModal">标题</button></td>
-                    <td><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#sortNumberDescLangModal">描述</button></td>
-                    <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button></td>
-                  </tr>
-                  <tr>
-                    <td><input type="number" class="form-control input-number" value="2"></td>
-                    <td><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#sortNumberTitleLangModal">标题</button></td>
-                    <td><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#sortNumberDescLangModal">描述</button></td>
-                    <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button></td>
-                  </tr>
-                  <tr>
-                    <td><input type="number" class="form-control input-number" value="56"></td>
-                    <td><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#sortNumberTitleLangModal">标题</button></td>
-                    <td><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#sortNumberDescLangModal">描述</button></td>
-                    <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button></td>
-                  </tr>
-                  <tr>
-                    <td colspan="4"><button class="btn btn-outline-success btn-sm px-3" type="button"><i class="bi bi-plus-circle-dotted"></i> 新增编号</button></td>
+                  <tr class="add-sort-tr">
+                    <td colspan="4"><button class="btn btn-outline-success btn-sm px-3 add-sort" type="button"><i class="bi bi-plus-circle-dotted"></i> 新增编号</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -283,16 +267,23 @@
   </div>
 
   <template id="sortTemplate">
-    <tr>
-      <td><input type="number" class="form-control input-number" value="2"></td>
-      <td><button type="button"
-                  class="btn btn-outline-secondary btn-modal w-100 text-start"
+    <tr class="sort-item">
+      <td><input required type="number" name="ids[]" class="form-control input-number"></td>
+      <td>
+        <button type="button"
+                  class="btn btn-outline-secondary btn-modal w-100 text-start sort-title"
                   data-bs-toggle="modal"
-                  data-bs-target="#sortNumberTitleLangModal">标题</button></td>
-      <td><button type="button"
-                  class="btn btn-outline-secondary btn-modal w-100 text-start"
+                  data-bs-target="#sortNumberTitleLangModal">标题</button>
+        <input type="hidden" name="titles[]">
+      </td>
+      <td>
+        <button type="button"
+                  class="btn btn-outline-secondary btn-modal w-100 text-start sort-description"
                   data-bs-toggle="modal"
-                  data-bs-target="#sortNumberDescLangModal">描述</button></td>
+                  data-bs-target="#sortNumberDescLangModal">描述</button>
+
+        <input type="hidden" name="descriptions[]">
+      </td>
       <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7 delete-sort-number">删除</button></td>
     </tr>
   </template>
@@ -306,7 +297,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form id="sortTitleForm">
             <div class="table-responsive">
               <table class="table table-hover align-middle text-nowrap">
                 <thead>
@@ -325,7 +316,7 @@
                         @endif
                       </td>
                       <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                      <td><input type="text" name="names[{{ $lang['langTag'] }}]" class="form-control" value=""></td>
+                      <td><input type="text" name="{{ $lang['langTag'] }}" class="form-control" value=""></td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -369,7 +360,7 @@
                         @endif
                       </td>
                       <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                      <td><input type="text" name="descriptions[{{ $lang['langTag'] }}]" class="form-control" value=""></td>
+                      <td><input type="text" name="{{ $lang['langTag'] }}" class="form-control" value=""></td>
                     </tr>
                   @endforeach
                 </tbody>

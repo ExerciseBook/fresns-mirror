@@ -15,6 +15,8 @@ class Controller extends BaseController
 
     protected $defaultLanguage;
 
+    protected $optionalLanguages;
+
     public function __construct()
     {
         View::share('langs', config('panel.langs'));
@@ -31,6 +33,7 @@ class Controller extends BaseController
             // 可选的语言
             $languageConfig = Config::where('item_key', 'language_menus')->first();
             $optionalLanguages = $languageConfig ? $languageConfig->item_value : [];
+            $this->optionalLanguages = $optionalLanguages;
             View::share('optionalLanguages', collect($optionalLanguages));
 
             $areaCodeConfig = Config::where('item_key', 'area_codes')->first();
