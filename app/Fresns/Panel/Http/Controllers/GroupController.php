@@ -92,7 +92,7 @@ class GroupController extends Controller
         ));
     }
 
-    public function store(Group $group, Request $request)
+    public function storeCategory(Group $group, Request $request)
     {
         $group->uuid = \Str::uuid();
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
@@ -167,7 +167,7 @@ class GroupController extends Controller
         return $this->createSuccess();
     }
 
-    public function update(Group $group, Request $request)
+    public function updateCategory(Group $group, Request $request)
     {
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $group->description = $request->langdesc[$this->defaultLanguage] ?? (current(array_filter($request->langdesc)) ?: '');

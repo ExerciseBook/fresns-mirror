@@ -187,6 +187,8 @@ Route::middleware(['panelAuth'])->group(function() {
         ]);
 		Route::put('memberRoles/{id}/rank', [MemberRoleController::class, 'updateRank'])->name('memberRoles.rank');
 
+        Route::post('groupCategories', [GroupController::class, 'storeCategory'])->name('groupCategories.store');
+        Route::put('groupCategories/{group}', [GroupController::class, 'updateCategory'])->name('groupCategories.update');
         Route::resource('groups', GroupController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);

@@ -14,7 +14,7 @@
     <div class="col-lg-5">
       <div class="input-group mt-2 mb-4 justify-content-lg-end">
         <button class="btn btn-primary edit-group-category" type="button"
-                                        data-action="{{ route('panel.groups.store') }}"
+                                        data-action="{{ route('panel.groupCategories.store') }}"
                                         ><i class="bi bi-plus-circle-dotted"></i> 新建小组分类</button>
         <button class="btn btn-success" type="button"
                                         data-bs-toggle="modal"
@@ -41,7 +41,7 @@
                     data-params="{{ $category->toJson() }}"
                     data-names="{{ $category->names->toJson() }}"
                     data-descriptions="{{ $category->descriptions->toJson() }}"
-                    data-action="{{ route('panel.groups.update', $category->id)}}"
+                    data-action="{{ route('panel.groupCategories.update', $category->id)}}"
               class="btn btn-outline-info btn-sm text-nowrap fs-9 ms-auto edit-group-category">编辑</button>
             <button type="button"
                     class="btn btn-outline-secondary btn-sm text-nowrap fs-9 ms-1 delete-group-category"
