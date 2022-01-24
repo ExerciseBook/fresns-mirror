@@ -52,6 +52,6 @@ class RouteServiceProvider extends ServiceProvider
             ->name('panel.')
             ->middleware('panel')
             ->namespace($this->namespace)
-            ->group(__DIR__.'/../routes/panel.php');
+            ->group(__DIR__.'/../Routes/panel.php');
     }
 }
