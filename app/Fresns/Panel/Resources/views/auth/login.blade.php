@@ -4,7 +4,7 @@
   <main class="form-signin text-center">
     <form method="post" class="p-3" action="{{route('panel.login')}}">
       @csrf
-      <img class="mt-3 mb-2" src="{{ @asset('/assets/panel/images/fresns-icon.png') }}" alt="Fresns" width="72" height="72">
+      <img class="mt-3 mb-2" src="{{ @asset('/static/images/fresns-icon.png') }}" alt="Fresns" width="72" height="72">
       <h2 class="mb-5">Fresns {{ __('panel::panel.panelControl') }}</h2>
       <h4 class="mb-3 fw-normal">{{ __('panel::panel.language') }}</h4>
       <select class="form-select mb-5 change-lang" aria-label=".form-select-lg example">
@@ -28,7 +28,7 @@
 @endsection
 
 @section('js')
-  <script src="{{@asset('/assets/panel/js/jquery-3.6.0.min.js')}}"></script>
+  <script src="{{@asset('/static/js/jquery-3.6.0.min.js')}}"></script>
 
   <script>
     $('.change-lang').change(function(){
