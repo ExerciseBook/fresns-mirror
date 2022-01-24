@@ -52,7 +52,12 @@
             $templateData = collect($template['email']['template'] ?? [])->where('langTag', $lang['langTag'])->first() ?: [];
           ?>
           <tr>
-            <td>{{ $lang['langTag'] }}</td>
+            <td>
+              {{ $lang['langTag'] }}
+              @if($lang['langTag'] == $defaultLanguage)
+                <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="默认语言" aria-label="默认语言"></i>
+              @endif
+            </td>
             <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
             <td><input type="text" class="form-control" name="email_templates[{{$lang['langTag']}}][title]" value="{{ $templateData['title'] ?? '' }}"></td>
             <td><textarea class="form-control" rows="3" name="email_templates[{{$lang['langTag']}}][content]">{{ $templateData['content'] ?? '' }}</textarea></td>
@@ -81,7 +86,12 @@
             $templateData = collect($template['sms']['template'] ?? [])->where('langTag', $lang['langTag'])->first() ?: [];
           ?>
           <tr>
-            <td>{{ $lang['langTag'] }}</td>
+            <td>
+              {{ $lang['langTag'] }}
+              @if($lang['langTag'] == $defaultLanguage)
+                <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="默认语言" aria-label="默认语言"></i>
+              @endif
+            </td>
             <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
             <td><input type="text" class="form-control" name="sms_templates[{{$lang['langTag'] }}][signName]" value="{{ $templateData['signName'] ?? ''}}"></td>
             <td><input type="text" class="form-control" name="sms_templates[{{$lang['langTag']}}][templateCode]" value="{{ $templateData['templateCode'] ?? ''}}"></td>

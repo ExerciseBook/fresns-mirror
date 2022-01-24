@@ -224,6 +224,7 @@ $('#configLangModal').on('show.bs.modal', function(e) {
     action = button.data('action');
 
   $(this).find('form').attr('action', action);
+  $(this).find('form').trigger("reset");
   $(this).find('input[name=update_config]').val(itemKey);
 
   if (languages) {

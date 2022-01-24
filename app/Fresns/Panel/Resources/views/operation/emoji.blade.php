@@ -163,7 +163,6 @@
                   </tr>
                 </thead>
                 <tbody>
-
                   @foreach($optionalLanguages as $lang)
                     <?php
                       $langName = $lang['langName'];
@@ -172,7 +171,12 @@
                       }
                     ?>
                   <tr>
-                    <td>{{ $lang['langTag'] }}</td>
+                    <td>
+                      {{ $lang['langTag'] }}
+                      @if($lang['langTag'] == $defaultLanguage)
+                        <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="默认语言" aria-label="默认语言"></i>
+                      @endif
+                    </td>
                     <td>{{ $langName }}</td>
                     <td><input type="text" class="form-control" name="names[{{ $lang['langTag'] }}]" value=""></td>
                   </tr>

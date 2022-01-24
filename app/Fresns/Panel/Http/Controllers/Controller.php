@@ -31,9 +31,16 @@ class Controller extends BaseController
 
 
             // 可选的语言
+            $stats = Config::where('item_key', 'language_status')->first();
+
             $languageConfig = Config::where('item_key', 'language_menus')->first();
             $optionalLanguages = $languageConfig ? $languageConfig->item_value : [];
+
+            if (!$stats || $stats->item_value == 'false') {
+                $optionalLanguages = collect($optionalLanguages)->where('langTag', $defaultLanguage)->all();
+            }
             $this->optionalLanguages = $optionalLanguages;
+
             View::share('optionalLanguages', collect($optionalLanguages));
 
             $areaCodeConfig = Config::where('item_key', 'area_codes')->first();

@@ -353,7 +353,12 @@
                   <tbody>
                     @foreach($optionalLanguages as $lang)
                       <tr>
-                        <td>{{ $lang['langTag'] }}</td>
+                        <td>
+                          {{ $lang['langTag'] }}
+                          @if($lang['langTag'] == $defaultLanguage)
+                            <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="默认语言" aria-label="默认语言"></i>
+                          @endif
+                        </td>
                         <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
                         <td><textarea class="form-control" name="post_limit_prompt[{{ $lang['langTag'] }}]" rows="3">{{ $languages->where('lang_tag', $lang['langTag'])->first()['lang_content'] ?? '' }}</textarea></td>
                       </tr>
