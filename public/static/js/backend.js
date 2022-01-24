@@ -62,10 +62,12 @@ $("#updateKey").on('show.bs.modal', function (e) {
 $("#resetKey").on('show.bs.modal', function (e) {
   let button = $(e.relatedTarget),
     appId = button.data('app_id'),
+    name = button.data('name'),
     action = button.data('action');
 
   $(this).find('form').attr('action', action);
   $(this).find('.app-id').text(appId);
+  $(this).find('.modal-title').text(name)
 });
 
 // delete session key

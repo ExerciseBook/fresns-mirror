@@ -35,8 +35,8 @@
       <tbody>
         @foreach($sessionKeys as $key)
         <tr>
-          <th scope="row" class="py-3">{{ $key->name }}</th></th>
-          <td>{{ $key->platformName($platforms) }}</td>
+          <th scope="row" class="py-3">{{ $key->platformName($platforms) }}</th></th>
+          <td>{{ $key->name }}</td>
           <td>{{ $key->app_id }}</td>
           <td>{{ $key->app_secret }}</td>
           <td>{{ $typeLabels[$key->type] ?? '' }}</td>
@@ -56,6 +56,7 @@
             <button type="button" class="btn btn-outline-primary btn-sm mx-2"
               data-bs-toggle="modal"
               data-app_id="{{ $key->app_id }}"
+              data-name="{{ $key->name }}"
               data-action="{{ route('panel.sessionKeys.reset', ['sessionKey' => $key]) }}"
               data-bs-target="#resetKey">重置 Key</button>
             <button type="button" class="btn btn-link btn-sm text-danger fresns-link"
