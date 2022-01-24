@@ -14,7 +14,7 @@
     <div class="col-lg-5">
       <div class="input-group mt-2 mb-4 justify-content-lg-end">
         <button class="btn btn-primary edit-group-category" type="button"
-                                        data-action="{{ route('panel.groupCategories.store') }}"
+                                        data-action="{{ route('panel.groups.store') }}"
                                         ><i class="bi bi-plus-circle-dotted"></i> 新建小组分类</button>
         <button class="btn btn-success" type="button"
                                         data-bs-toggle="modal"
@@ -41,7 +41,7 @@
                     data-params="{{ $category->toJson() }}"
                     data-names="{{ $category->names->toJson() }}"
                     data-descriptions="{{ $category->descriptions->toJson() }}"
-                    data-action="{{ route('panel.groupCategories.update', $category->id)}}"
+                    data-action="{{ route('panel.groups.update', $category->id)}}"
               class="btn btn-outline-info btn-sm text-nowrap fs-9 ms-auto edit-group-category">编辑</button>
             <button type="button"
                     class="btn btn-outline-secondary btn-sm text-nowrap fs-9 ms-1 delete-group-category"
@@ -103,10 +103,18 @@
                   <form action="{{ route('panel.groups.enable.update', ['group' => $group->id, 'is_enable' => 0])}}" method="post">
                     @csrf
                     @method('put')
-                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#groupModal">编辑</button>
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm"
+                            data-action="{{ route('panel.groups.update', $group->id) }}"
+                            data-params="{{ $group->toJson() }}"
+                            data-names="{{ $group->names->toJson() }}"
+                            data-descriptions="{{ $group->descriptions->toJson() }}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#groupModal">编辑</button>
                     <button type="button"
                             class="btn btn-outline-success btn-sm"
                             data-action="{{ route('panel.groups.change', $group->id) }}"
+                            data-params="{{ $group->toJson() }}"
                             data-bs-toggle="modal"
                             data-bs-target="#moveModal">合并</button>
                     <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">停用</button>
@@ -126,10 +134,11 @@
     @csrf
     @method('post')
     <input type="hidden" name="update_name" value="0">
+    <input type="hidden" name="update_description" value="0">
     <input type="hidden" name="is_category" value="1">
 
     <!-- Create Modal -->
-    <div class="modal fade" id="createGroupModal" tabindex="-1" aria-labelledby="createGroupModal" aria-hidden="true">
+    <div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -146,17 +155,21 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">分类名称</label>
               <div class="col-sm-9">
-                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal"
-                                                                                                   data-parent="#createGroupModal"
-                                                                                                   data-bs-target="#langModal">小组多语言名称</button>
+                <button type="button"
+                        class="btn btn-outline-secondary btn-modal w-100 text-start"
+                        data-bs-toggle="modal"
+                        data-parent="#createCategoryModal"
+                        data-bs-target="#categoryLangModal">小组多语言名称</button>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">分类描述</label>
               <div class="col-sm-9">
-                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal"
-                                                                                                   data-parent="#createGroupModal"
-                                                                                                   data-bs-target="#langDescModal">小组多语言描述</button>
+                <button type="button"
+                        class="btn btn-outline-secondary btn-modal w-100 text-start"
+                        data-bs-toggle="modal"
+                        data-parent="#createCategoryModal"
+                        data-bs-target="#categoryLangDescModal">小组多语言描述</button>
               </div>
             </div>
             <div class="mb-3 row">
@@ -209,10 +222,8 @@
       </div>
     </div>
 
-
-
     <!-- Language Modal -->
-    <div class="modal fade name-lang-modal" id="langModal" tabindex="-1" aria-labelledby="langModal" aria-hidden="true">
+    <div class="modal fade name-lang-modal" id="categoryLangModal" tabindex="-1" aria-labelledby="categoryLangModal" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -239,7 +250,7 @@
                         @endif
                       </td>
                       <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                      <td><input type="text" name="names[{{ $lang['langTag'] }}]" class="form-control" value="{{ $langParams['site_name'][$lang['langTag']] ?? '' }}"></td>
+                      <td><input type="text" name="names[{{ $lang['langTag'] }}]" class="form-control" value=""></td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -254,10 +265,8 @@
       </div>
     </div>
 
-
-
     <!-- Language Modal -->
-    <div class="modal fade name-lang-modal" id="langDescModal" tabindex="-1" aria-labelledby="langDescModal" aria-hidden="true">
+    <div class="modal fade description-lang-modal" id="categoryLangDescModal" tabindex="-1" aria-labelledby="categoryLangDescModal" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -284,7 +293,7 @@
                         @endif
                       </td>
                       <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                      <td><textarea class="form-control" name="langdesc[{{ $lang['langTag'] }}]" rows="3"></textarea></td>
+                      <td><textarea class="form-control" name="descriptions[{{ $lang['langTag'] }}]" rows="3"></textarea></td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -302,11 +311,12 @@
   </form>
 
 
-
   <form action="" method="post">
     @csrf
     @method('post')
     <input type="hidden" name="update_name" value="0">
+    <input type="hidden" name="update_description" value="0">
+    <input type="hidden" name="is_category" value="0">
 
     <!-- Group Modal -->
     <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModal" aria-hidden="true">
@@ -338,17 +348,21 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-md-2 col-form-label">小组名称</label>
               <div class="col-sm-9 col-md-10">
-                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal"
-                                                                                                   data-parent="#groupModal"
-                                                                                                   data-bs-target="#langGroupModal">小组多语言名称</button>
+                <button type="button"
+                        class="btn btn-outline-secondary btn-modal w-100 text-start"
+                        data-bs-toggle="modal"
+                        data-parent="#groupModal"
+                        data-bs-target="#langGroupModal">小组多语言名称</button>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-md-2 col-form-label">小组描述</label>
               <div class="col-sm-9 col-md-10">
-                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal"
-                                                                                                   data-parent="#groupModal"
-                                                                                                   data-bs-target="#langGroupDescModal">小组多语言描述</button>
+                <button type="button"
+                        class="btn btn-outline-secondary btn-modal w-100 text-start"
+                        data-bs-toggle="modal"
+                        data-parent="#groupModal"
+                        data-bs-target="#langGroupDescModal">小组多语言描述</button>
               </div>
             </div>
             <div class="mb-3 row">
@@ -356,7 +370,7 @@
               <div class="col-sm-9 col-md-10">
                 <div class="input-group">
                   <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="showIcon">上传图片</button>
-                  <ul class="dropdown-menu infoli">
+                  <ul class="dropdown-menu infoli selectImageTyle">
                     <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
                     <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
                   </ul>
@@ -370,7 +384,7 @@
               <div class="col-sm-9 col-md-10">
                 <div class="input-group">
                   <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="showIcon">上传图片</button>
-                  <ul class="dropdown-menu infoli">
+                  <ul class="dropdown-menu infoli selectImageTyle">
                     <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
                     <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
                   </ul>
@@ -447,8 +461,7 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-md-2 col-form-label">小组管理员</label>
               <div class="col-sm-9 col-md-10">
-                <select class="form-select" name="permission['admin_members']">
-                  <option selected disabled>这是 liveSearch 多选框，暂未加载样式组件，所以原型显示为单选下拉框</option>
+                <select class="form-select select2" name="permission['admin_members']" multiple="multiple">
                   @foreach($roles as $role)
                     <option value="{{$role->id}}">{{$role->name}}</option>
                   @endforeach
@@ -587,7 +600,7 @@
                         @endif
                       </td>
                       <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                      <td><input type="text" name="names[{{ $lang['langTag'] }}]" class="form-control" value="{{ $langParams['site_name'][$lang['langTag']] ?? '' }}"></td>
+                      <td><input type="text" name="names[{{ $lang['langTag'] }}]" class="form-control" value=""></td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -630,7 +643,7 @@
                         @endif
                       </td>
                       <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                      <td><textarea class="form-control" name="langdesc[{{ $lang['langTag'] }}]" rows="3">{{ $langParams['site_name'][$lang['langTag']] ?? '' }}</textarea></td>
+                      <td><textarea class="form-control" name="descriptions[{{ $lang['langTag'] }}]" rows="3"></textarea></td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -644,96 +657,8 @@
         </div>
       </div>
     </div>
-
   </form>
 
-  <!-- Language Modal -->
-  <div class="modal fade name-lang-modal" id="langModal" tabindex="-1" aria-labelledby="langModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">多语言设置</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle text-nowrap">
-              <thead>
-                <tr class="table-info">
-                  <th scope="col" class="w-25">语言标签</th>
-                  <th scope="col" class="w-25">语言名称</th>
-                  <th scope="col" class="w-50">内容</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($optionalLanguages as $lang)
-                  <tr>
-                    <td>
-                      {{ $lang['langTag'] }}
-                      @if($lang['langTag'] == $defaultLanguage)
-                        <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="默认语言" aria-label="默认语言"></i>
-                      @endif
-                    </td>
-                    <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                    <td><input type="text" name="names[{{ $lang['langTag'] }}]" class="form-control" value="{{ $langParams['site_name'][$lang['langTag']] ?? '' }}"></td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
-          <!--保存按钮-->
-          <div class="text-center">
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">确认</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-  <!-- Language Modal -->
-  <div class="modal fade name-lang-modal" id="langDescModal" tabindex="-1" aria-labelledby="langDescModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">多语言设置</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle text-nowrap">
-              <thead>
-                <tr class="table-info">
-                  <th scope="col" class="w-25">语言标签</th>
-                  <th scope="col" class="w-25">语言名称</th>
-                  <th scope="col" class="w-50">内容</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($optionalLanguages as $lang)
-                  <tr>
-                    <td>
-                      {{ $lang['langTag'] }}
-                      @if($lang['langTag'] == $defaultLanguage)
-                        <i class="bi bi-info-circle text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="默认语言" aria-label="默认语言"></i>
-                      @endif
-                    </td>
-                    <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                    <td><textarea class="form-control" name="langdesc[{{ $lang['langTag'] }}]" rows="3">{{ $langParams['site_name'][$lang['langTag']] ?? '' }}</textarea></td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
-          <!--保存按钮-->
-          <div class="text-center">
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">确认</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Move Modal -->
   <div class="modal fade" id="moveModal" tabindex="-1" aria-labelledby="moveModal" aria-hidden="true">

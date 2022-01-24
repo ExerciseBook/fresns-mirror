@@ -10,6 +10,7 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="{{ @asset('/static/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ @asset('/static/css/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ @asset('/static/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ @asset('/static/css/backend.css') }}">
     @yield('css')
   </head>
@@ -23,6 +24,7 @@
 
     <script src="{{ @asset('/static/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ @asset('/static/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ @asset('/static/js/select2.min.js') }}"></script>
     <script src="{{ @asset('/static/js/backend.js') }}"></script>
     @yield('js')
   </body>

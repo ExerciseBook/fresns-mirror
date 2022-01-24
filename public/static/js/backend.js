@@ -32,6 +32,9 @@ window.tips = function (message, code = 200) {
     setTimeoutToastHide();
 }
 
+$(document).ready(function() {
+  $('.select2').select2();
+});
 
 $.ajaxSetup({
     headers: {
@@ -289,6 +292,27 @@ $(".name-lang-modal").on('show.bs.modal', function (e) {
     }
   });
 });
+
+$(".description-lang-modal").on('show.bs.modal', function (e) {
+  if ($(this).data('is_back')) {
+    return;
+  }
+
+  let button = $(e.relatedTarget);
+  var parent = button.data('parent');
+  if (!parent) {
+    return;
+  }
+
+  var $this = $(this)
+  $(this).on('hide.bs.modal', function (e) {
+    if (parent) {
+      $(parent).data('is_back', true)
+      $this.parent('form').find('input[name=update_description]').val(1);
+      $(parent).modal('show');
+    }
+  });
+});
 // 通用处理，名称多语言 end
 
 
@@ -542,35 +566,34 @@ $('.edit-group-category').click(function() {
   let action = $(this).data('action');
   let params = $(this).data('params');
 
-  console.log($(this).parent('form'))
-  $('#createGroupModal').parent('form').find('input[name=_method]').val(params ? 'put' : 'post');
-  $('#createGroupModal').parent('form').attr('action', action);
-  $('#createGroupModal').parent('form').trigger("reset");
+  $('#createCategoryModal').parent('form').find('input[name=_method]').val(params ? 'put' : 'post');
+  $('#createCategoryModal').parent('form').attr('action', action);
+  $('#createCategoryModal').parent('form').trigger("reset");
 
   if (params) {
-    $('#createGroupModal').find('input[name=rank_num]').val(params.rank_num)
-    $('#createGroupModal').find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true);
+    $('#createCategoryModal').find('input[name=rank_num]').val(params.rank_num)
+    $('#createCategoryModal').find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true);
 	  $(".showSelectTypeName").text('图片地址');
 	  $(".inputFile").css('display','none');
-	  $('#createGroupModal').find('input[name=cover_file_url]').val(params.cover_file_url);
-	  $('#createGroupModal').find('input[name=cover_file_url]').css('display','block');
-	  $('#createGroupModal').find('input[name=banner_file_url]').val(params.banner_file_url);
-	  $('#createGroupModal').find('input[name=banner_file_url]').css('display','block');
+	  $('#createCategoryModal').find('input[name=cover_file_url]').val(params.cover_file_url);
+	  $('#createCategoryModal').find('input[name=cover_file_url]').css('display','block');
+	  $('#createCategoryModal').find('input[name=banner_file_url]').val(params.banner_file_url);
+	  $('#createCategoryModal').find('input[name=banner_file_url]').css('display','block');
 
     let names = $(this).data('names');
     let descriptions = $(this).data('descriptions');
     if ( names ) {
       names.map(name => {
-        $('#createGroupModal').parent('form').find("input[name='names["+name.lang_tag+"]'").val(name.lang_content);
+        $('#createCategoryModal').parent('form').find("input[name='names["+name.lang_tag+"]'").val(name.lang_content);
       });
     }
     if ( descriptions) {
       descriptions.map(description=> {
-        $('#createGroupModal').parent('form').find("input[name='langdesc["+description.lang_tag+"]'").val(description.lang_content);
+        $('#createCategoryModal').parent('form').find("textarea[name='descriptions["+description.lang_tag+"]'").val(description.lang_content);
       });
     }
   }
-  $('#createGroupModal').modal('show');
+  $('#createCategoryModal').modal('show');
 
   return false;
 });
@@ -951,7 +974,7 @@ $('#sortNumberModal').on('show.bs.modal', function(e) {
 //selectImageTyle
 $(".selectImageTyle li").click(function() {
 	let inputname = $(this).data('name');
-	console.log($(this).parent().siblings('.'+inputname));
+
 	$(this).parent().siblings('.showSelectTypeName').text($(this).text());
 	$(this).parent().siblings('input').css('display','none');
 	$(this).parent().siblings('.'+inputname).removeAttr('style');
@@ -1028,3 +1051,14 @@ $('#sortNumberModal').on('hide.bs.modal', function(e) {
 });
 
 // panel types edit end
+
+
+// operation group eidt
+$('#groupModal').on('show.bs.modal', function(e) {
+  let button = $(e.relatedTarget),
+    params = button.data('params'),
+    action = button.data('action');
+
+});
+// operation group eidt end
+

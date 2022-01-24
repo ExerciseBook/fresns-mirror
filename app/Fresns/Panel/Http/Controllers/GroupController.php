@@ -92,17 +92,18 @@ class GroupController extends Controller
         ));
     }
 
-    public function storeCategory(Group $group, Request $request)
+    public function store(Group $group, Request $request)
     {
         $group->uuid = \Str::uuid();
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
-        $group->description = $request->langdesc[$this->defaultLanguage] ?? (current(array_filter($request->langdesc)) ?: '');
+        $group->description = $request->descriptions[$this->defaultLanguage] ?? (current(array_filter($request->descriptions)) ?: '');
         $group->rank_num = $request->rank_num;
         $group->cover_file_url = $request->cover_file_url;
         $group->banner_file_url = $request->banner_file_url;
-        $group->permission = [];
         $group->is_enable = $request->is_enable;
+        // 分类
         if ($request->is_category) {
+            $group->permission = [];
             $group->type = 1;
         } else {
             $group->type = 2;
@@ -137,8 +138,8 @@ class GroupController extends Controller
         }
 
 
-        if ($request->update_name) {
-            foreach ($request->langdesc as $langTag => $content) {
+        if ($request->update_description) {
+            foreach ($request->descriptions as $langTag => $content) {
                 $language = Language::tableName('groups')
                     ->where('table_id', $group->id)
                     ->where('table_field', 'description')
@@ -167,10 +168,10 @@ class GroupController extends Controller
         return $this->createSuccess();
     }
 
-    public function updateCategory(Group $group, Request $request)
+    public function update(Group $group, Request $request)
     {
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
-        $group->description = $request->langdesc[$this->defaultLanguage] ?? (current(array_filter($request->langdesc)) ?: '');
+        $group->description = $request->descriptions[$this->defaultLanguage] ?? (current(array_filter($request->descriptions)) ?: '');
         $group->rank_num = $request->rank_num;
         $group->cover_file_url = $request->cover_file_url;
         $group->banner_file_url = $request->banner_file_url;
@@ -204,8 +205,8 @@ class GroupController extends Controller
             }
         }
 
-        if ($request->update_name) {
-            foreach ($request->langdesc as $langTag => $content) {
+        if ($request->update_description) {
+            foreach ($request->descriptions as $langTag => $content) {
                 $language = Language::tableName('groups')
                     ->where('table_id', $group->id)
                     ->where('table_field', 'description')
@@ -219,7 +220,7 @@ class GroupController extends Controller
                     }
                     $language = new Language();
                     $language->fill([
-                        'table_name' => 'plugin_usages',
+                        'table_name' => 'groups',
                         'table_field' => 'description',
                         'table_id' => $group->id,
                         'lang_tag' => $langTag,

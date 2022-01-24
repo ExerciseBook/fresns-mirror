@@ -148,3 +148,11 @@ body {
         height: calc(100% - 80px);
     }
 }
+
+.select2 {
+width:100%!important;
+}
+
+.select2-container--open {
+    z-index: 9999999
+}
