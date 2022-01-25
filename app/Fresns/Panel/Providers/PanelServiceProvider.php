@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Fresns\Panel\Http\Exceptions\Handler;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use App\Fresns\Panel\Http\Middleware\Authenticate;
+use App\Fresns\Panel\Console\Commands\UpgradeFresns;
 
 class PanelServiceProvider extends ServiceProvider
 {
@@ -38,6 +39,10 @@ class PanelServiceProvider extends ServiceProvider
             ExceptionHandler::class,
             Handler::class
         );
+
+        $this->commands([
+            UpgradeFresns::class,
+        ]);
     }
 
     /**
