@@ -531,6 +531,20 @@ $('#menuLangModal').on('shown.bs.modal', function (e) {
 
   if (languages) {
     languages.map((language, index) => {
+      $(this).find("input[name='languages["+language.lang_tag+"]'").val(language.lang_content);
+    });
+  }
+});
+$('#menuLangTextareaModal').on('shown.bs.modal', function (e) {
+  let button = $(e.relatedTarget),
+  languages = button.data('languages'),
+  action = button.data('action');
+
+  $(this).find('form').trigger("reset");
+  $(this).find('form').attr('action', action);
+
+  if (languages) {
+    languages.map((language, index) => {
       $(this).find("textarea[name='languages["+language.lang_tag+"]'").val(language.lang_content);
     });
   }
