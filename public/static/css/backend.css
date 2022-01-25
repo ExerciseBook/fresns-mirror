@@ -149,10 +149,13 @@ body {
     }
 }
 
-.select2 {
-width:100%!important;
+.input-group > .select2-container--bootstrap-5 {
+    width: auto;
+    flex: 1 1 auto;
 }
 
-.select2-container--open {
-    z-index: 9999999
+.input-group > .select2-container--bootstrap-5 .select2-selection--single {
+    height: 100%;
+    line-height: inherit;
+    padding: 0.5rem 1rem;
 }

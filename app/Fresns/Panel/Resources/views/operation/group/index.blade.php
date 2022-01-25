@@ -95,7 +95,11 @@
                     <i class="bi bi-dash-lg text-secondary"></i>
                   @endif
                 </td>
-                <td><span class="badge bg-light text-dark">{{ optional($group->member)->name }}</span></td>
+                <td>
+                  @foreach($group->admin_members as $member)
+                    <span class="badge bg-light text-dark">{{ $member->name }}</span>
+                  @endforeach
+                </td>
                 <td><span class="badge bg-light text-dark">{{ $permissioLabels[$group->permission['publish_post'] ?? 0] ?? ''}}</span></td>
                 <td><span class="badge bg-light text-dark">{{ $permissioLabels[$group->permission['publish_comment'] ?? 0] ?? ''}}</span></td>
                 <td><i class="bi bi-check-lg text-success"></i></td>
@@ -313,7 +317,7 @@
 
   <form action="" method="post">
     @csrf
-    @method('post')
+    @method('put')
     <input type="hidden" name="update_name" value="0">
     <input type="hidden" name="update_description" value="0">
     <input type="hidden" name="is_category" value="0">
@@ -330,12 +334,11 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-md-2 col-form-label">所属分类</label>
               <div class="col-sm-9 col-md-10">
-                <select class="form-select" name="parent_id">
-                  <option selected>小组分类</option>
+                <select class="form-select" name="parent_id" required>
+                  <option value="" selected>小组分类</option>
                   @foreach($categories as $category)
                     <option value="{{$category->id}}">{{$category->name}}</option>
                   @endforeach
-                  <option value="2">Two</option>
                 </select>
               </div>
             </div>
@@ -435,7 +438,7 @@
                 <div class="collapse mt-2" id="follow_setting">
                   <div class="input-group">
                     <span class="input-group-text">关联插件</span>
-                    <select class="form-select">
+                    <select class="form-select" name="plugin_unikey">
                       <option selected>Choose...</option>
                       @foreach($plugins as $plugin)
                         <option value="{{$plugin->id}}">{{$plugin->name}}</option>
@@ -461,9 +464,9 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-md-2 col-form-label">小组管理员</label>
               <div class="col-sm-9 col-md-10">
-                <select class="form-select select2" name="permission['admin_members']" multiple="multiple">
-                  @foreach($roles as $role)
-                    <option value="{{$role->id}}">{{$role->name}}</option>
+                <select class="form-select select2" name="permission[admin_members][]" multiple="multiple">
+                  @foreach($members as $member)
+                    <option value="{{$member->id}}">{{$member->name}}</option>
                   @endforeach
                 </select>
               </div>
@@ -472,22 +475,21 @@
               <label class="col-sm-3 col-md-2 col-form-label">发布权限</label>
               <div class="col-sm-9 col-md-10 pt-2">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="permission['publish_post']" id="publish.post.1" value="1" data-bs-toggle="collapse" data-bs-target="#publish_post_setting.show" aria-expanded="false" aria-controls="publish_post_setting" checked>
+                  <input class="form-check-input" type="radio" name="permission[publish_post]" id="publish.post.1" value="1" data-bs-toggle="collapse" data-bs-target="#publish_post_setting.show" aria-expanded="false" aria-controls="publish_post_setting" checked>
                   <label class="form-check-label" for="publish.post.1">所有人</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="permission['publish_post']" id="publish.post.2" value="2" data-bs-toggle="collapse" data-bs-target="#publish_post_setting.show" aria-expanded="false" aria-controls="publish_post_setting">
+                  <input class="form-check-input" type="radio" name="permission[publish_post]" id="publish.post.2" value="2" data-bs-toggle="collapse" data-bs-target="#publish_post_setting.show" aria-expanded="false" aria-controls="publish_post_setting">
                   <label class="form-check-label" for="publish.post.2">仅关注了小组的成员</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="permission['publish_post']" id="publish.post.3" value="3" data-bs-toggle="collapse" data-bs-target="#publish_post_setting:not(.show)" aria-expanded="false" aria-controls="publish_post_setting">
+                  <input class="form-check-input" type="radio" name="permission[publish_post]" id="publish.post.3" value="3" data-bs-toggle="collapse" data-bs-target="#publish_post_setting:not(.show)" aria-expanded="false" aria-controls="publish_post_setting">
                   <label class="form-check-label" for="publish.post.3">仅指定的角色成员</label>
                 </div>
                 <div class="collapse mt-2" id="publish_post_setting">
                   <div class="input-group">
                     <span class="input-group-text">有权发表的角色</span>
-                    <select class="form-select" name="permission['publish_post_roles']">
-                      <option selected disabled>这是多选框，暂未加载样式组件，所以原型显示为单选下拉框</option>
+                    <select class="form-select select2" name="permission[publish_post_roles][]" multiple="multiple">
                       @foreach($roles as $role)
                         <option value="{{$role->id}}">{{$role->name}}</option>
                       @endforeach
@@ -498,11 +500,11 @@
                   <span class="input-group-text">是否需要审核<i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="小组管理员不受影响"></i></span>
                   <div class="form-control bg-white">
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="permission['publish_post_review']" id="publish.post.review.0" value="0" checked>
+                      <input class="form-check-input" type="radio" name="permission[publish_post_review]" id="publish.post.review.0" value="0" checked>
                       <label class="form-check-label" for="publish.post.review.0">不需要</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="permission['publish_post_review']" id="publish.post.review.1" value="1">
+                      <input class="form-check-input" type="radio" name="permission[publish_post_review]" id="publish.post.review.1" value="1">
                       <label class="form-check-label" for="publish.post.review.1">需要</label>
                     </div>
                   </div>
@@ -513,22 +515,21 @@
               <label class="col-sm-3 col-md-2 col-form-label">评论权限</label>
               <div class="col-sm-9 col-md-10 pt-2">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="permission['publish_comment']" id="publish.comment.1" value="1" data-bs-toggle="collapse" data-bs-target="#publish_comment_setting.show" aria-expanded="false" aria-controls="publish_comment_setting" checked>
+                  <input class="form-check-input" type="radio" name="permission[publish_comment]" id="publish.comment.1" value="1" data-bs-toggle="collapse" data-bs-target="#publish_comment_setting.show" aria-expanded="false" aria-controls="publish_comment_setting" checked>
                   <label class="form-check-label" for="publish.comment.1">所有人</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="permission['publish_comment']" id="publish.comment.2" value="2" data-bs-toggle="collapse" data-bs-target="#publish_comment_setting.show" aria-expanded="false" aria-controls="publish_comment_setting">
+                  <input class="form-check-input" type="radio" name="permission[publish_comment]" id="publish.comment.2" value="2" data-bs-toggle="collapse" data-bs-target="#publish_comment_setting.show" aria-expanded="false" aria-controls="publish_comment_setting">
                   <label class="form-check-label" for="publish.comment.2">仅关注了小组的成员</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="permission['publish_comment']" id="publish.comment.3" value="3" data-bs-toggle="collapse" data-bs-target="#publish_comment_setting:not(.show)" aria-expanded="false" aria-controls="publish_comment_setting">
+                  <input class="form-check-input" type="radio" name="permission[publish_comment]" id="publish.comment.3" value="3" data-bs-toggle="collapse" data-bs-target="#publish_comment_setting:not(.show)" aria-expanded="false" aria-controls="publish_comment_setting">
                   <label class="form-check-label" for="publish.comment.3">仅指定的角色成员</label>
                 </div>
                 <div class="collapse mt-2" id="publish_comment_setting">
                   <div class="input-group">
                     <span class="input-group-text">有权发表的角色</span>
-                    <select class="form-select" name="permission['publish_comment_roles']">
-                      <option selected disabled>这是多选框，暂未加载样式组件，所以原型显示为单选下拉框</option>
+                    <select class="form-select select2" name="permission[publish_comment_roles][]" multiple="multiple">
                       @foreach($roles as $role)
                         <option value="{{$role->id}}">{{$role->name}}</option>
                       @endforeach
@@ -539,11 +540,11 @@
                   <span class="input-group-text">是否需要审核<i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="小组管理员不受影响"></i></span>
                   <div class="form-control bg-white">
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio"  name="permission['publish_comment_review']" id="publish.comment.review.0" value="0" checked>
+                      <input class="form-check-input" type="radio"  name="permission[publish_comment_review]" id="publish.comment.review.0" value="0" checked>
                       <label class="form-check-label" for="publish.comment.review.0">不需要</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio"  name="permission['publish_comment_review']" id="publish.comment.review.1" value="1">
+                      <input class="form-check-input" type="radio"  name="permission[publish_comment_review]" id="publish.comment.review.1" value="1">
                       <label class="form-check-label" for="publish.comment.review.1">需要</label>
                     </div>
                   </div>
@@ -616,7 +617,7 @@
     </div>
 
     <!-- Language Modal -->
-    <div class="modal fade name-lang-modal" id="langGroupDescModal" tabindex="-1" aria-labelledby="langGroupDescModal" aria-hidden="true">
+    <div class="modal fade description-lang-modal" id="langGroupDescModal" tabindex="-1" aria-labelledby="langGroupDescModal" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">

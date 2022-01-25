@@ -15,7 +15,7 @@ class Group extends Model
 
     public function scopeTypeGroup($query)
     {
-        return $query->where('type', 0);
+        return $query->where('type', 2);
     }
 
     public function category()

@@ -4,8 +4,9 @@ namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\Plugin;
-use App\Models\MemberRole;
+use App\Models\Member;
 use App\Models\Language;
+use App\Models\MemberRole;
 use Illuminate\Http\Request;
 use App\Fresns\Panel\Http\Requests\UpdateMemberRoleRequest;
 
@@ -35,21 +36,24 @@ class GroupController extends Controller
         if ($parentId) {
             $groups = Group::typeGroup()
                 ->where('parent_id', $parentId)
-                ->where('is_enable', 1)
                 ->with('member', 'plugin', 'names', 'descriptions')
                 ->paginate();
+
+            $groups->map(function($group) {
+                $memberIds = $group->permission['admin_members'] ?? [];
+                $group->admin_members = Member::whereIn('id', $memberIds)->get();
+            });
         }
 
         extract(get_object_vars($this));
 
-
         $plugins = Plugin::all();
-
         $plugins = $plugins->filter(function ($plugin) {
             return in_array('pay', $plugin->scene);
         });
 
         $roles = MemberRole::with('names')->get();
+        $members = Member::all();
 
         return view('panel::operation.group.index', compact(
             'categories',
@@ -58,22 +62,44 @@ class GroupController extends Controller
             'parentId',
             'permissioLabels',
             'plugins',
-            'roles'
+            'roles',
+            'members'
         ));
     }
 
     public function recommendIndex()
     {
+        $categories = Group::typeCategory()
+            ->with('names', 'descriptions')
+            ->get();
+
         $groups = Group::typeGroup()
             ->with('member', 'plugin', 'category')
             ->where('is_recommend', 1)
             ->paginate();
 
+        $groups->map(function($group) {
+            $memberIds = $group->permission['admin_members'] ?? [];
+            $group->admin_members = Member::whereIn('id', $memberIds)->get();
+        });
+
+        $plugins = Plugin::all();
+        $plugins = $plugins->filter(function ($plugin) {
+            return in_array('pay', $plugin->scene);
+        });
+
+        $roles = MemberRole::with('names')->get();
+        $members = Member::all();
+
         extract(get_object_vars($this));
         return view('panel::operation.group.recommend', compact(
+            'categories',
             'groups',
             'typeModeLabels',
-            'permissioLabels'
+            'permissioLabels',
+            'plugins',
+            'roles',
+            'members'
         ));
     }
 
@@ -94,7 +120,7 @@ class GroupController extends Controller
 
     public function store(Group $group, Request $request)
     {
-        $group->uuid = \Str::uuid();
+        $group->uuid = \Str::random(12);
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $group->description = $request->descriptions[$this->defaultLanguage] ?? (current(array_filter($request->descriptions)) ?: '');
         $group->rank_num = $request->rank_num;
@@ -106,6 +132,16 @@ class GroupController extends Controller
             $group->permission = [];
             $group->type = 1;
         } else {
+            $group->parent_id = $request->parent_id;
+            $group->type_mode = $request->type_mode;
+            $group->type_find = $request->type_find;
+            $group->type_follow = $request->type_follow;
+            $group->is_recommend = $request->is_recommend;
+            $group->plugin_unikey = $request->plugin_unikey;
+            $permission = $request->permission;
+            $permission['publish_post_review'] = (bool)$permission['publish_post_review'] ?? 0;
+            $permission['publish_comment_review'] = (bool)$permission['publish_comment_review'] ?? 0;
+            $group->permission = $permission;
             $group->type = 2;
         }
         $group->save();
@@ -176,6 +212,21 @@ class GroupController extends Controller
         $group->cover_file_url = $request->cover_file_url;
         $group->banner_file_url = $request->banner_file_url;
         $group->is_enable = $request->is_enable;
+        // 分类
+        if ($request->is_category) {
+            $group->permission = [];
+        } else {
+            $group->parent_id = $request->parent_id;
+            $group->type_mode = $request->type_mode;
+            $group->type_find = $request->type_find;
+            $group->type_follow = $request->type_follow;
+            $group->is_recommend = $request->is_recommend;
+            $group->plugin_unikey = $request->plugin_unikey;
+            $permission = $request->permission;
+            $permission['publish_post_review'] = (bool)$permission['publish_post_review'] ?? 0;
+            $permission['publish_comment_review'] = (bool)$permission['publish_comment_review'] ?? 0;
+            $group->permission = $permission;
+        }
         $group->save();
 
         if ($request->update_name) {

@@ -37,6 +37,12 @@ class UpgradeFresns extends Command
      */
     public function handle()
     {
-        echo 123;
+        // 下载远程 zip
+        // cache('upgrade_step', 'download');
+        // 解压zip /storage/app/upgrade_tmp
+        // 替换 zip 中的目录到本地
+        //
+        // composer  install
+        // Artican::call   migrate --seed
     }
 }

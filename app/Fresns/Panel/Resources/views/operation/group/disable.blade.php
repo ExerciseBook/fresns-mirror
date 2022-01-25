@@ -75,4 +75,5 @@
     </table>
   </div>
   {{ $groups->links() }}
+
 @endsection

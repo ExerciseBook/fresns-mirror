@@ -33,7 +33,9 @@ window.tips = function (message, code = 200) {
 }
 
 $(document).ready(function() {
-  $('.select2').select2();
+  $('.select2').select2({
+    theme: "bootstrap-5",
+  });
 });
 
 $.ajaxSetup({
@@ -618,6 +620,56 @@ $('#moveModal').on('shown.bs.modal', function(e) {
   let action = button.data('action');
 
   $(this).find('form').attr('action', action);
+});
+
+$('#groupModal').on('shown.bs.modal', function(e) {
+  if ($(this).data('is_back')) {
+    return;
+  }
+  let button = $(e.relatedTarget);
+  let action = button.data('action');
+  let params = button.data('params');
+
+  let form = $(this).parents('form');
+
+  form.attr('action', action);
+
+  form.find('select[name=parent_id]').val(params.parent_id);
+  form.find('input[name=rank_num]').val(params.rank_num);
+  form.find('select[name=plugin_unikey]').val(params.plugin_unikey);
+
+  let names = button.data('names');
+  let descriptions = button.data('descriptions');
+  $(".showSelectTypeName").text('图片地址');
+  $(".inputFile").css('display','none');
+  form.find('input[name=cover_file_url]').val(params.cover_file_url);
+  form.find('input[name=cover_file_url]').css('display','block');
+  form.find('input[name=banner_file_url]').val(params.banner_file_url);
+  form.find('input[name=banner_file_url]').css('display','block');
+  form.find('input[name=type_mode]').val(params.type_mode).click();
+  form.find('select[name=plugin_unikey]').val(params.plugin_unikey);
+  form.find('select[name="permission[admin_members][]"]').select2('val', params.permission.admin_members);
+  form.find('input:radio[name=type_find][value="'+params.type_find+'"]').prop('checked', true).click();
+  form.find('input:radio[name=type_follow][value="'+params.type_follow+'"]').prop('checked', true).click();
+  form.find('input:radio[name=is_recommend][value="'+params.is_recommend+'"]').prop('checked', true).click();
+  form.find('input:radio[name="permission[publish_post]"][value="'+params.permission.publish_post+'"]').prop('checked', true).click();
+  form.find('input:radio[name="permission[publish_post_review]"][value="'+params.permission.publish_post_review+'"]').prop('checked', true).click();
+  form.find('input:radio[name="permission[publish_comment]"][value="'+params.permission.publish_comment+'"]').prop('checked', true).click();
+  form.find('input:radio[name="permission[publish_comment_review]"][value="'+params.permission.publish_comment_review+'"]').prop('checked', true).click();
+  form.find('select[name="permission[publish_post_roles][]"]').select2('val', params.permission.publish_post_roles);
+  form.find('select[name="permission[publish_comment_roles][]"]').select2('val', params.permission.publish_comment_roles);
+  form.find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+
+  if ( names ) {
+    names.map(name => {
+      form.find("input[name='names["+name.lang_tag+"]'").val(name.lang_content);
+    });
+  }
+  if ( descriptions) {
+    descriptions.map(description=> {
+      form.find("textarea[name='descriptions["+description.lang_tag+"]'").val(description.lang_content);
+    });
+  }
 });
 
 //expend-edit-modal
