@@ -44,7 +44,7 @@ return [
     'distinct'             => 'Поле :attribute містить значення, яке дублюється.',
     'email'                => 'Поле :attribute повинне містити коректну електронну адресу.',
     'ends_with'            => 'Поле :attribute має закінчуватися одним з наступних значень: :values',
-    'enum'                 => 'The selected :attribute is invalid.',
+    'enum'                 => 'Вибране для :attribute значення не коректне.',
     'exists'               => 'Вибране для :attribute значення не коректне.',
     'file'                 => 'Поле :attribute має містити файл.',
     'filled'               => 'Поле :attribute є обов\'язковим для заповнення.',
@@ -80,7 +80,7 @@ return [
         'numeric' => 'Поле :attribute має дорівнювати чи бути менше ніж :value.',
         'string'  => 'Поле :attribute має дорівнювати чи бути менше ніж :value символів.',
     ],
-    'mac_address'          => 'The :attribute must be a valid MAC address.',
+    'mac_address'          => 'Поле :attribute має містити MAC адресу.',
     'max'                  => [
         'array'   => 'Поле :attribute повинне містити не більше :max елементів.',
         'file'    => 'Файл в полі :attribute має бути не більше :max кілобайт.',
