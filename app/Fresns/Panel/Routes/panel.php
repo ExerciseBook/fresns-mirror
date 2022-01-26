@@ -185,7 +185,9 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::resource('memberRoles', MemberRoleController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);
-		Route::put('memberRoles/{id}/rank', [MemberRoleController::class, 'updateRank'])->name('memberRoles.rank');
+		Route::put('memberRoles/{memberRole}/rank', [MemberRoleController::class, 'updateRank'])->name('memberRoles.rank');
+        Route::get('memberRoles/{memberRole}/permissions', [MemberRoleController::class, 'showPermissions'])->name('memberRoles.permissions.show');
+        Route::put('memberRoles/{memberRole}/permissions', [MemberRoleController::class, 'updatePermissions'])->name('memberRoles.permissions.update');
 
         Route::resource('groups', GroupController::class)->only([
             'index', 'store', 'update', 'destroy'

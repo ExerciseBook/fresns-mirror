@@ -73,7 +73,7 @@
                                     data-params="{{ $role->toJson() }}"
                                     data-action="{{ route('panel.memberRoles.update', ['memberRole' => $role->id]) }}"
                 data-bs-target="#createRoleModal">修改</button>
-              <a class="btn btn-outline-info btn-sm text-decoration-none ms-1" href="operating-role-permission.html" role="button">设置权限</a>
+              <a class="btn btn-outline-info btn-sm text-decoration-none ms-1" href="{{ route('panel.memberRoles.permissions.show', $role->id) }}" role="button">设置权限</a>
               <button type="butmit" class="btn btn-link link-danger ms-1 fresns-link fs-7"
                 data-bs-toggle="modal"
                 data-params="{{ $role->toJson() }}"
