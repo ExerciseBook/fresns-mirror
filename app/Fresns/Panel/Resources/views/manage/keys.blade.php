@@ -103,23 +103,23 @@
               <span class="input-group-text">{{ __('panel::panel.type' )}}</span>
               <div class="form-control bg-white">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="type" value="1" id="fresns_key"  data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting" checked>
-                  <label class="form-check-label" for="fresns_key">{{ __('panel::panel.mainApi')}}</label>
+                  <input class="form-check-input" type="radio" name="type" value="1" id="create_fresns_key"  data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting" checked>
+                  <label class="form-check-label" for="create_fresns_key">{{ __('panel::panel.mainApi')}}</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="type" value="2" id="admin_key"  data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting">
-                  <label class="form-check-label" for="admin_key">{{ __('panel::panel.manageApi') }}</label>
+                  <input class="form-check-input" type="radio" name="type" value="2" id="create_admin_key"  data-bs-toggle="collapse" data-bs-target="#key_plugin_setting.show" aria-expanded="false" aria-controls="key_plugin_setting">
+                  <label class="form-check-label" for="create_admin_key">{{ __('panel::panel.manageApi') }}</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="type" value="3" id="plugin_key" data-bs-toggle="collapse" data-bs-target="#key_plugin_setting:not(.show)" aria-expanded="false" aria-controls="key_plugin_setting">
-                  <label class="form-check-label" for="plugin_key">{{ __('panel::panel.pluginApi') }}</label>
+                  <input class="form-check-input" type="radio" name="type" value="3" id="create_plugin_key" data-bs-toggle="collapse" data-bs-target="#key_plugin_setting:not(.show)" aria-expanded="false" aria-controls="key_plugin_setting">
+                  <label class="form-check-label" for="create_plugin_key">{{ __('panel::panel.pluginApi') }}</label>
                 </div>
               </div>
             </div>
             <!--类型设置 开始-->
             <div class="input-group mb-3 collapse" id="key_plugin_setting">
               <span class="input-group-text">关联插件<i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="该密钥不允许请求主程序 API"></i></span>
-              <select class="form-select" name="plugin_unikey" id="key_plugin">
+              <select class="form-select" name="plugin_unikey" id="create_key_plugin">
                 <option selected disabled>选择密钥用于哪个插件</option>
                 @foreach($plugins as $plugin)
                   <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
@@ -209,12 +209,12 @@
               <span class="input-group-text">状态</span>
               <div class="form-control bg-white">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="is_enable" id="inlineRadio1" value="1">
-                  <label class="form-check-label" for="inlineRadio1">启用</label>
+                  <input class="form-check-input" type="radio" name="is_enable" id="createInlineRadio1" value="1">
+                  <label class="form-check-label" for="createInlineRadio1">启用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" checked type="radio" name="is_enable" id="inlineRadio2" value="0">
-                  <label class="form-check-label" for="inlineRadio2">停用</label>
+                  <input class="form-check-input" checked type="radio" name="is_enable" id="createInlineRadio2" value="0">
+                  <label class="form-check-label" for="createInlineRadio2">停用</label>
                 </div>
               </div>
             </div>
