@@ -63,7 +63,7 @@ class LoginController extends Controller
 
     public function loggedOut(Request $request)
     {
-        return redirect(route('panel.empty'));
+        return redirect(route('panel.empty', 'empty'));
     }
 
     public function emptyPage()
