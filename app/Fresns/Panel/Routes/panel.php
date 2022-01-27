@@ -64,8 +64,6 @@ try {
 Route::get($loginUrl, [LoginController::class, 'showLoginForm'])->name('login.form');
 Route::post($loginUrl, [LoginController::class, 'login'])->name('login');
 
-Route::get('empty', [LoginController::class, 'emptyPage'])->name('empty');
-
 Route::middleware(['panelAuth'])->group(function() {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 

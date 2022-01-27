@@ -31,7 +31,6 @@ class PanelServiceProvider extends ServiceProvider
             'model' => \App\Models\User::class,
         ]);
 
-        $this->loadRoutesFrom(__DIR__.'/../Routes/panel.php');
         \Route::aliasMiddleware('panelAuth', Authenticate::class);
 
         // register exception hanlder

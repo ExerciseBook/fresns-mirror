@@ -12,7 +12,11 @@ class LoginController extends Controller
     public function __construct()
     {
         \View::share('langs', config('panel.langs'));
-        $this->redirectTo = route('panel.dashboard');
+        try {
+            $this->redirectTo = route('panel.dashboard');
+        } catch (\Exception $e) {
+            $this->redirectTo = 'dashboard';
+        }
     }
 
     public function username()
@@ -59,7 +63,7 @@ class LoginController extends Controller
 
     public function loggedOut(Request $request)
     {
-        return redirect(route('panel.login.form'));
+        return redirect(route('panel.empty'));
     }
 
     public function emptyPage()
