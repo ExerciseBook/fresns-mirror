@@ -37,8 +37,7 @@ class SessionKeyController extends Controller
         $key->app_secret = strtolower(StrHelper::randString(32));
         $key->save();
 
-        return redirect(route('panel.sessionKeys.index'));
-;
+        return $this->createSuccess();
     }
 
     public function update(UpdateSessionKeyRequest $request, SessionKey $sessionKey)
@@ -49,8 +48,7 @@ class SessionKeyController extends Controller
         }
         $sessionKey->update($attributes);
 
-        return redirect(route('panel.sessionKeys.index'));
-;
+        return $this->updateSuccess();
     }
 
     public function reset(SessionKey $sessionKey)
@@ -59,14 +57,13 @@ class SessionKeyController extends Controller
         $sessionKey->app_secret = strtolower(StrHelper::randString(32));
         $sessionKey->save();
 
-        return redirect(route('panel.sessionKeys.index'));
+        return $this->updateSuccess();
     }
 
     public function destroy(SessionKey $sessionKey)
     {
         $sessionKey->delete();
 
-        return redirect(route('panel.sessionKeys.index'));
-;
+        return $this->deleteSuccess();
     }
 }

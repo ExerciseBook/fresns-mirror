@@ -16,13 +16,17 @@ class ManageConfigController extends Controller
         $domain = optional($domainConfig)->item_value;
 
         $pathConfig = Config::where('item_key', 'backend_path')->first();
-        $path = optional($pathConfig)->item_value;
+        $path = optional($pathConfig)->item_value ?: 'admin';
 
         return view('panel::manage.configs', compact('domain', 'path'));
     }
 
     public function update(UpdateConfigRequest $request)
     {
+        if ($request->path && \Str::startsWith($request->path, config('panel.route_blacklist'))) {
+            return back()->with('failure', '安全入口路由冲突');
+        }
+
         if ($request->domain) {
             $domainConfig = Config::where('item_key', 'backend_domain')->firstOrNew();
             $domainConfig->item_value = $request->domain;
@@ -31,10 +35,10 @@ class ManageConfigController extends Controller
 
         if ($request->path) {
             $pathConfig = Config::where('item_key', 'backend_path')->firstOrNew();
-            $pathConfig->item_value = $request->path;
+            $pathConfig->item_value = trim($request->path, '/');
             $pathConfig->save();
         }
 
-        return $this->updatSuccess();
+        return $this->updateSuccess();
     }
 }

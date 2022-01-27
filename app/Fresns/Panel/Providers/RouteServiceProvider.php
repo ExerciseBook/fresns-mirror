@@ -48,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middlewareGroup('panel', config('panel.middleware', []));
 
-        Route::prefix('panel')
+        Route::prefix('fresns')
             ->name('panel.')
             ->middleware('panel')
             ->namespace($this->namespace)

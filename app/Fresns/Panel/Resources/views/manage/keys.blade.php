@@ -62,6 +62,7 @@
             <button type="button" class="btn btn-link btn-sm text-danger fresns-link"
               data-bs-toggle="modal"
               data-app_id="{{ $key->app_id }}"
+              data-name="{{ $key->name }}"
               data-action="{{ route('panel.sessionKeys.destroy', ['sessionKey' => $key]) }}"
               data-bs-target="#deleteKey">删除</button>
           </td>

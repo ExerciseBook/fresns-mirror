@@ -17,25 +17,25 @@
     </div>
   </div>
   <!--配置 开始-->
-  <form action="{{ route('panel.manageConfigs.update') }}" method="post">
+  <form action="{{ route('panel.manageConfigs.update') }}" method="post" id="adminConfig">
     @csrf
     @method('put')
     <div class="row mb-3">
       <label for="backend_url" class="col-lg-2 col-form-label text-lg-end">后端网址：</label>
-      <div class="col-lg-6"><input type="url" class="form-control" id="backend_url" name="domain" value="{{ $domain }}" placeholder="https://"></div>
+      <div class="col-lg-6"><input type="url" class="form-control update-backend-url" id="backend_url" name="domain" value="{{ $domain }}" placeholder="https://"></div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 主程序 API 和插件默认访问地址，结尾不带 /</div>
     </div>
     <div class="row mb-3">
-      <label for="backend_url" class="col-lg-2 col-form-label text-lg-end">安全入口：</label>
-      <div class="col-lg-6"><input type="text" class="form-control" id="backend_url" name="path" value="{{ $path }}" placeholder="admin"></div>
+      <label for="backend_path" class="col-lg-2 col-form-label text-lg-end">安全入口：</label>
+      <div class="col-lg-6"><input type="text" class="form-control update-backend-url" id="backend_path" name="path" value="{{ $path }}" placeholder="admin"></div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 设置后只能通过指定安全入口登录控制台</div>
     </div>
     <div class="row mb-3">
       <label for="backend_url" class="col-lg-2 col-form-label text-lg-end">入口完整地址：</label>
       <div class="col-lg-6">
         <div class="input-group">
-          <span class="form-control bg-light">https://abc.com/fresns/admin</span>
-          <button class="btn btn-outline-secondary" type="button">复制</button>
+          <span class="form-control bg-light" id="backendUrl">{{ $domain.'/fresns/'.$path }}</span>
+          <button class="btn btn-outline-secondary" onclick="copyToClipboard('#backendUrl')" type="button">复制</button>
         </div>
       </div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 设置后只能通过指定安全入口登录控制台</div>

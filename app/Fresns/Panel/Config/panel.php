@@ -8,6 +8,15 @@ return [
         'web',
         ChangeLocale::class,
     ],
+    'route_blacklist' => [
+        'dashboard/',
+        'system/',
+        'manage/',
+        'operation/',
+        'expand/',
+        'plugin/',
+        'client/',
+    ],
     'langs' => [
         'en' => 'English - English',
         'es' => 'Español - Spanish',

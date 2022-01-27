@@ -28,8 +28,6 @@
 @endsection
 
 @section('js')
-  <script src="{{@asset('/static/js/jquery-3.6.0.min.js')}}"></script>
-
   <script>
     $('.change-lang').change(function(){
       var lang = $(this).val();

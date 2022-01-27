@@ -61,4 +61,9 @@ class LoginController extends Controller
     {
         return redirect(route('panel.login.form'));
     }
+
+    public function emptyPage()
+    {
+        return view('panel::auth.empty');
+    }
 }

@@ -38,10 +38,26 @@ $(document).ready(function() {
   });
 });
 
+function copyToClipboard(element) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+
+  window.tips('已复制');
+}
+
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
+});
+
+$('#adminConfig .update-backend-url').change(function() {
+  let domain = $('#adminConfig').find('input[name=domain]').val();
+  let path = $('#adminConfig').find('input[name=path]').val();
+  $('#adminConfig').find('#backendUrl').text(domain + '/fresns/' + path);
 });
 
 // update session key
@@ -79,10 +95,12 @@ $("#resetKey").on('show.bs.modal', function (e) {
 $("#deleteKey").on('show.bs.modal', function (e) {
   let button = $(e.relatedTarget),
     appId = button.data('app_id'),
+    name = button.data('name'),
     action = button.data('action');
 
   $(this).find('form').attr('action', action);
   $(this).find('.app-id').text(appId);
+  $(this).find('.modal-title').text(name)
 });
 
 // set default language

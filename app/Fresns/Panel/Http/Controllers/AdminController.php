@@ -32,7 +32,7 @@ class AdminController extends Controller
         $admin->user_type = 1;
         $admin->save();
 
-        return back();
+        return $this->createSuccess();
     }
 
     public function destroy(Request $request, User $admin)
@@ -40,6 +40,6 @@ class AdminController extends Controller
         $admin->user_type = 2;
         $admin->save();
 
-        return back();
+        return $this->deleteSuccess();
     }
 }

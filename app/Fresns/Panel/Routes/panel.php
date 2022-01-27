@@ -40,6 +40,7 @@ use App\Fresns\Panel\Http\Controllers\{
 };
 use Illuminate\Support\Facades\Route;
 use App\Fresns\Panel\Http\Controllers\ManageController;
+use App\Models\Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,8 +53,18 @@ use App\Fresns\Panel\Http\Controllers\ManageController;
 |
 */
 
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login.form');
-Route::post('login', [LoginController::class, 'login'])->name('login');
+try {
+    $loginConfig = Config::where('item_key', 'backend_path')->first();
+    $loginUrl = $loginConfig ? $loginConfig->item_value : 'admin';
+} catch(\Exception $e) {
+    $loginUrl = 'admin';
+}
+
+
+Route::get($loginUrl, [LoginController::class, 'showLoginForm'])->name('login.form');
+Route::post($loginUrl, [LoginController::class, 'login'])->name('login');
+
+Route::get('empty', [LoginController::class, 'emptyPage'])->name('empty');
 
 Route::middleware(['panelAuth'])->group(function() {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
@@ -268,3 +279,6 @@ Route::middleware(['panelAuth'])->group(function() {
 		Route::put('expandProfile/{id}/rank', [ExpandProfileController::class, 'updateRank'])->name('expandProfile.rank');
 	});
 });
+
+// empty page
+Route::any('{any}', [LoginController::class, 'emptyPage'])->name('empty')->where('any', '.*');
