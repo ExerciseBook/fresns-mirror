@@ -11,23 +11,23 @@
           <div class="col-md mb-4 pe-lg-5">
             <h3 class="h6">站点数据</h3>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item"><i class="bi bi-person-fill"></i> 账号总数 <span class="badge bg-success">100</span></li>
-              <li class="list-group-item"><i class="bi bi-person"></i> 用户总数 <span class="badge bg-success">100</span></li>
-              <li class="list-group-item"><i class="bi bi-collection"></i> 小组总数 <span class="badge bg-success">100</span></li>
-              <li class="list-group-item"><i class="bi bi-hash"></i> 话题总数 <span class="badge bg-success">100</span></li>
-              <li class="list-group-item"><i class="bi bi-file-post-fill"></i> 帖子总数 <span class="badge bg-success">100</span></li>
-              <li class="list-group-item"><i class="bi bi-chat-right-dots"></i> 评论总数 <span class="badge bg-success">100</span></li>
+              <li class="list-group-item"><i class="bi bi-person-fill"></i> 账号总数 <span class="badge bg-success">{{ $params['user_counts'] }}</span></li>
+              <li class="list-group-item"><i class="bi bi-person"></i> 用户总数 <span class="badge bg-success">{{ $params['member_counts'] }}</span></li>
+              <li class="list-group-item"><i class="bi bi-collection"></i> 小组总数 <span class="badge bg-success">{{ $params['group_counts'] }}</span></li>
+              <li class="list-group-item"><i class="bi bi-hash"></i> 话题总数 <span class="badge bg-success">{{ $params['hashtag_counts'] }}</span></li>
+              <li class="list-group-item"><i class="bi bi-file-post-fill"></i> 帖子总数 <span class="badge bg-success">{{ $params['post_counts'] }}</span></li>
+              <li class="list-group-item"><i class="bi bi-chat-right-dots"></i> 评论总数 <span class="badge bg-success">{{ $params['comment_counts'] }}</span></li>
             </ul>
           </div>
           <div class="col-md mb-4 pe-lg-5">
             <h3 class="h6">应用数量</h3>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item"><i class="bi bi-key"></i> 接口密钥 <span class="badge bg-info">2</span></li>
-              <li class="list-group-item"><i class="bi bi-person"></i> 管理员 <span class="badge bg-info">3</span></li>
-              <li class="list-group-item"><i class="bi bi-journal-code"></i> 扩展插件 <span class="badge bg-info">24</span></li>
-              <li class="list-group-item"><i class="bi bi-laptop"></i> 网站引擎 <span class="badge bg-info">3</span></li>
-              <li class="list-group-item"><i class="bi bi-brush"></i> 主题模板 <span class="badge bg-info">6</span></li>
-              <li class="list-group-item"><i class="bi bi-phone"></i> 移动应用 <span class="badge bg-info">2</span></li>
+              <li class="list-group-item"><i class="bi bi-key"></i> 接口密钥 <span class="badge bg-info">{{ $keyCount }}</span></li>
+              <li class="list-group-item"><i class="bi bi-person"></i> 管理员 <span class="badge bg-info">{{ $adminCount }}</span></li>
+              <li class="list-group-item"><i class="bi bi-journal-code"></i> 扩展插件 <span class="badge bg-info">{{ $plugins->where('type', 1)->count() }}</span></li>
+              <li class="list-group-item"><i class="bi bi-laptop"></i> 网站引擎 <span class="badge bg-info">{{ $plugins->where('type', 3)->count() }}</span></li>
+              <li class="list-group-item"><i class="bi bi-brush"></i> 主题模板 <span class="badge bg-info">{{ $plugins->where('type', 4)->count() }}</span></li>
+              <li class="list-group-item"><i class="bi bi-phone"></i> 移动应用 <span class="badge bg-info">{{ $plugins->where('type', 2)->count() }}</span></li>
             </ul>
           </div>
           <div class="col-md mb-4 pe-lg-5">
