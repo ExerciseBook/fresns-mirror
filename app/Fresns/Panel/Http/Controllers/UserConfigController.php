@@ -112,6 +112,19 @@ class UserConfigController extends Controller
             $config->save();
         }
 
+        if ($request->connects) {
+            $services = [];
+            foreach($request->connects as $key => $connect) {
+                $services[] = [
+                    'code' => $connect,
+                    'unikey' => $request->connect_plugins[$key] ?? '',
+                ];
+            }
+            $config = Config::where('item_key', 'account_connect_services')->first();
+            $config->item_value = $services;
+            $config->save();
+        }
+
         return $this->updateSuccess();
     }
 }

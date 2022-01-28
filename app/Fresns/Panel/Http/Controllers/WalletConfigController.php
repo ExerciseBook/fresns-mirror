@@ -81,6 +81,7 @@ class WalletConfigController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 1)
+            ->orderBy('rank_num')
             ->with('plugin', 'names')
             ->get();
 
@@ -92,6 +93,7 @@ class WalletConfigController extends Controller
         $pluginUsage = new PluginUsage;
         $pluginUsage->type = 1;
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
@@ -132,6 +134,7 @@ class WalletConfigController extends Controller
     {
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
+        $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rank_num = $request->rank_num;
@@ -169,7 +172,8 @@ class WalletConfigController extends Controller
 
     public function withdrawIndex()
     {
-        $pluginUsages = PluginUsage::where('type', 1)
+        $pluginUsages = PluginUsage::where('type', 2)
+            ->orderBy('rank_num')
             ->with('plugin')
             ->get();
 
@@ -179,5 +183,87 @@ class WalletConfigController extends Controller
         });
 
         return view('panel::system.wallet.withdraw', compact('pluginUsages', 'plugins'));
+    }
+
+    public function withdrawStore(Request $request)
+    {
+        $pluginUsage = new PluginUsage;
+        $pluginUsage->type = 2;
+        $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
+        $pluginUsage->icon_file_url = $request->icon_file_url;
+        $pluginUsage->plugin_unikey = $request->plugin_unikey;
+        $pluginUsage->parameter = $request->parameter;
+        $pluginUsage->is_enable = $request->is_enable;
+        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->save();
+
+        if ($request->update_name) {
+            foreach($request->names as $langTag => $content) {
+
+                $language = Language::tableName('plugin_usages')
+                    ->where('table_id', $pluginUsage->id)
+                    ->where('lang_tag', $langTag)
+                    ->first();
+
+                if (!$language) {
+                    // create but no content
+                    if (!$content){
+                        continue;
+                    }
+                    $language = new Language();
+                    $language->fill([
+                        'table_name' => 'plugin_usages',
+                        'table_field' => 'name',
+                        'table_id' => $pluginUsage->id,
+                        'lang_tag' => $langTag,
+                    ]);
+                }
+
+                $language->lang_content = $content;
+                $language->save();
+            }
+        }
+
+        return $this->createSuccess();
+    }
+
+    public function withdrawUpdate(PluginUsage $pluginUsage, Request $request)
+    {
+        $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
+        $pluginUsage->plugin_unikey = $request->plugin_unikey;
+        $pluginUsage->icon_file_url = $request->icon_file_url;
+        $pluginUsage->parameter = $request->parameter;
+        $pluginUsage->is_enable = $request->is_enable;
+        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->save();
+
+        if ($request->update_name) {
+            foreach($request->names as $langTag => $content) {
+
+                $language = Language::tableName('plugin_usages')
+                    ->where('table_id', $pluginUsage->id)
+                    ->where('lang_tag', $langTag)
+                    ->first();
+
+                if (!$language) {
+                    // create but no content
+                    if (!$content){
+                        continue;
+                    }
+                    $language = new Language();
+                    $language->fill([
+                        'table_name' => 'plugin_usages',
+                        'table_field' => 'name',
+                        'table_id' => $pluginUsage->id,
+                        'lang_tag' => $langTag,
+                    ]);
+                }
+
+                $language->lang_content = $content;
+                $language->save();
+            }
+        }
+
+        return $this->updateSuccess();
     }
 }

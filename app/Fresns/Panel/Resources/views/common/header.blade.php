@@ -16,10 +16,11 @@
               href="{{ route('panel.sessionKeys.index') }}">管理</a>
           </li>
           <li class="nav-item"><a class="nav-link {{ \Route::is([
-            'panel.languages.*',
+            'panel.languageMenus.*',
             'panel.site.*',
             'panel.policy.*',
             'panel.send.*',
+            'panel.verifyCodes.*',
             'panel.userConfigs.*',
             'panel.wallet*',
             'panel.storage.*',

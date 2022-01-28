@@ -7,7 +7,9 @@ class Config extends Model
     public function getItemValueAttribute($value)
     {
         if (in_array($this->item_type,  ['array', 'plugins', 'object'])) {
-            return json_decode($value, true);
+            $value = json_decode($value, true);
+        } else if ($this->item_type == 'boolean') {
+            $value = $value == 'true' ? true : false;
         }
 
         return $value;

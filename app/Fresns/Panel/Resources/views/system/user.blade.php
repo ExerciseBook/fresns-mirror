@@ -91,7 +91,7 @@
               <div class="input-group mb-1">
                 <label class="input-group-text" for="multi_member_roles">有权使用的角色</label>
                 <select class="form-select" multiple name="multi_member_roles[]">
-                  {{--<option value="0">全部角色</option>--}}
+                  <option value="0">全部角色</option>
                   @foreach($memberRoles as $role)
                     <option value="{{ $role->id }}" {{ in_array($role->id, $params['multi_member_roles']) ? 'selected' : '' }}>{{ $role->name }}</option>
                   @endforeach
@@ -112,7 +112,7 @@
       <div class="col-lg-6">
         <div class="input-group">
           <label class="input-group-text">默认用户角色</label>
-          <select class="form-select" name="default_role">
+          <select class="form-select select2" name="default_role">
             @foreach($memberRoles as $role)
               <option value="{{ $role->id }}" {{ $params['default_role'] == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
             @endforeach
@@ -249,7 +249,7 @@
         @endforeach
       </select>
       <label class="input-group-text" for="inputGroupSelect02">关联插件</label>
-      <select class="form-select" id="inputGroupSelect02">
+      <select class="form-select" name="connect_plugins[]" id="inputGroupSelect02">
         @foreach($pluginParams['connect'] as $plugin)
           <option value="{{ $plugin->unikey }}" {{ $connectService['unikey'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
         @endforeach

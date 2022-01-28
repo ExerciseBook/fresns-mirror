@@ -36,7 +36,7 @@ class Controller extends BaseController
             $languageConfig = Config::where('item_key', 'language_menus')->first();
             $optionalLanguages = $languageConfig ? $languageConfig->item_value : [];
 
-            if (!$stats || $stats->item_value == 'false') {
+            if (!$stats || !$stats->item_value) {
                 $optionalLanguages = collect($optionalLanguages)->where('langTag', $defaultLanguage)->all();
             }
             $this->optionalLanguages = $optionalLanguages;

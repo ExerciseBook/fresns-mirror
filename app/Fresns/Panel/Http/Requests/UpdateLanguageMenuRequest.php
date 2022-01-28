@@ -14,7 +14,7 @@ class UpdateLanguageMenuRequest extends FormRequest
         return [
             'rank_num' => 'required|string',
             'lang_code' => 'required|string',
-            'old_lang_tag' => 'required|string',
+            'old_lang_tag' => 'string',
             'continent_id' => 'int',
             'area_code' => 'string',
             'area_status' => 'required|boolean',

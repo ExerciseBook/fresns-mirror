@@ -103,6 +103,24 @@ $("#deleteKey").on('show.bs.modal', function (e) {
   $(this).find('.modal-title').text(name)
 });
 
+$('.select-continent').change(function() {
+  let areas = $(this).data('children');
+  let continent = $(this).val();
+  areas = areas.filter(area => {
+    if (area.continentId == continent) {
+      return true;
+    }
+    return false;
+  });
+
+  let childrenSelect = $(this).next();
+  childrenSelect.find('option').remove();
+
+  areas.map(area => {
+    childrenSelect.append('<option value="'+area.code+'">'+area.name+'</option>')
+  });
+});
+
 // set default language
 $('input[name="default_language"]').change(function() {
   $.ajax({
@@ -147,6 +165,24 @@ $("#updateLanguageMenu").on('show.bs.modal', function (e) {
   $(this).find('select[name=lang_code]').val(language.langCode);
   $(this).find('input:radio[name=area_status][value="'+status+'"]').prop('checked', true).click();
   $(this).find('select[name=continent_id]').val(language.continentId);
+
+  let continentSelect = $(this).find('select[name=continent_id]');
+  continent = language.continentId
+  let areas = continentSelect.data('children');
+  areas = areas.filter(area => {
+    if (area.continentId == continent) {
+      return true;
+    }
+    return false;
+  });
+
+  let childrenSelect = continentSelect.next();
+  childrenSelect.find('option').remove();
+
+  areas.map(area => {
+    childrenSelect.append('<option value="'+area.code+'">'+area.name+'</option>')
+  });
+
   $(this).find('select[name=area_code]').val(language.areaCode);
   $(this).find('select[name=length_units]').val(language.lengthUnits);
   $(this).find('select[name=date_format]').val(language.dateFormat);
@@ -170,6 +206,26 @@ $("#updateLanguage").on('show.bs.modal', function (e) {
   $(this).find('.lang-label').text(langTagDesc);
   $(this).find('input[name=lang_tag]').val(langTag);
   $(this).find('textarea[name=content]').val(content);
+});
+
+$('#updateLanguageForm').submit(function() {
+  $('#updateLanguage').modal('hide');
+  let content =  $(this).find('textarea[name=content]').val();
+  let langTag = $(this).find('input[name=lang_tag]').val();
+  $.ajax({
+    method:'post',
+    url: $(this).attr('action'),
+    data: {
+      lang_tag: langTag,
+      content: content,
+      _method: 'put',
+    },
+    success:function(response){
+      $('#policyTabContent').find("[data-lang_tag='" + langTag+ "']").data('content', content)
+      window.tips(response.message)
+    }
+  });
+  return false;
 });
 
 // user connect
@@ -586,6 +642,17 @@ $('.wallet-modal').on('show.bs.modal', function(e) {
     return;
   }
 
+  $(".inputUrl").css('display','none');
+  $(".inputFile").removeAttr('style');
+  $(".showSelectTypeName").text('上传图片');
+  if(params.icon_file_url){
+    $(this).find('input[name=icon_file_url]').val(params.icon_file_url);
+    $(this).find('input[name=icon_file_url]').removeAttr('style');
+    $(".showSelectTypeName").text('图片地址');
+    $(".inputFile").css('display','none');
+  } else {
+    $(this).find('input[name=icon_file_url]').val('');
+  }
   $(this).find('input[name=rank_num]').val(params.rank_num);
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
   $(this).find('input[name=parameter]').val(params.parameter);

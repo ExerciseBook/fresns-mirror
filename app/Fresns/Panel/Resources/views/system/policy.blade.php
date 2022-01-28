@@ -26,7 +26,7 @@
     </ul>
   </div>
   <!--操作列表-->
-  <div class="tab-content table-responsive" id="myTabContent">
+  <div class="tab-content table-responsive" id="policyTabContent">
     <div class="tab-pane fade show active" id="function" role="tabpanel" aria-labelledby="function-tab">
       <form action="{{ route('panel.policy.update')}}" method="post">
         @csrf
@@ -35,11 +35,11 @@
           <label for="delete_account" class="col-lg-2 col-form-label text-lg-end">服务条款：</label>
           <div class="col-lg-6 pt-2">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_terms_close" id="account_terms_false" value="false" {{ $params['account_terms_close'] == 'true' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_terms_close" id="account_terms_false" value="false" {{ $params['account_terms_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_terms_false">隐藏</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_terms_close" id="account_terms_true" value="true" {{ $params['account_terms_close'] == 'false' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_terms_close" id="account_terms_true" value="true" {{ !$params['account_terms_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_terms_true">显示</label>
             </div>
           </div>
@@ -48,11 +48,11 @@
           <label for="delete_account" class="col-lg-2 col-form-label text-lg-end">隐私权政策：</label>
           <div class="col-lg-6 pt-2">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_privacy_close" id="account_privacy_false" value="false" {{ $params['account_privacy_close'] == 'true' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_privacy_close" id="account_privacy_false" value="false" {{ $params['account_privacy_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_privacy_false">隐藏</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_privacy_close" id="account_privacy_true" value="true" {{ $params['account_privacy_close'] == 'false' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_privacy_close" id="account_privacy_true" value="true" {{ !$params['account_privacy_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_privacy_true">显示</label>
             </div>
           </div>
@@ -61,11 +61,11 @@
           <label for="delete_account" class="col-lg-2 col-form-label text-lg-end">Cookie 政策：</label>
           <div class="col-lg-6 pt-2">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_cookie_close" id="account_cookie_false" value="false" {{ $params['account_cookie_close'] == 'true' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_cookie_close" id="account_cookie_false" value="false" {{ $params['account_cookie_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_cookie_false">隐藏</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_cookie_close" id="account_cookie_true" value="true" {{ $params['account_cookie_close'] == 'false' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_cookie_close" id="account_cookie_true" value="true" {{ !$params['account_cookie_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_cookie_true">显示</label>
             </div>
           </div>
@@ -74,11 +74,11 @@
           <label for="delete_account" class="col-lg-2 col-form-label text-lg-end">注销说明：</label>
           <div class="col-lg-6 pt-2">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_delete_close" id="account_delete_false" value="false" {{ $params['account_delete_close'] == 'true' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_delete_close" id="account_delete_false" value="false" {{ $params['account_delete_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_delete_false">隐藏</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_delete_close" id="account_delete_true" value="true" {{ $params['account_delete_close'] == 'false' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_delete_close" id="account_delete_true" value="true" {{ !$params['account_delete_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_delete_true">显示</label>
             </div>
           </div>
@@ -156,9 +156,30 @@
                                       data-lang_tag="{{ $lang['langTag'] }}"
                                       data-content="{{ $langParams['account_terms'][$lang['langTag']] ?? '' }}"
                 >编辑</button></td>
-            <td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateLanguage">编辑</button></td>
-            <td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateLanguage">编辑</button></td>
-            <td><button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateLanguage">编辑</button></td>
+            <td><button type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        data-action="{{ route('panel.languages.update', ['itemKey' => 'account_privacy'] )}}"
+                        data-lang_tag_desc="{{ $langName }}"
+                        data-lang_tag="{{ $lang['langTag'] }}"
+                        data-content="{{ $langParams['account_privacy'][$lang['langTag']] ?? '' }}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateLanguage">编辑</button></td>
+            <td><button type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        data-action="{{ route('panel.languages.update', ['itemKey' => 'account_cookie'] )}}"
+                        data-lang_tag_desc="{{ $langName }}"
+                        data-lang_tag="{{ $lang['langTag'] }}"
+                        data-content="{{ $langParams['account_cookie'][$lang['langTag']] ?? '' }}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateLanguage">编辑</button></td>
+            <td><button type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        data-action="{{ route('panel.languages.update', ['itemKey' => 'account_delete'] )}}"
+                        data-lang_tag_desc="{{ $langName }}"
+                        data-lang_tag="{{ $lang['langTag'] }}"
+                        data-content="{{ $langParams['account_delete'][$lang['langTag']] ?? '' }}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateLanguage">编辑</button></td>
           </tr>
           @endforeach
         </tbody>
@@ -175,7 +196,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method="post">
+          <form method="post" id="updateLanguageForm">
             @csrf
             @method('put')
             <input type="hidden" name="lang_tag">

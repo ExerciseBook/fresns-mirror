@@ -116,12 +116,12 @@
               <label class="col-sm-3 col-form-label">语言地区</label>
               <div class="col-sm-9 pt-2">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="area_status" id="area_status_false" value="0" data-bs-toggle="collapse" data-bs-target="#area_setting.show" aria-expanded="false" aria-controls="area_setting" checked>
-                  <label class="form-check-label" for="area_status_false">不启用</label>
+                  <input class="form-check-input" type="radio" name="area_status" id="create_area_status_false" value="0" data-bs-toggle="collapse" data-bs-target="#area_setting.show" aria-expanded="false" aria-controls="area_setting" checked>
+                  <label class="form-check-label" for="create_area_status_false">不启用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="area_status" id="area_status_true" value="1" data-bs-toggle="collapse" data-bs-target="#area_setting:not(.show)" aria-expanded="false" aria-controls="area_setting">
-                  <label class="form-check-label" for="area_status_true">启用</label>
+                  <input class="form-check-input" type="radio" name="area_status" id="create_area_status_true" value="1" data-bs-toggle="collapse" data-bs-target="#area_setting:not(.show)" aria-expanded="false" aria-controls="area_setting">
+                  <label class="form-check-label" for="create_area_status_true">启用</label>
                 </div>
               </div>
             </div>
@@ -130,7 +130,7 @@
                 <label class="col-sm-3 col-form-label">地区代码</label>
                 <div class="col-sm-9">
                   <div class="input-group">
-                    <select class="form-select" name="continent_id">
+                    <select class="form-select select-continent" data-children="{{ json_encode($areaCodes) }}" name="continent_id">
                       <option selected disabled>Choose...</option>
                       @foreach($continents as $continent)
                       <option value="{{ $continent['id'] }}">{{ $continent['name']}}</option>
@@ -138,9 +138,9 @@
                     </select>
                     <select class="form-select" name="area_code">
                       <option selected disabled>Choose...</option>
-                      @foreach($areaCodes as $areaCode)
-                        <option value={{ $areaCode['code'] }}>{{ $areaCode['name'] }}- {{ $areaCode['localName']}} > {{ $areaCode['code']}}</option>
-                      @endforeach
+                      {{--@foreach($areaCodes as $areaCode)--}}
+                        {{--<option value={{ $areaCode['code'] }}>{{ $areaCode['name'] }}- {{ $areaCode['localName']}} > {{ $areaCode['code']}}</option>--}}
+                      {{--@endforeach--}}
                     </select>
                   </div>
                 </div>
@@ -198,11 +198,11 @@
               <label class="col-sm-3 col-form-label">是否启用</label>
               <div class="col-sm-9 pt-2">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="is_enable" id="language_status_true" value="1" checked>
+                  <input class="form-check-input" type="radio" name="is_enable" id="create_language_status_true" value="1" checked>
                   <label class="form-check-label" for="language_status_true">启用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="is_enable" id="language_status_false" value="0">
+                  <input class="form-check-input" type="radio" name="is_enable" id="create_language_status_false" value="0">
                   <label class="form-check-label" for="language_status_false">停用</label>
                 </div>
               </div>
@@ -265,7 +265,7 @@
                 <label class="col-sm-3 col-form-label">地区代码</label>
                 <div class="col-sm-9">
                   <div class="input-group">
-                    <select class="form-select" name="continent_id">
+                    <select class="form-select select-continent" data-children="{{ json_encode($areaCodes) }}" name="continent_id">
                       <option selected disabled>Choose...</option>
                       @foreach($continents as $continent)
                       <option value="{{ $continent['id'] }}">{{ $continent['name']}}</option>
@@ -273,9 +273,9 @@
                     </select>
                     <select class="form-select" name="area_code">
                       <option selected disabled>Choose...</option>
-                      @foreach($areaCodes as $areaCode)
-                        <option value={{ $areaCode['code'] }}>{{ $areaCode['name'] }}- {{ $areaCode['localName']}} > {{ $areaCode['code']}}</option>
-                      @endforeach
+                      {{--@foreach($areaCodes as $areaCode)--}}
+                        {{--<option value={{ $areaCode['code'] }}>{{ $areaCode['name'] }}- {{ $areaCode['localName']}} > {{ $areaCode['code']}}</option>--}}
+                      {{--@endforeach--}}
                     </select>
                   </div>
                 </div>

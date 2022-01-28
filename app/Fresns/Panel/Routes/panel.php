@@ -89,6 +89,7 @@ Route::middleware(['panelAuth'])->group(function() {
         ]);
     });
 
+    Route::put('pluginUsages/{pluginUsage}/rank', [PluginUsageController::class, 'updateRank'])->name('pluginUsages.rank.update');
     // plugin usage
     Route::resource('pluginUsages', PluginUsageController::class)->only([
         'store', 'update', 'destroy'

@@ -45,7 +45,7 @@
       <tbody>
         @foreach($pluginUsages as $item)
           <tr>
-            <td><input type="number" class="form-control input-number" value="{{ $item['rank_num']}}"></td>
+            <td><input type="number" class="form-control input-number rank-num" data-action="{{ route('panel.pluginUsages.rank.update', $item->id)}}" value="{{ $item['rank_num']}}"></td>
             <td>{{ optional($item->plugin)->name }}</td>
             <td>
               @if($item->icon_file_url)
@@ -62,13 +62,17 @@
               @endif
             </td>
             <td>
-              <button type="button" class="btn btn-outline-primary btn-sm"
-                data-bs-toggle="modal"
-                data-names="{{ $item->names->toJson() }}"
-                data-params="{{ json_encode($item->attributesToArray()) }}"
-                data-action="{{ route('panel.walletPayConfigs.update', ['pluginUsage' => $item->id]) }}"
-                data-bs-target="#createPayModal">修改</button>
-              <button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
+              <form method="post" action="{{ route('panel.pluginUsages.destroy', $item->id) }}">
+                @csrf
+                @method('delete')
+                <button type="button" class="btn btn-outline-primary btn-sm"
+                                      data-bs-toggle="modal"
+                                      data-names="{{ $item->names->toJson() }}"
+                                      data-params="{{ json_encode($item->attributesToArray()) }}"
+                                      data-action="{{ route('panel.walletPayConfigs.update', ['pluginUsage' => $item->id]) }}"
+                                      data-bs-target="#createPayModal">修改</button>
+                <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
+              </form>
             </td>
           </tr>
         @endforeach
@@ -109,15 +113,15 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">显示图标</label>
               <div class="col-sm-9">
-				  <div class="input-group">
-  					<button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
-  					<ul class="dropdown-menu selectImageTyle">
-  						<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
-  						<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
-  					</ul>
-  					<input type="file" class="form-control inputFile" name="default_avatar_file">
-  				 <input type="text" class="form-control inputUrl"     name="deactivate_avatar" value="" style="display:none;">
-  				</div>
+                <div class="input-group">
+                  <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
+                  <ul class="dropdown-menu selectImageTyle">
+                    <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+                    <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+                  </ul>
+                  <input type="file" class="form-control inputFile" name="icon_file_id">
+                  <input type="text" class="form-control inputUrl"  name="icon_file_url" value="" style="display:none;">
+                </div>
               </div>
             </div>
             <div class="mb-3 row">

@@ -13,13 +13,13 @@ class LanguageMenuController extends Controller
     public function index()
     {
         $languageConfig = Config::where('item_key', 'language_menus')->firstOrFail();
-        $languages = $languageConfig->item_value;
+        $languages = collect($languageConfig->item_value)->sortBy('rankNum');
 
         $defaultLanguageConfig = Config::where('item_key', 'default_language')->firstOrFail();
         $defaultLanguage = $defaultLanguageConfig->item_value;
 
         $statusConfig = Config::where('item_key', 'language_status')->firstOrFail();
-        $status = $statusConfig->item_value == 'true';
+        $status = $statusConfig->item_value;
 
         $codeConfig = Config::where('item_key', 'language_codes')->firstOrFail();
         $codes = $codeConfig->item_value;
@@ -36,7 +36,7 @@ class LanguageMenuController extends Controller
     public function switchStatus()
     {
         $statusConfig = Config::where('item_key', 'language_status')->firstOrFail();
-        $statusConfig->item_value = $statusConfig->item_value == 'true' ? 'false' : 'true';
+        $statusConfig->item_value = !$statusConfig->item_value;
         $statusConfig->save();
 
         return $this->updateSuccess();
@@ -206,6 +206,6 @@ class LanguageMenuController extends Controller
         $languageConfig->item_value = $languages;
         $languageConfig->save();
 
-        return back();
+        return $this->deleteSuccess();
     }
 }

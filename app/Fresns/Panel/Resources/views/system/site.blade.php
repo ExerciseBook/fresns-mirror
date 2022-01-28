@@ -30,13 +30,13 @@
 
     <div class="row mb-4">
       <label for="site_name" class="col-lg-2 col-form-label text-lg-end">站点名称：</label>
-      <div class="col-lg-6"><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#siteNameModal">{{ $params['site_name'] }}</button></div>
+      <div class="col-lg-6"><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#siteNameModal">{{ $defaultLangParams['site_name'] }}</button></div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 你的 Fresns 站点的名称。</div>
     </div>
 
     <div class="row mb-4">
       <label for="site_desc" class="col-lg-2 col-form-label text-lg-end">站点介绍：</label>
-      <div class="col-lg-6"><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#siteDescModal">{{ $params['site_desc'] }}</button></div>
+      <div class="col-lg-6"><button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#siteDescModal">{{ $defaultLangParams['site_desc'] }}</button></div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 你的 Fresns 站点的介绍。</div>
     </div>
 
@@ -120,7 +120,9 @@
                 <label class="input-group-text" for="register_plugin">注册功能配置</label>
                 <select class="form-select" id="register_plugin" name="site_public_service">
                   <option selected>默认</option>
-                  <option value="xx">xx插件</option>
+                  @foreach($registerPlugins as $plugin)
+                    <option value="{{ $plugin->unikey }}" {{ $params['site_public_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
+                  @endforeach
                 </select>
               </div>
               <div class="input-group mb-1">
@@ -158,8 +160,9 @@
                 <label class="input-group-text" for="site_private_plugin">加入通道支持插件</label>
                 <select class="form-select" id="site_private_plugin" name="site_private_service">
                   <option selected disabled>请选择插件关联</option>
-                  <option value="1">xx插件</option>
-                  <option value="2">zz插件</option>
+                  @foreach($joinPlugins as $plugin)
+                    <option value="{{ $plugin->unikey }}" {{ $params['site_private_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
+                  @endforeach
                 </select>
               </div>
               <div class="input-group mb-1">

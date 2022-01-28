@@ -3,6 +3,7 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Models\Config;
+use App\Models\Plugin;
 use App\Models\Language;
 use Illuminate\Http\Request;
 use App\Fresns\Panel\Http\Requests\UpdateSiteRequest;
@@ -48,11 +49,21 @@ class SiteController extends Controller
         }
 
         $langParams = [];
+        $defaultLangParams = [];
         foreach ($langKeys as $langKey) {
             $langParams[$langKey] = $languages->where('table_key', $langKey)->pluck('lang_content', 'lang_tag')->toArray();
+            $defaultLangParams[$langKey] = $languages->where('table_key', $langKey)->where('lang_tag', $this->defaultLanguage)->first()['lang_content'] ?? '';
         }
 
-        return view('panel::system.site', compact('params', 'langParams'));
+        $plugins = Plugin::all();
+        $registerPlugins = $plugins->filter(function ($plugin) {
+            return in_array('register', $plugin->scene);
+        });
+        $joinPlugins = $plugins->filter(function ($plugin) {
+            return in_array('join', $plugin->scene);
+        });
+
+        return view('panel::system.site', compact('params', 'langParams', 'defaultLangParams', 'registerPlugins', 'joinPlugins'));
     }
 
     public function update(UpdateSiteRequest $request)
@@ -66,16 +77,15 @@ class SiteController extends Controller
             'default_timezone',
             'site_mode',
             'site_public_close',
-            //'site_public_service',
+            'site_public_service',
             'site_register_email',
             'site_register_phone',
             'site_private_close',
-            //'site_private_service',
+            'site_private_service',
             'site_private_end',
             'site_email',
         ];
 
-        //dd($request->all());
         $configs = Config::whereIn('item_key', $configKeys)->get();
 
         foreach ($configKeys as $configKey) {

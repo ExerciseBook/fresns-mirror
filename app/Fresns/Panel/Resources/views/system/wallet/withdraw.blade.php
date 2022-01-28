@@ -13,7 +13,12 @@
     </div>
     <div class="col-lg-5">
       <div class="input-group mt-2 mb-4 justify-content-lg-end">
-        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createWithdrawModal"><i class="bi bi-plus-circle-dotted"></i> 新增服务商</button>
+        <button class="btn btn-primary"
+                type="button"
+                data-bs-toggle="modal"
+                data-action="{{ route('panel.walletWithdrawConfigs.store') }}"
+                data-bs-target="#createWithdrawModal">
+          <i class="bi bi-plus-circle-dotted"></i> 新增服务商</button>
         <a class="btn btn-outline-secondary" href="#" role="button">帮助说明</a>
       </div>
     </div>
@@ -39,7 +44,7 @@
       <tbody>
         @foreach($pluginUsages as $item)
           <tr>
-            <td><input type="number" class="form-control input-number" value="{{ $item['rank_num']}}"></td>
+            <td><input type="number" class="form-control input-number rank-num" data-action="{{ route('panel.pluginUsages.rank.update', $item->id)}}" value="{{ $item['rank_num']}}"></td>
             <td>{{ optional($item->plugin)->name }}</td>
             <td>
               @if($item->icon_file_url)
@@ -56,13 +61,18 @@
               @endif
             </td>
             <td>
-              <button type="button" class="btn btn-outline-primary btn-sm"
-                                    data-bs-toggle="modal"
-                                    data-names="{{ $item->names->toJson() }}"
-                                    data-params="{{ json_encode($item->attributesToArray()) }}"
-                                    data-action="{{ route('panel.walletWithdrawConfigs.update', ['pluginUsage' => $item->id]) }}"
-                                    data-bs-target="#createWithdrawModal">修改</button>
-              <button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
+              <form method="post" action="{{ route('panel.pluginUsages.destroy', $item->id) }}">
+                @csrf
+                @method('delete')
+                <button type="button" class="btn btn-outline-primary btn-sm"
+                                      data-bs-toggle="modal"
+                                      data-names="{{ $item->names->toJson() }}"
+                                      data-params="{{ json_encode($item->attributesToArray()) }}"
+                                      data-action="{{ route('panel.walletWithdrawConfigs.update', ['pluginUsage' => $item->id]) }}"
+                                      data-bs-target="#createWithdrawModal">修改</button>
+
+                <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
+              </form>
             </td>
           </tr>
         @endforeach
@@ -79,7 +89,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">充值服务商设置</h5>
+            <h5 class="modal-title">提现服务商设置</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -103,7 +113,15 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">显示图标</label>
               <div class="col-sm-9">
-                <input type="file" class="form-control" id="inputGroupFile01">
+                <div class="input-group">
+                  <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
+                  <ul class="dropdown-menu selectImageTyle">
+                    <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+                    <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+                  </ul>
+                  <input type="file" class="form-control inputFile" name="icon_file_id">
+                  <input type="text" class="form-control inputUrl"  name="icon_file_url" value="" style="display:none;">
+                </div>
               </div>
             </div>
             <div class="mb-3 row">

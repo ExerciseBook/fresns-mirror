@@ -74,7 +74,7 @@
             <td>
               <form method="post" action="{{ route('panel.pluginUsages.destroy', $item->id) }}">
                 @csrf
-				@method('delete')
+                @method('delete')
                 <button type="button"
                         class="btn btn-outline-primary btn-sm"
                         data-names="{{ $item->names->toJson() }}"

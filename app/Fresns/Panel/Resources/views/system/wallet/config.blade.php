@@ -79,11 +79,11 @@
             <label class="input-group-text">提现是否审核</label>
             <div class="form-control bg-white">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="wallet_withdraw_review" id="wallet_cash_review_false" value="false" {{ $params['wallet_withdraw_review'] == 'false' ? 'checked' : '' }}>
+                <input class="form-check-input" type="radio" name="wallet_withdraw_review" id="wallet_cash_review_false" value="false" {{ !$params['wallet_withdraw_review'] ? 'checked' : '' }}>
                 <label class="form-check-label" for="wallet_cash_review_false">不需要审核</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="wallet_withdraw_review" id="wallet_cash_review_true" value="true" {{ $params['wallet_withdraw_review'] == 'true' ? 'checked' : '' }}>
+                <input class="form-check-input" type="radio" name="wallet_withdraw_review" id="wallet_cash_review_true" value="true" {{ $params['wallet_withdraw_review'] ? 'checked' : '' }}>
                 <label class="form-check-label" for="wallet_cash_review_true">需审核</label>
               </div>
             </div>
@@ -92,11 +92,11 @@
             <label class="input-group-text">提现是否验证实名信息</label>
             <div class="form-control bg-white">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="wallet_withdraw_verify" id="wallet_cash_verify_false" value="false" {{ $params['wallet_withdraw_verify'] == 'false' ? 'checked' : ''}}>
+                <input class="form-check-input" type="radio" name="wallet_withdraw_verify" id="wallet_cash_verify_false" value="false" {{ !$params['wallet_withdraw_verify'] ? 'checked' : ''}}>
                 <label class="form-check-label" for="wallet_cash_verify_false">不验证</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="wallet_withdraw_verify" id="wallet_cash_verify_true" value="true" {{ $params['wallet_withdraw_verify'] == 'true' ? 'checked' : ''}}>
+                <input class="form-check-input" type="radio" name="wallet_withdraw_verify" id="wallet_cash_verify_true" value="true" {{ $params['wallet_withdraw_verify'] ? 'checked' : ''}}>
                 <label class="form-check-label" for="wallet_cash_verify_true">需验证</label>
               </div>
             </div>
