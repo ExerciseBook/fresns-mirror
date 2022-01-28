@@ -33,7 +33,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            return route('panel.empty');
+            return route('panel.empty', 'empty');
         }
     }
 }
