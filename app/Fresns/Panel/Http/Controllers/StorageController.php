@@ -79,7 +79,7 @@ class StorageController extends Controller
         foreach ($configKeys as $configKey) {
             $config = $configs->where('item_key', $configKey)->first();
             if (!$config) {
-                $continue;
+                continue;
             }
 
             $value = $request->$configKey;
@@ -343,19 +343,6 @@ class StorageController extends Controller
         foreach ($configs as $config) {
             $params[$config->item_key] = $config->item_value;
         }
-
-        $pluginScenes = [
-            'storage',
-        ];
-
-        // $plugins = Plugin::all();
-        //
-        // $pluginParams = [];
-        // foreach ($pluginScenes as $scene) {
-        //     $pluginParams[$scene] = $plugins->filter(function ($plugin) use ($scene) {
-        //         return in_array($scene, $plugin->scene);
-        //     });
-        // }
 
         return view('panel::system.storage.repair', compact('params'));
     }

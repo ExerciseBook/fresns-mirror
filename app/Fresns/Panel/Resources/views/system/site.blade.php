@@ -52,7 +52,7 @@
 			  </ul>
 			  <input type="file" class="form-control inputFile" name="site_icon_file" @if($params['site_icon']) style="display:none;" @endif>
 			    <input type="text" class="form-control inputUrl" name="site_icon" value="{{ $params['site_icon'] }}" @if(!$params['site_icon']) style="display:none;" @endif>
-			  <button class="btn btn-outline-secondary" type="button">查看</button>
+			  <button class="btn btn-outline-secondary preview-image" type="button">查看</button>
 		  </div>
 		  <div class="input-group">
 			  <label class="input-group-text font-monospace" for="LOGO">LOGO</label>
@@ -63,7 +63,7 @@
 			  </ul>
 			  <input type="file" class="form-control inputFile" name="site_logo_file" @if($params['site_logo']) style="display:none;" @endif>
 			  <input type="text" class="form-control inputUrl" name="site_logo" value="{{ $params['site_logo'] }}" @if(!$params['site_logo']) style="display:none;" @endif>
-			  <button class="btn btn-outline-secondary" type="button">查看</button>
+			  <button class="btn btn-outline-secondary preview-image" type="button">查看</button>
 		  </div>
 	  </div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 图片文件，必须配置了<a href="system-storage-image.html">存储设置</a>中的信息才能上传。</div>
@@ -289,6 +289,14 @@
             </div>
           </form>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade image-zoom" id="imageZoom" tabindex="-1" aria-labelledby="imageZoomLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="position-relative image-box">
+        <img class="img-fluid" src="">
       </div>
     </div>
   </div>

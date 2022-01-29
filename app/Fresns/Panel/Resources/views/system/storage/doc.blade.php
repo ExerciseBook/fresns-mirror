@@ -75,17 +75,17 @@
 				<label class="input-group-text w-25">防盗链功能</label>
 				<div class="form-control bg-white">
 					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="docs_url_status" id="docs_url_status_false" value="false" data-bs-toggle="collapse" data-bs-target="#docs_url_status_setting.show" aria-expanded="false" aria-controls="docs_url_status_setting"  {{ $params['docs_url_status'] == 'false' ? 'checked' : '' }}>
+						<input class="form-check-input" type="radio" name="docs_url_status" id="docs_url_status_false" value="false" data-bs-toggle="collapse" data-bs-target="#docs_url_status_setting.show" aria-expanded="false" aria-controls="docs_url_status_setting"  {{ !$params['docs_url_status'] ? 'checked' : '' }}>
 						<label class="form-check-label" for="docs_url_status_false">关闭</label>
 					</div>
 					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="docs_url_status" id="docs_url_status_true" value="true" data-bs-toggle="collapse" data-bs-target="#docs_url_status_setting:not(.show)" aria-expanded="false" aria-controls="docs_url_status_setting"  {{ $params['docs_url_status'] == 'true' ? 'checked' : '' }}>
+						<input class="form-check-input" type="radio" name="docs_url_status" id="docs_url_status_true" value="true" data-bs-toggle="collapse" data-bs-target="#docs_url_status_setting:not(.show)" aria-expanded="false" aria-controls="docs_url_status_setting"  {{ $params['docs_url_status'] ? 'checked' : '' }}>
 						<label class="form-check-label" for="docs_url_status_true">开启</label>
 					</div>
 				</div>
 			</div>
 			<!--防盗链功能 开始-->
-			<div class="collapse  {{ $params['docs_url_status'] == 'true' ? 'show' : '' }}" id="docs_url_status_setting">
+			<div class="collapse  {{ $params['docs_url_status'] ? 'show' : '' }}" id="docs_url_status_setting">
 				<div class="input-group mb-3">
 					<label class="input-group-text w-25">防盗链 Key</label>
 					<input type="text" class="form-control" id="docs_url_key"  name="docs_url_key" value="{{ $params['docs_url_key'] }}">

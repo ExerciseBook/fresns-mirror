@@ -9,7 +9,7 @@ class Config extends Model
         if (in_array($this->item_type,  ['array', 'plugins', 'object'])) {
             $value = json_decode($value, true);
         } else if ($this->item_type == 'boolean') {
-            $value = $value == 'true' ? true : false;
+            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
         }
 
         return $value;
@@ -22,7 +22,7 @@ class Config extends Model
         }
 
         if ($this->item_type == 'boolean') {
-            $value = ($value || $value == 'true') ? 'true' : 'false';
+            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
         }
         $this->attributes['item_value'] = $value;
     }

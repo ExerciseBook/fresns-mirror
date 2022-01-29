@@ -39,7 +39,7 @@
       <tbody>
         @foreach($pluginUsages as $item)
         <tr>
-          <td><input type="number" class="form-control input-number" value="{{ $item->rank_num }}"></td>
+          <td><input type="number" class="form-control input-number rank-num" data-action="{{ route('panel.pluginUsages.rank.update', $item->id)}}" value="{{ $item['rank_num']}}"></td>
           <td>{{ optional($item->plugin)->name }}</td>
           <td><img src=" {{ asset('static/images/placeholder_icon.png') }} " width="24" height="24">{{ $item->name }}</td>
           <td>{{ $mapServices[$item->parameter]['name'] ?? '' }}</td>
@@ -61,9 +61,9 @@
                 data-bs-target="#createMap"
                 data-action="{{ route('panel.mapConfigs.update', ['mapConfig' => $item->id])}}"
                 data-params="{{ $item->toJson() }}"
-                data-languages="{{ optional($languages->where('table_id', $item->id))->toJson() }}"
+                data-names="{{ $item->names->toJson() }}"
                 data-config_params="{{ json_encode($mapConfigs['map_' .$item->parameter] ?? []) }}"
-                data-bs-target="#UpdateMap">修改</button>
+              >修改</button>
               <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
             </form>
           </td>
@@ -78,7 +78,7 @@
     @csrf
     @method('post')
     <!-- Modal -->
-    <div class="modal fade" id="createMap" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
+    <div class="modal fade name-lang-parent" id="createMap" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -89,14 +89,14 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">显示顺序</label>
               <div class="col-sm-9">
-                <input type="number" class="form-control input-number" name="rank_num">
+                <input type="number" class="form-control input-number" name="rank_num" required>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">关联插件</label>
               <div class="col-sm-9">
                 <select class="form-select" name="plugin_unikey" required>
-                  <option selected disabled>请选择插件</option>
+                  <option selected disabled value="">请选择插件</option>
                   @foreach($plugins as $plugin)
                     <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
                   @endforeach
@@ -120,14 +120,18 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">显示名称</label>
               <div class="col-sm-9">
-                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start" data-bs-toggle="modal" data-bs-target="#mapLangModal" data-parent="#createMap">显示名称</button>
+                <button type="button"
+                        class="btn btn-outline-secondary btn-modal w-100 text-start"
+                        data-bs-toggle="modal"
+                        data-bs-target="#mapLangModal"
+                        data-parent="#createMap">显示名称</button>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">地图服务商</label>
               <div class="col-sm-9">
-                <select class="form-select" name="parameter">
-                  <option selected disabled>请选择</option>
+                <select class="form-select" name="parameter" required>
+                  <option selected disabled value="">请选择</option>
                   @foreach($mapServices as $service)
                     <option value="{{ $service['id'] }}">{{ $service['name'] }}</option>
                   @endforeach
@@ -169,7 +173,7 @@
     </div>
 
     <!-- Language Modal -->
-    <div class="modal fade" id="mapLangModal" tabindex="-1" aria-labelledby="mapLangModal" aria-hidden="true">
+    <div class="modal fade name-lang-modal" id="mapLangModal" tabindex="-1" aria-labelledby="mapLangModal" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -203,7 +207,7 @@
                       @endif
                     </td>
                     <td>{{ $langName }}</td>
-                    <td><input type="text" class="form-control" name="languages[{{ $lang['langTag'] }}]" value=""></td>
+                    <td><input type="text" class="form-control" name="names[{{ $lang['langTag'] }}]" value=""></td>
                   </tr>
                 @endforeach
                 </tbody>

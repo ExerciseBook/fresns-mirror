@@ -54,6 +54,13 @@ $.ajaxSetup({
     }
 });
 
+$('.preview-image').click(function() {
+  let url = $(this).siblings('.inputUrl').val();
+  $('#imageZoom').find('img').attr('src', url);
+  $('#imageZoom').modal('show');
+  console.log(123);
+})
+
 $('#adminConfig .update-backend-url').change(function() {
   let domain = $('#adminConfig').find('input[name=domain]').val();
   let path = $('#adminConfig').find('input[name=path]').val();
@@ -246,56 +253,23 @@ $('#createMap').on('show.bs.modal', function(e) {
   }
 
   let button = $(e.relatedTarget);
-  let action = button.data('action');
   let params = button.data('params');
 
-  $(this).parent('form').attr('action', action);
-
-  $(this).parent('form').find('input[name=_method]').val(params ? 'put' : 'post');
-
-  if (!params) {
-    $(this).parent('form').trigger("reset");
-    return;
-  }
+  $(this).parent('form').trigger("reset");
   let configParams = button.data('config_params');
-  let languages = button.data('languages');
-  $(this).data('languages', languages);
 
+  if(params.icon_file_url){
+	  $(this).find('input[name=icon_file_url]').val(params.icon_file_url);
+	  $(this).find('input[name=icon_file_url]').removeAttr('style');
+	   $(".showSelectTypeName").text('图片地址');
+	  $(".inputFile").css('display','none');
+  }
   $(this).find('input[name=rank_num]').val(params.rank_num);
   $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey)
   $(this).find('select[name=parameter]').val(params.parameter)
   $(this).find('input[name=app_id]').val(configParams.appId);
   $(this).find('input[name=app_key]').val(configParams.appKey);
   $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
-});
-
-$('#createMap').on('hide.bs.modal', function(e) {
-  $(this).data('is_back', false)
-});
-
-$("#mapLangModal").on('show.bs.modal', function (e) {
-  let button = $(e.relatedTarget);
-
-  var parent = button.data('parent');
-  if (!parent) {
-    return;
-  }
-
-  let languages = $(parent).data('languages');
-
-  var $this = $(this)
-  if (languages) {
-    languages.map(function(language, index) {
-      $this.find("input[name='languages["+language.lang_tag+"]'").val(language.lang_content);
-    });
-  }
-
-  $(this).on('hide.bs.modal', function (e) {
-    if (parent) {
-      $(parent).data('is_back', true)
-      $(parent).modal('show');
-    }
-  });
 });
 
 $('#configLangModal').on('show.bs.modal', function(e) {

@@ -78,13 +78,15 @@
 					<form action="{{ route('panel.expandEditor.destroy',$item->id) }}" method="post">
 					@csrf
 					 @method('delete')
-					<button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
-					data-names="{{ $item->names->toJson() }}"
-	                data-params="{{ json_encode($item->attributesToArray()) }}"
-	                data-action="{{ route('panel.expandEditor.update', $item->id) }}"
-					 data-bs-target="#createModal">修改</button>
-					<button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
-					</form>
+           <button type="button"
+                   class="btn btn-outline-primary btn-sm"
+                   data-bs-toggle="modal"
+                   data-names="{{ $item->names->toJson() }}"
+                   data-params="{{ json_encode($item->attributesToArray()) }}"
+                   data-action="{{ route('panel.expandEditor.update', $item->id) }}"
+                   data-bs-target="#createModal">修改</button>
+           <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
+          </form>
 				</td>
 			</tr>
 			@endforeach

@@ -80,11 +80,11 @@
 				<label class="input-group-text w-25">防盗链功能</label>
 				<div class="form-control bg-white">
 					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="videos_url_status" id="videos_url_status_false" value="false" data-bs-toggle="collapse" data-bs-target="#videos_url_status_setting.show" aria-expanded="false" aria-controls="videos_url_status_setting"  {{ $params['videos_url_status'] == 'false' ? 'checked' : '' }}>
+						<input class="form-check-input" type="radio" name="videos_url_status" id="videos_url_status_false" value="false" data-bs-toggle="collapse" data-bs-target="#videos_url_status_setting.show" aria-expanded="false" aria-controls="videos_url_status_setting"  {{ !$params['videos_url_status'] ? 'checked' : '' }}>
 						<label class="form-check-label" for="videos_url_status_false">关闭</label>
 					</div>
 					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="videos_url_status" id="videos_url_status_true" value="true" data-bs-toggle="collapse" data-bs-target="#videos_url_status_setting:not(.show)" aria-expanded="false" aria-controls="videos_url_status_setting"  {{ $params['videos_url_status'] == 'true' ? 'checked' : '' }}>
+						<input class="form-check-input" type="radio" name="videos_url_status" id="videos_url_status_true" value="true" data-bs-toggle="collapse" data-bs-target="#videos_url_status_setting:not(.show)" aria-expanded="false" aria-controls="videos_url_status_setting"  {{ $params['videos_url_status'] ? 'checked' : '' }}>
 						<label class="form-check-label" for="videos_url_status_true">开启</label>
 					</div>
 				</div>

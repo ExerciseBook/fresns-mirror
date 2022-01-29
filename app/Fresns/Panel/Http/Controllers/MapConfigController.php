@@ -28,6 +28,7 @@ class MapConfigController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 9)
+            ->orderBy('rank_num')
             ->with('plugin')
             ->get();
 
@@ -49,6 +50,7 @@ class MapConfigController extends Controller
         $mapConfig = PluginUsage::where('parameter', $request->parameter)
             ->where('type', 9)
             ->first();
+
         if ($mapConfig) {
             return back()->with('failure', __('panel::panel.mapExists'));
         }
@@ -60,7 +62,7 @@ class MapConfigController extends Controller
         $mapConfig->rank_num = $request->rank_num;
         $mapConfig->parameter = $request->parameter;
         $mapConfig->type = 9;
-        $mapConfig->name = $request->languages[$this->defaultLanguage] ?? (current(array_filter($request->languages)) ?: '');
+        $mapConfig->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $mapConfig->save();
 
         $config = Config::where('item_key', 'map_'.$request->parameter)
@@ -82,7 +84,7 @@ class MapConfigController extends Controller
         ];
         $config->save();
 
-        foreach($request->languages as $langTag => $content) {
+        foreach($request->names as $langTag => $content) {
             $language = Language::tableName('plugin_usages')
                 ->where('table_name', 'plugin_usages')
                 ->where('table_field', 'name')
@@ -118,7 +120,7 @@ class MapConfigController extends Controller
         $mapConfig->parameter = $request->parameter;
 		$mapConfig->icon_file_url = $request->icon_file_url;
         $mapConfig->type = 9;
-        $mapConfig->name = $request->languages[$this->defaultLanguage] ?? (current(array_filter($request->languages)) ?: '');
+        $mapConfig->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $mapConfig->save();
 
         $config = Config::where('item_key', 'map_'.$request->parameter)
@@ -140,7 +142,7 @@ class MapConfigController extends Controller
         ];
         $config->save();
 
-        foreach($request->languages as $langTag => $content) {
+        foreach($request->names as $langTag => $content) {
 
             $language = Language::tableName('plugin_usages')
                 ->where('table_field', 'name')
