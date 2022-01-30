@@ -370,8 +370,22 @@ $('#emojiGroupCreateModal').on('show.bs.modal', function(e) {
   let button = $(e.relatedTarget);
   let params = button.data('params');
 
+  console.log(params);
   if (!params) {
     return;
+  }
+
+  console.log(params);
+  $(".inputUrl").css('display','none');
+  $(".inputFile").removeAttr('style');
+  $(".showSelectTypeName").text('上传图片');
+  if(params.icon_file_url){
+    $(this).find('input[name=icon_file_url]').val(params.icon_file_url);
+    $(this).find('input[name=icon_file_url]').removeAttr('style');
+    $(".showSelectTypeName").text('图片地址');
+    $(".inputFile").css('display','none');
+  } else {
+    $(this).find('input[name=icon_file_url]').val('');
   }
 
   $(this).find('input[name=rank_num]').val(params.rank_num);
@@ -384,8 +398,10 @@ $('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
   let button = $(e.relatedTarget);
   let emojis = button.data('emojis');
   let parent_id = button.data('parent_id');
+
   $('#emojiList').empty();
-  $('#offcanvasEmojiLabel button').attr('data-parent_id',parent_id)
+  $('#offcanvasEmojiLabel button').data('parent_id', parent_id)
+
   if (!emojis) {
     return;
   }
@@ -397,7 +413,7 @@ $('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
     emojiTemplate.find('form').attr('action', href);
     emojiTemplate.find('input[name=rank_num]').val(emoji.rank_num);
     //todo
-    emojiTemplate.find('input[name=rank_num]').data('action',"/panel/operation/emojiGroups/"+emoji.id+'/rank');
+    //emojiTemplate.find('input[name=rank_num]').data('action',"/panel/operation/emojiGroups/"+emoji.id+'/rank');
     emojiTemplate.find('.emoji-img').attr('src', emoji.image_file_url);
     emojiTemplate.find('.emoji-code').html(emoji.code);
 
@@ -408,14 +424,12 @@ $('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
   });
 });
 
-$('#offcanvasEmoji').on('hidden.bs.offcanvas', function(e) {
- location.reload();
-});
 
 $('#emojiModal').on('show.bs.modal', function(e) {
-let button = $(e.relatedTarget);
+  let button = $(e.relatedTarget);
   let parent_id = button.data('parent_id');
-   $(this).find('input[name=emoji_group_id]').val(parent_id);
+
+  $(this).find('input[name=parent_id]').val(parent_id);
 });
 
 

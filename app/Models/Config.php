@@ -40,7 +40,7 @@ class Config extends Model
     public function setDefaultValue()
     {
         if ($this->item_type == 'boolean') {
-            $this->item_value = 'false';
+            $this->item_value = false;
         }  else if ($this->item_type == 'number') {
             $this->item_value = 0;
         } else {

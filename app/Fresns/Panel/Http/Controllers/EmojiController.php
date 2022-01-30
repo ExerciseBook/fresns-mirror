@@ -11,7 +11,7 @@ class EmojiController extends Controller
 {
     public function store(Emoji $emoji, Request $request)
     {
-        $emoji->parent_id = $request->emoji_group_id;
+        $emoji->parent_id = $request->parent_id;
         $emoji->rank_num = $request->rank_num;
         $emoji->code = $request->code;
         $emoji->name = $request->code;
@@ -25,7 +25,7 @@ class EmojiController extends Controller
 
     public function update(Emoji $emoji, Request $request)
     {
-        $emoji->is_enable = $request->is_enable?0:1;
+        $emoji->is_enable = $request->is_enable;
         $emoji->save();
 
         return $this->updateSuccess();

@@ -51,18 +51,18 @@
                 @csrf
                 @method('delete')
                 <button type="button" class="btn btn-outline-primary btn-sm"
-                  data-bs-toggle="modal"
-                  data-action="{{ route('panel.emojiGroups.update', ['emojiGroup' => $group->id]) }}"
-                  data-names="{{ $group->names->toJson() }}"
-                  data-params="{{ json_encode($group->attributesToArray()) }}"
-                  data-bs-target="#emojiGroupCreateModal">修改</button>
+                                      data-bs-toggle="modal"
+                                      data-action="{{ route('panel.emojiGroups.update', ['emojiGroup' => $group->id]) }}"
+                                      data-names="{{ $group->names->toJson() }}"
+                                      data-params="{{ json_encode($group->attributesToArray()) }}"
+                                      data-bs-target="#emojiGroupCreateModal">修改</button>
                 <button type="button" class="btn btn-outline-info btn-sm ms-1"
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasEmoji"
-                  data-action="{{ route('panel.emojis.store')}}"
-                  data-emojis="{{ $group->emojis->toJson() }}"
-				  data-parent_id="{{ $group->id }}"
-                  aria-controls="offcanvasEmoji">配置表情图</button>
+                                      data-bs-toggle="offcanvas"
+                                      data-bs-target="#offcanvasEmoji"
+                                      data-action="{{ route('panel.emojis.store')}}"
+                                      data-emojis="{{ $group->emojis->toJson() }}"
+                                      data-parent_id="{{ $group->id }}"
+                                      aria-controls="offcanvasEmoji">配置表情图</button>
                 <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
               </form>
             </td>
@@ -88,29 +88,29 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">显示顺序</label>
               <div class="col-sm-9">
-                <input type="number" class="form-control input-number" name="rank_num">
+                <input type="number" class="form-control input-number" name="rank_num" required>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">表情组图标</label>
               <div class="col-sm-9">
 
-				  <div class="input-group">
-					<button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
-					<ul class="dropdown-menu selectImageTyle">
-						<li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
-						<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
-					</ul>
-					<input type="file" class="form-control inputFile" name="image_file_url_file">
-				 <input type="text" class="form-control inputUrl"     name="image_file_url" value="" style="display:none;">
-				</div>
+                <div class="input-group">
+                  <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
+                  <ul class="dropdown-menu selectImageTyle">
+                    <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+                    <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+                  </ul>
+                  <input type="file" class="form-control inputFile" name="image_file_url_file">
+                  <input type="text" class="form-control inputUrl"     name="image_file_url" value="" style="display:none;">
+                </div>
 
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">表情组标识</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control input-number" name="code">
+                <input type="text" class="form-control input-number" name="code" required>
               </div>
             </div>
             <div class="mb-3 row">
@@ -126,7 +126,7 @@
               <label class="col-sm-3 col-form-label">启用状态</label>
               <div class="col-sm-9 pt-2">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="is_enable" id="status_true" value="1">
+                  <input class="form-check-input" type="radio" name="is_enable" id="status_true" value="1" checked>
                   <label class="form-check-label" for="status_true">启用</label>
                 </div>
                 <div class="form-check form-check-inline">
@@ -200,11 +200,11 @@
   <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasEmoji" aria-labelledby="offcanvasEmojiLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasEmojiLabel">表情管理
-		  <button class="btn btn-info btn-sm ms-3" type="button"
-		  data-bs-toggle="modal"
-		  data-parent_id=""
-		  data-bs-target="#emojiModal"><i class="bi bi-plus-circle-dotted"></i> 新增表情图</button>
-	  </h5>
+        <button class="btn btn-info btn-sm ms-3"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#emojiModal"><i class="bi bi-plus-circle-dotted"></i> 新增表情图</button>
+      </h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
@@ -267,7 +267,7 @@
         <div class="modal-body">
           <form action="{{ route('panel.emojis.store')}}" method="post">
             @csrf
-            <input type="hidden" name="emoji_group_id">
+            <input type="hidden" name="parent_id">
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">顺序</label>
               <div class="col-sm-9">

@@ -18,7 +18,7 @@ class UpdateEmojiGroupRequest extends FormRequest
             'is_enable' => 'boolean|required',
             'code' => [
                 'required',
-                Rule::unique('App\Models\Emoji')->ignore($this->id),
+                Rule::unique('App\Models\Emoji')->ignore($this->emojiGroup->id),
             ],
         ];
     }

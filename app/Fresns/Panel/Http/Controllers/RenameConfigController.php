@@ -49,7 +49,14 @@ class RenameConfigController extends Controller
             return [$config->item_key => $config];
         });
 
-        return view('panel::operation.rename', compact('configs'));
+        $langKeys = $configKeys;
+
+        $defaultLangParams = Language::ofConfig()
+            ->whereIn('table_key', $langKeys)
+            ->where('lang_tag', $this->defaultLanguage)
+            ->pluck('lang_content', 'table_key');
+
+        return view('panel::operation.rename', compact('configs', 'defaultLangParams'));
     }
 
     public function update(UpdateSiteRequest $request)

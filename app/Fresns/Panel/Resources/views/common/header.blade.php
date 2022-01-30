@@ -26,21 +26,32 @@
             'panel.storage.*',
             'panel.mapConfigs.*',
           ]) ? 'active' : ''}}" href="{{ route('panel.languageMenus.index') }}">系统</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('panel.renameConfigs.show' )}}">运营</a></li>
-
+          <li class="nav-item"> <a class="nav-link {{ \Route::is([
+            'panel.renameConfigs.*',
+            'panel.interactiveConfigs.*',
+            'panel.emojis.*',
+            'panel.emojiGroups.*',
+            'panel.postConfigs.*',
+            'panel.commentConfigs.*',
+            'panel.stopWords.*',
+            'panel.groups.*',
+            'panel.recommendGroups.*',
+            'panel.disableGroups.*',
+            'panel.memberRoles.*'
+          ]) ? 'active' : ''}}" href="{{ route('panel.renameConfigs.show' )}}">运营</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is([
             'panel.expandEditor.*',
-			'panel.expandType.*',
-			'panel.expandPost.*',
-			'panel.expandManage.*',
-			'panel.expandGroup.*',
-			'panel.expandFeature.*',
-			'panel.expandProfile.*'
-            ]) ? 'active' : '' }}" href="{{ route('panel.expandEditor.index') }}">扩展</a></li>
+            'panel.expandType.*',
+            'panel.expandPost.*',
+            'panel.expandManage.*',
+            'panel.expandGroup.*',
+            'panel.expandFeature.*',
+            'panel.expandProfile.*'
+          ]) ? 'active' : '' }}" href="{{ route('panel.expandEditor.index') }}">扩展</a></li>
 
           <li class="nav-item"><a class="nav-link {{ \Route::is([
             'panel.plugins.*'
-            ]) ? 'active' : '' }} " href="{{ route('panel.plugins.index') }}">插件</a></li>
+          ]) ? 'active' : '' }} " href="{{ route('panel.plugins.index') }}">插件</a></li>
           <li class="nav-item"><a class="nav-link  {{ \Route::is([
             'panel.clientMenus.*',
             'panel.columns.*',
@@ -48,7 +59,7 @@
             'panel.engines.*',
             'panel.themes.*',
             'panel.apps.*'
-            ]) ? 'active' : '' }} " href="{{ route('panel.clientMenus.index') }}">客户端</a></li>
+          ]) ? 'active' : '' }} " href="{{ route('panel.clientMenus.index') }}">客户端</a></li>
           {{--<li class="nav-item"><a class="nav-link" href="app-store.html">应用商店</a></li>--}}
         </ul>
         <div class="navbar-nav">

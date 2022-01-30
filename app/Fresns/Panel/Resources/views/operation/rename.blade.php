@@ -28,7 +28,7 @@
 	          data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_name'])}}"
 	          data-languages="{{ optional($configs['member_name'])->languages->toJson() }}"
 	          data-item_key="member_name"
-	          data-bs-target="#configLangModal">{{ $configs['member_name']['item_value'] ?? '' }}
+	          data-bs-target="#configLangModal">{{ $defaultLangParams['member_name'] ?? '' }}
 		  	</button>
       </div>
     </div>
@@ -44,7 +44,7 @@
 	            data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_id_name'])}}"
 	            data-languages="{{ optional($configs['member_id_name'])->languages->toJson() }}"
 	            data-item_key="member_id_name"
-	            data-bs-target="#configLangModal">{{ $configs['member_id_name']['item_value'] ?? '' }}
+	            data-bs-target="#configLangModal">{{ $defaultLangParams['member_id_name'] ?? '' }}
 	  	  	</button>
       </div>
     </div>
@@ -60,7 +60,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_name_name'])}}"
 			data-languages="{{ optional($configs['member_name_name'])->languages->toJson() }}"
 			data-item_key="member_name_name"
-			data-bs-target="#configLangModal">{{ $configs['member_name_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['member_name_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -76,7 +76,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_nickname_name'])}}"
 			data-languages="{{ optional($configs['member_nickname_name'])->languages->toJson() }}"
 			data-item_key="member_nickname_name"
-			data-bs-target="#configLangModal">{{ $configs['member_nickname_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['member_nickname_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -92,7 +92,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'member_role_name'])}}"
 			data-languages="{{ optional($configs['member_role_name'])->languages->toJson() }}"
 			data-item_key="member_role_name"
-			data-bs-target="#configLangModal">{{ $configs['member_role_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['member_role_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -109,7 +109,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'group_name'])}}"
 			data-languages="{{ optional($configs['group_name'])->languages->toJson() }}"
 			data-item_key="group_name"
-			data-bs-target="#configLangModal">{{ $configs['group_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['group_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -125,7 +125,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'hashtag_name'])}}"
 			data-languages="{{ optional($configs['hashtag_name'])->languages->toJson() }}"
 			data-item_key="hashtag_name"
-			data-bs-target="#configLangModal">{{ $configs['hashtag_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['hashtag_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -141,7 +141,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'post_name'])}}"
 			data-languages="{{ optional($configs['post_name'])->languages->toJson() }}"
 			data-item_key="post_name"
-			data-bs-target="#configLangModal">{{ $configs['post_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['post_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -157,7 +157,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'comment_name'])}}"
 			data-languages="{{ optional($configs['comment_name'])->languages->toJson() }}"
 			data-item_key="comment_name"
-			data-bs-target="#configLangModal">{{ $configs['comment_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['comment_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -174,7 +174,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'publish_post_name'])}}"
 			data-languages="{{ optional($configs['publish_post_name'])->languages->toJson() }}"
 			data-item_key="publish_post_name"
-			data-bs-target="#configLangModal">{{ $configs['publish_post_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['publish_post_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -190,7 +190,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'publish_comment_name'])}}"
 			data-languages="{{ optional($configs['publish_comment_name'])->languages->toJson() }}"
 			data-item_key="publish_comment_name"
-			data-bs-target="#configLangModal">{{ $configs['publish_comment_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['publish_comment_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -207,7 +207,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_member_name'])}}"
 			data-languages="{{ optional($configs['like_member_name'])->languages->toJson() }}"
 			data-item_key="like_member_name"
-			data-bs-target="#configLangModal">{{ $configs['like_member_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['like_member_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -223,7 +223,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_group_name'])}}"
 			data-languages="{{ optional($configs['like_group_name'])->languages->toJson() }}"
 			data-item_key="like_group_name"
-			data-bs-target="#configLangModal">{{ $configs['like_group_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['like_group_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -239,7 +239,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_hashtag_name'])}}"
 			data-languages="{{ optional($configs['like_hashtag_name'])->languages->toJson() }}"
 			data-item_key="like_hashtag_name"
-			data-bs-target="#configLangModal">{{ $configs['like_hashtag_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['like_hashtag_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -255,7 +255,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_post_name'])}}"
 			data-languages="{{ optional($configs['like_post_name'])->languages->toJson() }}"
 			data-item_key="like_post_name"
-			data-bs-target="#configLangModal">{{ $configs['like_post_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['like_post_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -271,7 +271,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'like_comment_name'])}}"
 			data-languages="{{ optional($configs['like_comment_name'])->languages->toJson() }}"
 			data-item_key="like_comment_name"
-			data-bs-target="#configLangModal">{{ $configs['like_comment_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['like_comment_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -288,7 +288,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_member_name'])}}"
 			data-languages="{{ optional($configs['follow_member_name'])->languages->toJson() }}"
 			data-item_key="follow_member_name"
-			data-bs-target="#configLangModal">{{ $configs['follow_member_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['follow_member_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -304,7 +304,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_group_name'])}}"
 			data-languages="{{ optional($configs['follow_group_name'])->languages->toJson() }}"
 			data-item_key="follow_group_name"
-			data-bs-target="#configLangModal">{{ $configs['follow_group_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['follow_group_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -320,7 +320,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_hashtag_name'])}}"
 			data-languages="{{ optional($configs['follow_hashtag_name'])->languages->toJson() }}"
 			data-item_key="follow_hashtag_name"
-			data-bs-target="#configLangModal">{{ $configs['follow_hashtag_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['follow_hashtag_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -336,7 +336,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_post_name'])}}"
 			data-languages="{{ optional($configs['follow_post_name'])->languages->toJson() }}"
 			data-item_key="follow_post_name"
-			data-bs-target="#configLangModal">{{ $configs['follow_post_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['follow_post_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -352,7 +352,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'follow_comment_name'])}}"
 			data-languages="{{ optional($configs['follow_comment_name'])->languages->toJson() }}"
 			data-item_key="follow_comment_name"
-			data-bs-target="#configLangModal">{{ $configs['follow_comment_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['follow_comment_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -369,7 +369,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_member_name'])}}"
 			data-languages="{{ optional($configs['shield_member_name'])->languages->toJson() }}"
 			data-item_key="shield_member_name"
-			data-bs-target="#configLangModal">{{ $configs['shield_member_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['shield_member_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -385,7 +385,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_group_name'])}}"
 			data-languages="{{ optional($configs['shield_group_name'])->languages->toJson() }}"
 			data-item_key="shield_group_name"
-			data-bs-target="#configLangModal">{{ $configs['shield_group_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['shield_group_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -401,7 +401,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_hashtag_name'])}}"
 			data-languages="{{ optional($configs['shield_hashtag_name'])->languages->toJson() }}"
 			data-item_key="shield_hashtag_name"
-			data-bs-target="#configLangModal">{{ $configs['shield_hashtag_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['shield_hashtag_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -417,7 +417,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_post_name'])}}"
 			data-languages="{{ optional($configs['shield_post_name'])->languages->toJson() }}"
 			data-item_key="shield_post_name"
-			data-bs-target="#configLangModal">{{ $configs['shield_post_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['shield_post_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -433,7 +433,7 @@
 			data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'shield_comment_name'])}}"
 			data-languages="{{ optional($configs['shield_comment_name'])->languages->toJson() }}"
 			data-item_key="shield_comment_name"
-			data-bs-target="#configLangModal">{{ $configs['shield_comment_name']['item_value'] ?? '' }}
+			data-bs-target="#configLangModal">{{ $defaultLangParams['shield_comment_name'] ?? '' }}
 		</button>
       </div>
     </div>
@@ -474,7 +474,7 @@
                         @endif
                       </td>
                       <td>{{$lang['langName']}} @if($lang['areaCode'])({{ optional($areaCodes->where('code', $lang['areaCode'])->first())['localName']}}) @endif</td>
-                      <td><input type="text" name="languages[{{ $lang['langTag'] }}]" class="form-control" value="{{ $langParams['site_name'][$lang['langTag']] ?? '' }}"></td>
+                      <td><input type="text" name="languages[{{ $lang['langTag'] }}]" class="form-control" value=""></td>
                     </tr>
                   @endforeach
                 </tbody>
