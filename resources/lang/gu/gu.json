@@ -190,7 +190,6 @@
     "Done.": "Done.",
     "Download": "Download",
     "Download Receipt": "Download Receipt",
-    "E-Mail Address": "E-Mail Address",
     "Ecuador": "Ecuador",
     "Edit": "Edit",
     "Edit :resource": "Edit :resource",
@@ -442,7 +441,7 @@
     "Please provide your name.": "Please provide your name.",
     "Poland": "Poland",
     "Portugal": "Portugal",
-    "Press \/ to search": "Press \/ to search",
+    "Press / to search": "Press / to search",
     "Preview": "Preview",
     "Previous": "Previous",
     "Privacy Policy": "Privacy Policy",
@@ -539,7 +538,7 @@
     "Sri Lanka": "Sri Lanka",
     "Standalone Actions": "Standalone Actions",
     "Start Polling": "Start Polling",
-    "State \/ County": "State \/ County",
+    "State / County": "State / County",
     "Stop Polling": "Stop Polling",
     "Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.": "Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.",
     "Subscribe": "Subscribe",
@@ -717,6 +716,6 @@
     "Your registered VAT Number is :vatNumber.": "Your registered VAT Number is :vatNumber.",
     "Zambia": "Zambia",
     "Zimbabwe": "Zimbabwe",
-    "Zip \/ Postal Code": "Zip \/ Postal Code",
+    "Zip / Postal Code": "Zip / Postal Code",
     "Åland Islands": "Åland Islands"
 }
