@@ -45,7 +45,7 @@
               <img src="{{ $role->icon_file_url }}" width="24" height="24">
               @endif
             </td>
-            <td>{{ $role->anme }}</td>
+            <td>{{ $role->name }}</td>
             <td>
               @if ($role->is_display_icon)
                 <i class="bi bi-image me-3" data-bs-toggle="tooltip" data-bs-placement="top" title="显示图标"></i>
@@ -76,8 +76,9 @@
               <a class="btn btn-outline-info btn-sm text-decoration-none ms-1" href="{{ route('panel.memberRoles.permissions.show', $role->id) }}" role="button">设置权限</a>
               <button type="butmit" class="btn btn-link link-danger ms-1 fresns-link fs-7"
                 data-bs-toggle="modal"
+                data-action="{{ route('panel.memberRoles.destroy', $role->id) }}"
                 data-params="{{ $role->toJson() }}"
-                data-bs-target="#deleteModal">删除</button>
+                data-bs-target="#deleteRoleModal">删除</button>
             </td>
           </tr>
         @endforeach
@@ -123,7 +124,7 @@
 						<li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
 					</ul>
 					<input type="file" class="form-control inputFile" name="icon_file_url_file">
-				 <input type="text" class="form-control inputUrl"     name="icon_file_url" value="" style="display:none;">
+				 <input type="url" class="form-control inputUrl" name="icon_file_url" value="" style="display:none;">
 				</div>
               </div>
             </div>
@@ -151,12 +152,12 @@
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">昵称颜色</label>
-              <div class="col-sm-2">
-                <input type="color" name="nickname_color" class="form-control form-control-color" value="#6600FF">
+              <div class="col-sm-2 choose-color">
+                <input type="color" name="nickname_color" class="form-control form-control-color" value="#FFFFFF">
               </div>
               <div class="col-sm-7">
                 <div class="form-check form-check-inline mt-2">
-                  <input class="form-check-input" type="checkbox" id="emptyColor" name="no_color" value="">
+                  <input class="form-check-input" type="checkbox" id="emptyColor" name="no_color" value="1">
                   <label class="form-check-label" for="emptyColor">不使用颜色</label>
                 </div>
               </div>
@@ -235,7 +236,7 @@
   </form>
 
   <!-- Delete Modal -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+  <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -243,23 +244,23 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form method="post">
+            @csrf
+            @method('delete')
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">源角色</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control-plaintext" value="普通会员" readonly>
+                <input type="text" name="name" class="form-control-plaintext" value="" readonly>
               </div>
             </div>
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">目标角色</label>
               <div class="col-sm-9">
-                <select class="form-select">
-                  <option selected disabled>请选择角色</option>
-                  <option value="1">管理员</option>
-                  <option value="2">版主</option>
-                  <option value="3">禁言用户</option>
-                  <option value="5">中级会员</option>
-                  <option value="6">高级会员</option>
+                <select class="form-select" required name="role_id" id="chooseRole">
+                  <option selected disabled value="">请选择角色</option>
+                  @foreach($roles as $role)
+                    <option class="role-option" value="{{ $role->id }}">{{ $role->name }}</option>
+                  @endforeach
                 </select>
                 <div class="form-text">角色删除后，该角色下成员合并到所选目标角色名下</div>
               </div>

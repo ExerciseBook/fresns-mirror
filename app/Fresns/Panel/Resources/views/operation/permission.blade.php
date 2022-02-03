@@ -356,19 +356,20 @@
                 <th scope="col" style="width:6rem;">操作</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><input type="text" class="form-control" value="abc" disabled readonly></td>
-                <td><input type="text" class="form-control" value="edf" disabled readonly></td>
-                <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button></td>
-              </tr>
-              <tr>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button></td>
-              </tr>
-              <tr>
-                <td colspan="3" class="text-center"><button class="btn btn-outline-success btn-sm px-3" type="button"><i class="bi bi-plus-circle-dotted"></i> 新增</button></td>
+            <tbody id="customPermBox">
+              @foreach($customPermission as $permission)
+                <tr>
+                  <td><input type="text" class="form-control" name="custom_permissions[permKey][]" value="{{ $permission['permKey'] ?? ''}}" readonly></td>
+                  <td><input type="text" class="form-control" name="custom_permissions[permValue][]" value="{{ $permission['permValue'] ?? ''}}" readonly></td>
+                  <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7 delete-custom-perm">删除</button></td>
+                </tr>
+              @endforeach
+              <tr id="addCustomPermTr">
+                <td colspan="3" class="text-center">
+                  <button class="btn btn-outline-success btn-sm px-3" id="addCustomPerm" type="button">
+                    <i class="bi bi-plus-circle-dotted"></i> 新增
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -386,5 +387,13 @@
     </div>
   </form>
   <!--表单 结束-->
+
+  <template id="customPerm">
+    <tr>
+      <td><input type="text" class="form-control" required name="custom_permissions[permKey][]"></td>
+      <td><input type="text" class="form-control" required name="custom_permissions[permValue][]"></td>
+      <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button></td>
+    </tr>
+  </template>
 
 @endsection

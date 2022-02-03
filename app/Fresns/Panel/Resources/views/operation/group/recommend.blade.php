@@ -42,7 +42,7 @@
       <tbody>
         @foreach($groups as $group)
           <tr>
-            <td><input type="number" class="form-control input-number" value="1"></td>
+            <td><input type="number" data-action="{{ route('panel.groups.rank.update', $group->id)}}" name="rank_num" class="form-control input-number rank-num" value="{{ $group->rank_num }}"></td>
             <td>
               @if ($group->cover_file_url)
                 <img src="{{ $group->cover_file_url }}" width="24" height="24">

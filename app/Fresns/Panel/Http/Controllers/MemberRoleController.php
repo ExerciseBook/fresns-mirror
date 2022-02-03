@@ -5,13 +5,14 @@ namespace App\Fresns\Panel\Http\Controllers;
 use App\Models\Language;
 use App\Models\MemberRole;
 use Illuminate\Http\Request;
+use App\Models\MemberRoleRel;
 use App\Fresns\Panel\Http\Requests\UpdateMemberRoleRequest;
 
 class MemberRoleController extends Controller
 {
     public function index()
     {
-        $roles = MemberRole::with('names')->get();
+        $roles = MemberRole::orderBy('rank_num')->with('names')->get();
 
         $typeLabels = [
             1 => '管理人员类',
@@ -28,7 +29,7 @@ class MemberRoleController extends Controller
     public function store(MemberRole $memberRole, UpdateMemberRoleRequest $request)
     {
         $memberRole->fill($request->all());
-        $memberRole->permission = [];
+        $memberRole->permission = json_decode(config('panel.member_role_default_permission'), true);
         if ($request->no_color) {
             $memberRole->nickname_color = null;
         }
@@ -97,8 +98,12 @@ class MemberRoleController extends Controller
         return $this->updateSuccess();
     }
 
-    public function destroy(StopWord $memberRole)
+    public function destroy(MemberRole $memberRole, Request $request)
     {
+        if ($request->role_id) {
+            MemberRoleRel::where('role_id', $memberRole->id)->update(['role_id' => $request->role_id]);
+        }
+
         $memberRole->delete();
         return $this->deleteSuccess();
     }
@@ -118,7 +123,14 @@ class MemberRoleController extends Controller
         $permission = collect($memberRole->permission)->mapWithKeys(function($perm) {
             return [$perm['permKey'] => $perm];
         })->toArray();
-        return view('panel::operation.permission', compact('permission', 'memberRole'));
+
+        $customPermission = collect($memberRole->permission)->filter(function($perm) {
+            return $perm['isCustom'] ?? false;
+        })->mapWithKeys(function($perm) {
+            return [$perm['permKey'] => $perm];
+        })->toArray();
+
+        return view('panel::operation.permission', compact('permission', 'memberRole', 'customPermission'));
     }
 
     public function updatePermissions(MemberRole $memberRole, Request $request)
@@ -139,9 +151,18 @@ class MemberRoleController extends Controller
                 'permKey' => $key,
                 'permValue' => $value,
                 'permStatus' => '',
+                'isCustom' => false,
             ];
         });
-        $memberRole->permission = $permission->values()->toArray();
+        $customPermission = collect($request->custom_permissions['permKey'] ?? [])->filter()->map(function($value, $key) use ($request) {
+            return [
+                'permKey' => $value,
+                'permValue' => $request->custom_permissions['permValue'][$key] ?? '',
+                'permStatus' => '',
+                'isCustom' => true,
+            ];
+        });
+        $memberRole->permission = $permission->merge($customPermission)->values()->toArray();
         $memberRole->save();
 
         return $this->updateSuccess();

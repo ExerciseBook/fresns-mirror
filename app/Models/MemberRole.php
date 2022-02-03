@@ -17,4 +17,8 @@ class MemberRole extends Model
             ->where('table_name', 'member_roles');
     }
 
+    public function members()
+    {
+        return $this->belongsToMany(Member::class, 'fs_member_role_rels', 'member_id', 'role_id');
+    }
 }

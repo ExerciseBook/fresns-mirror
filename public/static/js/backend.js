@@ -143,8 +143,11 @@ $('input[name="default_language"]').change(function() {
   });
 });
 
+$(document).on('click', 'input.rank-num', function() {
+  return false;
+});
+
 $(document).on('change', 'input.rank-num', function() {
-  console.log($(this).data('action'))
   $.ajax({
     method:'post',
     url: $(this).data('action'),
@@ -156,6 +159,7 @@ $(document).on('change', 'input.rank-num', function() {
       window.tips(response.message)
     }
   });
+  return false;
 });
 
 // update language menu
@@ -455,9 +459,20 @@ $('#createStopWordModal').on('show.bs.modal', function(e) {
   $(this).find('select[name=dialog_mode]').val(params.dialog_mode);
 });
 
+// memberROles
+$('#emptyColor').change(function() {
+  if ($(this).is(':checked')) {
+    $('.choose-color').hide();
+  } else {
+    $('.choose-color').show();
+  }
+});
+
 $('#createRoleModal').on('show.bs.modal', function(e) {
   let button = $(e.relatedTarget);
   let params = button.data('params');
+
+  $('.choose-color').show();
 
   if (!params) {
     return;
@@ -473,12 +488,51 @@ $('#createRoleModal').on('show.bs.modal', function(e) {
     $(this).find('input[name=is_display_icon]').attr('checked', 'checked');
   }
 
+  $(".inputUrl").css('display','none');
+  $(".inputFile").removeAttr('style');
+  $(".showSelectTypeName").text('上传图片');
+  if(params.icon_file_url){
+    $(this).find('input[name=icon_file_url]').val(params.icon_file_url);
+    $(this).find('input[name=icon_file_url]').removeAttr('style');
+    $(".showSelectTypeName").text('图片地址');
+    $(".inputFile").css('display','none');
+  } else {
+    $(this).find('input[name=icon_file_url]').val('');
+  }
+
   if (params.nickname_color) {
     $(this).find('input[name=nickname_color]').val(params.nickname_color);
+
+    $('.choose-color').show();
+    $(this).find('input[name=no_color]').prop('checked', false);
   } else {
-    $(this).find('input[name=no_color]').attr('checked', 'checked');
+    $('.choose-color').hide();
+    $(this).find('input[name=no_color]').prop('checked', true);
   }
   $(this).find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();
+});
+
+$('#deleteRoleModal').on('show.bs.modal', function(e){
+  let button = $(e.relatedTarget);
+  let action = button.data('action');
+  let params = button.data('params');
+
+  $(this).find('form').attr('action', action);
+
+  $(this).find('input[name=name]').val(params.name);
+  $(this).find('#chooseRole').children('.role-option').prop('disabled', false);
+  $(this).find('#chooseRole').find('option[value='+params.id+']').prop('disabled', true);
+});
+
+$('#addCustomPerm').click(function(){
+  console.log(123);
+  let template = $('#customPerm').clone();
+  console.log(template);
+  $('#addCustomPermTr').before(template.contents());
+});
+
+$('.delete-custom-perm').click(function(){
+  $(this).closest('tr').remove();
 });
 
 // config post select
@@ -735,16 +789,25 @@ $('#groupModal').on('shown.bs.modal', function(e) {
   form.find('input[name=cover_file_url]').css('display','block');
   form.find('input[name=banner_file_url]').val(params.banner_file_url);
   form.find('input[name=banner_file_url]').css('display','block');
-  form.find('input[name=type_mode]').val(params.type_mode).click();
+  form.find('input:radio[name=type_mode][value="'+params.type_mode+'"]').prop('checked', true).click();
+
   form.find('select[name=plugin_unikey]').val(params.plugin_unikey);
   form.find('select[name="permission[admin_members][]"]').select2('val', params.permission.admin_members);
   form.find('input:radio[name=type_find][value="'+params.type_find+'"]').prop('checked', true).click();
   form.find('input:radio[name=type_follow][value="'+params.type_follow+'"]').prop('checked', true).click();
   form.find('input:radio[name=is_recommend][value="'+params.is_recommend+'"]').prop('checked', true).click();
-  form.find('input:radio[name="permission[publish_post]"][value="'+params.permission.publish_post+'"]').prop('checked', true).click();
-  form.find('input:radio[name="permission[publish_post_review]"][value="'+params.permission.publish_post_review+'"]').prop('checked', true).click();
-  form.find('input:radio[name="permission[publish_comment]"][value="'+params.permission.publish_comment+'"]').prop('checked', true).click();
-  form.find('input:radio[name="permission[publish_comment_review]"][value="'+params.permission.publish_comment_review+'"]').prop('checked', true).click();
+
+  let permission = params.permission;
+  let publishPost = permission.publish_post ? 1 : 0;
+  let publishPostReview = permission.publish_post_review ? 1 : 0;
+  let publishComment = permission.publish_comment ? 1 : 0;
+  let publishCommentReview = permission.publish_comment_review ? 1 : 0;
+
+  form.find('input:radio[name="permission[publish_post]"][value="'+publishPost+'"]').prop('checked', true).click();
+  form.find('input:radio[name="permission[publish_post_review]"][value="'+publishPostReview+'"]').prop('checked', true).click();
+  form.find('input:radio[name="permission[publish_comment]"][value="'+publishComment+'"]').prop('checked', true).click();
+  form.find('input:radio[name="permission[publish_comment_review]"][value="'+publishCommentReview+'"]').prop('checked', true).click();
+
   form.find('select[name="permission[publish_post_roles][]"]').select2('val', params.permission.publish_post_roles);
   form.find('select[name="permission[publish_comment_roles][]"]').select2('val', params.permission.publish_comment_roles);
   form.find('input:radio[name=is_enable][value="'+params.is_enable+'"]').prop('checked', true).click();

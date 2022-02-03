@@ -14,7 +14,11 @@
           <li class="nav-item"><a class="nav-link  {{ \Route::is('panel.postConfigs.*','panel.commentConfigs.*') ? 'active' : ''}}" href="{{ route('panel.postConfigs.show') }}">发表配置</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.stopWords.*') ? 'active' : '' }}" href="{{ route('panel.stopWords.index') }}">过滤配置</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is('panel.memberRoles.*') ? 'active' : '' }}" href="{{ route('panel.memberRoles.index') }}">用户角色</a></li>
-          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.groups.*') ? 'active' : '' }}" href="{{ route('panel.groups.index') }}">内容小组</a></li>
+          <li class="nav-item"><a class="nav-link {{ \Route::is([
+            'panel.groups.*',
+            'panel.recommendGroups.*',
+            'panel.disableGroups.*'
+          ]) ? 'active' : '' }}" href="{{ route('panel.groups.index') }}">内容小组</a></li>
           <li class="nav-item d-block d-lg-none my-3 text-secondary">Powered by Fresns</li>
         </ul>
       </div>

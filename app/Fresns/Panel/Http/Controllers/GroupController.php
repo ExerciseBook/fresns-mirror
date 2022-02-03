@@ -26,6 +26,7 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         $categories = Group::typeCategory()
+            ->orderBy('rank_num')
             ->with('names', 'descriptions')
             ->get();
 
@@ -35,6 +36,7 @@ class GroupController extends Controller
 
         if ($parentId) {
             $groups = Group::typeGroup()
+                ->orderBy('rank_num')
                 ->where('parent_id', $parentId)
                 ->with('member', 'plugin', 'names', 'descriptions')
                 ->paginate();
@@ -74,6 +76,7 @@ class GroupController extends Controller
             ->get();
 
         $groups = Group::typeGroup()
+            ->orderBy('rank_num')
             ->with('member', 'plugin', 'category')
             ->where('is_recommend', 1)
             ->paginate();
@@ -106,6 +109,7 @@ class GroupController extends Controller
     public function disableIndex()
     {
         $groups = Group::typeGroup()
+            ->orderBy('rank_num')
             ->where('is_enable', 0)
             ->with('member', 'plugin', 'category')
             ->paginate();
@@ -139,8 +143,8 @@ class GroupController extends Controller
             $group->is_recommend = $request->is_recommend;
             $group->plugin_unikey = $request->plugin_unikey;
             $permission = $request->permission;
-            $permission['publish_post_review'] = (bool)$permission['publish_post_review'] ?? 0;
-            $permission['publish_comment_review'] = (bool)$permission['publish_comment_review'] ?? 0;
+            $permission['publish_post_review'] = (bool)($permission['publish_post_review'] ?? 0);
+            $permission['publish_comment_review'] = (bool)($permission['publish_comment_review'] ?? 0);
             $group->permission = $permission;
             $group->type = 2;
         }
@@ -223,8 +227,8 @@ class GroupController extends Controller
             $group->is_recommend = $request->is_recommend;
             $group->plugin_unikey = $request->plugin_unikey;
             $permission = $request->permission;
-            $permission['publish_post_review'] = (bool)$permission['publish_post_review'] ?? 0;
-            $permission['publish_comment_review'] = (bool)$permission['publish_comment_review'] ?? 0;
+            $permission['publish_post_review'] = (bool)($permission['publish_post_review'] ?? 0);
+            $permission['publish_comment_review'] = (bool)($permission['publish_comment_review'] ?? 0);
             $group->permission = $permission;
         }
         $group->save();
@@ -310,6 +314,14 @@ class GroupController extends Controller
             $group->parent_id = $request->category_id;
             $group->save();
         }
+
+        return $this->updateSuccess();
+    }
+
+    public function updateRank(Group $group, Request $request)
+    {
+        $group->rank_num = $request->rank_num;
+        $group->save();
 
         return $this->updateSuccess();
     }

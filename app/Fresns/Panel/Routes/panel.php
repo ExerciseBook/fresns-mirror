@@ -204,6 +204,7 @@ Route::middleware(['panelAuth'])->group(function() {
             'index', 'store', 'update', 'destroy'
         ]);
         Route::put('groups/{group}/change', [GroupController::class, 'changeCategory'])->name('groups.change');
+        Route::put('groups/{group}/rank', [GroupController::class, 'updateRank'])->name('groups.rank.update');
         Route::get('recommendGroups', [GroupController::class, 'recommendIndex'])->name('recommendGroups.index');
         Route::get('disableGroups', [GroupController::class, 'disableIndex'])->name('disableGroups.index');
         Route::put('groups/{group}/enable', [GroupController::class, 'updateEnable'])->name('groups.enable.update');

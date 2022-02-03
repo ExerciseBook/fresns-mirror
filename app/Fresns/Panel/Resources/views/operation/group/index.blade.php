@@ -35,7 +35,7 @@
       <div class="list-group">
         @foreach($categories as $category)
           <a href="{{ route('panel.groups.index', ['parent_id' => $category->id])}}" class="list-group-item list-group-item-action {{ $category->id == $parentId ? 'active' : '' }} d-flex justify-content-between align-items-center">
-            <input type="number" class="form-control input-number" value="{{ $category->rank_num }}" style="width:50px;">
+            <input type="number" class="form-control input-number rank-num" data-action="{{ route('panel.groups.rank.update', $category->id)}}"  value="{{ $category->rank_num }}" style="width:50px;">
             <span class="ms-2 text-nowrap overflow-hidden">{{ $category->name }}</span>
             <button type="button"
                     data-params="{{ $category->toJson() }}"
@@ -73,7 +73,7 @@
           <tbody>
             @foreach($groups as $group)
               <tr>
-                <td><input type="number" class="form-control input-number" value="{{ $group->rank_num }}"></td>
+                <td><input type="number" data-action="{{ route('panel.groups.rank.update', $group->id)}}" class="form-control input-number rank-num" value="{{ $group->rank_num }}"></td>
                 <td>
                   @if ($group->cover_file_url)
                     <img src="{{ $group->cover_file_url }}" width="24" height="24">
