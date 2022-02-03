@@ -4,7 +4,7 @@ namespace App\Fresns\Panel\Http\Requests;
 
 use Illuminate\Validation\Rule;
 
-class UpdateEmojiGroupRequest extends FormRequest
+class UpdateEmojiRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -25,7 +25,7 @@ class UpdateEmojiGroupRequest extends FormRequest
         } elseif ($this->method() == 'PUT') {
             $rule['code'] = [
                 'required',
-                Rule::unique('App\Models\Emoji')->ignore($this->emojiGroup->id),
+                Rule::unique('App\Models\Emoji')->ignore($this->emoji->id),
             ];
         }
         return $rule;

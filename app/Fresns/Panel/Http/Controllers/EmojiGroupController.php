@@ -14,18 +14,21 @@ class EmojiGroupController extends Controller
     {
         $groups = Emoji::group()
             ->orderBy('rank_num')
-            ->with('emojis', 'names')
+            ->with('names')
+            ->with(['emojis' => function($query) {
+                $query->orderBy('rank_num');
+            }])
             ->get();
 
         return view('panel::operation.emoji', compact('groups'));
     }
 
-    public function store(Emoji $emojiGroup, Request $request)
+    public function store(Emoji $emojiGroup, UpdateEmojiGroupRequest $request)
     {
         $emojiGroup->rank_num = $request->rank_num;
         $emojiGroup->code = $request->code;
         $emojiGroup->is_enable = $request->is_enable;
-        $emojiGroup->image_file_url = $request->image_file_url;
+        $emojiGroup->image_file_url = $request->image_file_url ?: '';
         $emojiGroup->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $emojiGroup->type = 2;
         $emojiGroup->save();
@@ -99,12 +102,4 @@ class EmojiGroupController extends Controller
         return $this->deleteSuccess();
     }
 
-    public function updateRank($id, Request $request)
-    {
-        $emoji = Emoji::findOrFail($id);
-        $emoji->rank_num = $request->rank_num;
-        $emoji->save();
-
-        return $this->updateSuccess();
-    }
 }

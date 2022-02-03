@@ -13,10 +13,11 @@
     </div>
     <div class="col-lg-5">
       <div class="input-group mt-2 mb-4 justify-content-lg-end">
-        <button class="btn btn-primary" type="button"
-                                        data-bs-toggle="modal"
-                                        data-action="{{ route('panel.emojiGroups.store') }}"
-                                        data-bs-target="#emojiGroupCreateModal"><i class="bi bi-plus-circle-dotted"></i> 新增表情组</button>
+        <button class="btn btn-primary"
+                type="button"
+                data-bs-toggle="modal"
+                data-action="{{ route('panel.emojiGroups.store') }}"
+                data-bs-target="#emojiGroupCreateModal"><i class="bi bi-plus-circle-dotted"></i> 新增表情组</button>
         <a class="btn btn-outline-secondary" href="#" role="button">帮助说明</a>
       </div>
     </div>
@@ -36,7 +37,7 @@
       <tbody>
         @foreach($groups as $group)
           <tr>
-			<td><input type="number"  data-action="{{ route('panel.emojiGroups.rank',$group->id) }}" class="form-control input-number rank-num" value="{{  $group->rank_num}}"></td>
+            <td><input type="number"  data-action="{{ route('panel.emojis.rank',$group->id) }}" class="form-control input-number rank-num" value="{{  $group->rank_num}}"></td>
             <td><img src="{{ $group->image_file_url }}" width="24" height="24"> {{ $group->name }}</td>
             <td>{{ $group->emojis->count() }}</td>
             <td>
@@ -50,19 +51,21 @@
               <form action="{{ route('panel.emojiGroups.destroy', ['emojiGroup' => $group->id]) }}" method="post">
                 @csrf
                 @method('delete')
-                <button type="button" class="btn btn-outline-primary btn-sm"
-                                      data-bs-toggle="modal"
-                                      data-action="{{ route('panel.emojiGroups.update', ['emojiGroup' => $group->id]) }}"
-                                      data-names="{{ $group->names->toJson() }}"
-                                      data-params="{{ json_encode($group->attributesToArray()) }}"
-                                      data-bs-target="#emojiGroupCreateModal">修改</button>
-                <button type="button" class="btn btn-outline-info btn-sm ms-1"
-                                      data-bs-toggle="offcanvas"
-                                      data-bs-target="#offcanvasEmoji"
-                                      data-action="{{ route('panel.emojis.store')}}"
-                                      data-emojis="{{ $group->emojis->toJson() }}"
-                                      data-parent_id="{{ $group->id }}"
-                                      aria-controls="offcanvasEmoji">配置表情图</button>
+                <button type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-action="{{ route('panel.emojiGroups.update', ['emojiGroup' => $group->id]) }}"
+                        data-names="{{ $group->names->toJson() }}"
+                        data-params="{{ json_encode($group->attributesToArray()) }}"
+                        data-bs-target="#emojiGroupCreateModal">修改</button>
+                <button type="button"
+                        class="btn btn-outline-info btn-sm ms-1"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasEmoji"
+                        data-action="{{ route('panel.emojis.store')}}"
+                        data-emojis="{{ $group->emojis->toJson() }}"
+                        data-parent_id="{{ $group->id }}"
+                        aria-controls="offcanvasEmoji">配置表情图</button>
                 <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
               </form>
             </td>
@@ -73,7 +76,7 @@
   </div>
 
 
-  <form method="post">
+  <form method="post" >
     @csrf
     @method('post')
     <!-- Modal -->
@@ -101,8 +104,8 @@
                     <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
                     <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
                   </ul>
-                  <input type="file" class="form-control inputFile" name="image_file_url_file">
-                  <input type="text" class="form-control inputUrl"     name="image_file_url" value="" style="display:none;">
+                  <input type="file" class="form-control inputFile" name="image_file_id">
+                  <input type="url" class="form-control inputUrl"  name="image_file_url" value="" style="display:none;">
                 </div>
 
               </div>
@@ -167,7 +170,7 @@
                     <?php
                       $langName = $lang['langName'];
                       if ($lang['areaCode']) {
-                          $langName .= '('. optional($areaCodes->where('code', $lang['areaCode'])->first())['localName'] .')';
+                        $langName .= '('. optional($areaCodes->where('code', $lang['areaCode'])->first())['localName'] .')';
                       }
                     ?>
                   <tr>
@@ -195,19 +198,23 @@
 
   </form>
 
-
-  <!-- Offcanvas -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasEmoji" aria-labelledby="offcanvasEmojiLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasEmojiLabel">表情管理
-        <button class="btn btn-info btn-sm ms-3"
-                type="button"
-                data-bs-toggle="modal"
-                data-bs-target="#emojiModal"><i class="bi bi-plus-circle-dotted"></i> 新增表情图</button>
-      </h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
+  <form method="post" action="{{ route('panel.emojis.batch.update')}}">  <!-- Offcanvas -->
+    @csrf
+    @method('put')
+    <input type="hidden" name="parent_id">
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasEmoji" aria-labelledby="offcanvasEmojiLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasEmojiLabel">表情管理
+          <button class="btn btn-info btn-sm ms-3"
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#emojiModal">
+            <i class="bi bi-plus-circle-dotted"></i> 新增表情图
+          </button>
+        </h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
         <div class="table-responsive">
           <table class="table table-hover align-middle text-nowrap">
             <thead>
@@ -224,33 +231,27 @@
           </table>
         </div>
         <!--保存按钮-->
-        {{--<div class="text-center mb-4">--}}
-          {{--<button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">保存</button>--}}
-        {{--</div>--}}
+        <div class="text-center mb-4">
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">保存</button>
+        </div>
+      </div>
     </div>
-  </div>
+  </form>
+
 
   <template id="emojiData">
     <tr>
-	  <td><input type="number" data-action="" name="rank_num" class="form-control input-number rank-num" value="1"></td>
+      <td><input type="number" class="form-control input-number emoji-rank"></td>
       <td><img class="emoji-img" src="" width="28" height="28"></td>
       <td>[<span class="emoji-code"></span>]</td>
       <td>
-		  <form action="" method="post">
-			@csrf
-			@method('put')
-		  <div class="form-check form-switch">
-		  <input name="is_enable" class="form-check-input" type="checkbox"></div>
-		  </form>
-	  </td>
+        <div class="form-check form-switch">
+          <input class="form-check-input update-emoji-enable emoji-enable" type="checkbox" value="1">
+        </div>
+      </td>
       <td>
-		  <form action="" method="post">
-			@csrf
-			@method('delete')
-		  <button type="submit" class="delete-emoji btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
-		  </form>
-	  </td>
-
+        <button type="submit" class="delete-emoji btn btn-link link-danger ms-1 fresns-link fs-7">删除</button>
+      </td>
     </tr>
 
   </template>
@@ -277,15 +278,15 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">表情图</label>
               <div class="col-sm-9">
-				  <div class="input-group">
-				   <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
-				   <ul class="dropdown-menu selectImageTyle">
-					   <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
-					   <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
-				   </ul>
-				   <input type="file" class="form-control inputFile" name="image_file_url_file">
-				<input type="text" class="form-control inputUrl"     name="image_file_url" value="" style="display:none;">
-			   </div>
+                <div class="input-group">
+                  <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">上传图片</button>
+                  <ul class="dropdown-menu selectImageTyle">
+                    <li data-name="inputFile"><a class="dropdown-item" href="#">上传图片</a></li>
+                    <li data-name="inputUrl"><a class="dropdown-item" href="#">图片地址</a></li>
+                  </ul>
+                  <input type="file" class="form-control inputFile" name="image_file_url_file">
+                  <input type="text" class="form-control inputUrl"     name="image_file_url" value="" style="display:none;">
+                </div>
               </div>
             </div>
             <div class="mb-3 row">

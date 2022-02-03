@@ -177,7 +177,8 @@ Route::middleware(['panelAuth'])->group(function() {
         Route::resource('emojiGroups', EmojiGroupController::class)->only([
             'index', 'store', 'update', 'destroy'
         ]);
-		Route::put('emojiGroups/{id}/rank', [EmojiGroupController::class, 'updateRank'])->name('emojiGroups.rank');
+		Route::put('emojis/{emoji}/rank', [EmojiController::class, 'updateRank'])->name('emojis.rank');
+		Route::put('batch/emojis', [EmojiController::class, 'batchUpdate'])->name('emojis.batch.update');
 
         // publsh config
         // post

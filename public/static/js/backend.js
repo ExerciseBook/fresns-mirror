@@ -143,7 +143,8 @@ $('input[name="default_language"]').change(function() {
   });
 });
 
-$('input.rank-num').change(function() {
+$(document).on('change', 'input.rank-num', function() {
+  console.log($(this).data('action'))
   $.ajax({
     method:'post',
     url: $(this).data('action'),
@@ -370,22 +371,20 @@ $('#emojiGroupCreateModal').on('show.bs.modal', function(e) {
   let button = $(e.relatedTarget);
   let params = button.data('params');
 
-  console.log(params);
   if (!params) {
     return;
   }
 
-  console.log(params);
   $(".inputUrl").css('display','none');
   $(".inputFile").removeAttr('style');
   $(".showSelectTypeName").text('上传图片');
-  if(params.icon_file_url){
-    $(this).find('input[name=icon_file_url]').val(params.icon_file_url);
-    $(this).find('input[name=icon_file_url]').removeAttr('style');
+  if(params.image_file_url){
+    $(this).find('input[name=image_file_url]').val(params.image_file_url);
+    $(this).find('input[name=image_file_url]').removeAttr('style');
     $(".showSelectTypeName").text('图片地址');
     $(".inputFile").css('display','none');
   } else {
-    $(this).find('input[name=icon_file_url]').val('');
+    $(this).find('input[name=image_file_url]').val('');
   }
 
   $(this).find('input[name=rank_num]').val(params.rank_num);
@@ -400,25 +399,25 @@ $('#offcanvasEmoji').on('show.bs.offcanvas', function(e) {
   let parent_id = button.data('parent_id');
 
   $('#emojiList').empty();
+  $(this).parent('form').find('input[name=parent_id]').val(parent_id)
   $('#offcanvasEmojiLabel button').data('parent_id', parent_id)
 
   if (!emojis) {
     return;
   }
-  let template = $('#emojiData').contents();
+  let template = $($('#emojiData').html());
 
   emojis.map((emoji) => {
     let emojiTemplate = template.clone();
-    let href ="/panel/operation/emojis/"+emoji.id
-    emojiTemplate.find('form').attr('action', href);
-    emojiTemplate.find('input[name=rank_num]').val(emoji.rank_num);
-    //todo
-    //emojiTemplate.find('input[name=rank_num]').data('action',"/panel/operation/emojiGroups/"+emoji.id+'/rank');
+
+    emojiTemplate.find('input.emoji-rank').attr('name', 'rank_num['+emoji.id+']').val(emoji.rank_num);
+
     emojiTemplate.find('.emoji-img').attr('src', emoji.image_file_url);
     emojiTemplate.find('.emoji-code').html(emoji.code);
 
+    emojiTemplate.find('input.emoji-enable').attr('name', 'enable['+emoji.id+']');
     if (emoji.is_enable) {
-      emojiTemplate.find('input[name=is_enable]').attr('checked', 'checked');
+      emojiTemplate.find('input.emoji-enable').attr('checked', 'checked');
     }
     $('#emojiList').append(emojiTemplate);
   });
@@ -432,6 +431,9 @@ $('#emojiModal').on('show.bs.modal', function(e) {
   $(this).find('input[name=parent_id]').val(parent_id);
 });
 
+$(document).on('click', '.delete-emoji', function() {
+  $(this).closest('tr').remove();
+});
 
 $('#createStopWordModal').on('show.bs.modal', function(e) {
   let button = $(e.relatedTarget);
