@@ -12,7 +12,7 @@ class PluginController extends Controller
     {
         $isEnable = $request->is_enable;
 
-        $plugins = Plugin::type(1)->query();
+        $plugins = Plugin::type(1);
 
         if ($request->has('is_enable')) {
             $plugins->where('is_enable', $request->is_enable);
