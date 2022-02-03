@@ -29,15 +29,15 @@
       <label class="col-lg-2 col-form-label text-lg-end">发表帖子要求：</label>
       <div class="col-lg-6 pt-2">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="post_email_verify" id="comment_email_verify" value="true" {{ $params['post_email_verify']=='true' ? 'checked' : ''}}>
+          <input class="form-check-input" type="checkbox" name="post_email_verify" id="comment_email_verify" value="true" {{ $params['post_email_verify'] ? 'checked' : ''}}>
           <label class="form-check-label" for="comment_email_verify">已绑定邮箱</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="post_phone_verify" id="comment_phone_verify" value="true" {{ $params['post_phone_verify']=='true' ? 'checked' : ''}}>
+          <input class="form-check-input" type="checkbox" name="post_phone_verify" id="comment_phone_verify" value="true" {{ $params['post_phone_verify'] ? 'checked' : ''}}>
           <label class="form-check-label" for="post_phone_verify">已绑定手机号</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="post_prove_verify" id="comment_prove_verify" value="true" {{ $params['post_prove_verify']=='true' ? 'checked' : ''}}>
+          <input class="form-check-input" type="checkbox" name="post_prove_verify" id="comment_prove_verify" value="true" {{ $params['post_prove_verify'] ? 'checked' : ''}}>
           <label class="form-check-label" for="post_prove_verify">已实名认证</label>
         </div>
       </div>
@@ -48,15 +48,15 @@
       <label class="col-lg-2 col-form-label text-lg-end">发表帖子特殊规则：</label>
       <div class="col-lg-6 pt-2">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="post_limit_status" id="post_limit_status_0" data-bs-toggle="collapse" data-bs-target="#post_limit_setting.show" aria-expanded="false" aria-controls="post_limit_setting" value="false" {{ $params['post_limit_status']=='false' ? 'checked' : ''}}>
+          <input class="form-check-input" type="radio" name="post_limit_status" id="post_limit_status_0" data-bs-toggle="collapse" data-bs-target="#post_limit_setting.show" aria-expanded="false" aria-controls="post_limit_setting" value="false" {{ !$params['post_limit_status'] ? 'checked' : ''}}>
           <label class="form-check-label" for="post_limit_status_0">关闭特殊规则</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="post_limit_status" id="post_limit_status_1" data-bs-toggle="collapse" data-bs-target="#post_limit_setting:not(.show)" aria-expanded="false" aria-controls="post_limit_setting" value="true" {{ $params['post_limit_status']=='true' ? 'checked' : ''}}>
+          <input class="form-check-input" type="radio" name="post_limit_status" id="post_limit_status_1" data-bs-toggle="collapse" data-bs-target="#post_limit_setting:not(.show)" aria-expanded="false" aria-controls="post_limit_setting" value="true" {{ $params['post_limit_status'] ? 'checked' : ''}}>
           <label class="form-check-label" for="post_limit_status_1">开启特殊规则</label>
         </div>
         <!--发表帖子特殊规则配置 开始-->
-        <div class="collapse mt-3 {{ $params['post_limit_status']=='true' ? 'show' : ''}}" id="post_limit_setting">
+        <div class="collapse mt-3 {{ $params['post_limit_status'] ? 'show' : ''}}" id="post_limit_setting">
           <div class="input-group mb-3">
             <label class="input-group-text fresns-label">规则类型</label>
             <select class="form-select" id="post_limit_type" name="post_limit_type">
@@ -93,13 +93,13 @@
           </div>
           <div class="input-group mb-3">
             <label class="input-group-text fresns-label">白名单角色</label>
-            <select class="form-select" name="post_limit_whitelist[]">
-              <option selected disabled>这是 liveSearch 多选框，暂未加载样式组件，所以原型显示为单选下拉框</option>
-			  @foreach($roles as $role)
-			  	<option value="{{$role->id}}" @if($params['post_limit_whitelist'] && is_array($params['post_limit_whitelist']) && in_array($role->id,$params['post_limit_whitelist'])) selected @endif>
-					{{$role->name}}
-				</option>
-			  @endforeach
+            <select class="form-select select2" name="post_limit_whitelist[]">
+              <option selected disabled>请选择角色</option>
+              @foreach($roles as $role)
+                <option value="{{$role->id}}" @if($params['post_limit_whitelist'] && is_array($params['post_limit_whitelist']) && in_array($role->id,$params['post_limit_whitelist'])) selected @endif>
+                {{$role->name}}
+                </option>
+              @endforeach
             </select>
           </div>
         </div>
@@ -112,15 +112,15 @@
       <label class="col-lg-2 col-form-label text-lg-end">帖子编辑权限：</label>
       <div class="col-lg-6 pt-2">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="post_edit" id="post_edit_status_0" data-bs-toggle="collapse" data-bs-target="#post_edit_setting.show" aria-expanded="false" aria-controls="post_edit_setting" value="false"  {{ $params['post_edit']=='false' ? 'checked' : ''}}>
+          <input class="form-check-input" type="radio" name="post_edit" id="post_edit_status_0" data-bs-toggle="collapse" data-bs-target="#post_edit_setting.show" aria-expanded="false" aria-controls="post_edit_setting" value="false"  {{ !$params['post_edit'] ? 'checked' : ''}}>
           <label class="form-check-label" for="post_edit_status_0">不可编辑</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="post_edit" id="post_edit_status_1" data-bs-toggle="collapse" data-bs-target="#post_edit_setting:not(.show)" aria-expanded="true" aria-controls="post_edit_setting" value="true"  {{ $params['post_edit']=='true' ? 'checked' : ''}}>
+          <input class="form-check-input" type="radio" name="post_edit" id="post_edit_status_1" data-bs-toggle="collapse" data-bs-target="#post_edit_setting:not(.show)" aria-expanded="true" aria-controls="post_edit_setting" value="true"  {{ $params['post_edit'] ? 'checked' : ''}}>
           <label class="form-check-label" for="post_edit_status_1">可以编辑</label>
         </div>
         <!--发表帖子特殊规则配置 开始-->
-        <div class="collapse mt-3 {{ $params['post_edit']=='true' ? 'show' : ''}}" id="post_edit_setting">
+        <div class="collapse mt-3 {{ $params['post_edit'] ? 'show' : ''}}" id="post_edit_setting">
           <div class="input-group mb-3">
             <label class="input-group-text">多长时间内可以编辑</label>
             <input type="number" name="post_edit_timelimit" value="{{$params['post_edit_timelimit']}}" class="form-control input-number" id="post_edit_timelimit" value="30">
@@ -130,11 +130,11 @@
             <label class="input-group-text">帖子置顶后编辑权限</label>
             <div class="form-control bg-white">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="post_edit_sticky" id="post_edit_sticky_false" value="false" {{ $params['post_edit_sticky']=='false' ? 'checked' : ''}}>
+                <input class="form-check-input" type="radio" name="post_edit_sticky" id="post_edit_sticky_false" value="false" {{ !$params['post_edit_sticky'] ? 'checked' : ''}}>
                 <label class="form-check-label" for="post_edit_sticky_false">不可编辑</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="post_edit_sticky" id="post_edit_sticky_true" value="true" {{ $params['post_edit_sticky']=='true' ? 'checked' : ''}}>
+                <input class="form-check-input" type="radio" name="post_edit_sticky" id="post_edit_sticky_true" value="true" {{ $params['post_edit_sticky'] ? 'checked' : ''}}>
                 <label class="form-check-label" for="post_edit_sticky_true">可以编辑</label>
               </div>
             </div>
@@ -143,11 +143,11 @@
             <label class="input-group-text">帖子加精后编辑权限</label>
             <div class="form-control bg-white">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="post_edit_essence" id="post_edit_essence_false" value="false"  {{ $params['post_edit_essence']=='false' ? 'checked' : ''}}>
+                <input class="form-check-input" type="radio" name="post_edit_essence" id="post_edit_essence_false" value="false"  {{ !$params['post_edit_essence'] ? 'checked' : ''}}>
                 <label class="form-check-label" for="post_edit_essence_false">不可编辑</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="post_edit_essence" id="post_edit_essence_true" value="true"  {{ $params['post_edit_essence']=='true' ? 'checked' : ''}}>
+                <input class="form-check-input" type="radio" name="post_edit_essence" id="post_edit_essence_true" value="true"  {{ $params['post_edit_essence'] ? 'checked' : ''}}>
                 <label class="form-check-label" for="post_edit_essence_true">可以编辑</label>
               </div>
             </div>
@@ -162,9 +162,9 @@
       <label class="col-lg-2 col-form-label text-lg-end">编辑器选择：</label>
       <div class="col-lg-6">
         <select class="form-select" name="post_editor_service" id="post_editor">
-		  @foreach($plugins as $plugin)
-		   <option value="{{$plugin->unikey}}" @if($plugin->unikey == $params['post_editor_service']) selected @endif>{{$plugin->name}}</option>
-		  @endforeach
+          @foreach($plugins as $plugin)
+            <option value="{{$plugin->unikey}}" @if($plugin->unikey == $params['post_editor_service']) selected @endif>{{$plugin->name}}</option>
+          @endforeach
         </select>
       </div>
       <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 发表帖子的编辑器</div>
@@ -176,55 +176,55 @@
         <ul class="list-group">
           <li class="list-group-item">
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_group" value="true" name="post_editor_group" {{ $params['post_editor_group']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_group" value="true" name="post_editor_group" {{ $params['post_editor_group'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_group">小组</label>
             </div>
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_title" value="true" name="post_editor_title" {{ $params['post_editor_title']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_title" value="true" name="post_editor_title" {{ $params['post_editor_title'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_title">标题</label>
             </div>
           </li>
           <li class="list-group-item">
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_emoji" value="true" name="post_editor_emoji" {{ $params['post_editor_emoji']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_emoji" value="true" name="post_editor_emoji" {{ $params['post_editor_emoji'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_emoji">表情</label>
             </div>
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_image" value="true" name="post_editor_image" {{ $params['post_editor_image']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_image" value="true" name="post_editor_image" {{ $params['post_editor_image'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_image">图片</label>
             </div>
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_video" value="true" name="post_editor_video" {{ $params['post_editor_video']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_video" value="true" name="post_editor_video" {{ $params['post_editor_video'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_video">视频</label>
             </div>
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_audio" value="true" name="post_editor_audio" {{ $params['post_editor_audio']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_audio" value="true" name="post_editor_audio" {{ $params['post_editor_audio'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_audio">音频</label>
             </div>
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_file" value="true" name="post_editor_doc" {{ $params['post_editor_doc']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_file" value="true" name="post_editor_doc" {{ $params['post_editor_doc'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_file">文档</label>
             </div>
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_at" value="true" name="post_editor_mention" {{ $params['post_editor_mention']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_at" value="true" name="post_editor_mention" {{ $params['post_editor_mention'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_at">艾特</label>
             </div>
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_topic" value="true" name="post_editor_hashtag" {{ $params['post_editor_hashtag']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_topic" value="true" name="post_editor_hashtag" {{ $params['post_editor_hashtag'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_topic">话题</label>
             </div>
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_expand" value="true" name="post_editor_expand" {{ $params['post_editor_expand']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_expand" value="true" name="post_editor_expand" {{ $params['post_editor_expand'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_expand">扩展功能</label>
             </div>
           </li>
           <li class="list-group-item">
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_lbs" value="true" name="post_editor_lbs" {{ $params['post_editor_lbs']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_lbs" value="true" name="post_editor_lbs" {{ $params['post_editor_lbs'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_lbs">定位</label>
             </div>
             <div class="form-check form-check-inline">
-              <input type="checkbox" class="form-check-input" id="editor_anonymous" value="true" name="post_editor_anonymous" {{ $params['post_editor_anonymous']=='true' ? 'checked' : ''}}>
+              <input type="checkbox" class="form-check-input" id="editor_anonymous" value="true" name="post_editor_anonymous" {{ $params['post_editor_anonymous'] ? 'checked' : ''}}>
               <label class="form-check-label" for="editor_anonymous">匿名</label>
             </div>
           </li>
@@ -239,11 +239,11 @@
           <label class="input-group-text">小组是否必选</label>
           <div class="form-control bg-white">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="post_editor_group_required" id="post_editor_group_required_false" value="false" {{ $params['post_editor_group_required']=='false' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="post_editor_group_required" id="post_editor_group_required_false" value="false" {{ !$params['post_editor_group_required'] ? 'checked' : ''}}>
               <label class="form-check-label" for="post_editor_group_required_false">否</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="post_editor_group_required" id="post_editor_group_required_true" value="true" {{ $params['post_editor_group_required']=='true' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="post_editor_group_required" id="post_editor_group_required_true" value="true" {{ $params['post_editor_group_required'] ? 'checked' : ''}}>
               <label class="form-check-label" for="post_editor_group_required_true">是</label>
             </div>
           </div>
@@ -277,11 +277,11 @@
           <label class="input-group-text">标题是否必填</label>
           <div class="form-control bg-white">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="post_editor_title_required" id="post_editor_title_required_false" value="false" {{ $params['post_editor_title_required']=='false' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="post_editor_title_required" id="post_editor_title_required_false" value="false" {{ !$params['post_editor_title_required'] ? 'checked' : ''}}>
               <label class="form-check-label" for="post_editor_title_required_false">否</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="post_editor_title_required" id="post_editor_title_required_true" value="true" {{ $params['post_editor_title_required']=='true' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="post_editor_title_required" id="post_editor_title_required_true" value="true" {{ $params['post_editor_title_required'] ? 'checked' : ''}}>
               <label class="form-check-label" for="post_editor_title_required_true">是</label>
             </div>
           </div>
