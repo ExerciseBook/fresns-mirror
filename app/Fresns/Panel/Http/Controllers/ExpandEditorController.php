@@ -20,6 +20,7 @@ class ExpandEditorController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 3)
+            ->orderBy('rank_num')
             ->with('plugin', 'names')
             ->paginate();
 

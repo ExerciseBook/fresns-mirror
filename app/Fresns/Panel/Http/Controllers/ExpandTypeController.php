@@ -18,6 +18,7 @@ class ExpandTypeController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 4)
+            ->orderBy('rank_num')
             ->with('plugin', 'names')
             ->paginate();
 
@@ -102,7 +103,7 @@ class ExpandTypeController extends Controller
 
 
         if ($request->post_nearby != ($dataSources['postNearbys']['pluginUnikey'] ?? null)) {
-            $dataSources['postFollows'] = [
+            $dataSources['postNearbys'] = [
                 'pluginUnikey' => $request->post_nearby,
                 'sortNumber' => [],
             ];

@@ -20,6 +20,7 @@ class ExpandManageController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 5)
+            ->orderBy('rank_num')
             ->with('plugin', 'names')
             ->paginate();
 

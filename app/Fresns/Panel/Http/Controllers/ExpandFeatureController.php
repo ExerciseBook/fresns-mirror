@@ -20,6 +20,7 @@ class ExpandFeatureController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 7)
+            ->orderBy('rank_num')
             ->with('plugin', 'names')
             ->paginate();
 

@@ -19,12 +19,16 @@ class ExpandGroupController extends Controller
         $plugins = $plugins->filter(function ($plugin) {
             return in_array('pay', $plugin->scene);
         });
-        $groupId = $request->get('group_id')??0;
+        $groupId = $request->group_id ?: 0;
+
         $pluginUsages = PluginUsage::where('type', 6);
         if ($groupId) {
-            $pluginUsages = $pluginUsages->where('group_id', $groupId);
+            $pluginUsages->where('group_id', $groupId);
         }
-        $pluginUsages = $pluginUsages->with('plugin', 'names', 'group')->paginate();
+        $pluginUsages = $pluginUsages
+            ->orderBy('rank_num')
+            ->with('plugin', 'names', 'group')
+            ->paginate();
 
         $memberRoles = MemberRole::all();
 
