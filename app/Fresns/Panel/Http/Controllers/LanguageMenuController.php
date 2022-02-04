@@ -68,7 +68,7 @@ class LanguageMenuController extends Controller
         $language['rankNum'] = $request->rank_num;
 
         $languages[$languageKey] = $language;
-        $languageConfig->item_value = $languages;
+        $languageConfig->item_value = array_values($languages);
         $languageConfig->save();
 
         return $this->updateSuccess();
@@ -83,14 +83,14 @@ class LanguageMenuController extends Controller
         $languageConfig = Config::where('item_key', 'language_menus')->firstOrFail();
         $languages = $languageConfig->item_value;
 
-        $langTag = $request->area_code ? $request->lang_code.'-'.$request->area_code : $request->lang_code;
+        $langTag = ($request->area_code && $request->area_status) ? $request->lang_code.'-'.$request->area_code : $request->lang_code;
 
         if (collect($languages)->where('langTag', $langTag)->first()) {
             return back()->with('failear', __('panel::panel.languageExists'));
         }
 
         $areaName = '';
-        if ($request->area_code) {
+        if ($request->area_status && $request->area_code) {
             $areaCodeConfig = Config::where('item_key', 'area_codes')->firstOrFail();
             $areaCodes = $areaCodeConfig->item_value;
 
@@ -103,9 +103,9 @@ class LanguageMenuController extends Controller
             'langCode' => $request->lang_code,
             'langName' => $code['name'] ?? '',
             'langTag' => $langTag,
-            'continentId' => $request->continent_id,
-            'areaStatus' => $request->area_status ? 'true' : 'false',
-            'areaCode' => $request->area_code,
+            'continentId' => $request->area_status ? $request->continent_id : 0,
+            'areaStatus' => (bool)$request->area_status,
+            'areaCode' => $request->area_status ? $request->area_code : null,
             'areaName' => $areaName,
             'writingDirection' => $code['writingDirection'],
             'lengthUnits' =>  $request->length_units,
@@ -135,7 +135,8 @@ class LanguageMenuController extends Controller
         $languages = $languageConfig->item_value;
 
         // check exists
-        $langTag = $request->area_code ? $request->lang_code.'-'.$request->area_code : $request->lang_code;
+        $langTag = ($request->area_code && $request->area_status) ? $request->lang_code.'-'.$request->area_code : $request->lang_code;
+
         if ($langTag != $request->old_lang_tag && collect($languages)->where('langTag', $langTag)->first()) {
             return back()->with('failear', __('panel::panel.languageExists'));
         }
@@ -145,7 +146,7 @@ class LanguageMenuController extends Controller
         $defaultLanguage = $defaultLanguageConfig->item_value;
 
         $areaName = '';
-        if ($request->area_code) {
+        if ($request->area_status && $request->area_code) {
             $areaCodeConfig = Config::where('item_key', 'area_codes')->firstOrFail();
             $areaCodes = $areaCodeConfig->item_value;
 
@@ -153,16 +154,14 @@ class LanguageMenuController extends Controller
             $areaName = $areaCode['name'];
         }
 
-        $isDefault = $defaultLanguage == $langTag;
-
         $data = [
             'rankNum' => $request->rank_num,
             'langCode' => $request->lang_code,
             'langName' => $code['name'] ?? '',
             'langTag' => $langTag,
-            'continentId' => $request->continent_id,
-            'areaStatus' => $request->area_status ? 'true' : 'false',
-            'areaCode' => $request->area_code,
+            'continentId' => $request->area_status ? $request->continent_id : 0,
+            'areaStatus' => (bool)$request->area_status,
+            'areaCode' => $request->area_status ? $request->area_code : null,
             'areaName' => $areaName,
             'writingDirection' => $code['writingDirection'],
             'lengthUnits' =>  $request->length_units,
@@ -184,13 +183,8 @@ class LanguageMenuController extends Controller
         }
 
         $languages[$languageKey] = $data;
-        $languageConfig->item_value = $languages;
+        $languageConfig->item_value = array_values($languages);
         $languageConfig->save();
-
-        if ($isDefault) {
-            $languageConfig->item_value = $langTag;
-            $languageConfig->save();
-        }
 
         return $this->updateSuccess();
     }

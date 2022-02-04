@@ -92,9 +92,4 @@ class LanguagePackController extends Controller
 
         return $this->updateSuccess();
     }
-
-    public function destroy($id, $configId)
-    {
-        return back();
-    }
 }

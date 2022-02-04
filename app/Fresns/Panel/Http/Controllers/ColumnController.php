@@ -3,6 +3,7 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Models\Config;
+use App\Models\Language;
 use Illuminate\Http\Request;
 
 class ColumnController extends Controller
@@ -91,7 +92,13 @@ class ColumnController extends Controller
             return [$config->item_key => $config];
         });
 
+        $langKeys = $configKeys;
 
-        return view('panel::client.columns', compact('configs'));
+        $defaultLangParams = Language::ofConfig()
+            ->whereIn('table_key', $langKeys)
+            ->where('lang_tag', $this->defaultLanguage)
+            ->pluck('lang_content', 'table_key');
+
+        return view('panel::client.columns', compact('configs', 'defaultLangParams'));
     }
 }

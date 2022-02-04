@@ -122,7 +122,7 @@
                         data-bs-target="#menuEdit"
                         data-config="{{ json_encode(optional($configs['menu_'.$key.'_config'] ?? [])->item_value) }}"
                         data-no_config="{{ $key == 'portal' ? 1 : 0}}"
-                        data-is_enable="{{ optional($configs['menu_'.$key.'_status'])->item_value }}"
+                        data-is_enable="{{ optional($configs['menu_'.$key.'_status'])->item_value ?: 0 }}"
                         data-action="{{ route('panel.clientMenus.update', ['key' => $key]) }}"
                         data-bs-whatever="{{ $menu['name'] }}">编辑</button></td>
           </tr>
@@ -155,11 +155,11 @@
               <label class="col-sm-3 col-form-label">启用状态</label>
               <div class="col-sm-9 pt-2">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="is_enable" id="status_true" value="true" checked>
+                  <input class="form-check-input" type="radio" name="is_enable" id="status_true" value="1" checked>
                   <label class="form-check-label" for="status_true">启用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="is_enable" id="status_false" value="false">
+                  <input class="form-check-input" type="radio" name="is_enable" id="status_false" value="0">
                   <label class="form-check-label" for="status_false">不启用</label>
                 </div>
               </div>
