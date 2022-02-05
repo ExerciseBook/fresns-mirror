@@ -7,6 +7,7 @@ use App\Models\Config;
 use App\Models\Plugin;
 use App\Models\SessionKey;
 use Illuminate\Http\Request;
+use Symfony\Component\Process\Process;
 
 class DashboardController extends Controller
 {
@@ -40,5 +41,12 @@ class DashboardController extends Controller
         $plugins = Plugin::all();
 
         return view('panel::dashboard', compact('news', 'params', 'keyCount', 'adminCount', 'plugins'));
+    }
+
+    public function upgrade()
+    {
+        exec('php '.base_path('artisan').' fresns:upgrade > /dev/null &');
+
+        return $this->successResponse('upgrade');
     }
 }

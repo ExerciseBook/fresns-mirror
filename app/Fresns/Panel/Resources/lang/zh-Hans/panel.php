@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'upgradeSuccess' => '更新成功',
     'updateSuccess' => '修改成功',
     'createSuccess' => '创建成功',
     'deleteSuccess' => '删除成功',

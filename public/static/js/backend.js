@@ -54,6 +54,17 @@ $.ajaxSetup({
     }
 });
 
+$('#fresnsUpgrade').click(function() {
+  console.log(123);
+  $.ajax({
+    method:'post',
+    url: $(this).data('action'),
+    success:function(response){
+      window.tips(response.message)
+    }
+  });
+});
+
 $('.preview-image').click(function() {
   let url = $(this).siblings('.inputUrl').val();
   $('#imageZoom').find('img').attr('src', url);

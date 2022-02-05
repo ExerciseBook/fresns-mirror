@@ -39,9 +39,9 @@ class PanelServiceProvider extends ServiceProvider
             Handler::class
         );
 
-        $this->commands([
-            UpgradeFresns::class,
-        ]);
+        //$this->commands([
+            //UpgradeFresns::class,
+        //]);
     }
 
     /**

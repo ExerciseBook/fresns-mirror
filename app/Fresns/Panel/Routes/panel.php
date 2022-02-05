@@ -69,6 +69,7 @@ Route::middleware(['panelAuth'])->group(function() {
 
     // dashboard
     Route::get('dashboard', [DashboardController::class, 'show'])->name('dashboard');
+    Route::post('upgrade', [DashboardController::class, 'upgrade'])->name('upgrade');
     // update config
     Route::put('configs/{config:item_key}', [ConfigController::class, 'update'])->name('configs.update');
 

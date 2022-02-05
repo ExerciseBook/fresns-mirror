@@ -6,7 +6,10 @@
     <div class="card mt-4 mb-4 p-2 p-lg-4">
       <div class="card-body">
         <h1 class="fs-3 fw-normal">欢迎使用 Fresns</h1>
-        <p class="text-secondary pb-4">当前使用的版本是 v1.0.0</p>
+        <p class="text-secondary pb-4">
+        当前使用的版本是 v1.0.0
+        <button type="button" id="fresnsUpgrade" class="btn btn-primary btn-sm" data-action="{{ route('panel.upgrade') }}">更新</button>
+        </p>
         <div class="row">
           <div class="col-md mb-4 pe-lg-5">
             <h3 class="h6">站点数据</h3>
@@ -89,11 +92,12 @@
     -->
     </div>
   </div>
-  <!-- 插件升级 Modal   <div class="modal fade" id="upgrade" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
+  <!-- 插件升级 Modal  -->
+    <div class="modal fade" id="upgrade" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title"><i class="bi bi-laptop"></i> Discuz X <span class="badge bg-secondary">1.0.0</span> to <span class="badge bg-danger">1.5</span></h5>
+          <h5 class="modal-title"><i class="bi bi-laptop"></i> Fresns <span class="badge bg-secondary">1.0.0</span> to <span class="badge bg-danger">1.5</span></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body ps-5">
@@ -107,7 +111,4 @@
       </div>
     </div>
   </div>
-  -->
-
-
 @endsection
