@@ -4,7 +4,7 @@
 <img src="https://img.shields.io/badge/Fresns-1.x-yellow" alt="Fresns">
 <img src="https://img.shields.io/badge/PHP-%5E8.0-blue" alt="PHP">
 <img src="https://img.shields.io/badge/MySQL-%5E5.7%7C%5E8.0-orange" alt="MySQL">
-<img src="https://img.shields.io/badge/License-GPL--3.0-green" alt="License">
+<img src="https://img.shields.io/badge/License-Apache--2.0-green" alt="License">
 </p>
 
 ## 介绍
@@ -28,7 +28,7 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 | [Laravel Framework](https://github.com/laravel/framework) | 8.80.0 | 主程序框架 |
 | [Laravel Lang](https://github.com/Laravel-Lang/lang) | 10.4.0 | 框架语言包 |
 | [Bootstrap](https://getbootstrap.com/) | 5.1.3 | 内置前端框架 |
-| [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.7.2 | 内置前端图标字体库 |
+| [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.8.0 | 内置前端图标字体库 |
 | [jQuery](https://github.com/jquery/jquery) | 3.6.0 | 内置 JS 库 |
 | [Select2](https://github.com/select2/select2) | 4.1.0 | 内置 Select2 选择框 |
 | [Base64 JS](https://github.com/dankogai/js-base64) | 3.7.2 | 内置 Base64 转码器 |
@@ -47,16 +47,16 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 
 本仓库为研发代码仓库，没有 vendor 引用库文件，如果使用本仓库代码包安装，需要基于命令行执行 composer 命令安装 vendor 引用库文件。如果觉得麻烦，也可以到官网[下载完整包](https://apps.fresns.cn/)，官网安装包已经包含引用库文件，无需再执行命令行安装。
 
-*请确保服务器已经安装了 Composer 软体包管理工具*
-
 **部署流程**
 
 - 1、下载本仓库[发行版代码包](https://gitee.com/fresns/fresns/releases)，上传到业务服务器解压；
 - 2、根据官网[安装教程](https://fresns.cn/guide/install.html)配置 Web 服务器；
-- 3、在「主程序根目录」终端执行 composer 命令（Git 仓库非完整包，需另行安装扩展包）
+- 3、在「主程序根目录」终端执行 composer 命令；
     - 开发环境部署 `composer install`
     - 生产环境部署 `composer install --optimize-autoloader --no-dev`
 - 4、其余配置流程同官网[安装教程](https://fresns.cn/guide/install.html)一致。
+
+*请确保服务器已经安装了 Composer 软体包管理工具*
 
 ## 加入我们
 
@@ -68,7 +68,7 @@ Fresns 的开源社区正在急速增长中，如果你认可我们的开源软�
 
 - 官方网站：[https://fresns.cn](https://fresns.cn/)
 - 项目发起人：[唐杰](https://tangjie.me/)
-- 电子邮箱：[jarvis.okay@gmail.com](mailto:jarvis.okay@gmail.com)
+- 电子邮箱：[support@fresns.org](mailto:support@fresns.org)
 - QQ 群：[5980111](https://qm.qq.com/cgi-bin/qm/qr?k=R2pfcPUd4Nyc87AKdkuHP9yJ0MhddUaz&jump_from=webapi)
 - Telegram 群：[https://t.me/fresns_zh](https://t.me/fresns_zh)
 - 微信群：[点击查看加群二维码](https://tangjie.me/media/wechat/fresns.jpg)
