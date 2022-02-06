@@ -1,7 +1,7 @@
 {
     "name": "fresns/fresns",
     "type": "project",
-    "description": "Cross-platform general-purpose multiple content forms social network service software.",
+    "description": "123123",
     "keywords": ["fresns", "sns", "bbs", "forum", "community"],
     "license": "Apache-2.0",
     "authors": [
@@ -18,7 +18,8 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.4"
+        "laravel/ui": "^3.4",
+        "zanysoft/laravel-zip": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

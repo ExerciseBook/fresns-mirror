@@ -21,6 +21,8 @@ class UpgradeFresns extends Command
      */
     protected $description = 'upgrade fresns';
 
+    protected $path = 'upgrade';
+
     /**
      * Create a new command instance.
      *
@@ -38,6 +40,39 @@ class UpgradeFresns extends Command
      */
     public function handle()
     {
+        $this->download();
+        //$this->composerInstall();
+        //$this->migrate();
+
+        return Command::SUCCESS;
+    }
+
+    public function download()
+    {
+        logger('upgrade:download');
+        $client = new \GuzzleHttp\Client();
+
+        $downloadUrl = 'http://fresns.liyu.wiki/fresns.zip';
+        $filename = basename($downloadUrl);
+
+        $path = \Storage::path($this->path);
+        if (!file_exists($path)) {
+            \File::makeDirectory($path, 0775, true);
+        }
+
+        $file = $path.'/'.$filename;
+
+        $client->request('GET', $downloadUrl, [
+            'sink' => $file,
+        ]);
+
+        $zip = \Zip::open($file);
+        $extractPath = pathinfo($file)['filename'] ?? date('Y-m-d');
+        $zip->extract(\Storage::path($this->path.'/'.$extractPath));
+    }
+
+    public function composerInstall()
+    {
         logger('upgrade:composer install');
         $process = new Process(['composer', 'install'], base_path());
         $process->start();
@@ -49,10 +84,11 @@ class UpgradeFresns extends Command
                 $this->info("\nRead from stderr: ".$data);
             }
         }
+    }
 
+    public function migrate()
+    {
         logger('upgrade:migrate');
         $this->call('migrate');
-
-        return Command::SUCCESS;
     }
 }
