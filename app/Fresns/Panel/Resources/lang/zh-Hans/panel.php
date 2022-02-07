@@ -6,6 +6,8 @@ return [
     'createSuccess' => '创建成功',
     'deleteSuccess' => '删除成功',
     'panelControl' => '控制面板',
+    'home' => '首页',
+    'upgrade' => '更新',
     'language' => '语言',
     'login' => '登录',
     'account' => '账号',

@@ -7,13 +7,11 @@
       </button>
       <div class="collapse navbar-collapse" id="headerNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link {{ \Route::is('panel.dashboard') ? 'active' : '' }}" href="{{ route('panel.dashboard') }}">仪表盘</a></li>
           <li class="nav-item"><a class="nav-link {{ \Route::is([
-              'panel.manageConfigs.*',
-              'panel.admins.*',
-              'panel.sessionKeys.*'
-            ]) ? 'active' : '' }}"
-              href="{{ route('panel.sessionKeys.index') }}">管理</a>
+            'panel.dashboard',
+            'panel.manageConfigs.*',
+            'panel.admins.*',
+          ]) ? 'active' : '' }}" href="{{ route('panel.dashboard') }}">仪表盘</a>
           </li>
           <li class="nav-item"><a class="nav-link {{ \Route::is([
             'panel.languageMenus.*',
@@ -58,7 +56,8 @@
             'panel.languagePack.*',
             'panel.engines.*',
             'panel.themes.*',
-            'panel.apps.*'
+            'panel.apps.*',
+            'panel.sessionKeys.*',
           ]) ? 'active' : '' }} " href="{{ route('panel.clientMenus.index') }}">客户端</a></li>
           {{--<li class="nav-item"><a class="nav-link" href="app-store.html">应用商店</a></li>--}}
         </ul>

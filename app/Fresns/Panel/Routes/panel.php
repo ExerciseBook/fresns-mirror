@@ -11,6 +11,7 @@ use App\Fresns\Panel\Http\Controllers\{
     StorageController,
     LanguageController,
     DashboardController,
+    UpgradeController,
     MapConfigController,
     SessionKeyController,
     VerifyCodeController,
@@ -69,16 +70,12 @@ Route::middleware(['panelAuth'])->group(function() {
 
     // dashboard
     Route::get('dashboard', [DashboardController::class, 'show'])->name('dashboard');
-    Route::post('upgrade', [DashboardController::class, 'upgrade'])->name('upgrade');
+    Route::get('upgrade', [UpgradeController::class, 'show'])->name('upgrade.show');
+    Route::post('upgrade', [UpgradeController::class, 'upgrade'])->name('upgrade');
     // update config
     Route::put('configs/{config:item_key}', [ConfigController::class, 'update'])->name('configs.update');
 
     Route::prefix('manage')->group(function() {
-        // session key
-        Route::resource('sessionKeys', SessionKeyController::class)->only([
-            'index', 'store', 'update', 'destroy'
-        ]);
-        Route::put('sessionKeys/{sessionKey}/reset', [SessionKeyController::class, 'reset'])->name('sessionKeys.reset');
 
         // config
         Route::get('manageConfigs/show', [ManageConfigController::class, 'show'])->name('manageConfigs.show');
@@ -213,6 +210,11 @@ Route::middleware(['panelAuth'])->group(function() {
 
     // client
 	Route::prefix('client')->group(function() {
+        // session key
+        Route::resource('sessionKeys', SessionKeyController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
+        Route::put('sessionKeys/{sessionKey}/reset', [SessionKeyController::class, 'reset'])->name('sessionKeys.reset');
 		// set meuns
 		Route::get('clientMenus', [ClientMenuController::class, 'index'])->name('clientMenus.index');
 		Route::put('clientMenus/{key}/update', [ClientMenuController::class, 'update'])->name('clientMenus.update');

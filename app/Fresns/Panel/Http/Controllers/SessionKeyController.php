@@ -26,7 +26,7 @@ class SessionKeyController extends Controller
 
         $plugins = Plugin::all();
 
-        return view('panel::manage.keys', compact('platforms', 'sessionKeys', 'typeLabels', 'plugins'));
+        return view('panel::client.keys', compact('platforms', 'sessionKeys', 'typeLabels', 'plugins'));
     }
 
     public function store(UpdateSessionKeyRequest $request)

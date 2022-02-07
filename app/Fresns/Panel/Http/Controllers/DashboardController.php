@@ -40,7 +40,7 @@ class DashboardController extends Controller
         $adminCount = User::ofAdmin()->count();
         $plugins = Plugin::all();
 
-        return view('panel::dashboard', compact('news', 'params', 'keyCount', 'adminCount', 'plugins'));
+        return view('panel::manage.dashboard', compact('news', 'params', 'keyCount', 'adminCount', 'plugins'));
     }
 
     public function upgrade()

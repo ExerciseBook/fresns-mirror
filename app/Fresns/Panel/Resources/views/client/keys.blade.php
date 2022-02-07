@@ -1,7 +1,7 @@
 @extends('panel::common.sidebarLayout')
 
 @section('sidebar')
-  @include('panel::manage.sidebar')
+  @include('panel::client.sidebar')
 @endsection
 
 @section('content')
