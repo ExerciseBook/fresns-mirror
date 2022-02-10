@@ -71,6 +71,7 @@ class FsService extends BaseAdminService
         $proveSupportUrl = FresnsPluginsService::getPluginUrlByUnikey($proveSupportUnikey);
         $data['proveSupport'] = $proveSupportUrl;
         $data['verifyStatus'] = $users->prove_verify ?? '';
+        $data['verifyType'] = $users->verify_type ?? null;
         $data['realname'] = StrHelper::encryptName($users->prove_realname) ?? '';
         $data['gender'] = $users->prove_gender ?? '';
         $data['idType'] = $users->prove_type ?? '';
