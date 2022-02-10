@@ -107,6 +107,7 @@ return [
     'prohibits'            => 'Isian ini melarang isian :other untuk ditampilkan.',
     'regex'                => 'Format ini tidak sesuai.',
     'required'             => 'Isian ini wajib diisi',
+    'required_array_keys'  => 'Isian ini wajib berisi entri untuk: :values',
     'required_if'          => 'Isian ini wajib diisi bila :other adalah :value.',
     'required_unless'      => 'Isian ini wajib diisi jika :other berada dalam :values.',
     'required_with'        => 'Isian ini wajib diisi bila :values tersedia.',
