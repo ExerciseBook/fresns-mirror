@@ -61,7 +61,7 @@ class LanguageMenuController extends Controller
         });
 
         if (!$languageKey) {
-            return back()->with('failear', __('panel::panel.languageNotExists'));
+            return back()->with('failure', __('panel::panel.languageNotExists'));
         }
 
         $language = $languages[$languageKey];
@@ -138,7 +138,7 @@ class LanguageMenuController extends Controller
         $langTag = ($request->area_code && $request->area_status) ? $request->lang_code.'-'.$request->area_code : $request->lang_code;
 
         if ($langTag != $request->old_lang_tag && collect($languages)->where('langTag', $langTag)->first()) {
-            return back()->with('failear', __('panel::panel.languageExists'));
+            return back()->with('failure', __('panel::panel.languageExists'));
         }
 
         // default language
@@ -179,7 +179,7 @@ class LanguageMenuController extends Controller
         });
 
         if (!$languageKey) {
-            return back()->with('failear', __('panel::panel.languageNotExists'));
+            return back()->with('failure', __('panel::panel.languageNotExists'));
         }
 
         $languages[$languageKey] = $data;

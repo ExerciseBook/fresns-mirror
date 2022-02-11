@@ -239,7 +239,7 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">语言代码</label>
               <div class="col-sm-9">
-                <select class="form-select" name="lang_code" required>
+                <select class="form-select" name="lang_code" disabled required>
                   <option selected>请选择语言代码</option>
                   @foreach($codes as $code)
                     <option value={{ $code['code'] }}>{{ $code['name'] }}- {{ $code['localName']}} > {{ $code['code']}}</option>
