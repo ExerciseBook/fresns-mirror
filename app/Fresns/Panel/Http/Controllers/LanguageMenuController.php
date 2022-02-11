@@ -86,7 +86,7 @@ class LanguageMenuController extends Controller
         $langTag = ($request->area_code && $request->area_status) ? $request->lang_code.'-'.$request->area_code : $request->lang_code;
 
         if (collect($languages)->where('langTag', $langTag)->first()) {
-            return back()->with('failear', __('panel::panel.languageExists'));
+            return back()->with('failure', __('panel::panel.languageExists'));
         }
 
         $areaName = '';

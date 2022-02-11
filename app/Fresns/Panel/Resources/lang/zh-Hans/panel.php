@@ -30,4 +30,5 @@ return [
     'defaultLanguage' => '默认语言',
     'verifycodeTemplate1' => '通用验证码',
     'doNotHandle' => '不处理',
+    'languageExists' => '语言已存在',
 ];

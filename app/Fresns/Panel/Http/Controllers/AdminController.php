@@ -23,7 +23,7 @@ class AdminController extends Controller
             $credentials['email'] = $username :
             $credentials['phone'] = $username;
 
-        $admin = User::where($credentials)->first();
+        $admin = User::where($credentials)->where('is_enable', 1)->first();
 
         if (!$admin) {
             return back()->with('failure', __('panel::error.userNotFound'));
