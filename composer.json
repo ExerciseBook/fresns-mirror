@@ -4,6 +4,11 @@
     "description": "123123",
     "keywords": ["fresns", "sns", "bbs", "forum", "community"],
     "license": "Apache-2.0",
+    "homepage": "https://fresns.org",
+    "support": {
+        "issues": "https://github.com/fresns/fresns/issues",
+        "source": "https://github.com/fresns/fresns"
+    },
     "authors": [
         {
             "name": "唐杰",
@@ -12,10 +17,10 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.4|^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.4.1",
-        "laravel/framework": "^8.75",
+        "laravel/framework": "^8.80",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
