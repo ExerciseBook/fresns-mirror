@@ -32,4 +32,10 @@ class SessionKey extends Model
         }
         return $platform['name'] ?? '';
     }
+
+    public function plugin()
+    {
+        return $this->belongsTo(Plugin::class, 'plugin_unikey', 'unikey');
+    }
+
 }

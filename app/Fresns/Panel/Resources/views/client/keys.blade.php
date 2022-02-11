@@ -39,7 +39,12 @@
           <td>{{ $key->name }}</td>
           <td>{{ $key->app_id }}</td>
           <td>{{ $key->app_secret }}</td>
-          <td>{{ $typeLabels[$key->type] ?? '' }}</td>
+          <td>
+            {{ $typeLabels[$key->type] ?? '' }}
+            @if ($key->type == 3)
+              <span class="badge bg-light text-dark">{{ optional($key->plugin)->name}}</span>
+            @endif
+          </td>
           <td><i class="bi {{ $key->is_enable ? 'bi-check-lg text-success' : 'bi-dash-lg text-secondary' }}"></i></td>
           <td>
             <button type="button" class="btn btn-outline-success btn-sm"
@@ -89,7 +94,7 @@
             <div class="input-group mb-3">
               <span class="input-group-text">平台</span>
               <select name="platform_id" class="form-select" required id="key_platform">
-                <option selected disabled>选择密钥应用平台</option>
+                <option selected disabled value="">选择密钥应用平台</option>
                 @foreach($platforms as $platform)
                   <option value="{{ $platform['id'] }}">{{ $platform['name'] }}</option>
                 @endforeach
@@ -120,7 +125,7 @@
             <div class="input-group mb-3 collapse" id="key_plugin_setting">
               <span class="input-group-text">关联插件<i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="该密钥不允许请求主程序 API"></i></span>
               <select class="form-select" name="plugin_unikey" id="create_key_plugin">
-                <option selected disabled>选择密钥用于哪个插件</option>
+                <option selected disabled value="">选择密钥用于哪个插件</option>
                 @foreach($plugins as $plugin)
                   <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
                 @endforeach
@@ -198,7 +203,7 @@
             <div class="input-group mb-3 collapse" id="key_plugin_setting">
               <span class="input-group-text">关联插件<i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="该密钥不允许请求主程序 API"></i></span>
               <select class="form-select" name="plugin_unikey" id="key_plugin">
-                <option selected disabled>选择密钥用于哪个插件</option>
+                <option selected disabled value="">选择密钥用于哪个插件</option>
                 @foreach($plugins as $plugin)
                   <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
                 @endforeach

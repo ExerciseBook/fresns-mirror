@@ -57,10 +57,10 @@ class TrimStrings extends Middleware
         // Switching languages
         LangHelper::initLocale();
 
-        if (InstallService::mode() === false) {
-            // Initialize global data
-            GlobalService::loadData();
-        }
+        //if (InstallService::mode() === false) {
+            //// Initialize global data
+            //GlobalService::loadData();
+        //}
 
         return $next($request);
     }

@@ -9,6 +9,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link {{ \Route::is([
             'panel.dashboard',
+            'panel.upgrade.*',
             'panel.manageConfigs.*',
             'panel.admins.*',
           ]) ? 'active' : '' }}" href="{{ route('panel.dashboard') }}">仪表盘</a>

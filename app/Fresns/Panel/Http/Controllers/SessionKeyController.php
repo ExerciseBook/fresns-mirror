@@ -16,7 +16,7 @@ class SessionKeyController extends Controller
         $platformConfig = Config::platform()->firstOrFail();
         $platforms = $platformConfig['item_value'];
 
-        $sessionKeys = SessionKey::all();
+        $sessionKeys = SessionKey::with('plugin')->get();
 
         $typeLabels = [
             1 => __('panel::panel.mainApi'),

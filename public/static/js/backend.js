@@ -93,9 +93,23 @@ $("#updateKey").on('show.bs.modal', function (e) {
   $(this).find('#key_platform').val(platformId);
   $(this).find('#key_name').val(name);
   $(this).find('input:radio[name=type][value="'+type+'"]').prop('checked', true).click();
+
+  if (type == 3) {
+    $(this).find('#key_plugin').prop('required', true);
+  } else {
+    $(this).find('#key_plugin').prop('required', false);
+  }
   $(this).find('input:radio[name=is_enable][value="'+isEnable+'"]').prop('checked', true);
   $(this).find('#key_plugin').val(pluginUnikey);
 });
+
+$('#updateKey,#createKey').find('input[name=type]').change(function() {
+  if ($(this).val() == 3) {
+    $(this).closest('form').find('select[name=plugin_unikey]').prop('required', true);
+  } else {
+    $(this).closest('form').find('select[name=plugin_unikey]').prop('required', false);
+  }
+})
 
 // reset session key
 $("#resetKey").on('show.bs.modal', function (e) {
