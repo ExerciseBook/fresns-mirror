@@ -237,11 +237,13 @@ $("#updateLanguage").on('show.bs.modal', function (e) {
     langTag = button.data('lang_tag'),
     langTagDesc = button.data('lang_tag_desc'),
     content = button.data('content'),
+    key = button.data('key'),
     action = button.data('action');
 
   $(this).find('form').attr('action', action);
   $(this).find('.lang-label').text(langTagDesc);
   $(this).find('input[name=lang_tag]').val(langTag);
+  $(this).find('input[name=lang_key]').val(key);
   $(this).find('textarea[name=content]').val(content);
 });
 
@@ -249,6 +251,8 @@ $('#updateLanguageForm').submit(function() {
   $('#updateLanguage').modal('hide');
   let content =  $(this).find('textarea[name=content]').val();
   let langTag = $(this).find('input[name=lang_tag]').val();
+  let langKey = $(this).find('input[name=lang_key]').val();
+
   $.ajax({
     method:'post',
     url: $(this).attr('action'),
@@ -258,7 +262,7 @@ $('#updateLanguageForm').submit(function() {
       _method: 'put',
     },
     success:function(response){
-      $('#policyTabContent').find("[data-lang_tag='" + langTag+ "']").data('content', content)
+      $('#policyTabContent').find("[data-lang_tag='" + langTag+ "'][data-key='"+langKey+"']").data('content', content)
       window.tips(response.message)
     }
   });

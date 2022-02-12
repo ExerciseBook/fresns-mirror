@@ -134,12 +134,12 @@
         </thead>
         <tbody>
           @foreach($optionalLanguages as $lang)
-          <?php
-            $langName = $lang['langName'];
-            if ($lang['areaCode']) {
-              $langName .= '('. optional($areaCodes->where('code', $lang['areaCode'])->first())['localName'] .')';
-            }
-          ?>
+            <?php
+              $langName = $lang['langName'];
+              if ($lang['areaCode']) {
+                $langName .= '('. optional($areaCodes->where('code', $lang['areaCode'])->first())['localName'] .')';
+              }
+            ?>
           <tr>
             <td>
               {{ $lang['langTag'] }}
@@ -148,19 +148,22 @@
               @endif
             </td>
             <td>{{ $langName }}</td>
-            <td><button type="button" class="btn btn-outline-primary btn-sm"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#updateLanguage"
-                                      data-action="{{ route('panel.languages.update', ['itemKey' => 'account_terms'] )}}"
-                                      data-lang_tag_desc="{{ $langName }}"
-                                      data-lang_tag="{{ $lang['langTag'] }}"
-                                      data-content="{{ $langParams['account_terms'][$lang['langTag']] ?? '' }}"
-                >编辑</button></td>
+            <td><button type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateLanguage"
+                        data-action="{{ route('panel.languages.update', ['itemKey' => 'account_terms'] )}}"
+                        data-lang_tag_desc="{{ $langName }}"
+                        data-lang_tag="{{ $lang['langTag'] }}"
+                        data-key="account_terms"
+                        data-content="{{ $langParams['account_terms'][$lang['langTag']] ?? '' }}"
+                        >编辑</button></td>
             <td><button type="button"
                         class="btn btn-outline-primary btn-sm"
                         data-action="{{ route('panel.languages.update', ['itemKey' => 'account_privacy'] )}}"
                         data-lang_tag_desc="{{ $langName }}"
                         data-lang_tag="{{ $lang['langTag'] }}"
+                        data-key="account_privacy"
                         data-content="{{ $langParams['account_privacy'][$lang['langTag']] ?? '' }}"
                         data-bs-toggle="modal"
                         data-bs-target="#updateLanguage">编辑</button></td>
@@ -169,6 +172,7 @@
                         data-action="{{ route('panel.languages.update', ['itemKey' => 'account_cookie'] )}}"
                         data-lang_tag_desc="{{ $langName }}"
                         data-lang_tag="{{ $lang['langTag'] }}"
+                        data-key="account_cookie"
                         data-content="{{ $langParams['account_cookie'][$lang['langTag']] ?? '' }}"
                         data-bs-toggle="modal"
                         data-bs-target="#updateLanguage">编辑</button></td>
@@ -177,11 +181,12 @@
                         data-action="{{ route('panel.languages.update', ['itemKey' => 'account_delete'] )}}"
                         data-lang_tag_desc="{{ $langName }}"
                         data-lang_tag="{{ $lang['langTag'] }}"
+                        data-key="account_delete"
                         data-content="{{ $langParams['account_delete'][$lang['langTag']] ?? '' }}"
                         data-bs-toggle="modal"
                         data-bs-target="#updateLanguage">编辑</button></td>
           </tr>
-          @endforeach
+        @endforeach
         </tbody>
       </table>
     </div>
@@ -200,6 +205,7 @@
             @csrf
             @method('put')
             <input type="hidden" name="lang_tag">
+            <input type="hidden" name="lang_key">
             <div class="form-floating">
               <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" name="content" style="height: 150px"></textarea>
               <label for="floatingTextarea2" class="lang-label"></label>
