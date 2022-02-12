@@ -162,6 +162,7 @@
       <label class="col-lg-2 col-form-label text-lg-end">编辑器选择：</label>
       <div class="col-lg-6">
         <select class="form-select" name="post_editor_service" id="post_editor">
+          <option value="" selected="">默认编辑器</option>
           @foreach($plugins as $plugin)
             <option value="{{$plugin->unikey}}" @if($plugin->unikey == $params['post_editor_service']) selected @endif>{{$plugin->name}}</option>
           @endforeach

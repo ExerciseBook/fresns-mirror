@@ -11,7 +11,7 @@
         <li class="breadcrumb-item"><a href="{{ route('panel.dashboard') }}">仪表盘</a></li>
         <li class="breadcrumb-item"><a href="{{ route('panel.renameConfigs.show') }}">运营配置</a></li>
         <li class="breadcrumb-item"><a href="{{ route('panel.memberRoles.index' )}}">用户角色</a></li>
-        <li class="breadcrumb-item active" aria-current="page">设置权限<span class="badge bg-secondary ms-2">普通会员</span></li>
+        <li class="breadcrumb-item active" aria-current="page">设置权限<span class="badge bg-secondary ms-2">{{ $memberRole->name }}</span></li>
       </ol>
     </nav>
   </div>
@@ -93,11 +93,11 @@
           <label class="input-group-text">发表帖子规则</label>
           <div class="form-control bg-white">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" {{ !($permission['post_review']['permValue'] ?? '') ? 'checked' : ''}} name="permission[post_review]" id="publish.post.review.0" value="0">
+              <input class="form-check-input" type="radio" {{ !($permission['post_review']['permValue'] ?? false) ? 'checked' : ''}} name="permission[post_review]" id="publish.post.review.0" value="0">
               <label class="form-check-label" for="publish.post.review.0">直接通过</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" {{ ($permission['post_review']['permValue'] ?? '') ? 'checked' : ''}} name="permission[post_review]" id="publish.post.review.1" value="1">
+              <input class="form-check-input" type="radio" {{ ($permission['post_review']['permValue'] ?? false) ? 'checked' : ''}} name="permission[post_review]" id="publish.post.review.1" value="1">
               <label class="form-check-label" for="publish.post.review.1">需要审核</label>
             </div>
           </div>
@@ -107,17 +107,17 @@
           <label class="input-group-text">发表帖子特殊规则</label>
           <div class="form-control bg-white">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" {{ !($permission['post_limit_status']['permValue'] ?? '') ? 'checked' : ''}} name="post.limit.status" id="post.limit.status.0" value="0" data-bs-toggle="collapse" data-bs-target="#post_limit_setting.show" aria-expanded="false" aria-controls="post_limit_setting">
+              <input class="form-check-input" type="radio" {{ !($permission['post_limit_status']['permValue'] ?? '') ? 'checked' : ''}} name="permission[post_limit_status]" id="post.limit.status.0" value="0" data-bs-toggle="collapse" data-bs-target="#post_limit_setting.show" aria-expanded="false" aria-controls="post_limit_setting">
               <label class="form-check-label" for="post.limit.status.0">关闭特殊规则</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" {{ ($permission['post_limit_status']['permValue'] ?? '') ? 'checked' : ''}} name="post.limit.status" id="post.limit.status.1" value="1" data-bs-toggle="collapse" data-bs-target="#post_limit_setting:not(.show)" aria-expanded="false" aria-controls="post_limit_setting">
+              <input class="form-check-input" type="radio" {{ ($permission['post_limit_status']['permValue'] ?? '') ? 'checked' : ''}} name="permission[post_limit_status]" id="post.limit.status.1" value="1" data-bs-toggle="collapse" data-bs-target="#post_limit_setting:not(.show)" aria-expanded="false" aria-controls="post_limit_setting">
               <label class="form-check-label" for="post.limit.status.1">开启特殊规则</label>
             </div>
           </div>
         </div>
         <!--发表帖子特殊规则配置 开始-->
-        <div class="collapse" id="post_limit_setting">
+        <div class="collapse {{ ($permission['post_limit_status']['permValue'] ?? false) ? 'show' : ''}}" id="post_limit_setting">
           <div class="input-group mb-3">
             <label class="input-group-text">规则类型</label>
             <select class="form-select" id="post_limit_type" name="permission[post_limit_type]">
@@ -216,27 +216,26 @@
               <label class="form-check-label" for="comment.limit.status.0">关闭特殊规则</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" {{ ($permission['comment_limit_status']['permValue'] ?? '') ? 'checked' : ''}} name="psermission[comment_limit_status]" id="comment.limit.status.1" value="1" data-bs-toggle="collapse" data-bs-target="#comment_limit_setting:not(.show)" aria-expanded="false" aria-controls="comment_limit_setting">
+              <input class="form-check-input" type="radio" {{ ($permission['comment_limit_status']['permValue'] ?? '') ? 'checked' : ''}} name="permission[comment_limit_status]" id="comment.limit.status.1" value="1" data-bs-toggle="collapse" data-bs-target="#comment_limit_setting:not(.show)" aria-expanded="false" aria-controls="comment_limit_setting">
               <label class="form-check-label" for="comment.limit.status.1">开启特殊规则</label>
             </div>
           </div>
         </div>
         <!--发表评论特殊规则配置 开始-->
-        <div class="collapse" id="comment_limit_setting">
+        <div class="collapse  {{ ($permission['comment_limit_status']['permValue'] ?? false) ? 'show' : ''}}" id="comment_limit_setting">
           <div class="input-group mb-3">
             <label class="input-group-text">规则类型</label>
-            <select class="form-select" id="comment_limit_status">
-              <option value="1" id="comment_date" selected>指定日期范围内全天生效</option>
-              <option value="2" id="comment_datetime">指定某个时间段范围内生效</option>
-              {{--<option value="3" id="comment_time">指定每天的某个时间段范围内循环生效</option>--}}
+            <select class="form-select" id="comment_limit_type" name="permission[comment_limit_type]">
+              <option value="1" id="comment_date" {{ ($permission['comment_limit_type']['permValue'] ?? '') == 1 ? 'selected' : '' }} >指定日期范围内全天生效</option>
+              <option value="2" id="comment_datetime" {{ ($permission['comment_limit_type']['permValue'] ?? '') == 2 ? 'selected' : '' }}>指定某个时间段范围内生效</option>
             </select>
           </div>
-          <div class="input-group mb-3 collapse" id="comment_date_setting">
+          <div class="input-group mb-3 collapse {{ ($permission['comment_limit_type']['permValue'] ?? '') == 1 ? 'show' : ''}}" id="comment_date_setting">
             <label class="input-group-text">日期范围</label>
             <input type="date" class="form-control" value="{{ ($permission['comment_limit_period_start']['permValue'] ?? '') }}" name="permission[comment_limit_period_start]" placeholder="2021/01/01">
             <input type="date" class="form-control" value="{{ ($permission['comment_limit_period_end']['permValue'] ?? '') }}" name="permission[comment_limit_period_end]" placeholder="2021/01/05">
           </div>
-          <div class="input-group mb-3 collapse" id="comment_datetime_setting">
+          <div class="input-group mb-3 collapse {{ ($permission['comment_limit_type']['permValue'] ?? '') == 2 ? 'show' : ''}}" id="comment_datetime_setting">
             <label class="input-group-text">时间段范围</label>
             <input type="datetime-local" class="form-control" value="{{ ($permission['comment_limit_cycle_start']['permValue'] ?? '') }}" name="permission[comment_limit_cycle_start]" placeholder="2021/01/01 22:00:00">
             <input type="datetime-local" class="form-control" value="{{ ($permission['comment_limit_cycle_end']['permValue'] ?? '') }}" name="permission[comment_limit_cycle_end]" placeholder="2021/01/05 09:00:00">
@@ -271,60 +270,60 @@
         <div class="input-group mb-3">
           <label class="input-group-text">上传图片</label>
           <div class="input-group-text">
-            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['post_editor_image']['permValue'] ?? '') ? 'checked' : ''}} name="permission[post_editor_image]" id="post_editor_image" value="0">
+            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['post_editor_image']['permValue'] ?? '') ? 'checked' : ''}} value="1" name="permission[post_editor_image]" id="post_editor_image" value="0">
             <label class="form-check-label ms-1" for="post_editor_image">帖子</label>
           </div>
           <div class="input-group-text">
-            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['comment_editor_image']['permValue'] ?? '') ? 'checked' : ''}} name="permission[comment_editor_image]" id="comment_editor_image" value="0">
+            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['comment_editor_image']['permValue'] ?? '') ? 'checked' : ''}} value="1" name="permission[comment_editor_image]" id="comment_editor_image" value="0">
             <label class="form-check-label ms-1" for="comment_editor_image">评论</label>
           </div>
-          <input type="number" class="form-control input-number" value="{{ ($permission['images_max_size']['permValue'] ?? '') }}" name="permission[images_max_size]" placeholder="上传图片最大尺寸">
+          <input type="number" class="form-control input-number" value="{{ ($permission['images_max_size']['permValue'] ?? '') }}" value="1" name="permission[images_max_size]" placeholder="上传图片最大尺寸">
           <span class="input-group-text">MB</span>
         </div>
         <!--上传视频-->
         <div class="input-group mb-3">
           <label class="input-group-text">上传视频</label>
           <div class="input-group-text">
-            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['post_editor_video']['permValue'] ?? '') ? 'checked' : ''}} name="permission[post_editor_video]" id="post_editor_video" value="0">
+            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['post_editor_video']['permValue'] ?? '') ? 'checked' : ''}} value="1" name="permission[post_editor_video]" id="post_editor_video" value="0">
             <label class="form-check-label ms-1" for="post_editor_video">帖子</label>
           </div>
           <div class="input-group-text">
-            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['comment_editor_video']['permValue'] ?? '') ? 'checked' : ''}} name="permission[comment_editor_video]" id="comment_editor_video" value="0">
+            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['comment_editor_video']['permValue'] ?? '') ? 'checked' : ''}} value="1" name="permission[comment_editor_video]" id="comment_editor_video" value="0">
             <label class="form-check-label ms-1" for="comment_editor_video">评论</label>
           </div>
-          <input type="number" class="form-control input-number" value="{{ ($permission['videos_max_size']['permValue'] ?? '') }}" name="permission[videos_max_size]" placeholder="上传视频最大尺寸">
+          <input type="number" class="form-control input-number" value="{{ ($permission['videos_max_size']['permValue'] ?? '') }}" value="1" name="permission[videos_max_size]" placeholder="上传视频最大尺寸">
           <span class="input-group-text">MB</span>
-          <input type="number" class="form-control input-number" value="{{ ($permission['videos_max_time']['permValue'] ?? '') }}" name="permission[videos_max_time]" placeholder="上传视频最大时长">
+          <input type="number" class="form-control input-number" value="{{ ($permission['videos_max_time']['permValue'] ?? '') }}" value="1" name="permission[videos_max_time]" placeholder="上传视频最大时长">
           <span class="input-group-text">秒</span>
         </div>
         <!--上传音频-->
         <div class="input-group mb-3">
           <label class="input-group-text">上传音频</label>
           <div class="input-group-text">
-            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['post_editor_audio']['permValue'] ?? '') ? 'checked' : ''}} name="permission[post_editor_audio]" id="post_editor_audio" value="0">
+            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['post_editor_audio']['permValue'] ?? '') ? 'checked' : ''}} value="1" name="permission[post_editor_audio]" id="post_editor_audio" value="0">
             <label class="form-check-label ms-1" for="post_editor_audio">帖子</label>
           </div>
           <div class="input-group-text">
-            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['comment_editor_audio']['permValue'] ?? '') ? 'checked' : ''}} name="permission[comment_editor_audio]" id="comment_editor_audio" value="0">
+            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['comment_editor_audio']['permValue'] ?? '') ? 'checked' : ''}} value="1" name="permission[comment_editor_audio]" id="comment_editor_audio" value="0">
             <label class="form-check-label ms-1" for="comment_editor_audio">评论</label>
           </div>
-          <input type="number" class="form-control input-number" value="{{ ($permission['audios_max_size']['permValue'] ?? '') }}" name="permission[audios_max_size]" placeholder="上传音频最大尺寸">
+          <input type="number" class="form-control input-number" value="{{ ($permission['audios_max_size']['permValue'] ?? '') }}" value="1" name="permission[audios_max_size]" placeholder="上传音频最大尺寸">
           <span class="input-group-text">MB</span>
-          <input type="number" class="form-control input-number" value="{{ ($permission['audios_max_time']['permValue'] ?? '') }}" name="permission[audios_max_time]" placeholder="上传音频最大时长">
+          <input type="number" class="form-control input-number" value="{{ ($permission['audios_max_time']['permValue'] ?? '') }}" value="1" name="permission[audios_max_time]" placeholder="上传音频最大时长">
           <span class="input-group-text">秒</span>
         </div>
         <!--上传文档-->
         <div class="input-group mb-3">
           <label class="input-group-text">上传文档</label>
           <div class="input-group-text">
-            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['post_editor_doc']['permValue'] ?? '') ? 'checked' : ''}} name="permission[post_editor_doc]" id="post_editor_doc" value="0">
+            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['post_editor_doc']['permValue'] ?? '') ? 'checked' : ''}} value="1" name="permission[post_editor_doc]" id="post_editor_doc" value="0">
             <label class="form-check-label ms-1" for="post_editor_doc">帖子</label>
           </div>
           <div class="input-group-text">
-            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['comment_editor_doc']['permValue'] ?? '') ? 'checked' : ''}} name="permission[comment_editor_doc]" id="comment_editor_doc" value="0">
+            <input class="form-check-input mt-0" type="checkbox" {{ ($permission['comment_editor_doc']['permValue'] ?? '') ? 'checked' : ''}} value="1" name="permission[comment_editor_doc]" id="comment_editor_doc" value="0">
             <label class="form-check-label ms-1" for="comment_editor_doc">评论</label>
           </div>
-          <input type="number" class="form-control input-number" value="{{ ($permission['docs_max_size']['permValue'] ?? '') }}" name="permission[docs_max_size]" placeholder="上传文档最大尺寸">
+          <input type="number" class="form-control input-number" value="{{ ($permission['docs_max_size']['permValue'] ?? '') }}" value="1" name="permission[docs_max_size]" placeholder="上传文档最大尺寸">
           <span class="input-group-text">MB</span>
         </div>
         <div class="form-text"><i class="bi bi-info-circle"></i> 勾选代表有权上传，输入框留空则使用<a href="system-storage-image.html">存储配置</a>的设置值作为默认参数。</div>

@@ -177,7 +177,7 @@
             <div class="mb-3 row">
               <label class="col-sm-3 col-form-label">角色使用权</label>
               <div class="col-sm-9">
-                <select class="form-select" multiple name="member_roles[]" id='member_roles'>
+                <select class="form-select select2" multiple name="member_roles[]" id='member_roles'>
                   <option selected>全部</option>
                   @foreach($memberRoles as $role)
                     <option value="{{ $role->id }}">{{ $role->name }}</option>

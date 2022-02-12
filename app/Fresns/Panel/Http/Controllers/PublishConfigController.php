@@ -115,13 +115,7 @@ class PublishConfigController extends Controller
             }
 
             if (!$request->has($configKey)) {
-                if ($config->item_type == 'boolean') {
-                    $config->item_value = 'false';
-                } elseif ($config->item_type == 'number') {
-                    $config->item_value = 0;
-                } else {
-                    $config->item_value = null;
-                }
+                $config->setDefaultValue();
                 $config->save();
                 continue;
             }
@@ -132,7 +126,6 @@ class PublishConfigController extends Controller
 
         foreach ($request->post_limit_prompt as $langTag => $content) {
             $language = Language::tableName('configs')
-                ->where('table_id', $config->id)
                 ->where('table_key', 'post_limit_prompt')
                 ->where('lang_tag', $langTag)
                 ->first();
@@ -147,7 +140,6 @@ class PublishConfigController extends Controller
                     'table_name' => 'configs',
                     'table_field' => 'item_value',
                     'table_key' => 'post_limit_prompt',
-                    'table_id' => $config->id,
                     'lang_tag' => $langTag,
                 ]);
             }
@@ -267,7 +259,7 @@ class PublishConfigController extends Controller
             $config->item_value = $request->$configKey;
             $config->save();
         }
-        
+
         foreach ($request->comment_limit_prompt as $langTag => $content) {
             $language = Language::tableName('configs')
                 ->where('table_id', $config->id)

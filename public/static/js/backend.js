@@ -598,11 +598,22 @@ $('.delete-custom-perm').click(function(){
 $("#post_limit_type").change(function(){
 	var value = $("#post_limit_type  option:selected").val();
 	if(value == 1){
-		$('#post_time_setting').css('display','none');
-		$('#post_date_setting').removeAttr('style');
-	}else{
-		$('#post_time_setting').removeAttr('style');
-		$('#post_date_setting').css('display','none');
+		$('#post_date_setting').collapse('show');
+		$('#post_datetime_setting').collapse('hide');
+	}else if(value == 2){
+		$('#post_date_setting').collapse('hide');
+		$('#post_datetime_setting').collapse('show');
+	}
+});
+
+$("#comment_limit_type").change(function(){
+	var value = $("#comment_limit_type  option:selected").val();
+	if(value == 1){
+		$('#comment_date_setting').collapse('show');
+		$('#comment_datetime_setting').collapse('hide');
+	}else if(value == 2){
+		$('#comment_date_setting').collapse('hide');
+		$('#comment_datetime_setting').collapse('show');
 	}
 });
 
