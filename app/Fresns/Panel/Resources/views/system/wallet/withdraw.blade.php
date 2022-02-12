@@ -103,7 +103,7 @@
               <label class="col-sm-3 col-form-label">关联插件</label>
               <div class="col-sm-9">
                 <select class="form-select" name="plugin_unikey" required>
-                  <option selected disabled>请选择插件</option>
+                  <option selected disabled value="">请选择插件</option>
                   @foreach($plugins as $plugin)
                     <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
                   @endforeach

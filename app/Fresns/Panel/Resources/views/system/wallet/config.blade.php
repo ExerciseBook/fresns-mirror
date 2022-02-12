@@ -34,11 +34,11 @@
           <label class="input-group-text">是否启用</label>
           <div class="form-control bg-white">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="wallet_status" id="wallet_false" value="false" data-bs-toggle="collapse" data-bs-target="#wallet_setting.show" aria-expanded="false" aria-controls="wallet_setting" {{ $params['wallet_status'] == 'false' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="wallet_status" id="wallet_false" value="false" data-bs-toggle="collapse" data-bs-target="#wallet_setting.show" aria-expanded="false" aria-controls="wallet_setting" {{ !$params['wallet_status'] ? 'checked' : ''}}>
               <label class="form-check-label" for="wallet_false">关闭</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="wallet_status" id="wallet_true" value="true" data-bs-toggle="collapse" data-bs-target="#wallet_setting:not(.show)" aria-expanded="false" aria-controls="wallet_setting" {{ $params['wallet_status'] == 'true' ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="wallet_status" id="wallet_true" value="true" data-bs-toggle="collapse" data-bs-target="#wallet_setting:not(.show)" aria-expanded="false" aria-controls="wallet_setting" {{ $params['wallet_status'] ? 'checked' : ''}}>
               <label class="form-check-label" for="wallet_true">开启</label>
             </div>
           </div>
@@ -57,11 +57,11 @@
             <span class="input-group-text">提现功能</span>
             <div class="form-control bg-white">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="wallet_withdraw_close" id="withdraw_false" value="false" data-bs-toggle="collapse" data-bs-target="#withdraw_setting.show" aria-expanded="false" aria-controls="withdraw_setting" {{ $params['wallet_withdraw_close'] == 'false' ? 'checked' : ''}}>
+                <input class="form-check-input" type="radio" name="wallet_withdraw_close" id="withdraw_false" value="false" data-bs-toggle="collapse" data-bs-target="#withdraw_setting.show" aria-expanded="false" aria-controls="withdraw_setting" {{ !$params['wallet_withdraw_close'] ? 'checked' : ''}}>
                 <label class="form-check-label" for="withdraw_false">关闭</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="wallet_withdraw_close" id="withdraw_true" value="true" data-bs-toggle="collapse" data-bs-target="#withdraw_setting:not(.show)" aria-expanded="false" aria-controls="withdraw_setting"  {{ $params['wallet_withdraw_close'] == 'true' ? 'checked' : ''}}>
+                <input class="form-check-input" type="radio" name="wallet_withdraw_close" id="withdraw_true" value="true" data-bs-toggle="collapse" data-bs-target="#withdraw_setting:not(.show)" aria-expanded="false" aria-controls="withdraw_setting"  {{ $params['wallet_withdraw_close'] ? 'checked' : ''}}>
                 <label class="form-check-label" for="withdraw_true">开启</label>
               </div>
             </div>
