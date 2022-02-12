@@ -68,12 +68,12 @@
 			</div>
 			<div class="input-group mb-3">
 				<label class="input-group-text w-25">支持的最大尺寸</label>
-				<input type="text" class="form-control" id="videos_max_size"  name="videos_max_size" value="{{ $params['videos_max_size'] }}">
+				<input type="number" class="form-control" id="videos_max_size"  name="videos_max_size" value="{{ $params['videos_max_size'] }}">
 				<span class="input-group-text">MB</span>
 			</div>
 			<div class="input-group mb-3">
 				<label class="input-group-text w-25">支持的最大时长</label>
-				<input type="text" class="form-control" id="videos_max_time"  name="videos_max_time" value="{{ $params['videos_max_time'] }}">
+				<input type="number" class="form-control" id="videos_max_time"  name="videos_max_time" value="{{ $params['videos_max_time'] }}">
 				<span class="input-group-text">秒</span>
 			</div>
 			<div class="input-group mb-3">
@@ -97,7 +97,7 @@
 				</div>
 				<div class="input-group mb-3">
 					<label class="input-group-text">防盗链签名有效期</label>
-					<input type="text" class="form-control" id="videos_url_expire"  name="videos_url_expire" value="{{ $params['videos_url_expire'] }}">
+					<input type="number" class="form-control" id="videos_url_expire"  name="videos_url_expire" value="{{ $params['videos_url_expire'] }}">
 					<span class="input-group-text">分钟</span>
 				</div>
 			</div>

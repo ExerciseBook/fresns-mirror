@@ -316,6 +316,10 @@ $('#createMap').on('show.bs.modal', function(e) {
   let params = button.data('params');
 
   $(this).parent('form').trigger("reset");
+
+  if (!params) {
+    return;
+  }
   let configParams = button.data('config_params');
 
   if(params.icon_file_url){

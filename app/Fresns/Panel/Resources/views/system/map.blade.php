@@ -154,11 +154,11 @@
               <label class="col-sm-3 col-form-label">启用状态</label>
               <div class="col-sm-9 pt-2">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="is_enable" id="status_true" value="true" checked>
+                  <input class="form-check-input" type="radio" name="is_enable" id="status_true" value="1" checked>
                   <label class="form-check-label" for="status_true">启用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="is_enable" id="status_false" value="false">
+                  <input class="form-check-input" type="radio" name="is_enable" id="status_false" value="0">
                   <label class="form-check-label" for="status_false">不启用</label>
                 </div>
               </div>

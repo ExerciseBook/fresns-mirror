@@ -67,7 +67,7 @@
         </div>
         <div class="input-group mb-3">
           <label class="input-group-text w-25">支持的最大尺寸</label>
-          <input type="text" class="form-control" name="images_max_size" value="{{ $params['images_max_size'] }}">
+          <input type="number" class="form-control" name="images_max_size" value="{{ $params['images_max_size'] }}">
           <span class="input-group-text">MB</span>
         </div>
         <div class="input-group mb-3">
@@ -91,7 +91,7 @@
           </div>
           <div class="input-group mb-3">
             <label class="input-group-text">防盗链签名有效期</label>
-            <input type="text" class="form-control" name="images_url_expire" value="{{ $params['images_url_expire'] }}">
+            <input type="number" class="form-control" name="images_url_expire" value="{{ $params['images_url_expire'] }}">
             <span class="input-group-text">分钟</span>
           </div>
         </div>
