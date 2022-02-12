@@ -159,7 +159,7 @@
               <div class="input-group mb-3">
                 <label class="input-group-text" for="site_private_plugin">加入通道支持插件</label>
                 <select class="form-select" id="site_private_plugin" name="site_private_service">
-                  <option selected disabled>请选择插件关联</option>
+                  <option selected>默认</option>
                   @foreach($joinPlugins as $plugin)
                     <option value="{{ $plugin->unikey }}" {{ $params['site_private_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                   @endforeach
