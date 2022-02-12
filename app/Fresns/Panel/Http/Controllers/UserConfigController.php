@@ -91,13 +91,7 @@ class UserConfigController extends Controller
             }
 
             if (!$request->has($configKey)) {
-                if ($config->item_type == 'boolean') {
-                    $config->item_value = 'false';
-                } elseif ($config->item_type == 'number') {
-                    $config->item_value = 0;
-                } else {
-                    $config->item_value = null;
-                }
+                $config->setDefaultValue();
                 $config->save();
                 continue;
             }
@@ -108,22 +102,34 @@ class UserConfigController extends Controller
                 $value = join(',', $request->$configKey);
             }
 
+            if ($configKey == 'multi_member_roles') {
+                if (in_array(0, $request->$configKey)) {
+                    $value = [];
+                }
+            }
+
             $config->item_value = $value;
             $config->save();
         }
 
+        $services = [];
         if ($request->connects) {
             $services = [];
             foreach($request->connects as $key => $connect) {
-                $services[] = [
+                if (array_key_exists($key, $services)) {
+                    continue;
+                }
+                $services[$connect] = [
                     'code' => $connect,
                     'unikey' => $request->connect_plugins[$key] ?? '',
                 ];
             }
-            $config = Config::where('item_key', 'account_connect_services')->first();
-            $config->item_value = $services;
-            $config->save();
+
+            $services = array_values($services);
         }
+        $config = Config::where('item_key', 'account_connect_services')->first();
+        $config->item_value = $services;
+        $config->save();
 
         return $this->updateSuccess();
     }

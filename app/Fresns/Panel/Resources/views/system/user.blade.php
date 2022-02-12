@@ -66,11 +66,11 @@
       <label for="site_copyright" class="col-lg-2 col-form-label text-lg-end">多用户模式支持：</label>
       <div class="col-lg-6 pt-2">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="member_multiple" id="member_multiple_false" value="false" data-bs-toggle="collapse" data-bs-target="#member_multiple_setting.show" aria-expanded="false" aria-controls="member_multiple_setting" {{ $params['member_multiple'] == 'false' ? 'checked': ''}}>
+          <input class="form-check-input" type="radio" name="member_multiple" id="member_multiple_false" value="false" data-bs-toggle="collapse" data-bs-target="#member_multiple_setting.show" aria-expanded="false" aria-controls="member_multiple_setting" {{ !$params['member_multiple'] ? 'checked': ''}}>
           <label class="form-check-label" for="member_multiple_false">关闭</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="member_multiple" id="member_multiple_true" value="true" data-bs-toggle="collapse" data-bs-target="#member_multiple_setting:not(.show)" aria-expanded="false" aria-controls="member_multiple_setting" {{ $params['member_multiple'] == 'true' ? 'checked': ''}}>
+          <input class="form-check-input" type="radio" name="member_multiple" id="member_multiple_true" value="true" data-bs-toggle="collapse" data-bs-target="#member_multiple_setting:not(.show)" aria-expanded="false" aria-controls="member_multiple_setting" {{ $params['member_multiple'] ? 'checked': ''}}>
           <label class="form-check-label" for="member_multiple_true">开启</label>
         </div>
         <!--多用户模式配置 开始-->
@@ -90,8 +90,8 @@
               </div>
               <div class="input-group mb-1">
                 <label class="input-group-text" for="multi_member_roles">有权使用的角色</label>
-                <select class="form-select" multiple name="multi_member_roles[]">
-                  <option value="0">全部角色</option>
+                <select class="form-select select2" multiple name="multi_member_roles[]">
+                  <option value="0" {{ !$params['multi_member_roles'] ? 'selected' : '' }}>全部角色</option>
                   @foreach($memberRoles as $role)
                     <option value="{{ $role->id }}" {{ in_array($role->id, $params['multi_member_roles']) ? 'selected' : '' }}>{{ $role->name }}</option>
                   @endforeach
@@ -251,7 +251,7 @@
       <label class="input-group-text" for="inputGroupSelect02">关联插件</label>
       <select class="form-select" name="connect_plugins[]" id="inputGroupSelect02">
         @foreach($pluginParams['connect'] as $plugin)
-          <option value="{{ $plugin->unikey }}" {{ $connectService['unikey'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
+          <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
         @endforeach
       </select>
       <button class="btn btn-outline-secondary delete-connect" type="button">删除</button>
