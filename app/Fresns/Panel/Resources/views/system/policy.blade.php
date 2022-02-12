@@ -35,11 +35,11 @@
           <label for="delete_account" class="col-lg-2 col-form-label text-lg-end">服务条款：</label>
           <div class="col-lg-6 pt-2">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_terms_close" id="account_terms_false" value="false" {{ $params['account_terms_close'] ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_terms_close" id="account_terms_false" value="false" {{ !$params['account_terms_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_terms_false">隐藏</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_terms_close" id="account_terms_true" value="true" {{ !$params['account_terms_close'] ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_terms_close" id="account_terms_true" value="true" {{ $params['account_terms_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_terms_true">显示</label>
             </div>
           </div>
@@ -48,11 +48,11 @@
           <label for="delete_account" class="col-lg-2 col-form-label text-lg-end">隐私权政策：</label>
           <div class="col-lg-6 pt-2">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_privacy_close" id="account_privacy_false" value="false" {{ $params['account_privacy_close'] ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_privacy_close" id="account_privacy_false" value="false" {{ !$params['account_privacy_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_privacy_false">隐藏</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_privacy_close" id="account_privacy_true" value="true" {{ !$params['account_privacy_close'] ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_privacy_close" id="account_privacy_true" value="true" {{ $params['account_privacy_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_privacy_true">显示</label>
             </div>
           </div>
@@ -61,11 +61,11 @@
           <label for="delete_account" class="col-lg-2 col-form-label text-lg-end">Cookie 政策：</label>
           <div class="col-lg-6 pt-2">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_cookie_close" id="account_cookie_false" value="false" {{ $params['account_cookie_close'] ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_cookie_close" id="account_cookie_false" value="false" {{ !$params['account_cookie_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_cookie_false">隐藏</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_cookie_close" id="account_cookie_true" value="true" {{ !$params['account_cookie_close'] ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_cookie_close" id="account_cookie_true" value="true" {{ $params['account_cookie_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_cookie_true">显示</label>
             </div>
           </div>
@@ -74,11 +74,11 @@
           <label for="delete_account" class="col-lg-2 col-form-label text-lg-end">注销说明：</label>
           <div class="col-lg-6 pt-2">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_delete_close" id="account_delete_false" value="false" {{ $params['account_delete_close'] ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_delete_close" id="account_delete_false" value="false" {{ !$params['account_delete_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_delete_false">隐藏</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="account_delete_close" id="account_delete_true" value="true" {{ !$params['account_delete_close'] ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="account_delete_close" id="account_delete_true" value="true" {{ $params['account_delete_close'] ? 'checked' : ''}}>
               <label class="form-check-label" for="account_delete_true">显示</label>
             </div>
           </div>
@@ -87,15 +87,15 @@
           <label for="delete_account" class="col-lg-2 col-form-label text-lg-end">注销功能：</label>
           <div class="col-lg-6 pt-2">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="delete_account" id="delete_account" value="0" data-bs-toggle="collapse" data-bs-target="#delete_account_todo_setting.show" aria-expanded="false" aria-controls="delete_account_todo_setting" {{ $params['delete_account'] == 0 ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="delete_account" id="delete_account" value="1" data-bs-toggle="collapse" data-bs-target="#delete_account_todo_setting.show" aria-expanded="false" aria-controls="delete_account_todo_setting" {{ $params['delete_account'] == 1 ? 'checked' : ''}}>
               <label class="form-check-label" for="delete_account">不启用注销功能</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="delete_account" id="delete_account_1" value="1" data-bs-toggle="collapse" data-bs-target="#delete_account_todo_setting:not(.show)" aria-expanded="false" aria-controls="delete_account_todo_setting" {{ $params['delete_account'] == 1 ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="delete_account" id="delete_account_1" value="2" data-bs-toggle="collapse" data-bs-target="#delete_account_todo_setting:not(.show)" aria-expanded="false" aria-controls="delete_account_todo_setting" {{ $params['delete_account'] == 2 ? 'checked' : ''}}>
               <label class="form-check-label" for="delete_account_1">软注销</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="delete_account" id="delete_account_2" value="2" data-bs-toggle="collapse" data-bs-target="#delete_account_todo_setting:not(.show)" aria-expanded="false" aria-controls="delete_account_todo_setting" {{ $params['delete_account'] == 2 ? 'checked' : ''}}>
+              <input class="form-check-input" type="radio" name="delete_account" id="delete_account_2" value="3" data-bs-toggle="collapse" data-bs-target="#delete_account_todo_setting:not(.show)" aria-expanded="false" aria-controls="delete_account_todo_setting" {{ $params['delete_account'] == 3 ? 'checked' : ''}}>
               <label class="form-check-label" for="delete_account_2">硬注销</label>
             </div>
             <div class="collapse {{ $params['delete_account'] ? 'show' : ''}}" id="delete_account_todo_setting">
