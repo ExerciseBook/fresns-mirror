@@ -18,7 +18,7 @@
     </div>
   </div>
   <!--表单 开始-->
-  <form action="{{ route('panel.userConfigs.update') }}" method="post">
+  <form action="{{ route('panel.userConfigs.update') }}" id="userConfigForm" method="post">
     @csrf
     @method('put')
     <div class="row mb-4">

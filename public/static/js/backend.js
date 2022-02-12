@@ -275,6 +275,32 @@ $('#addConnect').click(function() {
   $('.connect-box').append(template.html());
 });
 
+function hasDuplicates(array) {
+    var valuesSoFar = Object.create(null);
+    for (var i = 0; i < array.length; ++i) {
+        var value = array[i];
+        if (value in valuesSoFar) {
+            return true;
+        }
+        valuesSoFar[value] = true;
+    }
+    return false;
+}
+//user config
+$('#userConfigForm').submit(function(){
+  let connectItems = $(this).find('select[name="connects[]"]');
+  let connects = [];
+  connectItems.map((index, item) => {
+    connects.push($(item).val())
+  });
+
+  if (hasDuplicates(connects)) {
+    window.tips('第三方互联支持中有重复的互联平台');
+
+    return false;
+  }
+});
+
 // use config delete  connect
 $(document).on('click', '.delete-connect', function() {
   $(this).parent().remove();
