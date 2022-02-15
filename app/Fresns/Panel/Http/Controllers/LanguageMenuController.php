@@ -2,7 +2,11 @@
 
 namespace App\Fresns\Panel\Http\Controllers;
 
+use App\Models\Seo;
 use App\Models\Config;
+use App\Models\PostLog;
+use App\Models\Language;
+use App\Models\CodeMessage;
 use Illuminate\Http\Request;
 use App\Fresns\Panel\Http\Requests\UpdateLanguageMenuRequest;
 use App\Fresns\Panel\Http\Requests\UpdateLanguageRankRequest;
@@ -127,15 +131,17 @@ class LanguageMenuController extends Controller
 
     public function update(UpdateLanguageMenuRequest $request, string $langTag)
     {
-        $codeConfig = Config::where('item_key', 'language_codes')->firstOrFail();
-        $codes = $codeConfig->item_value;
-        $code = collect($codes)->where('code', $request->lang_code)->firstOrFail();
-
         $languageConfig = Config::where('item_key', 'language_menus')->firstOrFail();
         $languages = $languageConfig->item_value;
+        $languageCollection = collect($languages);
+        $oldConfig = $languageCollection->where('langTag', $request->old_lang_tag)->first();
+        if (!$oldConfig) {
+            return back()->with('failure', __('panel::panel.languageNotExists'));
+        }
 
+        $langCode = $oldConfig['langCode'];
         // check exists
-        $langTag = ($request->area_code && $request->area_status) ? $request->lang_code.'-'.$request->area_code : $request->lang_code;
+        $langTag = ($request->area_code && $request->area_status) ? $langCode.'-'.$request->area_code : $langCode;
 
         if ($langTag != $request->old_lang_tag && collect($languages)->where('langTag', $langTag)->first()) {
             return back()->with('failure', __('panel::panel.languageExists'));
@@ -154,16 +160,24 @@ class LanguageMenuController extends Controller
             $areaName = $areaCode['name'];
         }
 
+        $languageKey = $languageCollection->search(function($item) use ($request) {
+            return $item['langTag'] == $request->old_lang_tag;
+        });
+
+        if ($languageKey === false) {
+            return back()->with('failure', __('panel::panel.languageNotExists'));
+        }
+
         $data = [
             'rankNum' => $request->rank_num,
-            'langCode' => $request->lang_code,
-            'langName' => $code['name'] ?? '',
+            'langCode' => $oldConfig['langCode'],
+            'langName' => $oldConfig['langName'] ?? '',
             'langTag' => $langTag,
             'continentId' => $request->area_status ? $request->continent_id : 0,
             'areaStatus' => (bool)$request->area_status,
             'areaCode' => $request->area_status ? $request->area_code : null,
             'areaName' => $areaName,
-            'writingDirection' => $code['writingDirection'],
+            'writingDirection' => $oldConfig['writingDirection'],
             'lengthUnits' =>  $request->length_units,
             'dateFormat' =>  $request->date_format,
             'timeFormatMinute' =>  $request->time_format_minute,
@@ -171,22 +185,30 @@ class LanguageMenuController extends Controller
             'timeFormatDay' =>  $request->time_format_day,
             'timeFormatMonth' =>  $request->time_format_month,
             'packVersion' =>  1,
-            'isEnable' =>  $request->is_enable ? 'true' : 'false',
+            'isEnable' =>  (bool)$request->is_enable
         ];
-
-        $languageKey = collect($languages)->search(function($item) use ($request) {
-            return $item['langTag'] == $request->old_lang_tag;
-        });
-
-        if (!$languageKey) {
-            return back()->with('failure', __('panel::panel.languageNotExists'));
-        }
 
         $languages[$languageKey] = $data;
         $languageConfig->item_value = array_values($languages);
         $languageConfig->save();
 
+
+        // 如果是默认语言，修改配置
+        if ($defaultLanguage == $request->old_lang_tag && $request->old_lang_tag != $langTag) {
+            $defaultLanguageConfig->item_value = $langTag;
+            $defaultLanguageConfig->save();
+            // TODO 事件
+            $this->_updateDefaultLanguage($request->old_lang_tag, $langTag);
+        }
+
         return $this->updateSuccess();
+    }
+
+    public function _updateDefaultLanguage(string $oldLangTag, string $langTag)
+    {
+        Language::where('lang_tag', $oldLangTag)->update(['lang_tag' => $langTag]);
+        Seo::where('lang_tag', $oldLangTag)->update(['lang_tag' => $langTag]);
+        CodeMessage::where('lang_tag', $oldLangTag)->update(['lang_tag' => $langTag]);
     }
 
     public function destroy(string $code)

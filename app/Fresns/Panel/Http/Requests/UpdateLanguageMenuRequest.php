@@ -11,9 +11,8 @@ class UpdateLanguageMenuRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'rank_num' => 'required|string',
-            'lang_code' => 'required|string',
             'old_lang_tag' => 'string',
             'continent_id' => 'int',
             'area_code' => 'string',
@@ -26,6 +25,14 @@ class UpdateLanguageMenuRequest extends FormRequest
             'time_format_month' => 'required|string',
             'is_enable' => 'required|boolean',
         ];
+
+        if ($this->method() == 'POST') {
+            $rules['lang_code'] = 'required|string';
+        } else if ($this->method() == 'PUT') {
+            $rules['lang_code'] = 'string';
+        }
+
+        return $rules;
     }
 
     public function attributes()

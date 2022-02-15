@@ -193,8 +193,8 @@ $("#updateLanguageMenu").on('show.bs.modal', function (e) {
     language = button.data('language'),
     action = button.data('action');
 
-  let status = language.areaStatus == 'true' ? 1 : 0;
-  let isEnable = language.isEnable == 'true' ? 1 : 0;
+  let status = language.areaStatus ? 1 : 0;
+  let isEnable = language.isEnable ? 1 : 0;
 
   $(this).find('form').attr('action', action);
   $(this).find('input[name=rank_num]').val(language.rankNum);
