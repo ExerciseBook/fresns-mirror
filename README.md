@@ -25,7 +25,7 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 | 框架 | 版本 | 用途 |
 | --- | --- | --- |
 | [Composer](https://github.com/composer/composer) | 2.2.6 | 软体包管理系统 |
-| [Laravel Framework](https://github.com/laravel/framework) | 8.83.0 | 主程序框架 |
+| [Laravel Framework](https://github.com/laravel/framework) | 8.83.1 | 主程序框架 |
 | [Laravel Lang](https://github.com/Laravel-Lang/lang) | 10.4.4 | 框架语言包 |
 | [Bootstrap](https://getbootstrap.com/) | 5.1.3 | 内置前端框架 |
 | [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.8.1 | 内置前端图标字体库 |
