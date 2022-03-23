@@ -98,7 +98,7 @@ class FsApiController extends BaseApiController
                     $info = [
                         'missing header' => 'aid',
                     ];
-                    $this->error(ErrorCodeService::UID_REQUIRED_ERROR, $info);
+                    $this->error(ErrorCodeService::AID_REQUIRED_ERROR, $info);
                 }
             }
 
@@ -107,7 +107,7 @@ class FsApiController extends BaseApiController
                     $info = [
                         'missing header' => 'uid',
                     ];
-                    $this->error(ErrorCodeService::MID_REQUIRED_ERROR, $info);
+                    $this->error(ErrorCodeService::UID_REQUIRED_ERROR, $info);
                 }
             }
             if (empty($token)) {
@@ -134,7 +134,7 @@ class FsApiController extends BaseApiController
                         'missing header' => 'aid',
                     ];
 
-                    $this->error(ErrorCodeService::UID_REQUIRED_ERROR, $info);
+                    $this->error(ErrorCodeService::AID_REQUIRED_ERROR, $info);
                 }
             }
 
@@ -144,7 +144,7 @@ class FsApiController extends BaseApiController
                         'missing header' => 'uid',
                     ];
 
-                    $this->error(ErrorCodeService::MID_REQUIRED_ERROR, $info);
+                    $this->error(ErrorCodeService::UID_REQUIRED_ERROR, $info);
                 }
             }
             if (empty($token)) {

@@ -38,8 +38,8 @@ class ErrorCodeService
     const HEADER_PLATFORM_ERROR = 30104;
     const HEADER_APP_ID_ERROR = 30105;
     const HEADER_KEY_ERROR = 30106;
-    const UID_REQUIRED_ERROR = 30107;
-    const MID_REQUIRED_ERROR = 30108;
+    const AID_REQUIRED_ERROR = 30107;
+    const UID_REQUIRED_ERROR = 30108;
     const TOKEN_REQUIRED_ERROR = 30109;
     const DEVICE_INFO_REQUIRED_ERROR = 30110;
     const ACCOUNT_CHECK_ERROR = 30111;
@@ -229,8 +229,8 @@ class ErrorCodeService
         self::HEADER_PLATFORM_ERROR             => '平台 ID 不存在',
         self::HEADER_APP_ID_ERROR               => 'App ID 不存在',
         self::HEADER_KEY_ERROR                  => '密钥无权请求本接口',
+        self::AID_REQUIRED_ERROR                => 'AID 必传',
         self::UID_REQUIRED_ERROR                => 'UID 必传',
-        self::MID_REQUIRED_ERROR                => 'MID 必传',
         self::TOKEN_REQUIRED_ERROR              => 'Token 必传',
         self::DEVICE_INFO_REQUIRED_ERROR        => '设备信息必传',
         self::ACCOUNT_CHECK_ERROR               => '账号错误或者不存在',

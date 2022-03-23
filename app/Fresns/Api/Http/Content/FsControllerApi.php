@@ -52,10 +52,10 @@ class FsControllerApi extends FsApiController
             $aid = $this->aid;
             $user_id = $this->uid;
             if (empty($aid)) {
-                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::AID_REQUIRED_ERROR);
             }
             if (empty($user_id)) {
-                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
         }
         $uid = GlobalService::getGlobalKey('user_id');
@@ -97,10 +97,10 @@ class FsControllerApi extends FsApiController
             $aid = $this->aid;
             $user_id = $this->uid;
             if (empty($aid)) {
-                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::AID_REQUIRED_ERROR);
             }
             if (empty($user_id)) {
-                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
         }
         $uid = GlobalService::getGlobalKey('user_id');
@@ -150,10 +150,10 @@ class FsControllerApi extends FsApiController
             $aid = $this->aid;
             $user_id = $this->uid;
             if (empty($aid)) {
-                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::AID_REQUIRED_ERROR);
             }
             if (empty($user_id)) {
-                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
         }
         $uid = GlobalService::getGlobalKey('user_id');
@@ -197,10 +197,10 @@ class FsControllerApi extends FsApiController
             $aid = $this->aid;
             $user_id = $this->uid;
             if (empty($aid)) {
-                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::AID_REQUIRED_ERROR);
             }
             if (empty($user_id)) {
-                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
         }
         $uid = GlobalService::getGlobalKey('user_id');
@@ -240,10 +240,10 @@ class FsControllerApi extends FsApiController
             $aid = $this->aid;
             $user_id = $this->uid;
             if (empty($aid)) {
-                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::AID_REQUIRED_ERROR);
             }
             if (empty($user_id)) {
-                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
         }
 
@@ -352,10 +352,10 @@ class FsControllerApi extends FsApiController
             $aid = $this->aid;
             $user_id = $this->uid;
             if (empty($aid)) {
-                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::AID_REQUIRED_ERROR);
             }
             if (empty($user_id)) {
-                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
         }
         $uid = GlobalService::getGlobalKey('user_id');
@@ -387,10 +387,10 @@ class FsControllerApi extends FsApiController
             $aid = $this->aid;
             $user_id = $this->uid;
             if (empty($aid)) {
-                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::AID_REQUIRED_ERROR);
             }
             if (empty($user_id)) {
-                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
         }
         $langTag = $this->langTag;
@@ -411,10 +411,10 @@ class FsControllerApi extends FsApiController
             $aid = $this->aid;
             $user_id = $this->uid;
             if (empty($aid)) {
-                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::AID_REQUIRED_ERROR);
             }
             if (empty($user_id)) {
-                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
         }
         $uid = GlobalService::getGlobalKey('user_id');
@@ -452,10 +452,10 @@ class FsControllerApi extends FsApiController
             $aid = $this->aid;
             $user_id = $this->uid;
             if (empty($aid)) {
-                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::AID_REQUIRED_ERROR);
             }
             if (empty($user_id)) {
-                $this->error(ErrorCodeService::MID_REQUIRED_ERROR);
+                $this->error(ErrorCodeService::UID_REQUIRED_ERROR);
             }
         }
         $comment = FresnsComments::where('cid', $request->input('cid'))->first();
