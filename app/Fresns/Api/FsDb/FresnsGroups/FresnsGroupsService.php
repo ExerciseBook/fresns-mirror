@@ -9,7 +9,7 @@
 namespace App\Fresns\Api\FsDb\FresnsGroups;
 
 use App\Fresns\Api\Center\Common\GlobalService;
-use App\Fresns\Api\Http\Base\FresnsBaseService;
+use App\Fresns\Api\Http\Base\FsApiService;
 use App\Fresns\Api\Http\Content\FsConfig as ContentConfig;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\Helpers\ApiFileHelper;
@@ -25,7 +25,7 @@ use App\Fresns\Api\FsDb\FresnsPluginUsages\FresnsPluginUsagesConfig;
 use App\Fresns\Api\FsDb\FresnsPluginUsages\FresnsPluginUsagesService;
 use Illuminate\Support\Facades\DB;
 
-class FresnsGroupsService extends FresnsBaseService
+class FresnsGroupsService extends FsApiService
 {
     public $needCommon = true;
 

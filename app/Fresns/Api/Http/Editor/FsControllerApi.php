@@ -18,7 +18,7 @@ use App\Fresns\Api\Center\Helper\CmdRpcHelper;
 use App\Fresns\Api\Center\Helper\PluginHelper;
 use App\Fresns\Api\Center\Scene\FileSceneConfig;
 use App\Fresns\Api\Center\Scene\FileSceneService;
-use App\Fresns\Api\Http\Base\FresnsBaseApiController;
+use App\Fresns\Api\Http\Base\FsApiController;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\Helpers\ApiFileHelper;
 use App\Fresns\Api\Helpers\ApiLanguageHelper;
@@ -51,7 +51,7 @@ use App\Fresns\Api\FsDb\FresnsAccounts\FresnsAccountsConfig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class FsControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FsApiController
 {
     public function __construct()
     {

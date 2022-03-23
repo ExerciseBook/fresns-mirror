@@ -8,13 +8,13 @@
 
 namespace App\Fresns\Api\Http\User;
 
-use App\Fresns\Api\Http\Base\FresnsBaseChecker;
+use App\Fresns\Api\Http\Base\FsApiChecker;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\FsDb\FresnsUserFollows\FresnsUserFollows;
 use App\Fresns\Api\FsDb\FresnsUserLikes\FresnsUserLikes;
 use App\Fresns\Api\FsDb\FresnsUserBlocks\FresnsUserBlocks;
 
-class FsChecker extends FresnsBaseChecker
+class FsChecker extends FsApiChecker
 {
     /**
      * Check if likes, followers and blockers are added.

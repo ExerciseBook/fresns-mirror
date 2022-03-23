@@ -8,12 +8,12 @@
 
 namespace App\Fresns\Api\FsDb\FresnsDialogMessages;
 
-use App\Fresns\Api\Http\Base\FresnsBaseService;
+use App\Fresns\Api\Http\Base\FsApiService;
 
 /**
  * List resource config handle.
  */
-class FsResource extends FresnsBaseService
+class FsResource extends FsApiService
 {
     public function toArray($request)
     {

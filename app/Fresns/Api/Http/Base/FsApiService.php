@@ -8,6 +8,9 @@
 
 namespace App\Fresns\Api\Http\Base;
 
-class FresnsBaseConfig extends FsConfig
+use App\Fresns\Api\Base\Services\BaseAdminService;
+
+class FsApiService extends BaseAdminService
 {
+    public $needCommon = false;
 }

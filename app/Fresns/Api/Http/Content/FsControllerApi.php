@@ -15,7 +15,7 @@ use App\Fresns\Api\Center\Common\LogService;
 use App\Fresns\Api\Center\Common\ValidateService;
 use App\Fresns\Api\Center\Helper\CmdRpcHelper;
 use App\Fresns\Api\Center\Helper\PluginHelper;
-use App\Fresns\Api\Http\Base\FresnsBaseApiController;
+use App\Fresns\Api\Http\Base\FsApiController;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\FsDb\FresnsCommentAppends\FresnsCommentAppendsConfig;
 use App\Fresns\Api\FsDb\FresnsComments\FresnsComments;
@@ -33,7 +33,6 @@ use App\Fresns\Api\FsDb\FresnsImplants\FresnsImplantsService;
 use App\Fresns\Api\FsDb\FresnsUserFollows\FresnsUserFollowsConfig;
 use App\Fresns\Api\FsDb\FresnsUsers\FresnsUsers;
 use App\Fresns\Api\FsDb\FresnsUserBlocks\FresnsUserBlocksConfig;
-use App\Fresns\Api\FsDb\FresnsPlugins\FresnsPlugins as pluginUnikey;
 use App\Fresns\Api\FsDb\FresnsPluginUsages\FresnsPluginUsages;
 use App\Fresns\Api\FsDb\FresnsPluginUsages\FresnsPluginUsagesService;
 use App\Fresns\Api\FsDb\FresnsPostAppends\FresnsPostAppends;
@@ -43,7 +42,7 @@ use App\Fresns\Api\FsDb\FresnsPosts\FresnsPostsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class FsControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FsApiController
 {
     // Get group [tree structure list]
     public function groupTrees(Request $request)

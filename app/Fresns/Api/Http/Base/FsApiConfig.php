@@ -8,7 +8,7 @@
 
 namespace App\Fresns\Api\Http\Base;
 
-class FsConfig
+class FsApiConfig
 {
     const VIEW_MODE_PUBLIC = 1;
     const VIEW_MODE_PRIVATE = 2;

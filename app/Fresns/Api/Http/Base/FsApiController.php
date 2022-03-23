@@ -28,7 +28,7 @@ use App\Fresns\Api\FsDb\FresnsAccounts\FresnsAccountsConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
-class FresnsBaseApiController extends BaseApiController
+class FsApiController extends BaseApiController
 {
     public $platform;
     public $version;

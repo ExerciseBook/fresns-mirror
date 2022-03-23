@@ -11,7 +11,7 @@ namespace App\Fresns\Api\Http\Message;
 use App\Fresns\Api\Center\Common\ErrorCodeService;
 use App\Fresns\Api\Center\Common\GlobalService;
 use App\Fresns\Api\Center\Common\ValidateService;
-use App\Fresns\Api\Http\Base\FresnsBaseApiController;
+use App\Fresns\Api\Http\Base\FsApiController;
 use App\Fresns\Api\Http\Content\FsConfig as ContentConfig;
 use App\Fresns\Api\Helpers\ApiCommonHelper;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
@@ -32,7 +32,7 @@ use App\Fresns\Api\FsDb\FresnsSessionLogs\FresnsSessionLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class FsControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FsApiController
 {
     // Get Notify List
     public function notifyLists(Request $request)

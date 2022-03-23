@@ -13,7 +13,7 @@ use App\Fresns\Api\Center\Common\ErrorCodeService;
 use App\Fresns\Api\Center\Common\GlobalService;
 use App\Fresns\Api\Center\Common\ValidateService;
 use App\Fresns\Api\Center\Helper\CmdRpcHelper;
-use App\Fresns\Api\Http\Base\FresnsBaseApiController;
+use App\Fresns\Api\Http\Base\FsApiController;
 use App\Fresns\Api\Http\Content\FresnsCommentsResource;
 use App\Fresns\Api\Http\Content\FresnsGroupsResource;
 use App\Fresns\Api\Http\Content\FresnsHashtagsResource;
@@ -57,7 +57,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class FsControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FsApiController
 {
     public function __construct()
     {

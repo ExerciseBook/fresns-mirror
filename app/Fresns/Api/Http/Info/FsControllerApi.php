@@ -13,7 +13,7 @@ use App\Fresns\Api\Center\Common\ErrorCodeService;
 use App\Fresns\Api\Center\Common\GlobalService;
 use App\Fresns\Api\Center\Common\ValidateService;
 use App\Fresns\Api\Center\Helper\CmdRpcHelper;
-use App\Fresns\Api\Http\Base\FresnsBaseApiController;
+use App\Fresns\Api\Http\Base\FsApiController;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\Helpers\ApiFileHelper;
 use App\Fresns\Api\Helpers\ApiLanguageHelper;
@@ -57,7 +57,7 @@ use App\Fresns\Api\FsDb\FresnsAccounts\FresnsAccounts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class FsControllerApi extends FresnsBaseApiController
+class FsControllerApi extends FsApiController
 {
     public function __construct()
     {

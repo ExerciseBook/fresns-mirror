@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Helpers;
 
 use App\Fresns\Api\Helpers\StrHelper;
 use App\Fresns\Api\Center\Common\LogService;
-use App\Fresns\Api\Http\Base\FresnsBaseConfig;
+use App\Fresns\Api\Http\Base\FsApiConfig;
 use App\Fresns\Api\FsDb\FresnsConfigs\FresnsConfigsConfig;
 use App\Fresns\Api\FsDb\FresnsConfigs\FresnsConfigsService;
 use App\Fresns\Api\FsDb\FresnsLanguages\FresnsLanguagesService;
@@ -21,7 +21,7 @@ class ApiConfigHelper
     // Get config info list
     public static function getConfigsList()
     {
-        $map = config(FresnsBaseConfig::CONFIGS_LIST);
+        $map = config(FsApiConfig::CONFIGS_LIST);
 
         return $map;
     }
@@ -29,7 +29,7 @@ class ApiConfigHelper
     // Get config info list (api)
     public static function getConfigsListApi()
     {
-        $map = config(FresnsBaseConfig::CONFIGS_LIST_API);
+        $map = config(FsApiConfig::CONFIGS_LIST_API);
 
         $itemArr = [];
         if (! empty($map)) {
@@ -73,7 +73,7 @@ class ApiConfigHelper
     // Get by key tag
     public static function getConfigByItemTag($key)
     {
-        $map = config(FresnsBaseConfig::CONFIGS_LIST);
+        $map = config(FsApiConfig::CONFIGS_LIST);
         $itemArr = [];
         if ($map) {
             foreach ($map as $k => $v) {
@@ -105,7 +105,7 @@ class ApiConfigHelper
     // Get by key name
     public static function getConfigByItemKey($itemKey)
     {
-        $map = config(FresnsBaseConfig::CONFIGS_LIST);
+        $map = config(FsApiConfig::CONFIGS_LIST);
         $data = null;
         if ($map) {
             foreach ($map as $k => $v) {
@@ -209,7 +209,7 @@ class ApiConfigHelper
     // Get all language parameters
     public static function getConfigsLanguageList()
     {
-        $map = config(FresnsBaseConfig::CONFIGS_LIST);
+        $map = config(FsApiConfig::CONFIGS_LIST);
         $data = [];
         foreach ($map as $k => $v) {
             if ($k == FresnsConfigsConfig::LANGUAGES) {

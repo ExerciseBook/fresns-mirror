@@ -9,12 +9,12 @@
 namespace App\Fresns\Api\Http\Info;
 
 use App\Fresns\Api\Center\Common\ErrorCodeService;
-use App\Fresns\Api\Http\Base\FresnsBaseChecker;
+use App\Fresns\Api\Http\Base\FsApiChecker;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\FsDb\FresnsPluginCallbacks\FresnsPluginCallbacks;
 use App\Fresns\Api\FsDb\FresnsAccounts\FresnsAccounts;
 
-class FsChecker extends FresnsBaseChecker
+class FsChecker extends FsApiChecker
 {
     // Check Verify Code
     public static function checkVerifyCode($type, $useType, $account)

@@ -8,11 +8,11 @@
 
 namespace App\Fresns\Api\FsDb\FresnsHashtags;
 
-use App\Fresns\Api\Http\Base\FresnsBaseService;
+use App\Fresns\Api\Http\Base\FsApiService;
 use App\Fresns\Api\FsDb\FresnsPluginUsages\FresnsPluginUsagesService;
 use Illuminate\Support\Facades\DB;
 
-class FresnsHashtagsService extends FresnsBaseService
+class FresnsHashtagsService extends FsApiService
 {
     public $needCommon = true;
 

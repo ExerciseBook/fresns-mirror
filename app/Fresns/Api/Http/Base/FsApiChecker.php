@@ -14,7 +14,7 @@ use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\FsDb\FresnsUsers\FresnsUsers;
 use App\Fresns\Api\FsDb\FresnsSessionTokens\FresnsSessionTokens;
 
-class FsChecker extends BaseChecker
+class FsApiChecker extends BaseChecker
 {
     // Check: Site Mode = private (aid and uid required)
     public static function checkSiteMode()
