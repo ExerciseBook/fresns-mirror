@@ -15,7 +15,6 @@ use App\Fresns\Api\Helpers\ApiLanguageHelper;
 use App\Fresns\Api\FsDb\FresnsCodeMessages\FresnsCodeMessagesConfig;
 use App\Fresns\Api\FsDb\FresnsCodeMessages\FresnsCodeMessagesService;
 use App\Fresns\Api\FsDb\FresnsSessionLogs\FresnsSessionLogsService;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 

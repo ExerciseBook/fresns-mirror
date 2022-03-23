@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Api\Http\Info;
 
-use App\Fresns\Api\Base\Checkers\BaseChecker;
 use App\Fresns\Api\Center\Common\ErrorCodeService;
 use App\Fresns\Api\Http\Base\FresnsBaseChecker;
 use App\Fresns\Api\Helpers\ApiConfigHelper;

@@ -10,7 +10,6 @@ namespace App\Fresns\Api\Center\Common;
 
 use App\Fresns\Api\Helpers\DBHelper;
 use App\Fresns\Api\Traits\ApiTrait;
-use App\Fresns\Api\Traits\ServerTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;

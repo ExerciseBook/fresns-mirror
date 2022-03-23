@@ -8,9 +8,6 @@
 
 namespace App\Fresns\Api\Traits;
 
-use App\Fresns\Api\Helpers\CommonHelper;
-use Illuminate\Support\Facades\Route;
-
 trait HookControllerTrait
 {
     // Hook functions: store after verification, such as secondary verification

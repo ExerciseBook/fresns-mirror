@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Api\FsDb\FresnsComments;
 
-use App\Fresns\Api\Base\Services\BaseAdminService;
 use App\Fresns\Api\Base\Services\BaseCategoryService;
 
 class FsService extends BaseCategoryService

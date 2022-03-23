@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Api\Helpers;
 
-use App\Fresns\Api\Center\Common\LogService;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 

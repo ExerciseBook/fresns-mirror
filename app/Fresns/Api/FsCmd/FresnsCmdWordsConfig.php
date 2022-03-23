@@ -9,7 +9,6 @@
 namespace App\Fresns\Api\FsCmd;
 
 use App\Fresns\Api\Center\Base\BasePluginConfig;
-use Illuminate\Validation\Rule;
 
 class FresnsCmdWordsConfig extends BasePluginConfig
 {

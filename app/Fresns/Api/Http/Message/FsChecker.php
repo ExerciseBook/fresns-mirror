@@ -12,14 +12,11 @@ use App\Fresns\Api\Base\Checkers\BaseChecker;
 use App\Fresns\Api\Center\Common\ErrorCodeService;
 use App\Fresns\Api\Center\Common\LogService;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
-use App\Fresns\Api\FsDb\FresnsFiles\FresnsFiles;
 use App\Fresns\Api\FsDb\FresnsUserFollows\FresnsUserFollows;
-use App\Fresns\Api\FsDb\FresnsUserRoles\FresnsUserRoles;
 use App\Fresns\Api\FsDb\FresnsUserRoles\FresnsUserRolesService;
 use App\Fresns\Api\FsDb\FresnsRoles\FresnsRoles;
 use App\Fresns\Api\FsDb\FresnsRoles\FresnsRolesService;
 use App\Fresns\Api\FsDb\FresnsUsers\FresnsUsers;
-use App\Fresns\Api\FsDb\FresnsAccounts\FresnsAccounts;
 
 class FsChecker extends BaseChecker
 {

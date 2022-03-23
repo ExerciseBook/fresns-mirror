@@ -11,7 +11,6 @@ namespace App\Fresns\Api\Helpers;
 use App\Fresns\Api\FsDb\FresnsConfigs\FresnsConfigs;
 use App\Fresns\Api\FsDb\FresnsConfigs\FresnsConfigsConfig;
 use App\Fresns\Api\FsDb\FresnsLanguages\FresnsLanguages;
-use App\Fresns\Api\FsDb\FresnsPluginUsages\FresnsPluginUsagesService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 

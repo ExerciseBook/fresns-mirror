@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Api\FsDb\FresnsComments;
 
-use App\Fresns\Api\Base\Models\BaseAdminModel;
 use App\Fresns\Api\Base\Models\BaseCategoryModel;
 use App\Fresns\Api\Center\Common\GlobalService;
 use App\Fresns\Api\Helpers\ApiConfigHelper;

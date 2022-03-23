@@ -12,8 +12,6 @@ use App\Fresns\Api\Base\Resources\BaseAdminResource;
 use App\Fresns\Api\FsDb\FresnsCommentLogs\FresnsCommentLogsConfig;
 use App\Fresns\Api\FsDb\FresnsComments\FresnsComments;
 use App\Fresns\Api\FsDb\FresnsPlugins\FresnsPluginsService;
-use App\Fresns\Api\FsDb\FresnsPostLogs\FresnsPostLogsConfig;
-use App\Fresns\Api\FsDb\FresnsPosts\FresnsPosts;
 
 /**
  * List resource config handle.

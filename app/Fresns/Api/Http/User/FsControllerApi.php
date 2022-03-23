@@ -27,7 +27,6 @@ use App\Fresns\Api\FsDb\FresnsComments\FresnsComments;
 use App\Fresns\Api\FsDb\FresnsComments\FresnsCommentsService;
 use App\Fresns\Api\FsDb\FresnsConfigs\FresnsConfigs;
 use App\Fresns\Api\FsDb\FresnsConfigs\FresnsConfigsConfig;
-use App\Fresns\Api\FsDb\FresnsConfigs\FresnsConfigsService;
 use App\Fresns\Api\FsDb\FresnsFileLogs\FresnsFileLogsConfig;
 use App\Fresns\Api\FsDb\FresnsFiles\FresnsFiles;
 use App\Fresns\Api\FsDb\FresnsGroups\FresnsGroups;

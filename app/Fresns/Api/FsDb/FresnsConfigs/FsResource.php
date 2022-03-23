@@ -9,7 +9,6 @@
 namespace App\Fresns\Api\FsDb\FresnsConfigs;
 
 use App\Fresns\Api\Base\Resources\BaseAdminResource;
-use App\Fresns\Api\Helpers\ArrayHelper;
 
 /**
  * List resource config handle.

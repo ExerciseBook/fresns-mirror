@@ -10,10 +10,8 @@ namespace App\Fresns\Api\Base\Controllers;
 
 use App\Fresns\Api\Base\Config\BaseConfig;
 use App\Fresns\Api\Center\Common\LogService;
-use App\Fresns\Api\Servers\RpcHelper;
 use App\Fresns\Api\Traits\ApiTrait;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
 
 class BaseFrontendController extends Controller
 {

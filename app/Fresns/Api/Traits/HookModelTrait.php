@@ -8,9 +8,6 @@
 
 namespace App\Fresns\Api\Traits;
 
-use App\Fresns\Api\Helpers\CommonHelper;
-use Illuminate\Support\Facades\Route;
-
 trait HookModelTrait
 {
     public $model;

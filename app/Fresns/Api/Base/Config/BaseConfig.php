@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Api\Base\Config;
 
-use App\Fresns\Api\Base\Models\BaseModel;
 use Illuminate\Validation\Rule;
 
 class BaseConfig

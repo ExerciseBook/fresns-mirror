@@ -14,8 +14,6 @@ use App\Fresns\Api\Http\Content\FsConfig as ContentConfig;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\Helpers\ApiFileHelper;
 use App\Fresns\Api\FsDb\FresnsDialogMessages\FresnsDialogMessagesConfig;
-use App\Fresns\Api\FsDb\FresnsDialogs\FresnsDialogs;
-use App\Fresns\Api\FsDb\FresnsDialogs\FresnsDialogsConfig;
 use App\Fresns\Api\FsDb\FresnsUsers\FresnsUsers;
 use App\Fresns\Api\FsDb\FresnsUsers\FresnsUsersConfig;
 use Illuminate\Support\Facades\DB;

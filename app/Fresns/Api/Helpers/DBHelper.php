@@ -9,12 +9,9 @@
 namespace App\Fresns\Api\Helpers;
 
 use App\Fresns\Api\Base\Config\BaseConfig;
-use App\Fresns\Api\Base\Models\BaseModel;
 use App\Fresns\Api\Center\Common\LogService;
-use Doctrine\DBAL\Driver\IBMDB2\DB2Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class DBHelper
 {

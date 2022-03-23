@@ -9,7 +9,6 @@
 namespace App\Fresns\Api\Center\Scene;
 
 use App\Fresns\Api\Base\Services\BaseService;
-use App\Fresns\Api\Helpers\CommonHelper;
 use App\Fresns\Api\Helpers\FileHelper;
 use App\Fresns\Api\Center\Common\LogService;
 

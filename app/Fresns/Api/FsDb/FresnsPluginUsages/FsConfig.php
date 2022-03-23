@@ -9,10 +9,6 @@
 namespace App\Fresns\Api\FsDb\FresnsPluginUsages;
 
 use App\Fresns\Api\Base\Config\BaseConfig;
-use App\Fresns\Api\Http\Config\AssetFileConfig;
-use App\Fresns\Api\FsDb\FresnsFiles\FresnsFilesConfig;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 
 class FsConfig extends BaseConfig
 {

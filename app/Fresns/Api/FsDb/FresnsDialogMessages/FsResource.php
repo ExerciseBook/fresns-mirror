@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Api\FsDb\FresnsDialogMessages;
 
-use App\Fresns\Api\Base\Resources\BaseAdminResource;
 use App\Fresns\Api\Http\Base\FresnsBaseService;
 
 /**

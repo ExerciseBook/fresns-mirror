@@ -16,11 +16,9 @@ use App\Fresns\Api\FsDb\FresnsComments\FresnsComments;
 use App\Fresns\Api\FsDb\FresnsExtendLinkeds\FresnsExtendLinkedsConfig;
 use App\Fresns\Api\FsDb\FresnsExtends\FresnsExtends;
 use App\Fresns\Api\FsDb\FresnsFiles\FresnsFiles;
-use App\Fresns\Api\FsDb\FresnsUserRoles\FresnsUserRolesService;
 use App\Fresns\Api\FsDb\FresnsRoles\FresnsRolesService;
 use App\Fresns\Api\FsDb\FresnsPostLogs\FresnsPostLogs;
 use App\Fresns\Api\FsDb\FresnsPosts\FresnsPosts;
-use App\Fresns\Api\FsDb\FresnsAccounts\FresnsAccountsConfig;
 use Illuminate\Support\Facades\DB;
 
 class FsService

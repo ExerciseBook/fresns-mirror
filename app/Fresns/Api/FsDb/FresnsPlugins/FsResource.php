@@ -9,7 +9,6 @@
 namespace App\Fresns\Api\FsDb\FresnsPlugins;
 
 use App\Fresns\Api\Base\Resources\BaseAdminResource;
-use App\Fresns\Api\Center\Helper\PluginHelper;
 
 /**
  * List resource config handle.

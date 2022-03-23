@@ -16,7 +16,6 @@ use App\Fresns\Api\FsCmd\FresnsSubPluginConfig;
 use App\Fresns\Api\Traits\HookModelTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 

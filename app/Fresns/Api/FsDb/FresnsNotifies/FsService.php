@@ -9,9 +9,6 @@
 namespace App\Fresns\Api\FsDb\FresnsNotifies;
 
 use App\Fresns\Api\Base\Services\BaseAdminService;
-use App\Fresns\Api\FsDb\FresnsUserFollows\FresnsUserFollowsConfig;
-use App\Fresns\Api\FsDb\FresnsUserLikes\FresnsUserLikesConfig;
-use Illuminate\Support\Facades\DB;
 
 class FsService extends BaseAdminService
 {

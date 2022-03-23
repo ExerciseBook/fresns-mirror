@@ -10,7 +10,6 @@ namespace App\Fresns\Api\FsDb\FresnsPluginUsages;
 
 use App\Fresns\Api\Base\Models\BaseAdminModel;
 use App\Fresns\Api\FsDb\FresnsFiles\FresnsFiles;
-use App\Fresns\Api\FsDb\FresnsLanguages\FresnsLanguagesService;
 use App\Fresns\Api\FsDb\FresnsLanguages\FsModel as FresnsLanguagesModel;
 
 class FsModel extends BaseAdminModel

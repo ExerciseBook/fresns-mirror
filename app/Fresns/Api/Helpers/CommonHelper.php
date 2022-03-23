@@ -8,9 +8,6 @@
 
 namespace App\Fresns\Api\Helpers;
 
-use App\Fresns\Api\Base\Config\BaseConfig;
-use Illuminate\Support\Facades\DB;
-
 class CommonHelper
 {
     // Whether https request

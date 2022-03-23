@@ -16,8 +16,6 @@ use App\Fresns\Api\FsDb\FresnsComments\FresnsComments;
 use App\Fresns\Api\FsDb\FresnsExtends\FresnsExtends;
 use App\Fresns\Api\FsDb\FresnsExtends\FresnsExtendsConfig;
 use App\Fresns\Api\FsDb\FresnsPlugins\FresnsPluginsService;
-use App\Fresns\Api\FsDb\FresnsPostLogs\FresnsPostLogsConfig;
-use App\Fresns\Api\FsDb\FresnsPosts\FresnsPosts;
 
 /**
  * Detail resource config handle.

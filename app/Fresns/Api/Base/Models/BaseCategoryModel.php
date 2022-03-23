@@ -11,9 +11,6 @@ namespace App\Fresns\Api\Base\Models;
 use App\Fresns\Api\Base\Config\BaseConfig;
 use App\Fresns\Api\Helpers\CommonHelper;
 use App\Fresns\Api\Helpers\TreeHelper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 // Scenes
 // Scene 1: query all the ancestor categories of "c1"

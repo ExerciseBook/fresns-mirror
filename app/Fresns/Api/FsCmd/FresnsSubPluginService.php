@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Api\FsCmd;
 
-use App\Fresns\Api\Base\Services\BaseService;
 use App\Fresns\Api\Center\Common\LogService;
 use App\Fresns\Api\Center\Helper\CmdRpcHelper;
 

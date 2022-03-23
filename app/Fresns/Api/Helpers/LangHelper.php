@@ -9,8 +9,6 @@
 namespace App\Fresns\Api\Helpers;
 
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
 class LangHelper
 {

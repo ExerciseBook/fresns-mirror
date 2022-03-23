@@ -8,12 +8,7 @@
 
 namespace App\Fresns\Api\Base\Services;
 
-use App\Fresns\Api\Base\Config\BaseConfig;
-use App\Fresns\Api\Helpers\CommonHelper;
-use App\Fresns\Api\Helpers\TreeHelper;
-use App\Fresns\Api\Center\Common\LogService;
 use App\Fresns\Api\Center\Common\ValidateService;
-use Illuminate\Cache\NullStore;
 
 class BaseCategoryService extends BaseService
 {

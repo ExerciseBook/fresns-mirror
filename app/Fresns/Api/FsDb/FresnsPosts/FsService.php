@@ -9,7 +9,6 @@
 namespace App\Fresns\Api\FsDb\FresnsPosts;
 
 use App\Fresns\Api\Base\Services\BaseAdminService;
-use App\Fresns\Api\Http\Base\FresnsBaseService;
 
 class FsService extends BaseAdminService
 {
