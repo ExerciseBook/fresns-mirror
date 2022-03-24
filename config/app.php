@@ -172,7 +172,6 @@ return [
         App\Fresns\Install\Providers\InstallServiceProvider::class,
         App\Fresns\Panel\Providers\PanelServiceProvider::class,
         App\Fresns\Words\Providers\CmdWordServiceProvider::class,
-        App\Fresns\Crontab\Providers\CrontabServiceProvider::class,
         App\Fresns\Subscribe\Providers\SubscribeServiceProvider::class,
         App\Fresns\Api\Providers\FresnsApiServiceProvider::class,
 
