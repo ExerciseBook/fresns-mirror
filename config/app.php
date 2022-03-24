@@ -167,19 +167,15 @@ return [
          */
 
         /*
-         * Application Service Providers...
+         * Fresns Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        App\Fresns\Install\Providers\InstallServiceProvider::class,
+        App\Fresns\Panel\Providers\PanelServiceProvider::class,
+        App\Fresns\Words\Providers\CmdWordServiceProvider::class,
+        App\Fresns\Crontab\Providers\CrontabServiceProvider::class,
+        App\Fresns\Subscribe\Providers\SubscribeServiceProvider::class,
+        App\Fresns\Api\Providers\FresnsApiServiceProvider::class,
 
-        // fresns Provider
-        App\Http\FresnsApi\Providers\FresnsApiServiceProvider::class,
-        App\Fresns\Panel\Providers\PanelServiceProvider::class, // 管理后台
-        //App\Http\FresnsPanel\FresnsPanelServiceProvider::class,
-        //App\Http\FresnsInstall\FresnsInstallServiceProvider::class,
     ],
 
     /*

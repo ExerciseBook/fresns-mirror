@@ -1,9 +1,9 @@
 <p align="center"><a href="https://fresns.cn" target="_blank"><img src="https://cdn.fresns.cn/images/logo.png" width="300"></a></p>
 
 <p align="center">
-<img src="https://img.shields.io/badge/PHP-%5E8.0-blue" alt="PHP">
+<img src="https://img.shields.io/badge/PHP-%5E8.0-green" alt="PHP">
 <img src="https://img.shields.io/badge/MySQL-%5E8.0-orange" alt="MySQL">
-<img src="https://img.shields.io/badge/License-Apache--2.0-green" alt="License">
+<img src="https://img.shields.io/badge/License-Apache--2.0-blue" alt="License">
 </p>
 
 ## 介绍
@@ -25,8 +25,8 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 | --- | --- | --- |
 | [Composer](https://github.com/composer/composer) | 2.2.9 | 软体包管理系统 |
 | [Laravel Framework](https://github.com/laravel/framework) | 8.83.5 | 主程序框架 |
-| [Laravel Lang](https://github.com/Laravel-Lang/lang) | 10.4.10 | 框架语言包 |
-| [Laravel Excel](https://github.com/SpartnerNL/Laravel-Excel) | 3.1.7 | 框架 Excel 导入和导出 |
+| [Laravel Lang](https://github.com/Laravel-Lang/lang) | 10.4.11 | 框架语言包 |
+| [Laravel Excel](https://github.com/SpartnerNL/Laravel-Excel) | 3.1.37 | 框架 Excel 导入和导出 |
 | [PhpZip](https://github.com/Ne-Lexa/php-zip) | 4.0.1 | 扩展 zip 压缩包的 PHP 库 |
 | [Bootstrap](https://getbootstrap.com/) | 5.1.3 | 内置前端框架 |
 | [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.8.1 | 内置前端图标字体库 |
@@ -37,7 +37,7 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 | 配置 | 要求支持或启用 |
 | --- | --- |
 | PHP 扩展 | `fileinfo` |
-| PHP 函数 | `putenv` `symlink` `readlink` `proc_open` |
+| PHP 函数 | `putenv` `symlink` `readlink` `proc_open` `shell_exec` `exec` |
 
 | 数据库 | MySQL 8.x |
 | --- | --- |
