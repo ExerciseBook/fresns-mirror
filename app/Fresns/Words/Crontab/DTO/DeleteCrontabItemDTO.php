@@ -6,14 +6,14 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\File\DTO;
+namespace App\Fresns\Words\Crontab\DTO;
 
 use Fresns\DTO\DTO;
 
 /**
- * Class LogicalDeletionFile.
+ * Class AddCrontabItemDTO.
  */
-class LogicalDeletionFile extends DTO
+class DeleteCrontabItemDTO extends DTO
 {
     /**
      * @return array
@@ -21,8 +21,8 @@ class LogicalDeletionFile extends DTO
     public function rules(): array
     {
         return [
-            'fileId' => ['integer', 'required_without:fid'],
-            'fid' => ['integer', 'required_without:fileId'],
+            'unikey' => ['required', 'string'],
+            'cmdWord' => ['required', 'string'],
         ];
     }
 }

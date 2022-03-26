@@ -6,14 +6,11 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\File\DTO;
+namespace App\Fresns\Words\Account\DTO;
 
 use Fresns\DTO\DTO;
 
-/**
- * Class GetUploadToken.
- */
-class GetUploadToken extends DTO
+class LogicalDeletionAccountDTO extends DTO
 {
     /**
      * @return array
@@ -21,8 +18,7 @@ class GetUploadToken extends DTO
     public function rules(): array
     {
         return [
-            'type' => 'integer',
-            'scene' => 'integer',
+            'aid' => ['required', 'integer'],
         ];
     }
 }

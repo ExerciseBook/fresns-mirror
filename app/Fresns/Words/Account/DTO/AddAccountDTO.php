@@ -11,7 +11,7 @@ namespace App\Fresns\Words\Account\DTO;
 use Fresns\DTO\DTO;
 
 /**
- * Class AddAccount.
+ * Class AddAccountDTO.
  *
  * @property int $type
  * @property string $account
@@ -19,7 +19,7 @@ use Fresns\DTO\DTO;
  * @property int $connectInfo
  * @property string $password
  */
-class AddAccount extends DTO
+class AddAccountDTO extends DTO
 {
     /**
      * @return array
@@ -28,10 +28,10 @@ class AddAccount extends DTO
     {
         return [
             'type' => ['required', 'in:1,2,3'],
-            'account' => ['required_if:type,1,2'],
-            'countryCode' => 'required_if:type,2',
-            'connectInfo' => 'required_if:type,3',
-            'password' => 'string',
+            'account' => ['required_if:type,1,2', 'string'],
+            'countryCode' => ['required_if:type,2', 'integer'],
+            'connectInfo' => ['required_if:type,3', 'string'],
+            'password' => ['nullable', 'string'],
         ];
     }
 }

@@ -6,14 +6,11 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\File\DTO;
+namespace App\Fresns\Words\User\DTO;
 
 use Fresns\DTO\DTO;
 
-/**
- * Class PhysicalDeletionFile.
- */
-class PhysicalDeletionFile extends DTO
+class VerifyUserDTO extends DTO
 {
     /**
      * @return array
@@ -21,8 +18,8 @@ class PhysicalDeletionFile extends DTO
     public function rules(): array
     {
         return [
-            'fileId' => ['integer', 'required_without:fid'],
-            'fid' => ['integer', 'required_without:fileId'],
+            'uid' => ['required', 'integer'],
+            'password' => ['nullable', 'string'],
         ];
     }
 }

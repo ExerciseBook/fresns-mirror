@@ -6,11 +6,14 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\Account\DTO;
+namespace App\Fresns\Words\Crontab\DTO;
 
 use Fresns\DTO\DTO;
 
-class LogicalDeletionAccount extends DTO
+/**
+ * Class AddCrontabItemDTO.
+ */
+class AddCrontabItemDTO extends DTO
 {
     /**
      * @return array
@@ -18,7 +21,9 @@ class LogicalDeletionAccount extends DTO
     public function rules(): array
     {
         return [
-            'accountId' => ['required', 'integer'],
+            'unikey' => ['required', 'string'],
+            'cmdWord' => ['required', 'string'],
+            'taskPeriod' => ['required', 'string'],
         ];
     }
 }

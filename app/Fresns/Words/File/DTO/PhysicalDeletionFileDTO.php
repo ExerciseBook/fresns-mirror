@@ -6,11 +6,14 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\Account\DTO;
+namespace App\Fresns\Words\File\DTO;
 
 use Fresns\DTO\DTO;
 
-class GetAccountDetail extends DTO
+/**
+ * Class PhysicalDeletionFileDTO.
+ */
+class PhysicalDeletionFileDTO extends DTO
 {
     /**
      * @return array
@@ -18,7 +21,8 @@ class GetAccountDetail extends DTO
     public function rules(): array
     {
         return [
-            'aid' => ['required', 'string'],
+            'fileId' => ['required_without:fid', 'integer'],
+            'fid' => ['required_without:fileId', 'string'],
         ];
     }
 }

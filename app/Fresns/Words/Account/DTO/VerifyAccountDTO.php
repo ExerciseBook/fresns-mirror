@@ -6,14 +6,11 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\Basis\DTO;
+namespace App\Fresns\Words\Account\DTO;
 
 use Fresns\DTO\DTO;
 
-/**
- * Class SendCodeDTO.
- */
-class SendCodeDTO extends DTO
+class VerifyAccountDTO extends DTO
 {
     /**
      * @return array
@@ -24,9 +21,8 @@ class SendCodeDTO extends DTO
             'type' => ['required', 'in:1,2'],
             'account' => ['required', 'string'],
             'countryCode' => ['required_if:type,2', 'integer'],
-            'verifyCode' => ['required', 'string'],
-            'templateId' => ['required', 'integer'],
-            'langTag' => ['required', 'string'],
+            'password' => ['required_without:verifyCode', 'string'],
+            'verifyCode' => ['required_without:password', 'string'],
         ];
     }
 }

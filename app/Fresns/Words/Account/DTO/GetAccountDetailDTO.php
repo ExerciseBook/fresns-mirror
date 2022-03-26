@@ -6,11 +6,11 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\User\DTO;
+namespace App\Fresns\Words\Account\DTO;
 
 use Fresns\DTO\DTO;
 
-class DeactivateUserDialog extends DTO
+class GetAccountDetailDTO extends DTO
 {
     /**
      * @return array
@@ -18,7 +18,9 @@ class DeactivateUserDialog extends DTO
     public function rules(): array
     {
         return [
-            'userId' => 'integer',
+            'aid' => ['required', 'string'],
+            'langTag' => ['nullable', 'string'],
+            'timezone' => ['nullable', 'string'],
         ];
     }
 }

@@ -6,20 +6,19 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\Basis\DTO;
+namespace App\Fresns\Words\User\DTO;
 
 use Fresns\DTO\DTO;
 
-/**
- * Class DecodeSignDTO.
- */
-class DecodeSignDTO extends DTO
+class LogicalDeletionUserDTO extends DTO
 {
     /**
      * @return array
      */
     public function rules(): array
     {
-        return ['name'=> 'required'];
+        return [
+            'uid' => ['required', 'integer'],
+        ];
     }
 }

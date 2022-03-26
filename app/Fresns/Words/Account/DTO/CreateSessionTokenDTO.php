@@ -11,9 +11,9 @@ namespace App\Fresns\Words\Account\DTO;
 use Fresns\DTO\DTO;
 
 /**
- * Class VerifySessionToken.
+ * Class CreateSessionTokenDTO.
  */
-class VerifySessionToken extends DTO
+class CreateSessionTokenDTO extends DTO
 {
     /**
      * @return array
@@ -22,9 +22,9 @@ class VerifySessionToken extends DTO
     {
         return [
             'platform' => ['required', 'integer'],
-            'aid' => ['required', 'string'],
-            'uid' => 'integer',
-            'token' => ['required', 'string'],
+            'aid' => ['required', 'integer'],
+            'uid' => ['nullable', 'integer'],
+            'expiredTime' => ['nullable', 'integer'],
         ];
     }
 }

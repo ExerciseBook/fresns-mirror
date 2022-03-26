@@ -6,14 +6,11 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\Crontab\DTO;
+namespace App\Fresns\Words\Content\DTO;
 
 use Fresns\DTO\DTO;
 
-/**
- * Class AddCrontabItem.
- */
-class AddCrontabItem extends DTO
+class GenerateDraftFromMainTableDTO extends DTO
 {
     /**
      * @return array
@@ -21,9 +18,8 @@ class AddCrontabItem extends DTO
     public function rules(): array
     {
         return [
-            'unikey'=>'string',
-            'cmdWord'=>'string',
-            'taskPeriod' => 'string',
+            'type' => ['required', 'in:1,2'],
+            'fid' => ['required', 'string'],
         ];
     }
 }

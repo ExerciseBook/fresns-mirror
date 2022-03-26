@@ -6,11 +6,14 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\Content\DTO;
+namespace App\Fresns\Words\File\DTO;
 
 use Fresns\DTO\DTO;
 
-class PhysicalDeletionContent extends DTO
+/**
+ * Class GetUploadTokenDTO.
+ */
+class GetUploadTokenDTO extends DTO
 {
     /**
      * @return array
@@ -18,10 +21,9 @@ class PhysicalDeletionContent extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['required', 'integer'],
-            'contentType' => ['required', 'integer'],
-            'contentId' => 'integer',
-            'contentFsid' => 'string',
+            'type' => ['required', 'in:1,2,3,4'],
+            'name' => ['required', 'string'],
+            'expireTime' => ['required', 'integer'],
         ];
     }
 }

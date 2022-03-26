@@ -13,7 +13,7 @@ use Fresns\DTO\DTO;
 /**
  * Class LogicalDeletionFileDTO.
  */
-class UploadFile extends DTO
+class UploadFileInfoDTO extends DTO
 {
     /**
      * @return array
@@ -30,7 +30,7 @@ class UploadFile extends DTO
             'tableKey' => ['required_without:tableId', 'string'],
             'aid' => ['nullable', 'string'],
             'uid' => ['nullable', 'integer'],
-            'file' =>['required', 'file'],
+            'fileInfo' => ['required', 'string'],
         ];
     }
 }

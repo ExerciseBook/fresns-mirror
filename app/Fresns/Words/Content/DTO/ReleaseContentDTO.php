@@ -6,11 +6,11 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\User\DTO;
+namespace App\Fresns\Words\Content\DTO;
 
 use Fresns\DTO\DTO;
 
-class VerifyUser extends DTO
+class ReleaseContentDTO extends DTO
 {
     /**
      * @return array
@@ -18,8 +18,8 @@ class VerifyUser extends DTO
     public function rules(): array
     {
         return [
-            'uid' => ['integer', 'required'],
-            'password' => 'string',
+            'type' => ['required', 'in:1,2'],
+            'logId' => ['required', 'integer'],
         ];
     }
 }

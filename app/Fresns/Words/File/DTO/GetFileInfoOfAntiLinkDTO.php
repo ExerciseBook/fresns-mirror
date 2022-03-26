@@ -11,10 +11,10 @@ namespace App\Fresns\Words\File\DTO;
 use Fresns\DTO\DTO;
 
 /***
- * Class GetFileUrlOfAntiLink
+ * Class GetFileUrlOfAntiLinkDTO
  * @package App\Fresns\Words\File\DTO
  */
-class GetFileInfoOfAntiLink extends DTO
+class GetFileInfoOfAntiLinkDTO extends DTO
 {
     /**
      * @return array
@@ -22,8 +22,8 @@ class GetFileInfoOfAntiLink extends DTO
     public function rules(): array
     {
         return [
-            'fileId' => ['integer', 'required_without:fid'],
-            'fid' => ['integer', 'required_without:fileId'],
+            'fileId' => ['required_without:fid', 'integer'],
+            'fid' => ['required_without:fileId', 'string'],
         ];
     }
 }

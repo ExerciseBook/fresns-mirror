@@ -6,11 +6,14 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Words\User\DTO;
+namespace App\Fresns\Words\File\DTO;
 
 use Fresns\DTO\DTO;
 
-class LogicalDeletionUser extends DTO
+/**
+ * Class LogicalDeletionFileDTO.
+ */
+class LogicalDeletionFileDTO extends DTO
 {
     /**
      * @return array
@@ -18,7 +21,8 @@ class LogicalDeletionUser extends DTO
     public function rules(): array
     {
         return [
-            'accountId' => 'integer',
+            'fileId' => ['required_without:fid', 'integer'],
+            'fid' => ['required_without:fileId', 'string'],
         ];
     }
 }
