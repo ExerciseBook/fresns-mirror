@@ -36,7 +36,7 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 
 | 配置 | 要求支持或启用 |
 | --- | --- |
-| PHP 扩展 | `fileinfo` |
+| PHP 扩展 | `fileinfo` `exif` |
 | PHP 函数 | `putenv` `symlink` `readlink` `proc_open` `shell_exec` `exec` |
 
 | 数据库 | MySQL 8.x |
