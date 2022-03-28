@@ -34,7 +34,7 @@ return [
     // Sidebar menus
     'sidebar_home' => '家',
     'sidebar_upgrades' => 'アップグレード',
-    'sidebar_admins' => 'adm adm',
+    'sidebar_admins' => 'アドミン',
     'sidebar_settings' => '設定',
     'sidebar_languages' => '言語',
     'sidebar_general' => '全般的',

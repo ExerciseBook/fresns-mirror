@@ -20,10 +20,12 @@ use Fresns\CmdWordManager\Exceptions\Constants\ExceptionConstant;
 class Wallet
 {
     /**
-     * @param  WalletIncreaseDTO  $wordBody
+     * @param $wordBody
      * @return array
+     *
+     * @throws \Throwable
      */
-    public function walletIncrease(WalletIncreaseDTO $wordBody)
+    public function walletIncrease($wordBody)
     {
         $dtoWordBody = new WalletIncreaseDTO($wordBody);
         $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
@@ -45,10 +47,10 @@ class Wallet
     }
 
     /**
-     * @param  WalletDecrease  $wordBody
+     * @param $wordBody
      * @return array
      */
-    public function walletDecrease(WalletDecrease $wordBody)
+    public function walletDecrease($wordBody)
     {
         $dtoWordBody = new WalletDecrease($wordBody);
         $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
@@ -229,7 +231,7 @@ class Wallet
         $OriginWallet = ['balance' => $WalletBalance['balance'] - $wordBody->amount];
         AccountWallet::where('account_id', $accountId)->update($OriginWallet);
 
-        return ['code' => 0, 'msg' => 'success', 'data'=>[]];
+        return ['code' => 0, 'msg' => 'success', 'data' => []];
     }
 
     /**

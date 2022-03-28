@@ -624,7 +624,7 @@ class FsControllerApi extends FsApiController
         $input['type'] = $request->input('type');
         $input['scene'] = $request->input('scene');
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getUploadToken($input);
-        if ($fresnsResp->isErrorResponse) {
+        if ($fresnsResp->isErrorResponse()) {
             return $fresnsResp->errorResponse();
         }
         $output = $fresnsResp->getData();

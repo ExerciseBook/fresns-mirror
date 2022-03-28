@@ -26,8 +26,10 @@ use Illuminate\Support\Facades\Hash;
 class User
 {
     /**
-     * @param  AddUserDTO  $dtoWordBody
+     * @param $wordBody
      * @return array
+     *
+     * @throws \Throwable
      */
     public function addUser($wordBody)
     {
@@ -68,8 +70,10 @@ class User
     }
 
     /**
-     * @param  VerifyUserDTO  $wordBody
+     * @param $wordBody
      * @return array
+     *
+     * @throws \Throwable
      */
     public function verifyUser($wordBody)
     {
@@ -85,8 +89,10 @@ class User
     }
 
     /**
-     * @param  GetUserDetailDTO  $wordBody
+     * @param $wordBody
      * @return mixed
+     *
+     * @throws \Throwable
      */
     public function getUserDetail($wordBody)
     {

@@ -27,6 +27,8 @@ class Basis
     /**
      * @param $wordBody
      * @return mixed
+     *
+     * @throws \Throwable
      */
     public function verifyUrlSign($wordBody)
     {
@@ -37,7 +39,7 @@ class Basis
     }
 
     /**
-     * @param  VerifySignDTO  $wordBody
+     * @param $wordBody
      * @return array|string
      *
      * @throws \Throwable
@@ -149,8 +151,10 @@ class Basis
     }
 
     /**
-     * @param  CheckCodeDTO  $wordBody
+     * @param $wordBody
      * @return array
+     *
+     * @throws \Throwable
      */
     public function checkCode($wordBody)
     {
