@@ -16,7 +16,7 @@ class File extends Model
     use HasFactory;
     use Traits\FileTypeTrait;
     use Traits\FileInfoTrait;
-    
+
     const TYPE_IMAGE = 1;
     const TYPE_VIDEO = 2;
     const TYPE_AUDIO = 3;
@@ -44,16 +44,16 @@ class File extends Model
     {
         $fileType = $this->file_type;
         $tableType = $this->table_type;
-        
-        $fileTypeDir = match($fileType) {
+
+        $fileTypeDir = match ($fileType) {
             1 => 'images',
             2 => 'videos',
             3 => 'audios',
-            4 => 'docs',
+            4 => 'documents',
             default => throw new \LogicException("unknown file_type $fileType"),
         };
 
-        $tableTypeDir = match($tableType) {
+        $tableTypeDir = match ($tableType) {
             1 => '/mores/',
             2 => '/configs/system/',
             3 => '/configs/operating/',
@@ -69,8 +69,8 @@ class File extends Model
         };
 
         $replaceTableTypeDir = str_replace(
-            ['{YYYYMM}', '{DD}',], 
-            [date('Ym'), date('d'),], 
+            ['{YYYYMM}', '{DD}'],
+            [date('Ym'), date('d')],
             $tableTypeDir
         );
 
