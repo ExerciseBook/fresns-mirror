@@ -49,7 +49,7 @@ class FresnsCmdWordsConfig extends BasePluginConfig
     public const FRESNS_CMD_ANTI_LINK_IMAGE = 'fresns_cmd_anti_link_image';
     public const FRESNS_CMD_ANTI_LINK_VIDEO = 'fresns_cmd_anti_link_video';
     public const FRESNS_CMD_ANTI_LINK_AUDIO = 'fresns_cmd_anti_link_audio';
-    public const FRESNS_CMD_ANTI_LINK_DOC = 'fresns_cmd_anti_link_doc';
+    public const FRESNS_CMD_ANTI_LINK_DOCUMENT = 'fresns_cmd_anti_link_document';
     public const FRESNS_CMD_PHYSICAL_DELETION_FILE = 'fresns_cmd_physical_deletion_file';
     public const FRESNS_CMD_PHYSICAL_DELETION_TEMP_FILE = 'fresns_cmd_physical_deletion_temp_file';
 
@@ -84,7 +84,7 @@ class FresnsCmdWordsConfig extends BasePluginConfig
         self::FRESNS_CMD_ANTI_LINK_IMAGE => 'antiLinkImageHandler',
         self::FRESNS_CMD_ANTI_LINK_VIDEO => 'antiLinkVideoHandler',
         self::FRESNS_CMD_ANTI_LINK_AUDIO => 'antiLinkAudioHandler',
-        self::FRESNS_CMD_ANTI_LINK_DOC => 'antiLinkDocHandler',
+        self::FRESNS_CMD_ANTI_LINK_DOCUMENT => 'antiLinkDocHandler',
         self::FRESNS_CMD_PHYSICAL_DELETION_FILE => 'physicalDeletionFileHandler',
         self::FRESNS_CMD_PHYSICAL_DELETION_TEMP_FILE => 'physicalDeletionTempFileHandler',
         // Content

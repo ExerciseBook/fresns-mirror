@@ -930,7 +930,7 @@ class FresnsCmdWords extends BasePlugin
                     $item['transcodingState'] = $append['transcoding_state'];
                 }
                 if ($type == 4) {
-                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_DOC;
+                    $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_DOCUMENT;
                     $input['fid'] = $fid;
                     $resp = CmdRpcHelper::call(FresnsCmdWords::class, $cmd, $input);
                     if (CmdRpcHelper::isErrorCmdResp($resp)) {
@@ -1213,7 +1213,7 @@ class FresnsCmdWords extends BasePlugin
                 return $this->pluginError(ErrorCodeService::PLUGINS_PARAM_ERROR);
             }
 
-            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_DOC;
+            $cmd = FresnsCmdWordsConfig::FRESNS_CMD_ANTI_LINK_DOCUMENT;
             $input = [];
             $input['fid'] = $fid;
             $resp = CmdRpcHelper::call($pluginClass, $cmd, $input);
