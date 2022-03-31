@@ -675,7 +675,7 @@ class PostsService
         Group::where('id', $draftPost['group_id'])->increment('post_count');
         // Notification
         $this->sendAtMessages($postId, $draftId);
-        // Add stats: member_stats > post_publish_count
+        // Add stats: user_stats > post_publish_count
         $this->memberStats($draftId);
         // Analyze the hashtag and domain
         $this->analisisHashtag($draftId, 1);
@@ -772,7 +772,7 @@ class PostsService
         return true;
     }
 
-    // Add stats: member_stats > post_publish_count
+    // Add stats: user_stats > post_publish_count
     // Add stats: Configs item_key = post_counts
     public function memberStats($draftId)
     {

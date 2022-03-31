@@ -472,7 +472,7 @@ class CommentsService extends FsService
         // Notification
         $this->sendAtMessages($commentId, $draftId);
         $this->sendCommentMessages($commentId, $draftId, 1);
-        // Add stats: member_stats > post_publish_count
+        // Add stats: user_stats > post_publish_count
         $this->memberStats($draftId);
         // Analyze the hashtag and domain
         $this->analisisHashtag($draftId, 1);
@@ -501,7 +501,7 @@ class CommentsService extends FsService
         // Notification
         $this->sendAtMessages($commentId, $draftId, 2);
         $this->sendCommentMessages($commentId, $draftId, 1);
-        // Add stats: member_stats > post_publish_count
+        // Add stats: user_stats > post_publish_count
         // Analyze the hashtag
         $this->analisisHashtag($draftId, 2);
         $this->domainStore($commentId, $draftId, 2);
