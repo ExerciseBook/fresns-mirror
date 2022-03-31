@@ -23,16 +23,16 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 
 | 框架 | 版本 | 用途 |
 | --- | --- | --- |
-| [Composer](https://github.com/composer/composer) | 2.2.9 | 软体包管理系统 |
-| [Laravel Framework](https://github.com/laravel/framework) | 8.83.5 | 主程序框架 |
-| [Laravel Lang](https://github.com/Laravel-Lang/lang) | 10.4.11 | 框架语言包 |
-| [Laravel Excel](https://github.com/SpartnerNL/Laravel-Excel) | 3.1.37 | 框架 Excel 导入和导出 |
-| [PhpZip](https://github.com/Ne-Lexa/php-zip) | 4.0.1 | 扩展 zip 压缩包的 PHP 库 |
-| [Bootstrap](https://getbootstrap.com/) | 5.1.3 | 内置前端框架 |
-| [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.8.1 | 内置前端图标字体库 |
-| [jQuery](https://github.com/jquery/jquery) | 3.6.0 | 内置 JS 库 |
-| [Select2](https://github.com/select2/select2) | 4.1.0 | 内置 Select2 选择框 |
-| [Base64 JS](https://github.com/dankogai/js-base64) | 3.7.2 | 内置 Base64 转码器 |
+| [Composer](https://github.com/composer/composer) | 2.3 | 软体包管理系统 |
+| [Laravel Framework](https://github.com/laravel/framework) | 8.83 | 主程序框架 |
+| [Laravel Lang](https://github.com/Laravel-Lang/lang) | 10.4 | 框架语言包 |
+| [Laravel Excel](https://github.com/SpartnerNL/Laravel-Excel) | 3.1 | 框架 Excel 导入和导出 |
+| [PhpZip](https://github.com/Ne-Lexa/php-zip) | 4.0 | 扩展 zip 压缩包的 PHP 库 |
+| [Bootstrap](https://getbootstrap.com/) | 5.1 | 内置前端框架 |
+| [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.8 | 内置前端图标字体库 |
+| [jQuery](https://github.com/jquery/jquery) | 3.6 | 内置 JS 库 |
+| [Select2](https://github.com/select2/select2) | 4.1 | 内置 Select2 选择框 |
+| [Base64 JS](https://github.com/dankogai/js-base64) | 3.7 | 内置 Base64 转码器 |
 
 | 配置 | 要求支持或启用 |
 | --- | --- |
