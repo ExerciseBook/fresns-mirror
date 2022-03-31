@@ -14,14 +14,6 @@ use App\Models\User;
 
 class AccountService
 {
-    /**
-     * @param int $accountId
-     * @param string $langTag
-     * @param string $timezone
-     * @return mixed
-     *
-     * @throws \Exception
-     */
     public function getAccountDetail($accountId, $langTag, $timezone)
     {
         $account = Account::withTrashed()->find($accountId);
@@ -32,7 +24,7 @@ class AccountService
             $userProfile = $user->getUserProfile($timezone);
             $userMainRole = $user->getUserMainRole($timezone, $langTag);
             $userList[] = array_merge($userProfile, $userMainRole);
-        };
+        }
 
         $accountInfo = $account->getAccountInfo($timezone);
         $item['connects'] = $account->getAccountConnects();
