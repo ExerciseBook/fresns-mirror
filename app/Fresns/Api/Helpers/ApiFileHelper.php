@@ -252,44 +252,48 @@ class ApiFileHelper
                         $input['fid'] = $m['fid'];
                         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileUrlOfAntiLink($input);
                         if ($fresnsResp->isErrorResponse()) {
-                            return $fresnsResp->errorResponse(); //报错时，输出全量参数(code+message+data)
+                            // When an error is reported, the full amount of parameters is output
+                            // code + message + data
+                            return $fresnsResp->errorResponse();
                         }
-                        $resp = $fresnsResp->getData();
-                        $m['imageRatioUrl'] = $resp['imageRatioUrl'];
-                        $m['imageSquareUrl'] = $resp['imageSquareUrl'];
-                        $m['imageBigUrl'] = $resp['imageBigUrl'];
+                        $m['imageRatioUrl'] = $fresnsResp->getData('imageRatioUrl');
+                        $m['imageSquareUrl'] = $fresnsResp->getData('imageSquareUrl');
+                        $m['imageBigUrl'] = $fresnsResp->getData('imageBigUrl');
                     }
                     // Video
                     if (isset($m['videoCover'])) {
                         $input['fid'] = $m['fid'];
                         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileUrlOfAntiLink($input);
                         if ($fresnsResp->isErrorResponse()) {
-                            return $fresnsResp->errorResponse(); //报错时，输出全量参数(code+message+data)
+                            // When an error is reported, the full amount of parameters is output
+                            // code + message + data
+                            return $fresnsResp->errorResponse();
                         }
-                        $resp = $fresnsResp->getData();
-                        $m['videoCover'] = $resp['videoCover'];
-                        $m['videoGif'] = $resp['videoGif'];
-                        $m['videoUrl'] = $resp['videoUrl'];
+                        $m['videoCover'] = $fresnsResp->getData('videoCover');
+                        $m['videoGif'] = $fresnsResp->getData('videoGif');
+                        $m['videoUrl'] = $fresnsResp->getData('videoUrl');
                     }
                     // Audio
                     if (isset($m['audioUrl'])) {
                         $input['fid'] = $m['fid'];
                         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileUrlOfAntiLink($input);
                         if ($fresnsResp->isErrorResponse()) {
-                            return $fresnsResp->errorResponse(); //报错时，输出全量参数(code+message+data)
+                            // When an error is reported, the full amount of parameters is output
+                            // code + message + data
+                            return $fresnsResp->errorResponse();
                         }
-                        $resp = $fresnsResp->getData();
-                        $m['audioUrl'] = $resp['audioUrl'];
+                        $m['audioUrl'] = $fresnsResp->getData('audioUrl');
                     }
                     // Document
                     if (isset($m['documentUrl'])) {
                         $input['fid'] = $m['fid'];
                         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileUrlOfAntiLink($input);
                         if ($fresnsResp->isErrorResponse()) {
-                            return $fresnsResp->errorResponse(); //报错时，输出全量参数(code+message+data)
+                            // When an error is reported, the full amount of parameters is output
+                            // code + message + data
+                            return $fresnsResp->errorResponse();
                         }
-                        $resp = $fresnsResp->getData();
-                        $m['documentUrl'] = $resp['documentUrl'];
+                        $m['documentUrl'] = $fresnsResp->getData('documentUrl');
                     }
                 }
             }
