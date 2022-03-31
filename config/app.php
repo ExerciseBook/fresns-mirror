@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'zh-Hans',
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'zh-Hans',
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +106,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'zh-Hans-SG',
 
     /*
     |--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY', 'base64:GhuNGZUo+6sw93uN2ikdi8NyOgcQSTA8g0x5eVss1bc='),
 
     'cipher' => 'AES-256-CBC',
 
@@ -163,17 +163,13 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
-         * Package Service Providers...
-         */
-
-        /*
          * Fresns Service Providers...
          */
         App\Fresns\Install\Providers\InstallServiceProvider::class,
         App\Fresns\Panel\Providers\PanelServiceProvider::class,
         App\Fresns\Words\Providers\CmdWordServiceProvider::class,
         App\Fresns\Subscribe\Providers\SubscribeServiceProvider::class,
-        App\Fresns\Api\Providers\FresnsApiServiceProvider::class,
+        App\Fresns\Api\Providers\ApiServiceProvider::class,
 
     ],
 
