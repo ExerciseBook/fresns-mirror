@@ -16,6 +16,7 @@ use App\Fresns\Api\FsDb\FresnsDialogs\FresnsDialogsConfig;
 use App\Fresns\Api\FsDb\FresnsUsers\FresnsUsersConfig;
 use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\Helpers\ApiFileHelper;
+use App\Helpers\DateHelper;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -71,7 +72,7 @@ class FresnsDialogsResource extends BaseAdminResource
                 $user['uid'] = $userInfo->uid;
                 $user['username'] = $userInfo->username;
                 $user['nickname'] = $userInfo->nickname;
-                $user['avatar'] = ApiFileHelper::getImageAvatarUrl($user['avatar']);
+                $user['avatar'] = ApiFileHelper::getUserAvatar($userInfo->uid);
                 $user['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($userInfo->decorate_file_id, $userInfo->decorate_file_url);
                 $user['verifiedStatus'] = $userInfo->verified_status;
                 $user['verifiedIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($userInfo->verified_file_id, $userInfo->verified_file_url);
@@ -79,7 +80,7 @@ class FresnsDialogsResource extends BaseAdminResource
             }
         }
         $messageId = $this->latest_message_id;
-        $messageTime = $this->latest_message_time;
+        $messageTime = DateHelper::fresnsFormatDateTime($this->latest_message_time);
         $messageBrief = $this->latest_message_brief;
 
         // Number of unread
