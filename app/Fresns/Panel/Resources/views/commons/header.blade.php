@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fresns-navbar">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('panel.dashboard') }}"><img src="{{ @asset('/static/images/logo.png') }}" alt="Fresns" height="30"></a>
+            <a class="navbar-brand" href="{{ route('panel.dashboard') }}"><img src="{{ @asset('/static/images/panel-logo.png') }}" alt="Fresns" height="30"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#headerNavbar" aria-controls="headerNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -58,13 +58,13 @@
                         ]) ? 'active' : '' }}" href="{{ route('panel.menus.index') }}">{{ __('FsLang::panel.menu_clients') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is([
                         'panel.iframe.market'
-                        ]) ? 'active' : '' }}" href="{{ route('panel.iframe.market', ['url' => 'https://fresns.org']) }}">{{ __('FsLang::panel.menu_market') }}</a></li>
+                        ]) ? 'active' : '' }}" href="{{ route('panel.iframe.market', ['url' => 'https://market.fresns.cn']) }}">{{ __('FsLang::panel.menu_market') }}</a></li>
                 </ul>
                 <div class="navbar-nav">
                     <!--lang-->
                     <div class="btn-group d-flex flex-column">
                         <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-translate"></i> {{ $langs[$locale] ?? '' }}
+                            <i class="bi bi-translate"></i> {{ $langs[\App::getLocale()] ?? '' }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             @foreach($langs as $code => $lang)
