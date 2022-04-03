@@ -30,6 +30,7 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 | [PhpZip](https://github.com/Ne-Lexa/php-zip) | 4.0 | 扩展 zip 压缩包的 PHP 库 |
 | [Bootstrap](https://getbootstrap.com/) | 5.1 | 内置前端框架 |
 | [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.8 | 内置前端图标字体库 |
+| [Alpine JS](https://github.com/alpinejs/alpine) | 3.9 | 内置 JS 库 |
 | [jQuery](https://github.com/jquery/jquery) | 3.6 | 内置 JS 库 |
 | [Select2](https://github.com/select2/select2) | 4.1 | 内置 Select2 选择框 |
 | [Base64 JS](https://github.com/dankogai/js-base64) | 3.7 | 内置 Base64 转码器 |
