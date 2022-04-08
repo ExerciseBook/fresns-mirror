@@ -70,8 +70,6 @@ class PluginController extends Controller
                 $pcConfig->item_key = $pcKey;
                 $pcConfig->item_type = 'string';
                 $pcConfig->item_tag = 'themes';
-                $pcConfig->is_enable = 1;
-                $pcConfig->is_restful = 1;
             }
             $pcConfig->item_value = $request->$pcKey;
             $pcConfig->save();
@@ -89,8 +87,6 @@ class PluginController extends Controller
                 $mobileConfig->item_key = $mobileKey;
                 $mobileConfig->item_type = 'string';
                 $mobileConfig->item_tag = 'themes';
-                $mobileConfig->is_enable = 1;
-                $mobileConfig->is_restful = 1;
             }
 
             $mobileConfig->item_value = $request->$mobileKey;
@@ -123,20 +119,46 @@ class PluginController extends Controller
         ));
     }
 
-    public function update(Plugin $plugin, Request $request)
+    public function update(Request $request)
     {
-        if ($request->has('is_enable')) {
-            $plugin->is_enable = $request->is_enable;
+        if ($request->get('is_enable') != 0) {
+            \Artisan::call('plugin:activate', ['plugin' => $request->plugin]);
+        } else {
+            \Artisan::call('plugin:deactivate', ['plugin' => $request->plugin]);
         }
-        $plugin->save();
 
         return $this->updateSuccess();
     }
 
-    public function destroy(Plugin $plugin)
+    public function uninstall(Request $request)
     {
-        $plugin->delete();
+        if ($request->get('clearData') == 1) {
+            \Artisan::call('plugin:uninstall', ['plugin' => $request->plugin, '--cleardata' => true]);
+        } else {
+            \Artisan::call('plugin:uninstall', ['plugin' => $request->plugin, '--cleardata' => false]);
+        }
 
-        return $this->deleteSuccess();
+        return response(\Artisan::output()."\n".__('FsLang::tips.uninstallSuccess'));
+    }
+
+    public function updateTheme(Plugin $theme, Request $request)
+    {
+        if ($request->has('is_enable')) {
+            $theme->is_enable = $request->is_enable;
+        }
+        $theme->save();
+
+        return $this->updateSuccess();
+    }
+
+    public function uninstallTheme(Request $request)
+    {
+        if ($request->get('clearData') == 1) {
+            \Artisan::call('theme:uninstall', ['theme' => $request->theme, '--cleandata' => true]);
+        } else {
+            \Artisan::call('theme:uninstall', ['theme' => $request->theme, '--cleandata' => false]);
+        }
+
+        return response()->json(['message' => \Artisan::output().__('FsLang::tips.uninstallSuccess')], 200);
     }
 }
