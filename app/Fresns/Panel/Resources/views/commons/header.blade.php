@@ -43,9 +43,9 @@
                         'panel.user-profile.*'
                         ]) ? 'active' : '' }}" href="{{ route('panel.editor.index') }}">{{ __('FsLang::panel.menu_expands') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is([
-                        'panel.list.*',
+                        'panel.plugin.*',
                         'panel.iframe.plugin'
-                        ]) ? 'active' : '' }} " href="{{ route('panel.list.index') }}">{{ __('FsLang::panel.menu_plugins') }}</a></li>
+                        ]) ? 'active' : '' }} " href="{{ route('panel.plugin.list') }}">{{ __('FsLang::panel.menu_plugins') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is([
                         'panel.menus.*',
                         'panel.columns.*',
