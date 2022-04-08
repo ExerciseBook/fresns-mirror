@@ -42,7 +42,7 @@ class InstallController extends Controller
         }
 
         $email = null;
-        if ($step === 6) {
+        if ($step === 5) {
             $email = Account::first()?->value('email');
         }
 
@@ -59,11 +59,20 @@ class InstallController extends Controller
 
     public function install()
     {
-        \request()->validate([
-            'step' => 'required|integer',
-            'lang' => 'required_if:step,1',
-            'admin_info.password' => 'required_if:step,5|confirmed',
-        ]);
+        try {
+            \request()->validate([
+                'step' => 'required|integer',
+                'lang' => 'required_if:step,1',
+                'admin_info.password' => 'required_if:step,5|confirmed',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $exception) {
+            return \response()->json([
+                'step' => \request('step') ?? 1,
+                'code' => 500,
+                'message' => __('Install::install.server_status_failure').' '.$exception->validator->errors()->first(),
+                'data' => [],
+            ]);
+        }
 
         $step = (int) \request()->input('step');
 
@@ -164,7 +173,11 @@ class InstallController extends Controller
                 ]);
             }
 
-            $this->writeInstallTime();
+            $result['email'] = Account::first()?->value('email');
+
+            if (! empty($result['email'])) {
+                $this->writeInstallTime();
+            }
         }
 
         return \response()->json([
@@ -190,7 +203,7 @@ class InstallController extends Controller
         $extensionsCheckResult = ! in_array(false, array_column($extensionsCheck, 'loaded'));
 
         $functionsCheck = $this->functionCheck();
-        $functionsCheckResult = !in_array(true, array_column($functionsCheck, 'function_disabled'));
+        $functionsCheckResult = ! in_array(true, array_column($functionsCheck, 'function_disabled'));
 
         $data = [
             [
@@ -224,7 +237,7 @@ class InstallController extends Controller
                 'tips' => $dirPermissionsCheckResult ? __('Install::install.server_status_success') : __('Install::install.server_status_failure'),
                 'class' => $dirPermissionsCheckResult ? 'bg-success' : 'bg-danger',
                 'message' => $dirPermissionsCheckResult ? '' : sprintf('%s: %s', __('Install::install.server_status_not_writable'), implode(', ', array_column(array_filter($dirPermissions, function ($item) {
-                    return !$item['writable'];
+                    return ! $item['writable'];
                 }), 'dir'))),
             ],
             [
@@ -234,7 +247,7 @@ class InstallController extends Controller
                 'tips' => $extensionsCheckResult ? __('Install::install.server_status_success') : __('Install::install.server_status_failure'),
                 'class' => $extensionsCheckResult ? 'bg-success' : 'bg-danger',
                 'message' => $extensionsCheckResult ? '' : sprintf('%s: %s', __('Install::install.server_status_not_installed'), implode(', ', array_column(array_filter($extensionsCheck, function ($item) {
-                    return !$item['loaded'];
+                    return ! $item['loaded'];
                 }), 'extension'))),
             ],
             [
@@ -315,6 +328,7 @@ class InstallController extends Controller
             'symlink',
             'readlink',
             'proc_open',
+            'passthru',
         ];
 
         $disableFunction = explode(',', ini_get('disable_functions'));
@@ -349,6 +363,7 @@ class InstallController extends Controller
         $template['DB_DATABASE'] = $data['database']['DB_DATABASE'];
         $template['DB_USERNAME'] = $data['database']['DB_USERNAME'];
         $template['DB_PASSWORD'] = $data['database']['DB_PASSWORD'];
+        // $template['DB_TIMEZONE'] = $data['database']['DB_TIMEZONE'];
         $template['DB_PREFIX'] = $data['database']['DB_PREFIX'];
         $template['SESSION_DOMAIN'] = \request()->getHttpHost();
 
@@ -362,6 +377,8 @@ class InstallController extends Controller
 
     protected function installMysqlDatabase()
     {
+        (new \Illuminate\Database\DatabaseServiceProvider(app()))->register();
+
         $cmds = [
             'key:generate',
             'migrate',
@@ -381,7 +398,6 @@ class InstallController extends Controller
             } catch (\Throwable $e) {
                 $output[] = \Artisan::output();
                 $output[] = $e->getMessage();
-                $output[] = implode('', $e->getTrace());
                 break;
             }
 
@@ -418,7 +434,7 @@ class InstallController extends Controller
 
     protected function writeInstallTime()
     {
-        $installTime = now()->toDateTimeString();
+        $installTime = \App\Helpers\DateHelper::fresnsSqlCurrentDateTime();
 
         $item = [
             'item_key' => 'install_datetime',

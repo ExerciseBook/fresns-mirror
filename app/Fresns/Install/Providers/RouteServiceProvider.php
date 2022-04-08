@@ -42,8 +42,13 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->configureRateLimiting();
 
-        Route::middleware('web')->group(__DIR__.'/../Routes/web.php');
-        Route::middleware('api')->group(__DIR__.'/../Routes/api.php');
+        Route::middlewareGroup('cookie', [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        ]);
+
+        Route::middleware(['web'])->group(__DIR__.'/../Routes/web.php');
+        Route::middleware(['api', 'cookie'])->group(__DIR__.'/../Routes/api.php');
     }
 
     protected function configureRateLimiting()
