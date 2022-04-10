@@ -25,6 +25,7 @@ use App\Fresns\Api\FsDb\FresnsSessionKeys\FresnsSessionKeys;
 use App\Fresns\Api\FsDb\FresnsUserRoles\FresnsUserRolesService;
 use App\Fresns\Api\FsDb\FresnsUsers\FresnsUsers;
 use App\Fresns\Api\Helpers\StrHelper;
+use App\Fresns\Api\Http\Base\FsApiConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 

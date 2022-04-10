@@ -34,6 +34,8 @@ use App\Fresns\Api\Helpers\ApiConfigHelper;
 use App\Fresns\Api\Helpers\ApiFileHelper;
 use App\Fresns\Api\Helpers\ApiLanguageHelper;
 use App\Fresns\Api\Helpers\DateHelper;
+use App\Helpers\InteractiveHelper;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class FsService
@@ -289,6 +291,8 @@ class FsService
                 $stats['extcredits5'] = $userStats['extcredits5'];
             }
             $data['stats'] = $stats;
+
+            $data['archives'] = $user->getUserArchives($langTag);
 
             $userIconsArr = FresnsUserIcons::where('user_id', $viewUid)->get()->toArray();
             $iconsArr = [];
