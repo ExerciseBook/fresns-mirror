@@ -9,9 +9,12 @@
 namespace App\Fresns\Api\FsDb\FresnsUsers;
 
 use App\Fresns\Api\Base\Models\BaseAdminModel;
+use App\Models\Traits\UserServiceTrait;
 
 class FsModel extends BaseAdminModel
 {
+    use UserServiceTrait;
+
     protected $table = FsConfig::CFG_TABLE;
 
     // Front-end form field mapping
