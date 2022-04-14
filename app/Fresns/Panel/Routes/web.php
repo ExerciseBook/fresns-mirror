@@ -9,6 +9,7 @@
 use App\Fresns\Panel\Http\Controllers\AdminController;
 use App\Fresns\Panel\Http\Controllers\BlockWordController;
 use App\Fresns\Panel\Http\Controllers\ClientMenuController;
+use App\Fresns\Panel\Http\Controllers\CodeMessageController;
 use App\Fresns\Panel\Http\Controllers\ColumnController;
 use App\Fresns\Panel\Http\Controllers\ConfigController;
 use App\Fresns\Panel\Http\Controllers\DashboardController;
@@ -260,6 +261,8 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::get('language-packs', [LanguagePackController::class, 'index'])->name('language.packs.index');
         Route::get('language-packs/{langTag}/edit', [LanguagePackController::class, 'edit'])->name('language.packs.edit');
         Route::put('language-packs/{langTag}', [LanguagePackController::class, 'update'])->name('language.packs.update');
+        // code messages
+        Route::get('code-messages', [CodeMessageController::class, 'index'])->name('code.messages.index');
         // session key
         Route::resource('keys', SessionKeyController::class)->only([
             'index', 'store', 'update', 'destroy',
