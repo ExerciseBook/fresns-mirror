@@ -8,7 +8,7 @@
 
 namespace App\Console\Commands\Upgrade;
 
-use App\Utilities\VersionUtility;
+use App\Utilities\AppUtility;
 use Illuminate\Console\Command;
 
 class Upgrade1Command extends Command
@@ -48,7 +48,7 @@ class Upgrade1Command extends Command
             '--class' => 'UserRolesTableSeeder',
         ]);
 
-        VersionUtility::editVersion('1.5.0', 1);
+        AppUtility::editVersion('1.5.0', 1);
 
         return Command::SUCCESS;
     }
