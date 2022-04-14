@@ -37,7 +37,7 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 
 | 配置 | 要求支持或启用 |
 | --- | --- |
-| PHP 扩展 | `fileinfo` `exif` `redis` |
+| PHP 扩展 | `fileinfo` `exif` |
 | PHP 函数 | `putenv` `symlink` `readlink` `proc_open` `passthru` |
 
 | 数据库 | MySQL 8.x |
@@ -47,18 +47,18 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 
 ## 使用说明
 
-本仓库为研发代码仓库，没有 vendor 引用库文件，如果使用本仓库代码包安装，需要基于命令行执行 composer 命令安装 vendor 引用库文件。如果觉得麻烦，也可以到官网[下载完整包](https://apps.fresns.cn/)，官网安装包已经包含引用库文件，无需再执行命令行安装。
+本仓库为研发代码仓库，没有 vendor 引用库文件，如果使用本仓库代码包安装，需要基于命令行执行 composer 命令安装 vendor 引用库文件。如果觉得麻烦，也可以到官网[下载完整包](https://fresns.cn/guide/install.html)，官网安装包已经包含引用库文件，无需再执行命令行安装。
 
 **部署流程**
 
 - 1、下载本仓库[发行版代码包](https://gitee.com/fresns/fresns/releases)，上传到业务服务器解压；
-- 2、根据官网[安装教程](https://fresns.cn/guide/install.html)配置 Web 服务器；
-- 3、在「主程序根目录」终端执行 composer 命令；
+- 2、在「主程序根目录」终端执行 composer 命令；
     - 开发环境部署 `composer install`
     - 生产环境部署 `composer install --optimize-autoloader --no-dev`
-- 4、其余配置流程同官网[安装教程](https://fresns.cn/guide/install.html)一致。
-
-*请确保服务器已经安装了 Composer 软体包管理工具*
+- 3、在「主程序根目录」终端执行 php artisan 指令，配置插件管理器；
+    - `php artisan vendor:publish --provider="Fresns\PluginManager\Providers\PluginServiceProvider"`
+- 4、根据官网[安装教程](https://fresns.cn/guide/install.html)配置 Web 服务器；
+- 5、访问 `网址/install` 执行安装。
 
 ## 加入我们
 
