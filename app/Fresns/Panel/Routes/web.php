@@ -284,7 +284,9 @@ Route::middleware(['panelAuth'])->group(function () {
 
     // plugin manage
     Route::prefix('plugin')->group(function () {
+        Route::put('install', [PluginController::class, 'install'])->name('plugin.install');
         Route::patch('update', [PluginController::class, 'update'])->name('plugin.update');
+        Route::patch('update-code', [PluginController::class, 'updateCode'])->name('plugin.update.code');
         Route::delete('uninstall', [PluginController::class, 'uninstall'])->name('plugin.uninstall');
         Route::patch('updateTheme', [PluginController::class, 'updateTheme'])->name('plugin.updateTheme');
         Route::delete('uninstallTheme', [PluginController::class, 'uninstallTheme'])->name('plugin.uninstallTheme');

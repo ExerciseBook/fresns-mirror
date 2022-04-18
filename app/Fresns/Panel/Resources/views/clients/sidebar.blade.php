@@ -13,8 +13,8 @@
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.code.messages.*') ? 'active' : '' }}" href="{{ route('panel.code.messages.index') }}">{{ __('FsLang::panel.sidebar_code_messages') }}</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.keys.*') ? 'active' : '' }} " href="{{ route('panel.keys.index') }}">{{ __('FsLang::panel.sidebar_keys') }}</a></li>
-                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.engines.*', 'panel.themes.*') ? 'active' : '' }}" href="{{ route('panel.engines.index') }}">{{ __('FsLang::panel.sidebar_website') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.apps.*') ? 'active' : '' }}" href="{{ route('panel.apps.index') }}">{{ __('FsLang::panel.sidebar_apps') }}</a></li>
+                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.engines.*', 'panel.themes.*') ? 'active' : '' }}" href="{{ route('panel.engines.index') }}">{{ __('FsLang::panel.sidebar_website') }}</a></li>
                 </ul>
             </div>
         </div>

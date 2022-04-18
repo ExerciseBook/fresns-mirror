@@ -119,6 +119,23 @@ class PluginController extends Controller
         ));
     }
 
+    public function install(Request $request)
+    {
+        if ($request->file('plugin_zipball')) {
+            // php artisan plugin:install ...
+            // php artisan theme:install ...
+
+            return $this->installSuccess();
+        } elseif ($request->get('plugin_unikey')) {
+            // php artisan plugin:install ...
+            // php artisan theme:install ...
+
+            return $this->installSuccess();
+        }
+
+        return back()->with('failure', __('FsLang::tips.installFailure'));
+    }
+
     public function update(Request $request)
     {
         if ($request->get('is_enable') != 0) {
@@ -128,6 +145,20 @@ class PluginController extends Controller
         }
 
         return $this->updateSuccess();
+    }
+
+    public function updateCode(Request $request)
+    {
+        $plugin = Plugin::where('unikey', $request->input('pluginUnikey'))->first();
+
+        if (! empty($plugin)) {
+            $plugin->upgrade_code = $request->upgradeCode;
+            $plugin->save();
+
+            return $this->updateSuccess();
+        }
+
+        return back()->with('failure', __('FsLang::tips.plugin_not_exists'));
     }
 
     public function uninstall(Request $request)
