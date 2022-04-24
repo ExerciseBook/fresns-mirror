@@ -201,23 +201,6 @@ class ErrorCodeService
     const CONTENT_TYPES_ERROR = 30913;
     const CONTENT_COUNT_ERROR = 30914;
 
-    // Console Error Message
-    const SETTING_ERROR = 40000;
-    const SAVE_ERROR = 40001;
-    const DELETE_ERROR = 40002;
-    const LANGUAGE_SETTING_ERROR = 40003;
-    const BACKEND_PATH_ERROR = 40004;
-    const DELETE_ADMIN_ERROR = 40005;
-    const KEY_NAME_ERROR = 40006;
-    const KEY_PLATFORM_ERROR = 40007;
-    const KEY_PLUGIN_ERROR = 40008;
-
-    // Console Manage Extensions
-    const UNINSTALL_EXTENSION_ERROR = 40100;
-    const PLUGIN_UNIKEY_ERROR = 40101;
-    const FOLDER_NAME_EMPTY_ERROR = 40102;
-    const EXTENSION_DOWMLOAD_ERROR = 40103;
-
     private static $CODE_MSG_MAP = [
         self::CODE_OK                               => 'ok',
 
@@ -409,23 +392,6 @@ class ErrorCodeService
         self::CONTENT_CHECK_PARAMS_ERROR            => '内容、文件、扩展内容，三种不可全部为空，至少其中一个有值',
         self::CONTENT_TYPES_ERROR                   => '内容类型参数错误或者字符数达到上限',
         self::CONTENT_COUNT_ERROR                   => '内容超过限制字数',
-
-        // Console Error Message
-        self::SETTING_ERROR                         => '设置出错',
-        self::SAVE_ERROR                            => '保存失败',
-        self::DELETE_ERROR                          => '删除失败',
-        self::LANGUAGE_SETTING_ERROR                => '多语言设置错误',
-        self::BACKEND_PATH_ERROR                    => '该入口命名已被占用',
-        self::DELETE_ADMIN_ERROR                    => '不允许删除自己',
-        self::KEY_NAME_ERROR                        => '密钥名称必填',
-        self::KEY_PLATFORM_ERROR                    => '请选择密钥应用平台',
-        self::KEY_PLUGIN_ERROR                      => '请选择关联插件',
-
-        // Console Manage Extensions
-        self::PLUGIN_UNIKEY_ERROR                   => 'UniKey 错误',
-        self::UNINSTALL_EXTENSION_ERROR             => '停用后才能卸载',
-        self::FOLDER_NAME_EMPTY_ERROR               => '文件夹名不能为空',
-        self::EXTENSION_DOWMLOAD_ERROR              => '扩展安装包下载失败',
     ];
 
     // Get Message
