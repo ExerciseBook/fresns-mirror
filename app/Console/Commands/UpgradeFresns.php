@@ -8,6 +8,7 @@
 
 namespace App\Console\Commands;
 
+use App\Helpers\AppHelper;
 use App\Utilities\AppUtility;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -16,18 +17,8 @@ use Symfony\Component\Process\Process;
 
 class UpgradeFresns extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'fresns:upgrade';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'upgrade fresns';
 
     protected $path = 'upgrade';
@@ -36,54 +27,33 @@ class UpgradeFresns extends Command
 
     protected $extractPath;
 
-    protected $currentVersion;
-
-    protected $newVersion;
-
     const STEP_START = 1;
     const STEP_DOWNLOAD = 2;
     const STEP_EXTRACT = 3;
     const STEP_INSTALL = 4;
     const STEP_CLEAR = 5;
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
     }
 
-    public function commandExists($commandName)
-    {
-        ob_start();
-        passthru("command -v $commandName", $code);
-        ob_end_clean();
-
-        return (0 === $code) ? true : false;
-    }
-
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
+    // execute the console command
     public function handle()
     {
         $this->updateStep(self::STEP_START);
+
         // Check if an upgrade is needed
-        if (! $this->checkVersion()) {
-            return $this->info('Already the latest version of Fresns');
+        $checkVersion = AppUtility::checkVersion();
+        if (! $checkVersion) {
+            return $this->info('No new version, Already the latest version of Fresns.');
         }
 
         try {
             $this->download();
             $this->extractFile();
-            $this->install();
-            $this->migrate();
-
+            $this->composerInstall();
+            $this->upgradeCommand();
             $this->upgradeFinish();
         } catch (\Exception $e) {
             $this->info($e->getMessage());
@@ -94,24 +64,14 @@ class UpgradeFresns extends Command
         return Command::SUCCESS;
     }
 
-    public function checkVersion(): bool
-    {
-        $this->newVersion = AppUtility::newVersion();
-        $this->currentVersion = AppUtility::currentVersion();
-
-        if (($this->currentVersion['versionInt'] ?? 0) >= ($this->newVersion['versionInt'] ?? 0)) {
-            return false;
-        }
-
-        return true;
-    }
-
+    // output update step info
     public function updateStep(string $step): bool
     {
         // upgrade step
         return Cache::put('upgradeStep', $step);
     }
 
+    // step 1: download upgrade pack(zip)
     public function download(): bool
     {
         logger('upgrade:download');
@@ -119,8 +79,7 @@ class UpgradeFresns extends Command
 
         $client = new \GuzzleHttp\Client();
 
-        $newVersion = AppUtility::newVersion();
-        $downloadUrl = $newVersion['upgradePackage'];
+        $downloadUrl = AppUtility::newVersion()['upgradePackage'];
 
         $filename = basename($downloadUrl);
 
@@ -140,6 +99,7 @@ class UpgradeFresns extends Command
         return true;
     }
 
+    // step 2: unzip and replace the files
     public function extractFile(): bool
     {
         $this->updateStep(self::STEP_EXTRACT);
@@ -164,19 +124,9 @@ class UpgradeFresns extends Command
         return true;
     }
 
-    public function install()
-    {
-        logger('upgrade:install');
-        $this->updateStep(self::STEP_INSTALL);
-
-        $this->composerInstall();
-        $this->migrate();
-        $this->upgradeCommand();
-    }
-
+    // step 3: composer install
     public function composerInstall()
     {
-        logger('upgrade:composer install');
         $composerPath = 'composer';
 
         if (! $this->commandExists($composerPath)) {
@@ -184,7 +134,7 @@ class UpgradeFresns extends Command
         }
 
         $process = new Process([$composerPath, 'install'], base_path());
-        $process->setTimeout(600);
+        $process->setTimeout(0);
         $process->start();
 
         foreach ($process as $type => $data) {
@@ -196,25 +146,40 @@ class UpgradeFresns extends Command
         }
     }
 
+    // check composer
+    public function commandExists($commandName)
+    {
+        ob_start();
+        passthru("command -v $commandName", $code);
+        ob_end_clean();
+
+        return (0 === $code) ? true : false;
+    }
+
+    // step 4: execute the version command
+    public function upgradeCommand()
+    {
+        logger('upgrade:install');
+        $this->updateStep(self::STEP_INSTALL);
+
+        AppUtility::executeUpgradeCommand();
+    }
+
+    // step 5: edit fresns version info
     public function upgradeFinish(): bool
     {
         Cache::forget('currentVersion');
         Cache::forget('upgradeStep');
 
-        $version = $this->newVersion['version'];
-        $versionInt = $this->newVersion['versionInt'];
+        $newVersion = AppHelper::VERSION;
+        $newVersionInt = AppHelper::VERSION_INT;
 
-        AppUtility::editVersion($version, $versionInt);
+        AppUtility::editVersion($newVersion, $newVersionInt);
 
         return true;
     }
 
-    public function migrate()
-    {
-        logger('upgrade:migrate');
-        $this->call('migrate');
-    }
-
+    // step 6: clear cache
     public function clear()
     {
         logger('upgrade:clear');
@@ -229,34 +194,7 @@ class UpgradeFresns extends Command
         }
     }
 
-    public function upgradeCommand()
-    {
-        logger('upgrade:upgrade command');
-
-        $currentVersionInt = AppUtility::currentVersion()['versionInt'] ?? 0;
-        $newVersionInt = AppUtility::newVersion()['versionInt'] ?? 0;
-
-        if (! $currentVersionInt || ! $newVersionInt) {
-            return false;
-        }
-
-        $versionInt = $currentVersionInt;
-        while ($versionInt < $newVersionInt) {
-            $versionInt++;
-            $command = 'fresns:upgrade-'.$versionInt;
-            if (\Artisan::has($command)) {
-                $this->call($command);
-            }
-        }
-
-        $this->call('migrate');
-    }
-
-    public function replaceFile()
-    {
-        logger('upgrade:replace file');
-    }
-
+    // unzip and replace the files
     public function copyMerge($source, $target)
     {
         // Path processing
