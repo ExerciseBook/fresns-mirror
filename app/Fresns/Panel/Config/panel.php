@@ -9,8 +9,6 @@
 use App\Fresns\Panel\Http\Middleware\ChangeLocale;
 
 return [
-    'defaultLangTag' => 'zh-Hans',
-
     'middleware' => [
         'web',
         ChangeLocale::class,
