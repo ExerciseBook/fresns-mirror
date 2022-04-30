@@ -38,6 +38,7 @@ use App\Fresns\Api\Helpers\ApiFileHelper;
 use App\Fresns\Api\Helpers\ApiLanguageHelper;
 use App\Fresns\Api\Helpers\ArrayHelper;
 use App\Fresns\Api\Helpers\DateHelper;
+use App\Helpers\ConfigHelper;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -140,7 +141,8 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
         $user['roleNameDisplay'] = null;
         $user['roleIcon'] = null;
         $user['roleIconDisplay'] = null;
-        $user['avatar'] = ApiFileHelper::getUserAvatar($userInfo->uid) ?? null;
+        $user['avatar'] = ConfigHelper::fresnsConfigFileUrlByItemKey('anonymous_avatar');
+        $user['decorate'] = null;
         $user['gender'] = null;
         $user['bio'] = null;
         $user['location'] = null;
@@ -163,6 +165,7 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
                     $user['roleNameDisplay'] = $userRole['is_display_name'] ?? 0;
                     $user['roleIcon'] = ApiFileHelper::getImageSignUrlByFileIdUrl($userRole['icon_file_id'], $userRole['icon_file_url']);
                     $user['roleIconDisplay'] = $userRole['is_display_icon'] ?? 0;
+                    $user['avatar'] = ApiFileHelper::getUserAvatar($userInfo->uid) ?? null;
                     $user['decorate'] = ApiFileHelper::getImageSignUrlByFileIdUrl($userInfo->decorate_file_id, $userInfo->decorate_file_url);
                     $user['gender'] = $userInfo->gender ?? 0;
                     $user['bio'] = $userInfo->bio ?? null;
@@ -329,10 +332,16 @@ class FresnsCommentsResourceDetail extends BaseAdminResource
             $post['anonymous'] = $posts['is_anonymous'] ?? 0;
             $post['deactivate'] = false; //Not deactivated = false, Deactivated = true
             $postUserInfo = DB::table(FresnsUsersConfig::CFG_TABLE)->where('id', $posts['user_id'])->first();
-            $post['uid'] = $postUserInfo->uid ?? null;
-            $post['username'] = $postUserInfo->username ?? null;
-            $post['nickname'] = $postUserInfo->nickname ?? null;
-            $post['avatar'] = ApiFileHelper::getUserAvatar($postUserInfo->uid) ?? null;
+            $post['uid'] = null;
+            $post['username'] = null;
+            $post['nickname'] = null;
+            $post['avatar'] = ConfigHelper::fresnsConfigFileUrlByItemKey('anonymous_avatar');
+            if ($posts['is_anonymous'] == 0) {
+                $post['uid'] = $postUserInfo->uid ?? null;
+                $post['username'] = $postUserInfo->username ?? null;
+                $post['nickname'] = $postUserInfo->nickname ?? null;
+                $post['avatar'] = ApiFileHelper::getUserAvatar($postUserInfo->uid) ?? null;
+            }
         }
 
         // Comment Plugin Extensions
