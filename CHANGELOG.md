@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.1 (2022-05-02)
+
+**Bug Fixes**
+
+- 安装：获取域错误问题
+- 控制面板：插件安装错误问题
+
+
 ## 1.5.0 (2022-05-01)
 
 **Bug Fixes**
