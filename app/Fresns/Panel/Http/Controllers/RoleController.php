@@ -9,6 +9,7 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Fresns\Panel\Http\Requests\UpdateRoleRequest;
+use App\Helpers\PrimaryHelper;
 use App\Models\Language;
 use App\Models\Role;
 use App\Models\UserRole;
@@ -42,6 +43,27 @@ class RoleController extends Controller
         $role->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $role->save();
 
+        if ($request->file('icon_file')) {
+            $wordBody = [
+                'platform' => 4,
+                'type' => 1,
+                'tableType' => 3,
+                'tableName' => 'roles',
+                'tableColumn' => 'icon_file_id',
+                'tableId' => $role->id,
+                'file' => $request->file('icon_file'),
+            ];
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
+            if ($fresnsResp->isErrorResponse()) {
+                return $fresnsResp->errorResponse();
+            }
+            $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
+
+            $role->icon_file_id = $fileId;
+            $role->icon_file_url = $fresnsResp->getData('imageConfigUrl');
+            $role->save();
+        }
+
         foreach ($request->names as $langTag => $content) {
             $language = Language::tableName('roles')
                 ->where('table_id', $role->id)
@@ -71,11 +93,35 @@ class RoleController extends Controller
 
     public function update(Role $role, UpdateRoleRequest $request)
     {
-        $role->update($request->all());
+        $role->update($request->except('icon_file_url'));
         if ($request->no_color) {
             $role->nickname_color = null;
         }
         $role->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
+
+        if ($request->file('icon_file')) {
+            $wordBody = [
+                'platform' => 4,
+                'type' => 1,
+                'tableType' => 3,
+                'tableName' => 'roles',
+                'tableColumn' => 'icon_file_id',
+                'tableId' => $map->id,
+                'file' => $request->file('icon_file'),
+            ];
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
+            if ($fresnsResp->isErrorResponse()) {
+                return $fresnsResp->errorResponse();
+            }
+            $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
+
+            $role->icon_file_id = $fileId;
+            $role->icon_file_url = $fresnsResp->getData('imageConfigUrl');
+        } elseif ($role->icon_file_url != $request->icon_file_url) {
+            $role->icon_file_id = null;
+            $role->icon_file_url = $request->icon_file_url;
+        }
+
         $role->save();
 
         foreach ($request->names as $langTag => $content) {
