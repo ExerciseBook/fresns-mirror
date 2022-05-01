@@ -2,7 +2,7 @@
 
 <p align="center">
 <img src="https://img.shields.io/badge/PHP-%5E8.0-green" alt="PHP">
-<img src="https://img.shields.io/badge/MySQL-%5E8.0-orange" alt="MySQL">
+<img src="https://img.shields.io/badge/MySQL-%5E5.7%7C%5E8.0-orange" alt="MySQL">
 <img src="https://img.shields.io/badge/License-Apache--2.0-blue" alt="License">
 </p>
 
@@ -19,32 +19,15 @@ Fresns 是一款免费开源的社交网络服务软件，专为跨平台而打�
 
 Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生态建设以开源组织方式协作，我们不为任何运营主体提供技术背书，不参与任何项目运营，不承担任何法律责任。由于下载代码即可使用，所以我们无法得知你的用途，但是请在使用时遵守所在国家和地区的法律法规，禁止用于违法违规业务。
 
-## 技术框架
-
-| 框架 | 版本 | 用途 |
-| --- | --- | --- |
-| [Composer](https://github.com/composer/composer) | 2.3 | 软体包管理系统 |
-| [Laravel Framework](https://github.com/laravel/framework) | 8.83 | 主程序框架 |
-| [Laravel Lang](https://github.com/Laravel-Lang/lang) | 10.4 | 框架语言包 |
-| [Laravel Excel](https://github.com/SpartnerNL/Laravel-Excel) | 3.1 | 框架 Excel 导入和导出 |
-| [Browser Detection](https://github.com/hisorange/browser-detect) | 4.5 | 浏览器设备信息 |
-| [PhpZip](https://github.com/Ne-Lexa/php-zip) | 4.0 | 扩展 zip 压缩包的 PHP 库 |
-| [Bootstrap](https://getbootstrap.com/) | 5.1 | 内置前端框架 |
-| [Bootstrap Icons](https://icons.getbootstrap.com/) | 1.8 | 内置前端图标字体库 |
-| [Alpine JS](https://github.com/alpinejs/alpine) | 3.10 | 内置 JS 库 |
-| [jQuery](https://github.com/jquery/jquery) | 3.6 | 内置 JS 库 |
-| [Select2](https://github.com/select2/select2) | 4.1 | 内置 Select2 选择框 |
-| [Base64 JS](https://github.com/dankogai/js-base64) | 3.7 | 内置 Base64 转码器 |
+## 环境要求
 
 | 配置 | 要求支持或启用 |
 | --- | --- |
+| 软件包管理器 | Composer 2.x |
+| PHP 版本 | 8.x |
 | PHP 扩展 | `fileinfo` `exif` |
 | PHP 函数 | `putenv` `symlink` `readlink` `proc_open` `passthru` |
-
-| 数据库 | MySQL 8.x |
-| --- | --- |
-| 排序规则 | `utf8mb4_0900_ai_ci` |
-| 存储引擎 | InnoDB |
+| 数据库和版本 | MySQL 5.7 or 8.x |
 
 ## 使用说明
 

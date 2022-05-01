@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.0 (2022-05-01)
+
+**Bug Fixes**
+
+- API：用户资料新增 `location` 参数
+- API：用户资料新增 `archives` 数组参数
+- API：修复话题 `description` 参数多语言输出问题
+
+**Features**
+
+- 框架：Composer 升级到 v2.3.5
+- 框架：Laravel Framework 升级到 v8.83.10
+- 框架：Bootstrap Icons 升级到 v1.8.1
+- 框架：新增 Laravel Lang 包 v10.7.1
+- 框架：新增 Alpine JS 包 v3.10.2
+- 控制面板：全新控制面板和可视化升级功能
+- 安装功能：全新可视化安装
+
+**BREAKING CHANGES**
+
+- 数据库：重定义了账号、用户、贴纸、屏蔽的表命名
+- 扩展包：发版插件管理器（[fresns/plugin-manager](https://github.com/fresns/plugin-manager)）
+- 扩展包：发版命令字管理器（[fresns/cmd-word-manager](https://github.com/fresns/cmd-word-manager)）
+- 扩展包：发版数据传输对象（[fresns/dto](https://github.com/fresns/dto)）
+- 命令字：全新封装官方命令字
+- 通用支持：开发了各种辅助函数 Helpers
+- 通用支持：开发了各种实用程序 Utilities
+- 通用支持：开发了各种数据集模型 Models
+
+
 ## 1.4.0 (2022-01-05)
 
 **Bug Fixes**
@@ -17,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - 框架：Laravel Framework 升级到 v8.78.0
 - 框架：Bootstrap Icons 升级到 v1.7.2
 - 数据库：初始化多语言配置
+
 
 ## 1.3.0 (2021-11-13)
 
@@ -36,6 +67,7 @@ All notable changes to this project will be documented in this file.
 
 - build: laravel migrations
 - build: laravel seeders
+
 
 ## 1.2.0 (2021-11-01)
 
@@ -57,6 +89,7 @@ All notable changes to this project will be documented in this file.
 - API：上传图片返参增加 imageConfigUrl 和 imageAvatarUrl 参数
 - 命令字：用户注册功能 avatarFileUrl 参数修改为 avatarUrl
 
+
 ## 1.1.0 (2021-10-28)
 
 **Bug Fixes**
@@ -74,6 +107,7 @@ All notable changes to this project will be documented in this file.
 - API：涉及成员信息的接口，增加成员主角色 rid 参数
 - API：成员列表和详情增加 followMeStatus 参数
 - 框架：升级到 Laravel Framework 8.68.1
+
 
 ## 1.0.2 (2021-10-23)
 
@@ -96,6 +130,7 @@ All notable changes to this project will be documented in this file.
 - 内置前端图标字体库 Bootstrap Icons 升级到 1.6.1
 - 内置 Base64 转码器升级到 3.7.2
 
+
 ## 1.0.1 (2021-10-18)
 
 **Bug Fixes**
@@ -103,6 +138,7 @@ All notable changes to this project will be documented in this file.
 - API：不输出「未启用」的小组分类和小组
 - API：获取帖子列表，传参 searchGid 为小组 uuid 字段，因查询 id 字段导致无数据
 - API：帖子和评论的详情页 content 参数读取附属表
+
 
 ## 1.0.0 (2021-10-15)
 
