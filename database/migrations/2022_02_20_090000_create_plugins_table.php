@@ -24,14 +24,14 @@ class CreatePluginsTable extends Migration
             $table->string('unikey', 64)->unique('unikey');
             $table->unsignedTinyInteger('type');
             $table->string('name', 64);
-            $table->string('description');
+            $table->string('description', 255);
             $table->string('version', 16);
             $table->string('author', 64);
             $table->string('author_link', 128)->nullable();
             $table->json('scene')->nullable();
             $table->string('plugin_domain', 128)->nullable();
-            $table->string('access_path')->nullable();
-            $table->string('settings_path')->nullable();
+            $table->string('access_path', 255)->nullable();
+            $table->string('settings_path', 255)->nullable();
             $table->unsignedTinyInteger('theme_functions')->default('0');
             $table->unsignedTinyInteger('is_upgrade')->default('0');
             $table->string('upgrade_code', 32)->nullable();
