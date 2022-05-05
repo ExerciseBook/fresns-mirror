@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.6.0 (2022-05-06)
+
+**Added**
+
+- 安装：检测 `Composer` 版本号
+- 控制面板：仪表盘输出 `Composer` 版本和配置信息
+- 控制面板：钱包设置新增货币自定义命名、货币单位自定义命名、货币精度
+- 命令字：命令字管理器 Code Messages 信息存入 `code_messages` 数据表
+- API：帖子和评论列表增加 `isMarkdown` 参数
+
+**Fixes**
+
+- API：修复当用户不存在时，消息接口缺少补位信息。
+- 升级：修复升级功能运行错误
+- 数据库：为不限长度的 string 字段增加 255 字符长度值，兼容 MySQL 5.7 安装
+- 数据库：补齐 block_words 表缺失的 deleted_at 字段
+- 配置：修改 session 配置方法，避免单域多站点的 session 冲突
+
+**Changed**
+
+- 框架资源：公共 error 视图文件支持 html 格式
+- 控制面板：调整语言文件 tips 内容
+- 控制面板：仪表盘时区标识名错误时，展示修改建议
+- 控制面板：安装、升级、卸载等操作，不自动刷新页面，点击“关闭”按钮再刷新
+- 控制面板：检测版本的时间日志存入数据表
+- 框架：Laravel Framework 升级到 v8.83.11
+- 框架：Laravel Lang 升级到 v10.8.0
+
+
 ## 1.5.1 (2022-05-02)
 
 **Bug Fixes**
