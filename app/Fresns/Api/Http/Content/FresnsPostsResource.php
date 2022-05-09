@@ -417,7 +417,7 @@ class FresnsPostsResource extends BaseAdminResource
             $permissionArr = json_decode($permission, true);
             if ($permissionArr) {
                 $publish_comment = $permissionArr['publish_comment'];
-                $publish_comment_roles = $permissionArr['publish_comment_roles'];
+                $publish_comment_roles = $permissionArr['publish_comment_roles'] ?? [];
                 $group['allow'] = false;
                 // 1.All Users
                 if ($publish_comment == 1) {

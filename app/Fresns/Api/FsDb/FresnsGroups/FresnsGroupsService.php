@@ -97,12 +97,12 @@ class FresnsGroupsService extends FsApiService
     public static function publishRule($uid, $permission, $group_id)
     {
         $permissionArr = json_decode($permission, true);
-        $admin_user = $permissionArr['admin_users'];
+        $admin_user = $permissionArr['admin_users'] ?? [];
         $publish_post = $permissionArr['publish_post'];
-        $publish_post_roles = $permissionArr['publish_post_roles'];
+        $publish_post_roles = $permissionArr['publish_post_roles'] ?? [];
         $publish_post_review = $permissionArr['publish_post_review'];
         $publish_comment = $permissionArr['publish_comment'];
-        $publish_comment_roles = $permissionArr['publish_comment_roles'];
+        $publish_comment_roles = $permissionArr['publish_comment_roles'] ?? [];
         $publish_comment_review = $permissionArr['publish_comment_review'];
 
         $adminUserArr = [];
@@ -204,12 +204,12 @@ class FresnsGroupsService extends FsApiService
     public static function adminData($permission)
     {
         $permissionArr = json_decode($permission, true);
-        $admin_user = $permissionArr['admin_users'];
+        $admin_user = $permissionArr['admin_users'] ?? [];
         $publish_post = $permissionArr['publish_post'];
-        $publish_post_roles = $permissionArr['publish_post_roles'];
+        $publish_post_roles = $permissionArr['publish_post_roles'] ?? [];
         $publish_post_review = $permissionArr['publish_post_review'];
         $publish_comment = $permissionArr['publish_comment'];
-        $publish_comment_roles = $permissionArr['publish_comment_roles'];
+        $publish_comment_roles = $permissionArr['publish_comment_roles'] ?? [];
         $publish_comment_review = $permissionArr['publish_comment_review'];
 
         $adminUserArr = [];
