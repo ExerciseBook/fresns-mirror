@@ -22,7 +22,7 @@ class CreateDomainsTable extends Migration
         Schema::create('domains', function (Blueprint $table) {
             $table->increments('id');
             $table->string('domain', 64)->index('domain');
-            $table->string('sld', 128)->unique('sld');
+            $table->string('host', 128)->unique('host');
             $table->unsignedBigInteger('icon_file_id')->nullable();
             $table->string('icon_file_url', 255)->nullable();
             $table->unsignedInteger('post_count')->default('0');
