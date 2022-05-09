@@ -644,7 +644,7 @@ class FresnsCommentsService extends FsService
                 // Does the domain table exist
                 $domain_input = [
                     'domain' => $firstDomain,
-                    'sld' => $secDomain[0],
+                    'host' => $secDomain[0],
                 ];
                 $domainInfo = FresnsDomains::where($domain_input)->first();
                 if ($domainInfo) {

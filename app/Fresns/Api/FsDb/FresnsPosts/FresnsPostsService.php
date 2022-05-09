@@ -954,7 +954,7 @@ class FresnsPostsService extends FsService
                 if ($domain) {
                     $domain_input = [
                         'domain' => $firstDomain,
-                        'sld' => $domain,
+                        'host' => $domain,
                     ];
                     $domainInfo = FresnsDomains::where($domain_input)->first();
                     if ($domainInfo) {
