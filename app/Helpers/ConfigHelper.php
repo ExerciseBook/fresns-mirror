@@ -22,17 +22,15 @@ class ConfigHelper
      */
     public static function fresnsConfigByItemKey(string $itemKey, string $langTag = '')
     {
-        $itemData = Config::where('item_key', $itemKey)->first();
+        $langTag = $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
 
-        if (empty($langTag)) {
-            $langTag = Config::where('item_key', 'default_language')->value('item_value');
-        }
+        $itemData = Config::where('item_key', $itemKey)->first();
 
         if (empty($itemData)) {
             return null;
         } else {
             if ($itemData->is_multilingual == 1) {
-                return LanguageHelper::fresnsLanguageByTableKey($itemData->item_key, $langTag);
+                return LanguageHelper::fresnsLanguageByTableKey($itemData->item_key, $itemData->item_type, $langTag);
             }
         }
 
