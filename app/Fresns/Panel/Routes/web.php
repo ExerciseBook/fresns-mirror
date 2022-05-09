@@ -46,6 +46,7 @@ use App\Fresns\Panel\Http\Controllers\UserController;
 use App\Fresns\Panel\Http\Controllers\UserSearchController;
 use App\Fresns\Panel\Http\Controllers\VerifyCodeController;
 use App\Fresns\Panel\Http\Controllers\WalletController;
+use App\Fresns\Panel\Http\Controllers\PluginFunctionController;
 use App\Models\Config;
 use Illuminate\Support\Facades\Route;
 
@@ -95,6 +96,8 @@ Route::middleware(['panelAuth'])->group(function () {
     Route::get('composer/diagnose', [DashboardController::class, 'composerDiagnose'])->name('composer.diagnose');
     Route::get('composer/config', [DashboardController::class, 'composerConfigInfo'])->name('composer.config');
     Route::any('cache/clear', [DashboardController::class, 'cacheClear'])->name('cache.clear');
+    // dashboard-events
+    Route::get('events', [DashboardController::class, 'eventList'])->name('events.index');
     // dashboard-upgrades
     Route::get('upgrades', [UpgradeController::class, 'show'])->name('upgrades');
     Route::patch('upgrade/check', [UpgradeController::class, 'checkFresnsVersion'])->name('upgrade.check');
@@ -272,6 +275,7 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::put('language-packs/{langTag}', [LanguagePackController::class, 'update'])->name('language.packs.update');
         // code messages
         Route::get('code-messages', [CodeMessageController::class, 'index'])->name('code.messages.index');
+        Route::put('code-messages/{codeMessage}', [CodeMessageController::class, 'update'])->name('code.messages.update');
         // session key
         Route::resource('keys', SessionKeyController::class)->only([
             'index', 'store', 'update', 'destroy',
@@ -304,6 +308,10 @@ Route::middleware(['panelAuth'])->group(function () {
         // uninstall
         Route::delete('uninstall', [PluginController::class, 'uninstall'])->name('plugin.uninstall');
         Route::delete('uninstallTheme', [PluginController::class, 'uninstallTheme'])->name('plugin.uninstallTheme');
+
+        // theme function
+        Route::get('functions', [PluginFunctionController::class, 'show'])->name('plugin.function.show');
+        Route::put('functions', [PluginFunctionController::class, 'update'])->name('plugin.function.update');
     });
 
     // iframe

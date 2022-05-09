@@ -9,6 +9,7 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Account;
@@ -82,5 +83,15 @@ class DashboardController extends Controller
         \Artisan::call('config:cache');
 
         return back()->with('success', 'ok');
+    }
+
+    public function eventList()
+    {
+        $pluginUpgradeCount = Plugin::where('is_upgrade', 1)->count();
+
+        $subscribeList = ConfigHelper::fresnsConfigByItemKey('subscribe_items');
+        $crontabList = ConfigHelper::fresnsConfigByItemKey('crontab_items');
+
+        return view('FsView::dashboard.events', compact('pluginUpgradeCount', 'subscribeList', 'crontabList'));
     }
 }

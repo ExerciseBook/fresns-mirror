@@ -58,27 +58,39 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <i class="bi bi-key"></i> {{ __('FsLang::panel.extensions_admins') }}
-                    <span class="badge bg-info">{{ $adminCount }}</span>
+                    <a href="{{ route('panel.admins.index') }}">
+                        <span class="badge bg-info">{{ $adminCount }}</span>
+                    </a>
                 </li>
                 <li class="list-group-item">
                     <i class="bi bi-person"></i> {{ __('FsLang::panel.extensions_keys') }}
-                    <span class="badge bg-info">{{ $keyCount }}</span>
+                    <a href="{{ route('panel.keys.index') }}">
+                        <span class="badge bg-info">{{ $keyCount }}</span>
+                    </a>
                 </li>
                 <li class="list-group-item">
                     <i class="bi bi-journal-code"></i> {{ __('FsLang::panel.extensions_plugins') }}
-                    <span class="badge bg-info">{{ $plugins->where('type', 1)->count() }}</span>
+                    <a href="{{ route('panel.plugin.list') }}">
+                        <span class="badge bg-info">{{ $plugins->where('type', 1)->count() }}</span>
+                    </a>
                 </li>
                 <li class="list-group-item">
                     <i class="bi bi-phone"></i> {{ __('FsLang::panel.extensions_apps') }}
-                    <span class="badge bg-info">{{ $plugins->where('type', 2)->count() }}</span>
+                    <a href="{{ route('panel.apps.index') }}">
+                        <span class="badge bg-info">{{ $plugins->where('type', 2)->count() }}</span>
+                    </a>
                 </li>
                 <li class="list-group-item">
                     <i class="bi bi-laptop"></i> {{ __('FsLang::panel.extensions_engines') }}
-                    <span class="badge bg-info">{{ $plugins->where('type', 3)->count() }}</span>
+                    <a href="{{ route('panel.engines.index') }}">
+                        <span class="badge bg-info">{{ $plugins->where('type', 3)->count() }}</span>
+                    </a>
                 </li>
                 <li class="list-group-item">
                     <i class="bi bi-brush"></i> {{ __('FsLang::panel.extensions_themes') }}
-                    <span class="badge bg-info">{{ $plugins->where('type', 4)->count() }}</span>
+                    <a href="{{ route('panel.themes.index') }}">
+                        <span class="badge bg-info">{{ $plugins->where('type', 4)->count() }}</span>
+                    </a>
                 </li>
             </ul>
         </div>
