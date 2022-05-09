@@ -10,11 +10,11 @@ namespace App\Fresns\Api\Http\Info;
 
 use App\Fresns\Api\Base\Resources\BaseAdminResource;
 use App\Fresns\Api\FsDb\FresnsConfigs\FresnsConfigsConfig;
-use App\Fresns\Api\FsDb\FresnsLanguages\FresnsLanguagesService;
 use App\Fresns\Api\FsDb\FresnsPlugins\FresnsPluginsService;
 use App\Fresns\Api\Helpers\ApiFileHelper;
 use App\Fresns\Api\Helpers\ApiLanguageHelper;
 use App\Fresns\Api\Helpers\StrHelper;
+use App\Helpers\LanguageHelper;
 
 /**
  * List resource config handle.
@@ -39,7 +39,7 @@ class FresnsConfigsResource extends BaseAdminResource
 
         // When is_multilingual=1 means that the key is multilingual
         if ($isMultilingual == 1) {
-            $itemValue = FresnsLanguagesService::getLanguageByTableKey(FresnsConfigsConfig::CFG_TABLE, 'item_value', $itemKey, $langTag);
+            $itemValue = LanguageHelper::fresnsLanguageByTableKey($itemKey, $itemType, $langTag);
         }
 
         if ($itemType == 'boolean') {
