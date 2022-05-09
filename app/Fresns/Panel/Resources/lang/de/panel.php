@@ -33,8 +33,11 @@ return [
     'menu_market' => 'Markt',
     // Sidebar menus
     'sidebar_home' => 'Zuhause',
-    'sidebar_upgrades' => 'Upgrades',
     'sidebar_admins' => 'Admins',
+    'sidebar_events' => 'Veranstaltungen',
+    'sidebar_events_tab_subscribe' => 'Abonnieren',
+    'sidebar_events_tab_crontab' => 'Crontab',
+    'sidebar_upgrades' => 'Upgrades',
     'sidebar_settings' => 'Einstellungen',
     'sidebar_languages' => 'Sprachen',
     'sidebar_general' => 'Allgemein',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => 'Themen',
     'sidebar_apps' => 'Apps',
     // Sidebar intro
-    'sidebar_upgrades_intro' => 'Endlich',
     'sidebar_admins_intro' => 'Benutzer, die das Recht haben, sich bei der Systemsteuerung anzumelden',
+    'sidebar_events_intro' => 'Zeitgesteuerte Aufgaben und Abonnement-Ereignisse auf dem System anzeigen',
+    'sidebar_upgrades_intro' => 'Endlich',
     'sidebar_settings_intro' => 'Fresns Backend-Systemkonfigurationsinformationen sind sehr wichtig',
     'sidebar_languages_intro' => 'Multi-Sprache muss hier Sprachoptionen konfigurieren, bevor Sie mehrsprachige Inhalte in das entsprechende Konfigurationselement eingeben können',
     'sidebar_general_intro' => 'Sichern Sie die Einstellungselemente des laufenden Systems',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => 'App-Key',
     'table_app_secret' => 'App Secret',
     'table_plugin' => 'Plugin',
+    'table_command_word' => 'Befehlswort',
     'table_name' => 'Name',
     'table_description' => 'Beschreibung',
     'table_icon' => 'Symbol',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => 'Datenbanksortierregeln',
     'system_info_database_size' => 'Aktuelle Datenbankgröße',
     'news' => 'Fresns-Aktivitäten und Nachrichten',
+    // Dashboard-Events
+    'event_subscribe_table' => 'Abonnieren Sie die Datentabelle',
+    'event_crontab_time' => 'Zyklus der Ausführung',
+    'event_crontab_time_desc' => 'Laravel-Aufgabenplanung Cron-Tabellenformat',
     // Dashboard-Admins
     'admin_add_title' => 'Neuer Systemadministrator',
     'admin_add_form_account' => 'Konto',

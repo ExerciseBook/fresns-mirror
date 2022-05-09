@@ -33,8 +33,11 @@ return [
     'menu_market' => 'Mercado',
     // Sidebar menus
     'sidebar_home' => 'Casa',
-    'sidebar_upgrades' => 'Actualizaciones',
     'sidebar_admins' => 'Administradores',
+    'sidebar_events' => 'Eventi',
+    'sidebar_events_tab_subscribe' => 'Iscriviti',
+    'sidebar_events_tab_crontab' => 'Crontab',
+    'sidebar_upgrades' => 'Actualizaciones',
     'sidebar_settings' => 'Ajustes',
     'sidebar_languages' => 'Idiomas',
     'sidebar_general' => 'General',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => 'Temas',
     'sidebar_apps' => 'Apps',
     // Sidebar intro
-    'sidebar_upgrades_intro' => 'Finalmente',
     'sidebar_admins_intro' => 'Los usuarios que tienen derecho a iniciar sesión en el panel de control',
+    'sidebar_events_intro' => 'Ver las tareas cronometradas y los eventos de suscripción en el sistema',
+    'sidebar_upgrades_intro' => 'Finalmente',
     'sidebar_settings_intro' => 'La información de configuración del sistema de backend FRESNS es muy importante',
     'sidebar_languages_intro' => 'Multi-idioma necesita configurar las opciones de idioma aquí antes de poder ingresar contenido multilingüe en el elemento de configuración correspondiente',
     'sidebar_general_intro' => 'Salvaguardar los elementos de configuración del sistema en ejecución',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => 'Clave de la aplicación',
     'table_app_secret' => 'App secreta',
     'table_plugin' => 'Enchufar',
+    'table_command_word' => 'Palabra de mando',
     'table_name' => 'Nombre',
     'table_description' => 'Descripción',
     'table_icon' => 'Icono',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => 'Reglas de clasificación de la base de datos',
     'system_info_database_size' => 'Tamaño actual de la base de datos',
     'news' => 'FRESNS ACTIVIDADES Y NOTICIAS',
+    // Dashboard-Events
+    'event_subscribe_table' => 'Suscripción a la tabla de datos',
+    'event_crontab_time' => 'Ciclo de ejecución',
+    'event_crontab_time_desc' => 'Formato de la tabla cron de programación de tareas de Laravel',
     // Dashboard-Admins
     'admin_add_title' => 'Nuevo administrador del sistema',
     'admin_add_form_account' => 'cuenta',

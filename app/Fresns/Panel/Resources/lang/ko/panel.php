@@ -33,8 +33,11 @@ return [
     'menu_market' => '시장',
     // Sidebar menus
     'sidebar_home' => '집',
-    'sidebar_upgrades' => '업그레이드',
     'sidebar_admins' => 'admins',
+    'sidebar_events' => '이벤트',
+    'sidebar_events_tab_subscribe' => '구독하다',
+    'sidebar_events_tab_crontab' => '크론탭',
+    'sidebar_upgrades' => '업그레이드',
     'sidebar_settings' => '설정',
     'sidebar_languages' => '언어',
     'sidebar_general' => '일반적인',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => '테마',
     'sidebar_apps' => '앱',
     // Sidebar intro
-    'sidebar_upgrades_intro' => '마침내',
     'sidebar_admins_intro' => '제어판에 로그인 할 권리가있는 사용자',
+    'sidebar_events_intro' => '시스템에서 예약된 작업을 보고 이벤트를 구독합니다.',
+    'sidebar_upgrades_intro' => '마침내',
     'sidebar_settings_intro' => 'Fresns 백엔드 시스템 구성 정보는 매우 중요합니다',
     'sidebar_languages_intro' => '다중 언어는 해당 구성 항목에 다국어 컨텐츠를 입력하기 전에 언어 옵션을 구성해야합니다',
     'sidebar_general_intro' => '시스템 설정 항목을 안전하게 보호하십시오',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => '앱 키',
     'table_app_secret' => '앱 비밀',
     'table_plugin' => '플러그인',
+    'table_command_word' => '명령어',
     'table_name' => '이름',
     'table_description' => '설명',
     'table_icon' => '상',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => '데이터베이스 정렬 규칙',
     'system_info_database_size' => '현재 데이터베이스 크기',
     'news' => 'Fresns 활동 및 뉴스',
+    // Dashboard-Events
+    'event_subscribe_table' => '데이터 테이블 구독',
+    'event_crontab_time' => '실행 주기',
+    'event_crontab_time_desc' => 'Laravel 작업 스케줄링 크론 테이블 형식',
     // Dashboard-Admins
     'admin_add_title' => '새로운 시스템 관리자',
     'admin_add_form_account' => '계정',

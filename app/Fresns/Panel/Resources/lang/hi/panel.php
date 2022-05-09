@@ -33,8 +33,11 @@ return [
     'menu_market' => 'मंडी',
     // Sidebar menus
     'sidebar_home' => 'घर',
-    'sidebar_upgrades' => 'उन्नयन',
     'sidebar_admins' => 'व्यवस्थापक',
+    'sidebar_events' => 'आयोजन',
+    'sidebar_events_tab_subscribe' => 'सदस्यता लेने के',
+    'sidebar_events_tab_crontab' => 'क्रोंटैब',
+    'sidebar_upgrades' => 'उन्नयन',
     'sidebar_settings' => 'समायोजन',
     'sidebar_languages' => 'बोली',
     'sidebar_general' => 'आम',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => 'विषयों',
     'sidebar_apps' => 'ऐप्स',
     // Sidebar intro
-    'sidebar_upgrades_intro' => 'आखिरकार',
     'sidebar_admins_intro' => 'जिन उपयोगकर्ताओं को नियंत्रण कक्ष में लॉग इन करने का अधिकार है',
+    'sidebar_events_intro' => 'शेड्यूल किए गए कार्यों को देखें और सिस्टम में ईवेंट की सदस्यता लें',
+    'sidebar_upgrades_intro' => 'आखिरकार',
     'sidebar_settings_intro' => 'Fresns बैकएंड सिस्टम कॉन्फ़िगरेशन जानकारी बहुत महत्वपूर्ण है',
     'sidebar_languages_intro' => 'संबंधित कॉन्फ़िगरेशन आइटम में बहुभाषी सामग्री दर्ज करने से पहले बहु भाषा को यहां भाषा विकल्पों को कॉन्फ़िगर करने की आवश्यकता है।',
     'sidebar_general_intro' => 'चल रहे सिस्टम की सेटिंग आइटम की रक्षा करें।',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => 'ऐप कुंजी',
     'table_app_secret' => 'ऐप गुप्त',
     'table_plugin' => 'लगाना',
+    'table_command_word' => 'कमांड वर्ड',
     'table_name' => 'नाम',
     'table_description' => 'विवरण',
     'table_icon' => 'आइकन',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => 'डाटाबेस सॉर्टिंग नियम',
     'system_info_database_size' => 'वर्तमान डेटाबेस आकार',
     'news' => 'Fresns गतिविधियाँ और समाचार',
+    // Dashboard-Events
+    'event_subscribe_table' => 'डेटा तालिका की सदस्यता लें',
+    'event_crontab_time' => 'निष्पादन चक्र',
+    'event_crontab_time_desc' => 'लारवेल टास्क शेड्यूलिंग क्रॉन टेबल फॉर्मेट',
     // Dashboard-Admins
     'admin_add_title' => 'नया सिस्टम प्रशासक',
     'admin_add_form_account' => 'हेतु',

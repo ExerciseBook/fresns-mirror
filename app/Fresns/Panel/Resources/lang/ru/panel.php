@@ -33,8 +33,11 @@ return [
     'menu_market' => 'Рынок',
     // Sidebar menus
     'sidebar_home' => 'Дома',
-    'sidebar_upgrades' => 'Обновления',
     'sidebar_admins' => 'Админы',
+    'sidebar_events' => 'События',
+    'sidebar_events_tab_subscribe' => 'Подписаться',
+    'sidebar_events_tab_crontab' => 'Crontab',
+    'sidebar_upgrades' => 'Обновления',
     'sidebar_settings' => 'Настройки',
     'sidebar_languages' => 'Языки',
     'sidebar_general' => 'Общий',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => 'Темы',
     'sidebar_apps' => 'Программы',
     // Sidebar intro
-    'sidebar_upgrades_intro' => 'Ну наконец то',
     'sidebar_admins_intro' => 'Пользователи, которые имеют право войти в панель управления',
+    'sidebar_events_intro' => 'Просматривать задания по расписанию и события подписки в системе',
+    'sidebar_upgrades_intro' => 'Ну наконец то',
     'sidebar_settings_intro' => 'Информация о конфигурации Backend системы Freesns очень важна',
     'sidebar_languages_intro' => 'Многоязычные должны настроить параметры языка здесь, прежде чем вы сможете ввести многоязычный контент в соответствующем элементе конфигурации',
     'sidebar_general_intro' => 'Защитите настройки элементов работы системы',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => 'Ключ приложения',
     'table_app_secret' => 'Секрет приложения',
     'table_plugin' => 'Плагин',
+    'table_command_word' => 'Командное слово',
     'table_name' => 'Имя',
     'table_description' => 'Описание',
     'table_icon' => 'Значок',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => 'Правила сортировки баз',
     'system_info_database_size' => 'Текущая база данных Размер',
     'news' => 'Мероприятия и новости Fresns',
+    // Dashboard-Events
+    'event_subscribe_table' => 'Подписка на таблицу данных',
+    'event_crontab_time' => 'Цикл выполнения',
+    'event_crontab_time_desc' => 'Laravel планирование задач cron формат таблицы',
     // Dashboard-Admins
     'admin_add_title' => 'Новый системный администратор',
     'admin_add_form_account' => 'учетная запись',

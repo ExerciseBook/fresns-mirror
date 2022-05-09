@@ -33,8 +33,11 @@ return [
     'menu_market' => 'Mercado',
     // Sidebar menus
     'sidebar_home' => 'Lar',
-    'sidebar_upgrades' => 'Atualizações',
     'sidebar_admins' => 'Admins',
+    'sidebar_events' => 'Eventos',
+    'sidebar_events_tab_subscribe' => 'Subscrever',
+    'sidebar_events_tab_crontab' => 'Crontab',
+    'sidebar_upgrades' => 'Atualizações',
     'sidebar_settings' => 'Configurações',
     'sidebar_languages' => 'línguas',
     'sidebar_general' => 'Em geral',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => 'Temas',
     'sidebar_apps' => 'Aplicativos',
     // Sidebar intro
-    'sidebar_upgrades_intro' => 'Finalmente',
     'sidebar_admins_intro' => 'Usuários que têm o direito de efetuar login no painel de controle',
+    'sidebar_events_intro' => 'Ver tarefas cronometradas e eventos de subscrição no sistema',
+    'sidebar_upgrades_intro' => 'Finalmente',
     'sidebar_settings_intro' => 'As informações de configuração do sistema de backend fresns são muito importantes',
     'sidebar_languages_intro' => 'Multi-linguagem precisa configurar as opções de idioma aqui antes de poder inserir conteúdo multilíngue no item de configuração correspondente',
     'sidebar_general_intro' => 'Salvaguardar os itens de configuração do sistema em execução',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => 'Tecla do aplicativo',
     'table_app_secret' => 'Secret do App',
     'table_plugin' => 'Plugar',
+    'table_command_word' => 'Palavra de Comando',
     'table_name' => 'Nome',
     'table_description' => 'Descrição',
     'table_icon' => 'Ícone',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => 'Regras de classificação do banco de dados',
     'system_info_database_size' => 'Tamanho atual do banco de dados',
     'news' => 'Atividades e notícias fresns',
+    // Dashboard-Events
+    'event_subscribe_table' => 'Subscrever a tabela de dados',
+    'event_crontab_time' => 'Ciclo de Execução',
+    'event_crontab_time_desc' => 'Laravel formato de tabela de agendamento de tarefas cron',
     // Dashboard-Admins
     'admin_add_title' => 'Novo administrador do sistema',
     'admin_add_form_account' => 'conta',

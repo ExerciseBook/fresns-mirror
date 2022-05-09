@@ -33,8 +33,11 @@ return [
     'menu_market' => '市場',
     // Sidebar menus
     'sidebar_home' => '家',
-    'sidebar_upgrades' => 'アップグレード',
     'sidebar_admins' => 'アドミン',
+    'sidebar_events' => 'イベント情報',
+    'sidebar_events_tab_subscribe' => 'サブスクライブ',
+    'sidebar_events_tab_crontab' => 'クロンダブ',
+    'sidebar_upgrades' => 'アップグレード',
     'sidebar_settings' => '設定',
     'sidebar_languages' => '言語',
     'sidebar_general' => '全般的',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => 'テーマ',
     'sidebar_apps' => 'アプリ',
     // Sidebar intro
-    'sidebar_upgrades_intro' => 'ついに',
     'sidebar_admins_intro' => 'コントロールパネルにログインする権利を持つユーザー',
+    'sidebar_events_intro' => 'システム上の時間指定タスクと購読イベントの表示',
+    'sidebar_upgrades_intro' => 'ついに',
     'sidebar_settings_intro' => 'Fresnsバックエンドのシステム構成情報、非常に重要です。',
     'sidebar_languages_intro' => '多言語は、対応する設定項目に多言語コンテンツを入力する前に、ここで言語オプションを構成する必要があります。',
     'sidebar_general_intro' => '実行中のシステムの設定項目を保護します。',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => 'アプリキー',
     'table_app_secret' => 'アプリの秘密',
     'table_plugin' => 'プラグイン',
+    'table_command_word' => 'コマンドワード',
     'table_name' => '名前',
     'table_description' => '説明',
     'table_icon' => 'アイコン',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => 'データベースの並べ替えルール',
     'system_info_database_size' => '現在のデータベースサイズ',
     'news' => 'Fresnsイベント＆ニュース',
+    // Dashboard-Events
+    'event_subscribe_table' => 'データテーブルを購読する',
+    'event_crontab_time' => '実行サイクル',
+    'event_crontab_time_desc' => 'Laravelタスクスケジューリングcronテーブル形式',
     // Dashboard-Admins
     'admin_add_title' => '新しいシステム管理者',
     'admin_add_form_account' => 'アカウント',

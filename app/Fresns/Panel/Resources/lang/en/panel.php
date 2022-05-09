@@ -33,8 +33,11 @@ return [
     'menu_market' => 'Market',
     // Sidebar menus
     'sidebar_home' => 'Home',
-    'sidebar_upgrades' => 'Upgrades',
     'sidebar_admins' => 'Admins',
+    'sidebar_events' => 'Events',
+    'sidebar_events_tab_subscribe' => 'Subscribe',
+    'sidebar_events_tab_crontab' => 'Crontab',
+    'sidebar_upgrades' => 'Upgrades',
     'sidebar_settings' => 'Settings',
     'sidebar_languages' => 'Languages',
     'sidebar_general' => 'General',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => 'Themes',
     'sidebar_apps' => 'Apps',
     // Sidebar intro
-    'sidebar_upgrades_intro' => 'Last checked on',
     'sidebar_admins_intro' => 'Users who have access to the control panel',
+    'sidebar_events_intro' => 'View timed tasks and subscription events in the system',
+    'sidebar_upgrades_intro' => 'Last checked on',
     'sidebar_settings_intro' => 'Fresns backend system configuration information, very important',
     'sidebar_languages_intro' => 'You need to configure the language options here before you can enter multilingual content in the corresponding config items',
     'sidebar_general_intro' => 'The setting items that guarantee the proper operation of the system',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => 'App Key',
     'table_app_secret' => 'App Secret',
     'table_plugin' => 'Plugin',
+    'table_command_word' => 'Command Word',
     'table_name' => 'Name',
     'table_description' => 'Description',
     'table_icon' => 'Icon',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => 'Database collation',
     'system_info_database_size' => 'Database size',
     'news' => 'Fresns Events and News',
+    // Dashboard-Events
+    'event_subscribe_table' => 'Subscribe to the data table',
+    'event_crontab_time' => 'Execution Cycle',
+    'event_crontab_time_desc' => 'Laravel task scheduling cron table format',
     // Dashboard-Admins
     'admin_add_title' => 'New System Administrator',
     'admin_add_form_account' => 'Account',

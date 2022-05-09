@@ -33,8 +33,11 @@ return [
     'menu_market' => 'Pasar',
     // Sidebar menus
     'sidebar_home' => 'Rumah',
-    'sidebar_upgrades' => 'Upgrade',
     'sidebar_admins' => 'Admin',
+    'sidebar_events' => 'Acara',
+    'sidebar_events_tab_subscribe' => 'Langganan',
+    'sidebar_events_tab_crontab' => 'Crontab',
+    'sidebar_upgrades' => 'Upgrade',
     'sidebar_settings' => 'Pengaturan',
     'sidebar_languages' => 'Bahasa',
     'sidebar_general' => 'Umum',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => 'Tema',
     'sidebar_apps' => 'Aplikasi',
     // Sidebar intro
-    'sidebar_upgrades_intro' => 'Akhirnya',
     'sidebar_admins_intro' => 'Pengguna yang memiliki hak untuk masuk ke panel kontrol',
+    'sidebar_events_intro' => 'Lihat tugas terjadwal dan berlangganan acara di sistem',
+    'sidebar_upgrades_intro' => 'Akhirnya',
     'sidebar_settings_intro' => 'Informasi konfigurasi sistem backend fresns sangat penting',
     'sidebar_languages_intro' => 'Multi-bahasa perlu mengkonfigurasi opsi bahasa di sini sebelum Anda dapat memasukkan konten multibahasa di item konfigurasi yang sesuai',
     'sidebar_general_intro' => 'Perlindungan item pengaturan sistem yang berjalan',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => 'Kunci aplikasi',
     'table_app_secret' => 'Rahasia aplikasi',
     'table_plugin' => 'Plugin',
+    'table_command_word' => 'Kata Perintah',
     'table_name' => 'Nama',
     'table_description' => 'Keterangan',
     'table_icon' => 'Ikon',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => 'Basis data Colation',
     'system_info_database_size' => 'Ukuran basis data',
     'news' => 'Fresns Acara dan Berita',
+    // Dashboard-Events
+    'event_subscribe_table' => 'Berlangganan ke tabel data',
+    'event_crontab_time' => 'Siklus Eksekusi',
+    'event_crontab_time_desc' => 'Format tabel cron penjadwalan tugas Laravel',
     // Dashboard-Admins
     'admin_add_title' => 'Administrator Sistem Baru',
     'admin_add_form_account' => 'Akun',

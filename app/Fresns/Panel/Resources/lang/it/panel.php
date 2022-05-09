@@ -33,8 +33,11 @@ return [
     'menu_market' => 'Mercato',
     // Sidebar menus
     'sidebar_home' => 'Casa',
-    'sidebar_upgrades' => 'Aggiornamenti',
     'sidebar_admins' => 'Ammonire',
+    'sidebar_events' => 'Eventi',
+    'sidebar_events_tab_subscribe' => 'Iscriviti',
+    'sidebar_events_tab_crontab' => 'Crontab',
+    'sidebar_upgrades' => 'Aggiornamenti',
     'sidebar_settings' => 'Impostazioni',
     'sidebar_languages' => 'Le lingue',
     'sidebar_general' => 'Generale',
@@ -90,8 +93,9 @@ return [
     'sidebar_website_tab_themes' => 'Temi',
     'sidebar_apps' => 'Apps',
     // Sidebar intro
-    'sidebar_upgrades_intro' => 'Finalmente',
     'sidebar_admins_intro' => 'Utenti che hanno il diritto di accedere al pannello di controllo',
+    'sidebar_events_intro' => 'Visualizzare i compiti a tempo e gli eventi di sottoscrizione sul sistema',
+    'sidebar_upgrades_intro' => 'Finalmente',
     'sidebar_settings_intro' => 'FRESNS backend informazioni di configurazione del sistema è molto importante',
     'sidebar_languages_intro' => 'Multi-Language ha bisogno di configurare le opzioni di lingua qui prima di poter immettere contenuti multilingue nella voce di configurazione corrispondente',
     'sidebar_general_intro' => 'Salvaguardare gli elementi di impostazione del sistema in esecuzione',
@@ -192,6 +196,7 @@ return [
     'table_app_key' => 'Chiave dell\'app',
     'table_app_secret' => 'App Segreto',
     'table_plugin' => 'Collegare',
+    'table_command_word' => 'Parola di comando',
     'table_name' => 'Nome',
     'table_description' => 'Descrizione',
     'table_icon' => 'Icona',
@@ -298,6 +303,10 @@ return [
     'system_info_database_collation' => 'Regole di ordinamento del database',
     'system_info_database_size' => 'Dimensioni del database corrente',
     'news' => 'Attività e notizie di Fresns',
+    // Dashboard-Events
+    'event_subscribe_table' => 'Sottoscrivere la tabella dei dati',
+    'event_crontab_time' => 'Ciclo di esecuzione',
+    'event_crontab_time_desc' => 'Laravel task scheduling cron formato tabella',
     // Dashboard-Admins
     'admin_add_title' => 'Nuovo amministratore di sistema',
     'admin_add_form_account' => 'account',
