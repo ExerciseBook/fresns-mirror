@@ -11,6 +11,7 @@ namespace App\Fresns\Panel\Http\Controllers;
 use App\Models\Config;
 use App\Models\Plugin;
 use Illuminate\Http\Request;
+use App\Utilities\ConfigUtility;
 
 class PluginController extends Controller
 {
@@ -227,6 +228,26 @@ class PluginController extends Controller
     public function uninstallTheme(Request $request)
     {
         if ($request->get('clearData') == 1) {
+            $theme = $request->theme;
+            if (!$theme) {
+                abort(404);
+            }
+
+            $themeJsonFile = resource_path('themes/'.$theme.'/theme.json');
+
+            if(!\File::exists($themeJsonFile)) {
+                return back()->with('failure', '配置文件未找到');
+            }
+
+            $themeConfig = json_decode(\File::get($themeJsonFile), true);
+            $functionKeys = $themeConfig['functionKeys'] ?? [];
+
+            $configItemKeys = Config::whereIn('item_key', collect($functionKeys)->pluck('itemKey'))
+                ->where('is_custom', 1)
+                ->pluck('item_key');
+
+            ConfigUtility::removeFresnsConfigItems($configItemKeys);
+
             \Artisan::call('theme:uninstall', ['plugin' => $request->theme, '--cleardata' => true]);
         } else {
             \Artisan::call('theme:uninstall', ['plugin' => $request->theme, '--cleardata' => false]);

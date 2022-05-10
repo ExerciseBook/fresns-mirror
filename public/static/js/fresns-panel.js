@@ -851,7 +851,7 @@ $(document).ready(function () {
         $('#addCustomPermTr').before(template.contents());
     });
 
-    $('.delete-custom-perm').click(function () {
+    $(document).on('click', '.delete-custom-perm', function () {
         $(this).closest('tr').remove();
     });
 
@@ -2023,5 +2023,24 @@ $(document).ready(function () {
         if (defaultName) {
             $('#currencyUnitButton').text(defaultName);
         }
+    });
+    $('#editMessages').on('show.bs.modal', function(e) {
+        let button = $(e.relatedTarget);
+        let action = button.data('action');
+        let messages = button.data('messages');
+        let name = button.data('name');
+        let code = button.data('code');
+        let unikey= button.data('unikey');
+
+        $(this).find('.code-message-plugin-name').text(name)
+        $(this).find('.code-message-plugin-code').text(code)
+        $(this).find('.code-message-plugin-unikey').text(unikey)
+
+        $(this).find('form').attr('action', action);
+        Object.entries(messages).forEach(([langTag, message]) => {
+            console.log($(this).find("textarea[name='messages[" + langTag + "]'"))
+            $(this).find("textarea[name='messages[" + langTag + "]'")
+                    .val(message);
+        })
     });
 });

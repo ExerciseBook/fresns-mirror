@@ -11,7 +11,7 @@
                 <li class="breadcrumb-item"><a href="{{ route('panel.dashboard') }}">{{ __('FsLang::panel.menu_dashboard') }}</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('panel.rename.index') }}">{{ __('FsLang::panel.menu_operations') }}</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('panel.roles.index') }}">{{ __('FsLang::panel.sidebar_roles') }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ __('FsLang::panel.button_config_permission') }}<span class="badge bg-secondary ms-2">{{ $role->name }}</span></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ __('FsLang::panel.button_config_permission') }}<span class="badge bg-secondary ms-2">{{ $role->getLangName($defaultLanguage) }}</span></li>
             </ol>
         </nav>
     </div>
@@ -396,7 +396,7 @@
         <tr>
             <td><input type="text" class="form-control" required name="custom_permissions[permKey][]"></td>
             <td><input type="text" class="form-control" required name="custom_permissions[permValue][]"></td>
-            <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7">{{ __('FsLang::panel.button_delete') }}</button></td>
+            <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7 delete-custom-perm">{{ __('FsLang::panel.button_delete') }}</button></td>
         </tr>
     </template>
 @endsection
