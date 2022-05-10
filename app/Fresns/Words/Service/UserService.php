@@ -18,12 +18,12 @@ class UserService
         $user = User::withTrashed()->find($userId);
 
         $userProfile = $user->getUserProfile($timezone);
-        $userMainRole = $user->getUserMainRole($timezone, $langTag);
+        $userMainRole = $user->getUserMainRole($langTag, $timezone);
         $userInteractive = InteractiveHelper::fresnsUserInteractive($langTag);
 
         $item['roles'] = $user->getUserRoles($timezone, $langTag);
         $item['archives'] = $user->getUserArchives($langTag);
-        $item['icons'] = $user->getUserIcons($timezone, $langTag);
+        $item['icons'] = $user->getUserIcons($langTag);
         $item['stats'] = $user->getUserStats($langTag);
         $item['draftCount'] = $user->getUserDrafts();
 

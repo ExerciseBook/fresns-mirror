@@ -22,7 +22,7 @@ class AccountService
         $userList = [];
         foreach ($userArr as $user) {
             $userProfile = $user->getUserProfile($timezone);
-            $userMainRole = $user->getUserMainRole($timezone, $langTag);
+            $userMainRole = $user->getUserMainRole($langTag, $timezone);
             $userList[] = array_merge($userProfile, $userMainRole);
         }
 

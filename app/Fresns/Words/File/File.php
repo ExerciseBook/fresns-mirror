@@ -282,6 +282,7 @@ class File
     public function getFileInfoOfAntiLink($wordBody)
     {
         $dtoWordBody = new GetFileInfoOfAntiLinkDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
 
         $file = FileModel::idOrFid([
             'id' => $dtoWordBody->fileId,
@@ -289,7 +290,10 @@ class File
         ])->first();
 
         if (empty($file)) {
-            return $this->success([], 'file not found', 21009);
+            return $this->failure(
+                21009,
+                ConfigUtility::getCodeMessage(21009, 'CmdWord', $langTag),
+            );
         }
 
         $fileUniKey = $file->getFileServiceInfo();
@@ -312,11 +316,14 @@ class File
     public function logicalDeletionFile($wordBody)
     {
         $wordBody = new LogicalDeletionFileDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
         if (isset($wordBody->fileId)) {
             $query = ['id' => $wordBody->fileId];
         } else {
             $query = ['fid' => $wordBody->fid];
         }
+
         $file = FileModel::where($query)->first();
         if (empty($file)) {
             return $this->failure(
@@ -324,6 +331,7 @@ class File
                 ConfigUtility::getCodeMessage(21009, 'CmdWord', $langTag),
             );
         }
+
         FileModel::where($query)->delete();
 
         return $this->success();
@@ -338,14 +346,20 @@ class File
     public function physicalDeletionFile($wordBody)
     {
         $dtoWordBody = new PhysicalDeletionFileDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
         if (isset($dtoWordBody->fileId)) {
             $query = ['id' => $dtoWordBody->fileId];
         } else {
             $query = ['fid' => $dtoWordBody->fid];
         }
+
         $file = FileModel::where($query)->first();
         if (empty($file)) {
-            ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_DATA_ERROR)::throw();
+            return $this->failure(
+                21008,
+                ConfigUtility::getCodeMessage(21008, 'CmdWord', $langTag),
+            );
         }
 
         $pluginUniKey = match ($file['file_type']) {
@@ -355,7 +369,10 @@ class File
             default => ConfigHelper::fresnsConfigByItemKey('document_service'),
         };
         if (empty($pluginUniKey)) {
-            ExceptionConstant::getHandleClassByCode(ExceptionConstant::PLUGIN_CONFIG_ERROR)::throw();
+            return $this->failure(
+                21000,
+                ConfigUtility::getCodeMessage(21000, 'CmdWord', $langTag),
+            );
         }
 
         return \FresnsCmdWord::plugin($pluginUniKey)->physicalDeletionFile($wordBody);

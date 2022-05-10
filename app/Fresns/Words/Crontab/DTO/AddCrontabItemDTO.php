@@ -23,7 +23,7 @@ class AddCrontabItemDTO extends DTO
         return [
             'unikey' => ['required', 'string'],
             'cmdWord' => ['required', 'string'],
-            'taskPeriod' => ['required', 'string'],
+            'cronTableFormat' => ['required', 'string'],
         ];
     }
 }

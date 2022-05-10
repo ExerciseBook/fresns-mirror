@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         {
             $schedule->call(function () use ($cron) {
                 \FresnsCmdWord::plugin($cron['unikey'])->{$cron['cmdWord']}();
-            })->cron($cron['taskPeriod']);
+            })->cron($cron['cronTableFormat']);
         }
     }
 
