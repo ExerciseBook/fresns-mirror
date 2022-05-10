@@ -74,4 +74,56 @@ class UserHelper
 
         return $isAdmin;
     }
+
+    public static function fresnsUserAnonymousProfile()
+    {
+        $anonymousAvatar = ConfigHelper::fresnsConfigByItemKey('anonymous_avatar');
+        $userAvatar = null;
+        if (ConfigHelper::fresnsConfigFileValueTypeByItemKey('anonymous_avatar') == 'URL') {
+            $userAvatar = $anonymousAvatar;
+        } else {
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileUrlOfAntiLink([
+                'fileId' => $anonymousAvatar,
+            ]);
+            $userAvatar = $fresnsResp->getData('imageAvatarUrl');
+        }
+
+        $profile['uid'] = null;
+        $profile['username'] = null;
+        $profile['nickname'] = null;
+        $profile['avatar'] = $userAvatar;
+        $profile['decorate'] = null;
+        $profile['gender'] = null;
+        $profile['birthday'] = null;
+        $profile['bio'] = null;
+        $profile['location'] = null;
+        $profile['dialogLimit'] = null;
+        $profile['commentLimit'] = null;
+        $profile['timezone'] = null;
+        $profile['verifiedStatus'] = null;
+        $profile['verifiedIcon'] = null;
+        $profile['verifiedDesc'] = null;
+        $profile['verifiedDateTime'] = null;
+        $profile['expiryDateTime'] = null;
+        $profile['lastPublishPost'] = null;
+        $profile['lastPublishComment'] = null;
+        $profile['lastEditUsername'] = null;
+        $profile['lastEditNickname'] = null;
+        $profile['registerDateTime'] = null;
+        $profile['hasPassword'] = null;
+        $profile['status'] = 1;
+        $profile['deactivate'] = false;
+        $profile['deactivateTime'] = null;
+
+        $profile['nicknameColor'] = null;
+        $profile['rid'] = null;
+        $profile['roleName'] = null;
+        $profile['roleNameDisplay'] = 0;
+        $profile['roleIcon'] = null;
+        $profile['roleIconDisplay'] = 0;
+        $profile['roleExpiryDateTime'] = null;
+        $profile['rolePermission'] = null;
+
+        return $profile;
+    }
 }

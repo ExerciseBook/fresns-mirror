@@ -98,4 +98,19 @@ class FileHelper
 
         return $fresnsResponse->getData($urlType) ?? null;
     }
+
+    // icon file
+    public static function fresnsFileIconsByArray(array $icons)
+    {
+        $iconList = [];
+
+        foreach ($icons as $icon) {
+            $key = $icon['name'];
+            $image = FileHelper::fresnsFileImageUrlByColumn($icon['fileId'], $icon['fileUrl'], 'imageConfigUrl');
+
+            $iconList[$key] = $image;
+        }
+
+        return $iconList;
+    }
 }

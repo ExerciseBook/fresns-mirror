@@ -14,7 +14,7 @@ class StrHelper
      * @param  string  $email
      * @return string
      */
-    public static function encryptEmail(string $email)
+    public static function maskEmail(string $email)
     {
         $emailArr = explode('@', $email);
         if (empty($emailArr[0])) {
@@ -31,7 +31,7 @@ class StrHelper
      * @param  int  $number
      * @return mixed
      */
-    public static function encryptNumber(int $number)
+    public static function maskNumber(int $number)
     {
         $head = substr($number, 0, 2);
         $tail = substr($number, -2);
@@ -45,7 +45,7 @@ class StrHelper
      * @param  string  $name
      * @return string
      */
-    public static function encryptName(string $name)
+    public static function maskName(string $name)
     {
         $len = mb_strlen($name);
         if ($len < 1) {

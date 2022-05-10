@@ -143,7 +143,7 @@ class AppUtility
             'browserVersion' => Browser::browserVersion(),
             'browserEngine' => Browser::browserEngine(),
             'networkType' => '',
-            'networkIpv4' => $_SERVER['REMOTE_ADDR'] ?? '',
+            'networkIpv4' => request()->ip(),
             'networkIpv6' => '',
             'networkPort' => $_SERVER['REMOTE_PORT'] ?? '',
             'mapId' => '',
