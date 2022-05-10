@@ -10,7 +10,7 @@ namespace App\Models\Traits;
 
 use App\Models\Language;
 
-trait LangName
+trait LangNameTrait
 {
     public function names()
     {

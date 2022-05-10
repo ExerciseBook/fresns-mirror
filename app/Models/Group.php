@@ -13,8 +13,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Group extends Model
 {
     use SoftDeletes;
-    use Traits\LangName;
-    use Traits\LangDescription;
+    use Traits\LangNameTrait;
+    use Traits\LangDescriptionTrait;
+    use Traits\GroupServiceTrait;
     use Traits\DataChangeNotifyTrait;
 
     protected $casts = [

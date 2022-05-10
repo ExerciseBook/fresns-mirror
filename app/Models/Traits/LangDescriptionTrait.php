@@ -10,7 +10,7 @@ namespace App\Models\Traits;
 
 use App\Models\Language;
 
-trait LangDescription
+trait LangDescriptionTrait
 {
     public function descriptions()
     {

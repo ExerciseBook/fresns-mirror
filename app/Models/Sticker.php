@@ -10,7 +10,7 @@ namespace App\Models;
 
 class Sticker extends Model
 {
-    use Traits\LangName;
+    use Traits\LangNameTrait;
 
     protected $table = 'stickers';
 

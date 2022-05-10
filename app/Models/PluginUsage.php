@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 
 class PluginUsage extends Model
 {
-    use Traits\LangName;
+    use Traits\LangNameTrait;
 
     protected $casts = [
         'data_sources' => 'json',
