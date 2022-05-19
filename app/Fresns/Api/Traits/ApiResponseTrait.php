@@ -30,7 +30,7 @@ trait ApiResponseTrait
         return $string;
     }
 
-    public function success($data = [], $message = 'success', $code = 0, $headers = [])
+    public function success($data = null, $message = 'success', $code = 0, $headers = [])
     {
         if (is_string($data)) {
             $code = $message;
@@ -55,12 +55,13 @@ trait ApiResponseTrait
             array_merge([
                 'Fresns-Version' => AppHelper::VERSION,
                 'Fresns-Api' => 'v2',
+                'Fresns-Author' => 'Jarvis Tang',
                 'Content-Type' => 'application/json',
             ], $headers)
         );
     }
 
-    public function failure($code = 3e4, $message = 'unknown error', $data = [], $headers = [])
+    public function failure($code = 3e4, $message = 'unknown error', $data = null, $headers = [])
     {
         if (! \request()->wantsJson()) {
             $message = \json_encode(compact('code', 'message', 'data'), \JSON_UNESCAPED_SLASHES|\JSON_UNESCAPED_UNICODE|\JSON_PRETTY_PRINT);
@@ -74,6 +75,7 @@ trait ApiResponseTrait
                 array_merge([
                     'Fresns-Version' => AppHelper::VERSION,
                     'Fresns-Api' => 'v2',
+                    'Fresns-Author' => 'Jarvis Tang',
                     'Content-Type' => 'application/json',
                 ], $headers)
             );
