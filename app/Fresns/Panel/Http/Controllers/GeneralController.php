@@ -36,7 +36,7 @@ class GeneralController extends Controller
             'site_register_phone',
             'site_private_status',
             'site_private_service',
-            'site_private_end',
+            'site_private_end_after',
             'site_email',
             'utc',
         ];
@@ -135,7 +135,7 @@ class GeneralController extends Controller
             'site_register_phone',
             'site_private_status',
             'site_private_service',
-            'site_private_end',
+            'site_private_end_after',
             'site_email',
         ];
 

@@ -158,7 +158,7 @@
                                 </select>
                             </div>
                             <div class="input-group mb-1">
-                                <label class="input-group-text" for="site_private_end">{{ __('FsLang::panel.site_mode_public_register_type') }}</label>
+                                <label class="input-group-text">{{ __('FsLang::panel.site_mode_public_register_type') }}</label>
                                 <div class="form-control bg-white">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="account_email" name="site_register_email" value="true" {{ $params['site_register_email'] == 'true' ? 'checked' : '' }}>
@@ -197,10 +197,10 @@
                                 </select>
                             </div>
                             <div class="input-group mb-1">
-                                <label class="input-group-text" for="site_private_end">{{ __('FsLang::panel.site_mode_private_content_policy') }}</label>
-                                <select class="form-select" id="site_private_end" name="site_private_end">
-                                    <option value="1" {{ $params['site_private_end'] == 1 ? 'selected' : '' }}>{{ __('FsLang::panel.site_mode_private_content_policy_1') }}</option>
-                                    <option value="2" {{ $params['site_private_end'] == 2 ? 'selected' : '' }}>{{ __('FsLang::panel.site_mode_private_content_policy_2') }}</option>
+                                <label class="input-group-text" for="site_private_end_after">{{ __('FsLang::panel.site_mode_private_content_policy') }}</label>
+                                <select class="form-select" id="site_private_end_after" name="site_private_end_after">
+                                    <option value="1" {{ $params['site_private_end_after'] == 1 ? 'selected' : '' }}>{{ __('FsLang::panel.site_mode_private_content_policy_1') }}</option>
+                                    <option value="2" {{ $params['site_private_end_after'] == 2 ? 'selected' : '' }}>{{ __('FsLang::panel.site_mode_private_content_policy_2') }}</option>
                                 </select>
                             </div>
                             <!--private config end-->

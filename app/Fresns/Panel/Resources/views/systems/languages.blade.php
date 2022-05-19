@@ -158,15 +158,15 @@
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.language_table_dateFormat') }}</label>
                             <div class="col-sm-9">
                                 <select class="form-select" name="date_format">
-                                    <option value="yyyy-mm-dd" selected>yyyy-mm-dd</option>
-                                    <option value="yyyy/mm/dd">yyyy/mm/dd</option>
-                                    <option value="yyyy.mm.dd">yyyy.mm.dd</option>
-                                    <option value="mm-dd-yyyy">mm-dd-yyyy</option>
-                                    <option value="mm/dd/yyyy">mm/dd/yyyy</option>
-                                    <option value="mm.dd.yyyy">mm.dd.yyyy</option>
-                                    <option value="dd-mm-yyyy">dd-mm-yyyy</option>
-                                    <option value="dd/mm/yyyy">dd/mm/yyyy</option>
-                                    <option value="dd.mm.yyyy">dd.mm.yyyy</option>
+                                    <option value="Y-m-d" selected>yyyy-mm-dd</option>
+                                    <option value="Y/m/d">yyyy/mm/dd</option>
+                                    <option value="Y.m.d">yyyy.mm.dd</option>
+                                    <option value="m-d-Y">mm-dd-yyyy</option>
+                                    <option value="m/d/Y">mm/dd/yyyy</option>
+                                    <option value="m.d.Y">mm.dd.yyyy</option>
+                                    <option value="d-m-Y">dd-mm-yyyy</option>
+                                    <option value="d/m/Y">dd/mm/yyyy</option>
+                                    <option value="d.m.Y">dd.mm.yyyy</option>
                                 </select>
                                 <div class="form-text">{{ __('FsLang::panel.language_table_dateFormat_desc') }}</div>
                             </div>
@@ -296,18 +296,18 @@
                         </div>
                         <!--table_writingDirection-->
                         <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.language_table_writingDirection') }}</label>
+                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.language_table_dateFormat') }}</label>
                             <div class="col-sm-9">
                                 <select class="form-select" name="date_format">
-                                    <option value="yyyy-mm-dd" selected>yyyy-mm-dd</option>
-                                    <option value="yyyy/mm/dd">yyyy/mm/dd</option>
-                                    <option value="yyyy.mm.dd">yyyy.mm.dd</option>
-                                    <option value="mm-dd-yyyy">mm-dd-yyyy</option>
-                                    <option value="mm/dd/yyyy">mm/dd/yyyy</option>
-                                    <option value="mm.dd.yyyy">mm.dd.yyyy</option>
-                                    <option value="dd-mm-yyyy">dd-mm-yyyy</option>
-                                    <option value="dd/mm/yyyy">dd/mm/yyyy</option>
-                                    <option value="dd.mm.yyyy">dd.mm.yyyy</option>
+                                    <option value="Y-m-d" selected>yyyy-mm-dd</option>
+                                    <option value="Y/m/d">yyyy/mm/dd</option>
+                                    <option value="Y.m.d">yyyy.mm.dd</option>
+                                    <option value="m-d-Y">mm-dd-yyyy</option>
+                                    <option value="m/d/Y">mm/dd/yyyy</option>
+                                    <option value="m.d.Y">mm.dd.yyyy</option>
+                                    <option value="d-m-Y">dd-mm-yyyy</option>
+                                    <option value="d/m/Y">dd/mm/yyyy</option>
+                                    <option value="d.m.Y">dd.mm.yyyy</option>
                                 </select>
                                 <div class="form-text">{{ __('FsLang::panel.language_table_dateFormat_desc') }}</div>
                             </div>
