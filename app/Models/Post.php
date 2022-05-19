@@ -8,16 +8,47 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
     use SoftDeletes;
-    use HasFactory;
     use Traits\PostServiceTrait;
-    use Traits\DataChangeNotifyTrait;
 
     protected $guarded = ['id'];
+
+    public function postAppend()
+    {
+        return $this->hasOne(PostAppend::class);
+    }
+
+    public function postLogs()
+    {
+        return $this->hasMany(PostLog::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'group_id', 'id');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(PostUser::class);
+    }
+
+    public function allowUsers()
+    {
+        return $this->hasMany(PostAllow::class)->where('type', 1);
+    }
+
+    public function allowRoles()
+    {
+        return $this->hasMany(PostAllow::class)->where('type', 2);
+    }
 }

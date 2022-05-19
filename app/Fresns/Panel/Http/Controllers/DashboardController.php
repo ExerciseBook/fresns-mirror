@@ -54,7 +54,7 @@ class DashboardController extends Controller
 
         $systemInfo = AppHelper::getSystemInfo();
         $databaseInfo = AppHelper::getMySqlInfo();
-        $timezones = DateHelper::fresnsSqlTimezoneNames();
+        $timezones = DateHelper::fresnsDatabaseTimezoneNames();
 
         return view('FsView::dashboard.index', compact('overview', 'pluginUpgradeCount', 'newsList', 'keyCount', 'adminCount', 'plugins', 'currentVersion', 'newVersion', 'checkVersion', 'systemInfo', 'databaseInfo', 'timezones'));
     }

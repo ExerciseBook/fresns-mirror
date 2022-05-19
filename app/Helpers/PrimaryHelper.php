@@ -23,8 +23,12 @@ class PrimaryHelper
      * @param  string  $aid
      * @return int |null
      */
-    public static function fresnsAccountIdByAid(string $aid)
+    public static function fresnsAccountIdByAid(string $aid = '')
     {
+        if (empty($aid)) {
+            return null;
+        }
+
         $id = Account::withTrashed()->where('aid', $aid)->value('id');
 
         return $id ?? null;
@@ -34,8 +38,12 @@ class PrimaryHelper
      * @param  string  $aid
      * @return int |null
      */
-    public static function fresnsAccountIdByUid(string $uid)
+    public static function fresnsAccountIdByUid(string $uid = '')
     {
+        if (empty($uid)) {
+            return null;
+        }
+
         $id = User::withTrashed()->where('uid', $uid)->value('account_id');
 
         return $id ?? null;
@@ -45,8 +53,12 @@ class PrimaryHelper
      * @param  string  $aid
      * @return int |null
      */
-    public static function fresnsUserIdByUid(string $aid)
+    public static function fresnsUserIdByUid(string $aid = '')
     {
+        if (empty($aid)) {
+            return null;
+        }
+
         $id = User::withTrashed()->where('uid', $aid)->value('id');
 
         return $id ?? null;
@@ -78,9 +90,9 @@ class PrimaryHelper
      * @param  string  $huri
      * @return int |null
      */
-    public static function fresnsHashtagIdByHuri(string $huri)
+    public static function fresnsHashtagIdByHid(string $hid)
     {
-        $id = Hashtag::withTrashed()->where('huri', $huri)->value('id');
+        $id = Hashtag::withTrashed()->where('slug', $hid)->value('id');
 
         return $id ?? null;
     }

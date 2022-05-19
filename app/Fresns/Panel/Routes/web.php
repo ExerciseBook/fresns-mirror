@@ -50,17 +50,6 @@ use App\Fresns\Panel\Http\Controllers\PluginFunctionController;
 use App\Models\Config;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 try {
     $loginConfig = Config::where('item_key', 'panel_path')->first();
     $loginUrl = $loginConfig ? $loginConfig->item_value : 'admin';

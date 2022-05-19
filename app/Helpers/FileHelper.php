@@ -12,74 +12,81 @@ use App\Models\File;
 
 class FileHelper
 {
-    public static function fresnsFileUrlById(int $fileId)
+    public static function fresnsFileStorageConfigByType(int $type)
     {
-        $file = File::idOrFid(['id' => $fileId])->firstOrFail();
+        $key = match ($type) {
+            1 => 'image',
+            2 => 'video',
+            3 => 'audio',
+            4 => 'document',
+            default => 'image',
+        };
 
-        $fileInfo = $file->getFileInfo();
-
-        return collect($fileInfo)->only([
-            'type',
-            'imageDefaultUrl',
-            'imageConfigUrl',
-            'imageAvatarUrl',
-            'imageRatioUrl',
-            'imageSquareUrl',
-            'imageBigUrl',
-            'imageOriginalUrl',
-            'videoCover',
-            'videoGif',
-            'videoUrl',
-            'videoOriginalUrl',
-            'audioUrl',
-            'audioOriginalUrl',
-            'documentUrl',
-            'documentOriginalUrl',
+        $data = ConfigHelper::fresnsConfigByItemKeys([
+            "{$key}_service",
+            "{$key}_secret_id",
+            "{$key}_secret_key",
+            "{$key}_bucket_name",
+            "{$key}_bucket_area",
+            "{$key}_bucket_domain",
+            "{$key}_url_status",
+            "{$key}_url_key",
+            "{$key}_url_expire",
         ]);
+
+        $config = [
+            'service' => $data["{$key}_service"],
+            'secretId' => $data["{$key}_secret_id"],
+            'secretKey' => $data["{$key}_secret_key"],
+            'bucketName' => $data["{$key}_bucket_name"],
+            'bucketArea' => $data["{$key}_bucket_area"],
+            'bucketDomain' => $data["{$key}_bucket_domain"],
+            'antiLinkStatus' => $data["{$key}_url_status"],
+            'antiLinkKey' => $data["{$key}_url_key"],
+            'antiLinkExpire' => $data["{$key}_url_expire"],
+        ];
+
+        return $config;
     }
 
-    public static function fresnsFileUrlByFid(string $fid)
+    public static function fresnsFileStorageConfigStatusByType(int $type)
     {
-        $file = File::idOrFid(['fid' => $fid])->firstOrFail();
+        $config = FileHelper::fresnsFileStorageConfigByType($type);
 
-        $fileInfo = $file->getFileInfo();
+        if (empty($config['service']) || empty($config['secretId']) || empty($config['secretKey']) || empty($config['bucketName']) || empty($config['bucketDomain'])) {
+            return false;
+        }
 
-        return collect($fileInfo)->only([
-            'type',
-            'imageDefaultUrl',
-            'imageConfigUrl',
-            'imageAvatarUrl',
-            'imageRatioUrl',
-            'imageSquareUrl',
-            'imageBigUrl',
-            'imageOriginalUrl',
-            'videoCover',
-            'videoGif',
-            'videoUrl',
-            'videoOriginalUrl',
-            'audioUrl',
-            'audioOriginalUrl',
-            'documentUrl',
-            'documentOriginalUrl',
-        ]);
+        return true;
+    }
+
+    public static function fresnsFileAntiLinkStatusByType(int $type)
+    {
+        $config = FileHelper::fresnsFileStorageConfigByType($type);
+
+        if (! $config['antiLinkStatus']) {
+            return false;
+        }
+
+        if (empty($config['service']) || empty($config['antiLinkKey']) || empty($config['antiLinkExpire'])) {
+            return false;
+        }
+
+        return true;
     }
 
     public static function fresnsFileInfoById(int $fileId)
     {
-        $file = File::idOrFid(['id' => $fileId])->firstOrFail();
+        $file = File::whereId($fileId)->firstOrFail();
 
-        $fileInfo = $file->getFileInfo();
-
-        return $fileInfo;
+        return $file->getFileInfo();
     }
 
     public static function fresnsFileInfoByFid(string $fid)
     {
-        $file = File::idOrFid(['fid' => $fid])->firstOrFail();
+        $file = File::whereFid($fid)->firstOrFail();
 
-        $fileInfo = $file->getFileInfo();
-
-        return $fileInfo;
+        return $file->getFileInfo();
     }
 
     public static function fresnsFileImageUrlByColumn($fileId, $fileUrl, $urlType)
@@ -88,29 +95,16 @@ class FileHelper
             return $fileUrl;
         }
 
-        if (! File::isEnableAntiTheftChainOfFileType(File::TYPE_IMAGE)) {
-            return $fileUrl;
+        if (FileHelper::fresnsFileAntiLinkStatusByType(1)) {
+            $fresnsResponse = \FresnsCmdWord::plugin()->getFileInfo([
+                'fileId' => $fileId,
+            ]);
+
+            return $fresnsResponse->getData($urlType) ?? null;
         }
 
-        $fresnsResponse = \FresnsCmdWord::plugin()->getFileUrlOfAntiLink([
-            'fileId' => $fileId,
-        ]);
+        $file = File::whereId($fileId)->firstOrFail();
 
-        return $fresnsResponse->getData($urlType) ?? null;
-    }
-
-    // icon file
-    public static function fresnsFileIconsByArray(array $icons)
-    {
-        $iconList = [];
-
-        foreach ($icons as $icon) {
-            $key = $icon['name'];
-            $image = FileHelper::fresnsFileImageUrlByColumn($icon['fileId'], $icon['fileUrl'], 'imageConfigUrl');
-
-            $iconList[$key] = $image;
-        }
-
-        return $iconList;
+        return $file->getFileInfo()[$urlType] ?? null;
     }
 }

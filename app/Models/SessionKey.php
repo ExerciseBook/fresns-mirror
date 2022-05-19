@@ -16,8 +16,8 @@ class SessionKey extends Model
         'platform_id',
         'name',
         'type',
-        'is_enable',
         'plugin_unikey',
+        'is_enable',
     ];
 
     /**

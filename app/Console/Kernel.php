@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $cronArr = Cache::rememberForever('cronArr',function (){
+        $cronArr = Cache::remember('fresns_crontab_items', now()->addDays(1), function () {
             return ConfigHelper::fresnsConfigByItemKey('crontab_items');
         });
         foreach ($cronArr as $cron)
@@ -43,12 +43,11 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__.'/Commands');
 
-        //require base_path('routes/console.php');
+        // require base_path('routes/console.php');
     }
 
     public function has($command)
     {
         return $this->getArtisan()->has($command);
     }
-
 }

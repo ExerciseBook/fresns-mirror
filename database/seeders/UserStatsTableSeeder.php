@@ -52,8 +52,8 @@ class UserStatsTableSeeder extends Seeder
                 'extcredits3' => 0,
                 'extcredits4' => 0,
                 'extcredits5' => 0,
-                'created_at' => '2021-10-08 10:00:00',
-                'updated_at' => '2021-10-08 10:00:00',
+                'created_at' => '2022-05-08 13:00:00',
+                'updated_at' => '2022-05-08 13:00:00',
                 'deleted_at' => null,
             ],
         ]);

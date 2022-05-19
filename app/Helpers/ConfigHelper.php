@@ -46,13 +46,19 @@ class ConfigHelper
      */
     public static function fresnsConfigByItemKeys(array $itemKeys, string $langTag = ''): array
     {
-        $itemData = [];
+        $langTag = $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
+        $itemData = Config::whereIn('item_key', $itemKeys)->get();
 
-        foreach ($itemKeys as $key) {
-            $itemData[$key] = ConfigHelper::fresnsConfigByItemKey($key, $langTag);
+        $itemDataArr = [];
+        foreach ($itemData as $item) {
+            if ($item->is_multilingual == 1) {
+                $itemDataArr[$item->item_key] = LanguageHelper::fresnsLanguageByTableKey($item->item_key, $item->item_type, $langTag);
+            } else {
+                $itemDataArr[$item->item_key] = $item->item_value;
+            }
         }
 
-        return $itemData;
+        return $itemDataArr;
     }
 
     /**
@@ -64,11 +70,16 @@ class ConfigHelper
      */
     public static function fresnsConfigByItemTag(string $itemTag, string $langTag = '')
     {
-        $itemData = Config::where('item_tag', $itemTag)->get()->toArray();
+        $langTag = $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
+        $itemData = Config::where('item_tag', $itemTag)->get();
 
         $itemDataArr = [];
         foreach ($itemData as $item) {
-            $itemDataArr[$item['item_key']] = ConfigHelper::fresnsConfigByItemKey($item['item_key'], $langTag);
+            if ($item->is_multilingual == 1) {
+                $itemDataArr[$item->item_key] = LanguageHelper::fresnsLanguageByTableKey($item->item_key, $item->item_type, $langTag);
+            } else {
+                $itemDataArr[$item->item_key] = $item->item_value;
+            }
         }
 
         return $itemDataArr;

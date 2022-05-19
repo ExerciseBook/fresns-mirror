@@ -8,10 +8,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
 class HashtagLinked extends Model
 {
-    use HasFactory;
 }

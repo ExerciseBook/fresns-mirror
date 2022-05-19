@@ -12,16 +12,14 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\PluginHelper;
 use App\Helpers\StrHelper;
-use App\Models\AccountConnect;
-use App\Models\AccountWallet;
 
 trait AccountServiceTrait
 {
-    public function getAccountInfo(string $timezone = '')
+    public function getAccountInfo(string $langTag = '', string $timezone = '')
     {
         $accountData = $this;
 
-        $proveSupportUnikey = ConfigHelper::fresnsConfigByItemKey('account_prove_service');
+        $proveSupportUrl = ConfigHelper::fresnsConfigByItemKey('account_prove_service');
 
         $info['aid'] = $accountData->aid;
         $info['countryCode'] = $accountData->country_code;
@@ -29,36 +27,35 @@ trait AccountServiceTrait
         $info['phone'] = ! empty($accountData->phone) ? StrHelper::maskNumber($accountData->phone) : null;
         $info['email'] = ! empty($accountData->email) ? StrHelper::maskEmail($accountData->email) : null;
         $info['hasPassword'] = !! $accountData->password;
-        $info['proveSupport'] = $proveSupportUrl ?? null;
-        $info['proveSupport'] = ! empty($proveSupportUnikey) ? PluginHelper::fresnsPluginUrlByUnikey($proveSupportUnikey) : null;
-        $info['proveStatus'] = $accountData->prove_verify;
+        $info['proveSupport'] = ! empty($proveSupportUrl) ? PluginHelper::fresnsPluginUrlByUnikey($proveSupportUrl) : null;
         $info['proveRealName'] = ! empty($accountData->prove_realname) ? StrHelper::maskName($accountData->prove_realname) : null;
         $info['proveGender'] = $accountData->prove_gender;
         $info['proveType'] = $accountData->prove_type;
         $info['proveNumber'] = ! empty($accountData->prove_number) ? StrHelper::maskName($accountData->prove_number) : null;
+        $info['verifyStatus'] = (bool) $accountData->is_verify;
         $info['verifyType'] = $accountData->verify_type;
-        $info['verifyDateTime'] = DateHelper::fresnsDateTimeByTimezone($accountData->verify_at, $timezone);
-        $info['registerDateTime'] = DateHelper::fresnsDateTimeByTimezone($accountData->created_at, $timezone);
-        $info['status'] = $accountData->is_enable;
+        $info['verifyDateTime'] = DateHelper::fresnsDateTimeByTimezone($accountData->verify_at, $timezone, $langTag);
+        $info['registerDateTime'] = DateHelper::fresnsDateTimeByTimezone($accountData->created_at, $timezone, $langTag);
+        $info['status'] = (bool) $accountData->is_enable;
+        $info['waitDelete'] = (bool) $accountData->wait_delete;
+        $info['waitDeleteDateTime'] = DateHelper::fresnsDateTimeByTimezone($accountData->wait_delete_at, $timezone, $langTag);
         $info['deactivate'] = !! $accountData->deleted_at;
-        $info['deactivateTime'] = DateHelper::fresnsDateTimeByTimezone($accountData->deleted_at, $timezone);
+        $info['deactivateTime'] = DateHelper::fresnsDateTimeByTimezone($accountData->deleted_at, $timezone, $langTag);
 
         return $info;
     }
 
     public function getAccountConnects()
     {
-        $accountData = $this;
-
-        $connectsArr = AccountConnect::where('account_id', $accountData->id)->get()->toArray();
+        $connectsArr = $this->connects;
 
         $connectsItemArr = [];
         foreach ($connectsArr as $connect) {
-            $item['id'] = $connect['connect_id'];
-            $item['name'] = $connect['connect_name'];
-            $item['nickname'] = $connect['connect_nickname'];
-            $item['avatar'] = $connect['connect_avatar'];
-            $item['status'] = $connect['is_enable'];
+            $item['connectId'] = $connect->connect_id;
+            $item['username'] = $connect->connect_username;
+            $item['nickname'] = $connect->connect_nickname;
+            $item['avatar'] = $connect->connect_avatar;
+            $item['status'] = (bool) $connect->is_enable;
             $connectsItemArr[] = $item;
         }
 
@@ -67,16 +64,18 @@ trait AccountServiceTrait
 
     public function getAccountWallet(string $langTag = '')
     {
-        $accountData = $this;
+        $walletData = $this->wallet;
 
-        $walletData = AccountWallet::where('account_id', $accountData->id)->first();
+        $currencyConfig = ConfigHelper::fresnsConfigByItemKeys([
+            'wallet_currency_code', 'wallet_currency_name', 'wallet_currency_unit', 'wallet_currency_precision'
+        ], $langTag);
 
-        $wallet['status'] = $walletData->is_enable ?? null;
+        $wallet['status'] = (bool) $walletData->is_enable;
         $wallet['hasPassword'] = !! $walletData->password;
-        $wallet['currencyCode'] = ConfigHelper::fresnsConfigByItemKey('wallet_currency_code');
-        $wallet['currencyName'] = ConfigHelper::fresnsConfigByItemKey('wallet_currency_name', $langTag);
-        $wallet['currencyUnit'] = ConfigHelper::fresnsConfigByItemKey('wallet_currency_unit', $langTag);
-        $wallet['currencyPrecision'] = ConfigHelper::fresnsConfigByItemKey('wallet_currency_precision');
+        $wallet['currencyCode'] = $currencyConfig['wallet_currency_code'];
+        $wallet['currencyName'] = $currencyConfig['wallet_currency_name'];
+        $wallet['currencyUnit'] = $currencyConfig['wallet_currency_unit'];
+        $wallet['currencyPrecision'] = $currencyConfig['wallet_currency_precision'];
         $wallet['balance'] = $walletData->balance;
         $wallet['freezeAmount'] = $walletData->freeze_amount;
         $wallet['bankName'] = $walletData->bank_name;

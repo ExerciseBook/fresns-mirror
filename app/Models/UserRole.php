@@ -12,7 +12,7 @@ class UserRole extends Model
 {
     protected $guarded = ['id'];
 
-    public function info()
+    public function roleInfo()
     {
         return $this->belongsTo(Role::class, 'role_id', 'id');
     }

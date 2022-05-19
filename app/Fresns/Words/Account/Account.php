@@ -17,7 +17,6 @@ use App\Fresns\Words\Account\DTO\VerifySessionTokenDTO;
 use App\Fresns\Words\Service\AccountService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
-use App\Helpers\UserHelper;
 use App\Models\Account as AccountModel;
 use App\Models\AccountConnect;
 use App\Models\AccountWallet;
@@ -25,6 +24,7 @@ use App\Models\SessionToken;
 use App\Models\User;
 use App\Models\VerifyCode;
 use App\Utilities\ConfigUtility;
+use App\Utilities\ValidationUtility;
 use Fresns\CmdWordManager\Exceptions\Constants\ExceptionConstant;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
 use Illuminate\Support\Facades\DB;
@@ -194,8 +194,11 @@ class Account
         $dtoWordBody = new VerifySessionTokenDTO($wordBody);
         $langTag = \request()->header('langTag', config('app.locale'));
 
+        $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
+        $userId = PrimaryHelper::fresnsUserIdByUid($dtoWordBody->uid);
+
         if (! empty($dtoWordBody->uid)) {
-            $userAffiliation = UserHelper::fresnsUserAffiliation($dtoWordBody->uid, $dtoWordBody->aid);
+            $userAffiliation = ValidationUtility::checkUserAffiliation($userId, $accountId);
             if ($userAffiliation == false) {
                 return $this->failure(
                     35201,
@@ -204,8 +207,6 @@ class Account
             }
         }
 
-        $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
-        $userId = PrimaryHelper::fresnsUserIdByUid($dtoWordBody->uid);
 
         $condition = [
             'platform_id' => $dtoWordBody->platform,

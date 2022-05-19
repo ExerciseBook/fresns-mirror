@@ -31,6 +31,7 @@ class UploadFileDTO extends DTO
             'aid' => ['nullable', 'string'],
             'uid' => ['nullable', 'integer'],
             'file' =>['required', 'file'],
+            'moreJson' => ['nullable', 'string'],
         ];
     }
 }

@@ -31,7 +31,6 @@ trait GroupServiceTrait
         $info['find'] = $groupData->type_find;
         $info['followType'] = $groupData->type_follow;
         $info['followUrl'] = ! empty($groupData->plugin_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($groupData->plugin_unikey) : null;
-        $info['viewCount'] = $groupData->view_count;
         $info['likeCount'] = $groupData->like_count;
         $info['followCount'] = $groupData->follow_count;
         $info['blockCount'] = $groupData->block_count;
@@ -44,15 +43,13 @@ trait GroupServiceTrait
 
     public function getGroupAdmins(string $langTag = '', string $timezone = '')
     {
-        $groupData = $this;
+        $adminIds = $this->admins;
 
-        $adminsArr = GroupAdmin::where('group_id', $groupData->id)->get();
-
-        $admins = User::whereIn('id', $adminsArr->pluck('user_id'))->first();
+        $adminUsers = User::whereIn('id', $adminIds->pluck('user_id'))->first();
 
         $adminList = null;
-        foreach ($adminsArr as $groupAdmin) {
-            $admin = $admins->where('id', $groupAdmin->user_id)?->first();
+        foreach ($adminIds as $groupAdmin) {
+            $admin = $adminUsers->where('id', $groupAdmin->user_id)?->first();
 
             $userProfile = $admin->getUserProfile($timezone);
             $userMainRole = $admin->getUserMainRole($langTag, $timezone);

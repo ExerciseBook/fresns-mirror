@@ -8,19 +8,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
 {
-    use HasFactory;
     use SoftDeletes;
-    use Traits\FileTypeTrait;
-    use Traits\FileServiceInfoTrait;
-    use Traits\FileInfoTrait;
-    use Traits\FileStorageTrait;
-    use Traits\DataChangeNotifyTrait;
+    use Traits\FileServiceTrait;
 
     const TYPE_IMAGE = 1;
     const TYPE_VIDEO = 2;
@@ -35,31 +28,35 @@ class File extends Model
 
     protected $guarded = [];
 
-    public function scopeIdOrFid($query, $params)
-    {
-        return $query
-            ->when(! empty($params['id']), function ($query) use ($params) {
-                $query->where('id', $params['id']);
-            })
-            ->when(! empty($params['fid']), function ($query) use ($params) {
-                $query->where('fid', $params['fid']);
-            });
-    }
-
-    public function appends()
-    {
-        return $this->hasOne(FileAppend::class);
-    }
-
     public function fileAppend()
     {
-        return $this->hasOne(FileAppend::class);
+        return $this->hasMany(FileAppend::class);
+    }
+
+    public function isImage()
+    {
+        return $this->type === File::TYPE_IMAGE;
+    }
+
+    public function isVideo()
+    {
+        return $this->type === File::TYPE_VIDEO;
+    }
+
+    public function isAudio()
+    {
+        return $this->type === File::TYPE_AUDIO;
+    }
+
+    public function isDocument()
+    {
+        return $this->type === File::TYPE_DOCUMENT;
     }
 
     public function getTypeKey()
     {
-        return match ($this->file_type) {
-            default => throw new \RuntimeException("unknown file_type of {$this->file_type}"),
+        return match ($this->type) {
+            default => throw new \RuntimeException("unknown file type of {$this->type}"),
             File::TYPE_IMAGE => 'image',
             File::TYPE_VIDEO => 'video',
             File::TYPE_AUDIO => 'audio',
@@ -69,15 +66,15 @@ class File extends Model
 
     public function getDestinationPath()
     {
-        $fileType = $this->file_type;
-        $tableType = $this->table_type;
+        $fileType = $this->type;
+        $tableType = $this->fileAppend->table_type;
 
         $fileTypeDir = match ($fileType) {
             1 => 'images',
             2 => 'videos',
             3 => 'audios',
             4 => 'documents',
-            default => throw new \LogicException("unknown file_type $fileType"),
+            default => throw new \LogicException("unknown file type $fileType"),
         };
 
         $tableTypeDir = match ($tableType) {
@@ -92,7 +89,7 @@ class File extends Model
             9 => '/comments/{YYYYMM}/{DD}/',
             10 => '/extends/{YYYYMM}/{DD}/',
             11 => '/plugins/{YYYYMM}/{DD}/',
-            default => throw new \LogicException("unknown table_type $tableType"),
+            default => throw new \LogicException("unknown table type $tableType"),
         };
 
         $replaceTableTypeDir = str_replace(

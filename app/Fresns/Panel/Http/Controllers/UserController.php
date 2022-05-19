@@ -44,9 +44,6 @@ class UserController extends Controller
         $params = [];
         foreach ($configs as $config) {
             $value = $config->item_value;
-            if ($config->item_key == 'password_strength') {
-                $value = explode(',', $value);
-            }
             $params[$config->item_key] = $value;
         }
 
@@ -171,10 +168,6 @@ class UserController extends Controller
             }
 
             $value = $request->$configKey;
-
-            if ($configKey == 'password_strength') {
-                $value = join(',', $request->$configKey);
-            }
 
             if ($configKey == 'multi_user_roles') {
                 if (in_array(0, $request->$configKey)) {

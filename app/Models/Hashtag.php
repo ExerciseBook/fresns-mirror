@@ -8,14 +8,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Hashtag extends Model
 {
     use SoftDeletes;
-    use HasFactory;
     use Traits\HashtagServiceTrait;
-    use Traits\DataChangeNotifyTrait;
 }

@@ -16,7 +16,6 @@ class Group extends Model
     use Traits\LangNameTrait;
     use Traits\LangDescriptionTrait;
     use Traits\GroupServiceTrait;
-    use Traits\DataChangeNotifyTrait;
 
     protected $casts = [
         'permission' => 'array',
@@ -42,14 +41,12 @@ class Group extends Model
         return $this->hasMany(self::class, 'parent_id', 'id');
     }
 
-    public function descriptions()
+    public function admins()
     {
-        return $this->hasMany(Language::class, 'table_id', 'id')
-            ->where('table_column', 'description')
-            ->where('table_name', 'groups');
+        return $this->hasMany(GroupAdmin::class);
     }
 
-    public function user()
+    public function creator()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }

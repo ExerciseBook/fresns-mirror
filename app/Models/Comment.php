@@ -8,14 +8,39 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
     use SoftDeletes;
-    use HasFactory;
     use Traits\CommentServiceTrait;
-    use Traits\DataChangeNotifyTrait;
+
+    public function commentAppend()
+    {
+        return $this->hasOne(CommentAppend::class);
+    }
+
+    public function commentLogs()
+    {
+        return $this->hasMany(CommentLog::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class, 'post_id', 'id');
+    }
+    public function comments()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id');
+    }
+
+    public function parentComment()
+    {
+        return $this->belongsTo(self::class, 'parent_id', 'id');
+    }
 }
