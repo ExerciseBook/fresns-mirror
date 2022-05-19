@@ -333,7 +333,7 @@ return [
     'language_table_areaCode' => '지역 번호',
     'language_table_langName' => '언어 이름',
     'language_table_areaName' => '지역 이름',
-    'language_table_lengthUnits' => '길이 단위',
+    'language_table_lengthUnit' => '길이 단위',
     'language_table_writingDirection' => '쓰기 방향',
     'language_table_area' => '언어 영역',
     'language_table_dateFormat' => '날짜 형식',

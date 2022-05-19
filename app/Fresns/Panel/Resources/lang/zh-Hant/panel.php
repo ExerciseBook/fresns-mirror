@@ -334,7 +334,7 @@ return [
     'language_table_areaCode' => '地區代碼',
     'language_table_langName' => '語言名稱',
     'language_table_areaName' => '地區名稱',
-    'language_table_lengthUnits' => '長度單位',
+    'language_table_lengthUnit' => '長度單位',
     'language_table_writingDirection' => '書寫方向',
     'language_table_area' => '語言地區',
     'language_table_dateFormat' => '日期格式',

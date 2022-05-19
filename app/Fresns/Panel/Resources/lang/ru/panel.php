@@ -333,7 +333,7 @@ return [
     'language_table_areaCode' => 'Коды площади',
     'language_table_langName' => 'Название языка',
     'language_table_areaName' => 'Имя области',
-    'language_table_lengthUnits' => 'Блок длины',
+    'language_table_lengthUnit' => 'Блок длины',
     'language_table_writingDirection' => 'Направление записи',
     'language_table_area' => 'Языковая площадь',
     'language_table_dateFormat' => 'Формат даты',

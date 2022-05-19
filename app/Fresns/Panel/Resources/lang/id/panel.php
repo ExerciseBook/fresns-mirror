@@ -333,7 +333,7 @@ return [
     'language_table_areaCode' => 'Kode Area',
     'language_table_langName' => 'Nama bahasa',
     'language_table_areaName' => 'Nama wilayah',
-    'language_table_lengthUnits' => 'Unit panjang',
+    'language_table_lengthUnit' => 'Unit panjang',
     'language_table_writingDirection' => 'Arah penulisan',
     'language_table_area' => 'Area bahasa',
     'language_table_dateFormat' => 'Format tanggal',

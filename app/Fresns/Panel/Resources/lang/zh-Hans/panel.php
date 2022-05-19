@@ -333,7 +333,7 @@ return [
     'language_table_areaCode' => '地区代码',
     'language_table_langName' => '语言名称',
     'language_table_areaName' => '地区名称',
-    'language_table_lengthUnits' => '长度单位',
+    'language_table_lengthUnit' => '长度单位',
     'language_table_writingDirection' => '书写方向',
     'language_table_area' => '语言地区',
     'language_table_dateFormat' => '日期格式',

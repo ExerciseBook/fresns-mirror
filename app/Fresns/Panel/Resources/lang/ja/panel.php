@@ -333,7 +333,7 @@ return [
     'language_table_areaCode' => 'エリアコード',
     'language_table_langName' => '言語名',
     'language_table_areaName' => '地域の名前',
-    'language_table_lengthUnits' => '長さ単位',
+    'language_table_lengthUnit' => '長さ単位',
     'language_table_writingDirection' => '執筆方向に',
     'language_table_area' => '言語エリア',
     'language_table_dateFormat' => '日付形式',

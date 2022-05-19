@@ -333,7 +333,7 @@ return [
     'language_table_areaCode' => 'Códigos de área',
     'language_table_langName' => 'Nombre del lenguaje',
     'language_table_areaName' => 'Nombre de la región',
-    'language_table_lengthUnits' => 'Unidad de longitud',
+    'language_table_lengthUnit' => 'Unidad de longitud',
     'language_table_writingDirection' => 'Dirección de escritura',
     'language_table_area' => 'Área de idioma',
     'language_table_dateFormat' => 'Formato de fecha',

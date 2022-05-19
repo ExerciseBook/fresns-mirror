@@ -333,7 +333,7 @@ return [
     'language_table_areaCode' => 'क्षेत्र कोड',
     'language_table_langName' => 'भाषा का नाम',
     'language_table_areaName' => 'क्षेत्र का नाम',
-    'language_table_lengthUnits' => 'लंबाई इकाई',
+    'language_table_lengthUnit' => 'लंबाई इकाई',
     'language_table_writingDirection' => 'लेखन दिशा',
     'language_table_area' => 'भाषा क्षेत्र',
     'language_table_dateFormat' => 'डेटा प्रारूप',

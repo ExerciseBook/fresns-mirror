@@ -144,7 +144,7 @@ class ConfigHelper
      * @param  string  $langTag
      * @return string
      */
-    public static function fresnsConfigLengthUnits(string $langTag)
+    public static function fresnsConfigLengthUnit(string $langTag)
     {
         $language_menus = ConfigHelper::fresnsConfigByItemKey('language_menus');
 
@@ -152,15 +152,15 @@ class ConfigHelper
             return null;
         }
 
-        $lengthUnits = 'mi';
+        $lengthUnit = 'mi';
 
         foreach ($language_menus as $menus) {
             if ($menus['langTag'] == $langTag) {
-                $lengthUnits = $menus['lengthUnits'];
+                $lengthUnit = $menus['lengthUnit'];
             }
         }
 
-        return $lengthUnits;
+        return $lengthUnit;
     }
 
     /**

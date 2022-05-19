@@ -43,7 +43,7 @@
                     <th scope="col">{{ __('FsLang::panel.language_table_areaCode') }}</th>
                     <th scope="col">{{ __('FsLang::panel.language_table_langName') }}</th>
                     <th scope="col">{{ __('FsLang::panel.language_table_areaName') }}</th>
-                    <th scope="col">{{ __('FsLang::panel.language_table_lengthUnits') }}</th>
+                    <th scope="col">{{ __('FsLang::panel.language_table_lengthUnit') }}</th>
                     <th scope="col">{{ __('FsLang::panel.language_table_writingDirection') }}</th>
                     <th scope="col">{{ __('FsLang::panel.table_status') }}</th>
                     <th scope="col">{{ __('FsLang::panel.table_options') }}</th>
@@ -62,7 +62,7 @@
                         <td>{{ $language['areaCode'] }}</td>
                         <td>{{ $language['langName'] }}</td>
                         <td>{{ $language['areaName'] }}</td>
-                        <td>{{ $language['lengthUnits'] }}</td>
+                        <td>{{ $language['lengthUnit'] }}</td>
                         <td>{{ $language['writingDirection'] }}</td>
                         <td><i class="bi {{ $language['isEnable'] ? 'bi-check-lg text-success' : 'bi-dash-lg text-secondary' }} "></i></td>
                         <td>
@@ -143,9 +143,9 @@
                                 </div>
                             </div>
                         </div>
-                        <!--table_lengthUnits-->
+                        <!--table_lengthUnit-->
                         <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.language_table_lengthUnits') }}</label>
+                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.language_table_lengthUnit') }}</label>
                             <div class="col-sm-9">
                                 <select class="form-select" name="length_units">
                                     <option value="km" selected>{{ __('FsLang::panel.unit_kilometer') }} (km)</option>
@@ -284,9 +284,9 @@
                                 </div>
                             </div>
                         </div>
-                        <!--table_lengthUnits-->
+                        <!--table_lengthUnit-->
                         <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.language_table_lengthUnits') }}</label>
+                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.language_table_lengthUnit') }}</label>
                             <div class="col-sm-9">
                                 <select class="form-select" name="length_units">
                                     <option value="km" selected>{{ __('FsLang::panel.unit_kilometer') }} (km)</option>
