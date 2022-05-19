@@ -108,7 +108,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @foreach ($group->admin_users as $user)
+                                    @foreach ($group->admins as $user)
                                         <span class="badge bg-light text-dark">{{ $user->nickname }}</span>
                                     @endforeach
                                 </td>
@@ -122,7 +122,7 @@
                                             data-action="{{ route('panel.groups.update', $group->id) }}"
                                             data-params="{{ $group->toJson() }}"
                                             data-names="{{ $group->names->toJson() }}"
-                                            data-admin_users="{{ $group->admin_users }}"
+                                            data-admin_users="{{ $group->admins }}"
                                             data-descriptions="{{ $group->descriptions->toJson() }}"
                                             data-names="{{ $group->names->toJson() }}"
                                             data-descriptions="{{ $group->descriptions->toJson() }}"
@@ -470,7 +470,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-md-2 col-form-label">{{ __('FsLang::panel.group_table_admins') }}</label>
                             <div class="col-sm-9 col-md-10">
-                                <select class="form-select group-user-select2" name="permission[admin_users][]" multiple="multiple"></select>
+                                <select class="form-select group-user-select2" name="admin_ids[]" multiple="multiple"></select>
                             </div>
                         </div>
                         <div class="mb-3 row">

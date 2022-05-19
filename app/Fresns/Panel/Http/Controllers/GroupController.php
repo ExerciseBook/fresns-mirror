@@ -56,13 +56,8 @@ class GroupController extends Controller
                 ->orderBy('rank_num')
                 ->where('parent_id', $parentId)
                 ->where('is_enable', 1)
-                ->with('user', 'plugin', 'names', 'descriptions')
+                ->with('user', 'plugin', 'names', 'descriptions', 'admins')
                 ->paginate();
-
-            $groups->map(function ($group) {
-                $userIds = $group->permission['admin_users'] ?? [];
-                $group->admin_users = User::whereIn('id', $userIds)->get();
-            });
         }
 
         extract(get_object_vars($this));
@@ -105,15 +100,10 @@ class GroupController extends Controller
 
         $groups = Group::typeGroup()
             ->orderBy('recom_rank_num')
-            ->with('user', 'plugin', 'category')
+            ->with('user', 'plugin', 'category', 'admins')
             ->where('is_recommend', 1)
             ->where('is_enable', 1)
             ->paginate();
-
-        $groups->map(function ($group) {
-            $userIds = $group->permission['admin_users'] ?? [];
-            $group->admin_users = User::whereIn('id', $userIds)->get();
-        });
 
         $plugins = Plugin::all();
         $plugins = $plugins->filter(function ($plugin) {
@@ -183,6 +173,10 @@ class GroupController extends Controller
             $group->type = 2;
         }
         $group->save();
+
+        if ($request->admin_ids) {
+            $group->admins()->sync($request->admin_ids);
+        }
 
         if ($request->file('cover_file')) {
             $wordBody = [
@@ -288,8 +282,6 @@ class GroupController extends Controller
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $group->description = $request->descriptions[$this->defaultLanguage] ?? (current(array_filter($request->descriptions)) ?: '');
         $group->rank_num = $request->rank_num;
-        //$group->cover_file_url = $request->cover_file_url;
-        //$group->banner_file_url = $request->banner_file_url;
         // group category
         if ($request->is_category) {
             $group->permission = [];
@@ -307,6 +299,7 @@ class GroupController extends Controller
             $permission['publish_post_review'] = (bool) ($permission['publish_post_review'] ?? 0);
             $permission['publish_comment_review'] = (bool) ($permission['publish_comment_review'] ?? 0);
             $group->permission = $permission;
+            $group->admins()->sync($request->admin_ids);
         }
 
         if ($request->file('cover_file')) {

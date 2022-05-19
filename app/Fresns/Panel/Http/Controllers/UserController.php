@@ -44,6 +44,11 @@ class UserController extends Controller
         $params = [];
         foreach ($configs as $config) {
             $value = $config->item_value;
+
+            if ($config->item_key == 'password_strength') {
+                $params[$config->item_key] = explode(',', $value);
+                continue;
+            }
             $params[$config->item_key] = $value;
         }
 

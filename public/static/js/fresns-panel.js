@@ -1213,7 +1213,7 @@ $(document).ready(function () {
         let params = button.data('params');
 
         let form = $(this).parents('form');
-        let selectAdmin = form.find('select[name="permission[admin_users][]"]');
+        let selectAdmin = form.find('select[name="admin_ids[]"]');
 
         form.attr('action', action);
         form.find('input[name=_method]').val(params ? 'put' : 'post');
@@ -1249,14 +1249,16 @@ $(document).ready(function () {
 
         form.find('select[name=plugin_unikey]').val(params.plugin_unikey);
 
+        let adminIds = [];
         if (adminUsers) {
             adminUsers.map((user) => {
+                adminIds.push(user.id);
                 let text = user.nickname + '(@' + user.username + ')';
                 let newOption = new Option(text, user.id, true, true);
-                form.find('select[name="permission[admin_users][]"]').append(newOption);
+                form.find('select[name="admin_ids[]"]').append(newOption);
             });
         }
-        form.find('select[name="permission[admin_users][]"]').val(params.permission.admin_users).change();
+        form.find('select[name="admin_ids[]"]').val(adminIds).change();
         form.find('input:radio[name=type_find][value="' + params.type_find + '"]')
             .prop('checked', true)
             .click();

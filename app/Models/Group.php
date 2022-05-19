@@ -43,7 +43,7 @@ class Group extends Model
 
     public function admins()
     {
-        return $this->hasMany(GroupAdmin::class);
+        return $this->belongsToMany(User::class, 'group_admins', 'group_id', 'user_id');
     }
 
     public function creator()
