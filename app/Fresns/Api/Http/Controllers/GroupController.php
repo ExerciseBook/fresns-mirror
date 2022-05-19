@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Api\Http\Controllers;
 
-use App\Fresns\Words\File\DTO\GetFileInfoDTO;
 use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Group;
@@ -18,12 +17,14 @@ use App\Utilities\ConfigUtility;
 use App\Utilities\ExpandUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
+use App\Exceptions\FresnsApiException;
 
 class GroupController extends Controller
 {
     public function list(Request $request)
     {
-        new GetFileInfoDTO(\request()->all());
+
+        throw new FresnsApiException(37100);
 
 
         $headers = AppHelper::getApiHeaders();
