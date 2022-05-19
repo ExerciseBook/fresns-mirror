@@ -70,7 +70,7 @@ class StrHelper
      * @param  string  $commaString
      * @return array
      */
-    public static function commaStringToArray(string $commaString = '')
+    public static function commaStringToArray(string $commaString = null)
     {
         $toArray = explode(',', $commaString);
 
@@ -81,7 +81,7 @@ class StrHelper
      * @param  string  $uri
      * @param  string  $domain
      */
-    public static function qualifyUrl(?string $uri = '', ?string $domain = '')
+    public static function qualifyUrl(?string $uri = null, ?string $domain = null)
     {
         if (! $uri) {
             return '';

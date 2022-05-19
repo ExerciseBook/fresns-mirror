@@ -76,7 +76,7 @@ class DateHelper
      *
      * @throws \Exception
      */
-    public static function fresnsDateTimeToDatabaseTimezone(string $datetime, ?string $timezone = '', ?string $langTag = '')
+    public static function fresnsDateTimeToDatabaseTimezone(string $datetime, ?string $timezone = null, ?string $langTag = null)
     {
         if (empty($datetime)) {
             return null;
@@ -107,7 +107,7 @@ class DateHelper
      *
      * @throws \Exception
      */
-    public static function fresnsDateTimeByTimezone(?string $datetime = '', ?string $timezone = '', ?string $langTag = '')
+    public static function fresnsDateTimeByTimezone(?string $datetime = null, ?string $timezone = null, ?string $langTag = null)
     {
         if (empty($datetime)) {
             return null;
@@ -142,7 +142,7 @@ class DateHelper
      * @param  string  $langTag
      * @return string
      */
-    public static function fresnsFormatDateTime(?string $datetime = '', ?string $timezone = '', ?string $langTag = '')
+    public static function fresnsFormatDateTime(?string $datetime = null, ?string $timezone = null, ?string $langTag = null)
     {
         if (empty($datetime)) {
             return null;
@@ -185,7 +185,7 @@ class DateHelper
      * @param  string  $langTag
      * @return string
      */
-    public static function fresnsFormatTime(?string $datetime = '', ?string $langTag = '')
+    public static function fresnsFormatTime(?string $datetime = null, ?string $langTag = null)
     {
         if (empty($datetime)) {
             return null;

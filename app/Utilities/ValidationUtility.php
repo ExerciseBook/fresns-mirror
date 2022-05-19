@@ -44,13 +44,13 @@ class ValidationUtility
     }
 
     // Check if the user has permission to publish
-    public static function checkUserPublishPermForPost(int $userId, ?string $langTag = '')
+    public static function checkUserPublishPermForPost(int $userId, ?string $langTag = null)
     {
         $publishConfig = ConfigHelper::fresnsConfigByItemTag('postEditor', $langTag);
         $user = User::find($userId);
     }
 
-    public static function checkUserPublishPermForComment(int $userId, ?string $langTag = '')
+    public static function checkUserPublishPermForComment(int $userId, ?string $langTag = null)
     {
         $publishConfig = ConfigHelper::fresnsConfigByItemTag('commentEditor', $langTag);
         $user = User::find($userId);
@@ -65,7 +65,7 @@ class ValidationUtility
     }
 
     // Check if the user has group publishing permissions
-    public static function checkUserGroupPublishPerm(?int $userId = '', int $groupId)
+    public static function checkUserGroupPublishPerm(?int $userId = null, int $groupId)
     {
         $perm['allowPost'] = true;
         $perm['reviewPost'] = true;

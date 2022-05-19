@@ -23,7 +23,7 @@ class PrimaryHelper
      * @param  string  $aid
      * @return int |null
      */
-    public static function fresnsAccountIdByAid(?string $aid = '')
+    public static function fresnsAccountIdByAid(?string $aid = null)
     {
         if (empty($aid)) {
             return null;
@@ -38,7 +38,7 @@ class PrimaryHelper
      * @param  string  $aid
      * @return int |null
      */
-    public static function fresnsAccountIdByUid(?string $uid = '')
+    public static function fresnsAccountIdByUid(?string $uid = null)
     {
         if (empty($uid)) {
             return null;
@@ -53,7 +53,7 @@ class PrimaryHelper
      * @param  string  $aid
      * @return int |null
      */
-    public static function fresnsUserIdByUid(?string $aid = '')
+    public static function fresnsUserIdByUid(?string $aid = null)
     {
         if (empty($aid)) {
             return null;

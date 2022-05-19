@@ -21,7 +21,7 @@ class LanguageHelper
      * @param  string  $langTag
      * @return array
      */
-    public static function fresnsLanguageByTableId(string $tableName, string $tableColumn, int $tableId, ?string $langTag = '')
+    public static function fresnsLanguageByTableId(string $tableName, string $tableColumn, int $tableId, ?string $langTag = null)
     {
         if (empty($langTag)) {
             $languageArr = Language::where([
@@ -59,7 +59,7 @@ class LanguageHelper
      * @param  string  $langTag
      * @return array
      */
-    public static function fresnsLanguageByTableKey(string $tableKey, ?string $itemType = '', ?string $langTag = '')
+    public static function fresnsLanguageByTableKey(string $tableKey, ?string $itemType = null, ?string $langTag = null)
     {
         $itemType = $itemType ?: 'string';
 

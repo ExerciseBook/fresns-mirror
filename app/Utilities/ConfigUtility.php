@@ -126,7 +126,7 @@ class ConfigUtility
     }
 
     // get code message
-    public static function getCodeMessage(int $code, ?string $unikey = '', ?string $langTag = '')
+    public static function getCodeMessage(int $code, ?string $unikey = null, ?string $langTag = null)
     {
         $unikey = $unikey ?: 'Fresns';
 

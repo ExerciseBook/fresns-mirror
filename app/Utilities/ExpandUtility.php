@@ -24,7 +24,7 @@ use App\Models\ExtendLinked;
 
 class ExpandUtility
 {
-    public static function getPluginExpands(int $type, ?int $groupId = '', ?int $scene = '', ?int $userId = '', ?string $langTag = '')
+    public static function getPluginExpands(int $type, ?int $groupId = null, ?int $scene = null, ?int $userId = null, ?string $langTag = null)
     {
         $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
 
@@ -122,7 +122,7 @@ class ExpandUtility
     }
 
     // get icons
-    public static function getIcons(int $type, int $id, ?string $langTag = '')
+    public static function getIcons(int $type, int $id, ?string $langTag = null)
     {
         $iconLinkedArr = IconLinked::where('linked_type', $type)->where('linked_id', $id)->get()->toArray();
         $iconArr = Icon::whereIn('id', array_column($iconLinkedArr, 'icon_id'))->where('is_enable', 1)->get();
@@ -148,7 +148,7 @@ class ExpandUtility
     }
 
     // get tips
-    public static function getTips(int $type, int $id, ?string $langTag = '')
+    public static function getTips(int $type, int $id, ?string $langTag = null)
     {
         $tipLinkedArr = TipLinked::where('linked_type', $type)->where('linked_id', $id)->get()->toArray();
         $tipArr = Tip::whereIn('id', array_column($tipLinkedArr, 'tip_id'))->where('is_enable', 1)->get();
@@ -168,7 +168,7 @@ class ExpandUtility
     }
 
     // get extends
-    public static function getExtends(int $type, int $id, ?string $langTag = '')
+    public static function getExtends(int $type, int $id, ?string $langTag = null)
     {
         $extendLinkedArr = ExtendLinked::where('linked_type', $type)->where('linked_id', $id)->get()->toArray();
         $extendArr = Extend::whereIn('id', array_column($extendLinkedArr, 'extend_id'))->where('is_enable', 1)->get();
