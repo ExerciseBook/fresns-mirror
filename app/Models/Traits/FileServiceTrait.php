@@ -124,11 +124,18 @@ trait FileServiceTrait
 
     public function getFileListInfo(string $tableName, string $tableColumn, string $tableId = '', string $tableKey = '')
     {
+        $fileAppendQuery =  FileAppend::with('file')
+            ->where('table_name', $tableName)
+            ->where('table_column', $tableColumn)
+            ->orderBy('rank_num', 'desc');
+
         if (empty($tableId)) {
-            $fileAppends = FileAppend::with('file')->where('table_name', $tableName)->where('table_column', $tableColumn)->where('table_key', $tableKey)->get();
+            $fileAppendQuery->where('table_key', $tableKey);
         } else{
-            $fileAppends = FileAppend::with('file')->where('table_name', $tableName)->where('table_column', $tableColumn)->where('table_id', $tableId)->get();
+            $fileAppendQuery->where('table_id', $tableId);
         }
+
+        $fileAppends = $fileAppendQuery->get();
 
         $fileList = $fileAppends->map(fn ($fileAppend) => $fileAppend->file->getFileInfo());
 

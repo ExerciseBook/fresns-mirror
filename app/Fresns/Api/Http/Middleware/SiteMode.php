@@ -8,9 +8,12 @@
 
 namespace App\Fresns\Api\Http\Middleware;
 
+use Closure;
+use Illuminate\Http\Request;
+
 class SiteMode
 {
-    function middleware($request, $next)
+    public function handle(Request $request, Closure $next)
     {
         $isPrivateStatus = false;
 

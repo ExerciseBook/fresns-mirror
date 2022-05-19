@@ -65,7 +65,7 @@ class ValidationUtility
     }
 
     // Check if the user has group publishing permissions
-    public static function checkUserGroupPublishPerm(int $userId = null, int $groupId)
+    public static function checkUserGroupPublishPerm(?int $userId = '', int $groupId)
     {
         $perm['allowPost'] = true;
         $perm['reviewPost'] = true;

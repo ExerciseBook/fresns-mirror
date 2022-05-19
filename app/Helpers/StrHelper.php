@@ -81,7 +81,7 @@ class StrHelper
      * @param  string  $uri
      * @param  string  $domain
      */
-    public static function qualifyUrl(?string $uri = null, ?string $domain = null)
+    public static function qualifyUrl(?string $uri = '', ?string $domain = '')
     {
         if (! $uri) {
             return '';

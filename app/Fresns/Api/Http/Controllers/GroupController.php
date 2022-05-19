@@ -13,7 +13,6 @@ use App\Helpers\InteractiveHelper;
 use App\Models\Group;
 use App\Models\User;
 use App\Models\Seo;
-use App\Utilities\ConfigUtility;
 use App\Utilities\ExpandUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
@@ -23,10 +22,6 @@ class GroupController extends Controller
 {
     public function list(Request $request)
     {
-
-        throw new FresnsApiException(37100);
-
-
         $headers = AppHelper::getApiHeaders();
         $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
@@ -60,10 +55,7 @@ class GroupController extends Controller
 
         $group = Group::whereGid($gid)->first();
         if (empty($group)) {
-            return $this->failure(
-                37100,
-                ConfigUtility::getCodeMessage(37100, 'Fresns', $headers['langTag'])
-            );
+            throw new FresnsApiException(37100);
         }
 
         $parentGroup = $group->category;

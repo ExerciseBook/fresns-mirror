@@ -20,7 +20,7 @@ class ConfigHelper
      * @param  string  $langTag
      * @return mixed
      */
-    public static function fresnsConfigByItemKey(string $itemKey, string $langTag = '')
+    public static function fresnsConfigByItemKey(string $itemKey, ?string $langTag = '')
     {
         $langTag = $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
 
@@ -44,7 +44,7 @@ class ConfigHelper
      * @param  string  $langTag
      * @return mixed
      */
-    public static function fresnsConfigByItemKeys(array $itemKeys, string $langTag = ''): array
+    public static function fresnsConfigByItemKeys(array $itemKeys, ?string $langTag = ''): array
     {
         $langTag = $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
         $itemData = Config::whereIn('item_key', $itemKeys)->get();
@@ -68,7 +68,7 @@ class ConfigHelper
      * @param  string  $langTag
      * @return mixed
      */
-    public static function fresnsConfigByItemTag(string $itemTag, string $langTag = '')
+    public static function fresnsConfigByItemTag(string $itemTag, ?string $langTag = '')
     {
         $langTag = $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
         $itemData = Config::where('item_tag', $itemTag)->get();

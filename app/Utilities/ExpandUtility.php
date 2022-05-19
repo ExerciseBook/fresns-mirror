@@ -24,7 +24,7 @@ use App\Models\ExtendLinked;
 
 class ExpandUtility
 {
-    public static function getPluginExpands(int $type, ?int $groupId = null, ?int $scene = null, ?int $userId = null, ?string $langTag = '')
+    public static function getPluginExpands(int $type, ?int $groupId = '', ?int $scene = '', ?int $userId = '', ?string $langTag = '')
     {
         $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
 
@@ -38,7 +38,7 @@ class ExpandUtility
             ->get();
         }
 
-        $expandList = [];
+        $expandList = null;
         foreach ($expandArr as $expand) {
             if ($expand->is_group_admin == 1) {
                 $adminCheck = false;
@@ -98,7 +98,7 @@ class ExpandUtility
     // get expand list by ids
     public static function getExpandItemListByIds(array $usageIds, int $userId = 0, string $langTag)
     {
-        $expandList = [];
+        $expandList = null;
         foreach ($usageIds as $id) {
             $expandList[] = self::getExpandItemById($id, $userId, $langTag);
         }
@@ -110,7 +110,7 @@ class ExpandUtility
     {
         $rankNumberArr = $dataSources[$key]['rankNumber'];
 
-        $rankNumber = [];
+        $rankNumber = null;
         foreach ($rankNumberArr as $arr) {
             $item['id'] = $arr['id'];
             $item['title'] = collect($arr['intro'])->where('langTag', $langTag)->first()['title'] ?? null;
@@ -122,12 +122,12 @@ class ExpandUtility
     }
 
     // get icons
-    public static function getIcons(int $type, int $id, string $langTag = '')
+    public static function getIcons(int $type, int $id, ?string $langTag = '')
     {
         $iconLinkedArr = IconLinked::where('linked_type', $type)->where('linked_id', $id)->get()->toArray();
         $iconArr = Icon::whereIn('id', array_column($iconLinkedArr, 'icon_id'))->where('is_enable', 1)->get();
 
-        $iconList = [];
+        $iconList = null;
         foreach ($iconArr as $icon) {
             foreach ($iconLinkedArr as $iconLinked) {
                 if ($iconLinked['icon_id'] !== $icon['id']) {
@@ -148,12 +148,12 @@ class ExpandUtility
     }
 
     // get tips
-    public static function getTips(int $type, int $id, string $langTag = '')
+    public static function getTips(int $type, int $id, ?string $langTag = '')
     {
         $tipLinkedArr = TipLinked::where('linked_type', $type)->where('linked_id', $id)->get()->toArray();
         $tipArr = Tip::whereIn('id', array_column($tipLinkedArr, 'tip_id'))->where('is_enable', 1)->get();
 
-        $tipList = [];
+        $tipList = null;
         foreach ($tipArr as $tip) {
             $item['icon'] = FileHelper::fresnsFileImageUrlByColumn($tip['icon_file_id'], $tip['icon_file_url'], 'imageConfigUrl');
             $item['content'] = LanguageHelper::fresnsLanguageByTableId('tips', 'content', $tip->id, $langTag);
@@ -168,12 +168,12 @@ class ExpandUtility
     }
 
     // get extends
-    public static function getExtends(int $type, int $id, string $langTag = '')
+    public static function getExtends(int $type, int $id, ?string $langTag = '')
     {
         $extendLinkedArr = ExtendLinked::where('linked_type', $type)->where('linked_id', $id)->get()->toArray();
         $extendArr = Extend::whereIn('id', array_column($extendLinkedArr, 'extend_id'))->where('is_enable', 1)->get();
 
-        $extendList = [];
+        $extendList = null;
         foreach ($extendArr as $extend) {
             $item['eid'] = $extend->eid;
             $item['frameType'] = $extend->frame_type;

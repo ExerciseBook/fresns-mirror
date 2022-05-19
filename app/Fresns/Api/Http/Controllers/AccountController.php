@@ -11,8 +11,8 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Account;
-use App\Utilities\ConfigUtility;
 use App\Utilities\ExpandUtility;
+use App\Exceptions\FresnsApiException;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -23,10 +23,7 @@ class AccountController extends Controller
 
         $account = Account::whereAid($headers['aid'])->first();
         if (empty($account)) {
-            return $this->failure(
-                31502,
-                ConfigUtility::getCodeMessage(31502, 'Fresns', $headers['langTag'])
-            );
+            throw new FresnsApiException(31502);
         }
 
         $common['walletRecharges'] = ExpandUtility::getPluginExpands(1, null, null, $account->id, $headers['langTag']);

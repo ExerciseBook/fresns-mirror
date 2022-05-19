@@ -11,7 +11,7 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Comment;
-use App\Utilities\ConfigUtility;
+use App\Exceptions\FresnsApiException;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -23,10 +23,7 @@ class CommentController extends Controller
 
         $comment = Comment::with('creator')->whereCid($cid)->first();
         if (empty($comment)) {
-            return $this->failure(
-                37400,
-                ConfigUtility::getCodeMessage(37400, 'Fresns', $headers['langTag'])
-            );
+            throw new FresnsApiException(37400);
         }
     }
 }

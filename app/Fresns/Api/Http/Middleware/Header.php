@@ -8,13 +8,16 @@
 
 namespace App\Fresns\Api\Http\Middleware;
 
+use Closure;
+use Illuminate\Http\Request;
+
 class Header
 {
-    function middleware($request, $next)
+    public function handle(Request $request, Closure $next)
     {
         $headers = \request()->headers->all();
         $login = false;
-        
+
         $currentRouteName = \request()->route()->getName();
         $whistle1 = [
             'posts.list',
@@ -41,7 +44,7 @@ class Header
         if ($validateResult->isErrorResponse()) {
             throw new \RuntimeException('未登录，签名验证失败');
         }
-        
+
         // 验签通过，放行
         return $next($request);
     }

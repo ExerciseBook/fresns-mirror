@@ -13,18 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class DateHelper
 {
-    const diffYearFormat = [
-        'Y-m-d' => 'Y-m-d H:i', 'Y/m/d' => 'Y/m/d H:i', 'Y.m.d' => 'Y.m.d H:i',
-        'm-d-Y' => 'm-d-Y H:i', 'm/d/Y' => 'm/d/Y H:i', 'm.d.Y' => 'm.d.Y H:i',
-        'd-m-Y' => 'd-m-Y H:i', 'd/m/Y' => 'd/m/Y H:i', 'd.m.Y' => 'd.m.Y H:i',
-    ];
-
-    const sameYearFormat = [
-        'Y-m-d' => 'm-d H:i', 'Y/m/d' => 'm/d H:i', 'Y.m.d' => 'm.d H:i',
-        'm-d-Y' => 'm-d H:i', 'm/d/Y' => 'm/d H:i', 'm.d.Y' => 'm.d H:i',
-        'd-m-Y' => 'd-m H:i', 'd/m/Y' => 'd/m H:i', 'd.m.Y' => 'd.m H:i',
-    ];
-
     /**
      * Get database utc time zone.
      *
@@ -88,7 +76,7 @@ class DateHelper
      *
      * @throws \Exception
      */
-    public static function fresnsDateTimeToDatabaseTimezone($datetime, $timezone = '', $langTag = '')
+    public static function fresnsDateTimeToDatabaseTimezone(string $datetime, ?string $timezone = '', ?string $langTag = '')
     {
         if (empty($datetime)) {
             return null;
@@ -119,7 +107,7 @@ class DateHelper
      *
      * @throws \Exception
      */
-    public static function fresnsDateTimeByTimezone($datetime, $timezone = '', $langTag = '')
+    public static function fresnsDateTimeByTimezone(?string $datetime = '', ?string $timezone = '', ?string $langTag = '')
     {
         if (empty($datetime)) {
             return null;
@@ -154,7 +142,7 @@ class DateHelper
      * @param  string  $langTag
      * @return string
      */
-    public static function fresnsFormatDateTime($datetime, $timezone = '', $langTag = '')
+    public static function fresnsFormatDateTime(?string $datetime = '', ?string $timezone = '', ?string $langTag = '')
     {
         if (empty($datetime)) {
             return null;
@@ -197,7 +185,7 @@ class DateHelper
      * @param  string  $langTag
      * @return string
      */
-    public static function fresnsFormatTime($datetime, $langTag = '')
+    public static function fresnsFormatTime(?string $datetime = '', ?string $langTag = '')
     {
         if (empty($datetime)) {
             return null;

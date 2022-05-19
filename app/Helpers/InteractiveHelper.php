@@ -40,7 +40,7 @@ class InteractiveHelper
      * @param  string  $langTag
      * @return array
      */
-    public static function fresnsUserInteractive(string $langTag = '')
+    public static function fresnsUserInteractive(?string $langTag = '')
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'user_name', 'user_uid_name', 'user_username_name', 'user_nickname_name', 'user_role_name',
@@ -69,7 +69,7 @@ class InteractiveHelper
      * @param  string  $langTag
      * @return array
      */
-    public static function fresnsUserProfileInteractive(string $langTag = '')
+    public static function fresnsUserProfileInteractive(?string $langTag = '')
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'it_home_list', 'it_posts', 'it_comments', 'it_likers', 'it_followers', 'it_blockers',
@@ -110,7 +110,7 @@ class InteractiveHelper
      * @param  string  $langTag
      * @return array
      */
-    public static function fresnsGroupInteractive(string $langTag = '')
+    public static function fresnsGroupInteractive(?string $langTag = '')
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'group_name',
@@ -135,7 +135,7 @@ class InteractiveHelper
      * @param  string  $langTag
      * @return array
      */
-    public static function fresnsHashtagInteractive(string $langTag = '')
+    public static function fresnsHashtagInteractive(?string $langTag = '')
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'hashtag_name',
@@ -160,7 +160,7 @@ class InteractiveHelper
      * @param  string  $langTag
      * @return array
      */
-    public static function fresnsPostInteractive(string $langTag = '')
+    public static function fresnsPostInteractive(?string $langTag = '')
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'post_name',
@@ -185,7 +185,7 @@ class InteractiveHelper
      * @param  string  $langTag
      * @return array
      */
-    public static function fresnsCommentInteractive(string $langTag = '')
+    public static function fresnsCommentInteractive(?string $langTag = '')
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'comment_name',
