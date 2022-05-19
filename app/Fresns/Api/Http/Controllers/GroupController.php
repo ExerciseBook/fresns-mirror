@@ -8,6 +8,7 @@
 
 namespace App\Fresns\Api\Http\Controllers;
 
+use App\Fresns\Words\File\DTO\GetFileInfoDTO;
 use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Group;
@@ -20,9 +21,41 @@ use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {
+    public function list(Request $request)
+    {
+        new GetFileInfoDTO(\request()->all());
+
+
+        $headers = AppHelper::getApiHeaders();
+        $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
+
+        $groups = Group::paginate($request->get('pageSie', 1));
+
+        $groupList = [];
+        foreach ($groups as $group) {
+            $groupInfo = $group->getGroupInfo($headers['langTag']);
+
+            $item['icons'] = ExpandUtility::getIcons(2, $group->id, $headers['langTag']);
+            $item['tips'] = ExpandUtility::getTips(2, $group->id, $headers['langTag']);
+            $item['extends'] = ExpandUtility::getExtends(2, $group->id, $headers['langTag']);
+
+            $item['creator'] = null;
+            if (! empty($creator)) {
+                $userProfile = $creator->getUserProfile($headers['langTag'], $headers['timezone']);
+                $userMainRole = $creator->getUserMainRole($headers['langTag'], $headers['timezone']);
+                $item['creator'] = array_merge($userProfile, $userMainRole);
+            }
+
+            $groupList[] = array_merge($groupInfo, $item);
+        }
+
+        return $this->fresnsPaginate($groupList, $groups->total(), $groups->perPage());
+    }
+
     public function detail(string $gid)
     {
         $headers = AppHelper::getApiHeaders();
+        $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
         $group = Group::whereGid($gid)->first();
         if (empty($group)) {
@@ -35,18 +68,16 @@ class GroupController extends Controller
         $parentGroup = $group->category;
         $creator = $group->creator;
 
-        $user = User::whereUid($headers['uid'])->firstOrFail();
-
         $seoData = Seo::where('linked_type', 2)->where('linked_id', $group->id)->where('lang_tag', $headers['langTag'])->first();
         $common['title'] = $seoData->title ?? null;
         $common['keywords'] = $seoData->keywords ?? null;
         $common['description'] = $seoData->description ?? null;
-        $common['extensions'] = ExpandUtility::getPluginExpands(6, $group->id, null, $user->id, $headers['langTag']);
+        $common['extensions'] = ExpandUtility::getPluginExpands(6, $group->id, null, $user?->id, $headers['langTag']);
         $data['commons'] = $common;
 
         $groupInfo = $group->getGroupInfo($headers['langTag']);
 
-        $item['publishRule'] = ValidationUtility::checkUserGroupPublishPerm($user->id, $group->id);
+        $item['publishRule'] = ValidationUtility::checkUserGroupPublishPerm($user?->id, $group->id);
 
         $item['icons'] = ExpandUtility::getIcons(2, $group->id, $headers['langTag']);
         $item['tips'] = ExpandUtility::getTips(2, $group->id, $headers['langTag']);

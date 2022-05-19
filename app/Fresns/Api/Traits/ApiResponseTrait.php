@@ -7,6 +7,7 @@
 
 namespace App\Fresns\Api\Traits;
 
+use App\Helpers\AppHelper;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,6 +40,7 @@ trait ApiResponseTrait
 
         // paginate data
         $meta = [];
+        $paginate = [];
         if (isset($data['data']) && isset($data['paginate'])) {
             extract($data);
         }
@@ -51,6 +53,7 @@ trait ApiResponseTrait
             \json_encode($fresnsResponse, \JSON_UNESCAPED_SLASHES|\JSON_UNESCAPED_UNICODE|\JSON_PRETTY_PRINT),
             Response::HTTP_OK,
             array_merge([
+                'Fresns-Version' => AppHelper::VERSION,
                 'Fresns-Api' => 'v2',
                 'Content-Type' => 'application/json',
             ], $headers)
@@ -62,13 +65,14 @@ trait ApiResponseTrait
         if (! \request()->wantsJson()) {
             $message = \json_encode(compact('code', 'message', 'data'), \JSON_UNESCAPED_SLASHES|\JSON_UNESCAPED_UNICODE|\JSON_PRETTY_PRINT);
             if (!array_key_exists($code, Response::$statusTexts)) {
-                $code = 3e4;
+                $code = 200;
             }
 
             return \response(
                 $message,
                 $code,
                 array_merge([
+                    'Fresns-Version' => AppHelper::VERSION,
                     'Fresns-Api' => 'v2',
                     'Content-Type' => 'application/json',
                 ], $headers)
@@ -84,7 +88,7 @@ trait ApiResponseTrait
             'paginate' => [
                 'total' => $paginate->total(),
                 'currentPage' => $paginate->currentPage(),
-                'perPage' => $paginate->perPage(),
+                'pageSize' => $paginate->perPage(),
                 'lastPage' => $paginate->lastPage(),
             ],
             'list' => array_map(function ($item) use ($callable) {
