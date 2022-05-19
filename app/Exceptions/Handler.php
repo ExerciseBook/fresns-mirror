@@ -47,4 +47,21 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof \Fresns\DTO\Exceptions\DTOException) {
+            throw new DTOException($e->getMessage());
+        }
+
+        if ($e instanceof \Illuminate\Validation\ValidationException) {
+            if (! $request->wantsJson()) {
+                return back()->withException($e);
+            }
+
+            throw new \RuntimeException($e->validator->errors()->first());
+        }
+
+        return parent::render($request, $e);
+    }
 }
