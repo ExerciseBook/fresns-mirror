@@ -24,6 +24,7 @@ Route::prefix('v2')->group(function () {
     });
 
     Route::prefix('group')->group(function () {
+        Route::get('list', [GroupController::class, 'list'])->name('group.list');
         Route::get('detail/{gid}', [GroupController::class, 'detail'])->name('group.detail');
     });
 

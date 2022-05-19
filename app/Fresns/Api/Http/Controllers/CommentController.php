@@ -19,6 +19,7 @@ class CommentController extends Controller
     public function detail(string $cid, Request $request)
     {
         $headers = AppHelper::getApiHeaders();
+        $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
         $comment = Comment::with('creator')->whereCid($cid)->first();
         if (empty($comment)) {

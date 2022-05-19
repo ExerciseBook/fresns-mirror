@@ -14,24 +14,4 @@ class Controller extends BaseController
 {
     use ApiResponseTrait;
 
-    public function getPaginate($paginate, ?callable $callable = null)
-    {
-        $meta = [
-            'total' => $paginate->total(),
-            'current' => $paginate->currentPage(),
-            'pageSize' => $paginate->perPage(),
-            'lastPage' => $paginate->lastPage(),
-        ];
-
-        $data = $paginate->items();
-
-        if ($callable) {
-            $data = collect($paginate->items())->map($callable);
-        }
-
-        return [
-            'paginate' => $meta,
-            'list' => $data,
-        ];
-    }
 }
