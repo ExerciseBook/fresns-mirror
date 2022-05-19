@@ -301,6 +301,7 @@ Route::middleware(['panelAuth'])->group(function () {
         // theme function
         Route::get('functions', [PluginFunctionController::class, 'show'])->name('plugin.function.show');
         Route::put('functions', [PluginFunctionController::class, 'update'])->name('plugin.function.update');
+        Route::put('functions/languages', [PluginFunctionController::class, 'updateLanguage'])->name('plugin.function.update_language');
     });
 
     // iframe
