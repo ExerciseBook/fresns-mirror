@@ -54,6 +54,11 @@ return [
     'uninstall_step_3' => 'Deletar arquivos',
     'uninstall_step_4' => 'Limpar cache',
     'uninstall_step_5' => 'Feito',
+    // theme
+    'theme_error' => 'O tema é incorrecto ou não existe',
+    'theme_functions_file_error' => 'O ficheiro de visualização da configuração do tema está incorrecto ou não existe',
+    'theme_json_file_error' => 'O ficheiro de configuração do tema está incorrecto ou não existe',
+    'theme_json_format_error' => 'O ficheiro de configuração do tema está no formato errado',
     // others
     'account_not_found' => 'Conta não existe ou inserir erros',
     'account_login_limit' => 'O erro excedeu o limite do sistema. Por favor, faça novamente o log in 1 hora mais tarde',
@@ -63,6 +68,7 @@ return [
     'language_exists' => 'A linguagem já existe',
     'language_not_exists' => 'a língua não existe',
     'plugin_not_exists' => 'o plugin não existe',
+    'map_exists' => 'Este prestador de serviços de mapas já foi utilizado e não pode ser recriado',
     'map_not_exists' => 'o mapa não existe',
     'required_user_role_name' => 'Por favor, preencha o nome do papel',
     'required_sticker_category_name' => 'Por favor, preencha o nome do grupo de expressão',

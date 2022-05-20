@@ -54,6 +54,11 @@ return [
     'uninstall_step_3' => 'Supprimer les fichiers',
     'uninstall_step_4' => 'Vider le cache',
     'uninstall_step_5' => 'Terminé',
+    // theme
+    'theme_error' => 'Le thème est incorrect ou n\'existe pas',
+    'theme_functions_file_error' => 'Le fichier de vue de la configuration du thème est incorrect ou n\'existe pas.',
+    'theme_json_file_error' => 'Le fichier de configuration du thème est incorrect ou n\'existe pas',
+    'theme_json_format_error' => 'Le fichier de configuration du thème n\'a pas le bon format',
     // others
     'account_not_found' => 'Compte n\'existe pas ou n\'entre pas d\'erreur',
     'account_login_limit' => 'L\'erreur a dépassé la limite du système. Veuillez vous reconnecter 1 heure plus tard',
@@ -63,6 +68,7 @@ return [
     'language_exists' => 'La langue existe déjà',
     'language_not_exists' => 'la langue n\'existe pas',
     'plugin_not_exists' => 'plugin n\'existe pas',
+    'map_exists' => 'Ce fournisseur de services cartographiques a déjà été utilisé et ne peut être recréé.',
     'map_not_exists' => 'carte inexistante',
     'required_user_role_name' => 'S\'il vous plaît remplir le nom du rôle',
     'required_sticker_category_name' => 'S\'il vous plaît remplir le nom du groupe d\'expression',

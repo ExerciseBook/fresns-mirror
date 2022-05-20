@@ -54,6 +54,11 @@ return [
     'uninstall_step_3' => 'Hapus file',
     'uninstall_step_4' => 'Cure cache',
     'uninstall_step_5' => 'Selesai',
+    // theme
+    'theme_error' => 'Temanya salah atau tidak ada',
+    'theme_functions_file_error' => 'File tampilan untuk konfigurasi tema salah atau tidak ada',
+    'theme_json_file_error' => 'File konfigurasi tema salah atau tidak ada',
+    'theme_json_format_error' => 'Kesalahan format file konfigurasi tema',
     // others
     'account_not_found' => 'Akun tidak ada atau masukkan kesalahan',
     'account_login_limit' => 'Kesalahan telah melampaui batas sistem. Silakan masuk lagi 1 jam kemudian',
@@ -63,6 +68,7 @@ return [
     'language_exists' => 'Bahasa sudah ada',
     'language_not_exists' => 'bahasa tidak ada',
     'plugin_not_exists' => 'plugin tidak ada',
+    'map_exists' => 'Penyedia layanan peta telah digunakan dan tidak dapat dibuat ulang',
     'map_not_exists' => 'peta tidak ada',
     'required_user_role_name' => 'Silakan isi nama perannya',
     'required_sticker_category_name' => 'Silakan isi nama grup ekspresi',
