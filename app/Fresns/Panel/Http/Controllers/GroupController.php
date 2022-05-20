@@ -56,7 +56,7 @@ class GroupController extends Controller
                 ->orderBy('rank_num')
                 ->where('parent_id', $parentId)
                 ->where('is_enable', 1)
-                ->with('user', 'plugin', 'names', 'descriptions', 'admins')
+                ->with('creator', 'plugin', 'names', 'descriptions', 'admins')
                 ->paginate();
         }
 
