@@ -32,7 +32,7 @@
                     <option value="">{{ __('FsLang::panel.option_all') }}</option>
                     <option value="Fresns">Fresns</option>
                     @foreach ($pluginsList as $plugin)
-                      <option @if ($plugin['unikey'] == $pluginUnikey) selected @endif value="{{ $plugin['unikey'] }}">{{ $plugin['unikey'] }} -> {{ $plugin['name'] }}</option>
+                        <option @if ($plugin['unikey'] == $pluginUnikey) selected @endif value="{{ $plugin['unikey'] }}">{{ $plugin['unikey'] }} -> {{ $plugin['name'] }}</option>
                     @endforeach
                 </select>
                 <span class="input-group-text">{{ __('FsLang::panel.table_number') }}</span>

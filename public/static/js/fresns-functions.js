@@ -81,8 +81,8 @@ $(document).ready(function () {
     $('.preview-image').click(function () {
         let url = $(this).data('url');
         if (url) {
-          $('#imageZoom').find('img').attr('src', url);
-          $('#imageZoom').modal('show');
+            $('#imageZoom').find('img').attr('src', url);
+            $('#imageZoom').modal('show');
         }
     });
 
@@ -91,7 +91,7 @@ $(document).ready(function () {
         let showClass = $(this).data('name');
         let hideClass = 'inputUrl';
         if (showClass == 'inputUrl') {
-          hideClass = 'inputFile';
+            hideClass = 'inputFile';
         }
 
         $(this).parent().siblings('.showSelectTypeName').text($(this).text());
@@ -101,7 +101,7 @@ $(document).ready(function () {
 
     $('.delete-file').click(function() {
         $(this).siblings('.file-value').val('');
-        window.tips('删除成功');
+        window.tips(trans('tips.deleteSuccess')); //FsLang
     });
 
     $('#langModal').on('show.bs.modal', function(e) {
@@ -151,5 +151,4 @@ $(document).ready(function () {
     $(document).on('click', '.delete-plugin', function() {
         $(this).parent().remove()
     });
-
 });

@@ -20,15 +20,31 @@
 <body>
     @yield('body')
 
+    <!--fresns tips-->
     <div class="fresns-tips">
         @include('FsView::commons.tips')
     </div>
+
+    <!--imageZoom-->
+    <div class="modal fade image-zoom" id="imageZoom" tabindex="-1" aria-labelledby="imageZoomLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="position-relative image-box">
+                <img class="img-fluid" src="">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="copyright text-center">
+            <p class="mt-5 mb-5 text-muted">&copy; 2021 Fresns</p>
+        </div>
+    </footer>
 
     <script src="{{ @asset('/static/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ @asset('/static/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ @asset('/static/js/select2.min.js') }}"></script>
     <script src="{{ route('panel.translations', ['locale' => \App::getLocale()]) }}"></script>
-    <script src="{{ @asset('/static/js/fresns-panel.js?9c26d1a06118c93e') }}"></script>
+    <script src="{{ @asset('/static/js/fresns-functions.js?9c26d1a06118c93e') }}"></script>
     @yield('js')
 </body>
 

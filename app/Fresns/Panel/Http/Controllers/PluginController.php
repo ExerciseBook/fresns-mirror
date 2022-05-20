@@ -236,13 +236,14 @@ class PluginController extends Controller
             $themeJsonFile = resource_path('themes/'.$theme.'/theme.json');
 
             if(!\File::exists($themeJsonFile)) {
-                return back()->with('failure', '配置文件未找到');
+                return back()->with('failure', __('FsLang::tips.theme_json_file_error'));
             }
 
             $themeConfig = json_decode(\File::get($themeJsonFile), true);
             $functionKeys = $themeConfig['functionKeys'] ?? [];
 
-            $configItemKeys = Config::whereIn('item_key', collect($functionKeys)->pluck('itemKey'))
+            $configItemKeys = Config::whereIn('item_key', collect($functionKeys)
+                ->pluck('itemKey'))
                 ->where('is_custom', 1)
                 ->pluck('item_key');
 

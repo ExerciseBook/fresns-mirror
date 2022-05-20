@@ -41,12 +41,12 @@ use App\Fresns\Panel\Http\Controllers\SettingController;
 use App\Fresns\Panel\Http\Controllers\StickerController;
 use App\Fresns\Panel\Http\Controllers\StickerGroupController;
 use App\Fresns\Panel\Http\Controllers\StorageController;
+use App\Fresns\Panel\Http\Controllers\ThemeFunctionController;
 use App\Fresns\Panel\Http\Controllers\UpgradeController;
 use App\Fresns\Panel\Http\Controllers\UserController;
 use App\Fresns\Panel\Http\Controllers\UserSearchController;
 use App\Fresns\Panel\Http\Controllers\VerifyCodeController;
 use App\Fresns\Panel\Http\Controllers\WalletController;
-use App\Fresns\Panel\Http\Controllers\PluginFunctionController;
 use App\Models\Config;
 use Illuminate\Support\Facades\Route;
 
@@ -297,11 +297,13 @@ Route::middleware(['panelAuth'])->group(function () {
         // uninstall
         Route::delete('uninstall', [PluginController::class, 'uninstall'])->name('plugin.uninstall');
         Route::delete('uninstallTheme', [PluginController::class, 'uninstallTheme'])->name('plugin.uninstallTheme');
+    });
 
-        // theme function
-        Route::get('functions', [PluginFunctionController::class, 'show'])->name('plugin.function.show');
-        Route::put('functions', [PluginFunctionController::class, 'update'])->name('plugin.function.update');
-        Route::put('functions/languages', [PluginFunctionController::class, 'updateLanguage'])->name('plugin.function.update_language');
+    // theme manage
+    Route::prefix('theme')->group(function () {
+        Route::get('functions', [ThemeFunctionController::class, 'show'])->name('plugin.function.show');
+        Route::put('functions', [ThemeFunctionController::class, 'update'])->name('plugin.function.update');
+        Route::put('functions/languages', [ThemeFunctionController::class, 'updateLanguage'])->name('plugin.function.update_language');
     });
 
     // iframe

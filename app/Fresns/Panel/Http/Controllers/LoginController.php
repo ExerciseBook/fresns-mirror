@@ -87,12 +87,12 @@ class LoginController extends Controller
                 'platform' => Browser::isMobile() ? 3 : 2,
                 'version' => AppHelper::VERSION,
                 'langTag' => $langTag,
-                'aid' => (string)$account->aid, //凭账号查询到的账号表 aid
+                'aid' => (string) $account->aid, // aid by account number
                 'uid' => null,
                 'objectType' => 2,
                 'objectName' => self::class,
                 'objectAction' => 'Panel Login',
-                'objectResult' => $result ? 2 : 1, //登录成功或失败
+                'objectResult' => $result ? 2 : 1, // login success or failure
                 'objectOrderId' => null,
                 'deviceInfo' => json_encode($deviceInfo),
                 'deviceToken' => null,

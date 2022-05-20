@@ -19,12 +19,12 @@ class PluginFunctionController extends Controller
     protected function getThemeConfig($theme)
     {
         if (!$theme) {
-            abort(404);
+            abort(404, __('FsLang::tips.theme_error'));
         }
 
         $themeJsonFile = resource_path('themes/'.$theme.'/theme.json');
         if (!$themeJsonFile) {
-            abort(403, '配置文件未找到');
+            abort(403, __('FsLang::tips.theme_json_file_error'));
         }
 
         $themeConfig = json_decode(\File::get($themeJsonFile), true);
@@ -40,7 +40,7 @@ class PluginFunctionController extends Controller
 
         $view = $request->theme.'.functions';
         if (!view()->exists($view)){
-            abort(404);
+            abort(404, __('FsLang::tips.theme_functions_file_error'));
         }
 
         $configs = Config::whereIn('item_key', $functionKeys->pluck('itemKey'))->get();
@@ -56,7 +56,7 @@ class PluginFunctionController extends Controller
             $key = $functionKey['itemKey'];
             $functionKey['value'] = $configValue[$key] ?? null;
             $functionKey['is_enable'] = $configEnable[$key] ?? 0;
-            // 如果是文件
+            // File
             if ($functionKey['itemType'] == 'file') {
 
                 $functionKey['fileType'] = ConfigHelper::fresnsConfigFileValueTypeByItemKey($key);
@@ -67,7 +67,7 @@ class PluginFunctionController extends Controller
                 }
             }
 
-            // 多语言
+            // Multilingual
             if ($functionKey['isMultilingual']) {
                 $functionKey['languages'] = $languages->where('table_key', $key)->values();
                 $functionKey['defaultLanguage'] = $languages->where('table_key', $key)->where('lang_tag', $this->defaultLanguage)->first()['lang_content'] ?? '';
