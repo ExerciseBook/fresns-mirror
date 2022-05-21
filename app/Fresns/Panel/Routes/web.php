@@ -301,9 +301,9 @@ Route::middleware(['panelAuth'])->group(function () {
 
     // theme manage
     Route::prefix('theme')->group(function () {
-        Route::get('functions', [ThemeFunctionController::class, 'show'])->name('plugin.function.show');
-        Route::put('functions', [ThemeFunctionController::class, 'update'])->name('plugin.function.update');
-        Route::put('functions/languages', [ThemeFunctionController::class, 'updateLanguage'])->name('plugin.function.update_language');
+        Route::get('{theme}', [ThemeFunctionController::class, 'show'])->name('theme.functions');
+        Route::put('functions', [ThemeFunctionController::class, 'update'])->name('theme.functions.update');
+        Route::put('functions/languages', [ThemeFunctionController::class, 'updateLanguage'])->name('theme.functions.update_language');
     });
 
     // iframe

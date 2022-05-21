@@ -14,16 +14,16 @@ use Illuminate\Http\Request;
 use App\Helpers\ConfigHelper;
 use App\Utilities\ConfigUtility;
 
-class PluginFunctionController extends Controller
+class ThemeFunctionController extends Controller
 {
     protected function getThemeConfig($theme)
     {
-        if (!$theme) {
+        if (! $theme) {
             abort(404, __('FsLang::tips.theme_error'));
         }
 
         $themeJsonFile = resource_path('themes/'.$theme.'/theme.json');
-        if (!$themeJsonFile) {
+        if (! $themeJsonFile) {
             abort(403, __('FsLang::tips.theme_json_file_error'));
         }
 
@@ -32,21 +32,21 @@ class PluginFunctionController extends Controller
         return $themeConfig;
     }
 
-    public function show(Request $request)
+    public function show($theme)
     {
-        $themeConfig = $this->getThemeConfig($request->theme);
+        $themeConfig = $this->getThemeConfig($theme);
 
         $functionKeys = collect($themeConfig['functionKeys'] ?? []);
 
-        $view = $request->theme.'.functions';
-        if (!view()->exists($view)){
+        $view = $theme.'.functions';
+        if (! view()->exists($view)){
             abort(404, __('FsLang::tips.theme_functions_file_error'));
         }
 
         $configs = Config::whereIn('item_key', $functionKeys->pluck('itemKey'))->get();
         $configValue = $configs->pluck('item_value', 'item_key');
         $configEnable = $configs->pluck('is_enable', 'item_key');
-        $functionParams = [];
+        $themeParams = [];
 
         // language keys
         $langKeys = $functionKeys->where('isMultilingual', true)->pluck('itemKey');
@@ -58,8 +58,8 @@ class PluginFunctionController extends Controller
             $functionKey['is_enable'] = $configEnable[$key] ?? 0;
             // File
             if ($functionKey['itemType'] == 'file') {
-
                 $functionKey['fileType'] = ConfigHelper::fresnsConfigFileValueTypeByItemKey($key);
+
                 if ($functionKey['fileType'] == 'ID') {
                     $functionKey['fileUrl'] = ConfigHelper::fresnsConfigFileUrlByItemKey($key);
                 } else {
@@ -74,14 +74,12 @@ class PluginFunctionController extends Controller
             }
 
             $functionKey['isEnable'] = $configEnable[$key] ?? 0;
-            $functionParams[$key] = $functionKey;
+            $themeParams[$key] = $functionKey;
         }
 
         $plugins = Plugin::all();
 
-
-
-        return view($view, compact('functionParams', 'plugins'));
+        return view($view, compact('themeParams', 'plugins'));
     }
 
     public function update(Request $request)
