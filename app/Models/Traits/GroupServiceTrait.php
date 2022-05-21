@@ -24,8 +24,8 @@ trait GroupServiceTrait
         $info['type'] = $groupData->type;
         $info['gname'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $groupData->id, $langTag);
         $info['description'] = LanguageHelper::fresnsLanguageByTableId('groups', 'description', $groupData->id, $langTag);
-        $info['cover'] = FileHelper::fresnsFileImageUrlByColumn($groupData->cover_file_id, $groupData->cover_file_url, 'imageConfigUrl');
-        $info['banner'] = FileHelper::fresnsFileImageUrlByColumn($groupData->banner_file_id, $groupData->banner_file_url, 'imageConfigUrl');
+        $info['cover'] = FileHelper::fresnsFileImageUrlByColumn($groupData->cover_file_id, $groupData->cover_file_url);
+        $info['banner'] = FileHelper::fresnsFileImageUrlByColumn($groupData->banner_file_id, $groupData->banner_file_url);
         $info['recommend'] = $groupData->is_recommend;
         $info['mode'] = $groupData->type_mode;
         $info['find'] = $groupData->type_find;
@@ -67,8 +67,8 @@ trait GroupServiceTrait
         $info['gid'] = $parentGroup->gid;
         $info['gname'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $parentGroup->id, $langTag);
         $info['description'] = LanguageHelper::fresnsLanguageByTableId('groups', 'description', $parentGroup->id, $langTag);
-        $info['cover'] = FileHelper::fresnsFileImageUrlByColumn($parentGroup->cover_file_id, $parentGroup->cover_file_url, 'imageConfigUrl');
-        $info['banner'] = FileHelper::fresnsFileImageUrlByColumn($parentGroup->banner_file_id, $parentGroup->banner_file_url, 'imageConfigUrl');
+        $info['cover'] = FileHelper::fresnsFileImageUrlByColumn($parentGroup->cover_file_id, $parentGroup->cover_file_url);
+        $info['banner'] = FileHelper::fresnsFileImageUrlByColumn($parentGroup->banner_file_id, $parentGroup->banner_file_url);
 
         return $info;
     }

@@ -10,6 +10,7 @@ namespace App\Helpers;
 
 use App\Models\DomainLink;
 use App\Models\Mention;
+use App\Models\User;
 
 class ContentUtility
 {
@@ -51,7 +52,7 @@ class ContentUtility
     // Replace hashtag
     public static function replaceHashtag(string $content): string
     {
-        $hashtagList = ContentUtility::extractUrl($content);
+        $hashtagList = ContentUtility::extractHashtag($content);
 
         $config = ConfigHelper::fresnsConfigByItemKeys(['site_domain', 'hashtag_show']);
 
@@ -85,9 +86,10 @@ class ContentUtility
     {
         $config = ConfigHelper::fresnsConfigByItemKeys(['site_domain', 'user_identifier']);
         $userList = ContentUtility::extractMention($content);
+        $userDataList = User::where('username', $userList)->get();
         $mentionUserId = Mention::where('linked_type', $linkedType)->where('linked_id', $linkedId)->get();
 
-        // userList['userId'] == $mentionUserId['mention_user_id']
+        // userDataList['userId'] == $mentionUserId['mention_user_id']
 
         if ($config['user_identifier'] == 'uid') {
             // 格式 <a href="https://abc.com/u/{uid}" class="fresns_user" target="_blank">@昵称</a>
@@ -102,7 +104,9 @@ class ContentUtility
     public static function replaceSticker(string $content): string
     {
         $stickerList = ContentUtility::extractMention($content);
-        $stickerList = Mention::where('code', $stickerList)->get();
+        $stickerDataList = Mention::where('code', $stickerList)->get();
+
+        $stickerUrl = FileHelper::fresnsFileImageUrlByColumn($sticker->image_file_id, $sticker->image_file_url);
 
         // 格式 <img src="$stickerUrl" class="fresns_sticker" alt="$sticker->code">
 

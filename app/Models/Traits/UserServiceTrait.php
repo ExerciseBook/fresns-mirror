@@ -37,7 +37,7 @@ trait UserServiceTrait
         $profile['commentLimit'] = $userData->comment_limit;
         $profile['timezone'] = $userData->timezone;
         $profile['verifiedStatus'] = (bool) $userData->verified_status;
-        $profile['verifiedIcon'] = FileHelper::fresnsFileImageUrlByColumn($userData->verified_file_id, $userData->verified_file_url, 'imageConfigUrl');
+        $profile['verifiedIcon'] = FileHelper::fresnsFileImageUrlByColumn($userData->verified_file_id, $userData->verified_file_url);
         $profile['verifiedDesc'] = $userData->verified_desc;
         $profile['verifiedDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->verified_at, $timezone, $langTag);
         $profile['expiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->expired_at, $timezone, $langTag);
@@ -110,7 +110,7 @@ trait UserServiceTrait
         $mainRole['rid'] = $roleData->id;
         $mainRole['roleName'] = LanguageHelper::fresnsLanguageByTableId('roles', 'name', $roleData->id, $langTag);
         $mainRole['roleNameDisplay'] = (bool) $roleData->is_display_name;
-        $mainRole['roleIcon'] = FileHelper::fresnsFileImageUrlByColumn($roleData->icon_file_id, $roleData->icon_file_url, 'imageConfigUrl');
+        $mainRole['roleIcon'] = FileHelper::fresnsFileImageUrlByColumn($roleData->icon_file_id, $roleData->icon_file_url);
         $mainRole['roleIconDisplay'] = (bool) $roleData->is_display_icon;
         $mainRole['roleExpiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($mainRoleData->expired_at, $timezone, $langTag);
         $mainRole['rolePermission'] = $permission;
@@ -138,7 +138,7 @@ trait UserServiceTrait
                 $item['nicknameColor'] = $role['nickname_color'];
                 $item['name'] = LanguageHelper::fresnsLanguageByTableId('roles', 'name', $role['id'], $langTag);
                 $item['nameDisplay'] = (bool) $role['is_display_name'];
-                $item['icon'] = FileHelper::fresnsFileImageUrlByColumn($role['icon_file_id'], $role['icon_file_url'], 'imageConfigUrl');
+                $item['icon'] = FileHelper::fresnsFileImageUrlByColumn($role['icon_file_id'], $role['icon_file_url']);
                 $item['iconDisplay'] = (bool) $role['is_display_icon'];
                 $item['status'] = (bool) $role['is_enable'];
             }

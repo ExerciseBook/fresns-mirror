@@ -89,11 +89,17 @@ class FileHelper
         return $file->getFileInfo();
     }
 
-    public static function fresnsFileImageUrlByColumn($fileId, $fileUrl, $urlType)
+    public static function fresnsFileImageUrlByColumn(?int $fileId = null, ?string $fileUrl = null, ?string $urlType = null)
     {
+        if (! $fileId && ! $fileUrl ) {
+            return null;
+        }
+
         if (! $fileId) {
             return $fileUrl;
         }
+
+        $urlType = $urlType ?: 'imageConfigUrl';
 
         if (FileHelper::fresnsFileAntiLinkStatusByType(1)) {
             $fresnsResponse = \FresnsCmdWord::plugin()->getFileInfo([
