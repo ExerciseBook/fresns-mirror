@@ -18,7 +18,7 @@ return [
         'dashboard/',
         'systems/',
         'operations/',
-        'expands/',
+        'extends/',
         'plugins/',
         'clients/',
         'market/',

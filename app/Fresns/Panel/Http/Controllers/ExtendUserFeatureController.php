@@ -15,14 +15,14 @@ use App\Models\PluginUsage;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
-class ExpandUserFeatureController extends Controller
+class ExtendUserFeatureController extends Controller
 {
     public function index()
     {
         $plugins = Plugin::all();
 
         $plugins = $plugins->filter(function ($plugin) {
-            return in_array('expandUser', $plugin->scene);
+            return in_array('extendUser', $plugin->scene);
         });
 
         $pluginUsages = PluginUsage::where('type', 7)
@@ -32,7 +32,7 @@ class ExpandUserFeatureController extends Controller
 
         $roles = Role::with('names')->get();
 
-        return view('FsView::expands.user-feature', compact('pluginUsages', 'plugins', 'roles'));
+        return view('FsView::extends.user-feature', compact('pluginUsages', 'plugins', 'roles'));
     }
 
     public function store(Request $request)

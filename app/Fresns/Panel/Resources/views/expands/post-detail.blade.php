@@ -1,15 +1,15 @@
 @extends('FsView::commons.sidebarLayout')
 
 @section('sidebar')
-    @include('FsView::expands.sidebar')
+    @include('FsView::extends.sidebar')
 @endsection
 
 @section('content')
     <!--post_detail header-->
     <div class="row mb-5 border-bottom">
         <div class="col-lg-9">
-            <h3>{{ __('FsLang::panel.sidebar_expand_post_detail') }}</h3>
-            <p class="text-secondary">{{ __('FsLang::panel.sidebar_expand_post_detail_intro') }}</p>
+            <h3>{{ __('FsLang::panel.sidebar_extend_post_detail') }}</h3>
+            <p class="text-secondary">{{ __('FsLang::panel.sidebar_extend_post_detail_intro') }}</p>
         </div>
         <div class="col-lg-3">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
@@ -26,7 +26,7 @@
             <div class="col-lg-6">
                 <select class="form-select" id="post_editor" name="post_detail_service">
                     <option value="" selected>{{ __('FsLang::panel.option_default') }}</option>
-                    @foreach ($pluginParams['expandData'] as $plugin)
+                    @foreach ($pluginParams['extendData'] as $plugin)
                         <option value="{{ $plugin->unikey }}" {{ $params['post_detail_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                     @endforeach
                 </select>

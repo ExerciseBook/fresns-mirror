@@ -13,13 +13,13 @@ use App\Fresns\Panel\Http\Controllers\CodeMessageController;
 use App\Fresns\Panel\Http\Controllers\ColumnController;
 use App\Fresns\Panel\Http\Controllers\ConfigController;
 use App\Fresns\Panel\Http\Controllers\DashboardController;
-use App\Fresns\Panel\Http\Controllers\ExpandContentTypeController;
-use App\Fresns\Panel\Http\Controllers\ExpandEditorController;
-use App\Fresns\Panel\Http\Controllers\ExpandGroupController;
-use App\Fresns\Panel\Http\Controllers\ExpandManageController;
-use App\Fresns\Panel\Http\Controllers\ExpandPostDetailController;
-use App\Fresns\Panel\Http\Controllers\ExpandUserFeatureController;
-use App\Fresns\Panel\Http\Controllers\ExpandUserProfileController;
+use App\Fresns\Panel\Http\Controllers\ExtendContentTypeController;
+use App\Fresns\Panel\Http\Controllers\ExtendEditorController;
+use App\Fresns\Panel\Http\Controllers\ExtendGroupController;
+use App\Fresns\Panel\Http\Controllers\ExtendManageController;
+use App\Fresns\Panel\Http\Controllers\ExtendPostDetailController;
+use App\Fresns\Panel\Http\Controllers\ExtendUserFeatureController;
+use App\Fresns\Panel\Http\Controllers\ExtendUserProfileController;
 use App\Fresns\Panel\Http\Controllers\GeneralController;
 use App\Fresns\Panel\Http\Controllers\GroupController;
 use App\Fresns\Panel\Http\Controllers\IframeController;
@@ -212,43 +212,43 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::get('groups/categories', [GroupController::class, 'groupIndex'])->name('groups.categories.index');
     });
 
-    // expands
-    Route::prefix('expands')->group(function () {
+    // extends
+    Route::prefix('extends')->group(function () {
         // editor
-        Route::resource('editor', ExpandEditorController::class)->only([
+        Route::resource('editor', ExtendEditorController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('editor/{id}/rank', [ExpandEditorController::class, 'updateRank'])->name('editor.rank');
+        Route::put('editor/{id}/rank', [ExtendEditorController::class, 'updateRank'])->name('editor.rank');
         // content-type
-        Route::resource('content-type', ExpandContentTypeController::class)->only([
+        Route::resource('content-type', ExtendContentTypeController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('content-type/{id}/dataSources/{key}', [ExpandContentTypeController::class, 'updateSource'])->name('content-type.source');
-        Route::put('content-type/{id}/rank', [ExpandContentTypeController::class, 'updateRank'])->name('content-type.rank');
+        Route::put('content-type/{id}/dataSources/{key}', [ExtendContentTypeController::class, 'updateSource'])->name('content-type.source');
+        Route::put('content-type/{id}/rank', [ExtendContentTypeController::class, 'updateRank'])->name('content-type.rank');
         // post-detail
-        Route::resource('post-detail', ExpandPostDetailController::class)->only([
+        Route::resource('post-detail', ExtendPostDetailController::class)->only([
             'index', 'update',
         ]);
         // manage
-        Route::resource('manage', ExpandManageController::class)->only([
+        Route::resource('manage', ExtendManageController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('manage/{id}/rank', [ExpandManageController::class, 'updateRank'])->name('manage.rank');
+        Route::put('manage/{id}/rank', [ExtendManageController::class, 'updateRank'])->name('manage.rank');
         // group
-        Route::resource('group', ExpandGroupController::class)->only([
+        Route::resource('group', ExtendGroupController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('group/{id}/rank', [ExpandGroupController::class, 'updateRank'])->name('group.rank');
+        Route::put('group/{id}/rank', [ExtendGroupController::class, 'updateRank'])->name('group.rank');
         // user-feature
-        Route::resource('user-feature', ExpandUserFeatureController::class)->only([
+        Route::resource('user-feature', ExtendUserFeatureController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('user-feature/{id}/rank', [ExpandUserFeatureController::class, 'updateRank'])->name('user-feature.rank');
+        Route::put('user-feature/{id}/rank', [ExtendUserFeatureController::class, 'updateRank'])->name('user-feature.rank');
         // user-profile
-        Route::resource('user-profile', ExpandUserProfileController::class)->only([
+        Route::resource('user-profile', ExtendUserProfileController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('user-profile/{id}/rank', [ExpandUserProfileController::class, 'updateRank'])->name('user-profile.rank');
+        Route::put('user-profile/{id}/rank', [ExtendUserProfileController::class, 'updateRank'])->name('user-profile.rank');
     });
 
     // clients

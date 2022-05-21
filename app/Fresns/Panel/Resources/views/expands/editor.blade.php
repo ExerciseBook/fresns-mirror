@@ -1,15 +1,15 @@
 @extends('FsView::commons.sidebarLayout')
 
 @section('sidebar')
-    @include('FsView::expands.sidebar')
+    @include('FsView::extends.sidebar')
 @endsection
 
 @section('content')
     <!--editor header-->
     <div class="row mb-4 border-bottom">
         <div class="col-lg-9">
-            <h3>{{ __('FsLang::panel.sidebar_expand_editor') }}</h3>
-            <p class="text-secondary">{{ __('FsLang::panel.sidebar_expand_editor_intro') }}</p>
+            <h3>{{ __('FsLang::panel.sidebar_extend_editor') }}</h3>
+            <p class="text-secondary">{{ __('FsLang::panel.sidebar_extend_editor_intro') }}</p>
         </div>
         <div class="col-lg-3">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
@@ -29,7 +29,7 @@
                     <th scope="col">{{ __('FsLang::panel.table_plugin') }}</th>
                     <th scope="col">{{ __('FsLang::panel.table_name') }}</th>
                     <th scope="col">{{ __('FsLang::panel.table_scene') }}</th>
-                    <th scope="col">{{ __('FsLang::panel.table_number_of_uses') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.expand_editor_number_of_uses_desc') }}"></i></th>
+                    <th scope="col">{{ __('FsLang::panel.table_number_of_uses') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.extend_editor_number_of_uses_desc') }}"></i></th>
                     <th scope="col">{{ __('FsLang::panel.table_authorized_roles') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.table_authorized_roles_desc') }}"></i></th>
                     <th scope="col">{{ __('FsLang::panel.table_parameter') }}</th>
                     <th scope="col">{{ __('FsLang::panel.table_status') }}</th>
@@ -109,7 +109,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{{ __('FsLang::panel.sidebar_expand_editor') }}</h5>
+                        <h5 class="modal-title">{{ __('FsLang::panel.sidebar_extend_editor') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

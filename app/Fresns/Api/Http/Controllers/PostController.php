@@ -14,7 +14,7 @@ use App\Models\File;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Seo;
-use App\Utilities\ExpandUtility;
+use App\Utilities\ExtendUtility;
 use App\Utilities\LbsUtility;
 use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
@@ -58,9 +58,9 @@ class PostController extends Controller
         $files['audios'] = $groupFileList->get(File::TYPE_AUDIO)?->all() ?? null;
         $files['documents'] = $groupFileList->get(File::TYPE_DOCUMENT)?->all() ?? null;
         $item['files'] = $files;
-        $item['icons'] = ExpandUtility::getIcons(4, $post->id, $headers['langTag']);
-        $item['tips'] = ExpandUtility::getTips(4, $post->id, $headers['langTag']);
-        $item['extends'] = ExpandUtility::getExtends(4, $post->id, $headers['langTag']);
+        $item['icons'] = ExtendUtility::getIcons(4, $post->id, $headers['langTag']);
+        $item['tips'] = ExtendUtility::getTips(4, $post->id, $headers['langTag']);
+        $item['extends'] = ExtendUtility::getExtends(4, $post->id, $headers['langTag']);
 
         $attachCount['images'] = $groupFileList->get(File::TYPE_IMAGE)?->count() ?? 0;
         $attachCount['videos'] = $groupFileList->get(File::TYPE_VIDEO)?->count() ?? 0;
@@ -80,7 +80,7 @@ class PostController extends Controller
             $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
         }
 
-        $item['manages'] = ExpandUtility::getPluginExpands(5, $post->group_id, 1, $user?->id, $headers['langTag']);
+        $item['manages'] = ExtendUtility::getPluginExtends(5, $post->group_id, 1, $user?->id, $headers['langTag']);
 
         $editStatus['isMe'] = false;
         $editStatus['canEdit'] = false;

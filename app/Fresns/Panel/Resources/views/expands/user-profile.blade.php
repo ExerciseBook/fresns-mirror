@@ -1,15 +1,15 @@
 @extends('FsView::commons.sidebarLayout')
 
 @section('sidebar')
-    @include('FsView::expands.sidebar')
+    @include('FsView::extends.sidebar')
 @endsection
 
 @section('content')
     <!--user_profile header-->
     <div class="row mb-4 border-bottom">
         <div class="col-lg-9">
-            <h3>{{ __('FsLang::panel.sidebar_expand_user_profile') }}</h3>
-            <p class="text-secondary">{{ __('FsLang::panel.sidebar_expand_user_profile_intro') }}</p>
+            <h3>{{ __('FsLang::panel.sidebar_extend_user_profile') }}</h3>
+            <p class="text-secondary">{{ __('FsLang::panel.sidebar_extend_user_profile_intro') }}</p>
         </div>
         <div class="col-lg-3">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
@@ -98,7 +98,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{{ __('FsLang::panel.sidebar_expand_user_profile') }}</h5>
+                        <h5 class="modal-title">{{ __('FsLang::panel.sidebar_extend_user_profile') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

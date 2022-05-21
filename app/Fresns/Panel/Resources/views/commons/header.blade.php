@@ -41,7 +41,7 @@
                         'panel.group.*',
                         'panel.user-feature.*',
                         'panel.user-profile.*'
-                        ]) ? 'active' : '' }}" href="{{ route('panel.editor.index') }}">{{ __('FsLang::panel.menu_expands') }}</a></li>
+                        ]) ? 'active' : '' }}" href="{{ route('panel.editor.index') }}">{{ __('FsLang::panel.menu_extends') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is([
                         'panel.plugin.*',
                         'panel.iframe.plugin'

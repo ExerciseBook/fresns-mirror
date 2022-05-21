@@ -192,8 +192,8 @@
                             <label class="form-check-label" for="editor_hashtag">{{ __('FsLang::panel.editor_hashtag') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="checkbox" class="form-check-input" id="editor_expand" value="true" name="comment_editor_expand" {{ $params['comment_editor_expand'] ? 'checked' : '' }}>
-                            <label class="form-check-label" for="editor_expand">{{ __('FsLang::panel.editor_expand') }}</label>
+                            <input type="checkbox" class="form-check-input" id="editor_extend" value="true" name="comment_editor_extend" {{ $params['comment_editor_extend'] ? 'checked' : '' }}>
+                            <label class="form-check-label" for="editor_extend">{{ __('FsLang::panel.editor_extend') }}</label>
                         </div>
                     </li>
                     <li class="list-group-item">

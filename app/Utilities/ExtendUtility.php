@@ -22,88 +22,88 @@ use App\Models\TipLinked;
 use App\Models\Extend;
 use App\Models\ExtendLinked;
 
-class ExpandUtility
+class ExtendUtility
 {
-    public static function getPluginExpands(int $type, ?int $groupId = null, ?int $scene = null, ?int $userId = null, ?string $langTag = null)
+    public static function getPluginExtends(int $type, ?int $groupId = null, ?int $scene = null, ?int $userId = null, ?string $langTag = null)
     {
         $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
 
         if ($type == 6) {
-            $expandArr = PluginUsage::where('type', 6)->where('group_id', $groupId)->get();
+            $extendArr = PluginUsage::where('type', 6)->where('group_id', $groupId)->get();
         } else {
-            $expandArr = PluginUsage::where('type', $type)
+            $extendArr = PluginUsage::where('type', $type)
             ->when($scene, function ($query, $scene) {
                 $query->where('scene', 'like', "%$scene%");
             })
             ->get();
         }
 
-        $expandList = null;
-        foreach ($expandArr as $expand) {
-            if ($expand->is_group_admin == 1) {
+        $extendList = null;
+        foreach ($extendArr as $extend) {
+            if ($extend->is_group_admin == 1) {
                 $adminCheck = false;
 
                 if ($userId && $groupId) {
-                    $adminCheck = ValidationUtility::checkUserGroupAdmin($userId, $groupId);
+                    $adminCheck = PermissionUtility::checkUserGroupAdmin($userId, $groupId);
                 }
 
                 if ($adminCheck) {
-                    $expandList[] = self::getExpandItemById($expand->id, $userId, $langTag);
+                    $extendList[] = self::getExtendItemById($extend->id, $userId, $langTag);
                 }
             } else {
                 $permCheck = false;
 
                 if ($userId) {
-                    $roleArr = $expand->roles ? StrHelper::commaStringToArray($expand->roles) : [];
-                    $permCheck = ValidationUtility::checkUserRolePerm($userId, $roleArr);
+                    $roleArr = $extend->roles ? StrHelper::commaStringToArray($extend->roles) : [];
+                    $permCheck = PermissionUtility::checkUserRolePerm($userId, $roleArr);
                 }
 
-                if (empty($expand->roles)) {
-                    $expandList[] = self::getExpandItemById($expand->id, $userId, $langTag);
+                if (empty($extend->roles)) {
+                    $extendList[] = self::getExtendItemById($extend->id, $userId, $langTag);
                 } elseif ($permCheck) {
-                    $expandList[] = self::getExpandItemById($expand->id, $userId, $langTag);
+                    $extendList[] = self::getExtendItemById($extend->id, $userId, $langTag);
                 }
             }
         }
 
-        return $expandList;
+        return $extendList;
     }
 
-    // get expand by id
-    public static function getExpandItemById(int $usageId, int $userId = 0, string $langTag)
+    // get extend by id
+    public static function getExtendItemById(int $usageId, int $userId = 0, string $langTag)
     {
         $usage = PluginUsage::where('id', $usageId)->first();
         $badge = PluginBadge::where('plugin_unikey', $usage['plugin_unikey'])->where('user_id', $userId)->first();
 
-        $expand['plugin'] = $usage['plugin_unikey'];
-        $expand['name'] = LanguageHelper::fresnsLanguageByTableId('plugin_usages', 'name', $usage['id'], $langTag);
-        $expand['icon'] = FileHelper::fresnsFileImageUrlByColumn($usage['icon_file_id'], $usage['icon_file_url']);
-        $expand['url'] = PluginHelper::fresnsPluginUsageUrl($usage['plugin_unikey'], $usage['id']);
-        $expand['badgesType'] = $badge['display_type'] ?? null;
-        $expand['badgesValue'] = match ($expand['badgesType']) {
+        $extend['plugin'] = $usage['plugin_unikey'];
+        $extend['name'] = LanguageHelper::fresnsLanguageByTableId('plugin_usages', 'name', $usage['id'], $langTag);
+        $extend['icon'] = FileHelper::fresnsFileImageUrlByColumn($usage['icon_file_id'], $usage['icon_file_url']);
+        $extend['url'] = PluginHelper::fresnsPluginUsageUrl($usage['plugin_unikey'], $usage['id']);
+        $extend['badgesType'] = $badge['display_type'] ?? null;
+        $extend['badgesValue'] = match ($extend['badgesType']) {
             default => null,
             1 => $badge['value_number'],
             2 => $badge['value_text'],
         };
-        $expand['editorNumber'] = $usage['editor_number'];
+        $extend['editorNumber'] = $usage['editor_number'];
         $postByAll = self::getRankNumber('postByAll', $usage['data_sources'], $langTag);
         $postByFollow = self::getRankNumber('postByFollow', $usage['data_sources'], $langTag);
         $postByNearby = self::getRankNumber('postByNearby', $usage['data_sources'], $langTag);
         $rankNumber = array_merge($postByAll, $postByFollow, $postByNearby);
-        $expand['rankNumber'] = $rankNumber;
+        $extend['rankNumber'] = $rankNumber;
 
-        return $expand;
+        return $extend;
     }
 
-    // get expand list by ids
-    public static function getExpandItemListByIds(array $usageIds, int $userId = 0, string $langTag)
+    // get extend list by ids
+    public static function getExtendItemListByIds(array $usageIds, int $userId = 0, string $langTag)
     {
-        $expandList = null;
+        $extendList = null;
         foreach ($usageIds as $id) {
-            $expandList[] = self::getExpandItemById($id, $userId, $langTag);
+            $extendList[] = self::getExtendItemById($id, $userId, $langTag);
         }
 
-        return $expandList;
+        return $extendList;
     }
 
     public static function getRankNumber(string $key, array $dataSources, string $langTag)

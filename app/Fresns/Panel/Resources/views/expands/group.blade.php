@@ -1,15 +1,15 @@
 @extends('FsView::commons.sidebarLayout')
 
 @section('sidebar')
-    @include('FsView::expands.sidebar')
+    @include('FsView::extends.sidebar')
 @endsection
 
 @section('content')
     <!--group header-->
     <div class="row mb-4 border-bottom">
         <div class="col-lg-9">
-            <h3>{{ __('FsLang::panel.sidebar_expand_group') }}</h3>
-            <p class="text-secondary">{{ __('FsLang::panel.sidebar_expand_group_intro') }}</p>
+            <h3>{{ __('FsLang::panel.sidebar_extend_group') }}</h3>
+            <p class="text-secondary">{{ __('FsLang::panel.sidebar_extend_group_intro') }}</p>
         </div>
         <div class="col-lg-3">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
@@ -26,7 +26,7 @@
         <form action="" method="get">
             @csrf
             <div class="input-group">
-                <span class="input-group-text">{{ __('FsLang::panel.sidebar_expand_group_filter') }}</span>
+                <span class="input-group-text">{{ __('FsLang::panel.sidebar_extend_group_filter') }}</span>
                 <select class="form-select" id="search_group_id" required>
                     <option selected disabled value="">{{ __('FsLang::panel.select_box_tip_group_category') }}</option>
                     @foreach ($groups as $group)
@@ -128,7 +128,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{{ __('FsLang::panel.sidebar_expand_group') }}</h5>
+                        <h5 class="modal-title">{{ __('FsLang::panel.sidebar_extend_group') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

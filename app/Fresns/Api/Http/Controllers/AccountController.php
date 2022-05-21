@@ -11,7 +11,7 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Account;
-use App\Utilities\ExpandUtility;
+use App\Utilities\ExtendUtility;
 use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 
@@ -26,8 +26,8 @@ class AccountController extends Controller
             throw new ApiException(31502);
         }
 
-        $common['walletRecharges'] = ExpandUtility::getPluginExpands(1, null, null, $account->id, $headers['langTag']);
-        $common['walletWithdraws'] = ExpandUtility::getPluginExpands(2, null, null, $account->id, $headers['langTag']);
+        $common['walletRecharges'] = ExtendUtility::getPluginExtends(1, null, null, $account->id, $headers['langTag']);
+        $common['walletWithdraws'] = ExtendUtility::getPluginExtends(2, null, null, $account->id, $headers['langTag']);
         $data['commons'] = $common;
 
         $userArr = $account->users;

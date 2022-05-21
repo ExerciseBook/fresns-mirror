@@ -15,40 +15,37 @@ use App\Models\PluginUsage;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
-class ExpandEditorController extends Controller
+class ExtendUserProfileController extends Controller
 {
     public function index()
     {
         $plugins = Plugin::all();
 
         $plugins = $plugins->filter(function ($plugin) {
-            return in_array('expandEditor', $plugin->scene ?: []);
+            return in_array('extendUser', $plugin->scene);
         });
 
-        $pluginUsages = PluginUsage::where('type', 3)
+        $pluginUsages = PluginUsage::where('type', 8)
             ->orderBy('rank_num')
             ->with('plugin', 'names')
             ->paginate();
 
         $roles = Role::with('names')->get();
 
-        return view('FsView::expands.editor', compact('pluginUsages', 'plugins', 'roles'));
+        return view('FsView::extends.user-profile', compact('pluginUsages', 'plugins', 'roles'));
     }
 
     public function store(Request $request)
     {
         $pluginUsage = new PluginUsage;
-        $pluginUsage->type = 3;
+        $pluginUsage->type = 8;
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rank_num = $request->rank_num;
-        $pluginUsage->editor_number = $request->editor_number;
-        $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : '';
-        $pluginUsage->scene = $request->scene ? implode(',', $request->scene) : '';
+        $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : $pluginUsage->roles;
         $pluginUsage->icon_file_url = $request->icon_file_url;
-        $pluginUsage->can_delete = 1;
         $pluginUsage->save();
 
         if ($request->file('icon_file')) {
@@ -103,16 +100,16 @@ class ExpandEditorController extends Controller
 
     public function update($id, Request $request)
     {
-        $pluginUsage = PluginUsage::findOrFail($id);
+        $pluginUsage = PluginUsage::find($id);
+        if (! $pluginUsage) {
+            return $this->updateSuccess();
+        }
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rank_num = $request->rank_num;
-        $pluginUsage->editor_number = $request->editor_number;
-        $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : '';
-        $pluginUsage->scene = $request->scene ? implode(',', $request->scene) : '';
-
+        $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : $pluginUsage->roles;
         if ($request->file('icon_file')) {
             $wordBody = [
                 'platform' => 4,
@@ -135,7 +132,6 @@ class ExpandEditorController extends Controller
             $pluginUsage->icon_file_id = null;
             $pluginUsage->icon_file_url = $request->icon_file_url;
         }
-
         $pluginUsage->save();
 
         if ($request->update_name) {

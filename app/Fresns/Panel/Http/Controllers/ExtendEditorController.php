@@ -15,37 +15,40 @@ use App\Models\PluginUsage;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
-class ExpandUserProfileController extends Controller
+class ExtendEditorController extends Controller
 {
     public function index()
     {
         $plugins = Plugin::all();
 
         $plugins = $plugins->filter(function ($plugin) {
-            return in_array('expandUser', $plugin->scene);
+            return in_array('extendEditor', $plugin->scene ?: []);
         });
 
-        $pluginUsages = PluginUsage::where('type', 8)
+        $pluginUsages = PluginUsage::where('type', 3)
             ->orderBy('rank_num')
             ->with('plugin', 'names')
             ->paginate();
 
         $roles = Role::with('names')->get();
 
-        return view('FsView::expands.user-profile', compact('pluginUsages', 'plugins', 'roles'));
+        return view('FsView::extends.editor', compact('pluginUsages', 'plugins', 'roles'));
     }
 
     public function store(Request $request)
     {
         $pluginUsage = new PluginUsage;
-        $pluginUsage->type = 8;
+        $pluginUsage->type = 3;
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rank_num = $request->rank_num;
-        $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : $pluginUsage->roles;
+        $pluginUsage->editor_number = $request->editor_number;
+        $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : '';
+        $pluginUsage->scene = $request->scene ? implode(',', $request->scene) : '';
         $pluginUsage->icon_file_url = $request->icon_file_url;
+        $pluginUsage->can_delete = 1;
         $pluginUsage->save();
 
         if ($request->file('icon_file')) {
@@ -100,16 +103,16 @@ class ExpandUserProfileController extends Controller
 
     public function update($id, Request $request)
     {
-        $pluginUsage = PluginUsage::find($id);
-        if (! $pluginUsage) {
-            return $this->updateSuccess();
-        }
+        $pluginUsage = PluginUsage::findOrFail($id);
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rank_num = $request->rank_num;
-        $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : $pluginUsage->roles;
+        $pluginUsage->editor_number = $request->editor_number;
+        $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : '';
+        $pluginUsage->scene = $request->scene ? implode(',', $request->scene) : '';
+
         if ($request->file('icon_file')) {
             $wordBody = [
                 'platform' => 4,
@@ -132,6 +135,7 @@ class ExpandUserProfileController extends Controller
             $pluginUsage->icon_file_id = null;
             $pluginUsage->icon_file_url = $request->icon_file_url;
         }
+
         $pluginUsage->save();
 
         if ($request->update_name) {

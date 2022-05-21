@@ -13,7 +13,7 @@ use App\Helpers\InteractiveHelper;
 use App\Models\Group;
 use App\Models\User;
 use App\Models\Seo;
-use App\Utilities\ExpandUtility;
+use App\Utilities\ExtendUtility;
 use App\Utilities\PermissionUtility;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
@@ -31,9 +31,9 @@ class GroupController extends Controller
         foreach ($groups as $group) {
             $groupInfo = $group->getGroupInfo($headers['langTag']);
 
-            $item['icons'] = ExpandUtility::getIcons(2, $group->id, $headers['langTag']);
-            $item['tips'] = ExpandUtility::getTips(2, $group->id, $headers['langTag']);
-            $item['extends'] = ExpandUtility::getExtends(2, $group->id, $headers['langTag']);
+            $item['icons'] = ExtendUtility::getIcons(2, $group->id, $headers['langTag']);
+            $item['tips'] = ExtendUtility::getTips(2, $group->id, $headers['langTag']);
+            $item['extends'] = ExtendUtility::getExtends(2, $group->id, $headers['langTag']);
 
             $item['creator'] = null;
             if (! empty($creator)) {
@@ -65,16 +65,16 @@ class GroupController extends Controller
         $common['title'] = $seoData->title ?? null;
         $common['keywords'] = $seoData->keywords ?? null;
         $common['description'] = $seoData->description ?? null;
-        $common['extensions'] = ExpandUtility::getPluginExpands(6, $group->id, null, $user?->id, $headers['langTag']);
+        $common['extensions'] = ExtendUtility::getPluginExtends(6, $group->id, null, $user?->id, $headers['langTag']);
         $data['commons'] = $common;
 
         $groupInfo = $group->getGroupInfo($headers['langTag']);
 
         $item['publishRule'] = PermissionUtility::checkUserGroupPublishPerm($user?->id, $group->id);
 
-        $item['icons'] = ExpandUtility::getIcons(2, $group->id, $headers['langTag']);
-        $item['tips'] = ExpandUtility::getTips(2, $group->id, $headers['langTag']);
-        $item['extends'] = ExpandUtility::getExtends(2, $group->id, $headers['langTag']);
+        $item['icons'] = ExtendUtility::getIcons(2, $group->id, $headers['langTag']);
+        $item['tips'] = ExtendUtility::getTips(2, $group->id, $headers['langTag']);
+        $item['extends'] = ExtendUtility::getExtends(2, $group->id, $headers['langTag']);
 
         $item['parentInfo'] = null;
         if ($group->type == 2) {

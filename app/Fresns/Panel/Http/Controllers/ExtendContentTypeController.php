@@ -13,14 +13,14 @@ use App\Models\Plugin;
 use App\Models\PluginUsage;
 use Illuminate\Http\Request;
 
-class ExpandContentTypeController extends Controller
+class ExtendContentTypeController extends Controller
 {
     public function index()
     {
         $plugins = Plugin::all();
 
         $plugins = $plugins->filter(function ($plugin) {
-            return in_array('expandContentType', $plugin->scene);
+            return in_array('extendContentType', $plugin->scene);
         });
 
         $pluginUsages = PluginUsage::where('type', 4)
@@ -28,7 +28,7 @@ class ExpandContentTypeController extends Controller
             ->with('plugin', 'names')
             ->paginate();
 
-        return view('FsView::expands.content-type', compact('plugins', 'pluginUsages'));
+        return view('FsView::extends.content-type', compact('plugins', 'pluginUsages'));
     }
 
     public function store(Request $request)

@@ -12,7 +12,7 @@ use App\Models\Config;
 use App\Models\Plugin;
 use Illuminate\Http\Request;
 
-class ExpandPostDetailController extends Controller
+class ExtendPostDetailController extends Controller
 {
     public function index()
     {
@@ -27,7 +27,7 @@ class ExpandPostDetailController extends Controller
         }
 
         $pluginScenes = [
-            'expandData',
+            'extendData',
         ];
         $plugins = Plugin::all();
         $pluginParams = [];
@@ -37,7 +37,7 @@ class ExpandPostDetailController extends Controller
             });
         }
 
-        return view('FsView::expands.post-detail', compact('pluginParams', 'params'));
+        return view('FsView::extends.post-detail', compact('pluginParams', 'params'));
     }
 
     public function update(Request $request)

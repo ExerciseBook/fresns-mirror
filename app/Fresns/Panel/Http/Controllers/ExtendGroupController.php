@@ -16,14 +16,14 @@ use App\Models\PluginUsage;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
-class ExpandGroupController extends Controller
+class ExtendGroupController extends Controller
 {
     public function index(Request $request)
     {
         $plugins = Plugin::all();
 
         $plugins = $plugins->filter(function ($plugin) {
-            return in_array('expandGroup', $plugin->scene ?: []);
+            return in_array('extendGroup', $plugin->scene ?: []);
         });
         $groupId = $request->group_id ?: 0;
 
@@ -43,7 +43,7 @@ class ExpandGroupController extends Controller
             ->get();
         $groupSelect = Group::find($groupId);
 
-        return view('FsView::expands.group', compact('pluginUsages', 'plugins', 'roles', 'groups', 'groupId', 'groupSelect'));
+        return view('FsView::extends.group', compact('pluginUsages', 'plugins', 'roles', 'groups', 'groupId', 'groupSelect'));
     }
 
     public function store(Request $request)

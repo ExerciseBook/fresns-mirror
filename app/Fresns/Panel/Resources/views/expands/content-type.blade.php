@@ -1,15 +1,15 @@
 @extends('FsView::commons.sidebarLayout')
 
 @section('sidebar')
-    @include('FsView::expands.sidebar')
+    @include('FsView::extends.sidebar')
 @endsection
 
 @section('content')
     <!--content_type header-->
     <div class="row mb-4 border-bottom">
         <div class="col-lg-9">
-            <h3>{{ __('FsLang::panel.sidebar_expand_content_type') }}</h3>
-            <p class="text-secondary">{{ __('FsLang::panel.sidebar_expand_content_type_intro') }}</p>
+            <h3>{{ __('FsLang::panel.sidebar_extend_content_type') }}</h3>
+            <p class="text-secondary">{{ __('FsLang::panel.sidebar_extend_content_type_intro') }}</p>
         </div>
         <div class="col-lg-3">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
@@ -46,7 +46,7 @@
                                     data-action="{{ route('panel.content-type.source', ['id' => $item->id, 'key' => 'postByAll']) }}"
                                     data-params="{{ json_encode($item->data_sources['postByAll']['rankNumber'] ?? []) }} "
                                     data-default_language="{{$defaultLanguage}}"
-                                    data-bs-target="#rankNumberModal">{{ __('FsLang::panel.expand_content_type_option_post_all') }}</button>
+                                    data-bs-target="#rankNumberModal">{{ __('FsLang::panel.extend_content_type_option_post_all') }}</button>
                             @endif
                             @if (!empty($item->data_sources['postByFollow']['pluginUnikey']))
                                 <button type="button" class="btn btn-outline-secondary btn-sm update-data-source"
@@ -54,7 +54,7 @@
                                     data-action="{{ route('panel.content-type.source', ['id' => $item->id, 'key' => 'postByFollow']) }}"
                                     data-params="{{ json_encode($item->data_sources['postByFollow']['rankNumber'] ?? []) }} "
                                     data-default_language="{{$defaultLanguage}}"
-                                    data-bs-target="#rankNumberModal">{{ __('FsLang::panel.expand_content_type_option_post_follow') }}</button>
+                                    data-bs-target="#rankNumberModal">{{ __('FsLang::panel.extend_content_type_option_post_follow') }}</button>
                             @endif
                             @if (!empty($item->data_sources['postByNearby']['pluginUnikey']))
                                 <button type="button" class="btn btn-outline-secondary btn-sm update-data-source"
@@ -62,7 +62,7 @@
                                     data-action="{{ route('panel.content-type.source', ['id' => $item->id, 'key' => 'postByNearby']) }}"
                                     data-params="{{ json_encode($item->data_sources['postByNearby']['rankNumber'] ?? []) }} "
                                     data-default_language="{{$defaultLanguage}}"
-                                    data-bs-target="#rankNumberModal">{{ __('FsLang::panel.expand_content_type_option_post_nearby') }}</button>
+                                    data-bs-target="#rankNumberModal">{{ __('FsLang::panel.extend_content_type_option_post_nearby') }}</button>
                             @endif
                         </td>
                         <td>
@@ -104,7 +104,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{{ __('FsLang::panel.sidebar_expand_content_type') }}</h5>
+                        <h5 class="modal-title">{{ __('FsLang::panel.sidebar_extend_content_type') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -242,7 +242,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ __('FsLang::panel.expand_content_type_rank_number') }}</h5>
+                    <h5 class="modal-title">{{ __('FsLang::panel.extend_content_type_rank_number') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -253,7 +253,7 @@
                             <table class="table table-hover align-middle text-nowrap">
                                 <thead>
                                     <tr class="table-info">
-                                        <th scope="col" style="width:10rem;">{{ __('FsLang::panel.table_number') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.expand_content_type_rank_number_desc') }}"></i></th>
+                                        <th scope="col" style="width:10rem;">{{ __('FsLang::panel.table_number') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.extend_content_type_rank_number_desc') }}"></i></th>
                                         <th scope="col">{{ __('FsLang::panel.table_title') }}</th>
                                         <th scope="col">{{ __('FsLang::panel.table_description') }}</th>
                                         <th scope="col" style="width:6rem;">{{ __('FsLang::panel.table_options') }}</th>

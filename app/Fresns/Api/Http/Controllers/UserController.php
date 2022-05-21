@@ -12,7 +12,7 @@ use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\User;
 use App\Models\Seo;
-use App\Utilities\ExpandUtility;
+use App\Utilities\ExtendUtility;
 use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 
@@ -40,9 +40,9 @@ class UserController extends Controller
         $common['features'] = [];
         $common['profiles'] = [];
         if ($headers['uid'] == $viewUser->uid) {
-            $common['manages'] = ExpandUtility::getPluginExpands(5, null, 3, $viewUser->id, $headers['langTag']);
-            $common['features'] = ExpandUtility::getPluginExpands(7, null, null, $viewUser->id, $headers['langTag']);
-            $common['profiles'] = ExpandUtility::getPluginExpands(8, null, null, $viewUser->id, $headers['langTag']);
+            $common['manages'] = ExtendUtility::getPluginExtends(5, null, 3, $viewUser->id, $headers['langTag']);
+            $common['features'] = ExtendUtility::getPluginExtends(7, null, null, $viewUser->id, $headers['langTag']);
+            $common['profiles'] = ExtendUtility::getPluginExtends(8, null, null, $viewUser->id, $headers['langTag']);
         }
         $data['commons'] = $common;
 
@@ -53,9 +53,9 @@ class UserController extends Controller
         $item['stats'] = $viewUser->getUserStats($headers['langTag']);
         $item['roles'] = $viewUser->getUserRoles($headers['langTag'], $headers['timezone']);
         $item['archives'] = $viewUser->getUserArchives($headers['langTag']);
-        $item['icons'] = ExpandUtility::getIcons(1, $viewUser->id, $headers['langTag']);
-        $item['tips'] = ExpandUtility::getTips(1, $viewUser->id, $headers['langTag']);
-        $item['extends'] = ExpandUtility::getExtends(1, $viewUser->id, $headers['langTag']);
+        $item['icons'] = ExtendUtility::getIcons(1, $viewUser->id, $headers['langTag']);
+        $item['tips'] = ExtendUtility::getTips(1, $viewUser->id, $headers['langTag']);
+        $item['extends'] = ExtendUtility::getExtends(1, $viewUser->id, $headers['langTag']);
         $item['draftCount'] = (object) [];
         if ($headers['uid'] == $viewUser->uid) {
             $item['draftCount'] = $viewUser->getUserDrafts();
