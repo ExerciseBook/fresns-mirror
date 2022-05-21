@@ -43,6 +43,7 @@ trait CommentServiceTrait
         $info['isAnonymous'] = (bool) $commentData->is_anonymous;
         $info['isSticky'] = $commentData->is_sticky;
         $info['digest'] = $commentData->digest_state;
+        $info['ipRegion'] = $appendData->ip_region;
         $info['likeCount'] = $commentData->like_count;
         $info['followCount'] = $commentData->follow_count;
         $info['blockCount'] = $commentData->block_count;

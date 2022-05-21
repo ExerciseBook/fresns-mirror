@@ -51,6 +51,7 @@ trait PostServiceTrait
         $info['isAnonymous'] = (bool) $postData->is_anonymous;
         $info['sticky'] = $postData->sticky_state;
         $info['digest'] = $postData->digest_state;
+        $info['ipRegion'] = $appendData->ip_region;
         $info['likeCount'] = $postData->like_count;
         $info['followCount'] = $postData->follow_count;
         $info['blockCount'] = $postData->block_count;
