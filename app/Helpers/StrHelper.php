@@ -8,6 +8,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Str;
+
 class StrHelper
 {
     /**
@@ -166,5 +168,18 @@ class StrHelper
         $domain = self::extractDomainByHost($host);
 
         return $domain ?? 'Unknown Error';
+    }
+
+    public static function slug(string $text)
+    {
+        if (preg_match("/^[A-Za-z]+$/", $text)) {
+            // 如果是纯英文（可以有空格），则使用框架功能
+            $slug = Str::slug($text, '-');
+        } else {
+            // 其他字符串使用 URL 编码
+            $slug = 'PHP%E8%AF%AD%E8%A8%80';
+        }
+
+        return $slug;
     }
 }

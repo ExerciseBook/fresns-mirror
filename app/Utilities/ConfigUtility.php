@@ -14,7 +14,7 @@ use App\Models\Config;
 class ConfigUtility
 {
     // add config items
-    public static function addFresnsConfigItems($fresnsConfigItems)
+    public static function addFresnsConfigItems(array $fresnsConfigItems)
     {
         foreach ($fresnsConfigItems as $item) {
             $config = Config::where('item_key', '=', $item['item_key'])->first();
@@ -25,12 +25,10 @@ class ConfigUtility
     }
 
     // remove config items
-    public static function removeFresnsConfigItems($fresnsConfigKeys)
+    public static function removeFresnsConfigItems(array $fresnsConfigKeys)
     {
         foreach ($fresnsConfigKeys as $item) {
-            Config::where('item_key', '=', $item)
-                ->where('is_custom', 1)
-                ->forceDelete();
+            Config::where('item_key', '=', $item)->where('is_custom', 1)->forceDelete();
         }
     }
 
@@ -39,7 +37,7 @@ class ConfigUtility
     {
         // 批量修改常规的配置（存在则修改，不存在则新建）
         foreach($fresnsConfigKeys as $item) {
-            $config = Config::updateOrCreate(['item_key' => $item['item_key']], $item);
+            Config::updateOrCreate(['item_key' => $item['item_key']], $item);
         }
     }
 
