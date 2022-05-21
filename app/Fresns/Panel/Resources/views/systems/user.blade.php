@@ -146,8 +146,7 @@
                     <input type="hidden" name="default_avatar" value="{{ $params['default_avatar'] }}">
                     <!--Preview-->
                     @if ($params['default_avatar'])
-                        <input type="hidden" class="imageUrl" value="{{ $configImageInfo['defaultAvatarUrl'] }}">
-                        <button class="btn btn-outline-secondary preview-image" type="button">{{ __('FsLang::panel.button_view') }}</button>
+                        <button class="btn btn-outline-secondary preview-image" type="button" data-url="{{ $configImageInfo['defaultAvatarUrl'] }}">{{ __('FsLang::panel.button_view') }}</button>
                     @endif
                 </div>
             </div>
@@ -177,8 +176,7 @@
                     <input type="hidden" name="anonymous_avatar" value="{{ $params['anonymous_avatar'] }}">
                     <!--Preview-->
                     @if ($params['anonymous_avatar'])
-                        <input type="hidden" class="imageUrl" value="{{ $configImageInfo['anonymousAvatarUrl'] }}">
-                        <button class="btn btn-outline-secondary preview-image" type="button">{{ __('FsLang::panel.button_view') }}</button>
+                        <button class="btn btn-outline-secondary preview-image" type="button" data-url="{{ $configImageInfo['anonymousAvatarUrl'] }}">{{ __('FsLang::panel.button_view') }}</button>
                     @endif
                 </div>
             </div>
@@ -208,8 +206,7 @@
                     <input type="hidden" name="deactivate_avatar" value="{{ $params['deactivate_avatar'] }}">
                     <!--Preview-->
                     @if ($params['deactivate_avatar'])
-                        <input type="hidden" class="imageUrl" value="{{ $configImageInfo['deactivateAvatarUrl'] }}">
-                        <button class="btn btn-outline-secondary preview-image" type="button">{{ __('FsLang::panel.button_view') }}</button>
+                        <button class="btn btn-outline-secondary preview-image" type="button" data-url="{{ $configImageInfo['deactivateAvatarUrl'] }}">{{ __('FsLang::panel.button_view') }}</button>
                     @endif
                 </div>
             </div>

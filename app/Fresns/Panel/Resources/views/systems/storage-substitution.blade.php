@@ -38,8 +38,7 @@
                         <input type="hidden" name="substitution_image" value="{{ $params['substitution_image'] }}">
                         <!--Preview-->
                         @if ($params['substitution_image'])
-                            <input type="hidden" class="imageUrl" value="{{ $configImageInfo['imageConfigUrl'] }}">
-                            <button class="btn btn-outline-secondary preview-image" type="button">{{ __('FsLang::panel.button_view') }}</button>
+                            <button class="btn btn-outline-secondary preview-image" type="button" data-url="{{ $configImageInfo['imageConfigUrl'] }}">{{ __('FsLang::panel.button_view') }}</button>
                         @endif
                     </div>
                 </div>
@@ -67,8 +66,7 @@
                         <input type="hidden" name="substitution_video" value="{{ $params['substitution_video'] }}">
                         <!--Preview-->
                         @if ($params['substitution_video'])
-                            <input type="hidden" class="imageUrl" value="{{ $configImageInfo['videoConfigUrl'] }}">
-                            <button class="btn btn-outline-secondary preview-image" type="button">{{ __('FsLang::panel.button_view') }}</button>
+                            <button class="btn btn-outline-secondary preview-image" type="button" data-url="{{ $configImageInfo['videoConfigUrl'] }}">{{ __('FsLang::panel.button_view') }}</button>
                         @endif
                     </div>
                 </div>
@@ -96,8 +94,7 @@
                         <input type="hidden" name="substitution_audio" value="{{ $params['substitution_audio'] }}">
                         <!--Preview-->
                         @if ($params['substitution_audio'])
-                            <input type="hidden" class="imageUrl" value="{{ $configImageInfo['audioConfigUrl'] }}">
-                            <button class="btn btn-outline-secondary preview-image" type="button">{{ __('FsLang::panel.button_view') }}</button>
+                            <button class="btn btn-outline-secondary preview-image" type="button" data-url="{{ $configImageInfo['audioConfigUrl'] }}">{{ __('FsLang::panel.button_view') }}</button>
                         @endif
                     </div>
                 </div>
@@ -125,8 +122,7 @@
                         <input type="hidden" name="substitution_document" value="{{ $params['substitution_document'] }}">
                         <!--Preview-->
                         @if ($params['substitution_document'])
-                            <input type="hidden" class="imageUrl" value="{{ $configImageInfo['documentConfigUrl'] }}">
-                            <button class="btn btn-outline-secondary preview-image" type="button">{{ __('FsLang::panel.button_view') }}</button>
+                            <button class="btn btn-outline-secondary preview-image" type="button" data-url="{{ $configImageInfo['documentConfigUrl'] }}">{{ __('FsLang::panel.button_view') }}</button>
                         @endif
                     </div>
                 </div>
