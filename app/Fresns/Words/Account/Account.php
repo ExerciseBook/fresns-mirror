@@ -24,7 +24,7 @@ use App\Models\SessionToken;
 use App\Models\User;
 use App\Models\VerifyCode;
 use App\Utilities\ConfigUtility;
-use App\Utilities\ValidationUtility;
+use App\Utilities\PermissionUtility;
 use Fresns\CmdWordManager\Exceptions\Constants\ExceptionConstant;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
 use Illuminate\Support\Facades\DB;
@@ -194,29 +194,38 @@ class Account
         $dtoWordBody = new VerifySessionTokenDTO($wordBody);
         $langTag = \request()->header('langTag', config('app.locale'));
 
+        $condition = [
+            'platform_id' => $dtoWordBody->platformId,
+            'account_id' => $dtoWordBody->aid,
+            'user_id' => $dtoWordBody-> uid ?? null,
+        ];
+        $session = SessionToken::where($condition)->first();
+
+        if ($session->token != $dtoWordBody->token) {
+            return $this->failure(
+                31505,
+                ConfigUtility::getCodeMessage(31505, 'Fresns', $langTag)
+            );
+        }
+
+        if ($session->expired_at < date('Y-m-d H:i:s', time())) {
+            return $this->failure(
+                31303,
+                ConfigUtility::getCodeMessage(31303, 'Fresns', $langTag)
+            );
+        }
+
         $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
         $userId = PrimaryHelper::fresnsUserIdByUid($dtoWordBody->uid);
 
         if (! empty($dtoWordBody->uid)) {
-            $userAffiliation = ValidationUtility::checkUserAffiliation($userId, $accountId);
-            if ($userAffiliation == false) {
+            $userAffiliation = PermissionUtility::checkUserAffiliation($userId, $accountId);
+            if (! $userAffiliation) {
                 return $this->failure(
                     35201,
                     ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
                 );
             }
-        }
-
-
-        $condition = [
-            'platform_id' => $dtoWordBody->platform,
-            'account_id' => $accountId,
-            'user_id' => $userId ?? null,
-        ];
-        $session = SessionToken::where($condition)->first();
-
-        if ($session->token != $dtoWordBody->token || ($session->expired_at < date('Y-m-d H:i:s', time()))) {
-            ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_DATA_ERROR)::throw();
         }
 
         return $this->success();

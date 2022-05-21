@@ -53,13 +53,13 @@ class PrimaryHelper
      * @param  string  $aid
      * @return int |null
      */
-    public static function fresnsUserIdByUid(?string $aid = null)
+    public static function fresnsUserIdByUid(?string $uid = null)
     {
-        if (empty($aid)) {
+        if (empty($uid)) {
             return null;
         }
 
-        $id = User::withTrashed()->where('uid', $aid)->value('id');
+        $id = User::withTrashed()->where('uid', $uid)->value('id');
 
         return $id ?? null;
     }

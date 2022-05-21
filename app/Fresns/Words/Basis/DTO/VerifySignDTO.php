@@ -24,14 +24,14 @@ class VerifySignDTO extends DTO
     public function rules(): array
     {
         return [
-            'platform' => ['required', 'integer'],
+            'platformId' => ['required', 'integer'],
             'version' => ['required', 'string'],
             'appId' => ['required', 'string'],
             'timestamp' => ['required', 'integer'],
             'sign' => ['required', 'string'],
             'aid' => ['nullable', 'string'],
             'uid' => ['nullable', 'integer'],
-            'token' => ['required_with:aid', 'string'],
+            'token' => ['nullable', 'required_with:aid', 'string'],
         ];
     }
 }

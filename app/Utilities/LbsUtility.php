@@ -46,6 +46,7 @@ class LbsUtility
         $distanceWithUnit = match ($unit) {
             'km' => $distance,
             'mi' => $distance * 0.62137,
+            default => $distance,
         };
 
         return $distanceWithUnit;

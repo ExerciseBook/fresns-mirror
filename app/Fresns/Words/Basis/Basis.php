@@ -30,6 +30,93 @@ class Basis
 
     /**
      * @param $wordBody
+     * @return array|string
+     *
+     * @throws \Throwable
+     */
+    public function verifySign($wordBody)
+    {
+        $dtoWordBody = new VerifySignDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        $keyInfo = SessionKey::where('app_id', $dtoWordBody->appId)->where('is_enable', 1)->first();
+
+        if (empty($keyInfo)) {
+            return $this->failure(
+                31301,
+                ConfigUtility::getCodeMessage(31301, 'Fresns', $langTag),
+            );
+        }
+
+        if ($keyInfo->type != 1) {
+            return $this->failure(
+                31304,
+                ConfigUtility::getCodeMessage(31304, 'Fresns', $langTag),
+            );
+        }
+
+        if ($keyInfo->platform_id != $dtoWordBody->platformId) {
+            return $this->failure(
+                31102,
+                ConfigUtility::getCodeMessage(31102, 'Fresns', $langTag),
+            );
+        }
+
+        $timestampNum = strlen($dtoWordBody->timestamp);
+        $duration = 5; //Expiration time limit (unit: minutes)
+
+        if ($timestampNum == 10) {
+            $now = time();
+            $expiredDuration = $duration * 60;
+        } else {
+            $now = intval(microtime(true) * 1000);
+            $expiredDuration = $duration * 60 * 1000;
+        }
+
+        if ($now - $dtoWordBody->timestamp > $expiredDuration) {
+            return $this->failure(
+                31303,
+                ConfigUtility::getCodeMessage(31303, 'Fresns', $langTag),
+            );
+        }
+
+        $includeEmptyCheckArr = [
+            'platformId' => $dtoWordBody->platformId,
+            'version' => $dtoWordBody->version,
+            'appId' => $dtoWordBody->appId,
+            'timestamp' => $dtoWordBody->timestamp,
+            'sign' => $dtoWordBody->sign,
+            'aid' => $dtoWordBody->aid ?? null,
+            'uid' => $dtoWordBody->uid ?? null,
+            'token' => $dtoWordBody->token ?? null,
+        ];
+
+        $withoutEmptyCheckArr = array_filter($includeEmptyCheckArr);
+
+        $checkSign = SignHelper::checkSign($withoutEmptyCheckArr, $keyInfo->app_secret);
+
+        if ($checkSign !== true) {
+            return $this->failure(
+                31302,
+                ConfigUtility::getCodeMessage(31302, 'Fresns', $langTag),
+            );
+        }
+
+        if (isset($dtoWordBody->aid)) {
+            $verifySessionTokenArr = array_filter([
+                'platformId' => $dtoWordBody->platformId,
+                'aid' => $dtoWordBody->aid,
+                'uid' => $dtoWordBody->uid ?? null,
+                'token' => $dtoWordBody->token,
+            ]);
+            \FresnsCmdWord::plugin()->verifySessionToken($verifySessionTokenArr);
+        }
+
+        return $this->success();
+    }
+
+    /**
+     * @param $wordBody
      * @return mixed
      *
      * @throws \Throwable
@@ -56,82 +143,6 @@ class Basis
         }
 
         return $this->success($urlSignJson);
-    }
-
-    /**
-     * @param $wordBody
-     * @return array|string
-     *
-     * @throws \Throwable
-     */
-    public function verifySign($wordBody)
-    {
-        $dtoWordBody = new VerifySignDTO($wordBody);
-        $appId = $dtoWordBody->appId;
-        $langTag = \request()->header('langTag', config('app.locale'));
-
-        if (isset($dtoWordBody->aid)) {
-            $verifySessionTokenArr = array_filter([
-                'platform'=>$dtoWordBody->platform,
-                'aid'=>$dtoWordBody->aid,
-                'uid'=>$dtoWordBody->uid ?? 0,
-                'token'=>$dtoWordBody->token,
-            ]);
-            \FresnsCmdWord::plugin()->verifySessionToken($verifySessionTokenArr);
-        }
-
-        $includeEmptyCheckArr = [
-            'platform' => $dtoWordBody->platform,
-            'version' => $dtoWordBody->version,
-            'appId' => $dtoWordBody->appId,
-            'timestamp' => $dtoWordBody->timestamp,
-            'sign' => $dtoWordBody->sign,
-            'aid' => $dtoWordBody->aid ?? '',
-            'uid' => $dtoWordBody->uid ?? '',
-            'token' => $dtoWordBody->token ?? '',
-        ];
-
-        $withoutEmptyCheckArr = array_filter($includeEmptyCheckArr);
-
-        // Header Signature Expiration Date
-        $min = 5; //Expiration time limit (unit: minutes)
-
-        //Determine the timestamp type
-        $timestampNum = strlen($dtoWordBody->timestamp);
-        if ($timestampNum == 10) {
-            $now = time();
-            $expiredMin = $min * 60;
-        } else {
-            $now = intval(microtime(true) * 1000);
-            $expiredMin = $min * 60 * 1000;
-        }
-        if ($now - $dtoWordBody->timestamp > $expiredMin) {
-            ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_PARAM_ERROR)::throw();
-        }
-
-        $appSecret = SessionKey::where('app_id', $appId)->value('app_secret');
-        if (empty($appSecret)) {
-            return $this->failure(
-                31301,
-                ConfigUtility::getCodeMessage(31301, 'Fresns', $langTag),
-                [
-                    'appId' => $dtoWordBody->appId,
-                ]
-            );
-        }
-
-        $checkArr = SignHelper::checkSign($withoutEmptyCheckArr, $appSecret);
-        if ($checkArr !== true) {
-            return $this->failure(
-                31302,
-                ConfigUtility::getCodeMessage(31302, 'Fresns', $langTag),
-                [
-                    'sign'=>$checkArr,
-                ]
-            );
-        }
-
-        return $this->success();
     }
 
     /**
