@@ -12,7 +12,7 @@ use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Hashtag;
 use App\Models\Seo;
-use App\Exceptions\FresnsApiException;
+use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 
 class HashtagController extends Controller
@@ -23,7 +23,7 @@ class HashtagController extends Controller
 
         $hashtag = Hashtag::whereSlug($hid)->first();
         if (empty($hashtag)) {
-            throw new FresnsApiException(37200);
+            throw new ApiException(37200);
         }
 
         $seoData = Seo::where('linked_type', 3)->where('linked_id', $hashtag->id)->where('lang_tag', $headers['langTag'])->first();

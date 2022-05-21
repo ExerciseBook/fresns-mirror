@@ -16,7 +16,7 @@ use App\Models\User;
 use App\Models\Seo;
 use App\Utilities\ExpandUtility;
 use App\Utilities\LbsUtility;
-use App\Exceptions\FresnsApiException;
+use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -33,7 +33,7 @@ class PostController extends Controller
 
         $post = Post::with('creator')->wherePid($pid)->first();
         if (empty($post)) {
-            throw new FresnsApiException(37300);
+            throw new ApiException(37300);
         }
 
         $seoData = Seo::where('linked_type', 4)->where('linked_id', $post->id)->where('lang_tag', $headers['langTag'])->first();

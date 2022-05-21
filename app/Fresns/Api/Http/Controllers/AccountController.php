@@ -12,7 +12,7 @@ use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Account;
 use App\Utilities\ExpandUtility;
-use App\Exceptions\FresnsApiException;
+use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -23,7 +23,7 @@ class AccountController extends Controller
 
         $account = Account::whereAid($headers['aid'])->first();
         if (empty($account)) {
-            throw new FresnsApiException(31502);
+            throw new ApiException(31502);
         }
 
         $common['walletRecharges'] = ExpandUtility::getPluginExpands(1, null, null, $account->id, $headers['langTag']);

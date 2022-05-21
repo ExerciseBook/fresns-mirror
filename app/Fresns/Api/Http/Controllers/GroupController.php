@@ -14,9 +14,9 @@ use App\Models\Group;
 use App\Models\User;
 use App\Models\Seo;
 use App\Utilities\ExpandUtility;
-use App\Utilities\ValidationUtility;
+use App\Utilities\PermissionUtility;
 use Illuminate\Http\Request;
-use App\Exceptions\FresnsApiException;
+use App\Exceptions\ApiException;
 
 class GroupController extends Controller
 {
@@ -55,7 +55,7 @@ class GroupController extends Controller
 
         $group = Group::whereGid($gid)->first();
         if (empty($group)) {
-            throw new FresnsApiException(37100);
+            throw new ApiException(37100);
         }
 
         $parentGroup = $group->category;
@@ -70,7 +70,7 @@ class GroupController extends Controller
 
         $groupInfo = $group->getGroupInfo($headers['langTag']);
 
-        $item['publishRule'] = ValidationUtility::checkUserGroupPublishPerm($user?->id, $group->id);
+        $item['publishRule'] = PermissionUtility::checkUserGroupPublishPerm($user?->id, $group->id);
 
         $item['icons'] = ExpandUtility::getIcons(2, $group->id, $headers['langTag']);
         $item['tips'] = ExpandUtility::getTips(2, $group->id, $headers['langTag']);

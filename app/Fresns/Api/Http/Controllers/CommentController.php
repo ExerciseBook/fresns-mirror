@@ -11,7 +11,7 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Comment;
-use App\Exceptions\FresnsApiException;
+use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -23,7 +23,7 @@ class CommentController extends Controller
 
         $comment = Comment::with('creator')->whereCid($cid)->first();
         if (empty($comment)) {
-            throw new FresnsApiException(37400);
+            throw new ApiException(37400);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace App\Exceptions;
 use App\Utilities\ConfigUtility;
 use App\Fresns\Api\Traits\ApiResponseTrait;
 
-class FresnsApiException extends \Exception
+class ApiException extends \Exception
 {
     use ApiResponseTrait;
 

@@ -13,7 +13,7 @@ use App\Helpers\InteractiveHelper;
 use App\Models\User;
 use App\Models\Seo;
 use App\Utilities\ExpandUtility;
-use App\Exceptions\FresnsApiException;
+use App\Exceptions\ApiException;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -29,7 +29,7 @@ class UserController extends Controller
         }
 
         if (empty($viewUser)) {
-            throw new FresnsApiException(31602);
+            throw new ApiException(31602);
         }
 
         $seoData = Seo::where('linked_type', 1)->where('linked_id', $viewUser->id)->where('lang_tag', $headers['langTag'])->first();
