@@ -214,6 +214,50 @@
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.publish_editor_function_options') }}:</label>
             <div class="col-lg-6">
                 <div class="input-group">
+                    <label class="input-group-text">{{ __('FsLang::panel.editor_upload_image_number') }}</label>
+                    <input type="number" class="form-control input-number" id="comment_editor_image_upload_number" name="comment_editor_image_upload_number" value="{{ $params['comment_editor_image_upload_number'] }}">
+                    <span class="input-group-text">{{ __('FsLang::panel.unit_number') }}</span>
+                </div>
+            </div>
+            <div class="col-lg-4 form-text pt-1"></div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-lg-2 col-form-label text-lg-end"></label>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <label class="input-group-text">{{ __('FsLang::panel.editor_upload_video_number') }}</label>
+                    <input type="number" class="form-control input-number" id="comment_editor_video_upload_number" name="comment_editor_video_upload_number" value="{{ $params['comment_editor_video_upload_number'] }}">
+                    <span class="input-group-text">{{ __('FsLang::panel.unit_number') }}</span>
+                </div>
+            </div>
+            <div class="col-lg-4 form-text pt-1"></div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-lg-2 col-form-label text-lg-end"></label>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <label class="input-group-text">{{ __('FsLang::panel.editor_upload_audio_number') }}</label>
+                    <input type="number" class="form-control input-number" id="comment_editor_audio_upload_number" name="comment_editor_audio_upload_number" value="{{ $params['comment_editor_audio_upload_number'] }}">
+                    <span class="input-group-text">{{ __('FsLang::panel.unit_number') }}</span>
+                </div>
+            </div>
+            <div class="col-lg-4 form-text pt-1"></div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-lg-2 col-form-label text-lg-end"></label>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <label class="input-group-text">{{ __('FsLang::panel.editor_upload_document_number') }}</label>
+                    <input type="number" class="form-control input-number" id="comment_editor_document_upload_number" name="comment_editor_document_upload_number" value="{{ $params['comment_editor_document_upload_number'] }}">
+                    <span class="input-group-text">{{ __('FsLang::panel.unit_number') }}</span>
+                </div>
+            </div>
+            <div class="col-lg-4 form-text pt-1"></div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-lg-2 col-form-label text-lg-end"></label>
+            <div class="col-lg-6">
+                <div class="input-group">
                     <label class="input-group-text">{{ __('FsLang::panel.publish_editor_comment_word_length') }}</label>
                     <input type="number" class="form-control input-number" id="comment_editor_word_length" name="comment_editor_word_length" value="{{ $params['comment_editor_word_length'] }}">
                     <span class="input-group-text">{{ __('FsLang::panel.unit_character') }}</span>

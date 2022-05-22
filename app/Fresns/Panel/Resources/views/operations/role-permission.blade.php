@@ -344,7 +344,7 @@
                 <div class="input-group mb-3">
                     <label class="input-group-text">{{ __('FsLang::panel.role_perm_download_file_count') }}</label>
                     <input type="number" class="form-control input-number" value="{{ $permission['download_file_count']['permValue'] ?? '' }}" name="permission[download_file_count]" placeholder="10">
-                    <span class="input-group-text">{{ __('FsLang::panel.unit_number') }}</span>
+                    <span class="input-group-text">{{ __('FsLang::panel.unit_number_of_times') }}</span>
                 </div>
             </div>
         </div>

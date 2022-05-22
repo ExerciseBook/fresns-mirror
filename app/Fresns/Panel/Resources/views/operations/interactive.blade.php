@@ -56,7 +56,12 @@
             <div class="col-lg-6">
                 <div class="input-group">
                     <label class="input-group-text">{{ __('FsLang::panel.interactive_comment_preview') }}</label>
-                    <input type="number" class="form-control input-number" name="comment_preview" value="{{ $params['comment_preview'] }}" min="0" max="3">
+                    <select class="form-select" name="comment_preview">
+                        <option value="0" {{ $params['comment_preview'] == 0 ? 'selected' : '' }}>{{ __('FsLang::panel.option_close') }}</option>
+                        <option value="1" {{ $params['comment_preview'] == 1 ? 'selected' : '' }}>1</option>
+                        <option value="2" {{ $params['comment_preview'] == 2 ? 'selected' : '' }}>2</option>
+                        <option value="3" {{ $params['comment_preview'] == 3 ? 'selected' : '' }}>3</option>
+                    </select>
                 </div>
             </div>
             <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.interactive_comment_preview_desc') }}</div>
