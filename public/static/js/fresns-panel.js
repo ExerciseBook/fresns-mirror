@@ -368,7 +368,7 @@ $(document).ready(function () {
             method: 'post',
             url: $(this).data('action'),
             data: {
-                rank_num: $(this).val(),
+                rating: $(this).val(),
                 _method: 'put',
             },
             success: function (response) {
@@ -388,7 +388,7 @@ $(document).ready(function () {
         let isEnable = language.isEnable ? 1 : 0;
 
         $(this).find('form').attr('action', action);
-        $(this).find('input[name=rank_num]').val(language.rankNum);
+        $(this).find('input[name=rating]').val(language.rating);
         $(this).find('input[name=old_lang_tag]').val(language.langTag);
         $(this).find('select[name=lang_code]').val(language.langCode);
         $(this)
@@ -651,7 +651,7 @@ $(document).ready(function () {
             $('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
             $('.inputFile').css('display', 'none');
         }
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
         $(this).find('select[name=parameter]').val(params.parameter);
         $(this).find('input[name=app_id]').val(configParams.appId);
@@ -701,7 +701,7 @@ $(document).ready(function () {
             $(this).find('input[name=image_file_url]').val('');
         }
 
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('input[name=code]').val(params.code);
         $(this)
             .find('input:radio[name=is_enable][value="' + params.is_enable + '"]')
@@ -728,8 +728,8 @@ $(document).ready(function () {
 
             stickerTemplate
                 .find('input.sticker-rank')
-                .attr('name', 'rank_num[' + sticker.id + ']')
-                .val(sticker.rank_num);
+                .attr('name', 'rating[' + sticker.id + ']')
+                .val(sticker.rating);
 
             stickerTemplate.find('.sticker-img').attr('src', sticker.image_file_url);
             stickerTemplate.find('.sticker-code').html(sticker.code);
@@ -797,7 +797,7 @@ $(document).ready(function () {
         }
 
         $(this).find('select[name=type]').val(params.type);
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('input[name=name]').val(params.name);
         if (params.is_display_name) {
             $(this).find('input[name=is_display_name]').attr('checked', 'checked');
@@ -1051,7 +1051,7 @@ $(document).ready(function () {
         } else {
             $(this).find('input[name=icon_file_url]').val('');
         }
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
         $(this).find('input[name=parameter]').val(params.parameter);
         if (params.name) {
@@ -1076,7 +1076,7 @@ $(document).ready(function () {
         form.find('.desc-button').text(trans('panel.table_description')); //FsLang
 
         if (params) {
-            $('#createCategoryModal').find('input[name=rank_num]').val(params.rank_num);
+            $('#createCategoryModal').find('input[name=rating]').val(params.rating);
             $('#createCategoryModal')
                 .find('input:radio[name=is_enable][value="' + params.is_enable + '"]')
                 .prop('checked', true);
@@ -1230,7 +1230,7 @@ $(document).ready(function () {
         }
 
         form.find('select[name=parent_id]').val(params.parent_id);
-        form.find('input[name=rank_num]').val(params.rank_num);
+        form.find('input[name=rating]').val(params.rating);
         form.find('select[name=plugin_unikey]').val(params.plugin_unikey);
 
         let names = button.data('names');
@@ -1338,7 +1338,7 @@ $(document).ready(function () {
         }
         $('#inlineCheckbox1').removeAttr('checked');
         $('#inlineCheckbox2').removeAttr('checked');
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
         $(this).find('input[name=parameter]').val(params.parameter);
         $(this).find('input[name=editor_number]').val(params.editor_number);
@@ -1387,7 +1387,7 @@ $(document).ready(function () {
         $('#inlineCheckbox2').removeAttr('checked');
         $('#inlineCheckbox3').removeAttr('checked');
 
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
         $(this).find('input[name=parameter]').val(params.parameter);
 
@@ -1446,7 +1446,7 @@ $(document).ready(function () {
         if (!params) {
             return;
         }
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
         $(this).find('input[name=parameter]').val(params.parameter);
 
@@ -1481,7 +1481,7 @@ $(document).ready(function () {
         if (!params) {
             return;
         }
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
         $(this).find('input[name=parameter]').val(params.parameter);
 
@@ -1548,7 +1548,7 @@ $(document).ready(function () {
         $('#parentGroupId').change();
         $('#childGroup').val(group.id);
 
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
         $(this).find('input[name=parameter]').val(params.parameter);
 
@@ -1588,7 +1588,7 @@ $(document).ready(function () {
         let postByFollow = dataSources.postByFollow ? dataSources.postByFollow.pluginUnikey : null;
         let postByNearby = dataSources.postByNearby ? dataSources.postByNearby.pluginUnikey : null;
 
-        $(this).find('input[name=rank_num]').val(params.rank_num);
+        $(this).find('input[name=rating]').val(params.rating);
         $(this).find('select[name=plugin_unikey]').val(params.plugin_unikey);
         if (postByAll) {
             $(this).find('select[name=post_all]').val(postByAll);
@@ -1606,7 +1606,7 @@ $(document).ready(function () {
     });
 
     // panel types edit
-    $('#rankNumberModal').on('show.bs.modal', function (e) {
+    $('#pluginRatingModal').on('show.bs.modal', function (e) {
         if ($(this).data('is_back')) {
             return;
         }
@@ -1654,7 +1654,7 @@ $(document).ready(function () {
             rankTemplate.insertBefore($(this).find('.add-rank-tr'));
         });
 
-        $('#rankNumberTitleLangModal');
+        $('#pluginRatingTitleLangModal');
     });
 
     // selectInputType
@@ -1670,17 +1670,17 @@ $(document).ready(function () {
     });
 
     // content type data source
-    $('#rankNumberModal .add-rank').click(function () {
+    $('#pluginRatingModal .add-rank').click(function () {
         let template = $('#rankTemplate').clone();
 
-        $(template.html()).insertBefore($('#rankNumberModal').find('.add-rank-tr'));
+        $(template.html()).insertBefore($('#pluginRatingModal').find('.add-rank-tr'));
     });
 
     $(document).on('click', '.delete-rank-number', function () {
         $(this).closest('tr').remove();
     });
 
-    $('#rankNumberTitleLangModal').on('show.bs.modal', function (e) {
+    $('#pluginRatingTitleLangModal').on('show.bs.modal', function (e) {
         let button = $(e.relatedTarget);
         let languages = button.data('languages');
         $(this).find('form').trigger('reset');
@@ -1697,10 +1697,10 @@ $(document).ready(function () {
         });
     });
 
-    $('#rankNumberTitleLangModal').on('hide.bs.modal', function (e) {
+    $('#pluginRatingTitleLangModal').on('hide.bs.modal', function (e) {
         let button = $($(this).data('button'));
-        $('#rankNumberModal').data('is_back', true);
-        $('#rankNumberModal').modal('show');
+        $('#pluginRatingModal').data('is_back', true);
+        $('#pluginRatingModal').modal('show');
 
         let titles = $(this).find('form').serializeArray();
         let data = new Object();
@@ -1710,7 +1710,7 @@ $(document).ready(function () {
         button.siblings('input').val(JSON.stringify(data));
     });
 
-    $('#rankNumberDescLangModal').on('show.bs.modal', function (e) {
+    $('#pluginRatingDescLangModal').on('show.bs.modal', function (e) {
         let button = $(e.relatedTarget);
         let languages = button.data('languages');
         $(this).find('form').trigger('reset');
@@ -1727,10 +1727,10 @@ $(document).ready(function () {
         });
     });
 
-    $('#rankNumberDescLangModal').on('hide.bs.modal', function (e) {
+    $('#pluginRatingDescLangModal').on('hide.bs.modal', function (e) {
         let button = $($(this).data('button'));
-        $('#rankNumberModal').data('is_back', true);
-        $('#rankNumberModal').modal('show');
+        $('#pluginRatingModal').data('is_back', true);
+        $('#pluginRatingModal').modal('show');
 
         let descriptions = $(this).find('form').serializeArray();
         let data = new Object();
@@ -1740,7 +1740,7 @@ $(document).ready(function () {
         button.siblings('input').val(JSON.stringify(data));
     });
 
-    $('#rankNumberModal').on('hide.bs.modal', function (e) {
+    $('#pluginRatingModal').on('hide.bs.modal', function (e) {
         $(this).data('is_back', false);
     });
 

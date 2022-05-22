@@ -86,11 +86,11 @@ class ExtendUtility
             2 => $badge['value_text'],
         };
         $extend['editorNumber'] = $usage['editor_number'];
-        $postByAll = self::getRankNumber('postByAll', $usage['data_sources'], $langTag);
-        $postByFollow = self::getRankNumber('postByFollow', $usage['data_sources'], $langTag);
-        $postByNearby = self::getRankNumber('postByNearby', $usage['data_sources'], $langTag);
-        $rankNumber = array_merge($postByAll, $postByFollow, $postByNearby);
-        $extend['rankNumber'] = $rankNumber;
+        $postByAll = self::getPluginRating('postByAll', $usage['data_sources'], $langTag);
+        $postByFollow = self::getPluginRating('postByFollow', $usage['data_sources'], $langTag);
+        $postByNearby = self::getPluginRating('postByNearby', $usage['data_sources'], $langTag);
+        $pluginRating = array_merge($postByAll, $postByFollow, $postByNearby);
+        $extend['pluginRating'] = $pluginRating;
 
         return $extend;
     }
@@ -106,19 +106,19 @@ class ExtendUtility
         return $extendList;
     }
 
-    public static function getRankNumber(string $key, array $dataSources, string $langTag)
+    public static function getPluginRating(string $key, array $dataSources, string $langTag)
     {
-        $rankNumberArr = $dataSources[$key]['rankNumber'];
+        $pluginRatingArr = $dataSources[$key]['pluginRating'];
 
-        $rankNumber = null;
-        foreach ($rankNumberArr as $arr) {
+        $pluginRating = null;
+        foreach ($pluginRatingArr as $arr) {
             $item['id'] = $arr['id'];
             $item['title'] = collect($arr['intro'])->where('langTag', $langTag)->first()['title'] ?? null;
             $item['description'] = collect($arr['intro'])->where('langTag', $langTag)->first()['description'] ?? null;
-            $rankNumber[] = $item;
+            $pluginRating[] = $item;
         }
 
-        return $rankNumber;
+        return $pluginRating;
     }
 
     // get icons

@@ -43,15 +43,15 @@ class ExtendContentTypeController extends Controller
         $pluginUsage->data_sources = [
             'postByAll' => [
                 'pluginUnikey' => $request->post_list,
-                'rankNumber' => [],
+                'pluginRating' => [],
             ],
             'postByFollow' => [
                 'pluginUnikey' => $request->post_follow,
-                'rankNumber' => [],
+                'pluginRating' => [],
             ],
             'postByNearby' => [
                 'pluginUnikey' => $request->post_nearby,
-                'rankNumber' => [],
+                'pluginRating' => [],
             ],
         ];
         $pluginUsage->save();
@@ -97,21 +97,21 @@ class ExtendContentTypeController extends Controller
         if ($request->post_all != ($dataSources['postByAll']['pluginUnikey'] ?? null)) {
             $dataSources['postByAll'] = [
                 'pluginUnikey' => $request->post_all,
-                'rankNumber' => [],
+                'pluginRating' => [],
             ];
         }
 
         if ($request->post_follow != ($dataSources['postByFollow']['pluginUnikey'] ?? null)) {
             $dataSources['postByFollow'] = [
                 'pluginUnikey' => $request->post_follow,
-                'rankNumber' => [],
+                'pluginRating' => [],
             ];
         }
 
         if ($request->post_nearby != ($dataSources['postByNearby']['pluginUnikey'] ?? null)) {
             $dataSources['postByNearby'] = [
                 'pluginUnikey' => $request->post_nearby,
-                'rankNumber' => [],
+                'pluginRating' => [],
             ];
         }
 
@@ -196,7 +196,7 @@ class ExtendContentTypeController extends Controller
             ];
         }
 
-        $dataSources[$key]['rankNumber'] = $data;
+        $dataSources[$key]['pluginRating'] = $data;
         $pluginUsage->data_sources = $dataSources;
         $pluginUsage->save();
 
