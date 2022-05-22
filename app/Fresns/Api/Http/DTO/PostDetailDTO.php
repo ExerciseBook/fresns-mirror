@@ -19,8 +19,8 @@ class PostDetailDTO extends DTO
     {
         return [
             'mapId' => ['nullable', 'in:1,2,3,4,5,6,7,8,9,10'],
-            'longitude' => ['nullable', 'numeric'],
-            'latitude' => ['nullable', 'numeric'],
+            'mapLng' => ['nullable', 'numeric'],
+            'mapLat' => ['nullable', 'numeric'],
         ];
     }
 }

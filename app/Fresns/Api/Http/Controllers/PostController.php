@@ -14,7 +14,6 @@ use App\Helpers\AppHelper;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Seo;
-use App\Utilities\ExtendUtility;
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Services\PostService;
 use Illuminate\Http\Request;
@@ -34,7 +33,7 @@ class PostController extends Controller
         $postList = [];
         foreach ($posts as $post) {
             $service = new PostService();
-            $postList[] = $service->postInfo($post->pid, 'list', $dtoRequest->mapId, $dtoRequest->longitude, $dtoRequest->latitude);
+            $postList[] = $service->postInfo($post->pid, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
@@ -58,7 +57,7 @@ class PostController extends Controller
         $data['commons'] = $common;
 
         $service = new PostService();
-        $data['detail'] = $service->postInfo($pid, 'detail', $dtoRequest->mapId, $dtoRequest->longitude, $dtoRequest->latitude);
+        $data['detail'] = $service->postInfo($pid, 'detail', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
 
         return $this->success($data);
     }
