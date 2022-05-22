@@ -19,8 +19,12 @@ class PluginHelper
      * @param  string  $unikey
      * @return string
      */
-    public static function fresnsPluginUrlByUnikey(string $unikey)
+    public static function fresnsPluginUrlByUnikey(?string $unikey = null)
     {
+        if (empty($unikey)) {
+            return null;
+        }
+
         $plugin = Plugin::where('unikey', $unikey)->first(['plugin_domain', 'access_path']);
         if (empty($plugin)) {
             return null;

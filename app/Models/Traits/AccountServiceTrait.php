@@ -67,7 +67,10 @@ trait AccountServiceTrait
         $walletData = $this->wallet;
 
         $currencyConfig = ConfigHelper::fresnsConfigByItemKeys([
-            'wallet_currency_code', 'wallet_currency_name', 'wallet_currency_unit', 'wallet_currency_precision'
+            'wallet_currency_code',
+            'wallet_currency_name',
+            'wallet_currency_unit',
+            'wallet_currency_precision',
         ], $langTag);
 
         $wallet['status'] = (bool) $walletData->is_enable;

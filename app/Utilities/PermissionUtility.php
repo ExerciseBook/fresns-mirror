@@ -10,13 +10,14 @@ namespace App\Utilities;
 
 use App\Helpers\ConfigHelper;
 use App\Models\GroupAdmin;
+use App\Models\PostAllow;
 use App\Models\User;
 use App\Models\UserRole;
 
 class PermissionUtility
 {
     // Check if the user belongs to the account
-    public static function checkUserAffiliation(int $userId, int $accountId)
+    public static function checkUserAffiliation(int $userId, int $accountId): bool
     {
         $userAccountId = User::where('id', $userId)->value('account_id');
 
@@ -24,7 +25,7 @@ class PermissionUtility
     }
 
     // Check user status
-    public static function checkUserStatus(int $userId)
+    public static function checkUserStatus(int $userId): bool
     {
         $userStatus = User::where('id', $userId)->value('is_enable');
 
@@ -35,12 +36,31 @@ class PermissionUtility
         return $userStatus == 0 ? 'true' : 'false';
     }
 
+    // Check user permissions
+    public static function checkUserPerm(int $userId, array $permUserIds): bool
+    {
+        return in_array($userId, $permUserIds) ? 'true' : 'false';
+    }
+
     // Check user role permissions
-    public static function checkUserRolePerm(int $userId, array $permRoleIds)
+    public static function checkUserRolePerm(int $userId, array $permRoleIds): bool
     {
         $userRoles = UserRole::where('user_id', $userId)->pluck('role_id')->toArray();
 
-        return array_intersect($permRoleIds, $userRoles) ? 'true' : 'false';
+        return array_intersect($userRoles, $permRoleIds) ? 'true' : 'false';
+    }
+
+    // Check post allow
+    public static function checkPostAllow(int $userId, int $postId): bool
+    {
+        $allowUsers = PostAllow::where('post_id', $postId)->where('type', 1)->pluck('object_id')->toArray();
+        $checkUser = PermissionUtility::checkUserPerm($userId, $allowUsers);
+        if ($checkUser) {
+            return true;
+        } else {
+            $allowRoles = PostAllow::where('post_id', $postId)->where('type', 2)->pluck('object_id')->toArray();
+            return PermissionUtility::checkUserRolePerm($userId, $allowRoles);
+        }
     }
 
     // Check if the user has permission to publish

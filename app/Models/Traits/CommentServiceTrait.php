@@ -12,7 +12,6 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
-use App\Helpers\StrHelper;
 
 trait CommentServiceTrait
 {
@@ -22,35 +21,26 @@ trait CommentServiceTrait
         $appendData = $this->commentAppend;
         $postAppendData = $this->post->postAppend;
 
-        $contentLength = Str::length($commentData->content);
-        $briefLength = ConfigHelper::fresnsConfigByItemKey('comment_editor_brief_length');
-
-        $content = $commentData->content;
-        $isBrief = false;
-        if ($type == 'list' && $contentLength > $briefLength) {
-            $content = Str::limit($commentData->content, $briefLength);
-            $isBrief = true;
-        }
-
         $info['cid'] = $commentData->cid;
-        $info['types'] = StrHelper::commaStringToArray($commentData->types);
+        $info['types'] = explode(',', $commentData->types);
         $info['title'] = $commentData->title;
-        $info['content'] = $content;
+        $info['content'] = $commentData->content;
+        $info['contentLength'] = Str::length($commentData->content);
         $info['langTag'] = $commentData->lang_tag;
         $info['writingDirection'] = $commentData->writing_direction;
-        $info['isBrief'] = $isBrief;
+        $info['isBrief'] = false;
         $info['isMarkdown'] = (bool) $commentData->is_markdown;
         $info['isAnonymous'] = (bool) $commentData->is_anonymous;
         $info['isSticky'] = $commentData->is_sticky;
-        $info['digest'] = $commentData->digest_state;
+        $info['digestState'] = $commentData->digest_state;
         $info['ipRegion'] = $appendData->ip_region;
         $info['likeCount'] = $commentData->like_count;
         $info['followCount'] = $commentData->follow_count;
         $info['blockCount'] = $commentData->block_count;
         $info['commentCount'] = $commentData->comment_count;
         $info['commentLikeCount'] = $commentData->comment_like_count;
-        $info['time'] = DateHelper::fresnsFormatDateTime($commentData->created_at, $timezone, $langTag);
-        $info['timeFormat'] = DateHelper::fresnsFormatTime($commentData->created_at, $langTag);
+        $info['createTime'] = DateHelper::fresnsFormatDateTime($commentData->created_at, $timezone, $langTag);
+        $info['createTimeFormat'] = DateHelper::fresnsFormatTime($commentData->created_at, $langTag);
         $info['editTime'] = DateHelper::fresnsFormatDateTime($commentData->latest_edit_at, $timezone, $langTag);
         $info['editTimeFormat'] = DateHelper::fresnsFormatTime($commentData->latest_edit_at, $langTag);
         $info['editCount'] = $appendData->edit_count;

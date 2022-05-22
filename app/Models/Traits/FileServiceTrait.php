@@ -137,7 +137,7 @@ trait FileServiceTrait
 
         $fileAppends = $fileAppendQuery->get();
 
-        $fileList = $fileAppends->map(fn ($fileAppend) => $fileAppend->file->getFileInfo());
+        $fileList = $fileAppends->map(fn ($fileAppend) => $fileAppend->file->getFileInfo())->groupBy('type');
 
         return $fileList ?? null;
     }

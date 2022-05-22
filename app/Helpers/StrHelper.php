@@ -69,17 +69,6 @@ class StrHelper
     }
 
     /**
-     * @param  string  $commaString
-     * @return array
-     */
-    public static function commaStringToArray(string $commaString = null)
-    {
-        $toArray = explode(',', $commaString);
-
-        return $toArray;
-    }
-
-    /**
      * @param  string  $uri
      * @param  string  $domain
      */

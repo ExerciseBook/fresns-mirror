@@ -54,7 +54,7 @@ class ExtendUtility
                 $permCheck = false;
 
                 if ($userId) {
-                    $roleArr = $extend->roles ? StrHelper::commaStringToArray($extend->roles) : [];
+                    $roleArr = $extend->roles ? explode(',', $extend->roles) : [];
                     $permCheck = PermissionUtility::checkUserRolePerm($userId, $roleArr);
                 }
 

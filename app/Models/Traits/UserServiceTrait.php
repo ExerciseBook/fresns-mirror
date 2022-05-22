@@ -60,7 +60,7 @@ trait UserServiceTrait
 
         $avatar = ConfigHelper::fresnsConfigByItemKeys([
             'default_avatar',
-            'deactivate_avatar'
+            'deactivate_avatar',
         ]);
 
         if (empty($user->deleted_at)) {
@@ -171,7 +171,7 @@ trait UserServiceTrait
             'extcredits2_status', 'extcredits2_name', 'extcredits2_unit',
             'extcredits3_status', 'extcredits3_name', 'extcredits3_unit',
             'extcredits4_status', 'extcredits4_name', 'extcredits4_unit',
-            'extcredits5_status', 'extcredits5_name', 'extcredits5_unit'
+            'extcredits5_status', 'extcredits5_name', 'extcredits5_unit',
         ], $langTag);
 
         $stats['likeUserCount'] = $statsData->like_user_count;
