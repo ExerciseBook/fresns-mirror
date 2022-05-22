@@ -258,6 +258,7 @@ return [
     'unit_within_minute' => 'Dentro de un minuto',
     'unit_character' => 'Personaje',
     'unit_number' => 'Número',
+    'unit_number_of_times' => 'Número de veces',
     'unit_kilometer' => 'Kilómetro',
     'unit_mile' => 'Milla',
     'delete_desc' => 'Seguro de borrar?',

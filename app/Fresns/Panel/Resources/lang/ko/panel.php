@@ -258,6 +258,7 @@ return [
     'unit_within_minute' => '분 내에',
     'unit_character' => '성격',
     'unit_number' => '숫자',
+    'unit_number_of_times' => '횟수',
     'unit_kilometer' => '킬로미터',
     'unit_mile' => '마일',
     'delete_desc' => '확실히 삭제할 수 있습니까?',

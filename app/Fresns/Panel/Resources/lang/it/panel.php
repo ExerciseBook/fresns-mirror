@@ -258,6 +258,7 @@ return [
     'unit_within_minute' => 'Entro il minuto',
     'unit_character' => 'Carattere',
     'unit_number' => 'Numero',
+    'unit_number_of_times' => 'Numero di volte',
     'unit_kilometer' => 'Chilometro',
     'unit_mile' => 'Miglio',
     'delete_desc' => 'Sicuro di eliminare?',

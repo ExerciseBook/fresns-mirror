@@ -258,6 +258,7 @@ return [
     'unit_within_minute' => 'Dalam beberapa menit',
     'unit_character' => 'Karakter',
     'unit_number' => 'Nomor',
+    'unit_number_of_times' => 'Berkali-kali',
     'unit_kilometer' => 'Kilometer',
     'unit_mile' => 'Mil',
     'delete_desc' => 'Pastikan untuk menghapus?',

@@ -258,6 +258,7 @@ return [
     'unit_within_minute' => 'मिनट के भीतर',
     'unit_character' => 'चरित्र',
     'unit_number' => 'संख्या',
+    'unit_number_of_times' => 'कई बार',
     'unit_kilometer' => 'किलोमीटर',
     'unit_mile' => 'मील',
     'delete_desc' => 'हटाना सुनिश्चित करें?',

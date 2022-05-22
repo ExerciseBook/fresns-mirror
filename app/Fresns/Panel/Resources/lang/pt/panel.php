@@ -258,6 +258,7 @@ return [
     'unit_within_minute' => 'Em um minuto',
     'unit_character' => 'Personagem',
     'unit_number' => 'Número',
+    'unit_number_of_times' => 'Número de vezes',
     'unit_kilometer' => 'Quilômetro',
     'unit_mile' => 'Milha',
     'delete_desc' => 'Certifique-se de excluir?',

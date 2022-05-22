@@ -258,6 +258,7 @@ return [
     'unit_within_minute' => 'Within Minute',
     'unit_character' => 'Character',
     'unit_number' => 'Number',
+    'unit_number_of_times' => 'Number of times',
     'unit_kilometer' => 'Kilometer',
     'unit_mile' => 'Mile',
     'delete_desc' => 'Sure to delete?',
