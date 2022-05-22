@@ -113,7 +113,7 @@
                     <select class="form-select select2" name="default_role">
                         @foreach ($roles as $role)
                             @if ($role->type != 1)
-                            <option value="{{ $role->id }}" {{ $params['default_role'] == $role->id ? 'selected' : '' }}>{{ $role->getLangName($defaultLanguage) }}</option>
+                                <option value="{{ $role->id }}" {{ $params['default_role'] == $role->id ? 'selected' : '' }}>{{ $role->getLangName($defaultLanguage) }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -212,6 +212,20 @@
             </div>
             <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_default_deactivate_avatar_desc') }}</div>
         </div>
+        <!--user_identifier-->
+        <div class="row mb-2">
+            <label class="col-lg-2 col-form-label text-lg-end"></label>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <label class="input-group-text">{{ __('FsLang::panel.user_identifier') }}</label>
+                    <select class="form-select" name="user_identifier">
+                        <option value="uid" {{ $params['user_identifier'] == 'uid' ? 'selected' : '' }}>uid</option>
+                        <option value="username" {{ $params['user_identifier'] == 'username' ? 'selected' : '' }}>username</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_identifier_desc') }}</div>
+        </div>
         <!--user_password_config-->
         <div class="row mb-4">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.user_password_config') }}:</label>
@@ -259,6 +273,11 @@
                     <label class="input-group-text">{{ __('FsLang::panel.user_edit_username_periodicity') }}</label>
                     <input type="number" class="form-control input-number" name="username_edit" value="{{ $params['username_edit'] }}">
                     <span class="input-group-text">{{ __('FsLang::panel.unit_day') }}</span>
+                </div>
+                <div class="input-group mb-2">
+                    <label class="input-group-text">{{ __('FsLang::panel.user_edit_nickname_length') }}</label>
+                    <input type="number" class="form-control input-number" name="nickname_min" value="{{ $params['nickname_min'] }}" placeholder="{{ __('FsLang::panel.user_edit_username_length_min') }}">
+                    <input type="number" class="form-control input-number" name="nickname_max" value="{{ $params['nickname_max'] }}" placeholder="{{ __('FsLang::panel.user_edit_username_length_max') }}">
                 </div>
                 <div class="input-group">
                     <label class="input-group-text">{{ __('FsLang::panel.user_edit_nickname_periodicity') }}</label>
