@@ -8,28 +8,43 @@
 
 namespace App\Fresns\Api\Http\Controllers;
 
+use App\Fresns\Api\Http\DTO\PostDetailDTO;
+use App\Fresns\Api\Http\DTO\PostListDTO;
 use App\Helpers\AppHelper;
-use App\Helpers\InteractiveHelper;
-use App\Models\File;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Seo;
 use App\Utilities\ExtendUtility;
-use App\Utilities\LbsUtility;
 use App\Exceptions\ApiException;
+use App\Fresns\Api\Services\PostService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
     public function list(Request $request)
     {
+        $dtoRequest = new PostListDTO($request->all());
 
+        $headers = AppHelper::getApiHeaders();
+        $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
+
+        $postQuery = Post::where('is_enable', 1);
+        $posts = $postQuery->paginate($request->get('pageSize', 10));
+
+        $postList = [];
+        foreach ($posts as $post) {
+            $service = new PostService();
+            $postList[] = $service->postInfo($post->pid, 'list', $dtoRequest->mapId, $dtoRequest->longitude, $dtoRequest->latitude);
+        }
+
+        return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
     }
 
     public function detail(string $pid, Request $request)
     {
+        $dtoRequest = new PostDetailDTO($request->all());
+
         $headers = AppHelper::getApiHeaders();
-        $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
         $post = Post::with('creator')->wherePid($pid)->first();
         if (empty($post)) {
@@ -42,62 +57,8 @@ class PostController extends Controller
         $common['description'] = $seoData->description ?? null;
         $data['commons'] = $common;
 
-        $postInfo = $post->getPostInfo($headers['langTag'], $headers['timezone'], 'detail');
-        if (! empty($post->map_id)) {
-            $postLat = $post->map_latitude;
-            $postLon = $post->map_longitude;
-            $userLat = $request->longitude;
-            $userLon = $request->latitude;
-            $postInfo['location']['distance'] = LbsUtility::getDistanceWithUnit($headers['langTag'], $postLat, $postLon, $userLat, $userLon);
-        }
-
-        $fileList = (new File)->getFileListInfo('posts', 'id', $post->id);
-        $groupFileList = $fileList->groupBy('type');
-        $files['images'] = $groupFileList->get(File::TYPE_IMAGE)?->all() ?? null;
-        $files['videos'] = $groupFileList->get(File::TYPE_VIDEO)?->all() ?? null;
-        $files['audios'] = $groupFileList->get(File::TYPE_AUDIO)?->all() ?? null;
-        $files['documents'] = $groupFileList->get(File::TYPE_DOCUMENT)?->all() ?? null;
-        $item['files'] = $files;
-        $item['icons'] = ExtendUtility::getIcons(4, $post->id, $headers['langTag']);
-        $item['tips'] = ExtendUtility::getTips(4, $post->id, $headers['langTag']);
-        $item['extends'] = ExtendUtility::getExtends(4, $post->id, $headers['langTag']);
-
-        $attachCount['images'] = $groupFileList->get(File::TYPE_IMAGE)?->count() ?? 0;
-        $attachCount['videos'] = $groupFileList->get(File::TYPE_VIDEO)?->count() ?? 0;
-        $attachCount['audios'] = $groupFileList->get(File::TYPE_AUDIO)?->count() ?? 0;
-        $attachCount['documents'] = $groupFileList->get(File::TYPE_DOCUMENT)?->count() ?? 0;
-        $attachCount['icons'] = collect($item['icons'])->count();
-        $attachCount['tips'] = collect($item['tips'])->count();
-        $attachCount['extends'] = collect($item['extends'])->count();
-        $item['attachCount'] = $attachCount;
-
-        $item['group'] = $post->group?->getGroupInfo($headers['langTag']);
-
-        $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
-        if (! $post->is_anonymous) {
-            $creatorProfile = $post->creator->getUserProfile($headers['langTag'], $headers['timezone']);
-            $creatorMainRole = $post->creator->getUserMainRole($headers['langTag'], $headers['timezone']);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
-        }
-
-        $item['manages'] = ExtendUtility::getPluginExtends(5, $post->group_id, 1, $user?->id, $headers['langTag']);
-
-        $editStatus['isMe'] = false;
-        $editStatus['canEdit'] = false;
-        $editStatus['isPluginEditor'] = false;
-        $editStatus['editorUrl'] = null;
-        $editStatus['canDelete'] = false;
-
-        $item['editStatus'] = $editStatus;
-
-        $isMe = $post->user_id == $user?->id ? true : false;
-        if ($isMe) {
-            $item['editStatus'] = $post->getEditStatus($user->id);
-        }
-
-        $postInteractive = InteractiveHelper::fresnsPostInteractive($headers['langTag']);
-
-        $data['detail'] = array_merge($postInfo, $item, $postInteractive);
+        $service = new PostService();
+        $data['detail'] = $service->postInfo($pid, 'detail', $dtoRequest->mapId, $dtoRequest->longitude, $dtoRequest->latitude);
 
         return $this->success($data);
     }
