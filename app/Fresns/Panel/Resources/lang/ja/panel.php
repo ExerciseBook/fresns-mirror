@@ -431,6 +431,8 @@ return [
     'user_default_anonymous_avatar_desc' => 'コンテンツ発行匿名アバターダイアグラム',
     'user_default_deactivate_avatar' => 'ユーザーアバター',
     'user_default_deactivate_avatar_desc' => 'ユーザーログアウトまたは無効化後のアバター画像',
+    'user_identifier' => 'ユーザー識別子',
+    'user_identifier_desc' => 'ユーザーとのインタラクションでどのマークが優勢か',
     'user_password_config' => 'パスワード設定',
     'user_password_length' => '長さ要件',
     'user_password_length_desc' => '長さ要件：最小長、0または充填されていない。',
@@ -446,6 +448,7 @@ return [
     'user_edit_username_length_max' => '最大長さ',
     'user_edit_username_length_desc' => 'ユーザー名最小長さと最大長',
     'user_edit_username_periodicity' => 'ユーザー名変更間隔番号',
+    'user_edit_nickname_length' => 'ニックネームの長さ',
     'user_edit_nickname_periodicity' => 'ユーザーのニックネームの修正間隔番号',
     // System-Wallet
     'wallet_functions' => '財布',
@@ -647,6 +650,10 @@ return [
     'editor_extend' => 'エクステンション',
     'editor_location' => '位置',
     'editor_anonymous' => '匿名',
+    'editor_upload_image_number' => '画像の最大アップロード枚数',
+    'editor_upload_video_number' => 'アップロードできる動画の最大数',
+    'editor_upload_audio_number' => 'アップロード可能な音声の最大数',
+    'editor_upload_document_number' => 'アップロードできるドキュメントの最大数',
     // Operating-Publish
     'publish_editor_config' => 'エディタの選択',
     'publish_editor_function_status' => 'エディタ機能',

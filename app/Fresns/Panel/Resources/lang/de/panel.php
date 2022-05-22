@@ -431,6 +431,8 @@ return [
     'user_default_anonymous_avatar_desc' => 'Inhalt veröffentlicht anonymer Avatar-Diagramm',
     'user_default_deactivate_avatar' => 'Benutzer-Avatar',
     'user_default_deactivate_avatar_desc' => 'Avatar-Bild nach Benutzerabmelden oder Deaktivierung',
+    'user_identifier' => 'Benutzer-Identifikator',
+    'user_identifier_desc' => 'Welche Kennzeichnung ist bei der Benutzerinteraktion vorherrschend?',
     'user_password_config' => 'Kennworteinstellung',
     'user_password_length' => 'Längenanforderungen',
     'user_password_length_desc' => 'Länge Anforderungen: Die minimale Länge, 0 oder nicht gefüllt ist nicht begrenzt',
@@ -446,6 +448,7 @@ return [
     'user_edit_username_length_max' => 'Die maximale Länge',
     'user_edit_username_length_desc' => 'Benutzername Mindestlänge und maximale Länge',
     'user_edit_username_periodicity' => 'Benutzername-Modifikationsintervallnummer',
+    'user_edit_nickname_length' => 'Nickname Länge',
     'user_edit_nickname_periodicity' => 'Benutzer-Nickname-Modifikationsintervallnummer',
     // System-Wallet
     'wallet_functions' => 'Geldbörsenfunktion',
@@ -647,6 +650,10 @@ return [
     'editor_extend' => 'Erweiterungen',
     'editor_location' => 'Position',
     'editor_anonymous' => 'anonym',
+    'editor_upload_image_number' => 'Maximale Anzahl der hochzuladenden Bilder',
+    'editor_upload_video_number' => 'Maximale Anzahl von Video-Uploads',
+    'editor_upload_audio_number' => 'Maximale Anzahl von Audio-Uploads',
+    'editor_upload_document_number' => 'Maximale Anzahl von Upload-Dokumenten',
     // Operating-Publish
     'publish_editor_config' => 'Editorauswahl',
     'publish_editor_function_status' => 'Editor-Funktion',

@@ -431,6 +431,8 @@ return [
     'user_default_anonymous_avatar_desc' => 'Содержание опубликована анонимная аватарная диаграмма',
     'user_default_deactivate_avatar' => 'Аватар пользователя',
     'user_default_deactivate_avatar_desc' => 'Avatar Image После выхода из системы пользователя или деактивации',
+    'user_identifier' => 'Идентификатор пользователя',
+    'user_identifier_desc' => 'Какая маркировка доминирует при взаимодействии с пользователем',
     'user_password_config' => 'Настройка пароля',
     'user_password_length' => 'Длина требований',
     'user_password_length_desc' => 'Требования к длине: минимальная длина, 0 или не заполнена не ограничена',
@@ -446,6 +448,7 @@ return [
     'user_edit_username_length_max' => 'Максимальная длина',
     'user_edit_username_length_desc' => 'Имя пользователя минимальная длина и максимальная длина',
     'user_edit_username_periodicity' => 'Номер интервала модификации имени пользователя',
+    'user_edit_nickname_length' => 'Длина псевдонима',
     'user_edit_nickname_periodicity' => 'Интервал изменение прозвище пользователя',
     // System-Wallet
     'wallet_functions' => 'Функция кошелька',
@@ -647,6 +650,10 @@ return [
     'editor_extend' => 'расширения',
     'editor_location' => 'позиция',
     'editor_anonymous' => 'аноним',
+    'editor_upload_image_number' => 'Максимальное количество загружаемых изображений',
+    'editor_upload_video_number' => 'Максимальное количество загружаемых видео',
+    'editor_upload_audio_number' => 'Максимальное количество загрузок аудио',
+    'editor_upload_document_number' => 'Максимальное количество загружаемых документов',
     // Operating-Publish
     'publish_editor_config' => 'Выбор редактора',
     'publish_editor_function_status' => 'Функция редактора',

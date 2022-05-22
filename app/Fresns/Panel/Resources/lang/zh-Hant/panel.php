@@ -432,6 +432,8 @@ return [
     'user_default_anonymous_avatar_desc' => '內容髮表匿名者的頭像圖',
     'user_default_deactivate_avatar' => '已停用用戶頭像',
     'user_default_deactivate_avatar_desc' => '用戶註銷或停用後的頭像圖',
+    'user_identifier' => '用戶標識類型',
+    'user_identifier_desc' => '用戶互動中以哪個標識為主',
     'user_password_config' => '密碼設定',
     'user_password_length' => '長度要求',
     'user_password_length_desc' => '長度要求：密碼最小長度，0 或不填為不限制。',
@@ -447,6 +449,7 @@ return [
     'user_edit_username_length_max' => '最大長度',
     'user_edit_username_length_desc' => '用戶名最小長度和最大長度',
     'user_edit_username_periodicity' => '用戶名修改間隔天數',
+    'user_edit_nickname_length' => '用戶暱稱長度',
     'user_edit_nickname_periodicity' => '用戶暱稱修改間隔天數',
     // System-Wallet
     'wallet_functions' => '錢包功能',
@@ -648,6 +651,10 @@ return [
     'editor_extend' => '擴充功能',
     'editor_location' => '定位',
     'editor_anonymous' => '匿名',
+    'editor_upload_image_number' => '上傳圖片上限個數',
+    'editor_upload_video_number' => '上傳視頻上限個數',
+    'editor_upload_audio_number' => '上傳音頻上限個數',
+    'editor_upload_document_number' => '上傳文檔上限個數',
     // Operating-Publish
     'publish_editor_config' => '編輯器選擇',
     'publish_editor_function_status' => '編輯器功能開啟',

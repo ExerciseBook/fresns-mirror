@@ -431,6 +431,8 @@ return [
     'user_default_anonymous_avatar_desc' => 'Contenu Diagramme Avatar anonyme publié',
     'user_default_deactivate_avatar' => 'Avatar utilisateur',
     'user_default_deactivate_avatar_desc' => 'Image d\'avatar après la déconnexion ou la désactivation de l\'utilisateur',
+    'user_identifier' => 'Identifiant de l\'utilisateur',
+    'user_identifier_desc' => 'Quel marquage est dominant dans l\'interaction de l\'utilisateur',
     'user_password_config' => 'réglage de mot de passe',
     'user_password_length' => 'Exigences de longueur',
     'user_password_length_desc' => 'Exigences de longueur: la longueur minimale, 0 ou non remplie n\'est pas limitée',
@@ -446,6 +448,7 @@ return [
     'user_edit_username_length_max' => 'La longueur maximale',
     'user_edit_username_length_desc' => 'Nom d\'utilisateur Longueur minimale et longueur maximale',
     'user_edit_username_periodicity' => 'Nom de modification du nom d\'utilisateur Numéro d\'intervalle',
+    'user_edit_nickname_length' => 'Longueur du pseudo',
     'user_edit_nickname_periodicity' => 'Numéro d\'intervalle de modification de surnom d\'utilisateur',
     // System-Wallet
     'wallet_functions' => 'Fonction de portefeuille',
@@ -647,6 +650,10 @@ return [
     'editor_extend' => 'extensions',
     'editor_location' => 'position',
     'editor_anonymous' => 'anonyme',
+    'editor_upload_image_number' => 'Nombre maximum d\'images à télécharger',
+    'editor_upload_video_number' => 'Nombre maximum de vidéos à télécharger',
+    'editor_upload_audio_number' => 'Nombre maximum de téléchargements d\'audio',
+    'editor_upload_document_number' => 'Nombre maximal de téléchargements de documents',
     // Operating-Publish
     'publish_editor_config' => 'Sélection de l\'éditeur',
     'publish_editor_function_status' => 'Fonction de l\'éditeur',

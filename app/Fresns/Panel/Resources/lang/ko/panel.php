@@ -431,6 +431,8 @@ return [
     'user_default_anonymous_avatar_desc' => '콘텐츠 게시 익명 아바타 다이어그램',
     'user_default_deactivate_avatar' => '사용자 아바타',
     'user_default_deactivate_avatar_desc' => '사용자 로그 아웃 또는 비활성화 후 아바타 이미지',
+    'user_identifier' => '사용자 식별자',
+    'user_identifier_desc' => '사용자 상호 작용에서 어떤 로고가 지배적입니까?',
     'user_password_config' => '암호 설정',
     'user_password_length' => '길이 요구 사항',
     'user_password_length_desc' => '길이 요구 사항 : 최소 길이, 0 또는 채워지지 않음은 제한되지 않습니다',
@@ -446,6 +448,7 @@ return [
     'user_edit_username_length_max' => '최대 길이',
     'user_edit_username_length_desc' => '사용자 이름 최소 길이 및 최대 길이',
     'user_edit_username_periodicity' => '사용자 이름 수정 간격 번호',
+    'user_edit_nickname_length' => '닉네임 길이',
     'user_edit_nickname_periodicity' => '사용자 별명 수정 간격 번호',
     // System-Wallet
     'wallet_functions' => '지갑 기능',
@@ -647,6 +650,10 @@ return [
     'editor_extend' => '확장자',
     'editor_location' => '위치',
     'editor_anonymous' => '익명의',
+    'editor_upload_image_number' => '최대 업로드 이미지 수',
+    'editor_upload_video_number' => '최대 업로드 동영상 수',
+    'editor_upload_audio_number' => '최대 업로드 오디오 수',
+    'editor_upload_document_number' => '최대 업로드 문서 수',
     // Operating-Publish
     'publish_editor_config' => '편집자 선택',
     'publish_editor_function_status' => '편집기 기능',

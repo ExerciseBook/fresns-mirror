@@ -431,6 +431,8 @@ return [
     'user_default_anonymous_avatar_desc' => 'Content published by Anonymous avatar picture',
     'user_default_deactivate_avatar' => 'Deactivate Avatar',
     'user_default_deactivate_avatar_desc' => 'Avatar after user delete or deactivation',
+    'user_identifier' => 'User Identifier',
+    'user_identifier_desc' => 'Which marking is dominant in user interaction',
     'user_password_config' => 'Password Config',
     'user_password_length' => 'Length Request',
     'user_password_length_desc' => 'Length Request: The minimum length of the password. 0 or not filled for no limit',
@@ -446,6 +448,7 @@ return [
     'user_edit_username_length_max' => 'Length Max',
     'user_edit_username_length_desc' => 'Minimum and maximum length of username',
     'user_edit_username_periodicity' => 'Number of days between username changes',
+    'user_edit_nickname_length' => 'Nickname Length',
     'user_edit_nickname_periodicity' => 'Number of days between nickname changes',
     // System-Wallet
     'wallet_functions' => 'Wallet Functions',
@@ -647,6 +650,10 @@ return [
     'editor_extend' => 'Extend',
     'editor_location' => 'Location',
     'editor_anonymous' => 'Anonymous',
+    'editor_upload_image_number' => 'Max number of upload image',
+    'editor_upload_video_number' => 'Max number of upload video',
+    'editor_upload_audio_number' => 'Max number of upload audio',
+    'editor_upload_document_number' => 'Max number of upload document',
     // Operating-Publish
     'publish_editor_config' => 'Editor Config',
     'publish_editor_function_status' => 'Editor Function Status',

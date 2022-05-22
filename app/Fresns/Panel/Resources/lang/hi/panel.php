@@ -431,6 +431,8 @@ return [
     'user_default_anonymous_avatar_desc' => 'सामग्री प्रकाशित अज्ञात अवतार आरेख',
     'user_default_deactivate_avatar' => 'उपयोगकर्ता अवतार',
     'user_default_deactivate_avatar_desc' => 'उपयोगकर्ता लॉगआउट या निष्क्रियता के बाद अवतार छवि',
+    'user_identifier' => 'उपयोगकर्ता पहचानकर्ता',
+    'user_identifier_desc' => 'उपयोगकर्ता सहभागिता में कौन सा लोगो प्रमुख है',
     'user_password_config' => 'पासवर्ड सेटिंग',
     'user_password_length' => 'लंबाई आवश्यकताएं',
     'user_password_length_desc' => 'लंबाई आवश्यकताएं: न्यूनतम लंबाई, 0 या भरा नहीं सीमित नहीं है।',
@@ -446,6 +448,7 @@ return [
     'user_edit_username_length_max' => 'अधिकतम लंबाई',
     'user_edit_username_length_desc' => 'उपयोगकर्ता नाम न्यूनतम लंबाई और अधिकतम लंबाई',
     'user_edit_username_periodicity' => 'उपयोगकर्ता नाम संशोधन अंतराल संख्या',
+    'user_edit_nickname_length' => 'उपनाम लंबाई',
     'user_edit_nickname_periodicity' => 'उपयोगकर्ता उपनाम संशोधन अंतराल संख्या',
     // System-Wallet
     'wallet_functions' => 'वॉलेट समारोह',
@@ -647,6 +650,10 @@ return [
     'editor_extend' => 'एक्सटेंशन',
     'editor_location' => 'स्थान',
     'editor_anonymous' => 'अनाम',
+    'editor_upload_image_number' => 'अपलोड छवि की अधिकतम संख्या',
+    'editor_upload_video_number' => 'अपलोड वीडियो की अधिकतम संख्या',
+    'editor_upload_audio_number' => 'अपलोड ऑडियो की अधिकतम संख्या',
+    'editor_upload_document_number' => 'अपलोड दस्तावेज़ की अधिकतम संख्या',
     // Operating-Publish
     'publish_editor_config' => 'संपादक चयन',
     'publish_editor_function_status' => 'संपादक समारोह',

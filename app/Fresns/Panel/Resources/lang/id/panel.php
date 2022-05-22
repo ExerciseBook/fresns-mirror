@@ -431,6 +431,8 @@ return [
     'user_default_anonymous_avatar_desc' => 'Konten Diterbitkan Diagram Avatar Anonym',
     'user_default_deactivate_avatar' => 'Pengguna avatar',
     'user_default_deactivate_avatar_desc' => 'Gambar Avatar setelah logout pengguna atau penonaktifan',
+    'user_identifier' => 'Pengenal Pengguna',
+    'user_identifier_desc' => 'Logo mana yang dominan dalam interaksi pengguna',
     'user_password_config' => 'pengaturan kata sandi',
     'user_password_length' => 'Persyaratan Panjang',
     'user_password_length_desc' => 'Persyaratan Panjang: Panjang minimum, 0 atau tidak diisi tidak terbatas',
@@ -446,6 +448,7 @@ return [
     'user_edit_username_length_max' => 'Panjang maksimum',
     'user_edit_username_length_desc' => 'Nama pengguna Panjang minimum dan panjang maksimum',
     'user_edit_username_periodicity' => 'Nomor Interval Modifikasi Nama Pengguna',
+    'user_edit_nickname_length' => 'Panjang Nama Panggilan',
     'user_edit_nickname_periodicity' => 'Nomor Interval Modifikasi Nama Julukan Pengguna',
     // System-Wallet
     'wallet_functions' => 'Fungsi dompet',
@@ -647,6 +650,10 @@ return [
     'editor_extend' => 'ekstensi',
     'editor_location' => 'posisi',
     'editor_anonymous' => 'anonim',
+    'editor_upload_image_number' => 'Jumlah maksimum gambar yang diunggah',
+    'editor_upload_video_number' => 'Jumlah maksimum video yang diunggah',
+    'editor_upload_audio_number' => 'Jumlah maksimum audio yang diunggah',
+    'editor_upload_document_number' => 'Jumlah maksimum dokumen yang diunggah',
     // Operating-Publish
     'publish_editor_config' => 'Pilihan Editor',
     'publish_editor_function_status' => 'Fungsi editor',
