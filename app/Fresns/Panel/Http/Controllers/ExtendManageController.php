@@ -26,7 +26,7 @@ class ExtendManageController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 5)
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->with('plugin', 'names')
             ->paginate();
 
@@ -43,7 +43,7 @@ class ExtendManageController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->is_group_admin = $request->is_group_admin;
         $pluginUsage->roles = ($request->is_group_admin == 0 && $request->roles) ? implode(',', $request->roles) : '';
         $pluginUsage->scene = $request->scene ? implode(',', $request->scene) : '';
@@ -109,7 +109,7 @@ class ExtendManageController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->is_group_admin = $request->is_group_admin;
         $pluginUsage->roles = ($request->is_group_admin == 0 && $request->roles) ? implode(',', $request->roles) : '';
         $pluginUsage->scene = $request->scene ? implode(',', $request->scene) : '';
@@ -179,7 +179,7 @@ class ExtendManageController extends Controller
     public function updateRank($id, Request $request)
     {
         $pluginUsage = PluginUsage::findOrFail($id);
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->save();
 
         return $this->updateSuccess();

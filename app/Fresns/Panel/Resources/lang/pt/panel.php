@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => 'Lista total de posts',
     'extend_content_type_option_post_follow' => 'Concentre-se no post do objeto',
     'extend_content_type_option_post_nearby' => 'Posts nas proximidades',
-    'extend_content_type_rank_number' => 'Configuração de número de classificação',
-    'extend_content_type_rank_number_desc' => 'Como preencher, por favor consulte a documentação do plugin associado "fonte de dados"',
+    'extend_content_type_rating' => 'Configuração de número de classificação',
+    'extend_content_type_rating_desc' => 'Como preencher, por favor consulte a documentação do plugin associado "fonte de dados"',
     // Client-Menus
     'menu_table_home' => 'primeira página',
     'menu_table_menu' => 'cardápio',

@@ -39,7 +39,7 @@
             <tbody>
                 @foreach ($pluginUsages as $item)
                     <tr>
-                        <td><input type="number" data-action="{{ route('panel.editor.rank', $item->id) }}" class="form-control input-number rank-num" value="{{ $item['rank_num'] }}"></td>
+                        <td><input type="number" data-action="{{ route('panel.editor.rank', $item->id) }}" class="form-control input-number rank-num" value="{{ $item['rating'] }}"></td>
                         <td>{{ optional($item->plugin)->name }}</td>
                         <td>
                             @if ($item->icon_file_url)
@@ -116,7 +116,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.table_order') }}</label>
                             <div class="col-sm-9">
-                                <input type="number" name="rank_num" class="form-control input-number" required>
+                                <input type="number" name="rating" class="form-control input-number" required>
                             </div>
                         </div>
                         <div class="mb-3 row">

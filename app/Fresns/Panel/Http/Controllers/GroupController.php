@@ -43,7 +43,7 @@ class GroupController extends Controller
         $this->initOptions();
 
         $categories = Group::typeCategory()
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->with('names', 'descriptions')
             ->get();
 
@@ -53,7 +53,7 @@ class GroupController extends Controller
 
         if ($parentId) {
             $groups = Group::typeGroup()
-                ->orderBy('rank_num')
+                ->orderBy('rating')
                 ->where('parent_id', $parentId)
                 ->where('is_enable', 1)
                 ->with('creator', 'plugin', 'names', 'descriptions', 'admins')
@@ -99,7 +99,7 @@ class GroupController extends Controller
             ->get();
 
         $groups = Group::typeGroup()
-            ->orderBy('recom_rank_num')
+            ->orderBy('recom_rating')
             ->with('user', 'plugin', 'category', 'admins')
             ->where('is_recommend', 1)
             ->where('is_enable', 1)
@@ -129,7 +129,7 @@ class GroupController extends Controller
         $this->initOptions();
 
         $groups = Group::typeGroup()
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->where('is_enable', 0)
             ->with('user', 'plugin', 'category')
             ->paginate();
@@ -148,7 +148,7 @@ class GroupController extends Controller
         $group->gid = \Str::random(12);
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $group->description = $request->descriptions[$this->defaultLanguage] ?? (current(array_filter($request->descriptions)) ?: '');
-        $group->rank_num = $request->rank_num;
+        $group->rating = $request->rating;
         $group->cover_file_url = $request->cover_file_url;
         $group->banner_file_url = $request->banner_file_url;
         // group category
@@ -281,7 +281,7 @@ class GroupController extends Controller
     {
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $group->description = $request->descriptions[$this->defaultLanguage] ?? (current(array_filter($request->descriptions)) ?: '');
-        $group->rank_num = $request->rank_num;
+        $group->rating = $request->rating;
         // group category
         if ($request->is_category) {
             $group->permission = [];
@@ -440,7 +440,7 @@ class GroupController extends Controller
 
     public function updateRank(Group $group, Request $request)
     {
-        $group->rank_num = $request->rank_num;
+        $group->rating = $request->rating;
         $group->save();
 
         return $this->updateSuccess();
@@ -448,7 +448,7 @@ class GroupController extends Controller
 
     public function updateRecomRank(Group $group, Request $request)
     {
-        $group->recom_rank_num = $request->rank_num;
+        $group->recom_rating = $request->rating;
         $group->save();
 
         return $this->updateSuccess();

@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => 'Elenco totale dei post',
     'extend_content_type_option_post_follow' => 'Concentrarsi sul post dell\'oggetto',
     'extend_content_type_option_post_nearby' => 'Post nelle vicinanze',
-    'extend_content_type_rank_number' => 'Configurazione del numero di ordinamento',
-    'extend_content_type_rank_number_desc' => 'Come compilare, si prega di consultare la documentazione del "Data Source" plugin associato',
+    'extend_content_type_rating' => 'Configurazione del numero di ordinamento',
+    'extend_content_type_rating_desc' => 'Come compilare, si prega di consultare la documentazione del "Data Source" plugin associato',
     // Client-Menus
     'menu_table_home' => 'prima pagina',
     'menu_table_menu' => 'menù',

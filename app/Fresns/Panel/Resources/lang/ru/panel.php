@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => 'Общий список сообщений',
     'extend_content_type_option_post_follow' => 'Сосредоточиться на посте объекта',
     'extend_content_type_option_post_nearby' => 'Поблизости поблизости',
-    'extend_content_type_rank_number' => 'Конфигурация номера сортировки',
-    'extend_content_type_rank_number_desc' => 'Как заполнить, пожалуйста, обратитесь к документированию «источника данных» связанного плагина',
+    'extend_content_type_rating' => 'Конфигурация номера сортировки',
+    'extend_content_type_rating_desc' => 'Как заполнить, пожалуйста, обратитесь к документированию «источника данных» связанного плагина',
     // Client-Menus
     'menu_table_home' => 'титульная страница',
     'menu_table_menu' => 'меню',

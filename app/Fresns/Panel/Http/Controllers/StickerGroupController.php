@@ -18,10 +18,10 @@ class StickerGroupController extends Controller
     public function index()
     {
         $groups = Sticker::group()
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->with('names')
             ->with(['stickers' => function ($query) {
-                $query->orderBy('rank_num');
+                $query->orderBy('rating');
             }])
             ->get();
 
@@ -30,7 +30,7 @@ class StickerGroupController extends Controller
 
     public function store(Sticker $sticker, UpdateStickerGroupRequest $request)
     {
-        $sticker->rank_num = $request->rank_num;
+        $sticker->rating = $request->rating;
         $sticker->code = $request->code;
         $sticker->is_enable = $request->is_enable;
         $sticker->image_file_url = $request->image_file_url ?: '';
@@ -88,7 +88,7 @@ class StickerGroupController extends Controller
 
     public function update(Sticker $sticker, UpdateStickerGroupRequest $request)
     {
-        $sticker->rank_num = $request->rank_num;
+        $sticker->rating = $request->rating;
         $sticker->code = $request->code;
         $sticker->is_enable = $request->is_enable;
         $sticker->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');

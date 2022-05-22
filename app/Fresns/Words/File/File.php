@@ -232,7 +232,7 @@ class File
                 $append['table_column'] = $dtoWordBody->tableColumn;
                 $append['table_id'] = $tableId ?? null;
                 $append['table_key'] = $dtoWordBody->tableKey ?? null;
-                $append['rank_num'] = $fileInfo['rankNum'] ?? null;
+                $append['rating'] = $fileInfo['rating'] ?? null;
                 $append['account_id'] = $accountId;
                 $append['user_id'] = $userId;
                 $append['original_path'] = $fileInfo['originalPath'] == '' ? null : $fileInfo['originalPath'];

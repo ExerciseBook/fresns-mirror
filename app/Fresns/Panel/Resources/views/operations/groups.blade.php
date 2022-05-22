@@ -32,7 +32,7 @@
                     @if ($category['is_enable'])
                         <!--category activate-->
                         <a href="{{ route('panel.groups.index', ['parent_id' => $category->id]) }}" class="list-group-item list-group-item-action {{ $category->id == $parentId ? 'active' : '' }} d-flex justify-content-between align-items-center">
-                            <input type="number" class="form-control input-number rank-num" data-action="{{ route('panel.groups.rank.update', $category->id) }}" value="{{ $category->rank_num }}" style="width:50px;">
+                            <input type="number" class="form-control input-number rank-num" data-action="{{ route('panel.groups.rank.update', $category->id) }}" value="{{ $category->rating }}" style="width:50px;">
                             <span class="ms-2 text-nowrap overflow-hidden">{{ $category->name }}</span>
                             <button type="button" data-params="{{ $category->toJson() }}"
                                 data-names="{{ $category->names->toJson() }}"
@@ -48,7 +48,7 @@
                     @else
                         <!--category deactivate-->
                         <a href="{{ route('panel.groups.index', ['parent_id' => $category->id]) }}" class="list-group-item list-group-item-secondary {{ $category->id == $parentId ? 'active' : '' }} d-flex justify-content-between align-items-center">
-                            <input type="number" class="form-control input-number rank-num" data-action="{{ route('panel.groups.rank.update', $category->id) }}" value="{{ $category->rank_num }}" style="width:50px;">
+                            <input type="number" class="form-control input-number rank-num" data-action="{{ route('panel.groups.rank.update', $category->id) }}" value="{{ $category->rating }}" style="width:50px;">
                             <span class="ms-2 text-nowrap overflow-hidden">{{ $category->name }}</span>
                             <button type="button" data-params="{{ $category->toJson() }}"
                                 data-names="{{ $category->names->toJson() }}"
@@ -85,7 +85,7 @@
                     <tbody>
                         @foreach ($groups as $group)
                             <tr>
-                                <td><input type="number" data-action="{{ route('panel.groups.rank.update', $group->id) }}" class="form-control input-number rank-num" value="{{ $group->rank_num }}"></td>
+                                <td><input type="number" data-action="{{ route('panel.groups.rank.update', $group->id) }}" class="form-control input-number rank-num" value="{{ $group->rating }}"></td>
                                 <td>
                                     @if ($group->cover_file_url)
                                         <img src="{{ $group->cover_file_url }}" width="24" height="24">
@@ -163,7 +163,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.table_order') }}</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control input-number" name="rank_num" required>
+                                <input type="number" class="form-control input-number" name="rating" required>
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -358,7 +358,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-md-2 col-form-label">{{ __('FsLang::panel.table_order') }}</label>
                             <div class="col-sm-9 col-md-10">
-                                <input type="number" class="form-control input-number" name="rank_num" required>
+                                <input type="number" class="form-control input-number" name="rating" required>
                             </div>
                         </div>
                         <div class="mb-3 row">

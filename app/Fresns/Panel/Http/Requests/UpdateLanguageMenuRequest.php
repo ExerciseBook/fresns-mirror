@@ -18,7 +18,7 @@ class UpdateLanguageMenuRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'rank_num' => 'required|string',
+            'rating' => 'required|string',
             'old_lang_tag' => 'string',
             'continent_id' => 'int',
             'area_code' => 'string',

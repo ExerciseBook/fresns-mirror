@@ -19,7 +19,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::orderBy('rank_num')->with('names')->get();
+        $roles = Role::orderBy('rating')->with('names')->get();
 
         $typeLabels = [
             1 => __('FsLang::panel.role_type_admin'),
@@ -165,7 +165,7 @@ class RoleController extends Controller
     public function updateRank($id, Request $request)
     {
         $role = Role::findOrFail($id);
-        $role->rank_num = $request->rank_num;
+        $role->rating = $request->rating;
         $role->save();
 
         return $this->updateSuccess();

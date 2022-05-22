@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => 'Gesamtliste der Beiträge',
     'extend_content_type_option_post_follow' => 'Fokus auf den Beitrag des Objekts',
     'extend_content_type_option_post_nearby' => 'In der Nähe von Posts',
-    'extend_content_type_rank_number' => 'Nummer sortierende Konfiguration',
-    'extend_content_type_rank_number_desc' => 'Wie ausgefüllt werden, lesen Sie bitte die Dokumentation des zugehörigen Plugins "Datenquelle"',
+    'extend_content_type_rating' => 'Nummer sortierende Konfiguration',
+    'extend_content_type_rating_desc' => 'Wie ausgefüllt werden, lesen Sie bitte die Dokumentation des zugehörigen Plugins "Datenquelle"',
     // Client-Menus
     'menu_table_home' => 'Titelseite',
     'menu_table_menu' => 'Speisekarte',

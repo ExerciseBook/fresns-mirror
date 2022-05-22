@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => 'पदों की कुल सूची',
     'extend_content_type_option_post_follow' => 'ऑब्जेक्ट की पोस्ट पर फ़ोकस करें',
     'extend_content_type_option_post_nearby' => 'पास के पोस्ट',
-    'extend_content_type_rank_number' => 'सॉर्टिंग संख्या विन्यास',
-    'extend_content_type_rank_number_desc' => 'कैसे भरें, कृपया "डेटा स्रोत" संबंधित प्लगइन के दस्तावेज़ीकरण का संदर्भ लें',
+    'extend_content_type_rating' => 'सॉर्टिंग संख्या विन्यास',
+    'extend_content_type_rating_desc' => 'कैसे भरें, कृपया "डेटा स्रोत" संबंधित प्लगइन के दस्तावेज़ीकरण का संदर्भ लें',
     // Client-Menus
     'menu_table_home' => 'मुखपृष्ठ',
     'menu_table_menu' => 'मेन्यू',

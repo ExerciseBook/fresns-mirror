@@ -32,7 +32,7 @@ class ExtendGroupController extends Controller
             $pluginUsages->where('group_id', $groupId);
         }
         $pluginUsages = $pluginUsages
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->with('plugin', 'names', 'group')
             ->paginate();
 
@@ -54,7 +54,7 @@ class ExtendGroupController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : $pluginUsage->roles;
         $pluginUsage->group_id = $request->group_id;
         $pluginUsage->icon_file_url = $request->icon_file_url;
@@ -120,7 +120,7 @@ class ExtendGroupController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : $pluginUsage->roles;
         $pluginUsage->group_id = $request->group_id;
 
@@ -189,7 +189,7 @@ class ExtendGroupController extends Controller
     public function updateRank($id, Request $request)
     {
         $pluginUsage = PluginUsage::findOrFail($id);
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->save();
 
         return $this->updateSuccess();

@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => 'Posts list',
     'extend_content_type_option_post_follow' => 'Posts of follow',
     'extend_content_type_option_post_nearby' => 'Nearby range posts',
-    'extend_content_type_rank_number' => 'Ranking Number Config',
-    'extend_content_type_rank_number_desc' => 'For instructions on how to fill in the fields, please refer to the documentation of the "Data Source" link plugin',
+    'extend_content_type_rating' => 'Ranking Number Config',
+    'extend_content_type_rating_desc' => 'For instructions on how to fill in the fields, please refer to the documentation of the "Data Source" link plugin',
     // Client-Menus
     'menu_table_home' => 'Homepage',
     'menu_table_menu' => 'Menu',

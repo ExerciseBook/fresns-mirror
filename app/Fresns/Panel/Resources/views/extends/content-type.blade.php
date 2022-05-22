@@ -36,7 +36,7 @@
             <tbody>
                 @foreach ($pluginUsages as $item)
                     <tr>
-                        <td><input type="number" data-action="{{ route('panel.content-type.rank', $item->id) }}" class="form-control input-number rank-num" value="{{ $item['rank_num'] }}"></td>
+                        <td><input type="number" data-action="{{ route('panel.content-type.rank', $item->id) }}" class="form-control input-number rank-num" value="{{ $item['rating'] }}"></td>
                         <td>{{ optional($item->plugin)->name }}</td>
                         <td>{{ $item->name }}</td>
                         <td>
@@ -111,7 +111,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.table_order') }}</label>
                             <div class="col-sm-9">
-                                <input type="number" name="rank_num" required class="form-control input-number">
+                                <input type="number" name="rating" required class="form-control input-number">
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -242,7 +242,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ __('FsLang::panel.extend_content_type_rank_number') }}</h5>
+                    <h5 class="modal-title">{{ __('FsLang::panel.extend_content_type_rating') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -253,7 +253,7 @@
                             <table class="table table-hover align-middle text-nowrap">
                                 <thead>
                                     <tr class="table-info">
-                                        <th scope="col" style="width:10rem;">{{ __('FsLang::panel.table_number') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.extend_content_type_rank_number_desc') }}"></i></th>
+                                        <th scope="col" style="width:10rem;">{{ __('FsLang::panel.table_number') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.extend_content_type_rating_desc') }}"></i></th>
                                         <th scope="col">{{ __('FsLang::panel.table_title') }}</th>
                                         <th scope="col">{{ __('FsLang::panel.table_description') }}</th>
                                         <th scope="col" style="width:6rem;">{{ __('FsLang::panel.table_options') }}</th>

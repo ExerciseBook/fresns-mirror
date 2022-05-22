@@ -21,7 +21,7 @@ class LanguageMenuController extends Controller
     public function index()
     {
         $languageConfig = Config::where('item_key', 'language_menus')->firstOrFail();
-        $languages = collect($languageConfig->item_value)->sortBy('rankNum');
+        $languages = collect($languageConfig->item_value)->sortBy('rating');
 
         $defaultLanguageConfig = Config::where('item_key', 'default_language')->firstOrFail();
         $defaultLanguage = $defaultLanguageConfig->item_value;
@@ -73,7 +73,7 @@ class LanguageMenuController extends Controller
         }
 
         $language = $languages[$languageKey];
-        $language['rankNum'] = $request->rank_num;
+        $language['rating'] = $request->rating;
 
         $languages[$languageKey] = $language;
         $languageConfig->item_value = array_values($languages);
@@ -107,7 +107,7 @@ class LanguageMenuController extends Controller
         }
 
         $data = [
-            'rankNum' => $request->rank_num,
+            'rating' => $request->rating,
             'langCode' => $request->lang_code,
             'langName' => $code['name'] ?? '',
             'langTag' => $langTag,
@@ -173,7 +173,7 @@ class LanguageMenuController extends Controller
         }
 
         $data = [
-            'rankNum' => $request->rank_num,
+            'rating' => $request->rating,
             'langCode' => $oldConfig['langCode'],
             'langName' => $oldConfig['langName'] ?? '',
             'langTag' => $langTag,

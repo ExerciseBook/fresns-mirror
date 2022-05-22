@@ -127,7 +127,7 @@ trait FileServiceTrait
         $fileAppendQuery =  FileAppend::with('file')
             ->where('table_name', $tableName)
             ->where('table_column', $tableColumn)
-            ->orderBy('rank_num');
+            ->orderBy('rating');
 
         if (empty($tableId)) {
             $fileAppendQuery->where('table_key', $tableKey);

@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => '帖子总列表',
     'extend_content_type_option_post_follow' => '关注对象的帖子',
     'extend_content_type_option_post_nearby' => '附近范围的帖子',
-    'extend_content_type_rank_number' => '排序编号配置',
-    'extend_content_type_rank_number_desc' => '如何填写请参见「数据来源」关联插件的说明文档',
+    'extend_content_type_rating' => '排序编号配置',
+    'extend_content_type_rating_desc' => '如何填写请参见「数据来源」关联插件的说明文档',
     // Client-Menus
     'menu_table_home' => '首页',
     'menu_table_menu' => '菜单',

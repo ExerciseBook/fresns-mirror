@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => '총 게시물 목록',
     'extend_content_type_option_post_follow' => '개체의 게시물에 초점을 맞 춥니 다',
     'extend_content_type_option_post_nearby' => '근처의 포스트',
-    'extend_content_type_rank_number' => '정렬 번호 구성',
-    'extend_content_type_rank_number_desc' => '작성하는 방법은 "데이터 소스"관련 플러그인 설명서를 참조하십시오',
+    'extend_content_type_rating' => '정렬 번호 구성',
+    'extend_content_type_rating_desc' => '작성하는 방법은 "데이터 소스"관련 플러그인 설명서를 참조하십시오',
     // Client-Menus
     'menu_table_home' => '첫 페이지',
     'menu_table_menu' => '메뉴',

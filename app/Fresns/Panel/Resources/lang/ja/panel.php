@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => '投稿の合計リスト',
     'extend_content_type_option_post_follow' => 'オブジェクトの投稿に焦点を当てる',
     'extend_content_type_option_post_nearby' => '近くの投稿',
-    'extend_content_type_rank_number' => 'ソート番号設定',
-    'extend_content_type_rank_number_desc' => '記入方法は、「データソース」関連プラグインの文書を参照してください。',
+    'extend_content_type_rating' => 'ソート番号設定',
+    'extend_content_type_rating_desc' => '記入方法は、「データソース」関連プラグインの文書を参照してください。',
     // Client-Menus
     'menu_table_home' => '表紙',
     'menu_table_menu' => 'メニュー',

@@ -18,7 +18,7 @@ class StickerController extends Controller
     public function store(Sticker $stickerImage, UpdateStickerRequest $request)
     {
         $stickerImage->parent_id = $request->parent_id;
-        $stickerImage->rank_num = $request->rank_num;
+        $stickerImage->rating = $request->rating;
         $stickerImage->code = $request->code;
         $stickerImage->name = $request->code;
         $stickerImage->is_enable = $request->is_enable;
@@ -67,7 +67,7 @@ class StickerController extends Controller
 
     public function updateRank(Sticker $stickerImage, Request $request)
     {
-        $stickerImage->rank_num = $request->rank_num;
+        $stickerImage->rating = $request->rating;
         $stickerImage->save();
 
         return $this->updateSuccess();
@@ -78,17 +78,17 @@ class StickerController extends Controller
         $group = Sticker::group()->where('id', $request->parent_id)->firstOrFail();
 
         $stickerImages = $group->stickers;
-        $deleteIds = $stickerImages->pluck('id')->diff(array_keys($request->rank_num));
+        $deleteIds = $stickerImages->pluck('id')->diff(array_keys($request->rating));
         if ($deleteIds->count()) {
             $group->stickers()->whereIn('id', $deleteIds)->delete();
         }
 
-        foreach ($request->rank_num ?? [] as $id => $rank) {
+        foreach ($request->rating ?? [] as $id => $rank) {
             $stickerImage = $stickerImages->where('id', $id)->first();
             if (! $stickerImage) {
                 continue;
             }
-            $stickerImage->rank_num = $rank;
+            $stickerImage->rating = $rank;
             $stickerImage->is_enable = $request->enable[$id] ?? 0;
             $stickerImage->save();
         }

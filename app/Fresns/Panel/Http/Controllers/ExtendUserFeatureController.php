@@ -26,7 +26,7 @@ class ExtendUserFeatureController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 7)
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->with('plugin', 'names')
             ->paginate();
 
@@ -43,7 +43,7 @@ class ExtendUserFeatureController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : $pluginUsage->roles;
         $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
@@ -108,7 +108,7 @@ class ExtendUserFeatureController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : $pluginUsage->roles;
         if ($request->file('icon_file')) {
             $wordBody = [
@@ -174,7 +174,7 @@ class ExtendUserFeatureController extends Controller
     public function updateRank($id, Request $request)
     {
         $pluginUsage = PluginUsage::findOrFail($id);
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->save();
 
         return $this->updateSuccess();

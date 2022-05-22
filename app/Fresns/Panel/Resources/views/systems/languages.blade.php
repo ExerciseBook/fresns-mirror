@@ -53,7 +53,7 @@
                 @foreach ($languages as $language)
                     <tr>
                         <td>
-                            <input type="number" data-action="{{ route('panel.languageMenus.rank.update', ['langTag' => $language['langTag']]) }}" class="form-control input-number rank-num" value="{{ $language['rankNum'] }}">
+                            <input type="number" data-action="{{ route('panel.languageMenus.rank.update', ['langTag' => $language['langTag']]) }}" class="form-control input-number rank-num" value="{{ $language['rating'] }}">
                         </td>
                         <td>
                             <input data-action="{{ route('panel.languageMenus.default.update') }}" class="form-check-input" type="radio" name="default_language" value="{{ $language['langTag'] }}" {{ $language['langTag'] == $defaultLanguage ? 'checked' : '' }}>
@@ -94,7 +94,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.table_order') }}</label>
                             <div class="col-sm-9">
-                                <input type="number" name="rank_num" required class="form-control input-number">
+                                <input type="number" name="rating" required class="form-control input-number">
                             </div>
                         </div>
                         <!--table_langCode-->
@@ -236,7 +236,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.table_order') }}</label>
                             <div class="col-sm-9">
-                                <input type="number" name="rank_num" required class="form-control input-number">
+                                <input type="number" name="rating" required class="form-control input-number">
                             </div>
                         </div>
                         <!--table_langCode-->

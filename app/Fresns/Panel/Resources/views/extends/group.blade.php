@@ -65,7 +65,7 @@
             <tbody>
                 @foreach ($pluginUsages as $item)
                     <tr>
-                        <td><input type="number" data-action="{{ route('panel.group.rank', $item) }}" class="form-control input-number rank-num" value="{{ $item['rank_num'] }}"></td>
+                        <td><input type="number" data-action="{{ route('panel.group.rank', $item) }}" class="form-control input-number rank-num" value="{{ $item['rating'] }}"></td>
                         <td>{{ $item->group ? $item->group->name : '' }}</td>
                         <td>{{ optional($item->plugin)->name }}</td>
                         <td>
@@ -149,7 +149,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.table_order') }}</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control input-number" name="rank_num" required>
+                                <input type="number" class="form-control input-number" name="rating" required>
                             </div>
                         </div>
                         <div class="mb-3 row">

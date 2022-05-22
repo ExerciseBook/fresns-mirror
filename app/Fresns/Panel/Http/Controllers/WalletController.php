@@ -150,7 +150,7 @@ class WalletController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 1)
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->with('plugin', 'names')
             ->get();
 
@@ -165,7 +165,7 @@ class WalletController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
@@ -225,7 +225,7 @@ class WalletController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
 
         if ($request->file('icon_file')) {
             $wordBody = [
@@ -284,7 +284,7 @@ class WalletController extends Controller
     public function withdrawIndex()
     {
         $pluginUsages = PluginUsage::where('type', 2)
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->with('plugin')
             ->get();
 
@@ -304,7 +304,7 @@ class WalletController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->icon_file_url = $request->icon_file_url;
         $pluginUsage->save();
 
@@ -364,7 +364,7 @@ class WalletController extends Controller
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
 
         if ($request->file('icon_file')) {
             $wordBody = [

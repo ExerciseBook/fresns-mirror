@@ -788,8 +788,8 @@ return [
     'extend_content_type_option_post_all' => '貼文總列表',
     'extend_content_type_option_post_follow' => '關注對象的貼文',
     'extend_content_type_option_post_nearby' => '附近範圍的貼文',
-    'extend_content_type_rank_number' => '排序編號配置',
-    'extend_content_type_rank_number_desc' => '如何填寫請參見「數據來源」關聯外掛的說明文檔',
+    'extend_content_type_rating' => '排序編號配置',
+    'extend_content_type_rating_desc' => '如何填寫請參見「數據來源」關聯外掛的說明文檔',
     // Client-Menus
     'menu_table_home' => '首頁',
     'menu_table_menu' => '菜單',

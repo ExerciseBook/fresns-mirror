@@ -24,7 +24,7 @@ class ExtendContentTypeController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 4)
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->with('plugin', 'names')
             ->paginate();
 
@@ -38,7 +38,7 @@ class ExtendContentTypeController extends Controller
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->can_delete = 1;
         $pluginUsage->data_sources = [
             'postByAll' => [
@@ -91,7 +91,7 @@ class ExtendContentTypeController extends Controller
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
         $pluginUsage->is_enable = $request->is_enable;
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $dataSources = $pluginUsage->data_sources;
 
         if ($request->post_all != ($dataSources['postByAll']['pluginUnikey'] ?? null)) {
@@ -158,7 +158,7 @@ class ExtendContentTypeController extends Controller
     public function updateRank($id, Request $request)
     {
         $pluginUsage = PluginUsage::findOrFail($id);
-        $pluginUsage->rank_num = $request->rank_num;
+        $pluginUsage->rating = $request->rating;
         $pluginUsage->save();
 
         return $this->updateSuccess();

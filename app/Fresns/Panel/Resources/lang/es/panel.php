@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => 'Lista total de publicaciones',
     'extend_content_type_option_post_follow' => 'Centrarse en la publicación del objeto',
     'extend_content_type_option_post_nearby' => 'Publicaciones cercanas',
-    'extend_content_type_rank_number' => 'Configuración del número de clasificación',
-    'extend_content_type_rank_number_desc' => 'Cómo completar, consulte la documentación del complemento asociado "Fuente de datos"',
+    'extend_content_type_rating' => 'Configuración del número de clasificación',
+    'extend_content_type_rating_desc' => 'Cómo completar, consulte la documentación del complemento asociado "Fuente de datos"',
     // Client-Menus
     'menu_table_home' => 'página delantera',
     'menu_table_menu' => 'menú',

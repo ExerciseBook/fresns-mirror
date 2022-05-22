@@ -35,7 +35,7 @@ class MapController extends Controller
         });
 
         $pluginUsages = PluginUsage::where('type', 9)
-            ->orderBy('rank_num')
+            ->orderBy('rating')
             ->with('plugin')
             ->get();
 
@@ -65,7 +65,7 @@ class MapController extends Controller
         $map = new PluginUsage;
         $map->plugin_unikey = $request->plugin_unikey;
         $map->is_enable = $request->is_enable;
-        $map->rank_num = $request->rank_num;
+        $map->rating = $request->rating;
         $map->parameter = $request->parameter;
         $map->icon_file_url = $request->icon_file_url ?: '';
         $map->type = 9;
@@ -144,7 +144,7 @@ class MapController extends Controller
     {
         $map->plugin_unikey = $request->plugin_unikey;
         $map->is_enable = $request->is_enable;
-        $map->rank_num = $request->rank_num;
+        $map->rating = $request->rating;
         $map->parameter = $request->parameter;
         $map->type = 9;
         $map->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');

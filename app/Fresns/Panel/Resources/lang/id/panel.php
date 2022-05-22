@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => 'Daftar total posting',
     'extend_content_type_option_post_follow' => 'Fokus pada posting objek',
     'extend_content_type_option_post_nearby' => 'Postingan terdekat',
-    'extend_content_type_rank_number' => 'Menyortir Konfigurasi Nomor',
-    'extend_content_type_rank_number_desc' => 'Cara mengisi, silakan merujuk ke dokumentasi plugin terkait "Sumber Data"',
+    'extend_content_type_rating' => 'Menyortir Konfigurasi Nomor',
+    'extend_content_type_rating_desc' => 'Cara mengisi, silakan merujuk ke dokumentasi plugin terkait "Sumber Data"',
     // Client-Menus
     'menu_table_home' => 'halaman Depan',
     'menu_table_menu' => 'Tidak bisa',

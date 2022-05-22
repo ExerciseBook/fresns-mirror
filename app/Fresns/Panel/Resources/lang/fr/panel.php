@@ -787,8 +787,8 @@ return [
     'extend_content_type_option_post_all' => 'Total Liste des messages',
     'extend_content_type_option_post_follow' => 'Focus sur l\'objet de l\'objet',
     'extend_content_type_option_post_nearby' => 'Messages à proximité',
-    'extend_content_type_rank_number' => 'Configuration du numéro de tri',
-    'extend_content_type_rank_number_desc' => 'Comment remplir, veuillez vous reporter à la documentation du plugin associé "Source de données"',
+    'extend_content_type_rating' => 'Configuration du numéro de tri',
+    'extend_content_type_rating_desc' => 'Comment remplir, veuillez vous reporter à la documentation du plugin associé "Source de données"',
     // Client-Menus
     'menu_table_home' => 'page de garde',
     'menu_table_menu' => 'menu',
