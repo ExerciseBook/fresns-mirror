@@ -114,7 +114,7 @@ class ContentUtility
     }
 
     // Content
-    public static function contentHandler(string $content, ?int $linkedType = null, ?int $linkedId = null): string
+    public static function contentHandle(string $content, ?int $linkedType = null, ?int $linkedId = null): string
     {
         // Replace hashtag
         // Replace url
