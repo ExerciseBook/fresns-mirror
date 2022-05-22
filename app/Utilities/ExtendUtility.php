@@ -96,7 +96,7 @@ class ExtendUtility
     }
 
     // get extend list by ids
-    public static function getExtendItemListByIds(array $usageIds, int $userId = 0, string $langTag)
+    public static function getExtendItemListByIds(array $usageIds, ?int $userId = 0, string $langTag)
     {
         $extendList = null;
         foreach ($usageIds as $id) {

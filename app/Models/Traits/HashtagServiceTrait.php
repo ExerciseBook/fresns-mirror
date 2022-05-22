@@ -13,7 +13,7 @@ use App\Helpers\LanguageHelper;
 
 trait HashtagServiceTrait
 {
-    public function getHashtagInfo(string $langTag = '')
+    public function getHashtagInfo(?string $langTag = null)
     {
         $hashtagData = $this;
 

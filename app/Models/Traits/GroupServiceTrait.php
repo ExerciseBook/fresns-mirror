@@ -11,12 +11,11 @@ namespace App\Models\Traits;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
-use App\Models\GroupAdmin;
 use App\Models\User;
 
 trait GroupServiceTrait
 {
-    public function getGroupInfo(string $langTag = '')
+    public function getGroupInfo(?string $langTag = null)
     {
         $groupData = $this;
 
@@ -41,7 +40,7 @@ trait GroupServiceTrait
         return $info;
     }
 
-    public function getGroupAdmins(string $langTag = '', string $timezone = '')
+    public function getGroupAdmins(?string $langTag = null, ?string $timezone = null)
     {
         $adminIds = $this->admins;
 
@@ -60,7 +59,7 @@ trait GroupServiceTrait
         return $adminList;
     }
 
-    public function getParentGroupInfo(string $langTag = '')
+    public function getParentGroupInfo(?string $langTag = null)
     {
         $parentGroup = $this;
 

@@ -56,10 +56,6 @@ class UserController extends Controller
         $item['icons'] = ExtendUtility::getIcons(1, $viewUser->id, $headers['langTag']);
         $item['tips'] = ExtendUtility::getTips(1, $viewUser->id, $headers['langTag']);
         $item['extends'] = ExtendUtility::getExtends(1, $viewUser->id, $headers['langTag']);
-        $item['draftCount'] = (object) [];
-        if ($headers['uid'] == $viewUser->uid) {
-            $item['draftCount'] = $viewUser->getUserDrafts();
-        }
 
         $data['detail'] = array_merge($userProfile, $userMainRole, $item, $userInteractive);
 

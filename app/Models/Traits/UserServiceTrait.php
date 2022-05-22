@@ -12,15 +12,13 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
-use App\Models\CommentLog;
-use App\Models\PostLog;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
 
 trait UserServiceTrait
 {
-    public function getUserProfile(string $langTag = '', string $timezone = '')
+    public function getUserProfile(?string $langTag = null, ?string $timezone = null)
     {
         $userData = $this;
 
@@ -95,7 +93,7 @@ trait UserServiceTrait
         return $userAvatar;
     }
 
-    public function getUserMainRole(string $langTag = '', string $timezone = '')
+    public function getUserMainRole(?string $langTag = null, ?string $timezone = null)
     {
         $userData = $this;
 
@@ -119,14 +117,14 @@ trait UserServiceTrait
         return $mainRole;
     }
 
-    public function getUserRoles(string $langTag = '', string $timezone = '')
+    public function getUserRoles(?string $langTag = null, ?string $timezone = null)
     {
         $userData = $this;
 
         $userRoleArr = UserRole::where('user_id', $userData->id)->get()->toArray();
         $roleArr = Role::whereIn('id', array_column($userRoleArr, 'role_id'))->get();
 
-        $roleList = [];
+        $roleList = null;
         foreach ($roleArr as $role) {
             foreach ($userRoleArr as $userRole) {
                 if ($userRole['role_id'] !== $role['id']) {
@@ -148,7 +146,7 @@ trait UserServiceTrait
         return $roleList;
     }
 
-    public function getUserArchives(string $langTag = '')
+    public function getUserArchives(?string $langTag = null)
     {
         $archiveArr = $this->archives->where('is_enable', 1);
 
@@ -164,7 +162,7 @@ trait UserServiceTrait
         return $archiveList;
     }
 
-    public function getUserStats(string $langTag = '')
+    public function getUserStats(?string $langTag = null)
     {
         $statsData = $this->stat;
 
@@ -220,15 +218,5 @@ trait UserServiceTrait
         $stats['extcredits5Unit'] = $extcredits['extcredits5_unit'];
 
         return $stats;
-    }
-
-    public function getUserDrafts()
-    {
-        $userData = $this;
-
-        $draftCount['posts'] = PostLog::where('user_id', $userData->id)->whereIn('state', [1, 4])->count();
-        $draftCount['comments'] = CommentLog::where('user_id', $userData->id)->whereIn('state', [1, 4])->count();
-
-        return $draftCount;
     }
 }

@@ -122,7 +122,7 @@ trait FileServiceTrait
         return $info;
     }
 
-    public function getFileListInfo(string $tableName, string $tableColumn, string $tableId = '', string $tableKey = '')
+    public function getFileListInfo(string $tableName, string $tableColumn, ?string $tableId = null, ?string $tableKey = null)
     {
         $fileAppendQuery =  FileAppend::with('file')
             ->where('table_name', $tableName)
@@ -139,6 +139,6 @@ trait FileServiceTrait
 
         $fileList = $fileAppends->map(fn ($fileAppend) => $fileAppend->file->getFileInfo());
 
-        return $fileList ?? [];
+        return $fileList ?? null;
     }
 }

@@ -23,7 +23,7 @@ class LbsUtility
     public static function getDistance($lng1, $lat1, $lng2, $lat2)
     {
         // Turning the angle to fox degrees
-        $radLat1 = deg2rad($lat1);//deg2rad()function converts angles to radians
+        $radLat1 = deg2rad($lat1); // deg2rad()function converts angles to radians
         $radLat2 = deg2rad($lat2);
         $radLng1 = deg2rad($lng1);
         $radLng2 = deg2rad($lng2);

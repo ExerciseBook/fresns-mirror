@@ -91,7 +91,7 @@ class FileHelper
 
     public static function fresnsFileImageUrlByColumn(?int $fileId = null, ?string $fileUrl = null, ?string $urlType = null)
     {
-        if (! $fileId && ! $fileUrl ) {
+        if (! $fileId && ! $fileUrl) {
             return null;
         }
 

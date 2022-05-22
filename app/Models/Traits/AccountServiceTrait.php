@@ -15,7 +15,7 @@ use App\Helpers\StrHelper;
 
 trait AccountServiceTrait
 {
-    public function getAccountInfo(string $langTag = '', string $timezone = '')
+    public function getAccountInfo(?string $langTag = null, ?string $timezone = null)
     {
         $accountData = $this;
 
@@ -62,7 +62,7 @@ trait AccountServiceTrait
         return $connectsItemArr;
     }
 
-    public function getAccountWallet(string $langTag = '')
+    public function getAccountWallet(?string $langTag = null)
     {
         $walletData = $this->wallet;
 
