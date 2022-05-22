@@ -99,7 +99,7 @@ class GroupController extends Controller
             ->get();
 
         $groups = Group::typeGroup()
-            ->orderBy('recom_rating')
+            ->orderBy('recommend_rating')
             ->with('user', 'plugin', 'category', 'admins')
             ->where('is_recommend', 1)
             ->where('is_enable', 1)
@@ -448,7 +448,7 @@ class GroupController extends Controller
 
     public function updateRecomRank(Group $group, Request $request)
     {
-        $group->recom_rating = $request->rating;
+        $group->recommend_rating = $request->rating;
         $group->save();
 
         return $this->updateSuccess();

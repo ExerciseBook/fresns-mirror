@@ -41,7 +41,7 @@
             <tbody>
                 @foreach ($groups as $group)
                     <tr>
-                        <td><input type="number" data-action="{{ route('panel.groups.recom.rank.update', $group->id) }}" name="rating" class="form-control input-number rank-num" value="{{ $group->recom_rating }}"></td>
+                        <td><input type="number" data-action="{{ route('panel.groups.recom.rank.update', $group->id) }}" name="rating" class="form-control input-number rank-num" value="{{ $group->recommend_rating }}"></td>
                         <td><span class="badge rounded-pill bg-secondary">{{ optional($group->category)->name }}</span></td>
                         <td>
                             @if ($group->cover_file_url)
