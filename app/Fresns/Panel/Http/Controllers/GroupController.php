@@ -100,7 +100,7 @@ class GroupController extends Controller
 
         $groups = Group::typeGroup()
             ->orderBy('recommend_rating')
-            ->with('user', 'plugin', 'category', 'admins')
+            ->with('creator', 'plugin', 'category', 'admins')
             ->where('is_recommend', 1)
             ->where('is_enable', 1)
             ->paginate();
@@ -131,7 +131,7 @@ class GroupController extends Controller
         $groups = Group::typeGroup()
             ->orderBy('rating')
             ->where('is_enable', 0)
-            ->with('user', 'plugin', 'category')
+            ->with('creator', 'plugin', 'category')
             ->paginate();
 
         extract(get_object_vars($this));
