@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
 
 class PostService
 {
-    public function postInfo(string $pid, string $type, ?int $mapId = null, ?string $userLat = null, ?string $userLon = null)
+    public function postInfo(string $pid, string $type, ?int $mapId = null, ?string $userLng = null, ?string $userLat = null)
     {
         $headers = AppHelper::getApiHeaders();
         $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
@@ -61,10 +61,10 @@ class PostService
         }
 
         if (! empty($post->map_id)) {
+            $postLng = $post->map_longitude;
             $postLat = $post->map_latitude;
-            $postLon = $post->map_longitude;
             if (! empty($userLat) && ! empty($userLon)) {
-                $postInfo['location']['distance'] = LbsUtility::getDistanceWithUnit($headers['langTag'], $postLat, $postLon, $userLat, $userLon);
+                $postInfo['location']['distance'] = LbsUtility::getDistanceWithUnit($headers['langTag'], $postLng, $postLat, $userLng, $userLat);
             }
         }
 
