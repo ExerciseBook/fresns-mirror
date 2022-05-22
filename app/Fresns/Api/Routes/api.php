@@ -9,12 +9,18 @@
 use App\Fresns\Api\Http\Controllers\AccountController;
 use App\Fresns\Api\Http\Controllers\UserController;
 use App\Fresns\Api\Http\Controllers\GroupController;
+use App\Fresns\Api\Http\Controllers\GlobalController;
 use App\Fresns\Api\Http\Controllers\HashtagController;
 use App\Fresns\Api\Http\Controllers\PostController;
 use App\Fresns\Api\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v2')->group(function () {
+    Route::prefix('global')->group(function () {
+        Route::get('configs', [GlobalController::class, 'configs'])->name('global.configs');
+        Route::get('overview', [GlobalController::class, 'overview'])->name('global.overview');
+    });
+
     Route::prefix('account')->group(function () {
         Route::get('detail', [AccountController::class, 'detail'])->name('account.detail');
     });
