@@ -9,6 +9,7 @@
 namespace App\Fresns\Api\Http\Controllers;
 
 use App\Fresns\Api\Http\DTO\GlobalConfigsDTO;
+use App\Fresns\Api\Http\DTO\GlobalBlockWordsDTO;
 use App\Fresns\Api\Http\DTO\GlobalRolesDTO;
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
@@ -23,11 +24,14 @@ use App\Models\Dialog;
 use App\Models\DialogMessage;
 use App\Models\Notify;
 use App\Exceptions\ApiException;
+use App\Models\BlockWord;
 use App\Models\Role;
+use App\Utilities\ExtendUtility;
 use Illuminate\Http\Request;
 
 class GlobalController extends Controller
 {
+    // configs
     public function configs(Request $request)
     {
         $dtoRequest = new GlobalConfigsDTO($request->all());
@@ -73,6 +77,7 @@ class GlobalController extends Controller
         return $this->fresnsPaginate($item, $configs->total(), $configs->perPage());
     }
 
+    // overview
     public function overview()
     {
         $headers = AppHelper::getApiHeaders();
@@ -105,6 +110,7 @@ class GlobalController extends Controller
         return $this->success($data);
     }
 
+    // roles
     public function roles(Request $request)
     {
         $dtoRequest = new GlobalRolesDTO($request->all());
@@ -112,10 +118,10 @@ class GlobalController extends Controller
 
         $status = $dtoRequest->status ?? 1;
 
-        if (empty($dtoRequest->type)) {
-            $roleQuery = Role::where('is_enable', $status)->orderBy('rating');
-        } else {
-            $roleQuery = Role::where('is_enable', $status)->where('type', $dtoRequest->type)->orderBy('rating');
+        $roleModel = Role::where('is_enable', $status)->orderBy('rating');
+
+        if (! empty($dtoRequest->type)) {
+            $roleQuery = $roleModel->where('type', $dtoRequest->type);
         }
 
         $roles = $roleQuery->paginate($request->get('pageSize', 20));
@@ -138,5 +144,55 @@ class GlobalController extends Controller
         }
 
         return $this->fresnsPaginate($roleList, $roles->total(), $roles->perPage());
+    }
+
+    // maps
+    public function maps()
+    {
+        $headers = AppHelper::getApiHeaders();
+
+        $data = ExtendUtility::getPluginExtends(9, null, null, null, $headers['langTag']);
+
+        return $this->success($data);
+    }
+
+    // contentType
+    public function contentType()
+    {
+        $headers = AppHelper::getApiHeaders();
+
+        $data = ExtendUtility::getPluginExtends(4, null, null, null, $headers['langTag']);
+
+        return $this->success($data);
+    }
+
+    // blockWords
+    public function blockWords(Request $request)
+    {
+        $dtoRequest = new GlobalBlockWordsDTO($request->all());
+
+        $wordQuery = BlockWord::all();
+
+        if ($dtoRequest->type = 'content') {
+            $wordQuery = BlockWord::where('content_mode', '!=' , 1);
+        } elseif ($dtoRequest->type = 'user') {
+            $wordQuery = BlockWord::where('user_mode', '!=' , 1);
+        } elseif ($dtoRequest->type = 'dialog') {
+            $wordQuery = BlockWord::where('dialog_mode', '!=' , 1);
+        }
+
+        $words = $wordQuery->paginate($request->get('pageSize', 50));
+
+        $wordList = null;
+        foreach ($words as $word) {
+            $item['word'] = $word->word;
+            $item['contentMode'] = $word->content_mode;
+            $item['userMode'] = $word->user_mode;
+            $item['dialogMode'] = $word->dialog_mode;
+            $item['replaceWord'] = $word->replace_word;
+            $wordList[] = $item;
+        }
+
+        return $this->fresnsPaginate($wordList, $words->total(), $words->perPage());
     }
 }
