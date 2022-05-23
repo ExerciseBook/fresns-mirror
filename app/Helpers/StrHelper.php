@@ -166,7 +166,7 @@ class StrHelper
             $slug = Str::slug($text, '-');
         } else {
             // 其他字符串使用 URL 编码
-            $slug = 'PHP%E8%AF%AD%E8%A8%80';
+            $slug = urlencode($text);
         }
 
         return $slug;

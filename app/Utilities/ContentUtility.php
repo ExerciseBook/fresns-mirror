@@ -119,13 +119,27 @@ class ContentUtility
 
         $config = ConfigHelper::fresnsConfigByItemKeys(['site_domain', 'hashtag_show']);
 
-        if ($config['hashtag_show'] == 1) {
-            // 格式 <a href="https://abc.com/hashtag/PHP%E8%AF%AD%E8%A8%80" class="fresns_hashtag" target="_blank">#PHP语言</a>
-        } else {
-            // 格式 <a href="https://abc.com/hashtag/PHP%E8%AF%AD%E8%A8%80" class="fresns_hashtag" target="_blank">#PHP语言#</a>
+        $linkList = [];
+        foreach ($hashtagList as $hashTag) {
+            if ($config['hashtag_show'] == 1) {
+                // 格式 <a href="https://abc.com/hashtag/PHP%E8%AF%AD%E8%A8%80" class="fresns_hashtag" target="_blank">#PHP语言</a>
+                $topic = "#{$hashTag}";
+            } else {
+                // 格式 <a href="https://abc.com/hashtag/PHP%E8%AF%AD%E8%A8%80" class="fresns_hashtag" target="_blank">#PHP语言#</a>
+                $topic = "#{$hashTag}#";
+            }
+
+            $link = sprintf(
+                '<a href="%s/hashtag/%s" class="fresns_hashtag" target="_blank">%s</a>',
+                $config['site_domain'],
+                StrHelper::slug($hashTag),
+                $topic
+            );
+
+            $linkList[] = $link;
         }
 
-        return '';
+        return str_replace($hashtagList, $linkList, $content);
     }
 
     // Replace url
@@ -135,13 +149,20 @@ class ContentUtility
 
         $urlDataList = DomainLink::whereIn('link_url', $urlList)->get();
 
-        if (empty($urlDataList)) {
-            // 格式 <a href="https://tangjie.me" class="fresns_link" target="_blank">https://tangjie.me</a>
-        } else {
-            // 格式 <a href="https://tangjie.me" class="fresns_link" target="_blank">$urlDataList->link_title</a>
+        $linkList = [];
+        foreach ($urlList as $url) {
+            if ($urlData = $urlDataList->where('', $url)->first()) {
+                // 格式 <a href="https://tangjie.me" class="fresns_link" target="_blank">$urlDataList->link_title</a>
+                $name = $urlData->link_title;
+            } else {
+                // 格式 <a href="https://tangjie.me" class="fresns_link" target="_blank">https://tangjie.me</a>
+                $name = $url;
+            }
+
+            $linkList[] = sprintf('<a href="%s" class="fresns_link" target="_blank">%s</a>', $url, $name);
         }
 
-        return '';
+        return str_replace($urlList, $linkList, $content);
     }
 
     // Replace mention
