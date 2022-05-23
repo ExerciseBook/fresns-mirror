@@ -99,7 +99,8 @@ trait ApiResponseTrait
                 }
 
                 return $item;
-            }, $paginate->items()) ?: null,
+            },
+            $paginate->items()) ?: null,
         ]);
     }
 }

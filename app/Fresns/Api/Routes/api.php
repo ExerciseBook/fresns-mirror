@@ -19,6 +19,11 @@ Route::prefix('v2')->group(function () {
     Route::prefix('global')->group(function () {
         Route::get('configs', [GlobalController::class, 'configs'])->name('global.configs');
         Route::get('overview', [GlobalController::class, 'overview'])->name('global.overview');
+        Route::get('roles', [GlobalController::class, 'roles'])->name('global.roles');
+        Route::get('maps', [GlobalController::class, 'maps'])->name('global.maps');
+        Route::get('content-type', [GlobalController::class, 'contentType'])->name('global.contentType');
+        Route::get('stickers', [GlobalController::class, 'stickers'])->name('global.stickers');
+        Route::get('block-words', [GlobalController::class, 'blockWords'])->name('global.blockWords');
     });
 
     Route::prefix('account')->group(function () {
@@ -39,6 +44,7 @@ Route::prefix('v2')->group(function () {
     });
 
     Route::prefix('post')->group(function () {
+        Route::get('list', [PostController::class, 'list'])->name('post.list');
         Route::get('detail/{pid}', [PostController::class, 'detail'])->name('post.detail');
     });
 

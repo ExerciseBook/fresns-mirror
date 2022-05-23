@@ -9,9 +9,11 @@
 namespace App\Fresns\Api\Http\Controllers;
 
 use App\Fresns\Api\Http\DTO\GlobalConfigsDTO;
+use App\Fresns\Api\Http\DTO\GlobalRolesDTO;
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\LanguageHelper;
+use App\Helpers\FileHelper;
 use App\Helpers\PluginHelper;
 use App\Models\CommentLog;
 use App\Models\PostLog;
@@ -20,6 +22,8 @@ use App\Models\Config;
 use App\Models\Dialog;
 use App\Models\DialogMessage;
 use App\Models\Notify;
+use App\Exceptions\ApiException;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class GlobalController extends Controller
@@ -74,6 +78,10 @@ class GlobalController extends Controller
         $headers = AppHelper::getApiHeaders();
         $userId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
 
+        if (empty($userId)) {
+            throw new ApiException(31602);
+        }
+
         $dialogACount = Dialog::where('a_user_id', $userId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
         $dialogBCount = Dialog::where('b_user_id', $userId)->where('b_is_read', 0)->where('b_is_display', 1)->count();
         $dialogMessageCount = DialogMessage::where('recv_user_id', $userId)->where('recv_read_at', null)->where('recv_deleted_at', null)->where('is_enable', 1)->count();
@@ -95,5 +103,32 @@ class GlobalController extends Controller
         $data['draftCount'] = $draftCount;
 
         return $this->success($data);
+    }
+
+    public function roles(Request $request)
+    {
+        $dtoRequest = new GlobalRolesDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $roles = Role::where('is_enable', 1)->where('type', $dtoRequest->type)->paginate($request->get('pageSize', 50));
+
+        $roleList = null;
+        foreach ($roles as $role) {
+            foreach ($role->permission as $perm) {
+                $permission[$perm['permKey']] = $perm['permValue'];
+            }
+
+            $item['rid'] = $role->id;
+            $item['nicknameColor'] = $role->nickname_color;
+            $item['name'] = LanguageHelper::fresnsLanguageByTableId('roles', 'name', $role->id, $headers['langTag']);
+            $item['nameDisplay'] = (bool) $role->is_display_name;
+            $item['icon'] = FileHelper::fresnsFileImageUrlByColumn($role->icon_file_id, $role->icon_file_url);
+            $item['iconDisplay'] = (bool) $role->is_display_icon;
+            $item['permission'] = $permission;
+            $item['status'] = (bool) $role->is_enable;
+            $roleList[] = $item;
+        }
+
+        return $this->fresnsPaginate($roleList, $roles->total(), $roles->perPage());
     }
 }
