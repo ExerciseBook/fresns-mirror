@@ -243,7 +243,7 @@ class ContentUtility
     }
 
     // Content
-    public static function contentHandle(string $content, int $linkedType = null, int $linkedId = null): string
+    public static function contentHandle(string $content, ?int $linkedType = null, ?int $linkedId = null): string
     {
         // Replace hashtag
         // Replace url
@@ -251,7 +251,9 @@ class ContentUtility
         // Replace sticker
         $content = static::replaceHashtag($content);
         $content = static::replaceUrl($content);
-        $content = static::replaceMention($content, $linkedType, $linkedId);
+        if ($linkedType && $linkedId) {
+            $content = static::replaceMention($content, $linkedType, $linkedId);
+        }
         $content = static::replaceSticker($content);
 
         return $content;
