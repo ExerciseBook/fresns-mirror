@@ -43,11 +43,11 @@ class GlobalController extends Controller
         $configQuery = Config::where('is_api', 1);
 
         if (! empty($itemKey) && ! empty($itemTag)) {
-            $configQuery = Config::where('is_api', 1)->whereIn('item_key', $itemKey)->orWhereIn('item_tag', $itemTag);
+            $configQuery->whereIn('item_key', $itemKey)->orWhereIn('item_tag', $itemTag);
         } elseif (! empty($itemKey) && empty($itemTag)) {
-            $configQuery = Config::where('is_api', 1)->whereIn('item_key', $itemKey);
+            $configQuery->whereIn('item_key', $itemKey);
         } elseif (empty($itemKey) && ! empty($itemTag)) {
-            $configQuery = Config::where('is_api', 1)->whereIn('item_tag', $itemTag);
+            $configQuery->whereIn('item_tag', $itemTag);
         }
 
         $configs = $configQuery->paginate($request->get('pageSize', 50));
@@ -118,10 +118,10 @@ class GlobalController extends Controller
 
         $status = $dtoRequest->status ?? 1;
 
-        $roleModel = Role::where('is_enable', $status)->orderBy('rating');
+        $roleQuery = Role::where('is_enable', $status)->orderBy('rating');
 
         if (! empty($dtoRequest->type)) {
-            $roleQuery = $roleModel->where('type', $dtoRequest->type);
+            $roleQuery->where('type', $dtoRequest->type);
         }
 
         $roles = $roleQuery->paginate($request->get('pageSize', 20));
