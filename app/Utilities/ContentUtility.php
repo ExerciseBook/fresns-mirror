@@ -8,9 +8,10 @@
 
 namespace App\Helpers;
 
-use App\Models\DomainLink;
-use App\Models\Mention;
 use App\Models\User;
+use App\Models\Mention;
+use App\Models\Sticker;
+use App\Models\DomainLink;
 use Illuminate\Support\Collection;
 
 class ContentUtility
@@ -220,9 +221,7 @@ class ContentUtility
     public static function replaceSticker(string $content): string
     {
         $stickerList = ContentUtility::extractMention($content);
-        // xxx: code 字段不存在？
-        // @see: https://fresns.cn/database/interactives/mentions.html
-        $stickerDataList = Mention::whereIn('code', $stickerList)->get();
+        $stickerDataList = Sticker::whereIn('code', $stickerList)->get();
 
         $replaceList = [];
         $linkList = [];
