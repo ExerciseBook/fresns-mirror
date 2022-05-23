@@ -14,66 +14,76 @@ use App\Models\User;
 
 class ContentUtility
 {
+    public static function getRegexpBy($type)
+    {
+        return match ($type) {
+            'hash' => "/#(.*?)#/",
+            'space' => "/#(.*?)\s/",
+            'url' => "/(https?:\/\/.*?)\s/",
+            'at' => "/@(.*?)\s/",
+            'sticker' => "/\[(.*?)\]/",
+        };
+    }
+
+    public static function filterChars($data, $exceptChars = ',# ')
+    {
+        $data = array_filter($data);
+        // 需要排除的字符数组
+        $exceptChars = str_split($exceptChars);
+
+        $result = [];
+        foreach ($data as $item) {
+            $needExcludeflag = false;
+            // 当包含需要排除的字符时，跳过
+            foreach ($exceptChars as $char) {
+                if (str_contains($item, $char)) {
+                    $needExcludeflag = true;
+                    break;
+                }
+            }
+
+            if ($needExcludeflag) {
+                continue;
+            }
+
+            $result[] = $item;
+        }
+
+        return $result;
+    }
+
+    public static function matchAll($regexp, $content, ?callable $filterChars = null)
+    {
+        // 匹配信息在尾部的处理
+        $content = $content . ' ';
+
+        preg_match_all($regexp, $content, $matches);
+
+        $data = $matches[1] ?? [];
+
+        if (is_callable($filterChars)) {
+            return $filterChars($data);
+        }
+
+        return $data;
+    }
+
     // Extract hashtag
     public static function extractHashtag(string $content): array
     {
-        // 话题在尾部的处理
-        $content = $content . ' ';
-        // xxx: 话题中不包含的字符(要过滤的字符)
-        $exceptChars = ",# ";
-    
-        // 获取匹配正则
-        $getRregexp = function ($matchType = 'hash') {
-            return match ($matchType) {
-                'hash' => "/#(.*?)#/",
-                'space' => "/#(.*?)\s/",
-            };
-        };
-    
-        // 过滤话题中的字符
-        $filterChars = function ($data, $exceptChars = ',') {
-            $data = array_filter($data);
-            // 需要排除的字符数组
-            $exceptChars = str_split($exceptChars);
-    
-            $result = [];
-            foreach ($data as $item) {
-                $needExcludeflag = false;
-                // 当包含需要排除的字符时，跳过
-                foreach ($exceptChars as $char) {
-                    if (str_contains($item, $char)) {
-                        $needExcludeflag = true;
-                        break;
-                    }
-                }
-    
-                if ($needExcludeflag) {
-                    continue;
-                }
-    
-                $result[] = $item;
-            }
-    
-            return $result;
-        };
-    
-        $matchAll = function ($regexp, $content, $exceptChars) use ($filterChars) {
-            preg_match_all($regexp, $content, $matches);
-    
-            $data = $matches[1];
-    
-            return $filterChars($data, $exceptChars);
-        };
-    
         // 以 # 号开始（开始 # 号后面不支持空格）
         // 以 # 号或者空格结尾
         // 不支持标点符号，含有标点符号不符合要求
-        $hashData = $matchAll($getRregexp('hash'), $content, $exceptChars);
-        $spaceData = $matchAll($getRregexp('space'), $content, $exceptChars);
+        $hashData = ContentUtility::filterChars(
+            ContentUtility::matchAll(ContentUtility::getRegexpBy('hash'), $content)
+        );
+        $spaceData = ContentUtility::filterChars(
+            ContentUtility::matchAll(ContentUtility::getRegexpBy('space'), $content)
+        );
 
         // 对提取的话题进行去重处理
         $data = array_unique([...$spaceData, ...$hashData]);
-    
+
         return $data;
     }
 
@@ -81,16 +91,14 @@ class ContentUtility
     public static function extractUrl(string $content): array
     {
         // 以 http:// 或 https:// 开头，以空格结束
-
-        return [];
+        return ContentUtility::matchAll(ContentUtility::getRegexpBy('url'), $content);
     }
 
     // Extract mention user
     public static function extractMention(string $content): array
     {
         // 以 @ 符号开头，空格结尾
-
-        return [];
+        return ContentUtility::matchAll(ContentUtility::getRegexpBy('at'), $content);
     }
 
     // Extract sticker
@@ -98,8 +106,10 @@ class ContentUtility
     {
         // 以 [ 开头，以 ] 结尾
         // 中间不能有空格
-
-        return [];
+        return ContentUtility::filterChars(
+            ContentUtility::matchAll(ContentUtility::getRegexpBy('sticker'), $content),
+            ' '
+        );
     }
 
     // Replace hashtag
