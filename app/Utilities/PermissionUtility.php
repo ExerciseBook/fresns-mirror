@@ -24,16 +24,19 @@ class PermissionUtility
         return $userAccountId == $accountId ? 'true' : 'false';
     }
 
-    // Check user status
-    public static function checkUserStatus(int $userId): bool
+    // Check user status of the private model
+    public static function checkUserStatusOfPrivateModel(int $userId): bool
     {
-        $userStatus = User::where('id', $userId)->value('is_enable');
+        $userSet = User::where('id', $userId)->value('expired_at');
 
-        if (empty($userStatus)) {
-            return 'false';
+        $now = time();
+        $expireTime = strtotime($userSet->expired_at);
+
+        if ($expireTime && $expireTime < $now) {
+            return true;
         }
 
-        return $userStatus == 0 ? 'true' : 'false';
+        return false;
     }
 
     // Check user permissions

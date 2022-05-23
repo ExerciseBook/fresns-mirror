@@ -32,13 +32,13 @@ class PostListDTO extends DTO
             'blockCountLt' => ['nullable', 'integer'],
             'commentCountGt' => ['nullable', 'integer'],
             'commentCountLt' => ['nullable', 'integer'],
-            'createTimeGt' => ['nullable', 'integer'],
-            'createTimeLt' => ['nullable', 'integer'],
+            'createTimeGt' => ['nullable', 'date_format:Y-m-d', 'before:createTimeLt'],
+            'createTimeLt' => ['nullable', 'date_format:Y-m-d', 'after:createTimeGt'],
             'mapId' => ['nullable', 'in:1,2,3,4,5,6,7,8,9,10'],
             'mapLng' => ['nullable', 'numeric'],
             'mapLat' => ['nullable', 'numeric'],
-            'ratingType' => ['nullable', 'string:like,follow,block,comment,time'],
-            'ratingDirection' => ['nullable', 'in:1,2'],
+            'ratingType' => ['nullable', 'string'], // like,follow,block,comment,createTime
+            'ratingOrder' => ['nullable', 'string'], // ASC,DESC
             'pluginRatingId' => ['nullable', 'integer'],
             'pageSize' => ['nullable', 'integer', 'between:1,15'],
             'page' => ['nullable', 'integer'],
