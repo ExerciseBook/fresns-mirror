@@ -86,4 +86,25 @@ class PluginHelper
 
         return $upgradeCode;
     }
+
+    public static function pluginRatingHandle(string $key, ?array $dataSources = null, ?string $langTag = null)
+    {
+        $pluginRatingArr = $dataSources[$key]['pluginRating'];
+
+        if (empty($dataSources) || empty($pluginRatingArr)) {
+            return null;
+        }
+
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
+
+        $pluginRating = null;
+        foreach ($pluginRatingArr as $arr) {
+            $item['id'] = $arr['id'];
+            $item['title'] = collect($arr['intro'])->where('langTag', $langTag)->first()['title'] ?? null;
+            $item['description'] = collect($arr['intro'])->where('langTag', $langTag)->first()['description'] ?? null;
+            $pluginRating[] = $item;
+        }
+
+        return $pluginRating;
+    }
 }
