@@ -23,10 +23,7 @@ class ExtendContentTypeController extends Controller
             return in_array('extendContentType', $plugin->scene);
         });
 
-        $pluginUsages = PluginUsage::where('type', 4)
-            ->orderBy('rating')
-            ->with('plugin', 'names')
-            ->paginate();
+        $pluginUsages = PluginUsage::where('type', 4)->orderBy('rating')->with('plugin', 'names')->paginate();
 
         return view('FsView::extends.content-type', compact('plugins', 'pluginUsages'));
     }

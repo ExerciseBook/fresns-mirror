@@ -37,8 +37,8 @@
                 @foreach ($pluginUsages as $item)
                     <tr>
                         <td><input type="number" data-action="{{ route('panel.content-type.rank', $item->id) }}" class="form-control input-number rank-num" value="{{ $item['rating'] }}"></td>
-                        <td>{{ optional($item->plugin)->name }}</td>
-                        <td>{{ $item->name }}</td>
+                        <td>{{ optional($item->plugin)->name ?? $item->plugin_unikey }}</td>
+                        <td>{{ $item->getLangName($defaultLanguage) }}</td>
                         <td>
                             @if (!empty($item->data_sources['postByAll']['pluginUnikey']))
                                 <button type="button" class="btn btn-outline-secondary btn-sm update-data-source"
@@ -119,6 +119,12 @@
                             <div class="col-sm-9">
                                 <select class="form-select" name="plugin_unikey" required>
                                     <option selected disabled value="">{{ __('FsLang::panel.select_box_tip_plugin') }}</option>
+                                    <option value="All">All</option>
+                                    <option value="Text">Text</option>
+                                    <option value="Image">Image</option>
+                                    <option value="Video">Video</option>
+                                    <option value="Audio">Audio</option>
+                                    <option value="Document">Document</option>
                                     @foreach ($plugins as $plugin)
                                         <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
                                     @endforeach
