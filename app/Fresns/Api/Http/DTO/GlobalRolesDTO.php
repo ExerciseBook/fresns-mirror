@@ -19,6 +19,7 @@ class GlobalRolesDTO extends DTO
     {
         return [
             'type' => ['nullable', 'in:1,2,3'],
+            'status' => ['nullable', 'boolean'],
             'pageSize' => ['nullable', 'integer'],
             'page' => ['nullable', 'integer'],
         ];

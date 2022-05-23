@@ -110,7 +110,15 @@ class GlobalController extends Controller
         $dtoRequest = new GlobalRolesDTO($request->all());
         $headers = AppHelper::getApiHeaders();
 
-        $roles = Role::where('is_enable', 1)->where('type', $dtoRequest->type)->paginate($request->get('pageSize', 50));
+        $status = $dtoRequest->status ?? 1;
+
+        if (empty($dtoRequest->type)) {
+            $roleQuery = Role::where('is_enable', $status)->orderBy('rating');
+        } else {
+            $roleQuery = Role::where('is_enable', $status)->where('type', $dtoRequest->type)->orderBy('rating');
+        }
+
+        $roles = $roleQuery->paginate($request->get('pageSize', 20));
 
         $roleList = null;
         foreach ($roles as $role) {
