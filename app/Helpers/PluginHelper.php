@@ -89,11 +89,11 @@ class PluginHelper
 
     public static function pluginRatingHandle(string $key, ?array $dataSources = null, ?string $langTag = null)
     {
-        $pluginRatingArr = $dataSources[$key]['pluginRating'];
-
-        if (empty($dataSources) || empty($pluginRatingArr)) {
+        if (empty($dataSources)) {
             return null;
         }
+
+        $pluginRatingArr = $dataSources[$key]['pluginRating'];
 
         $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
 
