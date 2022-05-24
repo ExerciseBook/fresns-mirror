@@ -136,11 +136,19 @@ class FileHelper
         $files['audios'] = $fileList->get(3)?->all() ?? null;
         $files['documents'] = $fileList->get(4)?->all() ?? null;
 
+        return $files;
+    }
+
+    public static function fresnsAntiLinkFileInfoListByTable(string $tableName, string $tableColumn, ?int $tableId = null, ?string $tableKey = null)
+    {
+        $files = FileHelper::fresnsFileInfoListByTable($tableName, $tableColumn, $tableId, $tableKey);
+
         $imageStorageConfig = FileHelper::fresnsFileStorageConfigByType(1);
         $videoStorageConfig = FileHelper::fresnsFileStorageConfigByType(2);
         $audioStorageConfig = FileHelper::fresnsFileStorageConfigByType(3);
         $documentStorageConfig = FileHelper::fresnsFileStorageConfigByType(4);
 
+        // image
         if ($imageStorageConfig['antiLinkConfigStatus'] && empty($files['images'])) {
             $fids = $files['images']->pluck('fid')->get();
 
@@ -151,6 +159,7 @@ class FileHelper
             $files['images'] = $fresnsResponse->getData();
         }
 
+        // video
         if ($videoStorageConfig['antiLinkConfigStatus'] && empty($files['videos'])) {
             $fids = $files['videos']->pluck('fid')->get();
 
@@ -161,6 +170,7 @@ class FileHelper
             $files['videos'] = $fresnsResponse->getData();
         }
 
+        // audio
         if ($audioStorageConfig['antiLinkConfigStatus'] && empty($files['audios'])) {
             $fids = $files['audios']->pluck('fid')->get();
 
@@ -171,6 +181,7 @@ class FileHelper
             $files['audios'] = $fresnsResponse->getData();
         }
 
+        // document
         if ($documentStorageConfig['antiLinkConfigStatus'] && empty($files['documents'])) {
             $fids = $files['documents']->pluck('fid')->get();
 
@@ -181,7 +192,7 @@ class FileHelper
             $files['documents'] = $fresnsResponse->getData();
         }
 
-        return $files ?? null;
+        return $files;
     }
 
     public static function fresnsFileImageUrlByColumn(?int $fileId = null, ?string $fileUrl = null, ?string $urlType = null)
