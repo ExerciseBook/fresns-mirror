@@ -11,7 +11,6 @@ namespace App\Models\Traits;
 use App\Helpers\ConfigHelper;
 use App\Helpers\StrHelper;
 use App\Models\File;
-use App\Models\FileAppend;
 
 trait FileServiceTrait
 {
@@ -120,25 +119,5 @@ trait FileServiceTrait
         $info['documentUrl'] = StrHelper::qualifyUrl($fileData->path, $documentBucketDomain);
 
         return $info;
-    }
-
-    public function getFileListInfo(string $tableName, string $tableColumn, ?string $tableId = null, ?string $tableKey = null)
-    {
-        $fileAppendQuery =  FileAppend::with('file')
-            ->where('table_name', $tableName)
-            ->where('table_column', $tableColumn)
-            ->orderBy('rating');
-
-        if (empty($tableId)) {
-            $fileAppendQuery->where('table_key', $tableKey);
-        } else{
-            $fileAppendQuery->where('table_id', $tableId);
-        }
-
-        $fileAppends = $fileAppendQuery->get();
-
-        $fileList = $fileAppends->map(fn ($fileAppend) => $fileAppend->file->getFileInfo())->groupBy('type');
-
-        return $fileList ?? null;
     }
 }

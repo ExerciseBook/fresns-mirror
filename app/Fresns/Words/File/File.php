@@ -261,6 +261,7 @@ class File
         $langTag = \request()->header('langTag', config('app.locale'));
 
         $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(1);
+
         if (empty($fileConfigInfo['service'])) {
             return $this->failure(
                 21000,
@@ -268,16 +269,10 @@ class File
             );
         }
 
-        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(1);
-
-        if ($antiLinkStatus) {
+        if ($fileConfigInfo['antiLinkConfigStatus']) {
             return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForImage($dtoWordBody);
         } else {
-            if (isset($dtoWordBody->fileId)) {
-                return FileHelper::fresnsFileInfoByFid($dtoWordBody->fid);
-            } else {
-                return FileHelper::fresnsFileInfoById($dtoWordBody->fileId);
-            }
+            return FileHelper::fresnsFileInfo($dtoWordBody->fileId ?? $dtoWordBody->fid);
         }
     }
 
@@ -287,6 +282,7 @@ class File
         $langTag = \request()->header('langTag', config('app.locale'));
 
         $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(2);
+
         if (empty($fileConfigInfo['service'])) {
             return $this->failure(
                 21000,
@@ -294,16 +290,10 @@ class File
             );
         }
 
-        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(2);
-
-        if ($antiLinkStatus) {
+        if ($fileConfigInfo['antiLinkConfigStatus']) {
             return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForVideo($dtoWordBody);
         } else {
-            if (isset($dtoWordBody->fileId)) {
-                return FileHelper::fresnsFileInfoByFid($dtoWordBody->fid);
-            } else {
-                return FileHelper::fresnsFileInfoById($dtoWordBody->fileId);
-            }
+            return FileHelper::fresnsFileInfo($dtoWordBody->fileId ?? $dtoWordBody->fid);
         }
     }
 
@@ -313,6 +303,7 @@ class File
         $langTag = \request()->header('langTag', config('app.locale'));
 
         $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(3);
+
         if (empty($fileConfigInfo['service'])) {
             return $this->failure(
                 21000,
@@ -320,16 +311,10 @@ class File
             );
         }
 
-        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(3);
-
-        if ($antiLinkStatus) {
+        if ($fileConfigInfo['antiLinkConfigStatus']) {
             return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForAudio($dtoWordBody);
         } else {
-            if (isset($dtoWordBody->fileId)) {
-                return FileHelper::fresnsFileInfoByFid($dtoWordBody->fid);
-            } else {
-                return FileHelper::fresnsFileInfoById($dtoWordBody->fileId);
-            }
+            return FileHelper::fresnsFileInfo($dtoWordBody->fileId ?? $dtoWordBody->fid);
         }
     }
 
@@ -339,6 +324,7 @@ class File
         $langTag = \request()->header('langTag', config('app.locale'));
 
         $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(4);
+
         if (empty($fileConfigInfo['service'])) {
             return $this->failure(
                 21000,
@@ -346,16 +332,10 @@ class File
             );
         }
 
-        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(4);
-
-        if ($antiLinkStatus) {
+        if ($fileConfigInfo['antiLinkConfigStatus']) {
             return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForDocument($dtoWordBody);
         } else {
-            if (isset($dtoWordBody->fileId)) {
-                return FileHelper::fresnsFileInfoByFid($dtoWordBody->fid);
-            } else {
-                return FileHelper::fresnsFileInfoById($dtoWordBody->fileId);
-            }
+            return FileHelper::fresnsFileInfo($dtoWordBody->fileId ?? $dtoWordBody->fid);
         }
     }
 
@@ -371,6 +351,7 @@ class File
         $langTag = \request()->header('langTag', config('app.locale'));
 
         $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(1);
+
         if (empty($fileConfigInfo['service'])) {
             return $this->failure(
                 21000,
@@ -378,9 +359,7 @@ class File
             );
         }
 
-        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(1);
-
-        if ($antiLinkStatus) {
+        if ($fileConfigInfo['antiLinkConfigStatus']) {
             return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForImageList($dtoWordBody);
         }
 
@@ -393,6 +372,7 @@ class File
         $langTag = \request()->header('langTag', config('app.locale'));
 
         $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(2);
+
         if (empty($fileConfigInfo['service'])) {
             return $this->failure(
                 21000,
@@ -400,9 +380,7 @@ class File
             );
         }
 
-        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(2);
-
-        if ($antiLinkStatus) {
+        if ($fileConfigInfo['antiLinkConfigStatus']) {
             return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForVideoList($dtoWordBody);
         }
 
@@ -415,6 +393,7 @@ class File
         $langTag = \request()->header('langTag', config('app.locale'));
 
         $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(3);
+
         if (empty($fileConfigInfo['service'])) {
             return $this->failure(
                 21000,
@@ -422,9 +401,7 @@ class File
             );
         }
 
-        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(3);
-
-        if ($antiLinkStatus) {
+        if ($fileConfigInfo['antiLinkConfigStatus']) {
             return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForAudioList($dtoWordBody);
         }
 
@@ -437,6 +414,7 @@ class File
         $langTag = \request()->header('langTag', config('app.locale'));
 
         $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(4);
+
         if (empty($fileConfigInfo['service'])) {
             return $this->failure(
                 21000,
@@ -444,9 +422,7 @@ class File
             );
         }
 
-        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(4);
-
-        if ($antiLinkStatus) {
+        if ($fileConfigInfo['antiLinkConfigStatus']) {
             return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForDocumentList($dtoWordBody);
         }
 

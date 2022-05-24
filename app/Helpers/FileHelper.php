@@ -9,6 +9,7 @@
 namespace App\Helpers;
 
 use App\Models\File;
+use App\Models\FileAppend;
 
 class FileHelper
 {
@@ -19,7 +20,6 @@ class FileHelper
             2 => 'video',
             3 => 'audio',
             4 => 'document',
-            default => 'image',
         };
 
         $data = ConfigHelper::fresnsConfigByItemKeys([
@@ -46,47 +46,142 @@ class FileHelper
             'antiLinkExpire' => $data["{$key}_url_expire"],
         ];
 
+        $config['storageConfigStatus'] = true;
+        if (empty($config['service']) || empty($config['secretId']) || empty($config['secretKey']) || empty($config['bucketName']) || empty($config['bucketDomain'])) {
+            $config['storageConfigStatus'] = false;
+        }
+
+        $config['antiLinkConfigStatus'] = true;
+        if (! $config['antiLinkStatus']) {
+            $config['antiLinkConfigStatus'] = false;
+        }
+        if (empty($config['service']) || empty($config['antiLinkKey']) || empty($config['antiLinkExpire'])) {
+            $config['antiLinkConfigStatus'] = false;
+        }
+
         return $config;
     }
 
-    public static function fresnsFileStorageConfigStatusByType(int $type)
+    // get file info by id or fid
+    public static function fresnsFileInfo(string $fileIdOrFid)
     {
-        $config = FileHelper::fresnsFileStorageConfigByType($type);
-
-        if (empty($config['service']) || empty($config['secretId']) || empty($config['secretKey']) || empty($config['bucketName']) || empty($config['bucketDomain'])) {
-            return false;
+        if (is_numeric($fileIdOrFid)) {
+            $file = File::whereId($fileIdOrFid)->first();
+        } else {
+            $file = File::whereFid($fileIdOrFid)->first();
         }
 
-        return true;
-    }
-
-    public static function fresnsFileAntiLinkStatusByType(int $type)
-    {
-        $config = FileHelper::fresnsFileStorageConfigByType($type);
-
-        if (! $config['antiLinkStatus']) {
-            return false;
+        if (empty($file)) {
+            return null;
         }
 
-        if (empty($config['service']) || empty($config['antiLinkKey']) || empty($config['antiLinkExpire'])) {
-            return false;
+        $storageConfig = FileHelper::fresnsFileStorageConfigByType($file->type);
+
+        if ($storageConfig['antiLinkConfigStatus']) {
+            switch ($file->type) {
+                // Image
+                case 1:
+                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoForImage([
+                        'fileId' => $file->id,
+                    ]);
+                break;
+
+                // Video
+                case 2:
+                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoForVideo([
+                        'fileId' => $file->id,
+                    ]);
+                break;
+
+                // Audio
+                case 3:
+                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoForAudio([
+                        'fileId' => $file->id,
+                    ]);
+                break;
+
+                // Document
+                case 4:
+                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoForDocument([
+                        'fileId' => $file->id,
+                    ]);
+                break;
+            }
+
+            return $fresnsResponse->getData() ?? null;
         }
-
-        return true;
-    }
-
-    public static function fresnsFileInfoById(int $fileId)
-    {
-        $file = File::whereId($fileId)->firstOrFail();
 
         return $file->getFileInfo();
     }
 
-    public static function fresnsFileInfoByFid(string $fid)
+    public static function fresnsFileInfoListByTable(string $tableName, string $tableColumn, ?int $tableId = null, ?string $tableKey = null)
     {
-        $file = File::whereFid($fid)->firstOrFail();
+        $fileAppendQuery =  FileAppend::with('file')
+            ->where('table_name', $tableName)
+            ->where('table_column', $tableColumn)
+            ->orderBy('rating');
 
-        return $file->getFileInfo();
+        if (empty($tableId)) {
+            $fileAppendQuery->where('table_key', $tableKey);
+        } else{
+            $fileAppendQuery->where('table_id', $tableId);
+        }
+
+        $fileAppends = $fileAppendQuery->get();
+
+        $fileList = $fileAppends->map(fn ($fileAppend) => $fileAppend->file->getFileInfo())->groupBy('type');
+
+        $files['images'] = $fileList->get(1)?->all() ?? null;
+        $files['videos'] = $fileList->get(2)?->all() ?? null;
+        $files['audios'] = $fileList->get(3)?->all() ?? null;
+        $files['documents'] = $fileList->get(4)?->all() ?? null;
+
+        $imageStorageConfig = FileHelper::fresnsFileStorageConfigByType(1);
+        $videoStorageConfig = FileHelper::fresnsFileStorageConfigByType(2);
+        $audioStorageConfig = FileHelper::fresnsFileStorageConfigByType(3);
+        $documentStorageConfig = FileHelper::fresnsFileStorageConfigByType(4);
+
+        if ($imageStorageConfig['antiLinkConfigStatus'] && empty($files['images'])) {
+            $fids = $files['images']->pluck('fid')->get();
+
+            $fresnsResponse = \FresnsCmdWord::plugin($imageStorageConfig['service'])->getAntiLinkFileInfoForImageList([
+                'fids' => $fids,
+            ]);
+
+            $files['images'] = $fresnsResponse->getData();
+        }
+
+        if ($videoStorageConfig['antiLinkConfigStatus'] && empty($files['videos'])) {
+            $fids = $files['videos']->pluck('fid')->get();
+
+            $fresnsResponse = \FresnsCmdWord::plugin($videoStorageConfig['service'])->getAntiLinkFileInfoForVideoList([
+                'fids' => $fids,
+            ]);
+
+            $files['videos'] = $fresnsResponse->getData();
+        }
+
+        if ($audioStorageConfig['antiLinkConfigStatus'] && empty($files['audios'])) {
+            $fids = $files['audios']->pluck('fid')->get();
+
+            $fresnsResponse = \FresnsCmdWord::plugin($audioStorageConfig['service'])->getAntiLinkFileInfoForAudioList([
+                'fids' => $fids,
+            ]);
+
+            $files['audios'] = $fresnsResponse->getData();
+        }
+
+        if ($documentStorageConfig['antiLinkConfigStatus'] && empty($files['documents'])) {
+            $fids = $files['documents']->pluck('fid')->get();
+
+            $fresnsResponse = \FresnsCmdWord::plugin($documentStorageConfig['service'])->getAntiLinkFileInfoForDocumentList([
+                'fids' => $fids,
+            ]);
+
+            $files['documents'] = $fresnsResponse->getData();
+        }
+
+        return $files ?? null;
     }
 
     public static function fresnsFileImageUrlByColumn(?int $fileId = null, ?string $fileUrl = null, ?string $urlType = null)
@@ -101,7 +196,9 @@ class FileHelper
 
         $urlType = $urlType ?: 'imageConfigUrl';
 
-        if (FileHelper::fresnsFileAntiLinkStatusByType(1)) {
+        $antiLinkConfigStatus = FileHelper::fresnsFileStorageConfigByType(1)['antiLinkConfigStatus'];
+
+        if ($antiLinkConfigStatus) {
             $fresnsResponse = \FresnsCmdWord::plugin()->getFileInfo([
                 'fileId' => $fileId,
             ]);
@@ -109,7 +206,10 @@ class FileHelper
             return $fresnsResponse->getData($urlType) ?? null;
         }
 
-        $file = File::whereId($fileId)->firstOrFail();
+        $file = File::whereId($fileId)->first();
+        if (empty($file)) {
+            return null;
+        }
 
         return $file->getFileInfo()[$urlType] ?? null;
     }
