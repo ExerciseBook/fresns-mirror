@@ -45,7 +45,6 @@ class ThemeFunctionController extends Controller
 
         $configs = Config::whereIn('item_key', $functionKeys->pluck('itemKey'))->get();
         $configValue = $configs->pluck('item_value', 'item_key');
-        $configEnable = $configs->pluck('is_enable', 'item_key');
         $themeParams = [];
 
         // language keys
@@ -55,7 +54,6 @@ class ThemeFunctionController extends Controller
         foreach($functionKeys as $functionKey) {
             $key = $functionKey['itemKey'];
             $functionKey['value'] = $configValue[$key] ?? null;
-            $functionKey['is_enable'] = $configEnable[$key] ?? 0;
             // File
             if ($functionKey['itemType'] == 'file') {
                 $functionKey['fileType'] = ConfigHelper::fresnsConfigFileValueTypeByItemKey($key);
@@ -99,7 +97,7 @@ class ThemeFunctionController extends Controller
                         'tableType' => 2,
                         'tableName' => 'configs',
                         'tableColumn' => 'item_value',
-                        'tableKey' => $funcitonKey['itemKey'],
+                        'tableKey' => $functionKey['itemKey'],
                         'file' => $request->file($functionKey['itemKey'].'_file'),
                     ];
                     $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -119,13 +117,11 @@ class ThemeFunctionController extends Controller
             }
 
             $fresnsConfigItems[] = [
-                'item_value' => $value,
                 'item_key' => $functionKey['itemKey'],
+                'item_value' => $value,
                 'item_type' => $functionKey['itemType'],
                 'item_tag' => $functionKey['itemTag'],
                 'is_multilingual' => $functionKey['isMultilingual'],
-                'is_enable' => $request->is_enable ? ($request->is_enable[$functionKey['itemKey']] ?? 0) : 0,
-                'is_custom' => 1,
             ];
         }
         ConfigUtility::changeFresnsConfigItems($fresnsConfigItems);
@@ -174,13 +170,11 @@ class ThemeFunctionController extends Controller
         $content = $request->languages[$this->defaultLanguage] ?? current(array_filter($request->languages));
 
         $fresnsConfigItems[] = [
-            'item_value' => $content,
             'item_key' => $functionKey['itemKey'],
+            'item_value' => $content,
             'item_type' => $functionKey['itemType'],
             'item_tag' => $functionKey['itemTag'],
             'is_multilingual' => $functionKey['isMultilingual'],
-            'is_enable' => $request->is_enable ? ($request->is_enable[$functionKey['itemKey']] ?? 0) : 0,
-            'is_custom' => 1,
         ];
 
         ConfigUtility::changeFresnsConfigItems($fresnsConfigItems);
