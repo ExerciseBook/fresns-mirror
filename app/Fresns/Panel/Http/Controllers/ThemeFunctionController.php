@@ -71,7 +71,6 @@ class ThemeFunctionController extends Controller
                 $functionKey['defaultLanguage'] = $languages->where('table_key', $key)->where('lang_tag', $this->defaultLanguage)->first()['lang_content'] ?? '';
             }
 
-            $functionKey['isEnable'] = $configEnable[$key] ?? 0;
             $themeParams[$key] = $functionKey;
         }
 
