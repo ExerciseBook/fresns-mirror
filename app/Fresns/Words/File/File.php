@@ -9,7 +9,8 @@
 namespace App\Fresns\Words\File;
 
 use App\Fresns\Words\Config\WordConfig;
-use App\Fresns\Words\File\DTO\GetFileInfoDTO;
+use App\Fresns\Words\File\DTO\GetAntiLinkFileInfoDTO;
+use App\Fresns\Words\File\DTO\GetAntiLinkFileInfoListDTO;
 use App\Fresns\Words\File\DTO\GetUploadTokenDTO;
 use App\Fresns\Words\File\DTO\LogicalDeletionFileDTO;
 use App\Fresns\Words\File\DTO\PhysicalDeletionFileDTO;
@@ -254,37 +255,202 @@ class File
      *
      * @throws \Throwable
      */
-    public function getFileInfo($wordBody)
+    public function getAntiLinkFileInfoForImage($wordBody)
     {
-        $dtoWordBody = new GetFileInfoDTO($wordBody);
+        $dtoWordBody = new GetAntiLinkFileInfoDTO($wordBody);
         $langTag = \request()->header('langTag', config('app.locale'));
 
-        if (isset($dtoWordBody->fileId)) {
-            $file = FileModel::whereFid($dtoWordBody->fid)->firstOrFail();
-        } else {
-            $file = FileModel::whereId($dtoWordBody->fileId)->firstOrFail();
-        }
-
-        if (empty($file)) {
+        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(1);
+        if (empty($fileConfigInfo['service'])) {
             return $this->failure(
-                21009,
-                ConfigUtility::getCodeMessage(21009, 'CmdWord', $langTag),
+                21000,
+                ConfigUtility::getCodeMessage(21000, 'CmdWord', $langTag),
             );
         }
 
-        $fileAntiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType($file->type);
-        if (! $fileAntiLinkStatus) {
-            return $file->getFileInfo();
+        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(1);
+
+        if ($antiLinkStatus) {
+            return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForImage($dtoWordBody);
+        } else {
+            if (isset($dtoWordBody->fileId)) {
+                return FileHelper::fresnsFileInfoByFid($dtoWordBody->fid);
+            } else {
+                return FileHelper::fresnsFileInfoById($dtoWordBody->fileId);
+            }
+        }
+    }
+
+    public function getAntiLinkFileInfoForVideo($wordBody)
+    {
+        $dtoWordBody = new GetAntiLinkFileInfoDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(2);
+        if (empty($fileConfigInfo['service'])) {
+            return $this->failure(
+                21000,
+                ConfigUtility::getCodeMessage(21000, 'CmdWord', $langTag),
+            );
         }
 
-        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType($file->type);
-        $fileConfigStatus = FileHelper::fresnsFileStorageConfigStatusByType($file->type);
+        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(2);
 
-        if ($fileConfigStatus) {
-            return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getFileInfo($wordBody);
+        if ($antiLinkStatus) {
+            return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForVideo($dtoWordBody);
+        } else {
+            if (isset($dtoWordBody->fileId)) {
+                return FileHelper::fresnsFileInfoByFid($dtoWordBody->fid);
+            } else {
+                return FileHelper::fresnsFileInfoById($dtoWordBody->fileId);
+            }
+        }
+    }
+
+    public function getAntiLinkFileInfoForAudio($wordBody)
+    {
+        $dtoWordBody = new GetAntiLinkFileInfoDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(3);
+        if (empty($fileConfigInfo['service'])) {
+            return $this->failure(
+                21000,
+                ConfigUtility::getCodeMessage(21000, 'CmdWord', $langTag),
+            );
         }
 
-        return $file->getFileInfo();
+        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(3);
+
+        if ($antiLinkStatus) {
+            return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForAudio($dtoWordBody);
+        } else {
+            if (isset($dtoWordBody->fileId)) {
+                return FileHelper::fresnsFileInfoByFid($dtoWordBody->fid);
+            } else {
+                return FileHelper::fresnsFileInfoById($dtoWordBody->fileId);
+            }
+        }
+    }
+
+    public function getAntiLinkFileInfoForDocument($wordBody)
+    {
+        $dtoWordBody = new GetAntiLinkFileInfoDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(4);
+        if (empty($fileConfigInfo['service'])) {
+            return $this->failure(
+                21000,
+                ConfigUtility::getCodeMessage(21000, 'CmdWord', $langTag),
+            );
+        }
+
+        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(4);
+
+        if ($antiLinkStatus) {
+            return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForDocument($dtoWordBody);
+        } else {
+            if (isset($dtoWordBody->fileId)) {
+                return FileHelper::fresnsFileInfoByFid($dtoWordBody->fid);
+            } else {
+                return FileHelper::fresnsFileInfoById($dtoWordBody->fileId);
+            }
+        }
+    }
+
+    /**
+     * @param $wordBody
+     * @return array
+     *
+     * @throws \Throwable
+     */
+    public function getAntiLinkFileInfoForImageList($wordBody)
+    {
+        $dtoWordBody = new GetAntiLinkFileInfoListDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(1);
+        if (empty($fileConfigInfo['service'])) {
+            return $this->failure(
+                21000,
+                ConfigUtility::getCodeMessage(21000, 'CmdWord', $langTag),
+            );
+        }
+
+        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(1);
+
+        if ($antiLinkStatus) {
+            return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForImageList($dtoWordBody);
+        }
+
+        return FileHelper::fresnsFileInfoList($dtoWordBody->tableName, $dtoWordBody->tableColumn, $dtoWordBody->tableId, $dtoWordBody->tableKey);
+    }
+
+    public function getAntiLinkFileInfoForVideoList($wordBody)
+    {
+        $dtoWordBody = new GetAntiLinkFileInfoListDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(2);
+        if (empty($fileConfigInfo['service'])) {
+            return $this->failure(
+                21000,
+                ConfigUtility::getCodeMessage(21000, 'CmdWord', $langTag),
+            );
+        }
+
+        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(2);
+
+        if ($antiLinkStatus) {
+            return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForVideoList($dtoWordBody);
+        }
+
+        return FileHelper::fresnsFileInfoList($dtoWordBody->tableName, $dtoWordBody->tableColumn, $dtoWordBody->tableId, $dtoWordBody->tableKey);
+    }
+
+    public function getAntiLinkFileInfoForAudioList($wordBody)
+    {
+        $dtoWordBody = new GetAntiLinkFileInfoListDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(3);
+        if (empty($fileConfigInfo['service'])) {
+            return $this->failure(
+                21000,
+                ConfigUtility::getCodeMessage(21000, 'CmdWord', $langTag),
+            );
+        }
+
+        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(3);
+
+        if ($antiLinkStatus) {
+            return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForAudioList($dtoWordBody);
+        }
+
+        return FileHelper::fresnsFileInfoList($dtoWordBody->tableName, $dtoWordBody->tableColumn, $dtoWordBody->tableId, $dtoWordBody->tableKey);
+    }
+
+    public function getAntiLinkFileInfoForDocumentList($wordBody)
+    {
+        $dtoWordBody = new GetAntiLinkFileInfoListDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType(4);
+        if (empty($fileConfigInfo['service'])) {
+            return $this->failure(
+                21000,
+                ConfigUtility::getCodeMessage(21000, 'CmdWord', $langTag),
+            );
+        }
+
+        $antiLinkStatus = FileHelper::fresnsFileAntiLinkStatusByType(4);
+
+        if ($antiLinkStatus) {
+            return \FresnsCmdWord::plugin($fileConfigInfo['service'])->getAntiLinkFileInfoForDocumentList($dtoWordBody);
+        }
+
+        return FileHelper::fresnsFileInfoList($dtoWordBody->tableName, $dtoWordBody->tableColumn, $dtoWordBody->tableId, $dtoWordBody->tableKey);
     }
 
     /**

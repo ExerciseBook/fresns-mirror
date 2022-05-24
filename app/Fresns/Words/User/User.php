@@ -8,10 +8,8 @@
 
 namespace App\Fresns\Words\User;
 
-use App\Fresns\Words\Service\UserService;
 use App\Fresns\Words\User\DTO\AddUserDTO;
 use App\Fresns\Words\User\DTO\DeactivateUserDialogDTO;
-use App\Fresns\Words\User\DTO\GetUserDetailDTO;
 use App\Fresns\Words\User\DTO\LogicalDeletionUserDTO;
 use App\Fresns\Words\User\DTO\VerifyUserDTO;
 use App\Helpers\ConfigHelper;
@@ -89,39 +87,6 @@ class User
         }
         $result = false;
         $data = ['aid' => $user->aid, 'uid' => $user->account_id];
-
-        return $this->success();
-    }
-
-    /**
-     * @param $wordBody
-     * @return mixed
-     *
-     * @throws \Throwable
-     */
-    public function getUserDetail($wordBody)
-    {
-        $dtoWordBody = new GetUserDetailDTO($wordBody);
-
-        if (isset($dtoWordBody->uid)) {
-            $condition = ['uid' => $dtoWordBody->uid];
-        } else {
-            $condition = ['username' => $dtoWordBody->username];
-        }
-        $userId = UserModel::where($condition)->value('id');
-        if (empty($userId)) {
-            ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_DATA_ERROR)::throw();
-        }
-
-        if (empty($dtoWordBody->langTag)) {
-            $dtoWordBody->langTag = ConfigHelper::fresnsConfigByItemKey('default_language');
-        }
-        if (empty($dtoWordBody->timezone)) {
-            $dtoWordBody->timezone = ConfigHelper::fresnsConfigByItemKey('default_timezone');
-        }
-
-        $service = new UserService();
-        $detail = $service->detail($userId, $dtoWordBody->langTag, $dtoWordBody->timezone);
 
         return $this->success();
     }

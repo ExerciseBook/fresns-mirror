@@ -10,12 +10,9 @@ namespace App\Fresns\Words\Account;
 
 use App\Fresns\Words\Account\DTO\AddAccountDTO;
 use App\Fresns\Words\Account\DTO\CreateSessionTokenDTO;
-use App\Fresns\Words\Account\DTO\GetAccountDetailDTO;
 use App\Fresns\Words\Account\DTO\LogicalDeletionAccountDTO;
 use App\Fresns\Words\Account\DTO\VerifyAccountDTO;
 use App\Fresns\Words\Account\DTO\VerifySessionTokenDTO;
-use App\Fresns\Words\Service\AccountService;
-use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\Account as AccountModel;
 use App\Models\AccountConnect;
@@ -125,28 +122,6 @@ class Account
         } else {
             ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_DATA_ERROR)::throw();
         }
-    }
-
-    /**
-     * @param $wordBody
-     * @return array
-     *
-     * @throws \Throwable
-     */
-    public function getAccountDetail($wordBody)
-    {
-        $dtoWordBody = new GetAccountDetailDTO($wordBody);
-        $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
-        if (empty($dtoWordBody->langTag)) {
-            $dtoWordBody->langTag = ConfigHelper::fresnsConfigByItemKey('default_language');
-        }
-        if (empty($dtoWordBody->timezone)) {
-            $dtoWordBody->timezone = ConfigHelper::fresnsConfigByItemKey('default_timezone');
-        }
-        $service = new AccountService();
-        $data = $service->getAccountDetail($accountId, $dtoWordBody->langTag, $dtoWordBody->timezone);
-
-        return $this->success($data);
     }
 
     /**
