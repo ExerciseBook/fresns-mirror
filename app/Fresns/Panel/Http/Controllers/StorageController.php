@@ -362,7 +362,7 @@ class StorageController extends Controller
     {
         if ($request->file('substitution_image_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 2,
                 'tableName' => 'configs',
@@ -382,7 +382,7 @@ class StorageController extends Controller
 
         if ($request->file('substitution_video_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 2,
                 'tableName' => 'configs',
@@ -402,7 +402,7 @@ class StorageController extends Controller
 
         if ($request->file('substitution_audio_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 2,
                 'tableName' => 'configs',
@@ -422,7 +422,7 @@ class StorageController extends Controller
 
         if ($request->file('substitution_document_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 2,
                 'tableName' => 'configs',

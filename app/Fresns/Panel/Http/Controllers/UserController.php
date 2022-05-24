@@ -81,7 +81,7 @@ class UserController extends Controller
     {
         if ($request->file('default_avatar_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 2,
                 'tableName' => 'configs',
@@ -101,7 +101,7 @@ class UserController extends Controller
 
         if ($request->file('anonymous_avatar_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 2,
                 'tableName' => 'configs',
@@ -121,7 +121,7 @@ class UserController extends Controller
 
         if ($request->file('deactivate_avatar_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 2,
                 'tableName' => 'configs',

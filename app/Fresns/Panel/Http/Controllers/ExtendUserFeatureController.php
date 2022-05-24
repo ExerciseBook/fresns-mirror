@@ -50,7 +50,7 @@ class ExtendUserFeatureController extends Controller
 
         if ($request->file('icon_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'plugin_usages',
@@ -112,7 +112,7 @@ class ExtendUserFeatureController extends Controller
         $pluginUsage->roles = $request->roles ? implode(',', $request->roles) : $pluginUsage->roles;
         if ($request->file('icon_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'plugin_usages',

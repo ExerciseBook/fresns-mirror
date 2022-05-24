@@ -25,7 +25,7 @@ class UploadSessionLogDTO extends DTO
     {
         return [
             'pluginUnikey' => ['nullable', 'string'],
-            'platform' => ['required', 'integer'],
+            'platformId' => ['required', 'integer'],
             'version' => ['required', 'string'],
             'langTag' => ['nullable', 'string'],
             'aid' => ['nullable', 'string'],

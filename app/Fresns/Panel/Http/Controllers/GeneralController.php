@@ -83,7 +83,7 @@ class GeneralController extends Controller
     {
         if ($request->file('site_icon_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 2,
                 'tableName' => 'configs',
@@ -103,7 +103,7 @@ class GeneralController extends Controller
 
         if ($request->file('site_logo_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 2,
                 'tableName' => 'configs',

@@ -171,7 +171,7 @@ class WalletController extends Controller
 
         if ($request->file('icon_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'plugin_usages',
@@ -229,7 +229,7 @@ class WalletController extends Controller
 
         if ($request->file('icon_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'plugin_usages',
@@ -310,7 +310,7 @@ class WalletController extends Controller
 
         if ($request->file('icon_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'plugin_usages',
@@ -368,7 +368,7 @@ class WalletController extends Controller
 
         if ($request->file('icon_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'plugin_usages',

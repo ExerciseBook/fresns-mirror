@@ -118,7 +118,7 @@ class File
         $appendInput = [
             'file_id' => $retId,
             'file_type' => $dtoWordBody->type,
-            'platform_id' => $dtoWordBody->platform,
+            'platform_id' => $dtoWordBody->platformId,
             'table_type' => $dtoWordBody->tableType,
             'table_name' => $dtoWordBody->tableName,
             'table_column' => $dtoWordBody->tableColumn,
@@ -226,7 +226,7 @@ class File
                 $append = [];
                 $append['file_id'] = $fieldId;
                 $append['file_type'] = $dtoWordBody->type;
-                $append['platform_id'] = $dtoWordBody->platform;
+                $append['platform_id'] = $dtoWordBody->platformId;
                 $append['table_type'] = $dtoWordBody->tableType;
                 $append['table_name'] = $dtoWordBody->tableName;
                 $append['table_column'] = $dtoWordBody->tableColumn;

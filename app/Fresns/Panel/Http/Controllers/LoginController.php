@@ -84,7 +84,7 @@ class LoginController extends Controller
             $deviceInfo = AppUtility::getDeviceInfo();
             $wordBody = [
                 'pluginUnikey' => 'Fresns',
-                'platform' => Browser::isMobile() ? 3 : 2,
+                'platformId' => Browser::isMobile() ? 3 : 2,
                 'version' => AppHelper::VERSION,
                 'langTag' => $langTag,
                 'aid' => (string) $account->aid, // aid by account number

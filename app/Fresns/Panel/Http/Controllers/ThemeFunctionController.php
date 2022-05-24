@@ -94,7 +94,7 @@ class ThemeFunctionController extends Controller
 
                 if ($request->file($functionKey['itemKey'].'_file')) {
                     $wordBody = [
-                        'platform' => 4,
+                        'platformId' => 4,
                         'type' => 1,
                         'tableType' => 2,
                         'tableName' => 'configs',

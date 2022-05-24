@@ -166,7 +166,7 @@ class Basis
 
         $input = [
             'plugin_unikey' => $dtoWordBody->pluginUnikey ?? 'Fresns',
-            'platform_id' => $dtoWordBody->platform,
+            'platform_id' => $dtoWordBody->platformId,
             'version' => $dtoWordBody->version,
             'lang_tag' => $dtoWordBody->langTag ?? null,
             'account_id' => $dtoWordBody->accountId ?? null,

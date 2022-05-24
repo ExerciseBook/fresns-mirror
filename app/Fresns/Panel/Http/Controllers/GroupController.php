@@ -180,7 +180,7 @@ class GroupController extends Controller
 
         if ($request->file('cover_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'groups',
@@ -201,7 +201,7 @@ class GroupController extends Controller
 
         if ($request->file('banner_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'groups',
@@ -304,7 +304,7 @@ class GroupController extends Controller
 
         if ($request->file('cover_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'groups',
@@ -327,7 +327,7 @@ class GroupController extends Controller
 
         if ($request->file('banner_file')) {
             $wordBody = [
-                'platform' => 4,
+                'platformId' => 4,
                 'type' => 1,
                 'tableType' => 3,
                 'tableName' => 'groups',

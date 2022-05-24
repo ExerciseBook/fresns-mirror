@@ -21,7 +21,7 @@ class UploadFileDTO extends DTO
     public function rules(): array
     {
         return [
-            'platform' => ['required', 'integer'],
+            'platformId' => ['required', 'integer'],
             'type' => ['required', 'in:1,2,3,4'],
             'tableType' => ['required', 'integer'],
             'tableName' => ['required', 'string'],

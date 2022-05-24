@@ -167,7 +167,7 @@ class Account
         $condition = [
             'account_id' => $accountId,
             'user_id' => $userId ?? null,
-            'platform_id' => $dtoWordBody->platform,
+            'platform_id' => $dtoWordBody->platformId,
         ];
         $tokenCount = SessionToken::where($condition)->first();
         if ($tokenCount) {
