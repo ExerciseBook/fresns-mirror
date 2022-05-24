@@ -33,7 +33,7 @@ class PostController extends Controller
         $postList = [];
         foreach ($posts as $post) {
             $service = new PostService();
-            $postList[] = $service->postInfo($post->pid, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+            $postList[] = $service->postDetail($post->id, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
@@ -57,7 +57,7 @@ class PostController extends Controller
         $data['commons'] = $common;
 
         $service = new PostService();
-        $data['detail'] = $service->postInfo($pid, 'detail', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+        $data['detail'] = $service->postDetail($post->id, 'detail', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
 
         return $this->success($data);
     }

@@ -10,9 +10,9 @@ namespace App\Fresns\Api\Services;
 
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
+use App\Helpers\FileHelper;
 use App\Helpers\PluginHelper;
 use App\Helpers\InteractiveHelper;
-use App\Models\File;
 use App\Models\Post;
 use App\Models\User;
 use App\Utilities\ExtendUtility;
@@ -22,12 +22,15 @@ use Illuminate\Support\Str;
 
 class PostService
 {
-    public function postInfo(string $pid, string $type, ?int $mapId = null, ?string $userLng = null, ?string $userLat = null)
+    public function postDetail(int $postId, string $type, ?int $mapId = null, ?string $userLng = null, ?string $userLat = null)
     {
         $headers = AppHelper::getApiHeaders();
         $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
-        $post = Post::with('creator')->wherePid($pid)->first();
+        $post = Post::with('creator')->whereId($postId)->first();
+        if (empty($post)) {
+            return null;
+        }
 
         $postInfo = $post->getPostInfo($headers['langTag'], $headers['timezone']);
 
@@ -68,21 +71,15 @@ class PostService
             }
         }
 
-        $fileList = (new File)->getFileListInfo('posts', 'id', $post->id);
-        $files['images'] = $fileList->get(File::TYPE_IMAGE)?->all() ?? null;
-        $files['videos'] = $fileList->get(File::TYPE_VIDEO)?->all() ?? null;
-        $files['audios'] = $fileList->get(File::TYPE_AUDIO)?->all() ?? null;
-        $files['documents'] = $fileList->get(File::TYPE_DOCUMENT)?->all() ?? null;
-        $item['files'] = $files;
-
+        $item['files'] = FileHelper::fresnsAntiLinkFileInfoListByTable('posts', 'id', $post->id);
+        $item['extends'] = ExtendUtility::getExtends(4, $post->id, $headers['langTag']);
         $item['icons'] = ExtendUtility::getIcons(4, $post->id, $headers['langTag']);
         $item['tips'] = ExtendUtility::getTips(4, $post->id, $headers['langTag']);
-        $item['extends'] = ExtendUtility::getExtends(4, $post->id, $headers['langTag']);
 
-        $attachCount['images'] = $fileList->get(File::TYPE_IMAGE)?->count() ?? 0;
-        $attachCount['videos'] = $fileList->get(File::TYPE_VIDEO)?->count() ?? 0;
-        $attachCount['audios'] = $fileList->get(File::TYPE_AUDIO)?->count() ?? 0;
-        $attachCount['documents'] = $fileList->get(File::TYPE_DOCUMENT)?->count() ?? 0;
+        $attachCount['images'] = collect($item['files']['images'])->count();
+        $attachCount['videos'] = collect($item['files']['videos'])->count();
+        $attachCount['audios'] = collect($item['files']['audios'])->count();
+        $attachCount['documents'] = collect($item['files']['documents'])->count();
         $attachCount['icons'] = collect($item['icons'])->count();
         $attachCount['tips'] = collect($item['tips'])->count();
         $attachCount['extends'] = collect($item['extends'])->count();
@@ -117,9 +114,9 @@ class PostService
 
         $postInteractive = InteractiveHelper::fresnsPostInteractive($headers['langTag']);
 
-        $postInfo = array_merge($postInfo, $item, $postInteractive);
+        $detail = array_merge($postInfo, $item, $postInteractive);
 
-        return $postInfo;
+        return $detail;
     }
 
     public static function isCanEdit(string $createTime, int $stickyState, int $digestState): bool

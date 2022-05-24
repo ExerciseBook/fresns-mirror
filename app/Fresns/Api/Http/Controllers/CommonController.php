@@ -8,7 +8,9 @@
 
 namespace App\Fresns\Api\Http\Controllers;
 
+use App\Fresns\Api\Http\DTO\CommonCallbacksDTO;
 use App\Fresns\Api\Http\DTO\CommonInputTipsDTO;
+use App\Fresns\Api\Services\AccountService;
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\LanguageHelper;
@@ -16,8 +18,11 @@ use App\Helpers\FileHelper;
 use App\Models\Extend;
 use App\Models\Hashtag;
 use App\Models\Language;
+use App\Models\Plugin;
 use App\Models\Post;
 use App\Models\User;
+use App\Exceptions\ApiException;
+use App\Models\PluginCallback;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -143,6 +148,53 @@ class CommonController extends Controller
                 }
             break;
         }
+
+        return $this->success($data);
+    }
+
+    // callbacks
+    public function callbacks(Request $request)
+    {
+        $dtoRequest = new CommonCallbacksDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $plugin = Plugin::whereUnikey($dtoRequest->unikey)->first();
+        if (empty($plugin)) {
+            throw new ApiException(32304);
+        }
+
+        $callback = PluginCallback::whereUuid($dtoRequest->uuid)->first();
+
+        if (empty($callback)) {
+            throw new ApiException(32201);
+        }
+
+        if ($callback->is_use == 1) {
+            throw new ApiException(32204);
+        }
+
+        $timeDifference = time() - strtotime($callback->created_at);
+        if ($timeDifference > 600) {
+            throw new ApiException(32203);
+        }
+
+        $data['types'] = explode(',', $callback->types);
+        $data['dbContent'] = $callback->content;
+        $data['apiContent'] = $apiContent;
+
+        if (in_array(2, $data['types'])) {
+            $service = new AccountService();
+            $data['apiContent']['account'] = $service->accountDetail($callback->account_id);
+        }
+
+        if (in_array(4, $data['types'])) {
+            $service = new AccountService();
+            $data['apiContent']['account'] = $service->accountDetail($callback->account_id);
+        }
+
+        $callback->is_use = 1;
+        $callback->use_plugin_unikey = $dtoRequest->unikey;
+        $callback->save();
 
         return $this->success($data);
     }

@@ -9,10 +9,10 @@
 namespace App\Fresns\Api\Http\Controllers;
 
 use App\Helpers\AppHelper;
-use App\Helpers\InteractiveHelper;
-use App\Models\Account;
+use App\Fresns\Api\Services\AccountService;
 use App\Utilities\ExtendUtility;
 use App\Exceptions\ApiException;
+use App\Helpers\PrimaryHelper;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -21,30 +21,17 @@ class AccountController extends Controller
     {
         $headers = AppHelper::getApiHeaders();
 
-        $account = Account::whereAid($headers['aid'])->first();
+        $accountId = PrimaryHelper::fresnsAccountIdByAid($headers['aid']);
         if (empty($account)) {
             throw new ApiException(31502);
         }
 
-        $common['walletRecharges'] = ExtendUtility::getPluginExtends(1, null, null, $account->id, $headers['langTag']);
-        $common['walletWithdraws'] = ExtendUtility::getPluginExtends(2, null, null, $account->id, $headers['langTag']);
+        $common['walletRecharges'] = ExtendUtility::getPluginExtends(1, null, null, $accountId, $headers['langTag']);
+        $common['walletWithdraws'] = ExtendUtility::getPluginExtends(2, null, null, $accountId, $headers['langTag']);
         $data['commons'] = $common;
 
-        $userArr = $account->users;
-        $userList = [];
-        foreach ($userArr as $user) {
-            $userProfile = $user->getUserProfile($headers['langTag'], $headers['timezone']);
-            $userMainRole = $user->getUserMainRole($headers['langTag'], $headers['timezone']);
-            $userList[] = array_merge($userProfile, $userMainRole);
-        }
-
-        $accountInfo = $account->getAccountInfo($headers['langTag'], $headers['timezone']);
-        $item['connects'] = $account->getAccountConnects();
-        $item['wallet'] = $account->getAccountWallet($headers['langTag']);
-        $item['users'] = $userList;
-        $userInteractive = InteractiveHelper::fresnsUserInteractive($headers['langTag']);
-
-        $data['detail'] = array_merge($accountInfo, $item, $userInteractive);
+        $service = new AccountService();
+        $data['detail'] = $service->accountDetail($accountId);
 
         return $this->success($data);
     }

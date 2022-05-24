@@ -7,12 +7,13 @@
  */
 
 use App\Fresns\Api\Http\Controllers\AccountController;
-use App\Fresns\Api\Http\Controllers\UserController;
-use App\Fresns\Api\Http\Controllers\GroupController;
+use App\Fresns\Api\Http\Controllers\CommentController;
+use App\Fresns\Api\Http\Controllers\CommonController;
 use App\Fresns\Api\Http\Controllers\GlobalController;
+use App\Fresns\Api\Http\Controllers\GroupController;
 use App\Fresns\Api\Http\Controllers\HashtagController;
 use App\Fresns\Api\Http\Controllers\PostController;
-use App\Fresns\Api\Http\Controllers\CommentController;
+use App\Fresns\Api\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v2')->group(function () {
@@ -24,6 +25,16 @@ Route::prefix('v2')->group(function () {
         Route::get('content-type', [GlobalController::class, 'contentType'])->name('global.contentType');
         Route::get('stickers', [GlobalController::class, 'stickers'])->name('global.stickers');
         Route::get('block-words', [GlobalController::class, 'blockWords'])->name('global.blockWords');
+    });
+
+    Route::prefix('common')->group(function () {
+        Route::get('input-tips', [CommonController::class, 'inputTips'])->name('common.inputTips');
+        Route::get('callbacks', [CommonController::class, 'callbacks'])->name('common.callbacks');
+        Route::get('download-file', [CommonController::class, 'downloadFile'])->name('common.downloadFile');
+        Route::post('send-verify-code', [CommonController::class, 'sendVerifyCode'])->name('common.sendVerifyCode');
+        Route::post('upload-log', [CommonController::class, 'uploadLog'])->name('common.uploadLog');
+        Route::get('upload-token', [CommonController::class, 'uploadToken'])->name('common.uploadToken');
+        Route::post('upload-file', [CommonController::class, 'uploadFile'])->name('common.uploadFile');
     });
 
     Route::prefix('account')->group(function () {
