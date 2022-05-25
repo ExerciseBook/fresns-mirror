@@ -23,6 +23,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Exceptions\ApiException;
 use App\Models\PluginCallback;
+use App\Utilities\EditorUtility;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -180,16 +181,42 @@ class CommonController extends Controller
 
         $data['types'] = explode(',', $callback->types);
         $data['dbContent'] = $callback->content;
-        $data['apiContent'] = $apiContent;
+        $data['apiContent'] = $callback->content;
 
         if (in_array(2, $data['types'])) {
             $service = new AccountService();
             $data['apiContent']['account'] = $service->accountDetail($callback->account_id);
+
+            $fresnsResponse = \FresnsCmdWord::plugin()->createSessionToken([
+                'platformId' => $headers['platformId'],
+                'aid' => $data['apiContent']['account']['aid'],
+            ]);
+
+            if ($fresnsResponse->isSuccessResponse()) {
+                $data['apiContent']['account']['token'] = $fresnsResponse->getData('token') ?? null;
+                $data['apiContent']['account']['tokenExpiredTime'] = $fresnsResponse->getData('tokenExpiredTime') ?? null;
+            }
         }
 
         if (in_array(4, $data['types'])) {
-            $service = new AccountService();
-            $data['apiContent']['account'] = $service->accountDetail($callback->account_id);
+            $fids = array_column($callback->content['files'], 'fid');
+            $data['apiContent']['files'] = FileHelper::fresnsAntiLinkFileInfoList($fids);
+        }
+
+        if (in_array(5, $data['types'])) {
+            $data['apiContent']['extends'] = EditorUtility::extendHandle($callback->content['extends']);
+        }
+
+        if (in_array(6, $data['types'])) {
+            $data['apiContent']['readAllowConfig'] = EditorUtility::readAllowHandle($callback->content['readAllowConfig']);
+        }
+
+        if (in_array(7, $data['types'])) {
+            $data['apiContent']['userListConfig'] = EditorUtility::userListHandle($callback->content['userListConfig']);
+        }
+
+        if (in_array(8, $data['types'])) {
+            $data['apiContent']['commentBtnConfig'] = EditorUtility::commentBtnHandle($callback->content['commentBtnConfig']);
         }
 
         $callback->is_use = 1;
