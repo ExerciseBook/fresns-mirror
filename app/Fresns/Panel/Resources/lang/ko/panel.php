@@ -393,7 +393,7 @@ return [
     'send_sms_config' => 'SMS 구성',
     'send_sms_default_code' => '기본 국제 지역 코드',
     'send_sms_supported_codes' => '더 많은 지역 코드를 지원하십시오',
-    'send_sms_desc' => '한 줄, 지역 코드는 +입니다. 공백 대표는 단일 국가 만 지원합니다. 구성 이전에 서비스 제공 업체가 국제 SMS 기능을 지원하는지 확인하십시오',
+    'send_sms_desc' => '한 줄, 공백 대표는 단일 국가 만 지원합니다. 구성 이전에 서비스 제공 업체가 국제 SMS 기능을 지원하는지 확인하십시오',
     'send_ios_config' => 'iOS 구성',
     'send_ios_desc' => 'iOS 시스템 팝업 알림 기능',
     'send_android_config' => '안드로이드 구성',

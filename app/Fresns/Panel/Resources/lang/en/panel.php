@@ -393,7 +393,7 @@ return [
     'send_sms_config' => 'SMS Config',
     'send_sms_default_code' => 'Default Country Calling Code',
     'send_sms_supported_codes' => 'Country Calling Code Supported',
-    'send_sms_desc' => 'One in a row. Code with + symbol. Leave blank means only single country is supported. Please make sure the service provider supports international SMS function before configuration',
+    'send_sms_desc' => 'One in a row. Code without + symbol. Leave blank means only single country is supported. Please make sure the service provider supports international SMS function before configuration',
     'send_ios_config' => 'iOS Config',
     'send_ios_desc' => 'The iOS pop-up notification feature',
     'send_android_config' => 'Android Config',

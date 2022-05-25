@@ -393,7 +393,7 @@ return [
     'send_sms_config' => 'SMS構成',
     'send_sms_default_code' => 'デフォルトの国際市域コード',
     'send_sms_supported_codes' => 'より多くの市外局番をサポート',
-    'send_sms_desc' => '1行、エリアコードは+です。空白の代表者は単一の国だけをサポートします。構成の前にサービスプロバイダのサポート国際SMS機能を確認してください。',
+    'send_sms_desc' => '1回線につき1つの市外局番。空白の代表者は単一の国だけをサポートします。構成の前にサービスプロバイダのサポート国際SMS機能を確認してください。',
     'send_ios_config' => 'iOS構成',
     'send_ios_desc' => 'iOSシステムポップアップ通知機能',
     'send_android_config' => 'Androidの設定',

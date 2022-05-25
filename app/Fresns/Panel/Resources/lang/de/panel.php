@@ -393,7 +393,7 @@ return [
     'send_sms_config' => 'SMS-Konfiguration',
     'send_sms_default_code' => 'Standard-Internationaler Vorwahl',
     'send_sms_supported_codes' => 'Unterstützen Sie mehr Vorwahlcode',
-    'send_sms_desc' => 'Eine Zeile, der Vorwahl ist +. Der leere Vertreter unterstützt nur ein einziges Land. Bitte bestätigen Sie den Dienstanbieter unterstützen die internationale SMS-Funktion vor der Konfiguration',
+    'send_sms_desc' => 'Eine Zeile, Der leere Vertreter unterstützt nur ein einziges Land. Bitte bestätigen Sie den Dienstanbieter unterstützen die internationale SMS-Funktion vor der Konfiguration',
     'send_ios_config' => 'iOS-Konfiguration',
     'send_ios_desc' => 'IOS-System-Popup-Benachrichtigungsfunktion',
     'send_android_config' => 'Android-Konfiguration',

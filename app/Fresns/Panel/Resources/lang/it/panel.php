@@ -393,7 +393,7 @@ return [
     'send_sms_config' => 'Configurazione SMS',
     'send_sms_default_code' => 'Predefinito prefisso internazionale',
     'send_sms_supported_codes' => 'Supporta più prefisso',
-    'send_sms_desc' => 'Una riga, il prefisso dell\'area è +. Il rappresentante vuoto supporta solo un singolo paese. Si prega di confermare che il fornitore di servizi supporta la funzione SMS internazionale prima della configurazione',
+    'send_sms_desc' => 'Una riga, Il rappresentante vuoto supporta solo un singolo paese. Si prega di confermare che il fornitore di servizi supporta la funzione SMS internazionale prima della configurazione',
     'send_ios_config' => 'Configurazione iOS',
     'send_ios_desc' => 'Funzione di notifica pop-up del sistema iOS',
     'send_android_config' => 'Configurazione Android',

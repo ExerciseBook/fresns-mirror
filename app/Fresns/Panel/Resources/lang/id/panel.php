@@ -393,7 +393,7 @@ return [
     'send_sms_config' => 'Konfigurasi SMS',
     'send_sms_default_code' => 'Kode Area Internasional Default',
     'send_sms_supported_codes' => 'Mendukung lebih banyak kode area',
-    'send_sms_desc' => 'Satu baris, kode area adalah +. Perwakilan kosong hanya mendukung satu negara. Harap konfirmasi penyedia layanan mendukung fungsi SMS internasional sebelum konfigurasi',
+    'send_sms_desc' => 'Satu baris, Perwakilan kosong hanya mendukung satu negara. Harap konfirmasi penyedia layanan mendukung fungsi SMS internasional sebelum konfigurasi',
     'send_ios_config' => 'Konfigurasi iOS',
     'send_ios_desc' => 'Sistem Notifikasi Pop-Up Sistem iOS',
     'send_android_config' => 'Konfigurasi Android',

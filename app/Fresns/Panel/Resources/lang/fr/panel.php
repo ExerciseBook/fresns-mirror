@@ -393,7 +393,7 @@ return [
     'send_sms_config' => 'Configuration SMS',
     'send_sms_default_code' => 'Code régional international par défaut',
     'send_sms_supported_codes' => 'Soutenir plus d\'indicatif régional',
-    'send_sms_desc' => 'Une ligne, l\'indicatif régional est +. Le représentant vide ne prend en charge qu\'un seul pays. Veuillez confirmer que le fournisseur de service prend en charge la fonction SMS internationale avant la configuration',
+    'send_sms_desc' => 'Une ligne, Le représentant vide ne prend en charge qu\'un seul pays. Veuillez confirmer que le fournisseur de service prend en charge la fonction SMS internationale avant la configuration',
     'send_ios_config' => 'Configuration iOS',
     'send_ios_desc' => 'Fonction de notification contextuelle du système iOS',
     'send_android_config' => 'Configuration Android',

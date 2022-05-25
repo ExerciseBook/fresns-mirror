@@ -393,7 +393,7 @@ return [
     'send_sms_config' => '短信配置',
     'send_sms_default_code' => '默认国际区号',
     'send_sms_supported_codes' => '支持更多区号',
-    'send_sms_desc' => '一行一个，区号带 + 号。留空代表只支持单一国家。配置前请确认服务商支持国际短信功能。',
+    'send_sms_desc' => '一行一个，区号不带加号。留空代表只支持单一国家。配置前请确认服务商支持国际短信功能。',
     'send_ios_config' => 'iOS 配置',
     'send_ios_desc' => 'iOS 系统弹窗通知功能。',
     'send_android_config' => 'Android 配置',

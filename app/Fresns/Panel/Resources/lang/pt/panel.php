@@ -393,7 +393,7 @@ return [
     'send_sms_config' => 'Configuração do SMS',
     'send_sms_default_code' => 'Código de área internacional padrão',
     'send_sms_supported_codes' => 'Suporta mais código de área',
-    'send_sms_desc' => 'Uma linha, o código de área é +. O representante em branco só suporta um único país. Por favor, confirme o provedor de serviços Suporte a função SMS internacional antes da configuração',
+    'send_sms_desc' => 'Uma linha, O representante em branco só suporta um único país. Por favor, confirme o provedor de serviços Suporte a função SMS internacional antes da configuração',
     'send_ios_config' => 'Configuração do iOS',
     'send_ios_desc' => 'Função de notificação pop-up do sistema iOS',
     'send_android_config' => 'Configuração do Android',

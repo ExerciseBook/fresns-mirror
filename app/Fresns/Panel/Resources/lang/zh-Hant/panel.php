@@ -394,7 +394,7 @@ return [
     'send_sms_config' => '短信配置',
     'send_sms_default_code' => '默認國際區號',
     'send_sms_supported_codes' => '支持更多區號',
-    'send_sms_desc' => '一行一個，區號帶 + 號。留空代表只支持單一國家。配置前請確認服務商支持國際短信功能。',
+    'send_sms_desc' => '一行一個，區號不帶 + 號。留空代表只支持單一國家。配置前請確認服務商支持國際短信功能。',
     'send_ios_config' => 'iOS 配置',
     'send_ios_desc' => 'iOS 系統彈窗通知功能。',
     'send_android_config' => 'Android 配置',
