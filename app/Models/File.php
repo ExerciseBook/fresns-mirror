@@ -30,7 +30,7 @@ class File extends Model
 
     public function fileAppend()
     {
-        return $this->hasMany(FileAppend::class);
+        return $this->hasOne(FileAppend::class);
     }
 
     public function isImage()

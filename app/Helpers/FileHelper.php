@@ -212,6 +212,58 @@ class FileHelper
         return $file->getFileInfo()[$urlType] ?? null;
     }
 
+    // get file original url by file id or fid
+    public static function fresnsFileOriginalUrl(string $fileIdOrFid)
+    {
+        if (is_numeric($fileIdOrFid)) {
+            $file = File::whereId($fileIdOrFid)->first();
+        } else {
+            $file = File::whereFid($fileIdOrFid)->first();
+        }
+
+        if (empty($file)) {
+            return null;
+        }
+
+        $storageConfig = FileHelper::fresnsFileStorageConfigByType($file->type);
+
+        if ($storageConfig['antiLinkConfigStatus']) {
+            switch ($file->type) {
+                // Image
+                case 1:
+                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrlForImage([
+                        'fileId' => $file->id,
+                    ]);
+                break;
+
+                // Video
+                case 2:
+                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrlForVideo([
+                        'fileId' => $file->id,
+                    ]);
+                break;
+
+                // Audio
+                case 3:
+                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrlForAudio([
+                        'fileId' => $file->id,
+                    ]);
+                break;
+
+                // Document
+                case 4:
+                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrlForDocument([
+                        'fileId' => $file->id,
+                    ]);
+                break;
+            }
+
+            return $fresnsResponse->getData('fileUrl') ?? null;
+        }
+
+        return $file->getFileOriginalUrl();
+    }
+
     public static function getAntiLinkFileInfoList(array $files)
     {
         $imageStorageConfig = FileHelper::fresnsFileStorageConfigByType(1);

@@ -72,6 +72,10 @@ class CmdWordServiceProvider extends ServiceProvider implements \Fresns\CmdWordM
         ['word' => 'getAntiLinkFileInfoForVideoList', 'provider' => [File::class, 'getAntiLinkFileInfoForVideoList']],
         ['word' => 'getAntiLinkFileInfoForAudioList', 'provider' => [File::class, 'getAntiLinkFileInfoForAudioList']],
         ['word' => 'getAntiLinkFileInfoForDocumentList', 'provider' => [File::class, 'getAntiLinkFileInfoForDocumentList']],
+        ['word' => 'getAntiLinkFileOriginalUrlForImage', 'provider' => [File::class, 'getAntiLinkFileOriginalUrlForImage']],
+        ['word' => 'getAntiLinkFileOriginalUrlForVideo', 'provider' => [File::class, 'getAntiLinkFileOriginalUrlForVideo']],
+        ['word' => 'getAntiLinkFileOriginalUrlForAudio', 'provider' => [File::class, 'getAntiLinkFileOriginalUrlForAudio']],
+        ['word' => 'getAntiLinkFileOriginalUrlForDocument', 'provider' => [File::class, 'getAntiLinkFileOriginalUrlForDocument']],
         ['word' => 'logicalDeletionFile', 'provider' => [File::class, 'logicalDeletionFile']],
         ['word' => 'physicalDeletionFile', 'provider' => [File::class, 'physicalDeletionFile']],
 

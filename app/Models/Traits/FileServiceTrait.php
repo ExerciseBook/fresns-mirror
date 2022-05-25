@@ -9,11 +9,25 @@
 namespace App\Models\Traits;
 
 use App\Helpers\ConfigHelper;
+use App\Helpers\FileHelper;
 use App\Helpers\StrHelper;
 use App\Models\File;
 
 trait FileServiceTrait
 {
+    public function getFileOriginalUrl()
+    {
+        $fileData = $this;
+
+        $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType($fileData->type);
+
+        $path = $fileData->fileAppend->original_path ?? $fileData->path;
+
+        $originalUrl = StrHelper::qualifyUrl($path, $fileConfigInfo['bucketDomain']);
+
+        return $originalUrl;
+    }
+
     public function getFileInfo()
     {
         $fileData = $this;
