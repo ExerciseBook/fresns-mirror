@@ -26,6 +26,8 @@ use App\Models\Notify;
 use App\Exceptions\ApiException;
 use App\Models\BlockWord;
 use App\Models\Role;
+use App\Models\Sticker;
+use App\Utilities\CollectionUtility;
 use App\Utilities\ExtendUtility;
 use Illuminate\Http\Request;
 
@@ -164,6 +166,15 @@ class GlobalController extends Controller
         $data = ExtendUtility::getPluginExtends(4, null, null, null, $headers['langTag']);
 
         return $this->success($data);
+    }
+
+    public function stickers()
+    {
+        $stickers = Sticker::all();
+
+        $stickerTree = CollectionUtility::toTree($stickers->toArray());
+
+        return $this->success($stickerTree);
     }
 
     // blockWords
