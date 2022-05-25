@@ -44,11 +44,11 @@ class GlobalController extends Controller
 
         $configQuery = Config::where('is_api', 1);
 
-        if (! empty($itemKey) && ! empty($itemTag)) {
+        if (!empty($itemKey) && !empty($itemTag)) {
             $configQuery->whereIn('item_key', $itemKey)->orWhereIn('item_tag', $itemTag);
-        } elseif (! empty($itemKey) && empty($itemTag)) {
+        } elseif (!empty($itemKey) && empty($itemTag)) {
             $configQuery->whereIn('item_key', $itemKey);
-        } elseif (empty($itemKey) && ! empty($itemTag)) {
+        } elseif (empty($itemKey) && !empty($itemTag)) {
             $configQuery->whereIn('item_tag', $itemTag);
         }
 
@@ -122,7 +122,7 @@ class GlobalController extends Controller
 
         $roleQuery = Role::where('is_enable', $status)->orderBy('rating');
 
-        if (! empty($dtoRequest->type)) {
+        if (!empty($dtoRequest->type)) {
             $roleQuery->where('type', $dtoRequest->type);
         }
 
@@ -172,7 +172,9 @@ class GlobalController extends Controller
     {
         $stickers = Sticker::all();
 
-        $stickerTree = CollectionUtility::toTree($stickers->toArray());
+        $treeData = $stickers->toArray();
+
+        $stickerTree = CollectionUtility::toTree($treeData);
 
         return $this->success($stickerTree);
     }
@@ -185,11 +187,11 @@ class GlobalController extends Controller
         $wordQuery = BlockWord::all();
 
         if ($dtoRequest->type = 'content') {
-            $wordQuery = BlockWord::where('content_mode', '!=' , 1);
+            $wordQuery = BlockWord::where('content_mode', '!=', 1);
         } elseif ($dtoRequest->type = 'user') {
-            $wordQuery = BlockWord::where('user_mode', '!=' , 1);
+            $wordQuery = BlockWord::where('user_mode', '!=', 1);
         } elseif ($dtoRequest->type = 'dialog') {
-            $wordQuery = BlockWord::where('dialog_mode', '!=' , 1);
+            $wordQuery = BlockWord::where('dialog_mode', '!=', 1);
         }
 
         $words = $wordQuery->paginate($request->get('pageSize', 50));

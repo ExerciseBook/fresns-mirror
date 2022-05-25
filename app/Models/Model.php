@@ -15,4 +15,9 @@ class Model extends BaseModel
 {
     use HasFactory;
     use Traits\DataChangeNotifyTrait;
+
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format($this->dateFormat ?: 'Y-m-d H:i:s');
+    }
 }
