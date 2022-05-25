@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class CommonInputTipsDTO extends DTO
+class CommonDownloadFileDTO extends DTO
 {
     /**
      * @return array
@@ -19,7 +19,8 @@ class CommonInputTipsDTO extends DTO
     {
         return [
             'type' => ['integer', 'required', 'in:1,2,3,4,5,6'],
-            'key' => ['string', 'required'],
+            'fsid' => ['string', 'required'],
+            'fid' => ['string', 'required'],
         ];
     }
 }

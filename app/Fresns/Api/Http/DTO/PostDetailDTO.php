@@ -18,9 +18,9 @@ class PostDetailDTO extends DTO
     public function rules(): array
     {
         return [
-            'mapId' => ['nullable', 'in:1,2,3,4,5,6,7,8,9,10'],
-            'mapLng' => ['nullable', 'numeric'],
-            'mapLat' => ['nullable', 'numeric'],
+            'mapId' => ['integer', 'nullable', 'in:1,2,3,4,5,6,7,8,9,10'],
+            'mapLng' => ['numeric', 'nullable'],
+            'mapLat' => ['numeric', 'nullable'],
         ];
     }
 }

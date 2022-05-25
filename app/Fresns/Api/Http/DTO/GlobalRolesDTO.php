@@ -18,10 +18,10 @@ class GlobalRolesDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['nullable', 'in:1,2,3'],
-            'status' => ['nullable', 'boolean'],
-            'pageSize' => ['nullable', 'integer'],
-            'page' => ['nullable', 'integer'],
+            'type' => ['integer', 'nullable', 'in:1,2,3'],
+            'status' => ['boolean', 'nullable'],
+            'pageSize' => ['integer', 'nullable', 'between:1,100'],
+            'page' => ['integer', 'nullable'],
         ];
     }
 }

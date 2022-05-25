@@ -18,10 +18,10 @@ class GlobalConfigsDTO extends DTO
     public function rules(): array
     {
         return [
-            'keys' => ['nullable', 'string'],
-            'tags' => ['nullable', 'string'],
-            'pageSize' => ['nullable', 'integer'],
-            'page' => ['nullable', 'integer'],
+            'keys' => ['string', 'nullable'],
+            'tags' => ['string', 'nullable'],
+            'pageSize' => ['integer', 'nullable', 'between:1,100'],
+            'page' => ['integer', 'nullable'],
         ];
     }
 }
