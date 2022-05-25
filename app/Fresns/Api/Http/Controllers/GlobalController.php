@@ -30,6 +30,7 @@ use App\Models\Sticker;
 use App\Utilities\CollectionUtility;
 use App\Utilities\ExtendUtility;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class GlobalController extends Controller
 {
@@ -173,19 +174,18 @@ class GlobalController extends Controller
     {
         $headers = AppHelper::getApiHeaders();
 
-        $stickers = Sticker::orderBy('rating')->all();
+        $stickers = Sticker::orderBy('rating')->get();
 
-        $treeData = [];
+        $stickerData = [];
         foreach ($stickers as $index => $sticker) {
-            $treeData[$index]['id'] = $sticker->id;
-            $treeData[$index]['parentId'] = $sticker->parent_id;
-            $treeData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('stickers', 'name', $sticker->id, $headers['langTag']);
-            $treeData[$index]['code'] = $sticker->code;
-            $treeData[$index]['codeFormat'] = '['.$sticker->code.']';
-            $treeData[$index]['url'] = FileHelper::fresnsFileImageUrlByColumn($sticker->image_file_id, $sticker->image_file_url);
+            $stickerData[$index]['parentCode'] = $stickers->where('id', $sticker->parent_id)->first()?->code;
+            $stickerData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('stickers', 'name', $sticker->id, $headers['langTag']);
+            $stickerData[$index]['code'] = $sticker->code;
+            $stickerData[$index]['codeFormat'] = '['.$sticker->code.']';
+            $stickerData[$index]['url'] = FileHelper::fresnsFileImageUrlByColumn($sticker->image_file_id, $sticker->image_file_url);
         }
 
-        $stickerTree = CollectionUtility::toTree($treeData, 'id', 'parentId');
+        $stickerTree = CollectionUtility::toTree($stickerData, 'code', 'parentCode', 'stickers');
 
         return $this->success($stickerTree);
     }
