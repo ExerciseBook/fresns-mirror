@@ -22,7 +22,7 @@ class CommandUtility
 
     public function __construct()
     {
-        $this->executableFinder = new \Symfony\Component\Process\ExecutableFinder();
+        $this->executableFinder = new ExecutableFinder();
 
         if (function_exists('base_path')) {
             $this->defaultExtraDirs = array_merge($this->defaultExtraDirs, [base_path()]);
@@ -50,9 +50,9 @@ class CommandUtility
 
     public function createProcess(array $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60)
     {
-        return tap(new \Symfony\Component\Process\Process(...func_get_args()));
+        return tap(new Process(...func_get_args()));
     }
-    
+
     public static function findBinary(string $name, array $extraDirs = [])
     {
         $instance = static::make();
@@ -60,14 +60,14 @@ class CommandUtility
         $extraDirs = array_merge($instance->defaultExtraDirs, $extraDirs);
 
         $extraDirs = array_map(fn ($dir) => rtrim($dir, '/'), $extraDirs);
-        
+
         return $instance->executableFinder->find($name, null, $extraDirs);
     }
 
     public static function getPhpProcess(array $argument)
     {
         $instance = new static();
-        
+
         $php = $instance->findBinary('php');
 
         return $instance->createProcess([$php, ...$argument]);
@@ -76,7 +76,7 @@ class CommandUtility
     public static function getComposerProcess(array $argument)
     {
         $instance = new static();
-        
+
         $php = $instance->findBinary('php');
 
         $composer = $instance->findBinary('composer');
