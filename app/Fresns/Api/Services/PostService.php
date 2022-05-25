@@ -71,7 +71,7 @@ class PostService
             }
         }
 
-        $item['files'] = FileHelper::fresnsAntiLinkFileInfoListByTable('posts', 'id', $post->id);
+        $item['files'] = FileHelper::fresnsAntiLinkFileInfoListByTableColumn('posts', 'id', $post->id);
         $item['extends'] = ExtendUtility::getExtends(4, $post->id, $headers['langTag']);
         $item['icons'] = ExtendUtility::getIcons(4, $post->id, $headers['langTag']);
         $item['tips'] = ExtendUtility::getTips(4, $post->id, $headers['langTag']);
