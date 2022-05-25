@@ -8,28 +8,12 @@
 namespace App\Fresns\Api\Traits;
 
 use App\Helpers\AppHelper;
+use App\Helpers\StrHelper;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpFoundation\Response;
 
 trait ApiResponseTrait
 {
-    public static function string2utf8($string = '')
-    {
-        if (empty($string)) {
-            return $string;
-        }
-
-        $encoding_list = [
-            'ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5',
-        ];
-
-        $encode = mb_detect_encoding($string, $encoding_list);
-
-        $string = mb_convert_encoding($string, 'UTF-8', $encode);
-
-        return $string;
-    }
-
     public function success($data = null, $message = 'success', $code = 0, $headers = [])
     {
         if (is_string($data)) {
@@ -45,7 +29,7 @@ trait ApiResponseTrait
             extract($data);
         }
 
-        $message = static::string2utf8($message);
+        $message = StrHelper::stringToUtf8($message);
 
         $fresnsResponse = compact('code', 'message', 'data') + array_filter(compact('paginate'));
 

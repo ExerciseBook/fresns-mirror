@@ -69,6 +69,26 @@ class StrHelper
     }
 
     /**
+     * @param  string  $string
+     */
+    public static function stringToUtf8(?string $string = null)
+    {
+        if (empty($string)) {
+            return $string;
+        }
+
+        $encoding_list = [
+            'ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5',
+        ];
+
+        $encode = mb_detect_encoding($string, $encoding_list);
+
+        $string = mb_convert_encoding($string, 'UTF-8', $encode);
+
+        return $string;
+    }
+
+    /**
      * @param  string  $uri
      * @param  string  $domain
      */
@@ -161,11 +181,11 @@ class StrHelper
 
     public static function slug(string $text)
     {
+        $text = StrHelper::stringToUtf8($text);
+
         if (preg_match("/^[A-Za-z]+$/", $text)) {
-            // 如果是纯英文（可以有空格），则使用框架功能
             $slug = Str::slug($text, '-');
         } else {
-            // 其他字符串使用 URL 编码
             $slug = urlencode($text);
         }
 
