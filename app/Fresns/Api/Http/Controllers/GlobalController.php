@@ -170,11 +170,16 @@ class GlobalController extends Controller
 
     public function stickers()
     {
-        $stickers = Sticker::all();
+        $stickers = Sticker::paginate(100);
 
-        $treeData = $stickers->toArray();
+        $treeData = [];
+        foreach ($stickers as $index => $sticker) {
+            $data[$index]['id'] = $sticker->id;
+            $data[$index]['parentId'] = $sticker->parent_id;
+            $data[$index]['url'] = $sticker->image_file_url;
+        }
 
-        $stickerTree = CollectionUtility::toTree($treeData);
+        $stickerTree = CollectionUtility::toTree($treeData, 'id', 'parentId');
 
         return $this->success($stickerTree);
     }
