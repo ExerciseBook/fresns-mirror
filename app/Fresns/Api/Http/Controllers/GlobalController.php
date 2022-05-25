@@ -168,15 +168,21 @@ class GlobalController extends Controller
         return $this->success($data);
     }
 
+    // stickers
     public function stickers()
     {
-        $stickers = Sticker::paginate(100);
+        $headers = AppHelper::getApiHeaders();
+
+        $stickers = Sticker::orderBy('rating')->all();
 
         $treeData = [];
         foreach ($stickers as $index => $sticker) {
-            $data[$index]['id'] = $sticker->id;
-            $data[$index]['parentId'] = $sticker->parent_id;
-            $data[$index]['url'] = $sticker->image_file_url;
+            $treeData[$index]['id'] = $sticker->id;
+            $treeData[$index]['parentId'] = $sticker->parent_id;
+            $treeData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('stickers', 'name', $sticker->id, $headers['langTag']);
+            $treeData[$index]['code'] = $sticker->code;
+            $treeData[$index]['codeFormat'] = '['.$sticker->code.']';
+            $treeData[$index]['url'] = FileHelper::fresnsFileImageUrlByColumn($sticker->image_file_id, $sticker->image_file_url);
         }
 
         $stickerTree = CollectionUtility::toTree($treeData, 'id', 'parentId');
