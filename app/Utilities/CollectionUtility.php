@@ -15,7 +15,7 @@ class CollectionUtility
      * @param string $primary
      * @param string $parent
      * @param string $children
-     * @return array
+     * @return null|array
      * #
      */
     public static function toTree(?array $data = [], $primary = 'id', $parent = 'parent_id', $children = 'children')
