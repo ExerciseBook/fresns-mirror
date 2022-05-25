@@ -199,7 +199,8 @@ class CommonController extends Controller
         }
 
         if (in_array(4, $data['types'])) {
-            $fids = array_column($callback->content['files'], 'fid');
+            $fids = collect($callback->content['files'])->sortBy('rating')->pluck('fid')->toArray();
+
             $data['apiContent']['files'] = FileHelper::fresnsAntiLinkFileInfoList($fids);
         }
 

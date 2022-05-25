@@ -21,13 +21,15 @@ class EditorUtility
     // extend handle
     public static function extendHandle(array $extends)
     {
-        $extendArr = Extend::whereIn('eid', array_column($extends, 'eid'))->where('is_enable', 1)->get();
+        $extendsCollection = collect($extends);
+
+        $extendArr = Extend::whereIn('eid', $extendsCollection->pluck('eid'))->where('is_enable', 1)->get();
 
         $extendList = null;
         foreach ($extendArr as $extend) {
             $item['eid'] = $extend->eid;
-            $item['canDelete'] = true;
-            $item['rating'] = 9;
+            $item['canDelete'] = $extendsCollection->where('eid', $extend->eid)->value('canDelete');
+            $item['rating'] = $extendsCollection->where('eid', $extend->eid)->value('rating');
             $item['frameType'] = $extend->frame_type;
             $item['framePosition'] = $extend->frame_position;
             $item['textContent'] = $extend->text_content;
@@ -49,7 +51,7 @@ class EditorUtility
             $extendList[] = $item;
         }
 
-        return $extendList;
+        return collect($extendList)->sortBy('rating')->toArray();
     }
 
     // read allow handle
