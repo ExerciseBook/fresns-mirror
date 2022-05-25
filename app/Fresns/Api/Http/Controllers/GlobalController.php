@@ -11,6 +11,7 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Fresns\Api\Http\DTO\GlobalConfigsDTO;
 use App\Fresns\Api\Http\DTO\GlobalBlockWordsDTO;
 use App\Fresns\Api\Http\DTO\GlobalRolesDTO;
+use App\Fresns\Api\Http\DTO\GlobalTokenForUploadDTO;
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\LanguageHelper;
@@ -78,6 +79,14 @@ class GlobalController extends Controller
         }
 
         return $this->fresnsPaginate($item, $configs->total(), $configs->perPage());
+    }
+
+    // get upload token
+    public function tokenForUpload(Request $request)
+    {
+        $dtoRequest = new GlobalTokenForUploadDTO($request->all());
+
+        return \FresnsCmdWord::plugin('Fresns')->getUploadToken($dtoRequest);
     }
 
     // overview

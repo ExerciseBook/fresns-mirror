@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v2')->group(function () {
     Route::prefix('global')->group(function () {
         Route::get('configs', [GlobalController::class, 'configs'])->name('global.configs');
+        Route::get('token-for-upload', [GlobalController::class, 'tokenForUpload'])->name('common.tokenForUpload');
         Route::get('overview', [GlobalController::class, 'overview'])->name('global.overview');
         Route::get('roles', [GlobalController::class, 'roles'])->name('global.roles');
         Route::get('maps', [GlobalController::class, 'maps'])->name('global.maps');
@@ -33,7 +34,6 @@ Route::prefix('v2')->group(function () {
         Route::get('download-file', [CommonController::class, 'downloadFile'])->name('common.downloadFile');
         Route::post('send-verify-code', [CommonController::class, 'sendVerifyCode'])->name('common.sendVerifyCode');
         Route::post('upload-log', [CommonController::class, 'uploadLog'])->name('common.uploadLog');
-        Route::get('upload-token', [CommonController::class, 'uploadToken'])->name('common.uploadToken');
         Route::post('upload-file', [CommonController::class, 'uploadFile'])->name('common.uploadFile');
     });
 

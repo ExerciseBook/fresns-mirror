@@ -15,11 +15,31 @@ use App\Models\User;
 use App\Models\Seo;
 use App\Utilities\ExtendUtility;
 use App\Utilities\PermissionUtility;
+use App\Utilities\CollectionUtility;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
 
 class GroupController extends Controller
 {
+    public function tree(Request $request)
+    {
+        $headers = AppHelper::getApiHeaders();
+
+        $groups = Sticker::orderBy('rating')->get();
+
+        $groupData = [];
+        foreach ($groups as $index => $group) {
+            $groupData[$index]['gid'] = $group->gid;
+            $groupData[$index]['parentGid'] = $groups->where('id', $group->parent_id)->value('gid');
+            $groupData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $group->id, $headers['langTag']);
+        }
+
+        $groupTree = CollectionUtility::toTree($groupData, 'gid', 'parentGid', 'groups');
+
+        return $this->success($groupTree);
+
+    }
+
     public function list(Request $request)
     {
         $headers = AppHelper::getApiHeaders();

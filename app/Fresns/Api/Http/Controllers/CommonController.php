@@ -9,7 +9,11 @@
 namespace App\Fresns\Api\Http\Controllers;
 
 use App\Fresns\Api\Http\DTO\CommonCallbacksDTO;
+use App\Fresns\Api\Http\DTO\CommonDownloadFileDTO;
 use App\Fresns\Api\Http\DTO\CommonInputTipsDTO;
+use App\Fresns\Api\Http\DTO\CommonSendVerifyCodeDTO;
+use App\Fresns\Api\Http\DTO\CommonUploadFileDTO;
+use App\Fresns\Api\Http\DTO\CommonUploadLogDTO;
 use App\Fresns\Api\Services\AccountService;
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
@@ -22,6 +26,8 @@ use App\Models\Plugin;
 use App\Models\Post;
 use App\Models\User;
 use App\Exceptions\ApiException;
+use App\Models\Account;
+use App\Models\File;
 use App\Models\PluginCallback;
 use App\Utilities\EditorUtility;
 use Illuminate\Http\Request;
@@ -42,25 +48,27 @@ class CommonController extends Controller
                     ->limit(10)
                     ->get();
 
-                if (ConfigHelper::fresnsConfigFileValueTypeByItemKey('default_avatar') == 'URL') {
-                    $defaultAvatar = ConfigHelper::fresnsConfigByItemKey('default_avatar');
-                } else {
-                    $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileInfo([
-                        'fileId' => ConfigHelper::fresnsConfigByItemKey('default_avatar'),
-                    ]);
-                    $defaultAvatar = $fresnsResp->getData('imageAvatarUrl');
-                }
-
                 $data = null;
-                foreach ($userQuery as $user) {
-                    $avatar = FileHelper::fresnsFileImageUrlByColumn($user->avatar_file_id, $user->avatar_file_url, 'image_thumb_avatar');
+                if (! empty($userQuery)) {
+                    if (ConfigHelper::fresnsConfigFileValueTypeByItemKey('default_avatar') == 'URL') {
+                        $defaultAvatar = ConfigHelper::fresnsConfigByItemKey('default_avatar');
+                    } else {
+                        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileInfo([
+                            'fileId' => ConfigHelper::fresnsConfigByItemKey('default_avatar'),
+                        ]);
+                        $defaultAvatar = $fresnsResp->getData('imageAvatarUrl');
+                    }
 
-                    $item['fsid'] = $user->uid;
-                    $item['name'] = $user->username;
-                    $item['nickname'] = $user->nickname;
-                    $item['image'] = $avatar = $avatar ?: $defaultAvatar;
-                    $item['followStatus'] = false;
-                    $data[] = $item;
+                    foreach ($userQuery as $user) {
+                        $avatar = FileHelper::fresnsFileImageUrlByColumn($user->avatar_file_id, $user->avatar_file_url, 'image_thumb_avatar');
+
+                        $item['fsid'] = $user->uid;
+                        $item['name'] = $user->username;
+                        $item['image'] = $avatar = $avatar ?: $defaultAvatar;
+                        $item['nickname'] = $user->nickname;
+                        $item['followStatus'] = false;
+                        $data[] = $item;
+                    }
                 }
             break;
 
@@ -70,22 +78,24 @@ class CommonController extends Controller
                     ->where('table_column', 'name')
                     ->where('lang_content', 'like', "%$dtoRequest->key%")
                     ->value('table_id')
-                    ->limit(10)
+                    ?->limit(10)
                     ->get()
                     ->toArray();
 
-                $groupIds = array_unique($tipQuery);
-
-                $groupQuery = Language::whereIn('id', $groupIds)->get();
-
                 $data = null;
-                foreach ($groupQuery as $group) {
-                    $item['fsid'] = $group->gid;
-                    $item['name'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $group->id, $headers['langTag']);
-                    $item['nickname'] = null;
-                    $item['image'] = FileHelper::fresnsFileImageUrlByColumn($group->cover_file_id, $group->cover_file_url);
-                    $item['followStatus'] = false;
-                    $data[] = $item;
+                if (! empty($tipQuery)) {
+                    $groupIds = array_unique($tipQuery);
+
+                    $groupQuery = Language::whereIn('id', $groupIds)->get();
+
+                    foreach ($groupQuery as $group) {
+                        $item['fsid'] = $group->gid;
+                        $item['name'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $group->id, $headers['langTag']);
+                        $item['image'] = FileHelper::fresnsFileImageUrlByColumn($group->cover_file_id, $group->cover_file_url);
+                        $item['nickname'] = null;
+                        $item['followStatus'] = false;
+                        $data[] = $item;
+                    }
                 }
             break;
 
@@ -94,13 +104,15 @@ class CommonController extends Controller
                 $hashtagQuery = Hashtag::where('name', 'like', "%$dtoRequest->key%")->limit(10)->get();
 
                 $data = null;
-                foreach ($hashtagQuery as $hashtag) {
-                    $item['fsid'] = $hashtag->slug;
-                    $item['name'] = $hashtag->name;
-                    $item['nickname'] = null;
-                    $item['image'] = FileHelper::fresnsFileImageUrlByColumn($hashtag->cover_file_id, $hashtag->cover_file_url);
-                    $item['followStatus'] = false;
-                    $data[] = $item;
+                if (! empty($hashtagQuery)) {
+                    foreach ($hashtagQuery as $hashtag) {
+                        $item['fsid'] = $hashtag->slug;
+                        $item['name'] = $hashtag->name;
+                        $item['image'] = FileHelper::fresnsFileImageUrlByColumn($hashtag->cover_file_id, $hashtag->cover_file_url);
+                        $item['nickname'] = null;
+                        $item['followStatus'] = false;
+                        $data[] = $item;
+                    }
                 }
             break;
 
@@ -109,13 +121,15 @@ class CommonController extends Controller
                 $postQuery = Post::where('title', 'like', "%$dtoRequest->key%")->limit(10)->get();
 
                 $data = null;
-                foreach ($postQuery as $post) {
-                    $item['fsid'] = $post->pid;
-                    $item['name'] = $post->title;
-                    $item['nickname'] = null;
-                    $item['image'] = null;
-                    $item['followStatus'] = false;
-                    $data[] = $item;
+                if (! empty($postQuery)) {
+                    foreach ($postQuery as $post) {
+                        $item['fsid'] = $post->pid;
+                        $item['name'] = $post->title;
+                        $item['image'] = null;
+                        $item['nickname'] = null;
+                        $item['followStatus'] = false;
+                        $data[] = $item;
+                    }
                 }
             break;
 
@@ -130,22 +144,24 @@ class CommonController extends Controller
                     ->where('table_column', 'title')
                     ->where('lang_content', 'like', "%$dtoRequest->key%")
                     ->value('table_id')
-                    ->limit(10)
+                    ?->limit(10)
                     ->get()
                     ->toArray();
 
-                $extendIds = array_unique($tipQuery);
-
-                $extendQuery = Extend::whereIn('id', $extendIds)->get();
-
                 $data = null;
-                foreach ($extendQuery as $extend) {
-                    $item['fsid'] = $extend->eid;
-                    $item['name'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extend->id, $headers['langTag']);
-                    $item['nickname'] = null;
-                    $item['image'] = FileHelper::fresnsFileImageUrlByColumn($extend->cover_file_id, $extend->cover_file_url);
-                    $item['followStatus'] = false;
-                    $data[] = $item;
+                if (! empty($tipQuery)) {
+                    $extendIds = array_unique($tipQuery);
+
+                    $extendQuery = Extend::whereIn('id', $extendIds)->get();
+
+                    foreach ($extendQuery as $extend) {
+                        $item['fsid'] = $extend->eid;
+                        $item['name'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extend->id, $headers['langTag']);
+                        $item['image'] = FileHelper::fresnsFileImageUrlByColumn($extend->cover_file_id, $extend->cover_file_url);
+                        $item['nickname'] = null;
+                        $item['followStatus'] = false;
+                        $data[] = $item;
+                    }
                 }
             break;
         }
@@ -225,5 +241,214 @@ class CommonController extends Controller
         $callback->save();
 
         return $this->success($data);
+    }
+
+    // download file
+    public function downloadFile(Request $request)
+    {
+        $dtoRequest = new CommonDownloadFileDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $file = File::whereFid($dtoRequest->fid)->first();
+        if (empty($file)) {
+            throw new ApiException(37500);
+        }
+
+        if ($file->is_enable == 0) {
+            throw new ApiException(37501);
+        }
+
+        switch ($dtoRequest->type) {
+            // user
+            case 1:
+                $data = null;
+            break;
+
+            // group
+            case 2:
+                $data = null;
+            break;
+
+            // hashtag
+            case 3:
+                $data = null;
+            break;
+
+            // post
+            case 4:
+                $data = null;
+            break;
+
+            // comment
+            case 5:
+                $data = null;
+            break;
+
+            // extend
+            case 6:
+                $data = null;
+            break;
+        }
+
+        return $this->success($data);
+    }
+
+    // send verify code
+    public function sendVerifyCode(Request $request)
+    {
+        $dtoRequest = new CommonSendVerifyCodeDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $sendService = ConfigHelper::fresnsConfigByItemKeys([
+            'send_email_service',
+            'send_sms_service',
+        ]);
+
+        if ($dtoRequest->accountType == 1 && empty($sendService['send_email_service'])) {
+            throw new ApiException(32100);
+        } elseif ($dtoRequest->accountType == 2 && empty($sendService['send_sms_service'])) {
+            throw new ApiException(32100);
+        }
+
+        if ($dtoRequest->accountType == 1) {
+            $phone = $dtoRequest->countryCode.$dtoRequest->account;
+            $account = Account::where('phone', $phone)->first();
+            $accountConfig = $account->phone;
+        } else {
+            $account = Account::where('email', $dtoRequest->account)->first();
+            $accountConfig = $account->email;
+        }
+
+        $wordBody = [
+            'type' => $dtoRequest->accountType,
+            'account' => $dtoRequest->account,
+            'countryCode' => $dtoRequest->countryCode,
+            'templateId' => $dtoRequest->templateId,
+            'langTag' => $headers['langTag'],
+        ];
+
+        if ($dtoRequest->useType == 1 && ! empty($account)) {
+            switch ($dtoRequest->accountType) {
+                case 1:
+                    throw new ApiException(34205);
+                break;
+                case 2:
+                    throw new ApiException(34206);
+                break;
+            }
+        }
+
+        if ($dtoRequest->useType == 2 && empty($account)) {
+            throw new ApiException(34301);
+        }
+
+        if ($dtoRequest->useType == 3 && ! empty($accountConfig)) {
+            switch ($dtoRequest->accountType) {
+                case 1:
+                    throw new ApiException(34401);
+                break;
+                case 2:
+                    throw new ApiException(34402);
+                break;
+            }
+        }
+
+        if ($dtoRequest->useType == 4 && empty($headers['aid'])) {
+            throw new ApiException(31501);
+        } elseif ($dtoRequest->useType == 4 && ! empty($headers['aid'])) {
+            $loginAccount = Account::whereAid($headers['aid'])->first();
+            switch ($dtoRequest->accountType) {
+                case 1:
+                    $wordBody = [
+                        'account' => $loginAccount->email,
+                    ];
+                break;
+                case 2:
+                    $wordBody = [
+                        'account' => $loginAccount->pure_phone,
+                        'countryCode' => $loginAccount->country_code,
+                    ];
+                break;
+            }
+        }
+
+        if ($dtoRequest->accountType == 1) {
+            $fresnsResp = \FresnsCmdWord::plugin($sendService['send_email_service'])->sendCode($wordBody);
+        } else {
+            $fresnsResp = \FresnsCmdWord::plugin($sendService['send_sms_service'])->sendCode($wordBody);
+        }
+
+        return $fresnsResp->getOrigin();
+    }
+
+    // upload log
+    public function uploadLog(Request $request)
+    {
+        $dtoRequest = new CommonUploadLogDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $wordBody = [
+            'pluginUnikey' => $dtoRequest->pluginUnikey,
+            'platformId' => $headers['platformId'],
+            'version' => $headers['version'],
+            'langTag' => $headers['langTag'],
+            'aid' => $headers['aid'],
+            'uid' => $headers['uid'],
+            'objectType' => $dtoRequest->objectType,
+            'objectName' => $dtoRequest->objectName,
+            'objectAction' => $dtoRequest->objectAction,
+            'objectResult' => $dtoRequest->objectResult,
+            'objectOrderId' => $dtoRequest->objectOrderId,
+            'deviceInfo' => $headers['deviceInfo'],
+            'deviceToken' => $dtoRequest->deviceToken,
+            'moreJson' => $dtoRequest->moreJson,
+        ];
+
+        return \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($wordBody);
+    }
+
+    // upload file
+    public function uploadFile(Request $request)
+    {
+        $dtoRequest = new CommonUploadFileDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        switch ($dtoRequest->uploadMode) {
+            case 1:
+                $wordBody = [
+                    'platformId' => $headers['platformId'],
+                    'type' => $dtoRequest->type,
+                    'tableType' => $dtoRequest->tableType,
+                    'tableName' => $dtoRequest->tableName,
+                    'tableColumn' => $dtoRequest->tableColumn,
+                    'tableId' => $dtoRequest->tableId,
+                    'tableKey' => $dtoRequest->tableKey,
+                    'aid' => $headers['aid'],
+                    'uid' => $headers['uid'],
+                    'file' => $dtoRequest->file,
+                    'moreJson' => $dtoRequest->moreJson,
+                ];
+
+                return \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
+            break;
+
+            case 2:
+                $wordBody = [
+                    'platformId' => $headers['platformId'],
+                    'type' => $dtoRequest->type,
+                    'tableType' => $dtoRequest->tableType,
+                    'tableName' => $dtoRequest->tableName,
+                    'tableColumn' => $dtoRequest->tableColumn,
+                    'tableId' => $dtoRequest->tableId,
+                    'tableKey' => $dtoRequest->tableKey,
+                    'aid' => $headers['aid'],
+                    'uid' => $headers['uid'],
+                    'fileInfo' => $dtoRequest->fileInfo,
+                ];
+
+                return \FresnsCmdWord::plugin('Fresns')->uploadFileInfo($wordBody);
+            break;
+        }
+
     }
 }
