@@ -86,7 +86,13 @@ class GlobalController extends Controller
     {
         $dtoRequest = new GlobalTokenForUploadDTO($request->all());
 
-        return \FresnsCmdWord::plugin('Fresns')->getUploadToken($dtoRequest);
+        $wordBody = [
+            'type' => $dtoRequest->type,
+            'name' => $dtoRequest->name,
+            'expireTime' => $dtoRequest->expireTime,
+        ];
+
+        return \FresnsCmdWord::plugin('Fresns')->getUploadToken($wordBody);
     }
 
     // overview
