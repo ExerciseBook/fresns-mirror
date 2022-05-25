@@ -186,7 +186,7 @@ class StrHelper
         if (preg_match("/^[A-Za-z]+$/", $text)) {
             $slug = Str::slug($text, '-');
         } else {
-            $slug = urlencode($text);
+            $slug = rawurlencode($text);
         }
 
         return $slug;
