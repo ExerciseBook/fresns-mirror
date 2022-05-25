@@ -16,13 +16,13 @@ class CommandUtility
     protected $executableFinder;
 
     protected $defaultExtraDirs = [
-        '/usr/bin',
-        '/usr/local/bin',
+        '/usr/bin/',
+        '/usr/local/bin/',
     ];
 
     public function __construct()
     {
-        $this->executableFinder = new ExecutableFinder();
+        $this->executableFinder = new \Symfony\Component\Process\ExecutableFinder();
 
         if (function_exists('base_path')) {
             $this->defaultExtraDirs = array_merge($this->defaultExtraDirs, [base_path()]);
@@ -39,11 +39,20 @@ class CommandUtility
         return realpath($path);
     }
 
-    public function createProcess(array $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60)
+    public static function formatCommand($command)
     {
-        return tap(new Process(...func_get_args()));
+        if (is_string($command)) {
+            $command = explode(' ', $command);
+        }
+
+        return $command;
     }
 
+    public function createProcess(array $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60)
+    {
+        return tap(new \Symfony\Component\Process\Process(...func_get_args()));
+    }
+    
     public static function findBinary(string $name, array $extraDirs = [])
     {
         $instance = static::make();
@@ -51,14 +60,14 @@ class CommandUtility
         $extraDirs = array_merge($instance->defaultExtraDirs, $extraDirs);
 
         $extraDirs = array_map(fn ($dir) => rtrim($dir, '/'), $extraDirs);
-
+        
         return $instance->executableFinder->find($name, null, $extraDirs);
     }
 
     public static function getPhpProcess(array $argument)
     {
         $instance = new static();
-
+        
         $php = $instance->findBinary('php');
 
         return $instance->createProcess([$php, ...$argument]);
@@ -67,7 +76,7 @@ class CommandUtility
     public static function getComposerProcess(array $argument)
     {
         $instance = new static();
-
+        
         $php = $instance->findBinary('php');
 
         $composer = $instance->findBinary('composer');
