@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Http\Controllers;
 
 use App\Fresns\Api\Http\DTO\CommonCallbacksDTO;
 use App\Fresns\Api\Http\DTO\CommonDownloadFileDTO;
+use App\Fresns\Api\Http\DTO\CommonDownloadUsersDTO;
 use App\Fresns\Api\Http\DTO\CommonInputTipsDTO;
 use App\Fresns\Api\Http\DTO\CommonSendVerifyCodeDTO;
 use App\Fresns\Api\Http\DTO\CommonUploadFileDTO;
@@ -17,6 +18,7 @@ use App\Fresns\Api\Http\DTO\CommonUploadLogDTO;
 use App\Fresns\Api\Services\AccountService;
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
+use App\Helpers\DateHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\FileHelper;
 use App\Models\Extend;
@@ -28,6 +30,7 @@ use App\Models\User;
 use App\Exceptions\ApiException;
 use App\Models\Account;
 use App\Models\File;
+use App\Models\FileLog;
 use App\Models\PluginCallback;
 use App\Utilities\EditorUtility;
 use Illuminate\Http\Request;
@@ -458,8 +461,9 @@ class CommonController extends Controller
     }
 
     // file download users
-    public function downloadUsers(string $fid)
+    public function downloadUsers(string $fid, Request $request)
     {
+        $dtoRequest = new CommonDownloadUsersDTO($request->all());
         $headers = AppHelper::getApiHeaders();
 
         $file = File::whereFid($fid)->first();
@@ -471,8 +475,16 @@ class CommonController extends Controller
             throw new ApiException(37501);
         }
 
-        $data = null;
+        $fileLogs = FileLog::with('user')->orderBy('created_at', 'desc')->paginate($request->get('pageSize', 10));
 
-        return $this->success($data);
+        $item = null;
+        foreach ($fileLogs as $log) {
+            $item['downloadTime'] = DateHelper::fresnsFormatDateTime($log->created_at, $headers['timezone'], $headers['langTag']);
+            $item['downloadTimeFormat'] = DateHelper::fresnsFormatTime($log->created_at, $headers['langTag']);
+            $item['downloadUser'] = $log->user->getUserProfile();
+            $item[] = $item;
+        }
+
+        return $this->fresnsPaginate($item, $fileLogs->total(), $fileLogs->perPage());
     }
 }
