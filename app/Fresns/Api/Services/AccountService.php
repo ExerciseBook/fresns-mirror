@@ -17,12 +17,8 @@ class AccountService
 {
     public function accountDetail(int $accountId)
     {
-        $account = Account::whereId($accountId)->first();
-        if (empty($account)) {
-            return null;
-        }
-
         $headers = AppHelper::getApiHeaders();
+        $account = Account::whereId($accountId)->first();
 
         $userArr = $account->users;
         $userList = null;

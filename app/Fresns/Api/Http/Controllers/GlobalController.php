@@ -31,7 +31,6 @@ use App\Models\Sticker;
 use App\Utilities\CollectionUtility;
 use App\Utilities\ExtendUtility;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class GlobalController extends Controller
 {

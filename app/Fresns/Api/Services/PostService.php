@@ -28,9 +28,6 @@ class PostService
         $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
         $post = Post::with('creator')->whereId($postId)->first();
-        if (empty($post)) {
-            return null;
-        }
 
         $postInfo = $post->getPostInfo($headers['langTag'], $headers['timezone']);
 

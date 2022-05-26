@@ -271,14 +271,20 @@ class Account
     {
         $dtoWordBody = new LogicalDeletionAccountDTO($wordBody);
 
-        $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
+        $account = AccountModel::whereAid($dtoWordBody->aid)->first();
+
+        $oldEmail = $account->email;
+        $oldPhone = $account->phone;
         $dateTime = 'deleted#'.date('YmdHis').'#';
-        AccountModel::where('id', $accountId)->update([
-            'phone' => DB::raw("concat('$dateTime','phone')"),
-            'email' => DB::raw("concat('$dateTime','email')"),
-            'deleted_at' => now(), ]
-        );
-        AccountConnect::where('account_id', $accountId)->forceDelete();
+
+        $account->update([
+            'phone' => $dateTime.$oldEmail,
+            'email' => $dateTime.$oldPhone,
+        ]);
+
+        $account->delete();
+
+        AccountConnect::where('account_id', $account->id)->forceDelete();
 
         return $this->success();
     }
