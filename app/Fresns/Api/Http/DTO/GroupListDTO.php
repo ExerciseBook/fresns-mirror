@@ -34,7 +34,7 @@ class GroupListDTO extends DTO
             'createTimeGt' => ['date_format:Y-m-d', 'nullable', 'before:createTimeLt'],
             'createTimeLt' => ['date_format:Y-m-d', 'nullable', 'after:createTimeGt'],
             'ratingType' => ['string', 'nullable', 'in:like,follow,block,post,digest,createTime,rating'],
-            'ratingOrder' => ['string', 'nullable', 'in:ASC,DESC'],
+            'ratingOrder' => ['string', 'nullable', 'in:asc,desc'],
             'pageSize' => ['integer', 'nullable', 'between:1,20'],
             'page' => ['integer', 'nullable'],
         ];

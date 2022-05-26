@@ -38,7 +38,7 @@ class PostListDTO extends DTO
             'createTimeGt' => ['date_format:Y-m-d', 'nullable', 'before:createTimeLt'],
             'createTimeLt' => ['date_format:Y-m-d', 'nullable', 'after:createTimeGt'],
             'ratingType' => ['string', 'nullable', 'in:like,follow,block,comment,createTime'],
-            'ratingOrder' => ['string', 'nullable', 'in:ASC,DESC'],
+            'ratingOrder' => ['string', 'nullable', 'in:asc,desc'],
             'pluginRatingId' => ['integer', 'nullable'],
             'pageSize' => ['integer', 'nullable', 'between:1,20'],
             'page' => ['integer', 'nullable'],
