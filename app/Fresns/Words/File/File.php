@@ -456,7 +456,7 @@ class File
         }
 
         return $this->success([
-            'fileUrl' => FileHelper::fresnsFileOriginalUrl($dtoWordBody->fileId ?? $dtoWordBody->fid),
+            'fileLink' => FileHelper::fresnsFileOriginalUrl($dtoWordBody->fileId ?? $dtoWordBody->fid),
         ]);
     }
 
@@ -479,7 +479,7 @@ class File
         }
 
         return $this->success([
-            'fileUrl' => FileHelper::fresnsFileOriginalUrl($dtoWordBody->fileId ?? $dtoWordBody->fid),
+            'fileLink' => FileHelper::fresnsFileOriginalUrl($dtoWordBody->fileId ?? $dtoWordBody->fid),
         ]);
     }
 
@@ -502,7 +502,7 @@ class File
         }
 
         return $this->success([
-            'fileUrl' => FileHelper::fresnsFileOriginalUrl($dtoWordBody->fileId ?? $dtoWordBody->fid),
+            'fileLink' => FileHelper::fresnsFileOriginalUrl($dtoWordBody->fileId ?? $dtoWordBody->fid),
         ]);
     }
 
@@ -525,7 +525,7 @@ class File
         }
 
         return $this->success([
-            'fileUrl' => FileHelper::fresnsFileOriginalUrl($dtoWordBody->fileId ?? $dtoWordBody->fid),
+            'fileLink' => FileHelper::fresnsFileOriginalUrl($dtoWordBody->fileId ?? $dtoWordBody->fid),
         ]);
     }
 

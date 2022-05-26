@@ -201,16 +201,21 @@ class CommonController extends Controller
 
         if (in_array(2, $data['types'])) {
             $service = new AccountService();
-            $data['apiContent']['account'] = $service->accountDetail($callback->account_id);
+            $data['apiContent']['account']['sessionToken'] = null;
+            $data['apiContent']['account']['detail'] = $service->accountDetail($callback->account_id);
 
             $fresnsResponse = \FresnsCmdWord::plugin()->createSessionToken([
                 'platformId' => $headers['platformId'],
                 'aid' => $data['apiContent']['account']['aid'],
+                'uid' => null,
+                'expiredTime' => null,
             ]);
 
             if ($fresnsResponse->isSuccessResponse()) {
-                $data['apiContent']['account']['token'] = $fresnsResponse->getData('token') ?? null;
-                $data['apiContent']['account']['tokenExpiredTime'] = $fresnsResponse->getData('tokenExpiredTime') ?? null;
+                $sessionToken['token'] = $fresnsResponse->getData('token') ?? null;
+                $sessionToken['token'] = $fresnsResponse->getData('expiredTime') ?? null;
+
+                $data['apiContent']['account']['sessionToken'] = $sessionToken;
             }
         }
 
@@ -239,56 +244,6 @@ class CommonController extends Controller
         $callback->is_use = 1;
         $callback->use_plugin_unikey = $dtoRequest->unikey;
         $callback->save();
-
-        return $this->success($data);
-    }
-
-    // download file
-    public function downloadFile(Request $request)
-    {
-        $dtoRequest = new CommonDownloadFileDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
-
-        $file = File::whereFid($dtoRequest->fid)->first();
-        if (empty($file)) {
-            throw new ApiException(37500);
-        }
-
-        if ($file->is_enable == 0) {
-            throw new ApiException(37501);
-        }
-
-        switch ($dtoRequest->type) {
-            // user
-            case 1:
-                $data = null;
-            break;
-
-            // group
-            case 2:
-                $data = null;
-            break;
-
-            // hashtag
-            case 3:
-                $data = null;
-            break;
-
-            // post
-            case 4:
-                $data = null;
-            break;
-
-            // comment
-            case 5:
-                $data = null;
-            break;
-
-            // extend
-            case 6:
-                $data = null;
-            break;
-        }
 
         return $this->success($data);
     }
@@ -450,5 +405,74 @@ class CommonController extends Controller
             break;
         }
 
+    }
+
+    // download file
+    public function downloadFile(string $fid, Request $request)
+    {
+        $dtoRequest = new CommonDownloadFileDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $file = File::whereFid($fid)->first();
+        if (empty($file)) {
+            throw new ApiException(37500);
+        }
+
+        if ($file->is_enable == 0) {
+            throw new ApiException(37501);
+        }
+
+        switch ($dtoRequest->type) {
+            // user
+            case 1:
+                $data = null;
+            break;
+
+            // group
+            case 2:
+                $data = null;
+            break;
+
+            // hashtag
+            case 3:
+                $data = null;
+            break;
+
+            // post
+            case 4:
+                $data = null;
+            break;
+
+            // comment
+            case 5:
+                $data = null;
+            break;
+
+            // extend
+            case 6:
+                $data = null;
+            break;
+        }
+
+        return $this->success($data);
+    }
+
+    // file download users
+    public function downloadUsers(string $fid)
+    {
+        $headers = AppHelper::getApiHeaders();
+
+        $file = File::whereFid($fid)->first();
+        if (empty($file)) {
+            throw new ApiException(37500);
+        }
+
+        if ($file->is_enable == 0) {
+            throw new ApiException(37501);
+        }
+
+        $data = null;
+
+        return $this->success($data);
     }
 }
