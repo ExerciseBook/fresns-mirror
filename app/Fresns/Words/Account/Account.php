@@ -18,7 +18,6 @@ use App\Models\Account as AccountModel;
 use App\Models\AccountConnect;
 use App\Models\AccountWallet;
 use App\Models\SessionToken;
-use App\Models\User;
 use App\Models\VerifyCode;
 use App\Utilities\ConfigUtility;
 use App\Utilities\PermissionUtility;
@@ -174,24 +173,26 @@ class Account
     public function createSessionToken($wordBody)
     {
         $dtoWordBody = new CreateSessionTokenDTO($wordBody);
-        if ($dtoWordBody->aid) {
-            $accountId = AccountModel::where('id', '=', $dtoWordBody->aid)->value('id');
-        }
-        if ($dtoWordBody->uid) {
-            $userId = User::where('uid', '=', $dtoWordBody->uid)->value('id');
-        }
+
+        $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
+        $userId = PrimaryHelper::fresnsAccountIdByUid($dtoWordBody->uid);
+
         $condition = [
-            'account_id' => $accountId,
-            'user_id' => $userId ?? null,
             'platform_id' => $dtoWordBody->platformId,
+            'account_id' => $accountId,
+            'user_id' => $userId,
         ];
-        $tokenCount = SessionToken::where($condition)->first();
-        if ($tokenCount) {
+
+        $tokenInfo = SessionToken::where($condition)->first();
+        if (! empty($tokenInfo)) {
             SessionToken::where($condition)->delete();
         }
+
         $token = \Str::random(32);
+
         $condition['token'] = $token;
         $condition['expired_at'] = $dtoWordBody->expiredTime ?? null;
+
         SessionToken::insert($condition);
 
         return $this->success([
