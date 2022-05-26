@@ -9,6 +9,7 @@
 namespace App\Fresns\Api\Http\Controllers;
 
 use App\Fresns\Api\Http\DTO\PostDetailDTO;
+use App\Fresns\Api\Http\DTO\PostFollowDTO;
 use App\Fresns\Api\Http\DTO\PostListDTO;
 use App\Helpers\AppHelper;
 use App\Models\Post;
@@ -58,6 +59,39 @@ class PostController extends Controller
 
         $service = new PostService();
         $data['detail'] = $service->postDetail($post->id, 'detail', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+
+        return $this->success($data);
+    }
+
+    public function follow(string $type, Request $request)
+    {
+        $requestData = $request->all();
+        $requestData['type'] = $type;
+        $dtoRequest = new PostFollowDTO($requestData);
+
+        $headers = AppHelper::getApiHeaders();
+
+        switch ($dtoRequest->type) {
+            // all
+            case 'all':
+                $data = null;
+            break;
+
+            // user
+            case 'user':
+                $data = null;
+            break;
+
+            // group
+            case 'group':
+                $data = null;
+            break;
+
+            // hashtag
+            case 'hashtag':
+                $data = null;
+            break;
+        }
 
         return $this->success($data);
     }
