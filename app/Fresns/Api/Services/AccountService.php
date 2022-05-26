@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Services;
 
 use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
+use App\Utilities\ExtendUtility;
 use App\Models\Account;
 
 class AccountService
@@ -42,5 +43,23 @@ class AccountService
         $detail = array_merge($accountInfo, $item, $userInteractive);
 
         return $detail;
+    }
+
+    public function accountData(int $accountId)
+    {
+        $headers = AppHelper::getApiHeaders();
+
+        $common['walletRecharges'] = ExtendUtility::getPluginExtends(1, null, null, $accountId, $headers['langTag']);
+        $common['walletWithdraws'] = ExtendUtility::getPluginExtends(2, null, null, $accountId, $headers['langTag']);
+        $data['commons'] = $common;
+
+        $token['token'] = null;
+        $token['expiredTime'] = null;
+        $data['sessionToken'] = $token;
+
+        $service = new AccountService();
+        $data['detail'] = $service->accountDetail($accountId);
+
+        return $data;
     }
 }

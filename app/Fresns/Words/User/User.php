@@ -20,7 +20,7 @@ use App\Models\File;
 use App\Models\User as UserModel;
 use App\Models\UserRole;
 use App\Models\UserStat;
-use Fresns\CmdWordManager\Exceptions\Constants\ExceptionConstant;
+use App\Utilities\ConfigUtility;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
 use Illuminate\Support\Facades\Hash;
 
@@ -37,16 +37,22 @@ class User
     public function addUser($wordBody)
     {
         $dtoWordBody = new AddUserDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
 
-        $account_id = Account::where('aid', $dtoWordBody->aid)->value('id');
-        if (empty($account_id)) {
-            ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_DATA_ERROR)::throw();
+        $account = Account::where('aid', $dtoWordBody->aid)->first();
+        if (empty($account)) {
+            return $this->failure(
+                34301,
+                ConfigUtility::getCodeMessage(34301, 'Fresns', $langTag)
+            );
         }
 
+        $uid = StrHelper::generateDigital(8);
+        $username = $dtoWordBody->username ?? \Str::random(8);
         $userArr = [
-            'account_id' => $account_id,
-            'uid' => StrHelper::generateDigital(8),
-            'username' => $dtoWordBody->username ?? \Str::random(8),
+            'account_id' => $account->id,
+            'uid' => $uid,
+            'username' => $username,
             'nickname' => $dtoWordBody->nickname,
             'password' => isset($dtoWordBody->password) ? Hash::make($dtoWordBody->password) : null,
             'avatarFid' => isset($dtoWordBody->avatarFid) ? File::where('fid', $dtoWordBody->avatarFid)->value('id') : null,
@@ -69,7 +75,12 @@ class User
         $statArr = ['user_id' => $userId];
         UserStat::insert($statArr);
 
-        return $this->success();
+        return $this->success([
+            'aid' => $account->aid,
+            'uid' => $uid,
+            'username' => $username,
+            'nickname' => $dtoWordBody->nickname,
+        ]);
     }
 
     /**
@@ -81,14 +92,38 @@ class User
     public function verifyUser($wordBody)
     {
         $dtoWordBody = new VerifyUserDTO($wordBody);
-        $user = User::where('uid', '=', $dtoWordBody->uid)->first();
-        if ($user) {
-            $result = ! Hash::check($dtoWordBody->password, $user->password);
-        }
-        $result = false;
-        $data = ['aid' => $user->aid, 'uid' => $user->account_id];
+        $langTag = \request()->header('langTag', config('app.locale'));
 
-        return $this->success();
+        $user = User::where('uid', $dtoWordBody->uid)->first();
+        $aid = $user->account->aid;
+
+        if (empty($user) || $dtoWordBody->aid != $aid) {
+            return $this->failure(
+                35201,
+                ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
+            );
+        }
+
+        if (! empty($user->password)) {
+            if (empty($dtoWordBody->password)) {
+                return $this->failure(
+                    34110,
+                    ConfigUtility::getCodeMessage(34110, 'Fresns', $langTag),
+                );
+            }
+
+            if (! Hash::check($dtoWordBody->password, $user->password)) {
+                return $this->failure(
+                    35204,
+                    ConfigUtility::getCodeMessage(35204, 'Fresns', $langTag),
+                );
+            }
+        }
+
+        $data['aid'] = $user->account->aid;
+        $data['uid'] = $user->uid;
+
+        return $this->success($data);
     }
 
     /**

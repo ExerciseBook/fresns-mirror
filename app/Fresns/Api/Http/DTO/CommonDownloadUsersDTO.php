@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class CommonDownloadFileDTO extends DTO
+class CommonDownloadUsersDTO extends DTO
 {
     /**
      * @return array
@@ -18,8 +18,8 @@ class CommonDownloadFileDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['integer', 'required', 'in:1,2,3,4,5,6'],
-            'fsid' => ['string', 'required'],
+            'pageSize' => ['integer', 'nullable', 'between:1,30'],
+            'page' => ['integer', 'nullable'],
         ];
     }
 }

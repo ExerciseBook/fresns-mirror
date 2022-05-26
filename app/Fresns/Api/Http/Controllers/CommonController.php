@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Http\Controllers;
 
 use App\Fresns\Api\Http\DTO\CommonCallbacksDTO;
 use App\Fresns\Api\Http\DTO\CommonDownloadFileDTO;
+use App\Fresns\Api\Http\DTO\CommonDownloadUsersDTO;
 use App\Fresns\Api\Http\DTO\CommonInputTipsDTO;
 use App\Fresns\Api\Http\DTO\CommonSendVerifyCodeDTO;
 use App\Fresns\Api\Http\DTO\CommonUploadFileDTO;
@@ -17,6 +18,7 @@ use App\Fresns\Api\Http\DTO\CommonUploadLogDTO;
 use App\Fresns\Api\Services\AccountService;
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
+use App\Helpers\DateHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\FileHelper;
 use App\Models\Extend;
@@ -28,6 +30,7 @@ use App\Models\User;
 use App\Exceptions\ApiException;
 use App\Models\Account;
 use App\Models\File;
+use App\Models\FileLog;
 use App\Models\PluginCallback;
 use App\Utilities\EditorUtility;
 use Illuminate\Http\Request;
@@ -201,16 +204,21 @@ class CommonController extends Controller
 
         if (in_array(2, $data['types'])) {
             $service = new AccountService();
-            $data['apiContent']['account'] = $service->accountDetail($callback->account_id);
+            $data['apiContent']['account']['sessionToken'] = null;
+            $data['apiContent']['account']['detail'] = $service->accountDetail($callback->account_id);
 
             $fresnsResponse = \FresnsCmdWord::plugin()->createSessionToken([
                 'platformId' => $headers['platformId'],
                 'aid' => $data['apiContent']['account']['aid'],
+                'uid' => null,
+                'expiredTime' => null,
             ]);
 
             if ($fresnsResponse->isSuccessResponse()) {
-                $data['apiContent']['account']['token'] = $fresnsResponse->getData('token') ?? null;
-                $data['apiContent']['account']['tokenExpiredTime'] = $fresnsResponse->getData('tokenExpiredTime') ?? null;
+                $sessionToken['token'] = $fresnsResponse->getData('token') ?? null;
+                $sessionToken['token'] = $fresnsResponse->getData('expiredTime') ?? null;
+
+                $data['apiContent']['account']['sessionToken'] = $sessionToken;
             }
         }
 
@@ -239,56 +247,6 @@ class CommonController extends Controller
         $callback->is_use = 1;
         $callback->use_plugin_unikey = $dtoRequest->unikey;
         $callback->save();
-
-        return $this->success($data);
-    }
-
-    // download file
-    public function downloadFile(Request $request)
-    {
-        $dtoRequest = new CommonDownloadFileDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
-
-        $file = File::whereFid($dtoRequest->fid)->first();
-        if (empty($file)) {
-            throw new ApiException(37500);
-        }
-
-        if ($file->is_enable == 0) {
-            throw new ApiException(37501);
-        }
-
-        switch ($dtoRequest->type) {
-            // user
-            case 1:
-                $data = null;
-            break;
-
-            // group
-            case 2:
-                $data = null;
-            break;
-
-            // hashtag
-            case 3:
-                $data = null;
-            break;
-
-            // post
-            case 4:
-                $data = null;
-            break;
-
-            // comment
-            case 5:
-                $data = null;
-            break;
-
-            // extend
-            case 6:
-                $data = null;
-            break;
-        }
 
         return $this->success($data);
     }
@@ -450,5 +408,83 @@ class CommonController extends Controller
             break;
         }
 
+    }
+
+    // download file
+    public function downloadFile(string $fid, Request $request)
+    {
+        $dtoRequest = new CommonDownloadFileDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $file = File::whereFid($fid)->first();
+        if (empty($file)) {
+            throw new ApiException(37500);
+        }
+
+        if ($file->is_enable == 0) {
+            throw new ApiException(37501);
+        }
+
+        switch ($dtoRequest->type) {
+            // user
+            case 1:
+                $data = null;
+            break;
+
+            // group
+            case 2:
+                $data = null;
+            break;
+
+            // hashtag
+            case 3:
+                $data = null;
+            break;
+
+            // post
+            case 4:
+                $data = null;
+            break;
+
+            // comment
+            case 5:
+                $data = null;
+            break;
+
+            // extend
+            case 6:
+                $data = null;
+            break;
+        }
+
+        return $this->success($data);
+    }
+
+    // file download users
+    public function downloadUsers(string $fid, Request $request)
+    {
+        $dtoRequest = new CommonDownloadUsersDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $file = File::whereFid($fid)->first();
+        if (empty($file)) {
+            throw new ApiException(37500);
+        }
+
+        if ($file->is_enable == 0) {
+            throw new ApiException(37501);
+        }
+
+        $fileLogs = FileLog::with('user')->orderBy('created_at', 'desc')->paginate($request->get('pageSize', 10));
+
+        $item = null;
+        foreach ($fileLogs as $log) {
+            $item['downloadTime'] = DateHelper::fresnsFormatDateTime($log->created_at, $headers['timezone'], $headers['langTag']);
+            $item['downloadTimeFormat'] = DateHelper::fresnsFormatTime($log->created_at, $headers['langTag']);
+            $item['downloadUser'] = $log->user->getUserProfile();
+            $item[] = $item;
+        }
+
+        return $this->fresnsPaginate($item, $fileLogs->total(), $fileLogs->perPage());
     }
 }
