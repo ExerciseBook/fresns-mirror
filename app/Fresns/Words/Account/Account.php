@@ -106,8 +106,8 @@ class Account
         }
 
         return $this->success([
-            'aid' => $inputArr['aid'],
             'type' => $dtoWordBody->type,
+            'aid' => $inputArr['aid'],
         ]);
     }
 
@@ -161,7 +161,10 @@ class Account
             );
         }
 
-        return $this->success();
+        return $this->success([
+            'type' => $account->type,
+            'aid' => $account->aid,
+        ]);
     }
 
     /**
