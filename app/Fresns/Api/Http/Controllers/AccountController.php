@@ -11,12 +11,15 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Fresns\Api\Http\DTO\AccountLoginDTO;
 use App\Fresns\Api\Http\DTO\AccountRegisterDTO;
 use App\Fresns\Api\Http\DTO\AccountResetPasswordDTO;
+use App\Fresns\Api\Http\DTO\AccountWalletLogsDTO;
 use App\Helpers\AppHelper;
+use App\Helpers\DateHelper;
 use App\Fresns\Api\Services\AccountService;
 use App\Exceptions\ApiException;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\Account;
+use App\Models\AccountWalletLog;
 use App\Models\SessionToken;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
@@ -245,6 +248,42 @@ class AccountController extends Controller
         $data = $service->accountData($accountId);
 
         return $this->success($data);
+    }
+
+    // walletLogs
+    public function walletLogs(Request $request)
+    {
+        $dtoRequest = new AccountWalletLogsDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $accountId = PrimaryHelper::fresnsAccountIdByAid($headers['aid']);
+        $status = $dtoRequest->status ?? 1;
+
+        $walletLogQuery = AccountWalletLog::where('account_id', $accountId)->where('is_enable', $status)->orderBy('created_at', 'desc');
+
+        if (!empty($dtoRequest->type)) {
+            $walletLogQuery->where('object_type', $dtoRequest->type);
+        }
+
+        $walletLogs = $walletLogQuery->paginate($request->get('pageSize', 20));
+
+        $logList = null;
+        foreach ($walletLogs as $log) {
+            $item['type'] = $log->object_type;
+            $item['amount'] = $log->amount;
+            $item['transactionAmount'] = $log->transaction_amount;
+            $item['systemFee'] = $log->system_fee;
+            $item['openingBalance'] = $log->opening_balance;
+            $item['closingBalance'] = $log->closing_balance;
+            $info['createTime'] = DateHelper::fresnsFormatDateTime($log->created_at, $headers['timezone'], $headers['langTag']);
+            $info['createTimeFormat'] = DateHelper::fresnsFormatTime($log->created_at, $headers['langTag']);
+            $item['remark'] = $log->remark;
+            $item['pluginUnikey'] = $log->object_unikey;
+            $item['status'] = (bool) $log->is_enable;
+            $logList[] = $item;
+        }
+
+        return $this->fresnsPaginate($logList, $walletLogs->total(), $walletLogs->perPage());
     }
 
     // logout
