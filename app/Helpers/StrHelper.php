@@ -18,15 +18,28 @@ class StrHelper
      */
     public static function maskEmail(string $email)
     {
-        $emailArr = explode('@', $email);
-        if (empty($emailArr[0])) {
-            return '';
+        if (!$email) {
+            return;
         }
-        $mid = str_repeat('*', strlen($emailArr[0]) - 3);
-        $emailStr = substr_replace($emailArr[0], $mid, 3);
-        $email = $emailStr.'@'.$emailArr[1];
 
-        return $email;
+        $user = strstr($email, '@', true);
+        $domain = strstr($email, '@');
+
+        $len = mb_strlen($user);
+
+        $mask = match (true) {
+            default => str_repeat('*', 3),
+            $len > 3 => str_repeat('*', bcsub($len, 3)),
+        };
+
+        $offset = match (true) {
+            default => 1,
+            $len > 3 => 3,
+        };
+
+        $maskUser = substr_replace($user, $mask, $offset);
+
+        return "{$maskUser}{$domain}";
     }
 
     /**
