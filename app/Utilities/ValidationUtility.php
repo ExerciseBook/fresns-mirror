@@ -9,13 +9,12 @@
 namespace App\Helpers;
 
 use App\Models\BlockWord;
-use App\Exceptions\ApiException;
 use Illuminate\Support\Str;
 
 class ValidationUtility
 {
     // Validation username
-    public static function validUsername(string $username): bool
+    public static function validUsername(string $username): array
     {
         $config = ConfigHelper::fresnsConfigByItemKeys([
             'username_edit',
@@ -24,33 +23,36 @@ class ValidationUtility
             'ban_names',
         ]);
 
+        $format = true;
         // 只允许字母、数字和单个连字符
         // 数字不分前后，但不能是纯数字
         // 连字符只能在中间，不能在开头或结尾，也不能纯是连字符
 
-        // 35101 指定天数内只能修改一次
-        // throw new ApiException(35101);
+        $minLength = true;
+        // 用户名长度超出限制
 
-        // 35102 用户名格式错误，请勿使用特殊字符
-        // throw new ApiException(35102);
+        $maxLength = true;
+        // 用户名未达到最小长度要求
 
-        // 35103 用户名长度超出限制
-        // throw new ApiException(35103);
+        $use = true;
+        // 用户名已被使用
 
-        // 35104 用户名未达到最小长度要求
-        // throw new ApiException(35104);
+        $banName = true;
+        // 用户名存在禁用词
 
-        // 35105 用户名已被使用
-        // throw new ApiException(35105);
+        $validUsername = [
+            'format' => $format,
+            'minLength' => $minLength,
+            'maxLength' => $maxLength,
+            'use' => $use,
+            'banName' => $banName,
+        ];
 
-        // 35106 用户名存在禁用词
-        // throw new ApiException(35106);
-
-        return true;
+        return $validUsername;
     }
 
     // Validation nickname
-    public static function validNickname(string $nickname): bool
+    public static function validNickname(string $nickname): array
     {
         $config = ConfigHelper::fresnsConfigByItemKeys([
             'nickname_min',
@@ -60,52 +62,73 @@ class ValidationUtility
 
         $blockWords = BlockWord::whereIn('user_mode', [2, 3])->get();
 
+        $format = true;
         // 不能带标点符号或特殊符号
         // 允许有单个空格，但空格不能在开头或结尾
 
-        // 35107 昵称格式错误，请勿使用特殊字符
-        // throw new ApiException(35107);
+        $minLength = true;
+        // 昵称长度超出限制
 
-        // 35108 昵称长度超出限制
-        // throw new ApiException(35108);
+        $maxLength = true;
+        // 昵称未达到最小长度要求
 
-        // 35109 昵称未达到最小长度要求
-        // throw new ApiException(35109);
+        $blockWord = true;
+        // 昵称存在禁用词
 
-        // 35110 昵称存在禁用词
-        // throw new ApiException(35110);
+        $validNickname = [
+            'format' => $format,
+            'minLength' => $minLength,
+            'maxLength' => $maxLength,
+            'blockWord' => $blockWord,
+        ];
 
-        return true;
+        return $validNickname;
     }
 
     // Validation password
-    public static function validPassword(string $password): bool
+    public static function validPassword(string $password): array
     {
         $config = ConfigHelper::fresnsConfigByItemKeys([
             'password_length',
             'password_strength',
         ]);
-        // 1 密码中必须含有数字
-        // 2 密码中必须含有小写字母
-        // 3 密码中必须含有大写字母
-        // 4 密码中必须含有特殊字符（除空格）
 
-        // 34104 密码长度不正确
-        // throw new ApiException(34104);
+        $passwordLength = Str::length($password);
 
-        // 34105 密码应包含数字
-        // throw new ApiException(34105);
+        $length = false;
+        if ($passwordLength > $config['password_length']) {
+            $length = true;
+        }
 
-        // 34106 密码应包含小写字母
-        // throw new ApiException(34106);
+        $number = true;
+        if (in_array(1, $config['password_strength'])) {
+            $number = preg_match('/\d/is', $password);
+        }
 
-        // 34107 密码应包含大写字母
-        // throw new ApiException(34107);
+        $lowercase = true;
+        if (in_array(1, $config['password_strength'])) {
+            $lowercase = preg_match('/[a-z]/', $password);
+        }
 
-        // 34108 密码应包含符号（除空格）
-        // throw new ApiException(34108);
+        $uppercase = true;
+        if (in_array(1, $config['password_strength'])) {
+            $uppercase = preg_match('/[A-Z]/', $password);
+        }
 
-        return true;
+        $symbols = true;
+        if (in_array(1, $config['password_strength'])) {
+            $symbols = preg_match('/^[A-Za-z0-9]+$/', $password);
+        }
+
+        $validPassword = [
+            'length' => $length,
+            'number' => $number,
+            'lowercase' => $lowercase,
+            'uppercase' => $uppercase,
+            'symbols' => $symbols,
+        ];
+
+        return $validPassword;
     }
 
     // Validation content

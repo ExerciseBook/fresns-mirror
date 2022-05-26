@@ -10,13 +10,17 @@ namespace App\Fresns\Api\Http\Controllers;
 
 use App\Fresns\Api\Http\DTO\AccountLoginDTO;
 use App\Fresns\Api\Http\DTO\AccountRegisterDTO;
+use App\Fresns\Api\Http\DTO\AccountResetPasswordDTO;
 use App\Helpers\AppHelper;
 use App\Fresns\Api\Services\AccountService;
-use App\Utilities\ExtendUtility;
 use App\Exceptions\ApiException;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
+use App\Models\Account;
+use App\Models\SessionToken;
+use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
 {
@@ -166,13 +170,74 @@ class AccountController extends Controller
         return $this->success($data);
     }
 
+    // reset password
+    public function resetPassword(Request $request)
+    {
+        $dtoRequest = new AccountResetPasswordDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        // check code
+        $checkCodeWordBody = [
+            'type' => $dtoRequest->type,
+            'account' => $dtoRequest->account,
+            'countryCode' => $dtoRequest->countryCode,
+            'verifyCode' => $dtoRequest->verifyCode,
+        ];
+
+        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($checkCodeWordBody);
+
+        if ($fresnsResp->isErrorResponse()) {
+            return $fresnsResp->errorResponse();
+        }
+
+        if ($dtoRequest->type == 1) {
+            $account = Account::where('email', $dtoRequest->account)->first();
+        } else {
+            $account = Account::where('phone', $dtoRequest->countryCode.$dtoRequest->account)->first();
+        }
+
+        if (empty($account)) {
+            throw new ApiException(34301);
+        }
+
+        $validPassword = ValidationUtility::validPassword($dtoRequest->password);
+
+        if (! $validPassword->length) {
+            throw new ApiException(34104);
+        }
+
+        if (! $validPassword->number) {
+            throw new ApiException(34105);
+        }
+
+        if (! $validPassword->lowercase) {
+            throw new ApiException(34106);
+        }
+
+        if (! $validPassword->uppercase) {
+            throw new ApiException(34107);
+        }
+
+        if (! $validPassword->symbols) {
+            throw new ApiException(34108);
+        }
+
+        $dataPassword = Hash::make($dtoWordBody->password);
+
+        $account->update([
+            'password' => $dataPassword,
+        ]);
+
+        return $this->success();
+    }
+
     // detail
     public function detail()
     {
         $headers = AppHelper::getApiHeaders();
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($headers['aid']);
-        if (empty($account)) {
+        if (empty($accountId)) {
             throw new ApiException(31502);
         }
 
@@ -180,5 +245,23 @@ class AccountController extends Controller
         $data = $service->accountData($accountId);
 
         return $this->success($data);
+    }
+
+    // logout
+    public function logout()
+    {
+        $headers = AppHelper::getApiHeaders();
+
+        $accountId = PrimaryHelper::fresnsAccountIdByAid($headers['aid']);
+        $userId = PrimaryHelper::fresnsAccountIdByUid($headers['uid']);
+
+        $condition = [
+            'platform_id' => $headers['platformId'],
+            'account_id' => $accountId,
+            'user_id' => $userId,
+        ];
+        SessionToken::where($condition)->delete();
+
+        return $this->success();
     }
 }
