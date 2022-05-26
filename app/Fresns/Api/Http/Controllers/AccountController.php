@@ -200,29 +200,29 @@ class AccountController extends Controller
             throw new ApiException(34301);
         }
 
-        $validPassword = ValidationUtility::validPassword($dtoRequest->password);
+        $validPassword = ValidationUtility::validPassword($dtoRequest->newPassword);
 
-        if (! $validPassword->length) {
+        if (! $validPassword['length']) {
             throw new ApiException(34104);
         }
 
-        if (! $validPassword->number) {
+        if (! $validPassword['number']) {
             throw new ApiException(34105);
         }
 
-        if (! $validPassword->lowercase) {
+        if (! $validPassword['lowercase']) {
             throw new ApiException(34106);
         }
 
-        if (! $validPassword->uppercase) {
+        if (! $validPassword['uppercase']) {
             throw new ApiException(34107);
         }
 
-        if (! $validPassword->symbols) {
+        if (! $validPassword['symbols']) {
             throw new ApiException(34108);
         }
 
-        $dataPassword = Hash::make($dtoWordBody->password);
+        $dataPassword = Hash::make($dtoRequest->newPassword);
 
         $account->update([
             'password' => $dataPassword,

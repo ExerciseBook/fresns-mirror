@@ -6,8 +6,9 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Helpers;
+namespace App\Utilities;
 
+use App\Helpers\ConfigHelper;
 use App\Models\BlockWord;
 use Illuminate\Support\Str;
 
