@@ -40,9 +40,22 @@ class Account
     public function addAccount($wordBody)
     {
         $dtoWordBody = new AddAccountDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        if ($dtoWordBody->type == 1) {
+            $checkAccount = AccountModel::where('email', $dtoWordBody->account)->first();
+        } else {
+            $checkAccount = AccountModel::where('phone', $dtoWordBody->countryCode.$dtoWordBody->account)->first();
+        }
+
+        if (! empty($checkAccount)) {
+            return $this->failure(
+                34204,
+                ConfigUtility::getCodeMessage(34204, 'Fresns', $langTag)
+            );
+        }
 
         $connectInfoArr = [];
-        // Whether the same token exists
         if (isset($dtoWordBody->connectInfo)) {
             $connectInfoArr = json_decode($dtoWordBody->connectInfo, true);
             $connectTokenArr = [];
@@ -108,20 +121,48 @@ class Account
     public function verifyAccount($wordBody)
     {
         $dtoWordBody = new VerifyAccountDTO($wordBody);
-        $where = [
-            'type' => $dtoWordBody->type,
-            'account' => $dtoWordBody->type == 1 ? $dtoWordBody->type : $dtoWordBody->countryCode.$dtoWordBody->account,
-            'code' => $dtoWordBody->verifyCode,
-            'is_enable' => 1,
-        ];
-        $verifyInfo = VerifyCode::where($where)->where('expired_at', '>', date('Y-m-d H:i:s'))->first();
-        if ($verifyInfo) {
-            VerifyCode::where('id', $verifyInfo['id'])->update(['is_enable' => 0]);
+        $langTag = \request()->header('langTag', config('app.locale'));
 
-            return $this->success();
+        if ($dtoWordBody->type == 1) {
+            $accountName = $dtoWordBody->account;
+            $account = AccountModel::where('email', $accountName)->first();
         } else {
-            ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_DATA_ERROR)::throw();
+            $accountName = $dtoWordBody->countryCode.$dtoWordBody->account;
+            $account = AccountModel::where('phone', $accountName)->first();
         }
+
+        if (empty($dtoWordBody->password)) {
+            $checkCode = [
+                'type' => $dtoWordBody->type,
+                'account' => $accountName,
+                'code' => $dtoWordBody->verifyCode,
+                'is_enable' => 1,
+            ];
+
+            $verifyCode = VerifyCode::where($checkCode)->where('expired_at', '>', date('Y-m-d H:i:s'))->first();
+
+            if ($verifyCode) {
+                VerifyCode::where('id', $verifyCode->id)->update([
+                    'is_enable' => 0,
+                ]);
+
+                return $this->success();
+            } else {
+                return $this->failure(
+                    33103,
+                    ConfigUtility::getCodeMessage(33103, 'Fresns', $langTag),
+                );
+            }
+        }
+
+        if (! Hash::check($dtoWordBody->password, $account->password)) {
+            return $this->failure(
+                34304,
+                ConfigUtility::getCodeMessage(34304, 'Fresns', $langTag),
+            );
+        }
+
+        return $this->success();
     }
 
     /**

@@ -216,19 +216,33 @@ class Basis
     public function checkCode($wordBody)
     {
         $dtoWordBody = new CheckCodeDTO($wordBody);
+        $langTag = \request()->header('langTag', config('app.locale'));
+
+        if ($dtoWordBody->type == 1) {
+            $account = $dtoWordBody->account;
+        } else {
+            $account = $dtoWordBody->countryCode.$dtoWordBody->account;
+        }
+
         $term = [
             'type' => $dtoWordBody->type,
-            'account' => $dtoWordBody->account,
-            'code' => $dtoWordBody->type == 1 ? $dtoWordBody->verifyCode : $dtoWordBody->countryCode.$dtoWordBody->account,
+            'account' => $account,
+            'code' => $dtoWordBody->verifyCode,
             'is_enable' => 1,
         ];
         $verifyInfo = VerifyCode::where($term)->where('expired_at', '>', date('Y-m-d H:i:s'))->first();
+
         if ($verifyInfo) {
-            VerifyCode::where('id', $verifyInfo['id'])->update(['is_enable' => 0]);
+            VerifyCode::where('id', $verifyInfo->id)->update([
+                'is_enable' => 0,
+            ]);
 
             return $this->success();
         } else {
-            ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_DATA_ERROR)::throw();
+            return $this->failure(
+                33103,
+                ConfigUtility::getCodeMessage(33103, 'Fresns', $langTag),
+            );
         }
     }
 }
