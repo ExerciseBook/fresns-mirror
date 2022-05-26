@@ -189,14 +189,24 @@ class Account
         }
 
         $token = \Str::random(32);
+        $expiredAt = null;
+        if (isset($dtoWordBody->expiredTime)) {
+            $now = time();
+            $time = $dtoWordBody->expiredTime * 3600;
+            $expiredTime = $now + $time;
+            $expiredAt = date('Y-m-d H:i:s', $expiredTime);
+        }
 
         $condition['token'] = $token;
-        $condition['expired_at'] = $dtoWordBody->expiredTime ?? null;
+        $condition['expired_at'] = $expiredAt;
 
         SessionToken::insert($condition);
 
         return $this->success([
+            'aid' => $dtoWordBody->aid,
+            'uid' => $dtoWordBody->uid,
             'token' => $token,
+            'expiredTime' => $expiredAt,
         ]);
     }
 

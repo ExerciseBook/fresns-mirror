@@ -39,18 +39,20 @@ class User
         $dtoWordBody = new AddUserDTO($wordBody);
         $langTag = \request()->header('langTag', config('app.locale'));
 
-        $accountId = Account::where('aid', $dtoWordBody->aid)->value('id');
-        if (empty($accountId)) {
+        $account = Account::where('aid', $dtoWordBody->aid)->first();
+        if (empty($account)) {
             return $this->failure(
                 34301,
                 ConfigUtility::getCodeMessage(34301, 'Fresns', $langTag)
             );
         }
 
+        $uid = StrHelper::generateDigital(8);
+        $username = $dtoWordBody->username ?? \Str::random(8);
         $userArr = [
-            'account_id' => $accountId,
-            'uid' => StrHelper::generateDigital(8),
-            'username' => $dtoWordBody->username ?? \Str::random(8),
+            'account_id' => $account->id,
+            'uid' => $uid,
+            'username' => $username,
             'nickname' => $dtoWordBody->nickname,
             'password' => isset($dtoWordBody->password) ? Hash::make($dtoWordBody->password) : null,
             'avatarFid' => isset($dtoWordBody->avatarFid) ? File::where('fid', $dtoWordBody->avatarFid)->value('id') : null,
@@ -73,7 +75,12 @@ class User
         $statArr = ['user_id' => $userId];
         UserStat::insert($statArr);
 
-        return $this->success();
+        return $this->success([
+            'aid' => $account->aid,
+            'uid' => $uid,
+            'username' => $username,
+            'nickname' => $dtoWordBody->nickname,
+        ]);
     }
 
     /**
