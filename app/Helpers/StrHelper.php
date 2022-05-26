@@ -179,11 +179,11 @@ class StrHelper
         return $domain ?? 'Unknown Error';
     }
 
-    public static function slug(string $text)
+    public static function slug(string $string)
     {
-        $text = StrHelper::stringToUtf8($text);
+        $text = StrHelper::stringToUtf8($string);
 
-        if (preg_match("/^[A-Za-z]+$/", $text)) {
+        if (preg_match("/^[A-Za-z\s]+$/", $text)) {
             $slug = Str::slug($text, '-');
         } else {
             $slug = rawurlencode($text);
