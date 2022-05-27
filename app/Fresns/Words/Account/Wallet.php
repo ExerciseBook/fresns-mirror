@@ -8,8 +8,8 @@
 
 namespace App\Fresns\Words\Account;
 
-use App\Fresns\Words\Wallet\DTO\WalletDecreaseDTO;
-use App\Fresns\Words\Wallet\DTO\WalletIncreaseDTO;
+use App\Fresns\Words\Account\DTO\WalletDecreaseDTO;
+use App\Fresns\Words\Account\DTO\WalletIncreaseDTO;
 use App\Helpers\PrimaryHelper;
 use App\Models\Account;
 use App\Models\AccountWallet;

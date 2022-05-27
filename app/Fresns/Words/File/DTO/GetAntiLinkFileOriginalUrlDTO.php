@@ -18,8 +18,8 @@ class GetAntiLinkFileOriginalUrlDTO extends DTO
     public function rules(): array
     {
         return [
-            'fileId' => ['required_without:fid', 'nullable', 'integer'],
-            'fid' => ['required_without:fileId', 'nullable', 'string'],
+            'fileId' => ['integer', 'nullable', 'required_without:fid', 'exists:App\Models\File,id'],
+            'fid' => ['string', 'nullable', 'required_without:fileId', 'exists:App\Models\File,fid'],
         ];
     }
 }

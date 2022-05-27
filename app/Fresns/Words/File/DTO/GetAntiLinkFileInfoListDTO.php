@@ -18,8 +18,8 @@ class GetAntiLinkFileInfoListDTO extends DTO
     public function rules(): array
     {
         return [
-            'ids' => ['required', 'array'],
-            'type' => ['required', 'string', 'in:fileId,fid'],
+            'ids' => ['array', 'required'],
+            'type' => ['string', 'required', 'in:fileId,fid'],
         ];
     }
 }
