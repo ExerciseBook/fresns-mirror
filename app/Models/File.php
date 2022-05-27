@@ -33,6 +33,17 @@ class File extends Model
         return $this->hasOne(FileAppend::class);
     }
 
+    public function getTypeKey()
+    {
+        return match ($this->type) {
+            default => throw new \RuntimeException("unknown file type of {$this->type}"),
+            File::TYPE_IMAGE => 'image',
+            File::TYPE_VIDEO => 'video',
+            File::TYPE_AUDIO => 'audio',
+            File::TYPE_DOCUMENT => 'document',
+        };
+    }
+
     public function isImage()
     {
         return $this->type === File::TYPE_IMAGE;
@@ -51,57 +62,5 @@ class File extends Model
     public function isDocument()
     {
         return $this->type === File::TYPE_DOCUMENT;
-    }
-
-    public function getTypeKey()
-    {
-        return match ($this->type) {
-            default => throw new \RuntimeException("unknown file type of {$this->type}"),
-            File::TYPE_IMAGE => 'image',
-            File::TYPE_VIDEO => 'video',
-            File::TYPE_AUDIO => 'audio',
-            File::TYPE_DOCUMENT => 'document',
-        };
-    }
-
-    public function getDestinationPath()
-    {
-        $fileType = $this->type;
-        $tableType = $this->fileAppend->table_type;
-
-        $fileTypeDir = match ($fileType) {
-            1 => 'images',
-            2 => 'videos',
-            3 => 'audios',
-            4 => 'documents',
-            default => throw new \LogicException("unknown file type $fileType"),
-        };
-
-        $tableTypeDir = match ($tableType) {
-            1 => '/mores/',
-            2 => '/configs/system/',
-            3 => '/configs/operating/',
-            4 => '/configs/sticker/',
-            5 => '/configs/user/',
-            6 => '/avatars/{YYYYMM}/{DD}/',
-            7 => '/dialogs/{YYYYMM}/{DD}/',
-            8 => '/posts/{YYYYMM}/{DD}/',
-            9 => '/comments/{YYYYMM}/{DD}/',
-            10 => '/extends/{YYYYMM}/{DD}/',
-            11 => '/plugins/{YYYYMM}/{DD}/',
-            default => throw new \LogicException("unknown table type $tableType"),
-        };
-
-        $replaceTableTypeDir = str_replace(
-            ['{YYYYMM}', '{DD}'],
-            [date('Ym'), date('d')],
-            $tableTypeDir
-        );
-
-        if (in_array($tableType, range(1, 6))) {
-            return sprintf('%s', trim($replaceTableTypeDir, '/'));
-        }
-
-        return sprintf('%s/%s', trim($fileTypeDir, '/'), trim($replaceTableTypeDir, '/'));
     }
 }

@@ -63,6 +63,38 @@ class FileHelper
         return $config;
     }
 
+    // get file storage path
+    public static function fresnsFileStoragePath(int $fileType, int $useType)
+    {
+        $fileTypeDir = match ($fileType) {
+            1 => 'images',
+            2 => 'videos',
+            3 => 'audios',
+            4 => 'documents',
+        };
+
+        $useTypeDir = match ($useType) {
+            1 => '/mores/{YYYYMM}/',
+            2 => '/systems/{YYYYMM}/',
+            3 => '/operations/{YYYYMM}/',
+            4 => '/stickers/{YYYYMM}/',
+            5 => '/avatars/{YYYYMM}/{DD}/',
+            6 => '/dialogs/{YYYYMM}/{DD}/',
+            7 => '/posts/{YYYYMM}/{DD}/',
+            8 => '/comments/{YYYYMM}/{DD}/',
+            9 => '/extends/{YYYYMM}/{DD}/',
+            10 => '/plugins/{YYYYMM}/{DD}/',
+        };
+
+        $replaceUseTypeDir = str_replace(
+            ['{YYYYMM}', '{DD}'],
+            [date('Ym'), date('d')],
+            $useTypeDir
+        );
+
+        return sprintf('%s/%s', trim($fileTypeDir, '/'), trim($replaceUseTypeDir, '/'));
+    }
+
     // get file info by file id or fid
     public static function fresnsFileInfo(string $fileIdOrFid)
     {
