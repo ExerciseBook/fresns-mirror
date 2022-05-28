@@ -14,42 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait ApiResponseTrait
 {
-    public function fresnsPaginate($items, $total, $pageSize)
-    {
-        $paginate = new LengthAwarePaginator(
-            items: $items,
-            total: $total,
-            perPage: $pageSize,
-            currentPage: \request('page'),
-        );
-
-        $paginate
-            ->withPath('/'.\request()->path())
-            ->withQueryString();
-
-        return $this->paginate($paginate);
-    }
-
-    public function paginate(LengthAwarePaginator $paginate, ?callable $callable = null)
-    {
-        return $this->success([
-            'paginate' => [
-                'total' => $paginate->total(),
-                'currentPage' => $paginate->currentPage(),
-                'pageSize' => $paginate->perPage(),
-                'lastPage' => $paginate->lastPage(),
-            ],
-            'list' => array_map(function ($item) use ($callable) {
-                if ($callable) {
-                    return $callable($item) ?? $item;
-                }
-
-                return $item;
-            },
-            $paginate->items()),
-        ]);
-    }
-
     public function success($data = null, $message = 'success', $code = 0, $headers = [])
     {
         if (is_string($data)) {
@@ -103,5 +67,39 @@ trait ApiResponseTrait
         }
 
         return $this->success($data, $message ?: 'unknown error', $code ?: 3e4, $headers);
+    }
+
+    public function fresnsPaginate($items, $total, $pageSize)
+    {
+        $paginate = new LengthAwarePaginator(
+            items: $items,
+            total: $total,
+            perPage: $pageSize,
+            currentPage: \request('page'),
+        );
+
+        $paginate->withPath('/'.\request()->path())->withQueryString();
+
+        return $this->paginate($paginate);
+    }
+
+    public function paginate(LengthAwarePaginator $paginate, ?callable $callable = null)
+    {
+        return $this->success([
+            'paginate' => [
+                'total' => $paginate->total(),
+                'currentPage' => $paginate->currentPage(),
+                'pageSize' => $paginate->perPage(),
+                'lastPage' => $paginate->lastPage(),
+            ],
+            'list' => array_map(function ($item) use ($callable) {
+                if ($callable) {
+                    return $callable($item) ?? $item;
+                }
+
+                return $item;
+            },
+            $paginate->items()),
+        ]);
     }
 }
