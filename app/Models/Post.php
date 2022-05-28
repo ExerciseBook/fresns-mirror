@@ -8,11 +8,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 class Post extends Model
 {
-    use SoftDeletes;
     use Traits\PostServiceTrait;
 
     protected $guarded = ['id'];

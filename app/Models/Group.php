@@ -8,11 +8,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 class Group extends Model
 {
-    use SoftDeletes;
     use Traits\LangNameTrait;
     use Traits\LangDescriptionTrait;
     use Traits\GroupServiceTrait;

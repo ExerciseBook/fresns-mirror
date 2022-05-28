@@ -8,10 +8,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 class Hashtag extends Model
 {
-    use SoftDeletes;
     use Traits\HashtagServiceTrait;
 }

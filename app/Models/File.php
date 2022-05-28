@@ -8,11 +8,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 class File extends Model
 {
-    use SoftDeletes;
     use Traits\FileServiceTrait;
 
     const TYPE_IMAGE = 1;

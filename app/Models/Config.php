@@ -8,12 +8,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 class Config extends Model
 {
-    use SoftDeletes;
-
     protected $guarded = [];
 
     public function getItemValueAttribute($value)
