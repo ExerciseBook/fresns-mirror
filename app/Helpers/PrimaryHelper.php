@@ -10,6 +10,7 @@ namespace App\Helpers;
 
 use App\Models\Account;
 use App\Models\Comment;
+use App\Models\Config;
 use App\Models\Extend;
 use App\Models\File;
 use App\Models\Group;
@@ -19,6 +20,42 @@ use App\Models\User;
 
 class PrimaryHelper
 {
+    public static function fresnsPrimaryId(string $tableName, ?string $tableKey = null)
+    {
+        if (empty($tableKey)) {
+            return null;
+        }
+
+        $tableId = match ($tableName) {
+            'configs' => PrimaryHelper::fresnsConfigIdByItemKey($tableKey),
+            'accounts' => PrimaryHelper::fresnsAccountIdByAid($tableKey),
+            'users' => PrimaryHelper::fresnsUserIdByUid($tableKey),
+            'posts' => PrimaryHelper::fresnsPostIdByPid($tableKey),
+            'comments' => PrimaryHelper::fresnsCommentIdByCid($tableKey),
+            'extends' => PrimaryHelper::fresnsExtendIdByEid($tableKey),
+            'groups' => PrimaryHelper::fresnsGroupIdByGid($tableKey),
+            'hashtags' => PrimaryHelper::fresnsHashtagIdByHid($tableKey),
+            default => null,
+        };
+
+        return $tableId;
+    }
+
+    /**
+     * @param  string  $itemKey
+     * @return int |null
+     */
+    public static function fresnsConfigIdByItemKey(?string $itemKey = null)
+    {
+        if (empty($itemKey)) {
+            return null;
+        }
+
+        $id = Config::withTrashed()->where('item_key', $itemKey)->value('id');
+
+        return $id ?? null;
+    }
+
     /**
      * @param  string  $aid
      * @return int |null
