@@ -232,7 +232,7 @@ class ContentUtility
             if (is_null($currentSticker)) {
                 $linkList[] = "[$sticker]";
             } else {
-                $stickerUrl = FileHelper::fresnsFileImageUrlByColumn($sticker->image_file_id, $sticker->image_file_url);
+                $stickerUrl = FileHelper::fresnsFileUrlByTableColumn($sticker->image_file_id, $sticker->image_file_url);
 
                 // 格式 <img src="$stickerUrl" class="fresns_sticker" alt="$sticker->code">
                 $linkList[] = sprintf('<img src="%s" class="fresns_sticker" alt="%s" />', $stickerUrl, $currentSticker->code);

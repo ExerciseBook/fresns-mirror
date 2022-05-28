@@ -63,7 +63,7 @@ class CommonController extends Controller
                     }
 
                     foreach ($userQuery as $user) {
-                        $avatar = FileHelper::fresnsFileImageUrlByColumn($user->avatar_file_id, $user->avatar_file_url, 'image_thumb_avatar');
+                        $avatar = FileHelper::fresnsFileUrlByTableColumn($user->avatar_file_id, $user->avatar_file_url, 'image_thumb_avatar');
 
                         $item['fsid'] = $user->uid;
                         $item['name'] = $user->username;
@@ -94,7 +94,7 @@ class CommonController extends Controller
                     foreach ($groupQuery as $group) {
                         $item['fsid'] = $group->gid;
                         $item['name'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $group->id, $headers['langTag']);
-                        $item['image'] = FileHelper::fresnsFileImageUrlByColumn($group->cover_file_id, $group->cover_file_url);
+                        $item['image'] = FileHelper::fresnsFileUrlByTableColumn($group->cover_file_id, $group->cover_file_url);
                         $item['nickname'] = null;
                         $item['followStatus'] = false;
                         $data[] = $item;
@@ -111,7 +111,7 @@ class CommonController extends Controller
                     foreach ($hashtagQuery as $hashtag) {
                         $item['fsid'] = $hashtag->slug;
                         $item['name'] = $hashtag->name;
-                        $item['image'] = FileHelper::fresnsFileImageUrlByColumn($hashtag->cover_file_id, $hashtag->cover_file_url);
+                        $item['image'] = FileHelper::fresnsFileUrlByTableColumn($hashtag->cover_file_id, $hashtag->cover_file_url);
                         $item['nickname'] = null;
                         $item['followStatus'] = false;
                         $data[] = $item;
@@ -160,7 +160,7 @@ class CommonController extends Controller
                     foreach ($extendQuery as $extend) {
                         $item['fsid'] = $extend->eid;
                         $item['name'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extend->id, $headers['langTag']);
-                        $item['image'] = FileHelper::fresnsFileImageUrlByColumn($extend->cover_file_id, $extend->cover_file_url);
+                        $item['image'] = FileHelper::fresnsFileUrlByTableColumn($extend->cover_file_id, $extend->cover_file_url);
                         $item['nickname'] = null;
                         $item['followStatus'] = false;
                         $data[] = $item;

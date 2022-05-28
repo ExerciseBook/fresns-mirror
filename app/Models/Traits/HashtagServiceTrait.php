@@ -19,7 +19,7 @@ trait HashtagServiceTrait
 
         $info['hid'] = $hashtagData->slug;
         $info['hname'] = $hashtagData->name;
-        $info['cover'] = FileHelper::fresnsFileImageUrlByColumn($hashtagData->cover_file_id, $hashtagData->cover_file_url);
+        $info['cover'] = FileHelper::fresnsFileUrlByTableColumn($hashtagData->cover_file_id, $hashtagData->cover_file_url);
         $info['description'] = LanguageHelper::fresnsLanguageByTableId('hashtags', 'description', $hashtagData->id, $langTag);
         $info['likeCount'] = $hashtagData->like_count;
         $info['followCount'] = $hashtagData->follow_count;

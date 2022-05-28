@@ -34,7 +34,7 @@ class EditorUtility
             $item['framePosition'] = $extend->frame_position;
             $item['textContent'] = $extend->text_content;
             $item['textIsMarkdown'] = $extend->text_is_markdown;
-            $item['cover'] = FileHelper::fresnsFileImageUrlByColumn($extend['cover_file_id'], $extend['cover_file_url']);
+            $item['cover'] = FileHelper::fresnsFileUrlByTableColumn($extend['cover_file_id'], $extend['cover_file_url']);
             $item['title'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extend->id, $langTag);
             $item['titleColor'] = $extend->title_color;
             $item['descPrimary'] = LanguageHelper::fresnsLanguageByTableId('extends', 'desc_primary', $extend->id, $langTag);
@@ -76,7 +76,7 @@ class EditorUtility
                 $roleItem['nicknameColor'] = $role->nickname_color;
                 $roleItem['name'] = LanguageHelper::fresnsLanguageByTableId('roles', 'name', $role->id, $headers['langTag']);
                 $roleItem['nameDisplay'] = (bool) $role->is_display_name;
-                $roleItem['icon'] = FileHelper::fresnsFileImageUrlByColumn($role->icon_file_id, $role->icon_file_url);
+                $roleItem['icon'] = FileHelper::fresnsFileUrlByTableColumn($role->icon_file_id, $role->icon_file_url);
                 $roleItem['iconDisplay'] = (bool) $role->is_display_icon;
                 $roleItem['status'] = (bool) $role->is_enable;
                 $roleList[] = $roleItem;

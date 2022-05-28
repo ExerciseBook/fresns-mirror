@@ -153,7 +153,7 @@ class GlobalController extends Controller
             $item['nicknameColor'] = $role->nickname_color;
             $item['name'] = LanguageHelper::fresnsLanguageByTableId('roles', 'name', $role->id, $headers['langTag']);
             $item['nameDisplay'] = (bool) $role->is_display_name;
-            $item['icon'] = FileHelper::fresnsFileImageUrlByColumn($role->icon_file_id, $role->icon_file_url);
+            $item['icon'] = FileHelper::fresnsFileUrlByTableColumn($role->icon_file_id, $role->icon_file_url);
             $item['iconDisplay'] = (bool) $role->is_display_icon;
             $item['permission'] = $permission;
             $item['status'] = (bool) $role->is_enable;
@@ -196,7 +196,7 @@ class GlobalController extends Controller
             $stickerData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('stickers', 'name', $sticker->id, $headers['langTag']);
             $stickerData[$index]['code'] = $sticker->code;
             $stickerData[$index]['codeFormat'] = '['.$sticker->code.']';
-            $stickerData[$index]['url'] = FileHelper::fresnsFileImageUrlByColumn($sticker->image_file_id, $sticker->image_file_url);
+            $stickerData[$index]['url'] = FileHelper::fresnsFileUrlByTableColumn($sticker->image_file_id, $sticker->image_file_url);
         }
 
         $stickerTree = CollectionUtility::toTree($stickerData, 'code', 'parentCode', 'stickers');

@@ -80,8 +80,8 @@ class ExtendUtility
                 }
                 $item['code'] = $iconLinked['icon_code'];
                 $item['name'] = LanguageHelper::fresnsLanguageByTableId('icons', 'name', $icon['id'], $langTag);
-                $item['icon'] = FileHelper::fresnsFileImageUrlByColumn($icon['icon_file_id'], $icon['icon_file_url']);
-                $item['iconActive'] = FileHelper::fresnsFileImageUrlByColumn($icon['active_icon_file_id'], $icon['active_icon_file_url']);
+                $item['icon'] = FileHelper::fresnsFileUrlByTableColumn($icon['icon_file_id'], $icon['icon_file_url']);
+                $item['iconActive'] = FileHelper::fresnsFileUrlByTableColumn($icon['active_icon_file_id'], $icon['active_icon_file_url']);
                 $item['type'] = $icon['type'];
                 $item['url'] = ! empty($icon['plugin_unikey']) ? PluginHelper::fresnsPluginUrlByUnikey($icon['plugin_unikey']) : null;
             }
@@ -100,7 +100,7 @@ class ExtendUtility
 
         $tipList = null;
         foreach ($tipArr as $tip) {
-            $item['icon'] = FileHelper::fresnsFileImageUrlByColumn($tip['icon_file_id'], $tip['icon_file_url']);
+            $item['icon'] = FileHelper::fresnsFileUrlByTableColumn($tip['icon_file_id'], $tip['icon_file_url']);
             $item['content'] = LanguageHelper::fresnsLanguageByTableId('tips', 'content', $tip->id, $langTag);
             $item['style'] = $tip->style;
             $item['type'] = $tip->type;
@@ -125,7 +125,7 @@ class ExtendUtility
             $item['framePosition'] = $extend->frame_position;
             $item['textContent'] = $extend->text_content;
             $item['textIsMarkdown'] = $extend->text_is_markdown;
-            $item['cover'] = FileHelper::fresnsFileImageUrlByColumn($extend['cover_file_id'], $extend['cover_file_url']);
+            $item['cover'] = FileHelper::fresnsFileUrlByTableColumn($extend['cover_file_id'], $extend['cover_file_url']);
             $item['title'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extend->id, $langTag);
             $item['titleColor'] = $extend->title_color;
             $item['descPrimary'] = LanguageHelper::fresnsLanguageByTableId('extends', 'desc_primary', $extend->id, $langTag);

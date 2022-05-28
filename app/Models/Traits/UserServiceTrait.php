@@ -26,7 +26,7 @@ trait UserServiceTrait
         $profile['username'] = $userData->username;
         $profile['nickname'] = $userData->nickname;
         $profile['avatar'] = static::getUserAvatar($userData->id);
-        $profile['decorate'] = FileHelper::fresnsFileImageUrlByColumn($userData->decorate_file_id, $userData->decorate_file_url, 'imageAvatarUrl');
+        $profile['decorate'] = FileHelper::fresnsFileUrlByTableColumn($userData->decorate_file_id, $userData->decorate_file_url, 'imageAvatarUrl');
         $profile['gender'] = $userData->gender;
         $profile['birthday'] = DateHelper::fresnsDateTimeByTimezone($userData->birthday, $timezone, $langTag);
         $profile['bio'] = $userData->bio;
@@ -35,7 +35,7 @@ trait UserServiceTrait
         $profile['commentLimit'] = $userData->comment_limit;
         $profile['timezone'] = $userData->timezone;
         $profile['verifiedStatus'] = (bool) $userData->verified_status;
-        $profile['verifiedIcon'] = FileHelper::fresnsFileImageUrlByColumn($userData->verified_file_id, $userData->verified_file_url);
+        $profile['verifiedIcon'] = FileHelper::fresnsFileUrlByTableColumn($userData->verified_file_id, $userData->verified_file_url);
         $profile['verifiedDesc'] = $userData->verified_desc;
         $profile['verifiedDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->verified_at, $timezone, $langTag);
         $profile['expiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->expired_at, $timezone, $langTag);
@@ -76,7 +76,7 @@ trait UserServiceTrait
                 }
             } else {
                 // user avatar
-                $userAvatar = FileHelper::fresnsFileImageUrlByColumn($user->avatar_file_id, $user->avatar_file_url, 'imageAvatarUrl');
+                $userAvatar = FileHelper::fresnsFileUrlByTableColumn($user->avatar_file_id, $user->avatar_file_url, 'imageAvatarUrl');
             }
         } else {
             // user deactivate avatar
@@ -108,7 +108,7 @@ trait UserServiceTrait
         $mainRole['rid'] = $roleData->id;
         $mainRole['roleName'] = LanguageHelper::fresnsLanguageByTableId('roles', 'name', $roleData->id, $langTag);
         $mainRole['roleNameDisplay'] = (bool) $roleData->is_display_name;
-        $mainRole['roleIcon'] = FileHelper::fresnsFileImageUrlByColumn($roleData->icon_file_id, $roleData->icon_file_url);
+        $mainRole['roleIcon'] = FileHelper::fresnsFileUrlByTableColumn($roleData->icon_file_id, $roleData->icon_file_url);
         $mainRole['roleIconDisplay'] = (bool) $roleData->is_display_icon;
         $mainRole['roleExpiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($mainRoleData->expired_at, $timezone, $langTag);
         $mainRole['rolePermission'] = $permission;
@@ -136,7 +136,7 @@ trait UserServiceTrait
                 $item['nicknameColor'] = $role['nickname_color'];
                 $item['name'] = LanguageHelper::fresnsLanguageByTableId('roles', 'name', $role['id'], $langTag);
                 $item['nameDisplay'] = (bool) $role['is_display_name'];
-                $item['icon'] = FileHelper::fresnsFileImageUrlByColumn($role['icon_file_id'], $role['icon_file_url']);
+                $item['icon'] = FileHelper::fresnsFileUrlByTableColumn($role['icon_file_id'], $role['icon_file_url']);
                 $item['iconDisplay'] = (bool) $role['is_display_icon'];
                 $item['status'] = (bool) $role['is_enable'];
             }

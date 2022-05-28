@@ -21,8 +21,9 @@ class LogicalDeletionFileDTO extends DTO
     public function rules(): array
     {
         return [
-            'fileId' => ['integer', 'nullable', 'required_without:fid', 'exists:App\Models\File,id'],
-            'fid' => ['string', 'nullable', 'required_without:fileId', 'exists:App\Models\File,fid'],
+            'type' => ['integer', 'required', 'in:1,2,3,4'],
+            'ids' => ['array', 'required'],
+            'idType' => ['string', 'required', 'in:fileId,fid'],
         ];
     }
 }

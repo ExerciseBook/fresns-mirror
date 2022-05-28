@@ -21,7 +21,7 @@ trait PluginUsageServiceTrait
 
         $info['plugin'] = $usageData->plugin_unikey;
         $info['name'] = LanguageHelper::fresnsLanguageByTableId('plugin_usages', 'name', $usageData->id, $langTag);
-        $info['icon'] = FileHelper::fresnsFileImageUrlByColumn($usageData->icon_file_id, $usageData->icon_file_url);
+        $info['icon'] = FileHelper::fresnsFileUrlByTableColumn($usageData->icon_file_id, $usageData->icon_file_url);
         $info['url'] = PluginHelper::fresnsPluginUsageUrl($usageData->plugin_unikey, $usageData->id);
 
         $info['badgesType'] = null;
