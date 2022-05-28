@@ -49,8 +49,9 @@ trait FileServiceTrait
         $info['extension'] = $fileData->extension;
         $info['size'] = $fileSizeInfo;
         $info['md5'] = $fileData->md5;
-        $info['sha1'] = $fileData->sha1;
-        $info['more_json'] = $fileData->more_json;
+        $info['sha'] = $fileData->sha;
+        $info['shaType'] = $fileData->sha_type;
+        $info['moreJson'] = $fileData->more_json;
 
         $fileMetaInfo = $this->getFileMetaInfoByType();
 
