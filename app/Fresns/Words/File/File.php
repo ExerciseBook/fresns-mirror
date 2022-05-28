@@ -59,6 +59,21 @@ class File
         $dtoWordBody = new UploadFileDTO($wordBody);
         $langTag = \request()->header('langTag', config('app.locale'));
 
+        // $bodyInfo = [
+        //     'platformId' => $dtoWordBody->platformId,
+        //     'useType' => $dtoWordBody->useType,
+        //     'tableName' => $dtoWordBody->tableName,
+        //     'tableColumn' => $dtoWordBody->tableColumn,
+        //     'tableId' => $dtoWordBody->tableId,
+        //     'tableKey' => $dtoWordBody->tableKey,
+        //     'aid' => $dtoWordBody->aid,
+        //     'uid' => $dtoWordBody->uid,
+        //     'type' => $dtoWordBody->type,
+        //     'moreJson' => $dtoWordBody->moreJson,
+        // ];
+
+        // $uploadFile = FileUtility::uploadFile($bodyInfo, $dtoWordBody->file);
+
         $storageConfig = FileHelper::fresnsFileStorageConfigByType($dtoWordBody->type);
 
         if (! $storageConfig['storageConfigStatus']) {

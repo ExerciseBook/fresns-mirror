@@ -12,6 +12,7 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\StrHelper;
 use App\Models\File;
+use Illuminate\Support\Facades\Storage;
 
 trait FileServiceTrait
 {
@@ -81,7 +82,10 @@ trait FileServiceTrait
             'image_thumb_square',
             'image_thumb_big'
         ]);
-        $imageDefaultUrl = StrHelper::qualifyUrl($fileData->path, $imageConfig['image_bucket_domain']);
+
+        $filePath = Storage::url($fileData->path);
+
+        $imageDefaultUrl = StrHelper::qualifyUrl($filePath, $imageConfig['image_bucket_domain']);
 
         $info['imageWidth'] = $fileData->image_width;
         $info['imageHeight'] = $fileData->image_height;
@@ -102,10 +106,14 @@ trait FileServiceTrait
 
         $videoBucketDomain = ConfigHelper::fresnsConfigByItemKey('video_bucket_domain');
 
+        $videoCoverPath = Storage::url($fileData->video_cover);
+        $videoGifPath = Storage::url($fileData->video_gif);
+        $filePath = Storage::url($fileData->path);
+
         $info['videoTime'] = $fileData->video_time;
-        $info['videoCover'] = StrHelper::qualifyUrl($fileData->video_cover, $videoBucketDomain);
-        $info['videoGif'] = StrHelper::qualifyUrl($fileData->video_gif, $videoBucketDomain);
-        $info['videoUrl'] = StrHelper::qualifyUrl($fileData->path, $videoBucketDomain);
+        $info['videoCoverUrl'] = StrHelper::qualifyUrl($videoCoverPath, $videoBucketDomain);
+        $info['videoGifUrl'] = StrHelper::qualifyUrl($videoGifPath, $videoBucketDomain);
+        $info['videoUrl'] = StrHelper::qualifyUrl($filePath, $videoBucketDomain);
         $info['transcodingState'] = $fileData->transcoding_state;
 
         return $info;
@@ -117,8 +125,10 @@ trait FileServiceTrait
 
         $audioBucketDomain = ConfigHelper::fresnsConfigByItemKey('audio_bucket_domain');
 
+        $filePath = Storage::url($fileData->path);
+
         $info['audioTime'] = $fileData->audio_time;
-        $info['audioUrl'] = StrHelper::qualifyUrl($fileData->path, $audioBucketDomain);
+        $info['audioUrl'] = StrHelper::qualifyUrl($filePath, $audioBucketDomain);
         $info['transcodingState'] = $fileData->transcoding_state;
 
         return $info;
@@ -130,7 +140,9 @@ trait FileServiceTrait
 
         $documentBucketDomain = ConfigHelper::fresnsConfigByItemKey('document_bucket_domain');
 
-        $info['documentUrl'] = StrHelper::qualifyUrl($fileData->path, $documentBucketDomain);
+        $filePath = Storage::url($fileData->path);
+
+        $info['documentUrl'] = StrHelper::qualifyUrl($filePath, $documentBucketDomain);
 
         return $info;
     }

@@ -1,0 +1,162 @@
+<?php
+
+/*
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
+ * Released under the Apache-2.0 License.
+ */
+
+namespace App\Utilities;
+
+use App\Helpers\FileHelper;
+use App\Helpers\PrimaryHelper;
+use App\Models\File as FileModel;
+use App\Models\FileAppend;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+class FileUtility
+{
+    public static function uploadFile(array $bodyInfo, UploadedFile $file)
+    {
+        $fresnsDisk = Storage::build([
+            'driver' => 'local',
+            'root' => storage_path('app'),
+        ]);
+
+        $storePath = 'public/'.FileHelper::fresnsFileStoragePath($bodyInfo['type'], $bodyInfo['useType']);
+
+        $diskPath = $fresnsDisk->putFile($storePath, $file);
+
+        $fileArr['fid'] = Str::random(12);
+        $fileArr['type'] = $bodyInfo['type'];
+        $fileArr['name'] = $file->getClientOriginalName();
+        $fileArr['mime'] = $file->getMimeType();
+        $fileArr['extension'] = $file->getClientOriginalExtension();
+        $fileArr['size'] = $file->getSize();
+        $fileArr['md5'] = null;
+        $fileArr['sha'] = null;
+        $fileArr['sha_type'] = null;
+        $fileArr['path'] = $diskPath;
+        $fileArr['more_json'] = $bodyInfo['moreJson'];
+        if ($bodyInfo['type'] == 1) {
+            $imageSize = getimagesize(storage_path('app/'.$diskPath));
+            $fileArr['image_width'] = $imageSize[0] ?? null;
+            $fileArr['image_height'] = $imageSize[1] ?? null;
+            $fileArr['image_is_long'] = 0;
+            if (! empty($fileArr['image_width']) >= 700) {
+                if ($fileArr['image_height'] >= $fileArr['image_width'] * 3) {
+                    $fileArr['image_is_long'] = 1;
+                }
+            }
+        }
+        $fileId = FileModel::create($fileArr)->id;
+
+        $accountId = PrimaryHelper::fresnsAccountIdByAid($bodyInfo['aid']);
+        $userId = PrimaryHelper::fresnsUserIdByUid($bodyInfo['uid']);
+
+        $tableId = $bodyInfo['tableId'];
+        if (empty($bodyInfo['tableId'])) {
+            $tableId = PrimaryHelper::fresnsPrimaryId($bodyInfo['tableName'], $bodyInfo['tableKey']);
+        }
+
+        $appendInput = [
+            'file_id' => $fileId,
+            'file_type' => $bodyInfo['type'],
+            'platform_id' => $bodyInfo['platformId'],
+            'use_type' => $bodyInfo['useType'],
+            'table_name' => $bodyInfo['tableName'],
+            'table_column' => $bodyInfo['tableColumn'],
+            'table_id' => $tableId,
+            'table_key' => $bodyInfo['tableKey'] ?? null,
+            'account_id' => $accountId,
+            'user_id' => $userId,
+        ];
+        FileAppend::insert($appendInput);
+
+        return FileHelper::fresnsFileInfo($fileId);
+    }
+
+    public static function uploadFileInfo(array $bodyInfo)
+    {
+        $accountId = PrimaryHelper::fresnsAccountIdByAid($bodyInfo['aid']);
+        $userId = PrimaryHelper::fresnsUserIdByUid($bodyInfo['uid']);
+
+        $tableId = $bodyInfo['tableId'];
+        if (empty($bodyInfo['tableId'])) {
+            $tableId = PrimaryHelper::fresnsPrimaryId($bodyInfo['tableName'], $bodyInfo['tableKey']);
+        }
+
+        $fileInfoArr = json_decode($bodyInfo['fileInfo'], true);
+
+        $fileIdArr = [];
+        foreach ($fileInfoArr as $fileInfo) {
+            $item = [];
+            $item['fid'] = Str::random(12);
+            $item['type'] = $bodyInfo['type'];
+            $item['name'] = $fileInfo['name'];
+            $item['mime'] = $fileInfo['mime'] ?? null;
+            $item['extension'] = $fileInfo['extension'];
+            $item['size'] = $fileInfo['size'];
+            $item['md5'] = $fileInfo['md5'] ?? null;
+            $item['sha1'] = $fileInfo['sha1'] ?? null;
+            $item['path'] = $fileInfo['path'];
+            $item['image_width'] = $fileInfo['imageWidth'] ?? null;
+            $item['image_height'] = $fileInfo['imageHeight'] ?? null;
+            $imageLong = 0;
+            if (! empty($fileInfo['image_width'])) {
+                if ($fileInfo['image_width'] >= 700) {
+                    if ($fileInfo['image_height'] >= $fileInfo['image_width'] * 3) {
+                        $imageLong = 1;
+                    } else {
+                        $imageLong = 0;
+                    }
+                }
+            }
+            $item['image_is_long'] = $imageLong ?? 0;
+            $item['video_time'] = $fileInfo['videoTime'] ?? null;
+            $item['video_cover'] = $fileInfo['videoCover'] ?? null;
+            $item['video_gif'] = $fileInfo['videoGif'] ?? null;
+            $item['audio_time'] = $fileInfo['audioTime'] ?? null;
+            $item['more_json'] = json_encode($fileInfo['moreJson']);
+
+            $fileId = FileModel::create($item)->id;
+            $fileIdArr[] = $fileId;
+
+            $append = [];
+            $append['file_id'] = $fileId;
+            $append['file_type'] = $bodyInfo['type'];
+            $append['platform_id'] = $bodyInfo['platformId'];
+            $append['use_type'] = $bodyInfo['useType'];
+            $append['table_name'] = $bodyInfo['tableName'];
+            $append['table_column'] = $bodyInfo['tableColumn'];
+            $append['table_id'] = $tableId;
+            $append['table_key'] = $bodyInfo['tableKey'] ?? null;
+            $append['rating'] = $fileInfo['rating'] ?? 9;
+            $append['account_id'] = $accountId;
+            $append['user_id'] = $userId;
+            $append['original_path'] = $fileInfo['originalPath'] ?? null;
+
+            FileAppend::insert($append);
+        }
+
+        $fileTypeName = match ($bodyInfo['type']) {
+            1 => 'images',
+            2 => 'videos',
+            3 => 'audios',
+            4 => 'documents',
+        };
+
+        $fileInfo = FileHelper::fresnsAntiLinkFileInfoList($fileIdArr, 'fileId')[$fileTypeName];
+
+        return $fileInfo;
+    }
+
+    public static function logicalDeletionFile(array $fileIdOrFid)
+    {
+        FileModel::whereIn('id', $fileIdOrFid)->orWhereIn('fid', $fileIdOrFid)->delete();
+
+        return true;
+    }
+}
