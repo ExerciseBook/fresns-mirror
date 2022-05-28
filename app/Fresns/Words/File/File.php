@@ -74,6 +74,8 @@ class File
 
         // $uploadFile = FileUtility::uploadFile($bodyInfo, $dtoWordBody->file);
 
+        // return $this->success($uploadFile);
+
         $storageConfig = FileHelper::fresnsFileStorageConfigByType($dtoWordBody->type);
 
         if (! $storageConfig['storageConfigStatus']) {
