@@ -76,7 +76,7 @@ class FileUtility
         ];
         FileAppend::insert($appendInput);
 
-        return FileHelper::fresnsFileInfo($fileId);
+        return FileHelper::fresnsFileInfoById($fileId);
     }
 
     public static function uploadFileInfo(array $bodyInfo)
@@ -154,9 +154,9 @@ class FileUtility
         return $fileInfo;
     }
 
-    public static function logicalDeletionFile(array $fileIdOrFid)
+    public static function logicalDeletionFile(array $fileIdsOrFids)
     {
-        FileModel::whereIn('id', $fileIdOrFid)->orWhereIn('fid', $fileIdOrFid)->delete();
+        FileModel::whereIn('id', $fileIdsOrFids)->orWhereIn('fid', $fileIdsOrFids)->delete();
 
         return true;
     }

@@ -22,8 +22,7 @@ class PhysicalDeletionFileDTO extends DTO
     {
         return [
             'type' => ['integer', 'required', 'in:1,2,3,4'],
-            'ids' => ['array', 'required'],
-            'idType' => ['string', 'required', 'in:fileId,fid'],
+            'fileIdsOrFids' => ['array', 'required'],
         ];
     }
 }

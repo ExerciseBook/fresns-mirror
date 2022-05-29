@@ -98,7 +98,7 @@ class FileHelper
     }
 
     // get file info by file id or fid
-    public static function fresnsFileInfo(string $fileIdOrFid)
+    public static function fresnsFileInfoById(string $fileIdOrFid)
     {
         if (is_numeric($fileIdOrFid)) {
             $file = File::whereId($fileIdOrFid)->first();
@@ -113,35 +113,10 @@ class FileHelper
         $storageConfig = FileHelper::fresnsFileStorageConfigByType($file->type);
 
         if ($storageConfig['antiLinkConfigStatus']) {
-            switch ($file->type) {
-                // Image
-                case 1:
-                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoForImage([
-                        'fileId' => $file->id,
-                    ]);
-                break;
-
-                // Video
-                case 2:
-                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoForVideo([
-                        'fileId' => $file->id,
-                    ]);
-                break;
-
-                // Audio
-                case 3:
-                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoForAudio([
-                        'fileId' => $file->id,
-                    ]);
-                break;
-
-                // Document
-                case 4:
-                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoForDocument([
-                        'fileId' => $file->id,
-                    ]);
-                break;
-            }
+            $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfo([
+                'type' => $file->type,
+                'fileIdOrFid' => $file->id,
+            ]);
 
             return $fresnsResponse->getData() ?? null;
         }
@@ -150,15 +125,9 @@ class FileHelper
     }
 
     // get file info list by file id or fid
-    public static function fresnsFileInfoList(array $ids, ?string $idType = null)
+    public static function fresnsFileInfoListByIds(array $fileIdsOrFids)
     {
-        $idType = $idType ?: 'fid';
-
-        if ($idType == 'fileId') {
-            $fileQuery = File::whereIn('id', $ids)->groupBy('type')->get();
-        } else {
-            $fileQuery = File::whereIn('fid', $ids)->groupBy('type')->get();
-        }
+        $fileQuery = File::whereIn('id', $fileIdsOrFids)->orWhereIn('fid', $fileIdsOrFids)->groupBy('type')->get();
 
         $files['images'] = $fileQuery->get(1)?->all() ?? null;
         $files['videos'] = $fileQuery->get(2)?->all() ?? null;
@@ -195,17 +164,17 @@ class FileHelper
     }
 
     // get file url by table column
-    public static function fresnsFileUrlByTableColumn(?int $fileId = null, ?string $fileUrl = null, ?string $urlType = null)
+    public static function fresnsFileUrlByTableColumn(?int $idColumn = null, ?string $urlColumn = null, ?string $urlType = null)
     {
-        if (! $fileId && ! $fileUrl) {
+        if (! $idColumn && ! $urlColumn) {
             return null;
         }
 
-        if (! $fileId) {
-            return $fileUrl;
+        if (! $idColumn) {
+            return $urlColumn;
         }
 
-        $file = File::whereId($fileId)->first();
+        $file = File::whereId($idColumn)->first();
         if (empty($file)) {
             return null;
         }
@@ -217,7 +186,7 @@ class FileHelper
         if ($antiLinkConfigStatus) {
             $fresnsResponse = \FresnsCmdWord::plugin()->getAntiLinkFileInfo([
                 'type' => $file->type,
-                'fileId' => $file->id,
+                'fileIdOrFid' => $file->id,
             ]);
 
             return $fresnsResponse->getData($urlType) ?? null;
@@ -227,11 +196,9 @@ class FileHelper
     }
 
     // get anti link file info list
-    public static function fresnsAntiLinkFileInfoList(array $ids, ?string $idType = null)
+    public static function fresnsAntiLinkFileInfoListByIds(array $fileIdsOrFids)
     {
-        $idType = $idType ?: 'fid';
-
-        $files = FileHelper::fresnsFileInfoList($ids, $idType);
+        $files = FileHelper::fresnsFileInfoListByIds($fileIdsOrFids);
 
         $fileList = FileHelper::handleAntiLinkFileInfoList($files);
 
@@ -249,7 +216,7 @@ class FileHelper
     }
 
     // get file original url by file id or fid
-    public static function fresnsFileOriginalUrl(string $fileIdOrFid)
+    public static function fresnsFileOriginalUrlById(string $fileIdOrFid)
     {
         if (is_numeric($fileIdOrFid)) {
             $file = File::whereId($fileIdOrFid)->first();
@@ -264,39 +231,10 @@ class FileHelper
         $storageConfig = FileHelper::fresnsFileStorageConfigByType($file->type);
 
         if ($storageConfig['antiLinkConfigStatus']) {
-            switch ($file->type) {
-                // Image
-                case 1:
-                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl([
-                        'type' => 1,
-                        'fileId' => $file->id,
-                    ]);
-                break;
-
-                // Video
-                case 2:
-                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl([
-                        'type' => 2,
-                        'fileId' => $file->id,
-                    ]);
-                break;
-
-                // Audio
-                case 3:
-                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl([
-                        'type' => 3,
-                        'fileId' => $file->id,
-                    ]);
-                break;
-
-                // Document
-                case 4:
-                    $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl([
-                        'type' => 4,
-                        'fileId' => $file->id,
-                    ]);
-                break;
-            }
+            $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl([
+                'type' => $file->type,
+                'fileIdOrFid' => $file->id,
+            ]);
 
             return $fresnsResponse->getData('originalUrl') ?? null;
         }
@@ -317,8 +255,7 @@ class FileHelper
 
             $fresnsResponse = \FresnsCmdWord::plugin($imageStorageConfig['service'])->getAntiLinkFileInfoList([
                 'type' => 1,
-                'ids' => $fids,
-                'idType' => 'fid',
+                'fileIdsOrFids' => $fids,
             ]);
 
             $files['images'] = $fresnsResponse->getData();
@@ -330,8 +267,7 @@ class FileHelper
 
             $fresnsResponse = \FresnsCmdWord::plugin($videoStorageConfig['service'])->getAntiLinkFileInfoList([
                 'type' => 2,
-                'ids' => $fids,
-                'idType' => 'fid',
+                'fileIdsOrFids' => $fids,
             ]);
 
             $files['videos'] = $fresnsResponse->getData();
@@ -343,8 +279,7 @@ class FileHelper
 
             $fresnsResponse = \FresnsCmdWord::plugin($audioStorageConfig['service'])->getAntiLinkFileInfoList([
                 'type' => 3,
-                'ids' => $fids,
-                'idType' => 'fid',
+                'fileIdsOrFids' => $fids,
             ]);
 
             $files['audios'] = $fresnsResponse->getData();
@@ -356,8 +291,7 @@ class FileHelper
 
             $fresnsResponse = \FresnsCmdWord::plugin($documentStorageConfig['service'])->getAntiLinkFileInfoList([
                 'type' => 4,
-                'ids' => $fids,
-                'idType' => 'fid',
+                'fileIdsOrFids' => $fids,
             ]);
 
             $files['documents'] = $fresnsResponse->getData();

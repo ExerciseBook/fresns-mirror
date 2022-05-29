@@ -71,7 +71,6 @@ class File
         //     'type' => $dtoWordBody->type,
         //     'moreJson' => $dtoWordBody->moreJson,
         // ];
-
         // $uploadFile = FileUtility::uploadFile($bodyInfo, $dtoWordBody->file);
 
         // return $this->success($uploadFile);
@@ -98,6 +97,22 @@ class File
     {
         $dtoWordBody = new UploadFileInfoDTO($wordBody);
         $langTag = \request()->header('langTag', config('app.locale'));
+
+        // $bodyInfo = [
+        //     'platformId' => $dtoWordBody->platformId,
+        //     'useType' => $dtoWordBody->useType,
+        //     'tableName' => $dtoWordBody->tableName,
+        //     'tableColumn' => $dtoWordBody->tableColumn,
+        //     'tableId' => $dtoWordBody->tableId,
+        //     'tableKey' => $dtoWordBody->tableKey,
+        //     'aid' => $dtoWordBody->aid,
+        //     'uid' => $dtoWordBody->uid,
+        //     'type' => $dtoWordBody->type,
+        //     'fileInfo' => $dtoWordBody->fileInfo,
+        // ];
+        // $uploadFileInfo = FileUtility::uploadFileInfo($bodyInfo);
+
+        // return $this->success($uploadFileInfo);
 
         $storageConfig = FileHelper::fresnsFileStorageConfigByType($dtoWordBody->type);
 
@@ -135,7 +150,7 @@ class File
             return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfo($dtoWordBody);
         }
 
-        return $this->success(FileHelper::fresnsFileInfo($dtoWordBody->fileId ?? $dtoWordBody->fid));
+        return $this->success(FileHelper::fresnsFileInfoById($dtoWordBody->fileIdOrFid));
     }
 
     /**
@@ -162,7 +177,7 @@ class File
             return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoList($dtoWordBody);
         }
 
-        return $this->success(FileHelper::fresnsFileInfoList($dtoWordBody->ids, $dtoWordBody->idType));
+        return $this->success(FileHelper::fresnsFileInfoListByIds($dtoWordBody->fileIdsOrFids));
     }
 
     /**
@@ -191,7 +206,7 @@ class File
         }
 
         return $this->success([
-            'originalUrl' => FileHelper::fresnsFileOriginalUrl($dtoWordBody->fileId ?? $dtoWordBody->fid),
+            'originalUrl' => FileHelper::fresnsFileOriginalUrlById($dtoWordBody->fileIdOrFid),
         ]);
     }
 
@@ -205,7 +220,7 @@ class File
     {
         $dtoWordBody = new LogicalDeletionFileDTO($wordBody);
 
-        FileUtility::logicalDeletionFile($dtoWordBody->ids, $dtoWordBody->idType);
+        FileUtility::logicalDeletionFile($dtoWordBody->fileIdsOrFids);
 
         return $this->success();
     }
