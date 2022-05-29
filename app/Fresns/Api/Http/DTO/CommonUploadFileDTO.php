@@ -18,13 +18,13 @@ class CommonUploadFileDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['integer', 'required', 'in:1,2,3,4'],
-            'tableType' => ['integer', 'required', 'between:1,11'],
+            'useType' => ['integer', 'required', 'between:1,10'],
             'tableName' => ['string', 'required'],
             'tableColumn' => ['string', 'required'],
             'tableId' => ['integer', 'nullable', 'required_without:tableKey'],
             'tableKey' => ['string', 'nullable', 'required_without:tableId'],
             'uploadMode' => ['integer', 'required', 'in:1,2'],
+            'type' => ['integer', 'required', 'in:1,2,3,4'],
             'file' => ['file', 'nullable', 'required_if:uploadMode,1'],
             'moreJson' => ['string', 'nullable'],
             'fileInfo' => ['string', 'nullable', 'required_if:uploadMode,2'],

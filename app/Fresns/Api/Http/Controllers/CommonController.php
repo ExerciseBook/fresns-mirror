@@ -375,14 +375,14 @@ class CommonController extends Controller
             case 1:
                 $wordBody = [
                     'platformId' => $headers['platformId'],
-                    'type' => $dtoRequest->type,
-                    'tableType' => $dtoRequest->tableType,
+                    'useType' => $dtoRequest->useType,
                     'tableName' => $dtoRequest->tableName,
                     'tableColumn' => $dtoRequest->tableColumn,
                     'tableId' => $dtoRequest->tableId,
                     'tableKey' => $dtoRequest->tableKey,
                     'aid' => $headers['aid'],
                     'uid' => $headers['uid'],
+                    'type' => $dtoRequest->type,
                     'file' => $dtoRequest->file,
                     'moreJson' => $dtoRequest->moreJson,
                 ];
@@ -393,14 +393,14 @@ class CommonController extends Controller
             case 2:
                 $wordBody = [
                     'platformId' => $headers['platformId'],
-                    'type' => $dtoRequest->type,
-                    'tableType' => $dtoRequest->tableType,
+                    'useType' => $dtoRequest->useType,
                     'tableName' => $dtoRequest->tableName,
                     'tableColumn' => $dtoRequest->tableColumn,
                     'tableId' => $dtoRequest->tableId,
                     'tableKey' => $dtoRequest->tableKey,
                     'aid' => $headers['aid'],
                     'uid' => $headers['uid'],
+                    'type' => $dtoRequest->type,
                     'fileInfo' => $dtoRequest->fileInfo,
                 ];
 
