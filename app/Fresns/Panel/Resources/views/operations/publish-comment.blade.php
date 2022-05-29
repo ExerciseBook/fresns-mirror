@@ -97,7 +97,7 @@
                         <select class="form-select select2" name="comment_limit_whitelist[]" multiple="multiple">
                             @foreach ($roles as $role)
                                 <option value="{{ $role->id }}" @if ($params['comment_limit_whitelist'] && is_array($params['comment_limit_whitelist']) && in_array($role->id, $params['comment_limit_whitelist'])) selected @endif>
-                                    {{ $role->name }}
+                                    {{ $role->getLangName($defaultLanguage) }}
                                 </option>
                             @endforeach
                         </select>
