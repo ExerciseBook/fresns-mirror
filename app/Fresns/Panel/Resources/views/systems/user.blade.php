@@ -66,15 +66,15 @@
             <label for="user_multiple" class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.user_multiple') }}:</label>
             <div class="col-lg-6 pt-2">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="user_multiple" id="user_multiple_false" value="false" data-bs-toggle="collapse" data-bs-target="#user_multiple_setting.show" aria-expanded="false" aria-controls="user_multiple_setting" {{ !$params['user_multiple'] ? 'checked' : '' }}>
-                    <label class="form-check-label" for="user_multiple_false">{{ __('FsLang::panel.option_close') }}</label>
+                    <input class="form-check-input" type="radio" name="multi_user_status" id="multi_user_status_false" value="false" data-bs-toggle="collapse" data-bs-target="#multi_user_setting.show" aria-expanded="false" aria-controls="multi_user_setting" {{ !$params['multi_user_status'] ? 'checked' : '' }}>
+                    <label class="form-check-label" for="multi_user_status_false">{{ __('FsLang::panel.option_close') }}</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="user_multiple" id="user_multiple_true" value="true" data-bs-toggle="collapse" data-bs-target="#user_multiple_setting:not(.show)" aria-expanded="false" aria-controls="user_multiple_setting" {{ $params['user_multiple'] ? 'checked' : '' }}>
-                    <label class="form-check-label" for="user_multiple_true">{{ __('FsLang::panel.option_open') }}</label>
+                    <input class="form-check-input" type="radio" name="multi_user_status" id="multi_user_status_true" value="true" data-bs-toggle="collapse" data-bs-target="#multi_user_setting:not(.show)" aria-expanded="false" aria-controls="multi_user_setting" {{ $params['multi_user_status'] ? 'checked' : '' }}>
+                    <label class="form-check-label" for="multi_user_status_true">{{ __('FsLang::panel.option_open') }}</label>
                 </div>
-                <!--user_multiple_config-->
-                <div class="collapse {{ $params['user_multiple'] == 'true' ? 'show' : '' }}" id="user_multiple_setting">
+                <!--multi_user_config-->
+                <div class="collapse {{ $params['multi_user_status'] == 'true' ? 'show' : '' }}" id="multi_user_setting">
                     <div class="card mt-2">
                         <div class="card-header">{{ __('FsLang::panel.user_multiple_config') }}</div>
                         <div class="card-body">
@@ -100,7 +100,7 @@
                         </div>
                     </div>
                 </div>
-                <!--user_multiple_config end-->
+                <!--multi_user_config end-->
             </div>
             <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_multiple_desc') }}</div>
         </div>

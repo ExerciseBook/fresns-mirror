@@ -23,7 +23,7 @@ class UserController extends Controller
         $configKeys = [
             'account_connect_services',
             'account_prove_service',
-            'user_multiple',
+            'multi_user_status',
             'multi_user_service',
             'multi_user_roles',
             'default_role',
@@ -52,7 +52,7 @@ class UserController extends Controller
         $pluginScenes = [
             'connect',
             'prove',
-            'multiple',
+            'multiUser',
         ];
 
         $plugins = Plugin::all();
@@ -141,7 +141,7 @@ class UserController extends Controller
 
         $configKeys = [
             'account_prove_service',
-            'user_multiple',
+            'multi_user_status',
             'multi_user_service',
             'multi_user_roles',
             'default_role',
