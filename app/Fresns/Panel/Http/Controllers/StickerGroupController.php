@@ -41,11 +41,11 @@ class StickerGroupController extends Controller
         if ($request->file('image_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'stickers',
                 'tableColumn' => 'image_file_id',
                 'tableId' => $sticker->id,
+                'type' => 1,
                 'file' => $request->file('image_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -55,7 +55,7 @@ class StickerGroupController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $sticker->image_file_id = $fileId;
-            $sticker->image_file_url = $fresnsResp->getData('imageConfigUrl');
+            $sticker->image_file_url = null;
             $sticker->save();
         }
 
@@ -96,11 +96,11 @@ class StickerGroupController extends Controller
         if ($request->file('image_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'stickers',
                 'tableColumn' => 'image_file_id',
                 'tableId' => $sticker->id,
+                'type' => 1,
                 'file' => $request->file('image_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -110,7 +110,7 @@ class StickerGroupController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $sticker->image_file_id = $fileId;
-            $sticker->image_file_url = $fresnsResp->getData('imageConfigUrl');
+            $sticker->image_file_url = null;
         } elseif ($sticker->image_file_url != $request->image_file_url) {
             $sticker->image_file_id = null;
             $sticker->image_file_url = $request->image_file_url;

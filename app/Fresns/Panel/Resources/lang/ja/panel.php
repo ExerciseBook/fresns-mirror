@@ -494,6 +494,7 @@ return [
     'storage_bucket_area_desc' => '使用しない場合は、地域の構成を保存してください。',
     'storage_bucket_domain' => 'ストレージ構成ドメイン名',
     'storage_bucket_domain_desc' => 'ストレージ構成ドメインは、アップロードされたファイルのアクセスURLで、http:// または https:// から始まる。',
+    'storage_filesystem_disk' => 'ファイルシステムディスク',
     'storage_ext' => 'サポートされている拡張子',
     'storage_max_size' => 'サポートされている最大サイズ',
     'storage_max_time' => 'サポートされている最大時間',

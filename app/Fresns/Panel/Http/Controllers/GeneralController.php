@@ -84,11 +84,11 @@ class GeneralController extends Controller
         if ($request->file('site_icon_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 2,
+                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'site_icon',
+                'type' => 1,
                 'file' => $request->file('site_icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -104,11 +104,11 @@ class GeneralController extends Controller
         if ($request->file('site_logo_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 2,
+                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'site_logo',
+                'type' => 1,
                 'file' => $request->file('site_logo_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);

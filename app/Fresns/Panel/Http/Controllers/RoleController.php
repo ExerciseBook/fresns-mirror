@@ -46,11 +46,11 @@ class RoleController extends Controller
         if ($request->file('icon_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'roles',
                 'tableColumn' => 'icon_file_id',
                 'tableId' => $role->id,
+                'type' => 1,
                 'file' => $request->file('icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -60,7 +60,7 @@ class RoleController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $role->icon_file_id = $fileId;
-            $role->icon_file_url = $fresnsResp->getData('imageConfigUrl');
+            $role->icon_file_url = null;
             $role->save();
         }
 
@@ -102,11 +102,11 @@ class RoleController extends Controller
         if ($request->file('icon_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'roles',
                 'tableColumn' => 'icon_file_id',
                 'tableId' => $map->id,
+                'type' => 1,
                 'file' => $request->file('icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -116,7 +116,7 @@ class RoleController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $role->icon_file_id = $fileId;
-            $role->icon_file_url = $fresnsResp->getData('imageConfigUrl');
+            $role->icon_file_url = null;
         } elseif ($role->icon_file_url != $request->icon_file_url) {
             $role->icon_file_id = null;
             $role->icon_file_url = $request->icon_file_url;

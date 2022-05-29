@@ -82,11 +82,11 @@ class UserController extends Controller
         if ($request->file('default_avatar_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 2,
+                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'default_avatar',
+                'type' => 1,
                 'file' => $request->file('default_avatar_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -102,11 +102,11 @@ class UserController extends Controller
         if ($request->file('anonymous_avatar_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 2,
+                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'anonymous_avatar',
+                'type' => 1,
                 'file' => $request->file('anonymous_avatar_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -122,11 +122,11 @@ class UserController extends Controller
         if ($request->file('deactivate_avatar_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 2,
+                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'deactivate_avatar',
+                'type' => 1,
                 'file' => $request->file('deactivate_avatar_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);

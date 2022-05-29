@@ -494,6 +494,7 @@ return [
     'storage_bucket_area_desc' => '사용하지 않으면 해당 지역의 구성을 저장하십시오',
     'storage_bucket_domain' => '스토리지 구성 도메인 이름',
     'storage_bucket_domain_desc' => '스토리지 구성 도메인 이름은 http:// 또는 https://로 시작하는 파일 업로드를 위한 액세스 URL입니다.',
+    'storage_filesystem_disk' => '파일 시스템 디스크',
     'storage_ext' => '지원되는 확장자',
     'storage_max_size' => '지원 최대 크기',
     'storage_max_time' => '지원되는 최대 시간',

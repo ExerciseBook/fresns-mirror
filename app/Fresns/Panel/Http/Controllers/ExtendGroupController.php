@@ -63,11 +63,11 @@ class ExtendGroupController extends Controller
         if ($request->file('icon_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'plugin_usages',
                 'tableColumn' => 'icon_file_id',
                 'tableId' => $pluginUsage->id,
+                'type' => 1,
                 'file' => $request->file('icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -77,7 +77,7 @@ class ExtendGroupController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $pluginUsage->icon_file_id = $fileId;
-            $pluginUsage->icon_file_url = $fresnsResp->getData('imageConfigUrl');
+            $pluginUsage->icon_file_url = null;
             $pluginUsage->save();
         }
 
@@ -127,11 +127,11 @@ class ExtendGroupController extends Controller
         if ($request->file('icon_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'plugin_usages',
                 'tableColumn' => 'icon_file_id',
                 'tableId' => $pluginUsage->id,
+                'type' => 1,
                 'file' => $request->file('icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -141,7 +141,7 @@ class ExtendGroupController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $pluginUsage->icon_file_id = $fileId;
-            $pluginUsage->icon_file_url = $fresnsResp->getData('imageConfigUrl');
+            $pluginUsage->icon_file_url = null;
         } elseif ($pluginUsage->icon_file_url != $request->icon_file_url) {
             $pluginUsage->icon_file_id = null;
             $pluginUsage->icon_file_url = $request->icon_file_url;

@@ -92,11 +92,11 @@ class ThemeFunctionController extends Controller
                 if ($request->file($functionKey['itemKey'].'_file')) {
                     $wordBody = [
                         'platformId' => 4,
-                        'type' => 1,
-                        'tableType' => 2,
+                        'useType' => 2,
                         'tableName' => 'configs',
                         'tableColumn' => 'item_value',
                         'tableKey' => $functionKey['itemKey'],
+                        'type' => 1,
                         'file' => $request->file($functionKey['itemKey'].'_file'),
                     ];
                     $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);

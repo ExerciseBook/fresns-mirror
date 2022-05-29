@@ -494,6 +494,7 @@ return [
     'storage_bucket_area_desc' => 'Stockez la configuration de la région si vous ne l\'utilisez pas?',
     'storage_bucket_domain' => 'Nom de la configuration de la configuration de stockage',
     'storage_bucket_domain_desc' => 'Le domaine de configuration du stockage est l\'URL d\'accès au fichier téléchargé, qui commence par http:// ou https://',
+    'storage_filesystem_disk' => 'Disque du système de fichiers',
     'storage_ext' => 'Extension prise en charge',
     'storage_max_size' => 'Taille maximale supportée',
     'storage_max_time' => 'Temps maximum pris en charge',

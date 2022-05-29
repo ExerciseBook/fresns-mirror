@@ -29,11 +29,11 @@ class StickerController extends Controller
         if ($request->file('image_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'stickers',
                 'tableColumn' => 'image_file_id',
                 'tableId' => $stickerImage->id,
+                'type' => 1,
                 'file' => $request->file('image_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -43,7 +43,7 @@ class StickerController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $stickerImage->image_file_id = $fileId;
-            $stickerImage->image_file_url = $fresnsResp->getData('imageConfigUrl');
+            $stickerImage->image_file_url = null;
             $stickerImage->save();
         }
 

@@ -494,6 +494,7 @@ return [
     'storage_bucket_area_desc' => 'Speichern Sie die Konfiguration der Region, wenn Sie es nicht verwenden?',
     'storage_bucket_domain' => 'Speicherkonfigurationsdomänenname',
     'storage_bucket_domain_desc' => 'Die Speicherkonfigurationsdomäne ist die Zugriffs-URL für die hochgeladene Datei, die mit http:// oder https:// beginnt.',
+    'storage_filesystem_disk' => 'Dateisystem Diskette',
     'storage_ext' => 'Unterstützte Verlängerung',
     'storage_max_size' => 'Unterstützte maximale Größe',
     'storage_max_time' => 'Unterstützte maximale Zeit',

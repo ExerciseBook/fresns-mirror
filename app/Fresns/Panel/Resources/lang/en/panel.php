@@ -494,6 +494,7 @@ return [
     'storage_bucket_area_desc' => 'Storage locale config, leave empty if not used',
     'storage_bucket_domain' => 'Bucket Domain Name',
     'storage_bucket_domain_desc' => 'The storage configuration domain is the access URL for the uploaded file, starting with http:// or https://',
+    'storage_filesystem_disk' => 'Filesystem Disk',
     'storage_ext' => 'Supported extensions',
     'storage_max_size' => 'Max size supported',
     'storage_max_time' => 'Max time supported',

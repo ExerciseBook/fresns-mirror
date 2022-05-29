@@ -494,6 +494,7 @@ return [
     'storage_bucket_area_desc' => 'Almacenar la configuración de la región, si no lo usa?',
     'storage_bucket_domain' => 'Configuración de almacenamiento Nombre de dominio',
     'storage_bucket_domain_desc' => 'El dominio de configuración del almacenamiento es la URL de acceso al archivo cargado, que empieza por http:// o https://',
+    'storage_filesystem_disk' => 'Disco del sistema de archivos',
     'storage_ext' => 'Extensión admitida',
     'storage_max_size' => 'Tamaño máximo soportado',
     'storage_max_time' => 'Tiempo máximo admitido',

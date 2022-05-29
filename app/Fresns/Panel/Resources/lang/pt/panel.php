@@ -494,6 +494,7 @@ return [
     'storage_bucket_area_desc' => 'Armazene a configuração da região, se você não usá-lo?',
     'storage_bucket_domain' => 'Nome do domínio de configuração de armazenamento',
     'storage_bucket_domain_desc' => 'O domínio de configuração de armazenamento é o URL de acesso para o ficheiro carregado, começando por http:// ou https://',
+    'storage_filesystem_disk' => 'Disco do Sistema de Ficheiros',
     'storage_ext' => 'Extensão suportada',
     'storage_max_size' => 'Tamanho máximo suportado',
     'storage_max_time' => 'Tempo máximo suportado',

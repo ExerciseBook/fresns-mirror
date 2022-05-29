@@ -181,11 +181,11 @@ class GroupController extends Controller
         if ($request->file('cover_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'groups',
                 'tableColumn' => 'cover_file_id',
                 'tableId' => $group->id,
+                'type' => 1,
                 'file' => $request->file('cover_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -195,18 +195,18 @@ class GroupController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $group->cover_file_id = $fileId;
-            $group->cover_file_url = $fresnsResp->getData('imageConfigUrl');
+            $group->cover_file_url = null;
             $group->save();
         }
 
         if ($request->file('banner_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'groups',
                 'tableColumn' => 'banner_file_id',
                 'tableId' => $group->id,
+                'type' => 1,
                 'file' => $request->file('banner_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -216,7 +216,7 @@ class GroupController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $group->banner_file_id = $fileId;
-            $group->banner_file_url = $fresnsResp->getData('imageConfigUrl');
+            $group->banner_file_url = null;
             $group->save();
         }
 
@@ -305,11 +305,11 @@ class GroupController extends Controller
         if ($request->file('cover_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'groups',
                 'tableColumn' => 'cover_file_id',
                 'tableId' => $group->id,
+                'type' => 1,
                 'file' => $request->file('cover_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -319,7 +319,7 @@ class GroupController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $group->cover_file_id = $fileId;
-            $group->cover_file_url = $fresnsResp->getData('imageConfigUrl');
+            $group->cover_file_url = null;
         } elseif ($group->cover_file_url != $request->cover_file_url) {
             $group->cover_file_id = null;
             $group->cover_file_url = $request->cover_file_url;
@@ -328,11 +328,11 @@ class GroupController extends Controller
         if ($request->file('banner_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'groups',
                 'tableColumn' => 'banner_file_id',
                 'tableId' => $group->id,
+                'type' => 1,
                 'file' => $request->file('banner_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -342,7 +342,7 @@ class GroupController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $group->banner_file_id = $fileId;
-            $group->banner_file_url = $fresnsResp->getData('imageConfigUrl');
+            $group->banner_file_url = null;
         } else {
             $group->banner_file_id = null;
             $group->banner_file_url = $request->banner_file_url;

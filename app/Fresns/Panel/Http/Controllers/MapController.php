@@ -75,11 +75,11 @@ class MapController extends Controller
         if ($request->file('icon_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'plugin_usages',
                 'tableColumn' => 'icon_file_id',
                 'tableId' => $map->id,
+                'type' => 1,
                 'file' => $request->file('icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -89,7 +89,7 @@ class MapController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $map->icon_file_id = $fileId;
-            $map->icon_file_url = $fresnsResp->getData('imageConfigUrl');
+            $map->icon_file_url = null;
             $map->save();
         }
 
@@ -151,11 +151,11 @@ class MapController extends Controller
         if ($request->file('icon_file')) {
             $wordBody = [
                 'platformId' => 4,
-                'type' => 1,
-                'tableType' => 3,
+                'useType' => 2,
                 'tableName' => 'plugin_usages',
                 'tableColumn' => 'icon_file_id',
                 'tableId' => $map->id,
+                'type' => 1,
                 'file' => $request->file('icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -165,7 +165,7 @@ class MapController extends Controller
             $fileId = PrimaryHelper::fresnsFileIdByFid($fresnsResp->getData('fid'));
 
             $map->icon_file_id = $fileId;
-            $map->icon_file_url = $fresnsResp->getData('imageConfigUrl');
+            $map->icon_file_url = null;
         } elseif ($map->icon_file_url != $request->icon_file_url) {
             $map->icon_file_id = null;
             $map->icon_file_url = $request->icon_file_url;

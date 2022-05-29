@@ -494,6 +494,7 @@ return [
     'storage_bucket_area_desc' => 'Simpan konfigurasi wilayah, jika Anda tidak menggunakannya?',
     'storage_bucket_domain' => 'Nama domain konfigurasi penyimpanan',
     'storage_bucket_domain_desc' => 'Nama domain konfigurasi penyimpanan adalah URL akses untuk mengunggah file, dimulai dengan http:// atau https://',
+    'storage_filesystem_disk' => 'Disk sistem file',
     'storage_ext' => 'Ekstensi yang didukung',
     'storage_max_size' => 'Mendukung ukuran maksimum',
     'storage_max_time' => 'Mendukung waktu maksimum',
