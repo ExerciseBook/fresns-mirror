@@ -44,10 +44,10 @@
                         <td><input type="number" class="form-control input-number rank-num" data-action="{{ route('panel.plugin-usages.rank.update', $item->id) }}" value="{{ $item['rating'] }}"></td>
                         <td>{{ optional($item->plugin)->name }}</td>
                         <td>
-                            @if ($item->icon_file_url)
-                                <img src="{{ $item->icon_file_url }}" width="24" height="24">
+                            @if ($item->getIconUrl())
+                                <img src="{{ $item->getIconUrl() }}" width="24" height="24">
                             @endif
-                            {{ $item['name'] }}
+                            {{ $item->getLangName($defaultLanguage) }}
                         </td>
                         <td>{{ $item->parameter }}</td>
                         <td>

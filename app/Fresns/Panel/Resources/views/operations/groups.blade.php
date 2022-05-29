@@ -87,10 +87,10 @@
                             <tr>
                                 <td><input type="number" data-action="{{ route('panel.groups.rank.update', $group->id) }}" class="form-control input-number rank-num" value="{{ $group->rating }}"></td>
                                 <td>
-                                    @if ($group->cover_file_url)
-                                        <img src="{{ $group->cover_file_url }}" width="24" height="24">
+                                    @if ($group->getCoverUrl())
+                                        <img src="{{ $group->getCoverUrl() }}" width="24" height="24">
                                     @endif
-                                    {{ $group->name }}
+                                    {{ $group->getLangName($defaultLanguage) }}
                                 </td>
                                 <td>{{ $typeModeLabels[$group->type_mode] ?? '' }}</td>
                                 <td>

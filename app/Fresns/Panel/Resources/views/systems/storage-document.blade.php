@@ -39,7 +39,7 @@
                     <label class="input-group-text w-25">{{ __('FsLang::panel.storage_bucket_area') }}</label>
                     <input type="text" class="form-control" id="document_bucket_area" name="document_bucket_area" value="{{ $params['document_bucket_area'] }}">
                 </div>
-                <div class="input-group">
+                <div class="input-group mb-3">
                     <label class="input-group-text w-25">{{ __('FsLang::panel.storage_bucket_domain') }}</label>
                     <input type="url" class="form-control" id="document_bucket_domain" name="document_bucket_domain" value="{{ $params['document_bucket_domain'] }}">
                 </div>

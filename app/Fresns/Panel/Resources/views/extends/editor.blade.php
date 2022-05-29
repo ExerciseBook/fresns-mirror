@@ -42,10 +42,10 @@
                         <td><input type="number" data-action="{{ route('panel.editor.rank', $item->id) }}" class="form-control input-number rank-num" value="{{ $item['rating'] }}"></td>
                         <td>{{ optional($item->plugin)->name }}</td>
                         <td>
-                            @if ($item->icon_file_url)
-                                <img src="{{ $item->icon_file_url }}" width="24" height="24">
+                            @if ($item->getIconUrl())
+                                <img src="{{ $item->getIconUrl() }}" width="24" height="24">
                             @endif
-                            {{ $item['name'] }}
+                            {{ $item->getLangName($defaultLanguage) }}
                         </td>
                         <td>
                             @if (in_array(1, explode(',', $item->scene)))
