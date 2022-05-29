@@ -154,12 +154,7 @@ class InteractiveController extends Controller
                 continue;
             }
 
-            $value = $request->$configKey;
-            if ($configKey == 'dialog_files') {
-                $value = join(',', $value);
-            }
-
-            $config->item_value = $value;
+            $config->item_value = $request->$configKey;
             $config->save();
         }
 

@@ -116,19 +116,19 @@
                         <label class="input-group-text">{{ __('FsLang::panel.interactive_dialog_files') }}</label>
                         <div class="form-control bg-white">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="dialog_file_image" name="dialog_files[]" value="1" {{ in_array(1, explode(',', $params['dialog_files'] ?? '')) ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="dialog_file_image" name="dialog_files[]" value="1" {{ in_array(1, $params['dialog_files']) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="dialog_file_image">{{ __('FsLang::panel.editor_image') }}</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="dialog_file_video" name="dialog_files[]" value="2" {{ in_array(2, explode(',', $params['dialog_files'] ?? '')) ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="dialog_file_video" name="dialog_files[]" value="2" {{ in_array(2, $params['dialog_files']) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="dialog_file_video">{{ __('FsLang::panel.editor_video') }}</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="dialog_file_audio" name="dialog_files[]" value="3" {{ in_array(3, explode(',', $params['dialog_files'] ?? '')) ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="dialog_file_audio" name="dialog_files[]" value="3" {{ in_array(3, $params['dialog_files']) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="dialog_file_audio">{{ __('FsLang::panel.editor_audio') }}</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="dialog_file_document" name="dialog_files[]" value="4" {{ in_array(4, explode(',', $params['dialog_files'] ?? '')) ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="dialog_file_document" name="dialog_files[]" value="4" {{ in_array(4, $params['dialog_files']) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="dialog_file_document">{{ __('FsLang::panel.editor_document') }}</label>
                             </div>
                         </div>
@@ -251,6 +251,8 @@
                             <input type="checkbox" id="it_comments" name="it_comments" value="true" class="form-check-input" {{ $params['it_comments'] ? 'checked' : '' }}>
                             <label class="form-check-label" for="it_comments">{{ __('FsLang::panel.interactive_it_comments') }}</label>
                         </div>
+                    </li>
+                    <li class="list-group-item">
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="it_likers" name="it_likers" value="true" class="form-check-input" {{ $params['it_likers'] ? 'checked' : '' }}>
                             <label class="form-check-label" for="it_likers">{{ __('FsLang::panel.interactive_it_likers') }}</label>
@@ -365,94 +367,96 @@
                     <li class="list-group-item list-group-item-secondary">{{ __('FsLang::panel.interactive_user_profile') }}</li>
                     <li class="list-group-item">
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="it_posts" name="it_home_list" value="it_posts" class="form-check-input" {{ $params['it_home_list'] == 'it_posts' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="it_posts">{{ __('FsLang::panel.interactive_it_posts') }}</label>
+                            <input type="radio" id="home-it_posts" name="it_home_list" value="it_posts" class="form-check-input" {{ $params['it_home_list'] == 'it_posts' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_posts">{{ __('FsLang::panel.interactive_it_posts') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="it_comments" name="it_home_list" value="it_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_comments' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="it_comments">{{ __('FsLang::panel.interactive_it_comments') }}</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="it_likers" name="it_home_list" value="it_likers" class="form-check-input" {{ $params['it_home_list'] == 'it_likers' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="it_likers">{{ __('FsLang::panel.interactive_it_likers') }}</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="it_dislikers" name="it_home_list" value="it_dislikers" class="form-check-input" {{ $params['it_home_list'] == 'it_dislikers' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="it_dislikers">{{ __('FsLang::panel.interactive_it_dislikers') }}</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-112" name="it_home_list" value="it_followers" class="form-check-input" {{ $params['it_home_list'] == 'it_followers' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-112">{{ __('FsLang::panel.interactive_it_followers') }}</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-113" name="it_home_list" value="it_blockers" class="form-check-input" {{ $params['it_home_list'] == 'it_blockers' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-113">{{ __('FsLang::panel.interactive_it_blockers') }}</label>
+                            <input type="radio" id="home-it_comments" name="it_home_list" value="it_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_comments' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_comments">{{ __('FsLang::panel.interactive_it_comments') }}</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-3" name="it_home_list" value="it_like_users" class="form-check-input" {{ $params['it_home_list'] == 'it_like_users' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-3">{{ __('FsLang::panel.interactive_it_like_users') }}</label>
+                            <input type="radio" id="home-it_likers" name="it_home_list" value="it_likers" class="form-check-input" {{ $params['it_home_list'] == 'it_likers' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_likers">{{ __('FsLang::panel.interactive_it_likers') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-4" name="it_home_list" value="it_like_groups" class="form-check-input" {{ $params['it_home_list'] == 'it_like_groups' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-4">{{ __('FsLang::panel.interactive_it_like_groups') }}</label>
+                            <input type="radio" id="home-it_dislikers" name="it_home_list" value="it_dislikers" class="form-check-input" {{ $params['it_home_list'] == 'it_dislikers' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_dislikers">{{ __('FsLang::panel.interactive_it_dislikers') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-5" name="it_home_list" value="it_like_hashtags" class="form-check-input" {{ $params['it_home_list'] == 'it_like_hashtags' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-5">{{ __('FsLang::panel.interactive_it_like_hashtags') }}</label>
+                            <input type="radio" id="home-it_followers" name="it_home_list" value="it_followers" class="form-check-input" {{ $params['it_home_list'] == 'it_followers' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_followers">{{ __('FsLang::panel.interactive_it_followers') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-6" name="it_home_list" value="it_like_posts" class="form-check-input" {{ $params['it_home_list'] == 'it_like_posts' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-6">{{ __('FsLang::panel.interactive_it_like_posts') }}</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-7" name="it_home_list" value="it_like_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_like_comments' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-7">{{ __('FsLang::panel.interactive_it_like_comments') }}</label>
+                            <input type="radio" id="home-it_blockers" name="it_home_list" value="it_blockers" class="form-check-input" {{ $params['it_home_list'] == 'it_blockers' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_blockers">{{ __('FsLang::panel.interactive_it_blockers') }}</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-8" name="it_home_list" value="it_follow_users" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_users' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-8">{{ __('FsLang::panel.interactive_it_follow_users') }}</label>
+                            <input type="radio" id="home-it_like_users" name="it_home_list" value="it_like_users" class="form-check-input" {{ $params['it_home_list'] == 'it_like_users' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_like_users">{{ __('FsLang::panel.interactive_it_like_users') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-9" name="it_home_list" value="it_follow_groups" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_groups' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-9">{{ __('FsLang::panel.interactive_it_follow_groups') }}</label>
+                            <input type="radio" id="home-it_like_groups" name="it_home_list" value="it_like_groups" class="form-check-input" {{ $params['it_home_list'] == 'it_like_groups' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_like_groups">{{ __('FsLang::panel.interactive_it_like_groups') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-10" name="it_home_list" value="it_follow_hashtags" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_hashtags' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-10">{{ __('FsLang::panel.interactive_it_follow_hashtags') }}</label>
+                            <input type="radio" id="home-it_like_hashtags" name="it_home_list" value="it_like_hashtags" class="form-check-input" {{ $params['it_home_list'] == 'it_like_hashtags' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_like_hashtags">{{ __('FsLang::panel.interactive_it_like_hashtags') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-11" name="it_home_list" value="it_follow_posts" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_posts' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-11">{{ __('FsLang::panel.interactive_it_follow_posts') }}</label>
+                            <input type="radio" id="home-it_like_posts" name="it_home_list" value="it_like_posts" class="form-check-input" {{ $params['it_home_list'] == 'it_like_posts' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_like_posts">{{ __('FsLang::panel.interactive_it_like_posts') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-12" name="it_home_list" value="it_follow_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_comments' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-12">{{ __('FsLang::panel.interactive_it_follow_comments') }}</label>
+                            <input type="radio" id="home-it_like_comments" name="it_home_list" value="it_like_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_like_comments' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_like_comments">{{ __('FsLang::panel.interactive_it_like_comments') }}</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-13" name="it_home_list" value="it_block_users" class="form-check-input" {{ $params['it_home_list'] == 'it_block_users' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-13">{{ __('FsLang::panel.interactive_it_block_users') }}</label>
+                            <input type="radio" id="home-it_follow_users" name="it_home_list" value="it_follow_users" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_users' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_follow_users">{{ __('FsLang::panel.interactive_it_follow_users') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-14" name="it_home_list" value="it_block_groups" class="form-check-input" {{ $params['it_home_list'] == 'it_block_groups' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-14">{{ __('FsLang::panel.interactive_it_block_groups') }}</label>
+                            <input type="radio" id="home-it_follow_groups" name="it_home_list" value="it_follow_groups" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_groups' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_follow_groups">{{ __('FsLang::panel.interactive_it_follow_groups') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-15" name="it_home_list" value="it_block_hashtags" class="form-check-input" {{ $params['it_home_list'] == 'it_block_hashtags' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-15">{{ __('FsLang::panel.interactive_it_block_hashtags') }}</label>
+                            <input type="radio" id="home-it_follow_hashtags" name="it_home_list" value="it_follow_hashtags" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_hashtags' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_follow_hashtags">{{ __('FsLang::panel.interactive_it_follow_hashtags') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-16" name="it_home_list" value="it_block_posts" class="form-check-input" {{ $params['it_home_list'] == 'it_block_posts' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-16">{{ __('FsLang::panel.interactive_it_block_posts') }}</label>
+                            <input type="radio" id="home-it_follow_posts" name="it_home_list" value="it_follow_posts" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_posts' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_follow_posts">{{ __('FsLang::panel.interactive_it_follow_posts') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="ta-17" name="it_home_list" value="it_block_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_block_comments' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="ta-17">{{ __('FsLang::panel.interactive_it_block_comments') }}</label>
+                            <input type="radio" id="home-it_follow_comments" name="it_home_list" value="it_follow_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_follow_comments' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_follow_comments">{{ __('FsLang::panel.interactive_it_follow_comments') }}</label>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_block_users" name="it_home_list" value="it_block_users" class="form-check-input" {{ $params['it_home_list'] == 'it_block_users' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_block_users">{{ __('FsLang::panel.interactive_it_block_users') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_block_groups" name="it_home_list" value="it_block_groups" class="form-check-input" {{ $params['it_home_list'] == 'it_block_groups' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_block_groups">{{ __('FsLang::panel.interactive_it_block_groups') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_block_hashtags" name="it_home_list" value="it_block_hashtags" class="form-check-input" {{ $params['it_home_list'] == 'it_block_hashtags' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_block_hashtags">{{ __('FsLang::panel.interactive_it_block_hashtags') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_block_posts" name="it_home_list" value="it_block_posts" class="form-check-input" {{ $params['it_home_list'] == 'it_block_posts' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_block_posts">{{ __('FsLang::panel.interactive_it_block_posts') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_block_comments" name="it_home_list" value="it_block_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_block_comments' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_block_comments">{{ __('FsLang::panel.interactive_it_block_comments') }}</label>
                         </div>
                     </li>
                 </ul>
