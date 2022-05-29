@@ -152,7 +152,7 @@ class ExtendContentTypeController extends Controller
         return $this->deleteSuccess();
     }
 
-    public function updateRank($id, Request $request)
+    public function updateRating($id, Request $request)
     {
         $pluginUsage = PluginUsage::findOrFail($id);
         $pluginUsage->rating = $request->rating;

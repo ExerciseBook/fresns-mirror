@@ -36,7 +36,7 @@
             <tbody>
                 @foreach ($pluginUsages as $item)
                     <tr>
-                        <td><input type="number" data-action="{{ route('panel.content-type.rank', $item->id) }}" class="form-control input-number rank-num" value="{{ $item['rating'] }}"></td>
+                        <td><input type="number" data-action="{{ route('panel.content-type.rating', $item->id) }}" class="form-control input-number rating-number" value="{{ $item['rating'] }}"></td>
                         <td>{{ optional($item->plugin)->name ?? $item->plugin_unikey }}</td>
                         <td>{{ $item->getLangName($defaultLanguage) }}</td>
                         <td>
@@ -266,8 +266,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="add-rank-tr">
-                                        <td colspan="4"><button class="btn btn-outline-success btn-sm px-3 add-rank" type="button"><i class="bi bi-plus-circle-dotted"></i> {{ __('FsLang::panel.button_add') }}</button></td>
+                                    <tr class="add-rating-tr">
+                                        <td colspan="4"><button class="btn btn-outline-success btn-sm px-3 add-rating" type="button"><i class="bi bi-plus-circle-dotted"></i> {{ __('FsLang::panel.button_add') }}</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -281,18 +281,18 @@
         </div>
     </div>
 
-    <template id="rankTemplate">
-        <tr class="rank-item">
+    <template id="ratingTemplate">
+        <tr class="rating-item">
             <td><input required type="number" name="ids[]" class="form-control input-number"></td>
             <td>
-                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start rank-title" data-bs-toggle="modal" data-bs-target="#pluginRatingTitleLangModal">{{ __('FsLang::panel.table_title') }}</button>
+                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start rating-title" data-bs-toggle="modal" data-bs-target="#pluginRatingTitleLangModal">{{ __('FsLang::panel.table_title') }}</button>
                 <input type="hidden" name="titles[]">
             </td>
             <td>
-                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start rank-description" data-bs-toggle="modal" data-bs-target="#pluginRatingDescLangModal">{{ __('FsLang::panel.table_description') }}</button>
+                <button type="button" class="btn btn-outline-secondary btn-modal w-100 text-start rating-description" data-bs-toggle="modal" data-bs-target="#pluginRatingDescLangModal">{{ __('FsLang::panel.table_description') }}</button>
                 <input type="hidden" name="descriptions[]">
             </td>
-            <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7 delete-rank-number">{{ __('FsLang::panel.button_delete') }}</button></td>
+            <td><button type="button" class="btn btn-link link-danger ms-1 fresns-link fs-7 delete-rating-number">{{ __('FsLang::panel.button_delete') }}</button></td>
         </tr>
     </template>
 
@@ -305,7 +305,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="rankTitleForm">
+                    <form id="ratingTitleForm">
                         <div class="table-responsive">
                             <table class="table table-hover align-middle text-nowrap">
                                 <thead>

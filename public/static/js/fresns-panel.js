@@ -359,11 +359,11 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', 'input.rank-num', function () {
+    $(document).on('click', 'input.rating-number', function () {
         return false;
     });
 
-    $(document).on('change', 'input.rank-num', function () {
+    $(document).on('change', 'input.rating-number', function () {
         $.ajax({
             method: 'post',
             url: $(this).data('action'),
@@ -727,7 +727,7 @@ $(document).ready(function () {
             let stickerTemplate = template.clone();
 
             stickerTemplate
-                .find('input.sticker-rank')
+                .find('input.sticker-rating')
                 .attr('name', 'rating[' + sticker.id + ']')
                 .val(sticker.rating);
 
@@ -1615,10 +1615,10 @@ $(document).ready(function () {
         let action = button.data('action');
         let defaultLanguage = button.data('default_language');
 
-        $(this).find('.rank-item').remove();
+        $(this).find('.rating-item').remove();
         $(this).find('form').attr('action', action);
 
-        let template = $('#rankTemplate').contents();
+        let template = $('#ratingTemplate').contents();
         params = JSON.parse(params);
         $(this).data('languages', null);
 
@@ -1637,21 +1637,21 @@ $(document).ready(function () {
                 }
             });
 
-            let rankTemplate = template.clone();
-            rankTemplate.find('input[name="ids[]"]').val(param.id);
-            rankTemplate.find('.rank-title').data('languages', param.intro);
-            rankTemplate.find('input[name="titles[]"]').val(JSON.stringify(titles));
-            rankTemplate.find('.rank-description').data('languages', param.intro);
-            rankTemplate.find('input[name="descriptions[]"]').val(JSON.stringify(descriptions));
+            let ratingTemplate = template.clone();
+            ratingTemplate.find('input[name="ids[]"]').val(param.id);
+            ratingTemplate.find('.rating-title').data('languages', param.intro);
+            ratingTemplate.find('input[name="titles[]"]').val(JSON.stringify(titles));
+            ratingTemplate.find('.rating-description').data('languages', param.intro);
+            ratingTemplate.find('input[name="descriptions[]"]').val(JSON.stringify(descriptions));
 
             if (title) {
-                rankTemplate.find('button.rank-title').text(title);
+                ratingTemplate.find('button.rating-title').text(title);
             }
             if (description) {
-                rankTemplate.find('button.rank-description').text(description);
+                ratingTemplate.find('button.rating-description').text(description);
             }
 
-            rankTemplate.insertBefore($(this).find('.add-rank-tr'));
+            ratingTemplate.insertBefore($(this).find('.add-rating-tr'));
         });
 
         $('#pluginRatingTitleLangModal');
@@ -1670,13 +1670,13 @@ $(document).ready(function () {
     });
 
     // content type data source
-    $('#pluginRatingModal .add-rank').click(function () {
-        let template = $('#rankTemplate').clone();
+    $('#pluginRatingModal .add-rating').click(function () {
+        let template = $('#ratingTemplate').clone();
 
-        $(template.html()).insertBefore($('#pluginRatingModal').find('.add-rank-tr'));
+        $(template.html()).insertBefore($('#pluginRatingModal').find('.add-rating-tr'));
     });
 
-    $(document).on('click', '.delete-rank-number', function () {
+    $(document).on('click', '.delete-rating-number', function () {
         $(this).closest('tr').remove();
     });
 

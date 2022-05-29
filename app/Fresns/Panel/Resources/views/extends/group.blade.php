@@ -65,7 +65,7 @@
             <tbody>
                 @foreach ($pluginUsages as $item)
                     <tr>
-                        <td><input type="number" data-action="{{ route('panel.group.rank', $item) }}" class="form-control input-number rank-num" value="{{ $item['rating'] }}"></td>
+                        <td><input type="number" data-action="{{ route('panel.group.rating', $item) }}" class="form-control input-number rating-number" value="{{ $item['rating'] }}"></td>
                         <td>{{ $item->group ? $item->group->name : '' }}</td>
                         <td>{{ optional($item->plugin)->name }}</td>
                         <td>

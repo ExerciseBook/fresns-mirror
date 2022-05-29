@@ -65,7 +65,7 @@ class StickerController extends Controller
         return $this->deleteSuccess();
     }
 
-    public function updateRank(Sticker $stickerImage, Request $request)
+    public function updateRating(Sticker $stickerImage, Request $request)
     {
         $stickerImage->rating = $request->rating;
         $stickerImage->save();
@@ -83,12 +83,12 @@ class StickerController extends Controller
             $group->stickers()->whereIn('id', $deleteIds)->delete();
         }
 
-        foreach ($request->rating ?? [] as $id => $rank) {
+        foreach ($request->rating ?? [] as $id => $rating) {
             $stickerImage = $stickerImages->where('id', $id)->first();
             if (! $stickerImage) {
                 continue;
             }
-            $stickerImage->rating = $rank;
+            $stickerImage->rating = $rating;
             $stickerImage->is_enable = $request->enable[$id] ?? 0;
             $stickerImage->save();
         }

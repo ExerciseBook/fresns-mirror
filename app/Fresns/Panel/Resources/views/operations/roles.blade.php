@@ -38,7 +38,7 @@
             <tbody>
                 @foreach ($roles as $role)
                     <tr>
-                        <td><input type="number" data-action="{{ route('panel.roles.rank', $role->id) }}" class="form-control input-number rank-num" value="{{ $role->rating }}"></td>
+                        <td><input type="number" data-action="{{ route('panel.roles.rating', $role->id) }}" class="form-control input-number rating-number" value="{{ $role->rating }}"></td>
                         <td>{{ $typeLabels[$role->type] }}</td>
                         <td>
                             @if ($role->icon_file_url)

@@ -438,7 +438,7 @@ class GroupController extends Controller
         return $this->updateSuccess();
     }
 
-    public function updateRank(Group $group, Request $request)
+    public function updateRating(Group $group, Request $request)
     {
         $group->rating = $request->rating;
         $group->save();
@@ -446,7 +446,7 @@ class GroupController extends Controller
         return $this->updateSuccess();
     }
 
-    public function updateRecomRank(Group $group, Request $request)
+    public function updateRecommendRank(Group $group, Request $request)
     {
         $group->recommend_rating = $request->rating;
         $group->save();

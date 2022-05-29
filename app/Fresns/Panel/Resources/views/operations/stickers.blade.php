@@ -33,7 +33,7 @@
             <tbody>
                 @foreach ($groups as $group)
                     <tr>
-                        <td><input type="number" data-action="{{ route('panel.stickers.rank', $group->id) }}" class="form-control input-number rank-num" value="{{ $group->rating }}"></td>
+                        <td><input type="number" data-action="{{ route('panel.stickers.rating', $group->id) }}" class="form-control input-number rating-number" value="{{ $group->rating }}"></td>
                         <td>
                             @if ($group->image_file_url)
                                 <img src="{{ $group->image_file_url }}" width="24" height="24">
@@ -237,7 +237,7 @@
 
     <template id="stickerData">
         <tr>
-            <td><input type="number" class="form-control input-number sticker-rank"></td>
+            <td><input type="number" class="form-control input-number sticker-rating"></td>
             <td><img class="sticker-img" src="" width="28" height="28"></td>
             <td>[<span class="sticker-code"></span>]</td>
             <td>

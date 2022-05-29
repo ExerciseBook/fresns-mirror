@@ -162,7 +162,7 @@ class RoleController extends Controller
         return $this->deleteSuccess();
     }
 
-    public function updateRank($id, Request $request)
+    public function updateRating($id, Request $request)
     {
         $role = Role::findOrFail($id);
         $role->rating = $request->rating;

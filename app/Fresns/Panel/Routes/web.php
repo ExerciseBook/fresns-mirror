@@ -66,7 +66,7 @@ Route::middleware(['panelAuth'])->group(function () {
     // update config
     Route::put('configs/{config:item_key}', [ConfigController::class, 'update'])->name('configs.update');
     // plugin usage
-    Route::put('plugin-usages/{pluginUsage}/rank', [PluginUsageController::class, 'updateRank'])->name('plugin-usages.rank.update');
+    Route::put('plugin-usages/{pluginUsage}/rating', [PluginUsageController::class, 'updateRating'])->name('plugin-usages.rating.update');
     Route::resource('plugin-usages', PluginUsageController::class)->only([
         'store', 'update', 'destroy',
     ])->parameters([
@@ -112,7 +112,7 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::post('languageMenus', [LanguageMenuController::class, 'store'])->name('languageMenus.store');
         Route::put('languageMenus/status/switch', [LanguageMenuController::class, 'switchStatus'])->name('languageMenus.status.switch');
         Route::put('languageMenus/{langTag}', [LanguageMenuController::class, 'update'])->name('languageMenus.update');
-        Route::put('languageMenus/{langTag}/rank', [LanguageMenuController::class, 'updateRank'])->name('languageMenus.rank.update');
+        Route::put('languageMenus/{langTag}/rating', [LanguageMenuController::class, 'updateRating'])->name('languageMenus.rating.update');
         Route::put('default/languages/update', [LanguageMenuController::class, 'updateDefaultLanguage'])->name('languageMenus.default.update');
         Route::delete('languageMenus/{langTag}', [LanguageMenuController::class, 'destroy'])->name('languageMenus.destroy');
         // general
@@ -171,7 +171,7 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::resource('stickers', StickerGroupController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('stickers/{sticker}/rank', [StickerController::class, 'updateRank'])->name('stickers.rank');
+        Route::put('stickers/{sticker}/rating', [StickerController::class, 'updateRating'])->name('stickers.rating');
         Route::put('sticker-images/batch', [StickerController::class, 'batchUpdate'])->name('sticker-images.batch.update');
         Route::resource('sticker-images', StickerController::class)->only([
             'index', 'store', 'update', 'destroy',
@@ -196,7 +196,7 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::resource('roles', RoleController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('roles/{role}/rank', [RoleController::class, 'updateRank'])->name('roles.rank');
+        Route::put('roles/{role}/rating', [RoleController::class, 'updateRating'])->name('roles.rating');
         Route::get('roles/{role}/permissions', [RoleController::class, 'showPermissions'])->name('roles.permissions.index');
         Route::put('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
         // groups
@@ -206,8 +206,8 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::get('groups/recommend', [GroupController::class, 'recommendIndex'])->name('groups.recommend.index');
         Route::get('groups/inactive', [GroupController::class, 'disableIndex'])->name('groups.inactive.index');
         Route::put('groups/{group}/merge', [GroupController::class, 'mergeGroup'])->name('groups.merge');
-        Route::put('groups/{group}/rank', [GroupController::class, 'updateRank'])->name('groups.rank.update');
-        Route::put('groups/{group}/recom_rank', [GroupController::class, 'updateRecomRank'])->name('groups.recom.rank.update');
+        Route::put('groups/{group}/rating', [GroupController::class, 'updateRating'])->name('groups.rating.update');
+        Route::put('groups/{group}/recommend_rating', [GroupController::class, 'updateRecommendRank'])->name('groups.recommend.rating.update');
         Route::put('groups/{group}/enable', [GroupController::class, 'updateEnable'])->name('groups.enable.update');
         Route::get('groups/categories', [GroupController::class, 'groupIndex'])->name('groups.categories.index');
     });
@@ -218,13 +218,13 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::resource('editor', ExtendEditorController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('editor/{id}/rank', [ExtendEditorController::class, 'updateRank'])->name('editor.rank');
+        Route::put('editor/{id}/rating', [ExtendEditorController::class, 'updateRating'])->name('editor.rating');
         // content-type
         Route::resource('content-type', ExtendContentTypeController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
         Route::put('content-type/{id}/dataSources/{key}', [ExtendContentTypeController::class, 'updateSource'])->name('content-type.source');
-        Route::put('content-type/{id}/rank', [ExtendContentTypeController::class, 'updateRank'])->name('content-type.rank');
+        Route::put('content-type/{id}/rating', [ExtendContentTypeController::class, 'updateRating'])->name('content-type.rating');
         // post-detail
         Route::resource('post-detail', ExtendPostDetailController::class)->only([
             'index', 'update',
@@ -233,22 +233,22 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::resource('manage', ExtendManageController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('manage/{id}/rank', [ExtendManageController::class, 'updateRank'])->name('manage.rank');
+        Route::put('manage/{id}/rating', [ExtendManageController::class, 'updateRating'])->name('manage.rating');
         // group
         Route::resource('group', ExtendGroupController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('group/{id}/rank', [ExtendGroupController::class, 'updateRank'])->name('group.rank');
+        Route::put('group/{id}/rating', [ExtendGroupController::class, 'updateRating'])->name('group.rating');
         // user-feature
         Route::resource('user-feature', ExtendUserFeatureController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('user-feature/{id}/rank', [ExtendUserFeatureController::class, 'updateRank'])->name('user-feature.rank');
+        Route::put('user-feature/{id}/rating', [ExtendUserFeatureController::class, 'updateRating'])->name('user-feature.rating');
         // user-profile
         Route::resource('user-profile', ExtendUserProfileController::class)->only([
             'index', 'store', 'update', 'destroy',
         ]);
-        Route::put('user-profile/{id}/rank', [ExtendUserProfileController::class, 'updateRank'])->name('user-profile.rank');
+        Route::put('user-profile/{id}/rating', [ExtendUserProfileController::class, 'updateRating'])->name('user-profile.rating');
     });
 
     // clients

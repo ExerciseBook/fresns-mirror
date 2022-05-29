@@ -59,7 +59,7 @@ class LanguageMenuController extends Controller
         return $this->updateSuccess();
     }
 
-    public function updateRank(UpdateLanguageRankRequest $request, $langTag)
+    public function updateRating(UpdateLanguageRankRequest $request, $langTag)
     {
         $languageConfig = Config::where('item_key', 'language_menus')->firstOrFail();
         $languages = $languageConfig->item_value;
