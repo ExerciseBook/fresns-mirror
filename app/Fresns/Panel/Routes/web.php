@@ -8,7 +8,6 @@
 
 use App\Fresns\Panel\Http\Controllers\AdminController;
 use App\Fresns\Panel\Http\Controllers\BlockWordController;
-use App\Fresns\Panel\Http\Controllers\ClientMenuController;
 use App\Fresns\Panel\Http\Controllers\CodeMessageController;
 use App\Fresns\Panel\Http\Controllers\ColumnController;
 use App\Fresns\Panel\Http\Controllers\ConfigController;
@@ -29,6 +28,7 @@ use App\Fresns\Panel\Http\Controllers\LanguageMenuController;
 use App\Fresns\Panel\Http\Controllers\LanguagePackController;
 use App\Fresns\Panel\Http\Controllers\LoginController;
 use App\Fresns\Panel\Http\Controllers\MapController;
+use App\Fresns\Panel\Http\Controllers\MenuController;
 use App\Fresns\Panel\Http\Controllers\PluginController;
 use App\Fresns\Panel\Http\Controllers\PluginUsageController;
 use App\Fresns\Panel\Http\Controllers\PolicyController;
@@ -254,8 +254,8 @@ Route::middleware(['panelAuth'])->group(function () {
     // clients
     Route::prefix('clients')->group(function () {
         // menus
-        Route::get('menus', [ClientMenuController::class, 'index'])->name('menus.index');
-        Route::put('menus/{key}/update', [ClientMenuController::class, 'update'])->name('menus.update');
+        Route::get('menus', [MenuController::class, 'index'])->name('menus.index');
+        Route::put('menus/{key}/update', [MenuController::class, 'update'])->name('menus.update');
         // columns
         Route::get('columns', [ColumnController::class, 'index'])->name('columns.index');
         // language pack
