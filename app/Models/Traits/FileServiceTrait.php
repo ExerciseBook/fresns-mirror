@@ -50,8 +50,18 @@ trait FileServiceTrait
         } else {
             $fileSizeInfo = $fileData->size.' B';
         }
+
+        $substitutionConfig = match ($fileData->type) {
+            File::TYPE_IMAGE => 'image_substitution',
+            File::TYPE_VIDEO => 'video_substitution',
+            File::TYPE_AUDIO => 'audio_substitution',
+            File::TYPE_DOCUMENT => 'document_substitution',
+        };
+
         $info['fid'] = $fileData->fid;
         $info['type'] = $fileData->type;
+        $info['status'] = (bool) $fileData->is_enable;
+        $info['substitutionImageUrl'] = ConfigHelper::fresnsConfigFileUrlByItemKey($substitutionConfig);
         $info['name'] = $fileData->name;
         $info['mime'] = $fileData->mime;
         $info['extension'] = $fileData->extension;
