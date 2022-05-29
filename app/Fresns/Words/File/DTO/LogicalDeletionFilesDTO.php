@@ -10,10 +10,7 @@ namespace App\Fresns\Words\File\DTO;
 
 use Fresns\DTO\DTO;
 
-/**
- * Class PhysicalDeletionFileDTO.
- */
-class PhysicalDeletionFileDTO extends DTO
+class LogicalDeletionFilesDTO extends DTO
 {
     /**
      * @return array
@@ -21,7 +18,6 @@ class PhysicalDeletionFileDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['integer', 'required', 'in:1,2,3,4'],
             'fileIdsOrFids' => ['array', 'required'],
         ];
     }

@@ -225,7 +225,7 @@ class CommonController extends Controller
         if (in_array(4, $data['types'])) {
             $fids = collect($callback->content['files'])->sortBy('rating')->pluck('fid')->toArray();
 
-            $data['apiContent']['files'] = FileHelper::fresnsAntiLinkFileInfoList($fids);
+            $data['apiContent']['files'] = FileHelper::fresnsAntiLinkFileInfoListByIds($fids);
         }
 
         if (in_array(5, $data['types'])) {

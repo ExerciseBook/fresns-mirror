@@ -149,12 +149,12 @@ class FileUtility
             4 => 'documents',
         };
 
-        $fileInfo = FileHelper::fresnsAntiLinkFileInfoList($fileIdArr, 'fileId')[$fileTypeName];
+        $fileInfo = FileHelper::fresnsAntiLinkFileInfoListByIds($fileIdArr)[$fileTypeName];
 
         return $fileInfo;
     }
 
-    public static function logicalDeletionFile(array $fileIdsOrFids)
+    public static function logicalDeletionFiles(array $fileIdsOrFids)
     {
         FileModel::whereIn('id', $fileIdsOrFids)->orWhereIn('fid', $fileIdsOrFids)->delete();
 

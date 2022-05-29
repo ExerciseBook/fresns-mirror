@@ -12,8 +12,8 @@ use App\Fresns\Words\File\DTO\GetAntiLinkFileInfoDTO;
 use App\Fresns\Words\File\DTO\GetAntiLinkFileInfoListDTO;
 use App\Fresns\Words\File\DTO\GetAntiLinkFileOriginalUrlDTO;
 use App\Fresns\Words\File\DTO\GetUploadTokenDTO;
-use App\Fresns\Words\File\DTO\LogicalDeletionFileDTO;
-use App\Fresns\Words\File\DTO\PhysicalDeletionFileDTO;
+use App\Fresns\Words\File\DTO\LogicalDeletionFilesDTO;
+use App\Fresns\Words\File\DTO\PhysicalDeletionFilesDTO;
 use App\Fresns\Words\File\DTO\UploadFileDTO;
 use App\Fresns\Words\File\DTO\UploadFileInfoDTO;
 use App\Helpers\FileHelper;
@@ -216,11 +216,11 @@ class File
      *
      * @throws \Throwable
      */
-    public function logicalDeletionFile($wordBody)
+    public function logicalDeletionFiles($wordBody)
     {
-        $dtoWordBody = new LogicalDeletionFileDTO($wordBody);
+        $dtoWordBody = new LogicalDeletionFilesDTO($wordBody);
 
-        FileUtility::logicalDeletionFile($dtoWordBody->fileIdsOrFids);
+        FileUtility::logicalDeletionFiles($dtoWordBody->fileIdsOrFids);
 
         return $this->success();
     }
@@ -231,9 +231,9 @@ class File
      *
      * @throws \Throwable
      */
-    public function physicalDeletionFile($wordBody)
+    public function physicalDeletionFiles($wordBody)
     {
-        $dtoWordBody = new PhysicalDeletionFileDTO($wordBody);
+        $dtoWordBody = new PhysicalDeletionFilesDTO($wordBody);
         $langTag = \request()->header('langTag', config('app.locale'));
 
         $storageConfig = FileHelper::fresnsFileStorageConfigByType($dtoWordBody->type);
