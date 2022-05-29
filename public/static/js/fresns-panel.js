@@ -10,6 +10,13 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
 });
 
+/* Fresns Token */
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    }
+});
+
 // FsLang trans
 function trans(key, replace = {}) {
     let translation = key.split('.').reduce((t, i) => {
