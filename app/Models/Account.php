@@ -8,13 +8,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class Account extends Authenticatable
 {
+    use HasFactory;
     use Notifiable;
+    use SoftDeletes;
     use Traits\AccountServiceTrait;
+    use Traits\DataChangeNotifyTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -31,6 +36,11 @@ class Account extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format($this->dateFormat ?: 'Y-m-d H:i:s');
+    }
 
     public function wallet()
     {
