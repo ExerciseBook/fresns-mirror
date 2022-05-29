@@ -45,4 +45,9 @@ trait PluginUsageServiceTrait
 
         return $info;
     }
+
+    public function getIconUrl()
+    {
+        return FileHelper::fresnsFileUrlByTableColumn($this->icon_file_id, $this->icon_file_url);
+    }
 }

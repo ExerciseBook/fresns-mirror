@@ -71,4 +71,14 @@ trait GroupServiceTrait
 
         return $info;
     }
+
+    public function getCoverUrl()
+    {
+        return FileHelper::fresnsFileUrlByTableColumn($this->cover_file_id, $this->cover_file_url);
+    }
+
+    public function getBannerUrl()
+    {
+        return FileHelper::fresnsFileUrlByTableColumn($this->banner_file_id, $this->banner_file_url);
+    }
 }
