@@ -20,14 +20,15 @@ class FileUtility
 {
     public static function uploadFile(array $bodyInfo, UploadedFile $file)
     {
-        $fresnsDisk = Storage::build([
+        $fresnsStorage = Storage::build([
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('app/public'),
+            'url' => '/storage',
         ]);
 
-        $storePath = 'public/'.FileHelper::fresnsFileStoragePath($bodyInfo['type'], $bodyInfo['useType']);
+        $storePath = FileHelper::fresnsFileStoragePath($bodyInfo['type'], $bodyInfo['useType']);
 
-        $diskPath = $fresnsDisk->putFile($storePath, $file);
+        $diskPath = $fresnsStorage->putFile($storePath, $file);
 
         $fileArr['fid'] = Str::random(12);
         $fileArr['type'] = $bodyInfo['type'];
@@ -41,7 +42,7 @@ class FileUtility
         $fileArr['path'] = $diskPath;
         $fileArr['more_json'] = $bodyInfo['moreJson'];
         if ($bodyInfo['type'] == 1) {
-            $imageSize = getimagesize(storage_path('app/'.$diskPath));
+            $imageSize = getimagesize(storage_path('app/public/'.$diskPath));
             $fileArr['image_width'] = $imageSize[0] ?? null;
             $fileArr['image_height'] = $imageSize[1] ?? null;
             $fileArr['image_is_long'] = 0;
