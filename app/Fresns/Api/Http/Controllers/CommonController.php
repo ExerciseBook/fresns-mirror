@@ -346,13 +346,13 @@ class CommonController extends Controller
         $headers = AppHelper::getApiHeaders();
 
         $wordBody = [
+            'type' => $dtoRequest->type,
             'pluginUnikey' => $dtoRequest->pluginUnikey,
             'platformId' => $headers['platformId'],
             'version' => $headers['version'],
             'langTag' => $headers['langTag'],
             'aid' => $headers['aid'],
             'uid' => $headers['uid'],
-            'objectType' => $dtoRequest->objectType,
             'objectName' => $dtoRequest->objectName,
             'objectAction' => $dtoRequest->objectAction,
             'objectResult' => $dtoRequest->objectResult,

@@ -188,7 +188,7 @@ class GlobalController extends Controller
     {
         $headers = AppHelper::getApiHeaders();
 
-        $stickers = Sticker::orderBy('rating')->get();
+        $stickers = Sticker::where('is_enable', 1)->orderBy('rating')->get();
 
         $stickerData = [];
         foreach ($stickers as $index => $sticker) {

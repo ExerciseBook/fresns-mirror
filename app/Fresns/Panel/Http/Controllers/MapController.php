@@ -102,7 +102,6 @@ class MapController extends Controller
             $config->item_key = 'map_'.$request->parameter;
             $config->item_tag = 'maps';
             $config->item_type = 'object';
-            $config->is_enable = 1;
         }
 
         $config->item_value = [
@@ -183,7 +182,6 @@ class MapController extends Controller
             $config->item_key = 'map_'.$request->parameter;
             $config->item_tag = 'maps';
             $config->item_type = 'object';
-            $config->is_enable = 1;
         }
 
         $config->item_value = [

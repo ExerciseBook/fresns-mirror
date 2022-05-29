@@ -245,8 +245,6 @@ class StorageController extends Controller
                 $config->item_key = $configKey;
                 $config->item_type = 'number';
                 $config->item_tag = 'storageAudios';
-                $config->is_enable = 1;
-                $config->is_api = 1;
             }
 
             $value = $request->$configKey;

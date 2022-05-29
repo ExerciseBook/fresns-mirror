@@ -86,9 +86,7 @@ class ClientMenuController extends Controller
 
         $langKeys = $configKeys;
 
-        $configs = Config::whereIn('item_key', $configKeys)
-            ->with('languages')
-            ->get();
+        $configs = Config::whereIn('item_key', $configKeys)->with('languages')->get();
 
         $configs = $configs->mapWithKeys(function ($config) {
             return [$config->item_key => $config];
@@ -168,7 +166,6 @@ class ClientMenuController extends Controller
                 $config->item_key = $enableKey;
                 $config->item_type = 'object';
                 $config->item_tag = 'menus';
-                $config->is_enable = 1;
             }
 
             $config->item_value = json_decode($request->config, true);
@@ -182,7 +179,6 @@ class ClientMenuController extends Controller
                 $config->item_key = $enableKey;
                 $config->item_type = 'boolean';
                 $config->item_tag = 'menus';
-                $config->is_enable = 1;
             }
             $config->item_value = $request->is_enable;
             $config->save();

@@ -165,13 +165,13 @@ class Basis
         }
 
         $input = [
+            'type' => $dtoWordBody->type,
             'plugin_unikey' => $dtoWordBody->pluginUnikey ?? 'Fresns',
             'platform_id' => $dtoWordBody->platformId,
             'version' => $dtoWordBody->version,
             'lang_tag' => $dtoWordBody->langTag ?? null,
             'account_id' => $dtoWordBody->accountId ?? null,
             'user_id' => $dtoWordBody->userId ?? null,
-            'object_type' => $dtoWordBody->objectType,
             'object_name' => $dtoWordBody->objectName,
             'object_action' => $dtoWordBody->objectAction,
             'object_result' => $dtoWordBody->objectResult,

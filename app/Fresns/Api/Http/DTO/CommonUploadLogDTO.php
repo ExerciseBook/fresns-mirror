@@ -18,8 +18,8 @@ class CommonUploadLogDTO extends DTO
     public function rules(): array
     {
         return [
+            'type' => ['string', 'required'],
             'pluginUnikey' => ['string', 'nullable'],
-            'objectType' => ['string', 'required'],
             'objectName' => ['string', 'required'],
             'objectAction' => ['string', 'required'],
             'objectResult' => ['integer', 'required', 'in:1,2,3'],

@@ -85,8 +85,6 @@ class ColumnController extends Controller
                 $config->item_type = 'string';
                 $config->item_tag = 'menus';
                 $config->is_multilingual = 1;
-                $config->is_api = 1;
-                $config->is_enable = 1;
                 $config->save();
             }
         }
