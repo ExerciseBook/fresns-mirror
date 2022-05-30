@@ -144,26 +144,17 @@ class ThemeFunctionController extends Controller
         }
 
         foreach ($request->languages as $langTag => $content) {
-            $language = Language::ofConfig()
-                ->where('table_key', $key)
-                ->where('lang_tag', $langTag)
-                ->first();
-            if (! $language) {
-                // create but no content
-                if (! $content) {
-                    continue;
-                }
-                $language = new Language();
-                $language->fill([
-                    'table_name' => 'configs',
-                    'table_column' => 'item_value',
-                    'table_key' => $key,
-                    'lang_tag' => $langTag,
-                ]);
-            }
+            $item = [
+                'table_key' => $key,
+                'lang_tag' => $langTag,
+                'table_name' => 'configs',
+                'table_column' => 'item_value',
+                'table_key' => $key,
+                'lang_tag' => $langTag,
+                'lang_content' => $content,
+            ];
 
-            $language->lang_content = $content;
-            $language->save();
+            ConfigUtility::changeFresnsConfigMultilingualItem($item);
         }
 
         $content = $request->languages[$this->defaultLanguage] ?? current(array_filter($request->languages));

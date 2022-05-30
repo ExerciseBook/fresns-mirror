@@ -10,6 +10,7 @@ namespace App\Utilities;
 
 use App\Models\CodeMessage;
 use App\Models\Config;
+use App\Models\Language;
 
 class ConfigUtility
 {
@@ -46,6 +47,20 @@ class ConfigUtility
     public static function changeFresnsConfigMultilingualItem($fresnsConfigKey)
     {
         // 修改多语言的配置（存在则修改，不存在则新建）
+        $language = Language::ofConfig()
+            ->where('table_key', $fresnsConfigKey['table_key'])
+            ->where('lang_tag', $fresnsConfigKey['lang_tag'])
+            ->first();
+
+        if (! $language) {
+            $language = new Language();
+            $language->fill($fresnsConfigKey);
+        }
+
+        $language->lang_content = $fresnsConfigKey['lang_content'];
+        $language->save();
+
+        return $language;
     }
 
     // get code message
