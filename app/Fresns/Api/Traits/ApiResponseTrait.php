@@ -69,7 +69,7 @@ trait ApiResponseTrait
         return $this->success($data, $message ?: 'unknown error', $code ?: 3e4, $headers);
     }
 
-    public function fresnsPaginate($items, $total, $pageSize)
+    public function fresnsPaginate($items, $total, $pageSize = 15)
     {
         $paginate = new LengthAwarePaginator(
             items: $items,

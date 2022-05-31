@@ -8,6 +8,16 @@
 
 namespace App\Models;
 
-class UserBlock extends Model
+class UserFollow extends Model
 {
+    const FOLLOW_TYPE_USER = 1;
+    const FOLLOW_TYPE_GROUP = 2;
+    const FOLLOW_TYPE_HASHTAG = 3;
+    const FOLLOW_TYPE_POST = 4;
+    const FOLLOW_TYPE_COMMENT = 5;
+    
+    public function scopeType($query, int $type)
+    {
+        return $query->where('follow_type', $type);
+    }
 }

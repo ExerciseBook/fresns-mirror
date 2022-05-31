@@ -10,4 +10,6 @@ namespace App\Models;
 
 class HashtagLinked extends Model
 {
+    const LINKED_TYPE_POST = 1;
+    const LINKED_TYPE_COMMENT = 2;
 }

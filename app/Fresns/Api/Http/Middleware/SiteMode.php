@@ -8,6 +8,7 @@
 
 namespace App\Fresns\Api\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,8 @@ class SiteMode
         }
 
         // 获取当前登录的用户
-        $users = auth()->user();
+        /** @var User */
+        $user = auth()->user();
 
         // 获取用户的过期状态：1，2，3
         $expiredStatus = $user->getCurrentExpredStatus();
@@ -39,7 +41,7 @@ class SiteMode
         $whistle2 = [];
 
         // 名单 1 接口，仅用户状态 3 可访问
-        if (in_array($currentRouteName, $whistle1) && !in_array($expiredStatus, 3)) {
+        if (in_array($currentRouteName, $whistle1) && !in_array($expiredStatus, [3])) {
             return throw new \RuntimeException("当前不是会员 3，不能访问");
         }
 
