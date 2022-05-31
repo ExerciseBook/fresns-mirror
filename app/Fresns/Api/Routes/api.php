@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v2')->group(function () {
     Route::prefix('global')->group(function () {
         Route::get('configs', [GlobalController::class, 'configs'])->name('global.configs');
-        Route::get('token-for-upload', [GlobalController::class, 'tokenForUpload'])->name('common.tokenForUpload');
+        Route::get('upload-token', [GlobalController::class, 'uploadToken'])->name('common.uploadToken');
         Route::get('overview', [GlobalController::class, 'overview'])->name('global.overview');
         Route::get('roles', [GlobalController::class, 'roles'])->name('global.roles');
         Route::get('maps', [GlobalController::class, 'maps'])->name('global.maps');

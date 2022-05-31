@@ -101,6 +101,7 @@ trait UserServiceTrait
         $roleData = Role::where('id', $mainRoleData->role_id)->first();
 
         foreach ($roleData->permission as $perm) {
+            $permission['rid'] = $roleData->id;
             $permission[$perm['permKey']] = $perm['permValue'];
         }
 

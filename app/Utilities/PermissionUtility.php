@@ -11,6 +11,7 @@ namespace App\Utilities;
 use App\Helpers\ConfigHelper;
 use App\Models\GroupAdmin;
 use App\Models\PostAllow;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
 
@@ -37,6 +38,35 @@ class PermissionUtility
         }
 
         return false;
+    }
+
+    // Get user role permission
+    public static function getUserRolePerm(int $userId)
+    {
+        $defaultRoleId = ConfigHelper::fresnsConfigByItemKey('default_role');
+        $userRole = UserRole::where('user_id', $userId)->where('is_main', 1)->first();
+
+        $roleId = $userRole->role_id ?? $defaultRoleId;
+        $restoreRoleId = $userRole->restore_role_id ?? $defaultRoleId;
+        $expireTime = strtotime($userRole->expired_at ?? null);
+        $now = time();
+
+        if (! empty($userRole) && $expireTime && $expireTime < $now) {
+            $roleId = $restoreRoleId;
+        }
+
+        $rolePerm = Role::whereId($roleId)->where('is_enable', 1)->value('permission');
+        if (empty($rolePerm)) {
+            $roleId = null;
+            $rolePerm = Role::whereId($defaultRoleId)->where('is_enable', 1)->value('permission') ?? [];
+        }
+
+        foreach ($rolePerm as $perm) {
+            $permission['rid'] = $roleId;
+            $permission[$perm['permKey']] = $perm['permValue'];
+        }
+
+        return $permission;
     }
 
     // Check user permissions

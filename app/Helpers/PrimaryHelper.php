@@ -29,7 +29,7 @@ class PrimaryHelper
         $tableId = match ($tableName) {
             'configs' => PrimaryHelper::fresnsConfigIdByItemKey($tableKey),
             'accounts' => PrimaryHelper::fresnsAccountIdByAid($tableKey),
-            'users' => PrimaryHelper::fresnsUserIdByUid($tableKey),
+            'users' => PrimaryHelper::fresnsUserIdByUidOrUsername($tableKey),
             'posts' => PrimaryHelper::fresnsPostIdByPid($tableKey),
             'comments' => PrimaryHelper::fresnsCommentIdByCid($tableKey),
             'extends' => PrimaryHelper::fresnsExtendIdByEid($tableKey),
@@ -72,7 +72,7 @@ class PrimaryHelper
     }
 
     /**
-     * @param  string  $aid
+     * @param  string  $uid
      * @return int |null
      */
     public static function fresnsAccountIdByUid(?string $uid = null)
@@ -87,10 +87,10 @@ class PrimaryHelper
     }
 
     /**
-     * @param  string  $aid
+     * @param  int  $uid
      * @return int |null
      */
-    public static function fresnsUserIdByUid(?string $uid = null)
+    public static function fresnsUserIdByUid(?int $uid = null)
     {
         if (empty($uid)) {
             return null;
@@ -105,9 +105,28 @@ class PrimaryHelper
      * @param  string  $username
      * @return int |null
      */
-    public static function fresnsUserIdByUsername(string $username)
+    public static function fresnsUserIdByUsername(?string $username = null)
     {
+        if (empty($username)) {
+            return null;
+        }
+
         $id = User::withTrashed()->where('username', $username)->value('id');
+
+        return $id ?? null;
+    }
+
+    /**
+     * @param  string  $uidOrUsername
+     * @return int |null
+     */
+    public static function fresnsUserIdByUidOrUsername(?string $uidOrUsername = null)
+    {
+        if (empty($uidOrUsername)) {
+            return null;
+        }
+
+        $id = User::withTrashed()->where('uid', $uidOrUsername)->orWhere('username', $uidOrUsername)->value('id');
 
         return $id ?? null;
     }
@@ -116,19 +135,27 @@ class PrimaryHelper
      * @param  string  $gid
      * @return int |null
      */
-    public static function fresnsGroupIdByGid(string $gid)
+    public static function fresnsGroupIdByGid(?string $gid = null)
     {
+        if (empty($gid)) {
+            return null;
+        }
+
         $id = Group::withTrashed()->where('gid', $gid)->value('id');
 
         return $id ?? null;
     }
 
     /**
-     * @param  string  $huri
+     * @param  string  $hid
      * @return int |null
      */
-    public static function fresnsHashtagIdByHid(string $hid)
+    public static function fresnsHashtagIdByHid(?string $hid = null)
     {
+        if (empty($hid)) {
+            return null;
+        }
+
         $id = Hashtag::withTrashed()->where('slug', $hid)->value('id');
 
         return $id ?? null;
@@ -138,8 +165,12 @@ class PrimaryHelper
      * @param  string  $pid
      * @return int |null
      */
-    public static function fresnsPostIdByPid(string $pid)
+    public static function fresnsPostIdByPid(?string $pid = null)
     {
+        if (empty($pid)) {
+            return null;
+        }
+
         $id = Post::withTrashed()->where('pid', $pid)->value('id');
 
         return $id ?? null;
@@ -149,8 +180,12 @@ class PrimaryHelper
      * @param  string  $cid
      * @return int |null
      */
-    public static function fresnsCommentIdByCid(string $cid)
+    public static function fresnsCommentIdByCid(?string $cid = null)
     {
+        if (empty($cid)) {
+            return null;
+        }
+
         $id = Comment::withTrashed()->where('cid', $cid)->value('id');
 
         return $id ?? null;
@@ -160,8 +195,12 @@ class PrimaryHelper
      * @param  string  $fid
      * @return int |null
      */
-    public static function fresnsFileIdByFid(string $fid)
+    public static function fresnsFileIdByFid(?string $fid = null)
     {
+        if (empty($fid)) {
+            return null;
+        }
+
         $id = File::withTrashed()->where('fid', $fid)->value('id');
 
         return $id ?? null;
@@ -171,8 +210,12 @@ class PrimaryHelper
      * @param  string  $eid
      * @return int |null
      */
-    public static function fresnsExtendIdByEid(string $eid)
+    public static function fresnsExtendIdByEid(?string $eid = null)
     {
+        if (empty($eid)) {
+            return null;
+        }
+
         $id = Extend::withTrashed()->where('eid', $eid)->value('id');
 
         return $id ?? null;

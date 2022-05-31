@@ -11,7 +11,7 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Fresns\Api\Http\DTO\GlobalConfigsDTO;
 use App\Fresns\Api\Http\DTO\GlobalBlockWordsDTO;
 use App\Fresns\Api\Http\DTO\GlobalRolesDTO;
-use App\Fresns\Api\Http\DTO\GlobalTokenForUploadDTO;
+use App\Fresns\Api\Http\DTO\GlobalUploadTokenDTO;
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\LanguageHelper;
@@ -81,17 +81,30 @@ class GlobalController extends Controller
     }
 
     // get upload token
-    public function tokenForUpload(Request $request)
+    public function uploadToken(Request $request)
     {
-        $dtoRequest = new GlobalTokenForUploadDTO($request->all());
+        $dtoRequest = new GlobalUploadTokenDTO($request->all());
+
+        $fileType = match ($dtoRequest->type) {
+            'image' => 1,
+            'video' => 2,
+            'audio' => 3,
+            'document' => 4,
+        };
+
+        $storageConfig = FileHelper::fresnsFileStorageConfigByType($fileType);
+
+        if (! $storageConfig['storageConfigStatus']) {
+            throw new ApiException(32103);
+        }
 
         $wordBody = [
-            'type' => $dtoRequest->type,
+            'type' => $fileType,
             'name' => $dtoRequest->name,
             'expireTime' => $dtoRequest->expireTime,
         ];
 
-        return \FresnsCmdWord::plugin('Fresns')->getUploadToken($wordBody);
+        return \FresnsCmdWord::plugin($storageConfig['service'])->getUploadToken($wordBody);
     }
 
     // overview
