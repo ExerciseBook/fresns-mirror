@@ -245,6 +245,6 @@ class File
             );
         }
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->physicalDeletionFile($dtoWordBody);
+        return \FresnsCmdWord::plugin($storageConfig['service'])->physicalDeletionFiles($dtoWordBody);
     }
 }
