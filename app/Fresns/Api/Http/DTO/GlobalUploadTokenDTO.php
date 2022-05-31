@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class GlobalTokenForUploadDTO extends DTO
+class GlobalUploadTokenDTO extends DTO
 {
     /**
      * @return array
@@ -18,7 +18,7 @@ class GlobalTokenForUploadDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['integer', 'required', 'in:1,2,3,4'],
+            'type' => ['string', 'required', 'in:image,video,audio,document'],
             'name' => ['string', 'required'],
             'expireTime' => ['integer', 'required', 'between:1,600'],
         ];
