@@ -24,7 +24,6 @@ Route::prefix('v2')->group(function () {
     Route::prefix('global')->group(function () {
         Route::get('configs', [GlobalController::class, 'configs'])->name('global.configs');
         Route::get('upload-token', [GlobalController::class, 'uploadToken'])->name('common.uploadToken');
-        Route::get('overview', [GlobalController::class, 'overview'])->name('global.overview');
         Route::get('roles', [GlobalController::class, 'roles'])->name('global.roles');
         Route::get('maps', [GlobalController::class, 'maps'])->name('global.maps');
         Route::get('content-type', [GlobalController::class, 'contentType'])->name('global.contentType');
@@ -66,9 +65,10 @@ Route::prefix('v2')->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('list', [UserController::class, 'list'])->name('user.list');
         Route::get('{uidOrUsername}/detail', [UserController::class, 'detail'])->name('user.detail');
+        Route::get('{uidOrUsername}/interactive/{type}', [UserController::class, 'interactive'])->name('user.interactive');
         Route::get('{uidOrUsername}/mark/{markType}/{objectType}', [UserController::class, 'markList'])->name('user.markList');
-        Route::get('mark/{markType}/{objectType}/{fsid}', [UserController::class, 'markItList'])->name('user.markItList');
         Route::post('auth', [UserController::class, 'auth'])->name('user.auth');
+        Route::get('overview', [UserController::class, 'overview'])->name('user.overview');
         Route::put('edit', [UserController::class, 'edit'])->name('user.edit');
         Route::post('mark', [UserController::class, 'mark'])->name('user.mark');
         Route::delete('delete/{type}/{fsid}', [UserController::class, 'delete'])->name('user.delete');
@@ -94,17 +94,20 @@ Route::prefix('v2')->group(function () {
         Route::get('tree', [GroupController::class, 'tree'])->name('group.tree');
         Route::get('list', [GroupController::class, 'list'])->name('group.list');
         Route::get('{gid}/detail', [GroupController::class, 'detail'])->name('group.detail');
+        Route::get('{gid}/interactive/{type}', [GroupController::class, 'interactive'])->name('group.interactive');
     });
 
     Route::prefix('hashtag')->group(function () {
         Route::get('list', [HashtagController::class, 'list'])->name('hashtag.list');
         Route::get('{hid}/detail', [HashtagController::class, 'detail'])->name('hashtag.detail');
+        Route::get('{hid}/interactive/{type}', [HashtagController::class, 'interactive'])->name('hashtag.interactive');
     });
 
     Route::prefix('post')->group(function () {
         Route::get('list', [PostController::class, 'list'])->name('post.list');
         Route::get('logs', [PostController::class, 'logs'])->name('post.logs');
         Route::get('{pid}/detail', [PostController::class, 'detail'])->name('post.detail');
+        Route::get('{pid}/interactive/{type}', [PostController::class, 'interactive'])->name('post.interactive');
         Route::get('{pid}/logs', [PostController::class, 'postLogs'])->name('post.postLogs');
         Route::get('{pid}/user-list', [PostController::class, 'userList'])->name('post.userList');
         Route::get('follow/{type}', [PostController::class, 'follow'])->name('post.follow');
@@ -116,6 +119,7 @@ Route::prefix('v2')->group(function () {
         Route::get('list', [CommentController::class, 'list'])->name('comment.list');
         Route::get('logs', [CommentController::class, 'logs'])->name('comment.logs');
         Route::get('{cid}/detail', [CommentController::class, 'detail'])->name('comment.detail');
+        Route::get('{cid}/interactive/{type}', [CommentController::class, 'interactive'])->name('comment.interactive');
         Route::get('{cid}/logs', [CommentController::class, 'commentLogs'])->name('comment.commentLogs');
         Route::get('log/{logId}/detail', [CommentController::class, 'logDetail'])->name('comment.logDetail');
     });
