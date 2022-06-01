@@ -10,12 +10,25 @@ namespace App\Models;
 
 class PluginUsage extends Model
 {
+    // todo: 完善类型：@see https://fresns.cn/database/plugins/plugin-usages.html
+    const TYPE_CONTENT = 4;
+    
     use Traits\LangNameTrait;
     use Traits\PluginUsageServiceTrait;
 
     protected $casts = [
         'data_sources' => 'json',
     ];
+
+    public function scopeType($query, int $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    public function scopeIsEnable($query, bool $isEnable = true)
+    {
+        return $query->where('is_enable', $isEnable);
+    }
 
     public function plugin()
     {

@@ -14,15 +14,12 @@ use App\Models\User;
 use App\Helpers\AppHelper;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 use App\Fresns\Api\Http\DTO\PostListDTO;
 use App\Fresns\Api\Services\PostService;
 use App\Fresns\Api\Http\DTO\PostDetailDTO;
 use App\Fresns\Api\Http\DTO\PostFollowDTO;
-use App\Models\HashtagLinked;
-use App\Models\UserFollow;
-use Illuminate\Support\Str;
+use App\Fresns\Api\Services\PostFollowService;
+use App\Models\PluginUsage;
 
 class PostController extends Controller
 {
@@ -151,15 +148,15 @@ SQL;
         // - 当查看帖子类型为 group 时，获取我关注的小组的所有帖子，包括但不限于精华帖子与非精华帖子，以及自己发表的所有帖子
         // - 当查看帖子类型为 hashtag 时，获取我关注的话题的所有帖子，包括但不限于精华帖子与非精华帖子，以及自己发表的所有帖子
         // 
-        // - 指定帖子类型为全部时，帖子可能在用户、小组、话题、全站二级精华帖重复出现。场景举例：
+        // - 指定帖子类型为全部时，帖子可能在用户、小组、话题、全站二级精华帖重复出现。按下方重复帖子数据处理说明进行处理。场景举例：
         //      A用户关注了 B用户，A用户同时也关注了 a小组。B用户在 a小组发了 1篇帖子，帖子被设置为 a小组的精华帖。
         //      查询全部帖子时，关注的用户里会出现这篇帖子，关注的小组也会出现这篇帖子。
         // 
-        // 此时，需要按照如下逻辑处理：
+        // 重复帖子数据处理说明：
         //      - 关注的用户中展示此帖，小组中与其他类型不展示。优先级为：用户 > 小组 > 话题 > 全站二级精华帖
         // 
         // 数据来源：
-        // - 根据下方要求，获取插件关联使用表 plugin_usages 类型为内容类型扩展的第一条信息。
+        // - 根据下方要求，获取插件关联使用表 plugin_usages 类型为内容类型扩展的第一条已启用信息。
         //      @see https://fresns.cn/database/plugins/plugin-usages.html 插件关联表数据库参考
         //      - 未查到信息时，由主程序提供数据。
         //      - 关联信息为禁用状态时，由主程序提供数据。
@@ -173,13 +170,18 @@ SQL;
         $dtoRequest = new PostFollowDTO($requestData);
 
         $headers = AppHelper::getApiHeaders();
+        $postFollowService = new PostFollowService(auth()->id(), $dtoRequest);
 
-        $method = sprintf("get%sFollow", Str::studly($dtoRequest->type)); // getAllFollow、getUserFollow、getGroupFollow、getHashtagFollow
-        if (!method_exists($this->postClass(), $method)) {
-            throw new \RuntimeException("unknow method $method");
+        // 插件转发
+        if ($postFollowService->isPluginProvideDataSource()) {
+            // todo: 调用命令字, 需要确定调用的命令字是哪个，临时写的 postByFollow
+            $response = \FresnsCmdWord::plugin($postFollowService->getPluginUnikey())->postByFollow($dtoRequest->toArray());
+
+            return $response->getOrigin();
         }
 
-        ['data' => $data, 'posts' => $posts] = $this->postClass()->$method();
+        // 主程序处理
+        ['data' => $data, 'posts' => $posts] = $postFollowService->handle();
 
         if (!$posts) {
             return $this->success();
@@ -187,92 +189,8 @@ SQL;
 
         return $this->fresnsPaginate(
             $data,
-            $posts->total()
+            $posts->total(),
+            $posts->perPage(),
         );
-    }
-
-    public function postClass()
-    {
-        return new class
-        {
-            protected $userId;
-
-            protected $postService;
-
-            public function __construct()
-            {
-                $this->userId = auth()->id() ?? 24; // 24 为测试数据
-                $this->postService = new PostService();
-            }
-
-            public function getPostList($posts, string $followType, ?callable $callable = null)
-            {
-                $postList = [];
-                foreach ($posts as $post) {
-                    $postItem['followType'] = $followType;
-                    $postItem['pid'] = $post->pid ?? null;
-
-                    // todo: 转换详情信息
-                    // $postList[] = $postSservice->postDetail($post->id, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
-
-                    if ($callable) {
-                        $postItem = $callable($post, $postItem);
-                    }
-
-                    $postList[] = $postItem;
-                }
-
-                return [
-                    'posts' => $posts,
-                    'data' => $postList,
-                ];
-            }
-
-            public function getAllFollow()
-            {
-                return ['data' => [], 'posts' => null];
-            }
-
-            public function getUserFollow()
-            {
-                $followerIds = $this->getFollowIdsByType(UserFollow::FOLLOW_TYPE_USER);
-                $posts = Post::whereIn('user_id', [$this->userId, $followerIds])->latest()->paginate();
-
-                return $this->getPostList($posts, 'user');
-            }
-
-            public function getGroupFollow()
-            {
-                $followerIds = $this->getFollowIdsByType(UserFollow::FOLLOW_TYPE_GROUP);
-                $posts = Post::whereIn('user_id', [$this->userId, $followerIds])->latest()->paginate();
-
-                return $this->getPostList($posts, 'group');
-            }
-
-            public function getHashtagFollow()
-            {
-                // 获取用户关注的话题
-                // 获取话题下的所有帖子
-                $followerIds = $this->getFollowIdsByType(UserFollow::FOLLOW_TYPE_HASHTAG);
-
-                $postIds = $this->getPostIdsByHashTag($followerIds);
-
-                $postQuery = Post::whereIn('id', $postIds);
-
-                $posts = Post::where('user_id', $this->userId)->union($postQuery)->latest()->paginate();
-
-                return $this->getPostList($posts, 'hashtag');
-            }
-
-            protected function getFollowIdsByType(int $type)
-            {
-                return UserFollow::query()->where('user_id', $this->userId)->type($type)->pluck('follow_id')->toArray();
-            }
-
-            protected function getPostIdsByHashTag(array $followerIds)
-            {
-                return HashtagLinked::whereIn('hashtag_id', $followerIds)->where('linked_type', HashtagLinked::LINKED_TYPE_POST)->pluck('linked_id')->toArray();
-            }
-        };
     }
 }

@@ -193,6 +193,7 @@ return [
         /*
          * Fresns Service Providers...
          */
+        App\Fresns\Api\Providers\SqlLogServiceProvider::class,
         App\Fresns\Install\Providers\InstallServiceProvider::class,
         App\Fresns\Panel\Providers\PanelServiceProvider::class,
         App\Fresns\Words\Providers\CmdWordServiceProvider::class,

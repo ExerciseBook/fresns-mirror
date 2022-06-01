@@ -18,7 +18,7 @@ class PostFollowDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['string', 'required', 'in:all,user,group,hashtag'],
+            'type' => ['string', 'required', 'in:all,all2,user,group,hashtag'],
             'mapId' => ['integer', 'nullable', 'in:1,2,3,4,5,6,7,8,9,10'],
             'mapLng' => ['numeric', 'nullable'],
             'mapLat' => ['numeric', 'nullable'],
