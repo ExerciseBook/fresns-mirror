@@ -102,17 +102,17 @@ class PostFollowService
         // 自己的帖子
         $userIds = [$this->userId];
         // 我关注的用户的帖子
-        $followerUserIds = $this->getFollowIdsByType(UserFollow::FOLLOW_TYPE_USER);
+        $followerUserIds = $this->getFollowIdsByType(UserFollow::TYPE_USER);
         $followerUserIds = array_merge($userIds, $followerUserIds);
 
         $postQueryFollowers = Post::whereIn('user_id', $followerUserIds)->latest();
 
         // 我关注的小组中的二级精华帖子
-        $followerGroupIds = $this->getFollowIdsByType(UserFollow::FOLLOW_TYPE_GROUP);
+        $followerGroupIds = $this->getFollowIdsByType(UserFollow::TYPE_GROUP);
         $postQueryGroups = Post::whereNotIn('user_id', $followerUserIds)->whereIn('group_id', $followerGroupIds)->whereIn('digest_state', [2, 3])->latest();
 
         // 我关注的话题的二级精华帖子
-        $followerIds = $this->getFollowIdsByType(UserFollow::FOLLOW_TYPE_HASHTAG);
+        $followerIds = $this->getFollowIdsByType(UserFollow::TYPE_HASHTAG);
         $hashtagPostIds = $this->getPostIdsByHashTag($followerIds);
         $postQueryHashtags = Post::whereNotIn('user_id', $followerUserIds)->whereNotIn('group_id', $followerGroupIds)->whereIn('id', $hashtagPostIds)->whereIn('digest_state', [2, 3])->latest();
 
@@ -150,7 +150,7 @@ class PostFollowService
 
     public function getUserFollow()
     {
-        $followerIds = $this->getFollowIdsByType(UserFollow::FOLLOW_TYPE_USER);
+        $followerIds = $this->getFollowIdsByType(UserFollow::TYPE_USER);
 
         $followerIds = array_merge($followerIds, [$this->userId]);
 
@@ -165,7 +165,7 @@ class PostFollowService
 
     public function getGroupFollow()
     {
-        $followerIds = $this->getFollowIdsByType(UserFollow::FOLLOW_TYPE_GROUP);
+        $followerIds = $this->getFollowIdsByType(UserFollow::TYPE_GROUP);
 
         $posts = Post::query()
             ->where('user_id', $this->userId)
@@ -182,7 +182,7 @@ class PostFollowService
         // todo: 获取话题帖子功能需要验证。账号下没有数据，暂时不确定功能是否正常。
         // 获取用户关注的话题
         // 获取话题下的所有帖子
-        $followerIds = $this->getFollowIdsByType(UserFollow::FOLLOW_TYPE_HASHTAG);
+        $followerIds = $this->getFollowIdsByType(UserFollow::TYPE_HASHTAG);
 
         $postIds = $this->getPostIdsByHashTag($followerIds);
 
@@ -212,6 +212,6 @@ class PostFollowService
 
     protected function getPostIdsByHashTag(array $followerIds)
     {
-        return HashtagLinked::whereIn('hashtag_id', $followerIds)->where('linked_type', HashtagLinked::LINKED_TYPE_POST)->pluck('linked_id')->toArray();
+        return HashtagLinked::whereIn('hashtag_id', $followerIds)->where('linked_type', HashtagLinked::TYPE_POST)->pluck('linked_id')->toArray();
     }
 }
