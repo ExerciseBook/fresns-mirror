@@ -130,6 +130,7 @@ class ThemeFunctionController extends Controller
 
     public function updateLanguage(Request $request)
     {
+
         $key = $request->key;
         $theme = $request->theme;
         if (!$key || !$theme){
@@ -143,23 +144,9 @@ class ThemeFunctionController extends Controller
             abort(404);
         }
 
-        foreach ($request->languages as $langTag => $content) {
-            $item = [
-                'table_key' => $key,
-                'lang_tag' => $langTag,
-                'table_name' => 'configs',
-                'table_column' => 'item_value',
-                'table_key' => $key,
-                'lang_tag' => $langTag,
-                'lang_content' => $content,
-            ];
-
-            ConfigUtility::changeFresnsConfigMultilingualItem($item);
-        }
-
         $content = $request->languages[$this->defaultLanguage] ?? current(array_filter($request->languages));
 
-        $fresnsConfigItems[] = [
+        $fresnsConfigItem = [
             'item_key' => $functionKey['itemKey'],
             'item_value' => $content,
             'item_type' => $functionKey['itemType'],
@@ -167,8 +154,16 @@ class ThemeFunctionController extends Controller
             'is_multilingual' => $functionKey['isMultilingual'],
         ];
 
-        ConfigUtility::changeFresnsConfigItems($fresnsConfigItems);
+        foreach ($request->languages as $langTag => $content) {
+            $fresnsConfigItem['language_values'][] = [
+                'lang_tag' => $langTag,
+                'lang_content' => $content,
+            ];
+        }
+
+        ConfigUtility::changeFresnsConfigItems([$fresnsConfigItem]);
 
         return $this->createSuccess();
     }
+
 }
