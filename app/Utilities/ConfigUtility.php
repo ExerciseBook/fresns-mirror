@@ -37,9 +37,24 @@ class ConfigUtility
     public static function changeFresnsConfigItems(array $fresnsConfigKeys)
     {
         foreach($fresnsConfigKeys as $item) {
-            Config::updateOrCreate([
-                'item_key' => $item['item_key']
-            ], $item);
+            Config::updateOrCreate(
+                ['item_key' => $item['item_key']],
+                collect($item)->only('item_key', 'item_value', 'item_type', 'item_tag', 'is_multilingual')->toArray()
+            );
+
+            if ($item['is_multilingual']) {
+                foreach($item['language_values'] as $language) {
+                    $languageItem = [
+                        'table_key' => $item['item_key'],
+                        'lang_tag' => $language['lang_tag'],
+                        'table_name' => 'configs',
+                        'table_column' => 'item_value',
+                        'lang_content' => $language['lang_content'],
+                    ];
+
+                    self::changeFresnsConfigMultilingualItem($languageItem);
+                }
+            }
         }
     }
 
