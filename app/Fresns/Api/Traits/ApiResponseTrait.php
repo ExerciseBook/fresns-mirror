@@ -88,8 +88,8 @@ trait ApiResponseTrait
         return $this->success([
             'paginate' => [
                 'total' => $paginate->total(),
-                'currentPage' => $paginate->currentPage(),
                 'pageSize' => $paginate->perPage(),
+                'currentPage' => $paginate->currentPage(),
                 'lastPage' => $paginate->lastPage(),
             ],
             'list' => array_map(function ($item) use ($callable) {

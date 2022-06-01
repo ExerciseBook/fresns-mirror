@@ -45,7 +45,7 @@ class CommonController extends Controller
 
         switch ($dtoRequest->type) {
             // user
-            case 1:
+            case 'user':
                 $userQuery = User::where('username', 'like', "%$dtoRequest->key%")
                     ->orWhere('nickname', 'like', "%$dtoRequest->key%")
                     ->limit(10)
@@ -76,7 +76,7 @@ class CommonController extends Controller
             break;
 
             // group
-            case 2:
+            case 'group':
                 $tipQuery = Language::where('table_name', 'groups')
                     ->where('table_column', 'name')
                     ->where('lang_content', 'like', "%$dtoRequest->key%")
@@ -103,7 +103,7 @@ class CommonController extends Controller
             break;
 
             // hashtag
-            case 3:
+            case 'hashtag':
                 $hashtagQuery = Hashtag::where('name', 'like', "%$dtoRequest->key%")->limit(10)->get();
 
                 $data = null;
@@ -120,7 +120,7 @@ class CommonController extends Controller
             break;
 
             // post
-            case 4:
+            case 'post':
                 $postQuery = Post::where('title', 'like', "%$dtoRequest->key%")->limit(10)->get();
 
                 $data = null;
@@ -137,12 +137,12 @@ class CommonController extends Controller
             break;
 
             // comment
-            case 5:
+            case 'comment':
                 $data = null;
             break;
 
             // extend
-            case 6:
+            case 'extend':
                 $tipQuery = Language::where('table_name', 'extends')
                     ->where('table_column', 'title')
                     ->where('lang_content', 'like', "%$dtoRequest->key%")
@@ -262,23 +262,27 @@ class CommonController extends Controller
             'send_sms_service',
         ]);
 
-        if ($dtoRequest->accountType == 1 && empty($sendService['send_email_service'])) {
+        if ($dtoRequest->type == 'email' && empty($sendService['send_email_service'])) {
             throw new ApiException(32100);
-        } elseif ($dtoRequest->accountType == 2 && empty($sendService['send_sms_service'])) {
+        } elseif ($dtoRequest->type == 'sms' && empty($sendService['send_sms_service'])) {
             throw new ApiException(32100);
         }
 
-        if ($dtoRequest->accountType == 1) {
+        if ($dtoRequest->type == 'email') {
+            $account = Account::where('email', $dtoRequest->account)->first();
+            $accountConfig = $account->email;
+        } else {
             $phone = $dtoRequest->countryCode.$dtoRequest->account;
             $account = Account::where('phone', $phone)->first();
             $accountConfig = $account->phone;
-        } else {
-            $account = Account::where('email', $dtoRequest->account)->first();
-            $accountConfig = $account->email;
         }
 
+        $sendType = match ($dtoRequest->type) {
+            'email' => 1,
+            'sms' => 2,
+        };
         $wordBody = [
-            'type' => $dtoRequest->accountType,
+            'type' => $sendType,
             'account' => $dtoRequest->account,
             'countryCode' => $dtoRequest->countryCode,
             'templateId' => $dtoRequest->templateId,
@@ -286,11 +290,11 @@ class CommonController extends Controller
         ];
 
         if ($dtoRequest->useType == 1 && ! empty($account)) {
-            switch ($dtoRequest->accountType) {
-                case 1:
+            switch ($dtoRequest->type) {
+                case 'email':
                     throw new ApiException(34205);
                 break;
-                case 2:
+                case 'sms':
                     throw new ApiException(34206);
                 break;
             }
@@ -301,11 +305,11 @@ class CommonController extends Controller
         }
 
         if ($dtoRequest->useType == 3 && ! empty($accountConfig)) {
-            switch ($dtoRequest->accountType) {
-                case 1:
+            switch ($dtoRequest->type) {
+                case 'email':
                     throw new ApiException(34401);
                 break;
-                case 2:
+                case 'sms':
                     throw new ApiException(34402);
                 break;
             }
@@ -315,13 +319,13 @@ class CommonController extends Controller
             throw new ApiException(31501);
         } elseif ($dtoRequest->useType == 4 && ! empty($headers['aid'])) {
             $loginAccount = Account::whereAid($headers['aid'])->first();
-            switch ($dtoRequest->accountType) {
-                case 1:
+            switch ($dtoRequest->type) {
+                case 'email':
                     $wordBody = [
                         'account' => $loginAccount->email,
                     ];
                 break;
-                case 2:
+                case 'sms':
                     $wordBody = [
                         'account' => $loginAccount->pure_phone,
                         'countryCode' => $loginAccount->country_code,
@@ -330,7 +334,7 @@ class CommonController extends Controller
             }
         }
 
-        if ($dtoRequest->accountType == 1) {
+        if ($dtoRequest->type == 'email') {
             $fresnsResp = \FresnsCmdWord::plugin($sendService['send_email_service'])->sendCode($wordBody);
         } else {
             $fresnsResp = \FresnsCmdWord::plugin($sendService['send_sms_service'])->sendCode($wordBody);
@@ -371,8 +375,15 @@ class CommonController extends Controller
         $dtoRequest = new CommonUploadFileDTO($request->all());
         $headers = AppHelper::getApiHeaders();
 
+        $fileType = match ($dtoRequest->type) {
+            'image' => 1,
+            'video' => 2,
+            'audio' => 3,
+            'document' => 4,
+        };
+
         switch ($dtoRequest->uploadMode) {
-            case 1:
+            case 'file':
                 $wordBody = [
                     'platformId' => $headers['platformId'],
                     'useType' => $dtoRequest->useType,
@@ -382,7 +393,7 @@ class CommonController extends Controller
                     'tableKey' => $dtoRequest->tableKey,
                     'aid' => $headers['aid'],
                     'uid' => $headers['uid'],
-                    'type' => $dtoRequest->type,
+                    'type' => $fileType,
                     'file' => $dtoRequest->file,
                     'moreJson' => $dtoRequest->moreJson,
                 ];
@@ -390,7 +401,7 @@ class CommonController extends Controller
                 return \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
             break;
 
-            case 2:
+            case 'fileInfo':
                 $wordBody = [
                     'platformId' => $headers['platformId'],
                     'useType' => $dtoRequest->useType,
@@ -400,7 +411,7 @@ class CommonController extends Controller
                     'tableKey' => $dtoRequest->tableKey,
                     'aid' => $headers['aid'],
                     'uid' => $headers['uid'],
-                    'type' => $dtoRequest->type,
+                    'type' => $fileType,
                     'fileInfo' => $dtoRequest->fileInfo,
                 ];
 
@@ -426,33 +437,18 @@ class CommonController extends Controller
         }
 
         switch ($dtoRequest->type) {
-            // user
-            case 1:
-                $data = null;
-            break;
-
-            // group
-            case 2:
-                $data = null;
-            break;
-
-            // hashtag
-            case 3:
-                $data = null;
-            break;
-
             // post
-            case 4:
+            case 'post':
                 $data = null;
             break;
 
             // comment
-            case 5:
+            case 'comment':
                 $data = null;
             break;
 
             // extend
-            case 6:
+            case 'extend':
                 $data = null;
             break;
         }
@@ -475,7 +471,7 @@ class CommonController extends Controller
             throw new ApiException(37501);
         }
 
-        $fileLogs = FileLog::with('user')->orderBy('created_at', 'desc')->paginate($request->get('pageSize', 10));
+        $fileLogs = FileLog::with('user')->orderBy('created_at', 'desc')->paginate($request->get('pageSize'));
 
         $item = null;
         foreach ($fileLogs as $log) {

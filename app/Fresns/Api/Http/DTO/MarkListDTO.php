@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class GlobalRolesDTO extends DTO
+class MarkListDTO extends DTO
 {
     /**
      * @return array
@@ -18,10 +18,8 @@ class GlobalRolesDTO extends DTO
     public function rules(): array
     {
         return [
-            'ids' => ['string', 'nullable'],
-            'type' => ['integer', 'nullable', 'in:1,2,3'],
-            'status' => ['boolean', 'nullable'],
-            'pageSize' => ['integer', 'nullable', 'between:1,50'],
+            'type' => ['string', 'required', 'in:like,dislike,follow,block'],
+            'pageSize' => ['integer', 'nullable', 'between:1,20'],
             'page' => ['integer', 'nullable'],
         ];
     }

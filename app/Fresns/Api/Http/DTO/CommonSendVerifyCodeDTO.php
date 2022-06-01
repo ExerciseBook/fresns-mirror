@@ -18,11 +18,11 @@ class CommonSendVerifyCodeDTO extends DTO
     public function rules(): array
     {
         return [
-            'accountType' => ['integer', 'required', 'in:1,2'],
-            'account' => ['string', 'required'],
-            'countryCode' => ['integer', 'nullable', 'required_if:type,2'],
+            'type' => ['string', 'required', 'in:email,sms'],
             'useType' => ['integer', 'required', 'in:1,2,3,4,5'],
             'templateId' => ['integer', 'required', 'in:1,2,3,4,5,6,7'],
+            'account' => ['string', 'required'],
+            'countryCode' => ['integer', 'nullable', 'required_if:type,sms'],
         ];
     }
 }

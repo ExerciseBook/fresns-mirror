@@ -17,13 +17,7 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\PluginHelper;
-use App\Models\CommentLog;
-use App\Models\PostLog;
-use App\Helpers\PrimaryHelper;
 use App\Models\Config;
-use App\Models\Dialog;
-use App\Models\DialogMessage;
-use App\Models\Notify;
 use App\Exceptions\ApiException;
 use App\Models\BlockWord;
 use App\Models\Role;
@@ -107,39 +101,6 @@ class GlobalController extends Controller
         return \FresnsCmdWord::plugin($storageConfig['service'])->getUploadToken($wordBody);
     }
 
-    // overview
-    public function overview()
-    {
-        $headers = AppHelper::getApiHeaders();
-        $userId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-
-        if (empty($userId)) {
-            throw new ApiException(31602);
-        }
-
-        $dialogACount = Dialog::where('a_user_id', $userId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
-        $dialogBCount = Dialog::where('b_user_id', $userId)->where('b_is_read', 0)->where('b_is_display', 1)->count();
-        $dialogMessageCount = DialogMessage::where('recv_user_id', $userId)->where('recv_read_at', null)->where('recv_deleted_at', null)->where('is_enable', 1)->count();
-        $dialogUnread['dialog'] = $dialogACount + $dialogBCount;
-        $dialogUnread['message'] = $dialogMessageCount;
-        $data['dialogUnread'] = $dialogUnread;
-
-        $notify = Notify::where('user_id', $userId)->where('is_read', 0);
-        $notifyUnread['system'] = $notify->where('action_type', 1)->count();
-        $notifyUnread['follow'] = $notify->where('action_type', 2)->count();
-        $notifyUnread['like'] = $notify->where('action_type', 3)->count();
-        $notifyUnread['comment'] = $notify->where('action_type', 4)->count();
-        $notifyUnread['mention'] = $notify->where('action_type', 5)->count();
-        $notifyUnread['recommend'] = $notify->where('action_type', 6)->count();
-        $data['notifyUnread'] = $notifyUnread;
-
-        $draftCount['posts'] = PostLog::where('user_id', $userId)->whereIn('state', [1, 4])->count();
-        $draftCount['comments'] = CommentLog::where('user_id', $userId)->whereIn('state', [1, 4])->count();
-        $data['draftCount'] = $draftCount;
-
-        return $this->success($data);
-    }
-
     // roles
     public function roles(Request $request)
     {
@@ -150,11 +111,16 @@ class GlobalController extends Controller
 
         $roleQuery = Role::where('is_enable', $status)->orderBy('rating');
 
+        if (!empty($dtoRequest->ids)) {
+            $ids = explode(',', $dtoRequest->ids);
+            $roleQuery->whereIn('id', $ids);
+        }
+
         if (!empty($dtoRequest->type)) {
             $roleQuery->where('type', $dtoRequest->type);
         }
 
-        $roles = $roleQuery->paginate($request->get('pageSize', 20));
+        $roles = $roleQuery->paginate($request->get('pageSize'));
 
         $roleList = null;
         foreach ($roles as $role) {
@@ -209,7 +175,7 @@ class GlobalController extends Controller
             $stickerData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('stickers', 'name', $sticker->id, $headers['langTag']);
             $stickerData[$index]['code'] = $sticker->code;
             $stickerData[$index]['codeFormat'] = '['.$sticker->code.']';
-            $stickerData[$index]['url'] = FileHelper::fresnsFileUrlByTableColumn($sticker->image_file_id, $sticker->image_file_url);
+            $stickerData[$index]['image'] = FileHelper::fresnsFileUrlByTableColumn($sticker->image_file_id, $sticker->image_file_url);
         }
 
         $stickerTree = CollectionUtility::toTree($stickerData, 'code', 'parentCode', 'stickers');
@@ -232,7 +198,7 @@ class GlobalController extends Controller
             $wordQuery = BlockWord::where('dialog_mode', '!=', 1);
         }
 
-        $words = $wordQuery->paginate($request->get('pageSize', 50));
+        $words = $wordQuery->paginate($request->get('pageSize', 100));
 
         $wordList = null;
         foreach ($words as $word) {

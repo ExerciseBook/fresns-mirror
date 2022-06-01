@@ -18,7 +18,7 @@ class CommonInputTipsDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['integer', 'required', 'in:1,2,3,4,5,6'],
+            'type' => ['string', 'required', 'in:user,group,hashtag,post,extend'],
             'key' => ['string', 'required'],
         ];
     }

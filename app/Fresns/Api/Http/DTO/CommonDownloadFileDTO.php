@@ -18,7 +18,7 @@ class CommonDownloadFileDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['integer', 'required', 'in:1,2,3,4,5,6'],
+            'type' => ['string', 'required', 'in:post,comment,extend'],
             'fsid' => ['string', 'required'],
         ];
     }
