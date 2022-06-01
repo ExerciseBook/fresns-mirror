@@ -10,6 +10,13 @@ namespace App\Models;
 
 class FileLog extends Model
 {
+    const TYPE_USER = 1;
+    const TYPE_GROUP = 2;
+    const TYPE_HASHTAG = 3;
+    const TYPE_POST = 4;
+    const TYPE_COMMENT = 5;
+    const TYPE_EXTEND = 6;
+
     protected $guarded = [];
 
     public function file()

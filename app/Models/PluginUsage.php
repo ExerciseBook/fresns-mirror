@@ -10,11 +10,18 @@ namespace App\Models;
 
 class PluginUsage extends Model
 {
-    // todo: 完善类型：@see https://fresns.cn/database/plugins/plugin-usages.html
-    const TYPE_CONTENT = 4;
-    
     use Traits\LangNameTrait;
     use Traits\PluginUsageServiceTrait;
+
+    const TYPE_WALLET_RECHARGE = 1;
+    const TYPE_WALLET_WITHDRAW = 2;
+    const TYPE_EDITOR = 3;
+    const TYPE_CONTENT = 4;
+    const TYPE_MANAGE = 5;
+    const TYPE_GROUP = 6;
+    const TYPE_FEATURE = 7;
+    const TYPE_PROFILE = 8;
+    const TYPE_MAP = 9;
 
     protected $casts = [
         'data_sources' => 'json',
