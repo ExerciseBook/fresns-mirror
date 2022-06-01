@@ -185,6 +185,90 @@ class AppUtility
         return true;
     }
 
+    public static function ensureDistanceFunctionExists()
+    {
+        $getDistanceSqlFunctionExists = \Illuminate\Support\Facades\Cache::remember('get_distance_sql_exists', now()->addDays(7), function () {
+            $getDistanceSqlFunctionSql = "SHOW FUNCTION STATUS where name = 'get_distance'";
+            $getDistanceSqlFunction = \Illuminate\Support\Facades\DB::selectOne($getDistanceSqlFunctionSql);
+            $getDistanceSqlFunctionExists = boolval($getDistanceSqlFunction);
+
+            if ($getDistanceSqlFunctionExists) {
+                return true;
+            }
+
+            $createGetDistanceFunctionSql = <<<SQL
+drop function if exists get_distance;
+delimiter //
+create function get_distance (
+  lng1 double,
+  lat1 double,
+  lng2 double,
+  lat2 double
+)
+returns double
+begin
+    declare distance double;
+    declare a double;
+    declare b double;
+
+    declare radLat1 double;
+    declare radLat2 double;
+    declare radLng1 double;
+    declare radLng2 double;
+ 
+    set radLat1 = lat1 * PI() / 180;
+    set radLat2 = lat2 * PI() / 180;
+    set radLng1 = lng1 * PI() / 180;
+    set radLng2 = lng2 * PI() / 180;
+
+    set a = radLat1 - radLat2;
+    set b = radLng1 - radLng2;
+
+    set distance = 2 * asin(
+      sqrt(
+        pow(sin(a / 2), 2) + cos(radLat1) * cos(radLat2) * pow(sin(b / 2), 2)
+      )
+    ) * 6378.137;
+    return distance;
+end
+//
+delimiter ;
+SQL;
+
+            return \Illuminate\Support\Facades\DB::statement($createGetDistanceFunctionSql);
+        });
+
+        if (!$getDistanceSqlFunctionExists) {
+            \Illuminate\Support\Facades\Cache::forget('get_distance_sql_exists');
+        }
+
+        return $getDistanceSqlFunctionExists;
+    }
+
+    public static function getDistanceSql($sqlLongitude, $sqlLatitude, $longitude, $latitude, $alias = 'distance')
+    {
+        $sql = <<<SQL
+2 * ASIN(
+      SQRT(
+        POW(
+          SIN(
+            (
+                $latitude * PI() / 180 - $sqlLatitude * PI() / 180
+            ) / 2
+          ), 2
+        ) + COS($latitude * PI() / 180) * COS($sqlLatitude * PI() / 180) * POW(
+          SIN(
+            (
+                $longitude * PI() / 180 - $sqlLongitude * PI() / 180
+            ) / 2
+          ), 2
+        )
+      )
+    ) * 6378.137
+SQL;
+        return sprintf('(%s) as %s', $sql, $alias);
+    }
+
     public static function isForbidden(?User $user)
     {
         if (is_null($user)) {

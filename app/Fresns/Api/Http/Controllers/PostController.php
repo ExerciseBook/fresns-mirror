@@ -19,7 +19,10 @@ use App\Fresns\Api\Services\PostService;
 use App\Fresns\Api\Http\DTO\PostDetailDTO;
 use App\Fresns\Api\Http\DTO\PostFollowDTO;
 use App\Fresns\Api\Services\PostFollowService;
-use App\Models\PluginUsage;
+use App\Helpers\ConfigHelper;
+use App\Utilities\AppUtility;
+use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class PostController extends Controller
 {
@@ -136,92 +139,60 @@ class PostController extends Controller
         );
     }
 
-    public function ensureDistanceFunctionExists()
-    {
-        $getDistanceSqlFunctionExists = \Illuminate\Support\Facades\Cache::remember('get_distance_sql_exists', now()->addDays(7), function () {
-            $getDistanceSqlFunctionSql = "SHOW FUNCTION STATUS where name = 'get_distance'";
-            $getDistanceSqlFunction = \Illuminate\Support\Facades\DB::selectOne($getDistanceSqlFunctionSql);
-            $getDistanceSqlFunctionExists = boolval($getDistanceSqlFunction);
-
-            if ($getDistanceSqlFunctionExists) {
-                return true;
-            }
-
-            $createGetDistanceFunctionSql = <<<SQL
-drop function if exists get_distance;
-delimiter //
-create function get_distance (
-  lng1 double,
-  lat1 double,
-  lng2 double,
-  lat2 double
-)
-returns double
-begin
-    declare distance double;
-    declare a double;
-    declare b double;
-
-    declare radLat1 double;
-    declare radLat2 double;
-    declare radLng1 double;
-    declare radLng2 double;
- 
-    set radLat1 = lat1 * PI() / 180;
-    set radLat2 = lat2 * PI() / 180;
-    set radLng1 = lng1 * PI() / 180;
-    set radLng2 = lng2 * PI() / 180;
-
-    set a = radLat1 - radLat2;
-    set b = radLng1 - radLng2;
-
-    set distance = 2 * asin(
-      sqrt(
-        pow(sin(a / 2), 2) + cos(radLat1) * cos(radLat2) * pow(sin(b / 2), 2)
-      )
-    ) * 6378.137;
-    return distance;
-end//
-delimiter ;
-SQL;
-
-            return \Illuminate\Support\Facades\DB::statement($createGetDistanceFunctionSql);
-        });
-
-        if (!$getDistanceSqlFunctionExists) {
-            \Illuminate\Support\Facades\Cache::forget('get_distance_sql_exists');
-        }
-
-        return $getDistanceSqlFunctionExists;
-    }
-
     public function nearby()
     {
-        $dtoRequest = null;
+        $requestData = \request()->all();
+        $requestData['type'] = 'all';
+        // $dtoRequest = new PostFollowDTO($requestData);
+        $dtoRequest = new stdClass();
+        $dtoRequest->mapLng = '121.137543';
+        $dtoRequest->mapLat = '31.4171';
 
-        $this->ensureDistanceFunctionExists();
+        $headers = AppHelper::getApiHeaders();
+
+        $postFollowService = new PostFollowService(auth()->user(), $dtoRequest);
+
+        // AppUtility::ensureDistanceFunctionExists();
 
         $postFollowService = new PostFollowService(auth()->id(), $dtoRequest);
-
 
         // 插件转发
         if ($postFollowService->isPluginProvideDataSource(PostFollowService::POST_BY_NEAR_BY)) {
             // todo: 调用命令字, 需要确定调用的命令字是哪个，临时写的 postByFollow
-            // $response = \FresnsCmdWord::plugin($postFollowService->getPluginUnikey(PostFollowService::POST_BY_NEAR_BY))->postByFollow($dtoRequest->toArray());
+            $response = \FresnsCmdWord::plugin($postFollowService->getPluginUnikey(PostFollowService::POST_BY_NEAR_BY))->postByFollow($dtoRequest->toArray());
 
-            // return $response->getOrigin();
+            return $response->getOrigin();
         }
 
+        // @see https://fresns.cn/database/keyname/interactive.html 单位 km
+        $nearbyLength = ConfigHelper::fresnsConfigByItemKey('nearby_length');
+
+        $posts = Post::query()
+            ->select([
+                DB::raw("*"),
+                DB::raw(AppUtility::getDistanceSql('map_longitude', 'map_latitude', $dtoRequest->mapLng, $dtoRequest->mapLat))
+            ])
+            ->having('distance', '<=', $nearbyLength)
+            ->orderBy('distance')
+            ->paginate();
+
         // 主程序处理
+        ['data' => $data, 'posts' => $posts] = $postFollowService->getPostList($posts, null, function ($post, $postItem) {
+            unset($postItem['followType']);
 
-        // if (!$posts) {
-        //     return $this->success();
-        // }
+            $postItem['distance'] = $post->distance;
 
-        // return $this->fresnsPaginate(
-        //     $data,
-        //     $posts->total(),
-        //     $posts->perPage(),
-        // );
+            return $postItem;
+        });
+
+        if (!$posts) {
+            return $this->success();
+        }
+
+        return $this->fresnsPaginate(
+            $data,
+            $posts->total(),
+            $posts->perPage(),
+        );
     }
 }
