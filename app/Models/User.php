@@ -12,6 +12,10 @@ class User extends Model
 {
     use Traits\UserServiceTrait;
 
+    protected $dates = [
+        'expired_at',
+    ];
+
     public function account()
     {
         return $this->belongsTo(Account::class, 'account_id', 'id');

@@ -8,7 +8,9 @@
 
 namespace App\Fresns\Api\Http\Middleware;
 
+use App\Helpers\ConfigHelper;
 use App\Models\User;
+use App\Utilities\AppUtility;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,13 @@ class SiteMode
 {
     public function handle(Request $request, Closure $next)
     {
-        $isPrivateStatus = false;
+        // - 站点为私有模式时，需要验证用户到期状态 users.expired_at，确认用户是否已到期。
+        // 并根据站点配置的到期后数据处理模式 configs.site_private_end 对数据进行处理。
+        //     - 站点到期数据处理模式为 1 时，接口不允许请求。
+        //     - 站点到期数据处理模式为 2 时，输出用户到期前的内容，到期之后的内容不进行输出展示。
+        
+        // 站点是否是私有模式
+        $isPrivateStatus = ConfigHelper::fresnsConfigByItemKey('site_private_status');
 
         // 未开启私有模式，直接放行
         if (!$isPrivateStatus) {
@@ -29,6 +37,12 @@ class SiteMode
 
         // 获取用户的过期状态：1，2，3
         $expiredStatus = $user->getCurrentExpredStatus();
+
+        // 站点是私有模式时, 如果站点到期状态为1, 不允许请求
+        if (AppUtility::isForbidden($user)) {
+            throw new \RuntimeException("您当前不是会员, 无法访问");
+        }
+
 
         // 获取当前路由名
         $currentRouteName = \request()->route()->getName();

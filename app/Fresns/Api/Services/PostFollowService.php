@@ -9,43 +9,60 @@
 namespace App\Fresns\Api\Services;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Models\UserFollow;
 use App\Models\PluginUsage;
 use Illuminate\Support\Str;
 use App\Models\HashtagLinked;
 use App\Fresns\Api\Services\PostService;
+use App\Utilities\AppUtility;
+use RuntimeException;
 
 class PostFollowService
 {
+    const POST_BY_ALL = 'postByAll';
+    const POST_BY_FOLLOW = 'postByFollow';
+    const POST_BY_NEAR_BY = 'postByNearby';
+
+    /**
+     * @var User $user
+     */
+    protected $user;
+
     protected $userId;
 
     protected $postService;
 
     protected $dtoRequest;
 
-    public function __construct($userId, $dtoRequest)
+    public function __construct($user, $dtoRequest = null)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
+        $this->userId = $user?->id;
         $this->postService = new PostService();
         $this->dtoRequest = $dtoRequest;
     }
 
-    public function isPluginProvideDataSource()
+    public function isPluginProvideDataSource(string $type)
     {
         $this->pluginUseage = PluginUsage::type(PluginUsage::TYPE_CONTENT)->isEnable()->first();
-        $pluginUnikey = $this->getPluginUnikey();
+        $pluginUnikey = $this->getPluginUnikey($type);
 
         return (bool) $pluginUnikey;
     }
 
-    public function getPluginUnikey()
+    public function getPluginUnikey(string $type)
     {
-        return $this->pluginUseage->data_sources['postByFollow']['pluginUnikey'] ?? null;
+        return $this->pluginUseage->data_sources[$type]['pluginUnikey'] ?? null;
     }
 
     public function handle()
     {
+        if (AppUtility::isForbidden($this->user)) {
+            throw new \RuntimeException('您当前不是会员, 无法访问');
+        }
+
         $method = sprintf("get%sFollow", Str::studly($this->dtoRequest->type)); // getAllFollow、getUserFollow、getGroupFollow、getHashtagFollow
 
         if (!method_exists($this, $method)) {
@@ -107,6 +124,7 @@ class PostFollowService
             ->union($postQueryFollowers)
             ->union($postQueryGroups)
             ->union($postQueryHashtags)
+            ->beforeExpiredAtOrNotLimit($this->user)
             ->latest()
             ->paginate(1000);
 
@@ -136,7 +154,11 @@ class PostFollowService
 
         $followerIds = array_merge($followerIds, [$this->userId]);
 
-        $posts = Post::whereIn('user_id', $followerIds)->latest()->paginate();
+        $posts = Post::query()
+            ->whereIn('user_id', $followerIds)
+            ->beforeExpiredAtOrNotLimit($this->user)
+            ->latest()
+            ->paginate();
 
         return $this->getPostList($posts, 'user');
     }
@@ -147,7 +169,10 @@ class PostFollowService
 
         $posts = Post::query()
             ->where('user_id', $this->userId)
-            ->whereIn('group_id', $followerIds)->latest()->paginate();
+            ->whereIn('group_id', $followerIds)
+            ->beforeExpiredAtOrNotLimit($this->user)
+            ->latest()
+            ->paginate();
 
         return $this->getPostList($posts, 'group');
     }
@@ -167,6 +192,7 @@ class PostFollowService
             $query->where('user_id', $userId)->latest();
         })
             ->union($postQuery)
+            ->beforeExpiredAtOrNotLimit($this->user)
             ->latest()
             ->paginate();
 
@@ -175,9 +201,10 @@ class PostFollowService
 
     protected function getFollowIdsByType(int $type)
     {
-        return UserFollow::query()->when($this->userId, function ($query, $userId) {
-            $query->where('user_id', $userId)->latest();
-        })
+        return UserFollow::query()
+            ->when($this->userId, function ($query, $userId) {
+                $query->where('user_id', $userId)->latest();
+            })
             ->type($type)
             ->pluck('follow_id')
             ->toArray();

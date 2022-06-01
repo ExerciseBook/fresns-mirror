@@ -12,6 +12,7 @@ use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
 use Browser;
 use Illuminate\Support\Facades\Http;
+use App\Models\User;
 
 class AppUtility
 {
@@ -182,5 +183,35 @@ class AppUtility
         }
 
         return true;
+    }
+
+    public static function isForbidden(?User $user)
+    {
+        if (is_null($user)) {
+            return false;
+        }
+
+        if (now()->gt($user?->expired_at)) {
+            $sitePrivateEnd = ConfigHelper::fresnsConfigByItemKey('site_private_end');
+
+            return $sitePrivateEnd == 1;
+        }
+
+        return false;
+    }
+
+    public static function isPrivate(?User $user)
+    {
+        if (is_null($user)) {
+            return false;
+        }
+
+        if (now()->gt($user->expired_at)) {
+            $sitePrivateEnd = ConfigHelper::fresnsConfigByItemKey('site_private_end');
+
+            return $sitePrivateEnd == 2;
+        }
+
+        return false;
     }
 }

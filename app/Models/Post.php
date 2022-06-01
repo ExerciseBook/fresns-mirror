@@ -8,11 +8,20 @@
 
 namespace App\Models;
 
+use App\Utilities\AppUtility;
+
 class Post extends Model
 {
     use Traits\PostServiceTrait;
 
     protected $guarded = ['id'];
+
+    public function scopeBeforeExpiredAtOrNotLimit($query, ?User $user)
+    {
+        return $query->when(AppUtility::isPrivate($user), function ($query) use ($user) {
+            $query->where('created_at', '<=', $user->expired_at ?? now());
+        });
+    }
 
     public function postAppend()
     {
