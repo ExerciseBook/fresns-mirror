@@ -45,7 +45,7 @@ class GroupController extends Controller
         $headers = AppHelper::getApiHeaders();
         $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
-        $groups = Group::paginate($request->get('pageSize', 1));
+        $groups = Group::paginate($request->get('pageSize', 15));
 
         $groupList = [];
         foreach ($groups as $group) {

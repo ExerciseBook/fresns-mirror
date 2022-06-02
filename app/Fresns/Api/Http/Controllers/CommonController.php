@@ -198,7 +198,7 @@ class CommonController extends Controller
             throw new ApiException(32203);
         }
 
-        $data['types'] = explode(',', $callback->types);
+        $data['types'] = array_filter(explode(',', $callback->types));
         $data['dbContent'] = $callback->content;
         $data['apiContent'] = $callback->content;
 
@@ -471,7 +471,7 @@ class CommonController extends Controller
             throw new ApiException(37501);
         }
 
-        $fileLogs = FileLog::with('user')->orderBy('created_at', 'desc')->paginate($request->get('pageSize'));
+        $fileLogs = FileLog::with('user')->orderBy('created_at', 'desc')->paginate($request->get('pageSize', 15));
 
         $item = null;
         foreach ($fileLogs as $log) {

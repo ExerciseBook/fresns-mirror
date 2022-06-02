@@ -112,7 +112,7 @@ class GlobalController extends Controller
         $roleQuery = Role::isEnable($status)->orderBy('rating');
 
         if (!empty($dtoRequest->ids)) {
-            $ids = explode(',', $dtoRequest->ids);
+            $ids = array_filter(explode(',', $dtoRequest->ids));
             $roleQuery->whereIn('id', $ids);
         }
 
@@ -120,7 +120,7 @@ class GlobalController extends Controller
             $roleQuery->where('type', $dtoRequest->type);
         }
 
-        $roles = $roleQuery->paginate($request->get('pageSize'));
+        $roles = $roleQuery->paginate($request->get('pageSize', 15));
 
         $roleList = null;
         foreach ($roles as $role) {
@@ -198,7 +198,7 @@ class GlobalController extends Controller
             $wordQuery = BlockWord::where('dialog_mode', '!=', 1);
         }
 
-        $words = $wordQuery->paginate($request->get('pageSize', 100));
+        $words = $wordQuery->paginate($request->get('pageSize', 50));
 
         $wordList = null;
         foreach ($words as $word) {
