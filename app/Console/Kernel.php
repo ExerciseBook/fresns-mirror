@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         });
 
         foreach ($cronArr as $cron) {
-            $pluginStatus = Plugin::where('unikey', $cron['unikey'])->where('is_enable', 1)->first();
+            $pluginStatus = Plugin::where('unikey', $cron['unikey'])->isEnable()->first();
 
             if (! empty($pluginStatus)) {
                 $schedule->call(function () use ($cron) {

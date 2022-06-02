@@ -79,8 +79,8 @@ class Wallet
      */
     protected function verifyWalletBalance($accountId)
     {
-        $balance = AccountWallet::where(['account_id' => $accountId, 'is_enable' => 1])->value('balance');
-        $closingBalance = AccountWalletLog::where(['account_id' => $accountId, 'is_enable' => 1])->orderByDesc('id')->value('closing_balance');
+        $balance = AccountWallet::where('account_id', $accountId)->isEnable()->value('balance');
+        $closingBalance = AccountWalletLog::where('account_id', $accountId)->isEnable()->orderByDesc('id')->value('closing_balance');
         if ($closingBalance === null) {
             $closingBalance = 0;
         }
@@ -247,7 +247,7 @@ class Wallet
      */
     protected function verifyOriginWalletBalance($accountId, $amount)
     {
-        $balance = AccountWallet::where(['account_id' => $accountId, 'is_enable' => 1])->value('balance');
+        $balance = AccountWallet::where('account_id', $accountId)->isEnable()->value('balance');
 
         if ($balance >= $amount) {
             return ['balance' => $balance];

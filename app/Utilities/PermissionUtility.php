@@ -55,10 +55,10 @@ class PermissionUtility
             $roleId = $restoreRoleId;
         }
 
-        $rolePerm = Role::whereId($roleId)->where('is_enable', 1)->value('permission');
+        $rolePerm = Role::whereId($roleId)->isEnable()->value('permission');
         if (empty($rolePerm)) {
             $roleId = null;
-            $rolePerm = Role::whereId($defaultRoleId)->where('is_enable', 1)->value('permission') ?? [];
+            $rolePerm = Role::whereId($defaultRoleId)->isEnable()->value('permission') ?? [];
         }
 
         foreach ($rolePerm as $perm) {

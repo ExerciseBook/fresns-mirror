@@ -58,7 +58,7 @@ class SubscribeService
         $subscribe = Subscribe::make();
 
         $subscribe->getTableDataChangeSubscribes()->map(function ($subscribe) use ($event) {
-            $pluginStatus = Plugin::where('unikey', $subscribe->getUnikey())->where('is_enable', 1)->first();
+            $pluginStatus = Plugin::where('unikey', $subscribe->getUnikey())->isEnable()->first();
 
             if ($event->ensureSubscribedByThisTable($subscribe) && $pluginStatus) {
                 $event->notify($subscribe);
@@ -72,7 +72,7 @@ class SubscribeService
         $subscribe = Subscribe::make();
 
         $subscribe->getUserActivateSubscribes()->map(function ($subscribe) use ($event) {
-            $pluginStatus = Plugin::where('unikey', $subscribe->getUnikey())->where('is_enable', 1)->first();
+            $pluginStatus = Plugin::where('unikey', $subscribe->getUnikey())->isEnable()->first();
 
             if ($pluginStatus) {
                 $event->notify($subscribe);

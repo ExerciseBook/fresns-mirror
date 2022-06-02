@@ -12,6 +12,6 @@ class Dialog extends Model
 {
     public function messages()
     {
-        return $this->hasMany(DialogMessage::class)->where('is_enable', 1);
+        return $this->hasMany(DialogMessage::class)->isEnable();
     }
 }

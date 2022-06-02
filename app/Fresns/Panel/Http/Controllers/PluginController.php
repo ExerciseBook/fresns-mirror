@@ -22,16 +22,16 @@ class PluginController extends Controller
         $plugins = Plugin::type(1);
 
         if ($request->has('is_enable')) {
-            $plugins->where('is_enable', $request->is_enable);
+            $plugins->isEnable($isEnable);
         }
 
         $plugins = $plugins->get();
 
         // sidebar show
-        $enablePlugins = Plugin::type(1)->where('is_enable', 1)->get();
+        $enablePlugins = Plugin::type(1)->isEnable()->get();
 
         $enableCount = $enablePlugins->count();
-        $disableCount = Plugin::type(1)->where('is_enable', 0)->count();
+        $disableCount = Plugin::type(1)->isEnable(false)->count();
 
         return view('FsView::plugins.list', compact('plugins', 'enableCount', 'disableCount', 'isEnable', 'enablePlugins'));
     }

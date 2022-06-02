@@ -41,7 +41,7 @@ class IframeController extends Controller
     public function plugin(Request $request)
     {
         // Plugin Sidebar
-        $enablePlugins = Plugin::type(1)->where('is_enable', 1)->get();
+        $enablePlugins = Plugin::type(1)->isEnable()->get();
 
         $url = $this->addLangToUrl($request->url);
 

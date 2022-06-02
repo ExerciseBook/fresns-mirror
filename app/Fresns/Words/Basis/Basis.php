@@ -39,7 +39,7 @@ class Basis
         $dtoWordBody = new VerifySignDTO($wordBody);
         $langTag = \request()->header('langTag', config('app.locale'));
 
-        $keyInfo = SessionKey::where('app_id', $dtoWordBody->appId)->where('is_enable', 1)->first();
+        $keyInfo = SessionKey::where('app_id', $dtoWordBody->appId)->isEnable()->first();
 
         if (empty($keyInfo)) {
             return $this->failure(

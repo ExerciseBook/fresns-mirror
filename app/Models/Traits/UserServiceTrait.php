@@ -149,7 +149,7 @@ trait UserServiceTrait
 
     public function getUserArchives(?string $langTag = null)
     {
-        $archiveArr = $this->archives->where('is_enable', 1);
+        $archiveArr = $this->archives->isEnable();
 
         $archiveList = [];
         foreach ($archiveArr as $archive) {

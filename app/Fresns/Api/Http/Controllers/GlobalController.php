@@ -109,7 +109,7 @@ class GlobalController extends Controller
 
         $status = $dtoRequest->status ?? 1;
 
-        $roleQuery = Role::where('is_enable', $status)->orderBy('rating');
+        $roleQuery = Role::isEnable($status)->orderBy('rating');
 
         if (!empty($dtoRequest->ids)) {
             $ids = explode(',', $dtoRequest->ids);
@@ -167,7 +167,7 @@ class GlobalController extends Controller
     {
         $headers = AppHelper::getApiHeaders();
 
-        $stickers = Sticker::where('is_enable', 1)->orderBy('rating')->get();
+        $stickers = Sticker::isEnable()->orderBy('rating')->get();
 
         $stickerData = [];
         foreach ($stickers as $index => $sticker) {

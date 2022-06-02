@@ -82,7 +82,7 @@ class UserController extends Controller
 
         $dialogACount = Dialog::where('a_user_id', $userId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
         $dialogBCount = Dialog::where('b_user_id', $userId)->where('b_is_read', 0)->where('b_is_display', 1)->count();
-        $dialogMessageCount = DialogMessage::where('recv_user_id', $userId)->where('recv_read_at', null)->where('recv_deleted_at', null)->where('is_enable', 1)->count();
+        $dialogMessageCount = DialogMessage::where('recv_user_id', $userId)->where('recv_read_at', null)->where('recv_deleted_at', null)->isEnable()->count();
         $dialogUnread['dialog'] = $dialogACount + $dialogBCount;
         $dialogUnread['message'] = $dialogMessageCount;
         $data['dialogUnread'] = $dialogUnread;

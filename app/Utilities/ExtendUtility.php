@@ -70,7 +70,7 @@ class ExtendUtility
     public static function getIcons(int $type, int $id, ?string $langTag = null)
     {
         $iconLinkedArr = IconLinked::where('linked_type', $type)->where('linked_id', $id)->get()->toArray();
-        $iconArr = Icon::whereIn('id', array_column($iconLinkedArr, 'icon_id'))->where('is_enable', 1)->get();
+        $iconArr = Icon::whereIn('id', array_column($iconLinkedArr, 'icon_id'))->isEnable()->get();
 
         $iconList = null;
         foreach ($iconArr as $icon) {
@@ -96,7 +96,7 @@ class ExtendUtility
     public static function getTips(int $type, int $id, ?string $langTag = null)
     {
         $tipLinkedArr = TipLinked::where('linked_type', $type)->where('linked_id', $id)->get()->toArray();
-        $tipArr = Tip::whereIn('id', array_column($tipLinkedArr, 'tip_id'))->where('is_enable', 1)->get();
+        $tipArr = Tip::whereIn('id', array_column($tipLinkedArr, 'tip_id'))->isEnable()->get();
 
         $tipList = null;
         foreach ($tipArr as $tip) {
@@ -116,7 +116,7 @@ class ExtendUtility
     public static function getExtends(int $type, int $id, ?string $langTag = null)
     {
         $extendLinkedArr = ExtendLinked::where('linked_type', $type)->where('linked_id', $id)->orderBy('rating')->get()->toArray();
-        $extendArr = Extend::whereIn('id', array_column($extendLinkedArr, 'extend_id'))->where('is_enable', 1)->get();
+        $extendArr = Extend::whereIn('id', array_column($extendLinkedArr, 'extend_id'))->isEnable()->get();
 
         $extendList = null;
         foreach ($extendArr as $extend) {

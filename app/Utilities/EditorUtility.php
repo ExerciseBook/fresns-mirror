@@ -23,7 +23,7 @@ class EditorUtility
     {
         $extendsCollection = collect($extends);
 
-        $extendArr = Extend::whereIn('eid', $extendsCollection->pluck('eid'))->where('is_enable', 1)->get();
+        $extendArr = Extend::whereIn('eid', $extendsCollection->pluck('eid'))->isEnable()->get();
 
         $extendList = null;
         foreach ($extendArr as $extend) {
