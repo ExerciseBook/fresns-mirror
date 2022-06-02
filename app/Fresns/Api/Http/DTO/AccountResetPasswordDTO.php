@@ -18,9 +18,9 @@ class AccountResetPasswordDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['integer', 'required', 'in:1,2'],
+            'type' => ['string', 'required', 'in:email,phone'],
             'account' => ['string', 'required'],
-            'countryCode' => ['integer', 'nullable', 'required_if:type,2'],
+            'countryCode' => ['integer', 'nullable', 'required_if:type,phone'],
             'verifyCode' => ['string', 'required'],
             'newPassword' => ['string', 'required'],
         ];

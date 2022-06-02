@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class AccountLoginDTO extends DTO
+class AccountApplyDeleteDTO extends DTO
 {
     /**
      * @return array
@@ -18,11 +18,9 @@ class AccountLoginDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['string', 'required', 'in:email,phone'],
-            'account' => ['string', 'required'],
-            'countryCode' => ['integer', 'nullable', 'required_if:type,phone'],
             'password' => ['string', 'nullable', 'required_without:verifyCode'],
             'verifyCode' => ['string', 'nullable', 'required_without:password'],
+            'codeType' => ['string', 'required', 'in:email,phone'],
         ];
     }
 }

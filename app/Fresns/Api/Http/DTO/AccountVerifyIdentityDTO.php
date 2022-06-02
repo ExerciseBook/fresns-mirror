@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class AccountLoginDTO extends DTO
+class AccountVerifyIdentityDTO extends DTO
 {
     /**
      * @return array
@@ -19,10 +19,7 @@ class AccountLoginDTO extends DTO
     {
         return [
             'type' => ['string', 'required', 'in:email,phone'],
-            'account' => ['string', 'required'],
-            'countryCode' => ['integer', 'nullable', 'required_if:type,phone'],
-            'password' => ['string', 'nullable', 'required_without:verifyCode'],
-            'verifyCode' => ['string', 'nullable', 'required_without:password'],
+            'verifyCode' => ['string', 'required'],
         ];
     }
 }

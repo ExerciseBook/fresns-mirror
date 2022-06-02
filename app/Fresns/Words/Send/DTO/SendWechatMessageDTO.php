@@ -27,7 +27,7 @@ class SendWechatMessageDTO extends DTO
             'coverUrl' => ['url', 'nullable'],
             'title' => ['string', 'nullable'],
             'content' => ['string', 'nullable'],
-            'time' => ['nullable', 'date_format:"Y-m-d H:i:s"'],
+            'time' => ['string', 'nullable', 'date_format:"Y-m-d H:i:s"'],
             'linkType' => ['integer', 'nullable', 'in:1,2,3,4,5'],
             'linkFsid' => ['string', 'required_with:linkType'],
             'linkUrl' => ['url', 'nullable'],

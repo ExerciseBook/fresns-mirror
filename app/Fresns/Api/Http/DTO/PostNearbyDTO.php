@@ -18,12 +18,12 @@ class PostNearbyDTO extends DTO
     public function rules(): array
     {
         return [
-            'unit' => ['string', 'nullable', 'in:km,mi'],
-            'length' => ['integer', 'nullable'],
-            'contentType' => ['string', 'nullable'],
             'mapId' => ['integer', 'nullable', 'in:1,2,3,4,5,6,7,8,9,10'],
             'mapLng' => ['numeric', 'nullable'],
             'mapLat' => ['numeric', 'nullable'],
+            'unit' => ['string', 'nullable', 'in:km,mi'],
+            'length' => ['integer', 'nullable'],
+            'contentType' => ['string', 'nullable'],
             'pluginRatingId' => ['integer', 'nullable'],
             'pageSize' => ['integer', 'nullable', 'between:1,20'],
             'page' => ['integer', 'nullable'],
