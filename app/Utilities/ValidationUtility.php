@@ -107,17 +107,17 @@ class ValidationUtility
         }
 
         $lowercase = true;
-        if (in_array(1, $config['password_strength'])) {
+        if (in_array(2, $config['password_strength'])) {
             $lowercase = preg_match('/[a-z]/', $password);
         }
 
         $uppercase = true;
-        if (in_array(1, $config['password_strength'])) {
+        if (in_array(3, $config['password_strength'])) {
             $uppercase = preg_match('/[A-Z]/', $password);
         }
 
         $symbols = true;
-        if (in_array(1, $config['password_strength'])) {
+        if (in_array(4, $config['password_strength'])) {
             $symbols = preg_match('/^[A-Za-z0-9]+$/', $password);
         }
 
