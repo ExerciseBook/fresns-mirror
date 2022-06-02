@@ -21,6 +21,17 @@ class ConfigUtility
             $config = Config::where('item_key', '=', $item['item_key'])->first();
             if (empty($config)) {
                 Config::insert($item);
+
+                if ($item['is_multilingual'] ?? null) {
+                    $fresnsLangItems = [
+                        'table_name' => 'configs',
+                        'table_column' => 'item_value',
+                        'table_id' => null,
+                        'table_key' => $item['item_key'],
+                        'language_values' => $item['language_values'],
+                    ];
+                    ConfigUtility::changeFresnsLanguageItems($fresnsLangItems);
+                }
             }
         }
     }
@@ -34,48 +45,40 @@ class ConfigUtility
     }
 
     // change config items
-    public static function changeFresnsConfigItems(array $fresnsConfigKeys)
+    public static function changeFresnsConfigItems(array $fresnsConfigItems)
     {
-        foreach($fresnsConfigKeys as $item) {
-            Config::updateOrCreate(
-                ['item_key' => $item['item_key']],
-                collect($item)->only('item_key', 'item_value', 'item_type', 'item_tag', 'is_multilingual')->toArray()
+        foreach($fresnsConfigItems as $item) {
+            Config::updateOrCreate([
+                    'item_key' => $item['item_key']
+                ],
+                collect($item)->only('item_key', 'item_value', 'item_type', 'item_tag', 'is_multilingual', 'is_api')->toArray()
             );
 
-            if ($item['is_multilingual']) {
-                foreach($item['language_values'] as $language) {
-                    $languageItem = [
-                        'table_key' => $item['item_key'],
-                        'lang_tag' => $language['lang_tag'],
-                        'table_name' => 'configs',
-                        'table_column' => 'item_value',
-                        'lang_content' => $language['lang_content'],
-                    ];
-
-                    self::changeFresnsConfigMultilingualItem($languageItem);
-                }
+            if ($item['is_multilingual'] ?? null) {
+                $fresnsLangItems = [
+                    'table_name' => 'configs',
+                    'table_column' => 'item_value',
+                    'table_id' => null,
+                    'table_key' => $item['item_key'],
+                    'language_values' => $item['language_values'],
+                ];
+                ConfigUtility::changeFresnsLanguageItems($fresnsLangItems);
             }
         }
     }
 
-    // change config multilingual items
-    public static function changeFresnsConfigMultilingualItem($fresnsConfigKey)
+    // change language items
+    public static function changeFresnsLanguageItems($fresnsLangItems)
     {
-        // 修改多语言的配置（存在则修改，不存在则新建）
-        $language = Language::ofConfig()
-            ->where('table_key', $fresnsConfigKey['table_key'])
-            ->where('lang_tag', $fresnsConfigKey['lang_tag'])
-            ->first();
+        foreach($fresnsLangItems['language_values'] ?? [] as $key => $value) {
+            $item = $fresnsLangItems;
+            $item['lang_tag'] = $key;
+            $item['lang_content'] = $value;
 
-        if (! $language) {
-            $language = new Language();
-            $language->fill($fresnsConfigKey);
+            unset($item['language_values']);
+
+            Language::updateOrCreate($item);
         }
-
-        $language->lang_content = $fresnsConfigKey['lang_content'];
-        $language->save();
-
-        return $language;
     }
 
     // get code message
