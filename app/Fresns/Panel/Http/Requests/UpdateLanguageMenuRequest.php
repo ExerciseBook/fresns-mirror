@@ -23,7 +23,7 @@ class UpdateLanguageMenuRequest extends FormRequest
             'continent_id' => 'int',
             'area_code' => 'string',
             'area_status' => 'required|boolean',
-            'length_units' => 'required|string',
+            'length_unit' => 'required|string',
             'date_format' => 'required|string',
             'time_format_minute' => 'required|string',
             'time_format_hour' => 'required|string',

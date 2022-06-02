@@ -147,7 +147,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.language_table_lengthUnit') }}</label>
                             <div class="col-sm-9">
-                                <select class="form-select" name="length_units">
+                                <select class="form-select" name="length_unit">
                                     <option value="km" selected>{{ __('FsLang::panel.unit_kilometer') }} (km)</option>
                                     <option value="mi">{{ __('FsLang::panel.unit_mile') }} (mi)</option>
                                 </select>
@@ -288,7 +288,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.language_table_lengthUnit') }}</label>
                             <div class="col-sm-9">
-                                <select class="form-select" name="length_units">
+                                <select class="form-select" name="length_unit">
                                     <option value="km" selected>{{ __('FsLang::panel.unit_kilometer') }} (km)</option>
                                     <option value="mi">{{ __('FsLang::panel.unit_mile') }} (mi)</option>
                                 </select>
