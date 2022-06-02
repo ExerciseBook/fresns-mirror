@@ -10,9 +10,6 @@ namespace App\Models;
 
 class PluginUsage extends Model
 {
-    use Traits\LangNameTrait;
-    use Traits\PluginUsageServiceTrait;
-
     const TYPE_WALLET_RECHARGE = 1;
     const TYPE_WALLET_WITHDRAW = 2;
     const TYPE_EDITOR = 3;
@@ -23,6 +20,10 @@ class PluginUsage extends Model
     const TYPE_PROFILE = 8;
     const TYPE_MAP = 9;
 
+    use Traits\LangNameTrait;
+    use Traits\PluginUsageServiceTrait;
+    use Traits\IsEnableTrait;
+
     protected $casts = [
         'data_sources' => 'json',
     ];
@@ -30,11 +31,6 @@ class PluginUsage extends Model
     public function scopeType($query, int $type)
     {
         return $query->where('type', $type);
-    }
-
-    public function scopeIsEnable($query, bool $isEnable = true)
-    {
-        return $query->where('is_enable', $isEnable);
     }
 
     public function plugin()

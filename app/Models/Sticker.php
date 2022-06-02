@@ -11,6 +11,7 @@ namespace App\Models;
 class Sticker extends Model
 {
     use Traits\LangNameTrait;
+    use Traits\IsEnableTrait;
 
     protected $table = 'stickers';
 

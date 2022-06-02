@@ -13,6 +13,7 @@ use App\Utilities\AppUtility;
 class Post extends Model
 {
     use Traits\PostServiceTrait;
+    use Traits\IsEnableTrait;
 
     protected $guarded = ['id'];
 

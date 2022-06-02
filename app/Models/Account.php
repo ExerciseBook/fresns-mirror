@@ -20,6 +20,7 @@ class Account extends Authenticatable
     use SoftDeletes;
     use Traits\AccountServiceTrait;
     use Traits\DataChangeNotifyTrait;
+    use Traits\IsEnableTrait;
 
     /**
      * The attributes that are mass assignable.

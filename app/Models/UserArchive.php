@@ -10,6 +10,8 @@ namespace App\Models;
 
 class UserArchive extends Model
 {
+    use Traits\IsEnableTrait;
+
     protected $guarded = [];
 
     public function getArchiveValueAttribute($value)

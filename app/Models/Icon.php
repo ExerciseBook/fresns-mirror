@@ -10,4 +10,5 @@ namespace App\Models;
 
 class Icon extends Model
 {
+    use Traits\IsEnableTrait;
 }

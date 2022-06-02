@@ -10,6 +10,8 @@ namespace App\Models;
 
 class AccountConnect extends Model
 {
+    use Traits\IsEnableTrait;
+
     public function account()
     {
         return $this->belongsTo(Account::class, 'account_id', 'id');

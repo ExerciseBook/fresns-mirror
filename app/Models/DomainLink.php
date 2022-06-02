@@ -10,4 +10,5 @@ namespace App\Models;
 
 class DomainLink extends Model
 {
+    use Traits\IsEnableTrait;
 }

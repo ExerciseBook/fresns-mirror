@@ -11,6 +11,7 @@ namespace App\Models;
 class Comment extends Model
 {
     use Traits\CommentServiceTrait;
+    use Traits\IsEnableTrait;
 
     public function commentAppend()
     {

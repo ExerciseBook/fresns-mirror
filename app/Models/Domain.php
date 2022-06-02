@@ -10,6 +10,8 @@ namespace App\Models;
 
 class Domain extends Model
 {
+    use Traits\IsEnableTrait;
+
     public function links()
     {
         return $this->hasMany(DomainLink::class);

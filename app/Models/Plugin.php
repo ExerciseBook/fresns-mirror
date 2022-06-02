@@ -10,6 +10,8 @@ namespace App\Models;
 
 class Plugin extends Model
 {
+    use Traits\IsEnableTrait;
+
     protected $guarded = [];
 
     protected $casts = [

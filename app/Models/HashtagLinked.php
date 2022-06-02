@@ -15,4 +15,9 @@ class HashtagLinked extends Model
     const TYPE_HASHTAG = 3;
     const TYPE_POST = 4;
     const TYPE_COMMENT = 5;
+
+    public function scopeType($query, int $type)
+    {
+        return $query->where('linked_type', $type);
+    }
 }

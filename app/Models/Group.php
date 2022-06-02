@@ -13,6 +13,7 @@ class Group extends Model
     use Traits\LangNameTrait;
     use Traits\LangDescriptionTrait;
     use Traits\GroupServiceTrait;
+    use Traits\IsEnableTrait;
 
     protected $casts = [
         'permission' => 'array',

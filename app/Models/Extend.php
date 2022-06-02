@@ -10,4 +10,5 @@ namespace App\Models;
 
 class Extend extends Model
 {
+    use Traits\IsEnableTrait;
 }

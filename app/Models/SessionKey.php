@@ -12,6 +12,8 @@ use Illuminate\Support\Collection;
 
 class SessionKey extends Model
 {
+    use Traits\IsEnableTrait;
+
     protected $fillable = [
         'platform_id',
         'name',

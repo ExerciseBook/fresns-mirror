@@ -16,6 +16,11 @@ class UserRole extends Model
 
     protected $guarded = ['id'];
 
+    public function scopeType($query, int $type)
+    {
+        return $query->where('type', $type);
+    }
+
     public function roleInfo()
     {
         return $this->belongsTo(Role::class, 'role_id', 'id');

@@ -10,5 +10,7 @@ namespace App\Models;
 
 class VerifyCode extends Model
 {
+    use Traits\IsEnableTrait;
+
     protected $guarded = [];
 }

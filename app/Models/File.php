@@ -10,8 +10,6 @@ namespace App\Models;
 
 class File extends Model
 {
-    use Traits\FileServiceTrait;
-
     const TYPE_IMAGE = 1;
     const TYPE_VIDEO = 2;
     const TYPE_AUDIO = 3;
@@ -22,6 +20,9 @@ class File extends Model
         File::TYPE_AUDIO => 'Audio',
         File::TYPE_DOCUMENT => 'Document',
     ];
+
+    use Traits\FileServiceTrait;
+    use Traits\IsEnableTrait;
 
     protected $guarded = [];
 

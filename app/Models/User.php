@@ -11,6 +11,7 @@ namespace App\Models;
 class User extends Model
 {
     use Traits\UserServiceTrait;
+    use Traits\IsEnableTrait;
 
     protected $dates = [
         'expired_at',

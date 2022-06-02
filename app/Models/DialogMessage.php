@@ -10,4 +10,5 @@ namespace App\Models;
 
 class DialogMessage extends Model
 {
+    use Traits\IsEnableTrait;
 }

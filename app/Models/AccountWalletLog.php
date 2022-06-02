@@ -10,4 +10,5 @@ namespace App\Models;
 
 class AccountWalletLog extends Model
 {
+    use Traits\IsEnableTrait;
 }

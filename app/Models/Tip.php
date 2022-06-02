@@ -10,4 +10,5 @@ namespace App\Models;
 
 class Tip extends Model
 {
+    use Traits\IsEnableTrait;
 }
