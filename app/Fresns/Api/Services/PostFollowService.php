@@ -11,19 +11,15 @@ namespace App\Fresns\Api\Services;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\UserFollow;
-use App\Models\PluginUsage;
-use Illuminate\Support\Str;
+use App\Exceptions\ApiException;
 use App\Models\HashtagLinked;
 use App\Fresns\Api\Services\PostService;
 use App\Utilities\AppUtility;
-use RuntimeException;
+use App\Utilities\PermissionUtility;
+use Illuminate\Support\Str;
 
 class PostFollowService
 {
-    const POST_BY_ALL = 'postByAll';
-    const POST_BY_FOLLOW = 'postByFollow';
-    const POST_BY_NEAR_BY = 'postByNearby';
-
     /**
      * @var User $user
      */
@@ -44,32 +40,15 @@ class PostFollowService
         $this->dtoRequest = $dtoRequest;
     }
 
-    public function isPluginProvideDataSource(string $type)
-    {
-        $this->pluginUseage = PluginUsage::type(PluginUsage::TYPE_CONTENT)->isEnable()->first();
-        $pluginUnikey = $this->getPluginUnikey($type);
-
-        return (bool) $pluginUnikey;
-    }
-
-    public function getPluginUnikey(string $type)
-    {
-        return $this->pluginUseage->data_sources[$type]['pluginUnikey'] ?? null;
-    }
-
     public function handle()
     {
-        if (AppUtility::isForbidden($this->user)) {
-            throw new \RuntimeException('您当前不是会员, 无法访问');
+        $userConfig = PermissionUtility::getUserExpireInfo($this->userId);
+        if (! $userConfig['userStatus'] && $userConfig['expireAfter'] == 1) {
+            throw new ApiException(35302);
         }
 
-        $method = sprintf("get%sFollow", Str::studly($this->dtoRequest->type)); // getAllFollow、getUserFollow、getGroupFollow、getHashtagFollow
-
-        if (!method_exists($this, $method)) {
-            throw new \RuntimeException(
-                sprintf('unknow method %s::%s', get_class($this), $method)
-            );
-        }
+        // getAllFollow、getUserFollow、getGroupFollow、getHashtagFollow
+        $method = sprintf("get%sFollow", Str::studly($this->dtoRequest->type));
 
         return $this->$method();
     }

@@ -9,6 +9,7 @@
 namespace App\Models;
 
 use App\Utilities\AppUtility;
+use App\Utilities\PermissionUtility;
 
 class Post extends Model
 {
@@ -19,7 +20,13 @@ class Post extends Model
 
     public function scopeBeforeExpiredAtOrNotLimit($query, ?User $user)
     {
-        return $query->when(AppUtility::isPrivate($user), function ($query) use ($user) {
+        if (! $user) {
+            return $query;
+        }
+
+        $userConfig = PermissionUtility::getUserExpireInfo($user->id);
+
+        return $query->when(! $userConfig['userStatus'] && $userConfig['expireAfter'] == 2, function ($query) use ($user) {
             $query->where('created_at', '<=', $user->expired_at ?? now());
         });
     }

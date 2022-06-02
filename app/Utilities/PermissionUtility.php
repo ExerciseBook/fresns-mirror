@@ -25,10 +25,15 @@ class PermissionUtility
         return $userAccountId == $accountId ? 'true' : 'false';
     }
 
-    // Check user status of the private model
-    public static function checkUserStatusOfPrivateModel(int $userId): bool
+    // Check user status of the site mode
+    public static function checkUserStatusOfSiteMode(int $userId): bool
     {
+        $modeConfig = ConfigHelper::fresnsConfigByItemKey('site_mode');
         $userSet = User::where('id', $userId)->value('expired_at');
+
+        if ($modeConfig == 'public') {
+            return true;
+        }
 
         $now = time();
         $expireTime = strtotime($userSet->expired_at);
@@ -38,6 +43,18 @@ class PermissionUtility
         }
 
         return false;
+    }
+
+    // get user expire info
+    public static function getUserExpireInfo(int $userId)
+    {
+        $userExpiredTime = User::where('id', $userId)->value('expired_at');
+
+        $config['userStatus'] = PermissionUtility::checkUserStatusOfSiteMode($userId);
+        $config['expireTime'] = $userExpiredTime;
+        $config['expireAfter'] = ConfigHelper::fresnsConfigByItemKey('site_private_end_after');
+
+        return $config;
     }
 
     // Get user role permission

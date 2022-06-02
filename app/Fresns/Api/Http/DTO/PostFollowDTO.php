@@ -19,6 +19,7 @@ class PostFollowDTO extends DTO
     {
         return [
             'type' => ['string', 'required', 'in:all,user,group,hashtag'],
+            'contentType' => ['string', 'nullable'],
             'mapId' => ['integer', 'nullable', 'in:1,2,3,4,5,6,7,8,9,10'],
             'mapLng' => ['numeric', 'nullable'],
             'mapLat' => ['numeric', 'nullable'],

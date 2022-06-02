@@ -10,9 +10,10 @@ namespace App\Fresns\Api\Http\Middleware;
 
 use App\Helpers\ConfigHelper;
 use App\Models\User;
-use App\Utilities\AppUtility;
 use Closure;
 use Illuminate\Http\Request;
+use App\Utilities\PermissionUtility;
+use App\Exceptions\ApiException;
 
 class SiteMode
 {
@@ -22,7 +23,7 @@ class SiteMode
         // 并根据站点配置的到期后数据处理模式 configs.site_private_end 对数据进行处理。
         //     - 站点到期数据处理模式为 1 时，接口不允许请求。
         //     - 站点到期数据处理模式为 2 时，输出用户到期前的内容，到期之后的内容不进行输出展示。
-        
+
         // 站点是否是私有模式
         $isPrivateStatus = ConfigHelper::fresnsConfigByItemKey('site_private_status');
 
@@ -39,8 +40,9 @@ class SiteMode
         $expiredStatus = $user->getCurrentExpredStatus();
 
         // 站点是私有模式时, 如果站点到期状态为1, 不允许请求
-        if (AppUtility::isForbidden($user)) {
-            throw new \RuntimeException("您当前不是会员, 无法访问");
+        $userConfig = PermissionUtility::getUserExpireInfo($user->id);
+        if (! $userConfig['userStatus'] && $userConfig['expireAfter'] == 1) {
+            throw new ApiException(35302);
         }
 
 

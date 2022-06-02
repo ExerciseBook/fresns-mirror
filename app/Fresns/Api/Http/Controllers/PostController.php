@@ -18,11 +18,12 @@ use App\Fresns\Api\Http\DTO\PostListDTO;
 use App\Fresns\Api\Services\PostService;
 use App\Fresns\Api\Http\DTO\PostDetailDTO;
 use App\Fresns\Api\Http\DTO\PostFollowDTO;
+use App\Fresns\Api\Http\DTO\PostNearbyDTO;
 use App\Fresns\Api\Services\PostFollowService;
 use App\Helpers\ConfigHelper;
-use App\Utilities\AppUtility;
+use App\Utilities\ExtendUtility;
+use App\Utilities\LbsUtility;
 use Illuminate\Support\Facades\DB;
-use stdClass;
 
 class PostController extends Controller
 {
@@ -33,8 +34,8 @@ class PostController extends Controller
         $headers = AppHelper::getApiHeaders();
         $user = !empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
-        $postQuery = Post::where('is_enable', 1);
-        $posts = $postQuery->paginate($request->get('pageSize', 10));
+        $postQuery = Post::isEnable();
+        $posts = $postQuery->paginate($request->get('pageSize', 15));
 
         $postList = [];
         foreach ($posts as $post) {
@@ -91,14 +92,14 @@ class PostController extends Controller
         // - 当查看帖子类型为 user 时，获取我关注的用户的所有帖子，以及自己发表的所有帖子
         // - 当查看帖子类型为 group 时，获取我关注的小组的所有帖子，包括但不限于精华帖子与非精华帖子，以及自己发表的所有帖子
         // - 当查看帖子类型为 hashtag 时，获取我关注的话题的所有帖子，包括但不限于精华帖子与非精华帖子，以及自己发表的所有帖子
-        // 
+        //
         // - 指定帖子类型为全部时，帖子可能在用户、小组、话题、全站二级精华帖重复出现。按下方重复帖子数据处理说明进行处理。场景举例：
         //      A用户关注了 B用户，A用户同时也关注了 a小组。B用户在 a小组发了 1篇帖子，帖子被设置为 a小组的精华帖。
         //      查询全部帖子时，关注的用户里会出现这篇帖子，关注的小组也会出现这篇帖子。
-        // 
+        //
         // 重复帖子数据处理说明：
         //      - 关注的用户中展示此帖，小组中与其他类型不展示。优先级为：用户 > 小组 > 话题 > 全站二级精华帖
-        // 
+        //
         // 数据来源：
         // - 根据下方要求，获取插件关联使用表 plugin_usages 类型为内容类型扩展的第一条已启用信息。
         //      @see https://fresns.cn/database/plugins/plugin-usages.html 插件关联表数据库参考
@@ -106,26 +107,26 @@ class PostController extends Controller
         //      - 关联信息为禁用状态时，由主程序提供数据。
         //      - 关联信息为启用状态时，由插件提供数据源。
 
-
-
-
         $requestData = $request->all();
         $requestData['type'] = $type;
         $dtoRequest = new PostFollowDTO($requestData);
 
-        $headers = AppHelper::getApiHeaders();
+        if ($dtoRequest->contentType) {
+            $extendPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByFollow');
 
-        $postFollowService = new PostFollowService(auth()->user(), $dtoRequest);
+            if ($extendPluginUnikey) {
+                $fresnsResp = \FresnsCmdWord::plugin($extendPluginUnikey)->getPostByFollow($dtoRequest->toArray());
 
-        // 插件转发
-        if ($postFollowService->isPluginProvideDataSource(PostFollowService::POST_BY_FOLLOW)) {
-            // todo: 调用命令字, 需要确定调用的命令字是哪个，临时写的 postByFollow
-            $response = \FresnsCmdWord::plugin($postFollowService->getPluginUnikey(PostFollowService::POST_BY_FOLLOW))->postByFollow($dtoRequest->toArray());
-
-            return $response->getOrigin();
+                return $fresnsResp->getOrigin();
+            }
         }
 
         // 主程序处理
+        $headers = AppHelper::getApiHeaders();
+        $user = User::whereUid($headers['uid'])->first();
+
+        $postFollowService = new PostFollowService($user, $dtoRequest);
+
         ['data' => $data, 'posts' => $posts] = $postFollowService->handle();
 
         if (!$posts) {
@@ -139,60 +140,51 @@ class PostController extends Controller
         );
     }
 
-    public function nearby()
+    public function nearby(Request $request)
     {
-        $requestData = \request()->all();
-        $requestData['type'] = 'all';
-        // $dtoRequest = new PostFollowDTO($requestData);
-        $dtoRequest = new stdClass();
-        $dtoRequest->mapLng = '121.137543';
-        $dtoRequest->mapLat = '31.4171';
-
+        $dtoRequest = new PostNearbyDTO($request->all());
         $headers = AppHelper::getApiHeaders();
 
-        $postFollowService = new PostFollowService(auth()->user(), $dtoRequest);
+        if ($dtoRequest->contentType) {
+            $extendPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByNearby');
 
-        // AppUtility::ensureDistanceFunctionExists();
+            if ($extendPluginUnikey) {
+                $fresnsResp = \FresnsCmdWord::plugin($extendPluginUnikey)->getPostByNearby($dtoRequest->toArray());
 
-        $postFollowService = new PostFollowService(auth()->id(), $dtoRequest);
-
-        // 插件转发
-        if ($postFollowService->isPluginProvideDataSource(PostFollowService::POST_BY_NEAR_BY)) {
-            // todo: 调用命令字, 需要确定调用的命令字是哪个，临时写的 postByFollow
-            $response = \FresnsCmdWord::plugin($postFollowService->getPluginUnikey(PostFollowService::POST_BY_NEAR_BY))->postByFollow($dtoRequest->toArray());
-
-            return $response->getOrigin();
+                return $fresnsResp->getOrigin();
+            }
         }
 
-        // @see https://fresns.cn/database/keyname/interactive.html 单位 km
-        $nearbyLength = ConfigHelper::fresnsConfigByItemKey('nearby_length');
+        // 主程序处理
+        $nearbyConfig = ConfigHelper::fresnsConfigByItemKeys([
+            'nearby_length_km',
+            'nearby_length_mi',
+        ]);
+
+        $unit = $dtoRequest->unit ?? ConfigHelper::fresnsConfigLengthUnit($headers['langTag']);
+        $length = $dtoRequest->length ?? $nearbyConfig["nearby_length_{$unit}"];
+
+        $nearbyLength = match ($unit) {
+            'km' => $length,
+            'mi' => $length * 0.6214,
+            default => $length,
+        };
 
         $posts = Post::query()
             ->select([
                 DB::raw("*"),
-                DB::raw(AppUtility::getDistanceSql('map_longitude', 'map_latitude', $dtoRequest->mapLng, $dtoRequest->mapLat))
+                DB::raw(LbsUtility::getDistanceSql('map_longitude', 'map_latitude', $dtoRequest->mapLng, $dtoRequest->mapLat))
             ])
             ->having('distance', '<=', $nearbyLength)
             ->orderBy('distance')
             ->paginate();
 
-        // 主程序处理
-        ['data' => $data, 'posts' => $posts] = $postFollowService->getPostList($posts, null, function ($post, $postItem) {
-            unset($postItem['followType']);
-
-            $postItem['distance'] = $post->distance;
-
-            return $postItem;
-        });
-
-        if (!$posts) {
-            return $this->success();
+        $postList = [];
+        foreach ($posts as $post) {
+            $service = new PostService();
+            $postList[] = $service->postDetail($post->id, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
-        return $this->fresnsPaginate(
-            $data,
-            $posts->total(),
-            $posts->perPage(),
-        );
+        return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
     }
 }

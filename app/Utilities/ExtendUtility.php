@@ -66,6 +66,20 @@ class ExtendUtility
         return $extendList;
     }
 
+    // get data extend
+    public static function getDataExtend(string $contentType, string $dataType)
+    {
+        $dataConfig = PluginUsage::type(PluginUsage::TYPE_CONTENT)->where('plugin_unikey', $contentType)->isEnable()->value('data_sources');
+
+        if (empty($dataConfig)) {
+            return null;
+        }
+
+        $extendPluginUnikey = $dataConfig[$dataType]['pluginUnikey'] ?? null;
+
+        return $extendPluginUnikey;
+    }
+
     // get icons
     public static function getIcons(int $type, int $id, ?string $langTag = null)
     {
