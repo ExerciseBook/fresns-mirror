@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Fresns\Api\Providers;
+namespace App\Providers;
 
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SqlLogServiceProvider extends ServiceProvider
 {
@@ -38,13 +41,13 @@ class SqlLogServiceProvider extends ServiceProvider
         $this->app['config']->set('logging.channels.sql', config('logging.channels.daily'));
         $this->app['config']->set('logging.channels.sql.path', storage_path('logs/sql.log'));
 
-        \Illuminate\Support\Facades\DB::listen(function (\Illuminate\Database\Events\QueryExecuted $query) {
+        DB::listen(function (QueryExecuted $query) {
             $sqlWithPlaceholders = str_replace(['%', '?'], ['%%', '%s'], $query->sql);
             $bindings            = $query->connection->prepareBindings($query->bindings);
             $pdo                 = $query->connection->getPdo();
             $realSql             = vsprintf($sqlWithPlaceholders, array_map([$pdo, 'quote'], $bindings));
             $duration            = $this->formatDuration($query->time / 1000);
-            \Illuminate\Support\Facades\Log::channel('sql')->debug(sprintf('[%s] %s | %s: %s', $duration, $realSql, request()->method(), request()->getRequestUri()));
+            Log::channel('sql')->debug(sprintf('[%s] %s | %s: %s', $duration, $realSql, request()->method(), request()->getRequestUri()));
         });
     }
 
