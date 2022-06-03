@@ -57,11 +57,8 @@ class PostFollowService
     {
         $postList = [];
         foreach ($posts as $post) {
-            // todo: 转换详情信息
-            // $postItem = $this->postSservice->postDetail($post->id, 'list', $this->dtoRequest->mapId, $this->dtoRequest->mapLng, $this->dtoRequest->mapLat);
-
+            $postItem = $this->postService->postDetail($post, 'list', $this->dtoRequest->mapId, $this->dtoRequest->mapLng, $this->dtoRequest->mapLat);
             $postItem['followType'] = $followType;
-            $postItem['pid'] = $post->pid;
 
             if ($callable) {
                 $postItem = $callable($post, $postItem);
@@ -96,7 +93,7 @@ class PostFollowService
         $postQueryHashtags = Post::whereNotIn('user_id', $followerUserIds)->whereNotIn('group_id', $followerGroupIds)->whereIn('id', $hashtagPostIds)->whereIn('digest_state', [2, 3])->latest();
 
         // 全站二级精华帖子
-        $postQuerySites = Post::whereNotIn('user_id', $followerUserIds)->whereNotIn('group_id', $followerGroupIds)->whereNotIn('id', $hashtagPostIds)->whereIn('digest_state', [2, 3])->latest();
+        $postQuerySites = Post::whereNotIn('user_id', $followerUserIds)->whereNotIn('group_id', $followerGroupIds)->whereNotIn('id', $hashtagPostIds)->where('digest_state', 3)->latest();
 
         // 查询数据
         $posts = $postQuerySites
@@ -137,7 +134,7 @@ class PostFollowService
             ->whereIn('user_id', $followerIds)
             ->beforeExpiredAtOrNotLimit($this->user)
             ->latest()
-            ->paginate();
+            ->paginate($this->dtoRequest->pageSize ?? 15);
 
         return $this->getPostList($posts, 'user');
     }
@@ -147,11 +144,10 @@ class PostFollowService
         $followerIds = $this->getFollowIdsByType(UserFollow::TYPE_GROUP);
 
         $posts = Post::query()
-            ->where('user_id', $this->userId)
             ->whereIn('group_id', $followerIds)
             ->beforeExpiredAtOrNotLimit($this->user)
             ->latest()
-            ->paginate();
+            ->paginate($this->dtoRequest->pageSize ?? 15);
 
         return $this->getPostList($posts, 'group');
     }
@@ -167,13 +163,10 @@ class PostFollowService
 
         $postQuery = Post::whereIn('id', $postIds);
 
-        $posts = Post::when($this->userId, function ($query, $userId) {
-            $query->where('user_id', $userId)->latest();
-        })
-            ->union($postQuery)
+        $posts = $postQuery
             ->beforeExpiredAtOrNotLimit($this->user)
             ->latest()
-            ->paginate();
+            ->paginate($this->dtoRequest->pageSize ?? 15);
 
         return $this->getPostList($posts, 'hashtag');
     }

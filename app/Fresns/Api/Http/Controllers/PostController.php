@@ -11,6 +11,7 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Models\Seo;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Plugin;
 use App\Helpers\AppHelper;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
@@ -31,6 +32,18 @@ class PostController extends Controller
     {
         $dtoRequest = new PostListDTO($request->all());
 
+        // Plugin provides data
+        if ($dtoRequest->contentType) {
+            $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByAll');
+
+            if ($dataPluginUnikey) {
+                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($dtoRequest->toArray());
+
+                return $fresnsResp->getOrigin();
+            }
+        }
+
+        // Fresns provides data
         $headers = AppHelper::getApiHeaders();
         $user = !empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
@@ -38,9 +51,9 @@ class PostController extends Controller
         $posts = $postQuery->paginate($request->get('pageSize', 15));
 
         $postList = [];
+        $service = new PostService();
         foreach ($posts as $post) {
-            $service = new PostService();
-            $postList[] = $service->postDetail($post->id, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+            $postList[] = $service->postDetail($post, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
@@ -48,14 +61,24 @@ class PostController extends Controller
 
     public function detail(string $pid, Request $request)
     {
-        $dtoRequest = new PostDetailDTO($request->all());
+        $requestData = $request->all();
+        $requestData['pid'] = $pid;
+        $dtoRequest = new PostFollowDTO($requestData);
 
+        // Plugin provides data
+        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_detail_service');
+        $dataPlugin = Plugin::where('unikey', $dataPluginUnikey)->isEnable()->first();
+
+        if ($dataPlugin) {
+            $fresnsResp = \FresnsCmdWord::plugin($dataPlugin->unikey)->getPostDetail($dtoRequest->toArray());
+
+            return $fresnsResp->getOrigin();
+        }
+
+        // Fresns provides data
         $headers = AppHelper::getApiHeaders();
 
         $post = Post::with('creator')->wherePid($pid)->first();
-        if (empty($post)) {
-            throw new ApiException(37300);
-        }
 
         $seoData = Seo::where('linked_type', 4)->where('linked_id', $post->id)->where('lang_tag', $headers['langTag'])->first();
         $common['title'] = $seoData->title ?? null;
@@ -64,7 +87,7 @@ class PostController extends Controller
         $data['commons'] = $common;
 
         $service = new PostService();
-        $data['detail'] = $service->postDetail($post->id, 'detail', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+        $data['detail'] = $service->postDetail($post, 'detail', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
 
         return $this->success($data);
     }
@@ -111,17 +134,18 @@ class PostController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new PostFollowDTO($requestData);
 
+        // Plugin provides data
         if ($dtoRequest->contentType) {
-            $extendPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByFollow');
+            $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByFollow');
 
-            if ($extendPluginUnikey) {
-                $fresnsResp = \FresnsCmdWord::plugin($extendPluginUnikey)->getPostByFollow($dtoRequest->toArray());
+            if ($dataPluginUnikey) {
+                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByFollow($dtoRequest->toArray());
 
                 return $fresnsResp->getOrigin();
             }
         }
 
-        // 主程序处理
+        // Fresns provides data
         $headers = AppHelper::getApiHeaders();
         $user = User::whereUid($headers['uid'])->first();
 
@@ -145,17 +169,18 @@ class PostController extends Controller
         $dtoRequest = new PostNearbyDTO($request->all());
         $headers = AppHelper::getApiHeaders();
 
+        // Plugin provides data
         if ($dtoRequest->contentType) {
-            $extendPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByNearby');
+            $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByNearby');
 
-            if ($extendPluginUnikey) {
-                $fresnsResp = \FresnsCmdWord::plugin($extendPluginUnikey)->getPostByNearby($dtoRequest->toArray());
+            if ($dataPluginUnikey) {
+                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByNearby($dtoRequest->toArray());
 
                 return $fresnsResp->getOrigin();
             }
         }
 
-        // 主程序处理
+        // Fresns provides data
         $nearbyConfig = ConfigHelper::fresnsConfigByItemKeys([
             'nearby_length_km',
             'nearby_length_mi',
@@ -180,9 +205,9 @@ class PostController extends Controller
             ->paginate();
 
         $postList = [];
+        $service = new PostService();
         foreach ($posts as $post) {
-            $service = new PostService();
-            $postList[] = $service->postDetail($post->id, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+            $postList[] = $service->postDetail($post, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());

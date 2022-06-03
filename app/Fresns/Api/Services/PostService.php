@@ -18,16 +18,15 @@ use App\Models\User;
 use App\Utilities\ExtendUtility;
 use App\Utilities\LbsUtility;
 use App\Utilities\PermissionUtility;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class PostService
 {
-    public function postDetail(int $postId, string $type, ?int $mapId = null, ?string $userLng = null, ?string $userLat = null)
+    public function postDetail(Post $post, string $type, ?int $mapId = null, ?string $userLng = null, ?string $userLat = null, ?Collection $hashtags = null)
     {
         $headers = AppHelper::getApiHeaders();
         $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
-
-        $post = Post::with('creator')->whereId($postId)->first();
 
         $postInfo = $post->getPostInfo($headers['langTag'], $headers['timezone']);
 
@@ -83,6 +82,22 @@ class PostService
         $item['attachCount'] = $attachCount;
 
         $item['group'] = $post->group?->getGroupInfo($headers['langTag']);
+        $item['hashtags'] = null;
+        if ($hashtags) {
+            foreach ($hashtags as $hashtag) {
+                $hashtagItem['hid'] = $hashtag->slug;
+                $hashtagItem['hname'] = $hashtag->name;
+                $hashtagItem['description'] = $hashtag->description;
+                $hashtagItem['cover'] = FileHelper::fresnsFileUrlByTableColumn($hashtag->cover_file_id, $hashtag->cover_file_url);
+                $hashtagItem['likeCount'] = $hashtag->like_count;
+                $hashtagItem['dislikeCount'] = $hashtag->dislike_count;
+                $hashtagItem['followCount'] = $hashtag->follow_count;
+                $hashtagItem['postCount'] = $hashtag->post_count;
+                $hashtagItem['commentCount'] = $hashtag->comment_count;
+                $hashtagItem['digestCount'] = $hashtag->digest_count;
+                $item['hashtag'][] = $hashtagItem;
+            }
+        }
 
         $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
         if (! $post->is_anonymous) {
