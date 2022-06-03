@@ -19,6 +19,7 @@ use App\Models\Tip;
 use App\Models\TipLinked;
 use App\Models\Extend;
 use App\Models\ExtendLinked;
+use App\Models\Plugin;
 
 class ExtendUtility
 {
@@ -75,9 +76,15 @@ class ExtendUtility
             return null;
         }
 
-        $extendPluginUnikey = $dataConfig[$dataType]['pluginUnikey'] ?? null;
+        $dataPluginUnikey = $dataConfig[$dataType]['pluginUnikey'] ?? null;
 
-        return $extendPluginUnikey;
+        $dataPlugin = Plugin::where('unikey', $dataPluginUnikey)->isEnable()->first();
+
+        if (empty($dataPlugin)) {
+            return null;
+        }
+
+        return $dataPlugin->unikey;
     }
 
     // get icons
