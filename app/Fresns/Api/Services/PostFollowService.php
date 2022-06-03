@@ -14,8 +14,10 @@ use App\Models\UserFollow;
 use App\Exceptions\ApiException;
 use App\Models\HashtagLinked;
 use App\Fresns\Api\Services\PostService;
+use App\Models\Hashtag;
 use App\Utilities\AppUtility;
 use App\Utilities\PermissionUtility;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class PostFollowService
@@ -53,11 +55,26 @@ class PostFollowService
         return $this->$method();
     }
 
-    public function getPostList($posts, ?string $followType = null, ?callable $callable = null)
+    public function getPostList($posts, ?string $followType = null, ?callable $callable = null, ?Collection $hashtagLinkeds = null)
     {
+        $hashtags = null;
+        if ($hashtagLinkeds?->isNotEmpty()) {
+            $hashtagIds = $hashtagLinkeds->pluck('hashtag_id')->toArray();
+
+            $hashtags = Hashtag::whereIn('id', $hashtagIds)->isEnable()->get();
+        }
+
+        
         $postList = [];
         foreach ($posts as $post) {
-            $postItem = $this->postService->postDetail($post, 'list', $this->dtoRequest->mapId, $this->dtoRequest->mapLng, $this->dtoRequest->mapLat);
+            $postHashtags = null;
+
+            if ($hashtags) {
+                $postHashtagIds = $hashtagLinkeds->where('linked_id', $post->id)->pluck('hashtag_id')->toArray();
+                $postHashtags = $hashtags->whereIn('id', $postHashtagIds);
+            }
+            
+            $postItem = $this->postService->postDetail($post, 'list', $this->dtoRequest->mapId, $this->dtoRequest->mapLng, $this->dtoRequest->mapLat, $postHashtags);
             $postItem['followType'] = $followType;
 
             if ($callable) {
@@ -89,7 +106,9 @@ class PostFollowService
 
         // 我关注的话题的二级精华帖子
         $followerIds = $this->getFollowIdsByType(UserFollow::TYPE_HASHTAG);
-        $hashtagPostIds = $this->getPostIdsByHashTag($followerIds);
+        $hashtagLinkeds = $this->getHashtagLinkedByFollowers($followerIds);
+        $hashtagPostIds = $hashtagLinkeds->pluck('linked_id')->toArray();
+        
         $postQueryHashtags = Post::whereNotIn('user_id', $followerUserIds)->whereNotIn('group_id', $followerGroupIds)->whereIn('id', $hashtagPostIds)->whereIn('digest_state', [2, 3])->latest();
 
         // 全站二级精华帖子
@@ -121,7 +140,7 @@ class PostFollowService
             $postItem['created_at'] = $post->created_at->toDateTimeString();
 
             return $postItem;
-        });
+        }, $hashtagLinkeds);
     }
 
     public function getUserFollow()
@@ -159,16 +178,16 @@ class PostFollowService
         // 获取话题下的所有帖子
         $followerIds = $this->getFollowIdsByType(UserFollow::TYPE_HASHTAG);
 
-        $postIds = $this->getPostIdsByHashTag($followerIds);
+        $hashtagLinkeds = $this->getHashtagLinkedByFollowers($followerIds);
+        $hashtagPostIds = $hashtagLinkeds->pluck('linked_id')->toArray();
 
-        $postQuery = Post::whereIn('id', $postIds);
-
-        $posts = $postQuery
+        $posts = Post::query()
+            ->whereIn('id', $hashtagPostIds)
             ->beforeExpiredAtOrNotLimit($this->user)
             ->latest()
             ->paginate($this->dtoRequest->pageSize ?? 15);
 
-        return $this->getPostList($posts, 'hashtag');
+        return $this->getPostList($posts, 'hashtag', null, $hashtagLinkeds);
     }
 
     protected function getFollowIdsByType(int $type)
@@ -182,8 +201,8 @@ class PostFollowService
             ->toArray();
     }
 
-    protected function getPostIdsByHashTag(array $followerIds)
+    protected function getHashtagLinkedByFollowers(array $followerIds)
     {
-        return HashtagLinked::whereIn('hashtag_id', $followerIds)->where('linked_type', HashtagLinked::TYPE_POST)->pluck('linked_id')->toArray();
+        return HashtagLinked::whereIn('hashtag_id', $followerIds)->where('linked_type', HashtagLinked::TYPE_POST)->get();
     }
 }
