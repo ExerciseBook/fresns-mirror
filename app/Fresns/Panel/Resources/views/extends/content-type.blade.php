@@ -148,7 +148,7 @@
                                             <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
                                         @endforeach
                                     </select>
-                                    <label for="floatingSelect">/api/fresns/post/lists</label>
+                                    <label for="floatingSelect">/api/v2/post/list</label>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <select class="form-select" id="floatingSelect" name="post_follow" aria-label="Floating label select example">
@@ -158,7 +158,7 @@
                                             <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
                                         @endforeach
                                     </select>
-                                    <label for="floatingSelect">/api/fresns/post/follows</label>
+                                    <label for="floatingSelect">/api/v2/post/follow</label>
                                 </div>
                                 <div class="form-floating">
                                     <select class="form-select" id="floatingSelect" name="post_nearby" aria-label="Floating label select example">
@@ -168,7 +168,7 @@
                                             <option value="{{ $plugin->unikey }}">{{ $plugin->name }}</option>
                                         @endforeach
                                     </select>
-                                    <label for="floatingSelect">/api/fresns/post/nearbys</label>
+                                    <label for="floatingSelect">/api/v2/post/nearby</label>
                                 </div>
                             </div>
                         </div>
