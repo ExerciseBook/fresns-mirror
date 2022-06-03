@@ -155,10 +155,10 @@ class AccountController extends Controller
         $data['sessionToken'] = $token;
 
         // get account data
-        $accountId = PrimaryHelper::fresnsAccountIdByAid($fresnsTokenResponse->getData('aid'));
+        $account = Account::whereAid($fresnsTokenResponse->getData('aid'))->first();
 
         $service = new AccountService();
-        $data['detail'] = $service->accountData($accountId);
+        $data[] = $service->accountData($account);
 
         return $this->success($data);
     }
@@ -209,10 +209,10 @@ class AccountController extends Controller
         $data['sessionToken'] = $token;
 
         // get account data
-        $accountId = PrimaryHelper::fresnsAccountIdByAid($fresnsTokenResponse->getData('aid'));
+        $account = Account::whereAid($fresnsTokenResponse->getData('aid'))->first();
 
         $service = new AccountService();
-        $data['detail'] = $service->accountData($accountId);
+        $data[] = $service->accountData($account);
 
         return $this->success($data);
     }
@@ -288,13 +288,13 @@ class AccountController extends Controller
     {
         $headers = AppHelper::getApiHeaders();
 
-        $accountId = PrimaryHelper::fresnsAccountIdByAid($headers['aid']);
-        if (empty($accountId)) {
+        $account = Account::whereAid($headers['aid'])->first();
+        if (empty($account)) {
             throw new ApiException(31502);
         }
 
         $service = new AccountService();
-        $data['detail'] = $service->accountData($accountId);
+        $data = $service->accountData($account);
 
         return $this->success($data);
     }

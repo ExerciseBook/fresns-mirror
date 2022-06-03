@@ -58,8 +58,8 @@ Route::prefix('v2')->group(function () {
         Route::get('verify-identity', [AccountController::class, 'verifyIdentity'])->name('account.verifyIdentity');
         Route::put('edit', [AccountController::class, 'edit'])->name('account.edit');
         Route::delete('logout', [AccountController::class, 'logout'])->name('account.logout');
-        Route::patch('apply-delete', [AccountController::class, 'applyDelete'])->name('account.applyDelete');
-        Route::patch('revoke-delete', [AccountController::class, 'revokeDelete'])->name('account.revokeDelete');
+        Route::post('apply-delete', [AccountController::class, 'applyDelete'])->name('account.applyDelete');
+        Route::post('revoke-delete', [AccountController::class, 'revokeDelete'])->name('account.revokeDelete');
     });
 
     Route::prefix('user')->group(function () {
@@ -68,7 +68,7 @@ Route::prefix('v2')->group(function () {
         Route::get('{uidOrUsername}/interactive/{type}', [UserController::class, 'interactive'])->name('user.interactive');
         Route::get('{uidOrUsername}/mark/{type}', [UserController::class, 'markList'])->name('user.markList');
         Route::post('auth', [UserController::class, 'auth'])->name('user.auth');
-        Route::get('overview', [UserController::class, 'overview'])->name('user.overview');
+        Route::get('panel', [UserController::class, 'panel'])->name('user.panel');
         Route::put('edit', [UserController::class, 'edit'])->name('user.edit');
         Route::post('mark', [UserController::class, 'mark'])->name('user.mark');
     });

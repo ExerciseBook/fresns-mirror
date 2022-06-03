@@ -12,13 +12,13 @@ use App\Helpers\AppHelper;
 use App\Helpers\InteractiveHelper;
 use App\Utilities\ExtendUtility;
 use App\Models\Account;
+use App\Models\PluginUsage;
 
 class AccountService
 {
-    public function accountDetail(int $accountId)
+    public function accountDetail(Account $account)
     {
         $headers = AppHelper::getApiHeaders();
-        $account = Account::whereId($accountId)->first();
 
         $userArr = $account->users;
         $userList = null;
@@ -41,20 +41,16 @@ class AccountService
         return $detail;
     }
 
-    public function accountData(int $accountId)
+    public function accountData(Account $account)
     {
         $headers = AppHelper::getApiHeaders();
 
-        $common['walletRecharges'] = ExtendUtility::getPluginExtends(1, null, null, $accountId, $headers['langTag']);
-        $common['walletWithdraws'] = ExtendUtility::getPluginExtends(2, null, null, $accountId, $headers['langTag']);
+        $common['walletRecharges'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_WALLET_RECHARGE, null, null, $account->id, $headers['langTag']);
+        $common['walletWithdraws'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_WALLET_WITHDRAW, null, null, $account->id, $headers['langTag']);
         $data['commons'] = $common;
 
-        $token['token'] = null;
-        $token['expiredTime'] = null;
-        $data['sessionToken'] = $token;
-
         $service = new AccountService();
-        $data['detail'] = $service->accountDetail($accountId);
+        $data['detail'] = $service->accountDetail($account);
 
         return $data;
     }
