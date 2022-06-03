@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v2')->group(function () {
     Route::prefix('global')->group(function () {
         Route::get('configs', [GlobalController::class, 'configs'])->name('global.configs');
-        Route::get('upload-token', [GlobalController::class, 'uploadToken'])->name('common.uploadToken');
+        Route::get('upload-token', [GlobalController::class, 'uploadToken'])->name('global.uploadToken');
         Route::get('roles', [GlobalController::class, 'roles'])->name('global.roles');
         Route::get('maps', [GlobalController::class, 'maps'])->name('global.maps');
         Route::get('content-type', [GlobalController::class, 'contentType'])->name('global.contentType');
@@ -66,28 +66,25 @@ Route::prefix('v2')->group(function () {
         Route::get('list', [UserController::class, 'list'])->name('user.list');
         Route::get('{uidOrUsername}/detail', [UserController::class, 'detail'])->name('user.detail');
         Route::get('{uidOrUsername}/interactive/{type}', [UserController::class, 'interactive'])->name('user.interactive');
-        Route::get('{uidOrUsername}/mark/{markType}/{objectType}', [UserController::class, 'markList'])->name('user.markList');
+        Route::get('{uidOrUsername}/mark/{type}', [UserController::class, 'markList'])->name('user.markList');
         Route::post('auth', [UserController::class, 'auth'])->name('user.auth');
         Route::get('overview', [UserController::class, 'overview'])->name('user.overview');
         Route::put('edit', [UserController::class, 'edit'])->name('user.edit');
         Route::post('mark', [UserController::class, 'mark'])->name('user.mark');
-        Route::delete('delete/{type}/{fsid}', [UserController::class, 'delete'])->name('user.delete');
     });
 
     Route::prefix('notify')->group(function () {
         Route::get('{type}/list', [NotifyController::class, 'list'])->name('notify.list');
-        Route::put('{type}/read', [NotifyController::class, 'read'])->name('notify.read');
-        Route::patch('read/{notifyId}', [NotifyController::class, 'readById'])->name('notify.readById');
-        Route::delete('delete/{notifyIds}', [NotifyController::class, 'delete'])->name('notify.delete');
+        Route::put('mark-as-read', [NotifyController::class, 'markAsRead'])->name('notify.read');
+        Route::delete('delete', [NotifyController::class, 'delete'])->name('notify.delete');
     });
 
     Route::prefix('dialog')->group(function () {
         Route::get('list', [DialogController::class, 'list'])->name('dialog.list');
         Route::get('{dialogId}/messages', [DialogController::class, 'messages'])->name('dialog.messages');
-        Route::patch('{dialogId}/read', [DialogController::class, 'read'])->name('dialog.read');
-        Route::post('send', [DialogController::class, 'send'])->name('dialog.send');
-        Route::delete('delete/{dialogId}', [DialogController::class, 'delete'])->name('dialog.delete');
-        Route::delete('delete-message/{messageId}', [DialogController::class, 'deleteMessage'])->name('dialog.deleteMessage');
+        Route::post('send-message', [DialogController::class, 'sendMessage'])->name('dialog.sendMessage');
+        Route::put('mark-as-read', [DialogController::class, 'markAsRead'])->name('dialog.read');
+        Route::delete('delete', [DialogController::class, 'delete'])->name('dialog.delete');
     });
 
     Route::prefix('group')->group(function () {
@@ -105,33 +102,43 @@ Route::prefix('v2')->group(function () {
 
     Route::prefix('post')->group(function () {
         Route::get('list', [PostController::class, 'list'])->name('post.list');
-        Route::get('logs', [PostController::class, 'logs'])->name('post.logs');
         Route::get('{pid}/detail', [PostController::class, 'detail'])->name('post.detail');
         Route::get('{pid}/interactive/{type}', [PostController::class, 'interactive'])->name('post.interactive');
-        Route::get('{pid}/logs', [PostController::class, 'postLogs'])->name('post.postLogs');
         Route::get('{pid}/user-list', [PostController::class, 'userList'])->name('post.userList');
+        Route::get('{pid}/logs', [PostController::class, 'postLogs'])->name('post.logs');
+        Route::get('log/{logId}/detail', [PostController::class, 'logDetail'])->name('post.log.detail');
+        Route::delete('{pid}', [PostController::class, 'delete'])->name('post.delete');
         Route::get('follow/{type}', [PostController::class, 'follow'])->name('post.follow');
         Route::get('nearby', [PostController::class, 'nearby'])->name('post.nearby');
-        Route::get('log/{logId}/detail', [PostController::class, 'logDetail'])->name('post.logDetail');
     });
 
     Route::prefix('comment')->group(function () {
         Route::get('list', [CommentController::class, 'list'])->name('comment.list');
-        Route::get('logs', [CommentController::class, 'logs'])->name('comment.logs');
         Route::get('{cid}/detail', [CommentController::class, 'detail'])->name('comment.detail');
         Route::get('{cid}/interactive/{type}', [CommentController::class, 'interactive'])->name('comment.interactive');
-        Route::get('{cid}/logs', [CommentController::class, 'commentLogs'])->name('comment.commentLogs');
-        Route::get('log/{logId}/detail', [CommentController::class, 'logDetail'])->name('comment.logDetail');
+        Route::get('{cid}/logs', [CommentController::class, 'commentLogs'])->name('comment.logs');
+        Route::get('log/{logId}/detail', [CommentController::class, 'logDetail'])->name('comment.log.detail');
+        Route::delete('{cid}', [CommentController::class, 'delete'])->name('comment.delete');
     });
 
     Route::prefix('editor')->group(function () {
         Route::post('publish', [EditorController::class, 'publish'])->name('editor.publish');
         Route::get('{type}/config', [EditorController::class, 'config'])->name('editor.config');
-        Route::post('create', [EditorController::class, 'create'])->name('editor.create');
-        Route::get('{type}/{logId}/detail', [EditorController::class, 'detail'])->name('editor.detail');
-        Route::put('{type}/{logId}/update', [EditorController::class, 'update'])->name('editor.update');
+        // post editor
+        Route::post('post/create', [EditorController::class, 'postCreate'])->name('editor.post.create');
+        Route::get('post/logs', [EditorController::class, 'postLogs'])->name('editor.post.logs');
+        Route::get('post/{logId}/detail', [EditorController::class, 'postDetail'])->name('editor.post.detail');
+        Route::put('post/{logId}/update', [EditorController::class, 'postUpdate'])->name('editor.post.update');
+        Route::post('post/{logId}/revoke', [EditorController::class, 'postRevoke'])->name('editor.post.revoke');
+        Route::delete('post/{logId}/delete', [EditorController::class, 'postDelete'])->name('editor.post.delete');
+        // comment editor
+        Route::post('comment/create', [EditorController::class, 'commentCreate'])->name('editor.comment.create');
+        Route::get('comment/logs', [EditorController::class, 'commentLogs'])->name('editor.comment.logs');
+        Route::get('comment/{logId}/detail', [EditorController::class, 'commentDetail'])->name('editor.comment.detail');
+        Route::put('comment/{logId}/update', [EditorController::class, 'commentUpdate'])->name('editor.comment.update');
+        Route::post('comment/{logId}/revoke', [EditorController::class, 'commentRevoke'])->name('editor.comment.revoke');
+        Route::delete('comment/{logId}/delete', [EditorController::class, 'commentDelete'])->name('editor.comment.delete');
+        // submit
         Route::post('submit', [EditorController::class, 'submit'])->name('editor.submit');
-        Route::patch('revoke/{type}/{logId}', [EditorController::class, 'revokeSubmit'])->name('editor.revokeSubmit');
-        Route::delete('delete/{type}/{logId}', [EditorController::class, 'delete'])->name('editor.delete');
     });
 });
