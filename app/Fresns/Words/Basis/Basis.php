@@ -240,8 +240,8 @@ class Basis
             return $this->success();
         } else {
             return $this->failure(
-                33103,
-                ConfigUtility::getCodeMessage(33103, 'Fresns', $langTag),
+                33104,
+                ConfigUtility::getCodeMessage(33104, 'Fresns', $langTag),
             );
         }
     }

@@ -13,17 +13,16 @@ use App\Fresns\Words\Account\DTO\CreateSessionTokenDTO;
 use App\Fresns\Words\Account\DTO\LogicalDeletionAccountDTO;
 use App\Fresns\Words\Account\DTO\VerifyAccountDTO;
 use App\Fresns\Words\Account\DTO\VerifySessionTokenDTO;
+use App\Helpers\DateHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\Account as AccountModel;
 use App\Models\AccountConnect;
 use App\Models\AccountWallet;
 use App\Models\SessionToken;
-use App\Models\VerifyCode;
 use App\Utilities\ConfigUtility;
 use App\Utilities\PermissionUtility;
 use Fresns\CmdWordManager\Exceptions\Constants\ExceptionConstant;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class Account
@@ -79,6 +78,7 @@ class Account
         };
         $inputArr['aid'] = \Str::random(12);
         $inputArr['password'] = isset($dtoWordBody->password) ? Hash::make($dtoWordBody->password) : null;
+        $inputArr['last_login_at'] = DateHelper::fresnsDatabaseCurrentDateTime();
 
         $accountId = AccountModel::insertGetId($inputArr);
 
@@ -131,26 +131,24 @@ class Account
         }
 
         if (empty($dtoWordBody->password)) {
-            $checkCode = [
+            $codeWordBody = [
                 'type' => $dtoWordBody->type,
-                'account' => $accountName,
-                'code' => $dtoWordBody->verifyCode,
-                'is_enable' => 1,
+                'account' => $dtoWordBody->account,
+                'countryCode' => $dtoWordBody->countryCode,
+                'verifyCode' => $dtoWordBody->verifyCode,
             ];
 
-            $verifyCode = VerifyCode::where($checkCode)->where('expired_at', '>', date('Y-m-d H:i:s'))->first();
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
 
-            if ($verifyCode) {
-                VerifyCode::where('id', $verifyCode->id)->update([
-                    'is_enable' => 0,
+            if ($fresnsResp->isErrorResponse()) {
+                return $fresnsResp->getOrigin();
+            }
+
+            if ($fresnsResp->isSuccessResponse()) {
+                return $this->success([
+                    'type' => $account->type,
+                    'aid' => $account->aid,
                 ]);
-
-                return $this->success();
-            } else {
-                return $this->failure(
-                    33103,
-                    ConfigUtility::getCodeMessage(33103, 'Fresns', $langTag),
-                );
             }
         }
 
@@ -160,6 +158,10 @@ class Account
                 ConfigUtility::getCodeMessage(34304, 'Fresns', $langTag),
             );
         }
+
+        $account->update([
+            'last_login_at' => DateHelper::fresnsDatabaseCurrentDateTime(),
+        ]);
 
         return $this->success([
             'type' => $account->type,
