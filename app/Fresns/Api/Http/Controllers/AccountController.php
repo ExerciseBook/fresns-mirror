@@ -8,9 +8,12 @@
 
 namespace App\Fresns\Api\Http\Controllers;
 
+use App\Fresns\Api\Http\DTO\AccountApplyDeleteDTO;
+use App\Fresns\Api\Http\DTO\AccountEditDTO;
 use App\Fresns\Api\Http\DTO\AccountLoginDTO;
 use App\Fresns\Api\Http\DTO\AccountRegisterDTO;
 use App\Fresns\Api\Http\DTO\AccountResetPasswordDTO;
+use App\Fresns\Api\Http\DTO\AccountVerifyIdentityDTO;
 use App\Fresns\Api\Http\DTO\AccountWalletLogsDTO;
 use App\Helpers\AppHelper;
 use App\Helpers\DateHelper;
@@ -19,8 +22,11 @@ use App\Exceptions\ApiException;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\Account;
+use App\Models\AccountConnect;
+use App\Models\AccountWallet;
 use App\Models\AccountWalletLog;
 use App\Models\SessionToken;
+use App\Models\VerifyCode;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -330,6 +336,190 @@ class AccountController extends Controller
         return $this->fresnsPaginate($logList, $walletLogs->total(), $walletLogs->perPage());
     }
 
+    // verifyIdentity
+    public function verifyIdentity(Request $request)
+    {
+        $dtoRequest = new AccountVerifyIdentityDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        if ($dtoRequest->type == 'email') {
+            $account = Account::whereAid($headers['aid'])->value('email');
+        } else {
+            $account = Account::whereAid($headers['aid'])->value('phone');
+        }
+
+        $codeType = match ($dtoRequest->type) {
+            'email' => 1,
+            'sms' => 2,
+        };
+
+        $term = [
+            'type' => $codeType,
+            'account' => $account,
+            'code' => $dtoRequest->verifyCode,
+            'is_enable' => 1,
+        ];
+        $verifyInfo = VerifyCode::where($term)->where('expired_at', '>', date('Y-m-d H:i:s'))->first();
+
+        if (! $verifyInfo) {
+            throw new ApiException(33104);
+        }
+
+        return $this->success();
+    }
+
+    // edit
+    public function edit(Request $request)
+    {
+        $dtoRequest = new AccountEditDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $account = Account::whereAid($headers['aid'])->first();
+
+        // check code
+        if ($dtoRequest->verifyCode) {
+            if ($dtoRequest->codeType == 'email') {
+                $codeWordBody = [
+                    'type' => 1,
+                    'account' => $account->email,
+                    'countryCode' => null,
+                    'verifyCode' => $dtoRequest->verifyCode,
+                ];
+            } else {
+                $codeWordBody = [
+                    'type' => 2,
+                    'account' => $account->pure_phone,
+                    'countryCode' => $account->country_code,
+                    'verifyCode' => $dtoRequest->verifyCode,
+                ];
+            }
+
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+
+            if ($fresnsResp->isErrorResponse()) {
+                return $fresnsResp->getOrigin();
+            }
+        }
+
+        // edit email
+        if ($dtoRequest->editEmail) {
+            if ($account->email && empty($dtoRequest->verifyCode)) {
+                throw new ApiException(33103);
+            }
+
+            $codeWordBody = [
+                'type' => 1,
+                'account' => $dtoRequest->editEmail,
+                'countryCode' => null,
+                'verifyCode' => $dtoRequest->newVerifyCode,
+            ];
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+
+            if ($fresnsResp->isErrorResponse()) {
+                return $fresnsResp->getOrigin();
+            }
+
+            $checkEmail = Account::where('email', $dtoRequest->editEmail)->first();
+            if ($checkEmail) {
+                throw new ApiException(34205);
+            }
+
+            $account->update([
+                'email' => $dtoRequest->editEmail,
+            ]);
+        }
+
+        // edit phone
+        if ($dtoRequest->editPhone) {
+            if ($account->phone && empty($dtoRequest->verifyCode)) {
+                throw new ApiException(33103);
+            }
+
+            $codeWordBody = [
+                'type' => 2,
+                'account' => $dtoRequest->editPhone,
+                'countryCode' => $dtoRequest->editCountryCode,
+                'verifyCode' => $dtoRequest->newVerifyCode,
+            ];
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+
+            if ($fresnsResp->isErrorResponse()) {
+                return $fresnsResp->getOrigin();
+            }
+
+            $newPhone = $dtoRequest->editCountryCode.$dtoRequest->editPhone;
+            $checkPhone = Account::where('phone', $newPhone)->first();
+            if ($checkPhone) {
+                throw new ApiException(34206);
+            }
+
+            $account->update([
+                'country_code' => $dtoRequest->editCountryCode,
+                'pure_phone' => $dtoRequest->editPhone,
+                'phone' => $newPhone,
+            ]);
+        }
+
+        // edit password
+        if ($dtoRequest->editPassword) {
+            if (empty($dtoRequest->password) && empty($dtoRequest->verifyCode)) {
+                throw new ApiException(34110);
+            }
+
+            if ($dtoRequest->password) {
+                $password = base64_decode($dtoRequest->password, true);
+
+                if (! Hash::check($password, $account->password)) {
+                    throw new ApiException(34304);
+                }
+            }
+
+            $newPassword = base64_decode($dtoRequest->editPassword, true);
+            $account->update([
+                'password' => Hash::make($newPassword),
+            ]);
+        }
+
+        // edit wallet password
+        if ($dtoRequest->editWalletPassword) {
+            if (empty($dtoRequest->walletPassword) && empty($dtoRequest->verifyCode)) {
+                throw new ApiException(34110);
+            }
+
+            $wallet = AccountWallet::where('account_id', $account->id)->first();
+            if (empty($wallet)) {
+                throw new ApiException(34501);
+            }
+
+            if ($dtoRequest->walletPassword) {
+                $walletPassword = base64_decode($dtoRequest->walletPassword, true);
+
+                if (! Hash::check($walletPassword, $wallet->password)) {
+                    throw new ApiException(34502);
+                }
+            }
+
+            $newWalletPassword = base64_decode($dtoRequest->editWalletPassword, true);
+            $wallet->update([
+                'password' => Hash::make($newWalletPassword),
+            ]);
+        }
+
+        // delete connect info
+        if ($dtoRequest->deleteConnectInfo) {
+            AccountConnect::where('account_id', $account->id)->where('connect_id', $dtoRequest->deleteConnectInfo)->forceDelete();
+        }
+
+        // edit last login time
+        if ($dtoRequest->editLastLoginTime) {
+            $account->update([
+                'last_login_at' => DateHelper::fresnsDatabaseCurrentDateTime(),
+            ]);
+        }
+
+        return $this->success();
+    }
+
     // logout
     public function logout()
     {
@@ -346,5 +536,74 @@ class AccountController extends Controller
         SessionToken::where($condition)->forceDelete();
 
         return $this->success();
+    }
+
+    // applyDelete
+    public function applyDelete(Request $request)
+    {
+        $dtoRequest = new AccountApplyDeleteDTO($request->all());
+        $headers = AppHelper::getApiHeaders();
+
+        $account = Account::whereAid($headers['aid'])->first();
+        $todoDay = ConfigHelper::fresnsConfigByItemKey('delete_account_todo');
+        $dbDateTime = DateHelper::fresnsDatabaseCurrentDateTime();
+        $todoTime = date('Y-m-d H:i:s', strtotime("$dbDateTime +$todoDay day"));
+
+        if ($dtoRequest->password) {
+            $password = base64_decode($dtoRequest->password, true);
+
+            if (! Hash::check($password, $account->password)) {
+                throw new ApiException(34304);
+            }
+
+            $account->update([
+                'wait_delete' => 1,
+                'wait_delete_at' => $todoTime,
+            ]);
+        } else {
+            if ($dtoRequest->codeType == 'email') {
+                $codeWordBody = [
+                    'type' => 1,
+                    'account' => $account->email,
+                    'countryCode' => null,
+                    'verifyCode' => $dtoRequest->verifyCode,
+                ];
+            } else {
+                $codeWordBody = [
+                    'type' => 2,
+                    'account' => $account->pure_phone,
+                    'countryCode' => $account->country_code,
+                    'verifyCode' => $dtoRequest->verifyCode,
+                ];
+            }
+
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+            if ($fresnsResp->isErrorResponse()) {
+                return $fresnsResp->getOrigin();
+            }
+
+            $account->update([
+                'wait_delete' => 1,
+                'wait_delete_at' => $todoTime,
+            ]);
+        }
+
+        return $this->success([
+            'day' => $todoDay,
+            'dateTime' => DateHelper::fresnsDateTimeByTimezone($todoTime, $headers['timezone'], $headers['langTag']),
+        ]);
+    }
+
+    // revokeDelete
+    public function revokeDelete()
+    {
+        $headers = AppHelper::getApiHeaders();
+
+        $account = Account::whereAid($headers['aid'])->first();
+
+        $account->update([
+            'wait_delete' => 0,
+            'wait_delete_at' => null,
+        ]);
     }
 }

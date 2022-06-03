@@ -20,16 +20,16 @@ class AccountEditDTO extends DTO
         return [
             'codeType' => ['string', 'nullable', 'in:email,phone'],
             'verifyCode' => ['string', 'nullable'],
-            'newVerifyCode' => ['string', 'nullable'],
-            'editEmail' => ['string', 'nullable'],
+            'newVerifyCode' => ['string', 'nullable', 'required_with:editEmail', 'required_with:editPhone'],
+            'editEmail' => ['email', 'nullable'],
             'editPhone' => ['integer', 'nullable'],
             'editCountryCode' => ['integer', 'nullable', 'required_with:editPhone'],
             'password' => ['string', 'nullable'],
             'editPassword' => ['string', 'nullable'],
             'walletPassword' => ['string', 'nullable'],
             'editWalletPassword' => ['string', 'nullable'],
-            'deleteConnect' => ['integer', 'nullable', 'between:1,17'],
-            'editLastLoginTime' => ['string', 'nullable', 'date_format:"Y-m-d H:i:s"'],
+            'deleteConnectInfo' => ['integer', 'nullable', 'between:1,17'],
+            'editLastLoginTime' => ['boolean', 'nullable'],
         ];
     }
 }
