@@ -17,14 +17,14 @@ class AccountService
 {
     public function accountDetail(Account $account, string $langTag, string $timezone)
     {
-        $headers = HeaderService::getHeaders();
-
         $userArr = $account->users;
         $userList = null;
         foreach ($userArr as $user) {
             $userProfile = $user->getUserProfile($langTag, $timezone);
             $userMainRole = $user->getUserMainRole($langTag, $timezone);
-            $userList[] = array_merge($userProfile, $userMainRole);
+            $userStats['stats'] = $user->getUserStats($langTag);
+
+            $userList[] = array_merge($userProfile, $userMainRole, $userStats);
         }
 
         $accountInfo = $account->getAccountInfo($langTag, $timezone);
@@ -32,12 +32,11 @@ class AccountService
         $item['connects'] = $account->getAccountConnects();
         $item['wallet'] = $account->getAccountWallet($langTag);
         $item['users'] = $userList;
+        $item['interactive'] = InteractiveHelper::fresnsUserInteractive($langTag);
 
-        $userInteractive = InteractiveHelper::fresnsUserInteractive($langTag);
+        $data = array_merge($accountInfo, $item);
 
-        $detail = array_merge($accountInfo, $item, $userInteractive);
-
-        return $detail;
+        return $data;
     }
 
     public function accountData(Account $account, string $langTag, string $timezone)
