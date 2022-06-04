@@ -200,8 +200,13 @@ class Basis
         } else {
             $pluginUniKey = ConfigHelper::fresnsConfigByItemKey('send_sms_service');
         }
+
+        $langTag = \request()->header('langTag', config('app.locale'));
         if (empty($pluginUniKey)) {
-            ExceptionConstant::getHandleClassByCode(ExceptionConstant::PLUGIN_CONFIG_ERROR)::throw();
+            return $this->failure(
+                32100,
+                ConfigUtility::getCodeMessage(32100, 'Fresns', $langTag),
+            );
         }
 
         return \FresnsCmdWord::plugin($pluginUniKey)->sendCode($wordBody);
