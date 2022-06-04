@@ -180,6 +180,11 @@ trait UserServiceTrait
         $stats['likeHashtagCount'] = $statsData->like_hashtag_count;
         $stats['likePostCount'] = $statsData->like_post_count;
         $stats['likeCommentCount'] = $statsData->like_comment_count;
+        $stats['dislikeUserCount'] = $statsData->dislike_user_count;
+        $stats['dislikeGroupCount'] = $statsData->dislike_group_count;
+        $stats['dislikeHashtagCount'] = $statsData->dislike_hashtag_count;
+        $stats['dislikePostCount'] = $statsData->dislike_post_count;
+        $stats['dislikeCommentCount'] = $statsData->dislike_comment_count;
         $stats['followUserCount'] = $statsData->follow_user_count;
         $stats['followGroupCount'] = $statsData->follow_group_count;
         $stats['followHashtagCount'] = $statsData->follow_hashtag_count;
@@ -195,8 +200,10 @@ trait UserServiceTrait
         $stats['blockMeCount'] = $statsData->block_me_count;
         $stats['postPublishCount'] = $statsData->post_publish_count;
         $stats['postLikeCount'] = $statsData->post_like_count;
+        $stats['postDislikeCount'] = $statsData->post_dislike_count;
         $stats['commentPublishCount'] = $statsData->comment_publish_count;
         $stats['commentLikeCount'] = $statsData->comment_like_count;
+        $stats['commentDislikeCount'] = $statsData->comment_dislike_count;
         $stats['extcredits1'] = $statsData->extcredits1;
         $stats['extcredits1Status'] = $extcredits['extcredits1_status'];
         $stats['extcredits1Name'] = $extcredits['extcredits1_name'];
