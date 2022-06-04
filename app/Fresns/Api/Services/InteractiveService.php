@@ -82,7 +82,7 @@ class InteractiveService
             return false;
         }
 
-        $checkBlock = UserFollow::where('user_id', $authUserId)
+        $checkBlock = UserBlock::where('user_id', $authUserId)
             ->type($blockType)
             ->where('block_id', $blockId)
             ->first();
@@ -97,6 +97,10 @@ class InteractiveService
     public static function checkUserFollowMe(int $userId, ?int $authUserId = null): bool
     {
         if (empty($authUserId)) {
+            return false;
+        }
+
+        if ($userId == $authUserId) {
             return false;
         }
 
