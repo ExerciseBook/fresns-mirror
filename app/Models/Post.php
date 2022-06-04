@@ -8,7 +8,6 @@
 
 namespace App\Models;
 
-use App\Utilities\AppUtility;
 use App\Utilities\PermissionUtility;
 
 class Post extends Model
@@ -49,6 +48,11 @@ class Post extends Model
     public function group()
     {
         return $this->belongsTo(Group::class, 'group_id', 'id');
+    }
+
+    public function hashtags()
+    {
+        return $this->morphToMany(Hashtag::class, 'HashtagLinked');
     }
 
     public function users()

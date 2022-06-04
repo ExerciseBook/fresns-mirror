@@ -11,6 +11,7 @@ namespace App\Models\Traits;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
+use App\Models\GroupAdmin;
 use App\Models\User;
 
 trait GroupServiceTrait
@@ -42,16 +43,14 @@ trait GroupServiceTrait
 
     public function getGroupAdmins(?string $langTag = null, ?string $timezone = null)
     {
-        $adminIds = $this->admins;
+        $groupData = $this;
 
-        $adminUsers = User::whereIn('id', $adminIds->pluck('user_id'))->first();
+        $admins = GroupAdmin::with('user')->where('group_id', $groupData->id)->get();
 
         $adminList = null;
-        foreach ($adminIds as $groupAdmin) {
-            $admin = $adminUsers->where('id', $groupAdmin->user_id)?->first();
-
-            $userProfile = $admin->getUserProfile($timezone);
-            $userMainRole = $admin->getUserMainRole($langTag, $timezone);
+        foreach ($admins as $admin) {
+            $userProfile = $admin->user->getUserProfile($timezone);
+            $userMainRole = $admin->user->getUserMainRole($langTag, $timezone);
 
             $adminList[] = array_merge($userProfile, $userMainRole);
         }

@@ -39,6 +39,6 @@ class User extends Model
 
     public function roles()
     {
-        return $this->hasMany(UserRole::class);
+        return $this->belongsToMany(Role::class, 'user_roles', 'role_id');
     }
 }

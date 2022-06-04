@@ -8,6 +8,7 @@
 
 namespace App\Models\Traits;
 
+use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
@@ -61,6 +62,7 @@ trait PostServiceTrait
         $location['poi'] = $appendData->map_poi;
         $location['poiId'] = $appendData->map_poi_id;
         $location['distance'] = null;
+        $location['unit'] = ConfigHelper::fresnsConfigLengthUnit($langTag);
 
         $info['location'] = $location;
 
