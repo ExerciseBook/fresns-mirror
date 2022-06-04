@@ -16,7 +16,7 @@ use App\Fresns\Api\Http\DTO\CommonSendVerifyCodeDTO;
 use App\Fresns\Api\Http\DTO\CommonUploadFileDTO;
 use App\Fresns\Api\Http\DTO\CommonUploadLogDTO;
 use App\Fresns\Api\Services\AccountService;
-use App\Helpers\AppHelper;
+use App\Fresns\Api\Services\HeaderService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\LanguageHelper;
@@ -41,7 +41,7 @@ class CommonController extends Controller
     public function inputTips(Request $request)
     {
         $dtoRequest = new CommonInputTipsDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         switch ($dtoRequest->type) {
             // user
@@ -176,7 +176,7 @@ class CommonController extends Controller
     public function callbacks(Request $request)
     {
         $dtoRequest = new CommonCallbacksDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $plugin = Plugin::whereUnikey($dtoRequest->unikey)->first();
         if (empty($plugin)) {
@@ -255,7 +255,7 @@ class CommonController extends Controller
     public function sendVerifyCode(Request $request)
     {
         $dtoRequest = new CommonSendVerifyCodeDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $sendService = ConfigHelper::fresnsConfigByItemKeys([
             'send_email_service',
@@ -347,7 +347,7 @@ class CommonController extends Controller
     public function uploadLog(Request $request)
     {
         $dtoRequest = new CommonUploadLogDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $wordBody = [
             'type' => $dtoRequest->type,
@@ -373,7 +373,7 @@ class CommonController extends Controller
     public function uploadFile(Request $request)
     {
         $dtoRequest = new CommonUploadFileDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $fileType = match ($dtoRequest->type) {
             'image' => 1,
@@ -381,6 +381,12 @@ class CommonController extends Controller
             'audio' => 3,
             'document' => 4,
         };
+
+        $storageConfig = FileHelper::fresnsFileStorageConfigByType($fileType);
+
+        if (! $storageConfig['storageConfigStatus']) {
+            throw new ApiException(32100);
+        }
 
         switch ($dtoRequest->uploadMode) {
             case 'file':
@@ -398,7 +404,7 @@ class CommonController extends Controller
                     'moreJson' => $dtoRequest->moreJson,
                 ];
 
-                return \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
+                return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFile($wordBody);
             break;
 
             case 'fileInfo':
@@ -415,17 +421,16 @@ class CommonController extends Controller
                     'fileInfo' => $dtoRequest->fileInfo,
                 ];
 
-                return \FresnsCmdWord::plugin('Fresns')->uploadFileInfo($wordBody);
+                return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFileInfo($wordBody);
             break;
         }
-
     }
 
     // download file
     public function downloadFile(string $fid, Request $request)
     {
         $dtoRequest = new CommonDownloadFileDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $file = File::whereFid($fid)->first();
         if (empty($file)) {
@@ -460,7 +465,7 @@ class CommonController extends Controller
     public function downloadUsers(string $fid, Request $request)
     {
         $dtoRequest = new CommonDownloadUsersDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $file = File::whereFid($fid)->first();
         if (empty($file)) {

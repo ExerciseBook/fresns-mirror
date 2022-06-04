@@ -15,10 +15,10 @@ use App\Fresns\Api\Http\DTO\AccountRegisterDTO;
 use App\Fresns\Api\Http\DTO\AccountResetPasswordDTO;
 use App\Fresns\Api\Http\DTO\AccountVerifyIdentityDTO;
 use App\Fresns\Api\Http\DTO\AccountWalletLogsDTO;
-use App\Helpers\AppHelper;
 use App\Helpers\DateHelper;
 use App\Fresns\Api\Services\AccountService;
 use App\Exceptions\ApiException;
+use App\Fresns\Api\Services\HeaderService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\Account;
@@ -37,7 +37,7 @@ class AccountController extends Controller
     public function register(Request $request)
     {
         $dtoRequest = new AccountRegisterDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $configs = ConfigHelper::fresnsConfigByItemKeys([
             'site_mode',
@@ -158,7 +158,7 @@ class AccountController extends Controller
         $account = Account::whereAid($fresnsTokenResponse->getData('aid'))->first();
 
         $service = new AccountService();
-        $data[] = $service->accountData($account);
+        $data[] = $service->accountData($account, $headers['langTag'], $headers['timezone']);
 
         return $this->success($data);
     }
@@ -167,7 +167,7 @@ class AccountController extends Controller
     public function login(Request $request)
     {
         $dtoRequest = new AccountLoginDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $accountType = match ($dtoRequest->type) {
             'email' => 1,
@@ -212,7 +212,7 @@ class AccountController extends Controller
         $account = Account::whereAid($fresnsTokenResponse->getData('aid'))->first();
 
         $service = new AccountService();
-        $data[] = $service->accountData($account);
+        $data[] = $service->accountData($account, $headers['langTag'], $headers['timezone']);
 
         return $this->success($data);
     }
@@ -286,7 +286,7 @@ class AccountController extends Controller
     // detail
     public function detail()
     {
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $account = Account::whereAid($headers['aid'])->first();
         if (empty($account)) {
@@ -294,7 +294,7 @@ class AccountController extends Controller
         }
 
         $service = new AccountService();
-        $data = $service->accountData($account);
+        $data = $service->accountData($account, $headers['langTag'], $headers['timezone']);
 
         return $this->success($data);
     }
@@ -303,7 +303,7 @@ class AccountController extends Controller
     public function walletLogs(Request $request)
     {
         $dtoRequest = new AccountWalletLogsDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($headers['aid']);
         $status = $dtoRequest->status ?? 1;
@@ -340,7 +340,7 @@ class AccountController extends Controller
     public function verifyIdentity(Request $request)
     {
         $dtoRequest = new AccountVerifyIdentityDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         if ($dtoRequest->type == 'email') {
             $account = Account::whereAid($headers['aid'])->value('email');
@@ -372,7 +372,7 @@ class AccountController extends Controller
     public function edit(Request $request)
     {
         $dtoRequest = new AccountEditDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $account = Account::whereAid($headers['aid'])->first();
 
@@ -523,7 +523,7 @@ class AccountController extends Controller
     // logout
     public function logout()
     {
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($headers['aid']);
         $userId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
@@ -542,7 +542,7 @@ class AccountController extends Controller
     public function applyDelete(Request $request)
     {
         $dtoRequest = new AccountApplyDeleteDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $account = Account::whereAid($headers['aid'])->first();
         $todoDay = ConfigHelper::fresnsConfigByItemKey('delete_account_todo');
@@ -597,7 +597,7 @@ class AccountController extends Controller
     // revokeDelete
     public function revokeDelete()
     {
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $account = Account::whereAid($headers['aid'])->first();
 

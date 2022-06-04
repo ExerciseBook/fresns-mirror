@@ -8,7 +8,7 @@
 
 namespace App\Fresns\Api\Http\Controllers;
 
-use App\Helpers\AppHelper;
+use App\Fresns\Api\Services\HeaderService;
 use App\Helpers\InteractiveHelper;
 use App\Models\Comment;
 use App\Exceptions\ApiException;
@@ -18,7 +18,7 @@ class CommentController extends Controller
 {
     public function detail(string $cid, Request $request)
     {
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
         $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
         $comment = Comment::with('creator')->whereCid($cid)->first();

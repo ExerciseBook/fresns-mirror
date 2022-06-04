@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Api\Services;
 
-use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\PluginHelper;
@@ -25,7 +24,7 @@ class PostService
 {
     public function postDetail(Post $post, string $type, ?int $mapId = null, ?string $userLng = null, ?string $userLat = null, ?Collection $hashtags = null)
     {
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
         $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
         $postInfo = $post->getPostInfo($headers['langTag'], $headers['timezone']);

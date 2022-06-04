@@ -12,7 +12,7 @@ use App\Fresns\Api\Http\DTO\GlobalConfigsDTO;
 use App\Fresns\Api\Http\DTO\GlobalBlockWordsDTO;
 use App\Fresns\Api\Http\DTO\GlobalRolesDTO;
 use App\Fresns\Api\Http\DTO\GlobalUploadTokenDTO;
-use App\Helpers\AppHelper;
+use App\Fresns\Api\Services\HeaderService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\FileHelper;
@@ -20,6 +20,7 @@ use App\Helpers\PluginHelper;
 use App\Models\Config;
 use App\Exceptions\ApiException;
 use App\Models\BlockWord;
+use App\Models\PluginUsage;
 use App\Models\Role;
 use App\Models\Sticker;
 use App\Utilities\CollectionUtility;
@@ -32,7 +33,7 @@ class GlobalController extends Controller
     public function configs(Request $request)
     {
         $dtoRequest = new GlobalConfigsDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $itemKey = array_filter(explode(',', $dtoRequest->keys));
         $itemTag = array_filter(explode(',', $dtoRequest->tags));
@@ -105,7 +106,7 @@ class GlobalController extends Controller
     public function roles(Request $request)
     {
         $dtoRequest = new GlobalRolesDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $status = $dtoRequest->status ?? 1;
 
@@ -145,9 +146,9 @@ class GlobalController extends Controller
     // maps
     public function maps()
     {
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
-        $data = ExtendUtility::getPluginExtends(9, null, null, null, $headers['langTag']);
+        $data = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MAP, null, null, null, $headers['langTag']);
 
         return $this->success($data);
     }
@@ -155,9 +156,9 @@ class GlobalController extends Controller
     // contentType
     public function contentType()
     {
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
-        $data = ExtendUtility::getPluginExtends(4, null, null, null, $headers['langTag']);
+        $data = ExtendUtility::getPluginExtends(PluginUsage::TYPE_CONTENT, null, null, null, $headers['langTag']);
 
         return $this->success($data);
     }
@@ -165,7 +166,7 @@ class GlobalController extends Controller
     // stickers
     public function stickers()
     {
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $stickers = Sticker::isEnable()->orderBy('rating')->get();
 

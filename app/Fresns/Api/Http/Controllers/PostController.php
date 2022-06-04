@@ -12,7 +12,7 @@ use App\Models\Seo;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Plugin;
-use App\Helpers\AppHelper;
+use App\Fresns\Api\Services\HeaderService;
 use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\PostListDTO;
@@ -44,7 +44,7 @@ class PostController extends Controller
         }
 
         // Fresns provides data
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
         $user = !empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
 
         $postQuery = Post::isEnable();
@@ -63,7 +63,7 @@ class PostController extends Controller
     {
         $requestData = $request->all();
         $requestData['pid'] = $pid;
-        $dtoRequest = new PostFollowDTO($requestData);
+        $dtoRequest = new PostDetailDTO($requestData);
 
         // Plugin provides data
         $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_detail_service');
@@ -76,7 +76,7 @@ class PostController extends Controller
         }
 
         // Fresns provides data
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         $post = Post::with('creator')->wherePid($pid)->first();
 
@@ -146,7 +146,7 @@ class PostController extends Controller
         }
 
         // Fresns provides data
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
         $user = User::whereUid($headers['uid'])->first();
 
         $postFollowService = new PostFollowService($user, $dtoRequest);
@@ -167,7 +167,7 @@ class PostController extends Controller
     public function nearby(Request $request)
     {
         $dtoRequest = new PostNearbyDTO($request->all());
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
         // Plugin provides data
         if ($dtoRequest->contentType) {
