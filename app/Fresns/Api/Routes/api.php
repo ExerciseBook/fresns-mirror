@@ -66,7 +66,10 @@ Route::prefix('v2')->group(function () {
         Route::get('list', [UserController::class, 'list'])->name('user.list');
         Route::get('{uidOrUsername}/detail', [UserController::class, 'detail'])->name('user.detail');
         Route::get('{uidOrUsername}/interactive/{type}', [UserController::class, 'interactive'])->name('user.interactive');
-        Route::get('{uidOrUsername}/mark/{type}', [UserController::class, 'markList'])->name('user.markList');
+        Route::get('{uidOrUsername}/like/{type}', [UserController::class, 'like'])->name('user.like');
+        Route::get('{uidOrUsername}/dislike/{type}', [UserController::class, 'dislike'])->name('user.dislike');
+        Route::get('{uidOrUsername}/follow/{type}', [UserController::class, 'follow'])->name('user.follow');
+        Route::get('{uidOrUsername}/block/{type}', [UserController::class, 'block'])->name('user.block');
         Route::post('auth', [UserController::class, 'auth'])->name('user.auth');
         Route::get('panel', [UserController::class, 'panel'])->name('user.panel');
         Route::put('edit', [UserController::class, 'edit'])->name('user.edit');
