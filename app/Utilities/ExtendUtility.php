@@ -41,7 +41,7 @@ class ExtendUtility
             if ($extend->is_group_admin == 1) {
 
                 if (! empty($userId) && ! empty($groupId)) {
-                    $adminCheck = PermissionUtility::checkUserGroupAdmin($userId, $groupId);
+                    $adminCheck = PermissionUtility::checkUserGroupAdmin($groupId, $userId);
                 } else {
                     $adminCheck = false;
                 }

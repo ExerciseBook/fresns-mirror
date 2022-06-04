@@ -101,7 +101,7 @@ class PermissionUtility
     }
 
     // Check post allow
-    public static function checkPostAllow(int $userId, int $postId): bool
+    public static function checkPostAllow(int $postId, int $userId): bool
     {
         $allowUsers = PostAllow::where('post_id', $postId)->where('type', 1)->pluck('object_id')->toArray();
         $checkUser = PermissionUtility::checkUserPerm($userId, $allowUsers);
@@ -127,7 +127,7 @@ class PermissionUtility
     }
 
     // Check if the user is a group administrator
-    public static function checkUserGroupAdmin(int $userId, int $groupId)
+    public static function checkUserGroupAdmin(int $groupId, int $userId)
     {
         $groupAdminArr = GroupAdmin::where('group_id', $groupId)->pluck('user_id')->toArray();
 
@@ -135,7 +135,7 @@ class PermissionUtility
     }
 
     // Check if the user has group publishing permissions
-    public static function checkUserGroupPublishPerm(?int $userId = null, int $groupId)
+    public static function checkUserGroupPublishPerm(int $groupId, ?int $userId = null)
     {
         $perm['allowPost'] = true;
         $perm['reviewPost'] = true;
