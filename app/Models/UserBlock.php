@@ -20,4 +20,34 @@ class UserBlock extends Model
     {
         return $query->where('block_type', $type);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function blockUser()
+    {
+        return $this->belongsTo(User::class, 'block_id', 'id')->where('block_type', UserBlock::TYPE_USER);
+    }
+
+    public function blockGroup()
+    {
+        return $this->belongsTo(Group::class, 'block_id', 'id')->where('block_type', UserBlock::TYPE_GROUP);
+    }
+
+    public function blockHashtag()
+    {
+        return $this->belongsTo(Hashtag::class, 'block_id', 'id')->where('block_type', UserBlock::TYPE_HASHTAG);
+    }
+
+    public function blockPost()
+    {
+        return $this->belongsTo(Post::class, 'block_id', 'id')->where('block_type', UserBlock::TYPE_POST);
+    }
+
+    public function blockComment()
+    {
+        return $this->belongsTo(Comment::class, 'block_id', 'id')->where('block_type', UserBlock::TYPE_COMMENT);
+    }
 }

@@ -20,6 +20,10 @@ class PluginUsage extends Model
     const TYPE_PROFILE = 8;
     const TYPE_MAP = 9;
 
+    const SCENE_POST = 1;
+    const SCENE_COMMENT = 2;
+    const SCENE_USER = 3;
+
     use Traits\LangNameTrait;
     use Traits\PluginUsageServiceTrait;
     use Traits\IsEnableTrait;

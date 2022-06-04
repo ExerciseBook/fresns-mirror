@@ -10,7 +10,18 @@ namespace App\Models;
 
 class Seo extends Model
 {
+    const TYPE_USER = 1;
+    const TYPE_GROUP = 2;
+    const TYPE_HASHTAG = 3;
+    const TYPE_POST = 4;
+    const TYPE_COMMENT = 5;
+
     protected $table = 'seo';
 
     protected $guarded = ['id'];
+
+    public function scopeType($query, int $type)
+    {
+        return $query->where('linked_type', $type);
+    }
 }

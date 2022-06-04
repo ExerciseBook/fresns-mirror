@@ -20,4 +20,34 @@ class UserFollow extends Model
     {
         return $query->where('follow_type', $type);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function followUser()
+    {
+        return $this->belongsTo(User::class, 'follow_id', 'id')->where('follow_type', UserFollow::TYPE_USER);
+    }
+
+    public function followGroup()
+    {
+        return $this->belongsTo(Group::class, 'follow_id', 'id')->where('follow_type', UserFollow::TYPE_GROUP);
+    }
+
+    public function followHashtag()
+    {
+        return $this->belongsTo(Hashtag::class, 'follow_id', 'id')->where('follow_type', UserFollow::TYPE_HASHTAG);
+    }
+
+    public function followPost()
+    {
+        return $this->belongsTo(Post::class, 'follow_id', 'id')->where('follow_type', UserFollow::TYPE_POST);
+    }
+
+    public function followComment()
+    {
+        return $this->belongsTo(Comment::class, 'follow_id', 'id')->where('follow_type', UserFollow::TYPE_COMMENT);
+    }
 }
