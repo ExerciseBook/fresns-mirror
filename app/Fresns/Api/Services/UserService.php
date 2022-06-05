@@ -28,7 +28,7 @@ class UserService
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
         $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_USER, $user->id, $authUserId);
-        $followMeStatus = InteractiveService::checkUserFollowMe($user->id, $authUserId);
+        $followMeStatus['followMeStatus'] = InteractiveService::checkUserFollowMe($user->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $followMeStatus);
 
         $data = array_merge($userProfile, $userMainRole, $item);
@@ -50,7 +50,7 @@ class UserService
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
         $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_USER, $user->id, $authUserId);
-        $followMeStatus = InteractiveService::checkUserFollowMe($user->id, $authUserId);
+        $followMeStatus['followMeStatus'] = InteractiveService::checkUserFollowMe($user->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $followMeStatus);
 
         $data = array_merge($userProfile, $userMainRole, $item);

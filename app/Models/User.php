@@ -29,7 +29,7 @@ class User extends Model
 
     public function archives()
     {
-        return $this->hasMany(UserArchive::class);
+        return $this->hasMany(UserArchive::class)->isEnable();
     }
 
     public function mainRole()

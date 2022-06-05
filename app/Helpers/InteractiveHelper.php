@@ -44,7 +44,10 @@ class InteractiveHelper
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'user_name', 'user_uid_name', 'user_username_name', 'user_nickname_name', 'user_role_name',
-            'follow_user_setting', 'follow_user_name', 'like_user_setting', 'like_user_name', 'block_user_setting', 'block_user_name',
+            'like_user_setting', 'like_user_name',
+            'dislike_user_setting', 'dislike_user_name',
+            'follow_user_setting', 'follow_user_name',
+            'block_user_setting', 'block_user_name',
             'publish_post_name', 'publish_comment_name'
         ], $langTag);
 
@@ -57,6 +60,8 @@ class InteractiveHelper
         $interactive['followName'] = $itemData['follow_user_name'];
         $interactive['likeSetting'] = $itemData['like_user_setting'];
         $interactive['likeName'] = $itemData['like_user_name'];
+        $interactive['dislikeSetting'] = $itemData['dislike_user_setting'];
+        $interactive['dislikeName'] = $itemData['dislike_user_name'];
         $interactive['blockSetting'] = $itemData['block_user_setting'];
         $interactive['blockName'] = $itemData['block_user_name'];
         $interactive['publishPostName'] = $itemData['publish_post_name'];
@@ -74,6 +79,7 @@ class InteractiveHelper
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'it_home_list', 'it_posts', 'it_comments', 'it_likers', 'it_followers', 'it_blockers',
             'it_like_users', 'it_like_groups', 'it_like_hashtags', 'it_like_posts', 'it_like_comments',
+            'it_dislike_users', 'it_dislike_groups', 'it_dislike_hashtags', 'it_dislike_posts', 'it_dislike_comments',
             'it_follow_users', 'it_follow_groups', 'it_follow_hashtags', 'it_follow_posts', 'it_follow_comments',
             'it_block_users', 'it_block_groups', 'it_block_hashtags', 'it_block_posts', 'it_block_comments',
             'publish_post_name', 'publish_comment_name'
@@ -90,6 +96,11 @@ class InteractiveHelper
         $interactive['itLikeHashtags'] = $itemData['it_like_hashtags'];
         $interactive['itLikePosts'] = $itemData['it_like_posts'];
         $interactive['itLikeComments'] = $itemData['it_like_comments'];
+        $interactive['itDislikeUsers'] = $itemData['it_dislike_users'];
+        $interactive['itDislikeGroups'] = $itemData['it_dislike_groups'];
+        $interactive['itDislikeHashtags'] = $itemData['it_dislike_hashtags'];
+        $interactive['itDislikePosts'] = $itemData['it_dislike_posts'];
+        $interactive['itDislikeComments'] = $itemData['it_dislike_comments'];
         $interactive['itFollowUsers'] = $itemData['it_follow_users'];
         $interactive['itFollowGroups'] = $itemData['it_follow_groups'];
         $interactive['itFollowHashtags'] = $itemData['it_follow_hashtags'];
@@ -114,13 +125,18 @@ class InteractiveHelper
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'group_name',
-            'like_group_setting', 'like_group_name', 'follow_group_setting', 'follow_group_name', 'block_group_setting', 'block_group_name',
+            'like_group_setting', 'like_group_name',
+            'dislike_group_setting', 'dislike_group_name',
+            'follow_group_setting', 'follow_group_name',
+            'block_group_setting', 'block_group_name',
             'publish_post_name', 'publish_comment_name'
         ], $langTag);
 
         $interactive['groupName'] = $itemData['group_name'];
         $interactive['likeSetting'] = $itemData['like_group_setting'];
         $interactive['likeName'] = $itemData['like_group_name'];
+        $interactive['dislikeSetting'] = $itemData['dislike_group_setting'];
+        $interactive['dislikeName'] = $itemData['dislike_group_name'];
         $interactive['followSetting'] = $itemData['follow_group_setting'];
         $interactive['followName'] = $itemData['follow_group_name'];
         $interactive['blockSetting'] = $itemData['block_group_setting'];
@@ -139,13 +155,18 @@ class InteractiveHelper
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'hashtag_name',
-            'like_hashtag_setting', 'like_hashtag_name', 'follow_hashtag_setting', 'follow_hashtag_name', 'block_hashtag_setting', 'block_hashtag_name',
+            'like_hashtag_setting', 'like_hashtag_name',
+            'dislike_hashtag_setting', 'dislike_hashtag_name',
+            'follow_hashtag_setting', 'follow_hashtag_name',
+            'block_hashtag_setting', 'block_hashtag_name',
             'publish_post_name', 'publish_comment_name'
         ], $langTag);
 
         $interactive['hashtagName'] = $itemData['hashtag_name'];
         $interactive['likeSetting'] = $itemData['like_hashtag_setting'];
         $interactive['likeName'] = $itemData['like_hashtag_name'];
+        $interactive['dislikeSetting'] = $itemData['dislike_hashtag_setting'];
+        $interactive['dislikeName'] = $itemData['dislike_hashtag_name'];
         $interactive['followSetting'] = $itemData['follow_hashtag_setting'];
         $interactive['followName'] = $itemData['follow_hashtag_name'];
         $interactive['blockSetting'] = $itemData['block_hashtag_setting'];
@@ -164,13 +185,18 @@ class InteractiveHelper
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'post_name',
-            'like_post_setting', 'like_post_name', 'follow_post_setting', 'follow_post_name', 'block_post_setting', 'block_post_name',
+            'like_post_setting', 'like_post_name',
+            'dislike_post_setting', 'dislike_post_name',
+            'follow_post_setting', 'follow_post_name',
+            'block_post_setting', 'block_post_name',
             'publish_post_name', 'publish_comment_name'
         ], $langTag);
 
         $interactive['postName'] = $itemData['post_name'];
         $interactive['likeSetting'] = $itemData['like_post_setting'];
         $interactive['likeName'] = $itemData['like_post_name'];
+        $interactive['dislikeSetting'] = $itemData['dislike_post_setting'];
+        $interactive['dislikeName'] = $itemData['dislike_post_name'];
         $interactive['followSetting'] = $itemData['follow_post_setting'];
         $interactive['followName'] = $itemData['follow_post_name'];
         $interactive['blockSetting'] = $itemData['block_post_setting'];
@@ -189,13 +215,18 @@ class InteractiveHelper
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
             'comment_name',
-            'like_comment_setting', 'like_comment_name', 'follow_comment_setting', 'follow_comment_name', 'block_comment_setting', 'block_comment_name',
+            'like_comment_setting', 'like_comment_name',
+            'dislike_comment_setting', 'dislike_comment_name',
+            'follow_comment_setting', 'follow_comment_name',
+            'block_comment_setting', 'block_comment_name',
             'publish_post_name', 'publish_comment_name'
         ], $langTag);
 
         $interactive['commentName'] = $itemData['comment_name'];
         $interactive['likeSetting'] = $itemData['like_comment_setting'];
         $interactive['likeName'] = $itemData['like_comment_name'];
+        $interactive['dislikeSetting'] = $itemData['dislike_comment_setting'];
+        $interactive['dislikeName'] = $itemData['dislike_comment_name'];
         $interactive['followSetting'] = $itemData['follow_comment_setting'];
         $interactive['followName'] = $itemData['follow_comment_name'];
         $interactive['blockSetting'] = $itemData['block_comment_setting'];
