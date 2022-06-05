@@ -647,6 +647,11 @@ $(document).ready(function () {
 
         $(this).parent('form').trigger('reset');
 
+        //reset default
+        $('.showSelectTypeName').text(trans('panel.button_image_upload')); //FsLang
+        $('.inputUrl').hide();
+        $('.inputFile').show();
+
         if (!params) {
             return;
         }
@@ -692,13 +697,15 @@ $(document).ready(function () {
         let button = $(e.relatedTarget);
         let params = button.data('params');
 
+        //reset default
+        $('.showSelectTypeName').text(trans('panel.button_image_upload')); //FsLang
+        $('.inputUrl').hide();
+        $('.inputFile').show();
+
         if (!params) {
             return;
         }
 
-        $('.inputUrl').css('display', 'none');
-        $('.inputFile').removeAttr('style');
-        $('.showSelectTypeName').text(trans('panel.button_image_upload')); //FsLang
         if (params.image_file_url) {
             $(this).find('input[name=image_file_url]').val(params.image_file_url);
             $(this).find('input[name=image_file_url]').removeAttr('style');
@@ -799,6 +806,11 @@ $(document).ready(function () {
 
         $('.choose-color').show();
 
+        //reset default
+        $('.showSelectTypeName').text(trans('panel.button_image_upload')); //FsLang
+        $('.inputUrl').hide();
+        $('.inputFile').show();
+
         if (!params) {
             return;
         }
@@ -813,9 +825,6 @@ $(document).ready(function () {
             $(this).find('input[name=is_display_icon]').attr('checked', 'checked');
         }
 
-        $('.inputUrl').css('display', 'none');
-        $('.inputFile').removeAttr('style');
-        $('.showSelectTypeName').text(trans('panel.button_image_upload')); //FsLang
         if (params.icon_file_url) {
             $(this).find('input[name=icon_file_url]').val(params.icon_file_url);
             $(this).find('input[name=icon_file_url]').removeAttr('style');
@@ -1043,13 +1052,15 @@ $(document).ready(function () {
         let button = $(e.relatedTarget);
         let params = button.data('params');
 
+        //reset default
+        $('.showSelectTypeName').text(trans('panel.button_image_upload')); //FsLang
+        $('.inputUrl').hide();
+        $('.inputFile').show();
+
         if (!params) {
             return;
         }
 
-        $('.inputUrl').css('display', 'none');
-        $('.inputFile').removeAttr('style');
-        $('.showSelectTypeName').text(trans('panel.button_image_upload')); //FsLang
         if (params.icon_file_url) {
             $(this).find('input[name=icon_file_url]').val(params.icon_file_url);
             $(this).find('input[name=icon_file_url]').removeAttr('style');
@@ -1082,17 +1093,34 @@ $(document).ready(function () {
         form.find('.name-button').text(trans('panel.table_name')); //FsLang
         form.find('.desc-button').text(trans('panel.table_description')); //FsLang
 
+        //reset default
+        $('.showSelectTypeName').text(trans('panel.button_image_upload')); //FsLang
+        $('.inputUrl').hide();
+        $('.inputFile').show();
+
         if (params) {
             $('#createCategoryModal').find('input[name=rating]').val(params.rating);
             $('#createCategoryModal')
                 .find('input:radio[name=is_enable][value="' + params.is_enable + '"]')
                 .prop('checked', true);
-            $('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
-            $('.inputFile').css('display', 'none');
-            $('#createCategoryModal').find('input[name=cover_file_url]').val(params.cover_file_url);
-            $('#createCategoryModal').find('input[name=cover_file_url]').css('display', 'block');
-            $('#createCategoryModal').find('input[name=banner_file_url]').val(params.banner_file_url);
-            $('#createCategoryModal').find('input[name=banner_file_url]').css('display', 'block');
+
+            if (params.cover_file_url) {
+
+                $('#createCategoryModal').find('input[name=cover_file_url]').parent().find('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
+                $('#createCategoryModal').find('input[name=cover_file_url]').parent().find('.inputFile').css('display', 'none');
+
+                $('#createCategoryModal').find('input[name=cover_file_url]').val(params.cover_file_url);
+                $('#createCategoryModal').find('input[name=cover_file_url]').css('display', 'block');
+            }
+
+            if (params.banner_file_url) {
+                $('#createCategoryModal').find('input[name=banner_file_url]').parent().find('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
+                $('#createCategoryModal').find('input[name=banner_file_url]').parent().find('.inputFile').css('display', 'none');
+
+                $('#createCategoryModal').find('input[name=banner_file_url]').val(params.banner_file_url);
+                $('#createCategoryModal').find('input[name=banner_file_url]').css('display', 'block');
+            }
+
 
             let names = $(this).data('names');
             let defaultName = $(this).data('default-name');
@@ -1232,6 +1260,11 @@ $(document).ready(function () {
         form.find('.desc-button').text(trans('panel.table_description')); //FsLang
         selectAdmin.find('option').remove();
 
+        //reset default
+        $('.showSelectTypeName').text(trans('panel.button_image_upload')); //FsLang
+        $('.inputUrl').hide();
+        $('.inputFile').show();
+
         if (!params) {
             return;
         }
@@ -1246,12 +1279,22 @@ $(document).ready(function () {
         let defaultDesc = $(this).data('default-desc');
         let adminUsers = button.data('admin_users');
 
-        $('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
-        $('.inputFile').css('display', 'none');
-        form.find('input[name=cover_file_url]').val(params.cover_file_url);
-        form.find('input[name=cover_file_url]').css('display', 'block');
-        form.find('input[name=banner_file_url]').val(params.banner_file_url);
-        form.find('input[name=banner_file_url]').css('display', 'block');
+        //$('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
+        //$('.inputFile').css('display', 'none');
+        if (params.cover_file_url) {
+            $('#groupModal').find('input[name=cover_file_url]').parent().find('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
+            $('#groupModal').find('input[name=cover_file_url]').parent().find('.inputFile').css('display', 'none');
+            form.find('input[name=cover_file_url]').val(params.cover_file_url);
+            form.find('input[name=cover_file_url]').css('display', 'block');
+        }
+
+        if (params.banner_file_url) {
+            $('#groupModal').find('input[name=banner_file_url]').parent().find('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
+            $('#groupModal').find('input[name=banner_file_url]').parent().find('.inputFile').css('display', 'none');
+            form.find('input[name=banner_file_url]').val(params.banner_file_url);
+            form.find('input[name=banner_file_url]').css('display', 'block');
+        }
+
         form.find('input:radio[name=type_mode][value="' + params.type_mode + '"]')
             .prop('checked', true)
             .click();
