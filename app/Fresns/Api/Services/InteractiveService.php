@@ -216,7 +216,7 @@ class InteractiveService
                     $markId,
                     $likeType,
                     [InteractiveService::class, 'markActionHandle'],
-                    'follow'
+                    'block'
                 );
                 break;
         }
