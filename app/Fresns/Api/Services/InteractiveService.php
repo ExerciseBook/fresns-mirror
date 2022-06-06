@@ -22,213 +22,203 @@ class InteractiveService
     const TYPE_POST = 4;
     const TYPE_COMMENT = 5;
 
-    public static function markUser(int $markType, int $markId, int $authUserId): bool
+    const ACTION_CREATE = 'create';
+    const ACTION_RESTORE = 'restore';
+    const ACTION_DELETE = 'delete';
+
+    protected static function userLike($authUserId, $markId, $likeType, callable $callback, $markType = UserLike::MARK_TYPE_LIKE)
     {
-        switch ($markType) {
-            // like
-            case 'like':
-                $checkUserLike = UserLike::where('user_id', $authUserId)
-                    ->markType(UserLike::MARK_TYPE_LIKE)
-                    ->type(UserLike::TYPE_USER)
-                    ->where('like_id', $markId)
-                    ->first();
+        $userLike = UserLike::withTrashed()
+            ->where('user_id', $authUserId)
+            ->markType($markType)
+            ->type($likeType)
+            ->where('like_id', $markId)
+            ->first();
 
-                if ($checkUserLike) {
-                    $checkUserLike->delete();
-                    UserStat::where('user_id', $authUserId)->decrement('like_user_count');
-                    UserStat::where('user_id', $markId)->decrement('like_me_count');
-                } else {
-                    UserLike::updateOrCreate([
-                        'user_id' => $authUserId,
-                        'like_type' => UserLike::TYPE_USER,
-                        'like_id' => $markId,
-                    ], [
-                        'mark_type' => UserLike::MARK_TYPE_LIKE
-                    ]);
+        $action = null;
+        // 已经被删除的 或者 没有查到数据
+        if ($userLike->trashed() || empty($userLike)) {
+            if ($userLike->trashed()) {
+                $userLike->restore();
 
-                    UserStat::where('user_id', $authUserId)->increment('like_user_count');
-                    UserStat::where('user_id', $markId)->increment('like_me_count');
-                }
-            break;
+                $action = InteractiveService::ACTION_RESTORE;
+            } else {
+                UserLike::updateOrCreate([
+                    'user_id' => $authUserId,
+                    'like_type' => $likeType,
+                    'like_id' => $markId,
+                ], [
+                    'mark_type' => $markType,
+                ]);
 
-            // dislike
-            case 'dislike':
-                $checkUserDislike = UserLike::where('user_id', $authUserId)
-                    ->markType(UserLike::MARK_TYPE_DISLIKE)
-                    ->type(UserLike::TYPE_USER)
-                    ->where('like_id', $markId)
-                    ->first();
+                $action = InteractiveService::ACTION_CREATE;
+            }
+        } else {
+            $userLike->delete();
 
-                if ($checkUserDislike) {
-                    $checkUserDislike->delete();
-                    UserStat::where('user_id', $authUserId)->decrement('dislike_user_count');
-                    UserStat::where('user_id', $markId)->decrement('dislike_me_count');
-                } else {
-                    UserLike::updateOrCreate([
-                        'user_id' => $authUserId,
-                        'like_type' => UserLike::TYPE_USER,
-                        'like_id' => $markId,
-                    ], [
-                        'mark_type' => UserLike::MARK_TYPE_DISLIKE
-                    ]);
-
-                    UserStat::where('user_id', $authUserId)->increment('dislike_user_count');
-                    UserStat::where('user_id', $markId)->increment('dislike_me_count');
-                }
-            break;
-
-            // follow
-            case 'follow':
-                $checkUserFollow = UserFollow::where('user_id', $authUserId)
-                    ->type(UserFollow::TYPE_USER)
-                    ->where('follow_id', $markId)
-                    ->first();
-
-                if ($checkUserFollow) {
-                    $checkUserFollow->delete();
-                    UserStat::where('user_id', $authUserId)->decrement('follow_user_count');
-                    UserStat::where('user_id', $markId)->decrement('follow_me_count');
-                } else {
-                    UserFollow::updateOrCreate([
-                        'user_id' => $authUserId,
-                        'follow_type' => UserFollow::TYPE_USER,
-                        'follow_id' => $markId,
-                    ]);
-
-                    UserStat::where('user_id', $authUserId)->increment('follow_user_count');
-                    UserStat::where('user_id', $markId)->increment('follow_me_count');
-                }
-            break;
-
-            // block
-            case 'block':
-                $checkUserBlock = UserBlock::where('user_id', $authUserId)
-                    ->type(UserBlock::TYPE_USER)
-                    ->where('follow_id', $markId)
-                    ->first();
-
-                if ($checkUserBlock) {
-                    $checkUserBlock->delete();
-                    UserStat::where('user_id', $authUserId)->decrement('block_user_count');
-                    UserStat::where('user_id', $markId)->decrement('block_me_count');
-                } else {
-                    UserBlock::updateOrCreate([
-                        'user_id' => $authUserId,
-                        'block_type' => UserBlock::TYPE_USER,
-                        'block_id' => $markId,
-                    ]);
-
-                    UserStat::where('user_id', $authUserId)->increment('block_user_count');
-                    UserStat::where('user_id', $markId)->increment('block_me_count');
-                }
-            break;
+            $action = InteractiveService::ACTION_DELETE;
         }
 
-        return true;
+        $callback($action, $authUserId, $markId, $markType, $likeType);
     }
 
-    public static function markGroup(int $markType, int $markId, int $authUserId): bool
+    protected static function userFollow($authUserId, $markId, $likeType, callable $callback, $markType = 'follow')
+    {
+        $userFollow = UserFollow::withTrashed()
+            ->where('user_id', $authUserId)
+            ->type($likeType)
+            ->where('follow_id', $markId)
+            ->first();
+
+        $action = null;
+        if ($userFollow->trashed() || empty($userFollow)) {
+            if ($userFollow->trashed()) {
+                $userFollow->restore();
+
+                $action = InteractiveService::ACTION_RESTORE;
+            } else {
+                UserFollow::updateOrCreate([
+                    'user_id' => $authUserId,
+                    'follow_type' => $likeType,
+                    'follow_id' => $markId,
+                ]);
+
+                $action = InteractiveService::ACTION_CREATE;
+            }
+        } else {
+            $userFollow->delete();
+
+            $action = InteractiveService::ACTION_DELETE;
+        }
+
+        $callback($action, $authUserId, $markId, $markType, $likeType);
+    }
+
+    protected static function userBlock($authUserId, $markId, $likeType, callable $callback, $markType = 'block')
+    {
+        $userBlock = UserBlock::withTrashed()
+            ->where('user_id', $authUserId)
+            ->type($likeType)
+            ->where('follow_id', $markId)
+            ->first();
+
+        $action = null;
+        if ($userBlock->trashed() || empty($userBlock)) {
+            if ($userBlock->trashed()) {
+                $userBlock->restore();
+
+                $action = InteractiveService::ACTION_RESTORE;
+            } else {
+                UserBlock::updateOrCreate([
+                    'user_id' => $authUserId,
+                    'block_type' => $likeType,
+                    'block_id' => $markId,
+                ]);
+
+                $action = InteractiveService::ACTION_CREATE;
+            }
+        } else {
+            $userBlock->delete();
+
+            $action = InteractiveService::ACTION_DELETE;
+        }
+
+        $callback($action, $authUserId, $markId, $markType, $likeType);
+    }
+
+    protected static function markActionHandle(?string $action, $authUserId, $markId, $markType, $likeType)
+    {
+        if (is_null($action)) {
+            return;
+        }
+
+        $markTypeField = match ($markType) {
+            default => null,
+            UserLike::MARK_TYPE_LIKE => 'like',
+            UserLike::MARK_TYPE_DISLIKE => 'dislike',
+            'follow' => 'follow',
+            'block' => 'block',
+        };
+
+        if (is_null($markTypeField)) {
+            return;
+        }
+
+        switch (true) {
+                // create
+            case $action === InteractiveService::ACTION_CREATE:
+                // restore
+            case $action === InteractiveService::ACTION_RESTORE:
+                switch ($likeType) {
+                    case UserLike::TYPE_USER:
+                    case 'follow':
+                    case 'block':
+                        UserStat::where('user_id', $authUserId)->increment("{$markTypeField}_user_count");
+                        UserStat::where('user_id', $markId)->increment("{$markTypeField}_me_count");
+                        break;
+                    case UserLike::TYPE_GROUP:
+                        UserStat::where('user_id', $authUserId)->decrement("{$markTypeField}_group_count");
+                        Group::where('id', $markId)->decrement("{$markTypeField}_count");
+                        break;
+                }
+                break;
+                // delete
+            case $action === InteractiveService::ACTION_DELETE:
+                switch ($likeType) {
+                    case UserLike::TYPE_USER:
+                        UserStat::where('user_id', $authUserId)->decrement("{$markTypeField}_user_count");
+                        UserStat::where('user_id', $markId)->decrement("{$markTypeField}_me_count");
+                        break;
+                    case UserLike::TYPE_GROUP:
+                        UserStat::where('user_id', $authUserId)->decrement("{$markTypeField}_group_count");
+                        Group::where('id', $markId)->decrement("{$markTypeField}_count");
+                        break;
+                }
+                break;
+        }
+    }
+
+    public static function markUser(int $markType, int $markId, int $authUserId, int $userLikeType): bool
     {
         switch ($markType) {
-            // like
             case 'like':
-                $checkGroupLike = UserLike::where('user_id', $authUserId)
-                    ->markType(UserLike::MARK_TYPE_LIKE)
-                    ->type(UserLike::TYPE_GROUP)
-                    ->where('like_id', $markId)
-                    ->first();
-
-                if ($checkGroupLike) {
-                    $checkGroupLike->delete();
-                    UserStat::where('user_id', $authUserId)->decrement('like_group_count');
-                    Group::whereId($markId)->decrement('like_count');
-                } else {
-                    UserLike::updateOrCreate([
-                        'user_id' => $authUserId,
-                        'like_type' => UserLike::TYPE_GROUP,
-                        'like_id' => $markId,
-                    ], [
-                        'mark_type' => UserLike::MARK_TYPE_LIKE
-                    ]);
-
-                    UserStat::where('user_id', $authUserId)->increment('like_group_count');
-                    Group::whereId($markId)->increment('like_count');
-                }
-            break;
-
-            // dislike
             case 'dislike':
-                $checkGroupDislike = UserLike::where('user_id', $authUserId)
-                    ->markType(UserLike::MARK_TYPE_DISLIKE)
-                    ->type(UserLike::TYPE_GROUP)
-                    ->where('like_id', $markId)
-                    ->first();
+                $markType = match ($markType) {
+                    default => UserLike::MARK_TYPE_LIKE,
+                    'like' => UserLike::MARK_TYPE_LIKE,
+                    'dislike' => UserLike::MARK_TYPE_DISLIKE,
+                };
 
-                if ($checkGroupDislike) {
-                    $checkGroupDislike->delete();
-                    UserStat::where('user_id', $authUserId)->decrement('dislike_group_count');
-                    Group::whereId($markId)->decrement('dislike_count');
-                } else {
-                    UserLike::updateOrCreate([
-                        'user_id' => $authUserId,
-                        'like_type' => UserLike::TYPE_GROUP,
-                        'like_id' => $markId,
-                    ], [
-                        'mark_type' => UserLike::MARK_TYPE_DISLIKE
-                    ]);
+                InteractiveService::userLike(
+                    $authUserId,
+                    $markId,
+                    $markType,
+                    [InteractiveService::class, 'markActionHandle'],
+                    $userLikeType
+                );
+                break;
 
-                    UserStat::where('user_id', $authUserId)->increment('dislike_group_count');
-                    Group::whereId($markId)->increment('dislike_count');
-                }
-
-            break;
-
-            // follow
+                // follow
             case 'follow':
-                $checkGroupFollow = UserFollow::where('user_id', $authUserId)
-                    ->type(UserFollow::TYPE_GROUP)
-                    ->where('follow_id', $markId)
-                    ->first();
+                InteractiveService::userFollow(
+                    $authUserId,
+                    $markId,
+                    $userLikeType,
+                    [InteractiveService::class, 'markActionHandle'],
+                    'follow'
+                );
+                break;
 
-                if ($checkGroupFollow) {
-                    $checkGroupFollow->delete();
-                    UserStat::where('user_id', $authUserId)->decrement('follow_group_count');
-                    Group::whereId($markId)->decrement('follow_count');
-                } else {
-                    UserFollow::updateOrCreate([
-                        'user_id' => $authUserId,
-                        'follow_type' => UserFollow::TYPE_GROUP,
-                        'follow_id' => $markId,
-                    ]);
-
-                    UserStat::where('user_id', $authUserId)->increment('follow_group_count');
-                    Group::whereId($markId)->increment('follow_count');
-                }
-
-            break;
-
-            // block
+                // block
             case 'block':
-                $checkGroupBlock = UserBlock::where('user_id', $authUserId)
-                    ->type(UserBlock::TYPE_GROUP)
-                    ->where('follow_id', $markId)
-                    ->first();
-
-                if ($checkGroupBlock) {
-                    $checkGroupBlock->delete();
-                    UserStat::where('user_id', $authUserId)->decrement('block_group_count');
-                    Group::whereId($markId)->decrement('block_count');
-                } else {
-                    UserBlock::updateOrCreate([
-                        'user_id' => $authUserId,
-                        'block_type' => UserBlock::TYPE_GROUP,
-                        'block_id' => $markId,
-                    ]);
-
-                    UserStat::where('user_id', $authUserId)->increment('block_group_count');
-                    Group::whereId($markId)->increment('block_count');
-                }
-            break;
+                InteractiveService::userBlock(
+                    $authUserId,
+                    $markId,
+                    $userLikeType,
+                    [InteractiveService::class, 'markActionHandle'],
+                    'follow'
+                );
+                break;
         }
 
         return true;
@@ -283,11 +273,7 @@ class InteractiveService
             ->where('follow_id', $followId)
             ->first();
 
-        if ($checkFollow) {
-            return true;
-        }
-
-        return false;
+        return (bool) $checkFollow;
     }
 
     public static function checkUserBlock(int $blockType, int $blockId, ?int $authUserId = null): bool
@@ -301,11 +287,7 @@ class InteractiveService
             ->where('block_id', $blockId)
             ->first();
 
-        if ($checkBlock) {
-            return true;
-        }
-
-        return false;
+        return (bool) $checkBlock;
     }
 
     public static function checkUserFollowMe(int $userId, ?int $authUserId = null): bool
@@ -323,11 +305,7 @@ class InteractiveService
             ->where('follow_id', $authUserId)
             ->first();
 
-        if ($checkFollowMe) {
-            return true;
-        }
-
-        return false;
+        return (bool) $checkFollowMe;
     }
 
     public static function checkInteractiveStatus(int $markType, int $markId, ?int $authUserId = null): array
@@ -352,25 +330,25 @@ class InteractiveService
     public function getMarkListOfUsers(string $getType, string $markType, int $markId, string $timeOrder, ?string $authUserId = null)
     {
         switch ($getType) {
-            // like
+                // like
             case 'like':
                 $interactiveQuery = UserLike::markType(UserLike::MARK_TYPE_LIKE)->where('like_id', $markId);
-            break;
+                break;
 
-            // dislike
+                // dislike
             case 'dislike':
                 $interactiveQuery = UserLike::markType(UserLike::MARK_TYPE_DISLIKE)->where('like_id', $markId);
-            break;
+                break;
 
-            // follow
+                // follow
             case 'follow':
                 $interactiveQuery = UserFollow::where('follow_id', $markId);
-            break;
+                break;
 
-            // block
+                // block
             case 'block':
                 $interactiveQuery = UserBlock::where('block_id', $markId);
-            break;
+                break;
         }
 
         $interactiveData = $interactiveQuery->with('creator')
@@ -396,25 +374,25 @@ class InteractiveService
     public function getMarkUserList(string $getType, int $userId, string $timeOrder, ?string $authUserId = null)
     {
         switch ($getType) {
-            // like
+                // like
             case 'like':
                 $markQuery = UserLike::markType(UserLike::MARK_TYPE_LIKE);
-            break;
+                break;
 
-            // dislike
+                // dislike
             case 'dislike':
                 $markQuery = UserLike::markType(UserLike::MARK_TYPE_DISLIKE);
-            break;
+                break;
 
-            // follow
+                // follow
             case 'follow':
                 $markQuery = UserFollow::query();
-            break;
+                break;
 
-            // block
+                // block
             case 'block':
                 $markQuery = UserBlock::query();
-            break;
+                break;
         }
 
         $markData = $markQuery->with('user')
