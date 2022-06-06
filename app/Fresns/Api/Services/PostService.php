@@ -62,13 +62,10 @@ class PostService
 
         $item['hashtags'] = null;
         if ($post->hashtags) {
-            $hashtagInteractiveConfig = InteractiveHelper::fresnsHashtagInteractive($langTag);
+            $hashtagService = new HashtagService;
 
             foreach ($post->hashtags as $hashtag) {
-                $hashtagInteractiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_HASHTAG, $hashtag->id, $authUserId);
-
-                $hashtagItem[] = $hashtag->getHashtagInfo($langTag);
-                $hashtagItem['interactive'] = array_merge($hashtagInteractiveConfig, $hashtagInteractiveStatus);
+                $hashtagItem[] = $hashtagService->hashtagList($hashtag, $langTag, $authUserId);
             }
             $item['hashtags'] = $hashtagItem;
         }
@@ -98,9 +95,13 @@ class PostService
         }
         $item['editStatus'] = $editStatus;
 
-        $postInteractive = InteractiveHelper::fresnsPostInteractive($langTag);
+        $interactiveConfig = InteractiveHelper::fresnsPostInteractive($langTag);
+        $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_POST, $post->id, $authUserId);
+        $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus);
 
-        $detail = array_merge($postInfo, $item, $postInteractive);
+        $item['followType'] = null;
+
+        $detail = array_merge($postInfo, $item);
 
         return $detail;
     }
