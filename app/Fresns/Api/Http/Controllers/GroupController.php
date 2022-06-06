@@ -132,12 +132,12 @@ class GroupController extends Controller
             $groupQuery->where('post_count', '<=', $dtoRequest->postCountLt);
         }
 
-        if ($dtoRequest->digestCountGt) {
-            $groupQuery->where('post_digest_count', '>=', $dtoRequest->digestCountGt);
+        if ($dtoRequest->postDigestCountGt) {
+            $groupQuery->where('post_digest_count', '>=', $dtoRequest->postDigestCountGt);
         }
 
-        if ($dtoRequest->digestCountLt) {
-            $groupQuery->where('post_digest_count', '<=', $dtoRequest->digestCountLt);
+        if ($dtoRequest->postDigestCountLt) {
+            $groupQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
         }
 
         if ($dtoRequest->createTimeGt) {
@@ -155,7 +155,7 @@ class GroupController extends Controller
             'follow' => 'follow_me_count',
             'block' => 'block_me_count',
             'post' => 'post_count',
-            'digest' => 'post_digest_count',
+            'postDigest' => 'post_digest_count',
             'createTime' => 'created_at',
             'rating' => 'rating',
         };
@@ -182,7 +182,7 @@ class GroupController extends Controller
     // detail
     public function detail(string $gid)
     {
-        $group = Group::whereGid($gid)->first();
+        $group = Group::whereGid($gid)->isEnable()->first();
         if (empty($group)) {
             throw new ApiException(37100);
         }
@@ -213,7 +213,7 @@ class GroupController extends Controller
     // interactive
     public function interactive(string $gid, string $type, Request $request)
     {
-        $group = Group::whereGid($gid)->first();
+        $group = Group::whereGid($gid)->isEnable()->first();
         if (empty($group)) {
             throw new ApiException(37100);
         }
