@@ -52,7 +52,7 @@ class Post extends Model
 
     public function hashtags()
     {
-        return $this->morphToMany(Hashtag::class, 'HashtagLinked');
+        return $this->belongsToMany(Hashtag::class, 'hashtag_linkeds', 'hashtag_id', 'linked_id')->wherePivot('linked_type', HashtagLinked::TYPE_POST);
     }
 
     public function users()

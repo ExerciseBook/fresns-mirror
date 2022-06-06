@@ -20,12 +20,11 @@ use App\Models\TipLinked;
 use App\Utilities\ExtendUtility;
 use App\Utilities\LbsUtility;
 use App\Utilities\PermissionUtility;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class PostService
 {
-    public function postDetail(Post $post, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $userLng = null, ?string $userLat = null, ?Collection $hashtags = null)
+    public function postDetail(Post $post, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $userLng = null, ?string $userLat = null)
     {
         $postInfo = $post->getPostInfo($langTag, $timezone);
         $postInfo[] = self::contentHandle($post, $type, $authUserId);
@@ -50,23 +49,28 @@ class PostService
         $attachCount['extends'] = collect($item['extends'])->count();
         $item['attachCount'] = $attachCount;
 
-        $item['group'] = $post->group?->getGroupInfo($langTag);
+        $item['group'] = null;
+        if ($post->group) {
+            $groupInteractiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
+            $groupInteractiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_GROUP, $post->group->id, $authUserId);
 
-        $item['followHashtags'] = null;
-        if ($hashtags) {
-            foreach ($hashtags as $hashtag) {
-                $hashtagItem['hid'] = $hashtag->slug;
-                $hashtagItem['hname'] = $hashtag->name;
-                $hashtagItem['description'] = $hashtag->description;
-                $hashtagItem['cover'] = FileHelper::fresnsFileUrlByTableColumn($hashtag->cover_file_id, $hashtag->cover_file_url);
-                $hashtagItem['likeCount'] = $hashtag->like_count;
-                $hashtagItem['dislikeCount'] = $hashtag->dislike_count;
-                $hashtagItem['followCount'] = $hashtag->follow_count;
-                $hashtagItem['postCount'] = $hashtag->post_count;
-                $hashtagItem['commentCount'] = $hashtag->comment_count;
-                $hashtagItem['digestCount'] = $hashtag->digest_count;
-                $item['hashtag'][] = $hashtagItem;
+            $groupItem[] = $post->group?->getGroupInfo($langTag);
+            $groupItem['interactive'] = array_merge($groupInteractiveConfig, $groupInteractiveStatus);
+
+            $item['group'] = $groupItem;
+        }
+
+        $item['hashtags'] = null;
+        if ($post->hashtags) {
+            $hashtagInteractiveConfig = InteractiveHelper::fresnsHashtagInteractive($langTag);
+
+            foreach ($post->hashtags as $hashtag) {
+                $hashtagInteractiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_HASHTAG, $hashtag->id, $authUserId);
+
+                $hashtagItem[] = $hashtag->getHashtagInfo($langTag);
+                $hashtagItem['interactive'] = array_merge($hashtagInteractiveConfig, $hashtagInteractiveStatus);
             }
+            $item['hashtags'] = $hashtagItem;
         }
 
         $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
