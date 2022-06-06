@@ -178,7 +178,7 @@ class InteractiveService
         }
     }
 
-    public static function markUser(int $markType, int $markId, int $authUserId, int $userLikeType): bool
+    public static function mark(int $markType, int $markId, int $authUserId, int $userLikeType): bool
     {
         switch ($markType) {
             case 'like':
