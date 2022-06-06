@@ -30,7 +30,7 @@ class SqlLogServiceProvider extends ServiceProvider
     }
 
     /**
-     * 开发时 SQL 耗时查询日志
+     * SQL time-consuming query log at development time
      */
     protected function registerQueryLogger()
     {
@@ -52,7 +52,7 @@ class SqlLogServiceProvider extends ServiceProvider
     }
 
     /**
-     * 时间单位转换
+     * Time unit conversion
      *
      * @param $seconds
      *

@@ -16,7 +16,6 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\UserFollow;
-use Illuminate\Support\Arr;
 
 class PermissionUtility
 {
