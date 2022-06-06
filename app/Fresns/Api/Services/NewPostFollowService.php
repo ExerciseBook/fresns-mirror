@@ -35,8 +35,11 @@ class NewPostFollowService
         // follow user post
         $userPostQuery = Post::with('hashtags')
             ->whereIn('user_id', $allUserIds)
-            ->whereNotIn('id', $blockPostIds)
-            ->orWhereNotIn('group_id', $filterGroupIdsArr)
+            ->where(function ($query) use ($blockPostIds, $filterGroupIdsArr) {
+                $query
+                    ->whereNotIn('id', $blockPostIds)
+                    ->orWhereNotIn('group_id', $filterGroupIdsArr);
+            })
             ->isEnable()
             ->latest();
         $userPostQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
@@ -45,9 +48,13 @@ class NewPostFollowService
 
         // follow group post
         $groupPostQuery = Post::with('hashtags')
-            ->whereNotIn('id', $blockPostIds)
-            ->whereNotIn('user_id', $allUserIds)
-            ->orWhereNotIn('user_id', $blockUserIds)
+            ->where(function ($query) use ($blockPostIds, $allUserIds, $blockUserIds) {
+                $uniqueFilterUserIds = array_unique(array_merge($allUserIds, $blockUserIds));
+
+                $query
+                    ->whereNotIn('id', $blockPostIds)
+                    ->orWhereNotIn('user_id', $uniqueFilterUserIds);
+            })
             ->whereIn('group_id', $followGroupIds)
             ->whereIn('digest_state', [2, 3])
             ->isEnable()
@@ -58,11 +65,15 @@ class NewPostFollowService
 
         // follow hashtag post
         $hashtagPostQuery = Post::with('hashtags')
-            ->whereNotIn('id', $blockPostIds)
-            ->orWhereNotIn('user_id', $allUserIds)
-            ->orWhereNotIn('user_id', $blockUserIds)
-            ->orWhereNotIn('group_id', $followGroupIds)
-            ->orWhereNotIn('group_id', $filterGroupIdsArr)
+            ->where(function ($query) use ($blockPostIds, $allUserIds, $blockUserIds, $followGroupIds, $filterGroupIdsArr) {
+                $uniqueFilterUserIds = array_unique(array_merge($allUserIds, $blockUserIds));
+                $uniqueFilterGroupIds = array_unique(array_merge($followGroupIds, $filterGroupIdsArr));
+
+                $query
+                    ->whereNotIn('id', $blockPostIds)
+                    ->orWhereNotIn('user_id', $uniqueFilterUserIds)
+                    ->orWhereNotIn('group_id', $uniqueFilterGroupIds);
+            })
             ->whereIn('digest_state', [2, 3])
             ->isEnable()
             ->latest();
@@ -72,10 +83,15 @@ class NewPostFollowService
 
         // digest post query
         $digestPostQuery = Post::with('hashtags')
-            ->whereNotIn('id', $blockPostIds)
-            ->orWhereNotIn('user_id', $allUserIds)
-            ->orWhereNotIn('group_id', $followGroupIds)
-            ->orWhereNotIn('group_id', $filterGroupIdsArr)
+            ->where(function ($query) use ($blockPostIds, $allUserIds, $followGroupIds, $filterGroupIdsArr) {
+                $uniqueFilterGroupIds = array_unique(array_merge($followGroupIds, $filterGroupIdsArr));
+
+                $query
+                    ->whereNotIn('id', $blockPostIds)
+                    ->orWhereNotIn('user_id', $allUserIds)
+                    ->orWhereNotIn('group_id', $followGroupIds)
+                    ->orWhereNotIn('group_id', $uniqueFilterGroupIds);
+            })
             ->where('digest_state', 3)
             ->latest();
         $digestPostQuery->whereHas('hashtags', function ($query) use ($followHashtagIds) {
@@ -153,8 +169,11 @@ class NewPostFollowService
         $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
         $postQuery = Post::whereIn('group_id', $followGroupIds)
-            ->whereNotIn('id', $blockPostIds)
-            ->orWhereNotIn('user_id', $blockUserIds)
+            ->where(function ($query) use ($blockPostIds, $blockUserIds) {
+                $query
+                    ->whereNotIn('id', $blockPostIds)
+                    ->orWhereNotIn('user_id', $blockUserIds);
+            })
             ->isEnable()
             ->latest();
         $postQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
@@ -190,9 +209,12 @@ class NewPostFollowService
         $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
         $postQuery = Post::with('hashtags')
-            ->whereNotIn('id', $blockPostIds)
-            ->orWhereNotIn('user_id', $blockUserIds)
-            ->orWhereNotIn('group_id', $filterGroupIds)
+            ->where(function ($query) use ($blockPostIds, $blockUserIds, $filterGroupIds) {
+                $query
+                    ->whereNotIn('id', $blockPostIds)
+                    ->orWhereNotIn('user_id', $blockUserIds)
+                    ->orWhereNotIn('group_id', $filterGroupIds);
+            })
             ->isEnable()
             ->latest();
         $postQuery->whereHas('hashtags', function ($query) use ($followHashtagIds) {
