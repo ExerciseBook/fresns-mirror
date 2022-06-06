@@ -217,4 +217,45 @@ class PostFollowService
 
         return $posts;
     }
+
+    // check follow type
+    public static function checkFollowType(int $creatorId, ?int $groupId = null, ?array $hashtagIds = null, ?int $authUserId = null): bool
+    {
+        if (empty($authUserId)) {
+            return null;
+        }
+
+        $checkFollowUser = UserFollow::where('user_id', $authUserId)
+            ->type(UserFollow::TYPE_USER)
+            ->where('follow_id', $creatorId)
+            ->first();
+
+        if ($checkFollowUser) {
+            return 'user';
+        }
+
+        if (! empty($groupId)) {
+            $checkFollowGroup = UserFollow::where('user_id', $authUserId)
+                ->type(UserFollow::TYPE_GROUP)
+                ->where('follow_id', $groupId)
+                ->first();
+
+            if ($checkFollowGroup) {
+                return 'group';
+            }
+        }
+
+        if (! empty($hashtagIds)) {
+            $checkFollowHashtag = UserFollow::where('user_id', $authUserId)
+                ->type(UserFollow::TYPE_HASHTAG)
+                ->whereIn('follow_id', $hashtagIds)
+                ->first();
+
+            if ($checkFollowHashtag) {
+                return 'hashtag';
+            }
+        }
+
+        return 'digest';
+    }
 }
