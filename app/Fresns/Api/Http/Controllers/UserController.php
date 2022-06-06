@@ -27,6 +27,8 @@ use App\Fresns\Api\Services\UserService;
 use App\Fresns\Api\Services\InteractiveService;
 use Illuminate\Http\Request;
 use App\Models\UserStat;
+use App\Models\UserFollow;
+use App\Models\UserBlock;
 
 class UserController extends Controller
 {
@@ -286,6 +288,7 @@ class UserController extends Controller
 
             // hashtag
             case 'hashtag':
+                // todo: markId 变量不存在,需要处理
                 $interactiveQuery = UserFollow::where('follow_id', $markId);
             break;
 
