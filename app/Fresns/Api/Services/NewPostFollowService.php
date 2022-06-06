@@ -89,7 +89,6 @@ class NewPostFollowService
                 $query
                     ->whereNotIn('id', $blockPostIds)
                     ->orWhereNotIn('user_id', $allUserIds)
-                    ->orWhereNotIn('group_id', $followGroupIds)
                     ->orWhereNotIn('group_id', $uniqueFilterGroupIds);
             })
             ->where('digest_state', 3)
@@ -122,9 +121,9 @@ class NewPostFollowService
             ->union($hashtagPostQuery)
             ->union($digestPostQuery)
             ->latest()
-            ->paginate(1000);
+            ->paginate(\request()->get('pageSize', 15));
 
-        return null;
+        return $posts;
     }
 
     // get post list by follow users
