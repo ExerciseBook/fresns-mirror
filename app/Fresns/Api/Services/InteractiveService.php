@@ -178,7 +178,7 @@ class InteractiveService
         }
     }
 
-    public static function mark(int $markType, int $markId, int $authUserId, int $userLikeType): bool
+    public static function mark(int $markType, int $markId, int $authUserId, int $likeType): bool
     {
         switch ($markType) {
             case 'like':
@@ -194,7 +194,7 @@ class InteractiveService
                     $markId,
                     $markType,
                     [InteractiveService::class, 'markActionHandle'],
-                    $userLikeType
+                    $likeType
                 );
                 break;
 
@@ -203,7 +203,7 @@ class InteractiveService
                 InteractiveService::userFollow(
                     $authUserId,
                     $markId,
-                    $userLikeType,
+                    $likeType,
                     [InteractiveService::class, 'markActionHandle'],
                     'follow'
                 );
@@ -214,7 +214,7 @@ class InteractiveService
                 InteractiveService::userBlock(
                     $authUserId,
                     $markId,
-                    $userLikeType,
+                    $likeType,
                     [InteractiveService::class, 'markActionHandle'],
                     'follow'
                 );
