@@ -9,11 +9,14 @@
 namespace App\Utilities;
 
 use App\Helpers\ConfigHelper;
+use App\Models\Group;
 use App\Models\GroupAdmin;
 use App\Models\PostAllow;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
+use App\Models\UserFollow;
+use Illuminate\Support\Arr;
 
 class PermissionUtility
 {
@@ -57,8 +60,8 @@ class PermissionUtility
         return $config;
     }
 
-    // Get user role permission
-    public static function getUserRolePerm(int $userId)
+    // Get user main role permission
+    public static function getUserMainRolePerm(int $userId)
     {
         $defaultRoleId = ConfigHelper::fresnsConfigByItemKey('default_role');
         $userRole = UserRole::where('user_id', $userId)->where('is_main', 1)->first();
@@ -100,6 +103,56 @@ class PermissionUtility
         return array_intersect($userRoles, $permRoleIds) ? 'true' : 'false';
     }
 
+    // Get group filter ids
+    public static function getGroupFilterIds(?int $userId = null)
+    {
+        if (empty($userId)) {
+            return [];
+        }
+
+        $followGroupIds = UserFollow::type(UserFollow::TYPE_GROUP)->where('user_id', $userId)->pluck('follow_id')->toArray();
+        $groupIds = Group::where('type', 2)->where('type_find', 2)->pluck('id')->toArray();
+
+        $filtered = array_values(array_diff($groupIds, $followGroupIds));
+
+        return $filtered;
+    }
+
+    // Get group post filter ids
+    public static function getGroupPostFilterIds(?int $userId = null)
+    {
+        if (empty($userId)) {
+            return [];
+        }
+
+        $followGroupIds = UserFollow::type(UserFollow::TYPE_GROUP)->where('user_id', $userId)->pluck('follow_id')->toArray();
+        $groupIds = Group::where('type', 2)->where('type_mode', 2)->pluck('id')->toArray();
+
+        $filtered = array_values(array_diff($groupIds, $followGroupIds));
+
+        return $filtered;
+    }
+
+    // Check if the user is a group administrator
+    public static function checkUserGroupAdmin(int $groupId, int $userId)
+    {
+        $groupAdminArr = GroupAdmin::where('group_id', $groupId)->pluck('user_id')->toArray();
+
+        return in_array($userId, $groupAdminArr) ? 'true' : 'false';
+    }
+
+    // Check if the user has group publishing permissions
+    public static function checkUserGroupPublishPerm(int $groupId, ?int $userId = null)
+    {
+        $perm['allowPost'] = true;
+        $perm['reviewPost'] = true;
+        $perm['allowComment'] = true;
+        $perm['reviewComment'] = true;
+        $perms = $perm;
+
+        return $perms;
+    }
+
     // Check post allow
     public static function checkPostAllow(int $postId, int $userId): bool
     {
@@ -124,25 +177,5 @@ class PermissionUtility
     {
         $publishConfig = ConfigHelper::fresnsConfigByItemTag('commentEditor', $langTag);
         $user = User::find($userId);
-    }
-
-    // Check if the user is a group administrator
-    public static function checkUserGroupAdmin(int $groupId, int $userId)
-    {
-        $groupAdminArr = GroupAdmin::where('group_id', $groupId)->pluck('user_id')->toArray();
-
-        return in_array($userId, $groupAdminArr) ? 'true' : 'false';
-    }
-
-    // Check if the user has group publishing permissions
-    public static function checkUserGroupPublishPerm(int $groupId, ?int $userId = null)
-    {
-        $perm['allowPost'] = true;
-        $perm['reviewPost'] = true;
-        $perm['allowComment'] = true;
-        $perm['reviewComment'] = true;
-        $perms = $perm;
-
-        return $perms;
     }
 }

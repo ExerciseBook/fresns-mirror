@@ -18,11 +18,12 @@ class GroupListDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['integer', 'required', 'in:1,2'],
-            'parentGid' => ['string', 'nullable'],
+            'category' => ['string', 'nullable'],
             'recommend' => ['boolean', 'nullable'],
             'likeCountGt' => ['integer', 'nullable', 'lt:likeCountLt'],
             'likeCountLt' => ['integer', 'nullable', 'gt:likeCountGt'],
+            'dislikeCountGt' => ['integer', 'nullable', 'lt:dislikeCountLt'],
+            'dislikeCountLt' => ['integer', 'nullable', 'gt:dislikeCountGt'],
             'followCountGt' => ['integer', 'nullable', 'lt:followCountLt'],
             'followCountLt' => ['integer', 'nullable', 'gt:followCountGt'],
             'blockCountGt' => ['integer', 'nullable', 'lt:blockCountLt'],

@@ -8,112 +8,231 @@
 
 namespace App\Fresns\Api\Http\Controllers;
 
-use App\Helpers\AppHelper;
-use App\Helpers\InteractiveHelper;
-use App\Models\Group;
-use App\Models\User;
 use App\Models\Seo;
-use App\Utilities\ExtendUtility;
-use App\Utilities\PermissionUtility;
-use App\Utilities\CollectionUtility;
+use App\Models\Group;
+use App\Models\PluginUsage;
 use Illuminate\Http\Request;
+use App\Helpers\PrimaryHelper;
 use App\Exceptions\ApiException;
+use App\Utilities\ExtendUtility;
+use App\Utilities\CollectionUtility;
+use App\Fresns\Api\Http\DTO\GroupListDTO;
+use App\Fresns\Api\Services\GroupService;
+use App\Fresns\Api\Services\HeaderService;
+use App\Fresns\Api\Http\DTO\InteractiveDTO;
+use App\Fresns\Api\Services\InteractiveService;
+use App\Utilities\PermissionUtility;
 
 class GroupController extends Controller
 {
-    public function tree(Request $request)
+    // tree
+    public function tree()
     {
-        $headers = AppHelper::getApiHeaders();
+        $headers = HeaderService::getHeaders();
 
-        $groups = Sticker::orderBy('rating')->get();
+        $authUserId = null;
+        if (! empty($headers['uid'])) {
+            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        }
+
+        $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
+
+        $groups = Group::orderBy('rating')->whereNotIn('id', $groupFilterIds)->isEnable()->get();
+
+        $service = new GroupService();
 
         $groupData = [];
         foreach ($groups as $index => $group) {
-            $groupData[$index]['gid'] = $group->gid;
-            $groupData[$index]['parentGid'] = $groups->where('id', $group->parent_id)->value('gid');
-            $groupData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $group->id, $headers['langTag']);
+            $groupData[$index][] = $service->groupList($group, $headers['langTag'], $headers['timezone'], $authUserId);
         }
 
-        $groupTree = CollectionUtility::toTree($groupData, 'gid', 'parentGid', 'groups');
+        $groupTree = CollectionUtility::toTree($groupData, 'gid', 'category', 'groups');
 
         return $this->success($groupTree);
-
     }
 
-    public function list(Request $request)
+    public function categories(Request $request)
     {
-        $headers = AppHelper::getApiHeaders();
-        $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
+        $headers = HeaderService::getHeaders();
 
-        $groups = Group::paginate($request->get('pageSize', 15));
+        $groupQuery = Group::where('type', 1)->orderBy('rating')->isEnable();
 
-        $groupList = [];
-        foreach ($groups as $group) {
-            $groupInfo = $group->getGroupInfo($headers['langTag']);
+        $categories = $groupQuery->paginate($request->get('pageSize', 30));
 
-            $item['icons'] = ExtendUtility::getIcons(2, $group->id, $headers['langTag']);
-            $item['tips'] = ExtendUtility::getTips(2, $group->id, $headers['langTag']);
-            $item['extends'] = ExtendUtility::getExtends(2, $group->id, $headers['langTag']);
-
-            $item['creator'] = null;
-            if (! empty($creator)) {
-                $userProfile = $creator->getUserProfile($headers['langTag'], $headers['timezone']);
-                $userMainRole = $creator->getUserMainRole($headers['langTag'], $headers['timezone']);
-                $item['creator'] = array_merge($userProfile, $userMainRole);
-            }
-
-            $groupList[] = array_merge($groupInfo, $item);
+        $catList = [];
+        foreach ($categories as $category) {
+            $item = $category->getCategoryInfo($headers['langTag']);
+            $catList[] = $item;
         }
 
-        return $this->fresnsPaginate($groupList, $groups->total(), $groups->perPage());
+        return $this->fresnsPaginate($catList, $categories->total(), $categories->perPage());
     }
 
+    // list
+    public function list(Request $request)
+    {
+        $dtoRequest = new GroupListDTO($request->all());
+
+        $headers = HeaderService::getHeaders();
+
+        $authUserId = null;
+        if (! empty($headers['uid'])) {
+            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        }
+
+        $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
+        $groupQuery = Group::where('type', 2)->whereNotIn('id', $groupFilterIds)->isEnable();
+
+        if ($dtoRequest->category) {
+            $parentId = PrimaryHelper::fresnsGroupIdByGid($dtoRequest->category);
+            $groupQuery->where('parent_id', $parentId);
+        }
+
+        if ($dtoRequest->recommend) {
+            $groupQuery->where('is_recommend', $dtoRequest->recommend);
+        }
+
+        if ($dtoRequest->likeCountGt) {
+            $groupQuery->where('like_count', '>=', $dtoRequest->likeCountGt);
+        }
+
+        if ($dtoRequest->likeCountLt) {
+            $groupQuery->where('like_count', '<=', $dtoRequest->likeCountLt);
+        }
+
+        if ($dtoRequest->dislikeCountGt) {
+            $groupQuery->where('dislike_count', '>=', $dtoRequest->dislikeCountGt);
+        }
+
+        if ($dtoRequest->dislikeCountLt) {
+            $groupQuery->where('dislike_count', '<=', $dtoRequest->dislikeCountLt);
+        }
+
+        if ($dtoRequest->followCountGt) {
+            $groupQuery->where('follow_count', '>=', $dtoRequest->followCountGt);
+        }
+
+        if ($dtoRequest->followCountLt) {
+            $groupQuery->where('follow_count', '<=', $dtoRequest->followCountLt);
+        }
+
+        if ($dtoRequest->blockCountGt) {
+            $groupQuery->where('block_count', '>=', $dtoRequest->blockCountGt);
+        }
+
+        if ($dtoRequest->blockCountLt) {
+            $groupQuery->where('block_count', '<=', $dtoRequest->blockCountLt);
+        }
+
+        if ($dtoRequest->postCountGt) {
+            $groupQuery->where('post_count', '>=', $dtoRequest->postCountGt);
+        }
+
+        if ($dtoRequest->postCountLt) {
+            $groupQuery->where('post_count', '<=', $dtoRequest->postCountLt);
+        }
+
+        if ($dtoRequest->digestCountGt) {
+            $groupQuery->where('post_digest_count', '>=', $dtoRequest->digestCountGt);
+        }
+
+        if ($dtoRequest->digestCountLt) {
+            $groupQuery->where('post_digest_count', '<=', $dtoRequest->digestCountLt);
+        }
+
+        if ($dtoRequest->createTimeGt) {
+            $groupQuery->where('created_at', '>=', $dtoRequest->createTimeGt);
+        }
+
+        if ($dtoRequest->createTimeLt) {
+            $groupQuery->where('created_at', '<=', $dtoRequest->createTimeLt);
+        }
+
+        $ratingType = match ($dtoRequest->ratingType) {
+            default => 'rating',
+            'like' => 'like_me_count',
+            'dislike' => 'dislike_me_count',
+            'follow' => 'follow_me_count',
+            'block' => 'block_me_count',
+            'post' => 'post_count',
+            'digest' => 'post_digest_count',
+            'createTime' => 'created_at',
+            'rating' => 'rating',
+        };
+
+        $ratingOrder = match ($dtoRequest->ratingOrder) {
+            default => 'asc',
+            'asc' => 'asc',
+            'desc' => 'desc',
+        };
+
+        $groupQuery->orderBy('recommend_rating', 'asc')->orderBy($ratingType, $ratingOrder);
+
+        $groupData = $groupQuery->paginate($request->get('pageSize', 15));
+
+        $groupList = [];
+        $service = new GroupService();
+        foreach ($groupData as $group) {
+            $groupList[] = $service->groupList($group, $headers['langTag'], $headers['timezone'], $authUserId);
+        }
+
+        return $this->fresnsPaginate($groupList, $groupData->total(), $groupData->perPage());
+    }
+
+    // detail
     public function detail(string $gid)
     {
-        $headers = AppHelper::getApiHeaders();
-        $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
-
         $group = Group::whereGid($gid)->first();
         if (empty($group)) {
             throw new ApiException(37100);
         }
 
-        $parentGroup = $group->category;
-        $creator = $group->creator;
+        $headers = HeaderService::getHeaders();
 
-        $seoData = Seo::where('linked_type', 2)->where('linked_id', $group->id)->where('lang_tag', $headers['langTag'])->first();
+        $authUserId = null;
+        if (! empty($headers['uid'])) {
+            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        }
+
+        $seoData = Seo::where('linked_type', Seo::TYPE_GROUP)->where('linked_id', $group->id)->where('lang_tag', $headers['langTag'])->first();
+
         $common['title'] = $seoData->title ?? null;
         $common['keywords'] = $seoData->keywords ?? null;
         $common['description'] = $seoData->description ?? null;
-        $common['extensions'] = ExtendUtility::getPluginExtends(6, $group->id, null, $user?->id, $headers['langTag']);
+        $common['extensions'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_GROUP, $group->id, null, $authUserId, $headers['langTag']);
         $data['commons'] = $common;
 
-        $groupInfo = $group->getGroupInfo($headers['langTag']);
+        $data['category'] = $group->category->getCategoryInfo($headers['langTag']);
 
-        $item['publishRule'] = PermissionUtility::checkUserGroupPublishPerm($user?->id, $group->id);
-
-        $item['icons'] = ExtendUtility::getIcons(2, $group->id, $headers['langTag']);
-        $item['tips'] = ExtendUtility::getTips(2, $group->id, $headers['langTag']);
-        $item['extends'] = ExtendUtility::getExtends(2, $group->id, $headers['langTag']);
-
-        $item['parentInfo'] = null;
-        if ($group->type == 2) {
-            $item['parentInfo'] = $parentGroup->getParentGroupInfo($headers['langTag']);
-        }
-
-        $item['creator'] = null;
-        if (! empty($creator)) {
-            $userProfile = $creator->getUserProfile($headers['langTag'], $headers['timezone']);
-            $userMainRole = $creator->getUserMainRole($headers['langTag'], $headers['timezone']);
-            $item['creator'] = array_merge($userProfile, $userMainRole);
-        }
-
-        $item['admins'] = $group->getGroupAdmins($headers['langTag'], $headers['timezone']);
-
-        $groupInteractive = InteractiveHelper::fresnsGroupInteractive($headers['langTag']);
-
-        $data['detail'] = array_merge($groupInfo, $item, $groupInteractive);
+        $service = new GroupService();
+        $data['detail'] = $service->groupDetail($group, $headers['langTag'], $headers['timezone'], $authUserId);
 
         return $this->success($data);
+    }
+
+    // interactive
+    public function interactive(string $gid, string $type, Request $request)
+    {
+        $group = Group::whereGid($gid)->first();
+        if (empty($group)) {
+            throw new ApiException(37100);
+        }
+
+        $requestData = $request->all();
+        $requestData['type'] = $type;
+        $dtoRequest = new InteractiveDTO($requestData);
+
+        $timeOrder = $dtoRequest->timeOrder ?: 'desc';
+
+        $headers = HeaderService::getHeaders();
+        $authUserId = null;
+        if (! empty($headers['uid'])) {
+            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        }
+
+        $service = new InteractiveService();
+        $data = $service->getMarkListOfUsers($dtoRequest->type, InteractiveService::TYPE_GROUP, $group->id, $timeOrder, $authUserId);
+
+        return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }
 }

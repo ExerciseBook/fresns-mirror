@@ -44,12 +44,6 @@ class GroupService
         $item['tips'] = ExtendUtility::getTips(TipLinked::TYPE_GROUP, $group->id, $langTag);
         $item['extends'] = ExtendUtility::getExtends(ExtendLinked::TYPE_GROUP, $group->id, $langTag);
 
-        $item['parentInfo'] = null;
-        if ($group->type == 2) {
-            $parentGroup = $group->category;
-            $item['parentInfo'] = $parentGroup->getParentGroupInfo($langTag);
-        }
-
         $creator = $group->creator;
 
         $item['creator'] = null;

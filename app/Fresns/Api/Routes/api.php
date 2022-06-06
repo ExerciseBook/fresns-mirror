@@ -92,6 +92,7 @@ Route::prefix('v2')->group(function () {
 
     Route::prefix('group')->group(function () {
         Route::get('tree', [GroupController::class, 'tree'])->name('group.tree');
+        Route::get('categories', [GroupController::class, 'categories'])->name('group.categories');
         Route::get('list', [GroupController::class, 'list'])->name('group.list');
         Route::get('{gid}/detail', [GroupController::class, 'detail'])->name('group.detail');
         Route::get('{gid}/interactive/{type}', [GroupController::class, 'interactive'])->name('group.interactive');
