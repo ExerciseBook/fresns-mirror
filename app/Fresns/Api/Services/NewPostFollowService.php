@@ -22,7 +22,7 @@ class NewPostFollowService
         $followUserIds = UserFollow::type(UserFollow::TYPE_USER)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
         $allUserIds = Arr::prepend($followUserIds, $authUserId);
         $followGroupIds = UserFollow::type(UserFollow::TYPE_GROUP)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
-        $followHashtagIds = UserFollow::type(UserFollow::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('linked_id')->toArray();
+        $followHashtagIds = UserFollow::type(UserFollow::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
 
         $blockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
         $blockGroupIds = UserBlock::type(UserBlock::TYPE_GROUP)->where('user_id', $authUserId)->pluck('block_id')->toArray();
@@ -182,7 +182,7 @@ class NewPostFollowService
     // get post list by follow hashtags
     public function getPostListByFollowHashtags(int $authUserId, ?string $contentType = null, ?string $dateLimit = null)
     {
-        $followHashtagIds = UserFollow::type(UserFollow::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('linked_id')->toArray();
+        $followHashtagIds = UserFollow::type(UserFollow::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
         $blockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
         $blockGroupIds = UserBlock::type(UserBlock::TYPE_GROUP)->where('user_id', $authUserId)->pluck('block_id')->toArray();
         $modeGroupIds = PermissionUtility::getGroupPostFilterIds($authUserId);
