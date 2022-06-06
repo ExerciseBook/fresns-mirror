@@ -18,6 +18,7 @@ class UserListDTO extends DTO
     public function rules(): array
     {
         return [
+            'verified' => ['boolean', 'nullable'],
             'gender' => ['integer', 'nullable', 'in:1,2,3'],
             'createTimeGt' => ['date_format:Y-m-d', 'nullable', 'before:createTimeLt'], // user_stats->created_at
             'createTimeLt' => ['date_format:Y-m-d', 'nullable', 'after:createTimeGt'], // user_stats->created_at

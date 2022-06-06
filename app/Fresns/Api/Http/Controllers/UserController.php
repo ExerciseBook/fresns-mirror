@@ -42,6 +42,135 @@ class UserController extends Controller
         }
 
         $userQuery = UserStat::with('user');
+
+        $userQuery->when($dtoRequest->verified, function ($query, $value) {
+            $query->whereRelation('user', 'verified', $value);
+        });
+
+        $userQuery->when($dtoRequest->gender, function ($query, $value) {
+            $query->whereRelation('user', 'gender', $value);
+        });
+
+        if ($dtoRequest->createTimeGt) {
+            $userQuery->where('created_at', '>=', $dtoRequest->createTimeGt);
+        }
+
+        if ($dtoRequest->createTimeLt) {
+            $userQuery->where('created_at', '<=', $dtoRequest->createTimeLt);
+        }
+
+        if ($dtoRequest->likeCountGt) {
+            $userQuery->where('like_me_count', '>=', $dtoRequest->likeCountGt);
+        }
+
+        if ($dtoRequest->likeCountLt) {
+            $userQuery->where('like_me_count', '<=', $dtoRequest->likeCountLt);
+        }
+
+        if ($dtoRequest->dislikeCountGt) {
+            $userQuery->where('dislike_me_count', '>=', $dtoRequest->dislikeCountGt);
+        }
+
+        if ($dtoRequest->dislikeCountLt) {
+            $userQuery->where('dislike_me_count', '<=', $dtoRequest->dislikeCountLt);
+        }
+
+        if ($dtoRequest->followCountGt) {
+            $userQuery->where('follow_me_count', '>=', $dtoRequest->followCountGt);
+        }
+
+        if ($dtoRequest->followCountLt) {
+            $userQuery->where('follow_me_count', '<=', $dtoRequest->followCountLt);
+        }
+
+        if ($dtoRequest->blockCountGt) {
+            $userQuery->where('block_me_count', '>=', $dtoRequest->blockCountGt);
+        }
+
+        if ($dtoRequest->blockCountLt) {
+            $userQuery->where('block_me_count', '<=', $dtoRequest->blockCountLt);
+        }
+
+        if ($dtoRequest->postCountGt) {
+            $userQuery->where('post_publish_count', '>=', $dtoRequest->postCountGt);
+        }
+
+        if ($dtoRequest->postCountLt) {
+            $userQuery->where('post_publish_count', '<=', $dtoRequest->postCountLt);
+        }
+
+        if ($dtoRequest->commentCountGt) {
+            $userQuery->where('comment_publish_count', '>=', $dtoRequest->commentCountGt);
+        }
+
+        if ($dtoRequest->commentCountLt) {
+            $userQuery->where('comment_publish_count', '<=', $dtoRequest->commentCountLt);
+        }
+
+        if ($dtoRequest->extcredits1CountGt) {
+            $userQuery->where('extcredits1', '>=', $dtoRequest->extcredits1CountGt);
+        }
+
+        if ($dtoRequest->extcredits1CountLt) {
+            $userQuery->where('extcredits1', '<=', $dtoRequest->extcredits1CountLt);
+        }
+
+        if ($dtoRequest->extcredits2CountGt) {
+            $userQuery->where('extcredits2', '>=', $dtoRequest->extcredits2CountGt);
+        }
+
+        if ($dtoRequest->extcredits2CountLt) {
+            $userQuery->where('extcredits2', '<=', $dtoRequest->extcredits2CountLt);
+        }
+
+        if ($dtoRequest->extcredits3CountGt) {
+            $userQuery->where('extcredits3', '>=', $dtoRequest->extcredits3CountGt);
+        }
+
+        if ($dtoRequest->extcredits3CountLt) {
+            $userQuery->where('extcredits3', '<=', $dtoRequest->extcredits3CountLt);
+        }
+
+        if ($dtoRequest->extcredits4CountGt) {
+            $userQuery->where('extcredits4', '>=', $dtoRequest->extcredits4CountGt);
+        }
+
+        if ($dtoRequest->extcredits4CountLt) {
+            $userQuery->where('extcredits4', '<=', $dtoRequest->extcredits4CountLt);
+        }
+
+        if ($dtoRequest->extcredits5CountGt) {
+            $userQuery->where('extcredits5', '>=', $dtoRequest->extcredits5CountGt);
+        }
+
+        if ($dtoRequest->extcredits5CountLt) {
+            $userQuery->where('extcredits5', '<=', $dtoRequest->extcredits5CountLt);
+        }
+
+        $ratingType = match ($dtoRequest->ratingType) {
+            default => 'created_at',
+            'like' => 'like_me_count',
+            'dislike' => 'dislike_me_count',
+            'follow' => 'follow_me_count',
+            'block' => 'block_me_count',
+            'post' => 'post_publish_count',
+            'comment' => 'comment_publish_count',
+            'extcredits1' => 'extcredits1',
+            'extcredits2' => 'extcredits2',
+            'extcredits3' => 'extcredits3',
+            'extcredits4' => 'extcredits4',
+            'extcredits5' => 'extcredits5',
+            'createTime' => 'created_at',
+        };
+
+        $ratingOrder = match ($dtoRequest->ratingOrder) {
+            default => 'desc',
+            'asc' => 'asc',
+            'desc' => 'desc',
+        };
+
+        $userQuery->orderBy($ratingType, $ratingOrder);
+
         $userData = $userQuery->paginate($request->get('pageSize', 15));
 
         $userList = [];
