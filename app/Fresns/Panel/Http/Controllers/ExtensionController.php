@@ -33,7 +33,7 @@ class ExtensionController extends Controller
         $enableCount = $enablePlugins->count();
         $disableCount = Plugin::type(1)->isEnable(false)->count();
 
-        return view('FsView::plugins.list', compact('plugins', 'enableCount', 'disableCount', 'isEnable', 'enablePlugins'));
+        return view('FsView::extensions.plugins', compact('plugins', 'enableCount', 'disableCount', 'isEnable', 'enablePlugins'));
     }
 
     public function engineIndex()
@@ -57,7 +57,7 @@ class ExtensionController extends Controller
         // Sidebar
         $enablePlugins = Plugin::type(1)->isEnable()->get();
 
-        return view('FsView::clients.engines', compact(
+        return view('FsView::extensions.engines', compact(
             'engines', 'configs', 'themes', 'plugins', 'enablePlugins'
         ));
     }
@@ -112,7 +112,7 @@ class ExtensionController extends Controller
         // Sidebar
         $enablePlugins = Plugin::type(1)->isEnable()->get();
 
-        return view('FsView::clients.themes', compact(
+        return view('FsView::extensions.themes', compact(
             'themes', 'enablePlugins'
         ));
     }
@@ -124,7 +124,7 @@ class ExtensionController extends Controller
         // Sidebar
         $enablePlugins = Plugin::type(1)->isEnable()->get();
 
-        return view('FsView::clients.apps', compact(
+        return view('FsView::extensions.apps', compact(
             'apps', 'enablePlugins'
         ));
     }
