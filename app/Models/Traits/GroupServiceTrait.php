@@ -12,7 +12,6 @@ use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
 use App\Models\GroupAdmin;
-use App\Models\User;
 
 trait GroupServiceTrait
 {
@@ -22,23 +21,24 @@ trait GroupServiceTrait
         $parentGroup = $this->category;
 
         $info['gid'] = $groupData->gid;
-        $info['category'] = $parentGroup->gid;
         $info['type'] = $groupData->type;
         $info['gname'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $groupData->id, $langTag);
         $info['description'] = LanguageHelper::fresnsLanguageByTableId('groups', 'description', $groupData->id, $langTag);
         $info['cover'] = FileHelper::fresnsFileUrlByTableColumn($groupData->cover_file_id, $groupData->cover_file_url);
         $info['banner'] = FileHelper::fresnsFileUrlByTableColumn($groupData->banner_file_id, $groupData->banner_file_url);
         $info['recommend'] = (bool) $groupData->is_recommend;
+        $info['view'] = $groupData->type_view;
         $info['mode'] = $groupData->type_mode;
         $info['find'] = $groupData->type_find;
         $info['followType'] = $groupData->type_follow;
         $info['followUrl'] = ! empty($groupData->plugin_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($groupData->plugin_unikey) : null;
+        $info['category'] = $parentGroup->getCategoryInfo($langTag) ?? null;
         $info['likeCount'] = $groupData->like_count;
         $info['dislikeCount'] = $groupData->dislike_count;
         $info['followCount'] = $groupData->follow_count;
         $info['blockCount'] = $groupData->block_count;
         $info['postCount'] = $groupData->post_count;
-        $info['digestCount'] = $groupData->digest_count;
+        $info['postDigestCount'] = $groupData->post_digest_count;
         $info['permission'] = $groupData->permission;
 
         return $info;

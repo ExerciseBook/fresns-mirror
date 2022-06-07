@@ -32,6 +32,12 @@ class Comment extends Model
     {
         return $this->belongsTo(Post::class, 'post_id', 'id');
     }
+
+    public function postAppend()
+    {
+        return $this->belongsTo(PostAppend::class, 'post_id', 'post_id');
+    }
+
     public function comments()
     {
         return $this->hasMany(self::class, 'parent_id', 'id');
@@ -40,5 +46,10 @@ class Comment extends Model
     public function parentComment()
     {
         return $this->belongsTo(self::class, 'parent_id', 'id');
+    }
+
+    public function hashtags()
+    {
+        return $this->belongsToMany(Hashtag::class, 'hashtag_linkeds', 'hashtag_id', 'linked_id')->wherePivot('linked_type', HashtagLinked::TYPE_COMMENT);
     }
 }

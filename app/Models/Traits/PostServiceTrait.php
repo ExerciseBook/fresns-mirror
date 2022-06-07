@@ -33,12 +33,16 @@ trait PostServiceTrait
         $info['isAnonymous'] = (bool) $postData->is_anonymous;
         $info['stickyState'] = $postData->sticky_state;
         $info['digestState'] = $postData->digest_state;
-        $info['ipRegion'] = $appendData->ip_region;
         $info['likeCount'] = $postData->like_count;
+        $info['dislikeCount'] = $postData->dislike_count;
         $info['followCount'] = $postData->follow_count;
         $info['blockCount'] = $postData->block_count;
         $info['commentCount'] = $postData->comment_count;
+        $info['commentDigestCount'] = $postData->comment_digest_count;
         $info['commentLikeCount'] = $postData->comment_like_count;
+        $info['commentDislikeCount'] = $postData->comment_dislike_count;
+        $info['commentFollowCount'] = $postData->comment_follow_count;
+        $info['commentBlockCount'] = $postData->comment_block_count;
         $info['createTime'] = DateHelper::fresnsFormatDateTime($postData->created_at, $timezone, $langTag);
         $info['createTimeFormat'] = DateHelper::fresnsFormatTime($postData->created_at, $langTag);
         $info['editTime'] = DateHelper::fresnsFormatDateTime($postData->latest_edit_at, $timezone, $langTag);
@@ -53,6 +57,8 @@ trait PostServiceTrait
         $info['isUserList'] = (bool) $appendData->is_user_list;
         $info['userListName'] = LanguageHelper::fresnsLanguageByTableId('post_appends', 'user_list_name', $appendData->post_id, $langTag);
         $info['userListUrl'] = ! empty($appendData->user_list_plugin_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($appendData->user_list_plugin_unikey) : null;
+
+        $info['ipRegion'] = $appendData->ip_region;
 
         $location['isLbs'] = ! empty($postData->map_id) ? true : false;
         $location['mapId'] = $postData->map_id;

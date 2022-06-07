@@ -12,10 +12,11 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
+use Illuminate\Support\Str;
 
 trait CommentServiceTrait
 {
-    public function getCommentInfo(string $langTag = '', string $timezone = '', string $type)
+    public function getCommentInfo(?string $langTag = null, ?string $timezone = null)
     {
         $commentData = $this;
         $appendData = $this->commentAppend;
@@ -31,14 +32,18 @@ trait CommentServiceTrait
         $info['isBrief'] = false;
         $info['isMarkdown'] = (bool) $commentData->is_markdown;
         $info['isAnonymous'] = (bool) $commentData->is_anonymous;
-        $info['isSticky'] = $commentData->is_sticky;
+        $info['isSticky'] = (bool) $commentData->is_sticky;
         $info['digestState'] = $commentData->digest_state;
-        $info['ipRegion'] = $appendData->ip_region;
         $info['likeCount'] = $commentData->like_count;
+        $info['dislikeCount'] = $commentData->dislike_count;
         $info['followCount'] = $commentData->follow_count;
         $info['blockCount'] = $commentData->block_count;
         $info['commentCount'] = $commentData->comment_count;
+        $info['commentDigestCount'] = $commentData->comment_digest_count;
         $info['commentLikeCount'] = $commentData->comment_like_count;
+        $info['commentDislikeCount'] = $commentData->comment_dislike_count;
+        $info['commentFollowCount'] = $commentData->comment_follow_count;
+        $info['commentBlockCount'] = $commentData->comment_block_count;
         $info['createTime'] = DateHelper::fresnsFormatDateTime($commentData->created_at, $timezone, $langTag);
         $info['createTimeFormat'] = DateHelper::fresnsFormatTime($commentData->created_at, $langTag);
         $info['editTime'] = DateHelper::fresnsFormatDateTime($commentData->latest_edit_at, $timezone, $langTag);
@@ -49,6 +54,8 @@ trait CommentServiceTrait
         $info['commentBtnName'] = LanguageHelper::fresnsLanguageByTableId('post_appends', 'comment_btn_name', $commentData->post_id, $langTag);
         $info['commentBtnUrl'] = ! empty($postAppendData->comment_btn_plugin_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($postAppendData->comment_btn_plugin_unikey) : null;
 
+        $info['ipRegion'] = $appendData->ip_region;
+
         $location['isLbs'] = ! empty($commentData->map_id) ? true : false;
         $location['mapId'] = $commentData->map_id;
         $location['latitude'] = $commentData->map_latitude;
@@ -57,30 +64,10 @@ trait CommentServiceTrait
         $location['poi'] = $appendData->map_poi;
         $location['poiId'] = $appendData->map_poi_id;
         $location['distance'] = null;
+        $location['unit'] = ConfigHelper::fresnsConfigLengthUnit($langTag);
 
         $info['location'] = $location;
 
         return $info;
-    }
-
-    public function getEditStatus(int $userId)
-    {
-        $commentData = $this;
-        $editConfig = ConfigHelper::fresnsConfigByItemKeys([
-            'comment_edit',
-            'comment_edit_timelimit',
-            'comment_edit_sticky',
-            'comment_edit_digest',
-        ]);
-
-        $canEdit = false;
-
-        $editStatus['isMe'] = $commentData->user_id == $userId ? true : false;
-        $editStatus['canEdit'] = $canEdit;
-        $editStatus['isPluginEditor'] = (bool) $commentData->commentAppend->is_plugin_editor;
-        $editStatus['editorUrl'] = ! empty($commentData->commentAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($commentData->commentAppend->editor_unikey) : null;
-        $editStatus['canDelete'] = (bool) $commentData->commentAppend->can_delete;
-
-        return $editStatus;
     }
 }

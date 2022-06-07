@@ -22,10 +22,11 @@ trait HashtagServiceTrait
         $info['cover'] = FileHelper::fresnsFileUrlByTableColumn($hashtagData->cover_file_id, $hashtagData->cover_file_url);
         $info['description'] = LanguageHelper::fresnsLanguageByTableId('hashtags', 'description', $hashtagData->id, $langTag);
         $info['likeCount'] = $hashtagData->like_count;
+        $info['dislikeCount'] = $hashtagData->dislike_count;
         $info['followCount'] = $hashtagData->follow_count;
         $info['blockCount'] = $hashtagData->block_count;
         $info['postCount'] = $hashtagData->post_count;
-        $info['digestCount'] = $hashtagData->digest_count;
+        $info['postDigestCount'] = $hashtagData->post_digest_count;
 
         return $info;
     }

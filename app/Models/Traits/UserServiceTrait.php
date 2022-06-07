@@ -199,11 +199,17 @@ trait UserServiceTrait
         $stats['followMeCount'] = $statsData->follow_me_count;
         $stats['blockMeCount'] = $statsData->block_me_count;
         $stats['postPublishCount'] = $statsData->post_publish_count;
+        $stats['postDigestCount'] = $statsData->post_digest_count;
         $stats['postLikeCount'] = $statsData->post_like_count;
         $stats['postDislikeCount'] = $statsData->post_dislike_count;
+        $stats['postFollowCount'] = $statsData->post_follow_count;
+        $stats['postBlockCount'] = $statsData->post_block_count;
         $stats['commentPublishCount'] = $statsData->comment_publish_count;
+        $stats['commentDigestCount'] = $statsData->comment_digest_count;
         $stats['commentLikeCount'] = $statsData->comment_like_count;
         $stats['commentDislikeCount'] = $statsData->comment_dislike_count;
+        $stats['commentFollowCount'] = $statsData->comment_follow_count;
+        $stats['commentBlockCount'] = $statsData->comment_block_count;
         $stats['extcredits1'] = $statsData->extcredits1;
         $stats['extcredits1Status'] = $extcredits['extcredits1_status'];
         $stats['extcredits1Name'] = $extcredits['extcredits1_name'];
