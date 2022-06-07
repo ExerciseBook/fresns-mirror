@@ -268,6 +268,20 @@ class InteractiveUtility
             InteractiveUtility::markStats($userId, 'follow', $followType, $followId, 'decrement');
         }
 
+        // is_mutual
+        if ($followType == UserFollow::TYPE_USER) {
+            $myFollow = UserFollow::where('user_id', $userId)->type(UserFollow::TYPE_USER)->where('follow_id', $followId)->first();
+            $itFollow = UserFollow::where('user_id', $followId)->type(UserFollow::TYPE_USER)->where('follow_id', $userId)->first();
+
+            if (! empty($myFollow) && ! empty($itFollow)) {
+                $myFollow->update(['is_mutual' => 1]);
+                $itFollow->update(['is_mutual' => 1]);
+            } else {
+                $myFollow->update(['is_mutual' => 0]);
+                $itFollow->update(['is_mutual' => 0]);
+            }
+        }
+
         return;
     }
 
