@@ -44,11 +44,11 @@
                         <span class="input-group-text">{{ __('FsLang::panel.install_type') }}</span>
                         <div class="form-control">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="install_type" id="install_plugin" value="plugin">
+                                <input class="form-check-input" type="radio" name="install_type" id="install_plugin" value="plugin" required>
                                 <label class="form-check-label" for="install_plugin">{{ __('FsLang::panel.install_type_application') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.install_type_desc') }}"></i></label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="install_type" id="install_theme" value="theme">
+                                <input class="form-check-input" type="radio" name="install_type" id="install_theme" value="theme" required>
                                 <label class="form-check-label" for="install_theme">{{ __('FsLang::panel.install_type_theme') }}</label>
                             </div>
                         </div>
