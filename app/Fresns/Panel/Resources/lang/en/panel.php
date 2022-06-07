@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => 'Language Packs',
     'sidebar_code_messages' => 'Code Messages',
     'sidebar_keys' => 'App Keys',
-    'sidebar_plugins' => 'Plugin Manage',
+    'sidebar_plugins' => 'Plugins',
     'sidebar_plugins_tab_all' => 'All',
     'sidebar_plugins_tab_active' => 'Active',
     'sidebar_plugins_tab_inactive' => 'Inactive',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'Confirm Install',
     'button_confirm_upgrade' => 'Confirm Upgrade',
     'button_confirm_uninstall' => 'Confirm Uninstall',
-    'button_plugin_input' => 'Input key',
-    'button_plugin_upload' => 'Upload zip',
     'button_view' => 'View',
     'button_image_upload' => 'Upload',
     'button_image_input' => 'Input',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'Config of the default language',
     'language_pack_default_desc' => 'Default language config content for reference',
     'language_pack_current' => 'Config of the current language',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'Select a key application platform',
     'key_option_main_api' => 'Main API',
     'key_option_manage_api' => 'Manage API',
     'key_option_plugin_api' => 'Plugin API',
     'key_option_plugin_api_select' => 'Select the key for which plugin',
     'key_option_plugin_api_select_desc' => 'This key can only request the API of the associated plugin',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'If you want to deploy a website standalone, or a mobile app without a website. Simply "deactivate" or "uninstall" the website engine so that Fresns will just be a back-end system with APIs and plugins running',
     'engine_table_options_desc' => 'Support to enable multiple engines, as long as they do not conflict with each other\'s routing paths, please consult the engine developers for details',
     'engine_table_theme_none' => 'None',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => 'No use',
     'engine_theme_pc' => 'PC Theme',
     'engine_theme_mobile' => 'Mobile Theme',
+    // App-Center-Install
+    'install_application' => 'Install App',
+    'install_type' => 'Install Type',
+    'install_type_desc' => 'Plugin, engine, mobile app, all belong to the application',
+    'install_type_application' => 'Application',
+    'install_type_theme' => 'Theme Template',
+    'install_mode' => 'Install Mode',
+    'install_mode_input' => 'Input Fresns Key',
+    'install_mode_upload' => 'Upload Zip Package',
 ];

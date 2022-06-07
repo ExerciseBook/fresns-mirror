@@ -265,16 +265,10 @@ Route::middleware(['panelAuth'])->group(function () {
         // code messages
         Route::get('code-messages', [CodeMessageController::class, 'index'])->name('code.messages.index');
         Route::put('code-messages/{codeMessage}', [CodeMessageController::class, 'update'])->name('code.messages.update');
-        // session key
-        Route::resource('keys', SessionKeyController::class)->only([
-            'index', 'store', 'update', 'destroy',
-        ]);
-        Route::put('keys/{key}/reset', [SessionKeyController::class, 'reset'])->name('keys.reset');
     });
 
     // app center
     Route::prefix('app-center')->group(function () {
-        Route::get('/', [IframeController::class, 'iframe'])->name('iframe');
         // plugins
         Route::get('plugins', [ExtensionController::class, 'pluginIndex'])->name('plugin.index');
         // engines
@@ -284,7 +278,14 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::get('themes', [ExtensionController::class, 'themeIndex'])->name('theme.index');
         // apps
         Route::get('apps', [ExtensionController::class, 'appIndex'])->name('app.index');
+        // session key
+        Route::resource('keys', SessionKeyController::class)->only([
+            'index', 'store', 'update', 'destroy',
+        ]);
+        Route::put('keys/{key}/reset', [SessionKeyController::class, 'reset'])->name('keys.reset');
     });
+
+    Route::get('app', [IframeController::class, 'iframe'])->name('iframe');
 
     // plugin manage
     Route::prefix('plugin')->group(function () {

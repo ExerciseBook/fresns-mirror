@@ -32,7 +32,11 @@ class IframeController extends Controller
         $langQueryString = http_build_query($langParams);
 
         // Splicing url
-        $langUrl = $queryString['path'].'?'.$langQueryString;
+        if (! empty($queryString['path'])) {
+            $langUrl = $queryString['path'].'?'.$langQueryString;
+        } else {
+            $langUrl = $url.'?'.$langQueryString;
+        }
 
         return $langUrl;
     }
@@ -45,6 +49,6 @@ class IframeController extends Controller
 
         $url = $this->addLangToUrl($request->url);
 
-        return view('FsView::iframe.plugin', compact('url', 'enablePlugins'));
+        return view('FsView::extensions.iframe', compact('url', 'enablePlugins'));
     }
 }

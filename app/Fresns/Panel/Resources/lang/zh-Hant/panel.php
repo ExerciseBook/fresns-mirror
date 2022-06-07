@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => '語言包配置',
     'sidebar_code_messages' => '狀態碼配置',
     'sidebar_keys' => '應用密鑰',
-    'sidebar_plugins' => '外掛管理',
+    'sidebar_plugins' => '擴充外掛',
     'sidebar_plugins_tab_all' => '全部',
     'sidebar_plugins_tab_active' => '已啟用',
     'sidebar_plugins_tab_inactive' => '未啟用',
@@ -156,8 +156,6 @@ return [
     'button_confirm_install' => '確認安裝',
     'button_confirm_upgrade' => '確認升級',
     'button_confirm_uninstall' => '確認卸載',
-    'button_plugin_input' => '輸入 key',
-    'button_plugin_upload' => '上傳 zip',
     'button_view' => '查看',
     'button_image_upload' => '上傳圖片',
     'button_image_input' => '輸入地址',
@@ -899,14 +897,14 @@ return [
     'language_pack_default' => '默認語言的配置',
     'language_pack_default_desc' => '默認語言配置的內容，供參考',
     'language_pack_current' => '當前語言的配置',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => '選擇密鑰應用平台',
     'key_option_main_api' => '主程 API',
     'key_option_manage_api' => '管理 API',
     'key_option_plugin_api' => '外掛 API',
     'key_option_plugin_api_select' => '選擇密鑰用於哪個外掛',
     'key_option_plugin_api_select_desc' => '該密鑰僅能請求關聯外掛的 API',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => '如果你希望獨立部署網站，或者是不需要網站的移動應用。只需“停用”或“卸載”網站引擎，這樣 Fresns 將只是一個 API 和外掛運行的後端系統。',
     'engine_table_options_desc' => '支持啟用多個引擎，只需要彼此路徑不衝突即可，詳情請諮詢引擎開發者。',
     'engine_table_theme_none' => '未設定',
@@ -914,4 +912,13 @@ return [
     'engine_theme_option_no' => '不使用',
     'engine_theme_pc' => '電腦端主題',
     'engine_theme_mobile' => '手機端主題',
+    // App-Center-Install
+    'install_application' => '安裝應用',
+    'install_type' => '安裝類型',
+    'install_type_desc' => '外掛、引擎、移動應用，都屬於應用程序',
+    'install_type_application' => '應用程序',
+    'install_type_theme' => '主題模板',
+    'install_mode' => '安裝方式',
+    'install_mode_input' => '輸入 key',
+    'install_mode_upload' => '上傳 zip',
 ];

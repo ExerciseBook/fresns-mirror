@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => 'Paket Bahasa',
     'sidebar_code_messages' => 'Pesan Kode',
     'sidebar_keys' => 'Kunci Aplikasi',
-    'sidebar_plugins' => 'Manage Plugin',
+    'sidebar_plugins' => 'Plugins',
     'sidebar_plugins_tab_all' => 'Semua',
     'sidebar_plugins_tab_active' => 'Aktif',
     'sidebar_plugins_tab_inactive' => 'Tidak aktif',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'Konfirmasi Instal',
     'button_confirm_upgrade' => 'Konfirmasikan Peningkatan',
     'button_confirm_uninstall' => 'Konfirmasikan Uninstall',
-    'button_plugin_input' => 'Memasukkan key',
-    'button_plugin_upload' => 'Mengunggah zip',
     'button_view' => 'Melihat',
     'button_image_upload' => 'Mengunggah',
     'button_image_input' => 'Memasukkan',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'Konfigurasi Bahasa Default',
     'language_pack_default_desc' => 'Konfigurasi bahasa default untuk referensi',
     'language_pack_current' => 'Konfigurasi bahasa saat ini',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'Pilih Platform Aplikasi Kunci',
     'key_option_main_api' => 'API utama',
     'key_option_manage_api' => 'API manajemen',
     'key_option_plugin_api' => 'Plugin API',
     'key_option_plugin_api_select' => 'Pilih plugin mana yang digunakan',
     'key_option_plugin_api_select_desc' => 'Kunci ini hanya dapat meminta API dari plugin terkait',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'Jika Anda ingin menyebarkan situs web secara independen, atau Anda tidak memerlukan aplikasi seluler situs web. Cukup "nonaktifkan" atau "hapus instalan" mesin situs web sehingga Fresns hanya akan hanya sistem backend yang berjalan pada API dan plugin',
     'engine_table_options_desc' => 'Dukungan untuk memungkinkan beberapa mesin, hanya perlu saling lewat, silakan berkonsultasi dengan pengembang mesin untuk detailnya',
     'engine_table_theme_none' => 'Tidak diatur',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => 'Jangan gunakan',
     'engine_theme_pc' => 'Tema sisi komputer',
     'engine_theme_mobile' => 'Topik Ponsel',
+    // App-Center-Install
+    'install_application' => 'Instal aplikasi',
+    'install_type' => 'Menginstal Jenis',
+    'install_type_desc' => 'Plugin, mesin, aplikasi seluler, semuanya milik aplikasi',
+    'install_type_application' => 'Aplikasi',
+    'install_type_theme' => 'Template Tema',
+    'install_mode' => 'Instal Mode',
+    'install_mode_input' => 'Masukkan Kunci Fresns',
+    'install_mode_upload' => 'Unggah Paket Zip',
 ];

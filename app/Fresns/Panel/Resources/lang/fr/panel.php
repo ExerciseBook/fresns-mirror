@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => 'Packs de langue',
     'sidebar_code_messages' => 'Messages du code',
     'sidebar_keys' => 'Clés d\'application',
-    'sidebar_plugins' => 'Plugin Gérer',
+    'sidebar_plugins' => 'Plugins',
     'sidebar_plugins_tab_all' => 'Tous',
     'sidebar_plugins_tab_active' => 'actif',
     'sidebar_plugins_tab_inactive' => 'Inactif',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'Confirmer l\'installation',
     'button_confirm_upgrade' => 'Confirmer la mise à niveau',
     'button_confirm_uninstall' => 'Confirmer la désinstallation',
-    'button_plugin_input' => 'Saisir key',
-    'button_plugin_upload' => 'Télécharger zip',
     'button_view' => 'Voir',
     'button_image_upload' => 'Télécharger',
     'button_image_input' => 'Contribution',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'Configuration de la langue par défaut',
     'language_pack_default_desc' => 'Configuration de la langue par défaut pour référence',
     'language_pack_current' => 'Configuration de la langue actuelle',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'Sélectionnez la plate-forme d\'application clé',
     'key_option_main_api' => 'API principale',
     'key_option_manage_api' => 'API de gestion',
     'key_option_plugin_api' => 'API de plugin',
     'key_option_plugin_api_select' => 'Sélectionnez le plugin à utiliser',
     'key_option_plugin_api_select_desc' => 'Cette clé ne peut que demander l\'API du plugin associé',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'Si vous souhaitez déployer un site Web indépendamment, ou si vous n\'avez pas besoin d\'une application mobile de site Web. Simplement "désactiver" ou "désinstaller" le moteur de site Web afin que Fresns ne soit qu\'un système de backend qui fonctionne sur une API et un plugin',
     'engine_table_options_desc' => 'Soutien Pour activer plusieurs moteurs, il suffit de passer l\'autre, veuillez consulter le développeur de moteur pour plus de détails',
     'engine_table_theme_none' => 'Pas encore défini',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => 'Ne pas utiliser',
     'engine_theme_pc' => 'Thème côté ordinateur',
     'engine_theme_mobile' => 'Sujet de téléphone portable',
+    // App-Center-Install
+    'install_application' => 'Installer l\'application',
+    'install_type' => 'Type d\'installation',
+    'install_type_desc' => 'Plugin, moteur, application mobile, tous appartiennent à l\'application',
+    'install_type_application' => 'Application',
+    'install_type_theme' => 'Modèle de thème',
+    'install_mode' => 'Mode d\'installation',
+    'install_mode_input' => 'Entrer la clé Fresns',
+    'install_mode_upload' => 'Télécharger le paquet Zip',
 ];

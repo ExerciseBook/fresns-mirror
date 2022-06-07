@@ -924,7 +924,6 @@ $(document).ready(function () {
 
     $('#uninstallStepModal').on('show.bs.modal', function (e) {
         $(this).find('.modal-title').text(window.pluginName);
-
     });
 
     $('.uninstall-plugin').click(function () {
@@ -1980,15 +1979,6 @@ $(document).ready(function () {
                 return false;
             }
         }
-    });
-
-    // extensions install
-    $('.install-dialog').on('click', function () {
-        let name = $(this).data('name');
-        let type = $(this).data('type');
-
-        $('.install-name').text(name)
-        $('input[name=install_type]').val(type)
     });
 
     // extensions install form

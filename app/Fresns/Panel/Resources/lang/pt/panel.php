@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => 'Pacotes de idiomas',
     'sidebar_code_messages' => 'Mensagens em código',
     'sidebar_keys' => 'Chave de aplicação',
-    'sidebar_plugins' => 'Gerenciar plugin',
+    'sidebar_plugins' => 'Plugins',
     'sidebar_plugins_tab_all' => 'Todo',
     'sidebar_plugins_tab_active' => 'Ativo',
     'sidebar_plugins_tab_inactive' => 'Inativo',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'Confirmar Instalação',
     'button_confirm_upgrade' => 'Confirme a atualização',
     'button_confirm_uninstall' => 'Confirme desinstalação',
-    'button_plugin_input' => 'Entrada key',
-    'button_plugin_upload' => 'Carregar zip',
     'button_view' => 'Visualizar',
     'button_image_upload' => 'Carregar',
     'button_image_input' => 'Entrada',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'Configuração de idioma padrão',
     'language_pack_default_desc' => 'Configuração de idioma padrão para referência',
     'language_pack_current' => 'Configuração de idioma atual',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'Selecione a plataforma de aplicativos chave',
     'key_option_main_api' => 'API principal',
     'key_option_manage_api' => 'API de gerenciamento',
     'key_option_plugin_api' => 'API do plugin',
     'key_option_plugin_api_select' => 'Selecione qual plugin para uso',
     'key_option_plugin_api_select_desc' => 'Esta chave só pode solicitar a API do plugin associado',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'Se você quiser implantar um site de forma independente, ou não precisa de um aplicativo móvel do site. Simplesmente "desativar" ou "desinstalar" o mecanismo de site, portanto, o Fresns será apenas apenas um sistema de backend que é executado em uma API e plugin',
     'engine_table_options_desc' => 'Suporte para habilitar vários motores, só precisa passar um ao outro, consulte o desenvolvedor do motor para detalhes',
     'engine_table_theme_none' => 'Não configurado',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => 'Não use',
     'engine_theme_pc' => 'Tema do lado do computador',
     'engine_theme_mobile' => 'Tópico de telefone celular',
+    // App-Center-Install
+    'install_application' => 'Instalar App',
+    'install_type' => 'Tipo de instalação',
+    'install_type_desc' => 'Plugin, motor, aplicação móvel, todos pertencem à aplicação',
+    'install_type_application' => 'Aplicação',
+    'install_type_theme' => 'Tema Tema Template',
+    'install_mode' => 'Modo de instalação',
+    'install_mode_input' => 'Chave de entrada Fresns',
+    'install_mode_upload' => 'Carregar Pacote Zip',
 ];

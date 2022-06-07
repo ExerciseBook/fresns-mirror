@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => '语言包配置',
     'sidebar_code_messages' => '状态码配置',
     'sidebar_keys' => '应用密钥',
-    'sidebar_plugins' => '插件管理',
+    'sidebar_plugins' => '扩展插件',
     'sidebar_plugins_tab_all' => '全部',
     'sidebar_plugins_tab_active' => '已启用',
     'sidebar_plugins_tab_inactive' => '未启用',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => '确认安装',
     'button_confirm_upgrade' => '确认升级',
     'button_confirm_uninstall' => '确认卸载',
-    'button_plugin_input' => '输入标识名',
-    'button_plugin_upload' => '上传安装包',
     'button_view' => '查看',
     'button_image_upload' => '上传图片',
     'button_image_input' => '输入地址',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => '默认语言的配置',
     'language_pack_default_desc' => '默认语言配置的内容，供参考',
     'language_pack_current' => '当前语言的配置',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => '选择密钥应用平台',
     'key_option_main_api' => '主程 API',
     'key_option_manage_api' => '管理 API',
     'key_option_plugin_api' => '插件 API',
     'key_option_plugin_api_select' => '选择密钥用于哪个插件',
     'key_option_plugin_api_select_desc' => '该密钥仅能请求关联插件的 API',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => '如果你希望独立部署网站，或者是不需要网站的移动应用。只需“停用”或“卸载”网站引擎，这样 Fresns 将只是一个 API 和插件运行的后端系统。',
     'engine_table_options_desc' => '支持启用多个引擎，只需要彼此路径不冲突即可，详情请咨询引擎开发者。',
     'engine_table_theme_none' => '未设置',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => '不使用',
     'engine_theme_pc' => '电脑端主题',
     'engine_theme_mobile' => '手机端主题',
+    // App-Center-Install
+    'install_application' => '安装应用',
+    'install_type' => '安装类型',
+    'install_type_desc' => '插件、引擎、移动应用，都属于应用程序',
+    'install_type_application' => '应用程序',
+    'install_type_theme' => '主题模板',
+    'install_mode' => '安装方式',
+    'install_mode_input' => '输入标识名',
+    'install_mode_upload' => '上传安装包',
 ];

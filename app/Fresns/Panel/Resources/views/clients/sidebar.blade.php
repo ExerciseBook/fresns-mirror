@@ -7,8 +7,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav d-flex flex-column">
-                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.keys.*') ? 'active' : '' }} " href="{{ route('panel.keys.index') }}">{{ __('FsLang::panel.sidebar_keys') }}</a></li>
-                    <li><hr class="dropdown-divider"></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.menus.*') ? 'active' : '' }}" href="{{ route('panel.menus.index') }}">{{ __('FsLang::panel.sidebar_menus') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.columns.*') ? 'active' : '' }}" href="{{ route('panel.columns.index') }}">{{ __('FsLang::panel.sidebar_columns') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.language.packs.*') ? 'active' : '' }}" href="{{ route('panel.language.packs.index') }}">{{ __('FsLang::panel.sidebar_language_packs') }}</a></li>

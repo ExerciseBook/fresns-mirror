@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => '言語パック',
     'sidebar_code_messages' => 'コードメッセージ',
     'sidebar_keys' => 'アプリキー',
-    'sidebar_plugins' => 'プラグイン管理',
+    'sidebar_plugins' => 'プラグイン',
     'sidebar_plugins_tab_all' => '全て',
     'sidebar_plugins_tab_active' => 'アクティブ',
     'sidebar_plugins_tab_inactive' => '非活性',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'インストールを確認する',
     'button_confirm_upgrade' => 'アップグレードを確認します',
     'button_confirm_uninstall' => 'アンインストールを確認してください',
-    'button_plugin_input' => '入力 key',
-    'button_plugin_upload' => 'アップロード zip',
     'button_view' => '意見',
     'button_image_upload' => 'アップロード',
     'button_image_input' => '入力',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'デフォルトの言語設定',
     'language_pack_default_desc' => '参照用のデフォルトの言語設定',
     'language_pack_current' => '現在の言語構成',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'キーアプリケーションプラットフォームを選択します',
     'key_option_main_api' => 'メインアピリ',
     'key_option_manage_api' => '管理API',
     'key_option_plugin_api' => 'プラグインAPI',
     'key_option_plugin_api_select' => '使用するプラグインを選択してください',
     'key_option_plugin_api_select_desc' => 'このキーは、関連するプラグインのAPIのみを要求できます。',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'Webサイトを単独で展開したい場合、またはWebサイトを持たないモバイルアプリケーションを展開したい場合。 ウェブサイトエンジンを「停止」または「アンインストール」するだけで、FresnsはAPIとプラグインが動作するバックエンドシステムとなります。',
     'engine_table_options_desc' => '複数のエンジンを有効にするためのサポート、互いに渡す必要があるだけで、詳細についてはエンジン開発者を参照してください。',
     'engine_table_theme_none' => '設定されていません',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => '使ってはいけません',
     'engine_theme_pc' => 'コンピュータサイドのテーマ',
     'engine_theme_mobile' => '携帯電話のトピック',
+    // App-Center-Install
+    'install_application' => 'インストールアプリ',
+    'install_type' => 'インストールタイプ',
+    'install_type_desc' => 'プラグイン、エンジン、モバイルアプリ、すべてアプリケーションに属する',
+    'install_type_application' => 'アプリケーション',
+    'install_type_theme' => 'テーマテンプレート',
+    'install_mode' => 'インストールモード',
+    'install_mode_input' => 'Fresnsキーの入力',
+    'install_mode_upload' => 'Zipパッケージのアップロード',
 ];

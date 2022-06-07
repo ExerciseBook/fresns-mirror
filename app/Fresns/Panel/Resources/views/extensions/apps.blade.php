@@ -13,9 +13,6 @@
         </div>
         <div class="col-lg-5">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
-                <button class="btn btn-primary install-dialog" type="button" data-bs-toggle="modal" data-bs-target="#installModal" data-type="plugin" data-name="{{ __('FsLang::panel.sidebar_apps') }}">
-                    <i class="bi bi-phone"></i> {{ __('FsLang::panel.button_install') }}
-                </button>
                 <a class="btn btn-outline-secondary" href="#" role="button">{{ __('FsLang::panel.button_support') }}</a>
             </div>
         </div>
@@ -40,7 +37,7 @@
                             @if ($app->is_enable)
                                 <button type="button" class="btn btn-outline-secondary btn-sm plugin-manage" data-action="{{ route('panel.plugin.update', ['plugin' => $app->id]) }}" data-enable="0">{{ __('FsLang::panel.button_deactivate') }}</button>
                                 @if ($app->settings_path)
-                                    <a href="{{ route('panel.iframe.client', ['url' => $app->settings_path]) }}" class="btn btn-primary btn-sm">{{ __('FsLang::panel.button_setting') }}</a>
+                                    <a href="{{ route('panel.iframe', ['url' => $app->settings_path]) }}" class="btn btn-primary btn-sm">{{ __('FsLang::panel.button_setting') }}</a>
                                 @endif
                             @else
                                 <button type="button" class="btn btn-outline-success btn-sm plugin-manage" data-action="{{ route('panel.plugin.update', ['plugin' => $app->id]) }}" data-enable="1">{{ __('FsLang::panel.button_activate') }}</button>

@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => 'भाषा पैक',
     'sidebar_code_messages' => 'कोड संदेश',
     'sidebar_keys' => 'ऐप कुंजी',
-    'sidebar_plugins' => 'प्लगइन प्रबंधन',
+    'sidebar_plugins' => 'प्लग-इन',
     'sidebar_plugins_tab_all' => 'सभी',
     'sidebar_plugins_tab_active' => 'सक्रिय',
     'sidebar_plugins_tab_inactive' => 'निष्क्रिय',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'इंस्टॉल की पुष्टि करें',
     'button_confirm_upgrade' => 'अपग्रेड की पुष्टि करें',
     'button_confirm_uninstall' => 'अनइंस्टॉल की पुष्टि करें',
-    'button_plugin_input' => 'इनपुट key',
-    'button_plugin_upload' => 'डालना zip',
     'button_view' => 'राय',
     'button_image_upload' => 'डालना',
     'button_image_input' => 'इनपुट',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'डिफ़ॉल्ट भाषा विन्यास',
     'language_pack_default_desc' => 'संदर्भ के लिए डिफ़ॉल्ट भाषा विन्यास',
     'language_pack_current' => 'वर्तमान भाषा विन्यास',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'कुंजी आवेदन मंच का चयन करें',
     'key_option_main_api' => 'मुख्य एपीआई',
     'key_option_manage_api' => 'प्रबंधन एपीआई',
     'key_option_plugin_api' => 'प्लगइन एपीआई',
     'key_option_plugin_api_select' => 'उपयोग के लिए कौन सा प्लगइन चुनें',
     'key_option_plugin_api_select_desc' => 'यह कुंजी केवल संबंधित प्लगइन के एपीआई का अनुरोध कर सकती है',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'यदि आप एक वेबसाइट को स्वतंत्र रूप से तैनात करना चाहते हैं, या आपको वेबसाइट मोबाइल ऐप की आवश्यकता नहीं है। बस "निष्क्रिय करें" या "अनइंस्टॉल करें" वेबसाइट इंजन तो Fresns केवल एक बैकएंड सिस्टम होगा जो एपीआई और प्लग-इन पर चलता है।',
     'engine_table_options_desc' => 'एकाधिक इंजनों को सक्षम करने के लिए समर्थन, केवल एक-दूसरे को पारित करने की आवश्यकता है, कृपया विवरण के लिए इंजन डेवलपर से परामर्श लें।',
     'engine_table_theme_none' => 'सेट नहीं',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => 'उपयोग ना करें',
     'engine_theme_pc' => 'कंप्यूटर-साइड थीम',
     'engine_theme_mobile' => 'मोबाइल फोन विषय',
+    // App-Center-Install
+    'install_application' => 'एप्लिकेशन इंस्टॉल करें',
+    'install_type' => 'प्रकार स्थापित करें',
+    'install_type_desc' => 'प्लगइन, इंजन, मोबाइल ऐप, सभी एप्लिकेशन के हैं',
+    'install_type_application' => 'आवेदन पत्र',
+    'install_type_theme' => 'थीम टेम्पलेट',
+    'install_mode' => 'मोड स्थापित करें',
+    'install_mode_input' => 'इनपुट Fresns कुंजी',
+    'install_mode_upload' => 'ज़िप पैकेज अपलोड करें',
 ];

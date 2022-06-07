@@ -17,11 +17,15 @@ class ExtensionController extends Controller
 {
     public function pluginIndex(Request $request)
     {
-        $isEnable = $request->is_enable;
-
         $plugins = Plugin::type(1);
 
-        if ($request->has('is_enable')) {
+        $isEnable = match ($request->status) {
+            'active' => 1,
+            'inactive' => 0,
+            default => null,
+        };
+
+        if ($isEnable) {
             $plugins->isEnable($isEnable);
         }
 

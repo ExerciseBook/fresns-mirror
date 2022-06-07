@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => '언어 팩',
     'sidebar_code_messages' => '코드 메시지',
     'sidebar_keys' => '앱 키',
-    'sidebar_plugins' => '플러그인 관리',
+    'sidebar_plugins' => '플러그인',
     'sidebar_plugins_tab_all' => '모두',
     'sidebar_plugins_tab_active' => '활동적인',
     'sidebar_plugins_tab_inactive' => '비활성으로',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => '설치 확인',
     'button_confirm_upgrade' => '업그레이드 확인',
     'button_confirm_uninstall' => '제거를 확인하십시오',
-    'button_plugin_input' => '입력 key',
-    'button_plugin_upload' => '업로드 zip',
     'button_view' => '보다',
     'button_image_upload' => '업로드',
     'button_image_input' => '입력',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => '기본 언어 구성',
     'language_pack_default_desc' => '참조 용 기본 언어 구성',
     'language_pack_current' => '현재 언어 구성',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => '키 응용 프로그램 플랫폼을 선택하십시오',
     'key_option_main_api' => '메인 API',
     'key_option_manage_api' => '관리 API',
     'key_option_plugin_api' => '플러그인 API',
     'key_option_plugin_api_select' => '사용할 플러그인을 선택하십시오',
     'key_option_plugin_api_select_desc' => '이 키는 연관된 플러그인의 API 만 요청할 수 있습니다',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => '웹 사이트를 독립적으로 배포하려는 경우 또는 웹 사이트 모바일 앱이 필요하지 않습니다. FRESNS는 API 및 플러그인에서 실행되는 백엔드 시스템 일뿐 만 아니라 FRESNS만이 "비활성화"또는 "제거"또는 "제거"웹 사이트 엔진 일뿐입니다',
     'engine_table_options_desc' => '여러 엔진을 사용하도록 지원하며 서로를 통과 해야하는 경우 엔진 개발자에게 자세한 내용을 참조하십시오',
     'engine_table_theme_none' => '설정되지 않았습니다',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => '사용하지 마세요',
     'engine_theme_pc' => '컴퓨터 측 테마',
     'engine_theme_mobile' => '휴대 전화 주제',
+    // App-Center-Install
+    'install_application' => '앱 설치',
+    'install_type' => '설치 유형',
+    'install_type_desc' => '플러그인, 엔진, 모바일 앱 모두 해당 애플리케이션에 속합니다.',
+    'install_type_application' => '신청',
+    'install_type_theme' => '테마 템플릿',
+    'install_mode' => '설치 모드',
+    'install_mode_input' => '입력 Fresns 키',
+    'install_mode_upload' => 'Zip 패키지 업로드',
 ];

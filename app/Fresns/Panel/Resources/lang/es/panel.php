@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => 'Paquetes de idiomas',
     'sidebar_code_messages' => 'Mensajes de código',
     'sidebar_keys' => 'Claves de la aplicación',
-    'sidebar_plugins' => 'Gestión de plugin',
+    'sidebar_plugins' => 'Plugins',
     'sidebar_plugins_tab_all' => 'Todos',
     'sidebar_plugins_tab_active' => 'Activo',
     'sidebar_plugins_tab_inactive' => 'Inactivo',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'Confirmar la instalación',
     'button_confirm_upgrade' => 'Confirmar la actualización',
     'button_confirm_uninstall' => 'Confirmar desinstalar',
-    'button_plugin_input' => 'Introduzca key',
-    'button_plugin_upload' => 'Cargar zip',
     'button_view' => 'Vista',
     'button_image_upload' => 'Subir',
     'button_image_input' => 'Aporte',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'Configuración de idioma predeterminada',
     'language_pack_default_desc' => 'Configuración de idioma predeterminada para referencia',
     'language_pack_current' => 'Configuración de idioma actual',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'Seleccione la plataforma de aplicaciones clave',
     'key_option_main_api' => 'API principal',
     'key_option_manage_api' => 'API de gestión',
     'key_option_plugin_api' => 'API de plugin',
     'key_option_plugin_api_select' => 'Seleccione el complemento para usar',
     'key_option_plugin_api_select_desc' => 'Esta clave solo puede solicitar la API del complemento asociado',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'Si desea implementar un sitio web de forma independiente, o no necesita una aplicación móvil de un sitio web. Simplemente "desactivar" o "desinstalar" el motor del sitio web, por lo que FRESNS solo será solo un sistema de backend que se ejecute en una API y el complemento',
     'engine_table_options_desc' => 'Soporte Para habilitar múltiples motores, solo debe transmitirse entre sí, consulte al desarrollador del motor para obtener más información',
     'engine_table_theme_none' => 'No se establece',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => 'No utilice',
     'engine_theme_pc' => 'Tema del lado de la computadora',
     'engine_theme_mobile' => 'Tema de telefonía móvil',
+    // App-Center-Install
+    'install_application' => 'Instalar la aplicación',
+    'install_type' => 'Tipo de instalación',
+    'install_type_desc' => 'Plugin, motor, aplicación móvil, todos pertenecen a la aplicación',
+    'install_type_application' => 'Aplicación',
+    'install_type_theme' => 'Plantilla del tema',
+    'install_mode' => 'Modo de instalación',
+    'install_mode_input' => 'Introducir la clave de Fresns',
+    'install_mode_upload' => 'Subir el paquete Zip',
 ];

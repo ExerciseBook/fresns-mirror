@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => 'Pacchetti di lingua',
     'sidebar_code_messages' => 'Codice Messaggi',
     'sidebar_keys' => 'Chiavi dell\'applicazione',
-    'sidebar_plugins' => 'Gestione dei plugin',
+    'sidebar_plugins' => 'Plugins',
     'sidebar_plugins_tab_all' => 'Tutti',
     'sidebar_plugins_tab_active' => 'Attivo',
     'sidebar_plugins_tab_inactive' => 'Inattivo',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'Confermare l\'installazione',
     'button_confirm_upgrade' => 'Conferma upgrade',
     'button_confirm_uninstall' => 'Conferma Disinstalla',
-    'button_plugin_input' => 'Inserire key',
-    'button_plugin_upload' => 'Carica zip',
     'button_view' => 'Visualizzazione',
     'button_image_upload' => 'Caricamento',
     'button_image_input' => 'Ingresso',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'Configurazione della lingua predefinita',
     'language_pack_default_desc' => 'Configurazione della lingua predefinita per riferimento',
     'language_pack_current' => 'Configurazione della lingua corrente',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'Seleziona la piattaforma di applicazione chiave',
     'key_option_main_api' => 'API principale',
     'key_option_manage_api' => 'API DI GESTIONE',
     'key_option_plugin_api' => 'API del plugin',
     'key_option_plugin_api_select' => 'Seleziona quale plugin per l\'uso',
     'key_option_plugin_api_select_desc' => 'Questa chiave può richiedere solo l\'API del plugin associato',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'Se si desidera distribuire un sito Web in modo indipendente, oppure non è necessario un\'app mobile sitifica. Semplicemente "disattivare" o "Disinstalla" il motore del sito Web in modo da Fresns sarà solo un sistema di back-rend che viene eseguito su API e plugin',
     'engine_table_options_desc' => 'Supporto Per abilitare più motori, devi solo passare l\'un l\'altro, consultare lo sviluppatore del motore per i dettagli',
     'engine_table_theme_none' => 'Non impostato',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => 'Non usare',
     'engine_theme_pc' => 'Tema del computer',
     'engine_theme_mobile' => 'Argomento del telefono cellulare',
+    // App-Center-Install
+    'install_application' => 'Installare l\'app',
+    'install_type' => 'Tipo di installazione',
+    'install_type_desc' => 'Plugin, motore, app mobile, tutti appartengono all\'applicazione',
+    'install_type_application' => 'Applicazione',
+    'install_type_theme' => 'Modello di tema',
+    'install_mode' => 'Modalità di installazione',
+    'install_mode_input' => 'Immettere la chiave Fresns',
+    'install_mode_upload' => 'Caricare il pacchetto zip',
 ];

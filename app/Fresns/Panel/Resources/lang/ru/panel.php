@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => 'Языковые пакеты',
     'sidebar_code_messages' => 'Кодовые сообщения',
     'sidebar_keys' => 'Ключи приложений',
-    'sidebar_plugins' => 'Управление плагином',
+    'sidebar_plugins' => 'Плагины',
     'sidebar_plugins_tab_all' => 'Все',
     'sidebar_plugins_tab_active' => 'Активный',
     'sidebar_plugins_tab_inactive' => 'Неактивный',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'Подтверждение установки',
     'button_confirm_upgrade' => 'Подтвердить обновление',
     'button_confirm_uninstall' => 'Подтвердите удаление',
-    'button_plugin_input' => 'Введите key',
-    'button_plugin_upload' => 'Загрузить zip',
     'button_view' => 'Вид',
     'button_image_upload' => 'Загрузить',
     'button_image_input' => 'Вход',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'Конфигурация языка по умолчанию',
     'language_pack_default_desc' => 'Конфигурация языка по умолчанию для справки',
     'language_pack_current' => 'Конфигурация текущего языка',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'Выберите ключевую прикладную платформу',
     'key_option_main_api' => 'Основная API',
     'key_option_manage_api' => 'Управление API',
     'key_option_plugin_api' => 'Plugin API',
     'key_option_plugin_api_select' => 'Выберите, какой плагин для использования',
     'key_option_plugin_api_select_desc' => 'Этот ключ может запросить только API соответствующего плагина',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'Если вы хотите развернуть сайт самостоятельно, или вам не нужно мобильное приложение веб-сайта. Просто «деактивировать» или «удаление», так и двигатель сайта «Удаление», поэтому FRESNS просто будет только встроенной системой, которая работает на API и плагине',
     'engine_table_options_desc' => 'Поддержка для включения нескольких двигателей, просто нужно пройти друг другу, обратитесь к разработчику двигателя для деталей',
     'engine_table_theme_none' => 'Не установлен',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => 'Не используйте',
     'engine_theme_pc' => 'Тема на стороне компьютера',
     'engine_theme_mobile' => 'Тема мобильного телефона',
+    // App-Center-Install
+    'install_application' => 'Установить приложение',
+    'install_type' => 'Тип установки',
+    'install_type_desc' => 'Плагин, движок, мобильное приложение - все это относится к приложению',
+    'install_type_application' => 'Приложение',
+    'install_type_theme' => 'Тематический шаблон',
+    'install_mode' => 'Режим установки',
+    'install_mode_input' => 'Ввод ключа Fresns',
+    'install_mode_upload' => 'Загрузить Zip-пакет',
 ];

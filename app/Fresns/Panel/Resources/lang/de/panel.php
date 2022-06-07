@@ -84,7 +84,7 @@ return [
     'sidebar_language_packs' => 'Sprachpakete',
     'sidebar_code_messages' => 'Code-Meldungen',
     'sidebar_keys' => 'App-Tasten',
-    'sidebar_plugins' => 'Plugin verwalten',
+    'sidebar_plugins' => 'Plugins',
     'sidebar_plugins_tab_all' => 'Alle',
     'sidebar_plugins_tab_active' => 'Aktiv',
     'sidebar_plugins_tab_inactive' => 'Inaktiv',
@@ -155,8 +155,6 @@ return [
     'button_confirm_install' => 'Bestätigen Sie die Installation',
     'button_confirm_upgrade' => 'Aktualisierung bestätigen',
     'button_confirm_uninstall' => 'Deinstallation bestätigen',
-    'button_plugin_input' => 'Eingabe key',
-    'button_plugin_upload' => 'Hochladen zip',
     'button_view' => 'Sicht',
     'button_image_upload' => 'Hochladen',
     'button_image_input' => 'Eingang',
@@ -898,14 +896,14 @@ return [
     'language_pack_default' => 'Standardsprache-Konfiguration',
     'language_pack_default_desc' => 'Standardsprache-Konfiguration für Referenz',
     'language_pack_current' => 'Aktuelle Sprachkonfiguration',
-    // Client-Keys
+    // App-Center-Keys
     'key_select_platform' => 'Wählen Sie die wichtigste Anwendungsplattform aus',
     'key_option_main_api' => 'Haupt-API',
     'key_option_manage_api' => 'Management-API',
     'key_option_plugin_api' => 'Plugin-API',
     'key_option_plugin_api_select' => 'Wählen Sie aus, welches Plugin zur Verwendung verwendet wird',
     'key_option_plugin_api_select_desc' => 'Dieser Schlüssel kann nur die API des zugehörigen Plugins anfordern',
-    // Client-Website
+    // App-Center-Website
     'engine_table_name_desc' => 'Wenn Sie eine Website unabhängig bereitstellen möchten, oder benötigen Sie keine mobile App-App. Wählen Sie einfach "Deaktivieren" oder "Deinstallieren" der Website-Engine, sodass FRESNS nur ein Backend-System sein wird, das auf einer API und einem Plug-In ausgeführt wird',
     'engine_table_options_desc' => 'Unterstützung, um mehrere Motoren zu aktivieren, müssen Sie einfach weitergeben, wenden Sie sich bitte an den Motorentwickler',
     'engine_table_theme_none' => 'Nicht festgelegt',
@@ -913,4 +911,13 @@ return [
     'engine_theme_option_no' => 'Verwende nicht',
     'engine_theme_pc' => 'Computerseite',
     'engine_theme_mobile' => 'Handythema',
+    // App-Center-Install
+    'install_application' => 'App installieren',
+    'install_type' => 'Typ installieren',
+    'install_type_desc' => 'Plugin, Engine, mobile App, alle gehören zur Anwendung',
+    'install_type_application' => 'Anwendung',
+    'install_type_theme' => 'Thema Vorlage',
+    'install_mode' => 'Installieren Modus',
+    'install_mode_input' => 'Fresns-Schlüssel eingeben',
+    'install_mode_upload' => 'Zip-Paket hochladen',
 ];
