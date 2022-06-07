@@ -285,7 +285,9 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::put('keys/{key}/reset', [SessionKeyController::class, 'reset'])->name('keys.reset');
     });
 
-    Route::get('app', [IframeController::class, 'iframe'])->name('iframe');
+    // iframe
+    Route::get('setting', [IframeController::class, 'setting'])->name('iframe.setting');
+    Route::get('market', [IframeController::class, 'market'])->name('iframe.market');
 
     // plugin manage
     Route::prefix('plugin')->group(function () {

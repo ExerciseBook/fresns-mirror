@@ -64,7 +64,7 @@
                             'panel.engine.*',
                             'panel.theme.*',
                             'panel.app.*',
-                            'panel.iframe',
+                            'panel.iframe.*',
                         ]) ? 'active' : '' }} " href="{{ route('panel.plugin.index') }}">{{ __('FsLang::panel.menu_app_center') }}</a>
                     </li>
                 </ul>

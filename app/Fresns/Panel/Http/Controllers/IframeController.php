@@ -41,14 +41,19 @@ class IframeController extends Controller
         return $langUrl;
     }
 
-    // app center iframe
-    public function iframe(Request $request)
+    // app center setting
+    public function setting(Request $request)
     {
-        // Sidebar
-        $enablePlugins = Plugin::type(1)->isEnable()->get();
-
         $url = $this->addLangToUrl($request->url);
 
-        return view('FsView::extensions.iframe', compact('url', 'enablePlugins'));
+        return view('FsView::extensions.iframe', compact('url'));
+    }
+
+    // app center market
+    public function market(Request $request)
+    {
+        $url = $request->url;
+
+        return view('FsView::extensions.iframe', compact('url'));
     }
 }

@@ -13,14 +13,9 @@
                     <li><hr class="dropdown-divider"></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.keys.*') ? 'active' : '' }} " href="{{ route('panel.keys.index') }}"><i class="bi bi-key"></i> {{ __('FsLang::panel.sidebar_keys') }}</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.iframe') ? 'active' : '' }}" href="{{ route('panel.iframe', ['url' => 'https://market.fresns.cn']) }}"><i class="bi bi-shop"></i> {{ __('FsLang::panel.menu_market') }}</a></li>
+                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.iframe.market') ? 'active' : '' }}" href="{{ route('panel.iframe.market', ['url' => 'https://market.fresns.cn']) }}"><i class="bi bi-shop"></i> {{ __('FsLang::panel.menu_market') }}</a></li>
                     <li class="nav-item"><a class="nav-link" href="#installModal" data-bs-toggle="modal" role="button"><i class="bi bi-tools"></i> {{ __('FsLang::panel.install_application') }}</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    @foreach ($enablePlugins as $plugin)
-                        @if ($plugin->settings_path)
-                            <li class="nav-item"><a href="{{ route('panel.iframe', ['url' => $plugin->settings_path]) }}" class="nav-link">{{ $plugin->name }}</a></li>
-                        @endif
-                    @endforeach
                 </ul>
             </div>
         </div>
