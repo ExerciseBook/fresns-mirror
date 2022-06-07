@@ -70,25 +70,25 @@
                 </li>
                 <li class="list-group-item">
                     <i class="bi bi-journal-code"></i> {{ __('FsLang::panel.extensions_plugins') }}
-                    <a href="{{ route('panel.plugin.list') }}">
+                    <a href="{{ route('panel.plugin.index') }}">
                         <span class="badge bg-info">{{ $plugins->where('type', 1)->count() }}</span>
                     </a>
                 </li>
                 <li class="list-group-item">
                     <i class="bi bi-phone"></i> {{ __('FsLang::panel.extensions_apps') }}
-                    <a href="{{ route('panel.apps.index') }}">
+                    <a href="{{ route('panel.app.index') }}">
                         <span class="badge bg-info">{{ $plugins->where('type', 2)->count() }}</span>
                     </a>
                 </li>
                 <li class="list-group-item">
                     <i class="bi bi-laptop"></i> {{ __('FsLang::panel.extensions_engines') }}
-                    <a href="{{ route('panel.engines.index') }}">
+                    <a href="{{ route('panel.engine.index') }}">
                         <span class="badge bg-info">{{ $plugins->where('type', 3)->count() }}</span>
                     </a>
                 </li>
                 <li class="list-group-item">
                     <i class="bi bi-brush"></i> {{ __('FsLang::panel.extensions_themes') }}
-                    <a href="{{ route('panel.themes.index') }}">
+                    <a href="{{ route('panel.theme.index') }}">
                         <span class="badge bg-info">{{ $plugins->where('type', 4)->count() }}</span>
                     </a>
                 </li>

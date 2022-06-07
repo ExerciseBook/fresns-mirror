@@ -1,7 +1,7 @@
 @extends('FsView::commons.sidebarLayout')
 
 @section('sidebar')
-    @include('FsView::clients.sidebar')
+    @include('FsView::extensions.sidebar')
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
     <div class="row mb-4">
         <div class="col-lg-7">
             <h3>{{ __('FsLang::panel.sidebar_website') }}</h3>
-            <p class="text-secondary">{{ __('FsLang::panel.sidebar_website_engines_intro') }}</p>
+            <p class="text-secondary"><i class="bi bi-laptop"></i> {{ __('FsLang::panel.sidebar_website_engines_intro') }}</p>
         </div>
         <div class="col-lg-5">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
@@ -20,8 +20,8 @@
             </div>
         </div>
         <ul class="nav nav-tabs">
-            <li class="nav-item"><a class="nav-link active" href="{{ route('panel.engines.index') }}">{{ __('FsLang::panel.sidebar_website_tab_engines') }}</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ route('panel.themes.index') }}">{{ __('FsLang::panel.sidebar_website_tab_themes') }}</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ route('panel.engine.index') }}">{{ __('FsLang::panel.sidebar_website_tab_engines') }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('panel.theme.index') }}">{{ __('FsLang::panel.sidebar_website_tab_themes') }}</a></li>
         </ul>
     </div>
     <!--engine list-->
@@ -64,7 +64,7 @@
                             @if ($engine->is_enable)
                                 <button type="button" class="btn btn-outline-secondary btn-sm plugin-manage" data-action="{{ route('panel.plugin.update', ['plugin' => $engine->unikey]) }}" data-enable="0">{{ __('FsLang::panel.button_deactivate') }}</button>
                                 <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                    data-action="{{ route('panel.engines.theme.update', ['engine' => $engine->id]) }}"
+                                    data-action="{{ route('panel.engine.theme.update', ['engine' => $engine->id]) }}"
                                     data-params="{{ $engine->toJson() }}"
                                     data-pc_plugin="{{ optional($configs->where('item_key', $engine->unikey . '_Pc')->first())->item_value }}"
                                     data-mobile_plugin="{{ optional($configs->where('item_key', $engine->unikey . '_Mobile')->first())->item_value }}"

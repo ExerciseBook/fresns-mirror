@@ -1,7 +1,7 @@
 @extends('FsView::commons.sidebarLayout')
 
 @section('sidebar')
-    @include('FsView::clients.sidebar')
+    @include('FsView::extensions.sidebar')
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
     <div class="row mb-4">
         <div class="col-lg-7">
             <h3>{{ __('FsLang::panel.sidebar_website') }}</h3>
-            <p class="text-secondary">{{ __('FsLang::panel.sidebar_website_themes_intro') }}</p>
+            <p class="text-secondary"><i class="bi bi-brush"></i> {{ __('FsLang::panel.sidebar_website_themes_intro') }}</p>
         </div>
         <div class="col-lg-5">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
@@ -20,8 +20,8 @@
             </div>
         </div>
         <ul class="nav nav-tabs">
-            <li class="nav-item"><a class="nav-link" href="{{ route('panel.engines.index') }}">{{ __('FsLang::panel.sidebar_website_tab_engines') }}</a></li>
-            <li class="nav-item"><a class="nav-link active" href="{{ route('panel.themes.index') }}">{{ __('FsLang::panel.sidebar_website_tab_themes') }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('panel.engine.index') }}">{{ __('FsLang::panel.sidebar_website_tab_engines') }}</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ route('panel.theme.index') }}">{{ __('FsLang::panel.sidebar_website_tab_themes') }}</a></li>
         </ul>
     </div>
     <!--theme list-->

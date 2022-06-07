@@ -1,7 +1,7 @@
 @extends('FsView::commons.sidebarLayout')
 
 @section('sidebar')
-    @include('FsView::plugins.sidebar')
+    @include('FsView::extensions.sidebar')
 @endsection
 
 @section('content')
@@ -13,7 +13,7 @@
         </div>
         <div class="col-lg-5">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
-                <button class="btn btn-primary install-dialog" type="button" data-bs-toggle="modal" data-bs-target="#installModal" data-type="plugin" data-name="{{ __('FsLang::panel.menu_plugins') }}">
+                <button class="btn btn-primary install-dialog" type="button" data-bs-toggle="modal" data-bs-target="#installModal" data-type="plugin" data-name="{{ __('FsLang::panel.sidebar_plugins') }}">
                     <i class="bi bi-journal-code"></i> {{ __('FsLang::panel.button_install') }}
                 </button>
                 <a class="btn btn-outline-secondary" href="#" role="button">{{ __('FsLang::panel.button_support') }}</a>
@@ -21,13 +21,13 @@
         </div>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <a href="{{ route('panel.plugin.list') }}" class="nav-link {{ is_null($isEnable) ? 'active' : '' }}" type="button">{{ __('FsLang::panel.sidebar_plugins_tab_all') }}</a>
+                <a href="{{ route('panel.plugin.index') }}" class="nav-link {{ is_null($isEnable) ? 'active' : '' }}" type="button">{{ __('FsLang::panel.sidebar_plugins_tab_all') }}</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a href="{{ route('panel.plugin.list', ['is_enable' => 1]) }}" class="nav-link {{ $isEnable == 1 ? 'active' : '' }}" type="button">{{ __('FsLang::panel.sidebar_plugins_tab_active') }} ({{ $enableCount }})</a>
+                <a href="{{ route('panel.plugin.index', ['is_enable' => 1]) }}" class="nav-link {{ $isEnable == 1 ? 'active' : '' }}" type="button">{{ __('FsLang::panel.sidebar_plugins_tab_active') }} ({{ $enableCount }})</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a href="{{ route('panel.plugin.list', ['is_enable' => 0]) }}" class="nav-link {{ !is_null($isEnable) && $isEnable == 0 ? 'active' : '' }}" type="button">{{ __('FsLang::panel.sidebar_plugins_tab_inactive') }}({{ $disableCount }})</a>
+                <a href="{{ route('panel.plugin.index', ['is_enable' => 0]) }}" class="nav-link {{ !is_null($isEnable) && $isEnable == 0 ? 'active' : '' }}" type="button">{{ __('FsLang::panel.sidebar_plugins_tab_inactive') }}({{ $disableCount }})</a>
             </li>
         </ul>
     </div>

@@ -1,7 +1,7 @@
 @extends('FsView::commons.sidebarLayout')
 
 @section('sidebar')
-    @include('FsView::clients.sidebar')
+    @include('FsView::extensions.sidebar')
 @endsection
 
 @section('content')

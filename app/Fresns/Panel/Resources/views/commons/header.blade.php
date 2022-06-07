@@ -43,22 +43,17 @@
                         'panel.user-profile.*'
                         ]) ? 'active' : '' }}" href="{{ route('panel.editor.index') }}">{{ __('FsLang::panel.menu_extends') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is([
-                        'panel.plugin.*',
-                        'panel.iframe.plugin'
-                        ]) ? 'active' : '' }} " href="{{ route('panel.plugin.list') }}">{{ __('FsLang::panel.menu_plugins') }}</a></li>
-                    <li class="nav-item"><a class="nav-link {{ \Route::is([
                         'panel.menus.*',
                         'panel.columns.*',
                         'panel.language.packs.*',
                         'panel.keys.*',
-                        'panel.engines.*',
-                        'panel.themes.*',
-                        'panel.apps.*',
+                        'panel.engine.*',
+                        'panel.theme.*',
+                        'panel.app.*',
                         'panel.iframe.client'
                         ]) ? 'active' : '' }}" href="{{ route('panel.menus.index') }}">{{ __('FsLang::panel.menu_clients') }}</a></li>
-                    <li class="nav-item"><a class="nav-link {{ \Route::is([
-                        'panel.iframe.market'
-                        ]) ? 'active' : '' }}" href="{{ route('panel.iframe.market', ['url' => 'https://market.fresns.cn']) }}">{{ __('FsLang::panel.menu_market') }}</a></li>
+
+                    <li class="nav-item"><a class="nav-link {{ \Route::is(['panel.app-center.*',]) ? 'active' : '' }} " href="{{ route('panel.plugin.index') }}">{{ __('FsLang::panel.menu_app_center') }}</a></li>
                 </ul>
                 <div class="navbar-nav">
                     <!--lang-->

@@ -37,30 +37,14 @@ class IframeController extends Controller
         return $langUrl;
     }
 
-    // Plugin iframe
-    public function plugin(Request $request)
+    // app center iframe
+    public function iframe(Request $request)
     {
-        // Plugin Sidebar
+        // Sidebar
         $enablePlugins = Plugin::type(1)->isEnable()->get();
 
         $url = $this->addLangToUrl($request->url);
 
         return view('FsView::iframe.plugin', compact('url', 'enablePlugins'));
-    }
-
-    // Client iframe
-    public function client(Request $request)
-    {
-        $url = $request->url;
-
-        return view('FsView::iframe.client', compact('url'));
-    }
-
-    // Fresns Market iframe
-    public function market(Request $request)
-    {
-        $url = $request->url;
-
-        return view('FsView::iframe.market', compact('url'));
     }
 }

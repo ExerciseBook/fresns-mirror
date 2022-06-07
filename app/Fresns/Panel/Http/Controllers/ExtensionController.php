@@ -13,9 +13,9 @@ use App\Models\Plugin;
 use Illuminate\Http\Request;
 use App\Utilities\ConfigUtility;
 
-class PluginController extends Controller
+class ExtensionController extends Controller
 {
-    public function index(Request $request)
+    public function pluginIndex(Request $request)
     {
         $isEnable = $request->is_enable;
 
@@ -54,8 +54,11 @@ class PluginController extends Controller
 
         $themes = Plugin::type(4)->get();
 
+        // Sidebar
+        $enablePlugins = Plugin::type(1)->isEnable()->get();
+
         return view('FsView::clients.engines', compact(
-            'engines', 'configs', 'themes', 'plugins'
+            'engines', 'configs', 'themes', 'plugins', 'enablePlugins'
         ));
     }
 
@@ -106,8 +109,11 @@ class PluginController extends Controller
     {
         $themes = Plugin::type(4)->get();
 
+        // Sidebar
+        $enablePlugins = Plugin::type(1)->isEnable()->get();
+
         return view('FsView::clients.themes', compact(
-            'themes'
+            'themes', 'enablePlugins'
         ));
     }
 
@@ -115,8 +121,11 @@ class PluginController extends Controller
     {
         $apps = Plugin::type(2)->get();
 
+        // Sidebar
+        $enablePlugins = Plugin::type(1)->isEnable()->get();
+
         return view('FsView::clients.apps', compact(
-            'apps'
+            'apps', 'enablePlugins'
         ));
     }
 

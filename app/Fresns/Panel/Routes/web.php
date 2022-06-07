@@ -19,6 +19,7 @@ use App\Fresns\Panel\Http\Controllers\ExtendManageController;
 use App\Fresns\Panel\Http\Controllers\ExtendPostDetailController;
 use App\Fresns\Panel\Http\Controllers\ExtendUserFeatureController;
 use App\Fresns\Panel\Http\Controllers\ExtendUserProfileController;
+use App\Fresns\Panel\Http\Controllers\ExtensionController;
 use App\Fresns\Panel\Http\Controllers\GeneralController;
 use App\Fresns\Panel\Http\Controllers\GroupController;
 use App\Fresns\Panel\Http\Controllers\IframeController;
@@ -29,7 +30,6 @@ use App\Fresns\Panel\Http\Controllers\LanguagePackController;
 use App\Fresns\Panel\Http\Controllers\LoginController;
 use App\Fresns\Panel\Http\Controllers\MapController;
 use App\Fresns\Panel\Http\Controllers\MenuController;
-use App\Fresns\Panel\Http\Controllers\PluginController;
 use App\Fresns\Panel\Http\Controllers\PluginUsageController;
 use App\Fresns\Panel\Http\Controllers\PolicyController;
 use App\Fresns\Panel\Http\Controllers\PublishController;
@@ -270,33 +270,35 @@ Route::middleware(['panelAuth'])->group(function () {
             'index', 'store', 'update', 'destroy',
         ]);
         Route::put('keys/{key}/reset', [SessionKeyController::class, 'reset'])->name('keys.reset');
-        // engines
-        Route::get('engines', [PluginController::class, 'engineIndex'])->name('engines.index');
-        Route::put('engines/{engine}/theme', [PluginController::class, 'updateEngineTheme'])->name('engines.theme.update');
-        // themes
-        Route::get('themes', [PluginController::class, 'themeIndex'])->name('themes.index');
-        // apps
-        Route::get('apps', [PluginController::class, 'appIndex'])->name('apps.index');
     });
 
-    // plugins
-    Route::prefix('plugins')->group(function () {
-        Route::get('list', [PluginController::class, 'index'])->name('plugin.list');
+    // app center
+    Route::prefix('app-center')->group(function () {
+        Route::get('/', [IframeController::class, 'iframe'])->name('iframe');
+        // plugins
+        Route::get('plugins', [ExtensionController::class, 'pluginIndex'])->name('plugin.index');
+        // engines
+        Route::get('engines', [ExtensionController::class, 'engineIndex'])->name('engine.index');
+        Route::put('engines/{engine}/theme', [ExtensionController::class, 'updateEngineTheme'])->name('engine.theme.update');
+        // themes
+        Route::get('themes', [ExtensionController::class, 'themeIndex'])->name('theme.index');
+        // apps
+        Route::get('apps', [ExtensionController::class, 'appIndex'])->name('app.index');
     });
 
     // plugin manage
     Route::prefix('plugin')->group(function () {
         // dashboard upgrade page
-        Route::patch('update-code', [PluginController::class, 'updateCode'])->name('plugin.update.code');
+        Route::patch('update-code', [ExtensionController::class, 'updateCode'])->name('plugin.update.code');
         // plugin install and upgrade
-        Route::put('install', [PluginController::class, 'install'])->name('plugin.install');
-        Route::put('upgrade', [PluginController::class, 'upgrade'])->name('plugin.upgrade');
+        Route::put('install', [ExtensionController::class, 'install'])->name('plugin.install');
+        Route::put('upgrade', [ExtensionController::class, 'upgrade'])->name('plugin.upgrade');
         // activate or deactivate
-        Route::patch('update', [PluginController::class, 'update'])->name('plugin.update');
-        Route::patch('updateTheme', [PluginController::class, 'updateTheme'])->name('plugin.updateTheme');
+        Route::patch('update', [ExtensionController::class, 'update'])->name('plugin.update');
+        Route::patch('updateTheme', [ExtensionController::class, 'updateTheme'])->name('plugin.updateTheme');
         // uninstall
-        Route::delete('uninstall', [PluginController::class, 'uninstall'])->name('plugin.uninstall');
-        Route::delete('uninstallTheme', [PluginController::class, 'uninstallTheme'])->name('plugin.uninstallTheme');
+        Route::delete('uninstall', [ExtensionController::class, 'uninstall'])->name('plugin.uninstall');
+        Route::delete('uninstallTheme', [ExtensionController::class, 'uninstallTheme'])->name('plugin.uninstallTheme');
     });
 
     // theme manage
@@ -305,11 +307,6 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::put('functions', [ThemeFunctionController::class, 'update'])->name('theme.functions.update');
         Route::put('functions/languages', [ThemeFunctionController::class, 'updateLanguage'])->name('theme.functions.update_language');
     });
-
-    // iframe
-    Route::get('market', [IframeController::class, 'market'])->name('iframe.market');
-    Route::get('plugin', [IframeController::class, 'plugin'])->name('iframe.plugin');
-    Route::get('client', [IframeController::class, 'client'])->name('iframe.client');
 });
 
 // FsLang
