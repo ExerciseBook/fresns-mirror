@@ -55,7 +55,7 @@
                     </div>
                     <div class="input-group">
                         <span class="input-group-text">{{ __('FsLang::panel.install_mode') }}</span>
-                        <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_plugin_input') }}</button>
+                        <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.install_mode_input') }}</button>
                         <ul class="dropdown-menu selectInputType">
                             <li data-name="inputUnikey"><a class="dropdown-item" href="#">{{ __('FsLang::panel.install_mode_input') }}</a></li>
                             <li data-name="inputFile"><a class="dropdown-item" href="#">{{ __('FsLang::panel.install_mode_upload') }}</a></li>
