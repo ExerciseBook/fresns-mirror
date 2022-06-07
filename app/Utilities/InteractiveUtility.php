@@ -22,6 +22,12 @@ use App\Models\UserStat;
 
 class InteractiveUtility
 {
+    const TYPE_USER = 1;
+    const TYPE_GROUP = 2;
+    const TYPE_HASHTAG = 3;
+    const TYPE_POST = 4;
+    const TYPE_COMMENT = 5;
+
     // check interactive
     public static function checkUserLike(int $likeType, int $likeId, ?int $userId = null): bool
     {
