@@ -244,7 +244,7 @@ class UserController extends Controller
         }
 
         $service = new InteractiveService();
-        $data = $service->getMarkListOfUsers($dtoRequest->type, InteractiveService::TYPE_USER, $viewUser->id, $timeOrder, $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_USER, $viewUser->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }

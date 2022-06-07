@@ -175,7 +175,7 @@ class HashtagController extends Controller
         }
 
         $service = new InteractiveService();
-        $data = $service->getMarkListOfUsers($dtoRequest->type, InteractiveService::TYPE_HASHTAG, $hashtag->id, $timeOrder, $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_HASHTAG, $hashtag->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }

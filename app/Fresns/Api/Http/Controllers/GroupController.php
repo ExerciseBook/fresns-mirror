@@ -37,7 +37,7 @@ class GroupController extends Controller
 
         $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
 
-        $groups = Group::orderBy('rating')->whereNotIn('id', $groupFilterIds)->isEnable()->get();
+        $groups = Group::where('type_view', 1)->whereNotIn('id', $groupFilterIds)->isEnable()->orderBy('rating')->get();
 
         $service = new GroupService();
 
@@ -81,11 +81,13 @@ class GroupController extends Controller
         }
 
         $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
-        $groupQuery = Group::where('type', 2)->whereNotIn('id', $groupFilterIds)->isEnable();
+        $groupQuery = Group::whereIn('type', [2, 3])->whereNotIn('id', $groupFilterIds)->isEnable();
 
-        if ($dtoRequest->category) {
-            $parentId = PrimaryHelper::fresnsGroupIdByGid($dtoRequest->category);
+        if ($dtoRequest->gid) {
+            $parentId = PrimaryHelper::fresnsGroupIdByGid($dtoRequest->gid);
             $groupQuery->where('parent_id', $parentId);
+        } else {
+            $groupQuery->where('type_view', 1);
         }
 
         if ($dtoRequest->recommend) {
@@ -231,7 +233,7 @@ class GroupController extends Controller
         }
 
         $service = new InteractiveService();
-        $data = $service->getMarkListOfUsers($dtoRequest->type, InteractiveService::TYPE_GROUP, $group->id, $timeOrder, $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_GROUP, $group->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }

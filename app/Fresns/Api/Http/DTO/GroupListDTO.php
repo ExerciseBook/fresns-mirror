@@ -18,7 +18,7 @@ class GroupListDTO extends DTO
     public function rules(): array
     {
         return [
-            'category' => ['string', 'nullable'],
+            'gid' => ['string', 'nullable'],
             'recommend' => ['boolean', 'nullable'],
             'likeCountGt' => ['integer', 'nullable', 'lt:likeCountLt'],
             'likeCountLt' => ['integer', 'nullable', 'gt:likeCountGt'],
