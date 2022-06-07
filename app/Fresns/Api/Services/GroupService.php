@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Services;
 
 use App\Helpers\InteractiveHelper;
 use App\Utilities\ExtendUtility;
+use App\Utilities\InteractiveUtility;
 use App\Utilities\PermissionUtility;
 use App\Models\ExtendLinked;
 use App\Models\Group;
@@ -28,7 +29,7 @@ class GroupService
         $item['admins'] = $group->getGroupAdmins($langTag, $timezone);
 
         $interactiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
-        $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_GROUP, $group->id, $authUserId);
+        $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_GROUP, $group->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus);
 
         $data = array_merge($groupInfo, $item);
@@ -57,7 +58,7 @@ class GroupService
         $item['admins'] = $group->getGroupAdmins($langTag, $timezone);
 
         $interactiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
-        $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_GROUP, $group->id, $authUserId);
+        $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_GROUP, $group->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus);
 
         $data = array_merge($groupInfo, $item);

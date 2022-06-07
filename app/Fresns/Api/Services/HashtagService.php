@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Services;
 
 use App\Helpers\InteractiveHelper;
 use App\Utilities\ExtendUtility;
+use App\Utilities\InteractiveUtility;
 use App\Models\ExtendLinked;
 use App\Models\Hashtag;
 use App\Models\IconLinked;
@@ -24,7 +25,7 @@ class HashtagService
         $item['icons'] = ExtendUtility::getIcons(IconLinked::TYPE_HASHTAG, $hashtag->id, $langTag);
 
         $interactiveConfig = InteractiveHelper::fresnsHashtagInteractive($langTag);
-        $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_HASHTAG, $hashtag->id, $authUserId);
+        $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_HASHTAG, $hashtag->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus);
 
         $data = array_merge($hashtagInfo, $item);
@@ -41,7 +42,7 @@ class HashtagService
         $item['extends'] = ExtendUtility::getExtends(ExtendLinked::TYPE_HASHTAG, $hashtag->id, $langTag);
 
         $interactiveConfig = InteractiveHelper::fresnsHashtagInteractive($langTag);
-        $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_HASHTAG, $hashtag->id, $authUserId);
+        $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_HASHTAG, $hashtag->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus);
 
         $data = array_merge($hashtagInfo, $item);

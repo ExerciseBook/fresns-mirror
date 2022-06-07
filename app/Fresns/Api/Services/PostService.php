@@ -18,21 +18,22 @@ use App\Models\PluginUsage;
 use App\Models\Post;
 use App\Models\TipLinked;
 use App\Utilities\ExtendUtility;
+use App\Utilities\InteractiveUtility;
 use App\Utilities\LbsUtility;
 use App\Utilities\PermissionUtility;
 use Illuminate\Support\Str;
 
 class PostService
 {
-    public function postDetail(Post $post, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $userLng = null, ?string $userLat = null)
+    public function postDetail(Post $post, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $authUserLng = null, ?string $authUserLat = null)
     {
         $postInfo = $post->getPostInfo($langTag, $timezone);
         $postInfo[] = self::contentHandle($post, $type, $authUserId);
 
-        if (! empty($post->map_id) && ! empty($userLat) && ! empty($userLon)) {
+        if (! empty($post->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {
             $postLng = $post->map_longitude;
             $postLat = $post->map_latitude;
-            $postInfo['location']['distance'] = LbsUtility::getDistanceWithUnit($langTag, $postLng, $postLat, $userLng, $userLat);
+            $postInfo['location']['distance'] = LbsUtility::getDistanceWithUnit($langTag, $postLng, $postLat, $authUserLng, $authUserLat);
         }
 
         $item['icons'] = ExtendUtility::getIcons(IconLinked::TYPE_POST, $post->id, $langTag);
@@ -52,7 +53,7 @@ class PostService
         $item['group'] = null;
         if ($post->group) {
             $groupInteractiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
-            $groupInteractiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_GROUP, $post->group->id, $authUserId);
+            $groupInteractiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_GROUP, $post->group->id, $authUserId);
 
             $groupItem[] = $post->group?->getGroupInfo($langTag);
             $groupItem['interactive'] = array_merge($groupInteractiveConfig, $groupInteractiveStatus);
@@ -96,7 +97,7 @@ class PostService
         $item['editStatus'] = $editStatus;
 
         $interactiveConfig = InteractiveHelper::fresnsPostInteractive($langTag);
-        $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_POST, $post->id, $authUserId);
+        $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_POST, $post->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus);
 
         $item['followType'] = null;

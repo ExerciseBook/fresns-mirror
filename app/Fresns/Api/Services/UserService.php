@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Services;
 
 use App\Models\User;
 use App\Utilities\ExtendUtility;
+use App\Utilities\InteractiveUtility;
 use App\Helpers\InteractiveHelper;
 use App\Models\ExtendLinked;
 use App\Models\IconLinked;
@@ -27,8 +28,8 @@ class UserService
         $item['icons'] = ExtendUtility::getIcons(IconLinked::TYPE_USER, $user->id, $langTag);
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
-        $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_USER, $user->id, $authUserId);
-        $followMeStatus['followMeStatus'] = InteractiveService::checkUserFollowMe($user->id, $authUserId);
+        $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
+        $followMeStatus['followMeStatus'] = InteractiveUtility::checkUserFollowMe($user->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $followMeStatus);
 
         $data = array_merge($userProfile, $userMainRole, $item);
@@ -49,8 +50,8 @@ class UserService
         $item['roles'] = $user->getUserRoles($langTag, $timezone);
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
-        $interactiveStatus = InteractiveService::checkInteractiveStatus(InteractiveService::TYPE_USER, $user->id, $authUserId);
-        $followMeStatus['followMeStatus'] = InteractiveService::checkUserFollowMe($user->id, $authUserId);
+        $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
+        $followMeStatus['followMeStatus'] = InteractiveUtility::checkUserFollowMe($user->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $followMeStatus);
 
         $data = array_merge($userProfile, $userMainRole, $item);
