@@ -947,6 +947,45 @@ $(document).ready(function () {
         });
     });
 
+    $('#installModal').on('show.bs.modal', function (e) {
+        $('#inputUnikeyOrInputFile').text('').hide()
+        $('input[name=plugin_unikey]').removeClass('is-invalid')
+        $('input[name=plugin_zipball]').removeClass('is-invalid')
+    });
+
+    $('.install_method').click(function (e) {
+        let install_method = $(this).parent().data('name')
+        $('input[name=install_method]').val(install_method)
+    });
+
+    $('#installSubmit').click(function (e) {
+        e.preventDefault();
+
+        let install_type = $('input[name=install_type]').val()
+        let install_method = $('input[name=install_method]').val()
+        let plugin_unikey = $('input[name=plugin_unikey]').val()
+        let plugin_zipball = $('input[name=plugin_zipball]').val()
+
+        
+        if (plugin_unikey || plugin_zipball) {
+            $(this).submit()
+            $('#installStepModal').modal('toggle')
+            return;
+        }
+        
+        if (install_method == 'inputUnikey' && !plugin_unikey) {
+            $('input[name=plugin_unikey]').addClass('is-invalid')
+            $('#inputUnikeyOrInputFile').text('请输入标识名').show()
+            return;
+        }
+        
+        if (install_method == 'inputFile' && !plugin_zipball) {
+            $('input[name=plugin_zipball]').addClass('is-invalid')
+            $('#inputUnikeyOrInputFile').text('请上传安装包').show()
+            return;
+        }
+    });
+
     // theme set
     $('#themeSetting').on('show.bs.modal', function (e) {
         let button = $(e.relatedTarget);

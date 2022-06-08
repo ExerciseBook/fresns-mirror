@@ -39,7 +39,7 @@
                         <span class="input-group-text">{{ __('FsLang::panel.install_type') }}</span>
                         <div class="form-control">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="install_type" id="install_plugin" value="plugin" required>
+                                <input class="form-check-input" type="radio" name="install_type" id="install_plugin" value="plugin" checked required>
                                 <label class="form-check-label" for="install_plugin">{{ __('FsLang::panel.install_type_application') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.install_type_desc') }}"></i></label>
                             </div>
                             <div class="form-check form-check-inline">
@@ -52,15 +52,17 @@
                         <span class="input-group-text">{{ __('FsLang::panel.install_mode') }}</span>
                         <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.install_mode_input') }}</button>
                         <ul class="dropdown-menu selectInputType">
-                            <li data-name="inputUnikey"><a class="dropdown-item" href="#">{{ __('FsLang::panel.install_mode_input') }}</a></li>
-                            <li data-name="inputFile"><a class="dropdown-item" href="#">{{ __('FsLang::panel.install_mode_upload') }}</a></li>
+                            <li data-name="inputUnikey"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_input') }}</a></li>
+                            <li data-name="inputFile"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_upload') }}</a></li>
                         </ul>
+                        <input type="hidden" name="install_method" value="plugin_unikey" />
                         <input type="text" class="form-control inputUnikey" name="plugin_unikey" maxlength="64">
                         <input type="file" class="form-control inputFile" name="plugin_zipball" accept=".zip" style="display:none;">
+                        <div id="inputUnikeyOrInputFile" class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#installStepModal" id="installSubmit">{{ __('FsLang::panel.button_confirm_install') }}</button>
+                    <button type="submit" class="btn btn-primary"  id="installSubmit">{{ __('FsLang::panel.button_confirm_install') }}</button>
                 </div>
             </form>
         </div>
