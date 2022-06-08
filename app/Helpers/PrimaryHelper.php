@@ -27,6 +27,15 @@ class PrimaryHelper
         }
 
         $tableId = match ($tableName) {
+            'config' => PrimaryHelper::fresnsConfigIdByItemKey($tableKey),
+            'account' => PrimaryHelper::fresnsAccountIdByAid($tableKey),
+            'user' => PrimaryHelper::fresnsUserIdByUidOrUsername($tableKey),
+            'post' => PrimaryHelper::fresnsPostIdByPid($tableKey),
+            'comment' => PrimaryHelper::fresnsCommentIdByCid($tableKey),
+            'extend' => PrimaryHelper::fresnsExtendIdByEid($tableKey),
+            'group' => PrimaryHelper::fresnsGroupIdByGid($tableKey),
+            'hashtag' => PrimaryHelper::fresnsHashtagIdByHid($tableKey),
+
             'configs' => PrimaryHelper::fresnsConfigIdByItemKey($tableKey),
             'accounts' => PrimaryHelper::fresnsAccountIdByAid($tableKey),
             'users' => PrimaryHelper::fresnsUserIdByUidOrUsername($tableKey),
@@ -35,6 +44,7 @@ class PrimaryHelper
             'extends' => PrimaryHelper::fresnsExtendIdByEid($tableKey),
             'groups' => PrimaryHelper::fresnsGroupIdByGid($tableKey),
             'hashtags' => PrimaryHelper::fresnsHashtagIdByHid($tableKey),
+
             default => null,
         };
 

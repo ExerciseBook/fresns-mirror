@@ -10,6 +10,8 @@ namespace App\Utilities;
 
 use App\Helpers\ConfigHelper;
 use App\Models\BlockWord;
+use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Support\Str;
 
 class ValidationUtility
@@ -130,6 +132,43 @@ class ValidationUtility
         ];
 
         return $validPassword;
+    }
+
+    // validation user mark
+    public static function validUserMark(int $userId, int $markType, int $markId): bool
+    {
+        if (! is_numeric($markType)) {
+            $markType = match ($markType) {
+                default => null,
+                'user' => 1,
+                'group' => 2,
+                'hashtag' => 3,
+                'post' => 4,
+                'comment' => 5,
+            };
+        }
+
+        if ($markType == InteractiveUtility::TYPE_USER && $userId == $markId) {
+            return false;
+        }
+
+        if ($markType == InteractiveUtility::TYPE_POST || $markType == InteractiveUtility::TYPE_COMMENT) {
+            switch ($markType) {
+                case InteractiveUtility::TYPE_POST:
+                    $creator = Post::where('id', $markId)->value('user_id');
+                break;
+
+                case InteractiveUtility::TYPE_COMMENT:
+                    $creator = Comment::where('id', $markId)->value('user_id');
+                break;
+            }
+
+            if ($creator == $userId) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // Validation content
