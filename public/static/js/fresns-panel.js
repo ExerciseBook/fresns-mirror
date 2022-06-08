@@ -116,7 +116,6 @@ $(document).ready(function () {
         }
     })
 
-
     $('#physicalUpgradeButton').click(function () {
         if ($(this).data('upgrading')) {
             $('#physicalUpgradeOutputModal').modal('show');
@@ -1104,7 +1103,6 @@ $(document).ready(function () {
                 .prop('checked', true);
 
             if (params.cover_file_url) {
-
                 $('#createCategoryModal').find('input[name=cover_file_url]').parent().find('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
                 $('#createCategoryModal').find('input[name=cover_file_url]').parent().find('.inputFile').css('display', 'none');
 
@@ -1119,7 +1117,6 @@ $(document).ready(function () {
                 $('#createCategoryModal').find('input[name=banner_file_url]').val(params.banner_file_url);
                 $('#createCategoryModal').find('input[name=banner_file_url]').css('display', 'block');
             }
-
 
             let names = $(this).data('names');
             let defaultName = $(this).data('default-name');
@@ -2068,6 +2065,7 @@ $(document).ready(function () {
             $('#currencyUnitButton').text(defaultName);
         }
     });
+
     $('#editMessages').on('show.bs.modal', function(e) {
         let button = $(e.relatedTarget);
         let action = button.data('action');
