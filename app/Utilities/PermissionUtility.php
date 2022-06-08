@@ -13,6 +13,7 @@ use App\Models\Group;
 use App\Models\GroupAdmin;
 use App\Models\PostAllow;
 use App\Models\Role;
+use App\Models\SessionLog;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\UserFollow;
@@ -25,6 +26,23 @@ class PermissionUtility
         $userAccountId = User::where('id', $userId)->value('account_id');
 
         return $userAccountId == $accountId ? 'true' : 'false';
+    }
+
+    // check login error count
+    public static function checkLoginErrorCount(int $accountId, ?int $userId = null): int
+    {
+        $sessionLog = SessionLog::whereIn('type', [2, 5, 8])
+            ->whereIn('object_result', [1 ,2])
+            ->where('account_id', $accountId)
+            ->where('created_at', '>=', now()->subHour());
+
+        if (! empty($userId)) {
+            $sessionLog->where('user_id', $userId);
+        }
+
+        $errorCount = $sessionLog->count();
+
+        return $errorCount;
     }
 
     // Check user status of the site mode

@@ -21,6 +21,7 @@ use App\Models\User as UserModel;
 use App\Models\UserRole;
 use App\Models\UserStat;
 use App\Utilities\ConfigUtility;
+use App\Utilities\PermissionUtility;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
 use Illuminate\Support\Facades\Hash;
 
@@ -101,6 +102,15 @@ class User
             return $this->failure(
                 35201,
                 ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
+            );
+        }
+
+        $loginErrorCount = PermissionUtility::checkLoginErrorCount($user->account->id, $user->id);
+
+        if ($loginErrorCount >= 5) {
+            return $this->failure(
+                34306,
+                ConfigUtility::getCodeMessage(34306, 'Fresns', $langTag),
             );
         }
 

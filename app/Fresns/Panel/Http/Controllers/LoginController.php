@@ -10,9 +10,9 @@ namespace App\Fresns\Panel\Http\Controllers;
 
 use Browser;
 use App\Helpers\AppHelper;
-use App\Models\SessionLog;
 use Illuminate\Http\Request;
 use App\Utilities\AppUtility;
+use App\Utilities\PermissionUtility;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -70,10 +70,7 @@ class LoginController extends Controller
 
         // login session log
         if ($account) {
-            $loginCount = SessionLog::where('account_id', $account->id)
-                ->where('object_result', 1)
-                ->where('created_at', '>=', now()->subHour())
-                ->count();
+            $loginCount = PermissionUtility::checkLoginErrorCount($account->id);
 
             if ($loginCount >= 5) {
                 $this->loginLimit = true;

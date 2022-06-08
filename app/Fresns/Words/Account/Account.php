@@ -95,6 +95,7 @@ class Account
                 $item['account_id'] = $accountId;
                 $item['connect_id'] = $info['connectId'];
                 $item['connect_token'] = $info['connectToken'];
+                $item['connect_refresh_token'] = $info['connectRefreshToken'];
                 $item['connect_name'] = $info['connectName'];
                 $item['connect_nickname'] = $info['connectNickname'];
                 $item['connect_avatar'] = $info['connectAvatar'];
@@ -128,6 +129,15 @@ class Account
         } else {
             $accountName = $dtoWordBody->countryCode.$dtoWordBody->account;
             $account = AccountModel::where('phone', $accountName)->first();
+        }
+
+        $loginErrorCount = PermissionUtility::checkLoginErrorCount($account->id);
+
+        if ($loginErrorCount >= 5) {
+            return $this->failure(
+                34306,
+                ConfigUtility::getCodeMessage(34306, 'Fresns', $langTag),
+            );
         }
 
         if (empty($dtoWordBody->password)) {
