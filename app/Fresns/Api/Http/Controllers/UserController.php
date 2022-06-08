@@ -8,11 +8,15 @@
 
 namespace App\Fresns\Api\Http\Controllers;
 
+use App\Fresns\Api\Http\DTO\UserAuthDTO;
+use App\Fresns\Api\Http\DTO\UserEditDTO;
 use App\Fresns\Api\Http\DTO\UserListDTO;
-use App\Fresns\Api\Http\DTO\MarkListDTO;
+use App\Fresns\Api\Http\DTO\UserMarkDTO;
+use App\Fresns\Api\Http\DTO\UserMarkListDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Services\HeaderService;
 use App\Models\CommentLog;
+use App\Models\Comment;
 use App\Models\PostLog;
 use App\Helpers\PrimaryHelper;
 use App\Models\Dialog;
@@ -20,15 +24,17 @@ use App\Models\DialogMessage;
 use App\Models\Notify;
 use App\Models\User;
 use App\Models\Seo;
+use App\Models\Post;
 use App\Models\PluginUsage;
 use App\Utilities\ExtendUtility;
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Services\UserService;
 use App\Fresns\Api\Services\InteractiveService;
+use App\Helpers\ConfigHelper;
 use Illuminate\Http\Request;
 use App\Models\UserStat;
-use App\Models\UserFollow;
-use App\Models\UserBlock;
+use App\Utilities\InteractiveUtility;
+use App\Utilities\ValidationUtility;
 
 class UserController extends Controller
 {
@@ -109,6 +115,22 @@ class UserController extends Controller
             $userQuery->where('comment_publish_count', '<=', $dtoRequest->commentCountLt);
         }
 
+        if ($dtoRequest->postDigestCountGt) {
+            $userQuery->where('post_digest_count', '>=', $dtoRequest->postDigestCountGt);
+        }
+
+        if ($dtoRequest->postDigestCountLt) {
+            $userQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
+        }
+
+        if ($dtoRequest->commentDigestCountGt) {
+            $userQuery->where('comment_digest_count', '>=', $dtoRequest->commentDigestCountGt);
+        }
+
+        if ($dtoRequest->commentDigestCountLt) {
+            $userQuery->where('comment_digest_count', '<=', $dtoRequest->commentDigestCountLt);
+        }
+
         if ($dtoRequest->extcredits1CountGt) {
             $userQuery->where('extcredits1', '>=', $dtoRequest->extcredits1CountGt);
         }
@@ -157,6 +179,8 @@ class UserController extends Controller
             'block' => 'block_me_count',
             'post' => 'post_publish_count',
             'comment' => 'comment_publish_count',
+            'postDigest' => 'post_digest_count',
+            'commentDigest' => 'comment_digest_count',
             'extcredits1' => 'extcredits1',
             'extcredits2' => 'extcredits2',
             'extcredits3' => 'extcredits3',
@@ -188,9 +212,9 @@ class UserController extends Controller
     public function detail(string $uidOrUsername)
     {
         if (is_numeric($uidOrUsername)) {
-            $viewUser = User::whereUid($uidOrUsername)->first();
+            $viewUser = User::where('uid', $uidOrUsername)->first();
         } else {
-            $viewUser = User::whereUsername($uidOrUsername)->first();
+            $viewUser = User::where('username', $uidOrUsername)->first();
         }
 
         if (empty($viewUser)) {
@@ -222,9 +246,9 @@ class UserController extends Controller
     public function interactive(string $uidOrUsername, string $type, Request $request)
     {
         if (is_numeric($uidOrUsername)) {
-            $viewUser = User::whereUid($uidOrUsername)->first();
+            $viewUser = User::where('uid', $uidOrUsername)->first();
         } else {
-            $viewUser = User::whereUsername($uidOrUsername)->first();
+            $viewUser = User::where('username', $uidOrUsername)->first();
         }
 
         if (empty($viewUser)) {
@@ -234,6 +258,11 @@ class UserController extends Controller
         $requestData = $request->all();
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
+
+        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_users");
+        if (! $markSet) {
+            throw new ApiException(36200);
+        }
 
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';
 
@@ -249,13 +278,13 @@ class UserController extends Controller
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }
 
-    // like
-    public function like(string $uidOrUsername, string $type, Request $request)
+    // markList
+    public function markList(string $uidOrUsername, string $markType, string $listType, Request $request)
     {
         if (is_numeric($uidOrUsername)) {
-            $viewUser = User::whereUid($uidOrUsername)->first();
+            $viewUser = User::where('uid', $uidOrUsername)->first();
         } else {
-            $viewUser = User::whereUsername($uidOrUsername)->first();
+            $viewUser = User::where('username', $uidOrUsername)->first();
         }
 
         if (empty($viewUser)) {
@@ -263,10 +292,17 @@ class UserController extends Controller
         }
 
         $requestData = $request->all();
-        $requestData['type'] = $type;
-        $dtoRequest = new MarkListDTO($requestData);
+        $requestData['markType'] = $markType;
+        $requestData['listType'] = $listType;
+        $dtoRequest = new UserMarkListDTO($requestData);
+
+        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->markType}_{$dtoRequest->listType}");
+        if (! $markSet) {
+            throw new ApiException(36200);
+        }
 
         $headers = HeaderService::getHeaders();
+
         $authUserId = null;
         if (! empty($headers['uid'])) {
             $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
@@ -275,35 +311,65 @@ class UserController extends Controller
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';
 
         $service = new InteractiveService();
-
-        switch ($dtoRequest->type) {
-            // user
-            case 'user':
-                $data = $service->getMarkUserList($dtoRequest->type, $viewUser->id, $timeOrder, $authUserId);
-            break;
-
-            // group
-            case 'group':
-            break;
-
-            // hashtag
-            case 'hashtag':
-                // todo: markId 变量不存在,需要处理
-                $interactiveQuery = UserFollow::where('follow_id', $markId);
-            break;
-
-            // post
-            case 'post':
-                $interactiveQuery = UserBlock::where('block_id', $markId);
-            break;
-
-            // comment
-            case 'comment':
-                $interactiveQuery = UserBlock::where('block_id', $markId);
-            break;
-        }
+        $data = $service->getItMarkList($dtoRequest->markType, $dtoRequest->listType, $viewUser->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['markData']->total(), $data['markData']->perPage());
+    }
+
+    // auth
+    public function auth(Request $request)
+    {
+        $dtoRequest = new UserAuthDTO($request->all());
+
+        if (is_numeric($dtoRequest->uidOrUsername)) {
+            $authUser = User::where('uid', $dtoRequest->uidOrUsername)->first();
+        } else {
+            $authUser = User::where('username', $dtoRequest->uidOrUsername)->first();
+        }
+
+        if (empty($authUser)) {
+            throw new ApiException(31602);
+        }
+
+        $headers = HeaderService::getHeaders();
+
+        $password = base64_decode($dtoRequest->password, true);
+
+        // login
+        $wordBody = [
+            'aid' => $headers['aid'],
+            'uid' => $authUser->uid,
+            'password' => $password,
+        ];
+        $fresnsResponse = \FresnsCmdWord::plugin('Fresns')->verifyUser($wordBody);
+
+        if ($fresnsResponse->isErrorResponse()) {
+            return $fresnsResponse->errorResponse();
+        }
+
+        // create token
+        $createTokenWordBody = [
+            'platformId' => $headers['platformId'],
+            'aid' => $fresnsResponse->getData('aid'),
+            'uid' => $fresnsResponse->getData('uid'),
+            'expiredTime' => null,
+        ];
+        $fresnsTokenResponse = \FresnsCmdWord::plugin('Fresns')->createSessionToken($createTokenWordBody);
+
+        if ($fresnsTokenResponse->isErrorResponse()) {
+            return $fresnsTokenResponse->errorResponse();
+        }
+
+        // get user token
+        $token['token'] = $fresnsTokenResponse->getData('token');
+        $token['expiredTime'] = $fresnsTokenResponse->getData('expiredTime');
+        $data['sessionToken'] = $token;
+
+        // get user data
+        $service = new UserService();
+        $data['detail'] = $service->userDetail($authUser, $headers['langTag'], $headers['timezone']);
+
+        return $this->success($data);
     }
 
     // panel
@@ -340,5 +406,126 @@ class UserController extends Controller
         $data['draftCount'] = $draftCount;
 
         return $this->success($data);
+    }
+
+    // auth
+    public function edit(Request $request)
+    {
+        $dtoRequest = new UserEditDTO($request->all());
+
+        // edit username
+        if ($dtoRequest->username) {
+
+        }
+
+        // edit nickname
+        if ($dtoRequest->nickname) {
+
+        }
+
+        // edit avatarFid
+        if ($dtoRequest->avatarFid) {
+
+        }
+
+        // edit avatarUrl
+        if ($dtoRequest->avatarUrl) {
+
+        }
+
+        // edit gender
+        if ($dtoRequest->gender) {
+
+        }
+
+        // edit birthday
+        if ($dtoRequest->birthday) {
+
+        }
+
+        // edit bio
+        if ($dtoRequest->bio) {
+
+        }
+
+        // edit location
+        if ($dtoRequest->location) {
+
+        }
+
+        // edit dialogLimit
+        if ($dtoRequest->dialogLimit) {
+
+        }
+
+        // edit commentLimit
+        if ($dtoRequest->commentLimit) {
+
+        }
+
+        // edit timezone
+        if ($dtoRequest->timezone) {
+
+        }
+
+        return $this->success();
+    }
+
+    // mark
+    public function mark(Request $request)
+    {
+        $dtoRequest = new UserMarkDTO($request->all());
+
+        $markSet = ConfigHelper::fresnsConfigByItemKey("{$dtoRequest->interactiveType}_{$dtoRequest->markType}_setting");
+        if (! $markSet) {
+            throw new ApiException(36200);
+        }
+
+        $headers = HeaderService::getHeaders();
+        $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+
+        $primaryId = PrimaryHelper::fresnsPrimaryId($dtoRequest->markType, $dtoRequest->fsid);
+
+        if (empty($primaryId)) {
+            throw new ApiException(32201);
+        }
+
+        switch ($dtoRequest->interactiveType) {
+            // like
+            case 'like':
+                InteractiveUtility::markUserLike($authUserId, $dtoRequest->markType, $primaryId);
+            break;
+
+            // dislike
+            case 'dislike':
+                InteractiveUtility::markUserDislike($authUserId, $dtoRequest->markType, $primaryId);
+            break;
+
+            // follow
+            case 'follow':
+                $validMark = ValidationUtility::validUserMark($authUserId, $dtoRequest->markType, $primaryId);
+                if (! $validMark) {
+                    throw new ApiException(36201);
+                }
+
+                InteractiveUtility::markUserFollow($authUserId, $dtoRequest->markType, $primaryId);
+            break;
+
+            // block
+            case 'block':
+                if ($dtoRequest->markType == 'user' && $primaryId == $authUserId) {
+                    throw new ApiException(36201);
+                }
+
+                $validMark = ValidationUtility::validUserMark($authUserId, $dtoRequest->markType, $primaryId);
+                if (! $validMark) {
+                    throw new ApiException(36202);
+                }
+
+                InteractiveUtility::markUserBlock($authUserId, $dtoRequest->markType, $primaryId);
+            break;
+        }
+
+        return $this->success();
     }
 }

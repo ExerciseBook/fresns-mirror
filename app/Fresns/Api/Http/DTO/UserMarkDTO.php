@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class PostDetailDTO extends DTO
+class UserMarkDTO extends DTO
 {
     /**
      * @return array
@@ -18,9 +18,9 @@ class PostDetailDTO extends DTO
     public function rules(): array
     {
         return [
-            'mapId' => ['integer', 'nullable', 'in:1,2,3,4,5,6,7,8,9,10'],
-            'mapLng' => ['numeric', 'nullable'],
-            'mapLat' => ['numeric', 'nullable'],
+            'interactiveType' => ['string', 'required', 'in:like,dislike,follow,block'],
+            'markType' => ['string', 'required', 'in:user,group,hashtag,post,comment'],
+            'fsid' => ['string', 'required'],
         ];
     }
 }

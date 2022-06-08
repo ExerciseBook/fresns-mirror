@@ -34,6 +34,10 @@ class UserListDTO extends DTO
             'postCountLt' => ['integer', 'nullable', 'gt:postCountGt'], // user_stats->post_publish_count
             'commentCountGt' => ['integer', 'nullable', 'lt:commentCountLt'], // user_stats->comment_publish_count
             'commentCountLt' => ['integer', 'nullable', 'gt:commentCountGt'], // user_stats->comment_publish_count
+            'postDigestCountGt' => ['integer', 'nullable', 'lt:postDigestCountLt'], // user_stats->post_digest_count
+            'postDigestCountLt' => ['integer', 'nullable', 'gt:postDigestCountGt'], // user_stats->post_digest_count
+            'commentDigestCountGt' => ['integer', 'nullable', 'lt:commentDigestCountLt'], // user_stats->comment_digest_count
+            'commentDigestCountLt' => ['integer', 'nullable', 'gt:commentDigestCountGt'], // user_stats->comment_digest_count
             'extcredits1CountGt' => ['integer', 'nullable', 'lt:extcredits1CountLt'], // user_stats->extcredits1
             'extcredits1CountLt' => ['integer', 'nullable', 'gt:extcredits1CountGt'], // user_stats->extcredits1
             'extcredits2CountGt' => ['integer', 'nullable', 'lt:extcredits2CountLt'], // user_stats->extcredits2
@@ -44,7 +48,7 @@ class UserListDTO extends DTO
             'extcredits4CountLt' => ['integer', 'nullable', 'gt:extcredits4CountGt'], // user_stats->extcredits4
             'extcredits5CountGt' => ['integer', 'nullable', 'lt:extcredits5CountLt'], // user_stats->extcredits5
             'extcredits5CountLt' => ['integer', 'nullable', 'gt:extcredits5CountGt'], // user_stats->extcredits5
-            'ratingType' => ['string', 'nullable', 'in:like,dislike,follow,block,post,comment,extcredits1,extcredits2,extcredits3,extcredits4,extcredits5,createTime'],
+            'ratingType' => ['string', 'nullable', 'in:like,dislike,follow,block,post,comment,postDigest,commentDigest,extcredits1,extcredits2,extcredits3,extcredits4,extcredits5,createTime'],
             'ratingOrder' => ['string', 'nullable', 'in:asc,desc'],
             'pageSize' => ['integer', 'nullable', 'between:1,30'],
             'page' => ['integer', 'nullable'],
