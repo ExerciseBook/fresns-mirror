@@ -58,7 +58,7 @@
                             <li data-name="inputFile"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_upload') }}</a></li>
                         </ul>
 
-                        <input type="hidden" name="install_method" value="plugin_unikey" />
+                        <input type="hidden" name="install_method" value="inputUnikey" />
                         <input type="text" class="form-control inputUnikey" name="plugin_unikey" maxlength="64">
                         <input type="file" class="form-control inputFile" name="plugin_zipball" accept=".zip" style="display:none;">
 
