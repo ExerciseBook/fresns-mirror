@@ -14,6 +14,12 @@ use App\Models\UserLike;
 
 class InteractiveService
 {
+    const TYPE_USER = 1;
+    const TYPE_GROUP = 2;
+    const TYPE_HASHTAG = 3;
+    const TYPE_POST = 4;
+    const TYPE_COMMENT = 5;
+
     // get the users who marked it
     public function getUsersWhoMarkIt(string $getType, string $markType, int $markId, string $timeOrder, string $langTag, string $timezone, ?string $authUserId = null)
     {
@@ -58,29 +64,43 @@ class InteractiveService
     }
 
     // get a list of the content it marks
-    public function getItMarkList(string $getType, string $markType, int $userId, string $timeOrder, string $langTag, string $timezone, ?string $authUserId = null)
+    public function getItMarkList(string $getType, string $markTypeName, int $userId, string $timeOrder, string $langTag, string $timezone, ?string $authUserId = null)
     {
         switch ($getType) {
-                // like
+            // like
             case 'like':
                 $markQuery = UserLike::markType(UserLike::MARK_TYPE_LIKE);
-                break;
+            break;
 
-                // dislike
+            // dislike
             case 'dislike':
                 $markQuery = UserLike::markType(UserLike::MARK_TYPE_DISLIKE);
-                break;
+            break;
 
-                // follow
+            // follow
             case 'follow':
                 $markQuery = UserFollow::query();
-                break;
+            break;
 
-                // block
+            // block
             case 'block':
                 $markQuery = UserBlock::query();
-                break;
+            break;
         }
+
+        $markType = match ($markTypeName) {
+            'user' => 1,
+            'group' => 2,
+            'hashtag' => 3,
+            'post' => 4,
+            'comment' => 5,
+
+            'users' => 1,
+            'groups' => 2,
+            'hashtags' => 3,
+            'posts' => 4,
+            'comments' => 5,
+        };
 
         $markData = $markQuery->with('user')
             ->where('user_id', $userId)
@@ -88,51 +108,43 @@ class InteractiveService
             ->orderBy('created_at', $timeOrder)
             ->paginate(\request()->get('pageSize', 15));
 
-        $markTypeName = match ($markType) {
-            1 => 'user',
-            2 => 'group',
-            3 => 'hashtag',
-            4 => 'post',
-            5 => 'comment',
-        };
-
         $paginateData = [];
 
         switch ($markTypeName) {
-            // user
-            case 'user':
+            // users
+            case 'users':
                 $service = new UserService();
                 foreach ($markData as $mark) {
                     $paginateData[] = $service->userList($mark->user, $langTag, $timezone, $authUserId);
                 }
             break;
 
-            // group
-            case 'group':
+            // groups
+            case 'groups':
                 $service = new GroupService();
                 foreach ($markData as $mark) {
                     $paginateData[] = $service->groupList($mark->group, $langTag, $timezone, $authUserId);
                 }
             break;
 
-            // hashtag
-            case 'hashtag':
+            // hashtags
+            case 'hashtags':
                 $service = new HashtagService();
                 foreach ($markData as $mark) {
                     $paginateData[] = $service->hashtagList($mark->hashtag, $langTag, $timezone, $authUserId);
                 }
             break;
 
-            // post
-            case 'post':
+            // posts
+            case 'posts':
                 $service = new PostService();
                 foreach ($markData as $mark) {
                     $paginateData[] = $service->postDetail($mark->post, 'list', $langTag, $timezone, $authUserId);
                 }
             break;
 
-            // comment
-            case 'comment':
+            // comments
+            case 'comments':
                 $service = new CommentService();
                 foreach ($markData as $mark) {
                     $paginateData[] = $service->commentDetail($mark->comment, 'list', $langTag, $timezone, $authUserId);
