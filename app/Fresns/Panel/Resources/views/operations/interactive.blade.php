@@ -167,23 +167,23 @@
                     <li class="list-group-item">
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="dislike_user" name="dislike_user_setting" value="true" class="form-check-input" {{ $params['dislike_user_setting'] ? 'checked' : '' }}>
-                            <label class="form-check-label" for="like_user">{{ __('FsLang::panel.interactive_dislike_user') }}</label>
+                            <label class="form-check-label" for="dislike_user">{{ __('FsLang::panel.interactive_dislike_user') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="dislike_group" name="dislike_group_setting" value="true" class="form-check-input" {{ $params['dislike_group_setting'] ? 'checked' : '' }}>
-                            <label class="form-check-label" for="like_group">{{ __('FsLang::panel.interactive_dislike_group') }}</label>
+                            <label class="form-check-label" for="dislike_group">{{ __('FsLang::panel.interactive_dislike_group') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="dislike_hashtag" name="dislike_hashtag_setting" value="true" class="form-check-input" {{ $params['dislike_hashtag_setting'] ? 'checked' : '' }}>
-                            <label class="form-check-label" for="like_hashtag">{{ __('FsLang::panel.interactive_dislike_hashtag') }}</label>
+                            <label class="form-check-label" for="dislike_hashtag">{{ __('FsLang::panel.interactive_dislike_hashtag') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="dislike_post" name="dislike_post_setting" value="true" class="form-check-input" {{ $params['dislike_post_setting'] ? 'checked' : '' }}>
-                            <label class="form-check-label" for="like_post">{{ __('FsLang::panel.interactive_dislike_post') }}</label>
+                            <label class="form-check-label" for="dislike_post">{{ __('FsLang::panel.interactive_dislike_post') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="dislike_comment" name="dislike_comment_setting" value="true" class="form-check-input" {{ $params['dislike_comment_setting'] ? 'checked' : '' }}>
-                            <label class="form-check-label" for="like_comment">{{ __('FsLang::panel.interactive_dislike_comment') }}</label>
+                            <label class="form-check-label" for="dislike_comment">{{ __('FsLang::panel.interactive_dislike_comment') }}</label>
                         </div>
                     </li>
                     <li class="list-group-item">
@@ -413,6 +413,28 @@
                         <div class="form-check form-check-inline">
                             <input type="radio" id="home-it_like_comments" name="it_home_list" value="it_like_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_like_comments' ? 'checked' : '' }}>
                             <label class="form-check-label" for="home-it_like_comments">{{ __('FsLang::panel.interactive_it_like_comments') }}</label>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_dislike_users" name="it_home_list" value="it_dislike_users" class="form-check-input" {{ $params['it_home_list'] == 'it_dislike_users' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_dislike_users">{{ __('FsLang::panel.interactive_it_dislike_users') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_dislike_groups" name="it_home_list" value="it_dislike_groups" class="form-check-input" {{ $params['it_home_list'] == 'it_dislike_groups' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_dislike_groups">{{ __('FsLang::panel.interactive_it_dislike_groups') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_dislike_hashtags" name="it_home_list" value="it_dislike_hashtags" class="form-check-input" {{ $params['it_home_list'] == 'it_dislike_hashtags' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_dislike_hashtags">{{ __('FsLang::panel.interactive_it_dislike_hashtags') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_dislike_posts" name="it_home_list" value="it_dislike_posts" class="form-check-input" {{ $params['it_home_list'] == 'it_dislike_posts' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_dislike_posts">{{ __('FsLang::panel.interactive_it_dislike_posts') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="home-it_dislike_comments" name="it_home_list" value="it_dislike_comments" class="form-check-input" {{ $params['it_home_list'] == 'it_dislike_comments' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="home-it_dislike_comments">{{ __('FsLang::panel.interactive_it_dislike_comments') }}</label>
                         </div>
                     </li>
                     <li class="list-group-item">
