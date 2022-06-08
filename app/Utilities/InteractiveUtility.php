@@ -352,6 +352,7 @@ class InteractiveUtility
     // mark content digest
     public static function markContentDigest(string $type, int $id, int $digestState)
     {
+        // todo: 没有 default，如果 $digestState 值在预期之外，会报错，可忽略
         $digestStats = match ($digestState) {
             1 => 'no',
             2 => 'yes',
@@ -462,11 +463,8 @@ class InteractiveUtility
                     // comment
                     case 'comment':
                         UserStat::where('user_id', $userId)->increment("{$interactiveType}_group_count");
-                        $comment = Comment::where('id', $markId)->first();
-                        $comment?->increment("{$interactiveType}_count");
-                        UserStat::where('user_id', $comment?->user_id)->increment("post_{$interactiveType}_count");
-                        Post::where('id', $comment?->post_id)->increment("comment_{$interactiveType}_count");
-                        Comment::where('id', $comment?->parent_id)->increment("comment_{$interactiveType}_count");
+
+                        InteractiveUtility::markStatsComment($markId, $interactiveType, 'increment');
                     break;
                 }
             break;
@@ -503,14 +501,32 @@ class InteractiveUtility
                     // comment
                     case 'comment':
                         UserStat::where('user_id', $userId)->decrement("{$interactiveType}_group_count");
-                        $comment = Comment::where('id', $markId)->first();
-                        $comment?->decrement("{$interactiveType}_count");
-                        UserStat::where('user_id', $comment?->user_id)->decrement("post_{$interactiveType}_count");
-                        Post::where('id', $comment?->post_id)->decrement("comment_{$interactiveType}_count");
-                        Comment::where('id', $comment?->parent_id)->decrement("comment_{$interactiveType}_count");
+
+                        InteractiveUtility::markStatsComment($markId, $interactiveType, 'decrement');
                     break;
                 }
             break;
+        }
+    }
+
+    protected static function markStatsComment(int $commentId, string $interactiveType, string $actionType)
+    {
+        if (!in_array($actionType, ['increment', 'decrement'])) {
+            return;
+        }
+        
+        $comment = Comment::where('id', $commentId)->first();
+        if (!$comment) {
+            return;
+        }
+
+        $comment->$actionType("{$interactiveType}_count");
+        UserStat::where('user_id', $comment->user_id)->$actionType("post_{$interactiveType}_count");
+        Post::where('id', $comment->post_id)->$actionType("comment_{$interactiveType}_count");
+
+        if ($comment->parent_id) {
+            Comment::where('id', $comment->parent_id)->$actionType("comment_{$interactiveType}_count");
+            InteractiveUtility::markStatsComment($comment->parent_id, $interactiveType, $actionType);
         }
     }
 
@@ -544,20 +560,7 @@ class InteractiveUtility
 
                     // comment
                     case 'comment':
-                        $comment = Comment::with('hashtags')->where('id', $id)->first();
-                        UserStat::where('user_id', $comment?->user_id)->increment('comment_publish_count');
-                        Post::where('id', $comment?->post_id)->increment("comment_count");
-                        Group::where('id', $comment?->group_id)->increment('comment_count');
-
-                        $linkIds = DomainLinkLinked::type(DomainLinkLinked::TYPE_POST)->where('linked_id', $comment?->id)->pluck('link_id')->toArray();
-                        DomainLink::whereIn('id', $linkIds)->increment('comment_count');
-                        $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
-                        Domain::whereIn('id', $domainIds)->increment('comment_count');
-
-                        $hashtagIds = array_column($comment->hashtags, 'id');
-                        Hashtag::whereIn('id', $hashtagIds)->increment('comment_count');
-
-                        Comment::where('id', $comment?->parent_id)->increment("comment_count");
+                        InteractiveUtility::publishStatsComment($id, 'increment');
                     break;
                 }
             break;
@@ -582,23 +585,40 @@ class InteractiveUtility
 
                     // comment
                     case 'comment':
-                        $comment = Comment::with('hashtags')->where('id', $id)->first();
-                        UserStat::where('user_id', $comment?->user_id)->decrement('comment_publish_count');
-                        Post::where('id', $comment?->post_id)->decrement("comment_count");
-                        Group::where('id', $comment?->group_id)->decrement('comment_count');
-
-                        $linkIds = DomainLinkLinked::type(DomainLinkLinked::TYPE_POST)->where('linked_id', $comment?->id)->pluck('link_id')->toArray();
-                        DomainLink::whereIn('id', $linkIds)->decrement('comment_count');
-                        $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
-                        Domain::whereIn('id', $domainIds)->decrement('comment_count');
-
-                        $hashtagIds = array_column($comment->hashtags, 'id');
-                        Hashtag::whereIn('id', $hashtagIds)->decrement('comment_count');
-
-                        Comment::where('id', $comment?->parent_id)->decrement("comment_count");
+                        InteractiveUtility::publishStatsComment($id, 'decrement');
                     break;
                 }
             break;
+        }
+    }
+
+    protected static function publishStatsComment(int $commentId, string $actionType)
+    {
+        if (!in_array($actionType, ['increment', 'decrement'])) {
+            return;
+        }
+
+        $comment = Comment::with('hashtags')->where('id', $commentId)->first();
+        if (!$comment) {
+            return;
+        }
+
+        UserStat::where('user_id', $comment->user_id)->$actionType('comment_publish_count');
+        Post::where('id', $comment->post_id)->$actionType("comment_count");
+        Group::where('id', $comment->group_id)->$actionType('comment_count');
+
+        $linkIds = DomainLinkLinked::type(DomainLinkLinked::TYPE_POST)->where('linked_id', $comment->id)->pluck('link_id')->toArray();
+        DomainLink::whereIn('id', $linkIds)->$actionType('comment_count');
+
+        $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
+        Domain::whereIn('id', $domainIds)->$actionType('comment_count');
+
+        $hashtagIds = array_column($comment->hashtags, 'id');
+        Hashtag::whereIn('id', $hashtagIds)->$actionType('comment_count');
+
+        if ($comment->parent_id) {
+            Comment::where('id', $comment->parent_id)->$actionType("comment_count");
+            InteractiveUtility::publishStatsComment($comment->parent_id, $actionType);
         }
     }
 
@@ -627,15 +647,7 @@ class InteractiveUtility
 
                     // comment
                     case 'comment':
-                        $comment = Comment::with('hashtags')->where('id', $id)->first();
-                        UserStat::where('user_id', $comment?->user_id)->increment('comment_digest_count');
-                        Post::where('id', $comment?->post_id)->increment("comment_digest_count");
-                        Group::where('id', $comment?->group_id)->increment('comment_digest_count');
-
-                        $hashtagIds = array_column($comment->hashtags, 'id');
-                        Hashtag::whereIn('id', $hashtagIds)->increment('comment_digest_count');
-
-                        Comment::where('id', $comment?->parent_id)->increment("comment_digest_count");
+                        InteractiveUtility::digestStatsComment($id, 'increment');
                     break;
                 }
             break;
@@ -655,18 +667,36 @@ class InteractiveUtility
 
                     // comment
                     case 'comment':
-                        $comment = Comment::with('hashtags')->where('id', $id)->first();
-                        UserStat::where('user_id', $comment?->user_id)->decrement('comment_digest_count');
-                        Post::where('id', $comment?->post_id)->decrement("comment_digest_count");
-                        Group::where('id', $comment?->group_id)->decrement('comment_digest_count');
-
-                        $hashtagIds = array_column($comment->hashtags, 'id');
-                        Hashtag::whereIn('id', $hashtagIds)->decrement('comment_digest_count');
-
-                        Comment::where('id', $comment?->parent_id)->decrement("comment_digest_count");
+                        InteractiveUtility::digestStatsComment($id, 'decrement');
                     break;
                 }
             break;
+        }
+    }
+
+    protected static function digestStatsComment(int $commentId, string $actionType)
+    {
+        if (!in_array($actionType, ['increment', 'decrement'])) {
+            return;
+        }
+
+        $comment = Comment::with('hashtags')->where('id', $commentId)->first();
+        if (!$comment) {
+            return;
+        }
+
+        UserStat::where('user_id', $comment->user_id)->$actionType('comment_digest_count');
+        Post::where('id', $comment->post_id)->$actionType("comment_digest_count");
+        Group::where('id', $comment->group_id)->$actionType('comment_digest_count');
+
+        $hashtagIds = array_column($comment->hashtags, 'id');
+        Hashtag::whereIn('id', $hashtagIds)->$actionType('comment_digest_count');
+
+        Comment::where('id', $comment->parent_id)->$actionType("comment_digest_count");
+
+        if ($comment->parent_id) {
+            Comment::where('id', $comment->parent_id)->$actionType("comment_digest_count");
+            InteractiveUtility::publishStatsComment($comment->parent_id, $actionType);
         }
     }
 }
