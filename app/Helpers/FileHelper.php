@@ -129,10 +129,10 @@ class FileHelper
     {
         $fileQuery = File::whereIn('id', $fileIdsOrFids)->orWhereIn('fid', $fileIdsOrFids)->groupBy('type')->get();
 
-        $files['images'] = $fileQuery->get(1)?->all() ?? null;
-        $files['videos'] = $fileQuery->get(2)?->all() ?? null;
-        $files['audios'] = $fileQuery->get(3)?->all() ?? null;
-        $files['documents'] = $fileQuery->get(4)?->all() ?? null;
+        $files['images'] = $fileQuery->get(File::TYPE_IMAGE)?->all() ?? null;
+        $files['videos'] = $fileQuery->get(File::TYPE_VIDEO)?->all() ?? null;
+        $files['audios'] = $fileQuery->get(File::TYPE_AUDIO)?->all() ?? null;
+        $files['documents'] = $fileQuery->get(File::TYPE_DOCUMENT)?->all() ?? null;
 
         return $files;
     }
@@ -155,10 +155,10 @@ class FileHelper
 
         $fileList = $fileAppends->map(fn ($fileAppend) => $fileAppend->file->getFileInfo())->groupBy('type');
 
-        $files['images'] = $fileList->get(1)?->all() ?? null;
-        $files['videos'] = $fileList->get(2)?->all() ?? null;
-        $files['audios'] = $fileList->get(3)?->all() ?? null;
-        $files['documents'] = $fileList->get(4)?->all() ?? null;
+        $files['images'] = $fileList->get(File::TYPE_IMAGE)?->all() ?? null;
+        $files['videos'] = $fileList->get(File::TYPE_VIDEO)?->all() ?? null;
+        $files['audios'] = $fileList->get(File::TYPE_AUDIO)?->all() ?? null;
+        $files['documents'] = $fileList->get(File::TYPE_DOCUMENT)?->all() ?? null;
 
         return $files;
     }
@@ -244,10 +244,10 @@ class FileHelper
 
     public static function handleAntiLinkFileInfoList(array $files)
     {
-        $imageStorageConfig = FileHelper::fresnsFileStorageConfigByType(1);
-        $videoStorageConfig = FileHelper::fresnsFileStorageConfigByType(2);
-        $audioStorageConfig = FileHelper::fresnsFileStorageConfigByType(3);
-        $documentStorageConfig = FileHelper::fresnsFileStorageConfigByType(4);
+        $imageStorageConfig = FileHelper::fresnsFileStorageConfigByType(File::TYPE_IMAGE);
+        $videoStorageConfig = FileHelper::fresnsFileStorageConfigByType(File::TYPE_VIDEO);
+        $audioStorageConfig = FileHelper::fresnsFileStorageConfigByType(File::TYPE_AUDIO);
+        $documentStorageConfig = FileHelper::fresnsFileStorageConfigByType(File::TYPE_DOCUMENT);
 
         // image
         if ($imageStorageConfig['antiLinkConfigStatus'] && empty($files['images'])) {
