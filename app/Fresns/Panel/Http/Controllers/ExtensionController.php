@@ -150,7 +150,12 @@ class ExtensionController extends Controller
                 'unikey' => $unikey,
             ]);
 
-            return \response(\Artisan::output()."\n".__('FsLang::tips.installSuccess'));
+            $output = \Artisan::output();
+            if ($output == "\n") {
+                return \response("插件 $unikey ".__('FsLang::tips.installFailure'));
+            }
+
+            return \response($output."\n 插件 $unikey ".__('FsLang::tips.installSuccess'));
         }
 
         return back()->with('failure', __('FsLang::tips.installFailure'));
