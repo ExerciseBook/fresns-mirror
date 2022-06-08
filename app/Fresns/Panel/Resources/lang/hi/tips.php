@@ -27,7 +27,9 @@ return [
     'request_in_progress' => 'अनुरोध जारी है...',
     'requestSuccess' => 'अनुरोध सफलता',
     'requestFailure' => 'अनुरोध विफलता',
-    // install
+
+    'install_not_entered_key' => 'कृपया fresns कुंजी दर्ज करें',
+    'install_not_upload_zip' => 'कृपया स्थापना पैकेज का चयन करें',
     'install_in_progress' => 'इंस्टॉल हो रहा है...',
     // upgrade
     'upgrade_none' => 'कोई अपग्रेड नहीं',

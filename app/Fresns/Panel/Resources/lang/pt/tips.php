@@ -28,6 +28,8 @@ return [
     'requestSuccess' => 'Pedir sucesso',
     'requestFailure' => 'Pedir falha',
     // install
+    'install_not_entered_key' => 'Por favor introduza a chave fresns',
+    'install_not_upload_zip' => 'Por favor, seleccione o pacote de instalação',
     'install_in_progress' => 'Instalação em curso...',
     // upgrade
     'upgrade_none' => 'Sem atualização',

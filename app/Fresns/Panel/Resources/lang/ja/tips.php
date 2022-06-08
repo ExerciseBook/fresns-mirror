@@ -28,6 +28,8 @@ return [
     'requestSuccess' => 'リクエストサクセス',
     'requestFailure' => 'リクエストの失敗',
     // install
+    'install_not_entered_key' => 'fresnsキーを入力してください。',
+    'install_not_upload_zip' => 'インストールパッケージを選択してください',
     'install_in_progress' => 'インストール中...',
     // upgrade
     'upgrade_none' => '更新はありません',

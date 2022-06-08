@@ -28,6 +28,8 @@ return [
     'requestSuccess' => 'Запросить успех',
     'requestFailure' => 'Отказ запроса',
     // install
+    'install_not_entered_key' => 'Пожалуйста, введите ключ fresns',
+    'install_not_upload_zip' => 'Пожалуйста, выберите пакет установки',
     'install_in_progress' => 'Выполняется установка...',
     // upgrade
     'upgrade_none' => 'Нет обновления',

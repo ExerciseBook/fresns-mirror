@@ -225,11 +225,6 @@ $(document).ready(function () {
     $('.select2').select2({
         theme: 'bootstrap-5',
     });
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-        },
-    });
 
     // check if a multilingual field has a value
     $('.check-names').submit(function () {
@@ -961,27 +956,25 @@ $(document).ready(function () {
     $('#installSubmit').click(function (e) {
         e.preventDefault();
 
-        let install_type = $('input[name=install_type]').val()
         let install_method = $('input[name=install_method]').val()
         let plugin_unikey = $('input[name=plugin_unikey]').val()
         let plugin_zipball = $('input[name=plugin_zipball]').val()
 
-        
         if (plugin_unikey || plugin_zipball) {
             $(this).submit()
             $('#installStepModal').modal('toggle')
             return;
         }
-        
+
         if (install_method == 'inputUnikey' && !plugin_unikey) {
             $('input[name=plugin_unikey]').addClass('is-invalid')
-            $('#inputUnikeyOrInputFile').text('请输入标识名').show()
+            $('#inputUnikeyOrInputFile').text(trans('tips.install_not_entered_key')).show() // FsLang
             return;
         }
-        
+
         if (install_method == 'inputFile' && !plugin_zipball) {
             $('input[name=plugin_zipball]').addClass('is-invalid')
-            $('#inputUnikeyOrInputFile').text('请上传安装包').show()
+            $('#inputUnikeyOrInputFile').text(trans('tips.install_not_upload_zip')).show() // FsLang
             return;
         }
     });

@@ -28,6 +28,8 @@ return [
     'requestSuccess' => 'Demande de succès',
     'requestFailure' => 'Échec de la demande',
     // install
+    'install_not_entered_key' => 'Veuillez entrer la clé de la fresque',
+    'install_not_upload_zip' => 'Veuillez sélectionner le paquet d\'installation',
     'install_in_progress' => 'Installation en cours...',
     // upgrade
     'upgrade_none' => 'Pas de mise à jour',

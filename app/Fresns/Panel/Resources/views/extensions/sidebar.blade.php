@@ -10,12 +10,12 @@
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.plugin.*') ? 'active' : '' }}" href="{{ route('panel.plugin.index') }}"><i class="bi bi-journal-code"></i> {{ __('FsLang::panel.sidebar_plugins') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.engine.*', 'panel.theme.*') ? 'active' : '' }}" href="{{ route('panel.engine.index') }}"><i class="bi bi-laptop"></i> {{ __('FsLang::panel.sidebar_website') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.app.*') ? 'active' : '' }}" href="{{ route('panel.app.index') }}"><i class="bi bi-phone"></i> {{ __('FsLang::panel.sidebar_apps') }}</a></li>
-                    <li><hr class="dropdown-divider"></li>
+                    <li><hr style="margin: 0.5rem 0"></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.keys.*') ? 'active' : '' }} " href="{{ route('panel.keys.index') }}"><i class="bi bi-key"></i> {{ __('FsLang::panel.sidebar_keys') }}</a></li>
-                    <li><hr class="dropdown-divider"></li>
+                    <li><hr style="margin: 0.5rem 0"></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.iframe.market') ? 'active' : '' }}" href="{{ route('panel.iframe.market', ['url' => 'https://market.fresns.cn']) }}"><i class="bi bi-shop"></i> {{ __('FsLang::panel.menu_market') }}</a></li>
                     <li class="nav-item"><a class="nav-link" href="#installModal" data-bs-toggle="modal" role="button"><i class="bi bi-tools"></i> {{ __('FsLang::panel.install_application') }}</a></li>
-                    <li><hr class="dropdown-divider"></li>
+                    <li><hr style="margin: 0.5rem 0"></li>
                 </ul>
             </div>
         </div>
@@ -37,6 +37,7 @@
                 <div class="modal-body">
                     <div class="input-group mb-3">
                         <span class="input-group-text">{{ __('FsLang::panel.install_type') }}</span>
+
                         <div class="form-control">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="install_type" id="install_plugin" value="plugin" checked required>
@@ -50,14 +51,17 @@
                     </div>
                     <div class="input-group">
                         <span class="input-group-text">{{ __('FsLang::panel.install_mode') }}</span>
+
                         <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.install_mode_input') }}</button>
                         <ul class="dropdown-menu selectInputType">
                             <li data-name="inputUnikey"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_input') }}</a></li>
                             <li data-name="inputFile"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_upload') }}</a></li>
                         </ul>
+
                         <input type="hidden" name="install_method" value="plugin_unikey" />
                         <input type="text" class="form-control inputUnikey" name="plugin_unikey" maxlength="64">
                         <input type="file" class="form-control inputFile" name="plugin_zipball" accept=".zip" style="display:none;">
+
                         <div id="inputUnikeyOrInputFile" class="invalid-feedback"></div>
                     </div>
                 </div>
