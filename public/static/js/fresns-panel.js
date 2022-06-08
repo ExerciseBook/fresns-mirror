@@ -974,7 +974,6 @@ $(document).ready(function () {
             return;
         }
         
-        // 
         if (install_method == 'inputUnikey' && !plugin_unikey) {
             $('input[name=plugin_unikey]').addClass('is-invalid')
             $('#inputUnikeyOrInputFile').text('请输入标识名').show()
