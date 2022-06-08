@@ -15,11 +15,11 @@ use App\Fresns\Api\Services\InteractiveService;
 use App\Models\Hashtag;
 use App\Models\Seo;
 use App\Exceptions\ApiException;
-use App\Utilities\PermissionUtility;
 use Illuminate\Http\Request;
 use App\Fresns\Api\Http\DTO\HashtagListDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Models\UserBlock;
+use App\Helpers\ConfigHelper;
 
 class HashtagController extends Controller
 {
@@ -165,6 +165,11 @@ class HashtagController extends Controller
         $requestData = $request->all();
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
+
+        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_hashtags");
+        if (! $markSet) {
+            throw new ApiException(36200);
+        }
 
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';
 

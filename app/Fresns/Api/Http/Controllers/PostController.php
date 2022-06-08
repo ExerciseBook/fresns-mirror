@@ -61,9 +61,12 @@ class PostController extends Controller
 
     public function detail(string $pid, Request $request)
     {
-        $requestData = $request->all();
-        $requestData['pid'] = $pid;
-        $dtoRequest = new PostDetailDTO($requestData);
+        $dtoRequest = new PostDetailDTO($request->all());
+
+        $post = Post::with('creator')->wherePid($pid)->first();
+        if (empty($post)) {
+            throw new ApiException(37300);
+        }
 
         // Plugin provides data
         $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_detail_service');
@@ -77,8 +80,6 @@ class PostController extends Controller
 
         // Fresns provides data
         $headers = HeaderService::getHeaders();
-
-        $post = Post::with('creator')->wherePid($pid)->first();
 
         $seoData = Seo::where('linked_type', 4)->where('linked_id', $post->id)->where('lang_tag', $headers['langTag'])->first();
         $common['title'] = $seoData->title ?? null;

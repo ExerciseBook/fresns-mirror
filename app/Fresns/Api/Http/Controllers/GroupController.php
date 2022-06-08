@@ -12,16 +12,17 @@ use App\Models\Seo;
 use App\Models\Group;
 use App\Models\PluginUsage;
 use Illuminate\Http\Request;
+use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Exceptions\ApiException;
 use App\Utilities\ExtendUtility;
 use App\Utilities\CollectionUtility;
+use App\Utilities\PermissionUtility;
 use App\Fresns\Api\Http\DTO\GroupListDTO;
 use App\Fresns\Api\Services\GroupService;
 use App\Fresns\Api\Services\HeaderService;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Services\InteractiveService;
-use App\Utilities\PermissionUtility;
 
 class GroupController extends Controller
 {
@@ -223,6 +224,11 @@ class GroupController extends Controller
         $requestData = $request->all();
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
+
+        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_groups");
+        if (! $markSet) {
+            throw new ApiException(36200);
+        }
 
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';
 
