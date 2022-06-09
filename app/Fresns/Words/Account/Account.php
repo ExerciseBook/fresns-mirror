@@ -131,7 +131,7 @@ class Account
             $account = AccountModel::where('phone', $accountName)->first();
         }
 
-        $loginErrorCount = PermissionUtility::checkLoginErrorCount($account->id);
+        $loginErrorCount = ConfigUtility::getLoginErrorCount($account->id);
 
         if ($loginErrorCount >= 5) {
             return $this->failure(

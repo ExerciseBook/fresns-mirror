@@ -12,7 +12,7 @@ use Browser;
 use App\Helpers\AppHelper;
 use Illuminate\Http\Request;
 use App\Utilities\AppUtility;
-use App\Utilities\PermissionUtility;
+use App\Utilities\ConfigUtility;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -70,7 +70,7 @@ class LoginController extends Controller
 
         // login session log
         if ($account) {
-            $loginCount = PermissionUtility::checkLoginErrorCount($account->id);
+            $loginCount = ConfigUtility::getLoginErrorCount($account->id);
 
             if ($loginCount >= 5) {
                 $this->loginLimit = true;

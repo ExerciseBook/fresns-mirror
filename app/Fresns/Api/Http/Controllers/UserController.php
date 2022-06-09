@@ -34,7 +34,7 @@ use Illuminate\Http\Request;
 use App\Models\UserStat;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\ValidationUtility;
-use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Trig\Tangent;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -423,13 +423,19 @@ class UserController extends Controller
 
         // edit username
         if ($dtoRequest->username) {
+            $isEmpty = Str::of($dtoRequest->username)->trim()->isEmpty();
+            if ($isEmpty) {
+                throw new ApiException(35102);
+            }
+
             $nextEditUsernameTime = $authUser->last_username_at?->addDays($editNameConfig['username_edit']);
 
             if (now() < $nextEditUsernameTime) {
                 throw new ApiException(35101);
             }
 
-            $validUsername = ValidationUtility::validUsername($dtoRequest->username);
+            $username = Str::of($dtoRequest->username)->trim();
+            $validUsername = ValidationUtility::username($username);
 
             if (! $validUsername['formatString'] || ! $validUsername['formatHyphen'] || ! $validUsername['formatNumeric']) {
                 throw new ApiException(35102);
@@ -452,20 +458,27 @@ class UserController extends Controller
             }
 
             $authUser->update([
-                'username' => $dtoRequest->username,
+                'username' => $username,
                 'last_username_at' => now(),
             ]);
         }
 
         // edit nickname
         if ($dtoRequest->nickname) {
+            $isEmpty = Str::of($dtoRequest->nickname)->trim()->isEmpty();
+            if ($isEmpty) {
+                throw new ApiException(35107);
+            }
+
             $nextEditNicknameTime = $authUser->last_nickname_at?->addDays($editNameConfig['nickname_edit']);
 
             if (now() < $nextEditNicknameTime) {
                 throw new ApiException(35101);
             }
 
-            $validNickname = ValidationUtility::validNickname($dtoRequest->nickname);
+            $nickname = Str::of($dtoRequest->nickname)->trim();
+
+            $validNickname = ValidationUtility::nickname($nickname);
 
             if (! $validNickname['formatString'] || ! $validUsername['formatSpace']) {
                 throw new ApiException(35107);
@@ -485,7 +498,7 @@ class UserController extends Controller
 
             $blockWords = BlockWord::where('user_mode', 2)->get('word', 'replace_word');
 
-            $newNickname = str_ireplace($blockWords->pluck('word')->toArray(), $blockWords->pluck('replace_word')->toArray(), $dtoRequest->nickname);
+            $newNickname = str_ireplace($blockWords->pluck('word')->toArray(), $blockWords->pluck('replace_word')->toArray(), $nickname);
 
             $authUser->update([
                 'nickname' => $newNickname,
@@ -527,15 +540,17 @@ class UserController extends Controller
 
         // edit bio
         if ($dtoRequest->bio) {
+            $bio = Str::of($dtoRequest->bio)->trim();
             $authUser->update([
-                'gender' => $dtoRequest->gender,
+                'gender' => $bio,
             ]);
         }
 
         // edit location
         if ($dtoRequest->location) {
+            $location = Str::of($dtoRequest->location)->trim();
             $authUser->update([
-                'location' => $dtoRequest->location,
+                'location' => $location,
             ]);
         }
 
@@ -595,7 +610,7 @@ class UserController extends Controller
 
             // follow
             case 'follow':
-                $validMark = ValidationUtility::validUserMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
+                $validMark = ValidationUtility::userMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
                 if (! $validMark) {
                     throw new ApiException(36201);
                 }
@@ -605,13 +620,9 @@ class UserController extends Controller
 
             // block
             case 'block':
-                if ($dtoRequest->markType == 'user' && $primaryId == $authUserId) {
-                    throw new ApiException(36201);
-                }
-
-                $validMark = ValidationUtility::validUserMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
+                $validMark = ValidationUtility::userMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
                 if (! $validMark) {
-                    throw new ApiException(36202);
+                    throw new ApiException(36201);
                 }
 
                 InteractiveUtility::markUserBlock($authUserId, $dtoRequest->markType, $primaryId);

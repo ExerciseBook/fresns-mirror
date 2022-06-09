@@ -21,7 +21,6 @@ use App\Models\SessionLog;
 use App\Models\User;
 use App\Models\VerifyCode;
 use App\Utilities\ConfigUtility;
-use Fresns\CmdWordManager\Exceptions\Constants\ExceptionConstant;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
 
 class Basis
