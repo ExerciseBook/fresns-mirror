@@ -12,6 +12,7 @@ use App\Helpers\ConfigHelper;
 use App\Models\BlockWord;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 class ValidationUtility
@@ -20,31 +21,59 @@ class ValidationUtility
     public static function validUsername(string $username): array
     {
         $config = ConfigHelper::fresnsConfigByItemKeys([
-            'username_edit',
             'username_min',
             'username_max',
             'ban_names',
         ]);
+        $length = Str::length($username);
+        $user = User::withTrashed()->where('username', $username)->first();
 
-        $format = true;
-        // 只允许字母、数字和单个连字符
-        // 数字不分前后，但不能是纯数字
-        // 连字符只能在中间，不能在开头或结尾，也不能纯是连字符
+        $formatString = true;
+        $isError = preg_match('/^[A-Za-z0-9-]+$/', $username);
+        if (! $isError) {
+            $formatString = false;
+        }
+
+        $formatHyphen = true;
+        $hyphenCount = substr_count($username, '-');
+        $hyphenStrStart = str_starts_with($username, '-');
+        $hyphenStrEnd = str_ends_with($username, '-');
+        if ($hyphenCount > 1 || $hyphenStrStart || $hyphenStrEnd) {
+            $formatHyphen = false;
+        }
+
+        $formatNumeric = true;
+        $isNumeric = is_numeric($username);
+        if ($isNumeric) {
+            $formatNumeric = false;
+        }
 
         $minLength = true;
-        // 用户名长度超出限制
+        if ($length < $config['username_min']) {
+            $minLength = false;
+        }
 
         $maxLength = true;
-        // 用户名未达到最小长度要求
+        if ($length > $config['username_max']) {
+            $maxLength = false;
+        }
 
         $use = true;
-        // 用户名已被使用
+        if (! empty($user)) {
+            $use = false;
+        }
 
         $banName = true;
-        // 用户名存在禁用词
+        $newBanNames = array_map('strtolower', $config['ban_names']);
+        $isBanName = Str::contains(Str::lower($username), $newBanNames);
+        if ($isBanName) {
+            $banName = false;
+        }
 
         $validUsername = [
-            'format' => $format,
+            'formatString' => $formatString,
+            'formatHyphen' => $formatHyphen,
+            'formatNumeric' => $formatNumeric,
             'minLength' => $minLength,
             'maxLength' => $maxLength,
             'use' => $use,
@@ -60,29 +89,47 @@ class ValidationUtility
         $config = ConfigHelper::fresnsConfigByItemKeys([
             'nickname_min',
             'nickname_max',
-            'nickname_edit',
         ]);
+        $length = Str::length($nickname);
 
-        $blockWords = BlockWord::whereIn('user_mode', [2, 3])->get();
+        $formatString = true;
+        $isError = preg_match('/^[\x{4e00}-\x{9fa5} A-Za-z0-9]+$/u', $nickname);
+        if (! $isError) {
+            $formatString = false;
+        }
 
-        $format = true;
-        // 不能带标点符号或特殊符号
-        // 允许有单个空格，但空格不能在开头或结尾
+        $formatSpace = true;
+        $spaceCount = substr_count($nickname, ' ');
+        $spaceStrStart = str_starts_with($nickname, ' ');
+        $spaceStrEnd = str_ends_with($nickname, ' ');
+        if ($spaceCount > 1 || $spaceStrStart || $spaceStrEnd) {
+            $formatSpace = false;
+        }
 
         $minLength = true;
-        // 昵称长度超出限制
+        if ($length < $config['username_min']) {
+            $minLength = false;
+        }
 
         $maxLength = true;
-        // 昵称未达到最小长度要求
+        if ($length > $config['username_max']) {
+            $maxLength = false;
+        }
 
-        $blockWord = true;
-        // 昵称存在禁用词
+        $banName = true;
+        $banNames = BlockWord::where('user_mode', 3)->pluck('word')->toArray();
+        $newBanNames = array_map('strtolower', $banNames);
+        $isBanName = Str::contains(Str::lower($nickname), $newBanNames);
+        if ($isBanName) {
+            $banName = false;
+        }
 
         $validNickname = [
-            'format' => $format,
+            'formatString' => $formatString,
+            'formatSpace' => $formatSpace,
             'minLength' => $minLength,
             'maxLength' => $maxLength,
-            'blockWord' => $blockWord,
+            'banName' => $banName,
         ];
 
         return $validNickname;
@@ -98,9 +145,9 @@ class ValidationUtility
 
         $passwordLength = Str::length($password);
 
-        $length = false;
-        if ($passwordLength > $config['password_length']) {
-            $length = true;
+        $length = true;
+        if ($passwordLength < $config['password_length']) {
+            $length = false;
         }
 
         $number = true;
@@ -135,7 +182,7 @@ class ValidationUtility
     }
 
     // validation user mark
-    public static function validUserMark(int $userId, int $markType, int $markId): bool
+    public static function validUserMarkOwn(int $userId, int $markType, int $markId): bool
     {
         if (! is_numeric($markType)) {
             $markType = match ($markType) {
