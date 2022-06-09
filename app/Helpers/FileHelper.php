@@ -128,14 +128,14 @@ class FileHelper
     // get file info list by file id or fid
     public static function fresnsFileInfoListByIds(array $fileIdsOrFids)
     {
-        $fileQuery = File::whereIn('id', $fileIdsOrFids)->orWhereIn('fid', $fileIdsOrFids)->groupBy('type')->get();
+        $files = File::whereIn('id', $fileIdsOrFids)->orWhereIn('fid', $fileIdsOrFids)->get()->groupBy('type');
 
-        $files['images'] = $fileQuery->get(File::TYPE_IMAGE)?->all() ?? null;
-        $files['videos'] = $fileQuery->get(File::TYPE_VIDEO)?->all() ?? null;
-        $files['audios'] = $fileQuery->get(File::TYPE_AUDIO)?->all() ?? null;
-        $files['documents'] = $fileQuery->get(File::TYPE_DOCUMENT)?->all() ?? null;
+        $data['images'] = $files->get(File::TYPE_IMAGE)?->all() ?? null;
+        $data['videos'] = $files->get(File::TYPE_VIDEO)?->all() ?? null;
+        $data['audios'] = $files->get(File::TYPE_AUDIO)?->all() ?? null;
+        $data['documents'] = $files->get(File::TYPE_DOCUMENT)?->all() ?? null;
 
-        return $files;
+        return $data;
     }
 
     // get file info list by table column

@@ -20,7 +20,7 @@ class FileUtility
 {
     public static function uploadFile(array $bodyInfo, UploadedFile $file)
     {
-        if (Str::isJson($bodyInfo['moreJson'])) {
+        if (!Str::isJson($bodyInfo['moreJson'])) {
             return null;
         }
 
@@ -41,7 +41,7 @@ class FileUtility
 
     public static function uploadFileInfo(array $bodyInfo)
     {
-        if (Str::isJson($bodyInfo['fileInfo'])) {
+        if (!Str::isJson($bodyInfo['fileInfo'])) {
             return null;
         }
 
@@ -64,8 +64,9 @@ class FileUtility
             $item['mime'] = $fileInfo['mime'] ?? null;
             $item['extension'] = $fileInfo['extension'];
             $item['size'] = $fileInfo['size'];
-            $item['md5'] = $fileInfo['md5'] ?? null;
-            $item['sha1'] = $fileInfo['sha1'] ?? null;
+            $item['md5'] = $bodyInfo['md5'] ?? null;
+            $item['sha'] = $bodyInfo['sha'] ?? null;
+            $item['sha_type'] = $bodyInfo['shaType'] ?? null;
             $item['path'] = $fileInfo['path'];
             $item['image_width'] = $fileInfo['imageWidth'] ?? null;
             $item['image_height'] = $fileInfo['imageHeight'] ?? null;
