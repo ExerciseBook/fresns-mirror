@@ -15,3 +15,7 @@ yarn-error.log
 .DS_Store
 install.lock
 composer.lock
+
+# R&D File
+/config/plugins.php
+fresns-test.json
