@@ -164,7 +164,7 @@ class FileUtility
             'account_id' => $accountId,
             'user_id' => $userId,
         ];
-        FileAppend::insert($appendInput);
+        FileAppend::create($appendInput);
 
         return FileHelper::fresnsFileInfoById($fileId);
     }

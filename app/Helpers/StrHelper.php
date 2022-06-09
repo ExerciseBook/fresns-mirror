@@ -111,6 +111,10 @@ class StrHelper
             return '';
         }
 
+        if (str_contains($uri, '://')) {
+            return $uri;
+        }
+
         if (! $domain) {
             $defaultDomain = ConfigHelper::fresnsConfigByItemKey('backend_domain');
 

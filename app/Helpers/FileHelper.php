@@ -100,6 +100,7 @@ class FileHelper
     // get file info by file id or fid
     public static function fresnsFileInfoById(string $fileIdOrFid)
     {
+        /** @var File $file */
         if (is_numeric($fileIdOrFid)) {
             $file = File::whereId($fileIdOrFid)->first();
         } else {
