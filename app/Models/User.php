@@ -15,6 +15,8 @@ class User extends Model
 
     protected $dates = [
         'expired_at',
+        'last_username_at',
+        'last_nickname_at',
     ];
 
     public function account()

@@ -15,8 +15,8 @@ use App\Fresns\Api\Http\DTO\UserMarkDTO;
 use App\Fresns\Api\Http\DTO\UserMarkListDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Services\HeaderService;
+use App\Models\BlockWord;
 use App\Models\CommentLog;
-use App\Models\Comment;
 use App\Models\PostLog;
 use App\Helpers\PrimaryHelper;
 use App\Models\Dialog;
@@ -24,7 +24,6 @@ use App\Models\DialogMessage;
 use App\Models\Notify;
 use App\Models\User;
 use App\Models\Seo;
-use App\Models\Post;
 use App\Models\PluginUsage;
 use App\Utilities\ExtendUtility;
 use App\Exceptions\ApiException;
@@ -35,6 +34,7 @@ use Illuminate\Http\Request;
 use App\Models\UserStat;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\ValidationUtility;
+use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Trig\Tangent;
 
 class UserController extends Controller
 {
@@ -376,23 +376,23 @@ class UserController extends Controller
     public function panel()
     {
         $headers = HeaderService::getHeaders();
-        $userId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
 
-        if (empty($userId)) {
+        if (empty($authUserId)) {
             throw new ApiException(31602);
         }
 
-        $data['features'] = ExtendUtility::getPluginExtends(7, null, null, $userId, $headers['langTag']);
-        $data['profiles'] = ExtendUtility::getPluginExtends(8, null, null, $userId, $headers['langTag']);
+        $data['features'] = ExtendUtility::getPluginExtends(7, null, null, $authUserId, $headers['langTag']);
+        $data['profiles'] = ExtendUtility::getPluginExtends(8, null, null, $authUserId, $headers['langTag']);
 
-        $dialogACount = Dialog::where('a_user_id', $userId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
-        $dialogBCount = Dialog::where('b_user_id', $userId)->where('b_is_read', 0)->where('b_is_display', 1)->count();
-        $dialogMessageCount = DialogMessage::where('recv_user_id', $userId)->where('recv_read_at', null)->where('recv_deleted_at', null)->isEnable()->count();
+        $dialogACount = Dialog::where('a_user_id', $authUserId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
+        $dialogBCount = Dialog::where('b_user_id', $authUserId)->where('b_is_read', 0)->where('b_is_display', 1)->count();
+        $dialogMessageCount = DialogMessage::where('recv_user_id', $authUserId)->where('recv_read_at', null)->where('recv_deleted_at', null)->isEnable()->count();
         $dialogUnread['dialog'] = $dialogACount + $dialogBCount;
         $dialogUnread['message'] = $dialogMessageCount;
         $data['dialogUnread'] = $dialogUnread;
 
-        $notify = Notify::where('user_id', $userId)->where('is_read', 0);
+        $notify = Notify::where('user_id', $authUserId)->where('is_read', 0);
         $notifyUnread['system'] = $notify->where('action_type', 1)->count();
         $notifyUnread['follow'] = $notify->where('action_type', 2)->count();
         $notifyUnread['like'] = $notify->where('action_type', 3)->count();
@@ -401,8 +401,8 @@ class UserController extends Controller
         $notifyUnread['recommend'] = $notify->where('action_type', 6)->count();
         $data['notifyUnread'] = $notifyUnread;
 
-        $draftCount['posts'] = PostLog::where('user_id', $userId)->whereIn('state', [1, 4])->count();
-        $draftCount['comments'] = CommentLog::where('user_id', $userId)->whereIn('state', [1, 4])->count();
+        $draftCount['posts'] = PostLog::where('user_id', $authUserId)->whereIn('state', [1, 4])->count();
+        $draftCount['comments'] = CommentLog::where('user_id', $authUserId)->whereIn('state', [1, 4])->count();
         $data['draftCount'] = $draftCount;
 
         return $this->success($data);
@@ -412,60 +412,152 @@ class UserController extends Controller
     public function edit(Request $request)
     {
         $dtoRequest = new UserEditDTO($request->all());
+        $headers = HeaderService::getHeaders();
+
+        $authUser = User::where('uid', $headers['uid'])->first();
+
+        $editNameConfig = ConfigHelper::fresnsConfigByItemKeys([
+            'username_edit',
+            'nickname_edit',
+        ]);
 
         // edit username
         if ($dtoRequest->username) {
+            $nextEditUsernameTime = $authUser->last_username_at?->addDays($editNameConfig['username_edit']);
 
+            if (now() < $nextEditUsernameTime) {
+                throw new ApiException(35101);
+            }
+
+            $validUsername = ValidationUtility::validUsername($dtoRequest->username);
+
+            if (! $validUsername['formatString'] || ! $validUsername['formatHyphen'] || ! $validUsername['formatNumeric']) {
+                throw new ApiException(35102);
+            }
+
+            if (! $validUsername['minLength']) {
+                throw new ApiException(35103);
+            }
+
+            if (! $validUsername['maxLength']) {
+                throw new ApiException(35104);
+            }
+
+            if (! $validUsername['use']) {
+                throw new ApiException(35105);
+            }
+
+            if (! $validUsername['banName']) {
+                throw new ApiException(35106);
+            }
+
+            $authUser->update([
+                'username' => $dtoRequest->username,
+                'last_username_at' => now(),
+            ]);
         }
 
         // edit nickname
         if ($dtoRequest->nickname) {
+            $nextEditNicknameTime = $authUser->last_nickname_at?->addDays($editNameConfig['nickname_edit']);
 
+            if (now() < $nextEditNicknameTime) {
+                throw new ApiException(35101);
+            }
+
+            $validNickname = ValidationUtility::validNickname($dtoRequest->nickname);
+
+            if (! $validNickname['formatString'] || ! $validUsername['formatSpace']) {
+                throw new ApiException(35107);
+            }
+
+            if (! $validNickname['minLength']) {
+                throw new ApiException(35108);
+            }
+
+            if (! $validNickname['maxLength']) {
+                throw new ApiException(35109);
+            }
+
+            if (! $validNickname['banName']) {
+                throw new ApiException(35110);
+            }
+
+            $blockWords = BlockWord::where('user_mode', 2)->get('word', 'replace_word');
+
+            $newNickname = str_ireplace($blockWords->pluck('word')->toArray(), $blockWords->pluck('replace_word')->toArray(), $dtoRequest->nickname);
+
+            $authUser->update([
+                'nickname' => $newNickname,
+                'last_nickname_at' => now(),
+            ]);
         }
 
         // edit avatarFid
         if ($dtoRequest->avatarFid) {
+            $fileId = PrimaryHelper::fresnsFileIdByFid($dtoRequest->avatarFid);
 
+            $authUser->update([
+                'avatar_file_id' => $fileId,
+                'avatar_file_url' => null,
+            ]);
         }
 
         // edit avatarUrl
         if ($dtoRequest->avatarUrl) {
-
+            $authUser->update([
+                'avatar_file_id' => null,
+                'avatar_file_url' => $dtoRequest->avatarUrl,
+            ]);
         }
 
         // edit gender
         if ($dtoRequest->gender) {
-
+            $authUser->update([
+                'gender' => $dtoRequest->gender,
+            ]);
         }
 
         // edit birthday
         if ($dtoRequest->birthday) {
-
+            $authUser->update([
+                'birthday' => $dtoRequest->birthday,
+            ]);
         }
 
         // edit bio
         if ($dtoRequest->bio) {
-
+            $authUser->update([
+                'gender' => $dtoRequest->gender,
+            ]);
         }
 
         // edit location
         if ($dtoRequest->location) {
-
+            $authUser->update([
+                'location' => $dtoRequest->location,
+            ]);
         }
 
         // edit dialogLimit
         if ($dtoRequest->dialogLimit) {
-
+            $authUser->update([
+                'dialog_limit' => $dtoRequest->dialogLimit,
+            ]);
         }
 
         // edit commentLimit
         if ($dtoRequest->commentLimit) {
-
+            $authUser->update([
+                'comment_limit' => $dtoRequest->commentLimit,
+            ]);
         }
 
         // edit timezone
         if ($dtoRequest->timezone) {
-
+            $authUser->update([
+                'timezone' => $dtoRequest->timezone,
+            ]);
         }
 
         return $this->success();
@@ -503,7 +595,7 @@ class UserController extends Controller
 
             // follow
             case 'follow':
-                $validMark = ValidationUtility::validUserMark($authUserId, $dtoRequest->markType, $primaryId);
+                $validMark = ValidationUtility::validUserMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
                 if (! $validMark) {
                     throw new ApiException(36201);
                 }
@@ -517,7 +609,7 @@ class UserController extends Controller
                     throw new ApiException(36201);
                 }
 
-                $validMark = ValidationUtility::validUserMark($authUserId, $dtoRequest->markType, $primaryId);
+                $validMark = ValidationUtility::validUserMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
                 if (! $validMark) {
                     throw new ApiException(36202);
                 }
