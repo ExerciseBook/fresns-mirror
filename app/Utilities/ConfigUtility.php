@@ -11,6 +11,7 @@ namespace App\Utilities;
 use App\Models\CodeMessage;
 use App\Models\Config;
 use App\Models\Language;
+use App\Models\SessionLog;
 
 class ConfigUtility
 {
@@ -93,5 +94,22 @@ class ConfigUtility
         $message = CodeMessage::where('plugin_unikey', $unikey)->where('code', $code)->where('lang_tag', $langTag)->value('message');
 
         return $message ?? 'Unknown Error';
+    }
+
+    // get login error count
+    public static function getLoginErrorCount(int $accountId, ?int $userId = null): int
+    {
+        $sessionLog = SessionLog::whereIn('type', [2, 5, 8])
+            ->whereIn('object_result', [1 ,2])
+            ->where('account_id', $accountId)
+            ->where('created_at', '>=', now()->subHour());
+
+        if (! empty($userId)) {
+            $sessionLog->where('user_id', $userId);
+        }
+
+        $errorCount = $sessionLog->count();
+
+        return $errorCount;
     }
 }

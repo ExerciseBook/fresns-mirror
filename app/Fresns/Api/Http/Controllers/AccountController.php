@@ -51,8 +51,15 @@ class AccountController extends Controller
             throw new ApiException(34201);
         }
 
-        if ($dtoRequest->type == 'email' && ! $configs['site_register_email']) {
-            throw new ApiException(34202);
+        if ($dtoRequest->type == 'email') {
+            if (! $configs['site_register_email']) {
+                throw new ApiException(34202);
+            }
+
+            $checkEmail = ValidationUtility::disposableEmail($dtoRequest->account);
+            if (! $checkEmail) {
+                throw new ApiException(34109);
+            }
         }
 
         if ($dtoRequest->type == 'phone' && ! $configs['site_register_phone']) {
@@ -80,7 +87,7 @@ class AccountController extends Controller
 
         $password = base64_decode($dtoRequest->password, true);
 
-        $validPassword = ValidationUtility::validPassword($password);
+        $validPassword = ValidationUtility::password($password);
 
         if (! $validPassword['length']) {
             throw new ApiException(34104);
@@ -252,7 +259,7 @@ class AccountController extends Controller
         }
 
         $newPassword = base64_decode($dtoRequest->newPassword, true);
-        $validPassword = ValidationUtility::validPassword($newPassword);
+        $validPassword = ValidationUtility::password($newPassword);
 
         if (! $validPassword['length']) {
             throw new ApiException(34104);
@@ -403,6 +410,11 @@ class AccountController extends Controller
 
         // edit email
         if ($dtoRequest->editEmail) {
+            $checkEmail = ValidationUtility::disposableEmail($dtoRequest->editEmail);
+            if (! $checkEmail) {
+                throw new ApiException(34109);
+            }
+
             if ($account->email && empty($dtoRequest->verifyCode)) {
                 throw new ApiException(33103);
             }
@@ -463,7 +475,7 @@ class AccountController extends Controller
         // edit password
         if ($dtoRequest->editPassword) {
             if (empty($dtoRequest->password) && empty($dtoRequest->verifyCode)) {
-                throw new ApiException(34110);
+                throw new ApiException(31410);
             }
 
             if ($dtoRequest->password) {
@@ -483,7 +495,7 @@ class AccountController extends Controller
         // edit wallet password
         if ($dtoRequest->editWalletPassword) {
             if (empty($dtoRequest->walletPassword) && empty($dtoRequest->verifyCode)) {
-                throw new ApiException(34110);
+                throw new ApiException(31410);
             }
 
             $wallet = AccountWallet::where('account_id', $account->id)->first();

@@ -105,7 +105,7 @@ class User
             );
         }
 
-        $loginErrorCount = PermissionUtility::checkLoginErrorCount($user->account->id, $user->id);
+        $loginErrorCount = ConfigUtility::getLoginErrorCount($user->account->id, $user->id);
 
         if ($loginErrorCount >= 5) {
             return $this->failure(
@@ -117,8 +117,8 @@ class User
         if (! empty($user->password)) {
             if (empty($dtoWordBody->password)) {
                 return $this->failure(
-                    34110,
-                    ConfigUtility::getCodeMessage(34110, 'Fresns', $langTag),
+                    31410,
+                    ConfigUtility::getCodeMessage(31410, 'Fresns', $langTag),
                 );
             }
 

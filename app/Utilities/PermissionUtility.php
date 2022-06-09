@@ -13,58 +13,12 @@ use App\Models\Group;
 use App\Models\GroupAdmin;
 use App\Models\PostAllow;
 use App\Models\Role;
-use App\Models\SessionLog;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\UserFollow;
 
 class PermissionUtility
 {
-    // Check if the user belongs to the account
-    public static function checkUserAffiliation(int $userId, int $accountId): bool
-    {
-        $userAccountId = User::where('id', $userId)->value('account_id');
-
-        return $userAccountId == $accountId ? 'true' : 'false';
-    }
-
-    // check login error count
-    public static function checkLoginErrorCount(int $accountId, ?int $userId = null): int
-    {
-        $sessionLog = SessionLog::whereIn('type', [2, 5, 8])
-            ->whereIn('object_result', [1 ,2])
-            ->where('account_id', $accountId)
-            ->where('created_at', '>=', now()->subHour());
-
-        if (! empty($userId)) {
-            $sessionLog->where('user_id', $userId);
-        }
-
-        $errorCount = $sessionLog->count();
-
-        return $errorCount;
-    }
-
-    // Check user status of the site mode
-    public static function checkUserStatusOfSiteMode(int $userId): bool
-    {
-        $modeConfig = ConfigHelper::fresnsConfigByItemKey('site_mode');
-        $userSet = User::where('id', $userId)->value('expired_at');
-
-        if ($modeConfig == 'public') {
-            return true;
-        }
-
-        $now = time();
-        $expireTime = strtotime($userSet->expired_at);
-
-        if ($expireTime && $expireTime < $now) {
-            return true;
-        }
-
-        return false;
-    }
-
     // get user expire info
     public static function getUserExpireInfo(int $userId)
     {
@@ -106,20 +60,6 @@ class PermissionUtility
         return $permission;
     }
 
-    // Check user permissions
-    public static function checkUserPerm(int $userId, array $permUserIds): bool
-    {
-        return in_array($userId, $permUserIds) ? 'true' : 'false';
-    }
-
-    // Check user role permissions
-    public static function checkUserRolePerm(int $userId, array $permRoleIds): bool
-    {
-        $userRoles = UserRole::where('user_id', $userId)->pluck('role_id')->toArray();
-
-        return array_intersect($userRoles, $permRoleIds) ? 'true' : 'false';
-    }
-
     // Get group filter ids
     public static function getGroupFilterIds(?int $userId = null)
     {
@@ -148,6 +88,48 @@ class PermissionUtility
         $filtered = array_values(array_diff($groupIds, $followGroupIds));
 
         return $filtered;
+    }
+
+    // Check if the user belongs to the account
+    public static function checkUserAffiliation(int $userId, int $accountId): bool
+    {
+        $userAccountId = User::where('id', $userId)->value('account_id');
+
+        return $userAccountId == $accountId ? 'true' : 'false';
+    }
+
+    // Check user status of the site mode
+    public static function checkUserStatusOfSiteMode(int $userId): bool
+    {
+        $modeConfig = ConfigHelper::fresnsConfigByItemKey('site_mode');
+        $userSet = User::where('id', $userId)->value('expired_at');
+
+        if ($modeConfig == 'public') {
+            return true;
+        }
+
+        $now = time();
+        $expireTime = strtotime($userSet->expired_at);
+
+        if ($expireTime && $expireTime < $now) {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Check user permissions
+    public static function checkUserPerm(int $userId, array $permUserIds): bool
+    {
+        return in_array($userId, $permUserIds) ? 'true' : 'false';
+    }
+
+    // Check user role permissions
+    public static function checkUserRolePerm(int $userId, array $permRoleIds): bool
+    {
+        $userRoles = UserRole::where('user_id', $userId)->pluck('role_id')->toArray();
+
+        return array_intersect($userRoles, $permRoleIds) ? 'true' : 'false';
     }
 
     // Check if the user is a group administrator

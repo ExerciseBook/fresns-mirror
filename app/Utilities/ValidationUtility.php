@@ -17,8 +17,66 @@ use Illuminate\Support\Str;
 
 class ValidationUtility
 {
+    // Validation is disposable email
+    public static function disposableEmail(string $email): bool
+    {
+        $url = 'https://open.kickbox.com/v1/disposable/' . Str::after($email, '@');
+
+        try {
+            return ! json_decode(file_get_contents($url), true)['disposable'];
+        } catch (\Throwable $ex) {
+            return true;
+        }
+    }
+
+    // Validation password
+    public static function password(string $password): array
+    {
+        $config = ConfigHelper::fresnsConfigByItemKeys([
+            'password_length',
+            'password_strength',
+        ]);
+
+        $passwordLength = Str::length($password);
+
+        $length = true;
+        if ($passwordLength < $config['password_length']) {
+            $length = false;
+        }
+
+        $number = true;
+        if (in_array(1, $config['password_strength'])) {
+            $number = preg_match('/\d/is', $password);
+        }
+
+        $lowercase = true;
+        if (in_array(2, $config['password_strength'])) {
+            $lowercase = preg_match('/[a-z]/', $password);
+        }
+
+        $uppercase = true;
+        if (in_array(3, $config['password_strength'])) {
+            $uppercase = preg_match('/[A-Z]/', $password);
+        }
+
+        $symbols = true;
+        if (in_array(4, $config['password_strength'])) {
+            $symbols = preg_match('/^[A-Za-z0-9]+$/', $password);
+        }
+
+        $validPassword = [
+            'length' => $length,
+            'number' => $number,
+            'lowercase' => $lowercase,
+            'uppercase' => $uppercase,
+            'symbols' => $symbols,
+        ];
+
+        return $validPassword;
+    }
+
     // Validation username
-    public static function validUsername(string $username): array
+    public static function username(string $username): array
     {
         $config = ConfigHelper::fresnsConfigByItemKeys([
             'username_min',
@@ -84,7 +142,7 @@ class ValidationUtility
     }
 
     // Validation nickname
-    public static function validNickname(string $nickname): array
+    public static function nickname(string $nickname): array
     {
         $config = ConfigHelper::fresnsConfigByItemKeys([
             'nickname_min',
@@ -135,54 +193,8 @@ class ValidationUtility
         return $validNickname;
     }
 
-    // Validation password
-    public static function validPassword(string $password): array
-    {
-        $config = ConfigHelper::fresnsConfigByItemKeys([
-            'password_length',
-            'password_strength',
-        ]);
-
-        $passwordLength = Str::length($password);
-
-        $length = true;
-        if ($passwordLength < $config['password_length']) {
-            $length = false;
-        }
-
-        $number = true;
-        if (in_array(1, $config['password_strength'])) {
-            $number = preg_match('/\d/is', $password);
-        }
-
-        $lowercase = true;
-        if (in_array(2, $config['password_strength'])) {
-            $lowercase = preg_match('/[a-z]/', $password);
-        }
-
-        $uppercase = true;
-        if (in_array(3, $config['password_strength'])) {
-            $uppercase = preg_match('/[A-Z]/', $password);
-        }
-
-        $symbols = true;
-        if (in_array(4, $config['password_strength'])) {
-            $symbols = preg_match('/^[A-Za-z0-9]+$/', $password);
-        }
-
-        $validPassword = [
-            'length' => $length,
-            'number' => $number,
-            'lowercase' => $lowercase,
-            'uppercase' => $uppercase,
-            'symbols' => $symbols,
-        ];
-
-        return $validPassword;
-    }
-
     // validation user mark
-    public static function validUserMarkOwn(int $userId, int $markType, int $markId): bool
+    public static function userMarkOwn(int $userId, int $markType, int $markId): bool
     {
         if (! is_numeric($markType)) {
             $markType = match ($markType) {
@@ -218,30 +230,33 @@ class ValidationUtility
         return true;
     }
 
-    // Validation content
-    public static function validContent(string $content): array
+    // Validation content ban words
+    public static function contentBanWords(string $content): bool
     {
-        $blockWords = BlockWord::whereIn('content_mode', [2, 3, 4])->get();
+        $banWords = BlockWord::where('content_mode', 3)->pluck('word')->toArray();
 
-        $validContent = [
-            'validStatus' => true, // true 验证通过，false 有禁止发布的词 (content_mode = 3)
-            'reviewStatus' => true, // true 验证通过，false 有需要审核的词 (content_mode = 4)
-            'content' => 'content', // 替换词之后的内容 (content_mode = 2)
-        ];
+        $lowerBanWords = array_map('strtolower', $banWords);
 
-        return $validContent;
+        return ! Str::contains(Str::lower($content), $lowerBanWords);
     }
 
-    // Validation message
-    public static function validMessage(string $message): array
+    // Validation content is review
+    public static function contentReviewWords(string $content): bool
     {
-        $blockWords = BlockWord::whereIn('dialog_mode', [2, 3])->get();
+        $banWords = BlockWord::where('content_mode', 4)->pluck('word')->toArray();
 
-        $validContent = [
-            'validStatus' => true, // true 验证通过，false 有禁止发送的词(dialog_mode = 3)
-            'message' => 'message', // 替换词之后的消息 (dialog_mode = 2)
-        ];
+        $lowerBanWords = array_map('strtolower', $banWords);
 
-        return $validContent;
+        return ! Str::contains(Str::lower($content), $lowerBanWords);
+    }
+
+    // Validation message ban words
+    public static function messageBanWords(string $message): bool
+    {
+        $banWords = BlockWord::where('dialog_mode', 3)->pluck('word')->toArray();
+
+        $lowerBanWords = array_map('strtolower', $banWords);
+
+        return ! Str::contains(Str::lower($message), $lowerBanWords);
     }
 }
