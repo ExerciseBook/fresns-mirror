@@ -31,7 +31,7 @@ class PermissionUtility
     // check login error count
     public static function checkLoginErrorCount(int $accountId, ?int $userId = null): int
     {
-        $sessionLog = SessionLog::whereIn('type', [2, 5, 8])
+        $sessionLog = SessionLog::whereIn('object_type', [2, 5, 8])
             ->whereIn('object_result', [1 ,2])
             ->where('account_id', $accountId)
             ->where('created_at', '>=', now()->subHour());
