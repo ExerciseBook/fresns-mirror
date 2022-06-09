@@ -50,7 +50,7 @@ class FileHelper
         ];
 
         $config['storageConfigStatus'] = true;
-        if (empty($config['service']) || empty($config['secretId']) || empty($config['secretKey']) || empty($config['bucketName']) || empty($config['bucketDomain'])) {
+        if (empty($config['secretId']) || empty($config['secretKey']) || empty($config['bucketName']) || empty($config['bucketDomain'])) {
             $config['storageConfigStatus'] = false;
         }
 
