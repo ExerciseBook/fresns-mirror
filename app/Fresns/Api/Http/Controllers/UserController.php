@@ -30,6 +30,8 @@ use App\Exceptions\ApiException;
 use App\Fresns\Api\Services\UserService;
 use App\Fresns\Api\Services\InteractiveService;
 use App\Helpers\ConfigHelper;
+use App\Models\DomainLinkLinked;
+use App\Models\HashtagLinked;
 use App\Models\Mention;
 use Illuminate\Http\Request;
 use App\Models\UserStat;
@@ -410,7 +412,7 @@ class UserController extends Controller
         return $this->success($data);
     }
 
-    // auth
+    // edit
     public function edit(Request $request)
     {
         $dtoRequest = new UserEditDTO($request->all());
@@ -437,25 +439,25 @@ class UserController extends Controller
             }
 
             $username = Str::of($dtoRequest->username)->trim();
-            $validUsername = ValidationUtility::username($username);
+            $validateUsername = ValidationUtility::username($username);
 
-            if (! $validUsername['formatString'] || ! $validUsername['formatHyphen'] || ! $validUsername['formatNumeric']) {
+            if (! $validateUsername['formatString'] || ! $validateUsername['formatHyphen'] || ! $validateUsername['formatNumeric']) {
                 throw new ApiException(35102);
             }
 
-            if (! $validUsername['minLength']) {
+            if (! $validateUsername['minLength']) {
                 throw new ApiException(35103);
             }
 
-            if (! $validUsername['maxLength']) {
+            if (! $validateUsername['maxLength']) {
                 throw new ApiException(35104);
             }
 
-            if (! $validUsername['use']) {
+            if (! $validateUsername['use']) {
                 throw new ApiException(35105);
             }
 
-            if (! $validUsername['banName']) {
+            if (! $validateUsername['banName']) {
                 throw new ApiException(35106);
             }
 
@@ -480,21 +482,21 @@ class UserController extends Controller
 
             $nickname = Str::of($dtoRequest->nickname)->trim();
 
-            $validNickname = ValidationUtility::nickname($nickname);
+            $validateNickname = ValidationUtility::nickname($nickname);
 
-            if (! $validNickname['formatString'] || ! $validUsername['formatSpace']) {
+            if (! $validateNickname['formatString'] || ! $validateUsername['formatSpace']) {
                 throw new ApiException(35107);
             }
 
-            if (! $validNickname['minLength']) {
+            if (! $validateNickname['minLength']) {
                 throw new ApiException(35108);
             }
 
-            if (! $validNickname['maxLength']) {
+            if (! $validateNickname['maxLength']) {
                 throw new ApiException(35109);
             }
 
-            if (! $validNickname['banName']) {
+            if (! $validateNickname['banName']) {
                 throw new ApiException(35110);
             }
 
@@ -544,7 +546,33 @@ class UserController extends Controller
         if ($dtoRequest->bio) {
             $bio = Str::of($dtoRequest->bio)->trim();
 
-            ContentUtility::handleAndSaveAll($bio, ContentUtility::TYPE_USER, $authUser->id, $authUser->id);
+            $validateBio = ValidationUtility::bio($bio);
+
+            if (! $validateBio['banWord']) {
+                throw new ApiException(33105);
+            }
+
+            if (! $validateBio['length']) {
+                throw new ApiException(33106);
+            }
+
+            $bioConfig = ConfigHelper::fresnsConfigByItemKeys([
+                'bio_support_mention',
+                'bio_support_link',
+                'bio_support_hashtag',
+            ]);
+
+            if ($bioConfig['bio_support_mention']) {
+                ContentUtility::saveMention($bio, Mention::TYPE_USER, $authUser->id, $authUser->id);
+            }
+
+            if ($bioConfig['bio_support_link']) {
+                ContentUtility::saveLink($bio, DomainLinkLinked::TYPE_USER, $authUser->id);
+            }
+
+            if ($bioConfig['bio_support_hashtag']) {
+                ContentUtility::saveHashtag($bio, HashtagLinked::TYPE_USER, $authUser->id);
+            }
 
             $authUser->update([
                 'gender' => $bio,

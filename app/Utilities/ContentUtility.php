@@ -27,12 +27,6 @@ use Illuminate\Support\Collection;
 
 class ContentUtility
 {
-    const TYPE_USER = 1;
-    const TYPE_GROUP = 2;
-    const TYPE_HASHTAG = 3;
-    const TYPE_POST = 4;
-    const TYPE_COMMENT = 5;
-
     // preg regexp
     public static function getRegexpByType($type)
     {
@@ -108,8 +102,8 @@ class ContentUtility
         return $data;
     }
 
-    // Extract url(link)
-    public static function extractUrl(string $content): array
+    // Extract link
+    public static function extractLink(string $content): array
     {
         return ContentUtility::matchAll(ContentUtility::getRegexpByType('url'), $content);
     }
@@ -162,10 +156,10 @@ class ContentUtility
         return str_replace($replaceList, $linkList, $content);
     }
 
-    // Replace url
-    public static function replaceUrl(string $content): string
+    // Replace link
+    public static function replaceLink(string $content): string
     {
-        $urlList = ContentUtility::extractUrl($content);
+        $urlList = ContentUtility::extractLink($content);
 
         $urlDataList = DomainLink::whereIn('link_url', $urlList)->get();
 
@@ -257,7 +251,7 @@ class ContentUtility
         // Replace mention
         // Replace sticker
         $content = static::replaceHashtag($content);
-        $content = static::replaceUrl($content);
+        $content = static::replaceLink($content);
         if ($mentionType && $mentionId) {
             $content = static::replaceMention($content, $mentionType, $mentionId);
         }
@@ -297,10 +291,10 @@ class ContentUtility
         return;
     }
 
-    // Save url(link)
-    public static function saveUrl(string $content, int $linkedType, int $linkedId)
+    // Save link
+    public static function saveLink(string $content, int $linkedType, int $linkedId)
     {
-        $urlArr = ContentUtility::extractUrl($content);
+        $urlArr = ContentUtility::extractLink($content);
 
         // add domain data
         foreach ($urlArr as $url) {

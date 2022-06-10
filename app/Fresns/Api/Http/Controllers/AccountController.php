@@ -87,25 +87,25 @@ class AccountController extends Controller
 
         $password = base64_decode($dtoRequest->password, true);
 
-        $validPassword = ValidationUtility::password($password);
+        $validatePassword = ValidationUtility::password($password);
 
-        if (! $validPassword['length']) {
+        if (! $validatePassword['length']) {
             throw new ApiException(34104);
         }
 
-        if (! $validPassword['number']) {
+        if (! $validatePassword['number']) {
             throw new ApiException(34105);
         }
 
-        if (! $validPassword['lowercase']) {
+        if (! $validatePassword['lowercase']) {
             throw new ApiException(34106);
         }
 
-        if (! $validPassword['uppercase']) {
+        if (! $validatePassword['uppercase']) {
             throw new ApiException(34107);
         }
 
-        if (! $validPassword['symbols']) {
+        if (! $validatePassword['symbols']) {
             throw new ApiException(34108);
         }
 
@@ -259,25 +259,25 @@ class AccountController extends Controller
         }
 
         $newPassword = base64_decode($dtoRequest->newPassword, true);
-        $validPassword = ValidationUtility::password($newPassword);
+        $validatePassword = ValidationUtility::password($newPassword);
 
-        if (! $validPassword['length']) {
+        if (! $validatePassword['length']) {
             throw new ApiException(34104);
         }
 
-        if (! $validPassword['number']) {
+        if (! $validatePassword['number']) {
             throw new ApiException(34105);
         }
 
-        if (! $validPassword['lowercase']) {
+        if (! $validatePassword['lowercase']) {
             throw new ApiException(34106);
         }
 
-        if (! $validPassword['uppercase']) {
+        if (! $validatePassword['uppercase']) {
             throw new ApiException(34107);
         }
 
-        if (! $validPassword['symbols']) {
+        if (! $validatePassword['symbols']) {
             throw new ApiException(34108);
         }
 
