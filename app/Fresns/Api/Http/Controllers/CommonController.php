@@ -32,7 +32,7 @@ use App\Models\Account;
 use App\Models\File;
 use App\Models\FileLog;
 use App\Models\PluginCallback;
-use App\Utilities\EditorUtility;
+use App\Utilities\ContentUtility;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -229,19 +229,19 @@ class CommonController extends Controller
         }
 
         if (in_array(5, $data['types'])) {
-            $data['apiContent']['extends'] = EditorUtility::extendHandle($callback->content['extends']);
+            $data['apiContent']['extends'] = ContentUtility::extendJsonHandle($callback->content['extends'], $headers['langTag']);
         }
 
         if (in_array(6, $data['types'])) {
-            $data['apiContent']['readAllowConfig'] = EditorUtility::readAllowHandle($callback->content['readAllowConfig']);
+            $data['apiContent']['readAllowConfig'] = ContentUtility::readAllowJsonHandle($callback->content['readAllowConfig'], $headers['langTag'], $headers['timezone']);
         }
 
         if (in_array(7, $data['types'])) {
-            $data['apiContent']['userListConfig'] = EditorUtility::userListHandle($callback->content['userListConfig']);
+            $data['apiContent']['userListConfig'] = ContentUtility::userListJsonHandle($callback->content['userListConfig'], $headers['langTag']);
         }
 
         if (in_array(8, $data['types'])) {
-            $data['apiContent']['commentBtnConfig'] = EditorUtility::commentBtnHandle($callback->content['commentBtnConfig']);
+            $data['apiContent']['commentBtnConfig'] = ContentUtility::commentBtnJsonHandle($callback->content['commentBtnConfig'], $headers['langTag']);
         }
 
         $callback->is_use = 1;
