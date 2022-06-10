@@ -168,7 +168,7 @@ class HashtagController extends Controller
 
         $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_hashtags");
         if (! $markSet) {
-            throw new ApiException(36200);
+            throw new ApiException(36201);
         }
 
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';

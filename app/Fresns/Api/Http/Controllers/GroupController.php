@@ -227,7 +227,7 @@ class GroupController extends Controller
 
         $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_groups");
         if (! $markSet) {
-            throw new ApiException(36200);
+            throw new ApiException(36201);
         }
 
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';

@@ -22,26 +22,26 @@ class ConfigHelper
      */
     public static function fresnsConfigByItemKey(string $itemKey, ?string $langTag = null)
     {
-        $cacheKeyConfigItemkey = 'cache_config_item_key_'.$itemKey.$langTag;
-        $cacheKeyLangtag = 'cache_langtag_'.$itemKey.$langTag;
+        $cacheKeyConfigItemKey = 'cache_config_item_key_'.$itemKey.$langTag;
+        $cacheKeyLangTag = 'cache_langTag_'.$itemKey.$langTag;
 
-        // 缓存 10 分钟
-        $expireAt = now()->addMinutes(10);
+        // Cache 1 hour
+        $expireAt = now()->addHours(1);
 
-        $langTag = cache()->remember($cacheKeyLangtag, $expireAt, function () use ($langTag) {
+        $langTag = cache()->remember($cacheKeyLangTag, $expireAt, function () use ($langTag) {
             return $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
         });
 
         if (is_null($langTag)) {
-            cache()->forget($cacheKeyLangtag);
+            cache()->forget($cacheKeyLangTag);
         }
 
-        $itemValue = cache()->remember($cacheKeyConfigItemkey, $expireAt, function () use ($itemKey, $langTag) {
+        $itemValue = cache()->remember($cacheKeyConfigItemKey, $expireAt, function () use ($itemKey, $langTag) {
             $itemData = Config::where('item_key', $itemKey)->first();
             if (is_null($itemData)) {
                 return null;
             }
-    
+
             if ($itemData->is_multilingual == 1) {
                 return LanguageHelper::fresnsLanguageByTableKey($itemData->item_key, $itemData->item_type, $langTag);
             }
@@ -50,7 +50,7 @@ class ConfigHelper
         });
 
         if (is_null($itemValue)) {
-            cache()->forget($cacheKeyConfigItemkey);
+            cache()->forget($cacheKeyConfigItemKey);
         }
 
         return $itemValue;

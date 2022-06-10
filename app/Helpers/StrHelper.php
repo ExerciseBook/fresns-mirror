@@ -190,7 +190,7 @@ class StrHelper
 
     public static function extractDomainByUrl(string $url)
     {
-        $host = parse_url($url)['host'];
+        $host = parse_url($url, PHP_URL_HOST);
         $domain = self::extractDomainByHost($host);
 
         return $domain ?? 'Unknown Error';

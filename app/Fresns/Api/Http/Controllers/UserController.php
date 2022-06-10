@@ -30,8 +30,10 @@ use App\Exceptions\ApiException;
 use App\Fresns\Api\Services\UserService;
 use App\Fresns\Api\Services\InteractiveService;
 use App\Helpers\ConfigHelper;
+use App\Models\Mention;
 use Illuminate\Http\Request;
 use App\Models\UserStat;
+use App\Utilities\ContentUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Support\Str;
@@ -261,7 +263,7 @@ class UserController extends Controller
 
         $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_users");
         if (! $markSet) {
-            throw new ApiException(36200);
+            throw new ApiException(36201);
         }
 
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';
@@ -298,7 +300,7 @@ class UserController extends Controller
 
         $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->markType}_{$dtoRequest->listType}");
         if (! $markSet) {
-            throw new ApiException(36200);
+            throw new ApiException(36201);
         }
 
         $headers = HeaderService::getHeaders();
@@ -541,6 +543,9 @@ class UserController extends Controller
         // edit bio
         if ($dtoRequest->bio) {
             $bio = Str::of($dtoRequest->bio)->trim();
+
+            ContentUtility::handleAndSaveAll($bio, ContentUtility::TYPE_USER, $authUser->id, $authUser->id);
+
             $authUser->update([
                 'gender' => $bio,
             ]);
@@ -612,7 +617,7 @@ class UserController extends Controller
             case 'follow':
                 $validMark = ValidationUtility::userMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
                 if (! $validMark) {
-                    throw new ApiException(36201);
+                    throw new ApiException(36202);
                 }
 
                 InteractiveUtility::markUserFollow($authUserId, $dtoRequest->markType, $primaryId);
@@ -622,7 +627,7 @@ class UserController extends Controller
             case 'block':
                 $validMark = ValidationUtility::userMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
                 if (! $validMark) {
-                    throw new ApiException(36201);
+                    throw new ApiException(36202);
                 }
 
                 InteractiveUtility::markUserBlock($authUserId, $dtoRequest->markType, $primaryId);
