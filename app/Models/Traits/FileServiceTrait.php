@@ -115,6 +115,9 @@ trait FileServiceTrait
         $info['imageHeight'] = $fileData->image_height;
         $info['imageLong'] = (bool) $fileData->image_is_long;
         $info['imageDefaultUrl'] = $imageDefaultUrl;
+        // xxx: 在面板进行图片处理功能配置时，需要附加 ?
+        // xxx: 示例：等比例缩略图：?imageView2/1/w/200/h/200
+        // @see https://developer.qiniu.com/dora/1279/basic-processing-images-imageview2 
         $info['imageConfigUrl'] = $imageDefaultUrl.$imageConfig['image_thumb_config'];
         $info['imageAvatarUrl'] = $imageDefaultUrl.$imageConfig['image_thumb_avatar'];
         $info['imageRatioUrl'] = $imageDefaultUrl.$imageConfig['image_thumb_ratio'];

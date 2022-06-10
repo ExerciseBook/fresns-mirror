@@ -45,7 +45,7 @@ class File
             );
         }
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->getUploadToken($dtoWordBody);
+        return \FresnsCmdWord::plugin($storageConfig['service'])->getUploadToken($dtoWordBody->toArray());
     }
 
     /**
@@ -84,7 +84,7 @@ class File
             );
         }
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFile($dtoWordBody);
+        return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFile($dtoWordBody->toArray());
     }
 
     /**
@@ -123,7 +123,7 @@ class File
             );
         }
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFileInfo($dtoWordBody);
+        return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFileInfo($dtoWordBody->toArray());
     }
 
     /**
@@ -147,7 +147,7 @@ class File
         }
 
         if ($storageConfig['antiLinkConfigStatus']) {
-            return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfo($dtoWordBody);
+            return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfo($dtoWordBody->toArray());
         }
 
         return $this->success(FileHelper::fresnsFileInfoById($dtoWordBody->fileIdOrFid));
@@ -174,7 +174,7 @@ class File
         }
 
         if ($storageConfig['antiLinkConfigStatus']) {
-            return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoList($dtoWordBody);
+            return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoList($dtoWordBody->toArray());
         }
 
         return $this->success(FileHelper::fresnsFileInfoListByIds($dtoWordBody->fileIdsOrFids));
@@ -202,7 +202,7 @@ class File
         }
 
         if ($storageConfig['antiLinkConfigStatus']) {
-            return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl($dtoWordBody);
+            return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl($dtoWordBody->toArray());
         }
 
         return $this->success([
@@ -245,6 +245,6 @@ class File
             );
         }
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->physicalDeletionFiles($dtoWordBody);
+        return \FresnsCmdWord::plugin($storageConfig['service'])->physicalDeletionFiles($dtoWordBody->toArray());
     }
 }
