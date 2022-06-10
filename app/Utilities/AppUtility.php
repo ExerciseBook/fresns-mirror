@@ -51,10 +51,10 @@ class AppUtility
 
     public static function checkVersion(): bool
     {
-        $currentVersionInt = AppUtility::currentVersion()['versionInt'];
-        $newVersionInt = AppUtility::newVersion()['versionInt'];
+        $currentVersion = AppUtility::currentVersion()['version'];
+        $newVersion = AppUtility::newVersion()['version'];
 
-        if ($currentVersionInt < $newVersionInt) {
+        if (version_compare($currentVersion, $newVersion) == -1) {
             return true; // There is a new version
         }
 
