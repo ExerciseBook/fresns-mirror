@@ -21,6 +21,11 @@ class File extends Model
         File::TYPE_DOCUMENT => 'Document',
     ];
 
+    const TRANSCODING_STATE_WAIT_TRANSCODING = 1;
+    const TRANSCODING_STATE_TRANSCODING = 2;
+    const TRANSCODING_STATE_TRANSCODING_FINISH = 3;
+    const TRANSCODING_STATE_TRANSCODING_FAILURE = 4;
+
     use Traits\FileServiceTrait;
     use Traits\IsEnableTrait;
 
