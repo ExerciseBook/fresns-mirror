@@ -205,7 +205,7 @@ class CommonController extends Controller
         if (in_array(2, $data['types'])) {
             $service = new AccountService();
             $data['apiContent']['account']['sessionToken'] = null;
-            $data['apiContent']['account']['detail'] = $service->accountDetail($callback->account_id);
+            $data['apiContent']['account']['detail'] = $service->accountDetail($callback->account_id, $headers['langTag'], $headers['timezone']);
 
             $fresnsResponse = \FresnsCmdWord::plugin()->createSessionToken([
                 'platformId' => $headers['platformId'],

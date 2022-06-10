@@ -17,7 +17,7 @@ use Illuminate\Support\Str;
 
 class ValidationUtility
 {
-    // Validation is disposable email
+    // Validate is disposable email
     public static function disposableEmail(string $email): bool
     {
         $url = 'https://open.kickbox.com/v1/disposable/' . Str::after($email, '@');
@@ -29,7 +29,7 @@ class ValidationUtility
         }
     }
 
-    // Validation password
+    // Validate password
     public static function password(string $password): array
     {
         $config = ConfigHelper::fresnsConfigByItemKeys([
@@ -64,7 +64,7 @@ class ValidationUtility
             $symbols = preg_match('/^[A-Za-z0-9]+$/', $password);
         }
 
-        $validPassword = [
+        $validatePassword = [
             'length' => $length,
             'number' => $number,
             'lowercase' => $lowercase,
@@ -72,10 +72,10 @@ class ValidationUtility
             'symbols' => $symbols,
         ];
 
-        return $validPassword;
+        return $validatePassword;
     }
 
-    // Validation username
+    // Validate username
     public static function username(string $username): array
     {
         $config = ConfigHelper::fresnsConfigByItemKeys([
@@ -128,7 +128,7 @@ class ValidationUtility
             $banName = false;
         }
 
-        $validUsername = [
+        $validateUsername = [
             'formatString' => $formatString,
             'formatHyphen' => $formatHyphen,
             'formatNumeric' => $formatNumeric,
@@ -138,10 +138,10 @@ class ValidationUtility
             'banName' => $banName,
         ];
 
-        return $validUsername;
+        return $validateUsername;
     }
 
-    // Validation nickname
+    // Validate nickname
     public static function nickname(string $nickname): array
     {
         $config = ConfigHelper::fresnsConfigByItemKeys([
@@ -182,7 +182,7 @@ class ValidationUtility
             $banName = false;
         }
 
-        $validNickname = [
+        $validateNickname = [
             'formatString' => $formatString,
             'formatSpace' => $formatSpace,
             'minLength' => $minLength,
@@ -190,7 +190,34 @@ class ValidationUtility
             'banName' => $banName,
         ];
 
-        return $validNickname;
+        return $validateNickname;
+    }
+
+    // Validate bio
+    public static function bio(string $bio): array
+    {
+        $lengthConfig = ConfigHelper::fresnsConfigByItemKey('bio_length');
+        $bioLength = Str::length($bio);
+
+        $length = true;
+        if ($bioLength > $lengthConfig) {
+            $length = false;
+        }
+
+        $banWord = true;
+        $banWords = BlockWord::where('user_mode', 3)->pluck('word')->toArray();
+        $newBanWords = array_map('strtolower', $banWords);
+        $isBanWord = Str::contains(Str::lower($bio), $newBanWords);
+        if ($isBanWord) {
+            $banWord = false;
+        }
+
+        $validateBio = [
+            'length' => $length,
+            'banWord' => $banWord,
+        ];
+
+        return $validateBio;
     }
 
     // validation user mark
@@ -230,7 +257,7 @@ class ValidationUtility
         return true;
     }
 
-    // Validation content ban words
+    // Validate content ban words
     public static function contentBanWords(string $content): bool
     {
         $banWords = BlockWord::where('content_mode', 3)->pluck('word')->toArray();
@@ -240,7 +267,7 @@ class ValidationUtility
         return ! Str::contains(Str::lower($content), $lowerBanWords);
     }
 
-    // Validation content is review
+    // Validate content is review
     public static function contentReviewWords(string $content): bool
     {
         $banWords = BlockWord::where('content_mode', 4)->pluck('word')->toArray();
@@ -250,7 +277,7 @@ class ValidationUtility
         return ! Str::contains(Str::lower($content), $lowerBanWords);
     }
 
-    // Validation message ban words
+    // Validate message ban words
     public static function messageBanWords(string $message): bool
     {
         $banWords = BlockWord::where('dialog_mode', 3)->pluck('word')->toArray();
