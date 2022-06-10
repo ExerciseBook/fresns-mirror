@@ -22,19 +22,38 @@ class ConfigHelper
      */
     public static function fresnsConfigByItemKey(string $itemKey, ?string $langTag = null)
     {
-        $langTag = $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
+        $cacheKeyConfigItemkey = 'cache_config_item_key_'.$itemKey.$langTag;
+        $cacheKeyLangtag = 'cache_langtag_'.$itemKey.$langTag;
 
-        $itemData = Config::where('item_key', $itemKey)->first();
+        // 缓存 10 分钟
+        $expireAt = now()->addMinutes(10);
 
-        if (empty($itemData)) {
-            return null;
-        } else {
+        $langTag = cache()->remember($cacheKeyLangtag, $expireAt, function () use ($langTag) {
+            return $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
+        });
+
+        if (is_null($langTag)) {
+            cache()->forget($cacheKeyLangtag);
+        }
+
+        $itemValue = cache()->remember($cacheKeyConfigItemkey, $expireAt, function () use ($itemKey, $langTag) {
+            $itemData = Config::where('item_key', $itemKey)->first();
+            if (is_null($itemData)) {
+                return null;
+            }
+    
             if ($itemData->is_multilingual == 1) {
                 return LanguageHelper::fresnsLanguageByTableKey($itemData->item_key, $itemData->item_type, $langTag);
             }
+
+            return $itemData->item_value ?? null;
+        });
+
+        if (is_null($itemValue)) {
+            cache()->forget($cacheKeyConfigItemkey);
         }
 
-        return $itemData->item_value ?? null;
+        return $itemValue;
     }
 
     /**
@@ -46,19 +65,12 @@ class ConfigHelper
      */
     public static function fresnsConfigByItemKeys(array $itemKeys, ?string $langTag = null): array
     {
-        $langTag = $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
-        $itemData = Config::whereIn('item_key', $itemKeys)->get();
-
-        $itemDataArr = [];
-        foreach ($itemData as $item) {
-            if ($item->is_multilingual == 1) {
-                $itemDataArr[$item->item_key] = LanguageHelper::fresnsLanguageByTableKey($item->item_key, $item->item_type, $langTag);
-            } else {
-                $itemDataArr[$item->item_key] = $item->item_value;
-            }
+        $data = [];
+        foreach ($itemKeys as $itemKey) {
+            $data[$itemKey] = ConfigHelper::fresnsConfigByItemKey($itemKey, $langTag);
         }
 
-        return $itemDataArr;
+        return $data;
     }
 
     /**
