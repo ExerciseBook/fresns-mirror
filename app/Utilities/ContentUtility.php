@@ -13,16 +13,26 @@ use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
 use App\Helpers\StrHelper;
+use App\Models\Domain;
 use App\Models\User;
 use App\Models\Mention;
 use App\Models\Sticker;
 use App\Models\DomainLink;
+use App\Models\DomainLinkLinked;
 use App\Models\Extend;
+use App\Models\Hashtag;
+use App\Models\HashtagLinked;
 use App\Models\Role;
 use Illuminate\Support\Collection;
 
 class ContentUtility
 {
+    const TYPE_USER = 1;
+    const TYPE_GROUP = 2;
+    const TYPE_HASHTAG = 3;
+    const TYPE_POST = 4;
+    const TYPE_COMMENT = 5;
+
     // preg regexp
     public static function getRegexpByType($type)
     {
@@ -35,7 +45,8 @@ class ContentUtility
         };
     }
 
-    public static function filterChars($data, $exceptChars = ',# ')
+    // Not valid for hashtag containing special characters
+    public static function filterHashtagChars($data, $exceptChars = ',# ')
     {
         $data = array_filter($data);
 
@@ -44,17 +55,17 @@ class ContentUtility
 
         $result = [];
         foreach ($data as $item) {
-            $needExcludeflag = false;
+            $needExcludeFlag = false;
 
             // Skip when it contains characters that need to be excluded
             foreach ($exceptChars as $char) {
                 if (str_contains($item, $char)) {
-                    $needExcludeflag = true;
+                    $needExcludeFlag = true;
                     break;
                 }
             }
 
-            if ($needExcludeflag) {
+            if ($needExcludeFlag) {
                 continue;
             }
 
@@ -64,6 +75,7 @@ class ContentUtility
         return $result;
     }
 
+    // match all extract
     public static function matchAll($regexp, $content, ?callable $filterChars = null)
     {
         // Matching information is handled at the end
@@ -83,10 +95,10 @@ class ContentUtility
     // Extract hashtag
     public static function extractHashtag(string $content): array
     {
-        $hashData = ContentUtility::filterChars(
+        $hashData = ContentUtility::filterHashtagChars(
             ContentUtility::matchAll(ContentUtility::getRegexpByType('hash'), $content)
         );
-        $spaceData = ContentUtility::filterChars(
+        $spaceData = ContentUtility::filterHashtagChars(
             ContentUtility::matchAll(ContentUtility::getRegexpByType('space'), $content)
         );
 
@@ -126,22 +138,22 @@ class ContentUtility
 
         $replaceList = [];
         $linkList = [];
-        foreach ($hashtagList as $hashTag) {
+        foreach ($hashtagList as $hashtagName) {
             if ($config['hashtag_show'] == 1) {
                 // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP</a>
-                $topic = "#{$hashTag}";
-                $replaceList[] = "$topic ";
+                $hashtag = "#{$hashtagName}";
+                $replaceList[] = "$hashtag ";
             } else {
                 // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP#</a>
-                $topic = "#{$hashTag}#";
-                $replaceList[] = "$topic";
+                $hashtag = "#{$hashtagName}#";
+                $replaceList[] = "$hashtag";
             }
 
             $link = sprintf(
                 '<a href="%s/hashtag/%s" class="fresns_hashtag" target="_blank">%s</a>',
                 $config['site_domain'],
-                StrHelper::slug($hashTag),
-                $topic
+                StrHelper::slug($hashtagName),
+                $hashtag
             );
 
             $linkList[] = $link;
@@ -160,16 +172,15 @@ class ContentUtility
         $replaceList = [];
         $linkList = [];
         foreach ($urlList as $url) {
-            if ($urlData = $urlDataList->where('', $url)->first()) {
-                // <a href="https://fresns.org" class="fresns_link" target="_blank">Fresns Website</a>
-                $name = $urlData->link_title;
-            } else {
-                // <a href="https://fresns.org" class="fresns_link" target="_blank">https://fresns.org</a>
-                $name = $url;
-            }
+            $urlData = $urlDataList->where('link_url', $url)->first();
+
+            // <a href="https://fresns.org" class="fresns_link" target="_blank">Fresns Website</a>
+            // or
+            // <a href="https://fresns.org" class="fresns_link" target="_blank">https://fresns.org</a>
+            $title = $urlData->link_title ?? $url;
 
             $replaceList[] = "{$url} ";
-            $linkList[] = sprintf('<a href="%s" class="fresns_link" target="_blank">%s</a>', $url, $name);
+            $linkList[] = sprintf('<a href="%s" class="fresns_link" target="_blank">%s</a>', $url, $title);
         }
 
         return str_replace($replaceList, $linkList, $content);
@@ -238,8 +249,8 @@ class ContentUtility
         return str_replace($replaceList, $linkList, $content);
     }
 
-    // Content
-    public static function contentHandle(string $content, ?int $mentionType = null, ?int $mentionId = null): string
+    // Handle and replace all
+    public static function handleAndReplaceAll(string $content, ?int $mentionType = null, ?int $mentionId = null): string
     {
         // Replace hashtag
         // Replace url
@@ -253,6 +264,109 @@ class ContentUtility
         $content = static::replaceSticker($content);
 
         return $content;
+    }
+
+    // Save hashtag
+    public static function saveHashtag(string $content, int $linkedType, int $linkedId)
+    {
+        $hashtagArr = ContentUtility::extractHashtag($content);
+
+        // add hashtag data
+        foreach ($hashtagArr as $hashtag) {
+            Hashtag::firstOrCreate([
+                'name' => $hashtag,
+            ], [
+                'slug' => StrHelper::slug($hashtag),
+            ]);
+        }
+
+        // add hashtag linked
+        $hashtagIdArr = Hashtag::whereIn('name', $hashtagArr)->pluck('id')->toArray();
+
+        $hashtagLinkedData = [];
+        foreach ($hashtagIdArr as $hashtagId) {
+            $hashtagLinkedData[] = [
+                'linked_type' => $linkedType,
+                'linked_id' => $linkedId,
+                'hashtag_id' => $hashtagId,
+            ];
+        }
+
+        HashtagLinked::createMany($hashtagLinkedData);
+
+        return;
+    }
+
+    // Save url(link)
+    public static function saveUrl(string $content, int $linkedType, int $linkedId)
+    {
+        $urlArr = ContentUtility::extractUrl($content);
+
+        // add domain data
+        foreach ($urlArr as $url) {
+            Domain::firstOrCreate([
+                'host' => parse_url($url, PHP_URL_HOST),
+            ], [
+                'domain' => StrHelper::extractDomainByUrl($url),
+            ]);
+        }
+
+        // add domain link data
+        foreach ($urlArr as $url) {
+            DomainLink::firstOrCreate([
+                'link_url' => $url,
+            ], [
+                'domain_id' => Domain::withTrashed()->where('host', parse_url($url, PHP_URL_HOST))->value('id') ?? 0,
+            ]);
+        }
+
+        // add domain link linked
+        $urlIdArr = DomainLink::whereIn('link_url', $urlArr)->pluck('id')->toArray();
+        $urlLinkedData = [];
+        foreach ($urlIdArr as $urlId) {
+            $urlLinkedData[] = [
+                'linked_type' => $linkedType,
+                'linked_id' => $linkedId,
+                'link_id' => $urlId,
+            ];
+        }
+        DomainLinkLinked::createMany($urlLinkedData);
+
+        return;
+    }
+
+    // Save mention user
+    public static function saveMention(string $content, int $mentionType, int $mentionId, int $authUserId)
+    {
+        $usernameArr = ContentUtility::extractMention($content);
+        $userIdArr = User::whereIn('username', $usernameArr)->pluck('id')->toArray();
+
+        $mentionData = [];
+        foreach ($userIdArr as $userId) {
+            $mentionData[] = [
+                'user_id' => $authUserId,
+                'mention_type' => $mentionType,
+                'mention_id' => $mentionId,
+                'mention_user_id' => $userId,
+            ];
+        }
+
+        Mention::createMany($mentionData);
+
+        return;
+    }
+
+    // Handle and save all
+    public static function handleAndSaveAll(string $content, int $type, int $id, ?int $authUserId = null)
+    {
+        static::saveHashtag($content, $type, $id);
+        static::saveUrl($content, $type, $id);
+
+        if (! empty($authUserId)) {
+            static::saveMention($content, $type, $id, $authUserId);
+        }
+
+        return;
     }
 
     // extend json handle
