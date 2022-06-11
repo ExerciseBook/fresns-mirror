@@ -64,7 +64,6 @@
                         <input type="file" class="form-control inputFile" name="plugin_zipball" accept=".zip" style="display:none;">
                         <input type="text" class="form-control inputDir" name="plugin_dir" maxlength="64" style="display:none;">
 
-
                         <div id="inputUnikeyOrInputFile" class="invalid-feedback"></div>
                     </div>
                 </div>
