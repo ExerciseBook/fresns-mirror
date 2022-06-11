@@ -927,4 +927,5 @@ return [
     'install_mode' => 'Modo de instalação',
     'install_mode_input' => 'Chave de entrada Fresns',
     'install_mode_upload' => 'Carregar Pacote Zip',
+    'install_mode_directory' => 'Directório de entradas',
 ];

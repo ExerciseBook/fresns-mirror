@@ -927,4 +927,5 @@ return [
     'install_mode' => 'インストールモード',
     'install_mode_input' => 'Fresnsキーの入力',
     'install_mode_upload' => 'Zipパッケージのアップロード',
+    'install_mode_directory' => 'ディレクトリを入力',
 ];

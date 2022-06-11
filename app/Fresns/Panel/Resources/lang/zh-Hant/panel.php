@@ -928,5 +928,5 @@ return [
     'install_mode' => '安裝方式',
     'install_mode_input' => '輸入 key',
     'install_mode_upload' => '上傳 zip',
-    'install_mode_dir' => '输入安裝包目錄',
+    'install_mode_directory' => '输入應用目錄',
 ];

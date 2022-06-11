@@ -29,6 +29,7 @@ return [
     'requestFailure' => 'Richiesta di fallimento',
     // install
     'install_not_entered_key' => 'Inserire la chiave fresns',
+    'install_not_entered_dir' => 'Inserire una directory',
     'install_not_upload_zip' => 'Selezionare il pacchetto di installazione',
     'install_in_progress' => 'Installazione in corso...',
     // upgrade

@@ -927,4 +927,5 @@ return [
     'install_mode' => 'Modalità di installazione',
     'install_mode_input' => 'Immettere la chiave Fresns',
     'install_mode_upload' => 'Caricare il pacchetto zip',
+    'install_mode_directory' => 'Inserire una directory',
 ];

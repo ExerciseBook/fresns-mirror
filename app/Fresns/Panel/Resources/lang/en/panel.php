@@ -927,5 +927,5 @@ return [
     'install_mode' => 'Install Mode',
     'install_mode_input' => 'Input Fresns Key',
     'install_mode_upload' => 'Upload Zip Package',
-    'install_mode_dir' => 'Input the package dir location',
+    'install_mode_directory' => 'Input Directory',
 ];

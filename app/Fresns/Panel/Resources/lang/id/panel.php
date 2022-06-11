@@ -927,4 +927,5 @@ return [
     'install_mode' => 'Instal Mode',
     'install_mode_input' => 'Masukkan Kunci Fresns',
     'install_mode_upload' => 'Unggah Paket Zip',
+    'install_mode_directory' => 'Direktori Masukan',
 ];

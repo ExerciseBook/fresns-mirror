@@ -29,8 +29,8 @@ return [
     'requestFailure' => '請求失敗',
     // install
     'install_not_entered_key' => '請輸入標識名',
-    'install_not_upload_zip' => '請選擇安裝包',
     'install_not_entered_dir' => '请输入目錄',
+    'install_not_upload_zip' => '請選擇安裝包',
     'install_in_progress' => '正在安裝中...',
     // upgrade
     'upgrade_none' => '暫無更新',

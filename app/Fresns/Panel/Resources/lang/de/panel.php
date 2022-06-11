@@ -927,4 +927,5 @@ return [
     'install_mode' => 'Installieren Modus',
     'install_mode_input' => 'Fresns-Schlüssel eingeben',
     'install_mode_upload' => 'Zip-Paket hochladen',
+    'install_mode_directory' => 'Verzeichnis eingeben',
 ];
