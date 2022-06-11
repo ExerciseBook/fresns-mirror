@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => '사용자 이름 수정 간격 번호',
     'user_edit_nickname_length' => '닉네임 길이',
     'user_edit_nickname_periodicity' => '사용자 별명 수정 간격 번호',
+    'user_edit_bio_length' => '약력',
+    'user_edit_bio_support' => '바이오 지원',
+    'user_bio_support_mention' => '사용자 멘션',
+    'user_bio_support_link' => '링크',
+    'user_bio_support_hashtag' => '해시태그',
     // System-Wallet
     'wallet_functions' => '지갑 기능',
     'wallet_functions_desc' => '프랑스 돈 패키지를 사용할 수 있는지 여부',

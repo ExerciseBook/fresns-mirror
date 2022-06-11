@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => '用户名修改间隔天数',
     'user_edit_nickname_length' => '用户昵称长度',
     'user_edit_nickname_periodicity' => '用户昵称修改间隔天数',
+    'user_edit_bio_length' => '用户简介长度',
+    'user_edit_bio_support' => '用户简介支持',
+    'user_bio_support_mention' => '艾特用户',
+    'user_bio_support_link' => '超链接',
+    'user_bio_support_hashtag' => '话题',
     // System-Wallet
     'wallet_functions' => '钱包功能',
     'wallet_functions_desc' => '是否启用法币钱包功能',

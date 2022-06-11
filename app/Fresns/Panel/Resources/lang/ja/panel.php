@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'ユーザー名変更間隔番号',
     'user_edit_nickname_length' => 'ニックネームの長さ',
     'user_edit_nickname_periodicity' => 'ユーザーのニックネームの修正間隔番号',
+    'user_edit_bio_length' => 'バイオの長さ',
+    'user_edit_bio_support' => 'バイオサポート',
+    'user_bio_support_mention' => 'ユーザーへの言及',
+    'user_bio_support_link' => 'リンク',
+    'user_bio_support_hashtag' => 'ハッシュタグ',
     // System-Wallet
     'wallet_functions' => '財布',
     'wallet_functions_desc' => 'フランスのお金のパッケージを有効にするかどうか',

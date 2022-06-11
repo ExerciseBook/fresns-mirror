@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Nombre de intervalo de modificación de nombre de usuario',
     'user_edit_nickname_length' => 'Longitud del apodo',
     'user_edit_nickname_periodicity' => 'Número de intervalo de modificación de apodo de usuario',
+    'user_edit_bio_length' => 'Bio Longitud',
+    'user_edit_bio_support' => 'Soporte de la biografía',
+    'user_bio_support_mention' => 'Mencionar al usuario',
+    'user_bio_support_link' => 'Enlace',
+    'user_bio_support_hashtag' => 'Hashtag',
     // System-Wallet
     'wallet_functions' => 'Función de la billetera',
     'wallet_functions_desc' => 'Si habilitar el paquete de dinero francés',

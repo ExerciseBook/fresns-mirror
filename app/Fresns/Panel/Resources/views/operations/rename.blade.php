@@ -191,7 +191,7 @@
 
     <!--rename_like_config-->
     <div class="row mb-3">
-        <label class="col-lg-2">{{ __('FsLang::panel.rename_like_config') }}:</label>
+        <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.rename_like_config') }}:</label>
         <div class="col-lg-6">
             <div class="input-group">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.rename_like_user_name') }}</label>
@@ -268,7 +268,7 @@
 
     <!--rename_dislike_config-->
     <div class="row mb-3">
-        <label class="col-lg-2">{{ __('FsLang::panel.rename_dislike_config') }}:</label>
+        <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.rename_dislike_config') }}:</label>
         <div class="col-lg-6">
             <div class="input-group">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.rename_dislike_user_name') }}</label>
@@ -345,7 +345,7 @@
 
     <!--rename_follow_config-->
     <div class="row mb-3">
-        <label class="col-lg-2">{{ __('FsLang::panel.rename_follow_config') }}:</label>
+        <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.rename_follow_config') }}:</label>
         <div class="col-lg-6">
             <div class="input-group">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.rename_follow_user_name') }}</label>
@@ -422,7 +422,7 @@
 
     <!--rename_block_config-->
     <div class="row mb-3">
-        <label class="col-lg-2">{{ __('FsLang::panel.rename_block_config') }}:</label>
+        <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.rename_block_config') }}:</label>
         <div class="col-lg-6">
             <div class="input-group">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.rename_block_user_name') }}</label>

@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Número do Intervalo de Modificação de Nome de Usuário',
     'user_edit_nickname_length' => 'Comprimento do Apelido',
     'user_edit_nickname_periodicity' => 'Número do intervalo de modificação do apelido do usuário',
+    'user_edit_bio_length' => 'Comprimento Bio',
+    'user_edit_bio_support' => 'Apoio Bio',
+    'user_bio_support_mention' => 'Mencionar Utilizador',
+    'user_bio_support_link' => 'Ligação',
+    'user_bio_support_hashtag' => 'Hashtag',
     // System-Wallet
     'wallet_functions' => 'Função de carteira',
     'wallet_functions_desc' => 'Se deve habilitar o pacote de dinheiro francês',

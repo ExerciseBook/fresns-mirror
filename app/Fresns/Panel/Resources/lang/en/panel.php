@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Number of days between username changes',
     'user_edit_nickname_length' => 'Nickname Length',
     'user_edit_nickname_periodicity' => 'Number of days between nickname changes',
+    'user_edit_bio_length' => 'Bio Length',
+    'user_edit_bio_support' => 'Bio Support',
+    'user_bio_support_mention' => 'Mention User',
+    'user_bio_support_link' => 'Link',
+    'user_bio_support_hashtag' => 'Hashtag',
     // System-Wallet
     'wallet_functions' => 'Wallet Functions',
     'wallet_functions_desc' => 'Whether to enable the fiat wallet function',

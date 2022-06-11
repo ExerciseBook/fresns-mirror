@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Nom de modification du nom d\'utilisateur Numéro d\'intervalle',
     'user_edit_nickname_length' => 'Longueur du pseudo',
     'user_edit_nickname_periodicity' => 'Numéro d\'intervalle de modification de surnom d\'utilisateur',
+    'user_edit_bio_length' => 'Bio Length',
+    'user_edit_bio_support' => 'Support de la bio',
+    'user_bio_support_mention' => 'Mention de l\'utilisateur',
+    'user_bio_support_link' => 'Lien',
+    'user_bio_support_hashtag' => 'Hashtag',
     // System-Wallet
     'wallet_functions' => 'Fonction de portefeuille',
     'wallet_functions_desc' => 'Que ce soit pour activer le forfait d\'argent français',

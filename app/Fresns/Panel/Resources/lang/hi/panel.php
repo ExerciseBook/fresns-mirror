@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'उपयोगकर्ता नाम संशोधन अंतराल संख्या',
     'user_edit_nickname_length' => 'उपनाम लंबाई',
     'user_edit_nickname_periodicity' => 'उपयोगकर्ता उपनाम संशोधन अंतराल संख्या',
+    'user_edit_bio_length' => 'जैव लंबाई',
+    'user_edit_bio_support' => 'जैव समर्थन',
+    'user_bio_support_mention' => 'उपयोगकर्ता का उल्लेख करें',
+    'user_bio_support_link' => 'संपर्क',
+    'user_bio_support_hashtag' => 'हैशटैग',
     // System-Wallet
     'wallet_functions' => 'वॉलेट समारोह',
     'wallet_functions_desc' => 'फ्रेंच मनी पैकेज को सक्षम करना है या नहीं',

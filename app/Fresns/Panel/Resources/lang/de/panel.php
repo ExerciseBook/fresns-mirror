@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Benutzername-Modifikationsintervallnummer',
     'user_edit_nickname_length' => 'Nickname Länge',
     'user_edit_nickname_periodicity' => 'Benutzer-Nickname-Modifikationsintervallnummer',
+    'user_edit_bio_length' => 'Bio Länge',
+    'user_edit_bio_support' => 'Bio-Unterstützung',
+    'user_bio_support_mention' => 'Benutzer erwähnen',
+    'user_bio_support_link' => 'Link',
+    'user_bio_support_hashtag' => 'Hashtag',
     // System-Wallet
     'wallet_functions' => 'Geldbörsenfunktion',
     'wallet_functions_desc' => 'Ob das französische Geldpaket aktivieren soll',

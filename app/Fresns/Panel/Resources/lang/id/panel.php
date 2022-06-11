@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Nomor Interval Modifikasi Nama Pengguna',
     'user_edit_nickname_length' => 'Panjang Nama Panggilan',
     'user_edit_nickname_periodicity' => 'Nomor Interval Modifikasi Nama Julukan Pengguna',
+    'user_edit_bio_length' => 'Panjang Bio',
+    'user_edit_bio_support' => 'Dukungan Bio',
+    'user_bio_support_mention' => 'Sebutkan Pengguna',
+    'user_bio_support_link' => 'Tautan',
+    'user_bio_support_hashtag' => 'Tanda pagar',
     // System-Wallet
     'wallet_functions' => 'Fungsi dompet',
     'wallet_functions_desc' => 'Apakah akan mengaktifkan paket uang Prancis',
