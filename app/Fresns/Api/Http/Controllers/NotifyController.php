@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Http\Controllers;
 
 use App\Models\Notify;
 use App\Helpers\DateHelper;
+use App\Helpers\PluginHelper;
 use Illuminate\Http\Request;
 use App\Helpers\PrimaryHelper;
 use App\Fresns\Api\Services\PostService;
@@ -58,14 +59,18 @@ class NotifyController extends Controller
             $item['type'] = $notify->type;
             $item['content'] = $notify->content;
             $item['isMarkdown'] = (bool) $notify->is_markdown;
-            $item['isAccess'] = (bool) $notify->is_access;
-            $item['accessUrl'] = $notify->access_url;
+            $item['pluginUrl'] = null;
+            $item['isAccessPlugin'] = (bool) $notify->is_access_plugin;
             $item['actionUser'] = null;
             $item['actionType'] = $notify->action_type;
             $item['actionInfo'] = null;
             $info['notifyTime'] = DateHelper::fresnsFormatDateTime($notify->created_at, $headers['timezone'], $headers['langTag']);
             $info['notifyTimeFormat'] = DateHelper::fresnsFormatTime($notify->created_at, $headers['langTag']);
             $item['status'] = (bool) $notify->is_read;
+
+            if ($notify->is_access_plugin) {
+                $item['pluginUrl'] = ! empty($notify->plugin_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($notify->plugin_unikey) : null;
+            }
 
             if ($notify->action_user_id) {
                 $item['actionUser'] = $notify->actionUser?->getUserProfile($headers['langTag'], $headers['timezone']);
