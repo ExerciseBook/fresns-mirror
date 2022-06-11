@@ -222,25 +222,25 @@ class CommonController extends Controller
             }
         }
 
-        if (in_array(4, $data['types'])) {
+        if (in_array(PluginCallback::TYPE_FILE, $data['types'])) {
             $fids = collect($callback->content['files'])->sortBy('rating')->pluck('fid')->toArray();
 
             $data['apiContent']['files'] = FileHelper::fresnsAntiLinkFileInfoListByIds($fids);
         }
 
-        if (in_array(5, $data['types'])) {
+        if (in_array(PluginCallback::TYPE_EXTEND, $data['types'])) {
             $data['apiContent']['extends'] = ContentUtility::extendJsonHandle($callback->content['extends'], $headers['langTag']);
         }
 
-        if (in_array(6, $data['types'])) {
+        if (in_array(PluginCallback::TYPE_READ_ALLOW_CONFIG, $data['types'])) {
             $data['apiContent']['readAllowConfig'] = ContentUtility::readAllowJsonHandle($callback->content['readAllowConfig'], $headers['langTag'], $headers['timezone']);
         }
 
-        if (in_array(7, $data['types'])) {
+        if (in_array(PluginCallback::TYPE_USER_LIST_CONFIG, $data['types'])) {
             $data['apiContent']['userListConfig'] = ContentUtility::userListJsonHandle($callback->content['userListConfig'], $headers['langTag']);
         }
 
-        if (in_array(8, $data['types'])) {
+        if (in_array(PluginCallback::TYPE_COMMENT_BTN_CONFIG), $data['types'])) {
             $data['apiContent']['commentBtnConfig'] = ContentUtility::commentBtnJsonHandle($callback->content['commentBtnConfig'], $headers['langTag']);
         }
 
