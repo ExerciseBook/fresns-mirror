@@ -517,11 +517,6 @@ class AccountController extends Controller
             ]);
         }
 
-        // delete connect info
-        if ($dtoRequest->deleteConnectInfo) {
-            AccountConnect::where('account_id', $account->id)->where('connect_id', $dtoRequest->deleteConnectInfo)->forceDelete();
-        }
-
         // edit last login time
         if ($dtoRequest->editLastLoginTime) {
             $account->update([

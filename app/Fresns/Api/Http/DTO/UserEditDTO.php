@@ -22,6 +22,8 @@ class UserEditDTO extends DTO
             'nickname' => ['string', 'nullable'],
             'avatarFid' => ['string', 'nullable'],
             'avatarUrl' => ['url', 'nullable'],
+            'bannerFid' => ['string', 'nullable'],
+            'bannerUrl' => ['url', 'nullable'],
             'gender' => ['integer', 'nullable', 'in:1,2,3'],
             'birthday' => ['date', 'nullable', 'after:tomorrow', 'after_or_equal:1920-01-01 00:00:00'],
             'bio' => ['string', 'nullable'],

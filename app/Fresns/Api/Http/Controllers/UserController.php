@@ -418,6 +418,14 @@ class UserController extends Controller
         $dtoRequest = new UserEditDTO($request->all());
         $headers = HeaderService::getHeaders();
 
+        if ($dtoRequest->avatarFid && $dtoRequest->avatarUrl) {
+            throw new ApiException(30005);
+        }
+
+        if ($dtoRequest->bannerFid && $dtoRequest->bannerUrl) {
+            throw new ApiException(30005);
+        }
+
         $authUser = User::where('uid', $headers['uid'])->first();
 
         $editNameConfig = ConfigHelper::fresnsConfigByItemKeys([
@@ -525,6 +533,24 @@ class UserController extends Controller
             $authUser->update([
                 'avatar_file_id' => null,
                 'avatar_file_url' => $dtoRequest->avatarUrl,
+            ]);
+        }
+
+        // edit bannerFid
+        if ($dtoRequest->bannerFid) {
+            $fileId = PrimaryHelper::fresnsFileIdByFid($dtoRequest->bannerFid);
+
+            $authUser->update([
+                'banner_file_id' => $fileId,
+                'banner_file_url' => null,
+            ]);
+        }
+
+        // edit bannerUrl
+        if ($dtoRequest->bannerUrl) {
+            $authUser->update([
+                'banner_file_id' => null,
+                'banner_file_url' => $dtoRequest->bannerUrl,
             ]);
         }
 
