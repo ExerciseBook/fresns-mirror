@@ -117,8 +117,12 @@ class ExtensionController extends Controller
         return view('FsView::extensions.apps', compact('apps'));
     }
 
-    public function install(Request $request)
+    public function install(?string $unikey = null, Request $request)
     {
+        if ($unikey) {
+            $request->offsetSet('install_method', 'inputUrl');
+        }
+        
         defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
         defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'r'));
         defined('STDERR') or define('STDERR', fopen('php://stderr', 'r'));
@@ -146,19 +150,28 @@ class ExtensionController extends Controller
 
                 return \response(\Artisan::output()."\n".__('FsLang::tips.installSuccess'));
             break;
+            case 'inputUrl':
             case 'inputUnikey':
-                if ($unikey = $request->get('plugin_unikey')) {
+                if ($unikey = $request->get('plugin_unikey', $unikey)) {
                     // php artisan fresns:require ...
                     \Artisan::call('fresns:require', [
                         'unikey' => $unikey,
                     ]);
-
                     $output = \Artisan::output();
-                    if ($output == "\n") {
-                        return \response("$unikey ".__('FsLang::tips.installFailure'));
-                    }
 
-                    return \response($output."\n $unikey ".__('FsLang::tips.installSuccess'));
+                    if ($installMethod == 'inputUrl') {
+                        if ($output == "\n") {
+                            return back()->with('failure', __('FsLang::tips.installFailure'));
+                        }
+
+                        return back()->with('success', "\n $unikey ".__('FsLang::tips.installSuccess'));
+                    } else {
+                        if ($output == "\n") {
+                            return \response("$unikey ".__('FsLang::tips.installFailure'));
+                        }
+
+                        return \response($output."\n $unikey ".__('FsLang::tips.installSuccess'));
+                    }
                 }
             break;
             case 'inputFile':
