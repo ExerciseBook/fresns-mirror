@@ -2,7 +2,7 @@
 
 /*
  * Fresns (https://fresns.org)
- * Copyright (C) 2021-Present Jarvis 그것ng
+ * Copyright (C) 2021-Present Jarvis Tang
  * Released under the Apache-2.0 License.
  */
 
@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => '사용자 이름 수정 간격 번호',
     'user_edit_nickname_length' => '닉네임 길이',
     'user_edit_nickname_periodicity' => '사용자 별명 수정 간격 번호',
+    'user_edit_bio_length' => '약력',
+    'user_edit_bio_support' => '바이오 지원',
+    'user_bio_support_mention' => '사용자 멘션',
+    'user_bio_support_link' => '링크',
+    'user_bio_support_hashtag' => '해시태그',
     // System-Wallet
     'wallet_functions' => '지갑 기능',
     'wallet_functions_desc' => '프랑스 돈 패키지를 사용할 수 있는지 여부',
@@ -530,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => '예를 들어, "닉네임", "꽃 이름", "코드"및 기타 이름',
     'rename_user_role_name' => '역할 사용자 정의 이름',
     'rename_user_role_name_desc' => '예를 들어 "역할", "사용자 그룹", "사용자 그룹"및 기타 이름',
+    'rename_user_bio_name' => '약력 사용자 정의 이름',
+    'rename_user_bio_name_desc' => '예: 약력 또는 소개',
     'rename_group_name' => '그룹 맞춤 이름',
     'rename_group_name_desc' => '예를 들어, "에디션", "원", "분류"및 기타 이름',
     'rename_hashtag_name' => '주제 사용자 정의 이름',
@@ -920,4 +927,5 @@ return [
     'install_mode' => '설치 모드',
     'install_mode_input' => '입력 Fresns 키',
     'install_mode_upload' => 'Zip 패키지 업로드',
+    'install_mode_directory' => '입력 디렉토리',
 ];

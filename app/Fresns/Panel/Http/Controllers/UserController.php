@@ -39,6 +39,10 @@ class UserController extends Controller
             'nickname_min',
             'nickname_max',
             'nickname_edit',
+            'bio_length',
+            'bio_support_mention',
+            'bio_support_link',
+            'bio_support_hashtag',
             'connects',
         ];
 
@@ -157,6 +161,10 @@ class UserController extends Controller
             'nickname_min',
             'nickname_max',
             'nickname_edit',
+            'bio_length',
+            'bio_support_mention',
+            'bio_support_link',
+            'bio_support_hashtag',
         ];
 
         $configs = Config::whereIn('item_key', $configKeys)->get();

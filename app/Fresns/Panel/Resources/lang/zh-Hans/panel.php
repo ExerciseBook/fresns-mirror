@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => '用户名修改间隔天数',
     'user_edit_nickname_length' => '用户昵称长度',
     'user_edit_nickname_periodicity' => '用户昵称修改间隔天数',
+    'user_edit_bio_length' => '用户简介长度',
+    'user_edit_bio_support' => '用户简介支持',
+    'user_bio_support_mention' => '艾特用户',
+    'user_bio_support_link' => '超链接',
+    'user_bio_support_hashtag' => '话题',
     // System-Wallet
     'wallet_functions' => '钱包功能',
     'wallet_functions_desc' => '是否启用法币钱包功能',
@@ -530,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => '例如“昵称”、“花名”、“代号”等命名',
     'rename_user_role_name' => '角色自定义名称',
     'rename_user_role_name_desc' => '例如“角色”、“用户组”、“用户群”等命名',
+    'rename_user_bio_name' => '简介自定义名称',
+    'rename_user_bio_name_desc' => '例如“Bio”、“简介”、“个性签名”等命名',
     'rename_group_name' => '小组自定义名称',
     'rename_group_name_desc' => '例如“版区”、“圈子”、“分类”等命名',
     'rename_hashtag_name' => '话题自定义名称',
@@ -920,5 +927,5 @@ return [
     'install_mode' => '安装方式',
     'install_mode_input' => '输入标识名',
     'install_mode_upload' => '上传安装包',
-    'install_mode_dir' => '输入安装包目录',
+    'install_mode_directory' => '输入目录',
 ];

@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Number of days between username changes',
     'user_edit_nickname_length' => 'Nickname Length',
     'user_edit_nickname_periodicity' => 'Number of days between nickname changes',
+    'user_edit_bio_length' => 'Bio Length',
+    'user_edit_bio_support' => 'Bio Support',
+    'user_bio_support_mention' => 'Mention User',
+    'user_bio_support_link' => 'Link',
+    'user_bio_support_hashtag' => 'Hashtag',
     // System-Wallet
     'wallet_functions' => 'Wallet Functions',
     'wallet_functions_desc' => 'Whether to enable the fiat wallet function',
@@ -530,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'Example: Nickname or Codename',
     'rename_user_role_name' => 'Role Custom Name',
     'rename_user_role_name_desc' => 'Example: Role or User Group',
+    'rename_user_bio_name' => 'Bio Custom Name',
+    'rename_user_bio_name_desc' => 'Example: Bio or Introduction',
     'rename_group_name' => 'Group Custom Name',
     'rename_group_name_desc' => 'Example: Group or Forum',
     'rename_hashtag_name' => 'Hashtag Custom Name',
@@ -920,5 +927,5 @@ return [
     'install_mode' => 'Install Mode',
     'install_mode_input' => 'Input Fresns Key',
     'install_mode_upload' => 'Upload Zip Package',
-    'install_mode_dir' => 'Input the package dir location',
+    'install_mode_directory' => 'Input Directory',
 ];

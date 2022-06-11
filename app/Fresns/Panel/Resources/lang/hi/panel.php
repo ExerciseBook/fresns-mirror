@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'उपयोगकर्ता नाम संशोधन अंतराल संख्या',
     'user_edit_nickname_length' => 'उपनाम लंबाई',
     'user_edit_nickname_periodicity' => 'उपयोगकर्ता उपनाम संशोधन अंतराल संख्या',
+    'user_edit_bio_length' => 'जैव लंबाई',
+    'user_edit_bio_support' => 'जैव समर्थन',
+    'user_bio_support_mention' => 'उपयोगकर्ता का उल्लेख करें',
+    'user_bio_support_link' => 'संपर्क',
+    'user_bio_support_hashtag' => 'हैशटैग',
     // System-Wallet
     'wallet_functions' => 'वॉलेट समारोह',
     'wallet_functions_desc' => 'फ्रेंच मनी पैकेज को सक्षम करना है या नहीं',
@@ -530,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'उदाहरण के लिए, "उपनाम", "फूल नाम", "कोड" और अन्य नामित',
     'rename_user_role_name' => 'भूमिका कस्टम नाम',
     'rename_user_role_name_desc' => 'उदाहरण के लिए, "भूमिका", "उपयोगकर्ता समूह", "उपयोगकर्ता समूह" और अन्य नामित',
+    'rename_user_bio_name' => 'जैव कस्टम नाम',
+    'rename_user_bio_name_desc' => 'उदाहरण: जैव या परिचय',
     'rename_group_name' => 'समूह कस्टम नाम',
     'rename_group_name_desc' => 'उदाहरण के लिए, "संस्करण", "सर्कल", "वर्गीकरण" और अन्य नामित',
     'rename_hashtag_name' => 'विषय कस्टम नाम',
@@ -920,4 +927,5 @@ return [
     'install_mode' => 'मोड स्थापित करें',
     'install_mode_input' => 'इनपुट Fresns कुंजी',
     'install_mode_upload' => 'ज़िप पैकेज अपलोड करें',
+    'install_mode_directory' => 'इनपुट निर्देशिका',
 ];

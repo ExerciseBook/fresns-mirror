@@ -27,6 +27,7 @@ trait UserServiceTrait
         $profile['nickname'] = $userData->nickname;
         $profile['avatar'] = static::getUserAvatar($userData->id);
         $profile['decorate'] = FileHelper::fresnsFileUrlByTableColumn($userData->decorate_file_id, $userData->decorate_file_url, 'imageAvatarUrl');
+        $profile['banner'] = FileHelper::fresnsFileUrlByTableColumn($userData->banner_file_id, $userData->banner_file_url);
         $profile['gender'] = $userData->gender;
         $profile['birthday'] = DateHelper::fresnsDateTimeByTimezone($userData->birthday, $timezone, $langTag);
         $profile['bio'] = $userData->bio;
@@ -44,11 +45,11 @@ trait UserServiceTrait
         $profile['lastEditUsername'] = DateHelper::fresnsDateTimeByTimezone($userData->last_username_at, $timezone, $langTag);
         $profile['lastEditNickname'] = DateHelper::fresnsDateTimeByTimezone($userData->last_nickname_at, $timezone, $langTag);
         $profile['registerDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->created_at, $timezone, $langTag);
-        $profile['hasPassword'] = !! $userData->password;
+        $profile['hasPassword'] = (bool) $userData->password;
         $profile['status'] = (bool) $userData->is_enable;
         $profile['waitDelete'] = (bool) $userData->wait_delete;
         $profile['waitDeleteDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->wait_delete_at, $timezone, $langTag);
-        $profile['deactivate'] = !! $userData->deleted_at;
+        $profile['deactivate'] = (bool) $userData->deleted_at;
         $profile['deactivateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->deleted_at, $timezone, $langTag);
 
         return $profile;

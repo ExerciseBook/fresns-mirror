@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Nomor Interval Modifikasi Nama Pengguna',
     'user_edit_nickname_length' => 'Panjang Nama Panggilan',
     'user_edit_nickname_periodicity' => 'Nomor Interval Modifikasi Nama Julukan Pengguna',
+    'user_edit_bio_length' => 'Panjang Bio',
+    'user_edit_bio_support' => 'Dukungan Bio',
+    'user_bio_support_mention' => 'Sebutkan Pengguna',
+    'user_bio_support_link' => 'Tautan',
+    'user_bio_support_hashtag' => 'Tanda pagar',
     // System-Wallet
     'wallet_functions' => 'Fungsi dompet',
     'wallet_functions_desc' => 'Apakah akan mengaktifkan paket uang Prancis',
@@ -530,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'Misalnya, "nama panggilan", "nama bunga", "kode" dan bernama lainnya',
     'rename_user_role_name' => 'Peran nama kustom',
     'rename_user_role_name_desc' => 'Misalnya, "peran", "Grup Pengguna", "Grup Pengguna" dan lainnya bernama',
+    'rename_user_bio_name' => 'Nama Kustom Bio',
+    'rename_user_bio_name_desc' => 'Contoh: Bio atau Pendahuluan',
     'rename_group_name' => 'Nama Kustom Grup',
     'rename_group_name_desc' => 'Misalnya, "edisi", "lingkaran", "klasifikasi" dan bernama lainnya',
     'rename_hashtag_name' => 'Nama Kustom Topik',
@@ -920,4 +927,5 @@ return [
     'install_mode' => 'Instal Mode',
     'install_mode_input' => 'Masukkan Kunci Fresns',
     'install_mode_upload' => 'Unggah Paket Zip',
+    'install_mode_directory' => 'Direktori Masukan',
 ];

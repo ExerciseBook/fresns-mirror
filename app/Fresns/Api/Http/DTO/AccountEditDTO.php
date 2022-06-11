@@ -28,7 +28,6 @@ class AccountEditDTO extends DTO
             'editPassword' => ['string', 'nullable'],
             'walletPassword' => ['string', 'nullable'],
             'editWalletPassword' => ['string', 'nullable'],
-            'deleteConnectInfo' => ['integer', 'nullable', 'between:1,17'],
             'editLastLoginTime' => ['boolean', 'nullable'],
         ];
     }

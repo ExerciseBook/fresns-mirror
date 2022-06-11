@@ -79,7 +79,7 @@
         </div>
         <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.rename_user_nickname_name_desc') }}</div>
     </div>
-    <div class="row mb-5">
+    <div class="row mb-3">
         <label class="col-lg-2"></label>
         <div class="col-lg-6">
             <div class="input-group">
@@ -93,6 +93,21 @@
             </div>
         </div>
         <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.rename_user_role_name_desc') }}</div>
+    </div>
+    <div class="row mb-5">
+        <label class="col-lg-2"></label>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.rename_user_bio_name') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'user_bio_name']) }}"
+                    data-languages="{{ optional($configs['user_bio_name'] ?? null)?->languages?->toJson() }}"
+                    data-item_key="user_bio_name"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['user_bio_name'] ?? '' }}
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.rename_user_bio_name_desc') }}</div>
     </div>
 
     <!--rename_content_config-->
@@ -191,7 +206,7 @@
 
     <!--rename_like_config-->
     <div class="row mb-3">
-        <label class="col-lg-2">{{ __('FsLang::panel.rename_like_config') }}:</label>
+        <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.rename_like_config') }}:</label>
         <div class="col-lg-6">
             <div class="input-group">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.rename_like_user_name') }}</label>
@@ -268,7 +283,7 @@
 
     <!--rename_dislike_config-->
     <div class="row mb-3">
-        <label class="col-lg-2">{{ __('FsLang::panel.rename_dislike_config') }}:</label>
+        <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.rename_dislike_config') }}:</label>
         <div class="col-lg-6">
             <div class="input-group">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.rename_dislike_user_name') }}</label>
@@ -345,7 +360,7 @@
 
     <!--rename_follow_config-->
     <div class="row mb-3">
-        <label class="col-lg-2">{{ __('FsLang::panel.rename_follow_config') }}:</label>
+        <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.rename_follow_config') }}:</label>
         <div class="col-lg-6">
             <div class="input-group">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.rename_follow_user_name') }}</label>
@@ -422,7 +437,7 @@
 
     <!--rename_block_config-->
     <div class="row mb-3">
-        <label class="col-lg-2">{{ __('FsLang::panel.rename_block_config') }}:</label>
+        <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.rename_block_config') }}:</label>
         <div class="col-lg-6">
             <div class="input-group">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.rename_block_user_name') }}</label>

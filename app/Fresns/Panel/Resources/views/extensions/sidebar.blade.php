@@ -28,7 +28,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('FsLang::panel.install_application') }}</h5>
+                <h5 class="modal-title"><i class="bi bi-tools"></i> {{ __('FsLang::panel.install_application') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ route('panel.plugin.install') }}" method="post" enctype="multipart/form-data">
@@ -55,14 +55,14 @@
                         <button class="btn btn-outline-secondary dropdown-toggle showSelectTypeName" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.install_mode_input') }}</button>
                         <ul class="dropdown-menu selectInputType">
                             <li data-name="inputUnikey"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_input') }}</a></li>
+                            <li data-name="inputDir"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_directory') }}</a></li>
                             <li data-name="inputFile"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_upload') }}</a></li>
-                            <li data-name="inputDir"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_dir') }}</a></li>
                         </ul>
 
                         <input type="hidden" name="install_method" value="inputUnikey" />
                         <input type="text" class="form-control inputUnikey" name="plugin_unikey" maxlength="64">
-                        <input type="file" class="form-control inputFile" name="plugin_zipball" accept=".zip" style="display:none;">
                         <input type="text" class="form-control inputDir" name="plugin_dir" maxlength="64" style="display:none;">
+                        <input type="file" class="form-control inputFile" name="plugin_zipball" accept=".zip" style="display:none;">
 
                         <div id="inputUnikeyOrInputFile" class="invalid-feedback"></div>
                     </div>
@@ -80,7 +80,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('FsLang::panel.install_application') }}</h5>
+                <h5 class="modal-title"><i class="bi bi-tools"></i> {{ __('FsLang::panel.install_application') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

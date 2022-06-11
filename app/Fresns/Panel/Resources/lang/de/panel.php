@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Benutzername-Modifikationsintervallnummer',
     'user_edit_nickname_length' => 'Nickname Länge',
     'user_edit_nickname_periodicity' => 'Benutzer-Nickname-Modifikationsintervallnummer',
+    'user_edit_bio_length' => 'Bio Länge',
+    'user_edit_bio_support' => 'Bio-Unterstützung',
+    'user_bio_support_mention' => 'Benutzer erwähnen',
+    'user_bio_support_link' => 'Link',
+    'user_bio_support_hashtag' => 'Hashtag',
     // System-Wallet
     'wallet_functions' => 'Geldbörsenfunktion',
     'wallet_functions_desc' => 'Ob das französische Geldpaket aktivieren soll',
@@ -530,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'Zum Beispiel "Spitzname", "Blumenname", "Code" und andere benannt',
     'rename_user_role_name' => 'Rollen benutzerdefinierter Name',
     'rename_user_role_name_desc' => 'Zum Beispiel "Rolle", "Benutzergruppe", "Benutzergruppe" und andere benannte',
+    'rename_user_bio_name' => 'Bio benutzerdefinierter Name',
+    'rename_user_bio_name_desc' => 'Beispiel: Bio oder Einleitung',
     'rename_group_name' => 'Gruppen-benutzerdefinierter Name',
     'rename_group_name_desc' => 'Zum Beispiel "Edition", "Kreis", "Klassifizierung" und andere benannte',
     'rename_hashtag_name' => 'Thema benutzerdefinierter Name',
@@ -920,4 +927,5 @@ return [
     'install_mode' => 'Installieren Modus',
     'install_mode_input' => 'Fresns-Schlüssel eingeben',
     'install_mode_upload' => 'Zip-Paket hochladen',
+    'install_mode_directory' => 'Verzeichnis eingeben',
 ];

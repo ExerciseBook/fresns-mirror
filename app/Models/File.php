@@ -14,6 +14,7 @@ class File extends Model
     const TYPE_VIDEO = 2;
     const TYPE_AUDIO = 3;
     const TYPE_DOCUMENT = 4;
+
     const TYPE_MAP = [
         File::TYPE_IMAGE => 'Image',
         File::TYPE_VIDEO => 'Video',
@@ -21,10 +22,10 @@ class File extends Model
         File::TYPE_DOCUMENT => 'Document',
     ];
 
-    const TRANSCODING_STATE_WAIT_TRANSCODING = 1;
-    const TRANSCODING_STATE_TRANSCODING = 2;
-    const TRANSCODING_STATE_TRANSCODING_FINISH = 3;
-    const TRANSCODING_STATE_TRANSCODING_FAILURE = 4;
+    const TRANSCODING_STATE_WAIT = 1;
+    const TRANSCODING_STATE_ING = 2;
+    const TRANSCODING_STATE_DONE = 3;
+    const TRANSCODING_STATE_FAILURE = 4;
 
     use Traits\FileServiceTrait;
     use Traits\IsEnableTrait;

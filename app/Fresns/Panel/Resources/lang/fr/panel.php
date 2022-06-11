@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Nom de modification du nom d\'utilisateur Numéro d\'intervalle',
     'user_edit_nickname_length' => 'Longueur du pseudo',
     'user_edit_nickname_periodicity' => 'Numéro d\'intervalle de modification de surnom d\'utilisateur',
+    'user_edit_bio_length' => 'Bio Length',
+    'user_edit_bio_support' => 'Support de la bio',
+    'user_bio_support_mention' => 'Mention de l\'utilisateur',
+    'user_bio_support_link' => 'Lien',
+    'user_bio_support_hashtag' => 'Hashtag',
     // System-Wallet
     'wallet_functions' => 'Fonction de portefeuille',
     'wallet_functions_desc' => 'Que ce soit pour activer le forfait d\'argent français',
@@ -530,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'Par exemple, "surnom", "nom de fleur", "code" et autre nommé',
     'rename_user_role_name' => 'Rôle Nom personnalisé',
     'rename_user_role_name_desc' => 'Par exemple, "rôle", "groupe d\'utilisateurs", "groupe d\'utilisateurs" et autres nommés',
+    'rename_user_bio_name' => 'Nom personnalisé Bio',
+    'rename_user_bio_name_desc' => 'Exemple : Bio ou introduction',
     'rename_group_name' => 'Nom personnalisé du groupe',
     'rename_group_name_desc' => 'Par exemple, "édition", "cercle", "classification" et autre nommé',
     'rename_hashtag_name' => 'Topic Nom personnalisé',
@@ -920,4 +927,5 @@ return [
     'install_mode' => 'Mode d\'installation',
     'install_mode_input' => 'Entrer la clé Fresns',
     'install_mode_upload' => 'Télécharger le paquet Zip',
+    'install_mode_directory' => 'Entrer le répertoire',
 ];

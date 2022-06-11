@@ -55,7 +55,7 @@
                             'panel.menus.*',
                             'panel.columns.*',
                             'panel.language.packs.*',
-                            'panel.keys.*',
+                            'panel.code.messages.*',
                         ]) ? 'active' : '' }}" href="{{ route('panel.menus.index') }}">{{ __('FsLang::panel.menu_clients') }}</a>
                     </li>
                     <li class="nav-item">
@@ -64,6 +64,7 @@
                             'panel.engine.*',
                             'panel.theme.*',
                             'panel.app.*',
+                            'panel.keys.*',
                             'panel.iframe.*',
                         ]) ? 'active' : '' }} " href="{{ route('panel.plugin.index') }}">{{ __('FsLang::panel.menu_app_center') }}</a>
                     </li>

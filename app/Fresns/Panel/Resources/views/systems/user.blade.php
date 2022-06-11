@@ -279,10 +279,32 @@
                     <input type="number" class="form-control input-number" name="nickname_min" value="{{ $params['nickname_min'] }}" placeholder="{{ __('FsLang::panel.user_edit_username_length_min') }}">
                     <input type="number" class="form-control input-number" name="nickname_max" value="{{ $params['nickname_max'] }}" placeholder="{{ __('FsLang::panel.user_edit_username_length_max') }}">
                 </div>
-                <div class="input-group">
+                <div class="input-group mb-2">
                     <label class="input-group-text">{{ __('FsLang::panel.user_edit_nickname_periodicity') }}</label>
                     <input type="number" class="form-control input-number" name="nickname_edit" value="{{ $params['nickname_edit'] }}">
                     <span class="input-group-text">{{ __('FsLang::panel.unit_day') }}</span>
+                </div>
+                <div class="input-group mb-2">
+                    <label class="input-group-text">{{ __('FsLang::panel.user_edit_bio_length') }}</label>
+                    <input type="number" class="form-control input-number" name="bio_length" value="{{ $params['bio_length'] }}">
+                    <span class="input-group-text">{{ __('FsLang::panel.unit_character') }}</span>
+                </div>
+                <div class="input-group">
+                    <label class="input-group-text">{{ __('FsLang::panel.user_edit_bio_support') }}</label>
+                    <div class="form-control bg-white">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="bio_support_mention" name="bio_support_mention" value="true" {{ $params['bio_support_mention'] == 'true' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="bio_support_mention">{{ __('FsLang::panel.user_bio_support_mention') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="bio_support_link" name="bio_support_link" value="true" {{ $params['bio_support_link'] == 'true' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="bio_support_link">{{ __('FsLang::panel.user_bio_support_link') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="bio_support_hashtag" name="bio_support_hashtag" value="true" {{ $params['bio_support_hashtag'] == 'true' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="bio_support_hashtag">{{ __('FsLang::panel.user_bio_support_hashtag') }}</label>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_edit_username_length_desc') }}</div>

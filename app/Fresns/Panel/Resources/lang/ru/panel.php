@@ -449,6 +449,11 @@ return [
     'user_edit_username_periodicity' => 'Номер интервала модификации имени пользователя',
     'user_edit_nickname_length' => 'Длина псевдонима',
     'user_edit_nickname_periodicity' => 'Интервал изменение прозвище пользователя',
+    'user_edit_bio_length' => 'Био длина',
+    'user_edit_bio_support' => 'Поддержка био',
+    'user_bio_support_mention' => 'Упоминание пользователя',
+    'user_bio_support_link' => 'Ссылка',
+    'user_bio_support_hashtag' => 'Хэштег',
     // System-Wallet
     'wallet_functions' => 'Функция кошелька',
     'wallet_functions_desc' => 'Будь то, чтобы включить французский денежный пакет',
@@ -530,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'Например, «псевдоним», «Имя цветка», «Код» и Другое название',
     'rename_user_role_name' => 'Роль пользовательского имени',
     'rename_user_role_name_desc' => 'Например, «роль», «группа пользователей», «группа пользователей» и других названных',
+    'rename_user_bio_name' => 'Био пользовательское имя',
+    'rename_user_bio_name_desc' => 'Пример: Био или введение',
     'rename_group_name' => 'Группа пользовательских названий',
     'rename_group_name_desc' => 'Например, «издание», «круг», «классификация» и другие названия',
     'rename_hashtag_name' => 'Тема пользовательского имени',
@@ -920,4 +927,5 @@ return [
     'install_mode' => 'Режим установки',
     'install_mode_input' => 'Ввод ключа Fresns',
     'install_mode_upload' => 'Загрузить Zip-пакет',
+    'install_mode_directory' => 'Ввод справочника',
 ];
