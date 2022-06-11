@@ -259,12 +259,11 @@ class ExtensionController extends Controller
 
     public function updateTheme(Request $request)
     {
-        $theme = Plugin::where('unikey', $request->input('theme'))->first();
-
-        if ($request->has('is_enable')) {
-            $theme->is_enable = $request->is_enable;
+        if ($request->get('is_enable') != 0) {
+            \Artisan::call('plugin:activate', ['plugin' => $request->theme]);
+        } else {
+            \Artisan::call('plugin:deactivate', ['plugin' => $request->theme]);
         }
-        $theme->save();
 
         return $this->updateSuccess();
     }
