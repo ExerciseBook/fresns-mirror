@@ -14,11 +14,13 @@ class PluginCallback extends Model
     const TYPE_ACCOUNT = 2;
     const TYPE_MAP_INFO = 3;
     const TYPE_FILE = 4;
-    const TYPE_EXTENDS = 5;
-    const TYPE_READ_ALLOW_CONFIG = 6;
-    const TYPE_USER_LIST_CONFIG = 7;
-    const TYPE_COMMENT_BTN_CONFIG = 8;
-    const TYPE_COMMENT_PUBLIC_CONFIG = 9;
+    const TYPE_ICON = 5;
+    const TYPE_TIP = 6;
+    const TYPE_EXTEND = 7;
+    const TYPE_READ_ALLOW_CONFIG = 8;
+    const TYPE_USER_LIST_CONFIG = 9;
+    const TYPE_COMMENT_BTN_CONFIG = 10;
+    const TYPE_COMMENT_PUBLIC_CONFIG = 11;
 
     const IS_USE_FALSE = false;
     const IS_USE_TRUE = true;
