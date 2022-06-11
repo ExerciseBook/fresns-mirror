@@ -29,6 +29,7 @@
         "fresns/dto": "^1.1",
         "nelexa/zip": "^4.0",
         "hisorange/browser-detect": "^4.5",
+        "wikimedia/composer-merge-plugin": "dev-master",
         "maatwebsite/excel": "^3.1"
     },
     "require-dev": {
@@ -67,6 +68,17 @@
         ]
     },
     "extra": {
+        "merge-plugin": {
+            "include": [
+                "plugins/*/composer.json"
+            ],
+            "recurse": true,
+            "replace": false,
+            "ignore-duplicates": false,
+            "merge-dev": true,
+            "merge-extra": true,
+            "merge-extra-deep": true
+        },
         "laravel": {
             "dont-discover": []
         }
@@ -74,7 +86,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": false,
+        "allow-plugins": {
+            "wikimedia/composer-merge-plugin": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
