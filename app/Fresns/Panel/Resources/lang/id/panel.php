@@ -535,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'Misalnya, "nama panggilan", "nama bunga", "kode" dan bernama lainnya',
     'rename_user_role_name' => 'Peran nama kustom',
     'rename_user_role_name_desc' => 'Misalnya, "peran", "Grup Pengguna", "Grup Pengguna" dan lainnya bernama',
+    'rename_user_bio_name' => 'Nama Kustom Bio',
+    'rename_user_bio_name_desc' => 'Contoh: Bio atau Pendahuluan',
     'rename_group_name' => 'Nama Kustom Grup',
     'rename_group_name_desc' => 'Misalnya, "edisi", "lingkaran", "klasifikasi" dan bernama lainnya',
     'rename_hashtag_name' => 'Nama Kustom Topik',

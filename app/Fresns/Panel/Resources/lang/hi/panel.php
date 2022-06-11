@@ -535,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'उदाहरण के लिए, "उपनाम", "फूल नाम", "कोड" और अन्य नामित',
     'rename_user_role_name' => 'भूमिका कस्टम नाम',
     'rename_user_role_name_desc' => 'उदाहरण के लिए, "भूमिका", "उपयोगकर्ता समूह", "उपयोगकर्ता समूह" और अन्य नामित',
+    'rename_user_bio_name' => 'जैव कस्टम नाम',
+    'rename_user_bio_name_desc' => 'उदाहरण: जैव या परिचय',
     'rename_group_name' => 'समूह कस्टम नाम',
     'rename_group_name_desc' => 'उदाहरण के लिए, "संस्करण", "सर्कल", "वर्गीकरण" और अन्य नामित',
     'rename_hashtag_name' => 'विषय कस्टम नाम',

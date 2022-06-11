@@ -535,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => '例如“昵称”、“花名”、“代号”等命名',
     'rename_user_role_name' => '角色自定义名称',
     'rename_user_role_name_desc' => '例如“角色”、“用户组”、“用户群”等命名',
+    'rename_user_bio_name' => '简介自定义名称',
+    'rename_user_bio_name_desc' => '例如“Bio”、“简介”、“个性签名”等命名',
     'rename_group_name' => '小组自定义名称',
     'rename_group_name_desc' => '例如“版区”、“圈子”、“分类”等命名',
     'rename_hashtag_name' => '话题自定义名称',

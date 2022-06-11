@@ -535,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'Por exemplo, "apelido", "nome da flor", "código" e outro nomeado',
     'rename_user_role_name' => 'Nome personalizado do papel',
     'rename_user_role_name_desc' => 'Por exemplo, "função", "grupo de usuários", "grupo de usuários" e outros nomeados',
+    'rename_user_bio_name' => 'Nome Bio Personalizado',
+    'rename_user_bio_name_desc' => 'Exemplo: Bio ou Introdução',
     'rename_group_name' => 'Nome personalizado do grupo',
     'rename_group_name_desc' => 'Por exemplo, "Edition", "Circle", "Classificação" e outros nomeados',
     'rename_hashtag_name' => 'Nome personalizado do tópico',

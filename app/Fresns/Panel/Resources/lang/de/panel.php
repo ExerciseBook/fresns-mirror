@@ -535,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'Zum Beispiel "Spitzname", "Blumenname", "Code" und andere benannt',
     'rename_user_role_name' => 'Rollen benutzerdefinierter Name',
     'rename_user_role_name_desc' => 'Zum Beispiel "Rolle", "Benutzergruppe", "Benutzergruppe" und andere benannte',
+    'rename_user_bio_name' => 'Bio benutzerdefinierter Name',
+    'rename_user_bio_name_desc' => 'Beispiel: Bio oder Einleitung',
     'rename_group_name' => 'Gruppen-benutzerdefinierter Name',
     'rename_group_name_desc' => 'Zum Beispiel "Edition", "Kreis", "Klassifizierung" und andere benannte',
     'rename_hashtag_name' => 'Thema benutzerdefinierter Name',

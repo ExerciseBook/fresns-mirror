@@ -535,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'Example: Nickname or Codename',
     'rename_user_role_name' => 'Role Custom Name',
     'rename_user_role_name_desc' => 'Example: Role or User Group',
+    'rename_user_bio_name' => 'Bio Custom Name',
+    'rename_user_bio_name_desc' => 'Example: Bio or Introduction',
     'rename_group_name' => 'Group Custom Name',
     'rename_group_name_desc' => 'Example: Group or Forum',
     'rename_hashtag_name' => 'Hashtag Custom Name',

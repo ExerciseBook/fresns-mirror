@@ -535,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => '예를 들어, "닉네임", "꽃 이름", "코드"및 기타 이름',
     'rename_user_role_name' => '역할 사용자 정의 이름',
     'rename_user_role_name_desc' => '예를 들어 "역할", "사용자 그룹", "사용자 그룹"및 기타 이름',
+    'rename_user_bio_name' => '약력 사용자 정의 이름',
+    'rename_user_bio_name_desc' => '예: 약력 또는 소개',
     'rename_group_name' => '그룹 맞춤 이름',
     'rename_group_name_desc' => '예를 들어, "에디션", "원", "분류"및 기타 이름',
     'rename_hashtag_name' => '주제 사용자 정의 이름',

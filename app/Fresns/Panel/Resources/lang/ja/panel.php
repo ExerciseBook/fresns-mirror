@@ -535,6 +535,8 @@ return [
     'rename_user_nickname_name_desc' => 'たとえば、「ニックネーム」、「フラワー名」、「コード」、その他の名前付き',
     'rename_user_role_name' => '役割のカ​​スタム名',
     'rename_user_role_name_desc' => 'たとえば、「役割」、「ユーザーグループ」、「ユーザーグループ」、その他の名前を付けました。',
+    'rename_user_bio_name' => 'バイオカスタム名',
+    'rename_user_bio_name_desc' => '例 バイオまたはイントロダクション',
     'rename_group_name' => 'グループカスタムネーム',
     'rename_group_name_desc' => 'たとえば、「編集」、「丸」、「分類」、その他の名前付き',
     'rename_hashtag_name' => 'トピックカスタム名',
