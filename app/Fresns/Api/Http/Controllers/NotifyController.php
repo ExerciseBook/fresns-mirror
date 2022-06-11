@@ -17,6 +17,7 @@ use App\Fresns\Api\Services\PostService;
 use App\Fresns\Api\Services\UserService;
 use App\Fresns\Api\Services\GroupService;
 use App\Fresns\Api\Http\DTO\NotifyListDTO;
+use App\Fresns\Api\Http\DTO\NotifyDTO;
 use App\Fresns\Api\Services\HeaderService;
 use App\Fresns\Api\Services\CommentService;
 use App\Fresns\Api\Services\HashtagService;
@@ -37,15 +38,13 @@ class NotifyController extends Controller
         $readStatus = $dtoRequest->status ?: 0;
         $typeArr = array_filter(explode(',', $dtoRequest->types));
 
-        $notifyQuery = Notify::where('user_id', $authUserId)->where('is_read', $readStatus);
+        $notifyQuery = Notify::with('actionUser')->where('user_id', $authUserId)->where('is_read', $readStatus);
 
         if ($typeArr) {
             $notifyQuery->whereIn('type', $typeArr);
         }
 
         $notifies = $notifyQuery->latest()->paginate($request->get('pageSize', 15));
-
-        $notifies->loadMissing('actionUser');
 
         $userService = new UserService();
         $groupService = new GroupService();
@@ -98,6 +97,25 @@ class NotifyController extends Controller
     // read
     public function read(Request $request)
     {
+        $dtoRequest = new NotifyDTO($request->all());
+        $headers = HeaderService::getHeaders();
+
+        $authUserId = null;
+        if (! empty($headers['uid'])) {
+            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        }
+
+        if ($dtoRequest->markType == 'all') {
+            Notify::where('user_id', $authUserId)->where('type', $dtoRequest->type)->where('is_read', 0)->update([
+                'is_read' => 1,
+            ]);
+        } else {
+            $idArr = array_filter(explode(',', $dtoRequest->ids));
+
+            Notify::where('user_id', $authUserId)->whereIn('id', $idArr)->where('is_read', 0)->update([
+                'is_read' => 1,
+            ]);
+        }
 
         return $this->success();
     }
@@ -105,6 +123,21 @@ class NotifyController extends Controller
     // delete
     public function delete(Request $request)
     {
+        $dtoRequest = new NotifyDTO($request->all());
+        $headers = HeaderService::getHeaders();
+
+        $authUserId = null;
+        if (! empty($headers['uid'])) {
+            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        }
+
+        if ($dtoRequest->markType == 'all') {
+            Notify::where('user_id', $authUserId)->where('type', $dtoRequest->type)->delete();
+        } else {
+            $idArr = array_filter(explode(',', $dtoRequest->ids));
+
+            Notify::where('user_id', $authUserId)->whereIn('id', $idArr)->delete();
+        }
 
         return $this->success();
     }
