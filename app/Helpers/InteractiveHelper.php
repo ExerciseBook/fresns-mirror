@@ -43,7 +43,7 @@ class InteractiveHelper
     public static function fresnsUserInteractive(?string $langTag = null)
     {
         $itemData = ConfigHelper::fresnsConfigByItemKeys([
-            'user_name', 'user_uid_name', 'user_username_name', 'user_nickname_name', 'user_role_name',
+            'user_name', 'user_uid_name', 'user_username_name', 'user_nickname_name', 'user_role_name', 'user_bio_name',
             'like_user_setting', 'like_user_name',
             'dislike_user_setting', 'dislike_user_name',
             'follow_user_setting', 'follow_user_name',
@@ -56,6 +56,7 @@ class InteractiveHelper
         $interactive['userUsernameName'] = $itemData['user_username_name'];
         $interactive['userNicknameName'] = $itemData['user_nickname_name'];
         $interactive['userRoleName'] = $itemData['user_role_name'];
+        $interactive['userBioName'] = $itemData['user_bio_name'];
         $interactive['followSetting'] = $itemData['follow_user_setting'];
         $interactive['followName'] = $itemData['follow_user_name'];
         $interactive['likeSetting'] = $itemData['like_user_setting'];
@@ -256,6 +257,7 @@ class InteractiveHelper
         $profile['nickname'] = null;
         $profile['avatar'] = $userAvatar;
         $profile['decorate'] = null;
+        $profile['banner'] = null;
         $profile['gender'] = null;
         $profile['birthday'] = null;
         $profile['bio'] = null;

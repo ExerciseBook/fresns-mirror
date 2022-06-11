@@ -27,6 +27,7 @@ trait UserServiceTrait
         $profile['nickname'] = $userData->nickname;
         $profile['avatar'] = static::getUserAvatar($userData->id);
         $profile['decorate'] = FileHelper::fresnsFileUrlByTableColumn($userData->decorate_file_id, $userData->decorate_file_url, 'imageAvatarUrl');
+        $profile['banner'] = FileHelper::fresnsFileUrlByTableColumn($userData->banner_file_id, $userData->banner_file_url);
         $profile['gender'] = $userData->gender;
         $profile['birthday'] = DateHelper::fresnsDateTimeByTimezone($userData->birthday, $timezone, $langTag);
         $profile['bio'] = $userData->bio;
