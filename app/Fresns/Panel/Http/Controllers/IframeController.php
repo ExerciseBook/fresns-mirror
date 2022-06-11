@@ -20,7 +20,7 @@ class IframeController extends Controller
         return view('FsView::extensions.iframe', compact('url'));
     }
 
-    public function extensions(Request $request)
+    public function market(Request $request)
     {
         $url = $request->url;
 
