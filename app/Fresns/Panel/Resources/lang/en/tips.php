@@ -30,6 +30,7 @@ return [
     // install
     'install_not_entered_key' => 'Please enter the fresns key',
     'install_not_upload_zip' => 'Please select the installation package',
+    'install_not_entered_dir' => 'Please enter the package dir location',
     'install_in_progress' => 'Install in progress...',
     // upgrade
     'upgrade_none' => 'No Upgrade',

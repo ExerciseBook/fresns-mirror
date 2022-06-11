@@ -56,11 +56,14 @@
                         <ul class="dropdown-menu selectInputType">
                             <li data-name="inputUnikey"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_input') }}</a></li>
                             <li data-name="inputFile"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_upload') }}</a></li>
+                            <li data-name="inputDir"><a class="dropdown-item install_method" href="#">{{ __('FsLang::panel.install_mode_dir') }}</a></li>
                         </ul>
 
                         <input type="hidden" name="install_method" value="inputUnikey" />
                         <input type="text" class="form-control inputUnikey" name="plugin_unikey" maxlength="64">
                         <input type="file" class="form-control inputFile" name="plugin_zipball" accept=".zip" style="display:none;">
+                        <input type="text" class="form-control inputDir" name="plugin_dir" maxlength="64" style="display:none;">
+
 
                         <div id="inputUnikeyOrInputFile" class="invalid-feedback"></div>
                     </div>

@@ -120,42 +120,71 @@ class ExtensionController extends Controller
     public function install(Request $request)
     {
         defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
+        defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'r'));
+        defined('STDERR') or define('STDERR', fopen('php://stderr', 'r'));
 
         $installType = $request->get('install_type');
+        $installMethod = $request->get('install_method');
 
-        $file = $request->file('plugin_zipball');
-        if ($file && $file->isValid()) {
-            // php artisan plugin:install ...
-            // php artisan theme:install ...
+        switch ($installMethod) {
+            case 'inputDir':
+                // php artisan plugin:install ...
+                // php artisan theme:install ...
 
-            $command = match ($installType) {
-                default => throw new \RuntimeException("unknown install_type {$installType}"),
-                'plugin' => 'plugin:install',
-                'theme' => 'theme:install',
-            };
+                $command = match ($installType) {
+                    default => throw new \RuntimeException("unknown install_type {$installType}"),
+                    'plugin' => 'plugin:install',
+                    'theme' => 'theme:install',
+                };
 
-            $dir = storage_path('extensions');
-            $filename = $file->hashName();
-            $file->move($dir, $filename);
+                $dir = base_path($request->get('plugin_dir'));
 
-            \Artisan::call($command, [
-                'path' => "$dir/$filename",
-                '--force' => true,
-            ]);
+                \Artisan::call($command, [
+                    'path' => "$dir",
+                    '--force' => true,
+                ]);
 
-            return \response(\Artisan::output()."\n".__('FsLang::tips.installSuccess'));
-        } elseif ($unikey = $request->get('plugin_unikey')) {
-            // php artisan fresns:require ...
-            \Artisan::call('fresns:require', [
-                'unikey' => $unikey,
-            ]);
+                return \response(\Artisan::output()."\n".__('FsLang::tips.installSuccess'));
+            break;
+            case 'inputUnikey':
+                if ($unikey = $request->get('plugin_unikey')) {
+                    // php artisan fresns:require ...
+                    \Artisan::call('fresns:require', [
+                        'unikey' => $unikey,
+                    ]);
 
-            $output = \Artisan::output();
-            if ($output == "\n") {
-                return \response("$unikey ".__('FsLang::tips.installFailure'));
-            }
+                    $output = \Artisan::output();
+                    if ($output == "\n") {
+                        return \response("$unikey ".__('FsLang::tips.installFailure'));
+                    }
 
-            return \response($output."\n $unikey ".__('FsLang::tips.installSuccess'));
+                    return \response($output."\n $unikey ".__('FsLang::tips.installSuccess'));
+                }
+            break;
+            case 'inputFile':
+                $file = $request->file('plugin_zipball');
+                if ($file && $file->isValid()) {
+                    // php artisan plugin:install ...
+                    // php artisan theme:install ...
+
+                    $command = match ($installType) {
+                        default => throw new \RuntimeException("unknown install_type {$installType}"),
+                        'plugin' => 'plugin:install',
+                        'theme' => 'theme:install',
+                    };
+
+                    $dir = storage_path('extensions');
+                    $filename = $file->hashName();
+                    $file->move($dir, $filename);
+
+                    \Artisan::call($command, [
+                        'path' => "$dir/$filename",
+                        '--force' => true,
+                    ]);
+
+                    return \response(\Artisan::output()."\n".__('FsLang::tips.installSuccess'));
+                }
+            break;
         }
 
         return back()->with('failure', __('FsLang::tips.installFailure'));

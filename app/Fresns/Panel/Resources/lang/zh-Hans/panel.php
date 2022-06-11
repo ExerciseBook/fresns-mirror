@@ -920,4 +920,5 @@ return [
     'install_mode' => '安装方式',
     'install_mode_input' => '输入标识名',
     'install_mode_upload' => '上传安装包',
+    'install_mode_dir' => '输入安装包目录',
 ];
