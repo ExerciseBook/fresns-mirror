@@ -240,7 +240,7 @@ class CommonController extends Controller
             $data['apiContent']['userListConfig'] = ContentUtility::userListJsonHandle($callback->content['userListConfig'], $headers['langTag']);
         }
 
-        if (in_array(PluginCallback::TYPE_COMMENT_BTN_CONFIG), $data['types'])) {
+        if (in_array(PluginCallback::TYPE_COMMENT_BTN_CONFIG, $data['types'])) {
             $data['apiContent']['commentBtnConfig'] = ContentUtility::commentBtnJsonHandle($callback->content['commentBtnConfig'], $headers['langTag']);
         }
 
