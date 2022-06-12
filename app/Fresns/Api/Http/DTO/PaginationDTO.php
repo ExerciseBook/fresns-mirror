@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class CommonDownloadUsersDTO extends DTO
+class PaginationDTO extends DTO
 {
     /**
      * @return array
@@ -18,7 +18,7 @@ class CommonDownloadUsersDTO extends DTO
     public function rules(): array
     {
         return [
-            'pageSize' => ['integer', 'nullable', 'between:1,30'],
+            'pageSize' => ['integer', 'nullable', 'between:1,50'],
             'page' => ['integer', 'nullable'],
         ];
     }
