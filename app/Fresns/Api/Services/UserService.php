@@ -15,6 +15,7 @@ use App\Models\TipLinked;
 use App\Models\User;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
+use App\Utilities\PermissionUtility;
 
 class UserService
 {
@@ -53,6 +54,8 @@ class UserService
         $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
         $followMeStatus['followMeStatus'] = InteractiveUtility::checkUserFollowMe($user->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $followMeStatus);
+
+        $item['dialog'] = PermissionUtility::checkUserDialogPerm($user, $authUserId, $langTag);
 
         $data = array_merge($userProfile, $userMainRole, $item);
 

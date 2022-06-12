@@ -13,6 +13,7 @@ use App\Fresns\Api\Http\DTO\DialogDTO;
 use App\Fresns\Api\Http\DTO\DialogSendMessageDTO;
 use App\Fresns\Api\Http\DTO\PaginationDTO;
 use App\Fresns\Api\Services\HeaderService;
+use App\Fresns\Api\Services\UserService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
@@ -23,7 +24,6 @@ use App\Models\DialogMessage;
 use App\Models\File;
 use App\Models\FileAppend;
 use App\Models\User;
-use App\Utilities\InteractiveUtility;
 use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
@@ -75,7 +75,6 @@ class DialogController extends Controller
     public function detail($dialogId)
     {
         $headers = HeaderService::getHeaders();
-
         $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
 
         if (empty($dialogId) || ! is_int($dialogId)) {
@@ -93,24 +92,15 @@ class DialogController extends Controller
         }
 
         if ($dialog->a_user_id != $authUserId) {
-            $userProfile = $dialog->aUser?->getUserProfile($headers['langTag'], $headers['timezone']);
-            $userMainRole = $dialog->aUser?->getUserMainRole($headers['langTag'], $headers['timezone']);
+            $dialogUser = User::withTrashed()->where('id', $dialog->a_user_id)->first();
         } else {
-            $userProfile = $dialog->bUser?->getUserProfile($headers['langTag'], $headers['timezone']);
-            $userMainRole = $dialog->bUser?->getUserMainRole($headers['langTag'], $headers['timezone']);
+            $dialogUser = User::withTrashed()->where('id', $dialog->b_user_id)->first();
         }
 
-        $dialogUser = array_merge($userProfile, $userMainRole);
+        $userService = new UserService();
+        $user = $userService->userDetail($dialogUser, $headers['langTag'], $headers['timezone'], $authUserId);
 
-        $data['user'] = $dialogUser;
-
-        $config = ConfigHelper::fresnsConfigByItemKeys(['dialog_status', 'dialog_files']);
-
-        $configStatus = $config['dialog_status'];
-        $configFiles = $config['dialog_files'];
-        $data['config'] = array_merge($configStatus, $configFiles);
-
-        return $this->success($data);
+        return $this->success($user);
     }
 
     // messages
@@ -170,6 +160,7 @@ class DialogController extends Controller
     {
         $dtoRequest = new DialogSendMessageDTO($request->all());
         $headers = HeaderService::getHeaders();
+
         $config = ConfigHelper::fresnsConfigByItemKeys(['dialog_status', 'dialog_files']);
 
         if (! $config['dialog_status']) {
@@ -182,43 +173,19 @@ class DialogController extends Controller
             $receiveUser = User::withTrashed()->where('username', $dtoRequest->uidOrUsername)->first();
         }
 
-        $authUser = User::withTrashed()->where('uid', $headers['uid'])->first();
+        $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
 
-        // check send
-        if (empty($receiveUser) || empty($authUser)) {
+        if (empty($receiveUser) || empty($authUserId)) {
             throw new ApiException(31602);
         }
 
-        if ($receiveUser->id == $authUser->id) {
-            throw new ApiException(36603);
-        }
-
-        if (! is_null($receiveUser->deleted_at) || ! is_null($authUser->deleted_at)) {
-            throw new ApiException(35203);
-        }
-
-        if (! $receiveUser->is_enable || ! $authUser->is_enable) {
-            throw new ApiException(35202);
-        }
-
-        $authUserRolePerm = PermissionUtility::getUserMainRolePerm($receiveUser->id);
-
-        if (! $authUserRolePerm['dialog']) {
-            throw new ApiException(36114);
-        }
-
-        $checkFollow = InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_USER, $receiveUser->id, $authUser->id);
-
-        if ($receiveUser->dialog_limit == 4) {
-            throw new ApiException(36608);
-        }
-
-        if ($receiveUser->dialog_limit == 3 && ! $checkFollow && ! $authUser->verified_status) {
-            throw new ApiException(36607);
-        }
-
-        if ($receiveUser->dialog_limit == 2 && ! $checkFollow) {
-            throw new ApiException(36606);
+        // check send
+        $checkSend = PermissionUtility::checkUserDialogPerm($receiveUser, $authUserId, $headers['langTag']);
+        if (! $checkSend['status']) {
+            return $this->failure(
+                $checkSend['code'],
+                $checkSend['message']
+            );
         }
 
         // message content
@@ -242,11 +209,11 @@ class DialogController extends Controller
         }
 
         // dialog
-        $aDialog = Dialog::where('a_user_id', $authUser->id)->where('b_user_id', $receiveUser->id)->first();
-        $bDialog = Dialog::where('b_user_id', $receiveUser->id)->where('a_user_id', $authUser->id)->first();
+        $aDialog = Dialog::where('a_user_id', $authUserId)->where('b_user_id', $receiveUser->id)->first();
+        $bDialog = Dialog::where('b_user_id', $receiveUser->id)->where('a_user_id', $authUserId)->first();
 
         if (empty($aDialog) && empty($bDialog)) {
-            $dialogColumn['a_user_id'] = $authUser->id;
+            $dialogColumn['a_user_id'] = $authUserId;
             $dialogColumn['b_user_id'] = $receiveUser->id;
 
             $dialog = Dialog::create($dialogColumn)->first();
@@ -258,7 +225,7 @@ class DialogController extends Controller
 
         // dialog message
         $messageColumn['dialog_id'] = $dialog->id;
-        $messageColumn['send_user_id'] = $authUser->id;
+        $messageColumn['send_user_id'] = $authUserId;
         $messageColumn['message_type'] = $messageType;
         $messageColumn['message_text'] = $messageText;
         $messageColumn['message_file_id'] = $messageFileId;

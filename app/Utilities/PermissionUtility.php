@@ -132,6 +132,87 @@ class PermissionUtility
         return array_intersect($userRoles, $permRoleIds) ? 'true' : 'false';
     }
 
+    // Check user dialog permission
+    public static function checkUserDialogPerm(User $receiveUser, int $authUserId, ?string $langTag = null)
+    {
+        $configs = ConfigHelper::fresnsConfigByItemKeys(['dialog_status', 'dialog_files']);
+
+        $info['status'] = $configs['dialog_status'];
+        $info['files'] = $configs['dialog_files'];
+        $info['code'] = 0;
+        $info['message'] = 'ok';
+
+        if (! $configs['dialog_status']) {
+            $info['status'] = false;
+            $info['code'] = 36600;
+            $info['message'] = ConfigUtility::getCodeMessage(36600, 'Fresns', $langTag);
+
+            return  $info;
+        }
+
+        if ($receiveUser->id == $authUserId) {
+            $info['status'] = false;
+            $info['code'] = 31602;
+            $info['message'] = ConfigUtility::getCodeMessage(31602, 'Fresns', $langTag);
+
+            return  $info;
+        }
+
+        if (! is_null($receiveUser->deleted_at)) {
+            $info['status'] = false;
+            $info['code'] = 35203;
+            $info['message'] = ConfigUtility::getCodeMessage(35203, 'Fresns', $langTag);
+
+            return  $info;
+        }
+
+        if (! $receiveUser->is_enable) {
+            $info['status'] = false;
+            $info['code'] = 35202;
+            $info['message'] = ConfigUtility::getCodeMessage(35202, 'Fresns', $langTag);
+
+            return  $info;
+        }
+
+        $authUserRolePerm = PermissionUtility::getUserMainRolePerm($receiveUser->id);
+        if (! $authUserRolePerm['dialog']) {
+            $info['status'] = false;
+            $info['code'] = 36114;
+            $info['message'] = ConfigUtility::getCodeMessage(36114, 'Fresns', $langTag);
+
+            return  $info;
+        }
+
+        $checkBlock = InteractiveUtility::checkUserBlock(InteractiveUtility::TYPE_USER, $authUserId, $receiveUser->id);
+        if ($receiveUser->dialog_limit == 4 || $checkBlock) {
+            $info['status'] = false;
+            $info['code'] = 36608;
+            $info['message'] = ConfigUtility::getCodeMessage(36608, 'Fresns', $langTag);
+
+            return  $info;
+        }
+
+        $checkFollow = InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_USER, $receiveUser->id, $authUserId);
+        $authUserVerifiedStatus = User::where('id', $authUserId)->value('verified_status') ?? 0;
+        if ($receiveUser->dialog_limit == 3 && ! $checkFollow && ! $authUserVerifiedStatus) {
+            $info['status'] = false;
+            $info['code'] = 36607;
+            $info['message'] = ConfigUtility::getCodeMessage(36607, 'Fresns', $langTag);
+
+            return  $info;
+        }
+
+        if ($receiveUser->dialog_limit == 2 && ! $checkFollow) {
+            $info['status'] = false;
+            $info['code'] = 36606;
+            $info['message'] = ConfigUtility::getCodeMessage(36606, 'Fresns', $langTag);
+
+            return  $info;
+        }
+
+        return  $info;
+    }
+
     // Check if the user is a group administrator
     public static function checkUserGroupAdmin(int $groupId, int $userId)
     {
