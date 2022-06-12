@@ -80,7 +80,7 @@ class FileHelper
             2 => '/systems/{YYYYMM}/',
             3 => '/operations/{YYYYMM}/',
             4 => '/stickers/{YYYYMM}/',
-            5 => '/avatars/{YYYYMM}/{DD}/',
+            5 => '/users/{YYYYMM}/{DD}/',
             6 => '/dialogs/{YYYYMM}/{DD}/',
             7 => '/posts/{YYYYMM}/{DD}/',
             8 => '/comments/{YYYYMM}/{DD}/',

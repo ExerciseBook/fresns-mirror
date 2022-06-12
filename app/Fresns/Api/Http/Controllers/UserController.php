@@ -391,7 +391,7 @@ class UserController extends Controller
 
         $dialogACount = Dialog::where('a_user_id', $authUserId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
         $dialogBCount = Dialog::where('b_user_id', $authUserId)->where('b_is_read', 0)->where('b_is_display', 1)->count();
-        $dialogMessageCount = DialogMessage::where('recv_user_id', $authUserId)->whereNull('recv_read_at')->whereNull('recv_deleted_at')->isEnable()->count();
+        $dialogMessageCount = DialogMessage::where('receive_user_id', $authUserId)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
         $dialogUnread['dialog'] = $dialogACount + $dialogBCount;
         $dialogUnread['message'] = $dialogMessageCount;
         $data['dialogUnread'] = $dialogUnread;
@@ -582,6 +582,10 @@ class UserController extends Controller
                 throw new ApiException(33106);
             }
 
+            $blockWords = BlockWord::where('user_mode', 2)->get('word', 'replace_word');
+
+            $newBio = str_ireplace($blockWords->pluck('word')->toArray(), $blockWords->pluck('replace_word')->toArray(), $bio);
+
             $bioConfig = ConfigHelper::fresnsConfigByItemKeys([
                 'bio_support_mention',
                 'bio_support_link',
@@ -589,19 +593,19 @@ class UserController extends Controller
             ]);
 
             if ($bioConfig['bio_support_mention']) {
-                ContentUtility::saveMention($bio, Mention::TYPE_USER, $authUser->id, $authUser->id);
+                ContentUtility::saveMention($newBio, Mention::TYPE_USER, $authUser->id, $authUser->id);
             }
 
             if ($bioConfig['bio_support_link']) {
-                ContentUtility::saveLink($bio, DomainLinkLinked::TYPE_USER, $authUser->id);
+                ContentUtility::saveLink($newBio, DomainLinkLinked::TYPE_USER, $authUser->id);
             }
 
             if ($bioConfig['bio_support_hashtag']) {
-                ContentUtility::saveHashtag($bio, HashtagLinked::TYPE_USER, $authUser->id);
+                ContentUtility::saveHashtag($newBio, HashtagLinked::TYPE_USER, $authUser->id);
             }
 
             $authUser->update([
-                'gender' => $bio,
+                'gender' => $newBio,
             ]);
         }
 
