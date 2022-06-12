@@ -23,7 +23,8 @@ use App\Models\DialogMessage;
 use App\Models\File;
 use App\Models\FileAppend;
 use App\Models\User;
-use App\Utilities\ContentUtility;
+use App\Utilities\InteractiveUtility;
+use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -88,7 +89,7 @@ class DialogController extends Controller
         }
 
         if ($dialog->a_user_id != $authUserId && $dialog->b_user_id != $authUserId) {
-            throw new ApiException(36601);
+            throw new ApiException(36602);
         }
 
         if ($dialog->a_user_id != $authUserId) {
@@ -105,8 +106,9 @@ class DialogController extends Controller
 
         $config = ConfigHelper::fresnsConfigByItemKeys(['dialog_status', 'dialog_files']);
 
-        $data['config']['status'] = $config['dialog_status'];
-        $data['config']['files'] = $config['dialog_files'];
+        $configStatus = $config['dialog_status'];
+        $configFiles = $config['dialog_files'];
+        $data['config'] = array_merge($configStatus, $configFiles);
 
         return $this->success($data);
     }
@@ -130,7 +132,7 @@ class DialogController extends Controller
         }
 
         if ($dialog->a_user_id != $authUserId && $dialog->b_user_id != $authUserId) {
-            throw new ApiException(36601);
+            throw new ApiException(36602);
         }
 
         $messages = DialogMessage::where('dialog_id', $dialog->id)->isEnable()->latest()->paginate($request->get('pageSize', 15));
@@ -168,6 +170,11 @@ class DialogController extends Controller
     {
         $dtoRequest = new DialogSendMessageDTO($request->all());
         $headers = HeaderService::getHeaders();
+        $config = ConfigHelper::fresnsConfigByItemKeys(['dialog_status', 'dialog_files']);
+
+        if (! $config['dialog_status']) {
+            throw new ApiException(36600);
+        }
 
         if (is_int($dtoRequest->uidOrUsername)) {
             $receiveUser = User::withTrashed()->where('uid', $dtoRequest->uidOrUsername)->first();
@@ -183,7 +190,7 @@ class DialogController extends Controller
         }
 
         if ($receiveUser->id == $authUser->id) {
-            throw new ApiException(36602);
+            throw new ApiException(36603);
         }
 
         if (! is_null($receiveUser->deleted_at) || ! is_null($authUser->deleted_at)) {
@@ -194,13 +201,33 @@ class DialogController extends Controller
             throw new ApiException(35202);
         }
 
+        $authUserRolePerm = PermissionUtility::getUserMainRolePerm($receiveUser->id);
+
+        if (! $authUserRolePerm['dialog']) {
+            throw new ApiException(36114);
+        }
+
+        $checkFollow = InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_USER, $receiveUser->id, $authUser->id);
+
+        if ($receiveUser->dialog_limit == 4) {
+            throw new ApiException(36608);
+        }
+
+        if ($receiveUser->dialog_limit == 3 && ! $checkFollow && ! $authUser->verified_status) {
+            throw new ApiException(36607);
+        }
+
+        if ($receiveUser->dialog_limit == 2 && ! $checkFollow) {
+            throw new ApiException(36606);
+        }
+
         // message content
         if ($dtoRequest->message) {
             $message = Str::of($dtoRequest->message)->trim();
             $validateMessage = ValidationUtility::messageBanWords($message);
 
             if (! $validateMessage) {
-                throw new ApiException(36604);
+                throw new ApiException(36605);
             }
 
             $blockWords = BlockWord::where('dialog_mode', 2)->get('word', 'replace_word');
@@ -286,7 +313,7 @@ class DialogController extends Controller
             $bDialog = Dialog::where('id', $dtoRequest->dialogId)->where('b_user_id', $authUserId)->first();
 
             if (empty($aDialog) && empty($bDialog)) {
-                throw new ApiException(36601);
+                throw new ApiException(36602);
             }
 
             $aDialog->update([
@@ -320,7 +347,7 @@ class DialogController extends Controller
             $bDialog = Dialog::where('id', $dtoRequest->dialogId)->where('b_user_id', $authUserId)->first();
 
             if (empty($aDialog) && empty($bDialog)) {
-                throw new ApiException(36601);
+                throw new ApiException(36602);
             }
 
             $aDialog->update([
