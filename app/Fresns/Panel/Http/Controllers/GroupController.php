@@ -167,11 +167,12 @@ class GroupController extends Controller
             $group->type_follow = $request->type_follow;
             $group->is_recommend = $request->is_recommend;
             $group->plugin_unikey = $request->plugin_unikey;
-            $permissions = $request->permissions;
 
-            $permission['publish_post_review'] = (bool) ($permissions['publish_post_review'] ?? 0);
-            $permission['publish_comment_review'] = (bool) ($permissions['publish_comment_review'] ?? 0);
-            $group->permissions = $permission;
+            $permissions = $request->permissions;
+            $permissions['publish_post_review'] = (bool) ($permissions['publish_post_review'] ?? 0);
+            $permissions['publish_comment_review'] = (bool) ($permissions['publish_comment_review'] ?? 0);
+
+            $group->permissions = $permissions;
         }
         $group->save();
 
@@ -283,6 +284,7 @@ class GroupController extends Controller
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $group->description = $request->descriptions[$this->defaultLanguage] ?? (current(array_filter($request->descriptions)) ?: '');
         $group->rating = $request->rating;
+
         // group category
         if ($request->is_category) {
             $group->permission = [];
@@ -296,11 +298,12 @@ class GroupController extends Controller
             $group->type_follow = $request->type_follow;
             $group->is_recommend = $request->is_recommend;
             $group->plugin_unikey = $request->plugin_unikey;
-            $permissions = $request->permissions;
 
-            $permission['publish_post_review'] = (bool) ($permissions['publish_post_review'] ?? 0);
-            $permission['publish_comment_review'] = (bool) ($permissions['publish_comment_review'] ?? 0);
-            $group->permissions = $permission;
+            $permissions = $request->permissions;
+            $permissions['publish_post_review'] = (bool) ($permissions['publish_post_review'] ?? 0);
+            $permissions['publish_comment_review'] = (bool) ($permissions['publish_comment_review'] ?? 0);
+
+            $group->permissions = $permissions;
 
             $group->admins()->sync($request->admin_ids);
         }
@@ -346,7 +349,7 @@ class GroupController extends Controller
 
             $group->banner_file_id = $fileId;
             $group->banner_file_url = null;
-        } else {
+        } elseif ($group->banner_file_url != $request->banner_file_url) {
             $group->banner_file_id = null;
             $group->banner_file_url = $request->banner_file_url;
         }

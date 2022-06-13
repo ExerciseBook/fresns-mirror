@@ -67,7 +67,7 @@ class MapController extends Controller
         $map->is_enable = $request->is_enable;
         $map->rating = $request->rating;
         $map->parameter = $request->parameter;
-        $map->icon_file_url = $request->icon_file_url ?: '';
+        $map->icon_file_url = $request->icon_file_url;
         $map->type = 9;
         $map->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $map->save();
