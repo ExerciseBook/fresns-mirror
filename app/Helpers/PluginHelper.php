@@ -95,7 +95,7 @@ class PluginHelper
 
         $pluginRatingArr = $dataSources[$key]['pluginRating'];
 
-        $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
         $pluginRating = null;
         foreach ($pluginRatingArr as $arr) {

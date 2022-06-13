@@ -154,6 +154,8 @@ class GeneralController extends Controller
             $config->save();
         }
 
+        cache()->forget('fresns_default_timezone');
+
         return $this->updateSuccess();
     }
 }

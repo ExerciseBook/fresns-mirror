@@ -26,7 +26,7 @@ class ExtendUtility
     // get plugin usage
     public static function getPluginExtends(int $type, ?int $groupId = null, ?int $scene = null, ?int $userId = null, ?string $langTag = null)
     {
-        $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
         if ($type == 6) {
             $extendArr = PluginUsage::where('type', $type)->where('group_id', $groupId)->orderBy('rating')->get();

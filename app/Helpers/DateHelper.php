@@ -82,8 +82,9 @@ class DateHelper
             return null;
         }
 
-        $timezone = $timezone ?: ConfigHelper::fresnsConfigByItemKey('default_timezone');
-        $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
+        $timezone = $timezone ?: ConfigHelper::fresnsConfigDefaultTimezone();
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
+
         $dateFormat = ConfigHelper::fresnsConfigDateFormat($langTag);
         $dateTimeFormat = $dateFormat.' H:i:s' ?: 'Y-m-d H:i:s';
 
@@ -113,8 +114,9 @@ class DateHelper
             return null;
         }
 
-        $timezone = $timezone ?: ConfigHelper::fresnsConfigByItemKey('default_timezone');
-        $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
+        $timezone = $timezone ?: ConfigHelper::fresnsConfigDefaultTimezone();
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
+
         $dateFormat = ConfigHelper::fresnsConfigDateFormat($langTag);
         $dateTimeFormat = $dateFormat.' H:i:s' ?: 'Y-m-d H:i:s';
 
@@ -148,8 +150,9 @@ class DateHelper
             return null;
         }
 
-        $timezone = $timezone ?: ConfigHelper::fresnsConfigByItemKey('default_timezone');
-        $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
+        $timezone = $timezone ?: ConfigHelper::fresnsConfigDefaultTimezone();
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
+
         $dateFormat = ConfigHelper::fresnsConfigDateFormat($langTag).' H:i';
         $dateFormatNoY = \Str::swap([
             'Y-' => '',
@@ -191,7 +194,7 @@ class DateHelper
             return null;
         }
 
-        $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
         $currentTime = DateHelper::fresnsDatabaseCurrentDateTime();
 

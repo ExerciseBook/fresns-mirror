@@ -10,9 +10,36 @@ namespace App\Helpers;
 
 use App\Models\Config;
 use App\Models\File;
+use Illuminate\Support\Facades\Cache;
 
 class ConfigHelper
 {
+    public static function fresnsConfigDefaultLangTag(): string
+    {
+        $defaultLangTag = Cache::remember('fresns_default_langTag', now()->addHours(12), function () {
+            return Config::where('item_key', 'default_language')->value('item_value');
+        });
+
+        if (is_null($defaultLangTag)) {
+            Cache::forget('fresns_default_langTag');
+        }
+
+        return $defaultLangTag;
+    }
+
+    public static function fresnsConfigDefaultTimezone(): string
+    {
+        $defaultLangTag = Cache::remember('fresns_default_timezone', now()->addHours(12), function () {
+            return Config::where('item_key', 'default_timezone')->value('item_value');
+        });
+
+        if (is_null($defaultLangTag)) {
+            Cache::forget('fresns_default_timezone');
+        }
+
+        return $defaultLangTag;
+    }
+
     /**
      * Get config value based on Key.
      *
@@ -22,21 +49,11 @@ class ConfigHelper
      */
     public static function fresnsConfigByItemKey(string $itemKey, ?string $langTag = null)
     {
-        $cacheKeyConfigItemKey = 'cache_config_item_key_'.$itemKey.$langTag;
-        $cacheKeyLangTag = 'cache_langTag_'.$itemKey.$langTag;
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
-        // Cache 1 hour
-        $expireAt = now()->addHours(1);
+        $configCacheKey = 'fresns_config_'.$itemKey.'_'.$langTag;
 
-        $langTag = cache()->remember($cacheKeyLangTag, $expireAt, function () use ($langTag) {
-            return $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
-        });
-
-        if (is_null($langTag)) {
-            cache()->forget($cacheKeyLangTag);
-        }
-
-        $itemValue = cache()->remember($cacheKeyConfigItemKey, $expireAt, function () use ($itemKey, $langTag) {
+        $itemValue = Cache::remember($configCacheKey, now()->addHours(12), function () use ($itemKey, $langTag) {
             $itemData = Config::where('item_key', $itemKey)->first();
             if (is_null($itemData)) {
                 return null;
@@ -50,7 +67,7 @@ class ConfigHelper
         });
 
         if (is_null($itemValue)) {
-            cache()->forget($cacheKeyConfigItemKey);
+            Cache::forget($configCacheKey);
         }
 
         return $itemValue;
@@ -82,19 +99,30 @@ class ConfigHelper
      */
     public static function fresnsConfigByItemTag(string $itemTag, ?string $langTag = null)
     {
-        $langTag = $langTag ?: Config::where('item_key', 'default_language')->value('item_value');
-        $itemData = Config::where('item_tag', $itemTag)->get();
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
-        $itemDataArr = [];
-        foreach ($itemData as $item) {
-            if ($item->is_multilingual == 1) {
-                $itemDataArr[$item->item_key] = LanguageHelper::fresnsLanguageByTableKey($item->item_key, $item->item_type, $langTag);
-            } else {
-                $itemDataArr[$item->item_key] = $item->item_value;
+        $configCacheKey = 'fresns_config_tag_'.$itemTag.'_'.$langTag;
+
+        $tagData = Cache::remember($configCacheKey, now()->addHours(12), function () use ($itemTag, $langTag) {
+            $itemData = Config::where('item_tag', $itemTag)->get();
+
+            $itemDataArr = [];
+            foreach ($itemData as $item) {
+                if ($item->is_multilingual == 1) {
+                    $itemDataArr[$item->item_key] = LanguageHelper::fresnsLanguageByTableKey($item->item_key, $item->item_type, $langTag);
+                } else {
+                    $itemDataArr[$item->item_key] = $item->item_value;
+                }
             }
+
+            return $itemDataArr;
+        });
+
+        if (is_null($tagData)) {
+            Cache::forget($configCacheKey);
         }
 
-        return $itemDataArr;
+        return $tagData;
     }
 
     /**
@@ -106,13 +134,12 @@ class ConfigHelper
     public static function fresnsConfigFileValueTypeByItemKey(string $itemKey)
     {
         $file = ConfigHelper::fresnsConfigByItemKey($itemKey);
+
         if (is_int($file)) {
             return 'ID';
-        } elseif (preg_match("/^(http:\/\/|https:\/\/).*$/", $file)) {
-            return 'URL';
         }
 
-        return 'ID';
+        return 'URL';
     }
 
     /**
@@ -206,12 +233,13 @@ class ConfigHelper
      * @param  string  $itemKey
      * @return bool
      */
-    public static function fresnsCountAdd(string $itemKey)
+    public static function fresnsCountAdd(string $itemKey): bool
     {
-        $count = self::fresnsConfigByItemKey($itemKey);
+        $count = Config::where('item_key', $itemKey)->value('item_value');
+
         Config::where('item_key', $itemKey)->update(['item_value'=>$count + 1]);
 
-        return 'true';
+        return true;
     }
 
     /**
@@ -220,11 +248,12 @@ class ConfigHelper
      * @param  string  $itemKey
      * @return bool
      */
-    public static function fresnsCountMinus(string $itemKey)
+    public static function fresnsCountMinus(string $itemKey): bool
     {
-        $count = self::fresnsConfigByItemKey($itemKey);
+        $count = Config::where('item_key', $itemKey)->value('item_value');
+
         Config::where('item_key', $itemKey)->update(['item_value'=>$count - 1]);
 
-        return 'true';
+        return true;
     }
 }
