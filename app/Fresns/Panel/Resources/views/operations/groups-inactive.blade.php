@@ -35,7 +35,7 @@
                     <th scope="col">{{ __('FsLang::panel.group_table_admins') }}</th>
                     <th scope="col">{{ __('FsLang::panel.group_table_post_publish') }}</th>
                     <th scope="col">{{ __('FsLang::panel.group_table_comment_publish') }}</th>
-                    <th scope="col" style="width:10rem;">{{ __('FsLang::panel.table_options') }}</th>
+                    <th scope="col" style="width:11rem;">{{ __('FsLang::panel.table_options') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,6 +72,11 @@
                                     data-names="{{ $group->names->toJson() }}"
                                     data-descriptions="{{ $group->descriptions->toJson() }}"
                                     data-bs-toggle="modal" data-bs-target="#groupModal">{{ __('FsLang::panel.button_edit') }}</button>
+
+                                <button type="button" class="btn btn-outline-success btn-sm"
+                                    data-action="{{ route('panel.groups.merge', $group->id) }}"
+                                    data-params="{{ $group->toJson() }}" data-bs-toggle="modal"
+                                    data-bs-target="#moveModal">{{ __('FsLang::panel.button_group_move') }}</button>
 
                                 <button type="submit" class="btn btn-outline-warning btn-sm">{{ __('FsLang::panel.button_activate') }}</button>
                             </form>

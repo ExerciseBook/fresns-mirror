@@ -15,7 +15,6 @@ use App\Models\Plugin;
 use App\Models\Post;
 use App\Models\PostLog;
 use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -128,18 +127,32 @@ class GroupController extends Controller
     {
         $this->initOptions();
 
+        $categories = Group::typeCategory()
+            ->with('names', 'descriptions')
+            ->get();
+
         $groups = Group::typeGroup()
             ->orderBy('rating')
             ->isEnable(false)
             ->with('creator', 'plugin', 'category')
             ->paginate();
 
+        $plugins = Plugin::all();
+        $plugins = $plugins->filter(function ($plugin) {
+            return in_array('followGroup', $plugin->scene);
+        });
+
+        $roles = Role::with('names')->get();
+
         extract(get_object_vars($this));
 
         return view('FsView::operations.groups-inactive', compact(
+            'categories',
             'groups',
             'typeModeLabels',
-            'permissionLabels'
+            'permissionLabels',
+            'plugins',
+            'roles',
         ));
     }
 
