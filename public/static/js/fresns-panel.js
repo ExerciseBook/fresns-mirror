@@ -1026,8 +1026,8 @@ $(document).ready(function () {
         let button = $(e.relatedTarget),
             isEnable = button.data('is_enable'),
             noConfig = button.data('no_config');
-        action = button.data('action');
-        config = button.data('config');
+            action = button.data('action');
+            config = button.data('config');
 
         if (noConfig) {
             $(this).find('.default-config').hide();
@@ -1036,7 +1036,7 @@ $(document).ready(function () {
         }
 
         $(this).find('form').attr('action', action);
-        $(this).find('textarea[name=config]').val(JSON.stringify(config));
+        $(this).find('textarea[name=config]').val(config);
         $(this)
             .find('input:radio[name=is_enable][value="' + isEnable + '"]')
             .prop('checked', true);
@@ -1058,6 +1058,7 @@ $(document).ready(function () {
             });
         }
     });
+
     $('#menuLangTextareaModal').on('shown.bs.modal', function (e) {
         let button = $(e.relatedTarget),
             languages = button.data('languages'),
