@@ -34,7 +34,7 @@ class Wallet
         $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
         $userId = null;
         if (isset($dtoWordBody->uid)) {
-            $userId = PrimaryHelper::fresnsUserIdByUid($dtoWordBody->uid);
+            $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
         }
         if (empty($accountId) || (isset($userId) && empty($userId))) {
             ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_DATA_ERROR)::throw();
@@ -59,7 +59,7 @@ class Wallet
         $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
         $userId = null;
         if (isset($dtoWordBody->uid)) {
-            $userId = PrimaryHelper::fresnsUserIdByUid($dtoWordBody->uid);
+            $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
         }
         if (empty($accountId) || (isset($userId) && empty($userId))) {
             ExceptionConstant::getHandleClassByCode(ExceptionConstant::CMD_WORD_DATA_ERROR)::throw();

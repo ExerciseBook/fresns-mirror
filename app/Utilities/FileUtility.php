@@ -46,7 +46,7 @@ class FileUtility
         }
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($bodyInfo['aid']);
-        $userId = PrimaryHelper::fresnsUserIdByUid($bodyInfo['uid']);
+        $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($bodyInfo['uid']);
 
         $tableId = $bodyInfo['tableId'];
         if (empty($bodyInfo['tableId'])) {
@@ -146,7 +146,7 @@ class FileUtility
         $fileId = FileModel::create($fileArr)->id;
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($bodyInfo['aid']);
-        $userId = PrimaryHelper::fresnsUserIdByUid($bodyInfo['uid']);
+        $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($bodyInfo['uid']);
 
         $tableId = $bodyInfo['tableId'];
         if (empty($bodyInfo['tableId'])) {

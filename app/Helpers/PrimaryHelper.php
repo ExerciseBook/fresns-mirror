@@ -85,43 +85,17 @@ class PrimaryHelper
      * @param  string  $uid
      * @return int |null
      */
-    public static function fresnsAccountIdByUid(?string $uid = null)
+    public static function fresnsAccountIdByUidOrUsername(?string $uidOrUsername = null)
     {
-        if (empty($uid)) {
+        if (empty($uidOrUsername)) {
             return null;
         }
 
-        $id = User::withTrashed()->where('uid', $uid)->value('account_id');
-
-        return $id ?? null;
-    }
-
-    /**
-     * @param  int  $uid
-     * @return int |null
-     */
-    public static function fresnsUserIdByUid(?int $uid = null)
-    {
-        if (empty($uid)) {
-            return null;
+        if (is_int($uidOrUsername)) {
+            $id = User::withTrashed()->where('uid', $uidOrUsername)->value('account_id');
+        } else {
+            $id = User::withTrashed()->where('username', $uidOrUsername)->value('account_id');
         }
-
-        $id = User::withTrashed()->where('uid', $uid)->value('id');
-
-        return $id ?? null;
-    }
-
-    /**
-     * @param  string  $username
-     * @return int |null
-     */
-    public static function fresnsUserIdByUsername(?string $username = null)
-    {
-        if (empty($username)) {
-            return null;
-        }
-
-        $id = User::withTrashed()->where('username', $username)->value('id');
 
         return $id ?? null;
     }
@@ -136,7 +110,11 @@ class PrimaryHelper
             return null;
         }
 
-        $id = User::withTrashed()->where('uid', $uidOrUsername)->orWhere('username', $uidOrUsername)->value('id');
+        if (is_int($uidOrUsername)) {
+            $id = User::withTrashed()->where('uid', $uidOrUsername)->value('id');
+        } else {
+            $id = User::withTrashed()->where('username', $uidOrUsername)->value('id');
+        }
 
         return $id ?? null;
     }

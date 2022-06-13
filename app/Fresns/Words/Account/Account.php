@@ -190,7 +190,7 @@ class Account
         $dtoWordBody = new CreateSessionTokenDTO($wordBody);
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
-        $userId = PrimaryHelper::fresnsAccountIdByUid($dtoWordBody->uid);
+        $userId = PrimaryHelper::fresnsAccountIdByUidOrUsername($dtoWordBody->uid);
 
         $condition = [
             'platform_id' => $dtoWordBody->platformId,
@@ -258,7 +258,7 @@ class Account
         }
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
-        $userId = PrimaryHelper::fresnsUserIdByUid($dtoWordBody->uid);
+        $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
 
         if (! empty($dtoWordBody->uid)) {
             $userAffiliation = PermissionUtility::checkUserAffiliation($userId, $accountId);
