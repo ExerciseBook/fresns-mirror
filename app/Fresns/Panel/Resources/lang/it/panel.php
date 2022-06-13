@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'Descrizione SEO',
     'menu_table_seo_keywords' => 'Parola chiave SEO',
     'menu_table_parameter' => 'Parametri predefiniti',
+    'menu_table_parameter_desc' => 'Fare riferimento ai parametri di query API di questa interfaccia.',
     'menu_user_list' => 'Pagina dell\'elenco utenti',
     'menu_group_list' => 'elenco dei gruppi',
     'menu_hashtag_list' => 'Elenco degli argomenti',

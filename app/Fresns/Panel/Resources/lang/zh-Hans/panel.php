@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'SEO 描述',
     'menu_table_seo_keywords' => 'SEO 关键词',
     'menu_table_parameter' => '默认参数',
+    'menu_table_parameter_desc' => '参考本接口的 API Query 参数',
     'menu_user_list' => '用户列表页',
     'menu_group_list' => '小组列表页',
     'menu_hashtag_list' => '话题列表页',

@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'SEO-Beschreibung',
     'menu_table_seo_keywords' => 'SEO-Keyword',
     'menu_table_parameter' => 'Standardparameter',
+    'menu_table_parameter_desc' => 'Siehe die API-Abfrageparameter dieser Schnittstelle',
     'menu_user_list' => 'Benutzerliste Seite',
     'menu_group_list' => 'Gruppenliste',
     'menu_hashtag_list' => 'Themenliste',

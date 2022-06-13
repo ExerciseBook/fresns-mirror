@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'एसईओ विवरण',
     'menu_table_seo_keywords' => 'एसईओ कीवर्ड',
     'menu_table_parameter' => 'डिफ़ॉल्ट पैरामीटर',
+    'menu_table_parameter_desc' => 'इस इंटरफ़ेस के API क्वेरी पैरामीटर का संदर्भ लें',
     'menu_user_list' => 'उपयोगकर्ता सूची पृष्ठ',
     'menu_group_list' => 'समूह सूची',
     'menu_hashtag_list' => 'विषय सूची',

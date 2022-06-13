@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'SEO Описание',
     'menu_table_seo_keywords' => 'SEO ключевое слово',
     'menu_table_parameter' => 'Параметры по умолчанию',
+    'menu_table_parameter_desc' => 'Обратитесь к параметрам API-запроса этого интерфейса',
     'menu_user_list' => 'Страница списка пользователей',
     'menu_group_list' => 'Групповой список',
     'menu_hashtag_list' => 'Тема списка',

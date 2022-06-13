@@ -835,6 +835,7 @@ return [
     'menu_table_seo_description' => 'SEO 描述',
     'menu_table_seo_keywords' => 'SEO 關鍵詞',
     'menu_table_parameter' => '默認參數',
+    'menu_table_parameter_desc' => '參考本接口的 API Query 參數',
     'menu_user_list' => '用戶列表頁',
     'menu_group_list' => '社團列表頁',
     'menu_hashtag_list' => '話題列表頁',

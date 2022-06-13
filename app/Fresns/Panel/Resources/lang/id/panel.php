@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'Deskripsi SEO',
     'menu_table_seo_keywords' => 'Kata kunci SEO',
     'menu_table_parameter' => 'Parameter default',
+    'menu_table_parameter_desc' => 'Lihat parameter API Query dari antarmuka ini',
     'menu_user_list' => 'Daftar pengguna',
     'menu_group_list' => 'Daftar Grup',
     'menu_hashtag_list' => 'Daftar Topik',
