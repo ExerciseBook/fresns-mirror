@@ -22,6 +22,7 @@
             <li class="nav-item"><a class="nav-link" href="{{ route('panel.groups.recommend.index') }}">{{ __('FsLang::panel.sidebar_groups_tab_recommend') }}</a></li>
         </ul>
     </div>
+
     <!--groups config-->
     <div class="table-responsive">
         <table class="table table-hover align-middle text-nowrap">

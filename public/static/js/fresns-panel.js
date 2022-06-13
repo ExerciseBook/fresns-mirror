@@ -1314,8 +1314,6 @@ $(document).ready(function () {
         let defaultDesc = $(this).data('default-desc');
         let adminUsers = button.data('admin_users');
 
-        //$('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
-        //$('.inputFile').css('display', 'none');
         if (params.cover_file_url) {
             $('#groupModal').find('input[name=cover_file_url]').parent().find('.showSelectTypeName').text(trans('panel.button_image_input')); //FsLang
             $('#groupModal').find('input[name=cover_file_url]').parent().find('.inputFile').css('display', 'none');
@@ -1356,28 +1354,28 @@ $(document).ready(function () {
             .prop('checked', true)
             .click();
 
-        let permission = params.permission;
-        let publishPost = permission.publish_post ? permission.publish_post : 0;
-        let publishPostReview = permission.publish_post_review ? 1 : 0;
-        let publishComment = permission.publish_comment ? permission.publish_comment : 0;
-        let publishCommentReview = permission.publish_comment_review ? 1 : 0;
+        let permissions = params.permissions;
+        let publishPost = permissions.publish_post ? permissions.publish_post : 0;
+        let publishPostReview = permissions.publish_post_review ? 1 : 0;
+        let publishComment = permissions.publish_comment ? permissions.publish_comment : 0;
+        let publishCommentReview = permissions.publish_comment_review ? 1 : 0;
 
-        form.find('input:radio[name="permission[publish_post]"][value="' + publishPost + '"]')
+        form.find('input:radio[name="permissions[publish_post]"][value="' + publishPost + '"]')
             .prop('checked', true)
             .click();
-        form.find('input:radio[name="permission[publish_post_review]"][value="' + publishPostReview + '"]')
+        form.find('input:radio[name="permissions[publish_post_review]"][value="' + publishPostReview + '"]')
             .prop('checked', true)
             .click();
-        form.find('input:radio[name="permission[publish_comment]"][value="' + publishComment + '"]')
+        form.find('input:radio[name="permissions[publish_comment]"][value="' + publishComment + '"]')
             .prop('checked', true)
             .click();
-        form.find('input:radio[name="permission[publish_comment_review]"][value="' + publishCommentReview + '"]')
+        form.find('input:radio[name="permissions[publish_comment_review]"][value="' + publishCommentReview + '"]')
             .prop('checked', true)
             .click();
 
-        form.find('select[name="permission[publish_post_roles][]"]').val(params.permission.publish_post_roles).change();
-        form.find('select[name="permission[publish_comment_roles][]"]')
-            .val(params.permission.publish_comment_roles)
+        form.find('select[name="permissions[publish_post_roles][]"]').val(params.permissions.publish_post_roles).change();
+        form.find('select[name="permissions[publish_comment_roles][]"]')
+            .val(params.permissions.publish_comment_roles)
             .change();
         form.find('input:radio[name=is_enable][value="' + params.is_enable + '"]')
             .prop('checked', true)
