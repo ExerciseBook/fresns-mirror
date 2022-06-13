@@ -29,12 +29,9 @@ class GroupController extends Controller
     // tree
     public function tree()
     {
-        $headers = HeaderService::getHeaders();
-
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
         $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
 
@@ -44,7 +41,7 @@ class GroupController extends Controller
 
         $groupData = [];
         foreach ($groups as $index => $group) {
-            $groupData[$index][] = $service->groupList($group, $headers['langTag'], $headers['timezone'], $authUserId);
+            $groupData[$index][] = $service->groupList($group, $langTag, $timezone, $authUserId);
         }
 
         $groupTree = CollectionUtility::toTree($groupData, 'gid', 'category', 'groups');
@@ -54,7 +51,7 @@ class GroupController extends Controller
 
     public function categories(Request $request)
     {
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
 
         $groupQuery = Group::where('type', 1)->orderBy('rating')->isEnable();
 
@@ -62,7 +59,7 @@ class GroupController extends Controller
 
         $catList = [];
         foreach ($categories as $category) {
-            $item = $category->getCategoryInfo($headers['langTag']);
+            $item = $category->getCategoryInfo($langTag);
             $catList[] = $item;
         }
 
@@ -74,12 +71,9 @@ class GroupController extends Controller
     {
         $dtoRequest = new GroupListDTO($request->all());
 
-        $headers = HeaderService::getHeaders();
-
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
         $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
         $groupQuery = Group::whereIn('type', [2, 3])->whereNotIn('id', $groupFilterIds)->isEnable();
@@ -176,7 +170,7 @@ class GroupController extends Controller
         $groupList = [];
         $service = new GroupService();
         foreach ($groupData as $group) {
-            $groupList[] = $service->groupList($group, $headers['langTag'], $headers['timezone'], $authUserId);
+            $groupList[] = $service->groupList($group, $langTag, $timezone, $authUserId);
         }
 
         return $this->fresnsPaginate($groupList, $groupData->total(), $groupData->perPage());
@@ -190,25 +184,22 @@ class GroupController extends Controller
             throw new ApiException(37100);
         }
 
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
-
-        $seoData = Seo::where('linked_type', Seo::TYPE_GROUP)->where('linked_id', $group->id)->where('lang_tag', $headers['langTag'])->first();
+        $seoData = Seo::where('linked_type', Seo::TYPE_GROUP)->where('linked_id', $group->id)->where('lang_tag', $langTag)->first();
 
         $common['title'] = $seoData->title ?? null;
         $common['keywords'] = $seoData->keywords ?? null;
         $common['description'] = $seoData->description ?? null;
-        $common['extensions'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_GROUP, $group->id, null, $authUserId, $headers['langTag']);
+        $common['extensions'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_GROUP, $group->id, null, $authUserId, $langTag);
         $data['commons'] = $common;
 
-        $data['category'] = $group->category->getCategoryInfo($headers['langTag']);
+        $data['category'] = $group->category->getCategoryInfo($langTag);
 
         $service = new GroupService();
-        $data['detail'] = $service->groupDetail($group, $headers['langTag'], $headers['timezone'], $authUserId);
+        $data['detail'] = $service->groupDetail($group, $langTag, $timezone, $authUserId);
 
         return $this->success($data);
     }
@@ -232,14 +223,12 @@ class GroupController extends Controller
 
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';
 
-        $headers = HeaderService::getHeaders();
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
         $service = new InteractiveService();
-        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_GROUP, $group->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_GROUP, $group->id, $timeOrder, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }

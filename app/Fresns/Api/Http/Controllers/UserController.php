@@ -15,7 +15,6 @@ use App\Fresns\Api\Http\DTO\UserEditDTO;
 use App\Fresns\Api\Http\DTO\UserListDTO;
 use App\Fresns\Api\Http\DTO\UserMarkDTO;
 use App\Fresns\Api\Http\DTO\UserMarkListDTO;
-use App\Fresns\Api\Services\HeaderService;
 use App\Fresns\Api\Services\InteractiveService;
 use App\Fresns\Api\Services\UserService;
 use App\Helpers\ConfigHelper;
@@ -46,12 +45,10 @@ class UserController extends Controller
     public function list(Request $request)
     {
         $dtoRequest = new UserListDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
         $userQuery = UserStat::with('user');
 
@@ -206,7 +203,7 @@ class UserController extends Controller
         $userList = [];
         $service = new UserService();
         foreach ($userData as $user) {
-            $userList[] = $service->userList($user->user, $headers['langTag'], $headers['timezone'], $authUserId);
+            $userList[] = $service->userList($user->user, $langTag, $timezone, $authUserId);
         }
 
         return $this->fresnsPaginate($userList, $userData->total(), $userData->perPage());
@@ -225,23 +222,20 @@ class UserController extends Controller
             throw new ApiException(31602);
         }
 
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
-
-        $seoData = Seo::where('linked_type', Seo::TYPE_USER)->where('linked_id', $viewUser->id)->where('lang_tag', $headers['langTag'])->first();
+        $seoData = Seo::where('linked_type', Seo::TYPE_USER)->where('linked_id', $viewUser->id)->where('lang_tag', $langTag)->first();
 
         $common['title'] = $seoData->title ?? null;
         $common['keywords'] = $seoData->keywords ?? null;
         $common['description'] = $seoData->description ?? null;
-        $common['manages'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_USER, $authUserId, $headers['langTag']);
+        $common['manages'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_USER, $authUserId, $langTag);
         $data['commons'] = $common;
 
         $service = new UserService();
-        $data['detail'] = $service->userDetail($viewUser, $headers['langTag'], $headers['timezone'], $authUserId);
+        $data['detail'] = $service->userDetail($viewUser, $langTag, $timezone, $authUserId);
 
         return $this->success($data);
     }
@@ -270,14 +264,12 @@ class UserController extends Controller
 
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';
 
-        $headers = HeaderService::getHeaders();
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
         $service = new InteractiveService();
-        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_USER, $viewUser->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_USER, $viewUser->id, $timeOrder, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }
@@ -305,17 +297,14 @@ class UserController extends Controller
             throw new ApiException(36201);
         }
 
-        $headers = HeaderService::getHeaders();
-
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
         $timeOrder = $dtoRequest->timeOrder ?: 'desc';
 
         $service = new InteractiveService();
-        $data = $service->getItMarkList($dtoRequest->markType, $dtoRequest->listType, $viewUser->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
+        $data = $service->getItMarkList($dtoRequest->markType, $dtoRequest->listType, $viewUser->id, $timeOrder, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['markData']->total(), $data['markData']->perPage());
     }
@@ -335,13 +324,14 @@ class UserController extends Controller
             throw new ApiException(31602);
         }
 
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
 
         $password = base64_decode($dtoRequest->password, true);
 
         // login
         $wordBody = [
-            'aid' => $headers['aid'],
+            'aid' => $request->header('aid'),
             'uid' => $authUser->uid,
             'password' => $password,
         ];
@@ -353,7 +343,7 @@ class UserController extends Controller
 
         // create token
         $createTokenWordBody = [
-            'platformId' => $headers['platformId'],
+            'platformId' => $request->header('platformId'),
             'aid' => $fresnsResponse->getData('aid'),
             'uid' => $fresnsResponse->getData('uid'),
             'expiredTime' => null,
@@ -371,7 +361,7 @@ class UserController extends Controller
 
         // get user data
         $service = new UserService();
-        $data['detail'] = $service->userDetail($authUser, $headers['langTag'], $headers['timezone']);
+        $data['detail'] = $service->userDetail($authUser, $langTag, $timezone);
 
         return $this->success($data);
     }
@@ -379,15 +369,11 @@ class UserController extends Controller
     // panel
     public function panel()
     {
-        $headers = HeaderService::getHeaders();
-        $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        $langTag = $this->langTag();
+        $authUserId = $this->user()->id;
 
-        if (empty($authUserId)) {
-            throw new ApiException(31602);
-        }
-
-        $data['features'] = ExtendUtility::getPluginExtends(7, null, null, $authUserId, $headers['langTag']);
-        $data['profiles'] = ExtendUtility::getPluginExtends(8, null, null, $authUserId, $headers['langTag']);
+        $data['features'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_FEATURE, null, null, $authUserId, $langTag);
+        $data['profiles'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_PROFILE, null, null, $authUserId, $langTag);
 
         $dialogACount = Dialog::where('a_user_id', $authUserId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
         $dialogBCount = Dialog::where('b_user_id', $authUserId)->where('b_is_read', 0)->where('b_is_display', 1)->count();
@@ -416,7 +402,8 @@ class UserController extends Controller
     public function edit(Request $request)
     {
         $dtoRequest = new UserEditDTO($request->all());
-        $headers = HeaderService::getHeaders();
+
+        $authUser = $this->user();
 
         if ($dtoRequest->avatarFid && $dtoRequest->avatarUrl) {
             throw new ApiException(30005);
@@ -425,8 +412,6 @@ class UserController extends Controller
         if ($dtoRequest->bannerFid && $dtoRequest->bannerUrl) {
             throw new ApiException(30005);
         }
-
-        $authUser = User::where('uid', $headers['uid'])->first();
 
         $editNameConfig = ConfigHelper::fresnsConfigByItemKeys([
             'username_edit',
@@ -651,8 +636,7 @@ class UserController extends Controller
             throw new ApiException(36200);
         }
 
-        $headers = HeaderService::getHeaders();
-        $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        $authUserId = $this->user()->id;
 
         $primaryId = PrimaryHelper::fresnsPrimaryId($dtoRequest->markType, $dtoRequest->fsid);
 

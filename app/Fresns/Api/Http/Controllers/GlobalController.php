@@ -13,7 +13,6 @@ use App\Fresns\Api\Http\DTO\GlobalBlockWordsDTO;
 use App\Fresns\Api\Http\DTO\GlobalConfigsDTO;
 use App\Fresns\Api\Http\DTO\GlobalRolesDTO;
 use App\Fresns\Api\Http\DTO\GlobalUploadTokenDTO;
-use App\Fresns\Api\Services\HeaderService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
@@ -26,6 +25,7 @@ use App\Models\Sticker;
 use App\Utilities\CollectionUtility;
 use App\Utilities\ExtendUtility;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class GlobalController extends Controller
 {
@@ -33,7 +33,7 @@ class GlobalController extends Controller
     public function configs(Request $request)
     {
         $dtoRequest = new GlobalConfigsDTO($request->all());
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
 
         $itemKey = array_filter(explode(',', $dtoRequest->keys));
         $itemTag = array_filter(explode(',', $dtoRequest->tags));
@@ -53,7 +53,7 @@ class GlobalController extends Controller
         $item = null;
         foreach ($configs as $config) {
             if ($config->is_multilingual == 1) {
-                $item[$config->item_key] = LanguageHelper::fresnsLanguageByTableKey($config->item_key, $config->item_type, $headers['langTag']);
+                $item[$config->item_key] = LanguageHelper::fresnsLanguageByTableKey($config->item_key, $config->item_type, $langTag);
             } elseif ($config->item_type == 'file' && is_int($config->item_value)) {
                 $item[$config->item_key] = ConfigHelper::fresnsConfigFileUrlByItemKey($config->item_value);
             } elseif ($config->item_type == 'plugin') {
@@ -106,7 +106,7 @@ class GlobalController extends Controller
     public function roles(Request $request)
     {
         $dtoRequest = new GlobalRolesDTO($request->all());
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
 
         $status = $dtoRequest->status ?? 1;
 
@@ -131,7 +131,7 @@ class GlobalController extends Controller
 
             $item['rid'] = $role->id;
             $item['nicknameColor'] = $role->nickname_color;
-            $item['name'] = LanguageHelper::fresnsLanguageByTableId('roles', 'name', $role->id, $headers['langTag']);
+            $item['name'] = LanguageHelper::fresnsLanguageByTableId('roles', 'name', $role->id, $langTag);
             $item['nameDisplay'] = (bool) $role->is_display_name;
             $item['icon'] = FileHelper::fresnsFileUrlByTableColumn($role->icon_file_id, $role->icon_file_url);
             $item['iconDisplay'] = (bool) $role->is_display_icon;
@@ -146,9 +146,9 @@ class GlobalController extends Controller
     // maps
     public function maps()
     {
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
 
-        $data = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MAP, null, null, null, $headers['langTag']);
+        $data = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MAP, null, null, null, $langTag);
 
         return $this->success($data);
     }
@@ -156,9 +156,9 @@ class GlobalController extends Controller
     // contentType
     public function contentType()
     {
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
 
-        $data = ExtendUtility::getPluginExtends(PluginUsage::TYPE_CONTENT, null, null, null, $headers['langTag']);
+        $data = ExtendUtility::getPluginExtends(PluginUsage::TYPE_CONTENT, null, null, null, $langTag);
 
         return $this->success($data);
     }
@@ -166,14 +166,22 @@ class GlobalController extends Controller
     // stickers
     public function stickers()
     {
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
 
-        $stickers = Sticker::isEnable()->orderBy('rating')->get();
+        $cacheKey = 'fresns_api_stickers';
+
+        $stickers = Cache::rememberForever($cacheKey, function () {
+            return Sticker::isEnable()->orderBy('rating')->get();
+        });
+
+        if (is_null($stickers)) {
+            Cache::forget($cacheKey);
+        }
 
         $stickerData = [];
         foreach ($stickers as $index => $sticker) {
             $stickerData[$index]['parentCode'] = $stickers->where('id', $sticker->parent_id)->first()?->code;
-            $stickerData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('stickers', 'name', $sticker->id, $headers['langTag']);
+            $stickerData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('stickers', 'name', $sticker->id, $langTag);
             $stickerData[$index]['code'] = $sticker->code;
             $stickerData[$index]['codeFormat'] = '['.$sticker->code.']';
             $stickerData[$index]['image'] = FileHelper::fresnsFileUrlByTableColumn($sticker->image_file_id, $sticker->image_file_url);
