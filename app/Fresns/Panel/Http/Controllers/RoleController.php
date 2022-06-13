@@ -36,7 +36,7 @@ class RoleController extends Controller
     public function store(Role $role, UpdateRoleRequest $request)
     {
         $role->fill($request->all());
-        $role->permission = json_decode(config('FsConfig.role_default_permission'), true);
+        $role->permissions = json_decode(config('FsConfig.role_default_permissions'), true);
         if ($request->no_color) {
             $role->nickname_color = null;
         }
@@ -173,22 +173,22 @@ class RoleController extends Controller
 
     public function showPermissions(Role $role)
     {
-        $permission = collect($role->permission)->mapWithKeys(function ($perm) {
+        $permissions = collect($role->permissions)->mapWithKeys(function ($perm) {
             return [$perm['permKey'] => $perm];
         })->toArray();
 
-        $customPermission = collect($role->permission)->filter(function ($perm) {
+        $customPermissions = collect($role->permissions)->filter(function ($perm) {
             return $perm['isCustom'] ?? false;
         })->mapWithKeys(function ($perm) {
             return [$perm['permKey'] => $perm];
         })->toArray();
 
-        return view('FsView::operations.role-permission', compact('permission', 'role', 'customPermission'));
+        return view('FsView::operations.role-permissions', compact('permissions', 'role', 'customPermissions'));
     }
 
     public function updatePermissions(Role $role, Request $request)
     {
-        $permission = collect($request->permission)->map(function ($value, $key) {
+        $permissions = collect($request->permissions)->map(function ($value, $key) {
             $boolPerms = [
                 'content_view', 'dialog', 'post_publish', 'post_review',
                 'post_email_verify', 'post_phone_verify', 'post_prove_verify', 'post_limit_status',
@@ -208,7 +208,7 @@ class RoleController extends Controller
                 'isCustom' => false,
             ];
         });
-        $customPermission = collect($request->custom_permissions['permKey'] ?? [])->filter()->map(function ($value, $key) use ($request) {
+        $customPermissions = collect($request->custom_permissions['permKey'] ?? [])->filter()->map(function ($value, $key) use ($request) {
             return [
                 'permKey' => $value,
                 'permValue' => $request->custom_permissions['permValue'][$key] ?? '',
@@ -216,7 +216,7 @@ class RoleController extends Controller
                 'isCustom' => true,
             ];
         });
-        $role->permission = $permission->merge($customPermission)->values()->toArray();
+        $role->permissions = $permissions->merge($customPermissions)->values()->toArray();
         $role->save();
 
         return $this->updateSuccess();

@@ -56,8 +56,8 @@
                             @endif
                         </td>
                         <td><span class="badge bg-light text-dark">{{ optional($group->user)->name }}</span></td>
-                        <td><span class="badge bg-light text-dark">{{ $permissionLabels[$group->permission['publish_post'] ?? 0] ?? '' }}</span></td>
-                        <td><span class="badge bg-light text-dark">{{ $permissionLabels[$group->permission['publish_comment'] ?? 0] ?? '' }}</span></td>
+                        <td><span class="badge bg-light text-dark">{{ $permissionLabels[$group->permissions['publish_post'] ?? 0] ?? '' }}</span></td>
+                        <td><span class="badge bg-light text-dark">{{ $permissionLabels[$group->permissions['publish_comment'] ?? 0] ?? '' }}</span></td>
                         <td>
                             <form action="{{ route('panel.groups.enable.update', ['group' => $group->id, 'is_enable' => 1]) }}" method="post">
                                 @csrf

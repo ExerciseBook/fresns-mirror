@@ -125,8 +125,8 @@ class GlobalController extends Controller
 
         $roleList = null;
         foreach ($roles as $role) {
-            foreach ($role->permission as $perm) {
-                $permission[$perm['permKey']] = $perm['permValue'];
+            foreach ($role->permissions as $perm) {
+                $permissions[$perm['permKey']] = $perm['permValue'];
             }
 
             $item['rid'] = $role->id;
@@ -135,7 +135,7 @@ class GlobalController extends Controller
             $item['nameDisplay'] = (bool) $role->is_display_name;
             $item['icon'] = FileHelper::fresnsFileUrlByTableColumn($role->icon_file_id, $role->icon_file_url);
             $item['iconDisplay'] = (bool) $role->is_display_icon;
-            $item['permission'] = $permission;
+            $item['permissions'] = $permissions;
             $item['status'] = (bool) $role->is_enable;
             $roleList[] = $item;
         }

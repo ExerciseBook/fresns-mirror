@@ -153,24 +153,25 @@ class GroupController extends Controller
         $group->banner_file_url = $request->banner_file_url;
         // group category
         if ($request->is_category) {
-            $group->permission = [];
             $group->parent_id = 0;
             $group->type = 1;
+            $group->permissions = [];
             if ($request->has('is_enable')) {
                 $group->is_enable = $request->is_enable;
             }
         } else {
             $group->parent_id = $request->parent_id;
+            $group->type = 2;
             $group->type_mode = $request->type_mode;
             $group->type_find = $request->type_find;
             $group->type_follow = $request->type_follow;
             $group->is_recommend = $request->is_recommend;
             $group->plugin_unikey = $request->plugin_unikey;
-            $permission = $request->permission;
-            $permission['publish_post_review'] = (bool) ($permission['publish_post_review'] ?? 0);
-            $permission['publish_comment_review'] = (bool) ($permission['publish_comment_review'] ?? 0);
-            $group->permission = $permission;
-            $group->type = 2;
+            $permissions = $request->permissions;
+
+            $permission['publish_post_review'] = (bool) ($permissions['publish_post_review'] ?? 0);
+            $permission['publish_comment_review'] = (bool) ($permissions['publish_comment_review'] ?? 0);
+            $group->permissions = $permission;
         }
         $group->save();
 
@@ -295,10 +296,12 @@ class GroupController extends Controller
             $group->type_follow = $request->type_follow;
             $group->is_recommend = $request->is_recommend;
             $group->plugin_unikey = $request->plugin_unikey;
-            $permission = $request->permission;
-            $permission['publish_post_review'] = (bool) ($permission['publish_post_review'] ?? 0);
-            $permission['publish_comment_review'] = (bool) ($permission['publish_comment_review'] ?? 0);
-            $group->permission = $permission;
+            $permissions = $request->permissions;
+
+            $permission['publish_post_review'] = (bool) ($permissions['publish_post_review'] ?? 0);
+            $permission['publish_comment_review'] = (bool) ($permissions['publish_comment_review'] ?? 0);
+            $group->permissions = $permission;
+
             $group->admins()->sync($request->admin_ids);
         }
 
