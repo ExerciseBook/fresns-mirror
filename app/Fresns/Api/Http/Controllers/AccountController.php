@@ -17,6 +17,7 @@ use App\Fresns\Api\Http\DTO\AccountResetPasswordDTO;
 use App\Fresns\Api\Http\DTO\AccountVerifyIdentityDTO;
 use App\Fresns\Api\Http\DTO\AccountWalletLogsDTO;
 use App\Fresns\Api\Services\AccountService;
+use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Models\Account;
@@ -518,7 +519,8 @@ class AccountController extends Controller
             ]);
         }
 
-        $this->forgetAccountCache();
+        CacheHelper::fresnsApiAuthAccount();
+        CacheHelper::fresnsApiAuthUser();
 
         return $this->success();
     }
@@ -536,8 +538,8 @@ class AccountController extends Controller
         ];
         SessionToken::where($condition)->forceDelete();
 
-        $this->forgetAccountCache();
-        $this->forgetUserCache();
+        CacheHelper::fresnsApiAuthAccount();
+        CacheHelper::fresnsApiAuthUser();
 
         return $this->success();
     }
@@ -591,7 +593,7 @@ class AccountController extends Controller
             ]);
         }
 
-        $this->forgetAccountCache();
+        CacheHelper::fresnsApiAuthAccount();
 
         return $this->success([
             'day' => $todoDay,
@@ -609,6 +611,6 @@ class AccountController extends Controller
             'wait_delete_at' => null,
         ]);
 
-        $this->forgetAccountCache();
+        CacheHelper::fresnsApiAuthAccount();
     }
 }

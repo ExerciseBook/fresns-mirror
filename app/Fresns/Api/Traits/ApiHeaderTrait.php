@@ -60,7 +60,7 @@ trait ApiHeaderTrait
 
         $langTag = $this->langTag();
 
-        $cacheKey = 'fresns_api_account_'.$aid.'_'.$langTag;
+        $cacheKey = 'fresns_api_auth_account_'.$aid.'_'.$langTag;
 
         $authAccount = Cache::rememberForever($cacheKey, function () use ($aid) {
             return Account::withTrashed()->where('aid', $aid)->first();
@@ -71,24 +71,6 @@ trait ApiHeaderTrait
         }
 
         return $authAccount;
-    }
-
-    // forget account cache
-    public function forgetAccountCache()
-    {
-        $aid = \request()->header('aid');
-
-        if (empty($aid)) {
-            return;
-        }
-
-        $langTag = $this->langTag();
-
-        $cacheKey = 'fresns_api_account_'.$aid.'_'.$langTag;
-
-        Cache::forget($cacheKey);
-
-        return;
     }
 
     // auth user
@@ -102,9 +84,9 @@ trait ApiHeaderTrait
 
         $langTag = $this->langTag();
 
-        $cacheKey = 'fresns_api_user_'.$uid.'_'.$langTag;
+        $cacheKey = 'fresns_api_auth_user_'.$uid.'_'.$langTag;
 
-        $authUser = Cache::remember($cacheKey, now()->addHours(1), function () use ($uid) {
+        $authUser = Cache::rememberForever($cacheKey, function () use ($uid) {
             return User::withTrashed()->where('uid', $uid)->first();
         });
 
@@ -113,23 +95,5 @@ trait ApiHeaderTrait
         }
 
         return $authUser;
-    }
-
-    // forget user cache
-    public function forgetUserCache()
-    {
-        $uid = \request()->header('uid');
-
-        if (empty($uid)) {
-            return;
-        }
-
-        $langTag = $this->langTag();
-
-        $cacheKey = 'fresns_api_user_'.$uid.'_'.$langTag;
-
-        Cache::forget($cacheKey);
-
-        return;
     }
 }

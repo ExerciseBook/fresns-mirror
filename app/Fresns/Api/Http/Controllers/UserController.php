@@ -17,6 +17,7 @@ use App\Fresns\Api\Http\DTO\UserMarkDTO;
 use App\Fresns\Api\Http\DTO\UserMarkListDTO;
 use App\Fresns\Api\Services\InteractiveService;
 use App\Fresns\Api\Services\UserService;
+use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\BlockWord;
@@ -622,6 +623,8 @@ class UserController extends Controller
                 'timezone' => $dtoRequest->timezone,
             ]);
         }
+
+        CacheHelper::fresnsApiAuthUser();
 
         return $this->success();
     }
