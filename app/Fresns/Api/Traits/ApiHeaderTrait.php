@@ -11,6 +11,7 @@ namespace App\Fresns\Api\Traits;
 use App\Helpers\ConfigHelper;
 use App\Models\Account;
 use App\Models\User;
+use App\Utilities\PermissionUtility;
 use Illuminate\Support\Facades\Cache;
 
 trait ApiHeaderTrait
@@ -95,5 +96,45 @@ trait ApiHeaderTrait
         }
 
         return $authUser;
+    }
+
+    // auth user expire info
+    public function userExpireInfo(): array
+    {
+        $authUser = $this->user();
+
+        if (empty($authUser)) {
+            $cacheKey = 'fresns_api_guest_expire_info';
+        } else {
+            $cacheKey = 'fresns_api_user_'.$authUser->uid.'_expire_info';
+        }
+
+        $expireInfo = Cache::remember($cacheKey, now()->addHours(), function () use ($authUser) {
+            return PermissionUtility::checkUserStatusOfSiteMode($authUser?->id);
+        });
+
+        if (is_null($expireInfo)) {
+            Cache::forget($cacheKey);
+        }
+
+        return $expireInfo;
+    }
+
+    // user content view perm permission
+    public function userContentViewPerm(): array
+    {
+        $authUser = $this->user();
+
+        $cacheKey = 'fresns_api_'.$authUser->uid.'_content_view_perm';
+
+        $config = Cache::remember($cacheKey, now()->addHours(), function () use ($authUser) {
+            return PermissionUtility::getUserContentViewPerm($authUser->id);
+        });
+
+        if (is_null($config)) {
+            Cache::forget($cacheKey);
+        }
+
+        return $config;
     }
 }

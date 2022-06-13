@@ -25,7 +25,10 @@ class GroupService
 
         $item['icons'] = ExtendUtility::getIcons(IconLinked::TYPE_GROUP, $group->id, $langTag);
 
-        $item['publishRule'] = PermissionUtility::checkUserGroupPublishPerm($group->id, $authUserId);
+        $postPublishRule = PermissionUtility::checkUserGroupPostPublishPerm($group->id, $group->permissions, $authUserId);
+        $commentPublishRule = PermissionUtility::checkUserGroupCommentPublishPerm($group->id, $group->permissions, $authUserId);
+        $item['publishRule'] = array_merge($postPublishRule, $commentPublishRule);
+
         $item['admins'] = $group->getGroupAdmins($langTag, $timezone);
 
         $interactiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
@@ -54,7 +57,10 @@ class GroupService
             $item['creator'] = array_merge($userProfile, $userMainRole);
         }
 
-        $item['publishRule'] = PermissionUtility::checkUserGroupPublishPerm($group->id, $authUserId);
+        $postPublishRule = PermissionUtility::checkUserGroupPostPublishPerm($group->id, $group->permissions, $authUserId);
+        $commentPublishRule = PermissionUtility::checkUserGroupCommentPublishPerm($group->id, $group->permissions, $authUserId);
+        $item['publishRule'] = array_merge($postPublishRule, $commentPublishRule);
+
         $item['admins'] = $group->getGroupAdmins($langTag, $timezone);
 
         $interactiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
