@@ -168,26 +168,26 @@ class GlobalController extends Controller
     {
         $langTag = $this->langTag();
 
-        $cacheKey = 'fresns_api_stickers';
+        $cacheKey = 'fresns_api_stickers_'.$langTag;
 
-        $stickers = Cache::rememberForever($cacheKey, function () {
-            return Sticker::isEnable()->orderBy('rating')->get();
+        $stickerTree = Cache::rememberForever($cacheKey, function () use ($langTag) {
+            $stickers = Sticker::isEnable()->orderBy('rating')->get();
+
+            $stickerData = [];
+            foreach ($stickers as $index => $sticker) {
+                $stickerData[$index]['parentCode'] = $stickers->where('id', $sticker->parent_id)->first()?->code;
+                $stickerData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('stickers', 'name', $sticker->id, $langTag);
+                $stickerData[$index]['code'] = $sticker->code;
+                $stickerData[$index]['codeFormat'] = '['.$sticker->code.']';
+                $stickerData[$index]['image'] = FileHelper::fresnsFileUrlByTableColumn($sticker->image_file_id, $sticker->image_file_url);
+            }
+
+            return CollectionUtility::toTree($stickerData, 'code', 'parentCode', 'stickers');
         });
 
-        if (is_null($stickers)) {
+        if (is_null($stickerTree)) {
             Cache::forget($cacheKey);
         }
-
-        $stickerData = [];
-        foreach ($stickers as $index => $sticker) {
-            $stickerData[$index]['parentCode'] = $stickers->where('id', $sticker->parent_id)->first()?->code;
-            $stickerData[$index]['name'] = LanguageHelper::fresnsLanguageByTableId('stickers', 'name', $sticker->id, $langTag);
-            $stickerData[$index]['code'] = $sticker->code;
-            $stickerData[$index]['codeFormat'] = '['.$sticker->code.']';
-            $stickerData[$index]['image'] = FileHelper::fresnsFileUrlByTableColumn($sticker->image_file_id, $sticker->image_file_url);
-        }
-
-        $stickerTree = CollectionUtility::toTree($stickerData, 'code', 'parentCode', 'stickers');
 
         return $this->success($stickerTree);
     }

@@ -8,11 +8,11 @@
 
 namespace App\Helpers;
 
-use App\Models\Config;
 use Illuminate\Support\Facades\Cache;
 
 class CacheHelper
 {
+    // default langTag
     public static function fresnsDefaultLanguage()
     {
         Cache::forget('fresns_default_langTag');
@@ -20,6 +20,7 @@ class CacheHelper
         return;
     }
 
+    // default timezone
     public static function fresnsDefaultTimezone()
     {
         Cache::forget('fresns_default_timezone');
@@ -27,14 +28,34 @@ class CacheHelper
         return;
     }
 
-    public static function fresnsApiAuthAccount()
+    // lang tags
+    public static function fresnsLangTags()
     {
-        $aid = \request()->header('aid');
+        Cache::forget('fresns_lang_tags');
 
-        $langArr = Config::where('item_key', 'language_menus')->value('item_value');
-        $langArrCollection = collect($langArr)->pluck('langTag');
+        return;
+    }
 
-        foreach ($langArrCollection as $langTag) {
+    // fresns api stickers
+    public static function fresnsApiStickers()
+    {
+        $langTagArr = ConfigHelper::fresnsConfigLangTags();
+
+        foreach ($langTagArr as $langTag) {
+            $cacheKey = 'fresns_api_stickers_'.$langTag;
+
+            Cache::forget($cacheKey);
+        }
+
+        return;
+    }
+
+    // fresns api account
+    public static function fresnsApiAccount(string $aid)
+    {
+        $langTagArr = ConfigHelper::fresnsConfigLangTags();
+
+        foreach ($langTagArr as $langTag) {
             $cacheKey = 'fresns_api_auth_account_'.$aid.'_'.$langTag;
 
             Cache::forget($cacheKey);
@@ -43,14 +64,12 @@ class CacheHelper
         return;
     }
 
-    public static function fresnsApiAuthUser()
+    // fresns api user
+    public static function fresnsApiUser(?int $uid = null)
     {
-        $uid = \request()->header('uid');
+        $langTagArr = ConfigHelper::fresnsConfigLangTags();
 
-        $langArr = Config::where('item_key', 'language_menus')->value('item_value');
-        $langArrCollection = collect($langArr)->pluck('langTag');
-
-        foreach ($langArrCollection as $langTag) {
+        foreach ($langTagArr as $langTag) {
             $cacheKey = 'fresns_api_auth_user_'.$uid.'_'.$langTag;
 
             Cache::forget($cacheKey);
@@ -59,12 +78,33 @@ class CacheHelper
         return;
     }
 
+    // fresns api user expire info
+    public static function fresnsApiUserExpireInfo(int $uid)
+    {
+        $cacheKey = 'fresns_api_user_'.$uid.'_expire_info';
+
+        Cache::forget($cacheKey);
+        Cache::forget('fresns_api_guest_expire_info');
+
+        return;
+    }
+
+    // fresns api user content view perm
+    public static function fresnsApiUserContentViewPerm(int $uid)
+    {
+        $cacheKey = 'fresns_api_'.$uid.'_content_view_perm';
+
+        Cache::forget($cacheKey);
+
+        return;
+    }
+
+    // fresns api content
     public static function fresnsApiContent(string $type, string $content, int $id)
     {
-        $langArr = Config::where('item_key', 'language_menus')->value('item_value');
-        $langArrCollection = collect($langArr)->pluck('langTag');
+        $langTagArr = ConfigHelper::fresnsConfigLangTags();
 
-        foreach ($langArrCollection as $langTag) {
+        foreach ($langTagArr as $langTag) {
             $cacheKey = "fresns_api_{$type}_{$content}_{$id}_{$langTag}";
 
             Cache::forget($cacheKey);

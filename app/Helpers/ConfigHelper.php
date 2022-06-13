@@ -42,6 +42,22 @@ class ConfigHelper
         return $defaultLangTag;
     }
 
+    // lang tags
+    public static function fresnsConfigLangTags()
+    {
+        $langTagArr = Cache::remember('fresns_lang_tags', now()->addDays(), function () {
+            $langArr = Config::where('item_key', 'language_menus')->value('item_value');
+
+            return collect($langArr)->pluck('langTag');
+        });
+
+        if (is_null($langTagArr)) {
+            Cache::forget('fresns_lang_tags');
+        }
+
+        return $langTagArr;
+    }
+
     /**
      * Get config value based on Key.
      *

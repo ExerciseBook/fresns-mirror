@@ -519,8 +519,8 @@ class AccountController extends Controller
             ]);
         }
 
-        CacheHelper::fresnsApiAuthAccount();
-        CacheHelper::fresnsApiAuthUser();
+        CacheHelper::fresnsApiAccount();
+        CacheHelper::fresnsApiUser($this->user()?->uid);
 
         return $this->success();
     }
@@ -538,8 +538,8 @@ class AccountController extends Controller
         ];
         SessionToken::where($condition)->forceDelete();
 
-        CacheHelper::fresnsApiAuthAccount();
-        CacheHelper::fresnsApiAuthUser();
+        CacheHelper::fresnsApiAccount($authAccount->aid);
+        CacheHelper::fresnsApiUser($authUser?->uid);
 
         return $this->success();
     }
@@ -593,7 +593,7 @@ class AccountController extends Controller
             ]);
         }
 
-        CacheHelper::fresnsApiAuthAccount();
+        CacheHelper::fresnsApiAccount($authAccount->aid);
 
         return $this->success([
             'day' => $todoDay,
@@ -611,6 +611,6 @@ class AccountController extends Controller
             'wait_delete_at' => null,
         ]);
 
-        CacheHelper::fresnsApiAuthAccount();
+        CacheHelper::fresnsApiAccount($authAccount->aid);
     }
 }
