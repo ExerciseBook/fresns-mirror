@@ -77,10 +77,12 @@
                                     data-names="{{ $group->names->toJson() }}"
                                     data-descriptions="{{ $group->descriptions->toJson() }}" data-bs-toggle="modal"
                                     data-bs-target="#groupModal">{{ __('FsLang::panel.button_edit') }}</button>
+
                                 <button type="button" class="btn btn-outline-success btn-sm"
                                     data-action="{{ route('panel.groups.merge', $group->id) }}"
                                     data-params="{{ $group->toJson() }}" data-bs-toggle="modal"
                                     data-bs-target="#moveModal">{{ __('FsLang::panel.button_group_move') }}</button>
+
                                 <button type="submit" class="btn btn-link link-danger ms-1 fresns-link fs-7">{{ __('FsLang::panel.button_deactivate') }}</button>
                             </form>
                         </td>

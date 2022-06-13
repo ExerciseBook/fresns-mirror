@@ -234,7 +234,7 @@
         </div>
     </div>
 
-    <!-- Language Modal -->
+    <!-- Name Language Modal -->
     <div class="modal fade name-lang-modal" id="langGroupModal" tabindex="-1" aria-labelledby="langGroupModal"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -283,7 +283,7 @@
         </div>
     </div>
 
-    <!-- Language Modal -->
+    <!-- Desc Language Modal -->
     <div class="modal fade description-lang-modal" id="langGroupDescModal" tabindex="-1"
         aria-labelledby="langGroupDescModal" aria-hidden="true">
         <div class="modal-dialog modal-lg">

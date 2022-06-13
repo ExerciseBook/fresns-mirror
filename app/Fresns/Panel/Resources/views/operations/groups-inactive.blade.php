@@ -23,7 +23,7 @@
         </ul>
     </div>
 
-    <!--groups config-->
+    <!--group list-->
     <div class="table-responsive">
         <table class="table table-hover align-middle text-nowrap">
             <thead>
@@ -63,6 +63,16 @@
                             <form action="{{ route('panel.groups.enable.update', ['group' => $group->id, 'is_enable' => 1]) }}" method="post">
                                 @csrf
                                 @method('put')
+                                <button type="button" class="btn btn-outline-primary btn-sm"
+                                    data-action="{{ route('panel.groups.update', $group->id) }}"
+                                    data-params="{{ $group->toJson() }}"
+                                    data-names="{{ $group->names->toJson() }}"
+                                    data-admin_users="{{ $group->admins }}"
+                                    data-descriptions="{{ $group->descriptions->toJson() }}"
+                                    data-names="{{ $group->names->toJson() }}"
+                                    data-descriptions="{{ $group->descriptions->toJson() }}"
+                                    data-bs-toggle="modal" data-bs-target="#groupModal">{{ __('FsLang::panel.button_edit') }}</button>
+
                                 <button type="submit" class="btn btn-outline-warning btn-sm">{{ __('FsLang::panel.button_activate') }}</button>
                             </form>
                         </td>
@@ -72,4 +82,7 @@
         </table>
     </div>
     {{ $groups ? $groups->links() : '' }}
+
+    <!--group edit modal-->
+    @include('FsView::operations.group-edit')
 @endsection
