@@ -61,12 +61,12 @@ class UserController extends Controller
             $query->whereRelation('user', 'gender', $value);
         });
 
-        if ($dtoRequest->createTimeGt) {
-            $userQuery->where('created_at', '>=', $dtoRequest->createTimeGt);
+        if ($dtoRequest->createDateGt) {
+            $userQuery->whereDate('created_at', '>=', $dtoRequest->createDateGt);
         }
 
-        if ($dtoRequest->createTimeLt) {
-            $userQuery->where('created_at', '<=', $dtoRequest->createTimeLt);
+        if ($dtoRequest->createDateLt) {
+            $userQuery->whereDate('created_at', '<=', $dtoRequest->createDateLt);
         }
 
         if ($dtoRequest->likeCountGt) {
@@ -188,7 +188,7 @@ class UserController extends Controller
             'extcredits3' => 'extcredits3',
             'extcredits4' => 'extcredits4',
             'extcredits5' => 'extcredits5',
-            'createTime' => 'created_at',
+            'createDate' => 'created_at',
         };
 
         $ratingOrder = match ($dtoRequest->ratingOrder) {
@@ -229,11 +229,11 @@ class UserController extends Controller
 
         $seoData = Seo::where('linked_type', Seo::TYPE_USER)->where('linked_id', $viewUser->id)->where('lang_tag', $langTag)->first();
 
-        $common['title'] = $seoData->title ?? null;
-        $common['keywords'] = $seoData->keywords ?? null;
-        $common['description'] = $seoData->description ?? null;
-        $common['manages'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_USER, $authUserId, $langTag);
-        $data['commons'] = $common;
+        $item['title'] = $seoData->title ?? null;
+        $item['keywords'] = $seoData->keywords ?? null;
+        $item['description'] = $seoData->description ?? null;
+        $item['manages'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_USER, $authUserId, $langTag);
+        $data['items'] = $item;
 
         $service = new UserService();
         $data['detail'] = $service->userDetail($viewUser, $langTag, $timezone, $authUserId);
@@ -624,7 +624,7 @@ class UserController extends Controller
             ]);
         }
 
-        CacheHelper::fresnsApiAuthUser();
+        CacheHelper::fresnsApiUser($authUser->uid);
 
         return $this->success();
     }

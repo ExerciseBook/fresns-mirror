@@ -12,7 +12,6 @@ use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\DialogDTO;
 use App\Fresns\Api\Http\DTO\DialogSendMessageDTO;
 use App\Fresns\Api\Http\DTO\PaginationDTO;
-use App\Fresns\Api\Services\HeaderService;
 use App\Fresns\Api\Services\UserService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;

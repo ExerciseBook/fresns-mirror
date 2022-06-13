@@ -108,7 +108,7 @@ Route::prefix('v2')->group(function () {
         Route::get('{pid}/interactive/{type}', [PostController::class, 'interactive'])->name('post.interactive');
         Route::get('{pid}/user-list', [PostController::class, 'userList'])->name('post.userList');
         Route::get('{pid}/logs', [PostController::class, 'postLogs'])->name('post.logs');
-        Route::get('log/{logId}/detail', [PostController::class, 'logDetail'])->name('post.log.detail');
+        Route::get('{pid}/log/{logId}', [PostController::class, 'logDetail'])->name('post.log.detail');
         Route::delete('{pid}', [PostController::class, 'delete'])->name('post.delete');
         Route::get('follow/{type}', [PostController::class, 'follow'])->name('post.follow');
         Route::get('nearby', [PostController::class, 'nearby'])->name('post.nearby');
@@ -119,7 +119,7 @@ Route::prefix('v2')->group(function () {
         Route::get('{cid}/detail', [CommentController::class, 'detail'])->name('comment.detail');
         Route::get('{cid}/interactive/{type}', [CommentController::class, 'interactive'])->name('comment.interactive');
         Route::get('{cid}/logs', [CommentController::class, 'commentLogs'])->name('comment.logs');
-        Route::get('log/{logId}/detail', [CommentController::class, 'logDetail'])->name('comment.log.detail');
+        Route::get('{cid}/log/{logId}', [CommentController::class, 'logDetail'])->name('comment.log.detail');
         Route::delete('{cid}', [CommentController::class, 'delete'])->name('comment.delete');
     });
 

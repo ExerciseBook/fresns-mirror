@@ -12,10 +12,8 @@ use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\HashtagListDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Services\HashtagService;
-use App\Fresns\Api\Services\HeaderService;
 use App\Fresns\Api\Services\InteractiveService;
 use App\Helpers\ConfigHelper;
-use App\Helpers\PrimaryHelper;
 use App\Models\Hashtag;
 use App\Models\Seo;
 use App\Models\UserBlock;
@@ -34,6 +32,14 @@ class HashtagController extends Controller
         $blockHashtagIds = UserBlock::type(UserBlock::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
         $hashtagQuery = Hashtag::whereNotIn('id', $blockHashtagIds)->isEnable();
+
+        if ($dtoRequest->createDateGt) {
+            $hashtagQuery->whereDate('created_at', '>=', $dtoRequest->createDateGt);
+        }
+
+        if ($dtoRequest->createDateLt) {
+            $hashtagQuery->whereDate('created_at', '<=', $dtoRequest->createDateLt);
+        }
 
         if ($dtoRequest->likeCountGt) {
             $hashtagQuery->where('like_count', '>=', $dtoRequest->likeCountGt);
@@ -83,14 +89,6 @@ class HashtagController extends Controller
             $hashtagQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
         }
 
-        if ($dtoRequest->createTimeGt) {
-            $hashtagQuery->where('created_at', '>=', $dtoRequest->createTimeGt);
-        }
-
-        if ($dtoRequest->createTimeLt) {
-            $hashtagQuery->where('created_at', '<=', $dtoRequest->createTimeLt);
-        }
-
         $ratingType = match ($dtoRequest->ratingType) {
             default => 'rating',
             'like' => 'like_me_count',
@@ -99,7 +97,7 @@ class HashtagController extends Controller
             'block' => 'block_me_count',
             'post' => 'post_count',
             'postDigest' => 'post_digest_count',
-            'createTime' => 'created_at',
+            'createDate' => 'created_at',
             'rating' => 'rating',
         };
 
@@ -125,7 +123,7 @@ class HashtagController extends Controller
     // detail
     public function detail(string $hid)
     {
-        $hashtag = Hashtag::whereSlug($hid)->isEnable()->first();
+        $hashtag = Hashtag::where('slug', $hid)->isEnable()->first();
         if (empty($hashtag)) {
             throw new ApiException(37200);
         }
@@ -135,10 +133,10 @@ class HashtagController extends Controller
 
         $seoData = Seo::where('linked_type', Seo::TYPE_HASHTAG)->where('linked_id', $hashtag->id)->where('lang_tag', $langTag)->first();
 
-        $common['title'] = $seoData->title ?? null;
-        $common['keywords'] = $seoData->keywords ?? null;
-        $common['description'] = $seoData->description ?? null;
-        $data['commons'] = $common;
+        $item['title'] = $seoData->title ?? null;
+        $item['keywords'] = $seoData->keywords ?? null;
+        $item['description'] = $seoData->description ?? null;
+        $data['items'] = $item;
 
         $service = new HashtagService();
         $data['detail'] = $service->hashtagDetail($hashtag, $langTag, $authUserId);
@@ -149,7 +147,7 @@ class HashtagController extends Controller
     // interactive
     public function interactive(string $hid, string $type, Request $request)
     {
-        $hashtag = Hashtag::whereSlug($hid)->isEnable()->first();
+        $hashtag = Hashtag::where('slug', $hid)->isEnable()->first();
         if (empty($hashtag)) {
             throw new ApiException(37200);
         }

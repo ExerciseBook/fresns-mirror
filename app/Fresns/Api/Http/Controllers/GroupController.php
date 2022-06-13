@@ -12,7 +12,6 @@ use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\GroupListDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Services\GroupService;
-use App\Fresns\Api\Services\HeaderService;
 use App\Fresns\Api\Services\InteractiveService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
@@ -89,6 +88,14 @@ class GroupController extends Controller
             $groupQuery->where('is_recommend', $dtoRequest->recommend);
         }
 
+        if ($dtoRequest->createDateGt) {
+            $groupQuery->whereDate('created_at', '>=', $dtoRequest->createDateGt);
+        }
+
+        if ($dtoRequest->createDateLt) {
+            $groupQuery->whereDate('created_at', '<=', $dtoRequest->createDateLt);
+        }
+
         if ($dtoRequest->likeCountGt) {
             $groupQuery->where('like_count', '>=', $dtoRequest->likeCountGt);
         }
@@ -137,14 +144,6 @@ class GroupController extends Controller
             $groupQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
         }
 
-        if ($dtoRequest->createTimeGt) {
-            $groupQuery->where('created_at', '>=', $dtoRequest->createTimeGt);
-        }
-
-        if ($dtoRequest->createTimeLt) {
-            $groupQuery->where('created_at', '<=', $dtoRequest->createTimeLt);
-        }
-
         $ratingType = match ($dtoRequest->ratingType) {
             default => 'rating',
             'like' => 'like_me_count',
@@ -153,7 +152,7 @@ class GroupController extends Controller
             'block' => 'block_me_count',
             'post' => 'post_count',
             'postDigest' => 'post_digest_count',
-            'createTime' => 'created_at',
+            'createDate' => 'created_at',
             'rating' => 'rating',
         };
 
@@ -179,7 +178,7 @@ class GroupController extends Controller
     // detail
     public function detail(string $gid)
     {
-        $group = Group::whereGid($gid)->isEnable()->first();
+        $group = Group::where('gid', $gid)->isEnable()->first();
         if (empty($group)) {
             throw new ApiException(37100);
         }
@@ -190,13 +189,12 @@ class GroupController extends Controller
 
         $seoData = Seo::where('linked_type', Seo::TYPE_GROUP)->where('linked_id', $group->id)->where('lang_tag', $langTag)->first();
 
-        $common['title'] = $seoData->title ?? null;
-        $common['keywords'] = $seoData->keywords ?? null;
-        $common['description'] = $seoData->description ?? null;
-        $common['extensions'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_GROUP, $group->id, null, $authUserId, $langTag);
-        $data['commons'] = $common;
-
-        $data['category'] = $group->category->getCategoryInfo($langTag);
+        $item['title'] = $seoData->title ?? null;
+        $item['keywords'] = $seoData->keywords ?? null;
+        $item['description'] = $seoData->description ?? null;
+        $item['category'] = $group->category->getCategoryInfo($langTag);
+        $item['extensions'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_GROUP, $group->id, null, $authUserId, $langTag);
+        $data['items'] = $item;
 
         $service = new GroupService();
         $data['detail'] = $service->groupDetail($group, $langTag, $timezone, $authUserId);
@@ -207,7 +205,7 @@ class GroupController extends Controller
     // interactive
     public function interactive(string $gid, string $type, Request $request)
     {
-        $group = Group::whereGid($gid)->isEnable()->first();
+        $group = Group::where('gid', $gid)->isEnable()->first();
         if (empty($group)) {
             throw new ApiException(37100);
         }
