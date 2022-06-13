@@ -16,6 +16,7 @@ use App\Models\ExtendLinked;
 use App\Models\IconLinked;
 use App\Models\PluginUsage;
 use App\Models\Post;
+use App\Models\PostLog;
 use App\Models\TipLinked;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
@@ -197,5 +198,17 @@ class PostService
         }
 
         return false;
+    }
+
+    // post Log
+    public function postLogList(PostLog $log, string $langTag, string $timezone, ?int $authUserId = null)
+    {
+        return null;
+    }
+
+    // post log detail
+    public function postLogDetail(PostLog $log, string $langTag, string $timezone, ?int $authUserId = null)
+    {
+        return null;
     }
 }
