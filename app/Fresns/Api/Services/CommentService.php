@@ -14,6 +14,7 @@ use App\Helpers\InteractiveHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
 use App\Models\Comment;
+use App\Models\CommentLog;
 use App\Models\ExtendLinked;
 use App\Models\IconLinked;
 use App\Models\PluginUsage;
@@ -21,7 +22,6 @@ use App\Models\TipLinked;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\LbsUtility;
-use App\Utilities\PermissionUtility;
 use Illuminate\Support\Str;
 
 class CommentService
@@ -174,5 +174,17 @@ class CommentService
         }
 
         return false;
+    }
+
+    // comment Log
+    public function commentLogList(CommentLog $log, string $langTag, string $timezone, ?int $authUserId = null)
+    {
+        return null;
+    }
+
+    // comment log detail
+    public function commentLogDetail(CommentLog $log, string $langTag, string $timezone, ?int $authUserId = null)
+    {
+        return null;
     }
 }
