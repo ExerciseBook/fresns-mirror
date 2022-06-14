@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
+    // list
     public function list(Request $request)
     {
         $dtoRequest = new PostListDTO($request->all());
@@ -69,6 +70,7 @@ class PostController extends Controller
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
     }
 
+    // detail
     public function detail(string $pid, Request $request)
     {
         $dtoRequest = new PostDetailDTO($request->all());
@@ -79,16 +81,7 @@ class PostController extends Controller
             throw new ApiException(37300);
         }
 
-        $userContentViewPerm = $this->userContentViewPerm();
-
-        if ($userContentViewPerm['type'] == 2) {
-            $dateLimit = strtotime($userContentViewPerm['dateLimit']);
-            $postCreateTime = strtotime($post->created_at);
-
-            if ($dateLimit < $postCreateTime) {
-                throw new ApiException(35304);
-            }
-        }
+        UserService::checkUserContentViewPerm($post->created_at);
 
         // Plugin provides data
         $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_detail_service');
@@ -132,16 +125,7 @@ class PostController extends Controller
             throw new ApiException(37300);
         }
 
-        $userContentViewPerm = $this->userContentViewPerm();
-
-        if ($userContentViewPerm['type'] == 2) {
-            $dateLimit = strtotime($userContentViewPerm['dateLimit']);
-            $postCreateTime = strtotime($post->created_at);
-
-            if ($dateLimit < $postCreateTime) {
-                throw new ApiException(35304);
-            }
-        }
+        UserService::checkUserContentViewPerm($post->created_at);
 
         $requestData = $request->all();
         $requestData['type'] = $type;
@@ -173,16 +157,7 @@ class PostController extends Controller
             throw new ApiException(37300);
         }
 
-        $userContentViewPerm = $this->userContentViewPerm();
-
-        if ($userContentViewPerm['type'] == 2) {
-            $dateLimit = strtotime($userContentViewPerm['dateLimit']);
-            $postCreateTime = strtotime($post->created_at);
-
-            if ($dateLimit < $postCreateTime) {
-                throw new ApiException(35304);
-            }
-        }
+        UserService::checkUserContentViewPerm($post->created_at);
 
         $dtoRequest = new PaginationDTO($request->all());
 
@@ -210,17 +185,9 @@ class PostController extends Controller
             throw new ApiException(37300);
         }
 
-        $userContentViewPerm = $this->userContentViewPerm();
+        UserService::checkUserContentViewPerm($post->created_at);
 
-        if ($userContentViewPerm['type'] == 2) {
-            $dateLimit = strtotime($userContentViewPerm['dateLimit']);
-            $postCreateTime = strtotime($post->created_at);
-
-            if ($dateLimit < $postCreateTime) {
-                throw new ApiException(35304);
-            }
-        }
-
+        $dtoRequest = new PaginationDTO($request->all());
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
@@ -245,16 +212,7 @@ class PostController extends Controller
             throw new ApiException(37300);
         }
 
-        $userContentViewPerm = $this->userContentViewPerm();
-
-        if ($userContentViewPerm['type'] == 2) {
-            $dateLimit = strtotime($userContentViewPerm['dateLimit']);
-            $postCreateTime = strtotime($post->created_at);
-
-            if ($dateLimit < $postCreateTime) {
-                throw new ApiException(35304);
-            }
-        }
+        UserService::checkUserContentViewPerm($post->created_at);
 
         $log = PostLog::where('post_id', $post->id)->where('id', $logId)->where('state', 3)->first();
 
