@@ -258,13 +258,17 @@ class UserController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
 
-        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'group');
-
         $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
+
+        if ($viewUser->id == $authUserId) {
+            InteractiveService::checkMyInteractiveSetting($dtoRequest->type, 'user');
+        } else {
+            InteractiveService::checkInteractiveSetting($dtoRequest->type, 'user');
+        }
 
         $service = new InteractiveService();
         $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_USER, $viewUser->id, $orderDirection, $langTag, $timezone, $authUserId);

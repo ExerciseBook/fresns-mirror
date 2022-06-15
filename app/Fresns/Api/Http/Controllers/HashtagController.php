@@ -13,7 +13,6 @@ use App\Fresns\Api\Http\DTO\HashtagListDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Services\HashtagService;
 use App\Fresns\Api\Services\InteractiveService;
-use App\Helpers\ConfigHelper;
 use App\Models\Hashtag;
 use App\Models\Seo;
 use App\Models\UserBlock;
@@ -156,7 +155,7 @@ class HashtagController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
 
-        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'group');
+        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'hashtag');
 
         $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 

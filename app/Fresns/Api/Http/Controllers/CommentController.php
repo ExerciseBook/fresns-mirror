@@ -75,7 +75,7 @@ class CommentController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
 
-        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'group');
+        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'comment');
 
         $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
