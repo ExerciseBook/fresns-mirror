@@ -76,8 +76,7 @@ class PostController extends Controller
                         ->whereNotIn('id', $blockPostIds)
                         ->orWhereNotIn('user_id', $blockUserIds)
                         ->orWhereNotIn('group_id', $filterGroupIdsArr);
-                })
-                ->isEnable();
+                });
 
             $postQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
                 $query->whereNotIn('id', $blockHashtagIds);
@@ -85,8 +84,8 @@ class PostController extends Controller
         }
 
         if ($dtoRequest->uidOrUsername) {
-            $userPostConfig = ConfigHelper::fresnsConfigByItemKey('it_posts');
-            if (! $userPostConfig) {
+            $postConfig = ConfigHelper::fresnsConfigByItemKey('it_posts');
+            if (! $postConfig) {
                 throw new ApiException(35305);
             }
 
@@ -122,7 +121,7 @@ class PostController extends Controller
         }
 
         if ($dtoRequest->hid) {
-            $viewHashtag = PrimaryHelper::fresnsModelByFsid('group', $dtoRequest->gid);
+            $viewHashtag = PrimaryHelper::fresnsModelByFsid('hashtag', $dtoRequest->gid);
 
             if (empty($viewHashtag)) {
                 throw new ApiException(37200);
