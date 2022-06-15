@@ -366,7 +366,7 @@ class AccountController extends Controller
         $verifyInfo = VerifyCode::where($term)->where('expired_at', '>', date('Y-m-d H:i:s'))->first();
 
         if (! $verifyInfo) {
-            throw new ApiException(33104);
+            throw new ApiException(33105);
         }
 
         return $this->success();
@@ -411,7 +411,7 @@ class AccountController extends Controller
             }
 
             if ($authAccount->email && empty($dtoRequest->verifyCode)) {
-                throw new ApiException(33103);
+                throw new ApiException(33104);
             }
 
             $codeWordBody = [
@@ -439,7 +439,7 @@ class AccountController extends Controller
         // edit phone
         if ($dtoRequest->editPhone) {
             if ($authAccount->phone && empty($dtoRequest->verifyCode)) {
-                throw new ApiException(33103);
+                throw new ApiException(33104);
             }
 
             $codeWordBody = [
@@ -519,8 +519,8 @@ class AccountController extends Controller
             ]);
         }
 
-        CacheHelper::fresnsApiAccount();
-        CacheHelper::fresnsApiUser($this->user()?->uid);
+        CacheHelper::forgetApiAccount($authAccount->aid);
+        CacheHelper::forgetApiUser($this->user()?->uid);
 
         return $this->success();
     }
@@ -538,8 +538,8 @@ class AccountController extends Controller
         ];
         SessionToken::where($condition)->forceDelete();
 
-        CacheHelper::fresnsApiAccount($authAccount->aid);
-        CacheHelper::fresnsApiUser($authUser?->uid);
+        CacheHelper::forgetApiAccount($authAccount->aid);
+        CacheHelper::forgetApiUser($authUser?->uid);
 
         return $this->success();
     }
@@ -551,8 +551,6 @@ class AccountController extends Controller
         $authAccount = $this->account();
 
         $todoDay = ConfigHelper::fresnsConfigByItemKey('delete_account_todo');
-        $dbDateTime = DateHelper::fresnsDatabaseCurrentDateTime();
-        $todoTime = date('Y-m-d H:i:s', strtotime("$dbDateTime +$todoDay day"));
 
         if ($dtoRequest->password) {
             $password = base64_decode($dtoRequest->password, true);
@@ -563,7 +561,7 @@ class AccountController extends Controller
 
             $authAccount->update([
                 'wait_delete' => 1,
-                'wait_delete_at' => $todoTime,
+                'wait_delete_at' => now()->addDays($todoDay),
             ]);
         } else {
             if ($dtoRequest->codeType == 'email') {
@@ -589,15 +587,15 @@ class AccountController extends Controller
 
             $authAccount->update([
                 'wait_delete' => 1,
-                'wait_delete_at' => $todoTime,
+                'wait_delete_at' => now()->addDays($todoDay),
             ]);
         }
 
-        CacheHelper::fresnsApiAccount($authAccount->aid);
+        CacheHelper::forgetApiAccount($authAccount->aid);
 
         return $this->success([
             'day' => $todoDay,
-            'dateTime' => DateHelper::fresnsDateTimeByTimezone($todoTime, $this->timezone(), $this->langTag()),
+            'dateTime' => DateHelper::fresnsDateTimeByTimezone($authAccount->wait_delete_at, $this->timezone(), $this->langTag()),
         ]);
     }
 
@@ -611,6 +609,6 @@ class AccountController extends Controller
             'wait_delete_at' => null,
         ]);
 
-        CacheHelper::fresnsApiAccount($authAccount->aid);
+        CacheHelper::forgetApiAccount($authAccount->aid);
     }
 }

@@ -48,7 +48,9 @@ use App\Fresns\Panel\Http\Controllers\UserSearchController;
 use App\Fresns\Panel\Http\Controllers\VerifyCodeController;
 use App\Fresns\Panel\Http\Controllers\WalletController;
 use App\Models\Config;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 try {
     $loginConfig = Config::where('item_key', 'panel_path')->first();

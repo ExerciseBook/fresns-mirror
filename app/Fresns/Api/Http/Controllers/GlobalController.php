@@ -13,12 +13,14 @@ use App\Fresns\Api\Http\DTO\GlobalBlockWordsDTO;
 use App\Fresns\Api\Http\DTO\GlobalConfigsDTO;
 use App\Fresns\Api\Http\DTO\GlobalRolesDTO;
 use App\Fresns\Api\Http\DTO\GlobalUploadTokenDTO;
+use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
 use App\Models\BlockWord;
 use App\Models\Config;
+use App\Models\File;
 use App\Models\PluginUsage;
 use App\Models\Role;
 use App\Models\Sticker;
@@ -168,9 +170,10 @@ class GlobalController extends Controller
     {
         $langTag = $this->langTag();
 
-        $cacheKey = 'fresns_api_stickers_'.$langTag;
+        $cacheKey = 'fresns_api_stickers_0_all';
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
-        $stickerTree = Cache::rememberForever($cacheKey, function () use ($langTag) {
+        $stickerTree = Cache::remember($cacheKey, $cacheTime, function () use ($langTag) {
             $stickers = Sticker::isEnable()->orderBy('rating')->get();
 
             $stickerData = [];

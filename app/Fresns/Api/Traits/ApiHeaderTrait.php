@@ -8,6 +8,7 @@
 
 namespace App\Fresns\Api\Traits;
 
+use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Models\Account;
 use App\Models\User;
@@ -62,8 +63,9 @@ trait ApiHeaderTrait
         $langTag = $this->langTag();
 
         $cacheKey = 'fresns_api_auth_account_'.$aid.'_'.$langTag;
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $authAccount = Cache::rememberForever($cacheKey, function () use ($aid) {
+        $authAccount = Cache::remember($cacheKey, $cacheTime, function () use ($aid) {
             return Account::withTrashed()->where('aid', $aid)->first();
         });
 
@@ -86,8 +88,9 @@ trait ApiHeaderTrait
         $langTag = $this->langTag();
 
         $cacheKey = 'fresns_api_auth_user_'.$uid.'_'.$langTag;
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $authUser = Cache::rememberForever($cacheKey, function () use ($uid) {
+        $authUser = Cache::remember($cacheKey, $cacheTime, function () use ($uid) {
             return User::withTrashed()->where('uid', $uid)->first();
         });
 
@@ -109,7 +112,9 @@ trait ApiHeaderTrait
             $cacheKey = 'fresns_api_user_'.$authUser->uid.'_expire_info';
         }
 
-        $expireInfo = Cache::remember($cacheKey, now()->addHours(), function () use ($authUser) {
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $expireInfo = Cache::remember($cacheKey, $cacheTime, function () use ($authUser) {
             return PermissionUtility::checkUserStatusOfSiteMode($authUser?->id);
         });
 
@@ -126,8 +131,9 @@ trait ApiHeaderTrait
         $authUser = $this->user();
 
         $cacheKey = 'fresns_api_'.$authUser->uid.'_content_view_perm';
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $config = Cache::remember($cacheKey, now()->addHours(), function () use ($authUser) {
+        $config = Cache::remember($cacheKey, $cacheTime, function () use ($authUser) {
             return PermissionUtility::getUserContentViewPerm($authUser->id);
         });
 

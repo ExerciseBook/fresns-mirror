@@ -17,7 +17,7 @@ class ConfigHelper
     // default langTag
     public static function fresnsConfigDefaultLangTag(): string
     {
-        $defaultLangTag = Cache::rememberForever('fresns_default_langTag', function () {
+        $defaultLangTag = Cache::remember('fresns_default_langTag', now()->addDays(), function () {
             return Config::where('item_key', 'default_language')->value('item_value');
         });
 
@@ -31,7 +31,7 @@ class ConfigHelper
     // default timezone
     public static function fresnsConfigDefaultTimezone(): string
     {
-        $defaultLangTag = Cache::rememberForever('fresns_default_timezone', function () {
+        $defaultLangTag = Cache::remember('fresns_default_timezone', now()->addDays(), function () {
             return Config::where('item_key', 'default_timezone')->value('item_value');
         });
 
