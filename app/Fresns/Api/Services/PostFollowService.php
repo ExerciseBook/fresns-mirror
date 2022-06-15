@@ -29,7 +29,7 @@ class PostFollowService
         $blockHashtagIds = UserBlock::type(UserBlock::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('block_id')->toArray();
         $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
-        $filterGroupIds = PermissionUtility::getGroupPostFilterIds($authUserId);
+        $filterGroupIds = PermissionUtility::getPostFilterByGroupIds($authUserId);
         $filterGroupIdsArr = Arr::prepend($blockGroupIds, $filterGroupIds);
 
         // follow user post

@@ -44,7 +44,13 @@ class GroupController extends Controller
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
         $groups = Cache::remember($cacheKey, $cacheTime, function () use ($groupFilterIds) {
-            return Group::with(['category', 'admins'])->where('type_view', 1)->whereNotIn('id', $groupFilterIds)->isEnable()->orderBy('rating')->get();
+            return Group::with(['category', 'admins'])
+                ->where('sublevel_public', Group::SUBLEVEL_PUBLIC)
+                ->whereNotIn('id', $groupFilterIds)
+                ->isEnable()
+                ->orderBy('recommend_rating')
+                ->orderBy('rating')
+                ->get();
         });
 
         $service = new GroupService();
@@ -62,7 +68,7 @@ class GroupController extends Controller
     {
         $langTag = $this->langTag();
 
-        $groupQuery = Group::where('type', 1)->orderBy('rating')->isEnable();
+        $groupQuery = Group::where('type', Group::TYPE_CATEGORY)->orderBy('rating')->isEnable();
 
         $categories = $groupQuery->paginate($request->get('pageSize', 30));
 
@@ -85,84 +91,104 @@ class GroupController extends Controller
         $authUserId = $this->user()?->id;
 
         $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
-        $groupQuery = Group::whereIn('type', [2, 3])->whereNotIn('id', $groupFilterIds)->isEnable();
+        $groupQuery = Group::with(['category', 'admins'])
+            ->where('type', '!=', Group::TYPE_CATEGORY)
+            ->whereNotIn('id', $groupFilterIds)
+            ->isEnable();
 
         if ($dtoRequest->gid) {
-            $parentId = PrimaryHelper::fresnsGroupIdByGid($dtoRequest->gid);
-            $groupQuery->where('parent_id', $parentId);
+            $parentGroup = PrimaryHelper::fresnsModelByFsid('group', $dtoRequest->gid);
+
+            if (empty($parentGroup) || $parentGroup->trashed()) {
+                throw new ApiException(37100);
+            }
+
+            if ($parentGroup->isEnable(false)) {
+                throw new ApiException(37101);
+            }
+
+            switch ($parentGroup->type) {
+                case Group::TYPE_CATEGORY:
+                    $groupQuery->where('parent_id', $parentGroup->id)->where('sublevel_public', Group::SUBLEVEL_PUBLIC);
+                break;
+
+                case Group::TYPE_GROUP:
+                    $groupQuery->where('parent_id', $parentGroup->id);
+                break;
+            }
         } else {
-            $groupQuery->where('type_view', 1);
+            $groupQuery->where('sublevel_public', Group::SUBLEVEL_PUBLIC);
         }
 
-        if ($dtoRequest->recommend) {
-            $groupQuery->where('is_recommend', $dtoRequest->recommend);
-        }
+        $groupQuery->when($dtoRequest->recommend, function ($query, $value) {
+            $query->where('is_recommend', $value);
+        });
 
-        if ($dtoRequest->createDateGt) {
-            $groupQuery->whereDate('created_at', '>=', $dtoRequest->createDateGt);
-        }
+        $groupQuery->when($dtoRequest->createDateGt, function ($query, $value) {
+            $query->whereDate('created_at', '>=', $value);
+        });
 
-        if ($dtoRequest->createDateLt) {
-            $groupQuery->whereDate('created_at', '<=', $dtoRequest->createDateLt);
-        }
+        $groupQuery->when($dtoRequest->createDateLt, function ($query, $value) {
+            $query->whereDate('created_at', '<=', $value);
+        });
 
-        if ($dtoRequest->likeCountGt) {
-            $groupQuery->where('like_count', '>=', $dtoRequest->likeCountGt);
-        }
+        $groupQuery->when($dtoRequest->likeCountGt, function ($query, $value) {
+            $query->where('like_count', '>=', $value);
+        });
 
-        if ($dtoRequest->likeCountLt) {
-            $groupQuery->where('like_count', '<=', $dtoRequest->likeCountLt);
-        }
+        $groupQuery->when($dtoRequest->likeCountLt, function ($query, $value) {
+            $query->where('like_count', '<=', $value);
+        });
 
-        if ($dtoRequest->dislikeCountGt) {
-            $groupQuery->where('dislike_count', '>=', $dtoRequest->dislikeCountGt);
-        }
+        $groupQuery->when($dtoRequest->dislikeCountGt, function ($query, $value) {
+            $query->where('dislike_count', '>=', $value);
+        });
 
-        if ($dtoRequest->dislikeCountLt) {
-            $groupQuery->where('dislike_count', '<=', $dtoRequest->dislikeCountLt);
-        }
+        $groupQuery->when($dtoRequest->dislikeCountLt, function ($query, $value) {
+            $query->where('dislike_count', '<=', $value);
+        });
 
-        if ($dtoRequest->followCountGt) {
-            $groupQuery->where('follow_count', '>=', $dtoRequest->followCountGt);
-        }
+        $groupQuery->when($dtoRequest->followCountGt, function ($query, $value) {
+            $query->where('follow_count', '>=', $value);
+        });
 
-        if ($dtoRequest->followCountLt) {
-            $groupQuery->where('follow_count', '<=', $dtoRequest->followCountLt);
-        }
+        $groupQuery->when($dtoRequest->followCountLt, function ($query, $value) {
+            $query->where('follow_count', '<=', $value);
+        });
 
-        if ($dtoRequest->blockCountGt) {
-            $groupQuery->where('block_count', '>=', $dtoRequest->blockCountGt);
-        }
+        $groupQuery->when($dtoRequest->blockCountGt, function ($query, $value) {
+            $query->where('block_count', '>=', $value);
+        });
 
-        if ($dtoRequest->blockCountLt) {
-            $groupQuery->where('block_count', '<=', $dtoRequest->blockCountLt);
-        }
+        $groupQuery->when($dtoRequest->blockCountLt, function ($query, $value) {
+            $query->where('block_count', '<=', $value);
+        });
 
-        if ($dtoRequest->postCountGt) {
-            $groupQuery->where('post_count', '>=', $dtoRequest->postCountGt);
-        }
+        $groupQuery->when($dtoRequest->postCountGt, function ($query, $value) {
+            $query->where('post_count', '>=', $value);
+        });
 
-        if ($dtoRequest->postCountLt) {
-            $groupQuery->where('post_count', '<=', $dtoRequest->postCountLt);
-        }
+        $groupQuery->when($dtoRequest->postCountLt, function ($query, $value) {
+            $query->where('post_count', '<=', $value);
+        });
 
-        if ($dtoRequest->postDigestCountGt) {
-            $groupQuery->where('post_digest_count', '>=', $dtoRequest->postDigestCountGt);
-        }
+        $groupQuery->when($dtoRequest->postDigestCountGt, function ($query, $value) {
+            $query->where('post_digest_count', '>=', $value);
+        });
 
-        if ($dtoRequest->postDigestCountLt) {
-            $groupQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
-        }
+        $groupQuery->when($dtoRequest->postDigestCountLt, function ($query, $value) {
+            $query->where('post_digest_count', '<=', $value);
+        });
 
         $orderType = match ($dtoRequest->orderType) {
             default => 'rating',
-            'like' => 'like_me_count',
-            'dislike' => 'dislike_me_count',
-            'follow' => 'follow_me_count',
-            'block' => 'block_me_count',
+            'createDate' => 'created_at',
+            'like' => 'like_count',
+            'dislike' => 'dislike_count',
+            'follow' => 'follow_count',
+            'block' => 'block_count',
             'post' => 'post_count',
             'postDigest' => 'post_digest_count',
-            'createDate' => 'created_at',
             'rating' => 'rating',
         };
 
@@ -172,7 +198,7 @@ class GroupController extends Controller
             'desc' => 'desc',
         };
 
-        $groupQuery->orderBy('recommend_rating', 'asc')->orderBy($orderType, $orderDirection);
+        $groupQuery->orderBy('recommend_rating')->orderBy($orderType, $orderDirection);
 
         $groupData = $groupQuery->paginate($request->get('pageSize', 15));
 
@@ -188,9 +214,14 @@ class GroupController extends Controller
     // detail
     public function detail(string $gid)
     {
-        $group = Group::where('gid', $gid)->isEnable()->first();
+        $group = Group::where('gid', $gid)->first();
+
         if (empty($group)) {
             throw new ApiException(37100);
+        }
+
+        if ($group->isEnable(false)) {
+            throw new ApiException(37101);
         }
 
         $langTag = $this->langTag();

@@ -54,130 +54,127 @@ class UserController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $userQuery = UserStat::with('user');
-
-        $userQuery->when($dtoRequest->verified, function ($query, $value) {
-            $query->whereRelation('user', 'verified', $value);
-        });
+        $userQuery = UserStat::with('user')->whereRelation('user', 'is_enable', 1)->whereRelation('user', 'wait_delete', 0);
 
         $userQuery->when($dtoRequest->gender, function ($query, $value) {
             $query->whereRelation('user', 'gender', $value);
         });
 
-        if ($dtoRequest->createDateGt) {
-            $userQuery->whereDate('created_at', '>=', $dtoRequest->createDateGt);
-        }
+        $userQuery->when($dtoRequest->createDateGt, function ($query, $value) {
+            $query->whereDate('created_at', '>=', $value);
+        });
 
-        if ($dtoRequest->createDateLt) {
-            $userQuery->whereDate('created_at', '<=', $dtoRequest->createDateLt);
-        }
+        $userQuery->when($dtoRequest->createDateLt, function ($query, $value) {
+            $query->whereDate('created_at', '<=', $value);
+        });
 
-        if ($dtoRequest->likeCountGt) {
-            $userQuery->where('like_me_count', '>=', $dtoRequest->likeCountGt);
-        }
+        $userQuery->when($dtoRequest->likeCountGt, function ($query, $value) {
+            $query->where('like_me_count', '>=', $value);
+        });
 
-        if ($dtoRequest->likeCountLt) {
-            $userQuery->where('like_me_count', '<=', $dtoRequest->likeCountLt);
-        }
+        $userQuery->when($dtoRequest->likeCountLt, function ($query, $value) {
+            $query->where('like_me_count', '<=', $value);
+        });
 
-        if ($dtoRequest->dislikeCountGt) {
-            $userQuery->where('dislike_me_count', '>=', $dtoRequest->dislikeCountGt);
-        }
+        $userQuery->when($dtoRequest->dislikeCountGt, function ($query, $value) {
+            $query->where('dislike_me_count', '>=', $value);
+        });
 
-        if ($dtoRequest->dislikeCountLt) {
-            $userQuery->where('dislike_me_count', '<=', $dtoRequest->dislikeCountLt);
-        }
+        $userQuery->when($dtoRequest->dislikeCountLt, function ($query, $value) {
+            $query->where('dislike_me_count', '<=', $value);
+        });
 
-        if ($dtoRequest->followCountGt) {
-            $userQuery->where('follow_me_count', '>=', $dtoRequest->followCountGt);
-        }
+        $userQuery->when($dtoRequest->followCountGt, function ($query, $value) {
+            $query->where('follow_me_count', '>=', $value);
+        });
 
-        if ($dtoRequest->followCountLt) {
-            $userQuery->where('follow_me_count', '<=', $dtoRequest->followCountLt);
-        }
+        $userQuery->when($dtoRequest->followCountLt, function ($query, $value) {
+            $query->where('follow_me_count', '<=', $value);
+        });
 
-        if ($dtoRequest->blockCountGt) {
-            $userQuery->where('block_me_count', '>=', $dtoRequest->blockCountGt);
-        }
+        $userQuery->when($dtoRequest->blockCountGt, function ($query, $value) {
+            $query->where('block_me_count', '>=', $value);
+        });
 
-        if ($dtoRequest->blockCountLt) {
-            $userQuery->where('block_me_count', '<=', $dtoRequest->blockCountLt);
-        }
+        $userQuery->when($dtoRequest->blockCountLt, function ($query, $value) {
+            $query->where('block_me_count', '<=', $value);
+        });
 
-        if ($dtoRequest->postCountGt) {
-            $userQuery->where('post_publish_count', '>=', $dtoRequest->postCountGt);
-        }
+        $userQuery->when($dtoRequest->postCountGt, function ($query, $value) {
+            $query->where('post_publish_count', '>=', $value);
+        });
 
-        if ($dtoRequest->postCountLt) {
-            $userQuery->where('post_publish_count', '<=', $dtoRequest->postCountLt);
-        }
+        $userQuery->when($dtoRequest->postCountLt, function ($query, $value) {
+            $query->where('post_publish_count', '<=', $value);
+        });
 
-        if ($dtoRequest->commentCountGt) {
-            $userQuery->where('comment_publish_count', '>=', $dtoRequest->commentCountGt);
-        }
+        $userQuery->when($dtoRequest->commentCountGt, function ($query, $value) {
+            $query->where('comment_publish_count', '>=', $value);
+        });
 
-        if ($dtoRequest->commentCountLt) {
-            $userQuery->where('comment_publish_count', '<=', $dtoRequest->commentCountLt);
-        }
+        $userQuery->when($dtoRequest->commentCountLt, function ($query, $value) {
+            $query->where('comment_publish_count', '<=', $value);
+        });
 
-        if ($dtoRequest->postDigestCountGt) {
-            $userQuery->where('post_digest_count', '>=', $dtoRequest->postDigestCountGt);
-        }
+        $userQuery->when($dtoRequest->postDigestCountGt, function ($query, $value) {
+            $query->where('post_digest_count', '>=', $value);
+        });
 
-        if ($dtoRequest->postDigestCountLt) {
-            $userQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
-        }
+        $userQuery->when($dtoRequest->postDigestCountLt, function ($query, $value) {
+            $query->where('post_digest_count', '<=', $value);
+        });
 
-        if ($dtoRequest->commentDigestCountGt) {
-            $userQuery->where('comment_digest_count', '>=', $dtoRequest->commentDigestCountGt);
-        }
+        $userQuery->when($dtoRequest->commentDigestCountGt, function ($query, $value) {
+            $query->where('comment_digest_count', '>=', $value);
+        });
 
-        if ($dtoRequest->commentDigestCountLt) {
-            $userQuery->where('comment_digest_count', '<=', $dtoRequest->commentDigestCountLt);
-        }
+        $userQuery->when($dtoRequest->commentDigestCountLt, function ($query, $value) {
+            $query->where('comment_digest_count', '<=', $value);
+        });
 
-        if ($dtoRequest->extcredits1CountGt) {
-            $userQuery->where('extcredits1', '>=', $dtoRequest->extcredits1CountGt);
-        }
+        $userQuery->when($dtoRequest->extcredits1CountGt, function ($query, $value) {
+            $query->where('extcredits1', '>=', $value);
+        });
 
-        if ($dtoRequest->extcredits1CountLt) {
-            $userQuery->where('extcredits1', '<=', $dtoRequest->extcredits1CountLt);
-        }
+        $userQuery->when($dtoRequest->extcredits1CountLt, function ($query, $value) {
+            $query->where('extcredits1', '<=', $value);
+        });
 
-        if ($dtoRequest->extcredits2CountGt) {
-            $userQuery->where('extcredits2', '>=', $dtoRequest->extcredits2CountGt);
-        }
+        $userQuery->when($dtoRequest->extcredits2CountGt, function ($query, $value) {
+            $query->where('extcredits2', '>=', $value);
+        });
 
-        if ($dtoRequest->extcredits2CountLt) {
-            $userQuery->where('extcredits2', '<=', $dtoRequest->extcredits2CountLt);
-        }
+        $userQuery->when($dtoRequest->extcredits2CountLt, function ($query, $value) {
+            $query->where('extcredits2', '<=', $value);
+        });
 
-        if ($dtoRequest->extcredits3CountGt) {
-            $userQuery->where('extcredits3', '>=', $dtoRequest->extcredits3CountGt);
-        }
+        $userQuery->when($dtoRequest->extcredits3CountGt, function ($query, $value) {
+            $query->where('extcredits3', '>=', $value);
+        });
 
-        if ($dtoRequest->extcredits3CountLt) {
-            $userQuery->where('extcredits3', '<=', $dtoRequest->extcredits3CountLt);
-        }
+        $userQuery->when($dtoRequest->extcredits3CountLt, function ($query, $value) {
+            $query->where('extcredits3', '<=', $value);
+        });
 
-        if ($dtoRequest->extcredits4CountGt) {
-            $userQuery->where('extcredits4', '>=', $dtoRequest->extcredits4CountGt);
-        }
+        $userQuery->when($dtoRequest->extcredits4CountGt, function ($query, $value) {
+            $query->where('extcredits4', '>=', $value);
+        });
 
-        if ($dtoRequest->extcredits4CountLt) {
-            $userQuery->where('extcredits4', '<=', $dtoRequest->extcredits4CountLt);
-        }
+        $userQuery->when($dtoRequest->extcredits4CountLt, function ($query, $value) {
+            $query->where('extcredits4', '<=', $value);
+        });
 
-        if ($dtoRequest->extcredits5CountGt) {
-            $userQuery->where('extcredits5', '>=', $dtoRequest->extcredits5CountGt);
-        }
+        $userQuery->when($dtoRequest->extcredits5CountGt, function ($query, $value) {
+            $query->where('extcredits5', '>=', $value);
+        });
 
-        if ($dtoRequest->extcredits5CountLt) {
-            $userQuery->where('extcredits5', '<=', $dtoRequest->extcredits5CountLt);
-        }
+        $userQuery->when($dtoRequest->extcredits5CountLt, function ($query, $value) {
+            $query->where('extcredits5', '<=', $value);
+        });
 
         $orderType = match ($dtoRequest->orderType) {
             default => 'created_at',
+            'createDate' => 'created_at',
             'like' => 'like_me_count',
             'dislike' => 'dislike_me_count',
             'follow' => 'follow_me_count',
@@ -191,7 +188,6 @@ class UserController extends Controller
             'extcredits3' => 'extcredits3',
             'extcredits4' => 'extcredits4',
             'extcredits5' => 'extcredits5',
-            'createDate' => 'created_at',
         };
 
         $orderDirection = match ($dtoRequest->orderDirection) {
@@ -224,6 +220,14 @@ class UserController extends Controller
 
         if (empty($viewUser)) {
             throw new ApiException(31602);
+        }
+
+        if ($viewUser->isEnable(false)) {
+            throw new ApiException(35202);
+        }
+
+        if ($viewUser->wait_delete == 1) {
+            throw new ApiException(35203);
         }
 
         $langTag = $this->langTag();

@@ -32,76 +32,75 @@ class HashtagController extends Controller
 
         $hashtagQuery = Hashtag::whereNotIn('id', $blockHashtagIds)->isEnable();
 
-        if ($dtoRequest->createDateGt) {
-            $hashtagQuery->whereDate('created_at', '>=', $dtoRequest->createDateGt);
-        }
+        $hashtagQuery->when($dtoRequest->createDateGt, function ($query, $value) {
+            $query->whereDate('created_at', '>=', $value);
+        });
 
-        if ($dtoRequest->createDateLt) {
-            $hashtagQuery->whereDate('created_at', '<=', $dtoRequest->createDateLt);
-        }
+        $hashtagQuery->when($dtoRequest->createDateLt, function ($query, $value) {
+            $query->whereDate('created_at', '<=', $value);
+        });
 
-        if ($dtoRequest->likeCountGt) {
-            $hashtagQuery->where('like_count', '>=', $dtoRequest->likeCountGt);
-        }
+        $hashtagQuery->when($dtoRequest->likeCountGt, function ($query, $value) {
+            $query->where('like_count', '>=', $value);
+        });
 
-        if ($dtoRequest->likeCountLt) {
-            $hashtagQuery->where('like_count', '<=', $dtoRequest->likeCountLt);
-        }
+        $hashtagQuery->when($dtoRequest->likeCountLt, function ($query, $value) {
+            $query->where('like_count', '<=', $value);
+        });
 
-        if ($dtoRequest->dislikeCountGt) {
-            $hashtagQuery->where('dislike_count', '>=', $dtoRequest->dislikeCountGt);
-        }
+        $hashtagQuery->when($dtoRequest->dislikeCountGt, function ($query, $value) {
+            $query->where('dislike_count', '>=', $value);
+        });
 
-        if ($dtoRequest->dislikeCountLt) {
-            $hashtagQuery->where('dislike_count', '<=', $dtoRequest->dislikeCountLt);
-        }
+        $hashtagQuery->when($dtoRequest->dislikeCountLt, function ($query, $value) {
+            $query->where('dislike_count', '<=', $value);
+        });
 
-        if ($dtoRequest->followCountGt) {
-            $hashtagQuery->where('follow_count', '>=', $dtoRequest->followCountGt);
-        }
+        $hashtagQuery->when($dtoRequest->followCountGt, function ($query, $value) {
+            $query->where('follow_count', '>=', $value);
+        });
 
-        if ($dtoRequest->followCountLt) {
-            $hashtagQuery->where('follow_count', '<=', $dtoRequest->followCountLt);
-        }
+        $hashtagQuery->when($dtoRequest->followCountLt, function ($query, $value) {
+            $query->where('follow_count', '<=', $value);
+        });
 
-        if ($dtoRequest->blockCountGt) {
-            $hashtagQuery->where('block_count', '>=', $dtoRequest->blockCountGt);
-        }
+        $hashtagQuery->when($dtoRequest->blockCountGt, function ($query, $value) {
+            $query->where('block_count', '>=', $value);
+        });
 
-        if ($dtoRequest->blockCountLt) {
-            $hashtagQuery->where('block_count', '<=', $dtoRequest->blockCountLt);
-        }
+        $hashtagQuery->when($dtoRequest->blockCountLt, function ($query, $value) {
+            $query->where('block_count', '<=', $value);
+        });
 
-        if ($dtoRequest->postCountGt) {
-            $hashtagQuery->where('post_count', '>=', $dtoRequest->postCountGt);
-        }
+        $hashtagQuery->when($dtoRequest->postCountGt, function ($query, $value) {
+            $query->where('post_count', '>=', $value);
+        });
 
-        if ($dtoRequest->postCountLt) {
-            $hashtagQuery->where('post_count', '<=', $dtoRequest->postCountLt);
-        }
+        $hashtagQuery->when($dtoRequest->postCountLt, function ($query, $value) {
+            $query->where('post_count', '<=', $value);
+        });
 
-        if ($dtoRequest->postDigestCountGt) {
-            $hashtagQuery->where('post_digest_count', '>=', $dtoRequest->postDigestCountGt);
-        }
+        $hashtagQuery->when($dtoRequest->postDigestCountGt, function ($query, $value) {
+            $query->where('post_digest_count', '>=', $value);
+        });
 
-        if ($dtoRequest->postDigestCountLt) {
-            $hashtagQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
-        }
+        $hashtagQuery->when($dtoRequest->postDigestCountLt, function ($query, $value) {
+            $query->where('post_digest_count', '<=', $value);
+        });
 
         $orderType = match ($dtoRequest->orderType) {
-            default => 'rating',
-            'like' => 'like_me_count',
-            'dislike' => 'dislike_me_count',
-            'follow' => 'follow_me_count',
-            'block' => 'block_me_count',
+            default => 'created_at',
+            'createDate' => 'created_at',
+            'like' => 'like_count',
+            'dislike' => 'dislike_count',
+            'follow' => 'follow_count',
+            'block' => 'block_count',
             'post' => 'post_count',
             'postDigest' => 'post_digest_count',
-            'createDate' => 'created_at',
-            'rating' => 'rating',
         };
 
-        $orderDirection = match ($dtoRequest->ratingOorderDirectionrder) {
-            default => 'asc',
+        $orderDirection = match ($dtoRequest->orderDirection) {
+            default => 'desc',
             'asc' => 'asc',
             'desc' => 'desc',
         };
@@ -122,9 +121,14 @@ class HashtagController extends Controller
     // detail
     public function detail(string $hid)
     {
-        $hashtag = Hashtag::where('slug', $hid)->isEnable()->first();
+        $hashtag = Hashtag::where('slug', $hid)->first();
+
         if (empty($hashtag)) {
             throw new ApiException(37200);
+        }
+
+        if ($hashtag->isEnable(false)) {
+            throw new ApiException(37201);
         }
 
         $langTag = $this->langTag();

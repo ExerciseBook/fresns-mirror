@@ -73,9 +73,9 @@ class UserService
 
         if ($userContentViewPerm['type'] == 2) {
             $dateLimit = strtotime($userContentViewPerm['dateLimit']);
-            $postCreateTime = strtotime($dateTime);
+            $contentCreateTime = strtotime($dateTime);
 
-            if ($dateLimit < $postCreateTime) {
+            if ($dateLimit < $contentCreateTime) {
                 throw new ApiException(35304);
             }
         }
