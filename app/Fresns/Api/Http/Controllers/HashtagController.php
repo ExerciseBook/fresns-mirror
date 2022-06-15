@@ -89,7 +89,7 @@ class HashtagController extends Controller
             $hashtagQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
         }
 
-        $ratingType = match ($dtoRequest->ratingType) {
+        $orderType = match ($dtoRequest->orderType) {
             default => 'rating',
             'like' => 'like_me_count',
             'dislike' => 'dislike_me_count',
@@ -101,13 +101,13 @@ class HashtagController extends Controller
             'rating' => 'rating',
         };
 
-        $ratingOrder = match ($dtoRequest->ratingOrder) {
+        $orderDirection = match ($dtoRequest->ratingOorderDirectionrder) {
             default => 'asc',
             'asc' => 'asc',
             'desc' => 'desc',
         };
 
-        $hashtagQuery->orderBy($ratingType, $ratingOrder);
+        $hashtagQuery->orderBy($orderType, $orderDirection);
 
         $hashtagData = $hashtagQuery->paginate($request->get('pageSize', 30));
 
@@ -156,19 +156,16 @@ class HashtagController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
 
-        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_hashtags");
-        if (! $markSet) {
-            throw new ApiException(36201);
-        }
+        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'group');
 
-        $timeOrder = $dtoRequest->timeOrder ?: 'desc';
+        $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
         $service = new InteractiveService();
-        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_HASHTAG, $hashtag->id, $timeOrder, $langTag, $timezone, $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_HASHTAG, $hashtag->id, $orderDirection, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }

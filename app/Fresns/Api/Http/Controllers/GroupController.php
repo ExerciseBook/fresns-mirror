@@ -13,8 +13,9 @@ use App\Fresns\Api\Http\DTO\GroupListDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Services\GroupService;
 use App\Fresns\Api\Services\InteractiveService;
-use App\Helpers\ConfigHelper;
+use App\Helpers\CacheHelper;
 use App\Helpers\PrimaryHelper;
+use App\Models\File;
 use App\Models\Group;
 use App\Models\PluginUsage;
 use App\Models\Seo;
@@ -22,6 +23,7 @@ use App\Utilities\CollectionUtility;
 use App\Utilities\ExtendUtility;
 use App\Utilities\PermissionUtility;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class GroupController extends Controller
 {
@@ -34,10 +36,18 @@ class GroupController extends Controller
 
         $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
 
-        $groups = Group::where('type_view', 1)->whereNotIn('id', $groupFilterIds)->isEnable()->orderBy('rating')->get();
+        if (empty($authUserId)) {
+            $cacheKey = 'fresns_api_groups_0_all';
+        } else {
+            $cacheKey = "fresns_api_groups_{$authUserId}_user";
+        }
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
+
+        $groups = Cache::remember($cacheKey, $cacheTime, function () use ($groupFilterIds) {
+            return Group::with(['category', 'admins'])->where('type_view', 1)->whereNotIn('id', $groupFilterIds)->isEnable()->orderBy('rating')->get();
+        });
 
         $service = new GroupService();
-
         $groupData = [];
         foreach ($groups as $index => $group) {
             $groupData[$index][] = $service->groupList($group, $langTag, $timezone, $authUserId);
@@ -144,7 +154,7 @@ class GroupController extends Controller
             $groupQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
         }
 
-        $ratingType = match ($dtoRequest->ratingType) {
+        $orderType = match ($dtoRequest->orderType) {
             default => 'rating',
             'like' => 'like_me_count',
             'dislike' => 'dislike_me_count',
@@ -156,13 +166,13 @@ class GroupController extends Controller
             'rating' => 'rating',
         };
 
-        $ratingOrder = match ($dtoRequest->ratingOrder) {
+        $orderDirection = match ($dtoRequest->orderDirection) {
             default => 'asc',
             'asc' => 'asc',
             'desc' => 'desc',
         };
 
-        $groupQuery->orderBy('recommend_rating', 'asc')->orderBy($ratingType, $ratingOrder);
+        $groupQuery->orderBy('recommend_rating', 'asc')->orderBy($orderType, $orderDirection);
 
         $groupData = $groupQuery->paginate($request->get('pageSize', 15));
 
@@ -214,19 +224,16 @@ class GroupController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
 
-        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_groups");
-        if (! $markSet) {
-            throw new ApiException(36201);
-        }
+        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'group');
 
-        $timeOrder = $dtoRequest->timeOrder ?: 'desc';
+        $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
         $service = new InteractiveService();
-        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_GROUP, $group->id, $timeOrder, $langTag, $timezone, $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_GROUP, $group->id, $orderDirection, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }

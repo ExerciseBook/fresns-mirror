@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Http\Controllers;
 
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\CommentDetailDTO;
+use App\Fresns\Api\Http\DTO\CommentListDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Http\DTO\PaginationDTO;
 use App\Fresns\Api\Services\CommentService;
@@ -24,8 +25,9 @@ use Illuminate\Http\Request;
 class CommentController extends Controller
 {
     // list
-    public function list(string $cid, Request $request)
+    public function list(Request $request)
     {
+        $dtoRequest = new CommentListDTO($request->all());
     }
 
     // detail
@@ -61,7 +63,7 @@ class CommentController extends Controller
     // interactive
     public function interactive(string $cid, string $type, Request $request)
     {
-        $comment = Comment::with(['creator', 'hashtags'])->where('cid', $cid)->isEnable()->first();
+        $comment = Comment::where('cid', $cid)->isEnable()->first();
 
         if (empty($comment)) {
             throw new ApiException(37400);
@@ -73,19 +75,16 @@ class CommentController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
 
-        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_groups");
-        if (! $markSet) {
-            throw new ApiException(36201);
-        }
+        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'group');
 
-        $timeOrder = $dtoRequest->timeOrder ?: 'desc';
+        $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
         $service = new InteractiveService();
-        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_COMMENT, $comment->id, $timeOrder, $langTag, $timezone, $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_COMMENT, $comment->id, $orderDirection, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }

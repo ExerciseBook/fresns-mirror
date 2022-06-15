@@ -48,8 +48,8 @@ class UserListDTO extends DTO
             'extcredits4CountLt' => ['integer', 'nullable', 'gt:extcredits4CountGt'],
             'extcredits5CountGt' => ['integer', 'nullable', 'lt:extcredits5CountLt'], // user_stats->extcredits5
             'extcredits5CountLt' => ['integer', 'nullable', 'gt:extcredits5CountGt'],
-            'ratingType' => ['string', 'nullable', 'in:createDate,like,dislike,follow,block,post,comment,postDigest,commentDigest,extcredits1,extcredits2,extcredits3,extcredits4,extcredits5'],
-            'ratingOrder' => ['string', 'nullable', 'in:asc,desc'],
+            'orderType' => ['string', 'nullable', 'in:createDate,like,dislike,follow,block,post,comment,postDigest,commentDigest,extcredits1,extcredits2,extcredits3,extcredits4,extcredits5'],
+            'orderDirection' => ['string', 'nullable', 'in:asc,desc'],
             'pageSize' => ['integer', 'nullable', 'between:1,30'],
             'page' => ['integer', 'nullable'],
         ];

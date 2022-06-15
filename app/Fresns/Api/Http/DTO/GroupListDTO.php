@@ -34,8 +34,8 @@ class GroupListDTO extends DTO
             'postCountLt' => ['integer', 'nullable', 'gt:postCountGt'],
             'postDigestCountGt' => ['integer', 'nullable', 'lt:postDigestCountLt'], // groups->post_digest_count
             'postDigestCountLt' => ['integer', 'nullable', 'gt:postDigestCountGt'],
-            'ratingType' => ['string', 'nullable', 'in:createDate,like,follow,block,post,postDigest,rating'],
-            'ratingOrder' => ['string', 'nullable', 'in:asc,desc'],
+            'orderType' => ['string', 'nullable', 'in:createDate,like,follow,block,post,postDigest,rating'],
+            'orderDirection' => ['string', 'nullable', 'in:asc,desc'],
             'pageSize' => ['integer', 'nullable', 'between:1,20'],
             'page' => ['integer', 'nullable'],
         ];

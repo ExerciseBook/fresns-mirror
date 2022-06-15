@@ -32,8 +32,8 @@ class HashtagListDTO extends DTO
             'postCountLt' => ['integer', 'nullable', 'gt:postCountGt'],
             'postDigestCountGt' => ['integer', 'nullable', 'lt:postDigestCountLt'], // hashtags->post_digest_count
             'postDigestCountLt' => ['integer', 'nullable', 'gt:postDigestCountGt'],
-            'ratingType' => ['string', 'nullable', 'in:createDate,like,follow,block,post,postDigest'],
-            'ratingOrder' => ['string', 'nullable', 'in:asc,desc'],
+            'orderType' => ['string', 'nullable', 'in:createDate,like,follow,block,post,postDigest'],
+            'orderDirection' => ['string', 'nullable', 'in:asc,desc'],
             'pageSize' => ['integer', 'nullable', 'between:1,20'],
             'page' => ['integer', 'nullable'],
         ];

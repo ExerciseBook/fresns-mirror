@@ -173,7 +173,7 @@ class UserController extends Controller
             $userQuery->where('extcredits5', '<=', $dtoRequest->extcredits5CountLt);
         }
 
-        $ratingType = match ($dtoRequest->ratingType) {
+        $orderType = match ($dtoRequest->orderType) {
             default => 'created_at',
             'like' => 'like_me_count',
             'dislike' => 'dislike_me_count',
@@ -191,13 +191,13 @@ class UserController extends Controller
             'createDate' => 'created_at',
         };
 
-        $ratingOrder = match ($dtoRequest->ratingOrder) {
+        $orderDirection = match ($dtoRequest->orderDirection) {
             default => 'desc',
             'asc' => 'asc',
             'desc' => 'desc',
         };
 
-        $userQuery->orderBy($ratingType, $ratingOrder);
+        $userQuery->orderBy($orderType, $orderDirection);
 
         $userData = $userQuery->paginate($request->get('pageSize', 15));
 
@@ -258,19 +258,16 @@ class UserController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
 
-        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_users");
-        if (! $markSet) {
-            throw new ApiException(36201);
-        }
+        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'group');
 
-        $timeOrder = $dtoRequest->timeOrder ?: 'desc';
+        $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
         $service = new InteractiveService();
-        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_USER, $viewUser->id, $timeOrder, $langTag, $timezone, $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_USER, $viewUser->id, $orderDirection, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }
@@ -302,10 +299,10 @@ class UserController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $timeOrder = $dtoRequest->timeOrder ?: 'desc';
+        $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
         $service = new InteractiveService();
-        $data = $service->getItMarkList($dtoRequest->markType, $dtoRequest->listType, $viewUser->id, $timeOrder, $langTag, $timezone, $authUserId);
+        $data = $service->getItMarkList($dtoRequest->markType, $dtoRequest->listType, $viewUser->id, $orderDirection, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['markData']->total(), $data['markData']->perPage());
     }
@@ -561,11 +558,11 @@ class UserController extends Controller
             $validateBio = ValidationUtility::bio($bio);
 
             if (! $validateBio['banWord']) {
-                throw new ApiException(33105);
+                throw new ApiException(33106);
             }
 
             if (! $validateBio['length']) {
-                throw new ApiException(33106);
+                throw new ApiException(33107);
             }
 
             $blockWords = BlockWord::where('user_mode', 2)->get('word', 'replace_word');
@@ -624,7 +621,7 @@ class UserController extends Controller
             ]);
         }
 
-        CacheHelper::fresnsApiUser($authUser->uid);
+        CacheHelper::forgetApiUser($authUser->uid);
 
         return $this->success();
     }
