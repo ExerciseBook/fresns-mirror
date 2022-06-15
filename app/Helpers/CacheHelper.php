@@ -25,7 +25,7 @@ class CacheHelper
             return now()->addHours();
         }
 
-        $cacheTime = now()->addMinutes($fileConfig['antiLinkExpire']);
+        $cacheTime = now()->addMinutes($fileConfig['antiLinkExpire']-1);
 
         return $cacheTime;
     }
@@ -66,6 +66,28 @@ class CacheHelper
     public static function forgetTableColumnLangContent(string $tableName, string $tableColumn, int $tableId, ?string $langTag = null)
     {
         $cacheKey = "fresns_{$tableName}_{$tableColumn}_{$tableId}_{$langTag}";
+
+        Cache::forget($cacheKey);
+
+        return;
+    }
+
+    //
+    /**
+     * forget fresns model.
+     *
+     * fresns_model_account_{$aid}
+     * fresns_model_user_{$uidOrUsername}
+     * fresns_model_group_{$gid}
+     * fresns_model_hashtag_{$hid}
+     * fresns_model_post_{$pid}
+     * fresns_model_comment_{$cid}
+     * fresns_model_file_{$fid}
+     * fresns_model_extend_{$eid}
+     */
+    public static function forgetModel(string $modelName, string $fsid)
+    {
+        $cacheKey = "fresns_model_{$modelName}_{$fsid}";
 
         Cache::forget($cacheKey);
 
