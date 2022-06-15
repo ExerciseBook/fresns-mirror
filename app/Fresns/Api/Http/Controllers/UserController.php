@@ -15,6 +15,7 @@ use App\Fresns\Api\Http\DTO\UserEditDTO;
 use App\Fresns\Api\Http\DTO\UserListDTO;
 use App\Fresns\Api\Http\DTO\UserMarkDTO;
 use App\Fresns\Api\Http\DTO\UserMarkListDTO;
+use App\Fresns\Api\Http\DTO\UserMarkNoteDTO;
 use App\Fresns\Api\Services\InteractiveService;
 use App\Fresns\Api\Services\UserService;
 use App\Helpers\CacheHelper;
@@ -32,6 +33,8 @@ use App\Models\PluginUsage;
 use App\Models\PostLog;
 use App\Models\Seo;
 use App\Models\User;
+use App\Models\UserBlock;
+use App\Models\UserFollow;
 use App\Models\UserStat;
 use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
@@ -640,45 +643,97 @@ class UserController extends Controller
             throw new ApiException(36200);
         }
 
-        $authUserId = $this->user()->id;
-
         $primaryId = PrimaryHelper::fresnsPrimaryId($dtoRequest->markType, $dtoRequest->fsid);
-
         if (empty($primaryId)) {
             throw new ApiException(32201);
         }
 
+        $authUserId = $this->user()->id;
+
+        $markType = match ($dtoRequest->markType) {
+            'user' => 1,
+            'group' => 2,
+            'hashtag' => 3,
+            'post' => 4,
+            'comment' => 5,
+        };
+
         switch ($dtoRequest->interactiveType) {
             // like
             case 'like':
-                InteractiveUtility::markUserLike($authUserId, $dtoRequest->markType, $primaryId);
+                InteractiveUtility::markUserLike($authUserId, $markType, $primaryId);
             break;
 
             // dislike
             case 'dislike':
-                InteractiveUtility::markUserDislike($authUserId, $dtoRequest->markType, $primaryId);
+                InteractiveUtility::markUserDislike($authUserId, $markType, $primaryId);
             break;
 
             // follow
             case 'follow':
-                $validMark = ValidationUtility::userMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
+                $validMark = ValidationUtility::userMarkOwn($authUserId, $markType, $primaryId);
                 if (! $validMark) {
                     throw new ApiException(36202);
                 }
 
-                InteractiveUtility::markUserFollow($authUserId, $dtoRequest->markType, $primaryId);
+                InteractiveUtility::markUserFollow($authUserId, $markType, $primaryId);
             break;
 
             // block
             case 'block':
-                $validMark = ValidationUtility::userMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
+                $validMark = ValidationUtility::userMarkOwn($authUserId, $markType, $primaryId);
                 if (! $validMark) {
                     throw new ApiException(36202);
                 }
 
-                InteractiveUtility::markUserBlock($authUserId, $dtoRequest->markType, $primaryId);
+                InteractiveUtility::markUserBlock($authUserId, $markType, $primaryId);
             break;
         }
+
+        return $this->success();
+    }
+
+    // mark note
+    public function markNote(Request $request)
+    {
+        $dtoRequest = new UserMarkNoteDTO($request->all());
+
+        $primaryId = PrimaryHelper::fresnsPrimaryId($dtoRequest->markType, $dtoRequest->fsid);
+        if (empty($primaryId)) {
+            throw new ApiException(32201);
+        }
+
+        $authUserId = $this->user()->id;
+
+        $markType = match ($dtoRequest->markType) {
+            'user' => 1,
+            'group' => 2,
+            'hashtag' => 3,
+            'post' => 4,
+            'comment' => 5,
+        };
+
+        switch ($dtoRequest->interactiveType) {
+            // follow
+            case 'follow':
+                $userNote = UserFollow::withTrashed()->where('user_id', $authUserId)->type($markType)->where('follow_id', $primaryId)->first();
+            break;
+
+            // block
+            case 'block':
+                $userNote = UserBlock::withTrashed()->where('user_id', $authUserId)->type($markType)->where('block_id', $primaryId)->first();
+            break;
+        }
+
+        if (empty($dtoRequest->note)) {
+            $userNote->update([
+                'user_note' => null,
+            ]);
+        }
+
+        $userNote->update([
+            'user_note' => $dtoRequest->note,
+        ]);
 
         return $this->success();
     }

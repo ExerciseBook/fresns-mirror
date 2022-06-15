@@ -71,6 +71,7 @@ Route::prefix('v2')->group(function () {
         Route::get('panel', [UserController::class, 'panel'])->name('user.panel');
         Route::put('edit', [UserController::class, 'edit'])->name('user.edit');
         Route::post('mark', [UserController::class, 'mark'])->name('user.mark');
+        Route::put('mark-note', [UserController::class, 'markNote'])->name('user.markNote');
     });
 
     Route::prefix('notify')->group(function () {
