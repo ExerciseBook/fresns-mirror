@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'SEO Description',
     'menu_table_seo_keywords' => 'SEO Keywords',
     'menu_table_parameter' => 'Default Parameter',
+    'menu_table_parameter_desc' => 'Refer to the API Query parameters of this interface',
     'menu_user_list' => 'User List',
     'menu_group_list' => 'Group List',
     'menu_hashtag_list' => 'Hashtag List',

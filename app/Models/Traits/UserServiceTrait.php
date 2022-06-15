@@ -101,7 +101,7 @@ trait UserServiceTrait
         $mainRoleData = UserRole::where('user_id', $userData->id)->where('is_main', 1)->first(['role_id', 'expired_at']);
         $roleData = Role::where('id', $mainRoleData->role_id)->first();
 
-        foreach ($roleData->permission as $perm) {
+        foreach ($roleData->permissions as $perm) {
             $permission['rid'] = $roleData->id;
             $permission[$perm['permKey']] = $perm['permValue'];
         }
@@ -113,7 +113,7 @@ trait UserServiceTrait
         $mainRole['roleIcon'] = FileHelper::fresnsFileUrlByTableColumn($roleData->icon_file_id, $roleData->icon_file_url);
         $mainRole['roleIconDisplay'] = (bool) $roleData->is_display_icon;
         $mainRole['roleExpiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($mainRoleData->expired_at, $timezone, $langTag);
-        $mainRole['rolePermission'] = $permission;
+        $mainRole['rolePermissions'] = $permission;
         $mainRole['roleStatus'] = (bool) $roleData->is_enable;
 
         return $mainRole;

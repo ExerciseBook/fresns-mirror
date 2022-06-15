@@ -9,18 +9,22 @@
 namespace App\Fresns\Api\Http\Controllers;
 
 use App\Exceptions\ApiException;
+use App\Fresns\Api\Http\DTO\InteractiveDTO;
+use App\Fresns\Api\Http\DTO\PaginationDTO;
 use App\Fresns\Api\Http\DTO\PostDetailDTO;
 use App\Fresns\Api\Http\DTO\PostFollowDTO;
 use App\Fresns\Api\Http\DTO\PostListDTO;
 use App\Fresns\Api\Http\DTO\PostNearbyDTO;
-use App\Fresns\Api\Services\HeaderService;
+use App\Fresns\Api\Services\InteractiveService;
 use App\Fresns\Api\Services\PostFollowService;
 use App\Fresns\Api\Services\PostService;
+use App\Fresns\Api\Services\UserService;
 use App\Helpers\ConfigHelper;
 use App\Models\Plugin;
 use App\Models\Post;
+use App\Models\PostLog;
+use App\Models\PostUser;
 use App\Models\Seo;
-use App\Models\User;
 use App\Utilities\ExtendUtility;
 use App\Utilities\LbsUtility;
 use Illuminate\Http\Request;
@@ -28,6 +32,7 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
+    // list
     public function list(Request $request)
     {
         $dtoRequest = new PostListDTO($request->all());
@@ -37,15 +42,21 @@ class PostController extends Controller
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByAll');
 
             if ($dataPluginUnikey) {
-                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($dtoRequest->toArray());
+                $wordBody = ([
+                    "header" => \request()->header(),
+                    "body" => $dtoRequest->toArray(),
+                ]);
+
+                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($wordBody);
 
                 return $fresnsResp->getOrigin();
             }
         }
 
         // Fresns provides data
-        $headers = HeaderService::getHeaders();
-        $user = ! empty($headers['uid']) ? User::whereUid($headers['uid'])->first() : null;
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUser = $this->user();
 
         $postQuery = Post::isEnable();
         $posts = $postQuery->paginate($request->get('pageSize', 15));
@@ -53,46 +64,194 @@ class PostController extends Controller
         $postList = [];
         $service = new PostService();
         foreach ($posts as $post) {
-            $postList[] = $service->postDetail($post, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+            $postList[] = $service->postDetail($post, 'list', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
     }
 
+    // detail
     public function detail(string $pid, Request $request)
     {
         $dtoRequest = new PostDetailDTO($request->all());
 
-        $post = Post::with('creator')->wherePid($pid)->first();
+        $post = Post::with(['creator', 'group', 'hashtags'])->where('pid', $pid)->isEnable()->first();
+
         if (empty($post)) {
             throw new ApiException(37300);
         }
+
+        UserService::checkUserContentViewPerm($post->created_at);
 
         // Plugin provides data
         $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_detail_service');
         $dataPlugin = Plugin::where('unikey', $dataPluginUnikey)->isEnable()->first();
 
         if ($dataPlugin) {
-            $fresnsResp = \FresnsCmdWord::plugin($dataPlugin->unikey)->getPostDetail($dtoRequest->toArray());
+            $wordBody = ([
+                "header" => \request()->header(),
+                "body" => $dtoRequest->toArray(),
+            ]);
+
+            $fresnsResp = \FresnsCmdWord::plugin($dataPlugin->unikey)->getPostDetail($wordBody);
 
             return $fresnsResp->getOrigin();
         }
 
         // Fresns provides data
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUser = $this->user();
 
-        $seoData = Seo::where('linked_type', 4)->where('linked_id', $post->id)->where('lang_tag', $headers['langTag'])->first();
-        $common['title'] = $seoData->title ?? null;
-        $common['keywords'] = $seoData->keywords ?? null;
-        $common['description'] = $seoData->description ?? null;
-        $data['commons'] = $common;
+        $seoData = Seo::where('linked_type', Seo::TYPE_POST)->where('linked_id', $post->id)->where('lang_tag', $langTag)->first();
+
+        $item['title'] = $seoData->title ?? null;
+        $item['keywords'] = $seoData->keywords ?? null;
+        $item['description'] = $seoData->description ?? null;
+        $data['items'] = $item;
 
         $service = new PostService();
-        $data['detail'] = $service->postDetail($post, 'detail', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+        $data['detail'] = $service->postDetail($post, 'detail', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
 
         return $this->success($data);
     }
 
+    // interactive
+    public function interactive(string $pid, string $type, Request $request)
+    {
+        $post = Post::where('pid', $pid)->isEnable()->first();
+
+        if (empty($post)) {
+            throw new ApiException(37300);
+        }
+
+        UserService::checkUserContentViewPerm($post->created_at);
+
+        $requestData = $request->all();
+        $requestData['type'] = $type;
+        $dtoRequest = new InteractiveDTO($requestData);
+
+        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'post');
+
+        $orderDirection = $dtoRequest->orderDirection ?: 'desc';
+
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
+
+        $service = new InteractiveService();
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_POST, $post->id, $orderDirection, $langTag, $timezone, $authUserId);
+
+        return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
+    }
+
+    // userList
+    public function userList(string $pid, Request $request)
+    {
+        $post = Post::where('pid', $pid)->isEnable()->first();
+
+        if (empty($post)) {
+            throw new ApiException(37300);
+        }
+
+        UserService::checkUserContentViewPerm($post->created_at);
+
+        $dtoRequest = new PaginationDTO($request->all());
+
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
+
+        $userListData = PostUser::with('user')->where('post_id', $post->id)->latest()->paginate($request->get('pageSize', 15));
+
+        $userList = [];
+        $service = new UserService();
+        foreach ($userListData as $user) {
+            $userList[] = $service->userList($user, $langTag, $timezone, $authUserId);
+        }
+
+        return $this->fresnsPaginate($userList, $userListData->total(), $userListData->perPage());
+    }
+
+    // postLogs
+    public function postLogs(string $pid, Request $request)
+    {
+        $post = Post::where('pid', $pid)->isEnable()->first();
+
+        if (empty($post)) {
+            throw new ApiException(37300);
+        }
+
+        UserService::checkUserContentViewPerm($post->created_at);
+
+        $dtoRequest = new PaginationDTO($request->all());
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
+
+        $postLogs = PostLog::with('user')->where('post_id', $post->id)->where('state', 3)->latest()->paginate($request->get('pageSize', 15));
+
+        $postLogList = [];
+        $service = new PostService();
+        foreach ($postLogs as $log) {
+            $postLogList[] = $service->postLogList($log, $langTag, $timezone, $authUserId);
+        }
+
+        return $this->fresnsPaginate($postLogList, $postLogs->total(), $postLogs->perPage());
+    }
+
+    // logDetail
+    public function logDetail(string $pid, int $logId, Request $request)
+    {
+        $post = Post::where('pid', $pid)->isEnable()->first();
+
+        if (empty($post)) {
+            throw new ApiException(37300);
+        }
+
+        UserService::checkUserContentViewPerm($post->created_at);
+
+        $log = PostLog::where('post_id', $post->id)->where('id', $logId)->where('state', 3)->first();
+
+        if (empty($log)) {
+            throw new ApiException(37302);
+        }
+
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
+
+        $service = new PostService();
+        $data['detail'] = $service->postLogDetail($log, $langTag, $timezone, $authUserId);
+
+        return $this->success($data);
+    }
+
+    // delete
+    public function delete(string $pid)
+    {
+        $post = Post::where('pid', $pid)->first();
+
+        if (empty($post)) {
+            throw new ApiException(36400);
+        }
+
+        $authUser = $this->user();
+
+        if ($post->user_id != $authUser->id) {
+            throw new ApiException(36403);
+        }
+
+        if (! $post->postAppend->can_delete) {
+            throw new ApiException(36401);
+        }
+
+        $post->delete();
+
+        return $this->success();
+    }
+
+    // follow
     public function follow(string $type, Request $request)
     {
         $requestData = $request->all();
@@ -104,54 +263,94 @@ class PostController extends Controller
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByFollow');
 
             if ($dataPluginUnikey) {
-                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByFollow($dtoRequest->toArray());
+                $wordBody = ([
+                    "header" => \request()->header(),
+                    "body" => $dtoRequest->toArray(),
+                ]);
+
+                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByFollow($wordBody);
 
                 return $fresnsResp->getOrigin();
             }
         }
 
         // Fresns provides data
-        $headers = HeaderService::getHeaders();
-        $user = User::whereUid($headers['uid'])->first();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUser = $this->user();
+        $userContentViewPerm = $this->userContentViewPerm();
 
-        $postFollowService = new PostFollowService($user, $dtoRequest);
+        $postFollowService = new PostFollowService();
 
-        ['data' => $data, 'posts' => $posts] = $postFollowService->handle();
+        switch ($dtoRequest->type) {
+            // all
+            case 'all':
+                $posts = $postFollowService->getPostListByFollowAll($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+            break;
 
-        if (! $posts) {
-            return $this->success();
+            // user
+            case 'user':
+                $posts = $postFollowService->getPostListByFollowUsers($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+            break;
+
+            // group
+            case 'group':
+                $posts = $postFollowService->getPostListByFollowGroups($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+            break;
+
+            // hashtag
+            case 'hashtag':
+                $posts = $postFollowService->getPostListByFollowHashtags($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+            break;
         }
 
-        return $this->fresnsPaginate(
-            $data,
-            $posts->total(),
-            $posts->perPage(),
-        );
+        $postList = [];
+        $service = new PostService();
+        foreach ($posts as $post) {
+            $postList[] = $service->postDetail($post, 'list', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+            $postList['followType'] = $postFollowService->getFollowType($post->user_id, $post->group_id, $post->hashtags, $authUser->id);
+        }
+
+        return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
     }
 
+    // nearby
     public function nearby(Request $request)
     {
         $dtoRequest = new PostNearbyDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
         // Plugin provides data
         if ($dtoRequest->contentType) {
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByNearby');
 
             if ($dataPluginUnikey) {
-                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByNearby($dtoRequest->toArray());
+                $wordBody = ([
+                    "header" => \request()->header(),
+                    "body" => $dtoRequest->toArray(),
+                ]);
+
+                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByNearby($wordBody);
 
                 return $fresnsResp->getOrigin();
             }
         }
 
         // Fresns provides data
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUser = $this->user();
+        $userContentViewPerm = $this->userContentViewPerm();
+
+        if ($userContentViewPerm['type'] == 2) {
+            throw new ApiException(35303);
+        }
+
         $nearbyConfig = ConfigHelper::fresnsConfigByItemKeys([
             'nearby_length_km',
             'nearby_length_mi',
         ]);
 
-        $unit = $dtoRequest->unit ?? ConfigHelper::fresnsConfigLengthUnit($headers['langTag']);
+        $unit = $dtoRequest->unit ?? ConfigHelper::fresnsConfigLengthUnit($langTag);
         $length = $dtoRequest->length ?? $nearbyConfig["nearby_length_{$unit}"];
 
         $nearbyLength = match ($unit) {
@@ -172,7 +371,7 @@ class PostController extends Controller
         $postList = [];
         $service = new PostService();
         foreach ($posts as $post) {
-            $postList[] = $service->postDetail($post, 'list', $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+            $postList[] = $service->postDetail($post, 'list', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());

@@ -15,9 +15,10 @@ use App\Fresns\Api\Http\DTO\UserEditDTO;
 use App\Fresns\Api\Http\DTO\UserListDTO;
 use App\Fresns\Api\Http\DTO\UserMarkDTO;
 use App\Fresns\Api\Http\DTO\UserMarkListDTO;
-use App\Fresns\Api\Services\HeaderService;
+use App\Fresns\Api\Http\DTO\UserMarkNoteDTO;
 use App\Fresns\Api\Services\InteractiveService;
 use App\Fresns\Api\Services\UserService;
+use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\BlockWord;
@@ -32,6 +33,8 @@ use App\Models\PluginUsage;
 use App\Models\PostLog;
 use App\Models\Seo;
 use App\Models\User;
+use App\Models\UserBlock;
+use App\Models\UserFollow;
 use App\Models\UserStat;
 use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
@@ -46,12 +49,10 @@ class UserController extends Controller
     public function list(Request $request)
     {
         $dtoRequest = new UserListDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
         $userQuery = UserStat::with('user');
 
@@ -63,12 +64,12 @@ class UserController extends Controller
             $query->whereRelation('user', 'gender', $value);
         });
 
-        if ($dtoRequest->createTimeGt) {
-            $userQuery->where('created_at', '>=', $dtoRequest->createTimeGt);
+        if ($dtoRequest->createDateGt) {
+            $userQuery->whereDate('created_at', '>=', $dtoRequest->createDateGt);
         }
 
-        if ($dtoRequest->createTimeLt) {
-            $userQuery->where('created_at', '<=', $dtoRequest->createTimeLt);
+        if ($dtoRequest->createDateLt) {
+            $userQuery->whereDate('created_at', '<=', $dtoRequest->createDateLt);
         }
 
         if ($dtoRequest->likeCountGt) {
@@ -175,7 +176,7 @@ class UserController extends Controller
             $userQuery->where('extcredits5', '<=', $dtoRequest->extcredits5CountLt);
         }
 
-        $ratingType = match ($dtoRequest->ratingType) {
+        $orderType = match ($dtoRequest->orderType) {
             default => 'created_at',
             'like' => 'like_me_count',
             'dislike' => 'dislike_me_count',
@@ -190,23 +191,23 @@ class UserController extends Controller
             'extcredits3' => 'extcredits3',
             'extcredits4' => 'extcredits4',
             'extcredits5' => 'extcredits5',
-            'createTime' => 'created_at',
+            'createDate' => 'created_at',
         };
 
-        $ratingOrder = match ($dtoRequest->ratingOrder) {
+        $orderDirection = match ($dtoRequest->orderDirection) {
             default => 'desc',
             'asc' => 'asc',
             'desc' => 'desc',
         };
 
-        $userQuery->orderBy($ratingType, $ratingOrder);
+        $userQuery->orderBy($orderType, $orderDirection);
 
         $userData = $userQuery->paginate($request->get('pageSize', 15));
 
         $userList = [];
         $service = new UserService();
         foreach ($userData as $user) {
-            $userList[] = $service->userList($user->user, $headers['langTag'], $headers['timezone'], $authUserId);
+            $userList[] = $service->userList($user->user, $langTag, $timezone, $authUserId);
         }
 
         return $this->fresnsPaginate($userList, $userData->total(), $userData->perPage());
@@ -215,7 +216,7 @@ class UserController extends Controller
     // detail
     public function detail(string $uidOrUsername)
     {
-        if (is_numeric($uidOrUsername)) {
+        if (is_int($uidOrUsername)) {
             $viewUser = User::where('uid', $uidOrUsername)->first();
         } else {
             $viewUser = User::where('username', $uidOrUsername)->first();
@@ -225,23 +226,20 @@ class UserController extends Controller
             throw new ApiException(31602);
         }
 
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $seoData = Seo::where('linked_type', Seo::TYPE_USER)->where('linked_id', $viewUser->id)->where('lang_tag', $langTag)->first();
 
-        $seoData = Seo::where('linked_type', Seo::TYPE_USER)->where('linked_id', $viewUser->id)->where('lang_tag', $headers['langTag'])->first();
-
-        $common['title'] = $seoData->title ?? null;
-        $common['keywords'] = $seoData->keywords ?? null;
-        $common['description'] = $seoData->description ?? null;
-        $common['manages'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_USER, $authUserId, $headers['langTag']);
-        $data['commons'] = $common;
+        $item['title'] = $seoData->title ?? null;
+        $item['keywords'] = $seoData->keywords ?? null;
+        $item['description'] = $seoData->description ?? null;
+        $item['manages'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_USER, $authUserId, $langTag);
+        $data['items'] = $item;
 
         $service = new UserService();
-        $data['detail'] = $service->userDetail($viewUser, $headers['langTag'], $headers['timezone'], $authUserId);
+        $data['detail'] = $service->userDetail($viewUser, $langTag, $timezone, $authUserId);
 
         return $this->success($data);
     }
@@ -249,7 +247,7 @@ class UserController extends Controller
     // interactive
     public function interactive(string $uidOrUsername, string $type, Request $request)
     {
-        if (is_numeric($uidOrUsername)) {
+        if (is_int($uidOrUsername)) {
             $viewUser = User::where('uid', $uidOrUsername)->first();
         } else {
             $viewUser = User::where('username', $uidOrUsername)->first();
@@ -263,21 +261,20 @@ class UserController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
 
-        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_users");
-        if (! $markSet) {
-            throw new ApiException(36201);
-        }
+        $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
-        $timeOrder = $dtoRequest->timeOrder ?: 'desc';
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
-        $headers = HeaderService::getHeaders();
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        if ($viewUser->id == $authUserId) {
+            InteractiveService::checkMyInteractiveSetting($dtoRequest->type, 'user');
+        } else {
+            InteractiveService::checkInteractiveSetting($dtoRequest->type, 'user');
         }
 
         $service = new InteractiveService();
-        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_USER, $viewUser->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_USER, $viewUser->id, $orderDirection, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }
@@ -285,7 +282,7 @@ class UserController extends Controller
     // markList
     public function markList(string $uidOrUsername, string $markType, string $listType, Request $request)
     {
-        if (is_numeric($uidOrUsername)) {
+        if (is_int($uidOrUsername)) {
             $viewUser = User::where('uid', $uidOrUsername)->first();
         } else {
             $viewUser = User::where('username', $uidOrUsername)->first();
@@ -305,17 +302,14 @@ class UserController extends Controller
             throw new ApiException(36201);
         }
 
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
-
-        $timeOrder = $dtoRequest->timeOrder ?: 'desc';
+        $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
         $service = new InteractiveService();
-        $data = $service->getItMarkList($dtoRequest->markType, $dtoRequest->listType, $viewUser->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
+        $data = $service->getItMarkList($dtoRequest->markType, $dtoRequest->listType, $viewUser->id, $orderDirection, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['markData']->total(), $data['markData']->perPage());
     }
@@ -325,7 +319,7 @@ class UserController extends Controller
     {
         $dtoRequest = new UserAuthDTO($request->all());
 
-        if (is_numeric($dtoRequest->uidOrUsername)) {
+        if (is_int($dtoRequest->uidOrUsername)) {
             $authUser = User::where('uid', $dtoRequest->uidOrUsername)->first();
         } else {
             $authUser = User::where('username', $dtoRequest->uidOrUsername)->first();
@@ -335,13 +329,14 @@ class UserController extends Controller
             throw new ApiException(31602);
         }
 
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
 
         $password = base64_decode($dtoRequest->password, true);
 
         // login
         $wordBody = [
-            'aid' => $headers['aid'],
+            'aid' => $request->header('aid'),
             'uid' => $authUser->uid,
             'password' => $password,
         ];
@@ -353,7 +348,7 @@ class UserController extends Controller
 
         // create token
         $createTokenWordBody = [
-            'platformId' => $headers['platformId'],
+            'platformId' => $request->header('platformId'),
             'aid' => $fresnsResponse->getData('aid'),
             'uid' => $fresnsResponse->getData('uid'),
             'expiredTime' => null,
@@ -371,7 +366,7 @@ class UserController extends Controller
 
         // get user data
         $service = new UserService();
-        $data['detail'] = $service->userDetail($authUser, $headers['langTag'], $headers['timezone']);
+        $data['detail'] = $service->userDetail($authUser, $langTag, $timezone);
 
         return $this->success($data);
     }
@@ -379,19 +374,15 @@ class UserController extends Controller
     // panel
     public function panel()
     {
-        $headers = HeaderService::getHeaders();
-        $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        $langTag = $this->langTag();
+        $authUserId = $this->user()->id;
 
-        if (empty($authUserId)) {
-            throw new ApiException(31602);
-        }
-
-        $data['features'] = ExtendUtility::getPluginExtends(7, null, null, $authUserId, $headers['langTag']);
-        $data['profiles'] = ExtendUtility::getPluginExtends(8, null, null, $authUserId, $headers['langTag']);
+        $data['features'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_FEATURE, null, null, $authUserId, $langTag);
+        $data['profiles'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_PROFILE, null, null, $authUserId, $langTag);
 
         $dialogACount = Dialog::where('a_user_id', $authUserId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
         $dialogBCount = Dialog::where('b_user_id', $authUserId)->where('b_is_read', 0)->where('b_is_display', 1)->count();
-        $dialogMessageCount = DialogMessage::where('recv_user_id', $authUserId)->where('recv_read_at', null)->where('recv_deleted_at', null)->isEnable()->count();
+        $dialogMessageCount = DialogMessage::where('receive_user_id', $authUserId)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
         $dialogUnread['dialog'] = $dialogACount + $dialogBCount;
         $dialogUnread['message'] = $dialogMessageCount;
         $data['dialogUnread'] = $dialogUnread;
@@ -416,7 +407,8 @@ class UserController extends Controller
     public function edit(Request $request)
     {
         $dtoRequest = new UserEditDTO($request->all());
-        $headers = HeaderService::getHeaders();
+
+        $authUser = $this->user();
 
         if ($dtoRequest->avatarFid && $dtoRequest->avatarUrl) {
             throw new ApiException(30005);
@@ -425,8 +417,6 @@ class UserController extends Controller
         if ($dtoRequest->bannerFid && $dtoRequest->bannerUrl) {
             throw new ApiException(30005);
         }
-
-        $authUser = User::where('uid', $headers['uid'])->first();
 
         $editNameConfig = ConfigHelper::fresnsConfigByItemKeys([
             'username_edit',
@@ -575,12 +565,16 @@ class UserController extends Controller
             $validateBio = ValidationUtility::bio($bio);
 
             if (! $validateBio['banWord']) {
-                throw new ApiException(33105);
+                throw new ApiException(33106);
             }
 
             if (! $validateBio['length']) {
-                throw new ApiException(33106);
+                throw new ApiException(33107);
             }
+
+            $blockWords = BlockWord::where('user_mode', 2)->get('word', 'replace_word');
+
+            $newBio = str_ireplace($blockWords->pluck('word')->toArray(), $blockWords->pluck('replace_word')->toArray(), $bio);
 
             $bioConfig = ConfigHelper::fresnsConfigByItemKeys([
                 'bio_support_mention',
@@ -589,19 +583,19 @@ class UserController extends Controller
             ]);
 
             if ($bioConfig['bio_support_mention']) {
-                ContentUtility::saveMention($bio, Mention::TYPE_USER, $authUser->id, $authUser->id);
+                ContentUtility::saveMention($newBio, Mention::TYPE_USER, $authUser->id, $authUser->id);
             }
 
             if ($bioConfig['bio_support_link']) {
-                ContentUtility::saveLink($bio, DomainLinkLinked::TYPE_USER, $authUser->id);
+                ContentUtility::saveLink($newBio, DomainLinkLinked::TYPE_USER, $authUser->id);
             }
 
             if ($bioConfig['bio_support_hashtag']) {
-                ContentUtility::saveHashtag($bio, HashtagLinked::TYPE_USER, $authUser->id);
+                ContentUtility::saveHashtag($newBio, HashtagLinked::TYPE_USER, $authUser->id);
             }
 
             $authUser->update([
-                'gender' => $bio,
+                'gender' => $newBio,
             ]);
         }
 
@@ -634,6 +628,8 @@ class UserController extends Controller
             ]);
         }
 
+        CacheHelper::forgetApiUser($authUser->uid);
+
         return $this->success();
     }
 
@@ -647,46 +643,97 @@ class UserController extends Controller
             throw new ApiException(36200);
         }
 
-        $headers = HeaderService::getHeaders();
-        $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-
         $primaryId = PrimaryHelper::fresnsPrimaryId($dtoRequest->markType, $dtoRequest->fsid);
-
         if (empty($primaryId)) {
             throw new ApiException(32201);
         }
 
+        $authUserId = $this->user()->id;
+
+        $markType = match ($dtoRequest->markType) {
+            'user' => 1,
+            'group' => 2,
+            'hashtag' => 3,
+            'post' => 4,
+            'comment' => 5,
+        };
+
         switch ($dtoRequest->interactiveType) {
             // like
             case 'like':
-                InteractiveUtility::markUserLike($authUserId, $dtoRequest->markType, $primaryId);
+                InteractiveUtility::markUserLike($authUserId, $markType, $primaryId);
             break;
 
             // dislike
             case 'dislike':
-                InteractiveUtility::markUserDislike($authUserId, $dtoRequest->markType, $primaryId);
+                InteractiveUtility::markUserDislike($authUserId, $markType, $primaryId);
             break;
 
             // follow
             case 'follow':
-                $validMark = ValidationUtility::userMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
+                $validMark = ValidationUtility::userMarkOwn($authUserId, $markType, $primaryId);
                 if (! $validMark) {
                     throw new ApiException(36202);
                 }
 
-                InteractiveUtility::markUserFollow($authUserId, $dtoRequest->markType, $primaryId);
+                InteractiveUtility::markUserFollow($authUserId, $markType, $primaryId);
             break;
 
             // block
             case 'block':
-                $validMark = ValidationUtility::userMarkOwn($authUserId, $dtoRequest->markType, $primaryId);
+                $validMark = ValidationUtility::userMarkOwn($authUserId, $markType, $primaryId);
                 if (! $validMark) {
                     throw new ApiException(36202);
                 }
 
-                InteractiveUtility::markUserBlock($authUserId, $dtoRequest->markType, $primaryId);
+                InteractiveUtility::markUserBlock($authUserId, $markType, $primaryId);
             break;
         }
+
+        return $this->success();
+    }
+
+    // mark note
+    public function markNote(Request $request)
+    {
+        $dtoRequest = new UserMarkNoteDTO($request->all());
+
+        $primaryId = PrimaryHelper::fresnsPrimaryId($dtoRequest->markType, $dtoRequest->fsid);
+        if (empty($primaryId)) {
+            throw new ApiException(32201);
+        }
+
+        $authUserId = $this->user()->id;
+
+        $markType = match ($dtoRequest->markType) {
+            'user' => 1,
+            'group' => 2,
+            'hashtag' => 3,
+            'post' => 4,
+            'comment' => 5,
+        };
+
+        switch ($dtoRequest->interactiveType) {
+            // follow
+            case 'follow':
+                $userNote = UserFollow::withTrashed()->where('user_id', $authUserId)->type($markType)->where('follow_id', $primaryId)->first();
+            break;
+
+            // block
+            case 'block':
+                $userNote = UserBlock::withTrashed()->where('user_id', $authUserId)->type($markType)->where('block_id', $primaryId)->first();
+            break;
+        }
+
+        if (empty($dtoRequest->note)) {
+            $userNote->update([
+                'user_note' => null,
+            ]);
+        }
+
+        $userNote->update([
+            'user_note' => $dtoRequest->note,
+        ]);
 
         return $this->success();
     }

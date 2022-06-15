@@ -13,12 +13,10 @@ use App\Fresns\Api\Http\DTO\NotifyListDTO;
 use App\Fresns\Api\Services\CommentService;
 use App\Fresns\Api\Services\GroupService;
 use App\Fresns\Api\Services\HashtagService;
-use App\Fresns\Api\Services\HeaderService;
 use App\Fresns\Api\Services\PostService;
 use App\Fresns\Api\Services\UserService;
 use App\Helpers\DateHelper;
 use App\Helpers\PluginHelper;
-use App\Helpers\PrimaryHelper;
 use App\Models\Notify;
 use Illuminate\Http\Request;
 
@@ -28,12 +26,10 @@ class NotifyController extends Controller
     public function list(Request $request)
     {
         $dtoRequest = new NotifyListDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()->id;
 
         $readStatus = $dtoRequest->status ?: 0;
         $typeArr = array_filter(explode(',', $dtoRequest->types));
@@ -63,8 +59,8 @@ class NotifyController extends Controller
             $item['actionUser'] = null;
             $item['actionType'] = $notify->action_type;
             $item['actionInfo'] = null;
-            $info['notifyTime'] = DateHelper::fresnsFormatDateTime($notify->created_at, $headers['timezone'], $headers['langTag']);
-            $info['notifyTimeFormat'] = DateHelper::fresnsFormatTime($notify->created_at, $headers['langTag']);
+            $info['notifyTime'] = DateHelper::fresnsDateTimeByTimezone($notify->created_at, $timezone, $langTag);
+            $info['notifyTimeFormat'] = DateHelper::fresnsFormatDateTime($notify->created_at, $timezone, $langTag);
             $item['status'] = (bool) $notify->is_read;
 
             if ($notify->is_access_plugin) {
@@ -72,17 +68,20 @@ class NotifyController extends Controller
             }
 
             if ($notify->action_user_id) {
-                $item['actionUser'] = $notify->actionUser?->getUserProfile($headers['langTag'], $headers['timezone']);
+                $userProfile = $notify->actionUser?->getUserProfile($langTag, $timezone);
+                $userMainRole = $notify->actionUser?->getUserMainRole($langTag, $timezone);
+
+                $item['actionUser'] = array_merge($userProfile, $userMainRole);
             }
 
             if ($notify->action_id) {
                 $actionInfo = match ($notify->action_type) {
                     default => null,
-                    Notify::ACTION_TYPE_USER => $userService->userList($notify->user, $headers['langTag'], $headers['timezone'], $authUserId),
-                    Notify::ACTION_TYPE_GROUP => $groupService->groupList($notify->group, $headers['langTag'], $headers['timezone'], $authUserId),
-                    Notify::ACTION_TYPE_HASHTAG => $hashtagService->hashtagList($notify->hashtag, $headers['langTag'], $authUserId),
-                    Notify::ACTION_TYPE_POST => $postService->postDetail($notify->post, 'list', $headers['langTag'], $headers['timezone'], $authUserId),
-                    Notify::ACTION_TYPE_COMMENT => $commentService->commentDetail($notify->comment, 'list', $headers['langTag'], $headers['timezone'], $authUserId),
+                    Notify::ACTION_TYPE_USER => $userService->userList($notify->user, $langTag, $timezone, $authUserId),
+                    Notify::ACTION_TYPE_GROUP => $groupService->groupList($notify->group, $langTag, $timezone, $authUserId),
+                    Notify::ACTION_TYPE_HASHTAG => $hashtagService->hashtagList($notify->hashtag, $langTag, $authUserId),
+                    Notify::ACTION_TYPE_POST => $postService->postList($notify->post, $langTag, $timezone, $authUserId),
+                    Notify::ACTION_TYPE_COMMENT => $commentService->commentList($notify->comment, $langTag, $timezone, $authUserId),
                 };
 
                 $item['actionInfo'] = $actionInfo;
@@ -94,23 +93,19 @@ class NotifyController extends Controller
         return $this->fresnsPaginate($notifyList, $notifies->total(), $notifies->perPage());
     }
 
-    // read
-    public function read(Request $request)
+    // markAsRead
+    public function markAsRead(Request $request)
     {
         $dtoRequest = new NotifyDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $authUserId = $this->user()->id;
 
-        if ($dtoRequest->markType == 'all') {
-            Notify::where('user_id', $authUserId)->where('type', $dtoRequest->type)->where('is_read', 0)->update([
+        if ($dtoRequest->type == 'all') {
+            Notify::where('user_id', $authUserId)->where('type', $dtoRequest->notifyType)->where('is_read', 0)->update([
                 'is_read' => 1,
             ]);
         } else {
-            $idArr = array_filter(explode(',', $dtoRequest->ids));
+            $idArr = array_filter(explode(',', $dtoRequest->notifyIds));
 
             Notify::where('user_id', $authUserId)->whereIn('id', $idArr)->where('is_read', 0)->update([
                 'is_read' => 1,
@@ -124,17 +119,13 @@ class NotifyController extends Controller
     public function delete(Request $request)
     {
         $dtoRequest = new NotifyDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $authUserId = $this->user()->id;
 
-        if ($dtoRequest->markType == 'all') {
-            Notify::where('user_id', $authUserId)->where('type', $dtoRequest->type)->delete();
+        if ($dtoRequest->type == 'all') {
+            Notify::where('user_id', $authUserId)->where('type', $dtoRequest->notifyType)->delete();
         } else {
-            $idArr = array_filter(explode(',', $dtoRequest->ids));
+            $idArr = array_filter(explode(',', $dtoRequest->notifyIds));
 
             Notify::where('user_id', $authUserId)->whereIn('id', $idArr)->delete();
         }

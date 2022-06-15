@@ -12,12 +12,13 @@ use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
 use Browser;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
 class AppUtility
 {
     public static function currentVersion()
     {
-        return \Cache::remember('currentVersion', 3600, function () {
+        return Cache::remember('currentVersion', 3600, function () {
             $fresnsJson = file_get_contents(
                 base_path('fresns.json')
             );
@@ -30,7 +31,7 @@ class AppUtility
 
     public static function newVersion()
     {
-        return \Cache::remember('newVersion', 3600, function () {
+        return Cache::remember('newVersion', 3600, function () {
             try {
                 $versionInfoUrl = AppUtility::getApiHost().'/version.json';
                 $client = new \GuzzleHttp\Client();

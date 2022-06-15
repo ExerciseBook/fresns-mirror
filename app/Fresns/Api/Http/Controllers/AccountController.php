@@ -17,12 +17,10 @@ use App\Fresns\Api\Http\DTO\AccountResetPasswordDTO;
 use App\Fresns\Api\Http\DTO\AccountVerifyIdentityDTO;
 use App\Fresns\Api\Http\DTO\AccountWalletLogsDTO;
 use App\Fresns\Api\Services\AccountService;
-use App\Fresns\Api\Services\HeaderService;
+use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
-use App\Helpers\PrimaryHelper;
 use App\Models\Account;
-use App\Models\AccountConnect;
 use App\Models\AccountWallet;
 use App\Models\AccountWalletLog;
 use App\Models\SessionToken;
@@ -37,7 +35,6 @@ class AccountController extends Controller
     public function register(Request $request)
     {
         $dtoRequest = new AccountRegisterDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
         $configs = ConfigHelper::fresnsConfigByItemKeys([
             'site_mode',
@@ -145,7 +142,7 @@ class AccountController extends Controller
 
         // create token
         $createTokenWordBody = [
-            'platformId' => $headers['platformId'],
+            'platformId' => $this->platformId(),
             'aid' => $fresnsUserResp->getData('aid'),
             'uid' => $fresnsUserResp->getData('uid'),
             'expiredTime' => null,
@@ -165,7 +162,7 @@ class AccountController extends Controller
         $account = Account::whereAid($fresnsTokenResponse->getData('aid'))->first();
 
         $service = new AccountService();
-        $data[] = $service->accountData($account, $headers['langTag'], $headers['timezone']);
+        $data[] = $service->accountData($account, $this->langTag(), $this->timezone());
 
         return $this->success($data);
     }
@@ -174,7 +171,6 @@ class AccountController extends Controller
     public function login(Request $request)
     {
         $dtoRequest = new AccountLoginDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
         $accountType = match ($dtoRequest->type) {
             'email' => 1,
@@ -199,7 +195,7 @@ class AccountController extends Controller
 
         // create token
         $createTokenWordBody = [
-            'platformId' => $headers['platformId'],
+            'platformId' => $this->platformId(),
             'aid' => $fresnsResponse->getData('aid'),
             'uid' => null,
             'expiredTime' => null,
@@ -219,7 +215,7 @@ class AccountController extends Controller
         $account = Account::whereAid($fresnsTokenResponse->getData('aid'))->first();
 
         $service = new AccountService();
-        $data[] = $service->accountData($account, $headers['langTag'], $headers['timezone']);
+        $data[] = $service->accountData($account, $this->langTag(), $this->timezone());
 
         return $this->success($data);
     }
@@ -293,15 +289,14 @@ class AccountController extends Controller
     // detail
     public function detail()
     {
-        $headers = HeaderService::getHeaders();
+        $authAccount = $this->account();
 
-        $account = Account::whereAid($headers['aid'])->first();
-        if (empty($account)) {
+        if (empty($authAccount)) {
             throw new ApiException(31502);
         }
 
         $service = new AccountService();
-        $data = $service->accountData($account, $headers['langTag'], $headers['timezone']);
+        $data = $service->accountData($authAccount, $this->langTag(), $this->timezone());
 
         return $this->success($data);
     }
@@ -310,12 +305,14 @@ class AccountController extends Controller
     public function walletLogs(Request $request)
     {
         $dtoRequest = new AccountWalletLogsDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
-        $accountId = PrimaryHelper::fresnsAccountIdByAid($headers['aid']);
+        $authAccount = $this->account();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+
         $status = $dtoRequest->status ?? 1;
 
-        $walletLogQuery = AccountWalletLog::where('account_id', $accountId)->isEnable($status)->orderBy('created_at', 'desc');
+        $walletLogQuery = AccountWalletLog::where('account_id', $authAccount->id)->isEnable($status)->orderBy('created_at', 'desc');
 
         if (! empty($dtoRequest->type)) {
             $typeArr = array_filter(explode(',', $dtoRequest->keys));
@@ -332,8 +329,8 @@ class AccountController extends Controller
             $item['systemFee'] = $log->system_fee;
             $item['openingBalance'] = $log->opening_balance;
             $item['closingBalance'] = $log->closing_balance;
-            $info['createTime'] = DateHelper::fresnsFormatDateTime($log->created_at, $headers['timezone'], $headers['langTag']);
-            $info['createTimeFormat'] = DateHelper::fresnsFormatTime($log->created_at, $headers['langTag']);
+            $info['createTime'] = DateHelper::fresnsFormatDateTime($log->created_at, $timezone, $langTag);
+            $info['createTimeFormat'] = DateHelper::fresnsFormatTime($log->created_at, $langTag);
             $item['remark'] = $log->remark;
             $item['pluginUnikey'] = $log->object_unikey;
             $item['status'] = (bool) $log->is_enable;
@@ -347,12 +344,12 @@ class AccountController extends Controller
     public function verifyIdentity(Request $request)
     {
         $dtoRequest = new AccountVerifyIdentityDTO($request->all());
-        $headers = HeaderService::getHeaders();
+        $authAccount = $this->account();
 
         if ($dtoRequest->type == 'email') {
-            $account = Account::whereAid($headers['aid'])->value('email');
+            $accountName = $authAccount->email;
         } else {
-            $account = Account::whereAid($headers['aid'])->value('phone');
+            $accountName = $authAccount->phone;
         }
 
         $codeType = match ($dtoRequest->type) {
@@ -362,14 +359,14 @@ class AccountController extends Controller
 
         $term = [
             'type' => $codeType,
-            'account' => $account,
+            'account' => $accountName,
             'code' => $dtoRequest->verifyCode,
             'is_enable' => 1,
         ];
         $verifyInfo = VerifyCode::where($term)->where('expired_at', '>', date('Y-m-d H:i:s'))->first();
 
         if (! $verifyInfo) {
-            throw new ApiException(33104);
+            throw new ApiException(33105);
         }
 
         return $this->success();
@@ -379,24 +376,22 @@ class AccountController extends Controller
     public function edit(Request $request)
     {
         $dtoRequest = new AccountEditDTO($request->all());
-        $headers = HeaderService::getHeaders();
-
-        $account = Account::whereAid($headers['aid'])->first();
+        $authAccount = $this->account();
 
         // check code
         if ($dtoRequest->verifyCode) {
             if ($dtoRequest->codeType == 'email') {
                 $codeWordBody = [
                     'type' => 1,
-                    'account' => $account->email,
+                    'account' => $authAccount->email,
                     'countryCode' => null,
                     'verifyCode' => $dtoRequest->verifyCode,
                 ];
             } else {
                 $codeWordBody = [
                     'type' => 2,
-                    'account' => $account->pure_phone,
-                    'countryCode' => $account->country_code,
+                    'account' => $authAccount->pure_phone,
+                    'countryCode' => $authAccount->country_code,
                     'verifyCode' => $dtoRequest->verifyCode,
                 ];
             }
@@ -415,8 +410,8 @@ class AccountController extends Controller
                 throw new ApiException(34109);
             }
 
-            if ($account->email && empty($dtoRequest->verifyCode)) {
-                throw new ApiException(33103);
+            if ($authAccount->email && empty($dtoRequest->verifyCode)) {
+                throw new ApiException(33104);
             }
 
             $codeWordBody = [
@@ -436,15 +431,15 @@ class AccountController extends Controller
                 throw new ApiException(34205);
             }
 
-            $account->update([
+            $authAccount->update([
                 'email' => $dtoRequest->editEmail,
             ]);
         }
 
         // edit phone
         if ($dtoRequest->editPhone) {
-            if ($account->phone && empty($dtoRequest->verifyCode)) {
-                throw new ApiException(33103);
+            if ($authAccount->phone && empty($dtoRequest->verifyCode)) {
+                throw new ApiException(33104);
             }
 
             $codeWordBody = [
@@ -465,7 +460,7 @@ class AccountController extends Controller
                 throw new ApiException(34206);
             }
 
-            $account->update([
+            $authAccount->update([
                 'country_code' => $dtoRequest->editCountryCode,
                 'pure_phone' => $dtoRequest->editPhone,
                 'phone' => $newPhone,
@@ -481,13 +476,13 @@ class AccountController extends Controller
             if ($dtoRequest->password) {
                 $password = base64_decode($dtoRequest->password, true);
 
-                if (! Hash::check($password, $account->password)) {
+                if (! Hash::check($password, $authAccount->password)) {
                     throw new ApiException(34304);
                 }
             }
 
             $newPassword = base64_decode($dtoRequest->editPassword, true);
-            $account->update([
+            $authAccount->update([
                 'password' => Hash::make($newPassword),
             ]);
         }
@@ -498,7 +493,7 @@ class AccountController extends Controller
                 throw new ApiException(31410);
             }
 
-            $wallet = AccountWallet::where('account_id', $account->id)->first();
+            $wallet = AccountWallet::where('account_id', $authAccount->id)->first();
             if (empty($wallet)) {
                 throw new ApiException(34501);
             }
@@ -519,10 +514,13 @@ class AccountController extends Controller
 
         // edit last login time
         if ($dtoRequest->editLastLoginTime) {
-            $account->update([
+            $authAccount->update([
                 'last_login_at' => DateHelper::fresnsDatabaseCurrentDateTime(),
             ]);
         }
+
+        CacheHelper::forgetApiAccount($authAccount->aid);
+        CacheHelper::forgetApiUser($this->user()?->uid);
 
         return $this->success();
     }
@@ -530,17 +528,18 @@ class AccountController extends Controller
     // logout
     public function logout()
     {
-        $headers = HeaderService::getHeaders();
-
-        $accountId = PrimaryHelper::fresnsAccountIdByAid($headers['aid']);
-        $userId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
+        $authAccount = $this->account();
+        $authUser = $this->user();
 
         $condition = [
-            'platform_id' => $headers['platformId'],
-            'account_id' => $accountId,
-            'user_id' => $userId,
+            'platform_id' => $this->platformId(),
+            'account_id' => $authAccount->id,
+            'user_id' => $authUser?->id,
         ];
         SessionToken::where($condition)->forceDelete();
+
+        CacheHelper::forgetApiAccount($authAccount->aid);
+        CacheHelper::forgetApiUser($authUser?->uid);
 
         return $this->success();
     }
@@ -549,37 +548,34 @@ class AccountController extends Controller
     public function applyDelete(Request $request)
     {
         $dtoRequest = new AccountApplyDeleteDTO($request->all());
-        $headers = HeaderService::getHeaders();
+        $authAccount = $this->account();
 
-        $account = Account::whereAid($headers['aid'])->first();
         $todoDay = ConfigHelper::fresnsConfigByItemKey('delete_account_todo');
-        $dbDateTime = DateHelper::fresnsDatabaseCurrentDateTime();
-        $todoTime = date('Y-m-d H:i:s', strtotime("$dbDateTime +$todoDay day"));
 
         if ($dtoRequest->password) {
             $password = base64_decode($dtoRequest->password, true);
 
-            if (! Hash::check($password, $account->password)) {
+            if (! Hash::check($password, $authAccount->password)) {
                 throw new ApiException(34304);
             }
 
-            $account->update([
+            $authAccount->update([
                 'wait_delete' => 1,
-                'wait_delete_at' => $todoTime,
+                'wait_delete_at' => now()->addDays($todoDay),
             ]);
         } else {
             if ($dtoRequest->codeType == 'email') {
                 $codeWordBody = [
                     'type' => 1,
-                    'account' => $account->email,
+                    'account' => $authAccount->email,
                     'countryCode' => null,
                     'verifyCode' => $dtoRequest->verifyCode,
                 ];
             } else {
                 $codeWordBody = [
                     'type' => 2,
-                    'account' => $account->pure_phone,
-                    'countryCode' => $account->country_code,
+                    'account' => $authAccount->pure_phone,
+                    'countryCode' => $authAccount->country_code,
                     'verifyCode' => $dtoRequest->verifyCode,
                 ];
             }
@@ -589,28 +585,30 @@ class AccountController extends Controller
                 return $fresnsResp->getOrigin();
             }
 
-            $account->update([
+            $authAccount->update([
                 'wait_delete' => 1,
-                'wait_delete_at' => $todoTime,
+                'wait_delete_at' => now()->addDays($todoDay),
             ]);
         }
 
+        CacheHelper::forgetApiAccount($authAccount->aid);
+
         return $this->success([
             'day' => $todoDay,
-            'dateTime' => DateHelper::fresnsDateTimeByTimezone($todoTime, $headers['timezone'], $headers['langTag']),
+            'dateTime' => DateHelper::fresnsDateTimeByTimezone($authAccount->wait_delete_at, $this->timezone(), $this->langTag()),
         ]);
     }
 
     // revokeDelete
     public function revokeDelete()
     {
-        $headers = HeaderService::getHeaders();
+        $authAccount = $this->account();
 
-        $account = Account::whereAid($headers['aid'])->first();
-
-        $account->update([
+        $authAccount->update([
             'wait_delete' => 0,
             'wait_delete_at' => null,
         ]);
+
+        CacheHelper::forgetApiAccount($authAccount->aid);
     }
 }

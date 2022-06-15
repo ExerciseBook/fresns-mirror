@@ -15,12 +15,11 @@ use App\Exceptions\ApiException;
 use App\Models\HashtagLinked;
 use App\Fresns\Api\Services\PostService;
 use App\Models\Hashtag;
-use App\Utilities\AppUtility;
 use App\Utilities\PermissionUtility;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class PostFollowService
+class OldPostFollowService
 {
     /**
      * @var User $user
@@ -64,7 +63,7 @@ class PostFollowService
             $hashtags = Hashtag::whereIn('id', $hashtagIds)->isEnable()->get();
         }
 
-        
+
         $postList = [];
         foreach ($posts as $post) {
             $postHashtags = null;
@@ -73,7 +72,7 @@ class PostFollowService
                 $postHashtagIds = $hashtagLinkeds->where('linked_id', $post->id)->pluck('hashtag_id')->toArray();
                 $postHashtags = $hashtags->whereIn('id', $postHashtagIds);
             }
-            
+
             $postItem = $this->postService->postDetail($post, 'list', $this->dtoRequest->mapId, $this->dtoRequest->mapLng, $this->dtoRequest->mapLat, $postHashtags);
             $postItem['followType'] = $followType;
 
@@ -108,7 +107,7 @@ class PostFollowService
         $followerIds = $this->getFollowIdsByType(UserFollow::TYPE_HASHTAG);
         $hashtagLinkeds = $this->getHashtagLinkedByFollowers($followerIds);
         $hashtagPostIds = $hashtagLinkeds->pluck('linked_id')->toArray();
-        
+
         $postQueryHashtags = Post::whereNotIn('user_id', $followerUserIds)->whereNotIn('group_id', $followerGroupIds)->whereIn('id', $hashtagPostIds)->whereIn('digest_state', [2, 3])->latest();
 
         // 全站二级精华帖子

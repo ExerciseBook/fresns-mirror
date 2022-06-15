@@ -8,31 +8,31 @@
 
 namespace App\Fresns\Api\Http\Controllers;
 
+use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\CommonCallbacksDTO;
 use App\Fresns\Api\Http\DTO\CommonDownloadFileDTO;
-use App\Fresns\Api\Http\DTO\CommonDownloadUsersDTO;
 use App\Fresns\Api\Http\DTO\CommonInputTipsDTO;
 use App\Fresns\Api\Http\DTO\CommonSendVerifyCodeDTO;
 use App\Fresns\Api\Http\DTO\CommonUploadFileDTO;
 use App\Fresns\Api\Http\DTO\CommonUploadLogDTO;
+use App\Fresns\Api\Http\DTO\PaginationDTO;
 use App\Fresns\Api\Services\AccountService;
-use App\Fresns\Api\Services\HeaderService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
-use App\Helpers\LanguageHelper;
 use App\Helpers\FileHelper;
+use App\Helpers\LanguageHelper;
+use App\Models\Account;
 use App\Models\Extend;
+use App\Models\File;
+use App\Models\FileLog;
 use App\Models\Hashtag;
 use App\Models\Language;
 use App\Models\Plugin;
+use App\Models\PluginCallback;
 use App\Models\Post;
 use App\Models\User;
-use App\Exceptions\ApiException;
-use App\Models\Account;
-use App\Models\File;
-use App\Models\FileLog;
-use App\Models\PluginCallback;
 use App\Utilities\ContentUtility;
+use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -41,7 +41,7 @@ class CommonController extends Controller
     public function inputTips(Request $request)
     {
         $dtoRequest = new CommonInputTipsDTO($request->all());
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
 
         switch ($dtoRequest->type) {
             // user
@@ -93,7 +93,7 @@ class CommonController extends Controller
 
                     foreach ($groupQuery as $group) {
                         $item['fsid'] = $group->gid;
-                        $item['name'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $group->id, $headers['langTag']);
+                        $item['name'] = LanguageHelper::fresnsLanguageByTableId('groups', 'name', $group->id, $langTag);
                         $item['image'] = FileHelper::fresnsFileUrlByTableColumn($group->cover_file_id, $group->cover_file_url);
                         $item['nickname'] = null;
                         $item['followStatus'] = false;
@@ -159,7 +159,7 @@ class CommonController extends Controller
 
                     foreach ($extendQuery as $extend) {
                         $item['fsid'] = $extend->eid;
-                        $item['name'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extend->id, $headers['langTag']);
+                        $item['name'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extend->id, $langTag);
                         $item['image'] = FileHelper::fresnsFileUrlByTableColumn($extend->cover_file_id, $extend->cover_file_url);
                         $item['nickname'] = null;
                         $item['followStatus'] = false;
@@ -176,7 +176,8 @@ class CommonController extends Controller
     public function callbacks(Request $request)
     {
         $dtoRequest = new CommonCallbacksDTO($request->all());
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
 
         $plugin = Plugin::whereUnikey($dtoRequest->unikey)->first();
         if (empty($plugin)) {
@@ -205,10 +206,10 @@ class CommonController extends Controller
         if (in_array(2, $data['types'])) {
             $service = new AccountService();
             $data['apiContent']['account']['sessionToken'] = null;
-            $data['apiContent']['account']['detail'] = $service->accountDetail($callback->account_id, $headers['langTag'], $headers['timezone']);
+            $data['apiContent']['account']['detail'] = $service->accountDetail($callback->account_id, $langTag, $timezone);
 
             $fresnsResponse = \FresnsCmdWord::plugin()->createSessionToken([
-                'platformId' => $headers['platformId'],
+                'platformId' => $this->platformId(),
                 'aid' => $data['apiContent']['account']['aid'],
                 'uid' => null,
                 'expiredTime' => null,
@@ -229,19 +230,19 @@ class CommonController extends Controller
         }
 
         if (in_array(PluginCallback::TYPE_EXTEND, $data['types'])) {
-            $data['apiContent']['extends'] = ContentUtility::extendJsonHandle($callback->content['extends'], $headers['langTag']);
+            $data['apiContent']['extends'] = ContentUtility::extendJsonHandle($callback->content['extends'], $langTag);
         }
 
         if (in_array(PluginCallback::TYPE_READ_ALLOW_CONFIG, $data['types'])) {
-            $data['apiContent']['readAllowConfig'] = ContentUtility::readAllowJsonHandle($callback->content['readAllowConfig'], $headers['langTag'], $headers['timezone']);
+            $data['apiContent']['readAllowConfig'] = ContentUtility::readAllowJsonHandle($callback->content['readAllowConfig'], $langTag, $timezone);
         }
 
         if (in_array(PluginCallback::TYPE_USER_LIST_CONFIG, $data['types'])) {
-            $data['apiContent']['userListConfig'] = ContentUtility::userListJsonHandle($callback->content['userListConfig'], $headers['langTag']);
+            $data['apiContent']['userListConfig'] = ContentUtility::userListJsonHandle($callback->content['userListConfig'], $langTag);
         }
 
         if (in_array(PluginCallback::TYPE_COMMENT_BTN_CONFIG, $data['types'])) {
-            $data['apiContent']['commentBtnConfig'] = ContentUtility::commentBtnJsonHandle($callback->content['commentBtnConfig'], $headers['langTag']);
+            $data['apiContent']['commentBtnConfig'] = ContentUtility::commentBtnJsonHandle($callback->content['commentBtnConfig'], $langTag);
         }
 
         $callback->is_use = 1;
@@ -255,7 +256,8 @@ class CommonController extends Controller
     public function sendVerifyCode(Request $request)
     {
         $dtoRequest = new CommonSendVerifyCodeDTO($request->all());
-        $headers = HeaderService::getHeaders();
+        $authAccount = $this->account();
+        $langTag = $this->langTag();
 
         $sendService = ConfigHelper::fresnsConfigByItemKeys([
             'send_email_service',
@@ -271,10 +273,14 @@ class CommonController extends Controller
         if ($dtoRequest->type == 'email') {
             $account = Account::where('email', $dtoRequest->account)->first();
             $accountConfig = $account->email;
+
+            $checkSend = ValidationUtility::sendCode($dtoRequest->account);
         } else {
             $phone = $dtoRequest->countryCode.$dtoRequest->account;
             $account = Account::where('phone', $phone)->first();
             $accountConfig = $account->phone;
+
+            $checkSend = ValidationUtility::sendCode($dtoRequest->countryCode.$dtoRequest->account);
         }
 
         $sendType = match ($dtoRequest->type) {
@@ -286,7 +292,7 @@ class CommonController extends Controller
             'account' => $dtoRequest->account,
             'countryCode' => $dtoRequest->countryCode,
             'templateId' => $dtoRequest->templateId,
-            'langTag' => $headers['langTag'],
+            'langTag' => $langTag,
         ];
 
         if ($dtoRequest->useType == 1 && ! empty($account)) {
@@ -315,23 +321,30 @@ class CommonController extends Controller
             }
         }
 
-        if ($dtoRequest->useType == 4 && empty($headers['aid'])) {
+        if ($dtoRequest->useType == 4 && empty($authAccount?->aid)) {
             throw new ApiException(31501);
-        } elseif ($dtoRequest->useType == 4 && ! empty($headers['aid'])) {
-            $loginAccount = Account::whereAid($headers['aid'])->first();
+        } elseif ($dtoRequest->useType == 4 && ! empty($authAccount?->aid)) {
             switch ($dtoRequest->type) {
                 case 'email':
                     $wordBody = [
-                        'account' => $loginAccount->email,
+                        'account' => $authAccount->email,
                     ];
+
+                    $checkSend = ValidationUtility::sendCode($authAccount->email);
                 break;
                 case 'sms':
                     $wordBody = [
-                        'account' => $loginAccount->pure_phone,
-                        'countryCode' => $loginAccount->country_code,
+                        'account' => $authAccount->pure_phone,
+                        'countryCode' => $authAccount->country_code,
                     ];
+
+                    $checkSend = ValidationUtility::sendCode($authAccount->phone);
                 break;
             }
+        }
+
+        if (! $checkSend) {
+            throw new ApiException(33103);
         }
 
         if ($dtoRequest->type == 'email') {
@@ -347,21 +360,20 @@ class CommonController extends Controller
     public function uploadLog(Request $request)
     {
         $dtoRequest = new CommonUploadLogDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
         $wordBody = [
             'type' => $dtoRequest->type,
             'pluginUnikey' => $dtoRequest->pluginUnikey,
-            'platformId' => $headers['platformId'],
-            'version' => $headers['version'],
-            'langTag' => $headers['langTag'],
-            'aid' => $headers['aid'],
-            'uid' => $headers['uid'],
+            'platformId' => $request->header('platformId'),
+            'version' => $request->header('version'),
+            'langTag' => $request->header('langTag'),
+            'aid' => $request->header('aid'),
+            'uid' => $request->header('uid'),
             'objectName' => $dtoRequest->objectName,
             'objectAction' => $dtoRequest->objectAction,
             'objectResult' => $dtoRequest->objectResult,
             'objectOrderId' => $dtoRequest->objectOrderId,
-            'deviceInfo' => $headers['deviceInfo'],
+            'deviceInfo' => $request->header('deviceInfo'),
             'deviceToken' => $dtoRequest->deviceToken,
             'moreJson' => $dtoRequest->moreJson,
         ];
@@ -373,7 +385,6 @@ class CommonController extends Controller
     public function uploadFile(Request $request)
     {
         $dtoRequest = new CommonUploadFileDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
         $fileType = match ($dtoRequest->type) {
             'image' => 1,
@@ -391,14 +402,14 @@ class CommonController extends Controller
         switch ($dtoRequest->uploadMode) {
             case 'file':
                 $wordBody = [
-                    'platformId' => $headers['platformId'],
+                    'platformId' => $request->header('platformId'),
                     'useType' => $dtoRequest->useType,
                     'tableName' => $dtoRequest->tableName,
                     'tableColumn' => $dtoRequest->tableColumn,
                     'tableId' => $dtoRequest->tableId,
                     'tableKey' => $dtoRequest->tableKey,
-                    'aid' => $headers['aid'],
-                    'uid' => $headers['uid'],
+                    'aid' => $request->header('aid'),
+                    'uid' => $request->header('uid'),
                     'type' => $fileType,
                     'file' => $dtoRequest->file,
                     'moreJson' => $dtoRequest->moreJson,
@@ -409,14 +420,14 @@ class CommonController extends Controller
 
             case 'fileInfo':
                 $wordBody = [
-                    'platformId' => $headers['platformId'],
+                    'platformId' => $request->header('platformId'),
                     'useType' => $dtoRequest->useType,
                     'tableName' => $dtoRequest->tableName,
                     'tableColumn' => $dtoRequest->tableColumn,
                     'tableId' => $dtoRequest->tableId,
                     'tableKey' => $dtoRequest->tableKey,
-                    'aid' => $headers['aid'],
-                    'uid' => $headers['uid'],
+                    'aid' => $request->header('aid'),
+                    'uid' => $request->header('uid'),
                     'type' => $fileType,
                     'fileInfo' => $dtoRequest->fileInfo,
                 ];
@@ -430,7 +441,6 @@ class CommonController extends Controller
     public function downloadFile(string $fid, Request $request)
     {
         $dtoRequest = new CommonDownloadFileDTO($request->all());
-        $headers = HeaderService::getHeaders();
 
         $file = File::whereFid($fid)->first();
         if (empty($file)) {
@@ -464,8 +474,9 @@ class CommonController extends Controller
     // file download users
     public function downloadUsers(string $fid, Request $request)
     {
-        $dtoRequest = new CommonDownloadUsersDTO($request->all());
-        $headers = HeaderService::getHeaders();
+        $dtoRequest = new PaginationDTO($request->all());
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
 
         $file = File::whereFid($fid)->first();
         if (empty($file)) {
@@ -480,8 +491,8 @@ class CommonController extends Controller
 
         $item = null;
         foreach ($fileLogs as $log) {
-            $item['downloadTime'] = DateHelper::fresnsFormatDateTime($log->created_at, $headers['timezone'], $headers['langTag']);
-            $item['downloadTimeFormat'] = DateHelper::fresnsFormatTime($log->created_at, $headers['langTag']);
+            $item['downloadTime'] = DateHelper::fresnsFormatDateTime($log->created_at, $timezone, $langTag);
+            $item['downloadTimeFormat'] = DateHelper::fresnsFormatTime($log->created_at, $langTag);
             $item['downloadUser'] = $log->user->getUserProfile();
             $item[] = $item;
         }

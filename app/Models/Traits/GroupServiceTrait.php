@@ -39,7 +39,7 @@ trait GroupServiceTrait
         $info['blockCount'] = $groupData->block_count;
         $info['postCount'] = $groupData->post_count;
         $info['postDigestCount'] = $groupData->post_digest_count;
-        $info['permission'] = $groupData->permission;
+        $info['permissions'] = $groupData->permissions;
 
         return $info;
     }

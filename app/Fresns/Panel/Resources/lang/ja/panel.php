@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'SEOの説明',
     'menu_table_seo_keywords' => 'SEOのキーワード',
     'menu_table_parameter' => 'デフォルトのパラメータ',
+    'menu_table_parameter_desc' => 'このインターフェースのAPI Queryパラメータを参照する。',
     'menu_user_list' => 'ユーザーリストページ',
     'menu_group_list' => 'グループリスト',
     'menu_hashtag_list' => 'トピックリスト',

@@ -12,10 +12,7 @@ use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\HashtagListDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Services\HashtagService;
-use App\Fresns\Api\Services\HeaderService;
 use App\Fresns\Api\Services\InteractiveService;
-use App\Helpers\ConfigHelper;
-use App\Helpers\PrimaryHelper;
 use App\Models\Hashtag;
 use App\Models\Seo;
 use App\Models\UserBlock;
@@ -28,16 +25,20 @@ class HashtagController extends Controller
     {
         $dtoRequest = new HashtagListDTO($request->all());
 
-        $headers = HeaderService::getHeaders();
-
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $authUserId = $this->user()?->id;
 
         $blockHashtagIds = UserBlock::type(UserBlock::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
         $hashtagQuery = Hashtag::whereNotIn('id', $blockHashtagIds)->isEnable();
+
+        if ($dtoRequest->createDateGt) {
+            $hashtagQuery->whereDate('created_at', '>=', $dtoRequest->createDateGt);
+        }
+
+        if ($dtoRequest->createDateLt) {
+            $hashtagQuery->whereDate('created_at', '<=', $dtoRequest->createDateLt);
+        }
 
         if ($dtoRequest->likeCountGt) {
             $hashtagQuery->where('like_count', '>=', $dtoRequest->likeCountGt);
@@ -87,15 +88,7 @@ class HashtagController extends Controller
             $hashtagQuery->where('post_digest_count', '<=', $dtoRequest->postDigestCountLt);
         }
 
-        if ($dtoRequest->createTimeGt) {
-            $hashtagQuery->where('created_at', '>=', $dtoRequest->createTimeGt);
-        }
-
-        if ($dtoRequest->createTimeLt) {
-            $hashtagQuery->where('created_at', '<=', $dtoRequest->createTimeLt);
-        }
-
-        $ratingType = match ($dtoRequest->ratingType) {
+        $orderType = match ($dtoRequest->orderType) {
             default => 'rating',
             'like' => 'like_me_count',
             'dislike' => 'dislike_me_count',
@@ -103,24 +96,24 @@ class HashtagController extends Controller
             'block' => 'block_me_count',
             'post' => 'post_count',
             'postDigest' => 'post_digest_count',
-            'createTime' => 'created_at',
+            'createDate' => 'created_at',
             'rating' => 'rating',
         };
 
-        $ratingOrder = match ($dtoRequest->ratingOrder) {
+        $orderDirection = match ($dtoRequest->ratingOorderDirectionrder) {
             default => 'asc',
             'asc' => 'asc',
             'desc' => 'desc',
         };
 
-        $hashtagQuery->orderBy($ratingType, $ratingOrder);
+        $hashtagQuery->orderBy($orderType, $orderDirection);
 
         $hashtagData = $hashtagQuery->paginate($request->get('pageSize', 30));
 
         $hashtagList = [];
         $service = new HashtagService();
         foreach ($hashtagData as $hashtag) {
-            $hashtagList[] = $service->hashtagList($hashtag, $headers['langTag'], $authUserId);
+            $hashtagList[] = $service->hashtagList($hashtag, $langTag, $authUserId);
         }
 
         return $this->fresnsPaginate($hashtagList, $hashtagData->total(), $hashtagData->perPage());
@@ -129,27 +122,23 @@ class HashtagController extends Controller
     // detail
     public function detail(string $hid)
     {
-        $hashtag = Hashtag::whereSlug($hid)->isEnable()->first();
+        $hashtag = Hashtag::where('slug', $hid)->isEnable()->first();
         if (empty($hashtag)) {
             throw new ApiException(37200);
         }
 
-        $headers = HeaderService::getHeaders();
+        $langTag = $this->langTag();
+        $authUserId = $this->user()?->id;
 
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $seoData = Seo::where('linked_type', Seo::TYPE_HASHTAG)->where('linked_id', $hashtag->id)->where('lang_tag', $langTag)->first();
 
-        $seoData = Seo::where('linked_type', Seo::TYPE_HASHTAG)->where('linked_id', $hashtag->id)->where('lang_tag', $headers['langTag'])->first();
-
-        $common['title'] = $seoData->title ?? null;
-        $common['keywords'] = $seoData->keywords ?? null;
-        $common['description'] = $seoData->description ?? null;
-        $data['commons'] = $common;
+        $item['title'] = $seoData->title ?? null;
+        $item['keywords'] = $seoData->keywords ?? null;
+        $item['description'] = $seoData->description ?? null;
+        $data['items'] = $item;
 
         $service = new HashtagService();
-        $data['detail'] = $service->hashtagDetail($hashtag, $headers['langTag'], $authUserId);
+        $data['detail'] = $service->hashtagDetail($hashtag, $langTag, $authUserId);
 
         return $this->success($data);
     }
@@ -157,7 +146,7 @@ class HashtagController extends Controller
     // interactive
     public function interactive(string $hid, string $type, Request $request)
     {
-        $hashtag = Hashtag::whereSlug($hid)->isEnable()->first();
+        $hashtag = Hashtag::where('slug', $hid)->isEnable()->first();
         if (empty($hashtag)) {
             throw new ApiException(37200);
         }
@@ -166,21 +155,16 @@ class HashtagController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new InteractiveDTO($requestData);
 
-        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->type}_hashtags");
-        if (! $markSet) {
-            throw new ApiException(36201);
-        }
+        InteractiveService::checkInteractiveSetting($dtoRequest->type, 'hashtag');
 
-        $timeOrder = $dtoRequest->timeOrder ?: 'desc';
+        $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
-        $headers = HeaderService::getHeaders();
-        $authUserId = null;
-        if (! empty($headers['uid'])) {
-            $authUserId = PrimaryHelper::fresnsUserIdByUid($headers['uid']);
-        }
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUserId = $this->user()?->id;
 
         $service = new InteractiveService();
-        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_HASHTAG, $hashtag->id, $timeOrder, $headers['langTag'], $headers['timezone'], $authUserId);
+        $data = $service->getUsersWhoMarkIt($dtoRequest->type, InteractiveService::TYPE_HASHTAG, $hashtag->id, $orderDirection, $langTag, $timezone, $authUserId);
 
         return $this->fresnsPaginate($data['paginateData'], $data['interactiveData']->total(), $data['interactiveData']->perPage());
     }

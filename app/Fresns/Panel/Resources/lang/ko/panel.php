@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'SEO 설명',
     'menu_table_seo_keywords' => 'Seo 키워드',
     'menu_table_parameter' => '기본 매개 변수',
+    'menu_table_parameter_desc' => '이 인터페이스의 API 쿼리 매개변수를 참조하십시오.',
     'menu_user_list' => '사용자 목록 페이지',
     'menu_group_list' => '그룹 목록',
     'menu_hashtag_list' => '주제 목록',

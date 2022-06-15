@@ -16,7 +16,7 @@ class Group extends Model
     use Traits\IsEnableTrait;
 
     protected $casts = [
-        'permission' => 'array',
+        'permissions' => 'array',
     ];
 
     public function scopeTypeCategory($query)

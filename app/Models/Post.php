@@ -8,27 +8,12 @@
 
 namespace App\Models;
 
-use App\Utilities\PermissionUtility;
-
 class Post extends Model
 {
     use Traits\PostServiceTrait;
     use Traits\IsEnableTrait;
 
     protected $guarded = ['id'];
-
-    public function scopeBeforeExpiredAtOrNotLimit($query, ?User $user)
-    {
-        if (! $user) {
-            return $query;
-        }
-
-        $userConfig = PermissionUtility::getUserExpireInfo($user->id);
-
-        return $query->when(! $userConfig['userStatus'] && $userConfig['expireAfter'] == 2, function ($query) use ($user) {
-            $query->where('created_at', '<=', $user->expired_at ?? now());
-        });
-    }
 
     public function postAppend()
     {

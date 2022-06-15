@@ -25,8 +25,16 @@ class GroupService
 
         $item['icons'] = ExtendUtility::getIcons(IconLinked::TYPE_GROUP, $group->id, $langTag);
 
-        $item['publishRule'] = PermissionUtility::checkUserGroupPublishPerm($group->id, $authUserId);
-        $item['admins'] = $group->getGroupAdmins($langTag, $timezone);
+        $item['publishRule'] = PermissionUtility::checkUserGroupPublishPerm($group->id, $group->permissions, $authUserId);
+
+        $adminList = null;
+        foreach ($group->admins as $admin) {
+            $userProfile = $admin->user->getUserProfile($timezone);
+            $userMainRole = $admin->user->getUserMainRole($langTag, $timezone);
+
+            $adminList[] = array_merge($userProfile, $userMainRole);
+        }
+        $item['admins'] = $adminList;
 
         $interactiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
         $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_GROUP, $group->id, $authUserId);
@@ -54,8 +62,16 @@ class GroupService
             $item['creator'] = array_merge($userProfile, $userMainRole);
         }
 
-        $item['publishRule'] = PermissionUtility::checkUserGroupPublishPerm($group->id, $authUserId);
-        $item['admins'] = $group->getGroupAdmins($langTag, $timezone);
+        $item['publishRule'] = PermissionUtility::checkUserGroupPublishPerm($group->id, $group->permissions, $authUserId);
+
+        $adminList = null;
+        foreach ($group->admins as $admin) {
+            $userProfile = $admin->user->getUserProfile($timezone);
+            $userMainRole = $admin->user->getUserMainRole($langTag, $timezone);
+
+            $adminList[] = array_merge($userProfile, $userMainRole);
+        }
+        $item['admins'] = $adminList;
 
         $interactiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
         $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_GROUP, $group->id, $authUserId);

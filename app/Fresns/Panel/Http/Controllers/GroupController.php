@@ -15,7 +15,6 @@ use App\Models\Plugin;
 use App\Models\Post;
 use App\Models\PostLog;
 use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -128,18 +127,32 @@ class GroupController extends Controller
     {
         $this->initOptions();
 
+        $categories = Group::typeCategory()
+            ->with('names', 'descriptions')
+            ->get();
+
         $groups = Group::typeGroup()
             ->orderBy('rating')
             ->isEnable(false)
             ->with('creator', 'plugin', 'category')
             ->paginate();
 
+        $plugins = Plugin::all();
+        $plugins = $plugins->filter(function ($plugin) {
+            return in_array('followGroup', $plugin->scene);
+        });
+
+        $roles = Role::with('names')->get();
+
         extract(get_object_vars($this));
 
         return view('FsView::operations.groups-inactive', compact(
+            'categories',
             'groups',
             'typeModeLabels',
-            'permissionLabels'
+            'permissionLabels',
+            'plugins',
+            'roles',
         ));
     }
 
@@ -153,24 +166,26 @@ class GroupController extends Controller
         $group->banner_file_url = $request->banner_file_url;
         // group category
         if ($request->is_category) {
-            $group->permission = [];
             $group->parent_id = 0;
             $group->type = 1;
+            $group->permissions = [];
             if ($request->has('is_enable')) {
                 $group->is_enable = $request->is_enable;
             }
         } else {
             $group->parent_id = $request->parent_id;
+            $group->type = 2;
             $group->type_mode = $request->type_mode;
             $group->type_find = $request->type_find;
             $group->type_follow = $request->type_follow;
             $group->is_recommend = $request->is_recommend;
             $group->plugin_unikey = $request->plugin_unikey;
-            $permission = $request->permission;
-            $permission['publish_post_review'] = (bool) ($permission['publish_post_review'] ?? 0);
-            $permission['publish_comment_review'] = (bool) ($permission['publish_comment_review'] ?? 0);
-            $group->permission = $permission;
-            $group->type = 2;
+
+            $permissions = $request->permissions;
+            $permissions['publish_post_review'] = (bool) ($permissions['publish_post_review'] ?? 0);
+            $permissions['publish_comment_review'] = (bool) ($permissions['publish_comment_review'] ?? 0);
+
+            $group->permissions = $permissions;
         }
         $group->save();
 
@@ -282,6 +297,7 @@ class GroupController extends Controller
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $group->description = $request->descriptions[$this->defaultLanguage] ?? (current(array_filter($request->descriptions)) ?: '');
         $group->rating = $request->rating;
+
         // group category
         if ($request->is_category) {
             $group->permission = [];
@@ -295,10 +311,13 @@ class GroupController extends Controller
             $group->type_follow = $request->type_follow;
             $group->is_recommend = $request->is_recommend;
             $group->plugin_unikey = $request->plugin_unikey;
-            $permission = $request->permission;
-            $permission['publish_post_review'] = (bool) ($permission['publish_post_review'] ?? 0);
-            $permission['publish_comment_review'] = (bool) ($permission['publish_comment_review'] ?? 0);
-            $group->permission = $permission;
+
+            $permissions = $request->permissions;
+            $permissions['publish_post_review'] = (bool) ($permissions['publish_post_review'] ?? 0);
+            $permissions['publish_comment_review'] = (bool) ($permissions['publish_comment_review'] ?? 0);
+
+            $group->permissions = $permissions;
+
             $group->admins()->sync($request->admin_ids);
         }
 
@@ -343,7 +362,7 @@ class GroupController extends Controller
 
             $group->banner_file_id = $fileId;
             $group->banner_file_url = null;
-        } else {
+        } elseif ($group->banner_file_url != $request->banner_file_url) {
             $group->banner_file_id = null;
             $group->banner_file_url = $request->banner_file_url;
         }

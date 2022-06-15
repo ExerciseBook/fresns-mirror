@@ -8,6 +8,7 @@
 
 namespace App\Utilities;
 
+use App\Helpers\ConfigHelper;
 use App\Models\CodeMessage;
 use App\Models\Config;
 use App\Models\Language;
@@ -87,9 +88,7 @@ class ConfigUtility
     {
         $unikey = $unikey ?: 'Fresns';
 
-        if (empty($langTag)) {
-            $langTag = Config::where('item_key', 'default_language')->value('item_value');
-        }
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
         $message = CodeMessage::where('plugin_unikey', $unikey)->where('code', $code)->where('lang_tag', $langTag)->value('message');
 

@@ -33,7 +33,7 @@ class PostFollowService
         $filterGroupIdsArr = Arr::prepend($blockGroupIds, $filterGroupIds);
 
         // follow user post
-        $userPostQuery = Post::with('hashtags')
+        $userPostQuery = Post::with(['creator', 'group', 'hashtags'])
             ->whereIn('user_id', $allUserIds)
             ->where(function ($query) use ($blockPostIds, $filterGroupIdsArr) {
                 $query
@@ -47,7 +47,7 @@ class PostFollowService
         });
 
         // follow group post
-        $groupPostQuery = Post::with('hashtags')
+        $groupPostQuery = Post::with(['creator', 'group', 'hashtags'])
             ->where(function ($query) use ($blockPostIds, $allUserIds, $blockUserIds) {
                 $uniqueFilterUserIds = array_unique(array_merge($allUserIds, $blockUserIds));
 
@@ -64,7 +64,7 @@ class PostFollowService
         });
 
         // follow hashtag post
-        $hashtagPostQuery = Post::with('hashtags')
+        $hashtagPostQuery = Post::with(['creator', 'group', 'hashtags'])
             ->where(function ($query) use ($blockPostIds, $allUserIds, $blockUserIds, $followGroupIds, $filterGroupIdsArr) {
                 $uniqueFilterUserIds = array_unique(array_merge($allUserIds, $blockUserIds));
                 $uniqueFilterGroupIds = array_unique(array_merge($followGroupIds, $filterGroupIdsArr));
@@ -82,7 +82,7 @@ class PostFollowService
         });
 
         // digest post query
-        $digestPostQuery = Post::with('hashtags')
+        $digestPostQuery = Post::with(['creator', 'group', 'hashtags'])
             ->where(function ($query) use ($blockPostIds, $allUserIds, $followGroupIds, $filterGroupIdsArr) {
                 $uniqueFilterGroupIds = array_unique(array_merge($followGroupIds, $filterGroupIdsArr));
 
@@ -129,7 +129,8 @@ class PostFollowService
         $filterGroupIds = PermissionUtility::getGroupPostFilterIds($authUserId);
         $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
-        $postQuery = Post::whereIn('user_id', $allUserIds)
+        $postQuery = Post::with(['creator', 'group', 'hashtags'])
+            ->whereIn('user_id', $allUserIds)
             ->whereNotIn('id', $blockPostIds)
             ->orWhereNotIn('group_id', $filterGroupIds)
             ->where('is_anonymous', 0)
@@ -157,7 +158,8 @@ class PostFollowService
         $blockHashtagIds = UserBlock::type(UserBlock::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('block_id')->toArray();
         $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
-        $postQuery = Post::whereIn('group_id', $followGroupIds)
+        $postQuery = Post::with(['creator', 'group', 'hashtags'])
+            ->whereIn('group_id', $followGroupIds)
             ->where(function ($query) use ($blockPostIds, $blockUserIds) {
                 $query
                     ->whereNotIn('id', $blockPostIds)
@@ -192,7 +194,7 @@ class PostFollowService
         $filterGroupIds = Arr::prepend($blockGroupIds, $modeGroupIds);
         $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
-        $postQuery = Post::with('hashtags')
+        $postQuery = Post::with(['creator', 'group', 'hashtags'])
             ->where(function ($query) use ($blockPostIds, $blockUserIds, $filterGroupIds) {
                 $query
                     ->whereNotIn('id', $blockPostIds)
@@ -218,8 +220,8 @@ class PostFollowService
         return $posts;
     }
 
-    // check follow type
-    public static function checkFollowType(int $creatorId, ?int $groupId = null, ?array $hashtagIds = null, ?int $authUserId = null): bool
+    // get follow type
+    public function getFollowType(int $creatorId, ?int $groupId = null, ?array $hashtags = null, ?int $authUserId = null): string
     {
         if (empty($authUserId)) {
             return null;
@@ -245,7 +247,9 @@ class PostFollowService
             }
         }
 
-        if (! empty($hashtagIds)) {
+        if (! empty($hashtags)) {
+            $hashtagIds = array_column($hashtags, 'id');
+
             $checkFollowHashtag = UserFollow::where('user_id', $authUserId)
                 ->type(UserFollow::TYPE_HASHTAG)
                 ->whereIn('follow_id', $hashtagIds)

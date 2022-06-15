@@ -26,7 +26,7 @@ class ExtendUtility
     // get plugin usage
     public static function getPluginExtends(int $type, ?int $groupId = null, ?int $scene = null, ?int $userId = null, ?string $langTag = null)
     {
-        $langTag = $langTag ?: ConfigHelper::fresnsConfigByItemKey('default_language');
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
         if ($type == 6) {
             $extendArr = PluginUsage::where('type', $type)->where('group_id', $groupId)->orderBy('rating')->get();
@@ -100,7 +100,7 @@ class ExtendUtility
                 $item['code'] = $iconLinked['icon_code'];
                 $item['name'] = LanguageHelper::fresnsLanguageByTableId('icons', 'name', $icon['id'], $langTag);
                 $item['icon'] = FileHelper::fresnsFileUrlByTableColumn($icon['icon_file_id'], $icon['icon_file_url']);
-                $item['iconActive'] = FileHelper::fresnsFileUrlByTableColumn($icon['active_icon_file_id'], $icon['active_icon_file_url']);
+                $item['iconActive'] = FileHelper::fresnsFileUrlByTableColumn($icon['icon_active_file_id'], $icon['icon_active_file_url']);
                 $item['type'] = $icon['type'];
                 $item['url'] = ! empty($icon['plugin_unikey']) ? PluginHelper::fresnsPluginUrlByUnikey($icon['plugin_unikey']) : null;
             }

@@ -8,6 +8,8 @@
 
 namespace App\Fresns\Api\Services;
 
+use App\Exceptions\ApiException;
+use App\Fresns\Api\Traits\ApiHeaderTrait;
 use App\Helpers\InteractiveHelper;
 use App\Models\ExtendLinked;
 use App\Models\IconLinked;
@@ -15,9 +17,12 @@ use App\Models\TipLinked;
 use App\Models\User;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
+use App\Utilities\PermissionUtility;
 
 class UserService
 {
+    use ApiHeaderTrait;
+
     public function userList(User $user, string $langTag, string $timezone, ?int $authUserId = null)
     {
         $userProfile = $user->getUserProfile($langTag, $timezone);
@@ -54,8 +59,27 @@ class UserService
         $followMeStatus['followMeStatus'] = InteractiveUtility::checkUserFollowMe($user->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $followMeStatus);
 
+        $item['dialog'] = PermissionUtility::checkUserDialogPerm($user, $authUserId, $langTag);
+
         $data = array_merge($userProfile, $userMainRole, $item);
 
         return $data;
+    }
+
+    // check content view perm permission
+    public static function checkUserContentViewPerm(string $dateTime)
+    {
+        $userContentViewPerm = self::userContentViewPerm();
+
+        if ($userContentViewPerm['type'] == 2) {
+            $dateLimit = strtotime($userContentViewPerm['dateLimit']);
+            $postCreateTime = strtotime($dateTime);
+
+            if ($dateLimit < $postCreateTime) {
+                throw new ApiException(35304);
+            }
+        }
+
+        return;
     }
 }

@@ -48,7 +48,9 @@ use App\Fresns\Panel\Http\Controllers\UserSearchController;
 use App\Fresns\Panel\Http\Controllers\VerifyCodeController;
 use App\Fresns\Panel\Http\Controllers\WalletController;
 use App\Models\Config;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 try {
     $loginConfig = Config::where('item_key', 'panel_path')->first();
@@ -329,9 +331,9 @@ Route::get('js/{locale?}/translations', function ($locale) {
         })->toJson();
     });
 
-    header("content-type: application/javascript");
+    header('content-type: application/javascript');
     echo 'window.translations= '.$strings.';';
-    die();
+    exit();
 
     //return response('window.translations= '.$strings.';', 200)->header('Content-Type', 'text/javascript');
 })->name('translations');

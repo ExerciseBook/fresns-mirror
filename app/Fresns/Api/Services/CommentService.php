@@ -14,6 +14,7 @@ use App\Helpers\InteractiveHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
 use App\Models\Comment;
+use App\Models\CommentLog;
 use App\Models\ExtendLinked;
 use App\Models\IconLinked;
 use App\Models\PluginUsage;
@@ -21,25 +22,41 @@ use App\Models\TipLinked;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\LbsUtility;
-use App\Utilities\PermissionUtility;
 use Illuminate\Support\Str;
 
 class CommentService
 {
+    public function commentList(Comment $comment, string $langTag, string $timezone, ?int $authUserId = null)
+    {
+        $commentInfo = $comment->getCommentInfo($langTag, $timezone);
+        $commentInfo[] = self::contentHandle($comment, 'list', $authUserId);
+
+        $item['hashtags'] = null;
+        if ($comment->hashtags) {
+            $hashtagService = new HashtagService;
+
+            foreach ($comment->hashtags as $hashtag) {
+                $hashtagItem[] = $hashtagService->hashtagList($hashtag, $langTag, $authUserId);
+            }
+            $item['hashtags'] = $hashtagItem;
+        }
+
+        $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
+        if (! $comment->is_anonymous) {
+            $creatorProfile = $comment->creator->getUserProfile($langTag, $timezone);
+            $creatorMainRole = $comment->creator->getUserMainRole($langTag, $timezone);
+            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
+        }
+
+        $info = array_merge($commentInfo, $item);
+
+        return $info;
+    }
+
     public function commentDetail(Comment $comment, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $authUserLng = null, ?string $authUserLat = null)
     {
         $commentInfo = $comment->getCommentInfo($langTag, $timezone);
-        $postAppend = $comment->postAppend();
-
-        $briefLength = ConfigHelper::fresnsConfigByItemKey('comment_editor_brief_length');
-
-        $item['contentPublic'] = (bool) $postAppend->is_comment_public;
-        if (! $item['contentPublic']) {
-            $commentInfo['content'] = null;
-        } elseif ($type == 'list' && $commentInfo['contentLength'] > $briefLength) {
-            $commentInfo['content'] = Str::limit($comment->content, $briefLength);
-            $commentInfo['isBrief'] = true;
-        }
+        $commentInfo[] = self::contentHandle($comment, $type, $authUserId);
 
         if (! empty($comment->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {
             $postLng = $comment->map_longitude;
@@ -125,6 +142,24 @@ class CommentService
         return $detail;
     }
 
+    public static function contentHandle(Comment $comment, string $type, ?int $authUserId = null)
+    {
+        $postAppend = $comment->postAppend();
+        $contentLength = Str::length($comment->content);
+
+        $briefLength = ConfigHelper::fresnsConfigByItemKey('comment_editor_brief_length');
+
+        $item['contentPublic'] = (bool) $postAppend->is_comment_public;
+        if (! $item['contentPublic']) {
+            $commentInfo['content'] = null;
+        } elseif ($type == 'list' && $contentLength > $briefLength) {
+            $commentInfo['content'] = Str::limit($comment->content, $briefLength);
+            $commentInfo['isBrief'] = true;
+        }
+
+        return $commentInfo;
+    }
+
     public static function isCanEdit(string $createTime, int $isSticky, int $digestState): bool
     {
         $editConfig = ConfigHelper::fresnsConfigByItemKeys([
@@ -139,5 +174,17 @@ class CommentService
         }
 
         return false;
+    }
+
+    // comment Log
+    public function commentLogList(CommentLog $log, string $langTag, string $timezone, ?int $authUserId = null)
+    {
+        return null;
+    }
+
+    // comment log detail
+    public function commentLogDetail(CommentLog $log, string $langTag, string $timezone, ?int $authUserId = null)
+    {
+        return null;
     }
 }

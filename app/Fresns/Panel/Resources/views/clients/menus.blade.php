@@ -84,7 +84,7 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit"
-                                data-config="{{ json_encode(optional($configs['menu_' . $key . '_config'] ?? [])->item_value) }}"
+                                data-config="{{ optional($configs['menu_' . $key . '_config'] ?? [])->item_value }}"
                                 data-no_config="{{ $key == 'portal' ? 1 : 0 }}"
                                 data-is_enable="{{ optional($configs['menu_' . $key . '_status'])->item_value ?: 0 }}"
                                 data-action="{{ route('panel.menus.update', ['key' => $key]) }}"
@@ -114,7 +114,8 @@
                         <div class="mb-3 row default-config">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.menu_table_parameter') }}</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" name="config" rows="10"></textarea>
+                                <textarea class="form-control" name="config" rows="6"></textarea>
+                                <div class="form-text">{{ __('FsLang::panel.menu_table_parameter_desc') }}</div>
                             </div>
                         </div>
                         <div class="mb-3 row">

@@ -393,18 +393,18 @@ class ContentUtility
     // read allow json handle
     public static function readAllowJsonHandle(array $readAllowConfig, string $langTag, string $timezone): array
     {
-        $permission['users'] = null;
-        if (empty($readAllowConfig['permission']['users'])) {
-            $users = User::whereIn('uid', $readAllowConfig['permission']['users'])->first();
+        $permissions['users'] = null;
+        if (empty($readAllowConfig['permissions']['users'])) {
+            $users = User::whereIn('uid', $readAllowConfig['permissions']['users'])->first();
             foreach ($users as $user) {
                 $userList = $user->getUserProfile($langTag, $timezone);
             }
-            $permission['users'] = $userList;
+            $permissions['users'] = $userList;
         }
 
-        $permission['roles'] = null;
-        if (empty($readAllowConfig['permission']['roles'])) {
-            $roles = Role::whereIn('id', $readAllowConfig['permission']['roles'])->first();
+        $permissions['roles'] = null;
+        if (empty($readAllowConfig['permissions']['roles'])) {
+            $roles = Role::whereIn('id', $readAllowConfig['permissions']['roles'])->first();
             foreach ($roles as $role) {
                 $roleItem['rid'] = $role->id;
                 $roleItem['nicknameColor'] = $role->nickname_color;
@@ -415,14 +415,14 @@ class ContentUtility
                 $roleItem['status'] = (bool) $role->is_enable;
                 $roleList[] = $roleItem;
             }
-            $permission['roles'] = $roleList;
+            $permissions['roles'] = $roleList;
         }
 
         $item['isAllow'] = (bool) $readAllowConfig['isAllow'];
         $item['proportion'] = $readAllowConfig['proportion'];
         $item['url'] = PluginHelper::fresnsPluginUrlByUnikey($readAllowConfig['pluginUnikey']);
         $item['btnName'] = collect($readAllowConfig['btnName'])->where('langTag', $langTag)->first()['name'] ?? null;
-        $item['permission'] = $permission;
+        $item['permissions'] = $permissions;
 
         return $item;
     }

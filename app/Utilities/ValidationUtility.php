@@ -13,10 +13,28 @@ use App\Models\BlockWord;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\VerifyCode;
 use Illuminate\Support\Str;
 
 class ValidationUtility
 {
+    // Validate send code
+    public static function sendCode(?string $account = null): bool
+    {
+        if (empty($account)) {
+            return true;
+        }
+
+        $minuteSendCount = VerifyCode::where('account', $account)->where('created_at', '>=', now()->subMinute())->count();
+        $minutesSendCount = VerifyCode::where('account', $account)->where('created_at', '>=', now()->subMinutes(10))->count();
+
+        if ($minuteSendCount > 1 || $minutesSendCount > 5) {
+            return false;
+        }
+
+        return true;
+    }
+
     // Validate is disposable email
     public static function disposableEmail(string $email): bool
     {
@@ -45,22 +63,22 @@ class ValidationUtility
         }
 
         $number = true;
-        if (in_array(1, $config['password_strength'])) {
+        if (in_array('number', $config['password_strength'])) {
             $number = preg_match('/\d/is', $password);
         }
 
         $lowercase = true;
-        if (in_array(2, $config['password_strength'])) {
+        if (in_array('lowercase', $config['password_strength'])) {
             $lowercase = preg_match('/[a-z]/', $password);
         }
 
         $uppercase = true;
-        if (in_array(3, $config['password_strength'])) {
+        if (in_array('uppercase', $config['password_strength'])) {
             $uppercase = preg_match('/[A-Z]/', $password);
         }
 
         $symbols = true;
-        if (in_array(4, $config['password_strength'])) {
+        if (in_array('symbols', $config['password_strength'])) {
             $symbols = preg_match('/^[A-Za-z0-9]+$/', $password);
         }
 

@@ -164,11 +164,11 @@ class MenuController extends Controller
             if (! $config) {
                 $config = new Config;
                 $config->item_key = $enableKey;
-                $config->item_type = 'object';
+                $config->item_type = 'string';
                 $config->item_tag = 'menus';
             }
 
-            $config->item_value = json_decode($request->config, true);
+            $config->item_value = $request->config;
             $config->save();
         }
 

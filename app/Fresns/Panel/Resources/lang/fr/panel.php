@@ -834,6 +834,7 @@ return [
     'menu_table_seo_description' => 'Description du référencement',
     'menu_table_seo_keywords' => 'Mot-clé',
     'menu_table_parameter' => 'Paramètres par défaut',
+    'menu_table_parameter_desc' => 'Se référer aux paramètres de requête de l\'API de cette interface.',
     'menu_user_list' => 'Page de la liste des utilisateurs',
     'menu_group_list' => 'Liste de groupe',
     'menu_hashtag_list' => 'Liste de sujets',
