@@ -72,7 +72,6 @@ class CacheHelper
         return;
     }
 
-    //
     /**
      * forget fresns model.
      *
