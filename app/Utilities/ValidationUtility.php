@@ -13,10 +13,28 @@ use App\Models\BlockWord;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\VerifyCode;
 use Illuminate\Support\Str;
 
 class ValidationUtility
 {
+    // Validate send code
+    public static function sendCode(?string $account = null): bool
+    {
+        if (empty($account)) {
+            return true;
+        }
+
+        $minuteSendCount = VerifyCode::where('account', $account)->where('created_at', '>=', now()->subMinute())->count();
+        $minutesSendCount = VerifyCode::where('account', $account)->where('created_at', '>=', now()->subMinutes(10))->count();
+
+        if ($minuteSendCount > 1 || $minutesSendCount > 5) {
+            return false;
+        }
+
+        return true;
+    }
+
     // Validate is disposable email
     public static function disposableEmail(string $email): bool
     {
