@@ -250,18 +250,21 @@ class PermissionUtility
     }
 
     // Check if the user has group publishing permissions
-    public static function checkUserGroupPostPublishPerm(int $groupId, array $permissions, ?int $userId = null)
+    public static function checkUserGroupPublishPerm(int $groupId, array $permissions, ?int $userId = null)
     {
         $perm['allowPost'] = false;
         $perm['reviewPost'] = $permissions['publish_post_review'];
+        $perm['allowComment'] = false;
+        $perm['reviewComment'] = $permissions['publish_comment_review'];
         $perms = $perm;
 
         if (empty($userId)) {
             return $perms;
         }
 
-        if ($permissions['publish_post'] == 1) {
+        if ($permissions['publish_post'] == 1 && $permissions['publish_comment'] == 1) {
             $perm['allowPost'] = true;
+            $perm['allowComment'] = true;
 
             return $perms;
         }
@@ -271,93 +274,30 @@ class PermissionUtility
         if ($checkGroupAdmin) {
             $adminPerm['allowPost'] = true;
             $adminPerm['reviewPost'] = false;
-
-            return $adminPerm;
-        }
-
-        if ($permissions['publish_post'] == 4) {
-            return $perms;
-        }
-
-        if ($permissions['publish_post'] == 3) {
-            $checkRolePerm = static::checkUserRolePerm($userId, $permissions['publish_post_roles']);
-
-            if ($checkRolePerm) {
-                $perm['allowPost'] = true;
-
-                return $perms;
-            }
-
-            return $perms;
-        }
-
-        if ($permissions['publish_post'] == 2) {
-            $checkFollow = InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_GROUP, $groupId, $userId);
-
-            if ($checkFollow) {
-                $perm['allowPost'] = true;
-
-                return $perms;
-            }
-
-            return $perms;
-        }
-
-        return $perms;
-    }
-
-    public static function checkUserGroupCommentPublishPerm(int $groupId, array $permissions, ?int $userId = null)
-    {
-        $perm['allowComment'] = false;
-        $perm['reviewComment'] = $permissions['publish_comment_review'];
-        $perms = $perm;
-
-        if (empty($userId)) {
-            return $perms;
-        }
-
-        if ($permissions['publish_comment'] == 1) {
-            $perm['allowComment'] = true;
-
-            return $perms;
-        }
-
-        $checkGroupAdmin = static::checkUserGroupAdmin($groupId, $userId);
-
-        if ($checkGroupAdmin) {
             $adminPerm['allowComment'] = true;
             $adminPerm['reviewComment'] = false;
 
             return $adminPerm;
         }
 
-        if ($permissions['publish_comment'] == 4) {
-            return $perms;
-        }
+        $allowPost = match ($permissions['publish_post']) {
+            1 => true,
+            2 => InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_GROUP, $groupId, $userId),
+            3 => static::checkUserRolePerm($userId, $permissions['publish_post_roles']),
+            4 => false,
+            default => false,
+        };
 
-        if ($permissions['publish_comment'] == 3) {
-            $checkRolePerm = static::checkUserRolePerm($userId, $permissions['publish_comment_roles']);
+        $allowComment = match ($permissions['publish_comment']) {
+            1 => true,
+            2 => InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_GROUP, $groupId, $userId),
+            3 => static::checkUserRolePerm($userId, $permissions['publish_comment_roles']),
+            4 => false,
+            default => false,
+        };
 
-            if ($checkRolePerm) {
-                $perm['allowComment'] = true;
-
-                return $perms;
-            }
-
-            return $perms;
-        }
-
-        if ($permissions['publish_comment'] == 2) {
-            $checkFollow = InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_GROUP, $groupId, $userId);
-
-            if ($checkFollow) {
-                $perm['allowComment'] = true;
-
-                return $perms;
-            }
-
-            return $perms;
-        }
+        $perm['allowPost'] = $allowPost;
+        $perm['allowComment'] = $allowComment;
 
         return $perms;
     }

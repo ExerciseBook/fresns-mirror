@@ -100,7 +100,7 @@ class ExtendUtility
                 $item['code'] = $iconLinked['icon_code'];
                 $item['name'] = LanguageHelper::fresnsLanguageByTableId('icons', 'name', $icon['id'], $langTag);
                 $item['icon'] = FileHelper::fresnsFileUrlByTableColumn($icon['icon_file_id'], $icon['icon_file_url']);
-                $item['iconActive'] = FileHelper::fresnsFileUrlByTableColumn($icon['active_icon_file_id'], $icon['active_icon_file_url']);
+                $item['iconActive'] = FileHelper::fresnsFileUrlByTableColumn($icon['icon_active_file_id'], $icon['icon_active_file_url']);
                 $item['type'] = $icon['type'];
                 $item['url'] = ! empty($icon['plugin_unikey']) ? PluginHelper::fresnsPluginUrlByUnikey($icon['plugin_unikey']) : null;
             }

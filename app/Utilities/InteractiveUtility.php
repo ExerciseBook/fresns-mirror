@@ -8,6 +8,7 @@
 
 namespace App\Utilities;
 
+use App\Helpers\CacheHelper;
 use App\Models\Comment;
 use App\Models\Domain;
 use App\Models\DomainLink;
@@ -277,6 +278,11 @@ class InteractiveUtility
                 $itFollow->update(['is_mutual' => 0]);
             }
         }
+
+        $userBlock = UserBlock::where('user_id', $userId)->type($followType)->where('block_id', $followId)->first();
+        if (! empty($userBlock)) {
+            InteractiveUtility::markUserBlock($userId, $followType, $followId);
+        }
     }
 
     public static function markUserBlock(int $userId, int $blockType, int $blockId)
@@ -307,6 +313,15 @@ class InteractiveUtility
             $userBlock->delete();
 
             InteractiveUtility::markStats($userId, 'block', $blockType, $blockId, 'decrement');
+        }
+
+        $userFollow = UserFollow::where('user_id', $userId)->type($blockType)->where('follow_id', $blockId)->first();
+        if (! empty($userFollow)) {
+            InteractiveUtility::markUserFollow($userId, $blockType, $blockId);
+        }
+
+        if ($blockType == UserBlock::TYPE_GROUP) {
+            CacheHelper::forgetApiContent('groups', $userId, 'user');
         }
     }
 
