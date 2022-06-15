@@ -32,6 +32,7 @@ use App\Models\PluginCallback;
 use App\Models\Post;
 use App\Models\User;
 use App\Utilities\ContentUtility;
+use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -272,10 +273,14 @@ class CommonController extends Controller
         if ($dtoRequest->type == 'email') {
             $account = Account::where('email', $dtoRequest->account)->first();
             $accountConfig = $account->email;
+
+            $checkSend = ValidationUtility::sendCode($dtoRequest->account);
         } else {
             $phone = $dtoRequest->countryCode.$dtoRequest->account;
             $account = Account::where('phone', $phone)->first();
             $accountConfig = $account->phone;
+
+            $checkSend = ValidationUtility::sendCode($dtoRequest->countryCode.$dtoRequest->account);
         }
 
         $sendType = match ($dtoRequest->type) {
@@ -324,14 +329,22 @@ class CommonController extends Controller
                     $wordBody = [
                         'account' => $authAccount->email,
                     ];
+
+                    $checkSend = ValidationUtility::sendCode($authAccount->email);
                 break;
                 case 'sms':
                     $wordBody = [
                         'account' => $authAccount->pure_phone,
                         'countryCode' => $authAccount->country_code,
                     ];
+
+                    $checkSend = ValidationUtility::sendCode($authAccount->phone);
                 break;
             }
+        }
+
+        if (! $checkSend) {
+            throw new ApiException(33103);
         }
 
         if ($dtoRequest->type == 'email') {
