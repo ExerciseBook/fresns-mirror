@@ -17,8 +17,6 @@ class FileLog extends Model
     const TYPE_COMMENT = 5;
     const TYPE_EXTEND = 6;
 
-    protected $guarded = [];
-
     public function scopeFileType($query, int $type)
     {
         return $query->where('file_type', $type);

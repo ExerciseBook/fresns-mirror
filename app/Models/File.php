@@ -30,8 +30,6 @@ class File extends Model
     use Traits\FileServiceTrait;
     use Traits\IsEnableTrait;
 
-    protected $guarded = [];
-
     public function fileAppend()
     {
         return $this->hasOne(FileAppend::class);

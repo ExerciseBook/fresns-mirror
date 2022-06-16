@@ -13,8 +13,6 @@ class Post extends Model
     use Traits\PostServiceTrait;
     use Traits\IsEnableTrait;
 
-    protected $guarded = ['id'];
-
     public function postAppend()
     {
         return $this->hasOne(PostAppend::class);

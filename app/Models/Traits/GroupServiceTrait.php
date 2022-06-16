@@ -8,6 +8,8 @@
 
 namespace App\Models\Traits;
 
+use App\Helpers\ConfigHelper;
+use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
@@ -15,7 +17,7 @@ use App\Models\GroupAdmin;
 
 trait GroupServiceTrait
 {
-    public function getGroupInfo(?string $langTag = null)
+    public function getGroupInfo(?string $langTag = null, ?string $timezone = null)
     {
         $groupData = $this;
         $parentGroup = $this->category;
@@ -40,6 +42,7 @@ trait GroupServiceTrait
         $info['postCount'] = $groupData->post_count;
         $info['postDigestCount'] = $groupData->post_digest_count;
         $info['permissions'] = $groupData->permissions;
+        $info['createDate'] = date(ConfigHelper::fresnsConfigDateFormat($langTag), DateHelper::fresnsDateTimeByTimezone($groupData->created_at, $timezone, $langTag));
 
         return $info;
     }

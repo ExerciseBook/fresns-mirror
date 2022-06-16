@@ -10,11 +10,8 @@ namespace App\Models;
 
 class UserRole extends Model
 {
-    const TYPE_ADMIN = 1;
-    const TYPE_SYSTEM = 2;
-    const TYPE_USER = 3;
-
-    protected $guarded = ['id'];
+    const TYPE_GENERAL = 0;
+    const TYPE_MAIN = 1;
 
     public function scopeType($query, int $type)
     {

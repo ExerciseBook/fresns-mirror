@@ -31,12 +31,12 @@ class User extends Model
 
     public function archives()
     {
-        return $this->hasMany(UserArchive::class)->isEnable();
+        return $this->hasMany(Archive::class, 'linked_id')->where('linked_type', Archive::TYPE_USER);
     }
 
     public function mainRole()
     {
-        return $this->hasOne(UserRole::class)->where('is_main', 1);
+        return $this->hasOne(UserRole::class)->where('is_main', UserRole::TYPE_MAIN);
     }
 
     public function roles()

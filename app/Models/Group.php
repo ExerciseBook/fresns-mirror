@@ -65,7 +65,7 @@ class Group extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function plugin()
+    public function followByPlugin()
     {
         return $this->belongsTo(Plugin::class, 'plugin_unikey', 'unikey');
     }
