@@ -20,13 +20,16 @@ use App\Fresns\Api\Services\PostFollowService;
 use App\Fresns\Api\Services\PostService;
 use App\Fresns\Api\Services\UserService;
 use App\Helpers\ConfigHelper;
+use App\Helpers\PrimaryHelper;
 use App\Models\Plugin;
 use App\Models\Post;
 use App\Models\PostLog;
 use App\Models\PostUser;
 use App\Models\Seo;
+use App\Models\UserBlock;
 use App\Utilities\ExtendUtility;
 use App\Utilities\LbsUtility;
+use App\Utilities\PermissionUtility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -56,15 +59,172 @@ class PostController extends Controller
         // Fresns provides data
         $langTag = $this->langTag();
         $timezone = $this->timezone();
-        $authUser = $this->user();
+        $authUserId = $this->user()?->id;
 
-        $postQuery = Post::isEnable();
+        $filterGroupIdsArr = PermissionUtility::getPostFilterByGroupIds($authUserId);
+
+        if (empty($authUserId)) {
+            $postQuery = Post::with(['creator', 'group', 'hashtags'])->whereNotIn('group_id', $filterGroupIdsArr)->isEnable();
+        } else {
+            $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
+            $blockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
+            $blockHashtagIds = UserBlock::type(UserBlock::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('block_id')->toArray();
+
+            $postQuery = Post::with(['creator', 'group', 'hashtags'])
+                ->where(function ($query) use ($blockPostIds, $blockUserIds, $filterGroupIdsArr) {
+                    $query
+                        ->whereNotIn('id', $blockPostIds)
+                        ->orWhereNotIn('user_id', $blockUserIds)
+                        ->orWhereNotIn('group_id', $filterGroupIdsArr);
+                });
+
+            $postQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
+                $query->whereNotIn('id', $blockHashtagIds);
+            });
+        }
+
+        if ($dtoRequest->uidOrUsername) {
+            $postConfig = ConfigHelper::fresnsConfigByItemKey('it_posts');
+            if (! $postConfig) {
+                throw new ApiException(35305);
+            }
+
+            $viewUser = PrimaryHelper::fresnsModelByFsid('user', $dtoRequest->uidOrUsername);
+
+            if (empty($viewUser) || $viewUser->trashed()) {
+                throw new ApiException(31602);
+            }
+
+            if ($viewUser->isEnable(false)) {
+                throw new ApiException(35202);
+            }
+
+            if ($viewUser->wait_delete == 1) {
+                throw new ApiException(35203);
+            }
+
+            $postQuery->where('user_id', $viewUser->id)->where('is_anonymous', 0);
+        }
+
+        if ($dtoRequest->gid) {
+            $viewGroup = PrimaryHelper::fresnsModelByFsid('group', $dtoRequest->gid);
+
+            if (empty($viewGroup) || $viewGroup->trashed()) {
+                throw new ApiException(37100);
+            }
+
+            if ($viewGroup->isEnable(false)) {
+                throw new ApiException(37101);
+            }
+
+            $postQuery->where('group_id', $viewGroup->id);
+        }
+
+        if ($dtoRequest->hid) {
+            $viewHashtag = PrimaryHelper::fresnsModelByFsid('hashtag', $dtoRequest->gid);
+
+            if (empty($viewHashtag)) {
+                throw new ApiException(37200);
+            }
+
+            if ($viewHashtag->isEnable(false)) {
+                throw new ApiException(37201);
+            }
+
+            $postQuery->when($viewHashtag->id, function ($query, $value) {
+                $query->whereRelation('hashtags', 'id', $value);
+            });
+        }
+
+        $postQuery->when($dtoRequest->digestState, function ($query, $value) {
+            $query->where('digest_state', $value);
+        });
+
+        $postQuery->when($dtoRequest->stickyState, function ($query, $value) {
+            $query->where('sticky_state', $value);
+        });
+
+        $postQuery->when($dtoRequest->contentType, function ($query, $value) {
+            $query->where('types', 'like', "%$value%");
+        });
+
+        $postQuery->when($dtoRequest->createDateGt, function ($query, $value) {
+            $query->whereDate('created_at', '>=', $value);
+        });
+
+        $postQuery->when($dtoRequest->createDateLt, function ($query, $value) {
+            $query->whereDate('created_at', '<=', $value);
+        });
+
+        $postQuery->when($dtoRequest->likeCountGt, function ($query, $value) {
+            $query->where('like_count', '>=', $value);
+        });
+
+        $postQuery->when($dtoRequest->likeCountLt, function ($query, $value) {
+            $query->where('like_count', '<=', $value);
+        });
+
+        $postQuery->when($dtoRequest->dislikeCountGt, function ($query, $value) {
+            $query->where('dislike_count', '>=', $value);
+        });
+
+        $postQuery->when($dtoRequest->dislikeCountLt, function ($query, $value) {
+            $query->where('dislike_count', '<=', $value);
+        });
+
+        $postQuery->when($dtoRequest->followCountGt, function ($query, $value) {
+            $query->where('follow_count', '>=', $value);
+        });
+
+        $postQuery->when($dtoRequest->followCountLt, function ($query, $value) {
+            $query->where('follow_count', '<=', $value);
+        });
+
+        $postQuery->when($dtoRequest->blockCountGt, function ($query, $value) {
+            $query->where('block_count', '>=', $value);
+        });
+
+        $postQuery->when($dtoRequest->blockCountLt, function ($query, $value) {
+            $query->where('block_count', '<=', $value);
+        });
+
+        $postQuery->when($dtoRequest->commentCountGt, function ($query, $value) {
+            $query->where('comment_count', '>=', $value);
+        });
+
+        $postQuery->when($dtoRequest->commentCountGt, function ($query, $value) {
+            $query->where('comment_count', '<=', $value);
+        });
+
+        $dateLimit = $this->userContentViewPerm()['dateLimit'];
+        $postQuery->when($dateLimit, function ($query, $value) {
+            $query->where('created_at', '<=', $value);
+        });
+
+        $orderType = match ($dtoRequest->orderType) {
+            default => 'created_at',
+            'createDate' => 'created_at',
+            'like' => 'like_count',
+            'dislike' => 'dislike_count',
+            'follow' => 'follow_count',
+            'block' => 'block_count',
+            'comment' => 'comment_count',
+        };
+
+        $orderDirection = match ($dtoRequest->orderDirection) {
+            default => 'desc',
+            'asc' => 'asc',
+            'desc' => 'desc',
+        };
+
+        $postQuery->orderBy($orderType, $orderDirection);
+
         $posts = $postQuery->paginate($request->get('pageSize', 15));
 
         $postList = [];
         $service = new PostService();
         foreach ($posts as $post) {
-            $postList[] = $service->postDetail($post, 'list', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+            $postList[] = $service->postDetail($post, 'list', $langTag, $timezone, $authUserId, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
@@ -75,10 +235,14 @@ class PostController extends Controller
     {
         $dtoRequest = new PostDetailDTO($request->all());
 
-        $post = Post::with(['creator', 'group', 'hashtags'])->where('pid', $pid)->isEnable()->first();
+        $post = Post::with(['creator', 'group', 'hashtags'])->where('pid', $pid)->first();
 
         if (empty($post)) {
             throw new ApiException(37300);
+        }
+
+        if ($post->isEnable(false)) {
+            throw new ApiException(37301);
         }
 
         UserService::checkUserContentViewPerm($post->created_at);

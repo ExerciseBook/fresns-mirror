@@ -25,12 +25,10 @@ class PostFollowService
         $followHashtagIds = UserFollow::type(UserFollow::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
 
         $blockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
-        $blockGroupIds = UserBlock::type(UserBlock::TYPE_GROUP)->where('user_id', $authUserId)->pluck('block_id')->toArray();
         $blockHashtagIds = UserBlock::type(UserBlock::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('block_id')->toArray();
         $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
-        $filterGroupIds = PermissionUtility::getGroupPostFilterIds($authUserId);
-        $filterGroupIdsArr = Arr::prepend($blockGroupIds, $filterGroupIds);
+        $filterGroupIdsArr = PermissionUtility::getPostFilterByGroupIds($authUserId);
 
         // follow user post
         $userPostQuery = Post::with(['creator', 'group', 'hashtags'])
@@ -126,7 +124,7 @@ class PostFollowService
     {
         $followUserIds = UserFollow::type(UserFollow::TYPE_USER)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
         $allUserIds = Arr::prepend($followUserIds, $authUserId);
-        $filterGroupIds = PermissionUtility::getGroupPostFilterIds($authUserId);
+        $filterGroupIds = PermissionUtility::getPostFilterByGroupIds($authUserId);
         $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
         $postQuery = Post::with(['creator', 'group', 'hashtags'])
@@ -189,9 +187,7 @@ class PostFollowService
     {
         $followHashtagIds = UserFollow::type(UserFollow::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
         $blockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
-        $blockGroupIds = UserBlock::type(UserBlock::TYPE_GROUP)->where('user_id', $authUserId)->pluck('block_id')->toArray();
-        $modeGroupIds = PermissionUtility::getGroupPostFilterIds($authUserId);
-        $filterGroupIds = Arr::prepend($blockGroupIds, $modeGroupIds);
+        $filterGroupIds = PermissionUtility::getPostFilterByGroupIds($authUserId);
         $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
         $postQuery = Post::with(['creator', 'group', 'hashtags'])

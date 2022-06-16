@@ -48,6 +48,7 @@ class CommonController extends Controller
             case 'user':
                 $userQuery = User::where('username', 'like', "%$dtoRequest->key%")
                     ->orWhere('nickname', 'like', "%$dtoRequest->key%")
+                    ->isEnable()
                     ->limit(10)
                     ->get();
 
@@ -81,7 +82,7 @@ class CommonController extends Controller
                     ->where('table_column', 'name')
                     ->where('lang_content', 'like', "%$dtoRequest->key%")
                     ->value('table_id')
-                    ?->limit(10)
+                    ?->limit(15)
                     ->get()
                     ->toArray();
 
@@ -89,7 +90,7 @@ class CommonController extends Controller
                 if (! empty($tipQuery)) {
                     $groupIds = array_unique($tipQuery);
 
-                    $groupQuery = Language::whereIn('id', $groupIds)->get();
+                    $groupQuery = Language::whereIn('id', $groupIds)->isEnable()->get();
 
                     foreach ($groupQuery as $group) {
                         $item['fsid'] = $group->gid;
@@ -104,7 +105,7 @@ class CommonController extends Controller
 
             // hashtag
             case 'hashtag':
-                $hashtagQuery = Hashtag::where('name', 'like', "%$dtoRequest->key%")->limit(10)->get();
+                $hashtagQuery = Hashtag::where('name', 'like', "%$dtoRequest->key%")->isEnable()->limit(10)->get();
 
                 $data = null;
                 if (! empty($hashtagQuery)) {
@@ -121,7 +122,7 @@ class CommonController extends Controller
 
             // post
             case 'post':
-                $postQuery = Post::where('title', 'like', "%$dtoRequest->key%")->limit(10)->get();
+                $postQuery = Post::where('title', 'like', "%$dtoRequest->key%")->isEnable()->limit(10)->get();
 
                 $data = null;
                 if (! empty($postQuery)) {
@@ -155,7 +156,7 @@ class CommonController extends Controller
                 if (! empty($tipQuery)) {
                     $extendIds = array_unique($tipQuery);
 
-                    $extendQuery = Extend::whereIn('id', $extendIds)->get();
+                    $extendQuery = Extend::whereIn('id', $extendIds)->isEnable()->get();
 
                     foreach ($extendQuery as $extend) {
                         $item['fsid'] = $extend->eid;

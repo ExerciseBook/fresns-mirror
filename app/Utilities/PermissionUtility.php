@@ -14,8 +14,10 @@ use App\Models\GroupAdmin;
 use App\Models\PostAllow;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserBlock;
 use App\Models\UserFollow;
 use App\Models\UserRole;
+use Illuminate\Support\Arr;
 
 class PermissionUtility
 {
@@ -76,31 +78,37 @@ class PermissionUtility
     // Get group filter ids
     public static function getGroupFilterIds(?int $userId = null): array
     {
+        $hiddenGroupIds = Group::where('type_find', Group::FIND_HIDDEN)->pluck('id')->toArray();
+
         if (empty($userId)) {
-            return [];
+            return $hiddenGroupIds;
         }
 
         $followGroupIds = UserFollow::type(UserFollow::TYPE_GROUP)->where('user_id', $userId)->pluck('follow_id')->toArray();
-        $groupIds = Group::where('type', 2)->where('type_find', 2)->pluck('id')->toArray();
 
-        $filtered = array_values(array_diff($groupIds, $followGroupIds));
+        $filterIds = array_values(array_diff($hiddenGroupIds, $followGroupIds));
 
-        return $filtered;
+        return $filterIds;
     }
 
-    // Get group post filter ids
-    public static function getGroupPostFilterIds(?int $userId = null): array
+    // Get post filter by group ids
+    public static function getPostFilterByGroupIds(?int $userId = null): array
     {
+        $privateGroupIds = Group::where('type_mode', Group::MODE_PRIVATE)->pluck('id')->toArray();
+
         if (empty($userId)) {
-            return [];
+            return $privateGroupIds;
         }
 
         $followGroupIds = UserFollow::type(UserFollow::TYPE_GROUP)->where('user_id', $userId)->pluck('follow_id')->toArray();
-        $groupIds = Group::where('type', 2)->where('type_mode', 2)->pluck('id')->toArray();
 
-        $filtered = array_values(array_diff($groupIds, $followGroupIds));
+        $filterIds = array_values(array_diff($privateGroupIds, $followGroupIds));
 
-        return $filtered;
+        $blockGroupIds = UserBlock::type(UserBlock::TYPE_GROUP)->where('user_id', $userId)->pluck('block_id')->toArray();
+
+        $filterGroupIdsArr = Arr::prepend($blockGroupIds, $filterIds);
+
+        return $filterGroupIdsArr;
     }
 
     // Check if the user belongs to the account

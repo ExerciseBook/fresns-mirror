@@ -94,7 +94,9 @@ class InteractiveUtility
             $status['likeStatus'] = false;
             $status['dislikeStatus'] = false;
             $status['followStatus'] = false;
+            $status['followNote'] = null;
             $status['blockStatus'] = false;
+            $status['blockNote'] = null;
 
             return $status;
         }
@@ -102,7 +104,9 @@ class InteractiveUtility
         $status['likeStatus'] = self::checkUserLike($markType, $markId, $userId);
         $status['dislikeStatus'] = self::checkUserDislike($markType, $markId, $userId);
         $status['followStatus'] = self::checkUserFollow($markType, $markId, $userId);
+        $status['followNote'] = UserFollow::where('user_id', $userId)->type($markType)->where('follow_id', $markId)->value('user_note');
         $status['blockStatus'] = self::checkUserBlock($markType, $markId, $userId);
+        $status['blockNote'] = UserBlock::where('user_id', $userId)->type($markType)->where('block_id', $markId)->value('user_note');
 
         return $status;
     }

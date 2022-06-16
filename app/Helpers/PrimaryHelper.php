@@ -17,9 +17,74 @@ use App\Models\Group;
 use App\Models\Hashtag;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class PrimaryHelper
 {
+    // get model
+    public static function fresnsModelByFsid(string $modelName, ?string $fsid = null)
+    {
+        if (empty($fsid)) {
+            return null;
+        }
+
+        $cacheKey = "fresns_model_{$modelName}_{$fsid}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $fresnsModel = Cache::remember($cacheKey, $cacheTime, function () use ($modelName, $fsid) {
+            switch ($modelName) {
+                // account
+                case 'account':
+                    $model = Account::withTrashed()->where('aid', $fsid)->first();
+                break;
+
+                // user
+                case 'user':
+                    $model = User::withTrashed()->where('uid', $fsid)->orWhere('username', $fsid)->first();
+                break;
+
+                // group
+                case 'group':
+                    $model = Group::withTrashed()->where('gid', $fsid)->first();
+                break;
+
+                // hashtag
+                case 'hashtag':
+                    $model = Hashtag::withTrashed()->where('slug', $fsid)->first();
+                break;
+
+                // post
+                case 'post':
+                    $model = Post::withTrashed()->with('postAppend')->where('pid', $fsid)->first();
+                break;
+
+                // comment
+                case 'comment':
+                    $model = Comment::withTrashed()->with('commentAppend')->where('cid', $fsid)->first();
+                break;
+
+                // file
+                case 'file':
+                    $model = File::withTrashed()->with('fileAppend')->where('fid', $fsid)->first();
+                break;
+
+                // extend
+                case 'extend':
+                    $model = Extend::withTrashed()->where('eid', $fsid)->first();
+                break;
+            }
+
+            return $model;
+        });
+
+        if (empty($fresnsModel)) {
+            Cache::forget($cacheKey);
+        }
+
+        return $fresnsModel;
+    }
+
+    // get table id
     public static function fresnsPrimaryId(string $tableName, ?string $tableKey = null)
     {
         if (empty($tableKey)) {
@@ -30,20 +95,22 @@ class PrimaryHelper
             'config' => PrimaryHelper::fresnsConfigIdByItemKey($tableKey),
             'account' => PrimaryHelper::fresnsAccountIdByAid($tableKey),
             'user' => PrimaryHelper::fresnsUserIdByUidOrUsername($tableKey),
-            'post' => PrimaryHelper::fresnsPostIdByPid($tableKey),
-            'comment' => PrimaryHelper::fresnsCommentIdByCid($tableKey),
-            'extend' => PrimaryHelper::fresnsExtendIdByEid($tableKey),
             'group' => PrimaryHelper::fresnsGroupIdByGid($tableKey),
             'hashtag' => PrimaryHelper::fresnsHashtagIdByHid($tableKey),
+            'post' => PrimaryHelper::fresnsPostIdByPid($tableKey),
+            'comment' => PrimaryHelper::fresnsCommentIdByCid($tableKey),
+            'file' => PrimaryHelper::fresnsFileIdByFid($tableKey),
+            'extend' => PrimaryHelper::fresnsExtendIdByEid($tableKey),
 
             'configs' => PrimaryHelper::fresnsConfigIdByItemKey($tableKey),
             'accounts' => PrimaryHelper::fresnsAccountIdByAid($tableKey),
             'users' => PrimaryHelper::fresnsUserIdByUidOrUsername($tableKey),
-            'posts' => PrimaryHelper::fresnsPostIdByPid($tableKey),
-            'comments' => PrimaryHelper::fresnsCommentIdByCid($tableKey),
-            'extends' => PrimaryHelper::fresnsExtendIdByEid($tableKey),
             'groups' => PrimaryHelper::fresnsGroupIdByGid($tableKey),
             'hashtags' => PrimaryHelper::fresnsHashtagIdByHid($tableKey),
+            'posts' => PrimaryHelper::fresnsPostIdByPid($tableKey),
+            'comments' => PrimaryHelper::fresnsCommentIdByCid($tableKey),
+            'files' => PrimaryHelper::fresnsFileIdByFid($tableKey),
+            'extends' => PrimaryHelper::fresnsExtendIdByEid($tableKey),
 
             default => null,
         };
@@ -76,9 +143,7 @@ class PrimaryHelper
             return null;
         }
 
-        $id = Account::withTrashed()->where('aid', $aid)->value('id');
-
-        return $id ?? null;
+        return PrimaryHelper::fresnsModelByFsid('account', $aid)?->id;
     }
 
     /**
@@ -91,13 +156,7 @@ class PrimaryHelper
             return null;
         }
 
-        if (is_int($uidOrUsername)) {
-            $id = User::withTrashed()->where('uid', $uidOrUsername)->value('account_id');
-        } else {
-            $id = User::withTrashed()->where('username', $uidOrUsername)->value('account_id');
-        }
-
-        return $id ?? null;
+        return PrimaryHelper::fresnsModelByFsid('user', $uidOrUsername)?->account_id;
     }
 
     /**
@@ -110,13 +169,7 @@ class PrimaryHelper
             return null;
         }
 
-        if (is_int($uidOrUsername)) {
-            $id = User::withTrashed()->where('uid', $uidOrUsername)->value('id');
-        } else {
-            $id = User::withTrashed()->where('username', $uidOrUsername)->value('id');
-        }
-
-        return $id ?? null;
+        return PrimaryHelper::fresnsModelByFsid('user', $uidOrUsername)?->id;
     }
 
     /**
@@ -129,9 +182,7 @@ class PrimaryHelper
             return null;
         }
 
-        $id = Group::withTrashed()->where('gid', $gid)->value('id');
-
-        return $id ?? null;
+        return PrimaryHelper::fresnsModelByFsid('group', $gid)?->id;
     }
 
     /**
@@ -144,9 +195,7 @@ class PrimaryHelper
             return null;
         }
 
-        $id = Hashtag::withTrashed()->where('slug', $hid)->value('id');
-
-        return $id ?? null;
+        return PrimaryHelper::fresnsModelByFsid('hashtag', $hid)?->id;
     }
 
     /**
@@ -159,9 +208,7 @@ class PrimaryHelper
             return null;
         }
 
-        $id = Post::withTrashed()->where('pid', $pid)->value('id');
-
-        return $id ?? null;
+        return PrimaryHelper::fresnsModelByFsid('post', $pid)?->id;
     }
 
     /**
@@ -174,9 +221,7 @@ class PrimaryHelper
             return null;
         }
 
-        $id = Comment::withTrashed()->where('cid', $cid)->value('id');
-
-        return $id ?? null;
+        return PrimaryHelper::fresnsModelByFsid('comment', $cid)?->id;
     }
 
     /**
@@ -189,9 +234,7 @@ class PrimaryHelper
             return null;
         }
 
-        $id = File::withTrashed()->where('fid', $fid)->value('id');
-
-        return $id ?? null;
+        return PrimaryHelper::fresnsModelByFsid('file', $fid)?->id;
     }
 
     /**
@@ -204,8 +247,6 @@ class PrimaryHelper
             return null;
         }
 
-        $id = Extend::withTrashed()->where('eid', $eid)->value('id');
-
-        return $id ?? null;
+        return PrimaryHelper::fresnsModelByFsid('extend', $eid)?->id;
     }
 }
