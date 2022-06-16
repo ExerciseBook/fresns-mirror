@@ -39,7 +39,7 @@ class ContentUtility
     }
 
     // Not valid for hashtag containing special characters
-    public static function filterHashtagChars($data, $exceptChars = ',# ')
+    public static function filterChars($data, $exceptChars = ',# ')
     {
         $data = array_filter($data);
 
@@ -88,10 +88,10 @@ class ContentUtility
     // Extract hashtag
     public static function extractHashtag(string $content): array
     {
-        $hashData = ContentUtility::filterHashtagChars(
+        $hashData = ContentUtility::filterChars(
             ContentUtility::matchAll(ContentUtility::getRegexpByType('hash'), $content)
         );
-        $spaceData = ContentUtility::filterHashtagChars(
+        $spaceData = ContentUtility::filterChars(
             ContentUtility::matchAll(ContentUtility::getRegexpByType('space'), $content)
         );
 

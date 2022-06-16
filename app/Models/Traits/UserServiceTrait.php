@@ -26,7 +26,6 @@ trait UserServiceTrait
         $profile['username'] = $userData->username;
         $profile['nickname'] = $userData->nickname;
         $profile['avatar'] = static::getUserAvatar($userData->id);
-        $profile['decorate'] = FileHelper::fresnsFileUrlByTableColumn($userData->decorate_file_id, $userData->decorate_file_url, 'imageAvatarUrl');
         $profile['banner'] = FileHelper::fresnsFileUrlByTableColumn($userData->banner_file_id, $userData->banner_file_url);
         $profile['gender'] = $userData->gender;
         $profile['birthday'] = DateHelper::fresnsDateTimeByTimezone($userData->birthday, $timezone, $langTag);
@@ -36,7 +35,6 @@ trait UserServiceTrait
         $profile['commentLimit'] = $userData->comment_limit;
         $profile['timezone'] = $userData->timezone;
         $profile['verifiedStatus'] = (bool) $userData->verified_status;
-        $profile['verifiedIcon'] = FileHelper::fresnsFileUrlByTableColumn($userData->verified_file_id, $userData->verified_file_url);
         $profile['verifiedDesc'] = $userData->verified_desc;
         $profile['verifiedDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->verified_at, $timezone, $langTag);
         $profile['expiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->expired_at, $timezone, $langTag);
@@ -44,7 +42,7 @@ trait UserServiceTrait
         $profile['lastPublishComment'] = DateHelper::fresnsDateTimeByTimezone($userData->last_comment_at, $timezone, $langTag);
         $profile['lastEditUsername'] = DateHelper::fresnsDateTimeByTimezone($userData->last_username_at, $timezone, $langTag);
         $profile['lastEditNickname'] = DateHelper::fresnsDateTimeByTimezone($userData->last_nickname_at, $timezone, $langTag);
-        $profile['registerDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData->created_at, $timezone, $langTag);
+        $profile['registerDate'] = date(ConfigHelper::fresnsConfigDateFormat($langTag), DateHelper::fresnsDateTimeByTimezone($userData->created_at, $timezone, $langTag));
         $profile['hasPassword'] = (bool) $userData->password;
         $profile['status'] = (bool) $userData->is_enable;
         $profile['waitDelete'] = (bool) $userData->wait_delete;

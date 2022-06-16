@@ -55,7 +55,7 @@ class GroupController extends Controller
                 ->orderBy('rating')
                 ->where('parent_id', $parentId)
                 ->isEnable()
-                ->with('creator', 'plugin', 'names', 'descriptions', 'admins')
+                ->with('creator', 'followByPlugin', 'names', 'descriptions', 'admins')
                 ->paginate();
         }
 
@@ -99,7 +99,7 @@ class GroupController extends Controller
 
         $groups = Group::typeGroup()
             ->orderBy('recommend_rating')
-            ->with('creator', 'plugin', 'category', 'admins')
+            ->with('creator', 'followByPlugin', 'category', 'admins')
             ->where('is_recommend', 1)
             ->isEnable()
             ->paginate();
@@ -134,7 +134,7 @@ class GroupController extends Controller
         $groups = Group::typeGroup()
             ->orderBy('rating')
             ->isEnable(false)
-            ->with('creator', 'plugin', 'category')
+            ->with('creator', 'followByPlugin', 'category')
             ->paginate();
 
         $plugins = Plugin::all();

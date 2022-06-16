@@ -10,8 +10,6 @@ namespace App\Models;
 
 class FileAppend extends Model
 {
-    protected $guarded = [];
-
     public function file()
     {
         return $this->belongsTo(File::class, 'file_id', 'id');
