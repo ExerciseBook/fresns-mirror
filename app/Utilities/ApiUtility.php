@@ -5,40 +5,31 @@
  * Copyright (C) 2021-Present Jarvis Tang
  */
 
-namespace App\Fresns\Web;
+namespace App\Utilities;
 
-use App\Fresns\Client\Clientable;
+use App\Fresns\Client\ClientAble;
+use Psr\Http\Message\ResponseInterface;
 
-/**
- * 并发请求示例
- * 
-$client = \App\Fresns\Web\Client::make();
-$results = $client->unwrap([
-    'configs' => $client->getAsync('/api/v2/global/configs'),
-    'roles'   => $client->getAsync('/api/v2/global/roles'),
-]);
-
-dd($results, $results['configs'], $results['roles']);
- */
-class Client implements \ArrayAccess
+class ApiUtility implements \ArrayAccess
 {
-    use Clientable;
-
-    /** @var \GuzzleHttp\Psr7\Response */
-    protected $response;
+    use ClientAble;
 
     protected array $result = [];
-    
+
     public function getBaseUri(): ?string
     {
-        $apiHost = app()->environment('local') ? config('app.url') : 'https://api.fresns.cn';
+        $isLocal = true;
+        $localApiHost = config('app.url');
+        $remoteApiHost = 'https://api.fresns.cn';
+
+        $apiHost = $isLocal ? $localApiHost : $remoteApiHost;
 
         return $apiHost;
     }
 
-    public function handleEmptyResponse(?string $content = null, ?\Psr\Http\Message\ResponseInterface $response = null)
+    public function handleEmptyResponse(?string $content = null, ?ResponseInterface $response = null)
     {
-        info('empty reponse, ApiException: '.var_export($content, true));
+        info('empty response, ApiException: '.var_export($content, true));
         throw new \Exception(sprintf('ApiException: %s', $response?->getReasonPhrase()), $response?->getStatusCode());
     }
 
@@ -49,7 +40,7 @@ class Client implements \ArrayAccess
 
     public function handleErrorResponse(?string $content = null, array $data = [])
     {
-        info('error reponse, ApiException: '.var_export($content, true));
+        info('error response, ApiException: '.var_export($content, true));
         throw new \Exception(sprintf('ApiException: %s', $data['msg'] ?? $data['exception']), $data['code']);
     }
 

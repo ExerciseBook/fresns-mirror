@@ -7,16 +7,22 @@
 
 namespace App\Fresns\Client;
 
-trait Clientable
-{
-    use Arrayable;
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Promise\Promise;
+use Psr\Http\Message\ResponseInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-    /** @var \GuzzleHttp\Psr7\Response */
-    protected $response;
+trait ClientAble
+{
+    use ArrayAble;
+
+    protected Response $response;
 
     protected array $result = [];
 
-    public static function make(): static|\GuzzleHttp\Promise\Utils|\GuzzleHttp\Client
+    public static function make(): static|Utils|Client
     {
         return new static();
     }
@@ -25,11 +31,11 @@ trait Clientable
 
     public function getOptions()
     {
-
         return [
             'base_uri' => $this->getBaseUri(),
             'timeout' => 5, // 请求 5s 超时
             'http_errors' => false,
+            'verify' => true,
             'headers' => [
                 'Accept' => 'application/json',
             ],
@@ -38,10 +44,10 @@ trait Clientable
 
     public function getHttpClient()
     {
-        return new \GuzzleHttp\Client($this->getOptions());
+        return new Client($this->getOptions());
     }
 
-    abstract public function handleEmptyResponse(?string $content = null, ?\Psr\Http\Message\ResponseInterface $response = null);
+    abstract public function handleEmptyResponse(?string $content = null, ?ResponseInterface $response = null);
 
     abstract public function isErrorResponse(array $data): bool;
 
@@ -80,7 +86,7 @@ trait Clientable
             return null;
         }
 
-        $paginate = new \Illuminate\Pagination\LengthAwarePaginator(
+        $paginate = new LengthAwarePaginator(
             items: $this->getDataList(),
             total: $this->getTotal(),
             perPage: $this->getPageSize(),
@@ -97,8 +103,8 @@ trait Clientable
     public function __call($method, $args)
     {
         // 异步请求处理
-        if (method_exists(\GuzzleHttp\Promise\Utils::class, $method)) {
-            $results = call_user_func_array([\GuzzleHttp\Promise\Utils::class, $method], $args);
+        if (method_exists(Utils::class, $method)) {
+            $results = call_user_func_array([Utils::class, $method], $args);
 
             if (!is_array($results)) {
                 return $results;
@@ -120,14 +126,14 @@ trait Clientable
         }
 
         // 响应结果处理
-        if ($this->response instanceof \GuzzleHttp\Psr7\Response) {
+        if ($this->response instanceof Response) {
             $this->result  = $this->castResponse($this->response);
 
             $this->attributes = $this->result;
         }
 
         // 将 promise 请求直接返回
-        if ($this->response instanceof \GuzzleHttp\Promise\Promise) {
+        if ($this->response instanceof Promise) {
             return $this->response;
         }
 

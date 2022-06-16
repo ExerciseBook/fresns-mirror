@@ -9,7 +9,7 @@ namespace App\Fresns\Client;
 
 use Illuminate\Support\Arr;
 
-trait Arrayable
+trait ArrayAble
 {
     protected array $attributes = [];
 
