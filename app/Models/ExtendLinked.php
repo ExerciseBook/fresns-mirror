@@ -21,7 +21,7 @@ class ExtendLinked extends Model
         return $query->where('linked_type', $type);
     }
 
-    public function extendInfo()
+    public function extend()
     {
         return $this->belongsTo(Extend::class, 'extend_id', 'id');
     }

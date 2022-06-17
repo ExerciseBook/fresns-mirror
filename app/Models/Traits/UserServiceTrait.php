@@ -146,22 +146,6 @@ trait UserServiceTrait
         return $roleList;
     }
 
-    public function getUserArchives(?string $langTag = null)
-    {
-        $archiveArr = $this->archives;
-
-        $archiveList = [];
-        foreach ($archiveArr as $archive) {
-            $item['itemKey'] = $archive->config_key;
-            $item['itemValue'] = ConfigHelper::fresnsConfigByItemKey($archive->config_key, $langTag);
-            $item['archiveValue'] = $archive->archive_value;
-            $item['archiveType'] = $archive->archive_type;
-            $archiveList[] = $item;
-        }
-
-        return $archiveList;
-    }
-
     public function getUserStats(?string $langTag = null)
     {
         $statsData = $this->stat;

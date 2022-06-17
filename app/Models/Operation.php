@@ -10,10 +10,10 @@ namespace App\Models;
 
 class Operation extends Model
 {
-    const TYPE_CUSTOM = 1;
+    const TYPE_CUSTOMIZE = 1;
     const TYPE_BUTTON_ICON = 2;
     const TYPE_DIVERSIFY_IMAGE = 3;
-    const TYPE_TIP_TEXT = 4;
+    const TYPE_TIP = 4;
 
     const USE_TYPE_GENERAL = 1;
     const USE_TYPE_FUNCTION = 2;
