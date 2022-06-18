@@ -9,17 +9,32 @@ namespace App\Fresns\Client;
 
 use Illuminate\Support\Arr;
 
-trait ArrayAble
+trait Arrayable
 {
     protected array $attributes = [];
 
     public static function makeAttribute(array $attributes = [])
     {
-        $instance = new static();
+        $instance = new class implements \ArrayAccess
+        {
+            use Arrayable;
+        };
 
-        $instance->attributes = $attributes;
+        $instance->setAttributes($attributes);
 
         return $instance;
+    }
+
+    public function setAttributes(array $attributes = [])
+    {
+        $this->attributes = $attributes;
+        
+        return $this;
+    }
+
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     public function offsetExists(mixed $offset): bool
@@ -59,6 +74,6 @@ trait ArrayAble
 
     public function toArray()
     {
-        return $this->attributes;
+        return $this->getAttributes();
     }
 }

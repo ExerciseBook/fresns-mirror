@@ -14,11 +14,12 @@ use GuzzleHttp\Promise\Promise;
 use Psr\Http\Message\ResponseInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-trait ClientAble
+trait Clientable
 {
-    use ArrayAble;
+    use Arrayable;
 
-    protected Response $response;
+    /** @var Response */
+    protected $response;
 
     protected array $result = [];
 
@@ -35,7 +36,6 @@ trait ClientAble
             'base_uri' => $this->getBaseUri(),
             'timeout' => 5, // 请求 5s 超时
             'http_errors' => false,
-            'verify' => true,
             'headers' => [
                 'Accept' => 'application/json',
             ],
@@ -115,7 +115,7 @@ trait ClientAble
                 $data[$key] = $this->castResponse($promise);
             }
 
-            $this->attributes = $data;
+            $this->setAttributes($data);
 
             return $this;
         }
@@ -129,7 +129,7 @@ trait ClientAble
         if ($this->response instanceof Response) {
             $this->result  = $this->castResponse($this->response);
 
-            $this->attributes = $this->result;
+            $this->setAttributes($this->result);
         }
 
         // 将 promise 请求直接返回
