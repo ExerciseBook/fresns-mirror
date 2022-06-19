@@ -8,7 +8,7 @@
 
 namespace App\Models;
 
-class ArchiveUse extends Model
+class ArchiveUsage extends Model
 {
     const TYPE_USER = 1;
     const TYPE_GROUP = 2;
@@ -49,7 +49,7 @@ class ArchiveUse extends Model
 
     public function scopeType($query, int $type)
     {
-        return $query->where('use_type', $type);
+        return $query->where('usage_type', $type);
     }
 
     public function archive()
@@ -59,26 +59,26 @@ class ArchiveUse extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_USER);
+        return $this->belongsTo(User::class, 'usage_id', 'id')->where('usage_type', ArchiveUsage::TYPE_USER);
     }
 
     public function group()
     {
-        return $this->belongsTo(Group::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_GROUP);
+        return $this->belongsTo(Group::class, 'usage_id', 'id')->where('usage_type', ArchiveUsage::TYPE_GROUP);
     }
 
     public function hashtag()
     {
-        return $this->belongsTo(Hashtag::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_HASHTAG);
+        return $this->belongsTo(Hashtag::class, 'usage_id', 'id')->where('usage_type', ArchiveUsage::TYPE_HASHTAG);
     }
 
     public function post()
     {
-        return $this->belongsTo(Post::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_POST);
+        return $this->belongsTo(Post::class, 'usage_id', 'id')->where('usage_type', ArchiveUsage::TYPE_POST);
     }
 
     public function comment()
     {
-        return $this->belongsTo(Comment::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_COMMENT);
+        return $this->belongsTo(Comment::class, 'usage_id', 'id')->where('usage_type', ArchiveUsage::TYPE_COMMENT);
     }
 }

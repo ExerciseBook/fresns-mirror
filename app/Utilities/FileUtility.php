@@ -11,7 +11,7 @@ namespace App\Utilities;
 use App\Helpers\FileHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\File;
-use App\Models\FileUse;
+use App\Models\FileUsage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -30,7 +30,7 @@ class FileUtility
             'url' => '/storage',
         ]);
 
-        $storePath = FileHelper::fresnsFileStoragePath($bodyInfo['type'], $bodyInfo['useType']);
+        $storePath = FileHelper::fresnsFileStoragePath($bodyInfo['type'], $bodyInfo['usageType']);
 
         $diskPath = $fresnsStorage->putFile($storePath, $file);
 
@@ -90,7 +90,7 @@ class FileUtility
             $useInput = [
                 'file_id' => $fileId,
                 'file_type' => $bodyInfo['type'],
-                'use_type' => $bodyInfo['useType'],
+                'usage_type' => $bodyInfo['usageType'],
                 'platform_id' => $bodyInfo['platformId'],
                 'table_name' => $bodyInfo['tableName'],
                 'table_column' => $bodyInfo['tableColumn'],
@@ -101,7 +101,7 @@ class FileUtility
                 'user_id' => $userId,
             ];
 
-            FileUse::create($useInput);
+            FileUsage::create($useInput);
         }
 
         $fileTypeName = match ($bodyInfo['type']) {
@@ -163,7 +163,7 @@ class FileUtility
         $useInput = [
             'file_id' => $fileId,
             'file_type' => $bodyInfo['type'],
-            'use_type' => $bodyInfo['useType'],
+            'usage_type' => $bodyInfo['usageType'],
             'platform_id' => $bodyInfo['platformId'],
             'table_name' => $bodyInfo['tableName'],
             'table_column' => $bodyInfo['tableColumn'],
@@ -172,7 +172,7 @@ class FileUtility
             'account_id' => $accountId,
             'user_id' => $userId,
         ];
-        FileUse::create($useInput);
+        FileUsage::create($useInput);
 
         return FileHelper::fresnsFileInfoById($fileId);
     }

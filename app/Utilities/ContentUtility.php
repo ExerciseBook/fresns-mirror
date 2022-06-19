@@ -15,10 +15,10 @@ use App\Helpers\PluginHelper;
 use App\Helpers\StrHelper;
 use App\Models\Domain;
 use App\Models\DomainLink;
-use App\Models\DomainLinkUse;
+use App\Models\DomainLinkUsage;
 use App\Models\Extend;
 use App\Models\Hashtag;
-use App\Models\HashtagUse;
+use App\Models\HashtagUsage;
 use App\Models\Mention;
 use App\Models\Role;
 use App\Models\Sticker;
@@ -260,7 +260,7 @@ class ContentUtility
     }
 
     // Save hashtag
-    public static function saveHashtag(string $content, int $useType, int $useId)
+    public static function saveHashtag(string $content, int $usageType, int $useId)
     {
         $hashtagArr = ContentUtility::extractHashtag($content);
 
@@ -279,17 +279,17 @@ class ContentUtility
         $hashtagUseData = [];
         foreach ($hashtagIdArr as $hashtagId) {
             $hashtagUseData[] = [
-                'use_type' => $useType,
-                'use_id' => $useId,
+                'usage_type' => $usageType,
+                'usage_id' => $useId,
                 'hashtag_id' => $hashtagId,
             ];
         }
 
-        HashtagUse::createMany($hashtagUseData);
+        HashtagUsage::createMany($hashtagUseData);
     }
 
     // Save link
-    public static function saveLink(string $content, int $useType, int $useId)
+    public static function saveLink(string $content, int $usageType, int $useId)
     {
         $urlArr = ContentUtility::extractLink($content);
 
@@ -316,12 +316,12 @@ class ContentUtility
         $urlUseData = [];
         foreach ($urlIdArr as $urlId) {
             $urlUseData[] = [
-                'use_type' => $useType,
-                'use_id' => $useId,
+                'usage_type' => $usageType,
+                'usage_id' => $useId,
                 'link_id' => $urlId,
             ];
         }
-        DomainLinkUse::createMany($urlUseData);
+        DomainLinkUsage::createMany($urlUseData);
     }
 
     // Save mention user

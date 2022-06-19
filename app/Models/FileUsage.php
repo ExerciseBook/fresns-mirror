@@ -8,7 +8,7 @@
 
 namespace App\Models;
 
-class FileUse extends Model
+class FileUsage extends Model
 {
     const TYPE_OTHER = 1;
     const TYPE_SYSTEM = 2;
@@ -28,7 +28,7 @@ class FileUse extends Model
 
     public function scopeType($query, int $type)
     {
-        return $query->where('use_type', $type);
+        return $query->where('usage_type', $type);
     }
 
     public function file()

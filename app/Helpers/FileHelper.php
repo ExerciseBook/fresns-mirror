@@ -9,7 +9,7 @@
 namespace App\Helpers;
 
 use App\Models\File;
-use App\Models\FileUse;
+use App\Models\FileUsage;
 
 class FileHelper
 {
@@ -66,7 +66,7 @@ class FileHelper
     }
 
     // get file storage path
-    public static function fresnsFileStoragePath(int $fileType, int $useType)
+    public static function fresnsFileStoragePath(int $fileType, int $usageType)
     {
         $fileTypeDir = match ($fileType) {
             1 => 'images',
@@ -75,7 +75,7 @@ class FileHelper
             4 => 'documents',
         };
 
-        $useTypeDir = match ($useType) {
+        $usageTypeDir = match ($usageType) {
             1 => '/others/{YYYYMM}/',
             2 => '/systems/{YYYYMM}/',
             3 => '/operations/{YYYYMM}/',
@@ -91,7 +91,7 @@ class FileHelper
         $replaceUseTypeDir = str_replace(
             ['{YYYYMM}', '{DD}'],
             [date('Ym'), date('d')],
-            $useTypeDir
+            $usageTypeDir
         );
 
         return sprintf('%s/%s', trim($fileTypeDir, '/'), trim($replaceUseTypeDir, '/'));
@@ -141,7 +141,7 @@ class FileHelper
     // get file info list by table column
     public static function fresnsFileInfoListByTableColumn(string $tableName, string $tableColumn, ?int $tableId = null, ?string $tableKey = null)
     {
-        $fileUseQuery = FileUse::with('file')
+        $fileUseQuery = FileUsage::with('file')
             ->where('table_name', $tableName)
             ->where('table_column', $tableColumn)
             ->orderBy('rating');

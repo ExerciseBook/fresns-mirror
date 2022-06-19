@@ -12,13 +12,13 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
-use App\Models\ArchiveUse;
+use App\Models\ArchiveUsage;
 use App\Models\Extend;
-use App\Models\ExtendUse;
+use App\Models\ExtendUsage;
 use App\Models\Operation;
-use App\Models\OperationUse;
+use App\Models\OperationUsage;
 use App\Models\Plugin;
-use App\Models\PluginUse;
+use App\Models\PluginUsage;
 
 class ExtendUtility
 {
@@ -28,9 +28,9 @@ class ExtendUtility
         $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
         if ($type == 6) {
-            $extendArr = PluginUse::where('type', $type)->where('group_id', $groupId)->orderBy('rating')->get();
+            $extendArr = PluginUsage::where('type', $type)->where('group_id', $groupId)->orderBy('rating')->get();
         } else {
-            $extendArr = PluginUse::where('type', $type)->when($scene, function ($query, $scene) {
+            $extendArr = PluginUsage::where('type', $type)->when($scene, function ($query, $scene) {
                 $query->where('scene', 'like', "%$scene%");
             })->orderBy('rating')->get();
         }
@@ -45,7 +45,7 @@ class ExtendUtility
                 }
 
                 if ($adminCheck) {
-                    $extendList[] = $extend->getUseInfo($langTag, $userId);
+                    $extendList[] = $extend->getUsageInfo($langTag, $userId);
                 }
             } else {
                 if (! empty($userId) && ! empty($extend->roles)) {
@@ -56,7 +56,7 @@ class ExtendUtility
                 }
 
                 if (empty($extend->roles) || $permCheck) {
-                    $extendList[] = $extend->getUseInfo($langTag, $userId);
+                    $extendList[] = $extend->getUsageInfo($langTag, $userId);
                 }
             }
         }
@@ -67,7 +67,7 @@ class ExtendUtility
     // get data extend
     public static function getDataExtend(string $contentType, string $dataType)
     {
-        $dataConfig = PluginUse::type(PluginUse::TYPE_CONTENT)->where('plugin_unikey', $contentType)->isEnable()->value('data_sources');
+        $dataConfig = PluginUsage::type(PluginUsage::TYPE_CONTENT)->where('plugin_unikey', $contentType)->isEnable()->value('data_sources');
 
         if (empty($dataConfig)) {
             return null;
@@ -87,7 +87,7 @@ class ExtendUtility
     // get operations
     public static function getOperations(int $type, int $id, ?string $langTag = null)
     {
-        $operationQuery = OperationUse::with('operation')->type($type)->where('use_id', $id);
+        $operationQuery = OperationUsage::with('operation')->type($type)->where('usage_id', $id);
 
         $operationQuery->whereHas('operation', function ($query) {
             $query->where('is_enable', 1);
@@ -101,8 +101,8 @@ class ExtendUtility
             $item['description'] = LanguageHelper::fresnsLanguageByTableId('operations', 'description', $operationUse->operation->id, $langTag);
             $item['imageUrl'] = FileHelper::fresnsFileUrlByTableColumn($operationUse->operation->image_file_id, $operationUse->operation->image_file_url);
             $item['imageActiveUrl'] = FileHelper::fresnsFileUrlByTableColumn($operationUse->operation->image_active_file_id, $operationUse->operation->image_active_file_url);
-            $item['useType'] = $operationUse->operation->use_type;
-            $item['useUrl'] = PluginHelper::fresnsPluginUrlByUnikey($operationUse->operation->plugin_unikey);
+            $item['displayType'] = $operationUse->operation->display_type;
+            $item['pluginUrl'] = PluginHelper::fresnsPluginUrlByUnikey($operationUse->operation->plugin_unikey);
 
             return $item;
         })->groupBy('type');
@@ -118,7 +118,7 @@ class ExtendUtility
     // get archives
     public static function getArchives(int $type, int $id, ?string $langTag = null)
     {
-        $archiveQuery = ArchiveUse::with('archive')->type($type)->where('use_id', $id)->isEnable();
+        $archiveQuery = ArchiveUsage::with('archive')->type($type)->where('usage_id', $id)->isEnable();
 
         $archiveQuery->whereHas('archive', function ($query) {
             $query->where('is_enable', 1)->orderBy('rating');
@@ -159,7 +159,7 @@ class ExtendUtility
     // get extends
     public static function getExtends(int $type, int $id, ?string $langTag = null)
     {
-        $extendQuery = ExtendUse::with('extend')->type($type)->where('use_id', $id)->orderBy('rating');
+        $extendQuery = ExtendUsage::with('extend')->type($type)->where('usage_id', $id)->orderBy('rating');
 
         $extendQuery->whereHas('extend', function ($query) {
             $query->where('is_enable', 1);
@@ -181,7 +181,7 @@ class ExtendUtility
             $item['buttonName'] = LanguageHelper::fresnsLanguageByTableId('extends', 'button_name', $extendLinked->extend->id, $langTag) ?? $extendLinked->extend->button_name;
             $item['buttonColor'] = $extendLinked->extend->button_color;
             $item['position'] = $extendLinked->extend->position;
-            $item['accessUrl'] = PluginHelper::fresnsPluginUseUrl($extendLinked->extend->plugin_unikey, $extendLinked->extend->parameter);
+            $item['accessUrl'] = PluginHelper::fresnsPluginUsageUrl($extendLinked->extend->plugin_unikey, $extendLinked->extend->parameter);
             $item['moreJson'] = $extendLinked->extend->more_json;
 
             return $item;

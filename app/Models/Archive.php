@@ -24,6 +24,6 @@ class Archive extends Model
 
     public function scopeType($query, int $type)
     {
-        return $query->where('use_type', $type);
+        return $query->where('usage_type', $type);
     }
 }

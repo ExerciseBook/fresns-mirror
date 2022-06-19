@@ -35,7 +35,7 @@ class Post extends Model
 
     public function hashtags()
     {
-        return $this->belongsToMany(Hashtag::class, 'hashtag_uses', 'hashtag_id', 'use_id')->wherePivot('use_type', HashtagUse::TYPE_POST);
+        return $this->belongsToMany(Hashtag::class, 'hashtag_usages', 'hashtag_id', 'usage_id')->wherePivot('usage_type', HashtagUsage::TYPE_POST);
     }
 
     public function users()
@@ -43,13 +43,8 @@ class Post extends Model
         return $this->hasMany(PostUser::class);
     }
 
-    public function allowUsers()
+    public function allows()
     {
-        return $this->hasMany(PostAllow::class)->where('type', 1);
-    }
-
-    public function allowRoles()
-    {
-        return $this->hasMany(PostAllow::class)->where('type', 2);
+        return $this->hasMany(PostAllow::class);
     }
 }
