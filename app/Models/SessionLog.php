@@ -10,4 +10,7 @@ namespace App\Models;
 
 class SessionLog extends Model
 {
+    protected $casts = [
+        'device_info' => 'json',
+    ];
 }

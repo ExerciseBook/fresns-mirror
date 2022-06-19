@@ -29,11 +29,6 @@ class User extends Model
         return $this->hasOne(UserStat::class);
     }
 
-    public function archives()
-    {
-        return $this->hasMany(Archive::class, 'linked_id')->where('linked_type', Archive::TYPE_USER);
-    }
-
     public function mainRole()
     {
         return $this->hasOne(UserRole::class)->where('is_main', UserRole::TYPE_MAIN);

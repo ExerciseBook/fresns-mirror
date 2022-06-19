@@ -8,7 +8,7 @@
 
 namespace App\Models;
 
-class ArchiveLinked extends Model
+class ArchiveUse extends Model
 {
     const TYPE_USER = 1;
     const TYPE_GROUP = 2;
@@ -20,8 +20,8 @@ class ArchiveLinked extends Model
 
     public function getArchiveValueAttribute($value)
     {
-        $value = match ($this->archive->json_type) {
-            default => throw new \Exception("unknown archive type {$this->archive->json_type}"),
+        $value = match ($this->archive->api_type) {
+            default => throw new \Exception("unknown archive type {$this->archive->api_type}"),
             'array', 'object', 'plugins' => json_decode($value, true) ?? [],
             'boolean' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
             'number' => intval($value),
@@ -32,7 +32,7 @@ class ArchiveLinked extends Model
 
     public function setArchiveValueAttribute($value)
     {
-        if (in_array($this->archive->json_type, ['array', 'plugins', 'object']) || is_array($value)) {
+        if (in_array($this->archive->api_type, ['array', 'plugins', 'object']) || is_array($value)) {
             $value = json_encode($value);
         }
 
@@ -49,7 +49,7 @@ class ArchiveLinked extends Model
 
     public function scopeType($query, int $type)
     {
-        return $query->where('linked_type', $type);
+        return $query->where('use_type', $type);
     }
 
     public function archive()
@@ -59,26 +59,26 @@ class ArchiveLinked extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'linked_id', 'id')->where('linked_type', OperationLinked::TYPE_USER);
+        return $this->belongsTo(User::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_USER);
     }
 
     public function group()
     {
-        return $this->belongsTo(Group::class, 'linked_id', 'id')->where('linked_type', OperationLinked::TYPE_GROUP);
+        return $this->belongsTo(Group::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_GROUP);
     }
 
     public function hashtag()
     {
-        return $this->belongsTo(Hashtag::class, 'linked_id', 'id')->where('linked_type', OperationLinked::TYPE_HASHTAG);
+        return $this->belongsTo(Hashtag::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_HASHTAG);
     }
 
     public function post()
     {
-        return $this->belongsTo(Post::class, 'linked_id', 'id')->where('linked_type', OperationLinked::TYPE_POST);
+        return $this->belongsTo(Post::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_POST);
     }
 
     public function comment()
     {
-        return $this->belongsTo(Comment::class, 'linked_id', 'id')->where('linked_type', OperationLinked::TYPE_COMMENT);
+        return $this->belongsTo(Comment::class, 'use_id', 'id')->where('use_type', ArchiveUse::TYPE_COMMENT);
     }
 }

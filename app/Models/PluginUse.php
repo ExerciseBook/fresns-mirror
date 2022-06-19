@@ -8,7 +8,7 @@
 
 namespace App\Models;
 
-class PluginUsage extends Model
+class PluginUse extends Model
 {
     const TYPE_WALLET_RECHARGE = 1;
     const TYPE_WALLET_WITHDRAW = 2;
@@ -25,7 +25,7 @@ class PluginUsage extends Model
     const SCENE_USER = 3;
 
     use Traits\LangNameTrait;
-    use Traits\PluginUsageServiceTrait;
+    use Traits\PluginUseServiceTrait;
     use Traits\IsEnableTrait;
 
     protected $casts = [
@@ -34,7 +34,7 @@ class PluginUsage extends Model
 
     public function scopeType($query, int $type)
     {
-        return $query->where('type', $type);
+        return $query->where('use_type', $type);
     }
 
     public function plugin()

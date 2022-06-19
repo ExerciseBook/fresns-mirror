@@ -23,10 +23,10 @@ trait FileServiceTrait
         $fileConfigInfo = FileHelper::fresnsFileStorageConfigByType($fileData->type);
 
         if ($fileConfigInfo['filesystemDisk'] == 'local') {
-            $fileOriginalPath = Storage::url($fileData->fileAppend->original_path);
+            $fileOriginalPath = Storage::url($fileData->original_path);
             $filePath = Storage::url($fileData->path);
         } else {
-            $fileOriginalPath = $fileData->fileAppend->original_path;
+            $fileOriginalPath = $fileData->original_path;
             $filePath = $fileData->path;
         }
 

@@ -13,6 +13,10 @@ class UserRole extends Model
     const TYPE_GENERAL = 0;
     const TYPE_MAIN = 1;
 
+    protected $dates = [
+        'expired_at',
+    ];
+
     public function scopeType($query, int $type)
     {
         return $query->where('type', $type);

@@ -30,10 +30,9 @@ class File extends Model
     use Traits\FileServiceTrait;
     use Traits\IsEnableTrait;
 
-    public function fileAppend()
-    {
-        return $this->hasOne(FileAppend::class);
-    }
+    protected $casts = [
+        'more_json' => 'json',
+    ];
 
     public function getTypeKey()
     {
@@ -44,6 +43,11 @@ class File extends Model
             File::TYPE_AUDIO => 'audio',
             File::TYPE_DOCUMENT => 'document',
         };
+    }
+
+    public function scopeType($query, int $type)
+    {
+        return $query->where('type', $type);
     }
 
     public function isImage()

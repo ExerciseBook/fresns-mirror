@@ -50,6 +50,6 @@ class Comment extends Model
 
     public function hashtags()
     {
-        return $this->belongsToMany(Hashtag::class, 'hashtag_linkeds', 'hashtag_id', 'linked_id')->wherePivot('linked_type', HashtagLinked::TYPE_COMMENT);
+        return $this->belongsToMany(Hashtag::class, 'hashtag_uses', 'hashtag_id', 'use_id')->wherePivot('use_type', HashtagUse::TYPE_COMMENT);
     }
 }
