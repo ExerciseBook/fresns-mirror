@@ -21,7 +21,7 @@ use App\Models\BlockWord;
 use App\Models\Dialog;
 use App\Models\DialogMessage;
 use App\Models\File;
-use App\Models\FileAppend;
+use App\Models\FileUsage;
 use App\Models\User;
 use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
@@ -225,19 +225,23 @@ class DialogController extends Controller
         }
 
         // dialog message
-        $messageColumn['dialog_id'] = $dialog->id;
-        $messageColumn['send_user_id'] = $authUser->id;
-        $messageColumn['message_type'] = $messageType;
-        $messageColumn['message_text'] = $messageText;
-        $messageColumn['message_file_id'] = $messageFileId;
-        $messageColumn['receive_user_id'] = $receiveUser->id;
+        $messageInput = [
+            'dialog_id' => $dialog->id,
+            'send_user_id' => $authUser->id,
+            'message_type' => $messageType,
+            'message_text' => $messageText,
+            'message_file_id' => $messageFileId,
+            'receive_user_id' => $receiveUser->id,
+        ];
 
-        $dialogMessage = DialogMessage::create($messageColumn)->first();
+        $dialogMessage = DialogMessage::create($messageInput)->first();
 
         if ($messageFileId) {
-            $fileType = FileAppend::where('file_id', $messageFileId)->update([
+            $fileType = FileUsage::where('file_id', $messageFileId)->latest()->first()?->update([
+                'table_name' => 'dialog_messages',
+                'table_column' => 'message_file_id',
                 'table_id' => $dialogMessage->id,
-            ])->value('file_type');
+            ])?->value('file_type');
 
             $messageText = match ($fileType) {
                 File::TYPE_IMAGE => '[Image]',
@@ -251,7 +255,7 @@ class DialogController extends Controller
         $dialog->update([
             'latest_message_id' => $dialogMessage->id,
             'latest_message_time' => now(),
-            'latest_message_text' => $messageText,
+            'latest_message_text' => Str::limit($messageText, 140),
         ]);
 
         // return

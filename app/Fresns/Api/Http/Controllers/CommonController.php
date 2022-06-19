@@ -24,7 +24,7 @@ use App\Helpers\LanguageHelper;
 use App\Models\Account;
 use App\Models\Extend;
 use App\Models\File;
-use App\Models\FileLog;
+use App\Models\FileDownload;
 use App\Models\Hashtag;
 use App\Models\Language;
 use App\Models\Plugin;
@@ -403,8 +403,8 @@ class CommonController extends Controller
         switch ($dtoRequest->uploadMode) {
             case 'file':
                 $wordBody = [
+                    'usageType' => $dtoRequest->usageType,
                     'platformId' => $request->header('platformId'),
-                    'useType' => $dtoRequest->useType,
                     'tableName' => $dtoRequest->tableName,
                     'tableColumn' => $dtoRequest->tableColumn,
                     'tableId' => $dtoRequest->tableId,
@@ -421,8 +421,8 @@ class CommonController extends Controller
 
             case 'fileInfo':
                 $wordBody = [
+                    'usageType' => $dtoRequest->usageType,
                     'platformId' => $request->header('platformId'),
-                    'useType' => $dtoRequest->useType,
                     'tableName' => $dtoRequest->tableName,
                     'tableColumn' => $dtoRequest->tableColumn,
                     'tableId' => $dtoRequest->tableId,
@@ -488,16 +488,16 @@ class CommonController extends Controller
             throw new ApiException(37501);
         }
 
-        $fileLogs = FileLog::with('user')->orderBy('created_at', 'desc')->paginate($request->get('pageSize', 15));
+        $downUsers = FileDownload::with('user')->latest()->paginate($request->get('pageSize', 15));
 
         $item = null;
-        foreach ($fileLogs as $log) {
-            $item['downloadTime'] = DateHelper::fresnsFormatDateTime($log->created_at, $timezone, $langTag);
-            $item['downloadTimeFormat'] = DateHelper::fresnsFormatTime($log->created_at, $langTag);
-            $item['downloadUser'] = $log->user->getUserProfile();
+        foreach ($downUsers as $down) {
+            $item['downloadTime'] = DateHelper::fresnsFormatDateTime($down->created_at, $timezone, $langTag);
+            $item['downloadTimeFormat'] = DateHelper::fresnsFormatTime($down->created_at, $langTag);
+            $item['downloadUser'] = $down->user->getUserProfile();
             $item[] = $item;
         }
 
-        return $this->fresnsPaginate($item, $fileLogs->total(), $fileLogs->perPage());
+        return $this->fresnsPaginate($item, $downUsers->total(), $downUsers->perPage());
     }
 }

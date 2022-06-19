@@ -28,7 +28,7 @@ class HeaderDTO extends DTO
             'aid' => ['string', 'nullable', 'exists:App\Models\Account,aid'],
             'uid' => ['integer', 'nullable', 'exists:App\Models\User,uid'],
             'token' => ['string', 'nullable', 'required_with:aid'],
-            'deviceInfo' => ['string', 'required'],
+            'deviceInfo' => ['json', 'required'],
         ];
     }
 }

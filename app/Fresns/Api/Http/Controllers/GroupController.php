@@ -228,7 +228,7 @@ class GroupController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $seoData = Seo::where('linked_type', Seo::TYPE_GROUP)->where('linked_id', $group->id)->where('lang_tag', $langTag)->first();
+        $seoData = Seo::where('usage_type', Seo::TYPE_GROUP)->where('usage_id', $group->id)->where('lang_tag', $langTag)->first();
 
         $item['title'] = $seoData->title ?? null;
         $item['keywords'] = $seoData->keywords ?? null;

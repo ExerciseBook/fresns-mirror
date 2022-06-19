@@ -267,7 +267,7 @@ class PostController extends Controller
         $timezone = $this->timezone();
         $authUser = $this->user();
 
-        $seoData = Seo::where('linked_type', Seo::TYPE_POST)->where('linked_id', $post->id)->where('lang_tag', $langTag)->first();
+        $seoData = Seo::where('usage_type', Seo::TYPE_POST)->where('usage_id', $post->id)->where('lang_tag', $langTag)->first();
 
         $item['title'] = $seoData->title ?? null;
         $item['keywords'] = $seoData->keywords ?? null;

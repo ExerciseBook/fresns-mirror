@@ -134,7 +134,7 @@ class HashtagController extends Controller
         $langTag = $this->langTag();
         $authUserId = $this->user()?->id;
 
-        $seoData = Seo::where('linked_type', Seo::TYPE_HASHTAG)->where('linked_id', $hashtag->id)->where('lang_tag', $langTag)->first();
+        $seoData = Seo::where('usage_type', Seo::TYPE_HASHTAG)->where('usage_id', $hashtag->id)->where('lang_tag', $langTag)->first();
 
         $item['title'] = $seoData->title ?? null;
         $item['keywords'] = $seoData->keywords ?? null;

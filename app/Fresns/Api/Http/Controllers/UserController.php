@@ -25,8 +25,8 @@ use App\Models\BlockWord;
 use App\Models\CommentLog;
 use App\Models\Dialog;
 use App\Models\DialogMessage;
-use App\Models\DomainLinkLinked;
-use App\Models\HashtagLinked;
+use App\Models\DomainLinkUsage;
+use App\Models\HashtagUsage;
 use App\Models\Mention;
 use App\Models\Notify;
 use App\Models\PluginUsage;
@@ -234,7 +234,7 @@ class UserController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $seoData = Seo::where('linked_type', Seo::TYPE_USER)->where('linked_id', $viewUser->id)->where('lang_tag', $langTag)->first();
+        $seoData = Seo::where('usage_type', Seo::TYPE_USER)->where('usage_id', $viewUser->id)->where('lang_tag', $langTag)->first();
 
         $item['title'] = $seoData->title ?? null;
         $item['keywords'] = $seoData->keywords ?? null;
@@ -591,11 +591,11 @@ class UserController extends Controller
             }
 
             if ($bioConfig['bio_support_link']) {
-                ContentUtility::saveLink($newBio, DomainLinkLinked::TYPE_USER, $authUser->id);
+                ContentUtility::saveLink($newBio, DomainLinkUsage::TYPE_USER, $authUser->id);
             }
 
             if ($bioConfig['bio_support_hashtag']) {
-                ContentUtility::saveHashtag($newBio, HashtagLinked::TYPE_USER, $authUser->id);
+                ContentUtility::saveHashtag($newBio, HashtagUsage::TYPE_USER, $authUser->id);
             }
 
             $authUser->update([
