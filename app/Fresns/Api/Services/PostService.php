@@ -12,12 +12,12 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\InteractiveHelper;
 use App\Helpers\PluginHelper;
-use App\Models\ExtendLinked;
-use App\Models\IconLinked;
+use App\Models\ArchiveUsage;
+use App\Models\ExtendUsage;
+use App\Models\OperationUsage;
 use App\Models\PluginUsage;
 use App\Models\Post;
 use App\Models\PostLog;
-use App\Models\TipLinked;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\LbsUtility;
@@ -75,19 +75,16 @@ class PostService
             $postInfo['location']['distance'] = LbsUtility::getDistanceWithUnit($langTag, $postLng, $postLat, $authUserLng, $authUserLat);
         }
 
-        $item['icons'] = ExtendUtility::getIcons(IconLinked::TYPE_POST, $post->id, $langTag);
-        $item['tips'] = ExtendUtility::getTips(TipLinked::TYPE_POST, $post->id, $langTag);
-        $item['extends'] = ExtendUtility::getExtends(ExtendLinked::TYPE_POST, $post->id, $langTag);
+        $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST, $post->id, $langTag);
+        $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_POST, $post->id, $langTag);
+        $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_POST, $post->id, $langTag);
         $item['files'] = FileHelper::fresnsAntiLinkFileInfoListByTableColumn('posts', 'id', $post->id);
 
-        $attachCount['images'] = collect($item['files']['images'])->count();
-        $attachCount['videos'] = collect($item['files']['videos'])->count();
-        $attachCount['audios'] = collect($item['files']['audios'])->count();
-        $attachCount['documents'] = collect($item['files']['documents'])->count();
-        $attachCount['icons'] = collect($item['icons'])->count();
-        $attachCount['tips'] = collect($item['tips'])->count();
-        $attachCount['extends'] = collect($item['extends'])->count();
-        $item['attachCount'] = $attachCount;
+        $fileCount['images'] = collect($item['files']['images'])->count();
+        $fileCount['videos'] = collect($item['files']['videos'])->count();
+        $fileCount['audios'] = collect($item['files']['audios'])->count();
+        $fileCount['documents'] = collect($item['files']['documents'])->count();
+        $item['fileCount'] = $fileCount;
 
         $item['group'] = null;
         if ($post->group) {

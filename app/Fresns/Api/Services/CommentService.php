@@ -13,12 +13,12 @@ use App\Helpers\FileHelper;
 use App\Helpers\InteractiveHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
+use App\Models\ArchiveUsage;
 use App\Models\Comment;
 use App\Models\CommentLog;
-use App\Models\ExtendLinked;
-use App\Models\IconLinked;
+use App\Models\ExtendUsage;
+use App\Models\OperationUsage;
 use App\Models\PluginUsage;
-use App\Models\TipLinked;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\LbsUtility;
@@ -30,6 +30,8 @@ class CommentService
     {
         $commentInfo = $comment->getCommentInfo($langTag, $timezone);
         $commentInfo[] = self::contentHandle($comment, 'list', $authUserId);
+
+        $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_COMMENT, $comment->id, $langTag);
 
         $item['hashtags'] = null;
         if ($comment->hashtags) {
@@ -57,6 +59,8 @@ class CommentService
     {
         $commentInfo = $comment->getCommentInfo($langTag, $timezone);
         $commentInfo[] = self::contentHandle($comment, $type, $authUserId);
+        $commentAppend = $comment->commentAppend;
+        $postAppend = $comment->postAppend;
 
         if (! empty($comment->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {
             $postLng = $comment->map_longitude;
@@ -64,19 +68,16 @@ class CommentService
             $commentInfo['location']['distance'] = LbsUtility::getDistanceWithUnit($langTag, $postLng, $postLat, $authUserLng, $authUserLat);
         }
 
-        $item['icons'] = ExtendUtility::getIcons(IconLinked::TYPE_COMMENT, $comment->id, $langTag);
-        $item['tips'] = ExtendUtility::getTips(TipLinked::TYPE_COMMENT, $comment->id, $langTag);
-        $item['extends'] = ExtendUtility::getExtends(ExtendLinked::TYPE_COMMENT, $comment->id, $langTag);
+        $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_COMMENT, $comment->id, $langTag);
+        $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_COMMENT, $comment->id, $langTag);
+        $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_COMMENT, $comment->id, $langTag);
         $item['files'] = FileHelper::fresnsAntiLinkFileInfoListByTableColumn('comments', 'id', $comment->id);
 
-        $attachCount['images'] = collect($item['files']['images'])->count();
-        $attachCount['videos'] = collect($item['files']['videos'])->count();
-        $attachCount['audios'] = collect($item['files']['audios'])->count();
-        $attachCount['documents'] = collect($item['files']['documents'])->count();
-        $attachCount['icons'] = collect($item['icons'])->count();
-        $attachCount['tips'] = collect($item['tips'])->count();
-        $attachCount['extends'] = collect($item['extends'])->count();
-        $item['attachCount'] = $attachCount;
+        $fileCount['images'] = collect($item['files']['images'])->count();
+        $fileCount['videos'] = collect($item['files']['videos'])->count();
+        $fileCount['audios'] = collect($item['files']['audios'])->count();
+        $fileCount['documents'] = collect($item['files']['documents'])->count();
+        $item['fileCount'] = $fileCount;
 
         $item['hashtags'] = null;
         if ($comment->hashtags) {
@@ -102,14 +103,14 @@ class CommentService
         $commentBtn['url'] = null;
         $commentBtn['style'] = null;
 
-        if ($isMe && $comment->commentAppend->is_close_btn) {
+        if ($isMe && $commentAppend->is_close_btn) {
             $commentBtn['status'] = true;
-            if ($comment->commentAppend->is_change_btn) {
+            if ($commentAppend->is_change_btn) {
                 $commentBtn['name'] = LanguageHelper::fresnsLanguageByTableId('posts', 'comment_btn_name', $postAppend->post_id, $langTag);
                 $commentBtn['style'] = $postAppend->comment_btn_style;
             } else {
-                $commentBtn['name'] = ConfigHelper::fresnsConfigByItemKey($comment->commentAppend->btn_name_key, $langTag);
-                $commentBtn['style'] = $comment->commentAppend->btn_style;
+                $commentBtn['name'] = ConfigHelper::fresnsConfigByItemKey($commentAppend->btn_name_key, $langTag);
+                $commentBtn['style'] = $commentAppend->btn_style;
             }
             $editStatus['url'] = ! empty($postAppend->comment_btn_plugin_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($postAppend->comment_btn_plugin_unikey) : null;
         }
@@ -126,10 +127,10 @@ class CommentService
 
         if ($isMe) {
             $editStatus['isMe'] = true;
-            $editStatus['canDelete'] = (bool) $comment->postAppend->can_delete;
+            $editStatus['canDelete'] = (bool) $commentAppend->can_delete;
             $editStatus['canEdit'] = self::isCanEdit($comment->created_at, $comment->is_sticky, $comment->digest_state);
-            $editStatus['isPluginEditor'] = (bool) $comment->postAppend->is_plugin_editor;
-            $editStatus['editorUrl'] = ! empty($comment->postAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($comment->postAppend->editor_unikey) : null;
+            $editStatus['isPluginEditor'] = (bool) $commentAppend->is_plugin_editor;
+            $editStatus['editorUrl'] = ! empty($commentAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($commentAppend->editor_unikey) : null;
         }
         $item['editStatus'] = $editStatus;
 

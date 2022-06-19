@@ -11,9 +11,9 @@ namespace App\Fresns\Api\Services;
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Traits\ApiHeaderTrait;
 use App\Helpers\InteractiveHelper;
-use App\Models\ExtendLinked;
-use App\Models\IconLinked;
-use App\Models\TipLinked;
+use App\Models\ArchiveUsage;
+use App\Models\ExtendUsage;
+use App\Models\OperationUsage;
 use App\Models\User;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
@@ -29,8 +29,7 @@ class UserService
         $userMainRole = $user->getUserMainRole($langTag, $timezone);
 
         $item['stats'] = $user->getUserStats($langTag);
-        $item['archives'] = $user->getUserArchives($langTag);
-        $item['icons'] = ExtendUtility::getIcons(IconLinked::TYPE_USER, $user->id, $langTag);
+        $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $user->id, $langTag);
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
         $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
@@ -48,10 +47,9 @@ class UserService
         $userMainRole = $user->getUserMainRole($langTag, $timezone);
 
         $item['stats'] = $user->getUserStats($langTag);
-        $item['archives'] = $user->getUserArchives($langTag);
-        $item['icons'] = ExtendUtility::getIcons(IconLinked::TYPE_USER, $user->id, $langTag);
-        $item['tips'] = ExtendUtility::getTips(TipLinked::TYPE_USER, $user->id, $langTag);
-        $item['extends'] = ExtendUtility::getExtends(ExtendLinked::TYPE_USER, $user->id, $langTag);
+        $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST, $user->id, $langTag);
+        $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $user->id, $langTag);
+        $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_USER, $user->id, $langTag);
         $item['roles'] = $user->getUserRoles($langTag, $timezone);
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
