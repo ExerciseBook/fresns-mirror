@@ -179,7 +179,7 @@ return [
     'button_group_move' => 'Spostare',
     'button_add_key' => 'Aggiungi chiave',
     'button_reset_secret' => 'Reset Secret',
-    'button_linked_theme' => 'Tema collegato',
+    'button_use_theme' => 'Tema collegato',
     'button_clear_cache' => 'cancellare la cache',
     // Page table
     'table_order' => 'Ordine',

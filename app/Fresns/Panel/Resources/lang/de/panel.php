@@ -179,7 +179,7 @@ return [
     'button_group_move' => 'Umzug',
     'button_add_key' => 'Schlüssel hinzufügen',
     'button_reset_secret' => 'Sensibles zurücksetzen',
-    'button_linked_theme' => 'Verknüpftes Thema',
+    'button_use_theme' => 'Verknüpftes Thema',
     'button_clear_cache' => 'Cache löschen',
     // Page table
     'table_order' => 'Befehl',

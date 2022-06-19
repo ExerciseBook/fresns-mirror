@@ -179,7 +179,7 @@ return [
     'button_group_move' => 'कदम',
     'button_add_key' => 'कुंजी जोड़ें',
     'button_reset_secret' => 'गुप्त रीसेट',
-    'button_linked_theme' => 'लिंक थीम',
+    'button_use_theme' => 'लिंक थीम',
     'button_clear_cache' => 'कैश को साफ़ करें',
     // Page table
     'table_order' => 'आदेश',

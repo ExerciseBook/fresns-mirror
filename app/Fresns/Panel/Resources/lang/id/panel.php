@@ -179,7 +179,7 @@ return [
     'button_group_move' => 'Bergerak',
     'button_add_key' => 'Tambahkan kunci',
     'button_reset_secret' => 'Reset Rahasia',
-    'button_linked_theme' => 'Tema tertaut',
+    'button_use_theme' => 'Tema tertaut',
     'button_clear_cache' => 'bersihkan cache',
     // Page table
     'table_order' => 'Memesan',

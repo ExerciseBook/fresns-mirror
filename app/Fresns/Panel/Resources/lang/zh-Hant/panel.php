@@ -180,7 +180,7 @@ return [
     'button_group_move' => '合併',
     'button_add_key' => '新增密鑰',
     'button_reset_secret' => '重設 Secret',
-    'button_linked_theme' => '關聯主題',
+    'button_use_theme' => '關聯主題',
     'button_clear_cache' => '清除緩存',
     // Page table
     'table_order' => '顯示順序',
