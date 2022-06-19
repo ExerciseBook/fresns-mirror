@@ -9,7 +9,7 @@
 namespace App\Helpers;
 
 use App\Models\File;
-use App\Models\FileAppend;
+use App\Models\FileUse;
 
 class FileHelper
 {
@@ -76,7 +76,7 @@ class FileHelper
         };
 
         $useTypeDir = match ($useType) {
-            1 => '/mores/{YYYYMM}/',
+            1 => '/others/{YYYYMM}/',
             2 => '/systems/{YYYYMM}/',
             3 => '/operations/{YYYYMM}/',
             4 => '/stickers/{YYYYMM}/',
@@ -141,20 +141,20 @@ class FileHelper
     // get file info list by table column
     public static function fresnsFileInfoListByTableColumn(string $tableName, string $tableColumn, ?int $tableId = null, ?string $tableKey = null)
     {
-        $fileAppendQuery = FileAppend::with('file')
+        $fileUseQuery = FileUse::with('file')
             ->where('table_name', $tableName)
             ->where('table_column', $tableColumn)
             ->orderBy('rating');
 
         if (empty($tableId)) {
-            $fileAppendQuery->where('table_key', $tableKey);
+            $fileUseQuery->where('table_key', $tableKey);
         } else {
-            $fileAppendQuery->where('table_id', $tableId);
+            $fileUseQuery->where('table_id', $tableId);
         }
 
-        $fileAppends = $fileAppendQuery->get();
+        $fileUses = $fileUseQuery->get();
 
-        $fileList = $fileAppends->map(fn ($fileAppend) => $fileAppend->file->getFileInfo())->groupBy('type');
+        $fileList = $fileUses->map(fn ($fileUse) => $fileUse->file->getFileInfo())->groupBy('type');
 
         $files['images'] = $fileList->get(File::TYPE_IMAGE)?->all() ?? null;
         $files['videos'] = $fileList->get(File::TYPE_VIDEO)?->all() ?? null;

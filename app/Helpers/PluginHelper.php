@@ -9,7 +9,6 @@
 namespace App\Helpers;
 
 use App\Models\Plugin;
-use App\Models\PluginUsage;
 
 class PluginHelper
 {
@@ -46,7 +45,7 @@ class PluginHelper
      * @param  string  $parameter
      * @return mixed|string
      */
-    public static function fresnsPluginUsageUrl(string $unikey, ?string $parameter = null)
+    public static function fresnsPluginUseUrl(string $unikey, ?string $parameter = null)
     {
         $url = PluginHelper::fresnsPluginUrlByUnikey($unikey);
 

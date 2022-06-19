@@ -65,7 +65,7 @@ class PrimaryHelper
 
                 // file
                 case 'file':
-                    $model = File::withTrashed()->with('fileAppend')->where('fid', $fsid)->first();
+                    $model = File::withTrashed()->where('fid', $fsid)->first();
                 break;
 
                 // extend
