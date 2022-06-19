@@ -10,6 +10,8 @@ namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Fresns\Panel\Http\Requests\UpdateRoleRequest;
 use App\Helpers\PrimaryHelper;
+use App\Models\File;
+use App\Models\FileUsage;
 use App\Models\Language;
 use App\Models\Role;
 use App\Models\UserRole;
@@ -45,12 +47,12 @@ class RoleController extends Controller
 
         if ($request->file('icon_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'roles',
                 'tableColumn' => 'icon_file_id',
                 'tableId' => $role->id,
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -101,12 +103,12 @@ class RoleController extends Controller
 
         if ($request->file('icon_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'roles',
                 'tableColumn' => 'icon_file_id',
-                'tableId' => $map->id,
-                'type' => 1,
+                'tableId' => $role->id,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);

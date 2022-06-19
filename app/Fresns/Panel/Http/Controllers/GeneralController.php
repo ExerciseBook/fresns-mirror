@@ -12,6 +12,8 @@ use App\Fresns\Panel\Http\Requests\UpdateGeneralRequest;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\Config;
+use App\Models\File;
+use App\Models\FileUsage;
 use App\Models\Language;
 use App\Models\Plugin;
 
@@ -83,12 +85,12 @@ class GeneralController extends Controller
     {
         if ($request->file('site_icon_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'site_icon',
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('site_icon_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -103,12 +105,12 @@ class GeneralController extends Controller
 
         if ($request->file('site_logo_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'site_logo',
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('site_logo_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);

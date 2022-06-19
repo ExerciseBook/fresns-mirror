@@ -67,7 +67,7 @@ Route::middleware(['panelAuth'])->group(function () {
 
     // update config
     Route::put('configs/{config:item_key}', [ConfigController::class, 'update'])->name('configs.update');
-    // plugin usage
+    // plugin usages
     Route::put('plugin-usages/{pluginUsage}/rating', [PluginUsageController::class, 'updateRating'])->name('plugin-usages.rating.update');
     Route::resource('plugin-usages', PluginUsageController::class)->only([
         'store', 'update', 'destroy',

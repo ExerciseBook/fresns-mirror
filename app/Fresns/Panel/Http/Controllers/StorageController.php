@@ -11,6 +11,8 @@ namespace App\Fresns\Panel\Http\Controllers;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\Config;
+use App\Models\File;
+use App\Models\FileUsage;
 use App\Models\Plugin;
 use Illuminate\Http\Request;
 
@@ -368,12 +370,12 @@ class StorageController extends Controller
     {
         if ($request->file('image_substitution_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'image_substitution',
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('image_substitution_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -388,12 +390,12 @@ class StorageController extends Controller
 
         if ($request->file('video_substitution_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'video_substitution',
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('video_substitution_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -408,12 +410,12 @@ class StorageController extends Controller
 
         if ($request->file('audio_substitution_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'audio_substitution',
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('audio_substitution_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -428,12 +430,12 @@ class StorageController extends Controller
 
         if ($request->file('document_substitution_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'configs',
                 'tableColumn' => 'item_value',
                 'tableKey' => 'document_substitution',
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('document_substitution_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);

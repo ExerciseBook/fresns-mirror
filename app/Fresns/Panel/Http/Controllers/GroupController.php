@@ -9,6 +9,8 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Helpers\PrimaryHelper;
+use App\Models\File;
+use App\Models\FileUsage;
 use App\Models\Group;
 use App\Models\Language;
 use App\Models\Plugin;
@@ -195,12 +197,12 @@ class GroupController extends Controller
 
         if ($request->file('cover_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'groups',
                 'tableColumn' => 'cover_file_id',
                 'tableId' => $group->id,
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('cover_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -216,12 +218,12 @@ class GroupController extends Controller
 
         if ($request->file('banner_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'groups',
                 'tableColumn' => 'banner_file_id',
                 'tableId' => $group->id,
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('banner_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -323,12 +325,12 @@ class GroupController extends Controller
 
         if ($request->file('cover_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'groups',
                 'tableColumn' => 'cover_file_id',
                 'tableId' => $group->id,
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('cover_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
@@ -346,12 +348,12 @@ class GroupController extends Controller
 
         if ($request->file('banner_file')) {
             $wordBody = [
+                'usageType' => FileUsage::TYPE_SYSTEM,
                 'platformId' => 4,
-                'useType' => 2,
                 'tableName' => 'groups',
                 'tableColumn' => 'banner_file_id',
                 'tableId' => $group->id,
-                'type' => 1,
+                'type' => File::TYPE_IMAGE,
                 'file' => $request->file('banner_file'),
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadFile($wordBody);
