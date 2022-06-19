@@ -22,7 +22,7 @@ class ConfigUtility
         foreach ($fresnsConfigItems as $item) {
             $config = Config::where('item_key', '=', $item['item_key'])->first();
             if (empty($config)) {
-                Config::insert($item);
+                Config::create($item);
 
                 if ($item['is_multilingual'] ?? null) {
                     $fresnsLangItems = [

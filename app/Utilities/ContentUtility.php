@@ -15,10 +15,10 @@ use App\Helpers\PluginHelper;
 use App\Helpers\StrHelper;
 use App\Models\Domain;
 use App\Models\DomainLink;
-use App\Models\DomainLinkLinked;
+use App\Models\DomainLinkUse;
 use App\Models\Extend;
 use App\Models\Hashtag;
-use App\Models\HashtagLinked;
+use App\Models\HashtagUse;
 use App\Models\Mention;
 use App\Models\Role;
 use App\Models\Sticker;
@@ -260,7 +260,7 @@ class ContentUtility
     }
 
     // Save hashtag
-    public static function saveHashtag(string $content, int $linkedType, int $linkedId)
+    public static function saveHashtag(string $content, int $useType, int $useId)
     {
         $hashtagArr = ContentUtility::extractHashtag($content);
 
@@ -273,23 +273,23 @@ class ContentUtility
             ]);
         }
 
-        // add hashtag linked
+        // add hashtag use
         $hashtagIdArr = Hashtag::whereIn('name', $hashtagArr)->pluck('id')->toArray();
 
-        $hashtagLinkedData = [];
+        $hashtagUseData = [];
         foreach ($hashtagIdArr as $hashtagId) {
-            $hashtagLinkedData[] = [
-                'linked_type' => $linkedType,
-                'linked_id' => $linkedId,
+            $hashtagUseData[] = [
+                'use_type' => $useType,
+                'use_id' => $useId,
                 'hashtag_id' => $hashtagId,
             ];
         }
 
-        HashtagLinked::createMany($hashtagLinkedData);
+        HashtagUse::createMany($hashtagUseData);
     }
 
     // Save link
-    public static function saveLink(string $content, int $linkedType, int $linkedId)
+    public static function saveLink(string $content, int $useType, int $useId)
     {
         $urlArr = ContentUtility::extractLink($content);
 
@@ -311,17 +311,17 @@ class ContentUtility
             ]);
         }
 
-        // add domain link linked
+        // add domain link use
         $urlIdArr = DomainLink::whereIn('link_url', $urlArr)->pluck('id')->toArray();
-        $urlLinkedData = [];
+        $urlUseData = [];
         foreach ($urlIdArr as $urlId) {
-            $urlLinkedData[] = [
-                'linked_type' => $linkedType,
-                'linked_id' => $linkedId,
+            $urlUseData[] = [
+                'use_type' => $useType,
+                'use_id' => $useId,
                 'link_id' => $urlId,
             ];
         }
-        DomainLinkLinked::createMany($urlLinkedData);
+        DomainLinkUse::createMany($urlUseData);
     }
 
     // Save mention user

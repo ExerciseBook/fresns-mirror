@@ -12,7 +12,7 @@ use App\Helpers\CacheHelper;
 use App\Models\Comment;
 use App\Models\Domain;
 use App\Models\DomainLink;
-use App\Models\DomainLinkLinked;
+use App\Models\DomainLinkUse;
 use App\Models\Group;
 use App\Models\Hashtag;
 use App\Models\Post;
@@ -515,7 +515,7 @@ class InteractiveUtility
                 UserStat::where('user_id', $post?->user_id)->$actionType('post_publish_count');
                 Group::where('id', $post?->group_id)->$actionType('post_count');
 
-                $linkIds = DomainLinkLinked::type(DomainLinkLinked::TYPE_POST)->where('linked_id', $post?->id)->pluck('link_id')->toArray();
+                $linkIds = DomainLinkUse::type(DomainLinkUse::TYPE_POST)->where('use_id', $post?->id)->pluck('link_id')->toArray();
                 DomainLink::whereIn('id', $linkIds)->$actionType('post_count');
                 $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
                 Domain::whereIn('id', $domainIds)->$actionType('post_count');
@@ -531,7 +531,7 @@ class InteractiveUtility
                 Post::where('id', $comment?->post_id)->$actionType('comment_count');
                 Group::where('id', $comment?->group_id)->$actionType('comment_count');
 
-                $linkIds = DomainLinkLinked::type(DomainLinkLinked::TYPE_POST)->where('linked_id', $comment?->id)->pluck('link_id')->toArray();
+                $linkIds = DomainLinkUse::type(DomainLinkUse::TYPE_POST)->where('use_id', $comment?->id)->pluck('link_id')->toArray();
                 DomainLink::whereIn('id', $linkIds)->$actionType('comment_count');
                 $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
                 Domain::whereIn('id', $domainIds)->$actionType('comment_count');
