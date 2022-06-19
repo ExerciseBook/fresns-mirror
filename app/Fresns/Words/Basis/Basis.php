@@ -180,7 +180,7 @@ class Basis
             'more_json' => $dtoWordBody->moreJson ?? null,
         ];
 
-        SessionLog::insert($input);
+        SessionLog::create($input);
 
         return $this->success();
     }

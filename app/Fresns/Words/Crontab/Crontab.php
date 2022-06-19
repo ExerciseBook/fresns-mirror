@@ -87,7 +87,7 @@ class Crontab
                 if (! empty($nextRole)) {
                     UserRole::where(['role_id' => $role['restore_role_id'], 'user_id' => $role['user_id']])->where('id', '!=', $role['id'])->whereNull('deleted_at')->update(['is_main' => 1]);
                 } else {
-                    UserRole::insert(['user_id' => $role['user_id'], 'role_id' => $role['restore_role_id'], 'is_main' => 1]);
+                    UserRole::create(['user_id' => $role['user_id'], 'role_id' => $role['restore_role_id'], 'is_main' => 1]);
                 }
             }
         }

@@ -63,7 +63,7 @@ class User
             'timezone' => $dtoWordBody->timezone ?? null,
             'language' => $dtoWordBody->language ?? null,
         ];
-        $userId = UserModel::insertGetId(array_filter($userArr));
+        $userId = UserModel::create(array_filter($userArr))->id;
 
         $defaultRoleId = ConfigHelper::fresnsConfigByItemKey('default_role');
         $roleArr = [
@@ -71,10 +71,10 @@ class User
             'role_id' => $defaultRoleId,
             'is_main' => 1,
         ];
-        UserRole::insert($roleArr);
+        UserRole::create($roleArr);
 
         $statArr = ['user_id' => $userId];
-        UserStat::insert($statArr);
+        UserStat::create($statArr);
 
         return $this->success([
             'aid' => $account->aid,

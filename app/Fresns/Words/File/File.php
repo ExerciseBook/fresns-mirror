@@ -61,7 +61,7 @@ class File
 
         // $bodyInfo = [
         //     'platformId' => $dtoWordBody->platformId,
-        //     'useType' => $dtoWordBody->useType,
+        //     'usageType' => $dtoWordBody->usageType,
         //     'tableName' => $dtoWordBody->tableName,
         //     'tableColumn' => $dtoWordBody->tableColumn,
         //     'tableId' => $dtoWordBody->tableId,
@@ -100,7 +100,7 @@ class File
 
         // $bodyInfo = [
         //     'platformId' => $dtoWordBody->platformId,
-        //     'useType' => $dtoWordBody->useType,
+        //     'usageType' => $dtoWordBody->usageType,
         //     'tableName' => $dtoWordBody->tableName,
         //     'tableColumn' => $dtoWordBody->tableColumn,
         //     'tableId' => $dtoWordBody->tableId,

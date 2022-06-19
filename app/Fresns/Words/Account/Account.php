@@ -80,13 +80,13 @@ class Account
         $inputArr['password'] = isset($dtoWordBody->password) ? Hash::make($dtoWordBody->password) : null;
         $inputArr['last_login_at'] = DateHelper::fresnsDatabaseCurrentDateTime();
 
-        $accountId = AccountModel::insertGetId($inputArr);
+        $accountId = AccountModel::create($inputArr)->id;
 
         // Account Wallet Table
         $accountWalletsInput = [
             'account_id' => $accountId,
         ];
-        AccountWallet::insert($accountWalletsInput);
+        AccountWallet::create($accountWalletsInput);
 
         // Account Connects Table
         if ($connectInfoArr) {
@@ -103,7 +103,7 @@ class Account
                 $itemArr[] = $item;
             }
 
-            AccountConnect::insert($itemArr);
+            AccountConnect::create($itemArr);
         }
 
         return $this->success([
@@ -215,7 +215,7 @@ class Account
         $condition['token'] = $token;
         $condition['expired_at'] = $expiredAt;
 
-        SessionToken::insert($condition);
+        SessionToken::create($condition);
 
         return $this->success([
             'aid' => $dtoWordBody->aid,
