@@ -10,6 +10,7 @@ namespace App\Helpers;
 
 use App\Models\File;
 use App\Models\FileUsage;
+use Illuminate\Support\Str;
 
 class FileHelper
 {
@@ -63,6 +64,26 @@ class FileHelper
         }
 
         return $config;
+    }
+
+    // get file accept by type
+    public static function fresnsFileAcceptByType(?int $type = null)
+    {
+        if (empty($type)) {
+            return null;
+        }
+
+        $fileExt = match ($type) {
+            1 => ConfigHelper::fresnsConfigByItemKey('image_ext'),
+            2 => ConfigHelper::fresnsConfigByItemKey('video_ext'),
+            3 => ConfigHelper::fresnsConfigByItemKey('audio_ext'),
+            4 => ConfigHelper::fresnsConfigByItemKey('document_ext'),
+        };
+
+        $accept = str_replace(',', ',.', $fileExt);
+        $fileAccept = Str::start($accept, '.');
+
+        return $fileAccept;
     }
 
     // get file storage path
