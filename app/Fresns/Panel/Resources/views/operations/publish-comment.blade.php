@@ -123,19 +123,32 @@
                 <div class="collapse mt-3  {{ $params['comment_edit'] ? 'show' : '' }}" id="comment_edit_setting">
                     <div class="input-group mb-3">
                         <label class="input-group-text">{{ __('FsLang::panel.publish_edit_time_limit') }}</label>
-                        <input type="number" class="form-control input-number" name="comment_edit_timelimit" value="{{ $params['comment_edit_timelimit'] }}" id="comment_edit_timelimit" value="30">
+                        <input type="number" class="form-control input-number" name="comment_edit_time_limit" value="{{ $params['comment_edit_time_limit'] }}" id="comment_edit_time_limit" value="30">
                         <span class="input-group-text">{{ __('FsLang::panel.unit_within_minute') }}</span>
                     </div>
                     <div class="input-group mb-3">
                         <label class="input-group-text">{{ __('FsLang::panel.publish_edit_sticky_limit') }}</label>
                         <div class="form-control bg-white">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="comment_edit_sticky" id="comment_edit_sticky_false" value="false" {{ !$params['comment_edit_sticky'] ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="comment_edit_sticky_limit" id="comment_edit_sticky_false" value="false" {{ !$params['comment_edit_sticky_limit'] ? 'checked' : '' }}>
                                 <label class="form-check-label" for="comment_edit_sticky_false">{{ __('FsLang::panel.permission_option_non_editable') }}</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="comment_edit_sticky" id="comment_edit_sticky_true" value="true" {{ $params['comment_edit_sticky'] ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="comment_edit_sticky_limit" id="comment_edit_sticky_true" value="true" {{ $params['comment_edit_sticky_limit'] ? 'checked' : '' }}>
                                 <label class="form-check-label" for="comment_edit_sticky_true">{{ __('FsLang::panel.permission_option_editable') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text">{{ __('FsLang::panel.publish_edit_digest_limit') }}</label>
+                        <div class="form-control bg-white">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="comment_edit_digest_limit" id="comment_edit_digest_false" value="false" {{ !$params['comment_edit_digest_limit'] ? 'checked' : '' }}>
+                                <label class="form-check-label" for="comment_edit_digest_false">{{ __('FsLang::panel.permission_option_non_editable') }}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="comment_edit_digest_limit" id="comment_edit_digest_true" value="true" {{ $params['comment_edit_digest_limit'] ? 'checked' : '' }}>
+                                <label class="form-check-label" for="comment_edit_digest_true">{{ __('FsLang::panel.permission_option_editable') }}</label>
                             </div>
                         </div>
                     </div>

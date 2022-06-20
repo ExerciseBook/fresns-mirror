@@ -123,18 +123,18 @@
                 <div class="collapse mt-3 {{ $params['post_edit'] ? 'show' : '' }}" id="post_edit_setting">
                     <div class="input-group mb-3">
                         <label class="input-group-text">{{ __('FsLang::panel.publish_edit_time_limit') }}</label>
-                        <input type="number" name="post_edit_timelimit" value="{{ $params['post_edit_timelimit'] }}" class="form-control input-number" id="post_edit_timelimit" value="30">
+                        <input type="number" name="post_edit_time_limit" value="{{ $params['post_edit_time_limit'] }}" class="form-control input-number" id="post_edit_time_limit" value="30">
                         <span class="input-group-text">{{ __('FsLang::panel.unit_within_minute') }}</span>
                     </div>
                     <div class="input-group mb-3">
                         <label class="input-group-text">{{ __('FsLang::panel.publish_edit_sticky_limit') }}</label>
                         <div class="form-control bg-white">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="post_edit_sticky" id="post_edit_sticky_false" value="false" {{ !$params['post_edit_sticky'] ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="post_edit_sticky_limit" id="post_edit_sticky_false" value="false" {{ !$params['post_edit_sticky_limit'] ? 'checked' : '' }}>
                                 <label class="form-check-label" for="post_edit_sticky_false">{{ __('FsLang::panel.permission_option_non_editable') }}</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="post_edit_sticky" id="post_edit_sticky_true" value="true" {{ $params['post_edit_sticky'] ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="post_edit_sticky_limit" id="post_edit_sticky_true" value="true" {{ $params['post_edit_sticky_limit'] ? 'checked' : '' }}>
                                 <label class="form-check-label" for="post_edit_sticky_true">{{ __('FsLang::panel.permission_option_editable') }}</label>
                             </div>
                         </div>
@@ -143,11 +143,11 @@
                         <label class="input-group-text">{{ __('FsLang::panel.publish_edit_digest_limit') }}</label>
                         <div class="form-control bg-white">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="post_edit_digest" id="post_edit_digest_false" value="false" {{ !$params['post_edit_digest'] ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="post_edit_digest_limit" id="post_edit_digest_false" value="false" {{ !$params['post_edit_digest_limit'] ? 'checked' : '' }}>
                                 <label class="form-check-label" for="post_edit_digest_false">{{ __('FsLang::panel.permission_option_non_editable') }}</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="post_edit_digest" id="post_edit_digest_true" value="true" {{ $params['post_edit_digest'] ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="post_edit_digest_limit" id="post_edit_digest_true" value="true" {{ $params['post_edit_digest_limit'] ? 'checked' : '' }}>
                                 <label class="form-check-label" for="post_edit_digest_true">{{ __('FsLang::panel.permission_option_editable') }}</label>
                             </div>
                         </div>
