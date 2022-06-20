@@ -9,6 +9,7 @@
 namespace App\Helpers;
 
 use App\Models\Account;
+use App\Models\Archive;
 use App\Models\Comment;
 use App\Models\Config;
 use App\Models\Extend;
@@ -71,6 +72,11 @@ class PrimaryHelper
                 // extend
                 case 'extend':
                     $model = Extend::withTrashed()->where('eid', $fsid)->first();
+                break;
+
+                // archive
+                case 'archive':
+                    $model = Archive::withTrashed()->where('code', $fsid)->first();
                 break;
             }
 
@@ -248,5 +254,18 @@ class PrimaryHelper
         }
 
         return PrimaryHelper::fresnsModelByFsid('extend', $eid)?->id;
+    }
+
+    /**
+     * @param  string  $code
+     * @return int |null
+     */
+    public static function fresnsArchiveIdByCode(?string $code = null)
+    {
+        if (empty($code)) {
+            return null;
+        }
+
+        return PrimaryHelper::fresnsModelByFsid('archive', $code)?->id;
     }
 }
