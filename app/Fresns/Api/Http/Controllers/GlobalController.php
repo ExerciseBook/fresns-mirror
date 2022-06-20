@@ -9,6 +9,7 @@
 namespace App\Fresns\Api\Http\Controllers;
 
 use App\Exceptions\ApiException;
+use App\Fresns\Api\Http\DTO\GlobalArchivesDTO;
 use App\Fresns\Api\Http\DTO\GlobalBlockWordsDTO;
 use App\Fresns\Api\Http\DTO\GlobalConfigsDTO;
 use App\Fresns\Api\Http\DTO\GlobalRolesDTO;
@@ -18,6 +19,7 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
+use App\Models\Archive;
 use App\Models\BlockWord;
 use App\Models\Config;
 use App\Models\File;
@@ -75,6 +77,77 @@ class GlobalController extends Controller
         }
 
         return $this->fresnsPaginate($item, $configs->total(), $configs->perPage());
+    }
+
+    // archives
+    public function archives($type, Request $request)
+    {
+        $requestData = $request->all();
+        $requestData['type'] = $type;
+        $dtoRequest = new GlobalArchivesDTO($requestData);
+
+        $langTag = $this->langTag();
+        $unikey = $dtoRequest->unikey ?? null;
+
+        $cacheKey = "fresns_api_archives_{$dtoRequest->type}_{$unikey}_{$langTag}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $archives = Cache::remember($cacheKey, $cacheTime, function () use ($type, $unikey) {
+            $archiveData = Archive::type($type)
+                ->when($unikey, function ($query, $value) {
+                    $query->where('plugin_unikey', $value);
+                })
+                ->isEnable()
+                ->orderBy('rating')
+                ->get();
+
+            $fileExts = ConfigHelper::fresnsConfigByItemKeys([
+                'image_ext',
+                'video_ext',
+                'audio_ext',
+                'document_ext',
+            ]);
+
+            $items = null;
+            foreach ($archiveData as $archive) {
+                $fileExt = match ($archive->file_type) {
+                    1 => $fileExts['image_ext'],
+                    2 => $fileExts['video_ext'],
+                    3 => $fileExts['audio_ext'],
+                    4 => $fileExts['document_ext'],
+                    default => null,
+                };
+
+                $item['plugin'] = $archive->plugin_unikey;
+                $item['name'] = $archive->name;
+                $item['code'] = $archive->code;
+                $item['formElement'] = $archive->form_element;
+                $item['elementType'] = $archive->element_type;
+                $item['elementOptions'] = $archive->element_options;
+                $item['fileType'] = $archive->file_type;
+                $item['fileExt'] = $fileExt;
+                $item['fileAccept'] = FileHelper::fresnsFileAcceptByType($archive->file_type);
+                $item['isMultiple'] = $archive->is_multiple;
+                $item['isRequired'] = $archive->is_required;
+                $item['inputPattern'] = $archive->input_pattern;
+                $item['inputMax'] = $archive->input_max;
+                $item['inputMin'] = $archive->input_min;
+                $item['inputMaxlength'] = $archive->input_maxlength;
+                $item['inputMinlength'] = $archive->input_minlength;
+                $item['inputSize'] = $archive->input_size;
+                $item['inputStep'] = $archive->input_step;
+
+                $items[] = $item;
+            }
+
+            return $items;
+        });
+
+        if (is_null($archives)) {
+            Cache::forget($cacheKey);
+        }
+
+        return $this->success($archives);
     }
 
     // get upload token
@@ -170,7 +243,7 @@ class GlobalController extends Controller
     {
         $langTag = $this->langTag();
 
-        $cacheKey = 'fresns_api_stickers_0_all';
+        $cacheKey = "fresns_api_stickers_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
         $stickerTree = Cache::remember($cacheKey, $cacheTime, function () use ($langTag) {

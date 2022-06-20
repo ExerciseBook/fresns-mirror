@@ -21,6 +21,7 @@ use App\Fresns\Api\Services\UserService;
 use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
+use App\Models\ArchiveUsage;
 use App\Models\BlockWord;
 use App\Models\CommentLog;
 use App\Models\Dialog;
@@ -630,6 +631,26 @@ class UserController extends Controller
             $authUser->update([
                 'timezone' => $dtoRequest->timezone,
             ]);
+        }
+
+        // edit archives
+        if ($dtoRequest->archives) {
+            foreach ($dtoRequest->archives as $archive) {
+                $archiveId = PrimaryHelper::fresnsArchiveIdByCode($archive['code']);
+
+                ArchiveUsage::type(ArchiveUsage::TYPE_USER)
+                    ->where('usage_id', $authUser->id)
+                    ->where('archive_id', $archiveId)
+                    ->updateOrCreate([
+                        'usage_type' => ArchiveUsage::TYPE_USER,
+                        'usage_id' => $authUser->id,
+                        'archive_id' => $archiveId,
+                    ],
+                    [
+                        'archive_value' => $archive['value'],
+                        'is_enable' => $archive['isEnable'],
+                    ]);
+            }
         }
 
         CacheHelper::forgetApiUser($authUser->uid);
