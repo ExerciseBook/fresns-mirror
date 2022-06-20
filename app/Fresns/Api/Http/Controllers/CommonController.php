@@ -412,8 +412,8 @@ class CommonController extends Controller
                     'aid' => $request->header('aid'),
                     'uid' => $request->header('uid'),
                     'type' => $fileType,
-                    'file' => $dtoRequest->file,
                     'moreJson' => $dtoRequest->moreJson,
+                    'file' => $dtoRequest->file,
                 ];
 
                 return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFile($wordBody);

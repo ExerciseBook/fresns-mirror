@@ -25,9 +25,9 @@ class CommonUploadFileDTO extends DTO
             'tableKey' => ['string', 'nullable', 'required_without:tableId'],
             'type' => ['string', 'required', 'in:image,video,audio,document'],
             'uploadMode' => ['string', 'required', 'in:file,fileInfo'],
-            'file' => ['file', 'nullable', 'required_if:uploadMode,file'],
-            'moreJson' => ['json', 'nullable'],
             'fileInfo' => ['array', 'nullable', 'required_if:uploadMode,fileInfo'],
+            'moreJson' => ['json', 'nullable'],
+            'file' => ['file', 'nullable', 'required_if:uploadMode,file'],
         ];
     }
 }
