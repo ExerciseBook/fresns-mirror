@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => 'Bucket Domain Name',
     'storage_bucket_domain_desc' => 'The storage configuration domain is the access URL for the uploaded file, starting with http:// or https://',
     'storage_filesystem_disk' => 'Filesystem Disk',
-    'storage_ext' => 'Supported extensions',
+    'storage_extension_names' => 'Supported extensions',
     'storage_max_size' => 'Max size supported',
     'storage_max_time' => 'Max time supported',
     'storage_url_status' => 'Anti Link',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => 'Gift Parameter',
     'storage_audio_transcode' => 'Transcode Parameter',
     'storage_document_online_preview' => 'Preview url rules',
-    'storage_document_preview_ext' => 'Extensions that support preview',
+    'storage_document_preview_extension_names' => 'Extensions that support preview',
     // Operating-Rename
     'rename_user_config' => 'User Naming',
     'rename_content_config' => 'Content Naming',

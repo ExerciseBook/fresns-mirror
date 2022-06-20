@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => 'Configuración de almacenamiento Nombre de dominio',
     'storage_bucket_domain_desc' => 'El dominio de configuración del almacenamiento es la URL de acceso al archivo cargado, que empieza por http:// o https://',
     'storage_filesystem_disk' => 'Disco del sistema de archivos',
-    'storage_ext' => 'Extensión admitida',
+    'storage_extension_names' => 'Extensión admitida',
     'storage_max_size' => 'Tamaño máximo soportado',
     'storage_max_time' => 'Tiempo máximo admitido',
     'storage_url_status' => 'Función de la cadena antirrobo',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => 'Parámetros del diagrama de rotación de video',
     'storage_audio_transcode' => 'Parámetros de transcodificación de audio',
     'storage_document_online_preview' => 'Regla de la dirección de vista previa',
-    'storage_document_preview_ext' => 'Extensión de vista previa de soporte',
+    'storage_document_preview_extension_names' => 'Extensión de vista previa de soporte',
     // Operating-Rename
     'rename_user_config' => 'Configuración de nombres de usuario',
     'rename_content_config' => 'Configuración de nombres de contenido',

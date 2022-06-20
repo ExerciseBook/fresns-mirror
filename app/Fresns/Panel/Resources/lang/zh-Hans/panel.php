@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => '存储配置域名',
     'storage_bucket_domain_desc' => '存储配置域名为上传文件的访问网址，以 http:// 或 https:// 开头',
     'storage_filesystem_disk' => '文件系统磁盘',
-    'storage_ext' => '支持的扩展名',
+    'storage_extension_names' => '支持的扩展名',
     'storage_max_size' => '支持的最大尺寸',
     'storage_max_time' => '支持的最大时长',
     'storage_url_status' => '防盗链功能',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => '视频转动图参数',
     'storage_audio_transcode' => '音频转码参数',
     'storage_document_online_preview' => '预览地址规则',
-    'storage_document_preview_ext' => '支持预览的扩展名',
+    'storage_document_preview_extension_names' => '支持预览的扩展名',
     // Operating-Rename
     'rename_user_config' => '用户命名设置',
     'rename_content_config' => '内容命名设置',

@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => 'Доменное имя конфигурации хранения',
     'storage_bucket_domain_desc' => 'Домен конфигурации хранилища - это URL доступа к загруженному файлу, начинающийся с http:// или https://.',
     'storage_filesystem_disk' => 'Файловая система Диск',
-    'storage_ext' => 'Поддерживаемое расширение',
+    'storage_extension_names' => 'Поддерживаемое расширение',
     'storage_max_size' => 'Поддерживается максимальный размер',
     'storage_max_time' => 'Поддерживается максимальное время',
     'storage_url_status' => 'Функция противоугонной цепи',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => 'Параметры диаграммы вращения видео',
     'storage_audio_transcode' => 'Параметры транскодирования звука',
     'storage_document_online_preview' => 'Предварительный просмотр Адрес Правило',
-    'storage_document_preview_ext' => 'Расширение предварительного просмотра поддержки',
+    'storage_document_preview_extension_names' => 'Расширение предварительного просмотра поддержки',
     // Operating-Rename
     'rename_user_config' => 'Установка пользователя именования',
     'rename_content_config' => 'Установка именования содержимого',

@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => '스토리지 구성 도메인 이름',
     'storage_bucket_domain_desc' => '스토리지 구성 도메인 이름은 http:// 또는 https://로 시작하는 파일 업로드를 위한 액세스 URL입니다.',
     'storage_filesystem_disk' => '파일 시스템 디스크',
-    'storage_ext' => '지원되는 확장자',
+    'storage_extension_names' => '지원되는 확장자',
     'storage_max_size' => '지원 최대 크기',
     'storage_max_time' => '지원되는 최대 시간',
     'storage_url_status' => '도난 방지 체인 기능',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => '비디오 회전 다이어그램 매개 변수',
     'storage_audio_transcode' => '오디오 트랜스 코딩 매개 변수',
     'storage_document_online_preview' => '미리보기 주소 규칙',
-    'storage_document_preview_ext' => '지원 미리보기 확장자',
+    'storage_document_preview_extension_names' => '지원 미리보기 확장자',
     // Operating-Rename
     'rename_user_config' => '사용자 명명 설정',
     'rename_content_config' => '콘텐츠 이름 지정 설정',

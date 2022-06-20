@@ -499,7 +499,7 @@ return [
     'storage_bucket_domain' => '存儲配置域名',
     'storage_bucket_domain_desc' => '存儲配置域名為上傳文件的訪問網址，以 http:// 或 https:// 開頭',
     'storage_filesystem_disk' => '文件系統磁盤',
-    'storage_ext' => '支持的副檔名',
+    'storage_extension_names' => '支持的副檔名',
     'storage_max_size' => '支持的最大尺寸',
     'storage_max_time' => '支持的最大時長',
     'storage_url_status' => '防盜鏈功能',
@@ -517,7 +517,7 @@ return [
     'storage_video_gift' => '視頻轉動圖參數',
     'storage_audio_transcode' => '音頻轉碼參數',
     'storage_document_online_preview' => '預覽地址規則',
-    'storage_document_preview_ext' => '支持預覽的副檔名',
+    'storage_document_preview_extension_names' => '支持預覽的副檔名',
     // Operating-Rename
     'rename_user_config' => '用戶命名設定',
     'rename_content_config' => '內容命名設定',

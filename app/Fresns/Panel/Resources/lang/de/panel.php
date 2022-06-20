@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => 'Speicherkonfigurationsdomänenname',
     'storage_bucket_domain_desc' => 'Die Speicherkonfigurationsdomäne ist die Zugriffs-URL für die hochgeladene Datei, die mit http:// oder https:// beginnt.',
     'storage_filesystem_disk' => 'Dateisystem Diskette',
-    'storage_ext' => 'Unterstützte Verlängerung',
+    'storage_extension_names' => 'Unterstützte Verlängerung',
     'storage_max_size' => 'Unterstützte maximale Größe',
     'storage_max_time' => 'Unterstützte maximale Zeit',
     'storage_url_status' => 'Diebstahlsicherungskettenfunktion',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => 'Video-Rotationsdiagrammparameter',
     'storage_audio_transcode' => 'Audio-Transcoding-Parameter',
     'storage_document_online_preview' => 'Vorschauadresse Regel',
-    'storage_document_preview_ext' => 'Support-Vorschau-Erweiterung',
+    'storage_document_preview_extension_names' => 'Support-Vorschau-Erweiterung',
     // Operating-Rename
     'rename_user_config' => 'Benutzernamenseinstellung',
     'rename_content_config' => 'Inhaltsnamenseinstellung',

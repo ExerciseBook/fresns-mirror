@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => 'Nama domain konfigurasi penyimpanan',
     'storage_bucket_domain_desc' => 'Nama domain konfigurasi penyimpanan adalah URL akses untuk mengunggah file, dimulai dengan http:// atau https://',
     'storage_filesystem_disk' => 'Disk sistem file',
-    'storage_ext' => 'Ekstensi yang didukung',
+    'storage_extension_names' => 'Ekstensi yang didukung',
     'storage_max_size' => 'Mendukung ukuran maksimum',
     'storage_max_time' => 'Mendukung waktu maksimum',
     'storage_url_status' => 'Fungsi rantai anti-pencurian',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => 'Parameter Diagram Rotasi Video',
     'storage_audio_transcode' => 'Parameter transcoding audio',
     'storage_document_online_preview' => 'Pratinjau aturan alamat',
-    'storage_document_preview_ext' => 'Dukungan ekstensi pratinjau',
+    'storage_document_preview_extension_names' => 'Dukungan ekstensi pratinjau',
     // Operating-Rename
     'rename_user_config' => 'Pengaturan Penamaan Pengguna',
     'rename_content_config' => 'Pengaturan Penamaan Konten',

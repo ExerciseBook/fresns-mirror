@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => 'भंडारण विन्यास डोमेन नाम',
     'storage_bucket_domain_desc' => 'स्टोरेज कॉन्फ़िगरेशन डोमेन नाम http:// या https:// से शुरू होने वाली फाइलों को अपलोड करने के लिए एक्सेस यूआरएल है।',
     'storage_filesystem_disk' => 'फाइलसिस्टम डिस्क',
-    'storage_ext' => 'समर्थित विस्तार',
+    'storage_extension_names' => 'समर्थित विस्तार',
     'storage_max_size' => 'अधिकतम आकार का समर्थन किया',
     'storage_max_time' => 'अधिकतम समय का समर्थन किया',
     'storage_url_status' => 'विरोधी चोरी श्रृंखला समारोह',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => 'वीडियो रोटेशन आरेख पैरामीटर',
     'storage_audio_transcode' => 'ऑडियो ट्रांसकोडिंग पैरामीटर',
     'storage_document_online_preview' => 'पूर्वावलोकन पता नियम',
-    'storage_document_preview_ext' => 'समर्थन पूर्वावलोकन विस्तार',
+    'storage_document_preview_extension_names' => 'समर्थन पूर्वावलोकन विस्तार',
     // Operating-Rename
     'rename_user_config' => 'उपयोगकर्ता नामकरण सेटिंग',
     'rename_content_config' => 'सामग्री नामकरण सेटिंग',

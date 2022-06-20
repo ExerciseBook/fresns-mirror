@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => 'ストレージ構成ドメイン名',
     'storage_bucket_domain_desc' => 'ストレージ構成ドメインは、アップロードされたファイルのアクセスURLで、http:// または https:// から始まる。',
     'storage_filesystem_disk' => 'ファイルシステムディスク',
-    'storage_ext' => 'サポートされている拡張子',
+    'storage_extension_names' => 'サポートされている拡張子',
     'storage_max_size' => 'サポートされている最大サイズ',
     'storage_max_time' => 'サポートされている最大時間',
     'storage_url_status' => '盗難防止チェーン機能',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => 'ビデオ回転図のパラメータ',
     'storage_audio_transcode' => 'オーディオトランスコーディングパラメータ',
     'storage_document_online_preview' => 'プレビューアドレスルール',
-    'storage_document_preview_ext' => 'プレビューの拡張機能をサポートします',
+    'storage_document_preview_extension_names' => 'プレビューの拡張機能をサポートします',
     // Operating-Rename
     'rename_user_config' => 'ユーザーの命名設定',
     'rename_content_config' => 'コンテンツ命名設定',

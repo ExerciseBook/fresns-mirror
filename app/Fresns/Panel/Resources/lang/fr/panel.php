@@ -498,7 +498,7 @@ return [
     'storage_bucket_domain' => 'Nom de la configuration de la configuration de stockage',
     'storage_bucket_domain_desc' => 'Le domaine de configuration du stockage est l\'URL d\'accès au fichier téléchargé, qui commence par http:// ou https://',
     'storage_filesystem_disk' => 'Disque du système de fichiers',
-    'storage_ext' => 'Extension prise en charge',
+    'storage_extension_names' => 'Extension prise en charge',
     'storage_max_size' => 'Taille maximale supportée',
     'storage_max_time' => 'Temps maximum pris en charge',
     'storage_url_status' => 'Fonction de chaîne anti-vol',
@@ -516,7 +516,7 @@ return [
     'storage_video_gift' => 'Paramètres de diagramme de rotation vidéo',
     'storage_audio_transcode' => 'Paramètres de transcodage audio',
     'storage_document_online_preview' => 'Règle d\'adresse de prévisualisation',
-    'storage_document_preview_ext' => 'Principation d\'aperçu de la prise en charge',
+    'storage_document_preview_extension_names' => 'Principation d\'aperçu de la prise en charge',
     // Operating-Rename
     'rename_user_config' => 'Cadre de nommage utilisateur',
     'rename_content_config' => 'Réglage de la nommage du contenu',
