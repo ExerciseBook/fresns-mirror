@@ -84,7 +84,7 @@
                             <label class="form-check-label" for="publish.post.verify.phone">{{ __('FsLang::panel.permission_option_phone') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" {{ $permissions['post_prove_verify']['permValue'] ?? '' ? 'checked' : '' }} name="permissions[post_prove_verify]" id="publish.post.verify.prove" value="1">
+                            <input class="form-check-input" type="checkbox" {{ $permissions['post_real_name_verify']['permValue'] ?? '' ? 'checked' : '' }} name="permissions[post_real_name_verify]" id="publish.post.verify.prove" value="1">
                             <label class="form-check-label" for="publish.post.verify.prove">{{ __('FsLang::panel.permission_option_prove') }}</label>
                         </div>
                     </div>
@@ -192,7 +192,7 @@
                             <label class="form-check-label" for="publish.comment.verify.phone">{{ __('FsLang::panel.permission_option_phone') }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" {{ $permissions['comment_prove_verify']['permValue'] ?? '' ? 'checked' : '' }} name="permissions[comment_prove_verify]" id="publish.comment.verify.prove" value="1">
+                            <input class="form-check-input" type="checkbox" {{ $permissions['comment_real_name_verify']['permValue'] ?? '' ? 'checked' : '' }} name="permissions[comment_real_name_verify]" id="publish.comment.verify.prove" value="1">
                             <label class="form-check-label" for="publish.comment.verify.prove">{{ __('FsLang::panel.permission_option_prove') }}</label>
                         </div>
                     </div>

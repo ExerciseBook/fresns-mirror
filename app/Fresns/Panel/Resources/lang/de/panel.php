@@ -413,8 +413,8 @@ return [
     // System-User
     'user_account_connect_services' => 'Unterstützung von Drittanbietern',
     'user_account_connect_services_desc' => 'Wählen Sie die Verbindungsplattform und assoziierte Plugins, um eine schnelle Registrierung oder Anmeldung zu erstellen',
-    'user_account_prove_services' => 'Real Name-Zertifizierungsunterstützung',
-    'user_account_prove_services_desc' => 'Nach der Installation des Authentifizierungsdienst-Plug-Ins kann der Benutzer den echten Namen authentifizieren',
+    'user_account_real_name_services' => 'Real Name-Zertifizierungsunterstützung',
+    'user_account_real_name_services_desc' => 'Nach der Installation des Authentifizierungsdienst-Plug-Ins kann der Benutzer den echten Namen authentifizieren',
     'user_multiple' => 'Unterstützung der Multi-User-Modus',
     'user_multiple_desc' => 'Das Frontende verwendet die Multi-User-Funktion, um das entsprechende Plugin zu installieren',
     'user_multiple_config' => 'Multi-User-Modus-Konfiguration',

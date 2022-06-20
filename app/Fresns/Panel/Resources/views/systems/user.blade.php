@@ -48,18 +48,18 @@
             </div>
             <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_account_connect_services_desc') }}</div>
         </div>
-        <!--user_account_prove_services-->
+        <!--user_account_real_name_services-->
         <div class="row mb-4">
-            <label for="user_account_prove_services" class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.user_account_prove_services') }}:</label>
+            <label for="user_account_real_name_services" class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.user_account_real_name_services') }}:</label>
             <div class="col-lg-6">
-                <select class="form-select" name="account_prove_service">
+                <select class="form-select" name="account_real_name_service">
                     <option value="" selected>🚫 {{ __('FsLang::panel.option_deactivate') }}</option>
                     @foreach ($pluginParams['prove'] as $plugin)
-                        <option value="{{ $plugin->unikey }}" {{ $params['account_prove_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
+                        <option value="{{ $plugin->unikey }}" {{ $params['account_real_name_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                     @endforeach
                 </select>
             </div>
-            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_account_prove_services_desc') }}</div>
+            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_account_real_name_services_desc') }}</div>
         </div>
         <!--user_multiple-->
         <div class="row mb-4">

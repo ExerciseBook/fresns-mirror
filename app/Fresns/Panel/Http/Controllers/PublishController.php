@@ -22,7 +22,7 @@ class PublishController extends Controller
         $configKeys = [
             'post_email_verify',
             'post_phone_verify',
-            'post_prove_verify',
+            'post_real_name_verify',
             'post_limit_status',
             'post_limit_type',
             'post_limit_period_start',
@@ -82,7 +82,7 @@ class PublishController extends Controller
         $configKeys = [
             'post_email_verify',
             'post_phone_verify',
-            'post_prove_verify',
+            'post_real_name_verify',
             'post_limit_status',
             'post_limit_type',
             'post_limit_period_start',
@@ -170,7 +170,7 @@ class PublishController extends Controller
         $configKeys = [
             'comment_email_verify',
             'comment_phone_verify',
-            'comment_prove_verify',
+            'comment_real_name_verify',
             'comment_limit_status',
             'comment_limit_type',
             'comment_limit_period_start',
@@ -226,7 +226,7 @@ class PublishController extends Controller
         $configKeys = [
             'comment_email_verify',
             'comment_phone_verify',
-            'comment_prove_verify',
+            'comment_real_name_verify',
             'comment_limit_status',
             'comment_limit_type',
             'comment_limit_period_start',

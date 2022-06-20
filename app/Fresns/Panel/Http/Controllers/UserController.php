@@ -24,7 +24,7 @@ class UserController extends Controller
         // config keys
         $configKeys = [
             'account_connect_services',
-            'account_prove_service',
+            'account_real_name_service',
             'multi_user_status',
             'multi_user_service',
             'multi_user_roles',
@@ -146,7 +146,7 @@ class UserController extends Controller
         }
 
         $configKeys = [
-            'account_prove_service',
+            'account_real_name_service',
             'multi_user_status',
             'multi_user_service',
             'multi_user_roles',

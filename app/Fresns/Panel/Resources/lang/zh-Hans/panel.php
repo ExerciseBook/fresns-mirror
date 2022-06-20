@@ -413,8 +413,8 @@ return [
     // System-User
     'user_account_connect_services' => '第三方互联支持',
     'user_account_connect_services_desc' => '选择互联平台并关联插件，可实现快捷注册或登录。',
-    'user_account_prove_services' => '实名认证支持',
-    'user_account_prove_services_desc' => '安装认证服务插件后，用户可以实名制认证。',
+    'user_account_real_name_services' => '实名认证支持',
+    'user_account_real_name_services_desc' => '安装认证服务插件后，用户可以实名制认证。',
     'user_multiple' => '多用户模式支持',
     'user_multiple_desc' => '前端使用多用户功能需要安装相应的插件。',
     'user_multiple_config' => '多用户模式配置',

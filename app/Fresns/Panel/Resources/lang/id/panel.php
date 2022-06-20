@@ -413,8 +413,8 @@ return [
     // System-User
     'user_account_connect_services' => 'Dukungan Interkoneksi Pihak Ketiga',
     'user_account_connect_services_desc' => 'Pilih platform interkoneksi dan asosiasi plugin untuk membuat registrasi atau login cepat',
-    'user_account_prove_services' => 'Dukungan Sertifikasi Nama Asli',
-    'user_account_prove_services_desc' => 'Setelah menginstal plugin layanan otentikasi, pengguna dapat mengotentikasi nama-nama asli',
+    'user_account_real_name_services' => 'Dukungan Sertifikasi Nama Asli',
+    'user_account_real_name_services_desc' => 'Setelah menginstal plugin layanan otentikasi, pengguna dapat mengotentikasi nama-nama asli',
     'user_multiple' => 'Dukungan Mode Multi-Pengguna',
     'user_multiple_desc' => 'End depan menggunakan fungsi multi-pengguna untuk menginstal plugin yang sesuai',
     'user_multiple_config' => 'Konfigurasi mode multi-pengguna',

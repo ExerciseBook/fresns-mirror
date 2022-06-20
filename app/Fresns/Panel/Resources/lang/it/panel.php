@@ -413,8 +413,8 @@ return [
     // System-User
     'user_account_connect_services' => 'Supporto di interconnessione di terze parti',
     'user_account_connect_services_desc' => 'Selezionare la piattaforma di interconnessione e i plugin associati per effettuare la registrazione rapida o il login',
-    'user_account_prove_services' => 'Supporto di certificazione del nome reale',
-    'user_account_prove_services_desc' => 'Dopo aver installato il servizio di autenticazione plugin, l\'utente può autenticare reale nome',
+    'user_account_real_name_services' => 'Supporto di certificazione del nome reale',
+    'user_account_real_name_services_desc' => 'Dopo aver installato il servizio di autenticazione plugin, l\'utente può autenticare reale nome',
     'user_multiple' => 'Supporto in modalità multiutente',
     'user_multiple_desc' => 'Il front-end utilizza la funzione multiutente per installare il plugin corrispondente',
     'user_multiple_config' => 'Configurazione della modalità multiutente',

@@ -413,8 +413,8 @@ return [
     // System-User
     'user_account_connect_services' => 'サードパーティの相互接続サポート',
     'user_account_connect_services_desc' => 'インターコネリングプラットフォームとアソシエイトプラグインを選択して、迅速な登録またはログインを行います。',
-    'user_account_prove_services' => '本名認証支援',
-    'user_account_prove_services_desc' => '認証サービスプラグインをインストールした後、ユーザーはReal-Nameを認証できます。',
+    'user_account_real_name_services' => '本名認証支援',
+    'user_account_real_name_services_desc' => '認証サービスプラグインをインストールした後、ユーザーはReal-Nameを認証できます。',
     'user_multiple' => 'マルチユーザーモードのサポート',
     'user_multiple_desc' => 'フロントエンドはマルチユーザー機能を使用して対応するプラグインをインストールします。',
     'user_multiple_config' => 'マルチユーザーモードの設定',

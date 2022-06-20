@@ -413,8 +413,8 @@ return [
     // System-User
     'user_account_connect_services' => 'Connect Services',
     'user_account_connect_services_desc' => 'Select the connect platform and associate the plugin to enable quick registration or login',
-    'user_account_prove_services' => 'Real Identity Auth Support',
-    'user_account_prove_services_desc' => 'After installing the auth service plugin, users can auth in their real identity',
+    'user_account_real_name_services' => 'Real Identity Auth Support',
+    'user_account_real_name_services_desc' => 'After installing the auth service plugin, users can auth in their real identity',
     'user_multiple' => 'Multi-User Mode',
     'user_multiple_desc' => 'The use of multi-user functionality on the client requires the installation of the appropriate plugin',
     'user_multiple_config' => 'Multi-user mode config',

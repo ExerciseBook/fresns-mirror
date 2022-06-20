@@ -414,8 +414,8 @@ return [
     // System-User
     'user_account_connect_services' => '第三方互聯支持',
     'user_account_connect_services_desc' => '選擇互聯平台並關聯外掛，可實現快捷註冊或登錄。',
-    'user_account_prove_services' => '實名認證支持',
-    'user_account_prove_services_desc' => '安裝認證服務外掛後，用戶可以實名制認證。',
+    'user_account_real_name_services' => '實名認證支持',
+    'user_account_real_name_services_desc' => '安裝認證服務外掛後，用戶可以實名制認證。',
     'user_multiple' => '多用戶模式支持',
     'user_multiple_desc' => '前端使用多用戶功能需要安裝相應的外掛。',
     'user_multiple_config' => '多用戶模式配置',

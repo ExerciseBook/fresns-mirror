@@ -413,8 +413,8 @@ return [
     // System-User
     'user_account_connect_services' => '제 3 자 상호 연결 지원',
     'user_account_connect_services_desc' => '상호 연결 플랫폼을 선택하고 플러그인을 연결하여 빠른 등록 또는 로그인하십시오',
-    'user_account_prove_services' => '실명 인증 지원',
-    'user_account_prove_services_desc' => '인증 서비스 플러그인을 설치 한 후 사용자는 실제 이름을 인증 할 수 있습니다',
+    'user_account_real_name_services' => '실명 인증 지원',
+    'user_account_real_name_services_desc' => '인증 서비스 플러그인을 설치 한 후 사용자는 실제 이름을 인증 할 수 있습니다',
     'user_multiple' => '다중 사용자 모드 지원',
     'user_multiple_desc' => '프런트 엔드는 다중 사용자 기능을 사용하여 해당 플러그인을 설치합니다',
     'user_multiple_config' => '다중 사용자 모드 구성',

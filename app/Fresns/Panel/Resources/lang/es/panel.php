@@ -413,8 +413,8 @@ return [
     // System-User
     'user_account_connect_services' => 'Soporte de interconexión de terceros',
     'user_account_connect_services_desc' => 'Seleccione la plataforma de interconexión y los complementos asociados para realizar un registro rápido o inicio de sesión',
-    'user_account_prove_services' => 'Soporte de certificación de nombre real',
-    'user_account_prove_services_desc' => 'Después de instalar el complemento del servicio de autenticación, el usuario puede autenticar el nombre real',
+    'user_account_real_name_services' => 'Soporte de certificación de nombre real',
+    'user_account_real_name_services_desc' => 'Después de instalar el complemento del servicio de autenticación, el usuario puede autenticar el nombre real',
     'user_multiple' => 'Soporte de modo multiusuario',
     'user_multiple_desc' => 'El extremo frontal utiliza la función multiusuario para instalar el complemento correspondiente',
     'user_multiple_config' => 'Configuración de modo multiusuario',

@@ -38,8 +38,8 @@
                     <label class="form-check-label" for="post_phone_verify">{{ __('FsLang::panel.permission_option_phone') }}</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="post_prove_verify" id="post_prove_verify" value="true" {{ $params['post_prove_verify'] ? 'checked' : '' }}>
-                    <label class="form-check-label" for="post_prove_verify">{{ __('FsLang::panel.permission_option_prove') }}</label>
+                    <input class="form-check-input" type="checkbox" name="post_real_name_verify" id="post_real_name_verify" value="true" {{ $params['post_real_name_verify'] ? 'checked' : '' }}>
+                    <label class="form-check-label" for="post_real_name_verify">{{ __('FsLang::panel.permission_option_prove') }}</label>
                 </div>
             </div>
             <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.publish_verify_desc') }}</div>
