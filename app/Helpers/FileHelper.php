@@ -162,20 +162,20 @@ class FileHelper
     // get file info list by table column
     public static function fresnsFileInfoListByTableColumn(string $tableName, string $tableColumn, ?int $tableId = null, ?string $tableKey = null)
     {
-        $fileUseQuery = FileUsage::with('file')
+        $fileUsageQuery = FileUsage::with('file')
             ->where('table_name', $tableName)
             ->where('table_column', $tableColumn)
             ->orderBy('rating');
 
         if (empty($tableId)) {
-            $fileUseQuery->where('table_key', $tableKey);
+            $fileUsageQuery->where('table_key', $tableKey);
         } else {
-            $fileUseQuery->where('table_id', $tableId);
+            $fileUsageQuery->where('table_id', $tableId);
         }
 
-        $fileUses = $fileUseQuery->get();
+        $fileUsages = $fileUsageQuery->get();
 
-        $fileList = $fileUses->map(fn ($fileUse) => $fileUse->file->getFileInfo())->groupBy('type');
+        $fileList = $fileUsages->map(fn ($fileUsage) => $fileUsage->file->getFileInfo())->groupBy('type');
 
         $files['images'] = $fileList->get(File::TYPE_IMAGE)?->all() ?? null;
         $files['videos'] = $fileList->get(File::TYPE_VIDEO)?->all() ?? null;

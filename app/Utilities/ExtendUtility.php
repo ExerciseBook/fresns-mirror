@@ -124,10 +124,10 @@ class ExtendUtility
             $query->where('is_enable', 1)->orderBy('rating');
         });
 
-        $archiveUses = $archiveQuery->get();
+        $archiveUsages = $archiveQuery->get();
 
         $archiveList = null;
-        foreach ($archiveUses as $use) {
+        foreach ($archiveUsages as $use) {
             $archive = $use->archive;
 
             $item['code'] = $archive->code;
@@ -156,7 +156,7 @@ class ExtendUtility
         return $archiveList;
     }
 
-    // get extends
+    // get extends content
     public static function getExtends(int $type, int $id, ?string $langTag = null)
     {
         $extendQuery = ExtendUsage::with('extend')->type($type)->where('usage_id', $id)->orderBy('rating');
@@ -165,24 +165,24 @@ class ExtendUtility
             $query->where('is_enable', 1);
         });
 
-        $extends = $extendQuery->get()->map(function ($extendLinked) use ($langTag) {
-            $item['eid'] = $extendLinked->extend->eid;
-            $item['type'] = $extendLinked->extend->type;
-            $item['textContent'] = $extendLinked->extend->text_content;
-            $item['textIsMarkdown'] = (bool) $extendLinked->extend->text_is_markdown;
-            $item['infoType'] = $extendLinked->extend->info_type;
-            $item['cover'] = FileHelper::fresnsFileUrlByTableColumn($extendLinked->extend->cover_file_id, $extendLinked->extend->cover_file_url);
-            $item['title'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extendLinked->extend->id, $langTag) ?? $extendLinked->extend->title;
-            $item['titleColor'] = $extendLinked->extend->title_color;
-            $item['descPrimary'] = LanguageHelper::fresnsLanguageByTableId('extends', 'desc_primary', $extendLinked->extend->id, $langTag) ?? $extendLinked->extend->desc_primary;
-            $item['descPrimaryColor'] = $extendLinked->extend->desc_primary_color;
-            $item['descSecondary'] = LanguageHelper::fresnsLanguageByTableId('extends', 'desc_secondary', $extendLinked->extend->id, $langTag) ?? $extendLinked->extend->desc_secondary;
-            $item['descSecondaryColor'] = $extendLinked->extend->desc_secondary_color;
-            $item['buttonName'] = LanguageHelper::fresnsLanguageByTableId('extends', 'button_name', $extendLinked->extend->id, $langTag) ?? $extendLinked->extend->button_name;
-            $item['buttonColor'] = $extendLinked->extend->button_color;
-            $item['position'] = $extendLinked->extend->position;
-            $item['accessUrl'] = PluginHelper::fresnsPluginUsageUrl($extendLinked->extend->plugin_unikey, $extendLinked->extend->parameter);
-            $item['moreJson'] = $extendLinked->extend->more_json;
+        $extends = $extendQuery->get()->map(function ($extendUsage) use ($langTag) {
+            $item['eid'] = $extendUsage->extend->eid;
+            $item['type'] = $extendUsage->extend->type;
+            $item['textContent'] = $extendUsage->extend->text_content;
+            $item['textIsMarkdown'] = (bool) $extendUsage->extend->text_is_markdown;
+            $item['infoType'] = $extendUsage->extend->info_type;
+            $item['cover'] = FileHelper::fresnsFileUrlByTableColumn($extendUsage->extend->cover_file_id, $extendUsage->extend->cover_file_url);
+            $item['title'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extendUsage->extend->id, $langTag) ?? $extendUsage->extend->title;
+            $item['titleColor'] = $extendUsage->extend->title_color;
+            $item['descPrimary'] = LanguageHelper::fresnsLanguageByTableId('extends', 'desc_primary', $extendUsage->extend->id, $langTag) ?? $extendUsage->extend->desc_primary;
+            $item['descPrimaryColor'] = $extendUsage->extend->desc_primary_color;
+            $item['descSecondary'] = LanguageHelper::fresnsLanguageByTableId('extends', 'desc_secondary', $extendUsage->extend->id, $langTag) ?? $extendUsage->extend->desc_secondary;
+            $item['descSecondaryColor'] = $extendUsage->extend->desc_secondary_color;
+            $item['buttonName'] = LanguageHelper::fresnsLanguageByTableId('extends', 'button_name', $extendUsage->extend->id, $langTag) ?? $extendUsage->extend->button_name;
+            $item['buttonColor'] = $extendUsage->extend->button_color;
+            $item['position'] = $extendUsage->extend->position;
+            $item['accessUrl'] = PluginHelper::fresnsPluginUsageUrl($extendUsage->extend->plugin_unikey, $extendUsage->extend->parameter);
+            $item['moreJson'] = $extendUsage->extend->more_json;
 
             return $item;
         })->groupBy('type');
