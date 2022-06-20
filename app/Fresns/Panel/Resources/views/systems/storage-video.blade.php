@@ -63,7 +63,7 @@
             <div class="col-lg-6">
                 <div class="input-group mb-3">
                     <label class="input-group-text w-25">{{ __('FsLang::panel.storage_ext') }}</label>
-                    <input type="text" class="form-control" id="video_ext" placeholder="wmv,rm,mov,mpeg,mp4,3gp,flv,avi,rmvb" name="video_ext" value="{{ $params['video_ext'] }}">
+                    <input type="text" class="form-control" id="video_extension_names" placeholder="wmv,rm,mov,mpeg,mp4,3gp,flv,avi,rmvb" name="video_extension_names" value="{{ $params['video_extension_names'] }}">
                 </div>
                 <div class="input-group mb-3">
                     <label class="input-group-text w-25">{{ __('FsLang::panel.storage_max_size') }}</label>

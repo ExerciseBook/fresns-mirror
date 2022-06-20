@@ -101,20 +101,20 @@ class GlobalController extends Controller
                 ->orderBy('rating')
                 ->get();
 
-            $fileExts = ConfigHelper::fresnsConfigByItemKeys([
-                'image_ext',
-                'video_ext',
-                'audio_ext',
-                'document_ext',
+            $fileExtName = ConfigHelper::fresnsConfigByItemKeys([
+                'image_extension_names',
+                'video_extension_names',
+                'audio_extension_names',
+                'document_extension_names',
             ]);
 
             $items = null;
             foreach ($archiveData as $archive) {
                 $fileExt = match ($archive->file_type) {
-                    1 => $fileExts['image_ext'],
-                    2 => $fileExts['video_ext'],
-                    3 => $fileExts['audio_ext'],
-                    4 => $fileExts['document_ext'],
+                    1 => $fileExtName['image_extension_names'],
+                    2 => $fileExtName['video_extension_names'],
+                    3 => $fileExtName['audio_extension_names'],
+                    4 => $fileExtName['document_extension_names'],
                     default => null,
                 };
 

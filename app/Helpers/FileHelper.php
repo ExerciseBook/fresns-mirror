@@ -74,10 +74,10 @@ class FileHelper
         }
 
         $fileExt = match ($type) {
-            1 => ConfigHelper::fresnsConfigByItemKey('image_ext'),
-            2 => ConfigHelper::fresnsConfigByItemKey('video_ext'),
-            3 => ConfigHelper::fresnsConfigByItemKey('audio_ext'),
-            4 => ConfigHelper::fresnsConfigByItemKey('document_ext'),
+            1 => ConfigHelper::fresnsConfigByItemKey('image_extension_names'),
+            2 => ConfigHelper::fresnsConfigByItemKey('video_extension_names'),
+            3 => ConfigHelper::fresnsConfigByItemKey('audio_extension_names'),
+            4 => ConfigHelper::fresnsConfigByItemKey('document_extension_names'),
         };
 
         $accept = str_replace(',', ',.', $fileExt);

@@ -63,7 +63,7 @@
             <div class="col-lg-6">
                 <div class="input-group mb-3">
                     <label class="input-group-text w-25">{{ __('FsLang::panel.storage_ext') }}</label>
-                    <input type="text" class="form-control" id="document_ext" placeholder="doc,docx,xls,xlsx,csv,ppt,pptx,pdf,md,zip,epub,mobi,7z,rar,markdown,pps,ppts,txt" name="document_ext" value="{{ $params['document_ext'] }}">
+                    <input type="text" class="form-control" id="document_extension_names" placeholder="doc,docx,xls,xlsx,csv,ppt,pptx,pdf,md,zip,epub,mobi,7z,rar,markdown,pps,ppts,txt" name="document_extension_names" value="{{ $params['document_extension_names'] }}">
                 </div>
                 <div class="input-group mb-3">
                     <label class="input-group-text w-25">{{ __('FsLang::panel.storage_max_size') }}</label>

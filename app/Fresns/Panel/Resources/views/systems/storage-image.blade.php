@@ -63,7 +63,7 @@
             <div class="col-lg-6">
                 <div class="input-group mb-3">
                     <label class="input-group-text w-25">{{ __('FsLang::panel.storage_ext') }}</label>
-                    <input type="text" class="form-control" name="image_ext" value="{{ $params['image_ext'] }}" placeholder="png,gif,jpg,jpeg,bmp,heic">
+                    <input type="text" class="form-control" name="image_extension_names" value="{{ $params['image_extension_names'] }}" placeholder="png,gif,jpg,jpeg,bmp,heic">
                 </div>
                 <div class="input-group mb-3">
                     <label class="input-group-text w-25">{{ __('FsLang::panel.storage_max_size') }}</label>
