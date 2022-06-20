@@ -234,7 +234,7 @@ class GroupController extends Controller
         $item['keywords'] = $seoData->keywords ?? null;
         $item['description'] = $seoData->description ?? null;
         $item['category'] = $group->category->getCategoryInfo($langTag);
-        $item['extensions'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_GROUP, $group->id, null, $authUserId, $langTag);
+        $item['extensions'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_GROUP, $group->id, null, $authUserId, $langTag);
         $data['items'] = $item;
 
         $service = new GroupService();

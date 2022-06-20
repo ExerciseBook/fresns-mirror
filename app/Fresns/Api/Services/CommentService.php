@@ -117,7 +117,7 @@ class CommentService
 
         $item['commentBtn'] = $commentBtn;
 
-        $item['manages'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_COMMENT, $authUserId, $langTag);
+        $item['manages'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_COMMENT, $authUserId, $langTag);
 
         $editStatus['isMe'] = false;
         $editStatus['canDelete'] = false;
@@ -165,9 +165,9 @@ class CommentService
     {
         $editConfig = ConfigHelper::fresnsConfigByItemKeys([
             'comment_edit',
-            'comment_edit_timelimit',
-            'comment_edit_sticky',
-            'comment_edit_digest',
+            'comment_edit_time_limit',
+            'comment_edit_sticky_limit',
+            'comment_edit_digest_limit',
         ]);
 
         if (! $editConfig['comment_edit']) {

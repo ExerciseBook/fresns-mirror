@@ -26,6 +26,7 @@ trait PluginUsageServiceTrait
 
         $info['badgesType'] = null;
         $info['badgesValue'] = null;
+        $info['editorToolbar'] = (bool) $usageData->editor_toolbar;
         $info['editorNumber'] = $usageData->editor_number;
 
         if (! empty($userId)) {

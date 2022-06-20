@@ -22,8 +22,8 @@ use App\Models\PluginUsage;
 
 class ExtendUtility
 {
-    // get plugin uses
-    public static function getPluginExtends(int $type, ?int $groupId = null, ?int $scene = null, ?int $userId = null, ?string $langTag = null)
+    // get plugin usages
+    public static function getPluginUsages(int $type, ?int $groupId = null, ?int $scene = null, ?int $userId = null, ?string $langTag = null)
     {
         $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
@@ -156,7 +156,7 @@ class ExtendUtility
         return $archiveList;
     }
 
-    // get extends content
+    // get content extends
     public static function getExtends(int $type, int $id, ?string $langTag = null)
     {
         $extendQuery = ExtendUsage::with('extend')->type($type)->where('usage_id', $id)->orderBy('rating');

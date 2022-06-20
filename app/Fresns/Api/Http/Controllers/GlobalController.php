@@ -223,7 +223,7 @@ class GlobalController extends Controller
     {
         $langTag = $this->langTag();
 
-        $data = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MAP, null, null, null, $langTag);
+        $data = ExtendUtility::getPluginUsages(PluginUsage::TYPE_MAP, null, null, null, $langTag);
 
         return $this->success($data);
     }
@@ -233,7 +233,7 @@ class GlobalController extends Controller
     {
         $langTag = $this->langTag();
 
-        $data = ExtendUtility::getPluginExtends(PluginUsage::TYPE_CONTENT, null, null, null, $langTag);
+        $data = ExtendUtility::getPluginUsages(PluginUsage::TYPE_CONTENT, null, null, null, $langTag);
 
         return $this->success($data);
     }

@@ -240,7 +240,7 @@ class UserController extends Controller
         $item['title'] = $seoData->title ?? null;
         $item['keywords'] = $seoData->keywords ?? null;
         $item['description'] = $seoData->description ?? null;
-        $item['manages'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_USER, $authUserId, $langTag);
+        $item['manages'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_USER, $authUserId, $langTag);
         $data['items'] = $item;
 
         $service = new UserService();
@@ -382,8 +382,8 @@ class UserController extends Controller
         $langTag = $this->langTag();
         $authUserId = $this->user()->id;
 
-        $data['features'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_FEATURE, null, null, $authUserId, $langTag);
-        $data['profiles'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_PROFILE, null, null, $authUserId, $langTag);
+        $data['features'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_FEATURE, null, null, $authUserId, $langTag);
+        $data['profiles'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_PROFILE, null, null, $authUserId, $langTag);
 
         $dialogACount = Dialog::where('a_user_id', $authUserId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
         $dialogBCount = Dialog::where('b_user_id', $authUserId)->where('b_is_read', 0)->where('b_is_display', 1)->count();

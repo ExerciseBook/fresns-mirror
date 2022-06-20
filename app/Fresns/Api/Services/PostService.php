@@ -114,7 +114,7 @@ class PostService
             $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
         }
 
-        $item['manages'] = ExtendUtility::getPluginExtends(PluginUsage::TYPE_MANAGE, $post->group_id, PluginUsage::SCENE_POST, $authUserId, $langTag);
+        $item['manages'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, $post->group_id, PluginUsage::SCENE_POST, $authUserId, $langTag);
 
         $editStatus['isMe'] = false;
         $editStatus['canDelete'] = false;
@@ -185,9 +185,9 @@ class PostService
     {
         $editConfig = ConfigHelper::fresnsConfigByItemKeys([
             'post_edit',
-            'post_edit_timelimit',
-            'post_edit_sticky',
-            'post_edit_digest',
+            'post_edit_time_limit',
+            'post_edit_sticky_limit',
+            'post_edit_digest_limit',
         ]);
 
         if (! $editConfig['post_edit']) {
