@@ -56,8 +56,8 @@ class PublishController extends Controller
             'post_editor_group_required',
             'post_editor_title_view',
             'post_editor_title_required',
-            'post_editor_title_word_length',
-            'post_editor_word_length',
+            'post_editor_title_length',
+            'post_editor_content_length',
             'post_editor_brief_length',
         ];
         $configs = Config::whereIn('item_key', $configKeys)->get();
@@ -116,8 +116,8 @@ class PublishController extends Controller
             'post_editor_group_required',
             'post_editor_title_view',
             'post_editor_title_required',
-            'post_editor_title_word_length',
-            'post_editor_word_length',
+            'post_editor_title_length',
+            'post_editor_content_length',
             'post_editor_brief_length',
         ];
 
@@ -198,7 +198,7 @@ class PublishController extends Controller
             'comment_editor_video_upload_number',
             'comment_editor_audio_upload_number',
             'comment_editor_document_upload_number',
-            'comment_editor_word_length',
+            'comment_editor_content_length',
             'comment_editor_brief_length',
         ];
 
@@ -253,7 +253,7 @@ class PublishController extends Controller
             'comment_editor_video_upload_number',
             'comment_editor_audio_upload_number',
             'comment_editor_document_upload_number',
-            'comment_editor_word_length',
+            'comment_editor_content_length',
             'comment_editor_brief_length',
         ];
 

@@ -258,23 +258,23 @@
             <label class="col-lg-2 col-form-label text-lg-end"></label>
             <div class="col-lg-6">
                 <div class="input-group">
-                    <label class="input-group-text">{{ __('FsLang::panel.publish_editor_comment_word_length') }}</label>
-                    <input type="number" class="form-control input-number" id="comment_editor_word_length" name="comment_editor_word_length" value="{{ $params['comment_editor_word_length'] }}">
+                    <label class="input-group-text">{{ __('FsLang::panel.publish_editor_comment_content_length') }}</label>
+                    <input type="number" class="form-control input-number" id="comment_editor_content_length" name="comment_editor_content_length" value="{{ $params['comment_editor_content_length'] }}">
                     <span class="input-group-text">{{ __('FsLang::panel.unit_character') }}</span>
                 </div>
             </div>
-            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.publish_editor_comment_word_length_desc') }}</div>
+            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.publish_editor_comment_content_length_desc') }}</div>
         </div>
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end"></label>
             <div class="col-lg-6">
                 <div class="input-group">
-                    <label class="input-group-text">{{ __('FsLang::panel.publish_editor_comment_brief_word_length') }}</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.publish_editor_comment_brief_content_length') }}</label>
                     <input type="number" class="form-control input-number" id="comment_editor_brief_length" name="comment_editor_brief_length" value="{{ $params['comment_editor_brief_length'] }}">
                     <span class="input-group-text">{{ __('FsLang::panel.unit_character') }}</span>
                 </div>
             </div>
-            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.publish_editor_comment_brief_word_length_desc') }}</div>
+            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.publish_editor_comment_brief_content_length_desc') }}</div>
         </div>
         <!--button_save-->
         <div class="row mt-5">
