@@ -182,7 +182,7 @@ trait FileServiceTrait
             'document_bucket_domain',
             'document_filesystem_disk',
             'document_online_preview',
-            'document_preview_ext',
+            'document_preview_extension_names',
         ]);
 
         if ($documentConfig['document_filesystem_disk'] == 'local') {
@@ -194,8 +194,8 @@ trait FileServiceTrait
         $info['documentUrl'] = StrHelper::qualifyUrl($filePath, $documentConfig['document_bucket_domain']);
 
         $documentPreviewUrl = null;
-        if (! empty($documentConfig['document_online_preview']) && ! empty($documentConfig['document_preview_ext'])) {
-            $previewExtArr = explode(',', $documentConfig['document_preview_ext']);
+        if (! empty($documentConfig['document_online_preview']) && ! empty($documentConfig['document_preview_extension_names'])) {
+            $previewExtArr = explode(',', $documentConfig['document_preview_extension_names']);
             if (in_array($fileData->extension, $previewExtArr)) {
                 $replaceUrl = str_replace('{docurl}', $info['documentUrl'], $documentConfig['document_online_preview']);
                 $documentPreviewUrl = str_replace('{fid}', $fileData->fid, $replaceUrl);

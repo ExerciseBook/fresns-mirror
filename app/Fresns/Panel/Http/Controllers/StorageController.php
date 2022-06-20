@@ -280,7 +280,7 @@ class StorageController extends Controller
             'document_url_key',
             'document_url_expire',
             'document_online_preview',
-            'document_preview_ext',
+            'document_preview_extension_names',
         ];
 
         $configs = Config::whereIn('item_key', $configKeys)->get();
@@ -319,7 +319,7 @@ class StorageController extends Controller
             'document_url_key',
             'document_url_expire',
             'document_online_preview',
-            'document_preview_ext',
+            'document_preview_extension_names',
         ];
 
         $configs = Config::whereIn('item_key', $configKeys)->get();
