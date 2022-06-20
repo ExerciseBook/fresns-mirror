@@ -130,7 +130,7 @@ trait ApiHeaderTrait
     {
         $authUser = $this->user();
 
-        $cacheKey = 'fresns_api_'.$authUser->uid.'_content_view_perm';
+        $cacheKey = 'fresns_api_user_'.$authUser->uid.'_content_view_perm';
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
         $config = Cache::remember($cacheKey, $cacheTime, function () use ($authUser) {

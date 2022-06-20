@@ -37,9 +37,9 @@ class GroupController extends Controller
         $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
 
         if (empty($authUserId)) {
-            $cacheKey = 'fresns_api_groups_0_all';
+            $cacheKey = 'fresns_api_guest_groups';
         } else {
-            $cacheKey = "fresns_api_groups_{$authUserId}_user";
+            $cacheKey = "fresns_api_user_{$authUserId}_groups";
         }
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
