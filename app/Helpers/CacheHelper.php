@@ -32,15 +32,16 @@ class CacheHelper
 
     /**
      * forget fresns config.
-     *
-     * fresns_crontab_items
-     * fresns_default_langTag
-     * fresns_default_timezone
-     * fresns_lang_tags
      */
-    public static function forgetFresnsConfig(string $cacheKey)
+    public static function forgetFresnsConfig()
     {
-        Cache::forget($cacheKey);
+        Cache::forget('fresns_crontab_items');
+        Cache::forget('fresns_default_langTag');
+        Cache::forget('fresns_default_timezone');
+        Cache::forget('fresns_lang_tags');
+        // Cache::forget("fresns_config_*");
+        // Cache::forget("fresns_config_keys_*");
+        // Cache::forget("fresns_config_tag_*");
 
         return;
     }
