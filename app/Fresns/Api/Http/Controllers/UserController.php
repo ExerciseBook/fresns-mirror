@@ -37,12 +37,14 @@ use App\Models\User;
 use App\Models\UserBlock;
 use App\Models\UserFollow;
 use App\Models\UserStat;
+use App\Utilities\ConfigUtility;
 use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -380,6 +382,7 @@ class UserController extends Controller
     public function panel()
     {
         $langTag = $this->langTag();
+        $timezone = $this->timezone();
         $authUserId = $this->user()->id;
 
         $data['features'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_FEATURE, null, null, $authUserId, $langTag);
@@ -404,6 +407,17 @@ class UserController extends Controller
         $draftCount['posts'] = PostLog::where('user_id', $authUserId)->whereIn('state', [1, 4])->count();
         $draftCount['comments'] = CommentLog::where('user_id', $authUserId)->whereIn('state', [1, 4])->count();
         $data['draftCount'] = $draftCount;
+
+        $cacheKey = "fresns_api_publish_{$authUserId}_{$langTag}_{$timezone}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $publish = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId, $langTag, $timezone) {
+            $publish['post'] = ConfigUtility::getPublishConfigByType($authUserId, 'post', $langTag, $timezone);
+            $publish['comment'] = ConfigUtility::getPublishConfigByType($authUserId, 'comment', $langTag, $timezone);
+
+            return $publish;
+        });
+        $data['publish'] = $publish;
 
         return $this->success($data);
     }
