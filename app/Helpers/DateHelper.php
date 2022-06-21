@@ -136,6 +136,22 @@ class DateHelper
         return $time->format($dateTimeFormat);
     }
 
+    public static function fresnsTimeByTimezone(?string $time = null, ?string $timezone = null)
+    {
+        if (empty($time)) {
+            return null;
+        }
+
+        $timezone = $timezone ?: ConfigHelper::fresnsConfigDefaultTimezone();
+
+        $datetime = now()->toDateString().' '.$time.':00';
+        $newDatetime = DateHelper::fresnsDateTimeByTimezone($datetime, $timezone);
+
+        $newTime = date('H:i', strtotime($newDatetime));
+
+        return $newTime;
+    }
+
     /**
      * Formatted time output by time zone and language tag.
      *
