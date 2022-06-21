@@ -38,7 +38,7 @@ class User
     public function addUser($wordBody)
     {
         $dtoWordBody = new AddUserDTO($wordBody);
-        $langTag = \request()->header('langTag', config('app.locale'));
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $account = Account::where('aid', $dtoWordBody->aid)->first();
         if (empty($account)) {
@@ -93,7 +93,7 @@ class User
     public function verifyUser($wordBody)
     {
         $dtoWordBody = new VerifyUserDTO($wordBody);
-        $langTag = \request()->header('langTag', config('app.locale'));
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $user = User::where('uid', $dtoWordBody->uid)->first();
         $aid = $user->account->aid;

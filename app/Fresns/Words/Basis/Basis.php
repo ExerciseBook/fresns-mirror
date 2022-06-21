@@ -36,7 +36,7 @@ class Basis
     public function verifySign($wordBody)
     {
         $dtoWordBody = new VerifySignDTO($wordBody);
-        $langTag = \request()->header('langTag', config('app.locale'));
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $keyInfo = SessionKey::where('app_id', $dtoWordBody->appId)->isEnable()->first();
 
@@ -123,7 +123,7 @@ class Basis
     public function verifyUrlSign($wordBody)
     {
         $dtoWordBody = new VerifyUrlSignDTO($wordBody);
-        $langTag = \request()->header('langTag', config('app.locale'));
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $urlSignData = urldecode(base64_decode($dtoWordBody->urlSign));
         $urlSignJson = json_decode($urlSignData, true) ?? [];
@@ -200,7 +200,7 @@ class Basis
             $pluginUniKey = ConfigHelper::fresnsConfigByItemKey('send_sms_service');
         }
 
-        $langTag = \request()->header('langTag', config('app.locale'));
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
         if (empty($pluginUniKey)) {
             return $this->failure(
                 32100,
@@ -220,7 +220,7 @@ class Basis
     public function checkCode($wordBody)
     {
         $dtoWordBody = new CheckCodeDTO($wordBody);
-        $langTag = \request()->header('langTag', config('app.locale'));
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         if ($dtoWordBody->type == 1) {
             $account = $dtoWordBody->account;

@@ -13,6 +13,7 @@ use App\Fresns\Words\Account\DTO\CreateSessionTokenDTO;
 use App\Fresns\Words\Account\DTO\LogicalDeletionAccountDTO;
 use App\Fresns\Words\Account\DTO\VerifyAccountDTO;
 use App\Fresns\Words\Account\DTO\VerifySessionTokenDTO;
+use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\Account as AccountModel;
@@ -38,7 +39,7 @@ class Account
     public function addAccount($wordBody)
     {
         $dtoWordBody = new AddAccountDTO($wordBody);
-        $langTag = \request()->header('langTag', config('app.locale'));
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         if ($dtoWordBody->type == 1) {
             $checkAccount = AccountModel::where('email', $dtoWordBody->account)->first();
@@ -121,7 +122,7 @@ class Account
     public function verifyAccount($wordBody)
     {
         $dtoWordBody = new VerifyAccountDTO($wordBody);
-        $langTag = \request()->header('langTag', config('app.locale'));
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         if ($dtoWordBody->type == 1) {
             $accountName = $dtoWordBody->account;
@@ -234,7 +235,7 @@ class Account
     public function verifySessionToken($wordBody)
     {
         $dtoWordBody = new VerifySessionTokenDTO($wordBody);
-        $langTag = \request()->header('langTag', config('app.locale'));
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $condition = [
             'platform_id' => $dtoWordBody->platformId,
