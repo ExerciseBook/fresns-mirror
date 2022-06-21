@@ -153,7 +153,20 @@ class PrimaryHelper
     }
 
     /**
-     * @param  string  $uid
+     * @param  string  $userId
+     * @return int |null
+     */
+    public static function fresnsAccountIdByUserId(?string $userId = null)
+    {
+        if (empty($userId)) {
+            return null;
+        }
+
+        return PrimaryHelper::fresnsModelByFsid('user', $userId)?->account_id;
+    }
+
+    /**
+     * @param  string  $uidOrUsername
      * @return int |null
      */
     public static function fresnsAccountIdByUidOrUsername(?string $uidOrUsername = null)
