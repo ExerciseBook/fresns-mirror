@@ -325,7 +325,7 @@ class InteractiveUtility
         }
 
         if ($blockType == UserBlock::TYPE_GROUP) {
-            CacheHelper::forgetApiContent('groups', $userId, 'user');
+            CacheHelper::forgetFresnsApiInfo("fresns_api_user_{$userId}_groups");
         }
     }
 
