@@ -19,6 +19,7 @@ use App\Models\DomainLinkUsage;
 use App\Models\Extend;
 use App\Models\Hashtag;
 use App\Models\HashtagUsage;
+use App\Models\Language;
 use App\Models\Mention;
 use App\Models\Role;
 use App\Models\Sticker;
@@ -347,7 +348,7 @@ class ContentUtility
     public static function handleAndSaveAll(string $content, int $type, int $id, ?int $authUserId = null)
     {
         static::saveHashtag($content, $type, $id);
-        static::saveUrl($content, $type, $id);
+        static::saveLink($content, $type, $id);
 
         if (! empty($authUserId)) {
             static::saveMention($content, $type, $id, $authUserId);

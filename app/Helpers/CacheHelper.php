@@ -31,6 +31,18 @@ class CacheHelper
     }
 
     /**
+     * clear all cache.
+     */
+    public static function clearAllCache()
+    {
+        Cache::flush();
+        \Artisan::call('view:cache');
+        \Artisan::call('config:cache');
+
+        return;
+    }
+
+    /**
      * forget fresns config.
      */
     public static function forgetFresnsConfig()
@@ -97,6 +109,35 @@ class CacheHelper
             $cacheKey = "{$cacheName}_{$langTag}";
 
             Cache::forget($cacheKey);
+        }
+
+        return;
+    }
+
+    /**
+     * forget fresns api multilingual and timezone info.
+     *
+     * fresns_api_publish_{$authUserId}_{$langTag}_{$timezone}
+     */
+    public static function forgetFresnsApiLangAndTimezoneInfo(string $cacheName)
+    {
+        $langTagArr = ConfigHelper::fresnsConfigLangTags();
+
+        $langCacheKeyArr = null;
+        foreach ($langTagArr as $langTag) {
+            $cacheKey = "{$cacheName}_{$langTag}";
+
+            $langCacheKeyArr[] = $cacheKey;
+        }
+
+        $utcArr = ConfigHelper::fresnsConfigByItemKey('utc');
+
+        foreach ($langCacheKeyArr as $langCacheKey) {
+            foreach ($utcArr as $utc) {
+                $cacheKey = "{$langCacheKey}_{$utc}";
+
+                Cache::forget($cacheKey);
+            }
         }
 
         return;

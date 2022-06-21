@@ -9,6 +9,7 @@
 namespace App\Utilities;
 
 use App\Helpers\ConfigHelper;
+use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
 use App\Models\Account;
 use App\Models\CodeMessage;
@@ -245,7 +246,7 @@ class ConfigUtility
     }
 
     // get publish config by type(post or comment)
-    public static function getPublishConfigByType(int $userId, string $type, ?string $langTag = null): array
+    public static function getPublishConfigByType(int $userId, string $type, ?string $langTag = null, ?string $timezone = null): array
     {
         $rolePerm = PermissionUtility::getUserMainRolePerm($userId);
 
@@ -301,19 +302,19 @@ class ConfigUtility
 
             $limit['status'] = ! $checkWhiteList ? $limitConfig["{$type}_limit_status"] : false;
             $limit['type'] = $limitConfig["{$type}_limit_type"];
-            $limit['periodStart'] = $limitConfig["{$type}_limit_period_start"];
-            $limit['periodEnd'] = $limitConfig["{$type}_limit_period_end"];
-            $limit['cycleStart'] = $limitConfig["{$type}_limit_cycle_start"];
-            $limit['cycleEnd'] = $limitConfig["{$type}_limit_cycle_end"];
+            $limit['periodStart'] = DateHelper::fresnsDateTimeByTimezone($limitConfig["{$type}_limit_period_start"], $timezone, $langTag);
+            $limit['periodEnd'] = DateHelper::fresnsDateTimeByTimezone($limitConfig["{$type}_limit_period_end"], $timezone, $langTag);
+            $limit['cycleStart'] = DateHelper::fresnsTimeByTimezone($limitConfig["{$type}_limit_cycle_start"], $timezone);
+            $limit['cycleEnd'] = DateHelper::fresnsTimeByTimezone($limitConfig["{$type}_limit_cycle_end"], $timezone);
             $limit['rule'] = $limitConfig["{$type}_limit_rule"];
             $limit['tip'] = $limitConfig["{$type}_limit_tip"];
         } else {
             $limit['status'] = $rolePerm["{$type}_limit_status"];
             $limit['type'] = $rolePerm["{$type}_limit_type"];
-            $limit['periodStart'] = $rolePerm["{$type}_limit_period_start"];
-            $limit['periodEnd'] = $rolePerm["{$type}_limit_period_end"];
-            $limit['cycleStart'] = $rolePerm["{$type}_limit_cycle_start"];
-            $limit['cycleEnd'] = $rolePerm["{$type}_limit_cycle_end"];
+            $limit['periodStart'] = DateHelper::fresnsDateTimeByTimezone($rolePerm["{$type}_limit_period_start"], $timezone, $langTag);
+            $limit['periodEnd'] = DateHelper::fresnsDateTimeByTimezone($rolePerm["{$type}_limit_period_end"], $timezone, $langTag);
+            $limit['cycleStart'] = DateHelper::fresnsTimeByTimezone($rolePerm["{$type}_limit_cycle_start"], $timezone);
+            $limit['cycleEnd'] = DateHelper::fresnsTimeByTimezone($rolePerm["{$type}_limit_cycle_end"], $timezone);
             $limit['rule'] = $rolePerm["{$type}_limit_rule"];
             $limit['tip'] = ConfigUtility::getCodeMessage(36105, 'Fresns', $langTag);
         }
