@@ -8,19 +8,33 @@
 
 namespace App\Utilities;
 
+use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
+use App\Helpers\PrimaryHelper;
 use App\Helpers\StrHelper;
+use App\Models\ArchiveUsage;
+use App\Models\Comment;
+use App\Models\CommentAppend;
+use App\Models\CommentLog;
 use App\Models\Domain;
 use App\Models\DomainLink;
 use App\Models\DomainLinkUsage;
 use App\Models\Extend;
+use App\Models\ExtendUsage;
+use App\Models\FileUsage;
+use App\Models\Group;
 use App\Models\Hashtag;
 use App\Models\HashtagUsage;
 use App\Models\Language;
 use App\Models\Mention;
+use App\Models\OperationUsage;
+use App\Models\Post;
+use App\Models\PostAllow;
+use App\Models\PostAppend;
+use App\Models\PostLog;
 use App\Models\Role;
 use App\Models\Sticker;
 use App\Models\User;
@@ -247,7 +261,7 @@ class ContentUtility
     public static function handleAndReplaceAll(string $content, ?int $mentionType = null, ?int $mentionId = null): string
     {
         // Replace hashtag
-        // Replace url
+        // Replace link
         // Replace mention
         // Replace sticker
         $content = static::replaceHashtag($content);
@@ -344,8 +358,8 @@ class ContentUtility
         Mention::createMany($mentionData);
     }
 
-    // Handle and save all
-    public static function handleAndSaveAll(string $content, int $type, int $id, ?int $authUserId = null)
+    // Handle and save all(interactive content)
+    public static function handleAndSaveAllInteractive(string $content, int $type, int $id, ?int $authUserId = null)
     {
         static::saveHashtag($content, $type, $id);
         static::saveLink($content, $type, $id);
@@ -447,5 +461,482 @@ class ContentUtility
         $item['url'] = PluginHelper::fresnsPluginUrlByUnikey($commentBtnConfig['pluginUnikey']);
 
         return $item;
+    }
+
+    // save file usages
+    // $files = [{"fid": "fid", "rating": 9, "remark": "remark"}]
+    public static function saveFileUsages(int $usageType, string $tableName, string $tableColumn, int $tableId, array $files, int $platformId, int $accountId, int $userId)
+    {
+        foreach ($files as $file) {
+            $fileModel = PrimaryHelper::fresnsModelByFsid('file', $file['fid']);
+
+            FileUsage::updateOrCreate([
+                'file_id' => $fileModel->id,
+                'table_name' => $tableName,
+                'table_column' => $tableColumn,
+                'table_id' => $tableId,
+            ],
+            [
+                'file_type' => $$fileModel->type,
+                'usage_type' => $usageType,
+                'platform_id' => $platformId,
+                'rating' => $file['rating'],
+                'account_id' => $accountId,
+                'user_id' => $userId,
+                'remark' => $file['remark'],
+            ]);
+        }
+    }
+
+    // save operation usages
+    // $operations = [{"id": "id", "pluginUnikey": null}]
+    public static function saveOperationUsages(string $usageType, int $usageId, array $operations)
+    {
+        foreach ($operations as $operation) {
+            $operationModel = PrimaryHelper::fresnsModelById('operation', $operation['id']);
+
+            OperationUsage::updateOrCreate([
+                'usage_type' => $usageType,
+                'usage_id' => $usageId,
+                'operation_id' => $operation->id,
+            ],
+            [
+                'plugin_unikey' => $operation['pluginUnikey'] ?? $operationModel->plugin_unikey,
+            ]);
+        }
+    }
+
+    // save archive usages
+    // $archives = [{"code": "code", "value": "value", "isPrivate": true, "pluginUnikey": null}]
+    public static function saveArchiveUsages(string $usageType, int $usageId, array $archives)
+    {
+        foreach ($archives as $archive) {
+            $archiveModel = PrimaryHelper::fresnsModelByFsid('archive', $archive['code']);
+
+            OperationUsage::updateOrCreate([
+                'usage_type' => $usageType,
+                'usage_id' => $usageId,
+                'archive_id' => $archiveModel->id,
+            ],
+            [
+                'archive_value' => $archive['value'],
+                'is_private' => $archive['isPrivate'],
+                'plugin_unikey' => $archive['pluginUnikey'] ?? $archiveModel->plugin_unikey,
+            ]);
+        }
+    }
+
+    // save extend usages
+    // $extends = [{"eid": "eid", "canDelete": true, "rating": 9, "pluginUnikey": null}]
+    public static function saveExtendUsages(string $usageType, int $usageId, array $extends)
+    {
+        foreach ($extends as $extend) {
+            $extendModel = PrimaryHelper::fresnsModelByFsid('extend', $extend['eid']);
+
+            ExtendUsage::updateOrCreate([
+                'usage_type' => $usageType,
+                'usage_id' => $usageId,
+                'extend_id' => $extendModel->id,
+            ],
+            [
+                'can_delete' => $extend['canDelete'],
+                'rating' => $extend['rating'],
+                'plugin_unikey' => $extend['pluginUnikey'] ?? $extendModel->plugin_unikey,
+            ]);
+        }
+    }
+
+    // release lang name
+    public static function releaseLangName(string $tableName, string $tableColumn, int $tableId, array $langContentArr): string
+    {
+        $defaultLangTag = ConfigHelper::fresnsConfigDefaultLangTag();
+
+        foreach ($langContentArr as $lang) {
+            Language::updateOrCreate([
+                'table_name' => $tableName,
+                'table_column' => $tableColumn,
+                'table_id' => $tableId,
+                'lang_tag' => $lang['langTag'],
+            ],
+            [
+                'lang_content' => $lang['name'],
+            ]);
+
+            if ($lang['langTag'] == $defaultLangTag) {
+                $defaultLangName = $lang['name'];
+            }
+        }
+
+        return $defaultLangName ?? null;
+    }
+
+    // release allow users and roles
+    public static function releaseAllowUsersAndRoles(int $postId, array $permArr)
+    {
+        PostAllow::where('post_id', $postId)->where('type', PostAllow::TYPE_USER)->where('is_initial', 1)->delete();
+
+        foreach ($permArr['users'] as $userId) {
+            PostAllow::withTrashed()->updateOrCreate([
+                'post_id' => $postId,
+                'type' => PostAllow::TYPE_USER,
+                'object_id' => $userId,
+            ],
+            [
+                'is_initial' => 1,
+                'deleted_at' => null,
+            ]);
+        }
+
+        PostAllow::where('post_id', $postId)->where('type', PostAllow::TYPE_ROLE)->where('is_initial', 1)->delete();
+
+        foreach ($permArr['roles'] as $roleId) {
+            PostAllow::withTrashed()->updateOrCreate([
+                'post_id' => $postId,
+                'type' => PostAllow::TYPE_ROLE,
+                'object_id' => $roleId,
+            ],
+            [
+                'is_initial' => 1,
+                'deleted_at' => null,
+            ]);
+        }
+    }
+
+    // release file usages
+    public static function releaseFileUsages(string $type, int $logId, int $primaryId)
+    {
+        $logTableName = match ($type) {
+            'post' => 'post_logs',
+            'comment' => 'comment_logs',
+        };
+
+        $tableName = match ($type) {
+            'post' => 'posts',
+            'comment' => 'comments',
+        };
+
+        FileUsage::where('table_name', $tableName)->where('table_column', 'id')->where('table_id', $primaryId)->delete();
+
+        $fileUsages = FileUsage::where('table_name', $logTableName)->where('table_column', 'id')->where('table_id', $logId)->get();
+
+        $fileData = [];
+        foreach ($fileUsages as $file) {
+            $fileData[] = [
+                'file_id' => $file->id,
+                'file_type' => $file->file_type,
+                'usage_type' => $file->usage_type,
+                'platform_id' => $file->platform_id,
+                'table_name' => $tableName,
+                'table_column' => 'id',
+                'table_id' => $primaryId,
+                'rating' => $file->rating,
+                'account_id' => $file->account_id,
+                'user_id' => $file->user_id,
+                'remark' => $file->remark,
+            ];
+        }
+
+        FileUsage::createMany($fileData);
+    }
+
+    // release operation usages
+    public static function releaseOperationUsages(string $type, int $logId, int $primaryId)
+    {
+        $logUsageType = match ($type) {
+            'post' => OperationUsage::TYPE_POST_LOG,
+            'comment' => OperationUsage::TYPE_COMMENT_LOG,
+        };
+
+        $usageType = match ($type) {
+            'post' => OperationUsage::TYPE_POST,
+            'comment' => OperationUsage::TYPE_COMMENT,
+        };
+
+        OperationUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->delete();
+
+        $operationUsages = OperationUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
+
+        $operationData = [];
+        foreach ($operationUsages as $operation) {
+            $operationData[] = [
+                'usage_type' => $usageType,
+                'usage_id' => $primaryId,
+                'operation_id' => $operation->operation_id,
+                'plugin_unikey' => $operation->plugin_unikey,
+            ];
+        }
+
+        OperationUsage::createMany($operationData);
+    }
+
+    // release archive usages
+    public static function releaseArchiveUsages(string $type, int $logId, int $primaryId)
+    {
+        $logUsageType = match ($type) {
+            'post' => ArchiveUsage::TYPE_POST_LOG,
+            'comment' => ArchiveUsage::TYPE_COMMENT_LOG,
+        };
+
+        $usageType = match ($type) {
+            'post' => ArchiveUsage::TYPE_POST,
+            'comment' => ArchiveUsage::TYPE_COMMENT,
+        };
+
+        ArchiveUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->delete();
+
+        $archiveUsages = ArchiveUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
+
+        $archiveData = [];
+        foreach ($archiveUsages as $archive) {
+            $archiveData[] = [
+                'usage_type' => $usageType,
+                'usage_id' => $primaryId,
+                'archive_id' => $archive->archive_id,
+                'archive_value' => $archive->archive_value,
+                'is_private' => $archive->is_private,
+                'plugin_unikey' => $archive->plugin_unikey,
+            ];
+        }
+
+        ArchiveUsage::createMany($archiveData);
+    }
+
+    // release extend usages
+    public static function releaseExtendUsages(int $type, int $logId, int $primaryId)
+    {
+        $logUsageType = match ($type) {
+            'post' => ExtendUsage::TYPE_POST_LOG,
+            'comment' => ExtendUsage::TYPE_COMMENT_LOG,
+        };
+
+        $usageType = match ($type) {
+            'post' => ExtendUsage::TYPE_POST,
+            'comment' => ExtendUsage::TYPE_COMMENT,
+        };
+
+        ExtendUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->delete();
+
+        $extendUsages = ExtendUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
+
+        $extendData = [];
+        foreach ($extendUsages as $extend) {
+            $extendData[] = [
+                'usage_type' => $usageType,
+                'usage_id' => $primaryId,
+                'extend_id' => $extend->extend_id,
+                'can_delete' => $extend->can_delete,
+                'rating' => $extend->rating,
+                'plugin_unikey' => $extend->plugin_unikey,
+            ];
+        }
+
+        ExtendUsage::createMany($extendData);
+    }
+
+    // release post
+    public static function releasePost(PostLog $postLog): Post
+    {
+        if (! empty($postLog->post_id)) {
+            $oldPost = PrimaryHelper::fresnsModelById('post', $postLog->post_id);
+        }
+
+        $post = Post::updateOrCreate([
+            'id' => $postLog->post_id,
+        ],
+        [
+            'user_id' => $postLog->user_id,
+            'group_id' => $postLog->group_id,
+            'types' => $postLog->types,
+            'title' => $postLog->title,
+            'content' => $postLog->content,
+            'is_markdown' => $postLog->is_markdown,
+            'is_anonymous' => $postLog->is_anonymous,
+            'is_comment' => $postLog->is_comment,
+            'map_id' => $postLog->location_json['mapId'] ?? null,
+            'map_longitude' => $postLog->location_json['latitude'] ?? null,
+            'map_latitude' => $postLog->location_json['longitude'] ?? null,
+        ]);
+
+        $allowBtnName = null;
+        if (empty($postLog->allow_json)) {
+            Language::where('table_name', 'post_appends')->where('table_column', 'allow_btn_name')->where('table_id', $post->id)->delete();
+        } else {
+            $allowBtnName = ContentUtility::releaseLangName('post_appends', 'allow_btn_name', $post->id, $postLog->allow_json['btnName']);
+        }
+
+        $userListName = null;
+        if (empty($postLog->user_list_json)) {
+            Language::where('table_name', 'post_appends')->where('table_column', 'user_list_name')->where('table_id', $post->id)->delete();
+        } else {
+            $userListName = ContentUtility::releaseLangName('post_appends', 'user_list_name', $post->id, $postLog->user_list_json['userListName']);
+        }
+
+        $commentBtnName = null;
+        if (empty($postLog->comment_btn_json)) {
+            Language::where('table_name', 'post_appends')->where('table_column', 'comment_btn_name')->where('table_id', $post->id)->delete();
+        } else {
+            $commentBtnName = ContentUtility::releaseLangName('post_appends', 'comment_btn_name', $post->id, $postLog->comment_btn_json['btnName']);
+        }
+
+        $postAppend = PostAppend::updateOrCreate([
+            'post_id' => $postLog->post_id,
+        ],
+        [
+            'is_plugin_editor' => $postLog->is_plugin_editor,
+            'editor_unikey' => $postLog->editor_unikey,
+            'is_allow' => $postLog->allow_json['isAllow'] ?? null,
+            'allow_proportion' => $postLog->allow_json['proportion'] ?? null,
+            'allow_btn_name' => $allowBtnName,
+            'allow_plugin_unikey' => $postLog->allow_json['pluginUnikey'] ?? null,
+            'is_user_list' => $postLog->user_list_json['isUserList'] ?? null,
+            'user_list_name' => $userListName,
+            'user_list_plugin_unikey' => $postLog->user_list_json['pluginUnikey'] ?? null,
+            'is_comment_btn' => $postLog->comment_btn_json['isCommentBtn'] ?? null,
+            'comment_btn_name' => $commentBtnName,
+            'comment_btn_style' => $postLog->comment_btn_json['btnStyle'] ?? null,
+            'comment_btn_plugin_unikey' => $postLog->comment_btn_json['pluginUnikey'] ?? null,
+            'is_comment_public' => $postLog->is_comment_public,
+            'map_json' => $postLog->location_json ?? null,
+            'map_scale' => $postLog->location_json['scale'] ?? null,
+            'map_continent_code' => $postLog->location_json['continentCode'] ?? null,
+            'map_country_code' => $postLog->location_json['countryCode'] ?? null,
+            'map_region_code' => $postLog->location_json['regionCode'] ?? null,
+            'map_city_code' => $postLog->location_json['cityCode'] ?? null,
+            'map_city' => $postLog->location_json['city'] ?? null,
+            'map_zip' => $postLog->location_json['zip'] ?? null,
+            'map_poi' => $postLog->location_json['poi'] ?? null,
+            'map_poi_id' => $postLog->location_json['poiId'] ?? null,
+        ]);
+
+        ContentUtility::releaseAllowUsersAndRoles($post->id, $postLog->allow_json['permissions']);
+        ContentUtility::releaseFileUsages('post', $postLog->id, $post->id);
+        ContentUtility::releaseArchiveUsages('post', $postLog->id, $post->id);
+        ContentUtility::releaseOperationUsages('post', $postLog->id, $post->id);
+        ContentUtility::releaseExtendUsages('post', $postLog->id, $post->id);
+
+        if (empty($postLog->post_id)) {
+            ContentUtility::handleAndSaveAllInteractive($postLog->content, Mention::TYPE_POST, $post->id, $postLog->user_id);
+            InteractiveUtility::publishStats('post', $post->id, 'increment');
+        } else {
+            if ($postLog->group_id != $oldPost->group_id) {
+                Group::where('id', $oldPost->group_id)->decrement('post_count');
+                Group::where('id', $postLog->group_id)->increment('post_count');
+
+                $groupCommentCount = Comment::where('post_id', $post->id)->count();
+
+                Comment::where('post_id', $post->id)->update([
+                    'group_id' => $postLog->group_id,
+                ]);
+
+                Group::where('id', $postLog->group_id)->increment('comment_count', $groupCommentCount);
+                Group::where('id', $oldPost->group_id)->decrement('comment_count', $groupCommentCount);
+            }
+
+            InteractiveUtility::editStats('post', $post->id, 'decrement');
+
+            HashtagUsage::where('usage_type', HashtagUsage::TYPE_POST)->where('usage_id', $post->id)->delete();
+            DomainLinkUsage::where('usage_type', DomainLinkUsage::TYPE_POST)->where('usage_id', $post->id)->delete();
+            Mention::where('user_id', $postLog->user_id)->where('mention_type', Mention::TYPE_POST)->where('mention_id', $post->id)->delete();
+
+            ContentUtility::handleAndSaveAllInteractive($postLog->content, Mention::TYPE_POST, $post->id, $postLog->user_id);
+            InteractiveUtility::editStats('post', $post->id, 'increment');
+
+            $post->update([
+                'latest_edit_at' => now(),
+            ]);
+            $postAppend->increment('edit_count');
+
+            CacheHelper::forgetFresnsModel('post', $post->pid);
+            CacheHelper::forgetFresnsModel('post', $post->id);
+        }
+
+        $postLog->update([
+            'post_id' => $post->id,
+            'state' => 3,
+        ]);
+
+        return $post;
+    }
+
+    // release comment
+    public static function releaseComment(CommentLog $commentLog): Comment
+    {
+        $post = PrimaryHelper::fresnsModelById('post', $commentLog->post_id);
+        $parentComment = PrimaryHelper::fresnsModelById('comment', $commentLog->parent_id);
+
+        $topCommentId = null;
+        if (! $parentComment) {
+            $topCommentId = $parentComment?->top_comment_id ?? null;
+        }
+
+        $comment = Comment::updateOrCreate([
+            'id' => $commentLog->comment_id,
+        ],
+        [
+            'user_id' => $commentLog->user_id,
+            'post_id' => $commentLog->post_id,
+            'group_id' => $post->group_id,
+            'top_comment_id' => $topCommentId,
+            'parent_id' => $commentLog->parent_comment_id,
+            'types' => $commentLog->types,
+            'content' => $commentLog->content,
+            'is_markdown' => $commentLog->is_markdown,
+            'is_anonymous' => $commentLog->is_anonymous,
+            'map_id' => $commentLog->location_json['mapId'] ?? null,
+            'map_longitude' => $commentLog->location_json['latitude'] ?? null,
+            'map_latitude' => $commentLog->location_json['longitude'] ?? null,
+        ]);
+
+        $commentAppend = CommentAppend::updateOrCreate([
+            'comment_id' => $commentLog->comment_id,
+        ],
+        [
+            'is_plugin_editor' => $commentLog->is_plugin_editor,
+            'editor_unikey' => $commentLog->editor_unikey,
+            'map_json' => $commentLog->location_json ?? null,
+            'map_scale' => $commentLog->location_json['scale'] ?? null,
+            'map_continent_code' => $commentLog->location_json['continentCode'] ?? null,
+            'map_country_code' => $commentLog->location_json['countryCode'] ?? null,
+            'map_region_code' => $commentLog->location_json['regionCode'] ?? null,
+            'map_city_code' => $commentLog->location_json['cityCode'] ?? null,
+            'map_city' => $commentLog->location_json['city'] ?? null,
+            'map_zip' => $commentLog->location_json['zip'] ?? null,
+            'map_poi' => $commentLog->location_json['poi'] ?? null,
+            'map_poi_id' => $commentLog->location_json['poiId'] ?? null,
+        ]);
+
+        ContentUtility::releaseFileUsages('comment', $commentLog->id, $comment->id);
+        ContentUtility::releaseArchiveUsages('comment', $commentLog->id, $comment->id);
+        ContentUtility::releaseOperationUsages('comment', $commentLog->id, $comment->id);
+        ContentUtility::releaseExtendUsages('comment', $commentLog->id, $comment->id);
+
+        if (empty($commentLog->comment_id)) {
+            ContentUtility::handleAndSaveAllInteractive($commentLog->content, Mention::TYPE_COMMENT, $comment->id, $commentLog->user_id);
+            InteractiveUtility::publishStats('comment', $comment->id, 'increment');
+        } else {
+            InteractiveUtility::editStats('comment', $comment->id, 'decrement');
+
+            HashtagUsage::where('usage_type', HashtagUsage::TYPE_COMMENT)->where('usage_id', $comment->id)->delete();
+            DomainLinkUsage::where('usage_type', DomainLinkUsage::TYPE_COMMENT)->where('usage_id', $comment->id)->delete();
+            Mention::where('user_id', $commentLog->user_id)->where('mention_type', Mention::TYPE_COMMENT)->where('mention_id', $comment->id)->delete();
+
+            ContentUtility::handleAndSaveAllInteractive($commentLog->content, Mention::TYPE_COMMENT, $comment->id, $commentLog->user_id);
+            InteractiveUtility::editStats('comment', $comment->id, 'increment');
+
+            $post->update([
+                'latest_edit_at' => now(),
+            ]);
+            $commentAppend->increment('edit_count');
+
+            CacheHelper::forgetFresnsModel('comment', $comment->cid);
+            CacheHelper::forgetFresnsModel('comment', $comment->id);
+        }
+
+        $commentLog->update([
+            'comment_id' => $comment->id,
+            'state' => 3,
+        ]);
+
+        return $comment;
     }
 }

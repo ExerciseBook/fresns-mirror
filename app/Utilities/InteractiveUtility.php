@@ -546,6 +546,42 @@ class InteractiveUtility
         }
     }
 
+    public static function editStats(string $type, int $id, string $actionType)
+    {
+        if (! in_array($actionType, ['increment', 'decrement'])) {
+            return;
+        }
+
+        if (! in_array($type, ['post', 'comment'])) {
+            return;
+        }
+
+        switch ($type) {
+            // post
+            case 'post':
+                $content = Post::with('hashtags')->where('id', $id)->first();
+                $typeNumber = DomainLinkUsage::TYPE_POST;
+            break;
+
+            // comment
+            case 'comment':
+                $content = Comment::with('hashtags')->where('id', $id)->first();
+                $typeNumber = DomainLinkUsage::TYPE_COMMENT;
+            break;
+        }
+
+        Group::where('id', $content?->group_id)->$actionType("{$type}_count");
+
+        $linkIds = DomainLinkUsage::type($typeNumber)->where('usage_id', $content?->id)->pluck('link_id')->toArray();
+        DomainLink::whereIn('id', $linkIds)->$actionType("{$type}_count");
+
+        $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
+        Domain::whereIn('id', $domainIds)->$actionType("{$type}_count");
+
+        $hashtagIds = array_column($content->hashtags, 'id');
+        Hashtag::whereIn('id', $hashtagIds)->$actionType("{$type}_count");
+    }
+
     /**
      * It increments or decrements the digest count of a post or comment.
      *
