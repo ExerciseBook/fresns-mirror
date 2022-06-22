@@ -15,6 +15,8 @@ class ArchiveUsage extends Model
     const TYPE_HASHTAG = 3;
     const TYPE_POST = 4;
     const TYPE_COMMENT = 5;
+    const TYPE_POST_LOG = 6;
+    const TYPE_COMMENT_LOG = 7;
 
     use Traits\IsEnableTrait;
 

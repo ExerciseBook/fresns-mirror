@@ -22,6 +22,7 @@ class Account extends Authenticatable
     use Traits\AccountServiceTrait;
     use Traits\DataChangeNotifyTrait;
     use Traits\IsEnableTrait;
+    use Traits\FsidTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -38,6 +39,11 @@ class Account extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function getFsidKey()
+    {
+        return 'aid';
+    }
 
     protected function serializeDate(\DateTimeInterface $date)
     {

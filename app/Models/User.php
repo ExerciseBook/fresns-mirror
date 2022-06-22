@@ -8,16 +8,47 @@
 
 namespace App\Models;
 
+use App\Helpers\StrHelper;
+
 class User extends Model
 {
     use Traits\UserServiceTrait;
     use Traits\IsEnableTrait;
+    use Traits\FsidTrait;
 
     protected $dates = [
         'expired_at',
         'last_username_at',
         'last_nickname_at',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->uid = $model->uid ?? static::generateUid();
+        });
+    }
+
+    public function getFsidKey()
+    {
+        return 'username';
+    }
+
+    // generate uid
+    public static function generateUid(): string
+    {
+        $uid = StrHelper::generateDigital(8);
+
+        $checkUid = static::where('uid', $uid)->first();
+
+        if (! $checkUid) {
+            return $uid;
+        }
+
+        return static::generateUid();
+    }
 
     public function account()
     {

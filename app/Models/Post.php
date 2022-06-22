@@ -12,6 +12,12 @@ class Post extends Model
 {
     use Traits\PostServiceTrait;
     use Traits\IsEnableTrait;
+    use Traits\FsidTrait;
+
+    public function getFsidKey()
+    {
+        return 'pid';
+    }
 
     public function postAppend()
     {

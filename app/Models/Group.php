@@ -30,10 +30,16 @@ class Group extends Model
     use Traits\LangDescriptionTrait;
     use Traits\GroupServiceTrait;
     use Traits\IsEnableTrait;
+    use Traits\FsidTrait;
 
     protected $casts = [
         'permissions' => 'array',
     ];
+
+    public function getFsidKey()
+    {
+        return 'gid';
+    }
 
     public function scopeTypeCategory($query)
     {

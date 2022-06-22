@@ -20,4 +20,10 @@ class Extend extends Model
     const INFO_BOX_LANDSCAPE = 4;
 
     use Traits\IsEnableTrait;
+    use Traits\FsidTrait;
+
+    public function getFsidKey()
+    {
+        return 'eid';
+    }
 }

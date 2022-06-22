@@ -29,10 +29,16 @@ class File extends Model
 
     use Traits\FileServiceTrait;
     use Traits\IsEnableTrait;
+    use Traits\FsidTrait;
 
     protected $casts = [
         'more_json' => 'json',
     ];
+
+    public function getFsidKey()
+    {
+        return 'fid';
+    }
 
     public function getTypeKey()
     {
@@ -48,6 +54,11 @@ class File extends Model
     public function scopeType($query, int $type)
     {
         return $query->where('type', $type);
+    }
+
+    public function fileUsages()
+    {
+        return $this->hasMany(FileUsage::class);
     }
 
     public function isImage()

@@ -12,6 +12,12 @@ class Comment extends Model
 {
     use Traits\CommentServiceTrait;
     use Traits\IsEnableTrait;
+    use Traits\FsidTrait;
+
+    public function getFsidKey()
+    {
+        return 'cid';
+    }
 
     public function commentAppend()
     {
