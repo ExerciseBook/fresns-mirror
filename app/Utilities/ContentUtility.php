@@ -752,9 +752,9 @@ class ContentUtility
             'is_markdown' => $postLog->is_markdown,
             'is_anonymous' => $postLog->is_anonymous,
             'is_comment' => $postLog->is_comment,
-            'map_id' => $postLog->location_json['mapId'] ?? null,
-            'map_longitude' => $postLog->location_json['latitude'] ?? null,
-            'map_latitude' => $postLog->location_json['longitude'] ?? null,
+            'map_id' => $postLog->map_json['mapId'] ?? null,
+            'map_longitude' => $postLog->map_json['latitude'] ?? null,
+            'map_latitude' => $postLog->map_json['longitude'] ?? null,
         ]);
 
         $allowBtnName = null;
@@ -796,16 +796,16 @@ class ContentUtility
             'comment_btn_style' => $postLog->comment_btn_json['btnStyle'] ?? null,
             'comment_btn_plugin_unikey' => $postLog->comment_btn_json['pluginUnikey'] ?? null,
             'is_comment_public' => $postLog->is_comment_public,
-            'map_json' => $postLog->location_json ?? null,
-            'map_scale' => $postLog->location_json['scale'] ?? null,
-            'map_continent_code' => $postLog->location_json['continentCode'] ?? null,
-            'map_country_code' => $postLog->location_json['countryCode'] ?? null,
-            'map_region_code' => $postLog->location_json['regionCode'] ?? null,
-            'map_city_code' => $postLog->location_json['cityCode'] ?? null,
-            'map_city' => $postLog->location_json['city'] ?? null,
-            'map_zip' => $postLog->location_json['zip'] ?? null,
-            'map_poi' => $postLog->location_json['poi'] ?? null,
-            'map_poi_id' => $postLog->location_json['poiId'] ?? null,
+            'map_json' => $postLog->map_json ?? null,
+            'map_scale' => $postLog->map_json['scale'] ?? null,
+            'map_continent_code' => $postLog->map_json['continentCode'] ?? null,
+            'map_country_code' => $postLog->map_json['countryCode'] ?? null,
+            'map_region_code' => $postLog->map_json['regionCode'] ?? null,
+            'map_city_code' => $postLog->map_json['cityCode'] ?? null,
+            'map_city' => $postLog->map_json['city'] ?? null,
+            'map_zip' => $postLog->map_json['zip'] ?? null,
+            'map_poi' => $postLog->map_json['poi'] ?? null,
+            'map_poi_id' => $postLog->map_json['poiId'] ?? null,
         ]);
 
         ContentUtility::releaseAllowUsersAndRoles($post->id, $postLog->allow_json['permissions']);
@@ -882,9 +882,9 @@ class ContentUtility
             'content' => $commentLog->content,
             'is_markdown' => $commentLog->is_markdown,
             'is_anonymous' => $commentLog->is_anonymous,
-            'map_id' => $commentLog->location_json['mapId'] ?? null,
-            'map_longitude' => $commentLog->location_json['latitude'] ?? null,
-            'map_latitude' => $commentLog->location_json['longitude'] ?? null,
+            'map_id' => $commentLog->map_json['mapId'] ?? null,
+            'map_longitude' => $commentLog->map_json['latitude'] ?? null,
+            'map_latitude' => $commentLog->map_json['longitude'] ?? null,
         ]);
 
         $commentAppend = CommentAppend::updateOrCreate([
@@ -893,16 +893,16 @@ class ContentUtility
         [
             'is_plugin_editor' => $commentLog->is_plugin_editor,
             'editor_unikey' => $commentLog->editor_unikey,
-            'map_json' => $commentLog->location_json ?? null,
-            'map_scale' => $commentLog->location_json['scale'] ?? null,
-            'map_continent_code' => $commentLog->location_json['continentCode'] ?? null,
-            'map_country_code' => $commentLog->location_json['countryCode'] ?? null,
-            'map_region_code' => $commentLog->location_json['regionCode'] ?? null,
-            'map_city_code' => $commentLog->location_json['cityCode'] ?? null,
-            'map_city' => $commentLog->location_json['city'] ?? null,
-            'map_zip' => $commentLog->location_json['zip'] ?? null,
-            'map_poi' => $commentLog->location_json['poi'] ?? null,
-            'map_poi_id' => $commentLog->location_json['poiId'] ?? null,
+            'map_json' => $commentLog->map_json ?? null,
+            'map_scale' => $commentLog->map_json['scale'] ?? null,
+            'map_continent_code' => $commentLog->map_json['continentCode'] ?? null,
+            'map_country_code' => $commentLog->map_json['countryCode'] ?? null,
+            'map_region_code' => $commentLog->map_json['regionCode'] ?? null,
+            'map_city_code' => $commentLog->map_json['cityCode'] ?? null,
+            'map_city' => $commentLog->map_json['city'] ?? null,
+            'map_zip' => $commentLog->map_json['zip'] ?? null,
+            'map_poi' => $commentLog->map_json['poi'] ?? null,
+            'map_poi_id' => $commentLog->map_json['poiId'] ?? null,
         ]);
 
         ContentUtility::releaseFileUsages('comment', $commentLog->id, $comment->id);
@@ -938,5 +938,209 @@ class ContentUtility
         ]);
 
         return $comment;
+    }
+
+    // batch copy content extends
+    public static function batchCopyContentExtends(string $type, int $primaryId, int $logId)
+    {
+        $tableName = match ($type) {
+            'post' => 'posts',
+            'comment' => 'comments',
+        };
+
+        $logTableName = match ($type) {
+            'post' => 'post_logs',
+            'comment' => 'comment_logs',
+        };
+
+        $usageType = match ($type) {
+            'post' => ExtendUsage::TYPE_POST,
+            'comment' => ExtendUsage::TYPE_COMMENT,
+        };
+
+        $logUsageType = match ($type) {
+            'post' => ExtendUsage::TYPE_POST_LOG,
+            'comment' => ExtendUsage::TYPE_COMMENT_LOG,
+        };
+
+        // files
+        $fileUsages = FileUsage::where('table_name', $tableName)->where('table_column', 'id')->where('table_id', $primaryId)->get();
+        $fileData = [];
+        foreach ($fileUsages as $file) {
+            $fileData[] = [
+                'file_id' => $file->id,
+                'file_type' => $file->file_type,
+                'usage_type' => $file->usage_type,
+                'platform_id' => $file->platform_id,
+                'table_name' => $logTableName,
+                'table_column' => 'id',
+                'table_id' => $logId,
+                'rating' => $file->rating,
+                'account_id' => $file->account_id,
+                'user_id' => $file->user_id,
+                'remark' => $file->remark,
+            ];
+        }
+        FileUsage::createMany($fileData);
+
+        // operations
+        $operationUsages = OperationUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
+        $operationData = [];
+        foreach ($operationUsages as $operation) {
+            $operationData[] = [
+                'usage_type' => $logUsageType,
+                'usage_id' => $logId,
+                'operation_id' => $operation->operation_id,
+                'plugin_unikey' => $operation->plugin_unikey,
+            ];
+        }
+        OperationUsage::createMany($operationData);
+
+        // archives
+        $archiveUsages = ArchiveUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
+        $archiveData = [];
+        foreach ($archiveUsages as $archive) {
+            $archiveData[] = [
+                'usage_type' => $logUsageType,
+                'usage_id' => $logId,
+                'archive_id' => $archive->archive_id,
+                'archive_value' => $archive->archive_value,
+                'is_private' => $archive->is_private,
+                'plugin_unikey' => $archive->plugin_unikey,
+            ];
+        }
+        ArchiveUsage::createMany($archiveData);
+
+        // extends
+        $extendUsages = ExtendUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
+        $extendData = [];
+        foreach ($extendUsages as $extend) {
+            $extendData[] = [
+                'usage_type' => $logUsageType,
+                'usage_id' => $logId,
+                'extend_id' => $extend->extend_id,
+                'can_delete' => $extend->can_delete,
+                'rating' => $extend->rating,
+                'plugin_unikey' => $extend->plugin_unikey,
+            ];
+        }
+        ExtendUsage::createMany($extendData);
+    }
+
+    // generate post draft
+    public static function generatePostDraft(Post $post): PostLog
+    {
+        $postLog = PostLog::where('post_id', $post->id)->whereIn('state', [1, 2, 4])->first();
+        if (! empty($postLog)) {
+            return $postLog;
+        }
+
+        // allow json
+        $allowBtnNameArr = Language::where('table_name', 'post_appends')->where('table_column', 'allow_btn_name')->where('table_id', $post->id)->get();
+        $allowBtnName = [];
+        foreach ($allowBtnNameArr as $btnName) {
+            $item['langTag'] = $btnName->lang_tag;
+            $item['name'] = $btnName->lang_content;
+            $allowBtnName[] = $item;
+        }
+
+        $allowUserArr = PostAllow::where('post_id', $post->id)->where('is_initial', 1)->get()->groupBy('type');
+
+        $allowPermissions['users'] = $allowUserArr->get(PostAllow::TYPE_USER)->pluck('object_id')->all();
+        $allowPermissions['roles'] = $allowUserArr->get(PostAllow::TYPE_ROLE)->pluck('object_id')->all();
+
+        $allowJson['isAllow'] = $post->postAppend->is_allow;
+        $allowJson['btnName'] = $allowBtnName;
+        $allowJson['proportion'] = $post->postAppend->allow_proportion;
+        $allowJson['permissions'] = $allowPermissions;
+        $allowJson['pluginUnikey'] = $post->postAppend->allow_plugin_unikey;
+
+        // user list json
+        $userListNameArr = Language::where('table_name', 'post_appends')->where('table_column', 'user_list_name')->where('table_id', $post->id)->get();
+        $userListName = [];
+        foreach ($userListNameArr as $name) {
+            $item['langTag'] = $name->lang_tag;
+            $item['name'] = $name->lang_content;
+            $userListName[] = $item;
+        }
+
+        $userListJson['isUserList'] = $post->postAppend->is_user_list;
+        $userListJson['userListName'] = $userListName;
+        $userListJson['pluginUnikey'] = $post->postAppend->user_list_plugin_unikey;
+
+        // comment btn json
+        $commentBtnNameArr = Language::where('table_name', 'post_appends')->where('table_column', 'comment_btn_name')->where('table_id', $post->id)->get();
+        $commentBtnName = [];
+        foreach ($commentBtnNameArr as $btnName) {
+            $item['langTag'] = $btnName->lang_tag;
+            $item['name'] = $btnName->lang_content;
+            $commentBtnName[] = $item;
+        }
+
+        $commentBtnJson['isCommentBtn'] = $post->postAppend->is_comment_btn;
+        $commentBtnJson['btnName'] = $commentBtnName;
+        $commentBtnJson['pluginUnikey'] = $post->postAppend->comment_btn_plugin_unikey;
+
+        // post log
+        $logData = [
+            'user_id' => $post->user_id,
+            'post_id' => $post->id,
+            'create_type' => 2,
+            'is_plugin_editor' => $post->postAppend->is_plugin_editor,
+            'editor_unikey' => $post->postAppend->editor_unikey,
+            'group_id' => $post->group_id,
+            'types' => $post->types,
+            'title' => $post->title,
+            'content' => $post->content,
+            'is_markdown' => $post->is_markdown,
+            'is_anonymous' => $post->is_anonymous,
+            'is_comment' => $post->is_comment,
+            'is_comment_public' => $post->postAppend->is_comment_public,
+            'map_json' => $post->postAppend->map_json,
+            'allow_json' => $allowJson,
+            'user_list_json' => $userListJson,
+            'comment_btn_json' => $commentBtnJson,
+        ];
+
+        $postLog = PostLog::createMany($logData);
+
+        ContentUtility::batchCopyContentExtends('post', $post->id, $postLog->id);
+
+        return $postLog;
+    }
+
+    // generate comment draft
+    public static function generateCommentDraft(Comment $comment): CommentLog
+    {
+        if (! empty($comment->top_comment_id) || $comment->top_comment_id == 0) {
+            return null;
+        }
+
+        $commentLog = CommentLog::where('comment_id', $comment->id)->whereIn('state', [1, 2, 4])->first();
+        if (! empty($commentLog)) {
+            return $commentLog;
+        }
+
+        // comment log
+        $logData = [
+            'user_id' => $comment->user_id,
+            'comment_id' => $comment->id,
+            'post_id' => $comment->post_id,
+            'parent_comment_id' => $comment->parent_comment_id,
+            'create_type' => 2,
+            'is_plugin_editor' => $comment->commentAppend->is_plugin_editor,
+            'editor_unikey' => $comment->commentAppend->editor_unikey,
+            'types' => $comment->types,
+            'content' => $comment->content,
+            'is_markdown' => $comment->is_markdown,
+            'is_anonymous' => $comment->is_anonymous,
+            'map_json' => $comment->commentAppend->map_json,
+        ];
+
+        $commentLog = CommentLog::createMany($logData);
+
+        ContentUtility::batchCopyContentExtends('comment', $comment->id, $commentLog->id);
+
+        return $commentLog;
     }
 }
