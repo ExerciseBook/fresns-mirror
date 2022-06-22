@@ -77,7 +77,6 @@ class Account
             ],
             default => [],
         };
-        $inputArr['aid'] = \Str::random(12);
         $inputArr['password'] = isset($dtoWordBody->password) ? Hash::make($dtoWordBody->password) : null;
         $inputArr['last_login_at'] = DateHelper::fresnsDatabaseCurrentDateTime();
 

@@ -160,7 +160,6 @@ class GroupController extends Controller
 
     public function store(Group $group, Request $request)
     {
-        $group->gid = \Str::random(12);
         $group->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $group->description = $request->descriptions[$this->defaultLanguage] ?? (current(array_filter($request->descriptions)) ?: '');
         $group->rating = $request->rating;

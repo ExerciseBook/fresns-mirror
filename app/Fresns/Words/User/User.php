@@ -21,7 +21,6 @@ use App\Models\User as UserModel;
 use App\Models\UserRole;
 use App\Models\UserStat;
 use App\Utilities\ConfigUtility;
-use App\Utilities\PermissionUtility;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
 use Illuminate\Support\Facades\Hash;
 
@@ -48,12 +47,9 @@ class User
             );
         }
 
-        $uid = StrHelper::generateDigital(8);
-        $username = $dtoWordBody->username ?? \Str::random(8);
         $userArr = [
             'account_id' => $account->id,
-            'uid' => $uid,
-            'username' => $username,
+            'username' => $dtoWordBody->username,
             'nickname' => $dtoWordBody->nickname,
             'password' => isset($dtoWordBody->password) ? Hash::make($dtoWordBody->password) : null,
             'avatarFid' => isset($dtoWordBody->avatarFid) ? File::where('fid', $dtoWordBody->avatarFid)->value('id') : null,

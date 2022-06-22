@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 
 class FileUtility
 {
+    // uploadFile
     public static function uploadFile(array $bodyInfo, UploadedFile $file)
     {
         if (! Str::isJson($bodyInfo['moreJson'])) {
@@ -39,6 +40,7 @@ class FileUtility
         return FileUtility::saveFileInfoToDatabase($bodyInfo, $diskPath, $file);
     }
 
+    // uploadFileInfo
     public static function uploadFileInfo(array $bodyInfo)
     {
         if (! Str::isJson($bodyInfo['fileInfo'])) {
@@ -55,7 +57,6 @@ class FileUtility
             }
 
             $fileInput = [
-                'fid' => Str::random(12),
                 'type' => $bodyInfo['type'], // bodyInfo
                 'name' => $fileInfo['name'],
                 'mime' => $fileInfo['mime'] ?? null,
@@ -116,6 +117,7 @@ class FileUtility
         return $fileInfo;
     }
 
+    // saveFileInfoToDatabase
     public static function saveFileInfoToDatabase(array $bodyInfo, string $diskPath, UploadedFile $file)
     {
         $imageWidth = null;
@@ -134,7 +136,6 @@ class FileUtility
         }
 
         $fileInput = [
-            'fid' => Str::random(12),
             'type' => $bodyInfo['type'],
             'name' => $file->getClientOriginalName(),
             'mime' => $file->getMimeType(),
@@ -177,6 +178,7 @@ class FileUtility
         return FileHelper::fresnsFileInfoById($fileId);
     }
 
+    // logicalDeletionFiles
     public static function logicalDeletionFiles(array $fileIdsOrFids)
     {
         File::whereIn('id', $fileIdsOrFids)->orWhereIn('fid', $fileIdsOrFids)->delete();

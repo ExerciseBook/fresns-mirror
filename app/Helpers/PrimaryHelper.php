@@ -16,13 +16,14 @@ use App\Models\Extend;
 use App\Models\File;
 use App\Models\Group;
 use App\Models\Hashtag;
+use App\Models\Operation;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
 class PrimaryHelper
 {
-    // get model
+    // get model by fsid
     public static function fresnsModelByFsid(string $modelName, ?string $fsid = null)
     {
         if (empty($fsid)) {
@@ -77,6 +78,79 @@ class PrimaryHelper
                 // archive
                 case 'archive':
                     $model = Archive::withTrashed()->where('code', $fsid)->first();
+                break;
+            }
+
+            return $model;
+        });
+
+        if (empty($fresnsModel)) {
+            Cache::forget($cacheKey);
+        }
+
+        return $fresnsModel;
+    }
+
+    // get model by id
+    public static function fresnsModelById(string $modelName, ?string $id = null)
+    {
+        if (empty($id)) {
+            return null;
+        }
+
+        $cacheKey = "fresns_model_{$modelName}_{$id}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $fresnsModel = Cache::remember($cacheKey, $cacheTime, function () use ($modelName, $id) {
+            switch ($modelName) {
+                // account
+                case 'account':
+                    $model = Account::withTrashed()->where('id', $id)->first();
+                break;
+
+                // user
+                case 'user':
+                    $model = User::withTrashed()->where('id', $id)->first();
+                break;
+
+                // group
+                case 'group':
+                    $model = Group::withTrashed()->where('id', $id)->first();
+                break;
+
+                // hashtag
+                case 'hashtag':
+                    $model = Hashtag::withTrashed()->where('id', $id)->first();
+                break;
+
+                // post
+                case 'post':
+                    $model = Post::withTrashed()->with('postAppend')->where('id', $id)->first();
+                break;
+
+                // comment
+                case 'comment':
+                    $model = Comment::withTrashed()->with('commentAppend')->where('id', $id)->first();
+                break;
+
+                // file
+                case 'file':
+                    $model = File::withTrashed()->where('id', $id)->first();
+                break;
+
+                // extend
+                case 'extend':
+                    $model = Extend::withTrashed()->where('id', $id)->first();
+                break;
+
+                // operation
+                case 'operation':
+                    $model = Operation::withTrashed()->where('id', $id)->first();
+                break;
+
+                // archive
+                case 'archive':
+                    $model = Archive::withTrashed()->where('id', $id)->first();
                 break;
             }
 

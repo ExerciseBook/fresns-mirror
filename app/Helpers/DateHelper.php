@@ -74,7 +74,7 @@ class DateHelper
      *
      * @param null|string $datetime
      * @param null|string $timezone
-     * 
+     *
      * @return string
      *
      * @throws \Exception
@@ -89,7 +89,7 @@ class DateHelper
         $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
         $dateFormat = ConfigHelper::fresnsConfigDateFormat($langTag);
-    
+
         $dateTimeFormat = 'Y-m-d H:i:s';
         if ($dateFormat) {
             $dateTimeFormat = $dateFormat.' H:i:s';
@@ -107,7 +107,7 @@ class DateHelper
      *
      * @param $datetime
      * @param  string  $timezone
-     * 
+     *
      * @return \DateTime|string|null
      *
      * @throws \Exception
@@ -122,7 +122,7 @@ class DateHelper
         $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
         $dateFormat = ConfigHelper::fresnsConfigDateFormat($langTag);
-    
+
         $dateTimeFormat = 'Y-m-d H:i:s';
         if ($dateFormat) {
             $dateTimeFormat = $dateFormat.' H:i:s';
@@ -149,10 +149,9 @@ class DateHelper
         $currentTime = DateHelper::fresnsDatabaseCurrentDateTime();
         $dateString = Carbon::createFromFormat("Y-m-d H:i:s", $currentTime)->toDateString();
 
-        // 数据库时间
-        $userTime = $dateString.' '.$time.':00';
+        $dbTime = $dateString.' '.$time.':00';
 
-        $newDatetime = DateHelper::fresnsDateTimeByTimezone($userTime, $timezone);
+        $newDatetime = DateHelper::fresnsDateTimeByTimezone($dbTime, $timezone);
 
         $newTime = date('H:i', strtotime($newDatetime));
 
@@ -178,9 +177,10 @@ class DateHelper
 
         $dateFormat = ConfigHelper::fresnsConfigDateFormat($langTag).' H:i';
         $dateFormatNoY = str_replace(
-            ['Y-', 'Y.', '-Y', '.Y', 'Y/', '/Y',], 
-            '', 
-            $dateFormat);
+            ['Y-', 'Y.', '-Y', '.Y', 'Y/', '/Y'],
+            '',
+            $dateFormat
+        );
 
         $tzDatetime = DateHelper::fresnsDateTimeByTimezone($datetime, $timezone, $langTag);
         $tzDatetimeY = date('Y', strtotime($tzDatetime));

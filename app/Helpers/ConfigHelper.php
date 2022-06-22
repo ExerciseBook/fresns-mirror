@@ -255,34 +255,4 @@ class ConfigHelper
 
         return $dateFormat;
     }
-
-    /**
-     * Digital Value +1.
-     *
-     * @param  string  $itemKey
-     * @return bool
-     */
-    public static function fresnsCountAdd(string $itemKey): bool
-    {
-        $count = Config::where('item_key', $itemKey)->value('item_value');
-
-        Config::where('item_key', $itemKey)->update(['item_value'=>$count + 1]);
-
-        return true;
-    }
-
-    /**
-     * Digital Value -1.
-     *
-     * @param  string  $itemKey
-     * @return bool
-     */
-    public static function fresnsCountMinus(string $itemKey): bool
-    {
-        $count = Config::where('item_key', $itemKey)->value('item_value');
-
-        Config::where('item_key', $itemKey)->update(['item_value'=>$count - 1]);
-
-        return true;
-    }
 }

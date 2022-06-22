@@ -107,7 +107,7 @@ class CommentController extends Controller
                 throw new ApiException(37401);
             }
 
-            $commentQuery->where('comment_id', $viewComment->id);
+            $commentQuery->where('top_comment_id', $viewComment->id);
         }
 
         if ($dtoRequest->gid) {

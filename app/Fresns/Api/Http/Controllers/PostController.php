@@ -45,10 +45,10 @@ class PostController extends Controller
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByAll');
 
             if ($dataPluginUnikey) {
-                $wordBody = ([
+                $wordBody = [
                     "header" => \request()->header(),
                     "body" => $dtoRequest->toArray(),
-                ]);
+                ];
 
                 $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($wordBody);
 
@@ -252,10 +252,10 @@ class PostController extends Controller
         $dataPlugin = Plugin::where('unikey', $dataPluginUnikey)->isEnable()->first();
 
         if ($dataPlugin) {
-            $wordBody = ([
+            $wordBody = [
                 "header" => \request()->header(),
                 "body" => $dtoRequest->toArray(),
-            ]);
+            ];
 
             $fresnsResp = \FresnsCmdWord::plugin($dataPlugin->unikey)->getPostDetail($wordBody);
 
@@ -427,10 +427,10 @@ class PostController extends Controller
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByFollow');
 
             if ($dataPluginUnikey) {
-                $wordBody = ([
+                $wordBody = [
                     "header" => \request()->header(),
                     "body" => $dtoRequest->toArray(),
-                ]);
+                ];
 
                 $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByFollow($wordBody);
 
@@ -488,10 +488,10 @@ class PostController extends Controller
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByNearby');
 
             if ($dataPluginUnikey) {
-                $wordBody = ([
+                $wordBody = [
                     "header" => \request()->header(),
                     "body" => $dtoRequest->toArray(),
-                ]);
+                ];
 
                 $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByNearby($wordBody);
 
