@@ -22,7 +22,6 @@ use App\Models\CommentLog;
 use App\Models\Domain;
 use App\Models\DomainLink;
 use App\Models\DomainLinkUsage;
-use App\Models\Extend;
 use App\Models\ExtendUsage;
 use App\Models\File;
 use App\Models\FileUsage;
@@ -372,44 +371,8 @@ class ContentUtility
         }
     }
 
-    // extend json handle
-    public static function extendJsonHandle(array $extends, string $langTag): array
-    {
-        $extendsCollection = collect($extends);
-
-        $extendArr = Extend::whereIn('eid', $extendsCollection->pluck('eid'))->isEnable()->get();
-
-        $extendList = null;
-        foreach ($extendArr as $extend) {
-            $item['eid'] = $extend->eid;
-            $item['canDelete'] = $extendsCollection->where('eid', $extend->eid)->value('canDelete');
-            $item['rating'] = $extendsCollection->where('eid', $extend->eid)->value('rating');
-            $item['frameType'] = $extend->frame_type;
-            $item['framePosition'] = $extend->frame_position;
-            $item['textContent'] = $extend->text_content;
-            $item['textIsMarkdown'] = $extend->text_is_markdown;
-            $item['cover'] = FileHelper::fresnsFileUrlByTableColumn($extend['cover_file_id'], $extend['cover_file_url']);
-            $item['title'] = LanguageHelper::fresnsLanguageByTableId('extends', 'title', $extend->id, $langTag);
-            $item['titleColor'] = $extend->title_color;
-            $item['descPrimary'] = LanguageHelper::fresnsLanguageByTableId('extends', 'desc_primary', $extend->id, $langTag);
-            $item['descPrimaryColor'] = $extend->desc_primary_color;
-            $item['descSecondary'] = LanguageHelper::fresnsLanguageByTableId('extends', 'desc_secondary', $extend->id, $langTag);
-            $item['descSecondaryColor'] = $extend->desc_secondary_color;
-            $item['btnName'] = LanguageHelper::fresnsLanguageByTableId('extends', 'btn_name', $extend->id, $langTag);
-            $item['type'] = $extend->extend_type;
-            $item['target'] = $extend->extend_target;
-            $item['value'] = $extend->extend_value;
-            $item['support'] = $extend->extend_support;
-            $item['moreJson'] = $extend->more_json;
-
-            $extendList[] = $item;
-        }
-
-        return collect($extendList)->sortBy('rating')->toArray();
-    }
-
-    // read allow json handle
-    public static function readAllowJsonHandle(array $readAllowConfig, string $langTag, string $timezone): array
+    // handle read allow json
+    public static function handleAllowJson(array $readAllowConfig, string $langTag, string $timezone): array
     {
         $permissions['users'] = null;
         if (empty($readAllowConfig['permissions']['users'])) {
@@ -438,30 +401,36 @@ class ContentUtility
 
         $item['isAllow'] = (bool) $readAllowConfig['isAllow'];
         $item['proportion'] = $readAllowConfig['proportion'];
-        $item['url'] = PluginHelper::fresnsPluginUrlByUnikey($readAllowConfig['pluginUnikey']);
-        $item['btnName'] = collect($readAllowConfig['btnName'])->where('langTag', $langTag)->first()['name'] ?? null;
+        $item['pluginUrl'] = PluginHelper::fresnsPluginUrlByUnikey($readAllowConfig['pluginUnikey']);
+        $item['pluginUnikey'] = $readAllowConfig['pluginUnikey'];
+        $item['defaultLangBtnName'] = collect($readAllowConfig['btnName'])->where('langTag', $langTag)->first()['name'] ?? null;
+        $item['btnName'] = $readAllowConfig['btnName'];
         $item['permissions'] = $permissions;
 
         return $item;
     }
 
-    // user list json handle
-    public static function userListJsonHandle(array $userListConfig, string $langTag): array
+    // handle user list json
+    public static function handleUserListJson(array $userListConfig, string $langTag): array
     {
         $item['isUserList'] = (bool) $userListConfig['isUserList'];
-        $item['userListName'] = collect($userListConfig['userListName'])->where('langTag', $langTag)->first()['name'] ?? null;
-        $item['url'] = PluginHelper::fresnsPluginUrlByUnikey($userListConfig['pluginUnikey']);
+        $item['defaultLangUserListName'] = collect($userListConfig['userListName'])->where('langTag', $langTag)->first()['name'] ?? null;
+        $item['userListName'] = $userListConfig['userListName'];
+        $item['pluginUrl'] = PluginHelper::fresnsPluginUrlByUnikey($userListConfig['pluginUnikey']);
+        $item['pluginUnikey'] = $userListConfig['pluginUnikey'];
 
         return $item;
     }
 
-    // comment btn json handle
-    public static function commentBtnJsonHandle(array $commentBtnConfig, string $langTag): array
+    // handle comment btn json
+    public static function handleCommentBtnJson(array $commentBtnConfig, string $langTag): array
     {
         $item['isCommentBtn'] = (bool) $commentBtnConfig['isCommentBtn'];
-        $item['btnName'] = collect($commentBtnConfig['btnName'])->where('langTag', $langTag)->first()['name'] ?? null;
+        $item['defaultLangBtnName'] = collect($commentBtnConfig['btnName'])->where('langTag', $langTag)->first()['name'] ?? null;
+        $item['btnName'] = $commentBtnConfig['btnName'];
         $item['btnStyle'] = $commentBtnConfig['btnStyle'];
-        $item['url'] = PluginHelper::fresnsPluginUrlByUnikey($commentBtnConfig['pluginUnikey']);
+        $item['pluginUrl'] = PluginHelper::fresnsPluginUrlByUnikey($commentBtnConfig['pluginUnikey']);
+        $item['pluginUnikey'] = $commentBtnConfig['pluginUnikey'];
 
         return $item;
     }
@@ -1126,7 +1095,7 @@ class ContentUtility
         $logData = [
             'user_id' => $post->user_id,
             'post_id' => $post->id,
-            'create_type' => 2,
+            'create_type' => 3,
             'is_plugin_editor' => $post->postAppend->is_plugin_editor,
             'editor_unikey' => $post->postAppend->editor_unikey,
             'group_id' => $post->group_id,
@@ -1167,7 +1136,7 @@ class ContentUtility
             'comment_id' => $comment->id,
             'post_id' => $comment->post_id,
             'parent_comment_id' => $comment->parent_comment_id,
-            'create_type' => 2,
+            'create_type' => 3,
             'is_plugin_editor' => $comment->commentAppend->is_plugin_editor,
             'editor_unikey' => $comment->commentAppend->editor_unikey,
             'content' => $comment->content,
