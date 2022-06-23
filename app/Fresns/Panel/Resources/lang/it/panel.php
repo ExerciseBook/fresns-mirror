@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => 'Tipo di regola',
     'publish_rule_datetime' => 'Intervallo di date',
     'publish_rule_time' => 'limite di tempo',
+    'publish_rule_timezone' => 'Fuso orario standard',
     'publish_rule_rule' => 'Requisiti delle regole',
     'publish_rule_tip' => 'Prompt della regola',
     'publish_rule_whitelist' => 'Ruolo della lista bianca',

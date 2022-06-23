@@ -76,6 +76,13 @@
                         <input type="time" name="post_limit_cycle_end" value="{{ $params['post_limit_cycle_end'] }}" class="form-control" placeholder="08:30:00">
                     </div>
                     <div class="input-group mb-3">
+                        <label class="input-group-text fresns-label">{{ __('FsLang::panel.publish_rule_timezone') }}</label>
+                        <div class="form-control bg-white">
+                            {{ $ruleTimezone }}
+                            ({{ __('FsLang::panel.system_info_database_timezone') }})
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
                         <label class="input-group-text fresns-label">{{ __('FsLang::panel.publish_rule_rule') }}</label>
                         <div class="form-control bg-white">
                             <div class="form-check form-check-inline">

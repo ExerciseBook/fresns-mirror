@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => 'Rule Type',
     'publish_rule_datetime' => 'Date Range',
     'publish_rule_time' => 'Time Range',
+    'publish_rule_timezone' => 'Timezone Standard',
     'publish_rule_rule' => 'Rule Request',
     'publish_rule_tip' => 'Rule Tip',
     'publish_rule_whitelist' => 'Whitelist',

@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => 'Тип правила',
     'publish_rule_datetime' => 'Диапазон дат',
     'publish_rule_time' => 'лимит времени',
+    'publish_rule_timezone' => 'Стандарт часового пояса',
     'publish_rule_rule' => 'Требования к правилам',
     'publish_rule_tip' => 'Правило правила',
     'publish_rule_whitelist' => 'Белый список роль',

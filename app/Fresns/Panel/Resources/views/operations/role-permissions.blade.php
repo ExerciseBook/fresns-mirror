@@ -145,6 +145,13 @@
                         <input type="time" class="form-control" value="{{ $permissions['post_limit_cycle_end']['permValue'] ?? '' }}" name="permissions[post_limit_cycle_end]" placeholder="09:00:00">
                     </div>
                     <div class="input-group mb-3">
+                        <label class="input-group-text">{{ __('FsLang::panel.publish_rule_timezone') }}</label>
+                        <div class="form-control bg-white">
+                            {{ $ruleTimezone }}
+                            ({{ __('FsLang::panel.system_info_database_timezone') }})
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
                         <label class="input-group-text">{{ __('FsLang::panel.publish_rule_rule') }}</label>
                         <div class="form-control bg-white">
                             <div class="form-check form-check-inline">
@@ -251,6 +258,13 @@
                         <label class="input-group-text">{{ __('FsLang::panel.publish_rule_time') }}</label>
                         <input type="time" class="form-control" value="{{ $permissions['comment_limit_cycle_start']['permValue'] ?? '' }}" name="permissions[comment_limit_cycle_start]" placeholder="22:00:00">
                         <input type="time" class="form-control" value="{{ $permissions['comment_limit_cycle_end']['permValue'] ?? '' }}" name="permissions[comment_limit_cycle_end]" placeholder="09:00:00">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text">{{ __('FsLang::panel.publish_rule_timezone') }}</label>
+                        <div class="form-control bg-white">
+                            {{ $ruleTimezone }}
+                            ({{ __('FsLang::panel.system_info_database_timezone') }})
+                        </div>
                     </div>
                     <div class="input-group mb-3">
                         <label class="input-group-text">{{ __('FsLang::panel.publish_rule_rule') }}</label>

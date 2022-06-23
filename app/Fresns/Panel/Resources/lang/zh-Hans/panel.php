@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => '规则类型',
     'publish_rule_datetime' => '日期范围',
     'publish_rule_time' => '时间范围',
+    'publish_rule_timezone' => '时区标准',
     'publish_rule_rule' => '规则要求',
     'publish_rule_tip' => '规则提示',
     'publish_rule_whitelist' => '白名单角色',

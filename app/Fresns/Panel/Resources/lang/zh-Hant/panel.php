@@ -702,6 +702,7 @@ return [
     'publish_rule_type' => '規則類型',
     'publish_rule_datetime' => '日期範圍',
     'publish_rule_time' => '時間範圍',
+    'publish_rule_timezone' => '時區標準',
     'publish_rule_rule' => '規則要求',
     'publish_rule_tip' => '規則提示',
     'publish_rule_whitelist' => '白名單角色',

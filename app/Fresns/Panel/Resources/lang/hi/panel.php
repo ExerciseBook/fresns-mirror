@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => 'नियम प्रकार',
     'publish_rule_datetime' => 'तिथि सीमा',
     'publish_rule_time' => 'समय सीमा',
+    'publish_rule_timezone' => 'समयक्षेत्र मानक',
     'publish_rule_rule' => 'नियम आवश्यकताओं',
     'publish_rule_tip' => 'नियम प्रॉम्प्ट',
     'publish_rule_whitelist' => 'सफेद सूची भूमिका',

@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => 'Ketik aturan',
     'publish_rule_datetime' => 'Rentang tanggal',
     'publish_rule_time' => 'batas waktu',
+    'publish_rule_timezone' => 'Standar zona waktu',
     'publish_rule_rule' => 'Peraturan Persyaratan',
     'publish_rule_tip' => 'Prompt Peraturan',
     'publish_rule_whitelist' => 'Peran daftar putih',

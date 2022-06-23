@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => '규칙 유형',
     'publish_rule_datetime' => '날짜 범위',
     'publish_rule_time' => '시간 제한',
+    'publish_rule_timezone' => '시간대 표준',
     'publish_rule_rule' => '규칙 요구 사항',
     'publish_rule_tip' => '규칙 프롬프트',
     'publish_rule_whitelist' => '흰색 목록 역할',

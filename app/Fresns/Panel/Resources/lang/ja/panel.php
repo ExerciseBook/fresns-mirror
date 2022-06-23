@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => 'ルールタイプ',
     'publish_rule_datetime' => '日付範囲',
     'publish_rule_time' => '制限時間',
+    'publish_rule_timezone' => 'タイムゾーンスタンダード',
     'publish_rule_rule' => 'ルール要件',
     'publish_rule_tip' => 'ルールプロンプト',
     'publish_rule_whitelist' => 'ホワイトリストの役割',

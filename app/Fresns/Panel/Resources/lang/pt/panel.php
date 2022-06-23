@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => 'Tipo de regra',
     'publish_rule_datetime' => 'Revendedor de datas',
     'publish_rule_time' => 'Limite de tempo',
+    'publish_rule_timezone' => 'Fuso horário padrão',
     'publish_rule_rule' => 'Requisitos de regra',
     'publish_rule_tip' => 'Prompt de regra',
     'publish_rule_whitelist' => 'Função de lista branca',

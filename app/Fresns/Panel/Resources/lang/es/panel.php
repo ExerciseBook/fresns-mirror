@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => 'Tipo de Regla',
     'publish_rule_datetime' => 'Rango de fechas',
     'publish_rule_time' => 'límite de tiempo',
+    'publish_rule_timezone' => 'Zona horaria estándar',
     'publish_rule_rule' => 'Requisitos de la regla',
     'publish_rule_tip' => 'Regla',
     'publish_rule_whitelist' => 'Rol de lista blanca',

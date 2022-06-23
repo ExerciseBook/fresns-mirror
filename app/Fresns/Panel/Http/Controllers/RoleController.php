@@ -9,6 +9,7 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Fresns\Panel\Http\Requests\UpdateRoleRequest;
+use App\Helpers\DateHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\File;
 use App\Models\FileUsage;
@@ -185,7 +186,9 @@ class RoleController extends Controller
             return [$perm['permKey'] => $perm];
         })->toArray();
 
-        return view('FsView::operations.role-permissions', compact('permissions', 'role', 'customPermissions'));
+        $ruleTimezone = 'UTC'.DateHelper::fresnsDatabaseTimezone();
+
+        return view('FsView::operations.role-permissions', compact('permissions', 'ruleTimezone', 'role', 'customPermissions'));
     }
 
     public function updatePermissions(Role $role, Request $request)

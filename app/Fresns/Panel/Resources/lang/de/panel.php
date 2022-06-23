@@ -701,6 +701,7 @@ return [
     'publish_rule_type' => 'Regeltyp',
     'publish_rule_datetime' => 'Datumsbereich',
     'publish_rule_time' => 'Zeitlimit',
+    'publish_rule_timezone' => 'Zeitzone Standard',
     'publish_rule_rule' => 'Regelanforderungen',
     'publish_rule_tip' => 'Regelaufforderung',
     'publish_rule_whitelist' => 'Weiße Listenrolle',
