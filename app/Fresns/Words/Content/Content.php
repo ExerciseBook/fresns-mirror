@@ -13,6 +13,7 @@ use App\Fresns\Words\Content\DTO\LogicalDeletionContentDTO;
 use App\Fresns\Words\Content\DTO\PhysicalDeletionContentDTO;
 use App\Fresns\Words\Content\DTO\ReleaseContentDTO;
 use App\Helpers\ConfigHelper;
+use App\Helpers\DateHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\ArchiveUsage;
 use App\Models\Comment;
@@ -59,6 +60,9 @@ class Content
 
         $anonymous = $dtoWordBody->anonymous ?? 0;
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
+        $timezone = \request()->header('timezone', ConfigHelper::fresnsConfigDefaultTimezone());
+        $editableTime = null;
+        $deadlineTime = null;
 
         switch ($dtoWordBody->type) {
             // post
@@ -79,12 +83,30 @@ class Content
 
                 // generate draft
                 if (empty($dtoWordBody->fsid)) {
-                    $logModel = PostLog::create([
-                        'user_id' => $userId,
-                        'group_id' => $group->id,
-                        'content' => $hashtagName,
-                        'is_anonymous' => $anonymous,
-                    ]);
+                    $checkLog = null;
+                    if ($dtoWordBody->source == 1) {
+                        $checkLog = PostLog::where('user_id', $userId)->where('create_type', 1)->where('state', 1)->first();
+                    }
+
+                    if ($checkLog) {
+                        $logModel = $checkLog;
+                    } else {
+                        $isPluginEditor = 0;
+                        $editorUnikey = null;
+                        if ($dtoWordBody->editorUnikey) {
+                            $isPluginEditor = 1;
+                            $editorUnikey = $dtoWordBody->editorUnikey;
+                        }
+
+                        $logModel = PostLog::create([
+                            'user_id' => $userId,
+                            'group_id' => $group->id,
+                            'content' => $hashtagName,
+                            'is_anonymous' => $anonymous,
+                            'is_plugin_editor' => $isPluginEditor,
+                            'editor_unikey' => $editorUnikey,
+                        ]);
+                    }
                 } else {
                     $post = PrimaryHelper::fresnsModelByFsid('post', $dtoWordBody->fsid);
                     $editConfig = ConfigHelper::fresnsConfigByItemKeys([
@@ -124,6 +146,13 @@ class Content
                         );
                     }
 
+                    $editableDateTime = $post->created_at->addMinutes($editConfig['post_edit_time_limit']);
+                    $editableSecond = $editableDateTime->timestamp - time();
+                    $editableTimeMinute = intval($editableSecond / 60);
+                    $editableTimeSecond = $editableSecond % 60;
+                    $editableTime = "{$editableTimeMinute}:{$editableTimeSecond}";
+                    $deadlineTime = DateHelper::fresnsFormatDateTime($editableDateTime->format('Y-m-d H:i:s'), $timezone, $langTag);
+
                     $logModel = ContentUtility::generatePostDraft($post);
                 }
             break;
@@ -140,12 +169,28 @@ class Content
                         );
                     }
 
-                    $logModel = CommentLog::create([
-                        'user_id' => $userId,
-                        'post_id' => $postId,
-                        'content' => $hashtagName,
-                        'is_anonymous' => $anonymous,
-                    ]);
+                    $checkLog = null;
+                    if ($dtoWordBody->source == 1) {
+                        $checkLog = CommentLog::where('user_id', $userId)->where('create_type', 1)->where('state', 1)->first();
+                    }
+
+                    if ($checkLog) {
+                        $logModel = $checkLog;
+                    } else {
+                        $isPluginEditor = 0;
+                        $editorUnikey = null;
+                        if ($dtoWordBody->editorUnikey) {
+                            $isPluginEditor = 1;
+                            $editorUnikey = $dtoWordBody->editorUnikey;
+                        }
+
+                        $logModel = CommentLog::create([
+                            'user_id' => $userId,
+                            'post_id' => $postId,
+                            'content' => $hashtagName,
+                            'is_anonymous' => $anonymous,
+                        ]);
+                    }
                 } else {
                     $comment = PrimaryHelper::fresnsModelByFsid('comment', $dtoWordBody->fsid);
 
@@ -193,6 +238,13 @@ class Content
                         );
                     }
 
+                    $editableDateTime = $comment->created_at->addMinutes($editConfig['comment_edit_time_limit']);
+                    $editableSecond = $editableDateTime->timestamp - time();
+                    $editableTimeMinute = intval($editableSecond / 60);
+                    $editableTimeSecond = $editableSecond % 60;
+                    $editableTime = "{$editableTimeMinute}:{$editableTimeSecond}";
+                    $deadlineTime = DateHelper::fresnsFormatDateTime($editableDateTime->format('Y-m-d H:i:s'), $timezone, $langTag);
+
                     $logModel = ContentUtility::generateCommentDraft($comment);
                 }
             break;
@@ -201,6 +253,8 @@ class Content
         return $this->success([
             'type' => $dtoWordBody->type,
             'logId' => $logModel->id,
+            'editableTime' => $editableTime,
+            'deadlineTime' => $deadlineTime,
         ]);
     }
 

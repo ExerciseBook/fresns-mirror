@@ -20,8 +20,10 @@ class GenerateDraftDTO extends DTO
         return [
             'uid' => ['integer', 'required', 'exists:App\Models\User,uid'],
             'type' => ['integer', 'required', 'in:1,2'],
-            'hname' => ['string', 'nullable'],
+            'source' => ['integer', 'required', 'in:1,2'],
+            'editorUnikey' => ['string', 'nullable', 'exists:App\Models\Plugin,unikey'],
             'anonymous' => ['boolean', 'nullable'],
+            'hname' => ['string', 'nullable'],
             'gid' => ['string', 'nullable'],
             'pid' => ['string', 'nullable', 'required_if:type,2'],
             'fsid' => ['string', 'nullable'],
