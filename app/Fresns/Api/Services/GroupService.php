@@ -19,8 +19,12 @@ use App\Utilities\PermissionUtility;
 
 class GroupService
 {
-    public function groupList(Group $group, string $langTag, string $timezone, ?int $authUserId = null)
+    public function groupList(?Group $group, string $langTag, string $timezone, ?int $authUserId = null)
     {
+        if (! $group) {
+            return null;
+        }
+
         $groupInfo = $group->getGroupInfo($langTag);
 
         $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_GROUP, $group->id, $langTag);

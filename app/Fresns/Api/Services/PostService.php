@@ -26,8 +26,12 @@ use Illuminate\Support\Str;
 
 class PostService
 {
-    public function postList(Post $post, string $langTag, string $timezone, ?int $authUserId = null)
+    public function postList(?Post $post, string $langTag, string $timezone, ?int $authUserId = null)
     {
+        if (! $post) {
+            return null;
+        }
+
         $postInfo = $post->getPostInfo($langTag, $timezone);
         $postInfo[] = self::contentHandle($post, 'list', $authUserId);
 

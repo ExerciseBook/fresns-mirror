@@ -9,17 +9,21 @@
 namespace App\Utilities;
 
 use App\Helpers\CacheHelper;
+use App\Helpers\PrimaryHelper;
 use App\Models\Comment;
 use App\Models\Domain;
 use App\Models\DomainLink;
 use App\Models\DomainLinkUsage;
 use App\Models\Group;
 use App\Models\Hashtag;
+use App\Models\Notify;
 use App\Models\Post;
 use App\Models\UserBlock;
 use App\Models\UserFollow;
 use App\Models\UserLike;
 use App\Models\UserStat;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class InteractiveUtility
 {
@@ -167,6 +171,17 @@ class InteractiveUtility
 
                 InteractiveUtility::markStats($userId, 'like', $likeType, $likeId, 'increment');
             }
+
+            // like notify
+            if ($likeType == UserLike::TYPE_USER || $likeType == UserLike::TYPE_POST || $likeType == UserLike::TYPE_COMMENT) {
+                $toUserId = match ($likeType) {
+                    UserLike::TYPE_USER => PrimaryHelper::fresnsModelById('user', $likeId)->id,
+                    UserLike::TYPE_POST => PrimaryHelper::fresnsModelById('post', $likeId)->user_id,
+                    UserLike::TYPE_COMMENT => PrimaryHelper::fresnsModelById('comment', $likeId)->user_id,
+                };
+
+                InteractiveUtility::generateNotify($toUserId, Notify::TYPE_LIKE, $userId, $likeType, $likeId);
+            }
         } else {
             if ($userLike->mark_type == UserLike::MARK_TYPE_LIKE) {
                 // documented, mark type=like
@@ -254,7 +269,7 @@ class InteractiveUtility
 
                 InteractiveUtility::markStats($userId, 'follow', $followType, $followId, 'increment');
             } else {
-                // dislike null
+                // follow null
                 UserFollow::updateOrCreate([
                     'user_id' => $userId,
                     'follow_type' => $followType,
@@ -262,6 +277,11 @@ class InteractiveUtility
                 ]);
 
                 InteractiveUtility::markStats($userId, 'follow', $followType, $followId, 'increment');
+            }
+
+            // follow notify
+            if ($followType == UserFollow::TYPE_USER) {
+                InteractiveUtility::generateNotify($followId, Notify::TYPE_FOLLOW, $userId);
             }
         } else {
             $userFollow->delete();
@@ -304,7 +324,7 @@ class InteractiveUtility
 
                 InteractiveUtility::markStats($userId, 'block', $blockType, $blockId, 'increment');
             } else {
-                // dislike null
+                // block null
                 UserBlock::updateOrCreate([
                     'user_id' => $userId,
                     'block_type' => $blockType,
@@ -643,5 +663,78 @@ class InteractiveUtility
         if (! empty($comment->parent_id) || $comment->parent_id != 0) {
             InteractiveUtility::parentCommentStats($comment->parent_id, $actionType, $tableColumn);
         }
+    }
+
+    public static function generateNotify(int $toUserId, int $type, int $actionUserId, ?int $actionType = null, ?int $actionId = null)
+    {
+        if ($type == Notify::TYPE_SYSTEM_TO_FULL || $type == Notify::TYPE_SYSTEM_TO_USER || $type == Notify::TYPE_RECOMMEND) {
+            return;
+        }
+
+        // check notify
+        $checkNotify = Notify::withTrashed()
+            ->type($type)
+            ->where('user_id', $toUserId)
+            ->where('action_user_id', $actionUserId)
+            ->when($actionType, function ($query, $value) {
+                $query->where('action_type', $value);
+            })
+            ->when($actionId, function ($query, $value) {
+                $query->where('action_id', $value);
+            })
+            ->first();
+
+        // follow notify
+        if ($type == Notify::TYPE_FOLLOW && $checkNotify) {
+            return;
+        }
+
+        // like notify
+        if ($type == Notify::TYPE_LIKE) {
+            if (empty($actionType) || empty($actionId) || $checkNotify) {
+                return;
+            }
+        }
+
+        // content
+        $contentModel = match ($actionType) {
+            Notify::ACTION_TYPE_POST => PrimaryHelper::fresnsModelById('post', $actionId),
+            Notify::ACTION_TYPE_COMMENT => PrimaryHelper::fresnsModelById('comment', $actionId),
+        };
+        $content = null;
+        $isMarkdown = 0;
+
+        // mention notify
+        if ($type == Notify::TYPE_MENTION) {
+            if (empty($actionType) || empty($actionId) || $checkNotify) {
+                return;
+            }
+
+            $content = Str::limit($contentModel->content);
+            $isMarkdown = $contentModel->is_markdown;
+        }
+
+        // comment notify
+        if ($type == Notify::TYPE_COMMENT) {
+            if (empty($actionType) || empty($actionId)) {
+                return;
+            }
+
+            $content = Str::limit($contentModel->content);
+            $isMarkdown = $contentModel->is_markdown;
+        }
+
+        // notify data
+        $notifyData = [
+            'user_id' => $toUserId,
+            'type' => $type,
+            'content' => $content,
+            'is_markdown' => $isMarkdown,
+            'action_user_id' => $actionUserId,
+            'action_type' => $actionType ?? null,
+            'action_id' => $actionId ?? null,
+        ];
+
+        Notify::create($notifyData);
     }
 }

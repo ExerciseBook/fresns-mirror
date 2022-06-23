@@ -18,8 +18,12 @@ use App\Utilities\InteractiveUtility;
 
 class HashtagService
 {
-    public function hashtagList(Hashtag $hashtag, string $langTag, ?int $authUserId = null)
+    public function hashtagList(?Hashtag $hashtag, string $langTag, ?int $authUserId = null)
     {
+        if (! $hashtag) {
+            return null;
+        }
+
         $hashtagInfo = $hashtag->getHashtagInfo($langTag);
 
         $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_HASHTAG, $hashtag->id, $langTag);

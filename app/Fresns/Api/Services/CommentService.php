@@ -26,8 +26,12 @@ use Illuminate\Support\Str;
 
 class CommentService
 {
-    public function commentList(Comment $comment, string $langTag, string $timezone, ?int $authUserId = null)
+    public function commentList(?Comment $comment, string $langTag, string $timezone, ?int $authUserId = null)
     {
+        if (! $comment) {
+            return null;
+        }
+
         $commentInfo = $comment->getCommentInfo($langTag, $timezone);
         $commentInfo[] = self::contentHandle($comment, 'list', $authUserId);
 

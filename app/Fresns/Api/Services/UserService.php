@@ -23,8 +23,12 @@ class UserService
 {
     use ApiHeaderTrait;
 
-    public function userList(User $user, string $langTag, string $timezone, ?int $authUserId = null)
+    public function userList(?User $user, string $langTag, string $timezone, ?int $authUserId = null)
     {
+        if (! $user) {
+            return null;
+        }
+
         $userProfile = $user->getUserProfile($langTag, $timezone);
         $userMainRole = $user->getUserMainRole($langTag, $timezone);
 

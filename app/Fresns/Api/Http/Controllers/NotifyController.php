@@ -34,7 +34,7 @@ class NotifyController extends Controller
         $readStatus = $dtoRequest->status ?: 0;
         $typeArr = array_filter(explode(',', $dtoRequest->types));
 
-        $notifyQuery = Notify::with('actionUser')->where('user_id', $authUserId)->where('is_read', $readStatus);
+        $notifyQuery = Notify::with('actionUser')->whereIn('user_id', [$authUserId, 0])->where('is_read', $readStatus);
 
         if ($typeArr) {
             $notifyQuery->whereIn('type', $typeArr);
