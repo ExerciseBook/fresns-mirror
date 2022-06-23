@@ -22,7 +22,6 @@ use App\Models\UserBlock;
 use App\Models\UserFollow;
 use App\Models\UserLike;
 use App\Models\UserStat;
-use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class InteractiveUtility
@@ -665,6 +664,15 @@ class InteractiveUtility
         }
     }
 
+    /**
+     * It generates a notification.
+     *
+     * @param int toUserId The user who receives the notification
+     * @param int type The type of notification, which is defined in the Notify model.
+     * @param int actionUserId The user who triggered the notification
+     * @param actionType The type of action that triggered the notification.
+     * @param actionId The ID of the action, such as the ID of the post or comment.
+     */
     public static function generateNotify(int $toUserId, int $type, int $actionUserId, ?int $actionType = null, ?int $actionId = null)
     {
         if ($type == Notify::TYPE_SYSTEM_TO_FULL || $type == Notify::TYPE_SYSTEM_TO_USER || $type == Notify::TYPE_RECOMMEND) {
