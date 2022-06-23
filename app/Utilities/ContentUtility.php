@@ -24,6 +24,7 @@ use App\Models\DomainLink;
 use App\Models\DomainLinkUsage;
 use App\Models\Extend;
 use App\Models\ExtendUsage;
+use App\Models\File;
 use App\Models\FileUsage;
 use App\Models\Group;
 use App\Models\Hashtag;
@@ -38,6 +39,8 @@ use App\Models\PostLog;
 use App\Models\Role;
 use App\Models\Sticker;
 use App\Models\User;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class ContentUtility
 {
@@ -603,7 +606,7 @@ class ContentUtility
     }
 
     // release file usages
-    public static function releaseFileUsages(string $type, int $logId, int $primaryId)
+    public static function releaseFileUsages(string $type, int $logId, int $primaryId): array
     {
         $logTableName = match ($type) {
             'post' => 'post_logs',
@@ -620,6 +623,7 @@ class ContentUtility
         $fileUsages = FileUsage::where('table_name', $logTableName)->where('table_column', 'id')->where('table_id', $logId)->get();
 
         $fileData = [];
+        $typeText = [];
         foreach ($fileUsages as $file) {
             $fileData[] = [
                 'file_id' => $file->id,
@@ -634,9 +638,15 @@ class ContentUtility
                 'user_id' => $file->user_id,
                 'remark' => $file->remark,
             ];
+
+            $typeText[] = File::TYPE_MAP[$file->file_type];
         }
 
-        FileUsage::createMany($fileData);
+        if ($fileData) {
+            FileUsage::createMany($fileData);
+        }
+
+        return $typeText;
     }
 
     // release operation usages
@@ -666,7 +676,9 @@ class ContentUtility
             ];
         }
 
-        OperationUsage::createMany($operationData);
+        if ($operationData) {
+            OperationUsage::createMany($operationData);
+        }
     }
 
     // release archive usages
@@ -698,11 +710,13 @@ class ContentUtility
             ];
         }
 
-        ArchiveUsage::createMany($archiveData);
+        if ($archiveData) {
+            ArchiveUsage::createMany($archiveData);
+        }
     }
 
     // release extend usages
-    public static function releaseExtendUsages(int $type, int $logId, int $primaryId)
+    public static function releaseExtendUsages(int $type, int $logId, int $primaryId): array
     {
         $logUsageType = match ($type) {
             'post' => ExtendUsage::TYPE_POST_LOG,
@@ -719,6 +733,7 @@ class ContentUtility
         $extendUsages = ExtendUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
 
         $extendData = [];
+        $typeText = [];
         foreach ($extendUsages as $extend) {
             $extendData[] = [
                 'usage_type' => $usageType,
@@ -728,9 +743,15 @@ class ContentUtility
                 'rating' => $extend->rating,
                 'plugin_unikey' => $extend->plugin_unikey,
             ];
+
+            $typeText[] = $extend->plugin_unikey;
         }
 
-        ExtendUsage::createMany($extendData);
+        if ($extendData) {
+            ExtendUsage::createMany($extendData);
+        }
+
+        return $typeText;
     }
 
     // release post
@@ -746,7 +767,6 @@ class ContentUtility
         [
             'user_id' => $postLog->user_id,
             'group_id' => $postLog->group_id,
-            'types' => $postLog->types,
             'title' => $postLog->title,
             'content' => $postLog->content,
             'is_markdown' => $postLog->is_markdown,
@@ -809,10 +829,21 @@ class ContentUtility
         ]);
 
         ContentUtility::releaseAllowUsersAndRoles($post->id, $postLog->allow_json['permissions']);
-        ContentUtility::releaseFileUsages('post', $postLog->id, $post->id);
         ContentUtility::releaseArchiveUsages('post', $postLog->id, $post->id);
         ContentUtility::releaseOperationUsages('post', $postLog->id, $post->id);
-        ContentUtility::releaseExtendUsages('post', $postLog->id, $post->id);
+        $fileTypeText = ContentUtility::releaseFileUsages('post', $postLog->id, $post->id);
+        $extendTypeText = ContentUtility::releaseExtendUsages('post', $postLog->id, $post->id);
+
+        $typeArr = array_unique(Arr::collapse($fileTypeText, $extendTypeText));
+        $typesText = Str::lower(implode(",", $typeArr));
+
+        if (empty($typesText)) {
+            $typesText = null;
+        }
+
+        $post->update([
+            'types' => $typesText,
+        ]);
 
         if (empty($postLog->post_id)) {
             ContentUtility::handleAndSaveAllInteractive($postLog->content, Mention::TYPE_POST, $post->id, $postLog->user_id);
@@ -878,7 +909,6 @@ class ContentUtility
             'group_id' => $post->group_id,
             'top_comment_id' => $topCommentId,
             'parent_id' => $commentLog->parent_comment_id,
-            'types' => $commentLog->types,
             'content' => $commentLog->content,
             'is_markdown' => $commentLog->is_markdown,
             'is_anonymous' => $commentLog->is_anonymous,
@@ -905,10 +935,21 @@ class ContentUtility
             'map_poi_id' => $commentLog->map_json['poiId'] ?? null,
         ]);
 
-        ContentUtility::releaseFileUsages('comment', $commentLog->id, $comment->id);
         ContentUtility::releaseArchiveUsages('comment', $commentLog->id, $comment->id);
         ContentUtility::releaseOperationUsages('comment', $commentLog->id, $comment->id);
-        ContentUtility::releaseExtendUsages('comment', $commentLog->id, $comment->id);
+        $fileTypeText = ContentUtility::releaseFileUsages('comment', $commentLog->id, $comment->id);
+        $extendTypeText = ContentUtility::releaseExtendUsages('comment', $commentLog->id, $comment->id);
+
+        $typeArr = array_unique(Arr::collapse($fileTypeText, $extendTypeText));
+        $typesText = Str::lower(implode(",", $typeArr));
+
+        if (empty($typesText)) {
+            $typesText = null;
+        }
+
+        $comment->update([
+            'types' => $typesText,
+        ]);
 
         if (empty($commentLog->comment_id)) {
             ContentUtility::handleAndSaveAllInteractive($commentLog->content, Mention::TYPE_COMMENT, $comment->id, $commentLog->user_id);
@@ -1089,7 +1130,6 @@ class ContentUtility
             'is_plugin_editor' => $post->postAppend->is_plugin_editor,
             'editor_unikey' => $post->postAppend->editor_unikey,
             'group_id' => $post->group_id,
-            'types' => $post->types,
             'title' => $post->title,
             'content' => $post->content,
             'is_markdown' => $post->is_markdown,
@@ -1130,7 +1170,6 @@ class ContentUtility
             'create_type' => 2,
             'is_plugin_editor' => $comment->commentAppend->is_plugin_editor,
             'editor_unikey' => $comment->commentAppend->editor_unikey,
-            'types' => $comment->types,
             'content' => $comment->content,
             'is_markdown' => $comment->is_markdown,
             'is_anonymous' => $comment->is_anonymous,
