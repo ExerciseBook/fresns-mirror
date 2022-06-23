@@ -144,9 +144,13 @@ class PostController extends Controller
             $query->where('sticky_state', $value);
         });
 
-        $postQuery->when($dtoRequest->contentType, function ($query, $value) {
-            $query->where('types', 'like', "%$value%");
-        });
+        if ($dtoRequest->contentType && $dtoRequest->contentType != 'all') {
+            if ($dtoRequest->contentType == 'text') {
+                $postQuery->whereNull('types');
+            } else {
+                $postQuery->where('types', 'like', "%{$dtoRequest->contentType}%");
+            }
+        }
 
         $postQuery->when($dtoRequest->createDateGt, function ($query, $value) {
             $query->whereDate('created_at', '>=', $value);

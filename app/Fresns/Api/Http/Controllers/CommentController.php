@@ -152,9 +152,13 @@ class CommentController extends Controller
             $query->where('digest_state', $value);
         });
 
-        $commentQuery->when($dtoRequest->contentType, function ($query, $value) {
-            $query->where('types', 'like', "%$value%");
-        });
+        if ($dtoRequest->contentType && $dtoRequest->contentType != 'all') {
+            if ($dtoRequest->contentType == 'text') {
+                $commentQuery->whereNull('types');
+            } else {
+                $commentQuery->where('types', 'like', "%{$dtoRequest->contentType}%");
+            }
+        }
 
         $commentQuery->when($dtoRequest->createDateGt, function ($query, $value) {
             $query->whereDate('created_at', '>=', $value);
