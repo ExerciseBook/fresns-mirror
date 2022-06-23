@@ -8,6 +8,7 @@
 
 namespace App\Models;
 
+use App\Helpers\ConfigHelper;
 use App\Helpers\StrHelper;
 
 class User extends Model
@@ -27,7 +28,9 @@ class User extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->uid = $model->uid ?? static::generateUid();
+            $digit = ConfigHelper::fresnsConfigByItemKey('user_uid_digit');
+
+            $model->uid = $model->uid ?? static::generateUid($digit);
         });
     }
 
@@ -37,17 +40,23 @@ class User extends Model
     }
 
     // generate uid
-    public static function generateUid(): string
+    public static function generateUid(int $digit): int
     {
-        $uid = StrHelper::generateDigital(8);
+        $uid = StrHelper::generateDigital($digit);
 
         $checkUid = static::where('uid', $uid)->first();
 
         if (! $checkUid) {
             return $uid;
+        } else {
+            $newUid = $uid + 1;
+            $checkNewUid = static::where('uid', $uid)->first();
+            if (! $checkNewUid) {
+                return $newUid;
+            }
         }
 
-        return static::generateUid();
+        return static::generateUid($digit + 1);
     }
 
     public function account()

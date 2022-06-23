@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => 'Gambar Avatar setelah logout pengguna atau penonaktifan',
     'user_identifier' => 'Pengenal Pengguna',
     'user_identifier_desc' => 'Logo mana yang dominan dalam interaksi pengguna',
+    'user_uid_digit' => 'UID Pengguna Digit awal',
     'user_password_config' => 'pengaturan kata sandi',
     'user_password_length' => 'Persyaratan Panjang',
     'user_password_length_desc' => 'Persyaratan Panjang: Panjang minimum, 0 atau tidak diisi tidak terbatas',

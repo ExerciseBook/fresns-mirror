@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => 'Avatar-Bild nach Benutzerabmelden oder Deaktivierung',
     'user_identifier' => 'Benutzer-Identifikator',
     'user_identifier_desc' => 'Welche Kennzeichnung ist bei der Benutzerinteraktion vorherrschend?',
+    'user_uid_digit' => 'Benutzer-UID Anfangsziffer',
     'user_password_config' => 'Kennworteinstellung',
     'user_password_length' => 'Längenanforderungen',
     'user_password_length_desc' => 'Länge Anforderungen: Die minimale Länge, 0 oder nicht gefüllt ist nicht begrenzt',

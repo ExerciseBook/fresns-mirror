@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => 'Imagem de Avatar após o logout do usuário ou desativação',
     'user_identifier' => 'Identificador do utilizador',
     'user_identifier_desc' => 'Que marcação é dominante na interacção do utilizador',
+    'user_uid_digit' => 'Dígito inicial do UID do utilizador',
     'user_password_config' => 'Configuração de senha',
     'user_password_length' => 'Requisitos de comprimento',
     'user_password_length_desc' => 'Requisitos de comprimento: o comprimento mínimo, 0 ou não preenchido não é limitado',

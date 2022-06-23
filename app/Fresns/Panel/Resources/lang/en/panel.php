@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => 'Avatar after user delete or deactivation',
     'user_identifier' => 'User Identifier',
     'user_identifier_desc' => 'Which marking is dominant in user interaction',
+    'user_uid_digit' => 'User UID Starting digit',
     'user_password_config' => 'Password Config',
     'user_password_length' => 'Length Request',
     'user_password_length_desc' => 'Length Request: The minimum length of the password. 0 or not filled for no limit',

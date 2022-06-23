@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => 'Avatar Image После выхода из системы пользователя или деактивации',
     'user_identifier' => 'Идентификатор пользователя',
     'user_identifier_desc' => 'Какая маркировка доминирует при взаимодействии с пользователем',
+    'user_uid_digit' => 'UID пользователя Начальная цифра',
     'user_password_config' => 'Настройка пароля',
     'user_password_length' => 'Длина требований',
     'user_password_length_desc' => 'Требования к длине: минимальная длина, 0 или не заполнена не ограничена',

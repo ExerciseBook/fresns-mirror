@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => '사용자 로그 아웃 또는 비활성화 후 아바타 이미지',
     'user_identifier' => '사용자 식별자',
     'user_identifier_desc' => '사용자 상호 작용에서 어떤 로고가 지배적입니까?',
+    'user_uid_digit' => '사용자 UID 시작 숫자',
     'user_password_config' => '암호 설정',
     'user_password_length' => '길이 요구 사항',
     'user_password_length_desc' => '길이 요구 사항 : 최소 길이, 0 또는 채워지지 않음은 제한되지 않습니다',

@@ -213,7 +213,7 @@
             <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_default_deactivate_avatar_desc') }}</div>
         </div>
         <!--user_identifier-->
-        <div class="row mb-4">
+        <div class="row mb-2">
             <label class="col-lg-2 col-form-label text-lg-end"></label>
             <div class="col-lg-6">
                 <div class="input-group">
@@ -225,6 +225,18 @@
                 </div>
             </div>
             <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_identifier_desc') }}</div>
+        </div>
+        <!--user_uid_digit-->
+        <div class="row mb-4">
+            <label class="col-lg-2 col-form-label text-lg-end"></label>
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <label class="input-group-text">{{ __('FsLang::panel.user_uid_digit') }}</label>
+                    <input type="number" class="form-control input-number" name="user_uid_digit" min="5" max="16" value="{{ $params['user_uid_digit'] }}">
+                    <span class="input-group-text">{{ __('FsLang::panel.unit_length') }}</span>
+                </div>
+            </div>
+            <div class="col-lg-4 form-text pt-1"></div>
         </div>
         <!--user_password_config-->
         <div class="row mb-4">

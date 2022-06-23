@@ -433,6 +433,7 @@ return [
     'user_default_deactivate_avatar_desc' => '用戶註銷或停用後的頭像圖',
     'user_identifier' => '用戶標識類型',
     'user_identifier_desc' => '用戶互動中以哪個標識為主',
+    'user_uid_digit' => '用戶 UID 起始位數',
     'user_password_config' => '密碼設定',
     'user_password_length' => '長度要求',
     'user_password_length_desc' => '長度要求：密碼最小長度，0 或不填為不限制。',

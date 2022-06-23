@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => 'उपयोगकर्ता लॉगआउट या निष्क्रियता के बाद अवतार छवि',
     'user_identifier' => 'उपयोगकर्ता पहचानकर्ता',
     'user_identifier_desc' => 'उपयोगकर्ता सहभागिता में कौन सा लोगो प्रमुख है',
+    'user_uid_digit' => 'उपयोगकर्ता यूआईडी प्रारंभिक अंक',
     'user_password_config' => 'पासवर्ड सेटिंग',
     'user_password_length' => 'लंबाई आवश्यकताएं',
     'user_password_length_desc' => 'लंबाई आवश्यकताएं: न्यूनतम लंबाई, 0 या भरा नहीं सीमित नहीं है।',

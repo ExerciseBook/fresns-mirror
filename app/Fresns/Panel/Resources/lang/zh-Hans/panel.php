@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => '用户注销或停用后的头像图',
     'user_identifier' => '用户标识类型',
     'user_identifier_desc' => '用户互动中以哪个标识为主',
+    'user_uid_digit' => '用户 UID 起始位数',
     'user_password_config' => '密码设置',
     'user_password_length' => '长度要求',
     'user_password_length_desc' => '长度要求：密码最小长度，0 或不填为不限制。',

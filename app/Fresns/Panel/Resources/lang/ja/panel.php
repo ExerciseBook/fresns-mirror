@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => 'ユーザーログアウトまたは無効化後のアバター画像',
     'user_identifier' => 'ユーザー識別子',
     'user_identifier_desc' => 'ユーザーとのインタラクションでどのマークが優勢か',
+    'user_uid_digit' => 'User UID 開始桁',
     'user_password_config' => 'パスワード設定',
     'user_password_length' => '長さ要件',
     'user_password_length_desc' => '長さ要件：最小長、0または充填されていない。',

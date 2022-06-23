@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => 'Imagen de Avatar después del cierre de sesión del usuario o desactivación',
     'user_identifier' => 'Identificador de usuario',
     'user_identifier_desc' => 'Qué marca predomina en la interacción con el usuario',
+    'user_uid_digit' => 'UID del usuario Dígito inicial',
     'user_password_config' => 'Configuración de la contraseña',
     'user_password_length' => 'Requisitos de longitud',
     'user_password_length_desc' => 'Requisitos de longitud: la longitud mínima, 0 o no llena no está limitada',

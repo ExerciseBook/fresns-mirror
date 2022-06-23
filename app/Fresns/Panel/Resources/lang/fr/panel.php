@@ -432,6 +432,7 @@ return [
     'user_default_deactivate_avatar_desc' => 'Image d\'avatar après la déconnexion ou la désactivation de l\'utilisateur',
     'user_identifier' => 'Identifiant de l\'utilisateur',
     'user_identifier_desc' => 'Quel marquage est dominant dans l\'interaction de l\'utilisateur',
+    'user_uid_digit' => 'UID de l\'utilisateur Chiffre de départ',
     'user_password_config' => 'réglage de mot de passe',
     'user_password_length' => 'Exigences de longueur',
     'user_password_length_desc' => 'Exigences de longueur: la longueur minimale, 0 ou non remplie n\'est pas limitée',
