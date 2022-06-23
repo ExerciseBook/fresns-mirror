@@ -25,7 +25,6 @@ class GenerateDraftDTO extends DTO
             'gid' => ['string', 'nullable'],
             'pid' => ['string', 'nullable', 'required_if:type,2'],
             'fsid' => ['string', 'nullable'],
-            'sessionLog' => ['json', 'required'],
         ];
     }
 }

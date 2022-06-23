@@ -14,6 +14,7 @@ use App\Fresns\Words\Basis\DTO\UploadSessionLogDTO;
 use App\Fresns\Words\Basis\DTO\VerifySignDTO;
 use App\Fresns\Words\Basis\DTO\VerifyUrlSignDTO;
 use App\Helpers\ConfigHelper;
+use App\Helpers\PrimaryHelper;
 use App\Helpers\SignHelper;
 use App\Models\Account;
 use App\Models\SessionKey;
@@ -153,14 +154,15 @@ class Basis
     public function uploadSessionLog($wordBody)
     {
         $dtoWordBody = new UploadSessionLogDTO($wordBody);
+
+        $accountId = null;
         if (isset($dtoWordBody->aid)) {
-            $accountId = Account::where('aid', '=', $dtoWordBody->aid)->value('id');
-            $dtoWordBody->accountId = $accountId;
+            $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
         }
 
+        $userId = null;
         if (isset($dtoWordBody->uid)) {
-            $userId = User::where('uid', '=', $dtoWordBody->uid)->value('id');
-            $dtoWordBody->userId = $userId;
+            $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
         }
 
         $input = [
@@ -169,8 +171,8 @@ class Basis
             'platform_id' => $dtoWordBody->platformId,
             'version' => $dtoWordBody->version,
             'lang_tag' => $dtoWordBody->langTag ?? null,
-            'account_id' => $dtoWordBody->accountId ?? null,
-            'user_id' => $dtoWordBody->userId ?? null,
+            'account_id' => $accountId,
+            'user_id' => $userId,
             'object_name' => $dtoWordBody->objectName,
             'object_action' => $dtoWordBody->objectAction,
             'object_result' => $dtoWordBody->objectResult,

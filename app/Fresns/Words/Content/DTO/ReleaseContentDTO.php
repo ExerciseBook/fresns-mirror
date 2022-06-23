@@ -20,7 +20,6 @@ class ReleaseContentDTO extends DTO
         return [
             'type' => ['integer', 'required', 'in:1,2'],
             'logId' => ['integer', 'required'],
-            'sessionLog' => ['json', 'required'],
         ];
     }
 }

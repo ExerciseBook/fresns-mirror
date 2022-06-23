@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Words\Content;
 
-use App\Fresns\Words\Basis\DTO\UploadSessionLogDTO;
 use App\Fresns\Words\Content\DTO\GenerateDraftDTO;
 use App\Fresns\Words\Content\DTO\LogicalDeletionContentDTO;
 use App\Fresns\Words\Content\DTO\PhysicalDeletionContentDTO;
@@ -47,6 +46,7 @@ class Content
     public function generateDraft($wordBody)
     {
         $dtoWordBody = new GenerateDraftDTO($wordBody);
+
         $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
 
         $hashtagShow = ConfigHelper::fresnsConfigByItemKey('hashtag_show');
@@ -209,8 +209,6 @@ class Content
     {
         $dtoWordBody = new ReleaseContentDTO($wordBody);
 
-        $sessionLog = (new UploadSessionLogDTO($dtoWordBody->sessionLog))->toArray();
-
         $logModel = match ($dtoWordBody->type) {
             1 => PostLog::where('id', $dtoWordBody->logId)->first(),
             2 => CommentLog::where('id', $dtoWordBody->logId)->first(),
@@ -243,7 +241,6 @@ class Content
             // post
             case 1:
                 $post = ContentUtility::releasePost($logModel);
-                $sessionLog['objectOrderId'] = $post->id;
 
                 $fsid = $post->pid;
             break;
@@ -251,15 +248,10 @@ class Content
             // comment
             case 2:
                 $comment = ContentUtility::releaseComment($logModel);
-                $sessionLog['objectOrderId'] = $comment->id;
 
                 $fsid = $comment->pid;
             break;
         }
-
-        try {
-            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
-        } catch (\Throwable $e) {}
 
         return $this->success([
             'type' => $dtoWordBody->type,

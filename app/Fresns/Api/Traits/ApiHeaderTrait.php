@@ -51,6 +51,12 @@ trait ApiHeaderTrait
         return \request()->header('timezone', $defaultTimezone);
     }
 
+    // deviceInfo
+    public function deviceInfo(): array
+    {
+        return \request()->header('deviceInfo');
+    }
+
     // auth account
     public function account(): ?Account
     {

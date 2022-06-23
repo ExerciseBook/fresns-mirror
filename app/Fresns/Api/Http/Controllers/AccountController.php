@@ -23,6 +23,7 @@ use App\Helpers\DateHelper;
 use App\Models\Account;
 use App\Models\AccountWallet;
 use App\Models\AccountWalletLog;
+use App\Models\SessionLog;
 use App\Models\SessionToken;
 use App\Models\VerifyCode;
 use App\Utilities\ValidationUtility;
@@ -106,6 +107,24 @@ class AccountController extends Controller
             throw new ApiException(34108);
         }
 
+        // session log
+        $sessionLog = [
+            'type' => SessionLog::TYPE_ACCOUNT_REGISTER,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $this->langTag(),
+            'aid' => null,
+            'uid' => null,
+            'objectName' => route('api.account.register'),
+            'objectAction' => 'Account Register',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => null,
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => $dtoRequest->deviceToken,
+            'moreJson' => null,
+        ];
+
         // add account
         $addAccountWordBody = [
             'type' => $accountType,
@@ -118,8 +137,17 @@ class AccountController extends Controller
         $fresnsAccountResp = \FresnsCmdWord::plugin('Fresns')->addAccount($addAccountWordBody);
 
         if ($fresnsAccountResp->isErrorResponse()) {
+            // upload session log
+            $sessionLog['objectAction'] = 'addAccount';
+            $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
             return $fresnsAccountResp->errorResponse();
         }
+
+        // upload session log
+        $sessionLog['aid'] = $fresnsAccountResp->getData('aid');
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         // add user
         $addUserWordBody = [
@@ -137,8 +165,20 @@ class AccountController extends Controller
         $fresnsUserResp = \FresnsCmdWord::plugin('Fresns')->addUser($addUserWordBody);
 
         if ($fresnsUserResp->isErrorResponse()) {
+            // upload session log
+            $sessionLog['type'] = SessionLog::TYPE_USER_ADD;
+            $sessionLog['objectAction'] = 'addUser';
+            $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
             return $fresnsUserResp->errorResponse();
         }
+
+        // upload session log
+        $sessionLog['type'] = SessionLog::TYPE_USER_ADD;
+        $sessionLog['aid'] = $fresnsAccountResp->getData('aid');
+        $sessionLog['uid'] = $fresnsUserResp->getData('uid');
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         // create token
         $createTokenWordBody = [
@@ -179,6 +219,24 @@ class AccountController extends Controller
 
         $password = base64_decode($dtoRequest->password, true);
 
+        // session log
+        $sessionLog = [
+            'type' => SessionLog::TYPE_ACCOUNT_LOGIN,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $this->langTag(),
+            'aid' => null,
+            'uid' => null,
+            'objectName' => route('api.account.login'),
+            'objectAction' => 'Account Login',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => null,
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => $dtoRequest->deviceToken,
+            'moreJson' => null,
+        ];
+
         // login
         $wordBody = [
             'type' => $accountType,
@@ -190,6 +248,12 @@ class AccountController extends Controller
         $fresnsResponse = \FresnsCmdWord::plugin('Fresns')->verifyAccount($wordBody);
 
         if ($fresnsResponse->isErrorResponse()) {
+            // upload session log
+            $sessionLog['aid'] = $fresnsResponse->getData('aid') ?? null;
+            $sessionLog['objectAction'] = 'verifyAccount';
+            $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
             return $fresnsResponse->errorResponse();
         }
 
@@ -203,8 +267,18 @@ class AccountController extends Controller
         $fresnsTokenResponse = \FresnsCmdWord::plugin('Fresns')->createSessionToken($createTokenWordBody);
 
         if ($fresnsTokenResponse->isErrorResponse()) {
+            // upload session log
+            $sessionLog['aid'] = $fresnsResponse->getData('aid');
+            $sessionLog['objectAction'] = 'createSessionToken';
+            $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
             return $fresnsTokenResponse->errorResponse();
         }
+
+        // upload session log
+        $sessionLog['aid'] = $fresnsResponse->getData('aid');
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         // get account token
         $token['token'] = $fresnsTokenResponse->getData('token');
@@ -230,6 +304,24 @@ class AccountController extends Controller
             'phone' => 2,
         };
 
+        // session log
+        $sessionLog = [
+            'type' => SessionLog::TYPE_ACCOUNT_EDIT_PASSWORD,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $this->langTag(),
+            'aid' => null,
+            'uid' => null,
+            'objectName' => route('api.account.resetPassword'),
+            'objectAction' => 'Account Reset Password',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => null,
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => null,
+            'moreJson' => null,
+        ];
+
         // check code
         $checkCodeWordBody = [
             'type' => $accountType,
@@ -241,6 +333,11 @@ class AccountController extends Controller
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($checkCodeWordBody);
 
         if ($fresnsResp->isErrorResponse()) {
+            // upload session log
+            $sessionLog['objectAction'] = "checkCode ({$accountType} {$dtoRequest->account} {$dtoRequest->countryCode})";
+            $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
             return $fresnsResp->errorResponse();
         }
 
@@ -251,6 +348,11 @@ class AccountController extends Controller
         }
 
         if (empty($account)) {
+            // upload session log
+            $sessionLog['objectAction'] = "empty ({$accountType} {$dtoRequest->account} {$dtoRequest->countryCode})";
+            $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
             throw new ApiException(34301);
         }
 
@@ -282,6 +384,10 @@ class AccountController extends Controller
         $account->update([
             'password' => $dataPassword,
         ]);
+
+        // upload session log
+        $sessionLog['aid'] = $account->aid;
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         return $this->success();
     }
@@ -403,6 +509,24 @@ class AccountController extends Controller
             }
         }
 
+        // session log
+        $sessionLog = [
+            'type' => SessionLog::TYPE_ACCOUNT_EDIT_DATA,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $this->langTag(),
+            'aid' => $authAccount->aid,
+            'uid' => null,
+            'objectName' => route('api.account.edit'),
+            'objectAction' => 'Account Edit Data',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => null,
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => null,
+            'moreJson' => null,
+        ];
+
         // edit email
         if ($dtoRequest->editEmail) {
             $checkEmail = ValidationUtility::disposableEmail($dtoRequest->editEmail);
@@ -477,6 +601,12 @@ class AccountController extends Controller
                 $password = base64_decode($dtoRequest->password, true);
 
                 if (! Hash::check($password, $authAccount->password)) {
+                    // upload session log
+                    $sessionLog['type'] = SessionLog::TYPE_ACCOUNT_EDIT_PASSWORD;
+                    $sessionLog['objectAction'] = 'checkPassword';
+                    $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+                    \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
                     throw new ApiException(34304);
                 }
             }
@@ -485,6 +615,11 @@ class AccountController extends Controller
             $authAccount->update([
                 'password' => Hash::make($newPassword),
             ]);
+
+            // upload session log
+            $sessionLog['type'] = SessionLog::TYPE_ACCOUNT_EDIT_PASSWORD;
+            $sessionLog['objectAction'] = 'Account Edit Password';
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
         }
 
         // edit wallet password
@@ -502,6 +637,12 @@ class AccountController extends Controller
                 $walletPassword = base64_decode($dtoRequest->walletPassword, true);
 
                 if (! Hash::check($walletPassword, $wallet->password)) {
+                    // upload session log
+                    $sessionLog['type'] = SessionLog::TYPE_WALLET_EDIT_PASSWORD;
+                    $sessionLog['objectAction'] = 'checkPassword';
+                    $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+                    \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
                     throw new ApiException(34502);
                 }
             }
@@ -510,6 +651,11 @@ class AccountController extends Controller
             $wallet->update([
                 'password' => Hash::make($newWalletPassword),
             ]);
+
+            // upload session log
+            $sessionLog['type'] = SessionLog::TYPE_WALLET_EDIT_PASSWORD;
+            $sessionLog['objectAction'] = 'Account Edit Wallet Password';
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
         }
 
         // edit last login time
@@ -518,6 +664,11 @@ class AccountController extends Controller
                 'last_login_at' => DateHelper::fresnsDatabaseCurrentDateTime(),
             ]);
         }
+
+        // upload session log
+        $sessionLog['type'] = SessionLog::TYPE_ACCOUNT_EDIT_DATA;
+        $sessionLog['objectAction'] = 'Account Edit Data';
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         CacheHelper::forgetApiAccount($authAccount->aid);
         CacheHelper::forgetApiUser($this->user()?->uid);
@@ -591,6 +742,25 @@ class AccountController extends Controller
             ]);
         }
 
+        // session log
+        $sessionLog = [
+            'type' => SessionLog::TYPE_ACCOUNT_DELETE,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $this->langTag(),
+            'aid' => $authAccount->aid,
+            'uid' => null,
+            'objectName' => route('api.account.applyDelete'),
+            'objectAction' => 'Apply Delete Account',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => null,
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => null,
+            'moreJson' => null,
+        ];
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
         CacheHelper::forgetApiAccount($authAccount->aid);
 
         return $this->success([
@@ -608,6 +778,25 @@ class AccountController extends Controller
             'wait_delete' => 0,
             'wait_delete_at' => null,
         ]);
+
+        // session log
+        $sessionLog = [
+            'type' => SessionLog::TYPE_ACCOUNT_DELETE,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $this->langTag(),
+            'aid' => $authAccount->aid,
+            'uid' => null,
+            'objectName' => route('api.account.revokeDelete'),
+            'objectAction' => 'Revoke Delete Account',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => null,
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => null,
+            'moreJson' => null,
+        ];
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         CacheHelper::forgetApiAccount($authAccount->aid);
     }

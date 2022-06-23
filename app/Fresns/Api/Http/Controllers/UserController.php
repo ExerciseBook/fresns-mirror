@@ -33,6 +33,7 @@ use App\Models\Notify;
 use App\Models\PluginUsage;
 use App\Models\PostLog;
 use App\Models\Seo;
+use App\Models\SessionLog;
 use App\Models\User;
 use App\Models\UserBlock;
 use App\Models\UserFollow;
@@ -341,6 +342,24 @@ class UserController extends Controller
 
         $password = base64_decode($dtoRequest->password, true);
 
+        // session log
+        $sessionLog = [
+            'type' => SessionLog::TYPE_USER_LOGIN,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $this->langTag(),
+            'aid' => $this->account()->aid,
+            'uid' => $authUser->uid,
+            'objectName' => route('api.user.auth'),
+            'objectAction' => 'User Auth',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => null,
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => $dtoRequest->deviceToken,
+            'moreJson' => null,
+        ];
+
         // login
         $wordBody = [
             'aid' => $request->header('aid'),
@@ -350,6 +369,11 @@ class UserController extends Controller
         $fresnsResponse = \FresnsCmdWord::plugin('Fresns')->verifyUser($wordBody);
 
         if ($fresnsResponse->isErrorResponse()) {
+            // upload session log
+            $sessionLog['objectAction'] = 'verifyUser';
+            $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
             return $fresnsResponse->errorResponse();
         }
 
@@ -363,6 +387,11 @@ class UserController extends Controller
         $fresnsTokenResponse = \FresnsCmdWord::plugin('Fresns')->createSessionToken($createTokenWordBody);
 
         if ($fresnsTokenResponse->isErrorResponse()) {
+            // upload session log
+            $sessionLog['objectAction'] = 'createSessionToken';
+            $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
+            \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
             return $fresnsTokenResponse->errorResponse();
         }
 
@@ -374,6 +403,9 @@ class UserController extends Controller
         // get user data
         $service = new UserService();
         $data['detail'] = $service->userDetail($authUser, $langTag, $timezone);
+
+        // upload session log
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         return $this->success($data);
     }
@@ -651,6 +683,26 @@ class UserController extends Controller
         if ($dtoRequest->archives) {
             ContentUtility::saveArchiveUsages(ArchiveUsage::TYPE_USER, $authUser->id, $dtoRequest->archives);
         }
+
+        // session log
+        $sessionLog = [
+            'type' => SessionLog::TYPE_USER_EDIT_DATA,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $this->langTag(),
+            'aid' => $this->account()->aid,
+            'uid' => $authUser->uid,
+            'objectName' => route('api.user.edit'),
+            'objectAction' => 'User Edit Data',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => null,
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => null,
+            'moreJson' => null,
+        ];
+        // upload session log
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         CacheHelper::forgetApiUser($authUser->uid);
 
