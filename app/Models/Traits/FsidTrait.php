@@ -15,22 +15,28 @@ trait FsidTrait
     public static function bootFsidTrait()
     {
         static::creating(function ($model) {
-            $model->{$this->getFsidKey()} = $model->{$this->getFsidKey()} ?? static::generateFsid();
+            $model->{$this->getFsidKey()} = $model->{$this->getFsidKey()} ?? static::generateFsid(8);
         });
     }
 
     // generate fsid
-    public static function generateFsid(): string
+    public static function generateFsid($digit): string
     {
-        $fsid = Str::random(12);
+        $fsid = Str::random($digit);
 
         $checkFsid = static::fsid($fsid)->first();
 
         if (! $checkFsid) {
             return $fsid;
+        } else {
+            $newFsid = Str::random($digit);
+            $checkNewFsid = static::fsid($newFsid)->first();
+            if (! $checkNewFsid) {
+                return $newFsid;
+            }
         }
 
-        return static::generateFsid();
+        return static::generateFsid($digit + 1);
     }
 
     public function scopeFsid($query, string $fsid)
