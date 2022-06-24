@@ -58,9 +58,10 @@ class Content
             $hashtagName = '#'.$dtoWordBody->hname.'# ';
         }
 
-        $anonymous = $dtoWordBody->anonymous ?? 0;
+        $isAnonymous = $dtoWordBody->isAnonymous ?? 0;
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
         $timezone = \request()->header('timezone', ConfigHelper::fresnsConfigDefaultTimezone());
+        $editableStatus = true;
         $editableTime = null;
         $deadlineTime = null;
 
@@ -102,7 +103,7 @@ class Content
                             'user_id' => $userId,
                             'group_id' => $group->id,
                             'content' => $hashtagName,
-                            'is_anonymous' => $anonymous,
+                            'is_anonymous' => $isAnonymous,
                             'is_plugin_editor' => $isPluginEditor,
                             'editor_unikey' => $editorUnikey,
                         ]);
@@ -146,12 +147,10 @@ class Content
                         );
                     }
 
-                    $editableDateTime = $post->created_at->addMinutes($editConfig['post_edit_time_limit']);
-                    $editableSecond = $editableDateTime->timestamp - time();
-                    $editableTimeMinute = intval($editableSecond / 60);
-                    $editableTimeSecond = $editableSecond % 60;
-                    $editableTime = "{$editableTimeMinute}:{$editableTimeSecond}";
-                    $deadlineTime = DateHelper::fresnsFormatDateTime($editableDateTime->format('Y-m-d H:i:s'), $timezone, $langTag);
+                    $checkContentEditPerm = PermissionUtility::checkContentEditPerm($post->created_at, $editConfig['post_edit_time_limit'], $timezone, $langTag);
+                    $editableStatus = $checkContentEditPerm['editableStatus'];
+                    $editableTime = $checkContentEditPerm['editableTime'];
+                    $deadlineTime = $checkContentEditPerm['deadlineTime'];
 
                     $logModel = ContentUtility::generatePostDraft($post);
                 }
@@ -188,7 +187,7 @@ class Content
                             'user_id' => $userId,
                             'post_id' => $postId,
                             'content' => $hashtagName,
-                            'is_anonymous' => $anonymous,
+                            'is_anonymous' => $isAnonymous,
                         ]);
                     }
                 } else {
@@ -238,12 +237,10 @@ class Content
                         );
                     }
 
-                    $editableDateTime = $comment->created_at->addMinutes($editConfig['comment_edit_time_limit']);
-                    $editableSecond = $editableDateTime->timestamp - time();
-                    $editableTimeMinute = intval($editableSecond / 60);
-                    $editableTimeSecond = $editableSecond % 60;
-                    $editableTime = "{$editableTimeMinute}:{$editableTimeSecond}";
-                    $deadlineTime = DateHelper::fresnsFormatDateTime($editableDateTime->format('Y-m-d H:i:s'), $timezone, $langTag);
+                    $checkContentEditPerm = PermissionUtility::checkContentEditPerm($comment->created_at, $editConfig['comment_edit_time_limit'], $timezone, $langTag);
+                    $editableStatus = $checkContentEditPerm['editableStatus'];
+                    $editableTime = $checkContentEditPerm['editableTime'];
+                    $deadlineTime = $checkContentEditPerm['deadlineTime'];
 
                     $logModel = ContentUtility::generateCommentDraft($comment);
                 }
@@ -253,9 +250,16 @@ class Content
         return $this->success([
             'type' => $dtoWordBody->type,
             'logId' => $logModel->id,
+            'editableStatus' => $editableStatus,
             'editableTime' => $editableTime,
             'deadlineTime' => $deadlineTime,
         ]);
+    }
+
+    // checkPublish
+    public function checkPublish($wordBody)
+    {
+        // code
     }
 
     // releaseContent
@@ -296,6 +300,7 @@ class Content
             case 1:
                 $post = ContentUtility::releasePost($logModel);
 
+                $primaryId = $post->id;
                 $fsid = $post->pid;
             break;
 
@@ -303,12 +308,14 @@ class Content
             case 2:
                 $comment = ContentUtility::releaseComment($logModel);
 
+                $primaryId = $comment->id;
                 $fsid = $comment->pid;
             break;
         }
 
         return $this->success([
             'type' => $dtoWordBody->type,
+            'id' => $primaryId,
             'fsid' => $fsid,
         ]);
     }

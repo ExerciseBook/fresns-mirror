@@ -22,11 +22,11 @@ class GenerateDraftDTO extends DTO
             'type' => ['integer', 'required', 'in:1,2'],
             'source' => ['integer', 'required', 'in:1,2'],
             'editorUnikey' => ['string', 'nullable', 'exists:App\Models\Plugin,unikey'],
-            'anonymous' => ['boolean', 'nullable'],
-            'hname' => ['string', 'nullable'],
-            'gid' => ['string', 'nullable'],
-            'pid' => ['string', 'nullable', 'required_if:type,2'],
             'fsid' => ['string', 'nullable'],
+            'pid' => ['string', 'nullable', 'required_if:type,2'],
+            'gid' => ['string', 'nullable'],
+            'hname' => ['string', 'nullable'],
+            'isAnonymous' => ['boolean', 'nullable'],
         ];
     }
 }
