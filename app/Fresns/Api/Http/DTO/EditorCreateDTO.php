@@ -23,9 +23,9 @@ class EditorCreateDTO extends DTO
             'editorUnikey' => ['string', 'nullable'],
             'fsid' => ['string', 'nullable'],
             'pid' => ['string', 'nullable', 'required_if:type,comment'],
-            'anonymous' => ['boolean', 'nullable'],
-            'hname' => ['string', 'nullable'],
             'gid' => ['string', 'nullable'],
+            'hname' => ['string', 'nullable'],
+            'isAnonymous' => ['boolean', 'nullable'],
         ];
     }
 }
