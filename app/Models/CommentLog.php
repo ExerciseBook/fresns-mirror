@@ -14,4 +14,9 @@ class CommentLog extends Model
     {
         return $this->belongsTo(Comment::class, 'comment_id', 'id');
     }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

@@ -13,10 +13,12 @@ use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
 use App\Models\Account;
 use App\Models\CodeMessage;
+use App\Models\CommentLog;
 use App\Models\Config;
 use App\Models\File;
 use App\Models\Language;
 use App\Models\PluginUsage;
+use App\Models\PostLog;
 use App\Models\SessionLog;
 use App\Models\User;
 
@@ -267,11 +269,20 @@ class ConfigUtility
             "{$type}_limit_whitelist",
         ], $langTag);
 
+        $perm['draft'] = true;
         $perm['publish'] = $rolePerm["{$type}_publish"];
         $perm['review'] = $rolePerm["{$type}_review"];
         $perm['emailRequired'] = $limitConfig["{$type}_email_verify"] ? $limitConfig["{$type}_email_verify"] : $rolePerm["{$type}_email_verify"];
         $perm['phoneRequired'] = $limitConfig["{$type}_phone_verify"] ? $limitConfig["{$type}_phone_verify"] : $rolePerm["{$type}_phone_verify"];
         $perm['realNameRequired'] = $limitConfig["{$type}_real_name_verify"] ? $limitConfig["{$type}_real_name_verify"] : $rolePerm["{$type}_real_name_verify"];
+
+        $checkLogCount = match ($type) {
+            'post' => PostLog::where('user_id', $userId)->whereIn('state', [1, 2, 4])->count(),
+            'comment' => CommentLog::where('user_id', $userId)->whereIn('state', [1, 2, 4])->count(),
+        };
+        if ($checkLogCount >= $rolePerm["{$type}_draft_count"]) {
+            $perm['draft'] = false;
+        }
 
         $publishTip = null;
         $emailTip = null;

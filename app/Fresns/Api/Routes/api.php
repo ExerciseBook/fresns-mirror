@@ -126,23 +126,14 @@ Route::prefix('v2')->group(function () {
     });
 
     Route::prefix('editor')->group(function () {
-        Route::post('publish', [EditorController::class, 'publish'])->name('editor.publish');
         Route::get('{type}/config', [EditorController::class, 'config'])->name('editor.config');
-        // post editor
-        Route::post('post/create', [EditorController::class, 'postCreate'])->name('editor.post.create');
-        Route::get('post/logs', [EditorController::class, 'postLogs'])->name('editor.post.logs');
-        Route::get('post/{logId}/detail', [EditorController::class, 'postDetail'])->name('editor.post.detail');
-        Route::put('post/{logId}/update', [EditorController::class, 'postUpdate'])->name('editor.post.update');
-        Route::post('post/{logId}/revoke', [EditorController::class, 'postRevoke'])->name('editor.post.revoke');
-        Route::delete('post/{logId}/delete', [EditorController::class, 'postDelete'])->name('editor.post.delete');
-        // comment editor
-        Route::post('comment/create', [EditorController::class, 'commentCreate'])->name('editor.comment.create');
-        Route::get('comment/logs', [EditorController::class, 'commentLogs'])->name('editor.comment.logs');
-        Route::get('comment/{logId}/detail', [EditorController::class, 'commentDetail'])->name('editor.comment.detail');
-        Route::put('comment/{logId}/update', [EditorController::class, 'commentUpdate'])->name('editor.comment.update');
-        Route::post('comment/{logId}/revoke', [EditorController::class, 'commentRevoke'])->name('editor.comment.revoke');
-        Route::delete('comment/{logId}/delete', [EditorController::class, 'commentDelete'])->name('editor.comment.delete');
-        // submit
-        Route::post('submit', [EditorController::class, 'submit'])->name('editor.submit');
+        Route::get('{type}/drafts', [EditorController::class, 'drafts'])->name('editor.drafts');
+        Route::post('{type}/create', [EditorController::class, 'create'])->name('editor.create');
+        Route::get('{type}/{draftId}', [EditorController::class, 'detail'])->name('editor.detail');
+        Route::put('{type}/{draftId}', [EditorController::class, 'update'])->name('editor.update');
+        Route::post('{type}/{draftId}', [EditorController::class, 'publish'])->name('editor.publish');
+        Route::patch('{type}/{draftId}', [EditorController::class, 'revoke'])->name('editor.revoke');
+        Route::delete('{type}/{draftId}', [EditorController::class, 'delete'])->name('editor.delete');
+        Route::post('direct-publish', [EditorController::class, 'directPublish'])->name('editor.directPublish');
     });
 });
