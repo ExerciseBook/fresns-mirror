@@ -17,12 +17,12 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\PrimaryHelper;
-use App\Models\BlockWord;
 use App\Models\Dialog;
 use App\Models\DialogMessage;
 use App\Models\File;
 use App\Models\FileUsage;
 use App\Models\User;
+use App\Utilities\ContentUtility;
 use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
@@ -58,7 +58,7 @@ class DialogController extends Controller
             $latestMessage['messageId'] = $dialog->latest_message_id;
             $latestMessage['time'] = DateHelper::fresnsDateTimeByTimezone($dialog->created_at, $timezone, $langTag);
             $latestMessage['timeFormat'] = DateHelper::fresnsFormatDateTime($dialog->created_at, $timezone, $langTag);
-            $latestMessage['message'] = $dialog->latest_message_text;
+            $latestMessage['message'] = ContentUtility::replaceBlockWords('dialog', $dialog->latest_message_text);
 
             $item['dialogId'] = $dialog->id;
             $item['dialogUser'] = $dialogUser;
@@ -146,7 +146,7 @@ class DialogController extends Controller
             $item['sendTimeFormat'] = DateHelper::fresnsFormatDateTime($message->created_at, $timezone, $langTag);
             $item['sendUserIsMe'] = $sendUserIsMe;
             $item['type'] = $message->message_type;
-            $item['content'] = $message->message_text;
+            $item['content'] = ContentUtility::replaceBlockWords('dialog', $message->message_text);
             $item['file'] = FileHelper::fresnsFileInfoById($message->message_file_id);
             $item['readStatus'] = (bool) $message->receive_read_at;
             $messageList[] = $item;
@@ -198,10 +198,8 @@ class DialogController extends Controller
                 throw new ApiException(36605);
             }
 
-            $blockWords = BlockWord::where('dialog_mode', 2)->get('word', 'replace_word');
-
             $messageType = 1;
-            $messageText = str_ireplace($blockWords->pluck('word')->toArray(), $blockWords->pluck('replace_word')->toArray(), $message);
+            $messageText = $message;
             $messageFileId = null;
         } else {
             $messageType = 2;

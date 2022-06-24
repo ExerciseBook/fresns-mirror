@@ -623,10 +623,6 @@ class UserController extends Controller
                 throw new ApiException(33107);
             }
 
-            $blockWords = BlockWord::where('user_mode', 2)->get('word', 'replace_word');
-
-            $newBio = str_ireplace($blockWords->pluck('word')->toArray(), $blockWords->pluck('replace_word')->toArray(), $bio);
-
             $bioConfig = ConfigHelper::fresnsConfigByItemKeys([
                 'bio_support_mention',
                 'bio_support_link',
@@ -634,19 +630,19 @@ class UserController extends Controller
             ]);
 
             if ($bioConfig['bio_support_mention']) {
-                ContentUtility::saveMention($newBio, Mention::TYPE_USER, $authUser->id, $authUser->id);
+                ContentUtility::saveMention($bio, Mention::TYPE_USER, $authUser->id, $authUser->id);
             }
 
             if ($bioConfig['bio_support_link']) {
-                ContentUtility::saveLink($newBio, DomainLinkUsage::TYPE_USER, $authUser->id);
+                ContentUtility::saveLink($bio, DomainLinkUsage::TYPE_USER, $authUser->id);
             }
 
             if ($bioConfig['bio_support_hashtag']) {
-                ContentUtility::saveHashtag($newBio, HashtagUsage::TYPE_USER, $authUser->id);
+                ContentUtility::saveHashtag($bio, HashtagUsage::TYPE_USER, $authUser->id);
             }
 
             $authUser->update([
-                'gender' => $newBio,
+                'gender' => $bio,
             ]);
         }
 

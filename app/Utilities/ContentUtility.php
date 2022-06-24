@@ -16,6 +16,7 @@ use App\Helpers\PluginHelper;
 use App\Helpers\PrimaryHelper;
 use App\Helpers\StrHelper;
 use App\Models\ArchiveUsage;
+use App\Models\BlockWord;
 use App\Models\Comment;
 use App\Models\CommentAppend;
 use App\Models\CommentLog;
@@ -40,6 +41,7 @@ use App\Models\Sticker;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class ContentUtility
 {
@@ -1150,5 +1152,30 @@ class ContentUtility
         ContentUtility::batchCopyContentExtends('comment', $comment->id, $commentLog->id);
 
         return $commentLog;
+    }
+
+    // Replace block words
+    public static function replaceBlockWords(string $type, ?string $content = null): string
+    {
+        if (empty($content)) {
+            return null;
+        }
+
+        $cacheKey = "fresns_{$type}_block_words";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $blockWords = Cache::remember($cacheKey, $cacheTime, function () use ($type) {
+            $blockWords = match ($type) {
+                'content' => BlockWord::where('content_mode', 2)->get('word', 'replace_word'),
+                'user' => BlockWord::where('user_mode', 2)->get('word', 'replace_word'),
+                'dialog' => BlockWord::where('dialog_mode', 2)->get('word', 'replace_word'),
+            };
+
+            return $blockWords;
+        });
+
+        $newContent = str_ireplace($blockWords->pluck('word')->toArray(), $blockWords->pluck('replace_word')->toArray(), $content);
+
+        return $newContent;
     }
 }
