@@ -54,6 +54,13 @@ class CacheHelper
         // Cache::forget("fresns_config_*");
         // Cache::forget("fresns_config_keys_*");
         // Cache::forget("fresns_config_tag_*");
+        Cache::forget('fresns_content_block_words');
+        Cache::forget('fresns_user_block_words');
+        Cache::forget('fresns_dialog_block_words');
+        Cache::forget('fresns_content_ban_words');
+        Cache::forget('fresns_content_review_words');
+        Cache::forget('fresns_user_ban_words');
+        Cache::forget('fresns_dialog_ban_words');
 
         return;
     }
