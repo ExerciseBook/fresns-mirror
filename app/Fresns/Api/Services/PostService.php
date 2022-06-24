@@ -18,6 +18,7 @@ use App\Models\OperationUsage;
 use App\Models\PluginUsage;
 use App\Models\Post;
 use App\Models\PostLog;
+use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\LbsUtility;
@@ -202,14 +203,93 @@ class PostService
     }
 
     // post Log
-    public function postLogList(PostLog $log, string $langTag, string $timezone, ?int $authUserId = null)
+    public function postLogList(PostLog $log, string $langTag, string $timezone)
     {
-        return null;
+        $post = $log?->post;
+        $user = $log->user;
+        $group = $log?->group;
+
+        $info['id'] = $log->id;
+        $info['uid'] = $user->uid;
+        $info['pid'] = $post?->pid;
+        $info['isPluginEditor'] = (bool) $log->is_plugin_editor;
+        $info['editorUnikey'] = $log->editor_unikey;
+        $info['group'] = null;
+        $info['title'] = $log->title;
+        $info['content'] = $log->content;
+        $info['contentLength'] = Str::length($log->content);
+        $info['isMarkdown'] = (bool) $log->is_markdown;
+        $info['isAnonymous'] = (bool) $log->is_anonymous;
+        $info['state'] = $log->state;
+        $info['reason'] = $log->reason;
+
+        $info['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
+        if (! $log->is_anonymous) {
+            $creatorProfile = $log->creator->getUserProfile($langTag, $timezone);
+            $creatorMainRole = $log->creator->getUserMainRole($langTag, $timezone);
+            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
+        }
+
+        if ($group) {
+            $groupItem[] = $group?->getGroupInfo($langTag);
+
+            $info['group'] = $groupItem;
+        }
+
+        return $info;
     }
 
     // post log detail
-    public function postLogDetail(PostLog $log, string $langTag, string $timezone, ?int $authUserId = null)
+    public function postLogDetail(PostLog $log, string $langTag, string $timezone)
     {
-        return null;
+        $post = $log?->post;
+        $user = $log->user;
+        $group = $log?->group;
+
+        $info['id'] = $log->id;
+        $info['uid'] = $user->uid;
+        $info['pid'] = $post?->pid;
+        $info['isPluginEditor'] = (bool) $log->is_plugin_editor;
+        $info['editorUnikey'] = $log->editor_unikey;
+        $info['group'] = null;
+        $info['title'] = $log->title;
+        $info['content'] = $log->content;
+        $info['contentLength'] = Str::length($log->content);
+        $info['isMarkdown'] = (bool) $log->is_markdown;
+        $info['isAnonymous'] = (bool) $log->is_anonymous;
+        $info['isComment'] = (bool) $log->is_comment;
+        $info['isCommentPublic'] = (bool) $log->is_comment_public;
+        $info['mapJson'] = $log->map_json;
+        $info['allowJson'] = ContentUtility::handleAllowJson($log->allow_json, $langTag, $timezone);
+        $info['userListJson'] = ContentUtility::handleUserListJson($log->user_list_json, $langTag);
+        $info['commentBtnJson'] = ContentUtility::handleCommentBtnJson($log->comment_btn_json, $langTag);
+        $info['state'] = $log->state;
+        $info['reason'] = $log->reason;
+
+        $info['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
+        if (! $log->is_anonymous) {
+            $creatorProfile = $log->creator->getUserProfile($langTag, $timezone);
+            $creatorMainRole = $log->creator->getUserMainRole($langTag, $timezone);
+            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
+        }
+
+        if ($group) {
+            $groupItem[] = $group?->getGroupInfo($langTag);
+
+            $info['group'] = $groupItem;
+        }
+
+        $info['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST_LOG, $log->id, $langTag);
+        $info['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_POST_LOG, $log->id, $langTag);
+        $info['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_POST_LOG, $log->id, $langTag);
+        $info['files'] = FileHelper::fresnsAntiLinkFileInfoListByTableColumn('post_logs', 'id', $log->id);
+
+        $fileCount['images'] = collect($info['files']['images'])->count();
+        $fileCount['videos'] = collect($info['files']['videos'])->count();
+        $fileCount['audios'] = collect($info['files']['audios'])->count();
+        $fileCount['documents'] = collect($info['files']['documents'])->count();
+        $info['fileCount'] = $fileCount;
+
+        return $info;
     }
 }

@@ -321,7 +321,7 @@ class CommentController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $commentLogs = CommentLog::with('user')->where('comment_id', $comment->id)->where('state', 3)->latest()->paginate($request->get('pageSize', 15));
+        $commentLogs = CommentLog::with('creator')->where('comment_id', $comment->id)->where('state', 3)->latest()->paginate($request->get('pageSize', 15));
 
         $commentLogList = [];
         $service = new CommentService();

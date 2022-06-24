@@ -357,7 +357,7 @@ class PostController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $postLogs = PostLog::with('user')->where('post_id', $post->id)->where('state', 3)->latest()->paginate($request->get('pageSize', 15));
+        $postLogs = PostLog::with('creator')->where('post_id', $post->id)->where('state', 3)->latest()->paginate($request->get('pageSize', 15));
 
         $postLogList = [];
         $service = new PostService();
