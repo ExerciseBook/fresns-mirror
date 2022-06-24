@@ -9,6 +9,7 @@
 namespace App\Utilities;
 
 use App\Helpers\ConfigHelper;
+use App\Helpers\DateHelper;
 use App\Models\Group;
 use App\Models\GroupAdmin;
 use App\Models\PostAllow;
@@ -17,6 +18,7 @@ use App\Models\User;
 use App\Models\UserBlock;
 use App\Models\UserFollow;
 use App\Models\UserRole;
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 
 class PermissionUtility
@@ -324,16 +326,25 @@ class PermissionUtility
         }
     }
 
-    // Check if the user has permission to publish
-    public static function checkUserPublishPermForPost(int $userId, ?string $langTag = null)
+    // Check content edit perm
+    public static function checkContentEditPerm(Carbon $createDateTime, int $editTimeConfig, ?string $timezone = null, ?string $langTag = null): array
     {
-        $publishConfig = ConfigHelper::fresnsConfigByItemTag('postEditor', $langTag);
-        $user = User::find($userId);
-    }
+        $editableDateTime = $createDateTime->addMinutes($editTimeConfig);
+        $editableSecond = $editableDateTime->timestamp - time();
+        $editableTimeMinute = intval($editableSecond / 60);
+        $editableTimeSecond = $editableSecond % 60;
 
-    public static function checkUserPublishPermForComment(int $userId, ?string $langTag = null)
-    {
-        $publishConfig = ConfigHelper::fresnsConfigByItemTag('commentEditor', $langTag);
-        $user = User::find($userId);
+        $editableStatus = true;
+        if ($editableTimeMinute < 0) {
+            $editableStatus = false;
+            $editableTimeMinute = '00';
+            $editableTimeSecond = '00';
+        }
+
+        $perm['editableStatus'] = $editableStatus;
+        $perm['editableTime'] = "{$editableTimeMinute}:{$editableTimeSecond}";
+        $perm['deadlineTime'] = DateHelper::fresnsFormatDateTime($editableDateTime->format('Y-m-d H:i:s'), $timezone, $langTag);
+
+        return $perm;
     }
 }
