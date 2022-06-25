@@ -16,16 +16,7 @@ class UserActivateMiddleware
     public function handle(Request $request, Closure $next)
     {
         if ($this->tokenIsValid($request)) {
-            notifyUserActivate([
-                'platformId' => $request->header('platformId'),
-                'version' => $request->header('version'),
-                'appId' => $request->header('appId'),
-                'langTag' => $request->header('langTag'),
-                'timezone' => $request->header('timezone'),
-                'aid' => $request->header('aid'),
-                'uid' => $request->header('uid'),
-                'deviceInfo' => $request->header('deviceInfo'),
-            ]);
+            notifyUserActivate();
         }
 
         return $next($request);
