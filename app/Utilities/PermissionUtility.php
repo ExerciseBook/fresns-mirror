@@ -10,6 +10,7 @@ namespace App\Utilities;
 
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
+use App\Helpers\PrimaryHelper;
 use App\Models\Group;
 use App\Models\GroupAdmin;
 use App\Models\PostAllow;
@@ -171,9 +172,10 @@ class PermissionUtility
     }
 
     // Check user dialog permission
-    public static function checkUserDialogPerm(User $receiveUser, int $authUserId, ?string $langTag = null)
+    public static function checkUserDialogPerm(int $receiveUserId, int $authUserId, ?string $langTag = null)
     {
         $configs = ConfigHelper::fresnsConfigByItemKeys(['dialog_status', 'dialog_files']);
+        $receiveUser = PrimaryHelper::fresnsModelById('user', $receiveUserId);
 
         $info['status'] = $configs['dialog_status'];
         $info['files'] = $configs['dialog_files'];
@@ -324,6 +326,49 @@ class PermissionUtility
 
             return PermissionUtility::checkUserRolePerm($userId, $allowRoles);
         }
+    }
+
+    // Check post comment perm
+    public static function checkPostCommentPerm(?string $pidOrPostId = null, ?int $userId = null): bool
+    {
+        if (empty($pidOrPostId) || empty($userId)) {
+            return false;
+        }
+
+        if (is_int($pidOrPostId)) {
+            $post = PrimaryHelper::fresnsModelById('post', $pidOrPostId);
+        } else {
+            $post = PrimaryHelper::fresnsModelByFsid('post', $pidOrPostId);
+        }
+
+        if (empty($post)) {
+            return false;
+        }
+
+        if (! $post->postAppend->is_comment) {
+            return false;
+        }
+
+        $user = PrimaryHelper::fresnsModelById('user', $post->user_id);
+
+        if ($user->comment_limit != 1) {
+            if ($user->comment_limit == 4) {
+                return false;
+            }
+
+            $checkUserFollow = InteractiveUtility::checkUserFollowMe($userId, $user->id);
+
+            if (! $checkUserFollow) {
+                return false;
+            }
+
+            $checkUserVerified = PrimaryHelper::fresnsModelById('user', $userId)->verified_status;
+            if ($user->comment_limit == 3 && ! $checkUserVerified) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // Check content edit perm
