@@ -379,7 +379,9 @@ class CommonController extends Controller
             'moreJson' => $dtoRequest->moreJson,
         ];
 
-        return \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($wordBody);
+
+        return $fresnsResp->getOrigin();
     }
 
     // upload file
@@ -416,7 +418,7 @@ class CommonController extends Controller
                     'file' => $dtoRequest->file,
                 ];
 
-                return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFile($wordBody);
+                $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->uploadFile($wordBody);
             break;
 
             case 'fileInfo':
@@ -433,9 +435,11 @@ class CommonController extends Controller
                     'fileInfo' => $dtoRequest->fileInfo,
                 ];
 
-                return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFileInfo($wordBody);
+                $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->uploadFileInfo($wordBody);
             break;
         }
+
+        return $fresnsResp->getOrigin();
     }
 
     // download file

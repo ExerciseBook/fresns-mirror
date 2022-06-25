@@ -210,7 +210,9 @@ class Basis
             );
         }
 
-        return \FresnsCmdWord::plugin($pluginUniKey)->sendCode($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin($pluginUniKey)->sendCode($wordBody);
+
+        return $fresnsResp->getOrigin();
     }
 
     /**

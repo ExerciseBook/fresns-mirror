@@ -41,19 +41,21 @@ class PostController extends Controller
         $dtoRequest = new PostListDTO($request->all());
 
         // Plugin provides data
-        if ($dtoRequest->contentType) {
+        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_list_service');
+
+        if ($dtoRequest->contentType && ! $dataPluginUnikey) {
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByAll');
+        }
 
-            if ($dataPluginUnikey) {
-                $wordBody = [
-                    "header" => \request()->header(),
-                    "body" => $dtoRequest->toArray(),
-                ];
+        if ($dataPluginUnikey) {
+            $wordBody = [
+                "header" => \request()->headers->all(),
+                "body" => $dtoRequest->toArray(),
+            ];
 
-                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($wordBody);
+            $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($wordBody);
 
-                return $fresnsResp->getOrigin();
-            }
+            return $fresnsResp->getOrigin();
         }
 
         // Fresns provides data
@@ -237,7 +239,9 @@ class PostController extends Controller
     // detail
     public function detail(string $pid, Request $request)
     {
-        $dtoRequest = new PostDetailDTO($request->all());
+        $requestData = $request->all();
+        $requestData['pid'] = $pid;
+        $dtoRequest = new PostDetailDTO($requestData);
 
         $post = Post::with(['creator', 'group', 'hashtags'])->where('pid', $pid)->first();
 
@@ -253,15 +257,14 @@ class PostController extends Controller
 
         // Plugin provides data
         $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_detail_service');
-        $dataPlugin = Plugin::where('unikey', $dataPluginUnikey)->isEnable()->first();
 
-        if ($dataPlugin) {
+        if ($dataPluginUnikey) {
             $wordBody = [
-                "header" => \request()->header(),
+                "header" => \request()->headers->all(),
                 "body" => $dtoRequest->toArray(),
             ];
 
-            $fresnsResp = \FresnsCmdWord::plugin($dataPlugin->unikey)->getPostDetail($wordBody);
+            $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostDetail($wordBody);
 
             return $fresnsResp->getOrigin();
         }
@@ -427,19 +430,21 @@ class PostController extends Controller
         $dtoRequest = new PostFollowDTO($requestData);
 
         // Plugin provides data
-        if ($dtoRequest->contentType) {
+        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_follow_service');
+
+        if ($dtoRequest->contentType && ! $dataPluginUnikey) {
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByFollow');
+        }
 
-            if ($dataPluginUnikey) {
-                $wordBody = [
-                    "header" => \request()->header(),
-                    "body" => $dtoRequest->toArray(),
-                ];
+        if ($dataPluginUnikey) {
+            $wordBody = [
+                "header" => \request()->headers->all(),
+                "body" => $dtoRequest->toArray(),
+            ];
 
-                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByFollow($wordBody);
+            $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($wordBody);
 
-                return $fresnsResp->getOrigin();
-            }
+            return $fresnsResp->getOrigin();
         }
 
         // Fresns provides data
@@ -488,19 +493,21 @@ class PostController extends Controller
         $dtoRequest = new PostNearbyDTO($request->all());
 
         // Plugin provides data
-        if ($dtoRequest->contentType) {
+        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_nearby_service');
+
+        if ($dtoRequest->contentType && ! $dataPluginUnikey) {
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByNearby');
+        }
 
-            if ($dataPluginUnikey) {
-                $wordBody = [
-                    "header" => \request()->header(),
-                    "body" => $dtoRequest->toArray(),
-                ];
+        if ($dataPluginUnikey) {
+            $wordBody = [
+                "header" => \request()->headers->all(),
+                "body" => $dtoRequest->toArray(),
+            ];
 
-                $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByNearby($wordBody);
+            $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($wordBody);
 
-                return $fresnsResp->getOrigin();
-            }
+            return $fresnsResp->getOrigin();
         }
 
         // Fresns provides data

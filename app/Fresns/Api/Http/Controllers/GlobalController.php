@@ -174,7 +174,9 @@ class GlobalController extends Controller
             'expireTime' => $dtoRequest->expireTime,
         ];
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->getUploadToken($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->getUploadToken($wordBody);
+
+        return $fresnsResp->getOrigin();
     }
 
     // roles

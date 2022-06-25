@@ -46,7 +46,9 @@ class File
             );
         }
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->getUploadToken($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->getUploadToken($wordBody);
+
+        return $fresnsResp->getOrigin();
     }
 
     /**
@@ -85,7 +87,9 @@ class File
             );
         }
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFile($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->uploadFile($wordBody);
+
+        return $fresnsResp->getOrigin();
     }
 
     /**
@@ -124,7 +128,9 @@ class File
             );
         }
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->uploadFileInfo($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->uploadFileInfo($wordBody);
+
+        return $fresnsResp->getOrigin();
     }
 
     /**
@@ -148,7 +154,9 @@ class File
         }
 
         if ($storageConfig['antiLinkConfigStatus']) {
-            return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfo($wordBody);
+            $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfo($wordBody);
+
+            return $fresnsResp->getOrigin();
         }
 
         return $this->success(FileHelper::fresnsFileInfoById($dtoWordBody->fileIdOrFid));
@@ -175,7 +183,9 @@ class File
         }
 
         if ($storageConfig['antiLinkConfigStatus']) {
-            return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoList($wordBody);
+            $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfoList($wordBody);
+
+            return $fresnsResp->getOrigin();
         }
 
         return $this->success(FileHelper::fresnsFileInfoListByIds($dtoWordBody->fileIdsOrFids));
@@ -202,7 +212,9 @@ class File
         }
 
         if ($storageConfig['antiLinkConfigStatus']) {
-            return \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl($wordBody);
+            $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl($wordBody);
+
+            return $fresnsResp->getOrigin();
         }
 
         return $this->success([
@@ -245,6 +257,8 @@ class File
             );
         }
 
-        return \FresnsCmdWord::plugin($storageConfig['service'])->physicalDeletionFiles($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin($storageConfig['service'])->physicalDeletionFiles($wordBody);
+
+        return $fresnsResp->getOrigin();
     }
 }
