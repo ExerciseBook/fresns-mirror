@@ -11,12 +11,18 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\EditorCreateDTO;
 use App\Fresns\Api\Http\DTO\EditorDraftsDTO;
+use App\Fresns\Api\Http\DTO\EditorUpdateDTO;
 use App\Fresns\Api\Services\CommentService;
 use App\Fresns\Api\Services\PostService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\CommentLog;
+use App\Models\Extend;
+use App\Models\ExtendUsage;
+use App\Models\File;
+use App\Models\FileUsage;
+use App\Models\Plugin;
 use App\Models\PostLog;
 use App\Models\SessionLog;
 use App\Utilities\ConfigUtility;
@@ -180,8 +186,8 @@ class EditorController extends Controller
 
         // session log
         $logType = match ($type) {
-            'post' => SessionLog::TYPE_CREATE_POST_DRAFT,
-            'comment' => SessionLog::TYPE_CREATE_COMMENT_DRAFT,
+            'post' => SessionLog::TYPE_POST_CREATE_DRAFT,
+            'comment' => SessionLog::TYPE_COMMENT_CREATE_DRAFT,
         };
         $sessionLog = [
             'type' => $logType,
@@ -299,6 +305,240 @@ class EditorController extends Controller
         return $this->success($data);
     }
 
+    // update
+    public function update($type, $draftId, Request $request)
+    {
+        $requestData = $request->all();
+        $requestData['type'] = $type;
+        $requestData['draftId'] = $draftId;
+        $dtoRequest = new EditorUpdateDTO($requestData);
+
+        $authUser = $this->user();
+
+        $draft = match ($type) {
+            'post' => PostLog::where('id', $draftId)->where('user_id', $authUser->id)->first(),
+            'comment' => CommentLog::where('id', $draftId)->where('user_id', $authUser->id)->first(),
+            default => null,
+        };
+
+        if (empty($draft)) {
+            throw new ApiException(38100);
+        }
+
+        if ($draft->state == 2) {
+            throw new ApiException(38101);
+        }
+
+        if ($draft->state == 3) {
+            throw new ApiException(38102);
+        }
+
+        // editorUnikey
+        if ($dtoRequest->editorUnikey) {
+            if ($dtoRequest->editorUnikey == 'Fresns' || $dtoRequest->editorUnikey == 'fresns') {
+                $draft->update([
+                    'is_plugin_editor' => 0,
+                    'editor_unikey' => null,
+                ]);
+            } else {
+                $editorPlugin = Plugin::where('unikey', $dtoRequest->editorUnikey)->first();
+                if (empty($editorPlugin)) {
+                    throw new ApiException(32101);
+                }
+
+                if ($editorPlugin->is_enable == 0) {
+                    throw new ApiException(32102);
+                }
+
+                $draft->update([
+                    'is_plugin_editor' => 1,
+                    'editor_unikey' => $dtoRequest->editorUnikey,
+                ]);
+            }
+        }
+
+        // content
+        if ($dtoRequest->content) {
+            $content = Str::of($dtoRequest->content)->trim();
+            $checkBanWords = ValidationUtility::contentBanWords($content);
+
+            if (! $checkBanWords) {
+                throw new ApiException(38205);
+            }
+
+            $draft->update([
+                'content' => $content,
+            ]);
+        }
+
+        // isMarkdown
+        if ($dtoRequest->isMarkdown) {
+            $draft->update([
+                'is_markdown' => $dtoRequest->isMarkdown,
+            ]);
+        }
+
+        // isAnonymous
+        if ($dtoRequest->isAnonymous) {
+            $draft->update([
+                'is_anonymous' => $dtoRequest->isAnonymous,
+            ]);
+        }
+
+        // mapJson
+        if ($dtoRequest->mapJson) {
+            $draft->update([
+                'map_json' => $dtoRequest->mapJson,
+            ]);
+        }
+
+        // deleteMap
+        if ($dtoRequest->deleteMap) {
+            $draft->update([
+                'map_json' => null,
+            ]);
+        }
+
+        switch ($dtoRequest->type) {
+            // post
+            case 'post':
+                // postGid
+                if ($dtoRequest->postGid) {
+                    $group = PrimaryHelper::fresnsModelByFsid('group', $dtoRequest->postGid);
+
+                    if (empty($group)) {
+                        throw new ApiException(37100);
+                    }
+
+                    if ($group->is_enable == 0) {
+                        throw new ApiException(37101);
+                    }
+
+                    $checkPerm = PermissionUtility::checkUserGroupPublishPerm($group->id, $group->permissions, $authUser->id);
+
+                    if (! $checkPerm['allowPost']) {
+                        throw new ApiException(36311);
+                    }
+
+                    $draft->update([
+                        'group_id' => $group->id,
+                    ]);
+                }
+
+                // postTitle
+                if ($dtoRequest->postTitle) {
+                    $postTitle = Str::of($dtoRequest->postTitle)->trim();
+                    $checkBanWords = ValidationUtility::contentBanWords($postTitle);
+
+                    if (! $checkBanWords) {
+                        throw new ApiException(38205);
+                    }
+
+                    $draft->update([
+                        'title' => $postTitle,
+                    ]);
+                }
+
+                // postIsComment
+                if ($dtoRequest->postIsComment) {
+                    $draft->update([
+                        'is_comment' => $dtoRequest->postIsComment,
+                    ]);
+                }
+
+                // postIsCommentPublic
+                if ($dtoRequest->postIsCommentPublic) {
+                    $draft->update([
+                        'is_comment_public' => $dtoRequest->postIsCommentPublic,
+                    ]);
+                }
+
+                // deleteFile
+                if ($dtoRequest->deleteFile) {
+                    $file = File::where('fid', $dtoRequest->deleteFile)->first();
+
+                    if (empty($file)) {
+                        throw new ApiException(36400);
+                    }
+
+                    FileUsage::where('file_id', $file->id)
+                        ->where('tableName', 'post_logs')
+                        ->where('tableColumn', 'id')
+                        ->where('tableId', $draft->id)
+                        ->delete();
+                }
+
+                // deleteExtend
+                if ($dtoRequest->deleteExtend) {
+                    $extend = Extend::where('eid', $dtoRequest->deleteExtend)->first();
+
+                    if (empty($extend)) {
+                        throw new ApiException(36400);
+                    }
+
+                    $extendUsage = ExtendUsage::where('usage_type', ExtendUsage::TYPE_POST_LOG)
+                        ->where('usage_id', $draft->id)
+                        ->where('extend_id', $extend->id)
+                        ->first();
+
+                    if (empty($extendUsage)) {
+                        throw new ApiException(36400);
+                    }
+
+                    if ($extendUsage->can_delete == 0) {
+                        throw new ApiException(36401);
+                    }
+
+                    $extendUsage->delete();
+                }
+            break;
+
+            // comment
+            case 'comment':
+                // deleteFile
+                if ($dtoRequest->deleteFile) {
+                    $file = File::where('fid', $dtoRequest->deleteFile)->first();
+
+                    if (empty($file)) {
+                        throw new ApiException(36400);
+                    }
+
+                    FileUsage::where('file_id', $file->id)
+                        ->where('tableName', 'comment_logs')
+                        ->where('tableColumn', 'id')
+                        ->where('tableId', $draft->id)
+                        ->delete();
+                }
+
+                // deleteExtend
+                if ($dtoRequest->deleteExtend) {
+                    $extend = Extend::where('eid', $dtoRequest->deleteExtend)->first();
+
+                    if (empty($extend)) {
+                        throw new ApiException(36400);
+                    }
+
+                    $extendUsage = ExtendUsage::where('usage_type', ExtendUsage::TYPE_POST_LOG)
+                        ->where('usage_id', $draft->id)
+                        ->where('extend_id', $extend->id)
+                        ->first();
+
+                    if (empty($extendUsage)) {
+                        throw new ApiException(36400);
+                    }
+
+                    if ($extendUsage->can_delete == 0) {
+                        throw new ApiException(36401);
+                    }
+
+                    $extendUsage->delete();
+                }
+            break;
+        }
+
+        return $this->success();
+    }
+
     // publish
     public function publish($type, $draftId)
     {
@@ -408,8 +648,8 @@ class EditorController extends Controller
 
         // session log
         $sessionLogType = match ($type) {
-            'post' => SessionLog::TYPE_RELEASE_POST,
-            'comment' => SessionLog::TYPE_RELEASE_COMMENT,
+            'post' => SessionLog::TYPE_POST_REVIEW,
+            'comment' => SessionLog::TYPE_COMMENT_REVIEW,
         };
         $sessionLog = [
             'type' => $sessionLogType,
@@ -469,7 +709,6 @@ class EditorController extends Controller
                     }
 
                     if ($checkGroup['reviewPost']) {
-
                         // upload session log
                         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
@@ -518,7 +757,6 @@ class EditorController extends Controller
                     }
 
                     if ($checkGroup['reviewComment']) {
-
                         // upload session log
                         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
@@ -561,6 +799,11 @@ class EditorController extends Controller
         }
 
         // upload session log
+        $sessionLogType = match ($type) {
+            'post' => SessionLog::TYPE_POST_PUBLISH,
+            'comment' => SessionLog::TYPE_COMMENT_PUBLISH,
+        };
+        $sessionLog['type'] = $sessionLogType;
         $sessionLog['objectResult'] = SessionLog::STATE_SUCCESS;
         $sessionLog['objectOrderId'] = $fresnsResp->getData('id');
         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
