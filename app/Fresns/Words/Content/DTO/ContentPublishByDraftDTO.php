@@ -10,7 +10,7 @@ namespace App\Fresns\Words\Content\DTO;
 
 use Fresns\DTO\DTO;
 
-class ReleaseContentDTO extends DTO
+class ContentPublishByDraftDTO extends DTO
 {
     /**
      * @return array

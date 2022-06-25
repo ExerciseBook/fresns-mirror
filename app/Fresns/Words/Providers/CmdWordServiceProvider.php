@@ -73,7 +73,8 @@ class CmdWordServiceProvider extends ServiceProvider implements \Fresns\CmdWordM
         // Content
         ['word' => 'createDraft', 'provider' => [Content::class, 'createDraft']],
         ['word' => 'generateDraft', 'provider' => [Content::class, 'generateDraft']],
-        ['word' => 'releaseContent', 'provider' => [Content::class, 'releaseContent']],
+        ['word' => 'contentPublishByDraft', 'provider' => [Content::class, 'contentPublishByDraft']],
+        ['word' => 'contentDirectPublish', 'provider' => [Content::class, 'contentDirectPublish']],
         ['word' => 'logicalDeletionContent', 'provider' => [Content::class, 'logicalDeletionContent']],
         ['word' => 'physicalDeletionContent', 'provider' => [Content::class, 'physicalDeletionContent']],
 

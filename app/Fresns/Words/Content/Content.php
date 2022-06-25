@@ -8,11 +8,11 @@
 
 namespace App\Fresns\Words\Content;
 
+use App\Fresns\Words\Content\DTO\ContentPublishByDraftDTO;
 use App\Fresns\Words\Content\DTO\CreateDraftDTO;
 use App\Fresns\Words\Content\DTO\GenerateDraftDTO;
 use App\Fresns\Words\Content\DTO\LogicalDeletionContentDTO;
 use App\Fresns\Words\Content\DTO\PhysicalDeletionContentDTO;
-use App\Fresns\Words\Content\DTO\ReleaseContentDTO;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\ArchiveUsage;
@@ -36,6 +36,7 @@ use App\Utilities\ConfigUtility;
 use App\Utilities\ContentUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\PermissionUtility;
+use App\Utilities\ValidationUtility;
 use Carbon\Carbon;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
 use Illuminate\Support\Str;
@@ -48,10 +49,21 @@ class Content
     public function createDraft($wordBody)
     {
         $dtoWordBody = new CreateDraftDTO($wordBody);
-
-        $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
-
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
+
+        $authUser = PrimaryHelper::fresnsModelByFsid('user', $dtoWordBody->uid);
+        if (!$authUser) {
+            return $this->failure(
+                35201,
+                ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
+            );
+        }
+        if ($authUser->is_enable == 0) {
+            return $this->failure(
+                35202,
+                ConfigUtility::getCodeMessage(35202, 'Fresns', $langTag)
+            );
+        }
 
         $isPluginEditor = 0;
         $editorUnikey = null;
@@ -77,10 +89,10 @@ class Content
                     $title = Str::of($dtoWordBody->postTitle)->trim();
                 }
 
-                $checkLog = PostLog::with(['files', 'extends'])->where('user_id', $userId)->where('create_type', 1)->where('state', 1)->first();
+                $checkLog = PostLog::with(['files', 'extends'])->where('user_id', $authUser->id)->where('create_type', 1)->where('state', 1)->first();
 
                 $logData = [
-                    'user_id' => $userId,
+                    'user_id' => $authUser->id,
                     'create_type' => $dtoWordBody->createType,
                     'is_plugin_editor' => $isPluginEditor,
                     'editor_unikey' => $editorUnikey,
@@ -92,14 +104,14 @@ class Content
                     'map_json' => $dtoWordBody->mapJson ?? null,
                 ];
 
-                if (! $checkLog) {
-                    $logModel = PostLog::createMany($logData);
+                if (!$checkLog) {
+                    $logModel = PostLog::create($logData);
                 }
 
-                if (! $checkLog->content && ! $checkLog->files && ! $checkLog->extends) {
+                if (!$checkLog->content && !$checkLog->files && !$checkLog->extends) {
                     $logModel = $checkLog->update($logData);
                 } else {
-                    $logModel = PostLog::createMany($logData);
+                    $logModel = PostLog::create($logData);
                 }
             break;
 
@@ -114,10 +126,10 @@ class Content
                     );
                 }
 
-                $checkLog = CommentLog::with(['files', 'extends'])->where('user_id', $userId)->where('create_type', 1)->where('state', 1)->first();
+                $checkLog = CommentLog::with(['files', 'extends'])->where('user_id', $authUser->id)->where('create_type', 1)->where('state', 1)->first();
 
                 $logData = [
-                    'user_id' => $userId,
+                    'user_id' => $authUser->id,
                     'create_type' => $dtoWordBody->createType,
                     'is_plugin_editor' => $isPluginEditor,
                     'editor_unikey' => $editorUnikey,
@@ -127,14 +139,14 @@ class Content
                     'map_json' => $dtoWordBody->mapJson ?? null,
                 ];
 
-                if (! $checkLog) {
-                    $logModel = CommentLog::createMany($logData);
+                if (!$checkLog) {
+                    $logModel = CommentLog::create($logData);
                 }
 
-                if (! $checkLog->content && ! $checkLog->files && ! $checkLog->extends) {
+                if (!$checkLog->content && !$checkLog->files && !$checkLog->extends) {
                     $logModel = $checkLog->update($logData);
                 } else {
-                    $logModel = CommentLog::createMany($logData);
+                    $logModel = CommentLog::create($logData);
                 }
             break;
         }
@@ -148,7 +160,7 @@ class Content
                     2 => ExtendUsage::TYPE_COMMENT_LOG,
                 };
 
-                ExtendUsage::createMany([
+                ExtendUsage::create([
                     'usage_type' => $usageType,
                     'usage_id' => $logModel->id,
                     'extend_id' => $extendId,
@@ -175,6 +187,21 @@ class Content
             // post
             case 1:
                 $post = PrimaryHelper::fresnsModelByFsid('post', $dtoWordBody->fsid);
+
+                $creator = PrimaryHelper::fresnsModelById('user', $post->user_id);
+                if (!$creator) {
+                    return $this->failure(
+                        35201,
+                        ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
+                    );
+                }
+                if ($creator->is_enable == 0) {
+                    return $this->failure(
+                        35202,
+                        ConfigUtility::getCodeMessage(35202, 'Fresns', $langTag)
+                    );
+                }
+
                 $editConfig = ConfigHelper::fresnsConfigByItemKeys([
                     'post_edit',
                     'post_edit_time_limit',
@@ -182,7 +209,7 @@ class Content
                     'post_edit_digest_limit',
                 ]);
 
-                if (! $editConfig['post_edit']) {
+                if (!$editConfig['post_edit']) {
                     return $this->failure(
                         36305,
                         ConfigUtility::getCodeMessage(36305, 'Fresns', $langTag)
@@ -198,14 +225,14 @@ class Content
                     );
                 }
 
-                if (! $editConfig['post_edit_sticky_limit'] && $post->sticky_state != 1) {
+                if (!$editConfig['post_edit_sticky_limit'] && $post->sticky_state != 1) {
                     return $this->failure(
                         36307,
                         ConfigUtility::getCodeMessage(36307, 'Fresns', $langTag)
                     );
                 }
 
-                if (! $editConfig['post_edit_digest_limit'] && $post->digest_state != 1) {
+                if (!$editConfig['post_edit_digest_limit'] && $post->digest_state != 1) {
                     return $this->failure(
                         36308,
                         ConfigUtility::getCodeMessage(36308, 'Fresns', $langTag)
@@ -224,7 +251,21 @@ class Content
             case 2:
                 $comment = PrimaryHelper::fresnsModelByFsid('comment', $dtoWordBody->fsid);
 
-                if (! empty($comment->top_comment_id) || $comment->top_comment_id == 0) {
+                $creator = PrimaryHelper::fresnsModelById('user', $comment->user_id);
+                if (!$creator) {
+                    return $this->failure(
+                        35201,
+                        ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
+                    );
+                }
+                if ($creator->is_enable == 0) {
+                    return $this->failure(
+                        35202,
+                        ConfigUtility::getCodeMessage(35202, 'Fresns', $langTag)
+                    );
+                }
+
+                if (!empty($comment->top_comment_id) || $comment->top_comment_id == 0) {
                     return $this->failure(
                         36313,
                         ConfigUtility::getCodeMessage(36313, 'Fresns', $langTag)
@@ -238,7 +279,7 @@ class Content
                     'comment_edit_digest_limit',
                 ]);
 
-                if (! $editConfig['comment_edit']) {
+                if (!$editConfig['comment_edit']) {
                     return $this->failure(
                         36306,
                         ConfigUtility::getCodeMessage(36306, 'Fresns', $langTag)
@@ -254,14 +295,14 @@ class Content
                     );
                 }
 
-                if (! $editConfig['comment_edit_sticky_limit'] && $comment->sticky_state != 1) {
+                if (!$editConfig['comment_edit_sticky_limit'] && $comment->sticky_state != 1) {
                     return $this->failure(
                         36307,
                         ConfigUtility::getCodeMessage(36307, 'Fresns', $langTag)
                     );
                 }
 
-                if (! $editConfig['comment_edit_digest_limit'] && $comment->digest_state != 1) {
+                if (!$editConfig['comment_edit_digest_limit'] && $comment->digest_state != 1) {
                     return $this->failure(
                         36308,
                         ConfigUtility::getCodeMessage(36308, 'Fresns', $langTag)
@@ -286,10 +327,10 @@ class Content
         ]);
     }
 
-    // releaseContent
-    public function releaseContent($wordBody)
+    // contentPublishByDraft
+    public function contentPublishByDraft($wordBody)
     {
-        $dtoWordBody = new ReleaseContentDTO($wordBody);
+        $dtoWordBody = new ContentPublishByDraftDTO($wordBody);
 
         $logModel = match ($dtoWordBody->type) {
             1 => PostLog::where('id', $dtoWordBody->logId)->first(),
@@ -319,6 +360,20 @@ class Content
             ]);
         }
 
+        $creator = PrimaryHelper::fresnsModelById('user', $logModel->user_id);
+        if (!$creator) {
+            return $this->failure(
+                35201,
+                ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
+            );
+        }
+        if ($creator->is_enable == 0) {
+            return $this->failure(
+                35202,
+                ConfigUtility::getCodeMessage(35202, 'Fresns', $langTag)
+            );
+        }
+
         switch ($dtoWordBody->type) {
             // post
             case 1:
@@ -344,13 +399,278 @@ class Content
         ]);
     }
 
+    // contentDirectPublish
+    public function contentDirectPublish($wordBody)
+    {
+        $dtoWordBody = new CreateDraftDTO($wordBody);
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
+
+        $authUser = PrimaryHelper::fresnsModelByFsid('user', $dtoWordBody->uid);
+        if (!$authUser) {
+            return $this->failure(
+                35201,
+                ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
+            );
+        }
+        if ($authUser->is_enable == 0) {
+            return $this->failure(
+                35202,
+                ConfigUtility::getCodeMessage(35202, 'Fresns', $langTag)
+            );
+        }
+
+        $type = match ($dtoWordBody->type) {
+            1 => 'post',
+            2 => 'comment',
+        };
+
+        $editorConfig = ConfigHelper::fresnsConfigByItemKeys([
+            "{$type}_editor_title_required",
+            "{$type}_editor_title_length",
+            "{$type}_editor_group_required",
+            "{$type}_editor_content_length",
+            'content_review_service',
+        ]);
+
+        if ($dtoWordBody->content) {
+            $content = Str::of($dtoWordBody->content)->trim();
+
+            $contentLength = Str::length($content);
+            if ($contentLength > $editorConfig["{$type}_editor_content_length"]) {
+                return $this->failure(
+                    38204,
+                    ConfigUtility::getCodeMessage(38204, 'Fresns', $langTag)
+                );
+            }
+
+            $checkBanWords = ValidationUtility::contentBanWords($content);
+            if (!$checkBanWords) {
+                return $this->failure(
+                    38205,
+                    ConfigUtility::getCodeMessage(38205, 'Fresns', $langTag)
+                );
+            }
+        } else {
+            return $this->failure(
+                38203,
+                ConfigUtility::getCodeMessage(38203, 'Fresns', $langTag)
+            );
+        }
+
+        switch ($type) {
+            // post
+            case 'post':
+                if ($editorConfig['post_editor_group_required'] && !$dtoWordBody->postGid) {
+                    return $this->failure(
+                        38206,
+                        ConfigUtility::getCodeMessage(38206, 'Fresns', $langTag)
+                    );
+                }
+
+                if ($editorConfig['post_editor_title_required'] && !$dtoWordBody->postTitle) {
+                    return $this->failure(
+                        38201,
+                        ConfigUtility::getCodeMessage(38201, 'Fresns', $langTag)
+                    );
+                }
+
+                $group = PrimaryHelper::fresnsModelByFsid('group', $dtoWordBody->postGid);
+
+                $title = null;
+                if ($dtoWordBody->postTitle) {
+                    $title = Str::of($dtoWordBody->postTitle)->trim();
+
+                    $titleLength = Str::length($title);
+                    if ($titleLength > $editorConfig['post_editor_title_length']) {
+                        return $this->failure(
+                            38202,
+                            ConfigUtility::getCodeMessage(38202, 'Fresns', $langTag)
+                        );
+                    }
+
+                    $checkTitleBanWords = ValidationUtility::contentBanWords($title);
+                    if (!$checkTitleBanWords) {
+                        return $this->failure(
+                            38205,
+                            ConfigUtility::getCodeMessage(38205, 'Fresns', $langTag)
+                        );
+                    }
+                }
+            break;
+
+            // comment
+            case 'comment':
+                $post = PrimaryHelper::fresnsModelByFsid('post', $dtoWordBody->commentPid);
+                $group = PrimaryHelper::fresnsModelByFsid('group', $post->group_id);
+                $parentComment = PrimaryHelper::fresnsModelByFsid('comment', $dtoWordBody->commentCid);
+
+                $topCommentId = null;
+                if (! $parentComment) {
+                    $topCommentId = $parentComment?->top_comment_id ?? null;
+                }
+            break;
+        }
+
+        if ($group) {
+            $checkGroupPublishPerm = PermissionUtility::checkUserGroupPublishPerm($group->id, $group->permissions, $authUser->id);
+        } else {
+            $checkGroupPublishPerm = [
+                'allowPost' => true,
+                'reviewPost' => false,
+                'allowComment' => true,
+                'reviewComment' => false,
+            ];
+        }
+
+        switch ($type) {
+            // post
+            case 'post':
+                if (!$checkGroupPublishPerm['allowPost']) {
+                    return $this->failure(
+                        36311,
+                        ConfigUtility::getCodeMessage(36311, 'Fresns', $langTag)
+                    );
+                }
+
+                $checkReview = ValidationUtility::contentReviewWords($content);
+
+                if ($checkGroupPublishPerm['reviewComment'] || $checkReview) {
+                    $reviewResp = \FresnsCmdWord::plugin('Fresns')->createDraft($wordBody);
+
+                    if ($reviewResp->isErrorResponse()) {
+                        return $reviewResp->errorResponse();
+                    }
+
+                    PostLog::where('id', $reviewResp->getData('logId'))->update([
+                        'state' => 2,
+                        'submit_at' => now(),
+                    ]);
+
+                    return $reviewResp->getOrigin();
+                }
+
+                $post = Post::create([
+                    'user_id' => $authUser->id,
+                    'group_id' => $group?->id ?? null,
+                    'title' => $title,
+                    'content' => $content,
+                    'is_markdown' => $dtoWordBody->isMarkdown ?? 0,
+                    'is_anonymous' => $dtoWordBody->isAnonymous ?? 0,
+                    'map_id' => $dtoWordBody->mapJson['mapId'] ?? null,
+                    'map_longitude' => $dtoWordBody->mapJson['latitude'] ?? null,
+                    'map_latitude' => $dtoWordBody->mapJson['longitude'] ?? null,
+                ]);
+
+                PostAppend::create([
+                    'post_id' => $post->id,
+                    'is_comment' => $dtoWordBody->postIsComment ?? 1,
+                    'is_comment_public' => $dtoWordBody->postIsCommentPublic ?? 1,
+                    'map_json' => $dtoWordBody->mapJson ?? null,
+                    'map_scale' => $dtoWordBody->mapJson['scale'] ?? null,
+                    'map_continent_code' => $dtoWordBody->mapJson['continentCode'] ?? null,
+                    'map_country_code' => $dtoWordBody->mapJson['countryCode'] ?? null,
+                    'map_region_code' => $dtoWordBody->mapJson['regionCode'] ?? null,
+                    'map_city_code' => $dtoWordBody->mapJson['cityCode'] ?? null,
+                    'map_city' => $dtoWordBody->mapJson['city'] ?? null,
+                    'map_zip' => $dtoWordBody->mapJson['zip'] ?? null,
+                    'map_poi' => $dtoWordBody->mapJson['poi'] ?? null,
+                    'map_poi_id' => $dtoWordBody->mapJson['poiId'] ?? null,
+                ]);
+
+                $primaryId = $post->id;
+                $fsid = $post->pid;
+            break;
+
+            // comment
+            case 'comment':
+                if (!$checkGroupPublishPerm['allowComment']) {
+                    return $this->failure(
+                        36312,
+                        ConfigUtility::getCodeMessage(36312, 'Fresns', $langTag)
+                    );
+                }
+
+                $checkReview = ValidationUtility::contentReviewWords($content);
+
+                if ($checkGroupPublishPerm['reviewComment'] || $checkReview) {
+                    $reviewResp = \FresnsCmdWord::plugin('Fresns')->createDraft($wordBody);
+
+                    if ($reviewResp->isErrorResponse()) {
+                        return $reviewResp->errorResponse();
+                    }
+
+                    CommentLog::where('id', $reviewResp->getData('logId'))->update([
+                        'state' => 2,
+                        'submit_at' => now(),
+                    ]);
+
+                    return $reviewResp->getOrigin();
+                }
+
+                $comment = Comment::create([
+                    'user_id' => $authUser->id,
+                    'post_id' => $post->id,
+                    'group_id' => $post->group_id,
+                    'top_comment_id' => $topCommentId,
+                    'parent_id' => $parentComment?->id ?? null,
+                    'content' => $content,
+                    'is_markdown' => $dtoWordBody->isMarkdown ?? 0,
+                    'is_anonymous' => $dtoWordBody->isAnonymous ?? 0,
+                    'map_id' => $dtoWordBody->mapJson['mapId'] ?? null,
+                    'map_longitude' => $dtoWordBody->mapJson['latitude'] ?? null,
+                    'map_latitude' => $dtoWordBody->mapJson['longitude'] ?? null,
+                ]);
+
+                CommentAppend::create([
+                    'map_json' => $$dtoWordBody->mapJson ?? null,
+                    'map_scale' => $$dtoWordBody->mapJson['scale'] ?? null,
+                    'map_continent_code' => $$dtoWordBody->mapJson['continentCode'] ?? null,
+                    'map_country_code' => $$dtoWordBody->mapJson['countryCode'] ?? null,
+                    'map_region_code' => $$dtoWordBody->mapJson['regionCode'] ?? null,
+                    'map_city_code' => $$dtoWordBody->mapJson['cityCode'] ?? null,
+                    'map_city' => $$dtoWordBody->mapJson['city'] ?? null,
+                    'map_zip' => $$dtoWordBody->mapJson['zip'] ?? null,
+                    'map_poi' => $$dtoWordBody->mapJson['poi'] ?? null,
+                    'map_poi_id' => $$dtoWordBody->mapJson['poiId'] ?? null,
+                ]);
+
+                $primaryId = $comment->id;
+                $fsid = $comment->cid;
+            break;
+        }
+
+        if ($dtoWordBody->eid) {
+            $extendId = PrimaryHelper::fresnsExtendIdByEid($dtoWordBody->eid);
+
+            if ($extendId) {
+                $usageType = match ($dtoWordBody->type) {
+                    1 => ExtendUsage::TYPE_POST,
+                    2 => ExtendUsage::TYPE_COMMENT,
+                };
+
+                ExtendUsage::create([
+                    'usage_type' => $usageType,
+                    'usage_id' => $primaryId,
+                    'extend_id' => $extendId,
+                    'plugin_unikey' => 'Fresns',
+                ]);
+            }
+        }
+
+        return $this->success([
+            'type' => $dtoWordBody->type,
+            'id' => $primaryId,
+            'fsid' => $fsid,
+        ]);
+    }
+
     // logicalDeletionContent
     public function logicalDeletionContent($wordBody)
     {
         $dtoWordBody = new LogicalDeletionContentDTO($wordBody);
 
         switch ($dtoWordBody->contentType) {
-            // main
+                // main
             case 1:
                 $model = match ($dtoWordBody->type) {
                     1 => Post::where('pid', $dtoWordBody->contentFsid)->first(),
@@ -386,9 +706,9 @@ class Content
                     1 => OperationUsage::TYPE_POST,
                     2 => OperationUsage::TYPE_COMMENT,
                 };
-            break;
+                break;
 
-            // log
+                // log
             case 2:
                 $model = match ($dtoWordBody->type) {
                     1 => PostLog::where('id', $dtoWordBody->contentLogId)->first(),
@@ -404,7 +724,7 @@ class Content
                     1 => OperationUsage::TYPE_POST_LOG,
                     2 => OperationUsage::TYPE_COMMENT_LOG,
                 };
-            break;
+                break;
         }
 
         FileUsage::where('table_name', $tableName)->where('table_column', 'id')->where('table_id', $model->id)->delete();
@@ -428,7 +748,7 @@ class Content
         $dtoWordBody = new PhysicalDeletionContentDTO($wordBody);
 
         switch ($dtoWordBody->contentType) {
-            // main
+                // main
             case 1:
                 $model = match ($dtoWordBody->type) {
                     1 => Post::where('pid', $dtoWordBody->contentFsid)->first(),
@@ -464,9 +784,9 @@ class Content
                     1 => OperationUsage::TYPE_POST,
                     2 => OperationUsage::TYPE_COMMENT,
                 };
-            break;
+                break;
 
-            // log
+                // log
             case 2:
                 $model = match ($dtoWordBody->type) {
                     1 => PostLog::where('id', $dtoWordBody->contentLogId)->first(),
@@ -482,7 +802,7 @@ class Content
                     1 => OperationUsage::TYPE_POST_LOG,
                     2 => OperationUsage::TYPE_COMMENT_LOG,
                 };
-            break;
+                break;
         }
 
         $fileIds = FileUsage::where('table_name', $tableName)->where('table_column', 'id')->where('table_id', $model->id)->pluck('file_id')->toArray();
