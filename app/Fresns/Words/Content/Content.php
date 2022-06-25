@@ -8,12 +8,12 @@
 
 namespace App\Fresns\Words\Content;
 
+use App\Fresns\Words\Content\DTO\CreateDraftDTO;
 use App\Fresns\Words\Content\DTO\GenerateDraftDTO;
 use App\Fresns\Words\Content\DTO\LogicalDeletionContentDTO;
 use App\Fresns\Words\Content\DTO\PhysicalDeletionContentDTO;
 use App\Fresns\Words\Content\DTO\ReleaseContentDTO;
 use App\Helpers\ConfigHelper;
-use App\Helpers\DateHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\ArchiveUsage;
 use App\Models\Comment;
@@ -38,121 +38,68 @@ use App\Utilities\InteractiveUtility;
 use App\Utilities\PermissionUtility;
 use Carbon\Carbon;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
+use Illuminate\Support\Str;
 
 class Content
 {
     use CmdWordResponseTrait;
 
-    // generateDraft
-    public function generateDraft($wordBody)
+    // createDraft
+    public function createDraft($wordBody)
     {
-        $dtoWordBody = new GenerateDraftDTO($wordBody);
+        $dtoWordBody = new CreateDraftDTO($wordBody);
 
         $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
 
-        $hashtagShow = ConfigHelper::fresnsConfigByItemKey('hashtag_show');
-        $hashtagName = null;
-        if ($hashtagShow == 1) {
-            $hashtagName = '#'.$dtoWordBody->hname.' ';
-        } else {
-            $hashtagName = '#'.$dtoWordBody->hname.'# ';
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
+
+        $isPluginEditor = 0;
+        $editorUnikey = null;
+        if ($dtoWordBody->editorUnikey) {
+            $isPluginEditor = 1;
+            $editorUnikey = $dtoWordBody->editorUnikey;
         }
 
+        $content = null;
+        if ($dtoWordBody->content) {
+            $content = Str::of($dtoWordBody->content)->trim();
+        }
+        $isMarkdown = $dtoWordBody->isMarkdown ?? 0;
         $isAnonymous = $dtoWordBody->isAnonymous ?? 0;
-        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
-        $timezone = \request()->header('timezone', ConfigHelper::fresnsConfigDefaultTimezone());
-        $editableStatus = true;
-        $editableTime = null;
-        $deadlineTime = null;
 
         switch ($dtoWordBody->type) {
             // post
             case 1:
-                $group = PrimaryHelper::fresnsModelByFsid($dtoWordBody->gid);
+                $groupId = PrimaryHelper::fresnsGroupIdByGid($dtoWordBody->gid);
 
-                // check group publish
-                if (! empty($group)) {
-                    $checkPublish = PermissionUtility::checkUserGroupPublishPerm($group->id, $group->permissions, $userId);
-
-                    if (! $checkPublish['allowPost']) {
-                        return $this->failure(
-                            36311,
-                            ConfigUtility::getCodeMessage(36311, 'Fresns', $langTag)
-                        );
-                    }
+                $title = null;
+                if ($dtoWordBody->postTitle) {
+                    $title = Str::of($dtoWordBody->postTitle)->trim();
                 }
 
-                // generate draft
-                if (empty($dtoWordBody->fsid)) {
-                    $checkLog = null;
-                    if ($dtoWordBody->source == 1) {
-                        $checkLog = PostLog::where('user_id', $userId)->where('create_type', 1)->where('state', 1)->first();
-                    }
+                $checkLog = PostLog::with(['files', 'extends'])->where('user_id', $userId)->where('create_type', 1)->where('state', 1)->first();
 
-                    if ($checkLog) {
-                        $logModel = $checkLog;
-                    } else {
-                        $isPluginEditor = 0;
-                        $editorUnikey = null;
-                        if ($dtoWordBody->editorUnikey) {
-                            $isPluginEditor = 1;
-                            $editorUnikey = $dtoWordBody->editorUnikey;
-                        }
+                $logData = [
+                    'user_id' => $userId,
+                    'create_type' => $dtoWordBody->createType,
+                    'is_plugin_editor' => $isPluginEditor,
+                    'editor_unikey' => $editorUnikey,
+                    'group_id' => $groupId,
+                    'title' => $title,
+                    'content' => $content,
+                    'is_markdown' => $isMarkdown,
+                    'is_anonymous' => $isAnonymous,
+                    'map_json' => $dtoWordBody->mapJson ?? null,
+                ];
 
-                        $logModel = PostLog::create([
-                            'user_id' => $userId,
-                            'group_id' => $group->id,
-                            'content' => $hashtagName,
-                            'is_anonymous' => $isAnonymous,
-                            'is_plugin_editor' => $isPluginEditor,
-                            'editor_unikey' => $editorUnikey,
-                        ]);
-                    }
+                if (! $checkLog) {
+                    $logModel = PostLog::createMany($logData);
+                }
+
+                if (! $checkLog->content && ! $checkLog->files && ! $checkLog->extends) {
+                    $logModel = $checkLog->update($logData);
                 } else {
-                    $post = PrimaryHelper::fresnsModelByFsid('post', $dtoWordBody->fsid);
-                    $editConfig = ConfigHelper::fresnsConfigByItemKeys([
-                        'post_edit',
-                        'post_edit_time_limit',
-                        'post_edit_sticky_limit',
-                        'post_edit_digest_limit',
-                    ]);
-
-                    if (! $editConfig['post_edit']) {
-                        return $this->failure(
-                            36305,
-                            ConfigUtility::getCodeMessage(36305, 'Fresns', $langTag)
-                        );
-                    }
-
-                    $timeDiff = Carbon::parse($post->created_at)->diffInMinutes(now());
-
-                    if ($timeDiff > $editConfig['post_edit_time_limit']) {
-                        return $this->failure(
-                            36309,
-                            ConfigUtility::getCodeMessage(36309, 'Fresns', $langTag)
-                        );
-                    }
-
-                    if (! $editConfig['post_edit_sticky_limit'] && $post->sticky_state != 1) {
-                        return $this->failure(
-                            36307,
-                            ConfigUtility::getCodeMessage(36307, 'Fresns', $langTag)
-                        );
-                    }
-
-                    if (! $editConfig['post_edit_digest_limit'] && $post->digest_state != 1) {
-                        return $this->failure(
-                            36308,
-                            ConfigUtility::getCodeMessage(36308, 'Fresns', $langTag)
-                        );
-                    }
-
-                    $checkContentEditPerm = PermissionUtility::checkContentEditPerm($post->created_at, $editConfig['post_edit_time_limit'], $timezone, $langTag);
-                    $editableStatus = $checkContentEditPerm['editableStatus'];
-                    $editableTime = $checkContentEditPerm['editableTime'];
-                    $deadlineTime = $checkContentEditPerm['deadlineTime'];
-
-                    $logModel = ContentUtility::generatePostDraft($post);
+                    $logModel = PostLog::createMany($logData);
                 }
             break;
 
@@ -160,90 +107,173 @@ class Content
             case 2:
                 $postId = PrimaryHelper::fresnsPostIdByPid($dtoWordBody->pid);
 
-                if (empty($dtoWordBody->fsid)) {
-                    if (empty($postId)) {
-                        return $this->failure(
-                            37300,
-                            ConfigUtility::getCodeMessage(37300, 'Fresns', $langTag)
-                        );
-                    }
-
-                    $checkLog = null;
-                    if ($dtoWordBody->source == 1) {
-                        $checkLog = CommentLog::where('user_id', $userId)->where('create_type', 1)->where('state', 1)->first();
-                    }
-
-                    if ($checkLog) {
-                        $logModel = $checkLog;
-                    } else {
-                        $isPluginEditor = 0;
-                        $editorUnikey = null;
-                        if ($dtoWordBody->editorUnikey) {
-                            $isPluginEditor = 1;
-                            $editorUnikey = $dtoWordBody->editorUnikey;
-                        }
-
-                        $logModel = CommentLog::create([
-                            'user_id' => $userId,
-                            'post_id' => $postId,
-                            'content' => $hashtagName,
-                            'is_anonymous' => $isAnonymous,
-                        ]);
-                    }
-                } else {
-                    $comment = PrimaryHelper::fresnsModelByFsid('comment', $dtoWordBody->fsid);
-
-                    if (! empty($comment->top_comment_id) || $comment->top_comment_id == 0) {
-                        return $this->failure(
-                            36313,
-                            ConfigUtility::getCodeMessage(36313, 'Fresns', $langTag)
-                        );
-                    }
-
-                    $editConfig = ConfigHelper::fresnsConfigByItemKeys([
-                        'comment_edit',
-                        'comment_edit_time_limit',
-                        'comment_edit_sticky_limit',
-                        'comment_edit_digest_limit',
-                    ]);
-
-                    if (! $editConfig['comment_edit']) {
-                        return $this->failure(
-                            36306,
-                            ConfigUtility::getCodeMessage(36306, 'Fresns', $langTag)
-                        );
-                    }
-
-                    $timeDiff = Carbon::parse($comment->created_at)->diffInMinutes(now());
-
-                    if ($timeDiff > $editConfig['comment_edit_time_limit']) {
-                        return $this->failure(
-                            36309,
-                            ConfigUtility::getCodeMessage(36309, 'Fresns', $langTag)
-                        );
-                    }
-
-                    if (! $editConfig['comment_edit_sticky_limit'] && $comment->sticky_state != 1) {
-                        return $this->failure(
-                            36307,
-                            ConfigUtility::getCodeMessage(36307, 'Fresns', $langTag)
-                        );
-                    }
-
-                    if (! $editConfig['comment_edit_digest_limit'] && $comment->digest_state != 1) {
-                        return $this->failure(
-                            36308,
-                            ConfigUtility::getCodeMessage(36308, 'Fresns', $langTag)
-                        );
-                    }
-
-                    $checkContentEditPerm = PermissionUtility::checkContentEditPerm($comment->created_at, $editConfig['comment_edit_time_limit'], $timezone, $langTag);
-                    $editableStatus = $checkContentEditPerm['editableStatus'];
-                    $editableTime = $checkContentEditPerm['editableTime'];
-                    $deadlineTime = $checkContentEditPerm['deadlineTime'];
-
-                    $logModel = ContentUtility::generateCommentDraft($comment);
+                if (empty($postId)) {
+                    return $this->failure(
+                        37300,
+                        ConfigUtility::getCodeMessage(37300, 'Fresns', $langTag)
+                    );
                 }
+
+                $checkLog = CommentLog::with(['files', 'extends'])->where('user_id', $userId)->where('create_type', 1)->where('state', 1)->first();
+
+                $logData = [
+                    'user_id' => $userId,
+                    'create_type' => $dtoWordBody->createType,
+                    'is_plugin_editor' => $isPluginEditor,
+                    'editor_unikey' => $editorUnikey,
+                    'content' => $content,
+                    'is_markdown' => $isMarkdown,
+                    'is_anonymous' => $isAnonymous,
+                    'map_json' => $dtoWordBody->mapJson ?? null,
+                ];
+
+                if (! $checkLog) {
+                    $logModel = CommentLog::createMany($logData);
+                }
+
+                if (! $checkLog->content && ! $checkLog->files && ! $checkLog->extends) {
+                    $logModel = $checkLog->update($logData);
+                } else {
+                    $logModel = CommentLog::createMany($logData);
+                }
+            break;
+        }
+
+        if ($dtoWordBody->eid) {
+            $extendId = PrimaryHelper::fresnsExtendIdByEid($dtoWordBody->eid);
+
+            if ($extendId) {
+                $usageType = match ($dtoWordBody->type) {
+                    1 => ExtendUsage::TYPE_POST_LOG,
+                    2 => ExtendUsage::TYPE_COMMENT_LOG,
+                };
+
+                ExtendUsage::createMany([
+                    'usage_type' => $usageType,
+                    'usage_id' => $logModel->id,
+                    'extend_id' => $extendId,
+                    'plugin_unikey' => 'Fresns',
+                ]);
+            }
+        }
+
+        return $this->success([
+            'type' => $dtoWordBody->type,
+            'logId' => $logModel->id,
+        ]);
+    }
+
+    // generateDraft
+    public function generateDraft($wordBody)
+    {
+        $dtoWordBody = new GenerateDraftDTO($wordBody);
+
+        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
+        $timezone = \request()->header('timezone', ConfigHelper::fresnsConfigDefaultTimezone());
+
+        switch ($dtoWordBody->type) {
+            // post
+            case 1:
+                $post = PrimaryHelper::fresnsModelByFsid('post', $dtoWordBody->fsid);
+                $editConfig = ConfigHelper::fresnsConfigByItemKeys([
+                    'post_edit',
+                    'post_edit_time_limit',
+                    'post_edit_sticky_limit',
+                    'post_edit_digest_limit',
+                ]);
+
+                if (! $editConfig['post_edit']) {
+                    return $this->failure(
+                        36305,
+                        ConfigUtility::getCodeMessage(36305, 'Fresns', $langTag)
+                    );
+                }
+
+                $timeDiff = Carbon::parse($post->created_at)->diffInMinutes(now());
+
+                if ($timeDiff > $editConfig['post_edit_time_limit']) {
+                    return $this->failure(
+                        36309,
+                        ConfigUtility::getCodeMessage(36309, 'Fresns', $langTag)
+                    );
+                }
+
+                if (! $editConfig['post_edit_sticky_limit'] && $post->sticky_state != 1) {
+                    return $this->failure(
+                        36307,
+                        ConfigUtility::getCodeMessage(36307, 'Fresns', $langTag)
+                    );
+                }
+
+                if (! $editConfig['post_edit_digest_limit'] && $post->digest_state != 1) {
+                    return $this->failure(
+                        36308,
+                        ConfigUtility::getCodeMessage(36308, 'Fresns', $langTag)
+                    );
+                }
+
+                $checkContentEditPerm = PermissionUtility::checkContentEditPerm($post->created_at, $editConfig['post_edit_time_limit'], $timezone, $langTag);
+                $editableStatus = $checkContentEditPerm['editableStatus'];
+                $editableTime = $checkContentEditPerm['editableTime'];
+                $deadlineTime = $checkContentEditPerm['deadlineTime'];
+
+                $logModel = ContentUtility::generatePostDraft($post);
+            break;
+
+            // comment
+            case 2:
+                $comment = PrimaryHelper::fresnsModelByFsid('comment', $dtoWordBody->fsid);
+
+                if (! empty($comment->top_comment_id) || $comment->top_comment_id == 0) {
+                    return $this->failure(
+                        36313,
+                        ConfigUtility::getCodeMessage(36313, 'Fresns', $langTag)
+                    );
+                }
+
+                $editConfig = ConfigHelper::fresnsConfigByItemKeys([
+                    'comment_edit',
+                    'comment_edit_time_limit',
+                    'comment_edit_sticky_limit',
+                    'comment_edit_digest_limit',
+                ]);
+
+                if (! $editConfig['comment_edit']) {
+                    return $this->failure(
+                        36306,
+                        ConfigUtility::getCodeMessage(36306, 'Fresns', $langTag)
+                    );
+                }
+
+                $timeDiff = Carbon::parse($comment->created_at)->diffInMinutes(now());
+
+                if ($timeDiff > $editConfig['comment_edit_time_limit']) {
+                    return $this->failure(
+                        36309,
+                        ConfigUtility::getCodeMessage(36309, 'Fresns', $langTag)
+                    );
+                }
+
+                if (! $editConfig['comment_edit_sticky_limit'] && $comment->sticky_state != 1) {
+                    return $this->failure(
+                        36307,
+                        ConfigUtility::getCodeMessage(36307, 'Fresns', $langTag)
+                    );
+                }
+
+                if (! $editConfig['comment_edit_digest_limit'] && $comment->digest_state != 1) {
+                    return $this->failure(
+                        36308,
+                        ConfigUtility::getCodeMessage(36308, 'Fresns', $langTag)
+                    );
+                }
+
+                $checkContentEditPerm = PermissionUtility::checkContentEditPerm($comment->created_at, $editConfig['comment_edit_time_limit'], $timezone, $langTag);
+                $editableStatus = $checkContentEditPerm['editableStatus'];
+                $editableTime = $checkContentEditPerm['editableTime'];
+                $deadlineTime = $checkContentEditPerm['deadlineTime'];
+
+                $logModel = ContentUtility::generateCommentDraft($comment);
             break;
         }
 

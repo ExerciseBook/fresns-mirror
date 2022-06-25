@@ -18,15 +18,8 @@ class GenerateDraftDTO extends DTO
     public function rules(): array
     {
         return [
-            'uid' => ['integer', 'required', 'exists:App\Models\User,uid'],
             'type' => ['integer', 'required', 'in:1,2'],
-            'source' => ['integer', 'required', 'in:1,2'],
-            'editorUnikey' => ['string', 'nullable', 'exists:App\Models\Plugin,unikey'],
             'fsid' => ['string', 'nullable'],
-            'pid' => ['string', 'nullable', 'required_if:type,2'],
-            'gid' => ['string', 'nullable'],
-            'hname' => ['string', 'nullable'],
-            'isAnonymous' => ['boolean', 'nullable'],
         ];
     }
 }

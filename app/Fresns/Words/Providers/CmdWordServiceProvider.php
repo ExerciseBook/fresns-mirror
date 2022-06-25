@@ -71,6 +71,7 @@ class CmdWordServiceProvider extends ServiceProvider implements \Fresns\CmdWordM
         ['word' => 'physicalDeletionFiles', 'provider' => [File::class, 'physicalDeletionFiles']],
 
         // Content
+        ['word' => 'createDraft', 'provider' => [Content::class, 'createDraft']],
         ['word' => 'generateDraft', 'provider' => [Content::class, 'generateDraft']],
         ['word' => 'releaseContent', 'provider' => [Content::class, 'releaseContent']],
         ['word' => 'logicalDeletionContent', 'provider' => [Content::class, 'logicalDeletionContent']],
