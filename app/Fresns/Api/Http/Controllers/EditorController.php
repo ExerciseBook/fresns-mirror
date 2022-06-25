@@ -715,6 +715,7 @@ class EditorController extends Controller
                         // change state
                         $draft->update([
                             'state' => 2,
+                            'submit_at' => now(),
                         ]);
 
                         // review notice
@@ -763,6 +764,7 @@ class EditorController extends Controller
                         // change state
                         $draft->update([
                             'state' => 2,
+                            'submit_at' => now(),
                         ]);
 
                         // review notice
@@ -783,6 +785,7 @@ class EditorController extends Controller
             // change state
             $draft->update([
                 'state' => 2,
+                'submit_at' => now(),
             ]);
 
             // review notice
@@ -791,6 +794,10 @@ class EditorController extends Controller
             // Review
             throw new ApiException(38200);
         }
+
+        $draft->update([
+            'submit_at' => now(),
+        ]);
 
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->releaseContent($wordBody);
 

@@ -256,12 +256,6 @@ class Content
         ]);
     }
 
-    // checkPublish
-    public function checkPublish($wordBody)
-    {
-        // code
-    }
-
     // releaseContent
     public function releaseContent($wordBody)
     {
