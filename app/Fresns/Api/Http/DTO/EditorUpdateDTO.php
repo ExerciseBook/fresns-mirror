@@ -25,12 +25,13 @@ class EditorUpdateDTO extends DTO
             'postTitle' => ['string', 'nullable'],
             'postIsComment' => ['boolean', 'nullable'],
             'postIsCommentPublic' => ['boolean', 'nullable'],
-            'editorUnikey' => ['string', 'nullable'],
-            'fsid' => ['string', 'nullable'],
-            'pid' => ['string', 'nullable', 'required_if:type,comment'],
-            'gid' => ['string', 'nullable'],
-            'hname' => ['string', 'nullable'],
+            'content' => ['string', 'nullable'],
+            'isMarkdown' => ['boolean', 'nullable'],
             'isAnonymous' => ['boolean', 'nullable'],
+            'mapJson' => ['array', 'nullable'],
+            'deleteMap' => ['boolean', 'nullable'],
+            'deleteFile' => ['string', 'nullable'],
+            'deleteExtend' => ['string', 'nullable'],
         ];
     }
 }

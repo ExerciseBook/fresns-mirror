@@ -35,9 +35,9 @@ class UploadSessionLogDTO extends DTO
             'objectAction' => ['string', 'required'],
             'objectResult' => ['integer', 'required', 'in:1,2,3'],
             'objectOrderId' => ['string', 'nullable'],
-            'deviceInfo' => ['json', 'nullable'],
+            'deviceInfo' => ['array', 'nullable'],
             'deviceToken' => ['string', 'nullable'],
-            'moreJson' => ['json', 'nullable'],
+            'moreJson' => ['array', 'nullable'],
         ];
     }
 }

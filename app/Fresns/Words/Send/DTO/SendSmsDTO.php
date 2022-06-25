@@ -25,7 +25,7 @@ class SendSmsDTO extends DTO
             'phoneNumber' => ['integer', 'required'],
             'signName' => ['string', 'nullable'],
             'templateCode' => ['string', 'required'],
-            'templateParam' => ['json', 'nullable'],
+            'templateParam' => ['array', 'nullable'],
         ];
     }
 }
