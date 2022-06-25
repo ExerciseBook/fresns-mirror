@@ -11,11 +11,13 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\EditorCreateDTO;
 use App\Fresns\Api\Http\DTO\EditorDraftsDTO;
+use App\Fresns\Api\Http\DTO\EditorDirectPublishDTO;
 use App\Fresns\Api\Http\DTO\EditorUpdateDTO;
 use App\Fresns\Api\Services\CommentService;
 use App\Fresns\Api\Services\PostService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
+use App\Helpers\FileHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\CommentLog;
 use App\Models\Extend;
@@ -154,6 +156,11 @@ class EditorController extends Controller
                     throw new ApiException(36104);
                 }
 
+                $checkCommentPerm = PermissionUtility::checkPostCommentPerm($dtoRequest->pid, $authUser->id);
+                if (! $checkCommentPerm) {
+                    throw new ApiException(38108);
+                }
+
                 $checkLogCount = CommentLog::where('user_id', $authUser->id)->whereIn('state', [1, 2, 4])->count();
 
                 if ($checkLogCount >= $userRolePerm['comment_draft_count']) {
@@ -170,13 +177,19 @@ class EditorController extends Controller
         $wordBody = [
             'uid' => $authUser->uid,
             'type' => $wordType,
-            'source' => $dtoRequest->source,
+            'createType' => $dtoRequest->createType,
             'editorUnikey' => $dtoRequest->editorUnikey,
-            'fsid' => $dtoRequest->fsid,
-            'pid' => $dtoRequest->pid,
-            'gid' => $dtoRequest->gid,
-            'hname' => $dtoRequest->hname,
+            'postGid' => $dtoRequest->postGid,
+            'postTitle' => $dtoRequest->postTitle,
+            'postIsComment' => $dtoRequest->postIsComment,
+            'postIsCommentPublic' => $dtoRequest->postIsCommentPublic,
+            'commentPid' => $dtoRequest->commentPid,
+            'commentCid' => $dtoRequest->commentCid,
+            'content' => $dtoRequest->content,
+            'isMarkdown' => $dtoRequest->isMarkdown,
             'isAnonymous' => $dtoRequest->isAnonymous,
+            'mapJson' => $dtoRequest->mapJson,
+            'eid' => $dtoRequest->eid,
         ];
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->generateDraft($wordBody);
 
@@ -197,10 +210,10 @@ class EditorController extends Controller
             'langTag' => $langTag,
             'aid' => $this->account()->aid,
             'uid' => $authUser->uid,
-            'objectName' => route('api.editor.post.create'),
-            'objectAction' => 'Editor Create Post Log',
+            'objectName' => route('api.editor.create'),
+            'objectAction' => 'Editor Create Draft',
             'objectResult' => SessionLog::STATE_SUCCESS,
-            'objectOrderId' => null,
+            'objectOrderId' => $fresnsResp->getData('logId'),
             'deviceInfo' => $this->deviceInfo(),
             'deviceToken' => null,
             'moreJson' => null,
@@ -227,6 +240,79 @@ class EditorController extends Controller
             break;
         }
 
+        return $this->success($data);
+    }
+
+    // generate
+    public function generate($type, $fsid)
+    {
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUser = $this->user();
+
+        if ($type != 'post' && $type != 'comment') {
+            throw new ApiException(30002);
+        }
+
+        $wordType = match ($type) {
+            'post' => 1,
+            'comment' => 2,
+        };
+
+        $wordBody = [
+            'type' => $wordType,
+            'createType' => $fsid,
+        ];
+        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->generateDraft($wordBody);
+
+        if ($fresnsResp->isErrorResponse()) {
+            return $fresnsResp->errorResponse();
+        }
+
+        // session log
+        $logType = match ($type) {
+            'post' => SessionLog::TYPE_POST_CREATE_DRAFT,
+            'comment' => SessionLog::TYPE_COMMENT_CREATE_DRAFT,
+        };
+        $sessionLog = [
+            'type' => $logType,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $langTag,
+            'aid' => $this->account()->aid,
+            'uid' => $authUser->uid,
+            'objectName' => route('api.editor.generate'),
+            'objectAction' => 'Editor Generate Draft',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => $fresnsResp->getData('logId'),
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => null,
+            'moreJson' => null,
+        ];
+
+        // upload session log
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
+        switch ($type) {
+            // post
+            case 'post':
+                $service = new PostService();
+
+                $postLog = PostLog::where('id', $fresnsResp->getData('logId'))->first();
+                $data['detail'] = $service->postLogDetail($postLog, $langTag, $timezone);
+            break;
+
+            // comment
+            case 'comment':
+                $service = new CommentService();
+
+                $commentLog = CommentLog::where('id', $fresnsResp->getData('logId'))->first();
+                $data['detail'] = $service->commentLogDetail($commentLog, $langTag, $timezone);
+            break;
+        }
+
+        $edit['editableStatus'] = $fresnsResp->getData('editableStatus');
         $edit['editableTime'] = $fresnsResp->getData('editableTime');
         $edit['deadlineTime'] = $fresnsResp->getData('deadlineTime');
         $data['edit'] = $edit;
@@ -564,6 +650,14 @@ class EditorController extends Controller
             throw new ApiException(38104);
         }
 
+        if ($type == 'comment') {
+            $checkCommentPerm = PermissionUtility::checkPostCommentPerm($draft->post_id, $authUser->id);
+
+            if (! $checkCommentPerm) {
+                throw new ApiException(38108);
+            }
+        }
+
         $editorConfig = ConfigHelper::fresnsConfigByItemKeys([
             "{$type}_editor_title_length",
             "{$type}_editor_content_length",
@@ -816,5 +910,207 @@ class EditorController extends Controller
         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         return $this->success();
+    }
+
+    // revoke
+    public function revoke($type, $draftId)
+    {
+        $authUser = $this->user();
+
+        switch ($type) {
+            // post
+            case 'post':
+                $draft = PostLog::where('user_id', $authUser->id)->where('id', $draftId)->first();
+            break;
+
+            // comment
+            case 'comment':
+                $draft = CommentLog::where('user_id', $authUser->id)->where('id', $draftId)->first();
+            break;
+
+            // default
+            default:
+                throw new ApiException(30002);
+            break;
+        }
+
+        if (empty($draft)) {
+            throw new ApiException(38100);
+        }
+
+        if ($draft->state != 2) {
+            throw new ApiException(36501);
+        }
+
+        $draft->update([
+            'state' => 1,
+        ]);
+
+        return $this->success();
+    }
+
+    // delete
+    public function delete($type, $draftId)
+    {
+        $authUser = $this->user();
+
+        switch ($type) {
+            // post
+            case 'post':
+                $draft = PostLog::where('user_id', $authUser->id)->where('id', $draftId)->first();
+            break;
+
+            // comment
+            case 'comment':
+                $draft = CommentLog::where('user_id', $authUser->id)->where('id', $draftId)->first();
+            break;
+
+            // default
+            default:
+                throw new ApiException(30002);
+            break;
+        }
+
+        if (empty($draft)) {
+            throw new ApiException(38100);
+        }
+
+        if ($draft->state == 2) {
+            throw new ApiException(36404);
+        }
+
+        if ($draft->state == 3) {
+            throw new ApiException(36405);
+        }
+
+        $draft->delete();
+
+        return $this->success();
+    }
+
+    // directPublish
+    public function directPublish(Request $request)
+    {
+        $dtoRequest = new EditorDirectPublishDTO($request->all());
+
+        $authUser = $this->user();
+
+        $fileConfig = FileHelper::fresnsFileStorageConfigByType(File::TYPE_IMAGE);
+        if ($dtoRequest->file) {
+            if (! $fileConfig['storageConfigStatus']) {
+                throw new ApiException(32104);
+            }
+
+            if ($fileConfig['service']) {
+                throw new ApiException(32104);
+            }
+        }
+
+        $wordType = match ($dtoRequest->type) {
+            'post' => 1,
+            'comment' => 2,
+        };
+
+        $wordBody = [
+            'uid' => $authUser->uid,
+            'type' => $wordType,
+            'createType' => $dtoRequest->createType,
+            'editorUnikey' => $dtoRequest->editorUnikey,
+            'postGid' => $dtoRequest->postGid,
+            'postTitle' => $dtoRequest->postTitle,
+            'postIsComment' => $dtoRequest->postIsComment,
+            'postIsCommentPublic' => $dtoRequest->postIsCommentPublic,
+            'commentPid' => $dtoRequest->commentPid,
+            'commentCid' => $dtoRequest->commentCid,
+            'content' => $dtoRequest->content,
+            'isMarkdown' => $dtoRequest->isMarkdown,
+            'isAnonymous' => $dtoRequest->isAnonymous,
+            'mapJson' => $dtoRequest->mapJson,
+            'eid' => $dtoRequest->eid,
+        ];
+        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->contentDirectPublish($wordBody);
+
+        if ($fresnsResp->isErrorResponse()) {
+            return $fresnsResp->errorResponse();
+        }
+
+        $usageType = match ($fresnsResp->getData('type')) {
+            1 => FileUsage::TYPE_POST,
+            2 => FileUsage::TYPE_COMMENT,
+        };
+
+        $fsid = $fresnsResp->getData('fsid') ?? null;
+
+        if (! $fsid) {
+            $tableName = match ($fresnsResp->getData('type')) {
+                1 => 'post_logs',
+                2 => 'comment_logs',
+            };
+
+            $tableId = $fresnsResp->getData('logId');
+
+            $logType = match ($fresnsResp->getData('type')) {
+                1 => SessionLog::TYPE_POST_REVIEW,
+                2 => SessionLog::TYPE_COMMENT_REVIEW,
+            };
+        } else {
+            $tableName = match ($fresnsResp->getData('type')) {
+                1 => 'posts',
+                2 => 'comments',
+            };
+
+            $tableId = $fresnsResp->getData('id');
+
+            $logType = match ($fresnsResp->getData('type')) {
+                1 => SessionLog::TYPE_POST_PUBLISH,
+                2 => SessionLog::TYPE_COMMENT_PUBLISH,
+            };
+        }
+
+        // upload file
+        if ($dtoRequest->file) {
+            $fileWordBody = [
+                'usageType' => $usageType,
+                'platformId' => $this->platformId(),
+                'tableName' => $tableName,
+                'tableColumn' => 'id',
+                'tableId' => $tableId,
+                'tableKey' => null,
+                'aid' => $this->account()->aid,
+                'uid' => $authUser->uid,
+                'type' => File::TYPE_IMAGE,
+                'moreJson' => null,
+                'file' => $dtoRequest->file,
+            ];
+
+            \FresnsCmdWord::plugin('Fresns')->uploadFile($fileWordBody);
+        }
+
+        // session log
+        $sessionLog = [
+            'type' => $logType,
+            'pluginUnikey' => 'Fresns',
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'langTag' => $this->langTag(),
+            'aid' => $this->account()->aid,
+            'uid' => $authUser->uid,
+            'objectName' => route('api.editor.direct.publish'),
+            'objectAction' => 'Editor Create Post Log',
+            'objectResult' => SessionLog::STATE_SUCCESS,
+            'objectOrderId' => $tableId,
+            'deviceInfo' => $this->deviceInfo(),
+            'deviceToken' => null,
+            'moreJson' => null,
+        ];
+
+        // upload session log
+        \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
+
+        if (! $fsid) {
+            return $fresnsResp->getOrigin();
+        } else {
+            return $this->success();
+        }
     }
 }

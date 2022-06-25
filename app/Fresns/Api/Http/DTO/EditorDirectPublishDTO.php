@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class EditorCreateDTO extends DTO
+class EditorDirectPublishDTO extends DTO
 {
     /**
      * @return array
@@ -19,8 +19,6 @@ class EditorCreateDTO extends DTO
     {
         return [
             'type' => ['string', 'required', 'in:post,comment'],
-            'createType' => ['integer', 'required', 'in:1,2'],
-            'editorUnikey' => ['string', 'nullable'],
             'postGid' => ['string', 'nullable'],
             'postTitle' => ['string', 'nullable'],
             'postIsComment' => ['boolean', 'nullable'],
@@ -32,6 +30,7 @@ class EditorCreateDTO extends DTO
             'isAnonymous' => ['boolean', 'nullable'],
             'mapJson' => ['array', 'nullable'],
             'eid' => ['string', 'nullable'],
+            'file' => ['file', 'nullable'],
         ];
     }
 }
