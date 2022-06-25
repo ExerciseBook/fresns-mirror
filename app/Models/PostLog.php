@@ -24,4 +24,14 @@ class PostLog extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function files()
+    {
+        return $this->hasMany(FileUsage::class, 'id', 'table_id')->where('table_name', 'post_logs')->where('table_column', 'id');
+    }
+
+    public function extends()
+    {
+        return $this->hasMany(ExtendUsage::class, 'id', 'usage_id')->where('usage_type', ExtendUsage::TYPE_POST_LOG);
+    }
 }
