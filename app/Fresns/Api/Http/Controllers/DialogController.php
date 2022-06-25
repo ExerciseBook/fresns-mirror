@@ -181,7 +181,7 @@ class DialogController extends Controller
         }
 
         // check send
-        $checkSend = PermissionUtility::checkUserDialogPerm($receiveUser, $authUser->id, $langTag);
+        $checkSend = PermissionUtility::checkUserDialogPerm($receiveUser->id, $authUser->id, $langTag);
         if (! $checkSend['status']) {
             return $this->failure(
                 $checkSend['code'],

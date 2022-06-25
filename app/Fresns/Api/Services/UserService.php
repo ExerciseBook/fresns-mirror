@@ -61,7 +61,7 @@ class UserService
         $followMeStatus['followMeStatus'] = InteractiveUtility::checkUserFollowMe($user->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $followMeStatus);
 
-        $item['dialog'] = PermissionUtility::checkUserDialogPerm($user, $authUserId, $langTag);
+        $item['dialog'] = PermissionUtility::checkUserDialogPerm($user->id, $authUserId, $langTag);
 
         $data = array_merge($userProfile, $userMainRole, $item);
 
