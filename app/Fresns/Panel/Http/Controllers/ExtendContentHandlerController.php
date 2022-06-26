@@ -37,7 +37,9 @@ class ExtendContentHandlerController extends Controller
         }
 
         $pluginScenes = [
+            'extendIp',
             'extendData',
+            'extendSearch',
         ];
         $plugins = Plugin::all();
         $pluginParams = [];

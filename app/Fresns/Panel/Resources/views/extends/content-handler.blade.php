@@ -24,21 +24,21 @@
         @method('put')
         <!--content handler-->
         <div class="row mb-4">
-            <label class="col-lg-2 col-form-label text-lg-end">内容处理:</label>
+            <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.extend_content_service') }}:</label>
             <div class="col-lg-6">
                 <div class="input-group mb-3">
-                    <label class="input-group-text">IP 服务商</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_ip') }}</label>
                     <select class="form-select" name="ip_service">
-                        <option value="" {{ !$params['ip_service'] ? 'selected' : '' }}>🚫 {{ __('FsLang::panel.option_deactivate') }}</option>
+                        <option value="" {{ !$params['ip_service'] ? 'selected' : '' }}>⛔️ {{ __('FsLang::panel.option_close') }}</option>
                         @foreach ($pluginParams['extendIp'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['ip_service'] == $plugin->unikey ? 'selected' : '' }}> {{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="input-group mb-3">
-                    <label class="input-group-text">内容审核服务商</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_review') }}</label>
                     <select class="form-select" name="content_review_service">
-                        <option value="" {{ !$params['content_review_service'] ? 'selected' : '' }}>🚫 {{ __('FsLang::panel.option_deactivate') }}</option>
+                        <option value="" {{ !$params['content_review_service'] ? 'selected' : '' }}>⛔️ {{ __('FsLang::panel.option_close') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['content_review_service'] == $plugin->unikey ? 'selected' : '' }}> {{ $plugin->name }}</option>
                         @endforeach
@@ -49,10 +49,10 @@
 
         <!--content list-->
         <div class="row mb-4">
-            <label class="col-lg-2 col-form-label text-lg-end">内容列表:</label>
+            <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.extend_content_list') }}:</label>
             <div class="col-lg-6">
                 <div class="input-group mb-3">
-                    <label class="input-group-text">全部帖子</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_post_list') }}</label>
                     <select class="form-select" name="post_list_service">
                         <option value="" {{ !$params['post_list_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
@@ -61,7 +61,7 @@
                     </select>
                 </div>
                 <div class="input-group mb-3">
-                    <label class="input-group-text">关注对象的帖子</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_post_follow') }}</label>
                     <select class="form-select" name="post_follow_service">
                         <option value="" {{ !$params['post_follow_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
@@ -70,7 +70,7 @@
                     </select>
                 </div>
                 <div class="input-group mb-3">
-                    <label class="input-group-text">附近范围的帖子</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_post_nearby') }}</label>
                     <select class="form-select" name="post_nearby_service">
                         <option value="" {{ !$params['post_nearby_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
@@ -79,82 +79,80 @@
                     </select>
                 </div>
             </div>
-            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> 该配置的优先级大于内容类型配置，当配置后，内容类型指定的数据来源将被取代。</div>
+            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.extend_content_list_desc') }}</div>
         </div>
 
         <!--content detail-->
         <div class="row mb-4">
-            <label class="col-lg-2 col-form-label text-lg-end">内容详情:</label>
+            <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.extend_content_detail') }}:</label>
             <div class="col-lg-6">
                 <div class="input-group mb-3">
-                    <label class="input-group-text">帖子详情</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_post_detail') }}</label>
                     <select class="form-select" name="post_detail_service">
-                        <option value="" {{ !$params['post_detail_service'] ? 'selected' : '' }}>🚫 {{ __('FsLang::panel.option_deactivate') }}</option>
+                        <option value="" {{ !$params['search_users_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['post_detail_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
-            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.send_wechat_desc') }}</div>
         </div>
 
         <!--content search-->
         <div class="row mb-4">
-            <label class="col-lg-2 col-form-label text-lg-end">内容搜索:</label>
+            <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.extend_content_search') }}:</label>
             <div class="col-lg-6">
                 <!--users-->
                 <div class="input-group mb-3">
-                    <label class="input-group-text">搜索用户</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_search_users') }}</label>
                     <select class="form-select" name="search_users_service">
-                        <option value="" {{ !$params['search_users_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
-                        @foreach ($pluginParams['searchUsers'] as $plugin)
+                        <option value="" {{ !$params['search_users_service'] ? 'selected' : '' }}>⛔️ {{ __('FsLang::panel.option_close') }}</option>
+                        @foreach ($pluginParams['extendSearch'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['search_users_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <!--groups-->
                 <div class="input-group mb-3">
-                    <label class="input-group-text">搜索小组</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_search_groups') }}</label>
                     <select class="form-select" name="search_groups_service">
-                        <option value="" {{ !$params['search_groups_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
-                        @foreach ($pluginParams['searchUsers'] as $plugin)
+                        <option value="" {{ !$params['search_groups_service'] ? 'selected' : '' }}>⛔️ {{ __('FsLang::panel.option_close') }}</option>
+                        @foreach ($pluginParams['extendSearch'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['search_groups_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <!--hashtags-->
                 <div class="input-group mb-3">
-                    <label class="input-group-text">搜索话题</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_search_hashtags') }}</label>
                     <select class="form-select" name="search_hashtags_service">
-                        <option value="" {{ !$params['search_hashtags_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
-                        @foreach ($pluginParams['searchUsers'] as $plugin)
+                        <option value="" {{ !$params['search_hashtags_service'] ? 'selected' : '' }}>⛔️ {{ __('FsLang::panel.option_close') }}</option>
+                        @foreach ($pluginParams['extendSearch'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['search_hashtags_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <!--posts-->
                 <div class="input-group mb-3">
-                    <label class="input-group-text">搜索帖子</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_search_posts') }}</label>
                     <select class="form-select" name="search_posts_service">
-                        <option value="" {{ !$params['search_posts_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
-                        @foreach ($pluginParams['searchUsers'] as $plugin)
+                        <option value="" {{ !$params['search_posts_service'] ? 'selected' : '' }}>⛔️ {{ __('FsLang::panel.option_close') }}</option>
+                        @foreach ($pluginParams['extendSearch'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['search_posts_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <!--comments-->
                 <div class="input-group mb-3">
-                    <label class="input-group-text">搜索评论</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_search_comments') }}</label>
                     <select class="form-select" name="search_comments_service">
-                        <option value="" {{ !$params['search_comments_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
-                        @foreach ($pluginParams['searchUsers'] as $plugin)
+                        <option value="" {{ !$params['search_comments_service'] ? 'selected' : '' }}>⛔️ {{ __('FsLang::panel.option_close') }}</option>
+                        @foreach ($pluginParams['extendSearch'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['search_comments_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
-            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.send_wechat_desc') }}</div>
         </div>
 
         <!--button_save-->

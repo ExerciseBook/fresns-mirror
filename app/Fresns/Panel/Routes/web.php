@@ -228,9 +228,8 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::put('content-type/{id}/dataSources/{key}', [ExtendContentTypeController::class, 'updateSource'])->name('content-type.source');
         Route::put('content-type/{id}/rating', [ExtendContentTypeController::class, 'updateRating'])->name('content-type.rating');
         // content-handler
-        Route::resource('content-handler', ExtendContentHandlerController::class)->only([
-            'index', 'update',
-        ]);
+        Route::get('content-handler', [ExtendContentHandlerController::class, 'index'])->name('content-handler.index');
+        Route::put('content-handler', [ExtendContentHandlerController::class, 'update'])->name('content-handler.update');
         // manage
         Route::resource('manage', ExtendManageController::class)->only([
             'index', 'store', 'update', 'destroy',
