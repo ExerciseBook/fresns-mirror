@@ -12,11 +12,11 @@ use App\Fresns\Panel\Http\Controllers\CodeMessageController;
 use App\Fresns\Panel\Http\Controllers\ColumnController;
 use App\Fresns\Panel\Http\Controllers\ConfigController;
 use App\Fresns\Panel\Http\Controllers\DashboardController;
+use App\Fresns\Panel\Http\Controllers\ExtendContentHandlerController;
 use App\Fresns\Panel\Http\Controllers\ExtendContentTypeController;
 use App\Fresns\Panel\Http\Controllers\ExtendEditorController;
 use App\Fresns\Panel\Http\Controllers\ExtendGroupController;
 use App\Fresns\Panel\Http\Controllers\ExtendManageController;
-use App\Fresns\Panel\Http\Controllers\ExtendPostDetailController;
 use App\Fresns\Panel\Http\Controllers\ExtendUserFeatureController;
 use App\Fresns\Panel\Http\Controllers\ExtendUserProfileController;
 use App\Fresns\Panel\Http\Controllers\ExtensionController;
@@ -227,8 +227,8 @@ Route::middleware(['panelAuth'])->group(function () {
         ]);
         Route::put('content-type/{id}/dataSources/{key}', [ExtendContentTypeController::class, 'updateSource'])->name('content-type.source');
         Route::put('content-type/{id}/rating', [ExtendContentTypeController::class, 'updateRating'])->name('content-type.rating');
-        // post-detail
-        Route::resource('post-detail', ExtendPostDetailController::class)->only([
+        // content-handler
+        Route::resource('content-handler', ExtendContentHandlerController::class)->only([
             'index', 'update',
         ]);
         // manage
