@@ -7,20 +7,13 @@
 @section('content')
     <!--Dashboard-->
     <div class="row mb-4 ">
-        <div class="col-lg-7">
-            <h1 class="fs-3 fw-normal">{{ __('FsLang::panel.welcome') }}</h1>
-            <p class="text-secondary">
-                {{ __('FsLang::panel.current_version') }} v{{$currentVersion['version'] ?? ''}}
-                @if ($checkVersion)
-                    <a href="{{ route('panel.upgrades') }}" class="badge rounded-pill bg-danger ms-2 text-decoration-none">{{ __('FsLang::panel.new_version') }}</a>
-                @endif
-            </p>
-        </div>
-        <div class="col-lg-5">
-            <div class="input-group mt-2 mb-4 justify-content-lg-end">
-                <a class="btn btn-outline-success" href="{{ route('panel.cache.clear') }}" role="button">{{ __('FsLang::panel.button_clear_cache') }}</a>
-            </div>
-        </div>
+        <h1 class="fs-3 fw-normal">{{ __('FsLang::panel.welcome') }}</h1>
+        <p class="text-secondary">
+            {{ __('FsLang::panel.current_version') }} v{{$currentVersion['version'] ?? ''}}
+            @if ($checkVersion)
+                <a href="{{ route('panel.upgrades') }}" class="badge rounded-pill bg-danger ms-2 text-decoration-none">{{ __('FsLang::panel.new_version') }}</a>
+            @endif
+        </p>
     </div>
     <!--Dashboard data-->
     <div class="row mb-3">

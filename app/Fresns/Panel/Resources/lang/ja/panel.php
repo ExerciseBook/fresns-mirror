@@ -22,6 +22,8 @@ return [
     'account' => 'アカウント',
     'password' => 'パスワード',
     'enter' => '入力',
+    'operation' => 'パネル操作',
+    'switch_language' => 'スイッチの言語',
     'logout' => 'ログアウト',
     // Header menus
     'menu_dashboard' => 'ダッシュボード',

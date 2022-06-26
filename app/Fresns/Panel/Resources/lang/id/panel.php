@@ -22,6 +22,8 @@ return [
     'account' => 'Akun',
     'password' => 'Kata sandi',
     'enter' => 'Memasuki',
+    'operation' => 'Operasi Panel',
+    'switch_language' => 'Ganti Bahasa',
     'logout' => 'Keluar',
     // Header menus
     'menu_dashboard' => 'Dasbor',

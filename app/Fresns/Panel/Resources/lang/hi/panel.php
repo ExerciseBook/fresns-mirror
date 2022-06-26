@@ -22,6 +22,8 @@ return [
     'account' => 'हेतु',
     'password' => 'कुंजिका',
     'enter' => 'प्रवेश करना',
+    'operation' => 'पैनल ऑपरेशन',
+    'switch_language' => 'भाषा बदलें',
     'logout' => 'लॉग आउट',
     // Header menus
     'menu_dashboard' => 'डैशबोर्ड',

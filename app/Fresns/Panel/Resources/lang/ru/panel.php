@@ -22,6 +22,8 @@ return [
     'account' => 'Счет',
     'password' => 'Пароль',
     'enter' => 'Войти',
+    'operation' => 'Управление панелью',
+    'switch_language' => 'Язык переключателя',
     'logout' => 'Выйти',
     // Header menus
     'menu_dashboard' => 'Панель приборов',

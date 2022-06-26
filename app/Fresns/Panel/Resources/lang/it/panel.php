@@ -22,6 +22,8 @@ return [
     'account' => 'Account',
     'password' => 'Parola d\'ordine',
     'enter' => 'accedere',
+    'operation' => 'Funzionamento del pannello',
+    'switch_language' => 'Lingua degli interruttori',
     'logout' => 'Disconnettersi',
     // Header menus
     'menu_dashboard' => 'Pannello',

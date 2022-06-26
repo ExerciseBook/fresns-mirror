@@ -22,6 +22,8 @@ return [
     'account' => '账号',
     'password' => '密码',
     'enter' => '进入',
+    'operation' => '面板操作',
+    'switch_language' => '切换语言',
     'logout' => '退出登录',
     // Header menus
     'menu_dashboard' => '仪表盘',

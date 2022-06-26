@@ -22,6 +22,8 @@ return [
     'account' => 'Konto',
     'password' => 'Passwort',
     'enter' => 'Eingeben',
+    'operation' => 'Bedienung des Bedienfelds',
+    'switch_language' => 'Schalter Sprache',
     'logout' => 'Ausloggen',
     // Header menus
     'menu_dashboard' => 'Armaturenbrett',

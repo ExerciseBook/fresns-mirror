@@ -22,6 +22,8 @@ return [
     'account' => 'Conta',
     'password' => 'Senha',
     'enter' => 'Entrar',
+    'operation' => 'Funcionamento do Painel',
+    'switch_language' => 'Mudar de língua',
     'logout' => 'Sair',
     // Header menus
     'menu_dashboard' => 'Painel',

@@ -22,6 +22,8 @@ return [
     'account' => 'Compte',
     'password' => 'Mot de passe',
     'enter' => 'Entrer',
+    'operation' => 'Fonctionnement du panneau',
+    'switch_language' => 'Langue du commutateur',
     'logout' => 'Se déconnecter',
     // Header menus
     'menu_dashboard' => 'Tableau de bord',

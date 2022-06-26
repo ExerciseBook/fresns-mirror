@@ -22,6 +22,8 @@ return [
     'account' => '계정',
     'password' => '비밀번호',
     'enter' => '입력하다',
+    'operation' => '패널 작동',
+    'switch_language' => '언어 전환',
     'logout' => '로그 아웃',
     // Header menus
     'menu_dashboard' => '계기반',

@@ -22,6 +22,8 @@ return [
     'account' => 'Cuenta',
     'password' => 'Clave',
     'enter' => 'Ingresar',
+    'operation' => 'Funcionamiento del panel',
+    'switch_language' => 'Idioma del interruptor',
     'logout' => 'Cerrar sesión',
     // Header menus
     'menu_dashboard' => 'Tablero',

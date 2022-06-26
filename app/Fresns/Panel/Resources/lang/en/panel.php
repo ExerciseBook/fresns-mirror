@@ -22,6 +22,8 @@ return [
     'account' => 'Account',
     'password' => 'Password',
     'enter' => 'Enter',
+    'operation' => 'Panel Operation',
+    'switch_language' => 'Switch Language',
     'logout' => 'Logout',
     // Header menus
     'menu_dashboard' => 'Dashboard',
