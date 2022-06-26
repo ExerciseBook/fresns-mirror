@@ -517,7 +517,7 @@
                     <li class="list-group-item list-group-item-secondary">{{ __('FsLang::panel.interactive_mark_config') }}</li>
                     <!--user-->
                     <li class="list-group-item">
-                        <span class="badge text-bg-info me-3 fs-8">{{ __('FsLang::panel.user') }}</span>
+                        <span class="badge text-bg-info me-3 fs-8 fw-normal">{{ __('FsLang::panel.user') }}</span>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="user_likers" name="user_likers" value="true" class="form-check-input" {{ $params['user_likers'] ? 'checked' : '' }}>
                             <label class="form-check-label" for="user_likers">{{ __('FsLang::panel.interactive_like_it') }}</label>
@@ -537,7 +537,7 @@
                     </li>
                     <!--group-->
                     <li class="list-group-item">
-                        <span class="badge text-bg-info me-3 fs-8">{{ __('FsLang::panel.group') }}</span>
+                        <span class="badge text-bg-info me-3 fs-8 fw-normal">{{ __('FsLang::panel.group') }}</span>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="group_likers" name="group_likers" value="true" class="form-check-input" {{ $params['group_likers'] ? 'checked' : '' }}>
                             <label class="form-check-label" for="group_likers">{{ __('FsLang::panel.interactive_like_it') }}</label>
@@ -557,7 +557,7 @@
                     </li>
                     <!--hashtag-->
                     <li class="list-group-item">
-                        <span class="badge text-bg-info me-3 fs-8">{{ __('FsLang::panel.hashtag') }}</span>
+                        <span class="badge text-bg-info me-3 fs-8 fw-normal">{{ __('FsLang::panel.hashtag') }}</span>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="hashtag_likers" name="hashtag_likers" value="true" class="form-check-input" {{ $params['hashtag_likers'] ? 'checked' : '' }}>
                             <label class="form-check-label" for="hashtag_likers">{{ __('FsLang::panel.interactive_like_it') }}</label>
@@ -577,7 +577,7 @@
                     </li>
                     <!--post-->
                     <li class="list-group-item">
-                        <span class="badge text-bg-info me-3 fs-8">{{ __('FsLang::panel.post') }}</span>
+                        <span class="badge text-bg-info me-3 fs-8 fw-normal">{{ __('FsLang::panel.post') }}</span>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="post_likers" name="post_likers" value="true" class="form-check-input" {{ $params['post_likers'] ? 'checked' : '' }}>
                             <label class="form-check-label" for="post_likers">{{ __('FsLang::panel.interactive_like_it') }}</label>
@@ -597,7 +597,7 @@
                     </li>
                     <!--comment-->
                     <li class="list-group-item">
-                        <span class="badge text-bg-info me-3 fs-8">{{ __('FsLang::panel.comment') }}</span>
+                        <span class="badge text-bg-info me-3 fs-8 fw-normal">{{ __('FsLang::panel.comment') }}</span>
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="comment_likers" name="comment_likers" value="true" class="form-check-input" {{ $params['comment_likers'] ? 'checked' : '' }}>
                             <label class="form-check-label" for="comment_likers">{{ __('FsLang::panel.interactive_like_it') }}</label>
