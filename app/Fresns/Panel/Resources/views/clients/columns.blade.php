@@ -492,7 +492,7 @@
         <div class="col-lg-6">
             <!--It Interactive-->
             <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_it_likers') }}</label>
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_user_likers') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_profile_likes']) }}"
                     data-languages="{{ optional($configs['menu_profile_likes'])->languages->toJson() }}"
@@ -501,7 +501,7 @@
                 </button>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_it_dislikers') }}</label>
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_user_dislikers') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_profile_dislikes']) }}"
                     data-languages="{{ optional($configs['menu_profile_dislikes'])->languages->toJson() }}"
@@ -510,7 +510,7 @@
                 </button>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_it_followers') }}</label>
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_user_followers') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_profile_followers']) }}"
                     data-languages="{{ optional($configs['menu_profile_followers'])->languages->toJson() }}"
@@ -519,7 +519,7 @@
                 </button>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_it_blockers') }}</label>
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_user_blockers') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_profile_blockers']) }}"
                     data-languages="{{ optional($configs['menu_profile_blockers'])->languages->toJson() }}"

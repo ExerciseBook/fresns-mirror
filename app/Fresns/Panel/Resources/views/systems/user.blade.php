@@ -236,7 +236,7 @@
                     <span class="input-group-text">{{ __('FsLang::panel.unit_length') }}</span>
                 </div>
             </div>
-            <div class="col-lg-4 form-text pt-1"></div>
+            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.user_uid_digit_desc') }}</div>
         </div>
         <!--user_password_config-->
         <div class="row mb-4">
