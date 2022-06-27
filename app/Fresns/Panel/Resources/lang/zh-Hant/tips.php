@@ -60,7 +60,7 @@ return [
     // website
     'website_path_empty_error' => '保存失敗，路徑參數不允許為空',
     'website_path_format_error' => '保存失敗，路徑參數僅支持純英文字母',
-    'website_path_format_error' => '保存失敗，路徑參數重複，路徑參數名不允許彼此重複',
+    'website_path_unique_error' => '保存失敗，路徑參數重複，路徑參數名不允許彼此重複',
     // theme
     'theme_error' => '主題錯誤或者不存在',
     'theme_functions_file_error' => '主題配置的視圖文件錯誤或者不存在',

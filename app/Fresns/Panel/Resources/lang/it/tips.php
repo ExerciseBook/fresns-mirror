@@ -60,7 +60,7 @@ return [
     // website
     'website_path_empty_error' => 'Salvataggio fallito, il parametro percorso non può essere vuoto',
     'website_path_format_error' => 'non è riuscito a salvare, i parametri di percorso sono supportati solo in lettere semplici.',
-    'website_path_format_error' => 'Salvataggio fallito, parametri di percorso duplicati, i nomi dei parametri di percorso non possono ripetersi.',
+    'website_path_unique_error' => 'Salvataggio fallito, parametri di percorso duplicati, i nomi dei parametri di percorso non possono ripetersi.',
     // theme
     'theme_error' => 'Il tema non è corretto o non esiste',
     'theme_functions_file_error' => 'Il file di configurazione della vista del tema non è corretto o non esiste.',

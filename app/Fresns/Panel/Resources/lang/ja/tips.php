@@ -60,7 +60,7 @@ return [
     // website
     'website_path_empty_error' => '保存に失敗しました。pathパラメータは空であってはいけません。',
     'website_path_format_error' => '保存に失敗しました。パスパラメータは、プレーンな英字でのみサポートされています。',
-    'website_path_format_error' => '保存に失敗しました、パスパラメータが重複しています、パスパラメータ名は互いに繰り返すことはできません。',
+    'website_path_unique_error' => '保存に失敗しました、パスパラメータが重複しています、パスパラメータ名は互いに繰り返すことはできません。',
     // theme
     'theme_error' => 'テーマが正しくないか、存在しない',
     'theme_functions_file_error' => 'テーマ設定ビューファイルが正しくない、または存在しない',
