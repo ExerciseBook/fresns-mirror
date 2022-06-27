@@ -389,6 +389,15 @@
                 </button>
             </div>
             <div class="input-group mb-3">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_notify_bulletins') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_notify_bulletins']) }}"
+                    data-languages="{{ optional($configs['menu_notify_bulletins'])->languages->toJson() }}"
+                    data-item_key="menu_notify_bulletins"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_notify_bulletins'] ?? '' }}
+                </button>
+            </div>
+            <div class="input-group mb-3">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_notify_systems') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_notify_systems']) }}"
@@ -425,21 +434,21 @@
                 </button>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_notify_comments') }}</label>
-                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
-                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_notify_comments']) }}"
-                    data-languages="{{ optional($configs['menu_notify_comments'])->languages->toJson() }}"
-                    data-item_key="menu_notify_comments"
-                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_notify_comments'] ?? '' }}
-                </button>
-            </div>
-            <div class="input-group mb-3">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_notify_mentions') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_notify_mentions']) }}"
                     data-languages="{{ optional($configs['menu_notify_mentions'])->languages->toJson() }}"
                     data-item_key="menu_notify_mentions"
                     data-bs-target="#configLangModal">{{ $defaultLangParams['menu_notify_mentions'] ?? '' }}
+                </button>
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_notify_comments') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_notify_comments']) }}"
+                    data-languages="{{ optional($configs['menu_notify_comments'])->languages->toJson() }}"
+                    data-item_key="menu_notify_comments"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_notify_comments'] ?? '' }}
                 </button>
             </div>
         </div>
@@ -492,7 +501,7 @@
         <div class="col-lg-6">
             <!--It Interactive-->
             <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_user_likers') }}</label>
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_like_it') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_profile_likes']) }}"
                     data-languages="{{ optional($configs['menu_profile_likes'])->languages->toJson() }}"
@@ -501,7 +510,7 @@
                 </button>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_user_dislikers') }}</label>
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_dislike_it') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_profile_dislikes']) }}"
                     data-languages="{{ optional($configs['menu_profile_dislikes'])->languages->toJson() }}"
@@ -510,7 +519,7 @@
                 </button>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_user_followers') }}</label>
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_follow_it') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_profile_followers']) }}"
                     data-languages="{{ optional($configs['menu_profile_followers'])->languages->toJson() }}"
@@ -519,7 +528,7 @@
                 </button>
             </div>
             <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_user_blockers') }}</label>
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_block_it') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
                     data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_profile_blockers']) }}"
                     data-languages="{{ optional($configs['menu_profile_blockers'])->languages->toJson() }}"

@@ -54,6 +54,7 @@ class ColumnController extends Controller
             'menu_messages',
             'menu_notifies',
             'menu_notify_systems',
+            'menu_notify_bulletins',
             'menu_notify_recommends',
             'menu_notify_follows',
             'menu_notify_likes',
