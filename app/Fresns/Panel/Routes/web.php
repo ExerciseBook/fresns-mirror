@@ -47,6 +47,7 @@ use App\Fresns\Panel\Http\Controllers\UserController;
 use App\Fresns\Panel\Http\Controllers\UserSearchController;
 use App\Fresns\Panel\Http\Controllers\VerifyCodeController;
 use App\Fresns\Panel\Http\Controllers\WalletController;
+use App\Fresns\Panel\Http\Controllers\WebsiteController;
 use App\Models\Config;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
@@ -266,6 +267,9 @@ Route::middleware(['panelAuth'])->group(function () {
         // code messages
         Route::get('code-messages', [CodeMessageController::class, 'index'])->name('code.messages.index');
         Route::put('code-messages/{codeMessage}', [CodeMessageController::class, 'update'])->name('code.messages.update');
+        // website
+        Route::get('website', [WebsiteController::class, 'index'])->name('website.index');
+        Route::put('website', [WebsiteController::class, 'update'])->name('website.update');
     });
 
     // app center

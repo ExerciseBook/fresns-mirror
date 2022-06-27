@@ -11,6 +11,7 @@
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.columns.*') ? 'active' : '' }}" href="{{ route('panel.columns.index') }}">{{ __('FsLang::panel.sidebar_columns') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.language.packs.*') ? 'active' : '' }}" href="{{ route('panel.language.packs.index') }}">{{ __('FsLang::panel.sidebar_language_packs') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.code.messages.*') ? 'active' : '' }}" href="{{ route('panel.code.messages.index') }}">{{ __('FsLang::panel.sidebar_code_messages') }}</a></li>
+                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.website.*') ? 'active' : '' }}" href="{{ route('panel.website.index') }}">{{ __('FsLang::panel.sidebar_website') }}</a></li>
                 </ul>
             </div>
         </div>
