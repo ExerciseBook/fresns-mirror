@@ -9,9 +9,12 @@
                 <ul class="navbar-nav d-flex flex-column">
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.menus.*') ? 'active' : '' }}" href="{{ route('panel.menus.index') }}">{{ __('FsLang::panel.sidebar_menus') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.columns.*') ? 'active' : '' }}" href="{{ route('panel.columns.index') }}">{{ __('FsLang::panel.sidebar_columns') }}</a></li>
+                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.paths.*') ? 'active' : '' }}" href="{{ route('panel.paths.index') }}">{{ __('FsLang::panel.sidebar_paths') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.language.packs.*') ? 'active' : '' }}" href="{{ route('panel.language.packs.index') }}">{{ __('FsLang::panel.sidebar_language_packs') }}</a></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.code.messages.*') ? 'active' : '' }}" href="{{ route('panel.code.messages.index') }}">{{ __('FsLang::panel.sidebar_code_messages') }}</a></li>
-                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.website.*') ? 'active' : '' }}" href="{{ route('panel.website.index') }}">{{ __('FsLang::panel.sidebar_website') }}</a></li>
+                    <li><hr style="margin: 0.5rem 0"></li>
+                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.website.*') ? 'active' : '' }}" href="{{ route('panel.website.index') }}"><i class="bi bi-laptop"></i> {{ __('FsLang::panel.sidebar_website') }}</a></li>
+                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.app.*') ? 'active' : '' }}" href="{{ route('panel.app.index') }}"><i class="bi bi-phone"></i> {{ __('FsLang::panel.sidebar_apps') }}</a></li>
                 </ul>
             </div>
         </div>

@@ -8,6 +8,7 @@
 
 namespace App\Fresns\Panel\Http\Controllers;
 
+use App\Helpers\ConfigHelper;
 use App\Models\Config;
 use App\Models\Plugin;
 use App\Models\SessionKey;
@@ -59,6 +60,8 @@ class WebsiteController extends Controller
             $item['id'] = $key->id;
             $item['name'] = $key->name;
             $item['appId'] = $key->app_id;
+
+            $keys[] = $item;
         }
 
         $engine = Plugin::where('unikey', $params['engine_service'])->first();
@@ -86,6 +89,73 @@ class WebsiteController extends Controller
             'china_icp_license',
             'china_gongan_beian',
             'china_broadcasting_license',
+        ];
+
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+
+        foreach ($configKeys as $configKey) {
+            $config = $configs->where('item_key', $configKey)->first();
+            if (! $config) {
+            }
+
+            if (! $request->has($configKey)) {
+                $config->setDefaultValue();
+                $config->save();
+                continue;
+            }
+
+            $config->item_value = $request->$configKey;
+            $config->save();
+        }
+
+        return $this->updateSuccess();
+    }
+
+    // path index
+    public function pathIndex()
+    {
+        // config keys
+        $configKeys = [
+            'website_portal_path',
+            'website_user_path',
+            'website_group_path',
+            'website_hashtag_path',
+            'website_post_path',
+            'website_comment_path',
+            'website_user_detail_path',
+            'website_group_detail_path',
+            'website_hashtag_detail_path',
+            'website_post_detail_path',
+            'website_comment_detail_path',
+        ];
+        $configs = Config::whereIn('item_key', $configKeys)->get();
+
+        foreach ($configs as $config) {
+            $params[$config->item_key] = $config->item_value;
+        }
+
+        $siteUrl = ConfigHelper::fresnsConfigByItemKey('site_url');
+        $siteUrl = rtrim($siteUrl, "/");
+
+        return view('FsView::clients.paths', compact('params', 'siteUrl'));
+    }
+
+    // path update
+    public function pathUpdate(Request $request)
+    {
+        // config keys
+        $configKeys = [
+            'website_portal_path',
+            'website_user_path',
+            'website_group_path',
+            'website_hashtag_path',
+            'website_post_path',
+            'website_comment_path',
+            'website_user_detail_path',
+            'website_group_detail_path',
+            'website_hashtag_detail_path',
+            'website_post_detail_path',
+            'website_comment_detail_path',
         ];
 
         $configs = Config::whereIn('item_key', $configKeys)->get();

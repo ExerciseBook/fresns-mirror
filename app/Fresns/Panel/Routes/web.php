@@ -267,6 +267,9 @@ Route::middleware(['panelAuth'])->group(function () {
         // code messages
         Route::get('code-messages', [CodeMessageController::class, 'index'])->name('code.messages.index');
         Route::put('code-messages/{codeMessage}', [CodeMessageController::class, 'update'])->name('code.messages.update');
+        // path
+        Route::get('paths', [WebsiteController::class, 'pathIndex'])->name('paths.index');
+        Route::put('paths', [WebsiteController::class, 'pathUpdate'])->name('paths.update');
         // website
         Route::get('website', [WebsiteController::class, 'index'])->name('website.index');
         Route::put('website', [WebsiteController::class, 'update'])->name('website.update');
