@@ -22,6 +22,7 @@
     <form action="{{ route('panel.content-handler.update') }}" method="post">
         @csrf
         @method('put')
+
         <!--content handler-->
         <div class="row mb-4">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.extend_content_service') }}:</label>
