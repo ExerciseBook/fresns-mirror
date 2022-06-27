@@ -45,7 +45,7 @@
             <label for="panel_url" class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.setting_panel_url') }}:</label>
             <div class="col-lg-6">
                 <div class="input-group">
-                    <span class="form-control bg-light" id="panelUrl">{{ $systemUrl.'/fresns/'.$path }}</span>
+                    <span class="form-control bg-light" id="panelUrl">{{ $systemUrl.'/fresns/'.$panelPath }}</span>
                     <button class="btn btn-outline-secondary" onclick="copyToClipboard('#panelUrl')" type="button">{{ __('FsLang::panel.setting_panel_url_copy') }}</button>
                 </div>
             </div>

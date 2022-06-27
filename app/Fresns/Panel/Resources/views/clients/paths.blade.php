@@ -26,8 +26,8 @@
         <!--portal-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.portal') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_portal_path" value="{{ $params['website_portal_path'] }}" placeholder="portal">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -41,8 +41,8 @@
         <!--user-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.user') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_user_path" value="{{ $params['website_user_path'] }}" placeholder="users">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -62,8 +62,8 @@
         <!--group-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.group') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_group_path" value="{{ $params['website_group_path'] }}" placeholder="groups">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -83,8 +83,8 @@
         <!--hashtag-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.hashtag') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_hashtag_path" value="{{ $params['website_hashtag_path'] }}" placeholder="hashtags">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -104,8 +104,8 @@
         <!--post-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.post') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_post_path" value="{{ $params['website_post_path'] }}" placeholder="posts">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -125,8 +125,8 @@
         <!--comment-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.comment') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_comment_path" value="{{ $params['website_comment_path'] }}" placeholder="comments">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -146,8 +146,8 @@
         <!--user_detail-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.user_detail') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_user_detail_path" value="{{ $params['website_user_detail_path'] }}" placeholder="user">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -161,8 +161,8 @@
         <!--group_detail-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.group_detail') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_group_detail_path" value="{{ $params['website_group_detail_path'] }}" placeholder="group">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -176,8 +176,8 @@
         <!--hashtag_detail-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.hashtag_detail') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_hashtag_detail_path" value="{{ $params['website_hashtag_detail_path'] }}" placeholder="hashtag">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -191,8 +191,8 @@
         <!--post_detail-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.post_detail') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_post_detail_path" value="{{ $params['website_post_detail_path'] }}" placeholder="post">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
@@ -206,8 +206,8 @@
         <!--comment_detail-->
         <div class="row mb-3">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.comment_detail') }}:</label>
-            <div class="col-lg-8 pt-2">
-                <div class="input-group mb-3">
+            <div class="col-lg-8">
+                <div class="input-group">
                     <span class="input-group-text">{{ $siteUrl.'/' }}</span>
                     <input type="text" class="form-control" name="website_comment_detail_path" value="{{ $params['website_comment_detail_path'] }}" placeholder="comment">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('FsLang::panel.button_view') }}</button>
