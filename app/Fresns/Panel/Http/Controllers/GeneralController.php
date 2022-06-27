@@ -23,7 +23,7 @@ class GeneralController extends Controller
     {
         // config keys
         $configKeys = [
-            'site_domain',
+            'site_url',
             'site_name',
             'site_desc',
             'site_icon',
@@ -124,7 +124,7 @@ class GeneralController extends Controller
         }
 
         $configKeys = [
-            'site_domain',
+            'site_url',
             'site_copyright',
             'site_icon',
             'site_logo',

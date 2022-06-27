@@ -24,18 +24,18 @@ class PluginHelper
             return null;
         }
 
-        $plugin = Plugin::where('unikey', $unikey)->first(['plugin_domain', 'access_path']);
+        $plugin = Plugin::where('unikey', $unikey)->first(['plugin_url', 'access_path']);
         if (empty($plugin)) {
             return null;
         }
 
-        $backend_domain = ConfigHelper::fresnsConfigByItemKey('backend_domain');
+        $system_url = ConfigHelper::fresnsConfigByItemKey('system_url');
 
-        $domain = empty($plugin->plugin_domain) ? $backend_domain : $plugin->plugin_domain;
+        $url = empty($plugin->plugin_url) ? $system_url : $plugin->plugin_url;
 
-        $url = StrHelper::qualifyUrl($plugin->access_path, $domain);
+        $link = StrHelper::qualifyUrl($plugin->access_path, $url);
 
-        return $url;
+        return $link;
     }
 
     /**

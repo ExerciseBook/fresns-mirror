@@ -254,12 +254,12 @@ $(document).ready(function () {
     });
 
     // admin config
-    $('#adminConfig .update-backend-url').change(function () {
-        let domain = $('#adminConfig').find('input[name=domain]').val();
-        let path = $('#adminConfig').find('input[name=path]').val();
+    $('#adminConfig .update-panel-url').change(function () {
+        let systemUrl = $('#adminConfig').find('input[name=systemUrl]').val();
+        let panelPath = $('#adminConfig').find('input[name=panelPath]').val();
         $('#adminConfig')
-            .find('#backendUrl')
-            .text(domain + '/fresns/' + path);
+            .find('#panelUrl')
+            .text(systemUrl + '/fresns/' + panelPath);
     });
 
     // update session key

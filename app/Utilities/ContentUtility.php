@@ -146,7 +146,7 @@ class ContentUtility
     {
         $hashtagList = ContentUtility::extractHashtag($content);
 
-        $config = ConfigHelper::fresnsConfigByItemKeys(['site_domain', 'hashtag_show']);
+        $config = ConfigHelper::fresnsConfigByItemKeys(['site_url', 'hashtag_show']);
 
         $replaceList = [];
         $linkList = [];
@@ -163,7 +163,7 @@ class ContentUtility
 
             $link = sprintf(
                 '<a href="%s/hashtag/%s" class="fresns_hashtag" target="_blank">%s</a>',
-                $config['site_domain'],
+                $config['site_url'],
                 StrHelper::slug($hashtagName),
                 $hashtag
             );
@@ -201,7 +201,7 @@ class ContentUtility
     // Replace mention
     public static function replaceMention(string $content, int $mentionType, int $mentionId): string
     {
-        $config = ConfigHelper::fresnsConfigByItemKeys(['site_domain', 'user_identifier']);
+        $config = ConfigHelper::fresnsConfigByItemKeys(['site_url', 'user_identifier']);
         $usernameList = ContentUtility::extractMention($content);
 
         $userData = User::whereIn('username', $usernameList)->get();
@@ -216,7 +216,7 @@ class ContentUtility
 
             if (is_null($mentionUser)) {
                 $replaceList[] = "@{$username} ";
-                $linkList[] = sprintf('<a href="%s/u/404" class="fresns_user" target="_blank">@%s</a>', $config['site_domain'], $username);
+                $linkList[] = sprintf('<a href="%s/u/404" class="fresns_user" target="_blank">@%s</a>', $config['site_url'], $username);
                 continue;
             }
 
@@ -230,7 +230,7 @@ class ContentUtility
 
             $replaceList[] = "@{$user->nickname} ";
 
-            $linkList[] = sprintf('<a href="%s/u/%s" class="fresns_user" target="_blank">@%s</a>', $config['site_domain'], $urlName, $user->nickname);
+            $linkList[] = sprintf('<a href="%s/u/%s" class="fresns_user" target="_blank">@%s</a>', $config['site_url'], $urlName, $user->nickname);
         }
 
         return str_replace($replaceList, $linkList, $content);
