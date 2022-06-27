@@ -158,6 +158,28 @@ class WebsiteController extends Controller
             'website_comment_detail_path',
         ];
 
+        $rules = [];
+        $messages = [];
+        foreach ($configKeys as $key) {
+            $rules[$key] = ['required', 'regex:/^[a-z]+$/i'];
+            $messages["$key.required"] = __('FsLang::tips.website_path_empty_error');
+            $messages["$key.regex"] = __('FsLang::tips.website_path_format_error');
+        }
+
+        $data = $request->only($configKeys);
+
+        $validate = validator($data, $rules, $messages);
+
+        if (!$validate->passes()) {
+            return back()->with('failure', $validate->errors()->first());
+        }
+
+        $data = array_unique($data);
+
+        if (count($configKeys) !== count($data)) {
+            return back()->with('failure', __('FsLang::tips.website_path_unique_error'));
+        }
+
         $configs = Config::whereIn('item_key', $configKeys)->get();
 
         foreach ($configKeys as $configKey) {
