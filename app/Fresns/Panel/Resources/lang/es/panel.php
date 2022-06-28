@@ -131,7 +131,7 @@ return [
     'sidebar_language_packs_intro' => 'Configure los contenidos de varios idiomas de cada texto para clientes multi-idioma',
     'sidebar_code_messages_intro' => 'Descripción multilingüe de los códigos de estado configurados para el programa principal y los complementos.',
     'sidebar_website_intro' => 'Motor opcional, despliegue flexible, fácil de conseguir un conjunto de datos en varios motores para diferenciar la operación.',
-    'sidebar_apps_intro' => 'API estándar, potentes extensiones, cree una variedad de escenarios operativos y modelos de aplicación a su gusto.',
+    'sidebar_app_intro' => 'API estándar, potentes extensiones, cree una variedad de escenarios operativos y modelos de aplicación a su gusto.',
     'sidebar_plugins_intro' => 'Características flexibles, las extensiones poderosas lo ayudan a jugar libremente',
     'sidebar_panels_intro' => 'Gratis para construir, extensiones ilimitadas, puedes gestionar todo cómodamente.',
     'sidebar_engines_intro' => 'Seleccione diferentes motores para lograr características y servicios más personalizados',

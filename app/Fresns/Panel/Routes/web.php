@@ -282,14 +282,14 @@ Route::middleware(['panelAuth'])->group(function () {
     // app center
     Route::prefix('app-center')->group(function () {
         // plugins
-        Route::get('plugins', [ExtensionController::class, 'pluginIndex'])->name('plugin.index');
+        Route::get('plugins', [ExtensionController::class, 'pluginIndex'])->name('plugins.index');
         // panels
-        Route::get('panels', [ExtensionController::class, 'panelIndex'])->name('panel.index');
+        Route::get('panels', [ExtensionController::class, 'panelIndex'])->name('panels.index');
         // engines
-        Route::get('engines', [ExtensionController::class, 'engineIndex'])->name('engine.index');
-        Route::put('engines/{engine}/theme', [ExtensionController::class, 'updateEngineTheme'])->name('engine.theme.update');
+        Route::get('engines', [ExtensionController::class, 'engineIndex'])->name('engines.index');
+        Route::put('engines/{engine}/theme', [ExtensionController::class, 'updateEngineTheme'])->name('engines.theme.update');
         // themes
-        Route::get('themes', [ExtensionController::class, 'themeIndex'])->name('theme.index');
+        Route::get('themes', [ExtensionController::class, 'themeIndex'])->name('themes.index');
         // session key
         Route::resource('keys', SessionKeyController::class)->only([
             'index', 'store', 'update', 'destroy',

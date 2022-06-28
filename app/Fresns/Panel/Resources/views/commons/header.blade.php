@@ -43,7 +43,7 @@
                         <a class="nav-link {{ \Route::is([
                             'panel.editor.*',
                             'panel.content-type.*',
-                            'panel.post-detail.*',
+                            'panel.content-handler.*',
                             'panel.manage.*',
                             'panel.group.*',
                             'panel.user-feature.*',
@@ -54,19 +54,22 @@
                         <a class="nav-link {{ \Route::is([
                             'panel.menus.*',
                             'panel.columns.*',
+                            'panel.paths.*',
                             'panel.language.packs.*',
                             'panel.code.messages.*',
+                            'panel.website.*',
+                            'panel.app.*',
                         ]) ? 'active' : '' }}" href="{{ route('panel.menus.index') }}">{{ __('FsLang::panel.menu_clients') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ \Route::is([
-                            'panel.plugin.*',
-                            'panel.engine.*',
-                            'panel.theme.*',
-                            'panel.app.*',
+                            'panel.plugins.*',
+                            'panel.panels.*',
+                            'panel.engines.*',
+                            'panel.themes.*',
                             'panel.keys.*',
                             'panel.iframe.*',
-                        ]) ? 'active' : '' }} " href="{{ route('panel.plugin.index') }}">{{ __('FsLang::panel.menu_app_center') }}</a>
+                        ]) ? 'active' : '' }} " href="{{ route('panel.plugins.index') }}">{{ __('FsLang::panel.menu_app_center') }}</a>
                     </li>
                 </ul>
                 <div class="navbar-nav">

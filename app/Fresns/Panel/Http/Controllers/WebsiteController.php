@@ -70,7 +70,7 @@ class WebsiteController extends Controller
         $themeUnikey['mobile'] = Config::where('item_key', $params['engine_service'].'_Mobile')->value('item_value');
 
         $themeName['pc'] = Plugin::where('unikey', $themeUnikey['pc'])->value('name');
-        $themeName['mobile'] = Config::where('item_key', $themeUnikey['mobile'])->value('name');
+        $themeName['mobile'] = Plugin::where('unikey', $themeUnikey['mobile'])->value('name');
 
         return view('FsView::clients.website', compact('pluginParams', 'keys', 'params', 'engineSettingsPath', 'themeUnikey', 'themeName'));
     }

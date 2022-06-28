@@ -14,7 +14,7 @@
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.code.messages.*') ? 'active' : '' }}" href="{{ route('panel.code.messages.index') }}">{{ __('FsLang::panel.sidebar_code_messages') }}</a></li>
                     <li><hr style="margin: 0.5rem 0"></li>
                     <li class="nav-item"><a class="nav-link {{ \Route::is('panel.website.*') ? 'active' : '' }}" href="{{ route('panel.website.index') }}">{{ __('FsLang::panel.sidebar_website') }}</a></li>
-                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.app.*') ? 'active' : '' }}" href="{{ route('panel.app.index') }}">{{ __('FsLang::panel.sidebar_apps') }}</a></li>
+                    <li class="nav-item"><a class="nav-link {{ \Route::is('panel.app.*') ? 'active' : '' }}" href="{{ route('panel.app.index') }}">{{ __('FsLang::panel.sidebar_app') }}</a></li>
                 </ul>
             </div>
         </div>
