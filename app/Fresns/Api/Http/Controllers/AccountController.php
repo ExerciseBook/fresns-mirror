@@ -472,7 +472,7 @@ class AccountController extends Controller
         $verifyInfo = VerifyCode::where($term)->where('expired_at', '>', date('Y-m-d H:i:s'))->first();
 
         if (! $verifyInfo) {
-            throw new ApiException(33105);
+            throw new ApiException(33203);
         }
 
         return $this->success();
@@ -535,7 +535,7 @@ class AccountController extends Controller
             }
 
             if ($authAccount->email && empty($dtoRequest->verifyCode)) {
-                throw new ApiException(33104);
+                throw new ApiException(33202);
             }
 
             $codeWordBody = [
@@ -563,7 +563,7 @@ class AccountController extends Controller
         // edit phone
         if ($dtoRequest->editPhone) {
             if ($authAccount->phone && empty($dtoRequest->verifyCode)) {
-                throw new ApiException(33104);
+                throw new ApiException(33202);
             }
 
             $codeWordBody = [

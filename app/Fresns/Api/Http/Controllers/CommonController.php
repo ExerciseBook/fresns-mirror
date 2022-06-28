@@ -345,7 +345,7 @@ class CommonController extends Controller
         }
 
         if (! $checkSend) {
-            throw new ApiException(33103);
+            throw new ApiException(33201);
         }
 
         if ($dtoRequest->type == 'email') {

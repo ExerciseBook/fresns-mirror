@@ -616,11 +616,11 @@ class UserController extends Controller
             $validateBio = ValidationUtility::bio($bio);
 
             if (! $validateBio['banWord']) {
-                throw new ApiException(33106);
+                throw new ApiException(33301);
             }
 
             if (! $validateBio['length']) {
-                throw new ApiException(33107);
+                throw new ApiException(33302);
             }
 
             $bioConfig = ConfigHelper::fresnsConfigByItemKeys([
