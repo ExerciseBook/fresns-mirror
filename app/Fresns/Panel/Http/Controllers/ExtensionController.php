@@ -82,7 +82,7 @@ class ExtensionController extends Controller
         $themeUnikey['mobile'] = Config::where('item_key', 'FresnsEngine_Mobile')->value('item_value');
 
         $themeName['pc'] = Plugin::where('unikey', $themeUnikey['pc'])->value('name');
-        $themeName['mobile'] = Config::where('item_key', $themeUnikey['mobile'])->value('name');
+        $themeName['mobile'] = Plugin::where('item_key', $themeUnikey['mobile'])->value('name');
 
         return view('FsView::extensions.engines', compact(
             'engines', 'configs', 'themes', 'plugins', 'FresnsEngine', 'themeUnikey', 'themeName'

@@ -96,23 +96,28 @@
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.website_theme_config') }}:</label>
             <div class="col-lg-5">
                 <div class="input-group mb-3">
-                    <div class="form-control bg-white">
-                        <span class="badge bg-light text-dark fw-normal"><i class="bi bi-laptop"></i>
-                            @if ($themeUnikey['pc'])
-                                {{ $themeName['pc'] ?? $themeUnikey['pc'] }}
-                            @else
-                                {{ __('FsLang::panel.option_not_set') }}
-                            @endif
-                        </span>
-                        <span class="badge bg-light text-dark fw-normal"><i class="bi bi-phone"></i>
-                            @if ($themeUnikey['mobile'])
-                                {{ $themeName['mobile'] ?? $themeUnikey['mobile'] }}
-                            @else
-                                {{ __('FsLang::panel.option_not_set') }}
-                            @endif
-                        </span>
+                    <div class="form-control bg-white" style="padding:0.28rem 0.75rem;">
+                        @if ($themeUnikey['pc'])
+                            <span class="badge bg-success fw-normal ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.engine_theme_pc') }}">
+                                <i class="bi bi-laptop"></i> {{ $themeName['pc'] ?? $themeUnikey['pc'] }}
+                            </span>
+                        @else
+                            <span class="badge bg-secondary fw-normal ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.engine_theme_pc') }}">
+                                <i class="bi bi-laptop"></i> {{ __('FsLang::panel.option_not_set') }}
+                            </span>
+                        @endif
+
+                        @if ($themeUnikey['mobile'])
+                            <span class="badge bg-success fw-normal ms-3" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.engine_theme_mobile') }}">
+                                <i class="bi bi-phone"></i> {{ $themeName['mobile'] ?? $themeUnikey['mobile'] }}
+                            </span>
+                        @else
+                            <span class="badge bg-secondary fw-normal ms-3" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.engine_theme_mobile') }}">
+                                <i class="bi bi-phone"></i> {{ __('FsLang::panel.option_not_set') }}
+                            </span>
+                        @endif
                     </div>
-                    <a class="btn btn-outline-secondary" href="{{ route('panel.engines.index') }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
+                    <a class="btn btn-outline-secondary" href="{{ route('panel.engines.index') }}" role="button">{{ __('FsLang::panel.button_config') }}</a>
                 </div>
             </div>
             <div class="col-lg-5 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.sidebar_themes_intro') }}</div>
