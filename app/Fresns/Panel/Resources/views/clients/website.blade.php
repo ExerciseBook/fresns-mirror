@@ -112,7 +112,7 @@
                         @endif
                     </span>
                 </div>
-                <a class="btn btn-outline-secondary" href="{{ route('panel.engine.index') }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
+                <a class="btn btn-outline-secondary" href="{{ route('panel.engines.index') }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
             </div>
             <div class="col-lg-5 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.sidebar_themes_intro') }}</div>
         </div>
