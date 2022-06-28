@@ -219,7 +219,7 @@
         </div>
 
         <!--button_save-->
-        <div class="row my-3">
+        <div class="row my-4">
             <div class="col-lg-2"></div>
             <div class="col-lg-8">
                 <button type="submit" class="btn btn-primary">{{ __('FsLang::panel.button_save') }}</button>

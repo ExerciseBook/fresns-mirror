@@ -5,21 +5,17 @@
 @endsection
 
 @section('content')
-    <!--website header-->
-    <div class="row mb-4">
+    <!--theme header-->
+    <div class="row mb-4 border-bottom">
         <div class="col-lg-7">
-            <h3>{{ __('FsLang::panel.sidebar_website') }}</h3>
-            <p class="text-secondary"><i class="bi bi-brush"></i> {{ __('FsLang::panel.sidebar_website_themes_intro') }}</p>
+            <h3>{{ __('FsLang::panel.sidebar_themes') }}</h3>
+            <p class="text-secondary"><i class="bi bi-brush"></i> {{ __('FsLang::panel.sidebar_themes_intro') }}</p>
         </div>
         <div class="col-lg-5">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
                 <a class="btn btn-outline-secondary" href="#" role="button">{{ __('FsLang::panel.button_support') }}</a>
             </div>
         </div>
-        <ul class="nav nav-tabs">
-            <li class="nav-item"><a class="nav-link" href="{{ route('panel.engine.index') }}">{{ __('FsLang::panel.sidebar_website_tab_engines') }}</a></li>
-            <li class="nav-item"><a class="nav-link active" href="{{ route('panel.theme.index') }}">{{ __('FsLang::panel.sidebar_website_tab_themes') }}</a></li>
-        </ul>
     </div>
     <!--theme list-->
     <div class="row">

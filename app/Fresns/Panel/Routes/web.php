@@ -7,6 +7,7 @@
  */
 
 use App\Fresns\Panel\Http\Controllers\AdminController;
+use App\Fresns\Panel\Http\Controllers\AppController;
 use App\Fresns\Panel\Http\Controllers\BlockWordController;
 use App\Fresns\Panel\Http\Controllers\CodeMessageController;
 use App\Fresns\Panel\Http\Controllers\ColumnController;
@@ -273,19 +274,22 @@ Route::middleware(['panelAuth'])->group(function () {
         // website
         Route::get('website', [WebsiteController::class, 'index'])->name('website.index');
         Route::put('website', [WebsiteController::class, 'update'])->name('website.update');
+        // app
+        Route::get('app', [AppController::class, 'index'])->name('app.index');
+        Route::put('app', [AppController::class, 'update'])->name('app.update');
     });
 
     // app center
     Route::prefix('app-center')->group(function () {
         // plugins
         Route::get('plugins', [ExtensionController::class, 'pluginIndex'])->name('plugin.index');
+        // panels
+        Route::get('panels', [ExtensionController::class, 'panelIndex'])->name('panel.index');
         // engines
         Route::get('engines', [ExtensionController::class, 'engineIndex'])->name('engine.index');
         Route::put('engines/{engine}/theme', [ExtensionController::class, 'updateEngineTheme'])->name('engine.theme.update');
         // themes
         Route::get('themes', [ExtensionController::class, 'themeIndex'])->name('theme.index');
-        // apps
-        Route::get('apps', [ExtensionController::class, 'appIndex'])->name('app.index');
         // session key
         Route::resource('keys', SessionKeyController::class)->only([
             'index', 'store', 'update', 'destroy',
@@ -306,7 +310,7 @@ Route::middleware(['panelAuth'])->group(function () {
         Route::put('upgrade', [ExtensionController::class, 'upgrade'])->name('plugin.upgrade');
         // activate or deactivate
         Route::patch('update', [ExtensionController::class, 'update'])->name('plugin.update');
-        Route::patch('updateTheme', [ExtensionController::class, 'updateTheme'])->name('plugin.updateTheme');
+        Route::patch('updateDefaultEngine', [ExtensionController::class, 'updateDefaultEngine'])->name('plugin.updateDefaultEngine');
         // uninstall
         Route::delete('uninstall', [ExtensionController::class, 'uninstall'])->name('plugin.uninstall');
         Route::delete('uninstallTheme', [ExtensionController::class, 'uninstallTheme'])->name('plugin.uninstallTheme');

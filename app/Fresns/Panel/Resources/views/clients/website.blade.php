@@ -30,13 +30,13 @@
                 <div class="input-group mb-3">
                     <label class="input-group-text">{{ __('FsLang::panel.website_engine_service') }}</label>
                     <select class="form-select" name="engine_service">
-                        <option value="" {{ !$params['engine_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
+                        <option value="FresnsEngine" {{ !$params['engine_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.website_engine_default') }}</option>
                         @foreach ($pluginParams['engine'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['engine_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
-                    @if ($engine?->settings_path)
-                        <a class="btn btn-outline-secondary" href="{{ route('panel.iframe.setting', ['url' => $engine?->settings_path]) }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
+                    @if ($engineSettingsPath)
+                        <a class="btn btn-outline-secondary" href="{{ route('panel.iframe.setting', ['url' => $engineSettingsPath]) }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
                     @endif
                 </div>
                 <!--engine_api_type-->
@@ -88,7 +88,33 @@
                 </div>
                 <!--engine_api_type end-->
             </div>
-            <div class="col-lg-5 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.website_engine_config_desc') }}</div>
+            <div class="col-lg-5 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.sidebar_engines_intro') }}</div>
+        </div>
+
+        <!--website_theme_config-->
+        <div class="row mb-4">
+            <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.website_theme_config') }}:</label>
+            <div class="input-group mb-3">
+                <label class="input-group-text">{{ __('FsLang::panel.website_engine_api_type') }}</label>
+                <div class="form-control bg-white">
+                    <span class="badge bg-light text-dark"><i class="bi bi-laptop"></i>
+                        @if ($themeUnikey['pc'])
+                            {{ $themeName['pc'] ?? $themeUnikey['pc'] }}
+                        @else
+                            {{ __('FsLang::panel.option_not_set') }}
+                        @endif
+                    </span>
+                    <span class="badge bg-light text-dark"><i class="bi bi-phone"></i>
+                        @if ($themeUnikey['mobile'])
+                            {{ $themeName['mobile'] ?? $themeUnikey['mobile'] }}
+                        @else
+                            {{ __('FsLang::panel.option_not_set') }}
+                        @endif
+                    </span>
+                </div>
+                <a class="btn btn-outline-secondary" href="{{ route('panel.engine.index') }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
+            </div>
+            <div class="col-lg-5 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.sidebar_themes_intro') }}</div>
         </div>
 
         <!--website_stat_code-->
