@@ -9,7 +9,7 @@
     <div class="row mb-5 border-bottom">
         <div class="col-lg-9">
             <h3>{{ __('FsLang::panel.sidebar_website') }}</h3>
-            <p class="text-secondary">{{ __('FsLang::panel.sidebar_website_intro') }}</p>
+            <p class="text-secondary"><i class="bi bi-laptop"></i> {{ __('FsLang::panel.sidebar_website_intro') }}</p>
         </div>
         <div class="col-lg-3">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
@@ -58,7 +58,7 @@
                     <!--api_type config-->
                     <!--api_local-->
                     <div class="collapse {{ $params['engine_api_type'] == 'local' ? 'show' : '' }}" id="local_key_setting" aria-labelledby="api_local" data-bs-parent="#accordionApiType">
-                        <div class="input-group">
+                        <div class="input-group mb-2">
                             <label class="input-group-text">{{ __('FsLang::panel.website_engine_key_id') }}</label>
                             <select class="form-select" name="engine_key_id">
                                 <option value="" {{ !$params['engine_key_id'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_not_set') }}</option>
@@ -79,7 +79,7 @@
                             <label class="input-group-text">API ID</label>
                             <input type="text" class="form-control" name="engine_api_app_id" id="engine_api_app_id" value="{{ $params['engine_api_app_id'] }}">
                         </div>
-                        <div class="input-group">
+                        <div class="input-group mb-2">
                             <label class="input-group-text">API Secret</label>
                             <input type="text" class="form-control" name="engine_api_app_secret" id="engine_api_app_secret" value="{{ $params['engine_api_app_secret'] }}">
                         </div>
@@ -94,25 +94,26 @@
         <!--website_theme_config-->
         <div class="row mb-4">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.website_theme_config') }}:</label>
-            <div class="input-group mb-3">
-                <label class="input-group-text">{{ __('FsLang::panel.website_engine_api_type') }}</label>
-                <div class="form-control bg-white">
-                    <span class="badge bg-light text-dark"><i class="bi bi-laptop"></i>
-                        @if ($themeUnikey['pc'])
-                            {{ $themeName['pc'] ?? $themeUnikey['pc'] }}
-                        @else
-                            {{ __('FsLang::panel.option_not_set') }}
-                        @endif
-                    </span>
-                    <span class="badge bg-light text-dark"><i class="bi bi-phone"></i>
-                        @if ($themeUnikey['mobile'])
-                            {{ $themeName['mobile'] ?? $themeUnikey['mobile'] }}
-                        @else
-                            {{ __('FsLang::panel.option_not_set') }}
-                        @endif
-                    </span>
+            <div class="col-lg-5">
+                <div class="input-group mb-3">
+                    <div class="form-control bg-white">
+                        <span class="badge bg-light text-dark fw-normal"><i class="bi bi-laptop"></i>
+                            @if ($themeUnikey['pc'])
+                                {{ $themeName['pc'] ?? $themeUnikey['pc'] }}
+                            @else
+                                {{ __('FsLang::panel.option_not_set') }}
+                            @endif
+                        </span>
+                        <span class="badge bg-light text-dark fw-normal"><i class="bi bi-phone"></i>
+                            @if ($themeUnikey['mobile'])
+                                {{ $themeName['mobile'] ?? $themeUnikey['mobile'] }}
+                            @else
+                                {{ __('FsLang::panel.option_not_set') }}
+                            @endif
+                        </span>
+                    </div>
+                    <a class="btn btn-outline-secondary" href="{{ route('panel.engines.index') }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
                 </div>
-                <a class="btn btn-outline-secondary" href="{{ route('panel.engines.index') }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
             </div>
             <div class="col-lg-5 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.sidebar_themes_intro') }}</div>
         </div>

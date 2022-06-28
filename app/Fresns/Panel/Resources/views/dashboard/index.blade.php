@@ -80,7 +80,7 @@
                     </a>
                 </li>
                 <li class="list-group-item">
-                    <i class="bi bi-brush"></i> {{ __('FsLang::panel.sidebar_themes') }}
+                    <i class="bi bi-palette"></i> {{ __('FsLang::panel.sidebar_themes') }}
                     <a href="{{ route('panel.themes.index') }}">
                         <span class="badge bg-info">{{ $plugins->where('type', 4)->count() }}</span>
                     </a>

@@ -9,7 +9,7 @@
     <div class="row mb-4 border-bottom">
         <div class="col-lg-7">
             <h3>{{ __('FsLang::panel.sidebar_themes') }}</h3>
-            <p class="text-secondary"><i class="bi bi-brush"></i> {{ __('FsLang::panel.sidebar_themes_intro') }}</p>
+            <p class="text-secondary"><i class="bi bi-palette"></i> {{ __('FsLang::panel.sidebar_themes_intro') }}</p>
         </div>
         <div class="col-lg-5">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
@@ -17,6 +17,7 @@
             </div>
         </div>
     </div>
+
     <!--theme list-->
     <div class="row">
         @foreach ($themes as $theme)
@@ -34,15 +35,10 @@
                         <h5 class="text-nowrap overflow-hidden">{{ $theme->name }} <span class="badge bg-secondary align-middle fs-9">{{ $theme->version }}</span></h5>
                         <p class="card-text text-height">{{ $theme->description }}</p>
                         <div>
-                            @if ($theme->is_enable)
-                                <button type="button" class="btn btn-outline-secondary btn-sm me-2 plugin-manage" data-action="{{ route('panel.plugin.updateTheme', ['theme' => $theme->unikey]) }}" data-enable="0">{{ __('FsLang::panel.button_deactivate') }}</button>
-                                @if ($theme->theme_functions)
-                                    <a href="{{ route('panel.iframe.setting', ['url' => route('panel.theme.functions', ['theme' => $theme->unikey])]) }}" class="btn btn-primary btn-sm">{{ __('FsLang::panel.button_setting') }}</a>
-                                @endif
-                            @else
-                                <button type="button" class="btn btn-outline-success btn-sm plugin-manage" data-action="{{ route('panel.plugin.updateTheme', ['theme' => $theme->unikey]) }}" data-enable="1">{{ __('FsLang::panel.button_activate') }}</button>
-                                <button type="button" class="btn btn-link btn-sm ms-2 text-danger fresns-link plugin-uninstall-button" data-action="{{ route('panel.plugin.uninstallTheme', ['theme' => $theme->unikey]) }}" data-name="{{ $theme->name }}" data-clear_data_desc="{{ __('FsLang::panel.option_uninstall_theme_data') }}" data-bs-toggle="modal" data-bs-target="#uninstallConfirm">{{ __('FsLang::panel.button_uninstall') }}</button>
+                            @if ($theme->theme_functions)
+                                <a href="{{ route('panel.iframe.setting', ['url' => route('panel.theme.functions', ['theme' => $theme->unikey])]) }}" class="btn btn-primary btn-sm">{{ __('FsLang::panel.button_setting') }}</a>
                             @endif
+                            <button type="button" class="btn btn-link btn-sm ms-2 text-danger fresns-link plugin-uninstall-button" data-action="{{ route('panel.plugin.uninstallTheme', ['theme' => $theme->unikey]) }}" data-name="{{ $theme->name }}" data-clear_data_desc="{{ __('FsLang::panel.option_uninstall_theme_data') }}" data-bs-toggle="modal" data-bs-target="#uninstallConfirm">{{ __('FsLang::panel.button_uninstall') }}</button>
                         </div>
                     </div>
                     <div class="card-footer fs-8">{{ __('FsLang::panel.author') }}: <a href="{{ $theme->author_link }}" target="_blank" class="link-info fresns-link">{{ $theme->author }}</a></div>
