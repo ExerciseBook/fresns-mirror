@@ -40,7 +40,7 @@
                     <label class="input-group-text">{{ __('FsLang::panel.extend_content_review') }}</label>
                     <select class="form-select" name="content_review_service">
                         <option value="" {{ !$params['content_review_service'] ? 'selected' : '' }}>⛔️ {{ __('FsLang::panel.option_close') }}</option>
-                        @foreach ($pluginParams['extendData'] as $plugin)
+                        @foreach ($pluginParams['extendReview'] as $plugin)
                             <option value="{{ $plugin->unikey }}" {{ $params['content_review_service'] == $plugin->unikey ? 'selected' : '' }}> {{ $plugin->name }}</option>
                         @endforeach
                     </select>

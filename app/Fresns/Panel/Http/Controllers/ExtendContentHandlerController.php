@@ -38,6 +38,7 @@ class ExtendContentHandlerController extends Controller
 
         $pluginScenes = [
             'extendIp',
+            'extendReview',
             'extendData',
             'extendSearch',
         ];
