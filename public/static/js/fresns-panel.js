@@ -990,17 +990,17 @@ $(document).ready(function () {
     $('#themeSetting').on('show.bs.modal', function (e) {
         let button = $(e.relatedTarget);
         let action = button.data('action');
-        let params = button.data('params');
+        let unikey = button.data('unikey');
         let pcPlugin = button.data('pc_plugin');
         let mobilePlugin = button.data('mobile_plugin');
 
         $(this).find('form').attr('action', action);
         $(this)
             .find('#pcTheme')
-            .attr('name', params.unikey + '_Pc');
+            .attr('name', unikey + '_Pc');
         $(this)
             .find('#mobileTheme')
-            .attr('name', params.unikey + '_Mobile');
+            .attr('name', unikey + '_Mobile');
 
         $(this).find('#pcTheme').val(pcPlugin);
         $(this).find('#mobileTheme').val(mobilePlugin);

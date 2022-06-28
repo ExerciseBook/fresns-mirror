@@ -22,7 +22,7 @@
         <table class="table table-hover align-middle">
             <thead>
                 <tr class="table-info">
-                    <th scope="col">{{ __('FsLang::panel.sidebar_website_tab_engines') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.engine_table_name_desc') }}"></i></th>
+                    <th scope="col">{{ __('FsLang::panel.sidebar_engines') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.engine_table_name_desc') }}"></i></th>
                     <th scope="col">{{ __('FsLang::panel.author') }}</th>
                     <th scope="col">{{ __('FsLang::panel.engine_theme_title') }}</th>
                     <th scope="col" class="text-center">{{ __('FsLang::panel.table_options') }} <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('FsLang::panel.engine_table_options_desc') }}"></i></th>
@@ -50,14 +50,15 @@
                     </td>
                     <td class="text-center">
                         @if ($FresnsEngine)
-                            <button type="button" class="btn btn-outline-secondary btn-sm plugin-manage" data-action="{{ route('panel.plugin.updateDefaultEngine') }}" data-enable="0">{{ __('FsLang::panel.button_deactivate') }}</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm plugin-manage" data-action="{{ route('panel.defaultEngine.theme.update') }}" data-enable="0">{{ __('FsLang::panel.button_deactivate') }}</button>
                             <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                data-action="{{ route('panel.engine.theme.update', ['engine' => 0]) }}"
+                                data-action="{{ route('panel.engine.theme.update', ['unikey' => 'FresnsEngine']) }}"
+                                data-unikey="FresnsEngine"
                                 data-pc_plugin="{{ optional($configs->where('item_key', 'FresnsEngine_Pc')->first())->item_value }}"
                                 data-mobile_plugin="{{ optional($configs->where('item_key', 'FresnsEngine_Mobile')->first())->item_value }}"
                                 data-bs-target="#themeSetting">{{ __('FsLang::panel.engine_theme_title') }}</button>
                         @else
-                            <button type="button" class="btn btn-outline-success btn-sm plugin-manage" data-action="{{ route('panel.plugin.updateDefaultEngine') }}" data-enable="1">{{ __('FsLang::panel.button_activate') }}</button>
+                            <button type="button" class="btn btn-outline-success btn-sm plugin-manage" data-action="{{ route('panel.defaultEngine.theme.update') }}" data-enable="1">{{ __('FsLang::panel.button_activate') }}</button>
                         @endif
                     </td>
                 </tr>
@@ -89,8 +90,8 @@
                             @if ($engine->is_enable)
                                 <button type="button" class="btn btn-outline-secondary btn-sm plugin-manage" data-action="{{ route('panel.plugin.update', ['plugin' => $engine->unikey]) }}" data-enable="0">{{ __('FsLang::panel.button_deactivate') }}</button>
                                 <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                    data-action="{{ route('panel.engine.theme.update', ['engine' => $engine->id]) }}"
-                                    data-params="{{ $engine->toJson() }}"
+                                    data-action="{{ route('panel.engine.theme.update', ['unikey' => $engine->unikey]) }}"
+                                    data-unikey="{{ $engine->unikey }}"
                                     data-pc_plugin="{{ optional($configs->where('item_key', $engine->unikey . '_Pc')->first())->item_value }}"
                                     data-mobile_plugin="{{ optional($configs->where('item_key', $engine->unikey . '_Mobile')->first())->item_value }}"
                                     data-bs-target="#themeSetting">{{ __('FsLang::panel.engine_theme_title') }}</button>

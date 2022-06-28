@@ -77,12 +77,12 @@ class ExtensionController extends Controller
 
         $themes = Plugin::type(4)->get();
 
-        $FresnsEngine = Config::where('item_key', 'FresnsEngine')->value('item_value');
+        $FresnsEngine = Config::where('item_key', 'FresnsEngine')->first()?->item_value;
         $themeUnikey['pc'] = Config::where('item_key', 'FresnsEngine_Pc')->value('item_value');
         $themeUnikey['mobile'] = Config::where('item_key', 'FresnsEngine_Mobile')->value('item_value');
 
         $themeName['pc'] = Plugin::where('unikey', $themeUnikey['pc'])->value('name');
-        $themeName['mobile'] = Plugin::where('item_key', $themeUnikey['mobile'])->value('name');
+        $themeName['mobile'] = Plugin::where('unikey', $themeUnikey['mobile'])->value('name');
 
         return view('FsView::extensions.engines', compact(
             'engines', 'configs', 'themes', 'plugins', 'FresnsEngine', 'themeUnikey', 'themeName'
@@ -104,10 +104,10 @@ class ExtensionController extends Controller
         return $this->updateSuccess();
     }
 
-    public function updateEngineTheme(Plugin $engine, Request $request)
+    public function updateEngineTheme(string $unikey, Request $request)
     {
-        $pcKey = $engine->unikey.'_Pc';
-        $mobileKey = $engine->unikey.'_Mobile';
+        $pcKey = $unikey.'_Pc';
+        $mobileKey = $unikey.'_Mobile';
 
         $pcConfig = Config::where('item_key', $pcKey)->first();
         if ($request->has($pcKey)) {
