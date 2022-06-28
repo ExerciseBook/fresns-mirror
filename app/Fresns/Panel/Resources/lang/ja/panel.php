@@ -968,7 +968,7 @@ return [
     // App-Center-Install
     'install_application' => 'インストールアプリ',
     'install_type' => 'インストールタイプ',
-    'install_type_desc' => 'プラグイン、エンジン、モバイルアプリ、すべてアプリケーションに属する',
+    'install_type_desc' => 'プラグイン、パネル、エンジン、すべてアプリケーションに属します。',
     'install_type_application' => 'アプリケーション',
     'install_type_theme' => 'テーマテンプレート',
     'install_mode' => 'インストールモード',

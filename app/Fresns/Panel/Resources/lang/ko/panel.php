@@ -968,7 +968,7 @@ return [
     // App-Center-Install
     'install_application' => '앱 설치',
     'install_type' => '설치 유형',
-    'install_type_desc' => '플러그인, 엔진, 모바일 앱 모두 해당 애플리케이션에 속합니다.',
+    'install_type_desc' => '플러그인, 패널, 엔진, 모두 애플리케이션에 속합니다.',
     'install_type_application' => '신청',
     'install_type_theme' => '테마 템플릿',
     'install_mode' => '설치 모드',

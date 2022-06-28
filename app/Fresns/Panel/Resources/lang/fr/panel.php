@@ -968,7 +968,7 @@ return [
     // App-Center-Install
     'install_application' => 'Installer l\'application',
     'install_type' => 'Type d\'installation',
-    'install_type_desc' => 'Plugin, moteur, application mobile, tous appartiennent à l\'application',
+    'install_type_desc' => 'Plugins, Panels, Moteurs, Tous appartiennent aux applications',
     'install_type_application' => 'Application',
     'install_type_theme' => 'Modèle de thème',
     'install_mode' => 'Mode d\'installation',

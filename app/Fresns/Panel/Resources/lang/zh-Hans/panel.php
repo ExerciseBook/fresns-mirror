@@ -992,7 +992,7 @@ return [
     // App-Center-Install
     'install_application' => '安装应用',
     'install_type' => '安装类型',
-    'install_type_desc' => '插件、引擎、移动应用，都属于应用程序',
+    'install_type_desc' => '扩展插件、控制面板、网站引擎，都属于应用程序',
     'install_type_application' => '应用程序',
     'install_type_theme' => '主题模板',
     'install_mode' => '安装方式',

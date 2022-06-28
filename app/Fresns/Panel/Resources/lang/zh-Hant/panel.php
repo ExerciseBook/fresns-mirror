@@ -969,7 +969,7 @@ return [
     // App-Center-Install
     'install_application' => '安裝應用',
     'install_type' => '安裝類型',
-    'install_type_desc' => '外掛、引擎、移動應用，都屬於應用程序',
+    'install_type_desc' => '擴展外掛、控制面板、網站引擎，都屬於應用程序',
     'install_type_application' => '應用程序',
     'install_type_theme' => '主題模板',
     'install_mode' => '安裝方式',

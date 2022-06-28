@@ -968,7 +968,7 @@ return [
     // App-Center-Install
     'install_application' => 'Instal aplikasi',
     'install_type' => 'Menginstal Jenis',
-    'install_type_desc' => 'Plugin, mesin, aplikasi seluler, semuanya milik aplikasi',
+    'install_type_desc' => 'Plugin, Panel, Mesin, Semua milik aplikasi',
     'install_type_application' => 'Aplikasi',
     'install_type_theme' => 'Template Tema',
     'install_mode' => 'Instal Mode',

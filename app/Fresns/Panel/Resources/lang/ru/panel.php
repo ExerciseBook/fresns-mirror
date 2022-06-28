@@ -968,7 +968,7 @@ return [
     // App-Center-Install
     'install_application' => 'Установить приложение',
     'install_type' => 'Тип установки',
-    'install_type_desc' => 'Плагин, движок, мобильное приложение - все это относится к приложению',
+    'install_type_desc' => 'Плагины, панели, движки, все они относятся к приложениям',
     'install_type_application' => 'Приложение',
     'install_type_theme' => 'Тематический шаблон',
     'install_mode' => 'Режим установки',
