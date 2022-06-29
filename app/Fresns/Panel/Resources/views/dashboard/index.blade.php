@@ -68,7 +68,7 @@
                     </a>
                 </li>
                 <li class="list-group-item">
-                    <i class="bi bi-phone"></i> {{ __('FsLang::panel.sidebar_panels') }}
+                    <i class="bi bi-layers"></i> {{ __('FsLang::panel.sidebar_panels') }}
                     <a href="{{ route('panel.panels.index') }}">
                         <span class="badge bg-info">{{ $plugins->where('type', 2)->count() }}</span>
                     </a>

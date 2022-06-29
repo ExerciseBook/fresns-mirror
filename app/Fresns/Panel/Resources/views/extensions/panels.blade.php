@@ -9,7 +9,7 @@
     <div class="row mb-4">
         <div class="col-lg-7">
             <h3>{{ __('FsLang::panel.sidebar_panels') }}</h3>
-            <p class="text-secondary"><i class="bi bi-journal-code"></i> {{ __('FsLang::panel.sidebar_panels_intro') }}</p>
+            <p class="text-secondary"><i class="bi bi-layers"></i> {{ __('FsLang::panel.sidebar_panels_intro') }}</p>
         </div>
         <div class="col-lg-5">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">

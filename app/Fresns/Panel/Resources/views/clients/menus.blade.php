@@ -38,11 +38,11 @@
                     <tr>
                         <td>
                             @if ($menu['select'])
-                                <input class="form-check-input update-config" type="radio" name="default_homepage" data-action="{{ route('panel.configs.update', ['config' => 'default_homepage']) }}" data-item_value="{{ $menu['url'] }}" value="portal" {{ optional($configs['default_homepage'])->item_value == $menu['url'] ? 'checked' : '' }}>
+                                <input class="form-check-input update-config" type="radio" name="default_homepage" data-action="{{ route('panel.configs.update', ['config' => 'default_homepage']) }}" data-item_value="{{ $menu['path'] }}" value="portal" {{ optional($configs['default_homepage'])->item_value == $menu['path'] ? 'checked' : '' }}>
                             @endif
                         </td>
                         <td>{{ $menu['name'] }}</td>
-                        <td>/{{ $menu['url'] ?? '' }}</td>
+                        <td>/{{ $menu['path'] ?? '' }}</td>
                         <td>
                             <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip"
                                 data-placement="top" data-bs-toggle="modal" data-bs-target="#menuLangModal"
