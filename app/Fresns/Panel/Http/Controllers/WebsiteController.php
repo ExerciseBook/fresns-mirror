@@ -66,13 +66,15 @@ class WebsiteController extends Controller
 
         $engineSettingsPath = Plugin::where('unikey', $params['engine_service'])->value('settings_path');
 
+        $FresnsEngine = Config::where('item_key', 'FresnsEngine')->first()?->item_value;
+
         $themeUnikey['pc'] = Config::where('item_key', $params['engine_service'].'_Pc')->value('item_value');
         $themeUnikey['mobile'] = Config::where('item_key', $params['engine_service'].'_Mobile')->value('item_value');
 
         $themeName['pc'] = Plugin::where('unikey', $themeUnikey['pc'])->value('name');
         $themeName['mobile'] = Plugin::where('unikey', $themeUnikey['mobile'])->value('name');
 
-        return view('FsView::clients.website', compact('pluginParams', 'keys', 'params', 'engineSettingsPath', 'themeUnikey', 'themeName'));
+        return view('FsView::clients.website', compact('pluginParams', 'keys', 'params', 'engineSettingsPath', 'FresnsEngine', 'themeUnikey', 'themeName'));
     }
 
     public function update(Request $request)
