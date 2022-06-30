@@ -86,6 +86,16 @@
                     <!--api_remote-->
                     <div class="collapse {{ $params['engine_api_type'] == 'remote' ? 'show' : '' }}" id="remote_key_setting" aria-labelledby="api_remote" data-bs-parent="#accordionApiType">
                         <div class="input-group mb-3">
+                            <label class="input-group-text">{{ __('FsLang::panel.table_platform') }}</label>
+                            <select class="form-select" disabled>
+                                <option value="4" selected>Responsive Web</option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="input-group-text">{{ __('FsLang::panel.table_type') }}</label>
+                            <input class="form-control" type="text" value="{{ __('FsLang::panel.key_option_main_api') }}" disabled>
+                        </div>
+                        <div class="input-group mb-3">
                             <label class="input-group-text">API Host</label>
                             <input type="url" class="form-control" name="engine_api_host" id="engine_api_host" value="{{ $params['engine_api_host'] }}" placeholder="https://">
                         </div>

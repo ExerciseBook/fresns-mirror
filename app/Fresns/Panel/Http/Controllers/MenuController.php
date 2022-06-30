@@ -105,31 +105,37 @@ class MenuController extends Controller
         $menus = [
             'portal' => [
                 'name' => __('FsLang::panel.portal'),
+                'controller' => 'portal',
                 'path' => $paths['website_portal_path'],
                 'select' => true,
             ],
             'user' => [
                 'name' => __('FsLang::panel.user'),
+                'controller' => 'user',
                 'path' => $paths['website_user_path'],
                 'select' => true,
             ],
             'group' => [
                 'name' => __('FsLang::panel.group'),
+                'controller' => 'group',
                 'path' => $paths['website_group_path'],
                 'select' => true,
             ],
             'hashtag' => [
                 'name' => __('FsLang::panel.hashtag'),
+                'controller' => 'hashtag',
                 'path' => $paths['website_hashtag_path'],
                 'select' => true,
             ],
             'post' => [
                 'name' => __('FsLang::panel.post'),
+                'controller' => 'post',
                 'path' => $paths['website_post_path'],
                 'select' => true,
             ],
             'comment' => [
                 'name' => __('FsLang::panel.comment'),
+                'controller' => 'comment',
                 'path' => $paths['website_comment_path'],
                 'select' => true,
             ],

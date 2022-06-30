@@ -38,7 +38,7 @@
                     <tr>
                         <td>
                             @if ($menu['select'])
-                                <input class="form-check-input update-config" type="radio" name="default_homepage" data-action="{{ route('panel.configs.update', ['config' => 'default_homepage']) }}" data-item_value="{{ $menu['path'] }}" value="portal" {{ optional($configs['default_homepage'])->item_value == $menu['path'] ? 'checked' : '' }}>
+                                <input class="form-check-input update-config" type="radio" name="default_homepage" data-action="{{ route('panel.configs.update', ['config' => 'default_homepage']) }}" data-item_value="{{ $menu['controller'] }}" value="portal" {{ optional($configs['default_homepage'])->item_value == $menu['controller'] ? 'checked' : '' }}>
                             @endif
                         </td>
                         <td>{{ $menu['name'] }}</td>
