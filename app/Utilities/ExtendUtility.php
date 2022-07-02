@@ -28,9 +28,9 @@ class ExtendUtility
         $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
         if ($type == 6) {
-            $extendArr = PluginUsage::where('type', $type)->where('group_id', $groupId)->orderBy('rating')->get();
+            $extendArr = PluginUsage::where('usage_type', $type)->where('group_id', $groupId)->orderBy('rating')->get();
         } else {
-            $extendArr = PluginUsage::where('type', $type)->when($scene, function ($query, $scene) {
+            $extendArr = PluginUsage::where('usage_type', $type)->when($scene, function ($query, $scene) {
                 $query->where('scene', 'like', "%$scene%");
             })->orderBy('rating')->get();
         }

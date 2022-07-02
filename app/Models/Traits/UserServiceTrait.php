@@ -42,7 +42,7 @@ trait UserServiceTrait
         $profile['lastPublishComment'] = DateHelper::fresnsDateTimeByTimezone($userData->last_comment_at, $timezone, $langTag);
         $profile['lastEditUsername'] = DateHelper::fresnsDateTimeByTimezone($userData->last_username_at, $timezone, $langTag);
         $profile['lastEditNickname'] = DateHelper::fresnsDateTimeByTimezone($userData->last_nickname_at, $timezone, $langTag);
-        $profile['registerDate'] = date(ConfigHelper::fresnsConfigDateFormat($langTag), DateHelper::fresnsDateTimeByTimezone($userData->created_at, $timezone, $langTag));
+        $profile['registerDate'] = date(ConfigHelper::fresnsConfigDateFormat($langTag), strtotime(DateHelper::fresnsDateTimeByTimezone($userData->created_at, $timezone, $langTag)));
         $profile['hasPassword'] = (bool) $userData->password;
         $profile['status'] = (bool) $userData->is_enable;
         $profile['waitDelete'] = (bool) $userData->wait_delete;

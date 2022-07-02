@@ -31,11 +31,11 @@ trait PluginUsageServiceTrait
 
         if (! empty($userId)) {
             $badge = PluginBadge::where('plugin_unikey', $usageData->plugin_unikey)->where('user_id', $userId)->first();
-            $info['badgesType'] = $badge->display_type;
-            $info['badgesValue'] = match ($badge->display_type) {
+            $info['badgesType'] = $badge?->display_type;
+            $info['badgesValue'] = match ($badge?->display_type) {
                 default => null,
-                1 => $badge->value_number,
-                2 => $badge->value_text,
+                1 => $badge?->value_number,
+                2 => $badge?->value_text,
             };
         }
 

@@ -24,14 +24,14 @@ class PluginHelper
             return null;
         }
 
-        $plugin = Plugin::where('unikey', $unikey)->first(['plugin_url', 'access_path']);
+        $plugin = Plugin::where('unikey', $unikey)->first(['plugin_host', 'access_path']);
         if (empty($plugin)) {
             return null;
         }
 
         $system_url = ConfigHelper::fresnsConfigByItemKey('system_url');
 
-        $url = empty($plugin->plugin_url) ? $system_url : $plugin->plugin_url;
+        $url = empty($plugin->plugin_host) ? $system_url : $plugin->plugin_host;
 
         $link = StrHelper::qualifyUrl($plugin->access_path, $url);
 
