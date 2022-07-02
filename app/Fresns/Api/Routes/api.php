@@ -18,9 +18,14 @@ use App\Fresns\Api\Http\Controllers\NotifyController;
 use App\Fresns\Api\Http\Controllers\PostController;
 use App\Fresns\Api\Http\Controllers\SearchController;
 use App\Fresns\Api\Http\Controllers\UserController;
+use App\Fresns\Api\Http\Middleware\CheckHeader;
+use App\Fresns\Subscribe\Middleware\UserActivate;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('v2')->group(function () {
+Route::prefix('v2')->middleware([
+    CheckHeader::class,
+    UserActivate::class,
+])->group(function () {
     Route::prefix('global')->name('global.')->group(function () {
         Route::get('configs', [GlobalController::class, 'configs'])->name('configs');
         Route::get('{type}/archives', [GlobalController::class, 'archives'])->name('archives');

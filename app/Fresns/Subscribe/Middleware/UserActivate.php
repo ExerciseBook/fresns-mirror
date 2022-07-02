@@ -11,7 +11,7 @@ namespace App\Fresns\Subscribe\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class UserActivateMiddleware
+class UserActivate
 {
     public function handle(Request $request, Closure $next)
     {
