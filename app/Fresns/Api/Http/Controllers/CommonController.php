@@ -182,7 +182,7 @@ class CommonController extends Controller
 
         $plugin = Plugin::whereUnikey($dtoRequest->unikey)->first();
         if (empty($plugin)) {
-            throw new ApiException(32304);
+            throw new ApiException(32303);
         }
 
         $callback = PluginCallback::whereUuid($dtoRequest->uuid)->first();

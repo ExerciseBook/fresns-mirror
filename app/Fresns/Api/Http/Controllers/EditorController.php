@@ -449,7 +449,7 @@ class EditorController extends Controller
             $checkBanWords = ValidationUtility::contentBanWords($content);
 
             if (! $checkBanWords) {
-                throw new ApiException(38205);
+                throw new ApiException(38207);
             }
 
             $draft->update([
@@ -517,7 +517,7 @@ class EditorController extends Controller
                     $checkBanWords = ValidationUtility::contentBanWords($postTitle);
 
                     if (! $checkBanWords) {
-                        throw new ApiException(38205);
+                        throw new ApiException(38206);
                     }
 
                     $draft->update([
@@ -668,26 +668,26 @@ class EditorController extends Controller
         if ($draft->title) {
             $titleLength = Str::length($draft->title);
             if ($titleLength > $editorConfig['post_editor_title_length']) {
-                throw new ApiException(38202);
+                throw new ApiException(38203);
             }
 
             $checkTitleBanWords = ValidationUtility::contentBanWords($draft->title);
             if (! $checkTitleBanWords) {
-                throw new ApiException(38205);
+                throw new ApiException(38206);
             }
         }
 
         if (! $draft->content) {
-            throw new ApiException(38203);
+            throw new ApiException(38204);
         } else {
             $contentLength = Str::length($draft->content);
             if ($contentLength > $editorConfig["{$type}_editor_content_length"]) {
-                throw new ApiException(38204);
+                throw new ApiException(38205);
             }
 
             $checkContentBanWords = ValidationUtility::contentBanWords($draft->content);
             if (! $checkContentBanWords) {
-                throw new ApiException(38205);
+                throw new ApiException(38207);
             }
         }
 

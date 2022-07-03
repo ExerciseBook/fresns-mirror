@@ -438,22 +438,22 @@ class Content
             $contentLength = Str::length($content);
             if ($contentLength > $editorConfig["{$type}_editor_content_length"]) {
                 return $this->failure(
-                    38204,
-                    ConfigUtility::getCodeMessage(38204, 'Fresns', $langTag)
+                    38205,
+                    ConfigUtility::getCodeMessage(38205, 'Fresns', $langTag)
                 );
             }
 
             $checkBanWords = ValidationUtility::contentBanWords($content);
             if (!$checkBanWords) {
                 return $this->failure(
-                    38205,
-                    ConfigUtility::getCodeMessage(38205, 'Fresns', $langTag)
+                    38207,
+                    ConfigUtility::getCodeMessage(38207, 'Fresns', $langTag)
                 );
             }
         } else {
             return $this->failure(
-                38203,
-                ConfigUtility::getCodeMessage(38203, 'Fresns', $langTag)
+                38204,
+                ConfigUtility::getCodeMessage(38204, 'Fresns', $langTag)
             );
         }
 
@@ -462,15 +462,15 @@ class Content
             case 'post':
                 if ($editorConfig['post_editor_group_required'] && !$dtoWordBody->postGid) {
                     return $this->failure(
-                        38206,
-                        ConfigUtility::getCodeMessage(38206, 'Fresns', $langTag)
+                        38208,
+                        ConfigUtility::getCodeMessage(38208, 'Fresns', $langTag)
                     );
                 }
 
                 if ($editorConfig['post_editor_title_required'] && !$dtoWordBody->postTitle) {
                     return $this->failure(
-                        38201,
-                        ConfigUtility::getCodeMessage(38201, 'Fresns', $langTag)
+                        38202,
+                        ConfigUtility::getCodeMessage(38202, 'Fresns', $langTag)
                     );
                 }
 
@@ -483,16 +483,16 @@ class Content
                     $titleLength = Str::length($title);
                     if ($titleLength > $editorConfig['post_editor_title_length']) {
                         return $this->failure(
-                            38202,
-                            ConfigUtility::getCodeMessage(38202, 'Fresns', $langTag)
+                            38203,
+                            ConfigUtility::getCodeMessage(38203, 'Fresns', $langTag)
                         );
                     }
 
                     $checkTitleBanWords = ValidationUtility::contentBanWords($title);
                     if (!$checkTitleBanWords) {
                         return $this->failure(
-                            38205,
-                            ConfigUtility::getCodeMessage(38205, 'Fresns', $langTag)
+                            38206,
+                            ConfigUtility::getCodeMessage(38206, 'Fresns', $langTag)
                         );
                     }
                 }
