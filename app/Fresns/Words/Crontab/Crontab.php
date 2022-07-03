@@ -100,7 +100,7 @@ class Crontab
      */
     public function checkDeleteAccount()
     {
-        $deleteAccount = ConfigHelper::fresnsConfigByItemKey('delete_account');
+        $deleteAccount = ConfigHelper::fresnsConfigByItemKey('delete_account_type');
         $bufferDay = ConfigHelper::fresnsConfigByItemKey('delete_account_todo');
         if ($deleteAccount == 2) {
             $this->logicDelete($bufferDay);
