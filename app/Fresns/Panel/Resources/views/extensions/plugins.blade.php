@@ -43,7 +43,7 @@
                 @foreach ($plugins as $plugin)
                     <tr>
                         <td class="py-3">
-                            <img src="/assets/{{ $plugin->unikey }}/fresns.png" class="me-2" width="44" height="44">
+                            <img src="/assets/plugins/{{ $plugin->unikey }}/fresns.png" class="me-2" width="44" height="44">
                             <span class="fs-6">{{ $plugin->name }}</span>
                             <span class="badge bg-secondary fs-9">{{ $plugin->version }}</span>
                             @if ($plugin->is_upgrade)

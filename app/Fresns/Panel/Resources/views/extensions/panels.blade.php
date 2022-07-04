@@ -43,7 +43,7 @@
                 @foreach ($panels as $panel)
                     <tr>
                         <td class="py-3">
-                            <img src="/assets/{{ $panel->unikey }}/fresns.png" class="me-2" width="44" height="44">
+                            <img src="/assets/plugins/{{ $panel->unikey }}/fresns.png" class="me-2" width="44" height="44">
                             <span class="fs-6">{{ $panel->name }}</span>
                             <span class="badge bg-secondary fs-9">{{ $panel->version }}</span>
                             @if ($panel->is_upgrade)

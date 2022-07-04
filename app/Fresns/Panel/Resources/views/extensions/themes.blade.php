@@ -24,7 +24,7 @@
             <div class="col-sm-6 col-xl-3 mb-4">
                 <div class="card">
                     <div class="position-relative">
-                        <img src="/assets/{{ $theme->unikey }}/fresns.png" class="card-img-top">
+                        <img src="/assets/themes/{{ $theme->unikey }}/fresns.png" class="card-img-top">
                         @if ($theme->is_upgrade)
                             <div class="position-absolute top-0 start-100 translate-middle">
                                 <a href="{{ route('panel.upgrades') }}"><span class="badge rounded-pill bg-danger">{{ __('FsLang::panel.new_version') }}</span></a>
