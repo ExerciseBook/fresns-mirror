@@ -253,7 +253,7 @@ class CommentController extends Controller
             throw new ApiException(37400);
         }
 
-        if ($comment->isEnable(false)) {
+        if ($comment->is_enable == 0) {
             throw new ApiException(37401);
         }
 

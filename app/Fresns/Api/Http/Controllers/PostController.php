@@ -249,7 +249,7 @@ class PostController extends Controller
             throw new ApiException(37300);
         }
 
-        if ($post->isEnable(false)) {
+        if ($post->is_enable == 0) {
             throw new ApiException(37301);
         }
 

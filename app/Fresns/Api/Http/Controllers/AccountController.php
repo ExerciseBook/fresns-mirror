@@ -401,6 +401,10 @@ class AccountController extends Controller
             throw new ApiException(31502);
         }
 
+        if ($authAccount->is_enable == 0) {
+            throw new ApiException(34307);
+        }
+
         $service = new AccountService();
         $data = $service->accountData($authAccount, $this->langTag(), $this->timezone());
 

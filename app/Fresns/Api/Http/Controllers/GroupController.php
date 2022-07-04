@@ -56,10 +56,10 @@ class GroupController extends Controller
         $service = new GroupService();
         $groupData = [];
         foreach ($groups as $index => $group) {
-            $groupData[$index][] = $service->groupList($group, $langTag, $timezone, $authUserId);
+            $groupData[$index] = $service->groupList($group, $langTag, $timezone, $authUserId);
         }
 
-        $groupTree = CollectionUtility::toTree($groupData, 'gid', 'category', 'groups');
+        $groupTree = CollectionUtility::toTree($groupData, 'gid', 'parentGid', 'groups');
 
         return $this->success($groupTree);
     }
@@ -91,6 +91,7 @@ class GroupController extends Controller
         $authUserId = $this->user()?->id;
 
         $groupFilterIds = PermissionUtility::getGroupFilterIds($authUserId);
+
         $groupQuery = Group::with(['category', 'admins'])
             ->where('type', '!=', Group::TYPE_CATEGORY)
             ->whereNotIn('id', $groupFilterIds)
@@ -220,7 +221,7 @@ class GroupController extends Controller
             throw new ApiException(37100);
         }
 
-        if ($group->isEnable(false)) {
+        if ($group->is_enable == 0) {
             throw new ApiException(37101);
         }
 
@@ -233,7 +234,6 @@ class GroupController extends Controller
         $item['title'] = $seoData->title ?? null;
         $item['keywords'] = $seoData->keywords ?? null;
         $item['description'] = $seoData->description ?? null;
-        $item['category'] = $group->category->getCategoryInfo($langTag);
         $item['extensions'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_GROUP, $group->id, null, $authUserId, $langTag);
         $data['items'] = $item;
 

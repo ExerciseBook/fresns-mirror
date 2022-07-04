@@ -118,7 +118,7 @@ class ExtendUtility
     // get archives
     public static function getArchives(int $type, int $id, ?string $langTag = null)
     {
-        $archiveQuery = ArchiveUsage::with('archive')->type($type)->where('usage_id', $id)->isEnable();
+        $archiveQuery = ArchiveUsage::with('archive')->type($type)->where('usage_id', $id)->where('is_private', 0);
 
         $archiveQuery->whereHas('archive', function ($query) {
             $query->where('is_enable', 1)->orderBy('rating');

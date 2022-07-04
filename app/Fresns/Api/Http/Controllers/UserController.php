@@ -226,7 +226,7 @@ class UserController extends Controller
             throw new ApiException(31602);
         }
 
-        if ($viewUser->isEnable(false)) {
+        if ($viewUser->is_enable == 0) {
             throw new ApiException(35202);
         }
 

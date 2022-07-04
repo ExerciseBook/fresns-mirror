@@ -34,7 +34,8 @@ trait GroupServiceTrait
         $info['find'] = $groupData->type_find;
         $info['followType'] = $groupData->type_follow;
         $info['followUrl'] = ! empty($groupData->plugin_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($groupData->plugin_unikey) : null;
-        $info['category'] = $parentGroup->getCategoryInfo($langTag) ?? null;
+        $info['parentGid'] = $parentGroup?->gid ?? null;
+        $info['category'] = $parentGroup?->getCategoryInfo($langTag) ?? null;
         $info['likeCount'] = $groupData->like_count;
         $info['dislikeCount'] = $groupData->dislike_count;
         $info['followCount'] = $groupData->follow_count;
@@ -42,7 +43,7 @@ trait GroupServiceTrait
         $info['postCount'] = $groupData->post_count;
         $info['postDigestCount'] = $groupData->post_digest_count;
         $info['permissions'] = $groupData->permissions;
-        $info['createDate'] = date(ConfigHelper::fresnsConfigDateFormat($langTag), DateHelper::fresnsDateTimeByTimezone($groupData->created_at, $timezone, $langTag));
+        $info['createDate'] = date(ConfigHelper::fresnsConfigDateFormat($langTag), strtotime(DateHelper::fresnsDateTimeByTimezone($groupData->created_at, $timezone, $langTag)));
 
         return $info;
     }

@@ -29,7 +29,7 @@ trait HashtagServiceTrait
         $info['blockCount'] = $hashtagData->block_count;
         $info['postCount'] = $hashtagData->post_count;
         $info['postDigestCount'] = $hashtagData->post_digest_count;
-        $info['createDate'] = date(ConfigHelper::fresnsConfigDateFormat($langTag), DateHelper::fresnsDateTimeByTimezone($hashtagData->created_at, $timezone, $langTag));
+        $info['createDate'] = date(ConfigHelper::fresnsConfigDateFormat($langTag), strtotime(DateHelper::fresnsDateTimeByTimezone($hashtagData->created_at, $timezone, $langTag)));
 
         return $info;
     }
