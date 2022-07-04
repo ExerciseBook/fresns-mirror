@@ -233,8 +233,8 @@
                                 <input type="text" class="form-control" id="china_icp_license" name="china_icp_license" value="{{ $params['china_icp_license'] }}">
                             </div>
                             <div class="input-group mb-3">
-                                <label class="input-group-text" for="china_icp_license">{{ __('FsLang::panel.china_gongan_beian') }}</label>
-                                <input type="text" class="form-control" id="china_icp_license" name="china_icp_license" value="{{ $params['china_icp_license'] }}">
+                                <label class="input-group-text" for="china_gongan_beian">{{ __('FsLang::panel.china_gongan_beian') }}</label>
+                                <input type="text" class="form-control" id="china_gongan_beian" name="china_gongan_beian" value="{{ $params['china_gongan_beian'] }}">
                             </div>
                             <div class="input-group mb-1">
                                 <label class="input-group-text" for="china_broadcasting_license">{{ __('FsLang::panel.china_broadcasting_license') }}</label>
