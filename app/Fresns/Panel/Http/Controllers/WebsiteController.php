@@ -143,7 +143,7 @@ class WebsiteController extends Controller
         }
 
         $siteUrl = ConfigHelper::fresnsConfigByItemKey('site_url');
-        $siteUrl = rtrim($siteUrl, "/");
+        $siteUrl = rtrim($siteUrl, '/');
 
         return view('FsView::clients.paths', compact('params', 'siteUrl'));
     }
@@ -178,7 +178,7 @@ class WebsiteController extends Controller
 
         $validate = validator($data, $rules, $messages);
 
-        if (!$validate->passes()) {
+        if (! $validate->passes()) {
             return back()->with('failure', $validate->errors()->first());
         }
 

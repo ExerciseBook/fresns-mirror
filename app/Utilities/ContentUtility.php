@@ -40,8 +40,8 @@ use App\Models\Role;
 use App\Models\Sticker;
 use App\Models\User;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class ContentUtility
 {
@@ -806,7 +806,7 @@ class ContentUtility
         $extendTypeText = ContentUtility::releaseExtendUsages('post', $postLog->id, $post->id);
 
         $typeArr = array_unique(Arr::collapse($fileTypeText, $extendTypeText));
-        $typesText = Str::lower(implode(",", $typeArr));
+        $typesText = Str::lower(implode(',', $typeArr));
 
         if (empty($typesText)) {
             $typesText = null;
@@ -912,7 +912,7 @@ class ContentUtility
         $extendTypeText = ContentUtility::releaseExtendUsages('comment', $commentLog->id, $comment->id);
 
         $typeArr = array_unique(Arr::collapse($fileTypeText, $extendTypeText));
-        $typesText = Str::lower(implode(",", $typeArr));
+        $typesText = Str::lower(implode(',', $typeArr));
 
         if (empty($typesText)) {
             $typesText = null;

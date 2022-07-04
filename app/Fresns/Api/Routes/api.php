@@ -26,6 +26,7 @@ Route::prefix('v2')->middleware([
     CheckHeader::class,
     UserActivate::class,
 ])->group(function () {
+    // global
     Route::prefix('global')->name('global.')->group(function () {
         Route::get('configs', [GlobalController::class, 'configs'])->name('configs');
         Route::get('{type}/archives', [GlobalController::class, 'archives'])->name('archives');
@@ -37,6 +38,7 @@ Route::prefix('v2')->middleware([
         Route::get('block-words', [GlobalController::class, 'blockWords'])->name('block.words');
     });
 
+    // common
     Route::prefix('common')->name('common.')->group(function () {
         Route::get('input-tips', [CommonController::class, 'inputTips'])->name('input.tips');
         Route::get('callbacks', [CommonController::class, 'callbacks'])->name('callbacks');
@@ -47,6 +49,7 @@ Route::prefix('v2')->middleware([
         Route::get('file/{fid}/users', [CommonController::class, 'downloadUsers'])->name('download.users');
     });
 
+    // search
     Route::prefix('search')->name('search.')->group(function () {
         Route::get('users', [SearchController::class, 'users'])->name('users');
         Route::get('groups', [SearchController::class, 'groups'])->name('groups');
@@ -55,6 +58,7 @@ Route::prefix('v2')->middleware([
         Route::get('comments', [SearchController::class, 'comments'])->name('comments');
     });
 
+    // account
     Route::prefix('account')->name('account.')->group(function () {
         Route::post('register', [AccountController::class, 'register'])->name('register');
         Route::post('login', [AccountController::class, 'login'])->name('login');
@@ -68,6 +72,7 @@ Route::prefix('v2')->middleware([
         Route::post('revoke-delete', [AccountController::class, 'revokeDelete'])->name('revoke.delete');
     });
 
+    // user
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('list', [UserController::class, 'list'])->name('list');
         Route::get('{uidOrUsername}/detail', [UserController::class, 'detail'])->name('detail');
@@ -80,12 +85,14 @@ Route::prefix('v2')->middleware([
         Route::put('mark-note', [UserController::class, 'markNote'])->name('mark.note');
     });
 
+    // notify
     Route::prefix('notify')->name('notify.')->group(function () {
         Route::get('{type}/list', [NotifyController::class, 'list'])->name('list');
         Route::put('mark-as-read', [NotifyController::class, 'markAsRead'])->name('read');
         Route::delete('delete', [NotifyController::class, 'delete'])->name('delete');
     });
 
+    // dialog
     Route::prefix('dialog')->name('dialog.')->group(function () {
         Route::get('list', [DialogController::class, 'list'])->name('list');
         Route::get('{dialogId}/detail', [DialogController::class, 'detail'])->name('detail');
@@ -95,6 +102,7 @@ Route::prefix('v2')->middleware([
         Route::delete('delete', [DialogController::class, 'delete'])->name('delete');
     });
 
+    // group
     Route::prefix('group')->name('group.')->group(function () {
         Route::get('tree', [GroupController::class, 'tree'])->name('tree');
         Route::get('categories', [GroupController::class, 'categories'])->name('categories');
@@ -103,12 +111,14 @@ Route::prefix('v2')->middleware([
         Route::get('{gid}/interactive/{type}', [GroupController::class, 'interactive'])->name('interactive');
     });
 
+    // hashtag
     Route::prefix('hashtag')->name('hashtag.')->group(function () {
         Route::get('list', [HashtagController::class, 'list'])->name('list');
         Route::get('{hid}/detail', [HashtagController::class, 'detail'])->name('detail');
         Route::get('{hid}/interactive/{type}', [HashtagController::class, 'interactive'])->name('interactive');
     });
 
+    // post
     Route::prefix('post')->name('post.')->group(function () {
         Route::get('list', [PostController::class, 'list'])->name('list');
         Route::get('{pid}/detail', [PostController::class, 'detail'])->name('detail');
@@ -121,6 +131,7 @@ Route::prefix('v2')->middleware([
         Route::get('nearby', [PostController::class, 'nearby'])->name('nearby');
     });
 
+    // comment
     Route::prefix('comment')->name('comment.')->group(function () {
         Route::get('list', [CommentController::class, 'list'])->name('list');
         Route::get('{cid}/detail', [CommentController::class, 'detail'])->name('detail');
@@ -130,6 +141,7 @@ Route::prefix('v2')->middleware([
         Route::delete('{cid}', [CommentController::class, 'delete'])->name('delete');
     });
 
+    // editor
     Route::prefix('editor')->name('editor.')->group(function () {
         Route::get('{type}/config', [EditorController::class, 'config'])->name('config');
         Route::get('{type}/drafts', [EditorController::class, 'drafts'])->name('drafts');

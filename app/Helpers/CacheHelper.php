@@ -25,7 +25,7 @@ class CacheHelper
             return now()->addHours();
         }
 
-        $cacheTime = now()->addMinutes($fileConfig['antiLinkExpire']-1);
+        $cacheTime = now()->addMinutes($fileConfig['antiLinkExpire'] - 1);
 
         return $cacheTime;
     }
@@ -38,8 +38,6 @@ class CacheHelper
         Cache::flush();
         \Artisan::call('view:cache');
         \Artisan::call('config:cache');
-
-        return;
     }
 
     /**
@@ -61,8 +59,6 @@ class CacheHelper
         Cache::forget('fresns_content_review_words');
         Cache::forget('fresns_user_ban_words');
         Cache::forget('fresns_dialog_ban_words');
-
-        return;
     }
 
     /**
@@ -82,8 +78,6 @@ class CacheHelper
         $cacheKey = "fresns_model_{$modelName}_{$fsid}";
 
         Cache::forget($cacheKey);
-
-        return;
     }
 
     /**
@@ -96,8 +90,6 @@ class CacheHelper
         $cacheKey = "fresns_{$tableName}_{$tableColumn}_{$tableId}_{$langTag}";
 
         Cache::forget($cacheKey);
-
-        return;
     }
 
     /**
@@ -117,8 +109,6 @@ class CacheHelper
 
             Cache::forget($cacheKey);
         }
-
-        return;
     }
 
     /**
@@ -146,8 +136,6 @@ class CacheHelper
                 Cache::forget($cacheKey);
             }
         }
-
-        return;
     }
 
     /**
@@ -162,8 +150,6 @@ class CacheHelper
     public static function forgetFresnsApiInfo(string $cacheKey)
     {
         Cache::forget($cacheKey);
-
-        return;
     }
 
     // forget fresns api account

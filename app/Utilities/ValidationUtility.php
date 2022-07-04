@@ -15,8 +15,8 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\VerifyCode;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class ValidationUtility
 {

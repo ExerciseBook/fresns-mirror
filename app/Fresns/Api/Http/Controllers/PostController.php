@@ -49,8 +49,8 @@ class PostController extends Controller
 
         if ($dataPluginUnikey) {
             $wordBody = [
-                "header" => \request()->headers->all(),
-                "body" => $dtoRequest->toArray(),
+                'header' => \request()->headers->all(),
+                'body' => $dtoRequest->toArray(),
             ];
 
             $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($wordBody);
@@ -260,8 +260,8 @@ class PostController extends Controller
 
         if ($dataPluginUnikey) {
             $wordBody = [
-                "header" => \request()->headers->all(),
-                "body" => $dtoRequest->toArray(),
+                'header' => \request()->headers->all(),
+                'body' => $dtoRequest->toArray(),
             ];
 
             $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostDetail($wordBody);
@@ -438,8 +438,8 @@ class PostController extends Controller
 
         if ($dataPluginUnikey) {
             $wordBody = [
-                "header" => \request()->headers->all(),
-                "body" => $dtoRequest->toArray(),
+                'header' => \request()->headers->all(),
+                'body' => $dtoRequest->toArray(),
             ];
 
             $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($wordBody);
@@ -501,8 +501,8 @@ class PostController extends Controller
 
         if ($dataPluginUnikey) {
             $wordBody = [
-                "header" => \request()->headers->all(),
-                "body" => $dtoRequest->toArray(),
+                'header' => \request()->headers->all(),
+                'body' => $dtoRequest->toArray(),
             ];
 
             $fresnsResp = \FresnsCmdWord::plugin($dataPluginUnikey)->getPostByAll($wordBody);

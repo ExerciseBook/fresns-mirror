@@ -63,11 +63,11 @@ class Wallet
     // wallet amount
     public function amountIncrement(int $accountId, int $userId, float $amountTotal, float $systemFee, ?int $objectAccountId = null, ?int $objectUserId = null)
     {
-        return;
+
     }
 
     public function amountDecrement(int $accountId, int $userId, float $amountTotal, float $systemFee, ?int $objectAccountId = null, ?int $objectUserId = null)
     {
-        return;
+
     }
 }

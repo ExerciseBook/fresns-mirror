@@ -11,8 +11,8 @@ namespace App\Utilities;
 use App\Helpers\AppHelper;
 use App\Helpers\ConfigHelper;
 use Browser;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class AppUtility
 {
@@ -167,7 +167,7 @@ class AppUtility
             'regionCode' => '',
             'city' => '',
             'district' => '',
-            'zip' => ''
+            'zip' => '',
         ];
 
         return $deviceInfo;

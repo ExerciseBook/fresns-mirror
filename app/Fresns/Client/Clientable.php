@@ -3,16 +3,17 @@
 /*
  * Fresns (https://fresns.org)
  * Copyright (C) 2021-Present Jarvis Tang
+ * Released under the Apache-2.0 License.
  */
 
 namespace App\Fresns\Client;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Promise\Promise;
-use Psr\Http\Message\ResponseInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Psr\Http\Message\ResponseInterface;
 
 trait Clientable
 {
@@ -34,7 +35,7 @@ trait Clientable
     {
         return [
             'base_uri' => $this->getBaseUri(),
-            'timeout' => 5, // 请求 5s 超时
+            'timeout' => 5, // Request 5s timeout
             'http_errors' => false,
             'headers' => [
                 'Accept' => 'application/json',
@@ -82,7 +83,7 @@ trait Clientable
 
     public function paginate()
     {
-        if (!$this->hasPaginate()) {
+        if (! $this->hasPaginate()) {
             return null;
         }
 
@@ -102,11 +103,11 @@ trait Clientable
 
     public function __call($method, $args)
     {
-        // 异步请求处理
+        // Asynchronous requests
         if (method_exists(Utils::class, $method)) {
             $results = call_user_func_array([Utils::class, $method], $args);
 
-            if (!is_array($results)) {
+            if (! is_array($results)) {
                 return $results;
             }
 
@@ -120,19 +121,19 @@ trait Clientable
             return $this;
         }
 
-        // 同步请求
+        // Synchronization Request
         if (method_exists($this->getHttpClient(), $method)) {
             $this->response = $this->getHttpClient()->$method(...$args);
         }
 
-        // 响应结果处理
+        // Response results processing
         if ($this->response instanceof Response) {
-            $this->result  = $this->castResponse($this->response);
+            $this->result = $this->castResponse($this->response);
 
             $this->setAttributes($this->result);
         }
 
-        // 将 promise 请求直接返回
+        // Return the promise request directly to
         if ($this->response instanceof Promise) {
             return $this->response;
         }

@@ -71,16 +71,15 @@ class DateHelper
     /**
      * The conversion time is the current database time.
      *
-     * @param null|string $datetime
-     * @param null|string $timezone
-     *
+     * @param  null|string  $datetime
+     * @param  null|string  $timezone
      * @return string
      *
      * @throws \Exception
      */
     public static function fresnsDateTimeToDatabaseTimezone(?string $datetime, ?string $timezone = null, ?string $langTag = null)
     {
-        if (!$datetime) {
+        if (! $datetime) {
             return null;
         }
 
@@ -106,14 +105,13 @@ class DateHelper
      *
      * @param $datetime
      * @param  string  $timezone
-     *
      * @return \DateTime|string|null
      *
      * @throws \Exception
      */
     public static function fresnsDateTimeByTimezone(?string $datetime = null, ?string $timezone = null, ?string $langTag = null)
     {
-        if (!$datetime) {
+        if (! $datetime) {
             return null;
         }
 
@@ -139,14 +137,14 @@ class DateHelper
 
     public static function fresnsTimeByTimezone(?string $time = null, ?string $timezone = null)
     {
-        if (!$time) {
+        if (! $time) {
             return null;
         }
 
         $timezone = $timezone ?? ConfigHelper::fresnsConfigDefaultTimezone();
 
         $currentTime = DateHelper::fresnsDatabaseCurrentDateTime();
-        $dateString = Carbon::createFromFormat("Y-m-d H:i:s", $currentTime)->toDateString();
+        $dateString = Carbon::createFromFormat('Y-m-d H:i:s', $currentTime)->toDateString();
 
         $dbTime = $dateString.' '.$time.':00';
 
@@ -208,7 +206,7 @@ class DateHelper
      */
     public static function fresnsFormatTime(?string $datetime = null, ?string $langTag = null)
     {
-        if (!$datetime) {
+        if (! $datetime) {
             return null;
         }
 

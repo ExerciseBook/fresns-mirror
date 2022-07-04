@@ -52,7 +52,7 @@ class Content
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $authUser = PrimaryHelper::fresnsModelByFsid('user', $dtoWordBody->uid);
-        if (!$authUser) {
+        if (! $authUser) {
             return $this->failure(
                 35201,
                 ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
@@ -104,11 +104,11 @@ class Content
                     'map_json' => $dtoWordBody->mapJson ?? null,
                 ];
 
-                if (!$checkLog) {
+                if (! $checkLog) {
                     $logModel = PostLog::create($logData);
                 }
 
-                if (!$checkLog->content && !$checkLog->files && !$checkLog->extends) {
+                if (! $checkLog->content && ! $checkLog->files && ! $checkLog->extends) {
                     $logModel = $checkLog->update($logData);
                 } else {
                     $logModel = PostLog::create($logData);
@@ -139,11 +139,11 @@ class Content
                     'map_json' => $dtoWordBody->mapJson ?? null,
                 ];
 
-                if (!$checkLog) {
+                if (! $checkLog) {
                     $logModel = CommentLog::create($logData);
                 }
 
-                if (!$checkLog->content && !$checkLog->files && !$checkLog->extends) {
+                if (! $checkLog->content && ! $checkLog->files && ! $checkLog->extends) {
                     $logModel = $checkLog->update($logData);
                 } else {
                     $logModel = CommentLog::create($logData);
@@ -189,7 +189,7 @@ class Content
                 $post = PrimaryHelper::fresnsModelByFsid('post', $dtoWordBody->fsid);
 
                 $creator = PrimaryHelper::fresnsModelById('user', $post->user_id);
-                if (!$creator) {
+                if (! $creator) {
                     return $this->failure(
                         35201,
                         ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
@@ -209,7 +209,7 @@ class Content
                     'post_edit_digest_limit',
                 ]);
 
-                if (!$editConfig['post_edit']) {
+                if (! $editConfig['post_edit']) {
                     return $this->failure(
                         36305,
                         ConfigUtility::getCodeMessage(36305, 'Fresns', $langTag)
@@ -225,14 +225,14 @@ class Content
                     );
                 }
 
-                if (!$editConfig['post_edit_sticky_limit'] && $post->sticky_state != 1) {
+                if (! $editConfig['post_edit_sticky_limit'] && $post->sticky_state != 1) {
                     return $this->failure(
                         36307,
                         ConfigUtility::getCodeMessage(36307, 'Fresns', $langTag)
                     );
                 }
 
-                if (!$editConfig['post_edit_digest_limit'] && $post->digest_state != 1) {
+                if (! $editConfig['post_edit_digest_limit'] && $post->digest_state != 1) {
                     return $this->failure(
                         36308,
                         ConfigUtility::getCodeMessage(36308, 'Fresns', $langTag)
@@ -252,7 +252,7 @@ class Content
                 $comment = PrimaryHelper::fresnsModelByFsid('comment', $dtoWordBody->fsid);
 
                 $creator = PrimaryHelper::fresnsModelById('user', $comment->user_id);
-                if (!$creator) {
+                if (! $creator) {
                     return $this->failure(
                         35201,
                         ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
@@ -265,7 +265,7 @@ class Content
                     );
                 }
 
-                if (!empty($comment->top_comment_id) || $comment->top_comment_id == 0) {
+                if (! empty($comment->top_comment_id) || $comment->top_comment_id == 0) {
                     return $this->failure(
                         36313,
                         ConfigUtility::getCodeMessage(36313, 'Fresns', $langTag)
@@ -279,7 +279,7 @@ class Content
                     'comment_edit_digest_limit',
                 ]);
 
-                if (!$editConfig['comment_edit']) {
+                if (! $editConfig['comment_edit']) {
                     return $this->failure(
                         36306,
                         ConfigUtility::getCodeMessage(36306, 'Fresns', $langTag)
@@ -295,14 +295,14 @@ class Content
                     );
                 }
 
-                if (!$editConfig['comment_edit_sticky_limit'] && $comment->sticky_state != 1) {
+                if (! $editConfig['comment_edit_sticky_limit'] && $comment->sticky_state != 1) {
                     return $this->failure(
                         36307,
                         ConfigUtility::getCodeMessage(36307, 'Fresns', $langTag)
                     );
                 }
 
-                if (!$editConfig['comment_edit_digest_limit'] && $comment->digest_state != 1) {
+                if (! $editConfig['comment_edit_digest_limit'] && $comment->digest_state != 1) {
                     return $this->failure(
                         36308,
                         ConfigUtility::getCodeMessage(36308, 'Fresns', $langTag)
@@ -342,26 +342,26 @@ class Content
         if (empty($logModel)) {
             return $this->failure([
                 38100,
-                ConfigUtility::getCodeMessage(38100, 'Fresns', $langTag)
+                ConfigUtility::getCodeMessage(38100, 'Fresns', $langTag),
             ]);
         }
 
         if ($logModel->state == 2) {
             return $this->failure([
                 38103,
-                ConfigUtility::getCodeMessage(38103, 'Fresns', $langTag)
+                ConfigUtility::getCodeMessage(38103, 'Fresns', $langTag),
             ]);
         }
 
         if ($logModel->state == 3) {
             return $this->failure([
                 38104,
-                ConfigUtility::getCodeMessage(38104, 'Fresns', $langTag)
+                ConfigUtility::getCodeMessage(38104, 'Fresns', $langTag),
             ]);
         }
 
         $creator = PrimaryHelper::fresnsModelById('user', $logModel->user_id);
-        if (!$creator) {
+        if (! $creator) {
             return $this->failure(
                 35201,
                 ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
@@ -406,7 +406,7 @@ class Content
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $authUser = PrimaryHelper::fresnsModelByFsid('user', $dtoWordBody->uid);
-        if (!$authUser) {
+        if (! $authUser) {
             return $this->failure(
                 35201,
                 ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
@@ -444,7 +444,7 @@ class Content
             }
 
             $checkBanWords = ValidationUtility::contentBanWords($content);
-            if (!$checkBanWords) {
+            if (! $checkBanWords) {
                 return $this->failure(
                     38207,
                     ConfigUtility::getCodeMessage(38207, 'Fresns', $langTag)
@@ -460,14 +460,14 @@ class Content
         switch ($type) {
             // post
             case 'post':
-                if ($editorConfig['post_editor_group_required'] && !$dtoWordBody->postGid) {
+                if ($editorConfig['post_editor_group_required'] && ! $dtoWordBody->postGid) {
                     return $this->failure(
                         38208,
                         ConfigUtility::getCodeMessage(38208, 'Fresns', $langTag)
                     );
                 }
 
-                if ($editorConfig['post_editor_title_required'] && !$dtoWordBody->postTitle) {
+                if ($editorConfig['post_editor_title_required'] && ! $dtoWordBody->postTitle) {
                     return $this->failure(
                         38202,
                         ConfigUtility::getCodeMessage(38202, 'Fresns', $langTag)
@@ -489,7 +489,7 @@ class Content
                     }
 
                     $checkTitleBanWords = ValidationUtility::contentBanWords($title);
-                    if (!$checkTitleBanWords) {
+                    if (! $checkTitleBanWords) {
                         return $this->failure(
                             38206,
                             ConfigUtility::getCodeMessage(38206, 'Fresns', $langTag)
@@ -525,7 +525,7 @@ class Content
         switch ($type) {
             // post
             case 'post':
-                if (!$checkGroupPublishPerm['allowPost']) {
+                if (! $checkGroupPublishPerm['allowPost']) {
                     return $this->failure(
                         36311,
                         ConfigUtility::getCodeMessage(36311, 'Fresns', $langTag)
@@ -583,7 +583,7 @@ class Content
 
             // comment
             case 'comment':
-                if (!$checkGroupPublishPerm['allowComment']) {
+                if (! $checkGroupPublishPerm['allowComment']) {
                     return $this->failure(
                         36312,
                         ConfigUtility::getCodeMessage(36312, 'Fresns', $langTag)
@@ -832,8 +832,8 @@ class Content
             }
 
             \FresnsCmdWord::plugin('Fresns')->physicalDeletionFiles([
-                "type" => $type,
-                "fileIdsOrFids" => $ids,
+                'type' => $type,
+                'fileIdsOrFids' => $ids,
             ]);
         }
 

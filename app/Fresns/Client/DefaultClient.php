@@ -3,6 +3,7 @@
 /*
  * Fresns (https://fresns.org)
  * Copyright (C) 2021-Present Jarvis Tang
+ * Released under the Apache-2.0 License.
  */
 
 namespace App\Fresns\Client;
@@ -18,7 +19,7 @@ trait DefaultClient
 
     public function handleEmptyResponse(?string $content = null, ?ResponseInterface $response = null)
     {
-        throw new \RuntimeException(sprintf("Request fail , response body is ein class %s", static::class), $response->getStatusCode());
+        throw new \RuntimeException(sprintf('Request fail , response body is ein class %s', static::class), $response->getStatusCode());
     }
 
     public function isErrorResponse(array $data): bool

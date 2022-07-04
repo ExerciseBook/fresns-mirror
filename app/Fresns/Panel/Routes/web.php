@@ -51,8 +51,8 @@ use App\Fresns\Panel\Http\Controllers\WalletController;
 use App\Fresns\Panel\Http\Controllers\WebsiteController;
 use App\Models\Config;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
 
 try {
     $loginConfig = Config::where('item_key', 'panel_path')->first();

@@ -10,8 +10,8 @@ namespace App\Fresns\Api\Http\Controllers;
 
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\EditorCreateDTO;
-use App\Fresns\Api\Http\DTO\EditorDraftsDTO;
 use App\Fresns\Api\Http\DTO\EditorDirectPublishDTO;
+use App\Fresns\Api\Http\DTO\EditorDraftsDTO;
 use App\Fresns\Api\Http\DTO\EditorUpdateDTO;
 use App\Fresns\Api\Services\CommentService;
 use App\Fresns\Api\Services\PostService;

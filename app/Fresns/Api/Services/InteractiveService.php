@@ -36,8 +36,6 @@ class InteractiveService
         if (! $interactiveSet) {
             throw new ApiException(36201);
         }
-
-        return;
     }
 
     // check my interactive setting
@@ -67,7 +65,6 @@ class InteractiveService
             throw new ApiException(36201);
         }
 
-        return;
     }
 
     // get the users who marked it

@@ -107,13 +107,13 @@ class AppHelper
     // get themes
     public static function getThemes()
     {
-        $themeFiles = glob("extensions/themes/*/theme.json");
+        $themeFiles = glob('extensions/themes/*/theme.json');
 
         $themes = [];
         foreach ($themeFiles as $file) {
             $themeJson = json_decode(@file_get_contents($file), true);
 
-            if (!$themeJson) {
+            if (! $themeJson) {
                 continue;
             }
 

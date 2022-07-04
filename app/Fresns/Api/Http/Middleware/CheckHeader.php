@@ -8,11 +8,11 @@
 
 namespace App\Fresns\Api\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\CheckHeaderDTO;
 use App\Helpers\ConfigHelper;
+use Closure;
+use Illuminate\Http\Request;
 
 class CheckHeader
 {
@@ -21,64 +21,64 @@ class CheckHeader
         $dtoHeaders = new CheckHeaderDTO(\request()->headers->all());
         $headers = $dtoHeaders->toArray();
 
-        // 验证签名
+        // check sign
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->verifySign($headers);
 
         if ($fresnsResp->isErrorResponse()) {
             return $fresnsResp->errorResponse();
         }
 
-        // 配置
+        // config
         $siteMode = ConfigHelper::fresnsConfigByItemKey('site_mode');
         $currentRouteName = \request()->route()->getName();
 
-        // 账号登录状态
+        // account login
         $accountLogin = false;
         if ($headers['aid'] ?? null) {
             $accountLogin = true;
         }
 
-        // 用户登录状态
+        // user login
         $userLogin = false;
         if ($headers['uid'] ?? null) {
             $userLogin = true;
         }
 
-        // 账号白名单
+        // account whitelist
         $accountWhitelist = match ($siteMode) {
             default => null,
             'public' => config('FsApiWhitelist.publicAccount'),
             'private' => config('FsApiWhitelist.privateAccount'),
         };
 
-        // 用户白名单
+        // user whitelist
         $userWhitelist = match ($siteMode) {
             default => null,
             'public' => config('FsApiWhitelist.publicUser'),
             'private' => config('FsApiWhitelist.privateUser'),
         };
 
-        // 判断名单是否为空
+        // check whitelist
         if (! $accountWhitelist || ! $userWhitelist) {
             throw new ApiException(33102);
         }
 
-        // 未登录账号可访问的接口
+        // check account whitelist
         if (! $accountLogin && in_array($currentRouteName, $accountWhitelist)) {
             return $next($request);
         }
 
-        // 未登录用户可访问的接口
+        // check user whitelist
         if (! $userLogin && in_array($currentRouteName, $userWhitelist)) {
             return $next($request);
         }
 
-        // 登录状态
+        // account and user login
         if ($accountLogin && $userLogin) {
             return $next($request);
         }
 
-        // 路由不在白名单 1 和 2 当中，也不是登录状态。
+        // not login
         throw new ApiException(31501);
     }
 }
