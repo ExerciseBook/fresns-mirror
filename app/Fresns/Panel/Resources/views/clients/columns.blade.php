@@ -58,15 +58,6 @@
                     data-bs-target="#configLangModal">{{ $defaultLangParams['menu_block_users'] ?? '' }}
                 </button>
             </div>
-            <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_post_from_follow_users') }}</label>
-                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
-                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_post_from_follow_users']) }}"
-                    data-languages="{{ optional($configs['menu_post_from_follow_users'])->languages->toJson() }}"
-                    data-item_key="menu_post_from_follow_users"
-                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_post_from_follow_users'] ?? '' }}
-                </button>
-            </div>
         </div>
     </div>
 
@@ -108,15 +99,6 @@
                     data-languages="{{ optional($configs['menu_block_groups'])->languages->toJson() }}"
                     data-item_key="menu_block_groups"
                     data-bs-target="#configLangModal">{{ $defaultLangParams['menu_block_groups'] ?? '' }}
-                </button>
-            </div>
-            <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_post_from_follow_groups') }}</label>
-                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
-                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_post_from_follow_groups']) }}"
-                    data-languages="{{ optional($configs['menu_post_from_follow_groups'])->languages->toJson() }}"
-                    data-item_key="menu_post_from_follow_groups"
-                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_post_from_follow_groups'] ?? '' }}
                 </button>
             </div>
         </div>
@@ -162,15 +144,6 @@
                     data-bs-target="#configLangModal">{{ $defaultLangParams['menu_block_hashtags'] ?? '' }}
                 </button>
             </div>
-            <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_post_from_follow_hashtags') }}</label>
-                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
-                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_post_from_follow_hashtags']) }}"
-                    data-languages="{{ optional($configs['menu_post_from_follow_hashtags'])->languages->toJson() }}"
-                    data-item_key="menu_post_from_follow_hashtags"
-                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_post_from_follow_hashtags'] ?? '' }}
-                </button>
-            </div>
         </div>
     </div>
 
@@ -178,6 +151,24 @@
     <div class="row mb-4">
         <label class="col-lg-2">{{ __('FsLang::panel.columns_post_rename') }}:</label>
         <div class="col-lg-6">
+            <div class="input-group mb-3">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_nearby_posts') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_nearby_posts']) }}"
+                    data-languages="{{ optional($configs['menu_nearby_posts'])->languages->toJson() }}"
+                    data-item_key="menu_nearby_posts"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_nearby_posts'] ?? '' }}
+                </button>
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_location_posts') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_location_posts']) }}"
+                    data-languages="{{ optional($configs['menu_location_posts'])->languages->toJson() }}"
+                    data-item_key="menu_location_posts"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_location_posts'] ?? '' }}
+                </button>
+            </div>
             <div class="input-group mb-3">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_like_posts') }}</label>
                 <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
@@ -212,33 +203,6 @@
                     data-languages="{{ optional($configs['menu_block_posts'])->languages->toJson() }}"
                     data-item_key="menu_block_posts"
                     data-bs-target="#configLangModal">{{ $defaultLangParams['menu_block_posts'] ?? '' }}
-                </button>
-            </div>
-            <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_post_from_follow_all') }}</label>
-                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
-                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_post_from_follow_all']) }}"
-                    data-languages="{{ optional($configs['menu_post_from_follow_all'])->languages->toJson() }}"
-                    data-item_key="menu_post_from_follow_all"
-                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_post_from_follow_all'] ?? '' }}
-                </button>
-            </div>
-            <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_post_from_nearby') }}</label>
-                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
-                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_post_from_nearby']) }}"
-                    data-languages="{{ optional($configs['menu_post_from_nearby'])->languages->toJson() }}"
-                    data-item_key="menu_post_from_nearby"
-                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_post_from_nearby'] ?? '' }}
-                </button>
-            </div>
-            <div class="input-group mb-3">
-                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_post_from_location') }}</label>
-                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
-                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_post_from_location']) }}"
-                    data-languages="{{ optional($configs['menu_post_from_location'])->languages->toJson() }}"
-                    data-item_key="menu_post_from_location"
-                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_post_from_location'] ?? '' }}
                 </button>
             </div>
         </div>
@@ -282,6 +246,49 @@
                     data-languages="{{ optional($configs['menu_block_comments'])->languages->toJson() }}"
                     data-item_key="menu_block_comments"
                     data-bs-target="#configLangModal">{{ $defaultLangParams['menu_block_comments'] ?? '' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--Follow-->
+    <div class="row mb-4">
+        <label class="col-lg-2">{{ __('FsLang::panel.columns_follow_rename') }}:</label>
+        <div class="col-lg-6">
+            <div class="input-group mb-3">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_follow_all_posts') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_follow_all_posts']) }}"
+                    data-languages="{{ optional($configs['menu_follow_all_posts'])->languages->toJson() }}"
+                    data-item_key="menu_follow_all_posts"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_follow_all_posts'] ?? '' }}
+                </button>
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_follow_user_posts') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_follow_user_posts']) }}"
+                    data-languages="{{ optional($configs['menu_follow_user_posts'])->languages->toJson() }}"
+                    data-item_key="menu_follow_user_posts"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_follow_user_posts'] ?? '' }}
+                </button>
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_follow_group_posts') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_follow_group_posts']) }}"
+                    data-languages="{{ optional($configs['menu_follow_group_posts'])->languages->toJson() }}"
+                    data-item_key="menu_follow_group_posts"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_follow_group_posts'] ?? '' }}
+                </button>
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.menu_follow_hashtag_posts') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_follow_hashtag_posts']) }}"
+                    data-languages="{{ optional($configs['menu_follow_hashtag_posts'])->languages->toJson() }}"
+                    data-item_key="menu_follow_hashtag_posts"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_follow_hashtag_posts'] ?? '' }}
                 </button>
             </div>
         </div>
