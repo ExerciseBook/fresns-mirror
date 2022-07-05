@@ -22,6 +22,14 @@ trait UserServiceTrait
     {
         $userData = $this;
 
+        $identifier = ConfigHelper::fresnsConfigByItemKey('user_identifier');
+
+        if ($identifier == 'uid') {
+            $profile['fsid'] = $userData->uid;
+        } else {
+            $profile['fsid'] = $userData->username;
+        }
+
         $profile['uid'] = $userData->uid;
         $profile['username'] = $userData->username;
         $profile['nickname'] = $userData->nickname;
