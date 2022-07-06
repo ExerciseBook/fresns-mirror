@@ -153,7 +153,7 @@
         </div>
 
         <!--interactive_follow_config-->
-        <div class="row mb-3">
+        <div class="row mt-5">
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.interactive_follow_config') }}:</label>
             <div class="col-lg-6">
                 <div class="input-group">
@@ -169,7 +169,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.interactive_dialog_status_desc') }}</div>
         </div>
 
         <!--interactive_function_config-->
