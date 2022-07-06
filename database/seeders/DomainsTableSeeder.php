@@ -58,7 +58,7 @@ class DomainsTableSeeder extends Seeder
             3 => [
                 'id' => 4,
                 'domain' => 'fresns.org',
-                'host' => 'apps.fresns.org',
+                'host' => 'discuss.fresns.org',
                 'post_count' => 0,
                 'comment_count' => 0,
                 'is_enable' => 1,
@@ -68,8 +68,8 @@ class DomainsTableSeeder extends Seeder
             ],
             4 => [
                 'id' => 5,
-                'domain' => 'fresns.org',
-                'host' => 'discuss.fresns.org',
+                'domain' => 'fresns.cn',
+                'host' => 'fresns.cn',
                 'post_count' => 0,
                 'comment_count' => 0,
                 'is_enable' => 1,
@@ -80,7 +80,7 @@ class DomainsTableSeeder extends Seeder
             5 => [
                 'id' => 6,
                 'domain' => 'fresns.cn',
-                'host' => 'fresns.cn',
+                'host' => 'discuss.fresns.cn',
                 'post_count' => 0,
                 'comment_count' => 0,
                 'is_enable' => 1,
@@ -91,7 +91,7 @@ class DomainsTableSeeder extends Seeder
             6 => [
                 'id' => 7,
                 'domain' => 'fresns.cn',
-                'host' => 'docs.fresns.cn',
+                'host' => 'market.fresns.cn',
                 'post_count' => 0,
                 'comment_count' => 0,
                 'is_enable' => 1,
@@ -102,7 +102,7 @@ class DomainsTableSeeder extends Seeder
             7 => [
                 'id' => 8,
                 'domain' => 'fresns.cn',
-                'host' => 'apps.fresns.cn',
+                'host' => 'developer.fresns.cn',
                 'post_count' => 0,
                 'comment_count' => 0,
                 'is_enable' => 1,
@@ -112,17 +112,6 @@ class DomainsTableSeeder extends Seeder
             ],
             8 => [
                 'id' => 9,
-                'domain' => 'fresns.cn',
-                'host' => 'discuss.fresns.cn',
-                'post_count' => 0,
-                'comment_count' => 0,
-                'is_enable' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
-            9 => [
-                'id' => 10,
                 'domain' => 'tangjie.me',
                 'host' => 'tangjie.me',
                 'post_count' => 0,
