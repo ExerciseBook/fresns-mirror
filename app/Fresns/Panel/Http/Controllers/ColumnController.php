@@ -35,6 +35,8 @@ class ColumnController extends Controller
             'menu_dislike_posts',
             'menu_follow_posts',
             'menu_block_posts',
+            'menu_nearby_comments',
+            'menu_location_comments',
             'menu_like_comments',
             'menu_dislike_comments',
             'menu_follow_comments',
