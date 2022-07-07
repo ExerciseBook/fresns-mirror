@@ -13,43 +13,43 @@ use Illuminate\Http\Request;
 class HashtagController extends Controller
 {
     // index
-    public function index()
+    public function index(Request $request)
     {
         return view('hashtags.index');
     }
 
     // list
-    public function list()
+    public function list(Request $request)
     {
         return view('hashtags.list');
     }
 
     // likes
-    public function likes()
+    public function likes(Request $request)
     {
         return view('hashtags.likes');
     }
 
     // dislikes
-    public function dislikes()
+    public function dislikes(Request $request)
     {
         return view('hashtags.dislikes');
     }
 
     // following
-    public function following()
+    public function following(Request $request)
     {
         return view('hashtags.following');
     }
 
     // blocking
-    public function blocking()
+    public function blocking(Request $request)
     {
         return view('hashtags.blocking');
     }
 
     // detail
-    public function detail()
+    public function detail(Request $request, string $hid)
     {
         return view('hashtags.detail');
     }

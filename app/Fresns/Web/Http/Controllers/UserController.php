@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     // index
-    public function index()
+    public function index(Request $request)
     {
         $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_user_config');
 
@@ -27,7 +27,7 @@ class UserController extends Controller
     }
 
     // list
-    public function list()
+    public function list(Request $request)
     {
         $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_user_list_config');
 
@@ -39,7 +39,7 @@ class UserController extends Controller
     }
 
     // likes
-    public function likes()
+    public function likes(Request $request)
     {
         $uid = fs_user('uid');
 
@@ -51,7 +51,7 @@ class UserController extends Controller
     }
 
     // dislikes
-    public function dislikes()
+    public function dislikes(Request $request)
     {
         $uid = fs_user('uid');
 
@@ -63,7 +63,7 @@ class UserController extends Controller
     }
 
     // following
-    public function following()
+    public function following(Request $request)
     {
         $uid = fs_user('uid');
 
@@ -75,7 +75,7 @@ class UserController extends Controller
     }
 
     // blocking
-    public function blocking()
+    public function blocking(Request $request)
     {
         $uid = fs_user('uid');
 

@@ -13,37 +13,37 @@ use Illuminate\Http\Request;
 class ProfileController extends Controller
 {
     // posts
-    public function posts()
+    public function posts(Request $request, string $uidOrUsername)
     {
         return view('profile.posts');
     }
 
     // comments
-    public function comments()
+    public function comments(Request $request, string $uidOrUsername)
     {
         return view('profile.comments');
     }
 
     // likers
-    public function likers()
+    public function likers(Request $request, string $uidOrUsername)
     {
         return view('profile.likers');
     }
 
     // dislikers
-    public function dislikers()
+    public function dislikers(Request $request, string $uidOrUsername)
     {
         return view('profile.dislikers');
     }
 
     // followers
-    public function followers()
+    public function followers(Request $request, string $uidOrUsername)
     {
         return view('profile.followers');
     }
 
     // blockers
-    public function blockers()
+    public function blockers(Request $request, string $uidOrUsername)
     {
         return view('profile.blockers');
     }
@@ -53,31 +53,31 @@ class ProfileController extends Controller
      */
 
     // likeUsers
-    public function likeUsers()
+    public function likeUsers(Request $request, string $uidOrUsername)
     {
         return view('profile.likes.users');
     }
 
     // likeGroups
-    public function likeGroups()
+    public function likeGroups(Request $request, string $uidOrUsername)
     {
         return view('profile.likes.groups');
     }
 
     // likeHashtags
-    public function likeHashtags()
+    public function likeHashtags(Request $request, string $uidOrUsername)
     {
         return view('profile.likes.hashtags');
     }
 
     // likePosts
-    public function likePosts()
+    public function likePosts(Request $request, string $uidOrUsername)
     {
         return view('profile.likes.posts');
     }
 
     // likeComments
-    public function likeComments()
+    public function likeComments(Request $request, string $uidOrUsername)
     {
         return view('profile.likes.comments');
     }
@@ -87,31 +87,31 @@ class ProfileController extends Controller
      */
 
     // dislikeUsers
-    public function dislikeUsers()
+    public function dislikeUsers(Request $request, string $uidOrUsername)
     {
         return view('profile.dislikes.users');
     }
 
     // dislikeGroups
-    public function dislikeGroups()
+    public function dislikeGroups(Request $request, string $uidOrUsername)
     {
         return view('profile.dislikes.groups');
     }
 
     // dislikeHashtags
-    public function dislikeHashtags()
+    public function dislikeHashtags(Request $request, string $uidOrUsername)
     {
         return view('profile.dislikes.hashtags');
     }
 
     // dislikePosts
-    public function dislikePosts()
+    public function dislikePosts(Request $request, string $uidOrUsername)
     {
         return view('profile.dislikes.posts');
     }
 
     // dislikeComments
-    public function dislikeComments()
+    public function dislikeComments(Request $request, string $uidOrUsername)
     {
         return view('profile.dislikes.comments');
     }
@@ -121,31 +121,31 @@ class ProfileController extends Controller
      */
 
     // followingUsers
-    public function followingUsers()
+    public function followingUsers(Request $request, string $uidOrUsername)
     {
         return view('profile.following.users');
     }
 
     // followingGroups
-    public function followingGroups()
+    public function followingGroups(Request $request, string $uidOrUsername)
     {
         return view('profile.following.groups');
     }
 
     // followingHashtags
-    public function followingHashtags()
+    public function followingHashtags(Request $request, string $uidOrUsername)
     {
         return view('profile.following.hashtags');
     }
 
     // followingPosts
-    public function followingPosts()
+    public function followingPosts(Request $request, string $uidOrUsername)
     {
         return view('profile.following.posts');
     }
 
     // followingComments
-    public function followingComments()
+    public function followingComments(Request $request, string $uidOrUsername)
     {
         return view('profile.following.comments');
     }
@@ -155,31 +155,31 @@ class ProfileController extends Controller
      */
 
     // blockingUsers
-    public function blockingUsers()
+    public function blockingUsers(Request $request, string $uidOrUsername)
     {
         return view('profile.blocking.users');
     }
 
     // blockingGroups
-    public function blockingGroups()
+    public function blockingGroups(Request $request, string $uidOrUsername)
     {
         return view('profile.blocking.groups');
     }
 
     // blockingHashtags
-    public function blockingHashtags()
+    public function blockingHashtags(Request $request, string $uidOrUsername)
     {
         return view('profile.blocking.hashtags');
     }
 
     // blockingPosts
-    public function blockingPosts()
+    public function blockingPosts(Request $request, string $uidOrUsername)
     {
         return view('profile.blocking.posts');
     }
 
     // blockingComments
-    public function blockingComments()
+    public function blockingComments(Request $request, string $uidOrUsername)
     {
         return view('profile.blocking.comments');
     }

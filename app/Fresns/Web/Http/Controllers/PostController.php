@@ -13,55 +13,55 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     // index
-    public function index()
+    public function index(Request $request)
     {
         return view('posts.index');
     }
 
     // list
-    public function list()
+    public function list(Request $request)
     {
         return view('posts.list');
     }
 
     // nearby
-    public function nearby()
+    public function nearby(Request $request)
     {
         return view('posts.nearby');
     }
 
     // location
-    public function location()
+    public function location(Request $request)
     {
         return view('posts.location');
     }
 
     // likes
-    public function likes()
+    public function likes(Request $request)
     {
         return view('posts.likes');
     }
 
     // dislikes
-    public function dislikes()
+    public function dislikes(Request $request)
     {
         return view('posts.dislikes');
     }
 
     // following
-    public function following()
+    public function following(Request $request)
     {
         return view('posts.following');
     }
 
     // blocking
-    public function blocking()
+    public function blocking(Request $request)
     {
         return view('posts.blocking');
     }
 
     // detail
-    public function detail()
+    public function detail(Request $request, string $pid)
     {
         return view('posts.detail');
     }

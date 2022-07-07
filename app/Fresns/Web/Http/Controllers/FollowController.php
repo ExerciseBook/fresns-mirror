@@ -13,49 +13,49 @@ use Illuminate\Http\Request;
 class FollowController extends Controller
 {
     // all posts
-    public function allPosts()
+    public function allPosts(Request $request)
     {
         return view('follows.all-posts');
     }
 
     // user posts
-    public function userPosts()
+    public function userPosts(Request $request)
     {
         return view('follows.user-posts');
     }
 
     // group posts
-    public function groupPosts()
+    public function groupPosts(Request $request)
     {
         return view('follows.group-posts');
     }
 
     // hashtag posts
-    public function hashtagPosts()
+    public function hashtagPosts(Request $request)
     {
         return view('follows.hashtag-posts');
     }
 
     // all comments
-    public function allComments()
+    public function allComments(Request $request)
     {
         return view('follows.all-comments');
     }
 
     // user comments
-    public function userComments()
+    public function userComments(Request $request)
     {
         return view('follows.user-comments');
     }
 
     // group comments
-    public function groupComments()
+    public function groupComments(Request $request)
     {
         return view('follows.group-comments');
     }
 
     // hashtag comments
-    public function hashtagComments()
+    public function hashtagComments(Request $request)
     {
         return view('follows.hashtag-comments');
     }

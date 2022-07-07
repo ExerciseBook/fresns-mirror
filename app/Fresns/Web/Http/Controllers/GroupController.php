@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 class GroupController extends Controller
 {
     // index
-    public function index()
+    public function index(Request $request)
     {
         $result = ApiHelper::make()->get('/api/v2/group/tree');
 
@@ -24,37 +24,37 @@ class GroupController extends Controller
     }
 
     // list
-    public function list()
+    public function list(Request $request)
     {
         return view('groups.list');
     }
 
     // likes
-    public function likes()
+    public function likes(Request $request)
     {
         return view('groups.likes');
     }
 
     // dislikes
-    public function dislikes()
+    public function dislikes(Request $request)
     {
         return view('groups.dislikes');
     }
 
     // following
-    public function following()
+    public function following(Request $request)
     {
         return view('groups.following');
     }
 
     // blocking
-    public function blocking()
+    public function blocking(Request $request)
     {
         return view('groups.blocking');
     }
 
     // detail
-    public function detail()
+    public function detail(Request $request, string $gid)
     {
         return view('groups.detail');
     }

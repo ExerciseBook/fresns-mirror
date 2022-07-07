@@ -13,55 +13,55 @@ use Illuminate\Http\Request;
 class CommentController extends Controller
 {
     // index
-    public function index()
+    public function index(Request $request)
     {
         return view('comments.index');
     }
 
     // list
-    public function list()
+    public function list(Request $request)
     {
         return view('comments.list');
     }
 
     // nearby
-    public function nearby()
+    public function nearby(Request $request)
     {
         return view('comments.nearby');
     }
 
     // location
-    public function location()
+    public function location(Request $request)
     {
         return view('comments.location');
     }
 
     // likes
-    public function likes()
+    public function likes(Request $request)
     {
         return view('comments.likes');
     }
 
     // dislikes
-    public function dislikes()
+    public function dislikes(Request $request)
     {
         return view('comments.dislikes');
     }
 
     // following
-    public function following()
+    public function following(Request $request)
     {
         return view('comments.following');
     }
 
     // blocking
-    public function blocking()
+    public function blocking(Request $request)
     {
         return view('comments.blocking');
     }
 
     // detail
-    public function detail()
+    public function detail(Request $request)
     {
         return view('comments.detail');
     }
