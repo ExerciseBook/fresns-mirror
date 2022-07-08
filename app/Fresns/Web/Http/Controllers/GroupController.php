@@ -9,6 +9,7 @@
 namespace App\Fresns\Web\Http\Controllers;
 
 use App\Fresns\Web\Helpers\ApiHelper;
+use App\Helpers\ConfigHelper;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -16,17 +17,49 @@ class GroupController extends Controller
     // index
     public function index(Request $request)
     {
-        $result = ApiHelper::make()->get('/api/v2/group/tree');
+        $indexType = ConfigHelper::fresnsConfigByItemKey('menu_group_type');
 
-        $groupTree = $result['data'];
+        $groupTree = [];
+        $groups = [];
 
-        return view('groups.index', compact('groupTree'));
+        if ($indexType == 'tree') {
+            $result = ApiHelper::make()->get('/api/v2/group/tree');
+            $groupTree = $result['data']->toArray();
+        } else {
+            $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_group_config');
+
+            $query = [];
+            if (! empty($queryConfig)) {
+                parse_str($queryConfig, $query);
+            }
+
+            $result = ApiHelper::make()->get('/api/v2/group/list', [
+                'query' => $query,
+            ]);
+
+            $groups = $result['data']['list']->toArray();
+        }
+
+        return view('groups.index', compact('groupTree', 'groups'));
     }
 
     // list
     public function list(Request $request)
     {
-        return view('groups.list');
+        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_group_list_config');
+
+        $query = [];
+        if (! empty($queryConfig)) {
+            parse_str($queryConfig, $query);
+        }
+
+        $result = ApiHelper::make()->get('/api/v2/group/list', [
+            'query' => $query,
+        ]);
+
+        $groups = $result['data']['list']->toArray();
+
+        return view('groups.list', compact('groups'));
     }
 
     // likes
