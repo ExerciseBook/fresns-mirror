@@ -1024,10 +1024,18 @@ $(document).ready(function () {
     // menu edit
     $('#menuEdit').on('show.bs.modal', function (e) {
         let button = $(e.relatedTarget),
-            isEnable = button.data('is_enable'),
-            noConfig = button.data('no_config');
             action = button.data('action');
+            noType = button.data('no_type');
+            indexType = button.data('type');
+            noConfig = button.data('no_config');
             config = button.data('config');
+            isEnable = button.data('is_enable');
+
+        if (noType) {
+            $(this).find('.index-type').hide();
+        } else {
+            $(this).find('.index-type').show();
+        }
 
         if (noConfig) {
             $(this).find('.default-config').hide();
@@ -1036,6 +1044,9 @@ $(document).ready(function () {
         }
 
         $(this).find('form').attr('action', action);
+        $(this)
+            .find('input:radio[name=indexType][value="' + indexType + '"]')
+            .prop('checked', true);
         $(this).find('textarea[name=config]').val(config);
         $(this)
             .find('input:radio[name=is_enable][value="' + isEnable + '"]')
