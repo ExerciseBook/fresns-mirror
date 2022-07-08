@@ -187,6 +187,7 @@ trait UserServiceTrait
         $stats['blockPostCount'] = $statsData->block_post_count;
         $stats['blockCommentCount'] = $statsData->block_comment_count;
         $stats['likeMeCount'] = $statsData->like_me_count;
+        $stats['dislikeMeCount'] = $statsData->dislike_me_count;
         $stats['followMeCount'] = $statsData->follow_me_count;
         $stats['blockMeCount'] = $statsData->block_me_count;
         $stats['postPublishCount'] = $statsData->post_publish_count;

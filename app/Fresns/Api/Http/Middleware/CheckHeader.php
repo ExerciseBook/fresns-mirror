@@ -32,6 +32,7 @@ class CheckHeader
             'deviceInfo' => json_decode(\request()->header('deviceInfo'), true),
         ];
 
+        // check header
         new CheckHeaderDTO($headers);
 
         // check sign

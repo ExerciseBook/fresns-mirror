@@ -243,7 +243,7 @@ class Account
         ];
         $session = SessionToken::where($condition)->first();
 
-        if ($session->token != $dtoWordBody->token) {
+        if ($session?->token != $dtoWordBody->token) {
             return $this->failure(
                 31505,
                 ConfigUtility::getCodeMessage(31505, 'Fresns', $langTag)

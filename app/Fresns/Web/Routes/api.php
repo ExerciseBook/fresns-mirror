@@ -23,9 +23,11 @@ Route::prefix('engine')
         Route::post('reset-password', [ApiController::class, 'resetPassword'])->name('resetPassword')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
         Route::delete('logout', [AccountController::class, 'logout'])->name('logout')->withoutMiddleware(['UserAuthorize']);
 
-        Route::post('auth', [AccountController::class, 'userAuth'])->name('user.auth')->withoutMiddleware(['UserAuthorize']);
-        Route::post('mark', [ApiController::class, 'userMark'])->name('mark');
-        Route::put('mark-note', [ApiController::class, 'userMarkNote'])->name('mark.note');
+        Route::prefix('user')->name('user.')->group(function () {
+            Route::post('auth', [AccountController::class, 'userAuth'])->name('auth')->withoutMiddleware(['UserAuthorize']);
+            Route::post('mark', [ApiController::class, 'userMark'])->name('mark');
+            Route::put('mark-note', [ApiController::class, 'userMarkNote'])->name('mark.note');
+        });
 
         Route::prefix('editor')->name('editor.')->group(function () {
             Route::get('{type}/drafts', [ApiController::class, 'drafts'])->name('drafts');
