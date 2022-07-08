@@ -29,6 +29,7 @@
                 </tr>
             </thead>
             <tbody>
+                <!--default engine-->
                 <tr>
                     <th scope="row" class="py-3">{{ __('FsLang::panel.website_engine_default') }}</th>
                     <td><a href="https://fresns.org" target="_blank" class="link-info fresns-link fs-7">Fresns</a></td>
@@ -54,14 +55,16 @@
                             <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                 data-action="{{ route('panel.engine.theme.update', ['unikey' => 'FresnsEngine']) }}"
                                 data-unikey="FresnsEngine"
-                                data-pc_plugin="{{ optional($configs->where('item_key', 'FresnsEngine_Pc')->first())->item_value }}"
-                                data-mobile_plugin="{{ optional($configs->where('item_key', 'FresnsEngine_Mobile')->first())->item_value }}"
+                                data-pc_plugin="{{ $themeUnikey['pc'] }}"
+                                data-mobile_plugin="{{ $themeUnikey['mobile'] }}"
                                 data-bs-target="#themeSetting">{{ __('FsLang::panel.engine_theme_title') }}</button>
                         @else
                             <button type="button" class="btn btn-outline-success btn-sm plugin-manage" data-action="{{ route('panel.defaultEngine.theme.update') }}" data-enable="1">{{ __('FsLang::panel.button_activate') }}</button>
                         @endif
                     </td>
                 </tr>
+
+                <!--engine list-->
                 @foreach ($engines as $engine)
                     <tr>
                         <th scope="row" class="py-3">{{ $engine->name }} <span class="badge bg-secondary plugin-version">{{ $engine->version }}</span>
