@@ -32,6 +32,7 @@ class MenuController extends Controller
             'menu_group_title',
             'menu_group_keywords',
             'menu_group_description',
+            'menu_group_type',
             'menu_group_config',
             'menu_group_status',
             'menu_hashtag_name',
@@ -171,14 +172,28 @@ class MenuController extends Controller
 
     public function update($key, Request $request)
     {
+        $typeKey = 'menu_'.$key.'_type';
         $configKey = 'menu_'.$key.'_config';
         $enableKey = 'menu_'.$key.'_status';
+
+        if ($key = 'group' && $request->has('indexType')) {
+            $config = Config::where('item_key', $typeKey)->first();
+            if (! $config) {
+                $config = new Config;
+                $config->item_key = $typeKey;
+                $config->item_type = 'string';
+                $config->item_tag = 'menus';
+            }
+
+            $config->item_value = $request->indexType;
+            $config->save();
+        }
 
         if ($key != 'portal' && $request->has('config')) {
             $config = Config::where('item_key', $configKey)->first();
             if (! $config) {
                 $config = new Config;
-                $config->item_key = $enableKey;
+                $config->item_key = $configKey;
                 $config->item_type = 'string';
                 $config->item_tag = 'menus';
             }

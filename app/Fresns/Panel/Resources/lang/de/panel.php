@@ -249,6 +249,8 @@ return [
     'option_optional' => 'Optional',
     'option_email' => 'Email',
     'option_sms' => 'SMS',
+    'option_type_tree' => 'Baum',
+    'option_type_list' => 'Liste',
     'option_uninstall_plugin_data' => 'Gleichzeitige Löschung der Plugin-Daten',
     'option_uninstall_theme_data' => 'Gleichzeitige Löschung der Themendaten',
     // Commons

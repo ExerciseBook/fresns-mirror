@@ -249,6 +249,8 @@ return [
     'option_optional' => '선택 과목',
     'option_email' => '이메일',
     'option_sms' => 'SMS',
+    'option_type_tree' => '나무',
+    'option_type_list' => '목록',
     'option_uninstall_plugin_data' => '플러그인 데이터의 동시 삭제',
     'option_uninstall_theme_data' => '테마 데이터를 동시에 삭제합니다',
     // Commons

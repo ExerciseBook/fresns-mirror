@@ -249,6 +249,8 @@ return [
     'option_optional' => 'Необязательный',
     'option_email' => 'Эл. адрес',
     'option_sms' => 'SMS',
+    'option_type_tree' => 'Дерево',
+    'option_type_list' => 'Список',
     'option_uninstall_plugin_data' => 'Одновременное удаление данных плагина',
     'option_uninstall_theme_data' => 'Одновременное удаление данных темы',
     // Commons

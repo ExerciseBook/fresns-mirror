@@ -250,6 +250,8 @@ return [
     'option_optional' => '可選',
     'option_email' => '郵件',
     'option_sms' => '短信',
+    'option_type_tree' => '樹結構',
+    'option_type_list' => '列表',
     'option_uninstall_plugin_data' => '同步刪除該外掛的數據',
     'option_uninstall_theme_data' => '同步刪除該主題的數據',
     // Commons

@@ -249,6 +249,8 @@ return [
     'option_optional' => 'Pilihan',
     'option_email' => 'Surel',
     'option_sms' => 'SMS',
+    'option_type_tree' => 'Pohon',
+    'option_type_list' => 'Daftar',
     'option_uninstall_plugin_data' => 'Penghapusan secara simultan dari data plugin',
     'option_uninstall_theme_data' => 'Penghapusan data tema secara simultan',
     // Commons

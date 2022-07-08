@@ -249,6 +249,8 @@ return [
     'option_optional' => 'ऐच्छिक',
     'option_email' => 'ईमेल',
     'option_sms' => 'एसएमएस',
+    'option_type_tree' => 'पेड़',
+    'option_type_list' => 'सूची',
     'option_uninstall_plugin_data' => 'प्लगइन डेटा के साथ-साथ विलोपन',
     'option_uninstall_theme_data' => 'थीम डेटा का एक साथ विलोपन',
     // Commons

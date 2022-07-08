@@ -249,6 +249,8 @@ return [
     'option_optional' => '可选',
     'option_email' => '邮件',
     'option_sms' => '短信',
+    'option_type_tree' => '树结构',
+    'option_type_list' => '列表',
     'option_uninstall_plugin_data' => '同步删除该插件的数据',
     'option_uninstall_theme_data' => '同步删除该主题的数据',
     // Commons

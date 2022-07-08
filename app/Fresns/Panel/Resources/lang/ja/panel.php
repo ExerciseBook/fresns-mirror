@@ -249,6 +249,8 @@ return [
     'option_optional' => '任意の',
     'option_email' => 'Eメール',
     'option_sms' => 'SMS',
+    'option_type_tree' => '木',
+    'option_type_list' => 'リスト',
     'option_uninstall_plugin_data' => 'プラグインデータの同時削除',
     'option_uninstall_theme_data' => 'テーマデータの同時削除',
     // Commons
