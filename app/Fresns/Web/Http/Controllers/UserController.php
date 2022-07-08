@@ -52,7 +52,7 @@ class UserController extends Controller
         // todo 分页
         $users = $result['data']['list'];
 
-        $items = $users;
+        $items = $users->toArray();
         $total = $result['data']['paginate']['total'];
         $pageSize = $result['data']['paginate']['pageSize'];
         $paginate = new \Illuminate\Pagination\LengthAwarePaginator(
