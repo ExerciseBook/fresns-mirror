@@ -52,6 +52,20 @@ class UserController extends Controller
         // todo 分页
         $users = $result['data']['list'];
 
+        $items = $users;
+        $total = $result['data']['paginate']['total'];
+        $pageSize = $result['data']['paginate']['pageSize'];
+        $paginate = new \Illuminate\Pagination\LengthAwarePaginator(
+            items: $items,
+            total: $total,
+            perPage: $pageSize,
+            currentPage: \request('page'),
+        );
+
+        $paginate->withPath('/'.\request()->path())->withQueryString();
+
+        $users = $paginate;
+
         return view('users.list', compact('users'));
     }
 
