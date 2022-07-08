@@ -25,7 +25,7 @@ class EditorController extends Controller
         $type = 'post';
 
         $stickersResult = ApiHelper::make()->get('/api/v2/global/stickers');
-        $stickers = $stickersResult['data'];
+        $stickers = $stickersResult['data']->toArray();
 
         return view('editor.editor', compact('stickers', 'type', 'draftId'));
     }
@@ -36,8 +36,7 @@ class EditorController extends Controller
         $type = 'comment';
 
         $result = ApiHelper::make()->get('/api/v2/global/stickers');
-
-        $stickers = $result['data'];
+        $stickers = $result['data']->toArray();
 
         return view('editor.editor', compact('stickers', 'type', 'draftId'));
     }
