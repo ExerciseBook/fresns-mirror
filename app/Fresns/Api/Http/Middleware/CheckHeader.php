@@ -29,7 +29,7 @@ class CheckHeader
             'aid' => \request()->header('aid'),
             'uid' => \request()->header('uid'),
             'token' => \request()->header('token'),
-            'deviceInfo' => \request()->header('deviceInfo'),
+            'deviceInfo' => json_decode(\request()->header('deviceInfo'), true),
         ];
 
         new CheckHeaderDTO($headers);

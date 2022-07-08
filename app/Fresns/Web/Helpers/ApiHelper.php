@@ -132,7 +132,7 @@ class ApiHelper implements \ArrayAccess
             'aid' => Cookie::get('aid') ?? null,
             'uid' => Cookie::get('uid') ?? null,
             'token' => Cookie::get('token') ?? null,
-            'deviceInfo' => AppUtility::getDeviceInfo(),
+            'deviceInfo' => json_encode(AppUtility::getDeviceInfo()),
         ];
         $headers['sign'] = SignHelper::makeSign($headers, $appSecret);
 
