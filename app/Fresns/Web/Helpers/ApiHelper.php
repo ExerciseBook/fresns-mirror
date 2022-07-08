@@ -125,7 +125,7 @@ class ApiHelper implements \ArrayAccess
             'timestamp' => now()->unix(),
             'sign' => null,
             'langTag' => \App::getLocale(),
-            'timezone' => urldecode(Cookie::get('timezone')) ?? ConfigHelper::fresnsConfigByItemKey('default_timezone'),
+            'timezone' => urldecode(Cookie::get('timezone')) ?: ConfigHelper::fresnsConfigByItemKey('default_timezone'),
             // 'aid' => 'fresns',
             // 'uid' => 123456,
             // 'token' => '2rPWjgayYqR5WHkrmaq2M78Q50D4WosX',

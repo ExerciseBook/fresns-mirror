@@ -18,8 +18,21 @@ class CheckHeader
 {
     public function handle(Request $request, Closure $next)
     {
-        $dtoHeaders = new CheckHeaderDTO(\request()->headers->all());
-        $headers = $dtoHeaders->toArray();
+        $headers = [
+            'platformId' => \request()->header('platformId'),
+            'version' => \request()->header('version'),
+            'appId' => \request()->header('appId'),
+            'timestamp' => \request()->header('timestamp'),
+            'sign' => \request()->header('sign'),
+            'langTag' => \request()->header('langTag'),
+            'timezone' => \request()->header('timezone'),
+            'aid' => \request()->header('aid'),
+            'uid' => \request()->header('uid'),
+            'token' => \request()->header('token'),
+            'deviceInfo' => \request()->header('deviceInfo'),
+        ];
+
+        new CheckHeaderDTO($headers);
 
         // check sign
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->verifySign($headers);
