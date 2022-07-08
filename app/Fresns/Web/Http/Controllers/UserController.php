@@ -23,6 +23,21 @@ class UserController extends Controller
 
         $users = $result['data']['list'];
 
+        // todo: 分页，封装
+        $items = $users->toArray();
+        $total = $result['data']['paginate']['total'];
+        $pageSize = $result['data']['paginate']['pageSize'];
+        $paginate = new \Illuminate\Pagination\LengthAwarePaginator(
+            items: $items,
+            total: $total,
+            perPage: $pageSize,
+            currentPage: \request('page'),
+        );
+
+        $paginate->withPath('/'.\request()->path())->withQueryString();
+
+        $users = $paginate;
+
         return view('users.index', compact('users'));
     }
 
@@ -34,7 +49,7 @@ class UserController extends Controller
         // todo: 来自数据库的配置
         $configParams = '?verified=1&gender=1&likeCountGt=100&likeCountLt=1000';
 
-        // 转换为数组参数
+        // todo: 转换为数组参数，封装
         $query = [];
         if ($configParams) {
             $urlInfo = parse_url($configParams);
@@ -49,7 +64,7 @@ class UserController extends Controller
             'query' => $query,
         ]);
 
-        // todo 分页
+        // todo: 分页，封装
         $users = $result['data']['list'];
 
         $items = $users->toArray();
