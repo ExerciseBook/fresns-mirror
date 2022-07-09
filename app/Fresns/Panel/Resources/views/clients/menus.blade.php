@@ -84,12 +84,14 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#menuEdit"
-                                data-type="{{ optional($configs['menu_' . $key . '_type'] ?? [])->item_value }}"
-                                data-no_type="{{ $key == 'group' ? 0 : 1 }}"
-                                data-config="{{ optional($configs['menu_' . $key . '_config'] ?? [])->item_value }}"
-                                data-no_config="{{ $key == 'portal' ? 1 : 0 }}"
-                                data-is_enable="{{ optional($configs['menu_' . $key . '_status'])->item_value ?: 0 }}"
                                 data-action="{{ route('panel.menus.update', ['key' => $key]) }}"
+                                data-is_enable="{{ optional($configs['menu_' . $key . '_status'])->item_value ?: 0 }}"
+                                data-no_type="{{ $key == 'group' ? 0 : 1 }}"
+                                data-type="{{ optional($configs['menu_' . $key . '_type'] ?? [])->item_value }}"
+                                data-no_query_status="{{ $key == 'portal' ? 1 : 0 }}"
+                                data-query_status="{{ optional($configs['menu_' . $key . '_query_status'] ?? [])->item_value ?: 0 }}"
+                                data-no_query_config="{{ $key == 'portal' ? 1 : 0 }}"
+                                data-query_config="{{ optional($configs['menu_' . $key . '_query_config'] ?? [])->item_value }}"
                                 data-bs-whatever="{{ $menu['name'] }}">
                                 {{ __('FsLang::panel.button_edit') }}
                             </button>
@@ -113,30 +115,6 @@
                     <form action="" method="post">
                         @csrf
                         @method('put')
-                        <!--type-->
-                        <div class="mb-3 row index-type">
-                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.table_type') }}</label>
-                            <div class="col-sm-9 pt-2">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="indexType" id="type_tree" value="tree" checked>
-                                    <label class="form-check-label" for="type_tree">{{ __('FsLang::panel.option_type_tree') }}</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="indexType" id="type_list" value="list">
-                                    <label class="form-check-label" for="type_list">{{ __('FsLang::panel.option_type_list') }}</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--query config-->
-                        <div class="mb-3 row default-config">
-                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.menu_table_parameter') }}</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" name="config" rows="6"></textarea>
-                                <div class="form-text">{{ __('FsLang::panel.menu_table_parameter_desc') }}</div>
-                            </div>
-                        </div>
-
                         <!--status-->
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.table_status') }}</label>
@@ -149,6 +127,46 @@
                                     <input class="form-check-input" type="radio" name="is_enable" id="status_false" value="0">
                                     <label class="form-check-label" for="status_false">{{ __('FsLang::panel.option_deactivate') }}</label>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!--type-->
+                        <div class="mb-3 row index-type">
+                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.table_type') }}</label>
+                            <div class="col-sm-9 pt-2">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="index_type" id="type_tree" value="tree" checked>
+                                    <label class="form-check-label" for="type_tree">{{ __('FsLang::panel.option_type_tree') }}</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="index_type" id="type_list" value="list">
+                                    <label class="form-check-label" for="type_list">{{ __('FsLang::panel.option_type_list') }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--query status-->
+                        <div class="mb-3 row query-status">
+                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.menu_table_query_status') }}</label>
+                            <div class="col-sm-9 pt-2">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="query_status" id="query_status_true" value="1">
+                                    <label class="form-check-label" for="query_status_true">{{ __('FsLang::panel.option_yes') }}</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="query_status" id="query_status_false" value="0" checked>
+                                    <label class="form-check-label" for="query_status_false">{{ __('FsLang::panel.option_no') }}</label>
+                                </div>
+                                <div class="form-text">{{ __('FsLang::panel.menu_table_query_status_desc') }}</div>
+                            </div>
+                        </div>
+
+                        <!--query config-->
+                        <div class="mb-3 row query-config">
+                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.menu_table_query_config') }}</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" name="query_config" rows="6"></textarea>
+                                <div class="form-text">{{ __('FsLang::panel.menu_table_query_config_desc') }}</div>
                             </div>
                         </div>
 

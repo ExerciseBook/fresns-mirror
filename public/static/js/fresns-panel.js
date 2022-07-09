@@ -1025,11 +1025,13 @@ $(document).ready(function () {
     $('#menuEdit').on('show.bs.modal', function (e) {
         let button = $(e.relatedTarget),
             action = button.data('action');
+            isEnable = button.data('is_enable');
             noType = button.data('no_type');
             indexType = button.data('type');
-            noConfig = button.data('no_config');
-            config = button.data('config');
-            isEnable = button.data('is_enable');
+            noQueryStatus = button.data('no_query_status');
+            queryStatus = button.data('query_status');
+            noQueryConfig = button.data('no_query_config');
+            queryConfig = button.data('query_config');
 
         if (noType) {
             $(this).find('.index-type').hide();
@@ -1037,20 +1039,29 @@ $(document).ready(function () {
             $(this).find('.index-type').show();
         }
 
-        if (noConfig) {
-            $(this).find('.default-config').hide();
+        if (noQueryStatus) {
+            $(this).find('.query-status').hide();
         } else {
-            $(this).find('.default-config').show();
+            $(this).find('.query-status').show();
+        }
+
+        if (noQueryConfig) {
+            $(this).find('.query-config').hide();
+        } else {
+            $(this).find('.query-config').show();
         }
 
         $(this).find('form').attr('action', action);
         $(this)
-            .find('input:radio[name=indexType][value="' + indexType + '"]')
-            .prop('checked', true);
-        $(this).find('textarea[name=config]').val(config);
-        $(this)
             .find('input:radio[name=is_enable][value="' + isEnable + '"]')
             .prop('checked', true);
+        $(this)
+            .find('input:radio[name=index_type][value="' + indexType + '"]')
+            .prop('checked', true);
+        $(this)
+            .find('input:radio[name=query_status][value="' + queryStatus + '"]')
+            .prop('checked', true);
+        $(this).find('textarea[name=query_config]').val(queryConfig);
     });
 
     $('#menuLangModal').on('shown.bs.modal', function (e) {

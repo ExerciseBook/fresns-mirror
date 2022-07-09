@@ -26,66 +26,74 @@ class MenuController extends Controller
             'menu_user_title',
             'menu_user_keywords',
             'menu_user_description',
-            'menu_user_config',
             'menu_user_status',
+            'menu_user_query_status',
+            'menu_user_query_config',
             'menu_group_name',
             'menu_group_title',
             'menu_group_keywords',
             'menu_group_description',
             'menu_group_type',
-            'menu_group_config',
             'menu_group_status',
+            'menu_group_query_status',
+            'menu_group_query_config',
             'menu_hashtag_name',
             'menu_hashtag_title',
             'menu_hashtag_keywords',
             'menu_hashtag_description',
-            'menu_hashtag_config',
             'menu_hashtag_status',
+            'menu_hashtag_query_status',
+            'menu_hashtag_query_config',
             'menu_post_name',
             'menu_post_title',
             'menu_post_keywords',
             'menu_post_description',
-            'menu_post_config',
             'menu_post_status',
+            'menu_post_query_status',
+            'menu_post_query_config',
             'menu_comment_name',
             'menu_comment_title',
             'menu_comment_keywords',
             'menu_comment_description',
-            'menu_comment_config',
             'menu_comment_status',
+            'menu_comment_query_status',
+            'menu_comment_query_config',
             'menu_user_list_name',
             'menu_user_list_title',
             'menu_user_list_keywords',
             'menu_user_list_description',
-            'menu_user_list_config',
             'menu_user_list_status',
+            'menu_user_list_query_status',
+            'menu_user_list_query_config',
             'menu_group_list_name',
             'menu_group_list_title',
             'menu_group_list_keywords',
             'menu_group_list_description',
-            'menu_group_list_config',
             'menu_group_list_status',
+            'menu_group_list_query_status',
+            'menu_group_list_query_config',
             'menu_hashtag_list_name',
             'menu_hashtag_list_title',
             'menu_hashtag_list_keywords',
             'menu_hashtag_list_description',
-            'menu_hashtag_list_config',
             'menu_hashtag_list_status',
+            'menu_hashtag_list_query_status',
+            'menu_hashtag_list_query_config',
             'menu_post_list_name',
             'menu_post_list_title',
             'menu_post_list_keywords',
             'menu_post_list_description',
-            'menu_post_list_config',
             'menu_post_list_status',
+            'menu_post_list_query_status',
+            'menu_post_list_query_config',
             'menu_comment_list_name',
             'menu_comment_list_title',
             'menu_comment_list_keywords',
             'menu_comment_list_description',
-            'menu_comment_list_config',
             'menu_comment_list_status',
+            'menu_comment_list_query_status',
+            'menu_comment_list_query_config',
         ];
-
-        $langKeys = $configKeys;
 
         $configs = Config::whereIn('item_key', $configKeys)->with('languages')->get();
 
@@ -172,46 +180,60 @@ class MenuController extends Controller
 
     public function update($key, Request $request)
     {
-        $typeKey = 'menu_'.$key.'_type';
-        $configKey = 'menu_'.$key.'_config';
         $enableKey = 'menu_'.$key.'_status';
-
-        if ($key = 'group' && $request->has('indexType')) {
-            $config = Config::where('item_key', $typeKey)->first();
-            if (! $config) {
-                $config = new Config;
-                $config->item_key = $typeKey;
-                $config->item_type = 'string';
-                $config->item_tag = 'menus';
-            }
-
-            $config->item_value = $request->indexType;
-            $config->save();
-        }
-
-        if ($key != 'portal' && $request->has('config')) {
-            $config = Config::where('item_key', $configKey)->first();
-            if (! $config) {
-                $config = new Config;
-                $config->item_key = $configKey;
-                $config->item_type = 'string';
-                $config->item_tag = 'menus';
-            }
-
-            $config->item_value = $request->config;
-            $config->save();
-        }
+        $typeKey = 'menu_'.$key.'_type';
+        $queryStatusKey = 'menu_'.$key.'_query_status';
+        $queryConfigKey = 'menu_'.$key.'_query_config';
 
         if ($request->has('is_enable')) {
-            $config = Config::where('item_key', $enableKey)->first();
-            if (! $config) {
-                $config = new Config;
-                $config->item_key = $enableKey;
-                $config->item_type = 'boolean';
-                $config->item_tag = 'menus';
+            $status = Config::where('item_key', $enableKey)->first();
+            if (! $status) {
+                $status = new Config;
+                $status->item_key = $enableKey;
+                $status->item_type = 'boolean';
+                $status->item_tag = 'menus';
             }
-            $config->item_value = $request->is_enable;
-            $config->save();
+            $status->item_value = $request->is_enable;
+            $status->save();
+        }
+
+        if ($key == 'group' && $request->has('index_type')) {
+            $indexType = Config::where('item_key', $typeKey)->first();
+            if (! $indexType) {
+                $indexType = new Config;
+                $indexType->item_key = $typeKey;
+                $indexType->item_type = 'string';
+                $indexType->item_tag = 'menus';
+            }
+
+            $indexType->item_value = $request->index_type;
+            $indexType->save();
+        }
+
+        if ($key != 'portal' && $request->has('query_status')) {
+            $queryStatus = Config::where('item_key', $queryStatusKey)->first();
+            if (! $queryStatus) {
+                $queryStatus = new Config;
+                $queryStatus->item_key = $queryStatusKey;
+                $queryStatus->item_type = 'boolean';
+                $queryStatus->item_tag = 'menus';
+            }
+
+            $queryStatus->item_value = $request->query_status;
+            $queryStatus->save();
+        }
+
+        if ($key != 'portal' && $request->has('query_config')) {
+            $queryConfig = Config::where('item_key', $queryConfigKey)->first();
+            if (! $queryConfig) {
+                $queryConfig = new Config;
+                $queryConfig->item_key = $queryConfigKey;
+                $queryConfig->item_type = 'string';
+                $queryConfig->item_tag = 'menus';
+            }
+
+            $queryConfig->item_value = $request->query_config;
+            $queryConfig->save();
         }
 
         return $this->updateSuccess();
