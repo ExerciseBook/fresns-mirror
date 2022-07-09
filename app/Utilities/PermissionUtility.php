@@ -172,7 +172,7 @@ class PermissionUtility
     }
 
     // Check user dialog permission
-    public static function checkUserDialogPerm(int $receiveUserId, int $authUserId, ?string $langTag = null)
+    public static function checkUserDialogPerm(int $receiveUserId, ?int $authUserId = null, ?string $langTag = null)
     {
         $configs = ConfigHelper::fresnsConfigByItemKeys(['dialog_status', 'dialog_files']);
         $receiveUser = PrimaryHelper::fresnsModelById('user', $receiveUserId);
@@ -181,6 +181,14 @@ class PermissionUtility
         $info['files'] = $configs['dialog_files'];
         $info['code'] = 0;
         $info['message'] = 'ok';
+
+        if (empty($authUserId)) {
+            $info['status'] = false;
+            $info['code'] = 31601;
+            $info['message'] = ConfigUtility::getCodeMessage(31601, 'Fresns', $langTag);
+
+            return  $info;
+        }
 
         if (! $configs['dialog_status']) {
             $info['status'] = false;
