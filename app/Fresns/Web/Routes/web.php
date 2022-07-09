@@ -135,17 +135,17 @@ Route::prefix(LaravelLocalization::setLocale())
             Route::get('dislikes/posts', [ProfileController::class, 'dislikePosts'])->name('dislikes.posts');
             Route::get('dislikes/comments', [ProfileController::class, 'dislikeComments'])->name('dislikes.comments');
             // following
-            Route::get('following/users', [ProfileController::class, 'followUsers'])->name('following.users');
-            Route::get('following/groups', [ProfileController::class, 'followGroups'])->name('following.groups');
-            Route::get('following/hashtags', [ProfileController::class, 'followHashtags'])->name('following.hashtags');
-            Route::get('following/posts', [ProfileController::class, 'followPosts'])->name('following.posts');
-            Route::get('following/comments', [ProfileController::class, 'followComments'])->name('following.comments');
+            Route::get('following/users', [ProfileController::class, 'followingUsers'])->name('following.users');
+            Route::get('following/groups', [ProfileController::class, 'followingGroups'])->name('following.groups');
+            Route::get('following/hashtags', [ProfileController::class, 'followingHashtags'])->name('following.hashtags');
+            Route::get('following/posts', [ProfileController::class, 'followingPosts'])->name('following.posts');
+            Route::get('following/comments', [ProfileController::class, 'followingComments'])->name('following.comments');
             // blocking
-            Route::get('blocking/users', [ProfileController::class, 'blockUsers'])->name('blocking.users');
-            Route::get('blocking/groups', [ProfileController::class, 'blockGroups'])->name('blocking.groups');
-            Route::get('blocking/hashtags', [ProfileController::class, 'blockHashtags'])->name('blocking.hashtags');
-            Route::get('blocking/posts', [ProfileController::class, 'blockPosts'])->name('blocking.posts');
-            Route::get('blocking/comments', [ProfileController::class, 'blockComments'])->name('blocking.comments');
+            Route::get('blocking/users', [ProfileController::class, 'blockingUsers'])->name('blocking.users');
+            Route::get('blocking/groups', [ProfileController::class, 'blockingGroups'])->name('blocking.groups');
+            Route::get('blocking/hashtags', [ProfileController::class, 'blockingHashtags'])->name('blocking.hashtags');
+            Route::get('blocking/posts', [ProfileController::class, 'blockingPosts'])->name('blocking.posts');
+            Route::get('blocking/comments', [ProfileController::class, 'blockingComments'])->name('blocking.comments');
         });
 
         // search

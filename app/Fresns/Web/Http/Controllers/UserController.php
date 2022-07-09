@@ -17,9 +17,17 @@ class UserController extends Controller
     // index
     public function index(Request $request)
     {
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_user_config');
+        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_user_query_status');
+        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_user_query_config');
 
-        $result = ApiHelper::make()->get('/api/v2/user/list');
+        $query = [];
+        if (! empty($queryConfig)) {
+            parse_str($queryConfig, $query);
+        }
+
+        $result = ApiHelper::make()->get('/api/v2/user/list', [
+            'query' => $query,
+        ]);
 
         $users = $result['data']['list'];
 
@@ -44,19 +52,13 @@ class UserController extends Controller
     // list
     public function list(Request $request)
     {
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_user_list_config');
-
-        // todo: 来自数据库的配置
-        $configParams = '?verified=1&gender=1&likeCountGt=100&likeCountLt=1000';
+        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_user_list_query_status');
+        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_user_list_query_config');
 
         // todo: 转换为数组参数，封装
         $query = [];
-        if ($configParams) {
-            $urlInfo = parse_url($configParams);
-
-            if (!empty($urlInfo['query'])) {
-                parse_str($urlInfo['query'], $query);
-            }
+        if (! empty($queryConfig)) {
+            parse_str($queryConfig, $query);
         }
 
         // 使用数据库配置的参数给接口

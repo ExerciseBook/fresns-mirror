@@ -26,7 +26,8 @@ class GroupController extends Controller
             $result = ApiHelper::make()->get('/api/v2/group/tree');
             $groupTree = $result['data']->toArray();
         } else {
-            $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_group_config');
+            $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_group_query_status');
+            $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_group_query_config');
 
             $query = [];
             if (! empty($queryConfig)) {
@@ -46,7 +47,8 @@ class GroupController extends Controller
     // list
     public function list(Request $request)
     {
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_group_list_config');
+        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_group_list_query_status');
+        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_group_list_query_config');
 
         $query = [];
         if (! empty($queryConfig)) {
@@ -57,7 +59,21 @@ class GroupController extends Controller
             'query' => $query,
         ]);
 
-        $groups = $result['data']['list']->toArray();
+        $groups = $result['data']['list'];
+
+        $items = $groups->toArray();
+        $total = $result['data']['paginate']['total'];
+        $pageSize = $result['data']['paginate']['pageSize'];
+        $paginate = new \Illuminate\Pagination\LengthAwarePaginator(
+            items: $items,
+            total: $total,
+            perPage: $pageSize,
+            currentPage: \request('page'),
+        );
+
+        $paginate->withPath('/'.\request()->path())->withQueryString();
+
+        $groups = $paginate;
 
         return view('groups.list', compact('groups'));
     }
@@ -89,6 +105,11 @@ class GroupController extends Controller
     // detail
     public function detail(Request $request, string $gid)
     {
-        return view('groups.detail');
+        $result = ApiHelper::make()->get("/api/v2/group/{$gid}/detail");
+
+        $items = $result['data']['items']->toArray();
+        $group = $result['data']['detail']->toArray();
+
+        return view('groups.detail', compact('items', 'group'));
     }
 }

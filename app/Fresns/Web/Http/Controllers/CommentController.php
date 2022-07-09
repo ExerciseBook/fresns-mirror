@@ -8,6 +8,7 @@
 
 namespace App\Fresns\Web\Http\Controllers;
 
+use App\Helpers\ConfigHelper;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -15,12 +16,18 @@ class CommentController extends Controller
     // index
     public function index(Request $request)
     {
+        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_comment_query_status');
+        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_comment_query_config');
+
         return view('comments.index');
     }
 
     // list
     public function list(Request $request)
     {
+        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_comment_list_query_status');
+        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_comment_list_query_config');
+
         return view('comments.list');
     }
 
