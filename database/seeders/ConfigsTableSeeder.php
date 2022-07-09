@@ -5189,7 +5189,7 @@ class ConfigsTableSeeder extends Seeder
                 'item_value' => 'tree',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
-                'is_multilingual' => 1,
+                'is_multilingual' => 0,
                 'is_custom' => 0,
                 'is_api' => 1,
                 'created_at' => '2022-07-18 17:00:00',
