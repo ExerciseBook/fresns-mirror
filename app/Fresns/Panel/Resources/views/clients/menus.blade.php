@@ -88,8 +88,8 @@
                                 data-is_enable="{{ optional($configs['menu_' . $key . '_status'])->item_value ?: 0 }}"
                                 data-no_type="{{ $key == 'group' ? 0 : 1 }}"
                                 data-type="{{ optional($configs['menu_' . $key . '_type'] ?? [])->item_value }}"
-                                data-no_query_status="{{ $key == 'portal' ? 1 : 0 }}"
-                                data-query_status="{{ optional($configs['menu_' . $key . '_query_status'] ?? [])->item_value ?: 0 }}"
+                                data-no_query_state="{{ $key == 'portal' ? 1 : 0 }}"
+                                data-query_state="{{ optional($configs['menu_' . $key . '_query_state'] ?? [])->item_value }}"
                                 data-no_query_config="{{ $key == 'portal' ? 1 : 0 }}"
                                 data-query_config="{{ optional($configs['menu_' . $key . '_query_config'] ?? [])->item_value }}"
                                 data-bs-whatever="{{ $menu['name'] }}">
@@ -145,19 +145,23 @@
                             </div>
                         </div>
 
-                        <!--query status-->
-                        <div class="mb-3 row query-status">
-                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.menu_table_query_status') }}</label>
+                        <!--query state-->
+                        <div class="mb-3 row query-state">
+                            <label class="col-sm-3 col-form-label">{{ __('FsLang::panel.menu_table_query_state') }}</label>
                             <div class="col-sm-9 pt-2">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="query_status" id="query_status_true" value="1">
-                                    <label class="form-check-label" for="query_status_true">{{ __('FsLang::panel.option_yes') }}</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="query_state" id="query_state_1" value="1" checked>
+                                    <label class="form-check-label" for="query_state_1">{{ __('FsLang::panel.menu_query_state_1') }}</label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="query_status" id="query_status_false" value="0" checked>
-                                    <label class="form-check-label" for="query_status_false">{{ __('FsLang::panel.option_no') }}</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="query_state" id="query_state_2" value="2">
+                                    <label class="form-check-label" for="query_state_2">{{ __('FsLang::panel.menu_query_state_2') }}</label>
                                 </div>
-                                <div class="form-text">{{ __('FsLang::panel.menu_table_query_status_desc') }}</div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="query_state" id="query_state_3" value="3">
+                                    <label class="form-check-label" for="query_state_3">{{ __('FsLang::panel.menu_query_state_3') }}</label>
+                                </div>
+                                <div class="form-text">{{ __('FsLang::panel.menu_table_query_state_desc') }}</div>
                             </div>
                         </div>
 

@@ -1028,8 +1028,8 @@ $(document).ready(function () {
             isEnable = button.data('is_enable');
             noType = button.data('no_type');
             indexType = button.data('type');
-            noQueryStatus = button.data('no_query_status');
-            queryStatus = button.data('query_status');
+            noQueryState = button.data('no_query_state');
+            queryState = button.data('query_state');
             noQueryConfig = button.data('no_query_config');
             queryConfig = button.data('query_config');
 
@@ -1039,10 +1039,10 @@ $(document).ready(function () {
             $(this).find('.index-type').show();
         }
 
-        if (noQueryStatus) {
-            $(this).find('.query-status').hide();
+        if (noQueryState) {
+            $(this).find('.query-state').hide();
         } else {
-            $(this).find('.query-status').show();
+            $(this).find('.query-state').show();
         }
 
         if (noQueryConfig) {
@@ -1059,7 +1059,7 @@ $(document).ready(function () {
             .find('input:radio[name=index_type][value="' + indexType + '"]')
             .prop('checked', true);
         $(this)
-            .find('input:radio[name=query_status][value="' + queryStatus + '"]')
+            .find('input:radio[name=query_state][value="' + queryState + '"]')
             .prop('checked', true);
         $(this).find('textarea[name=query_config]').val(queryConfig);
     });

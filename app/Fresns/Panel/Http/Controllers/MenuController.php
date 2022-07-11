@@ -27,7 +27,7 @@ class MenuController extends Controller
             'menu_user_keywords',
             'menu_user_description',
             'menu_user_status',
-            'menu_user_query_status',
+            'menu_user_query_state',
             'menu_user_query_config',
             'menu_group_name',
             'menu_group_title',
@@ -35,63 +35,63 @@ class MenuController extends Controller
             'menu_group_description',
             'menu_group_type',
             'menu_group_status',
-            'menu_group_query_status',
+            'menu_group_query_state',
             'menu_group_query_config',
             'menu_hashtag_name',
             'menu_hashtag_title',
             'menu_hashtag_keywords',
             'menu_hashtag_description',
             'menu_hashtag_status',
-            'menu_hashtag_query_status',
+            'menu_hashtag_query_state',
             'menu_hashtag_query_config',
             'menu_post_name',
             'menu_post_title',
             'menu_post_keywords',
             'menu_post_description',
             'menu_post_status',
-            'menu_post_query_status',
+            'menu_post_query_state',
             'menu_post_query_config',
             'menu_comment_name',
             'menu_comment_title',
             'menu_comment_keywords',
             'menu_comment_description',
             'menu_comment_status',
-            'menu_comment_query_status',
+            'menu_comment_query_state',
             'menu_comment_query_config',
             'menu_user_list_name',
             'menu_user_list_title',
             'menu_user_list_keywords',
             'menu_user_list_description',
             'menu_user_list_status',
-            'menu_user_list_query_status',
+            'menu_user_list_query_state',
             'menu_user_list_query_config',
             'menu_group_list_name',
             'menu_group_list_title',
             'menu_group_list_keywords',
             'menu_group_list_description',
             'menu_group_list_status',
-            'menu_group_list_query_status',
+            'menu_group_list_query_state',
             'menu_group_list_query_config',
             'menu_hashtag_list_name',
             'menu_hashtag_list_title',
             'menu_hashtag_list_keywords',
             'menu_hashtag_list_description',
             'menu_hashtag_list_status',
-            'menu_hashtag_list_query_status',
+            'menu_hashtag_list_query_state',
             'menu_hashtag_list_query_config',
             'menu_post_list_name',
             'menu_post_list_title',
             'menu_post_list_keywords',
             'menu_post_list_description',
             'menu_post_list_status',
-            'menu_post_list_query_status',
+            'menu_post_list_query_state',
             'menu_post_list_query_config',
             'menu_comment_list_name',
             'menu_comment_list_title',
             'menu_comment_list_keywords',
             'menu_comment_list_description',
             'menu_comment_list_status',
-            'menu_comment_list_query_status',
+            'menu_comment_list_query_state',
             'menu_comment_list_query_config',
         ];
 
@@ -182,7 +182,7 @@ class MenuController extends Controller
     {
         $enableKey = 'menu_'.$key.'_status';
         $typeKey = 'menu_'.$key.'_type';
-        $queryStatusKey = 'menu_'.$key.'_query_status';
+        $queryStateKey = 'menu_'.$key.'_query_state';
         $queryConfigKey = 'menu_'.$key.'_query_config';
 
         if ($request->has('is_enable')) {
@@ -210,17 +210,17 @@ class MenuController extends Controller
             $indexType->save();
         }
 
-        if ($key != 'portal' && $request->has('query_status')) {
-            $queryStatus = Config::where('item_key', $queryStatusKey)->first();
-            if (! $queryStatus) {
-                $queryStatus = new Config;
-                $queryStatus->item_key = $queryStatusKey;
-                $queryStatus->item_type = 'boolean';
-                $queryStatus->item_tag = 'menus';
+        if ($key != 'portal' && $request->has('query_state')) {
+            $queryState = Config::where('item_key', $queryStateKey)->first();
+            if (! $queryState) {
+                $queryState = new Config;
+                $queryState->item_key = $queryStateKey;
+                $queryState->item_type = 'number';
+                $queryState->item_tag = 'menus';
             }
 
-            $queryStatus->item_value = $request->query_status;
-            $queryStatus->save();
+            $queryState->item_value = $request->query_state;
+            $queryState->save();
         }
 
         if ($key != 'portal' && $request->has('query_config')) {
