@@ -8,6 +8,7 @@
 
 namespace App\Fresns\Web\Http\Controllers;
 
+use App\Fresns\Web\Helpers\ApiHelper;
 use App\Helpers\ConfigHelper;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,18 @@ class PostController extends Controller
         $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_post_query_status');
         $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_post_query_config');
 
-        return view('posts.index');
+        $query = [];
+        if (! empty($queryConfig)) {
+            parse_str($queryConfig, $query);
+        }
+
+        $result = ApiHelper::make()->get('/api/v2/post/list', [
+            'query' => $query,
+        ]);
+
+        $posts = $result['data']['list']->toArray();
+
+        return view('posts.index', compact('posts'));
     }
 
     // list
@@ -38,7 +50,7 @@ class PostController extends Controller
     }
 
     // location
-    public function location(Request $request)
+    public function location(Request $request, int $mapId, string $mapLng, string $mapLat)
     {
         return view('posts.location');
     }
@@ -70,6 +82,11 @@ class PostController extends Controller
     // detail
     public function detail(Request $request, string $pid)
     {
-        return view('posts.detail');
+        $result = ApiHelper::make()->get("/api/v2/post/{$pid}/detail");
+
+        $items = $result['data']['items']->toArray();
+        $post = $result['data']['detail']->toArray();
+
+        return view('posts.detail', compact('items', 'post'));
     }
 }
