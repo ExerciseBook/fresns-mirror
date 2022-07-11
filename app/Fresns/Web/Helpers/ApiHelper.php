@@ -16,7 +16,7 @@ use App\Utilities\AppUtility;
 use Illuminate\Support\Facades\Cookie;
 use Psr\Http\Message\ResponseInterface;
 
-class ApiHelper implements \ArrayAccess
+class ApiHelper implements \ArrayAccess, \IteratorAggregate
 {
     use Clientable;
 
