@@ -25,9 +25,16 @@ use Illuminate\Support\Arr;
 class PermissionUtility
 {
     // Get user content view perm permission
-    public static function getUserContentViewPerm(int $userId): array
+    public static function getUserContentViewPerm(?int $userId = null): array
     {
         $userExpireInfo = PermissionUtility::checkUserStatusOfSiteMode($userId);
+
+        if (empty($userId) && $userExpireInfo['siteMode'] == 'public') {
+            $item['type'] = 1;
+            $item['dateLimit'] = null;
+
+            return $item;
+        }
 
         if (! $userExpireInfo['userStatus'] && $userExpireInfo['expireAfter'] == 1) {
             $item['type'] = 3;
