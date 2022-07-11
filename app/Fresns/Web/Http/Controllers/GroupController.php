@@ -9,6 +9,7 @@
 namespace App\Fresns\Web\Http\Controllers;
 
 use App\Fresns\Web\Helpers\ApiHelper;
+use App\Fresns\Web\Helpers\QueryHelper;
 use App\Helpers\ConfigHelper;
 use Illuminate\Http\Request;
 
@@ -26,19 +27,16 @@ class GroupController extends Controller
             $result = ApiHelper::make()->get('/api/v2/group/tree');
             $groupTree = $result['data']->toArray();
         } else {
-            $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_group_query_status');
-            $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_group_query_config');
-
-            $query = [];
-            if (! empty($queryConfig)) {
-                parse_str($queryConfig, $query);
-            }
+            $query = QueryHelper::convertOptionToRequestParam('group', $request->all());
 
             $result = ApiHelper::make()->get('/api/v2/group/list', [
                 'query' => $query,
             ]);
 
-            $groups = $result['data']['list']->toArray();
+            $groups = QueryHelper::convertApiDataToPaginate(
+                items: $result['data']['list'],
+                paginate: $result['data']['paginate'],
+            );
         }
 
         return view('groups.index', compact('groupTree', 'groups'));
@@ -47,33 +45,16 @@ class GroupController extends Controller
     // list
     public function list(Request $request)
     {
-        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_group_list_query_status');
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_group_list_query_config');
-
-        $query = [];
-        if (! empty($queryConfig)) {
-            parse_str($queryConfig, $query);
-        }
+        $query = QueryHelper::convertOptionToRequestParam('group_list', $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/group/list', [
             'query' => $query,
         ]);
 
-        $groups = $result['data']['list'];
-
-        $items = $groups->toArray();
-        $total = $result['data']['paginate']['total'];
-        $pageSize = $result['data']['paginate']['pageSize'];
-        $paginate = new \Illuminate\Pagination\LengthAwarePaginator(
-            items: $items,
-            total: $total,
-            perPage: $pageSize,
-            currentPage: \request('page'),
+        $groups = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
         );
-
-        $paginate->withPath('/'.\request()->path())->withQueryString();
-
-        $groups = $paginate;
 
         return view('groups.list', compact('groups'));
     }

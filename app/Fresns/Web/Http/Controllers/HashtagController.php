@@ -9,8 +9,7 @@
 namespace App\Fresns\Web\Http\Controllers;
 
 use App\Fresns\Web\Helpers\ApiHelper;
-use App\Helpers\ConfigHelper;
-use App\Helpers\StrHelper;
+use App\Fresns\Web\Helpers\QueryHelper;
 use Illuminate\Http\Request;
 
 class HashtagController extends Controller
@@ -18,39 +17,33 @@ class HashtagController extends Controller
     // index
     public function index(Request $request)
     {
-        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_hashtag_query_status');
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_hashtag_query_config');
-
-        $query = [];
-        if (! empty($queryConfig)) {
-            parse_str($queryConfig, $query);
-        }
+        $query = QueryHelper::convertOptionToRequestParam('hashtag', $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/hashtag/list', [
             'query' => $query,
         ]);
 
-        $hashtags = $result['data']['list']->toArray();
+        $hashtags = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
 
-        return view('hashtags.index', compact('hashtags'));
+        return view('hashtags.list', compact('hashtags'));
     }
 
     // list
     public function list(Request $request)
     {
-        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_hashtag_list_query_status');
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_hashtag_list_query_config');
-
-        $query = [];
-        if (! empty($queryConfig)) {
-            parse_str($queryConfig, $query);
-        }
+        $query = QueryHelper::convertOptionToRequestParam('hashtag_list', $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/hashtag/list', [
             'query' => $query,
         ]);
 
-        $hashtags = $result['data']['list']->toArray();
+        $hashtags = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
 
         return view('hashtags.list', compact('hashtags'));
     }

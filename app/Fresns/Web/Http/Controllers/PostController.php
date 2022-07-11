@@ -9,7 +9,7 @@
 namespace App\Fresns\Web\Http\Controllers;
 
 use App\Fresns\Web\Helpers\ApiHelper;
-use App\Helpers\ConfigHelper;
+use App\Fresns\Web\Helpers\QueryHelper;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -17,30 +17,35 @@ class PostController extends Controller
     // index
     public function index(Request $request)
     {
-        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_post_query_status');
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_post_query_config');
-
-        $query = [];
-        if (! empty($queryConfig)) {
-            parse_str($queryConfig, $query);
-        }
+        $query = QueryHelper::convertOptionToRequestParam('post', $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/post/list', [
             'query' => $query,
         ]);
 
-        $posts = $result['data']['list']->toArray();
+        $posts = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
 
-        return view('posts.index', compact('posts'));
+        return view('posts.list', compact('posts'));
     }
 
     // list
     public function list(Request $request)
     {
-        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_post_list_query_status');
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_post_list_query_config');
+        $query = QueryHelper::convertOptionToRequestParam('post_list', $request->all());
 
-        return view('posts.list');
+        $result = ApiHelper::make()->get('/api/v2/post/list', [
+            'query' => $query,
+        ]);
+
+        $posts = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('posts.list', compact('posts'));
     }
 
     // nearby

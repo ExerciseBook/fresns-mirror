@@ -8,7 +8,8 @@
 
 namespace App\Fresns\Web\Http\Controllers;
 
-use App\Helpers\ConfigHelper;
+use App\Fresns\Web\Helpers\ApiHelper;
+use App\Fresns\Web\Helpers\QueryHelper;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -16,19 +17,35 @@ class CommentController extends Controller
     // index
     public function index(Request $request)
     {
-        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_comment_query_status');
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_comment_query_config');
+        $query = QueryHelper::convertOptionToRequestParam('comment', $request->all());
 
-        return view('comments.index');
+        $result = ApiHelper::make()->get('/api/v2/comment/list', [
+            'query' => $query,
+        ]);
+
+        $comments = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('comments.index', compact('comments'));
     }
 
     // list
     public function list(Request $request)
     {
-        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_comment_list_query_status');
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_comment_list_query_config');
+        $query = QueryHelper::convertOptionToRequestParam('comment_list', $request->all());
 
-        return view('comments.list');
+        $result = ApiHelper::make()->get('/api/v2/comment/list', [
+            'query' => $query,
+        ]);
+
+        $comments = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('comments.list', compact('comments'));
     }
 
     // nearby
