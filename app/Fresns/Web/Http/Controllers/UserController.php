@@ -40,7 +40,6 @@ class UserController extends Controller
         // 系统配置参数与用户参数处理
         $query = AppUtility::convertOptionToRequesParam($request->all());
 
-        // 使用数据库配置的参数给接口
         $result = ApiHelper::make()->get('/api/v2/user/list', [
             'query' => $query,
         ]);
