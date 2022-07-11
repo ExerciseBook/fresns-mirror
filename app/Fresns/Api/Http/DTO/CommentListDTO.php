@@ -25,6 +25,7 @@ class CommentListDTO extends DTO
             'pid' => ['string', 'nullable'], // comments->post_id
             'cid' => ['string', 'nullable'], // comments->parent_id
             'gid' => ['string', 'nullable'], // comments->post_id->group_id
+            'hid' => ['string', 'nullable'],
             'sticky' => ['boolean', 'nullable'], // comments->is_sticky
             'digestState' => ['integer', 'nullable', 'in:1,2,3'], // comments->digest_state
             'contentType' => ['string', 'nullable'], // comments->types

@@ -72,7 +72,7 @@ class PostService
     public function postDetail(Post $post, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $authUserLng = null, ?string $authUserLat = null)
     {
         $postInfo = $post->getPostInfo($langTag, $timezone);
-        $postInfo[] = self::contentHandle($post, $type, $authUserId);
+        self::contentHandle($post, $type, $authUserId);
 
         if (! empty($post->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {
             $postLng = $post->map_longitude;
@@ -96,14 +96,15 @@ class PostService
             $groupInteractiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
             $groupInteractiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_GROUP, $post->group->id, $authUserId);
 
-            $groupItem[] = $post->group?->getGroupInfo($langTag);
+            $groupItem = $post->group?->getGroupInfo($langTag);
             $groupItem['interactive'] = array_merge($groupInteractiveConfig, $groupInteractiveStatus);
 
             $item['group'] = $groupItem;
         }
 
         $item['hashtags'] = null;
-        if ($post->hashtags) {
+
+        if (! $post->hashtags) {
             $hashtagService = new HashtagService;
 
             foreach ($post->hashtags as $hashtag) {
