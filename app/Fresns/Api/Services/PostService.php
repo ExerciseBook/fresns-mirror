@@ -48,7 +48,7 @@ class PostService
         }
 
         $item['hashtags'] = null;
-        if ($post->hashtags) {
+        if ($post->hashtags->isNotEmpty()) {
             $hashtagService = new HashtagService;
 
             foreach ($post->hashtags as $hashtag) {
@@ -103,7 +103,6 @@ class PostService
         }
 
         $item['hashtags'] = null;
-
         if ($post->hashtags->isNotEmpty()) {
             $hashtagService = new HashtagService;
 

@@ -38,7 +38,7 @@ class CommentService
         $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_COMMENT, $comment->id, $langTag);
 
         $item['hashtags'] = null;
-        if ($comment->hashtags) {
+        if ($comment->hashtags->isNotEmpty()) {
             $hashtagService = new HashtagService;
 
             foreach ($comment->hashtags as $hashtag) {
@@ -84,7 +84,7 @@ class CommentService
         $item['fileCount'] = $fileCount;
 
         $item['hashtags'] = null;
-        if ($comment->hashtags) {
+        if ($comment->hashtags->isNotEmpty()) {
             $hashtagService = new HashtagService;
 
             foreach ($comment->hashtags as $hashtag) {
