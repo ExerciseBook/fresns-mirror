@@ -10,6 +10,7 @@ namespace App\Fresns\Web\Http\Controllers;
 
 use App\Fresns\Web\Helpers\ApiHelper;
 use App\Helpers\ConfigHelper;
+use App\Utilities\AppUtility;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -17,34 +18,18 @@ class UserController extends Controller
     // index
     public function index(Request $request)
     {
-        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_user_query_status');
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_user_query_config');
-
-        $query = [];
-        if (! empty($queryConfig)) {
-            parse_str($queryConfig, $query);
-        }
+        // 系统配置参数与用户参数处理
+        $query = AppUtility::convertOptionToRequesParam($request->all());
 
         $result = ApiHelper::make()->get('/api/v2/user/list', [
             'query' => $query,
         ]);
 
-        $users = $result['data']['list'];
-
-        // todo: 分页，封装
-        $items = $users->toArray();
-        $total = $result['data']['paginate']['total'];
-        $pageSize = $result['data']['paginate']['pageSize'];
-        $paginate = new \Illuminate\Pagination\LengthAwarePaginator(
-            items: $items,
-            total: $total,
-            perPage: $pageSize,
-            currentPage: \request('page'),
+        // 分页
+        $users = AppUtility::convertApiDataToPaginate(
+            items: $result['data']['list'], 
+            paginate: $result['data']['paginate']
         );
-
-        $paginate->withPath('/'.\request()->path())->withQueryString();
-
-        $users = $paginate;
 
         return view('users.index', compact('users'));
     }
@@ -52,36 +37,19 @@ class UserController extends Controller
     // list
     public function list(Request $request)
     {
-        $queryStatus = ConfigHelper::fresnsConfigByItemKey('menu_user_list_query_status');
-        $queryConfig = ConfigHelper::fresnsConfigByItemKey('menu_user_list_query_config');
-
-        // todo: 转换为数组参数，封装
-        $query = [];
-        if (! empty($queryConfig)) {
-            parse_str($queryConfig, $query);
-        }
+        // 系统配置参数与用户参数处理
+        $query = AppUtility::convertOptionToRequesParam($request->all());
 
         // 使用数据库配置的参数给接口
         $result = ApiHelper::make()->get('/api/v2/user/list', [
             'query' => $query,
         ]);
 
-        // todo: 分页，封装
-        $users = $result['data']['list'];
-
-        $items = $users->toArray();
-        $total = $result['data']['paginate']['total'];
-        $pageSize = $result['data']['paginate']['pageSize'];
-        $paginate = new \Illuminate\Pagination\LengthAwarePaginator(
-            items: $items,
-            total: $total,
-            perPage: $pageSize,
-            currentPage: \request('page'),
+        // 分页，封装
+        $users = AppUtility::convertApiDataToPaginate(
+            items: $result['data']['list'], 
+            paginate: $result['data']['paginate']
         );
-
-        $paginate->withPath('/'.\request()->path())->withQueryString();
-
-        $users = $paginate;
 
         return view('users.list', compact('users'));
     }
