@@ -116,7 +116,7 @@ class PermissionUtility
 
         $blockGroupIds = UserBlock::type(UserBlock::TYPE_GROUP)->where('user_id', $userId)->pluck('block_id')->toArray();
 
-        $filterGroupIdsArr = Arr::prepend($blockGroupIds, $filterIds);
+        $filterGroupIdsArr = array_values(array_unique(array_merge($blockGroupIds, $filterIds)));
 
         return $filterGroupIdsArr;
     }
