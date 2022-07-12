@@ -18,8 +18,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.posts', compact('items', 'user'));
     }
@@ -29,8 +29,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.comments', compact('items', 'user'));
     }
@@ -40,8 +40,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.likers', compact('items', 'user'));
     }
@@ -51,8 +51,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.dislikers', compact('items', 'user'));
     }
@@ -62,8 +62,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.followers', compact('items', 'user'));
     }
@@ -73,8 +73,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.blockers', compact('items', 'user'));
     }
@@ -88,8 +88,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.likes.users', compact('items', 'user'));
     }
@@ -99,8 +99,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.likes.groups', compact('items', 'user'));
     }
@@ -110,8 +110,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.likes.hashtags', compact('items', 'user'));
     }
@@ -121,8 +121,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.likes.posts', compact('items', 'user'));
     }
@@ -132,8 +132,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.likes.comments', compact('items', 'user'));
     }
@@ -147,8 +147,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.dislikes.users', compact('items', 'user'));
     }
@@ -158,8 +158,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.dislikes.groups', compact('items', 'user'));
     }
@@ -169,8 +169,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.dislikes.hashtags', compact('items', 'user'));
     }
@@ -180,8 +180,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.dislikes.posts', compact('items', 'user'));
     }
@@ -191,8 +191,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.dislikes.comments', compact('items', 'user'));
     }
@@ -206,8 +206,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.following.users', compact('items', 'user'));
     }
@@ -217,8 +217,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.following.groups', compact('items', 'user'));
     }
@@ -228,8 +228,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.following.hashtags', compact('items', 'user'));
     }
@@ -239,8 +239,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.following.posts', compact('items', 'user'));
     }
@@ -250,8 +250,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.following.comments', compact('items', 'user'));
     }
@@ -265,8 +265,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.blocking.users', compact('items', 'user'));
     }
@@ -276,8 +276,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.blocking.groups', compact('items', 'user'));
     }
@@ -287,8 +287,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.blocking.hashtags', compact('items', 'user'));
     }
@@ -298,8 +298,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.blocking.posts', compact('items', 'user'));
     }
@@ -309,8 +309,8 @@ class ProfileController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/user/{$uidOrUsername}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $user = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $user = $result['data']['detail'];
 
         return view('profile.blocking.comments', compact('items', 'user'));
     }
