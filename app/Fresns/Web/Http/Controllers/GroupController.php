@@ -86,11 +86,26 @@ class GroupController extends Controller
     // detail
     public function detail(Request $request, string $gid)
     {
-        $result = ApiHelper::make()->get("/api/v2/group/{$gid}/detail");
+        $query = $request->all();
+        $query['gid'] = $gid;
 
-        $items = $result['data']['items'];
-        $group = $result['data']['detail'];
+        $client = ApiHelper::make();
 
-        return view('groups.detail', compact('items', 'group'));
+        $results = $client->unwrap([
+            'group' => $client->getAsync("/api/v2/group/{$gid}/detail"),
+            'posts'   => $client->getAsync('/api/v2/post/list', [
+                'query' => $query,
+            ]),
+        ]);
+
+        $items = $results['group']['data']['items'];
+        $group = $results['group']['data']['detail'];
+
+        $posts = QueryHelper::convertApiDataToPaginate(
+            items: $results['posts']['data']['list'],
+            paginate: $results['posts']['data']['paginate'],
+        );
+
+        return view('groups.detail', compact('items', 'group', 'posts'));
     }
 }
