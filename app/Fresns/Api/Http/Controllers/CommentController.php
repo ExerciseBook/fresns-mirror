@@ -71,7 +71,7 @@ class CommentController extends Controller
                 throw new ApiException(31602);
             }
 
-            if ($viewUser->isEnable(false)) {
+            if ($viewUser->is_enable == 0) {
                 throw new ApiException(35202);
             }
 
@@ -89,7 +89,7 @@ class CommentController extends Controller
                 throw new ApiException(37300);
             }
 
-            if ($viewPost->isEnable(false)) {
+            if ($viewPost->is_enable == 0) {
                 throw new ApiException(37301);
             }
 
@@ -103,7 +103,7 @@ class CommentController extends Controller
                 throw new ApiException(37400);
             }
 
-            if ($viewComment->isEnable(false)) {
+            if ($viewComment->is_enable == 0) {
                 throw new ApiException(37401);
             }
 
@@ -117,7 +117,7 @@ class CommentController extends Controller
                 throw new ApiException(37100);
             }
 
-            if ($viewGroup->isEnable(false)) {
+            if ($viewGroup->is_enable == 0) {
                 throw new ApiException(37101);
             }
 
@@ -135,7 +135,7 @@ class CommentController extends Controller
                 throw new ApiException(37200);
             }
 
-            if ($viewHashtag->isEnable(false)) {
+            if ($viewHashtag->is_enable == 0) {
                 throw new ApiException(37201);
             }
 
