@@ -79,9 +79,11 @@ class PostController extends Controller
                         ->orWhereNotIn('group_id', $filterGroupIdsArr);
                 });
 
-            $postQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
-                $query->whereNotIn('id', $blockHashtagIds);
-            });
+            if ($blockHashtagIds) {
+                $postQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
+                    $query->whereNotIn('id', $blockHashtagIds);
+                });
+            }
         }
 
         if ($dtoRequest->uidOrUsername) {
