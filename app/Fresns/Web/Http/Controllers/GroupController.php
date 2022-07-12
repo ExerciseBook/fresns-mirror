@@ -25,9 +25,9 @@ class GroupController extends Controller
 
         if ($indexType == 'tree') {
             $result = ApiHelper::make()->get('/api/v2/group/tree');
-            $groupTree = $result['data']->toArray();
+            $groupTree = $result['data'];
         } else {
-            $query = QueryHelper::convertOptionToRequestParam('group', $request->all());
+            $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_GROUP, $request->all());
 
             $result = ApiHelper::make()->get('/api/v2/group/list', [
                 'query' => $query,
@@ -45,7 +45,7 @@ class GroupController extends Controller
     // list
     public function list(Request $request)
     {
-        $query = QueryHelper::convertOptionToRequestParam('group_list', $request->all());
+        $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_GROUP_LIST, $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/group/list', [
             'query' => $query,
@@ -88,8 +88,8 @@ class GroupController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/group/{$gid}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $group = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $group = $result['data']['detail'];
 
         return view('groups.detail', compact('items', 'group'));
     }

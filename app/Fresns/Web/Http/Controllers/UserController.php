@@ -17,14 +17,12 @@ class UserController extends Controller
     // index
     public function index(Request $request)
     {
-        // 系统配置参数与用户参数处理
-        $query = QueryHelper::convertOptionToRequestParam('user', $request->all());
+        $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_USER, $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/user/list', [
             'query' => $query,
         ]);
 
-        // 分页
         $users = QueryHelper::convertApiDataToPaginate(
             items: $result['data']['list'],
             paginate: $result['data']['paginate'],
@@ -36,14 +34,12 @@ class UserController extends Controller
     // list
     public function list(Request $request)
     {
-        // 系统配置参数与用户参数处理
-        $query = QueryHelper::convertOptionToRequestParam('user_list', $request->all());
+        $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_USER_LIST, $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/user/list', [
             'query' => $query,
         ]);
 
-        // 分页，封装
         $users = QueryHelper::convertApiDataToPaginate(
             items: $result['data']['list'],
             paginate: $result['data']['paginate'],
@@ -57,9 +53,14 @@ class UserController extends Controller
     {
         $uid = fs_user('uid');
 
-        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/like/users");
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/like/users", [
+            'query' => $request->all(),
+        ]);
 
-        $users = $result['data']['list'];
+        $users = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
 
         return view('users.likes', compact('users'));
     }
@@ -69,9 +70,14 @@ class UserController extends Controller
     {
         $uid = fs_user('uid');
 
-        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/dislike/users");
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/dislike/users", [
+            'query' => $request->all(),
+        ]);
 
-        $users = $result['data']['list'];
+        $users = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
 
         return view('users.dislikes', compact('users'));
     }
@@ -81,9 +87,14 @@ class UserController extends Controller
     {
         $uid = fs_user('uid');
 
-        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/follow/users");
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/follow/users", [
+            'query' => $request->all(),
+        ]);
 
-        $users = $result['data']['list'];
+        $users = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
 
         return view('users.following', compact('users'));
     }
@@ -93,9 +104,14 @@ class UserController extends Controller
     {
         $uid = fs_user('uid');
 
-        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/block/users");
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/block/users", [
+            'query' => $request->all(),
+        ]);
 
-        $users = $result['data']['list'];
+        $users = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
 
         return view('users.blocking', compact('users'));
     }

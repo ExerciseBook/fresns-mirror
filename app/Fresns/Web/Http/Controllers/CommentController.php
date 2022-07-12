@@ -17,7 +17,7 @@ class CommentController extends Controller
     // index
     public function index(Request $request)
     {
-        $query = QueryHelper::convertOptionToRequestParam('comment', $request->all());
+        $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_COMMENT, $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/comment/list', [
             'query' => $query,
@@ -34,7 +34,7 @@ class CommentController extends Controller
     // list
     public function list(Request $request)
     {
-        $query = QueryHelper::convertOptionToRequestParam('comment_list', $request->all());
+        $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_COMMENT_LIST, $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/comment/list', [
             'query' => $query,

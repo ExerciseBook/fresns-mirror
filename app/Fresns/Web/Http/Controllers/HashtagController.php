@@ -17,7 +17,7 @@ class HashtagController extends Controller
     // index
     public function index(Request $request)
     {
-        $query = QueryHelper::convertOptionToRequestParam('hashtag', $request->all());
+        $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_HASHTAG, $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/hashtag/list', [
             'query' => $query,
@@ -34,7 +34,7 @@ class HashtagController extends Controller
     // list
     public function list(Request $request)
     {
-        $query = QueryHelper::convertOptionToRequestParam('hashtag_list', $request->all());
+        $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_HASHTAG_LIST, $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/hashtag/list', [
             'query' => $query,
@@ -77,8 +77,8 @@ class HashtagController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/hashtag/{$hid}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $hashtag = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $hashtag = $result['data']['detail'];
 
         return view('hashtags.detail', compact('items', 'hashtag'));
     }

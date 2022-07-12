@@ -17,7 +17,7 @@ class PostController extends Controller
     // index
     public function index(Request $request)
     {
-        $query = QueryHelper::convertOptionToRequestParam('post', $request->all());
+        $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_POST, $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/post/list', [
             'query' => $query,
@@ -34,7 +34,7 @@ class PostController extends Controller
     // list
     public function list(Request $request)
     {
-        $query = QueryHelper::convertOptionToRequestParam('post_list', $request->all());
+        $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_POST_LIST, $request->all());
 
         $result = ApiHelper::make()->get('/api/v2/post/list', [
             'query' => $query,
@@ -89,8 +89,8 @@ class PostController extends Controller
     {
         $result = ApiHelper::make()->get("/api/v2/post/{$pid}/detail");
 
-        $items = $result['data']['items']->toArray();
-        $post = $result['data']['detail']->toArray();
+        $items = $result['data']['items'];
+        $post = $result['data']['detail'];
 
         return view('posts.detail', compact('items', 'post'));
     }
