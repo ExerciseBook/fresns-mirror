@@ -22,16 +22,23 @@ trait UserServiceTrait
     {
         $userData = $this;
 
-        $identifier = ConfigHelper::fresnsConfigByItemKey('user_identifier');
+        $configKey = ConfigHelper::fresnsConfigByItemKeys([
+            'user_identifier',
+            'website_user_detail_path',
+            'site_url',
+        ]);
 
-        if ($identifier == 'uid') {
+        if ($configKey['user_identifier'] == 'uid') {
             $profile['fsid'] = $userData->uid;
+            $url = $configKey['site_url'].'/'.$configKey['website_user_detail_path'].'/'.$userData->uid;
         } else {
             $profile['fsid'] = $userData->username;
+            $url = $configKey['site_url'].'/'.$configKey['website_user_detail_path'].'/'.$userData->username;
         }
 
         $profile['uid'] = $userData->uid;
         $profile['username'] = $userData->username;
+        $profile['url'] = $url;
         $profile['nickname'] = $userData->nickname;
         $profile['avatar'] = static::getUserAvatar($userData->id);
         $profile['banner'] = FileHelper::fresnsFileUrlByTableColumn($userData->banner_file_id, $userData->banner_file_url);
