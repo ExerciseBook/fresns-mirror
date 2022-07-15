@@ -34,7 +34,7 @@ class PostService
         }
 
         $postInfo = $post->getPostInfo($langTag, $timezone);
-        $postInfo[] = self::contentHandle($post, 'list', $authUserId);
+        $contentHandle = self::contentHandle($post, 'list', $authUserId);
 
         $item['group'] = null;
         if ($post->group) {
@@ -61,10 +61,11 @@ class PostService
         if (! $post->is_anonymous) {
             $creatorProfile = $post->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $post->creator->getUserMainRole($langTag, $timezone);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
+            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
-        $info = array_merge($postInfo, $item);
+        $info = array_merge($postInfo, $contentHandle, $item);
 
         return $info;
     }
@@ -72,7 +73,7 @@ class PostService
     public function postDetail(Post $post, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $authUserLng = null, ?string $authUserLat = null)
     {
         $postInfo = $post->getPostInfo($langTag, $timezone);
-        self::contentHandle($post, $type, $authUserId);
+        $contentHandle = self::contentHandle($post, $type, $authUserId);
 
         if (! empty($post->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {
             $postLng = $post->map_longitude;
@@ -116,7 +117,8 @@ class PostService
         if (! $post->is_anonymous) {
             $creatorProfile = $post->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $post->creator->getUserMainRole($langTag, $timezone);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
+            $creatorOperations['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
         $item['manages'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, $post->group_id, PluginUsage::SCENE_POST, $authUserId, $langTag);
@@ -143,7 +145,7 @@ class PostService
 
         $item['followType'] = null;
 
-        $detail = array_merge($postInfo, $item);
+        $detail = array_merge($postInfo, $contentHandle, $item);
 
         return $detail;
     }
@@ -227,7 +229,8 @@ class PostService
         if (! $log->is_anonymous) {
             $creatorProfile = $log->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $log->creator->getUserMainRole($langTag, $timezone);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
+            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
         if ($group) {
@@ -270,7 +273,8 @@ class PostService
         if (! $log->is_anonymous) {
             $creatorProfile = $log->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $log->creator->getUserMainRole($langTag, $timezone);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
+            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
         if ($group) {

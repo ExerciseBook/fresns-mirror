@@ -33,7 +33,7 @@ class CommentService
         }
 
         $commentInfo = $comment->getCommentInfo($langTag, $timezone);
-        $commentInfo[] = self::contentHandle($comment, 'list', $authUserId);
+        $contentHandle = self::contentHandle($comment, 'list', $authUserId);
 
         $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_COMMENT, $comment->id, $langTag);
 
@@ -51,10 +51,11 @@ class CommentService
         if (! $comment->is_anonymous) {
             $creatorProfile = $comment->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $comment->creator->getUserMainRole($langTag, $timezone);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
+            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
-        $info = array_merge($commentInfo, $item);
+        $info = array_merge($commentInfo, $contentHandle, $item);
 
         return $info;
     }
@@ -62,9 +63,10 @@ class CommentService
     public function commentDetail(Comment $comment, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $authUserLng = null, ?string $authUserLat = null)
     {
         $commentInfo = $comment->getCommentInfo($langTag, $timezone);
-        $commentInfo[] = self::contentHandle($comment, $type, $authUserId);
         $commentAppend = $comment->commentAppend;
         $postAppend = $comment->postAppend;
+
+        $contentHandle = self::contentHandle($comment, $type, $authUserId);
 
         if (! empty($comment->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {
             $postLng = $comment->map_longitude;
@@ -97,7 +99,8 @@ class CommentService
         if (! $comment->is_anonymous) {
             $creatorProfile = $comment->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $comment->creator->getUserMainRole($langTag, $timezone);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole);
+            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
         $isMe = $comment->user_id == $authUserId ? true : false;
@@ -142,7 +145,7 @@ class CommentService
         $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_COMMENT, $comment->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus);
 
-        $detail = array_merge($commentInfo, $item);
+        $detail = array_merge($commentInfo, $contentHandle, $item);
 
         return $detail;
     }
