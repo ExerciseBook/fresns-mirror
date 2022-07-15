@@ -17,6 +17,7 @@ Route::prefix('engine')
     ->group(function () {
 
         Route::post('send-verify-code', [ApiController::class, 'sendVerifyCode'])->name('send.verifyCode')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
+        Route::get('download-link', [ApiController::class, 'downloadLink'])->name('file.download');
 
         Route::post('register', [ApiController::class, 'accountRegister'])->name('register')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
         Route::post('login', [ApiController::class, 'accountLogin'])->name('login')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
@@ -28,6 +29,9 @@ Route::prefix('engine')
             Route::post('mark', [ApiController::class, 'userMark'])->name('mark');
             Route::put('mark-note', [ApiController::class, 'userMarkNote'])->name('mark.note');
         });
+
+        Route::delete('post/{pid}', [ApiController::class, 'postDelete'])->name('post.delete');
+        Route::delete('comment/{pid}', [ApiController::class, 'commentDelete'])->name('comment.delete');
 
         Route::prefix('editor')->name('editor.')->group(function () {
             Route::get('{type}/drafts', [ApiController::class, 'drafts'])->name('drafts');
