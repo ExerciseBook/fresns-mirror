@@ -14,7 +14,6 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
-use Plugins\FresnsEngine\Sdk\Factory;
 
 class AccountGuard implements Guard
 {
@@ -92,22 +91,6 @@ class AccountGuard implements Guard
     public function guest(): bool
     {
         return ! $this->check();
-    }
-
-    /**
-     * Get the ID for the currently authenticated account.
-     *
-     * @return mixed|null
-     *
-     * @throws GuzzleException
-     */
-    public function aid(): string
-    {
-        if ($this->get()) {
-            return $this->get()['detail']['aid'];
-        }
-
-        return null;
     }
 
     /**
