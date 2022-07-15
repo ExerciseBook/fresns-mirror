@@ -44,12 +44,12 @@ Route::prefix(LaravelLocalization::setLocale())
         }
 
         // portal
-        Route::get(fs_db_config('website_portal_path'), [PortalController::class, 'portal'])->name('portal')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
+        Route::get(fs_db_config('website_portal_path'), [PortalController::class, 'portal'])->name('portal')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
 
         // users
         Route::name('user.')->prefix(fs_db_config('website_user_path'))->group(function () {
-            Route::get('/', [UserController::class, 'index'])->name('index')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('list', [UserController::class, 'list'])->name('list')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
+            Route::get('/', [UserController::class, 'index'])->name('index')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('list', [UserController::class, 'list'])->name('list')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
             Route::get('likes', [UserController::class, 'likes'])->name('likes');
             Route::get('dislikes', [UserController::class, 'dislikes'])->name('dislikes');
             Route::get('following', [UserController::class, 'following'])->name('following');
@@ -58,8 +58,8 @@ Route::prefix(LaravelLocalization::setLocale())
 
         // groups
         Route::name('group.')->prefix(fs_db_config('website_group_path'))->group(function () {
-            Route::get('/', [GroupController::class, 'index'])->name('index')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('list', [GroupController::class, 'list'])->name('list')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
+            Route::get('/', [GroupController::class, 'index'])->name('index')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('list', [GroupController::class, 'list'])->name('list')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
             Route::get('likes', [GroupController::class, 'likes'])->name('likes');
             Route::get('dislikes', [GroupController::class, 'dislikes'])->name('dislikes');
             Route::get('following', [GroupController::class, 'following'])->name('following');
@@ -68,8 +68,8 @@ Route::prefix(LaravelLocalization::setLocale())
 
         // hashtags
         Route::name('hashtag.')->prefix(fs_db_config('website_hashtag_path'))->group(function () {
-            Route::get('/', [HashtagController::class, 'index'])->name('index')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('list', [HashtagController::class, 'list'])->name('list')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
+            Route::get('/', [HashtagController::class, 'index'])->name('index')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('list', [HashtagController::class, 'list'])->name('list')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
             Route::get('likes', [HashtagController::class, 'likes'])->name('likes');
             Route::get('dislikes', [HashtagController::class, 'dislikes'])->name('dislikes');
             Route::get('following', [HashtagController::class, 'following'])->name('following');
@@ -78,10 +78,10 @@ Route::prefix(LaravelLocalization::setLocale())
 
         // posts
         Route::name('post.')->prefix(fs_db_config('website_post_path'))->group(function () {
-            Route::get('/', [PostController::class, 'index'])->name('index')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('list', [PostController::class, 'list'])->name('list')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('nearby', [PostController::class, 'nearby'])->name('nearby')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('location', [PostController::class, 'location'])->name('location')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
+            Route::get('/', [PostController::class, 'index'])->name('index')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('list', [PostController::class, 'list'])->name('list')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('nearby', [PostController::class, 'nearby'])->name('nearby')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('location', [PostController::class, 'location'])->name('location')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
             Route::get('likes', [PostController::class, 'likes'])->name('likes');
             Route::get('dislikes', [PostController::class, 'dislikes'])->name('dislikes');
             Route::get('following', [PostController::class, 'following'])->name('following');
@@ -90,10 +90,10 @@ Route::prefix(LaravelLocalization::setLocale())
 
         // comment
         Route::name('comment.')->prefix(fs_db_config('website_comment_path'))->group(function () {
-            Route::get('/', [CommentController::class, 'index'])->name('index')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('list', [CommentController::class, 'list'])->name('list')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('nearby', [CommentController::class, 'nearby'])->name('nearby')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('location', [CommentController::class, 'location'])->name('location')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
+            Route::get('/', [CommentController::class, 'index'])->name('index')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('list', [CommentController::class, 'list'])->name('list')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('nearby', [CommentController::class, 'nearby'])->name('nearby')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('location', [CommentController::class, 'location'])->name('location')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
             Route::get('likes', [CommentController::class, 'likes'])->name('likes');
             Route::get('dislikes', [CommentController::class, 'dislikes'])->name('dislikes');
             Route::get('following', [CommentController::class, 'following'])->name('following');
@@ -101,7 +101,7 @@ Route::prefix(LaravelLocalization::setLocale())
         });
 
         // detail
-        Route::withoutMiddleware(['AccountAuthorize', 'UserAuthorize'])->group(function () {
+        Route::withoutMiddleware([AccountAuthorize::class, UserAuthorize::class])->group(function () {
             Route::get(fs_db_config('website_group_detail_path').'/{gid}', [GroupController::class, 'detail'])->name('group.detail');
             Route::get(fs_db_config('website_hashtag_detail_path').'/{hid}', [HashtagController::class, 'detail'])->name('hashtag.detail');
             Route::get(fs_db_config('website_post_detail_path').'/{pid}', [PostController::class, 'detail'])->name('post.detail');
@@ -109,7 +109,7 @@ Route::prefix(LaravelLocalization::setLocale())
         });
 
         // profile
-        Route::name('profile.')->prefix(fs_db_config('website_user_detail_path').'/{uidOrUsername}')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize'])->group(function () {
+        Route::name('profile.')->prefix(fs_db_config('website_user_detail_path').'/{uidOrUsername}')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class])->group(function () {
             try {
                 $homeListConfig = str_replace('it_', '', fs_db_config('it_home_list'));
                 $profileHome = str_replace('user_', '', $homeListConfig);
@@ -151,7 +151,7 @@ Route::prefix(LaravelLocalization::setLocale())
         });
 
         // search
-        Route::name('search.')->prefix('search')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize'])->group(function () {
+        Route::name('search.')->prefix('search')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class])->group(function () {
             Route::get('/', [SearchController::class, 'index'])->name('index');
             Route::get('users', [SearchController::class, 'users'])->name('users');
             Route::get('groups', [SearchController::class, 'groups'])->name('groups');
@@ -174,13 +174,13 @@ Route::prefix(LaravelLocalization::setLocale())
 
         // account
         Route::name('account.')->prefix('account')->group(function () {
-            Route::get('register', [AccountController::class, 'register'])->name('register')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-            Route::get('login', [AccountController::class, 'login'])->name('login')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize', 'CheckSiteModel']);
-            Route::get('reset-password', [AccountController::class, 'resetPassword'])->name('resetPassword')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize', 'CheckSiteModel']);
-            Route::get('/', [AccountController::class, 'index'])->name('index')->withoutMiddleware(['UserAuthorize']);
-            Route::get('wallet', [AccountController::class, 'wallet'])->name('wallet')->withoutMiddleware(['UserAuthorize']);
-            Route::get('users', [AccountController::class, 'users'])->name('users')->withoutMiddleware(['UserAuthorize']);
-            Route::get('settings', [AccountController::class, 'settings'])->name('settings')->withoutMiddleware(['UserAuthorize']);
+            Route::get('register', [AccountController::class, 'register'])->name('register')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+            Route::get('login', [AccountController::class, 'login'])->name('login')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
+            Route::get('reset-password', [AccountController::class, 'resetPassword'])->name('resetPassword')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
+            Route::get('/', [AccountController::class, 'index'])->name('index')->withoutMiddleware([UserAuthorize::class]);
+            Route::get('wallet', [AccountController::class, 'wallet'])->name('wallet')->withoutMiddleware([UserAuthorize::class]);
+            Route::get('users', [AccountController::class, 'users'])->name('users')->withoutMiddleware([UserAuthorize::class]);
+            Route::get('settings', [AccountController::class, 'settings'])->name('settings')->withoutMiddleware([UserAuthorize::class]);
         });
 
         // messages

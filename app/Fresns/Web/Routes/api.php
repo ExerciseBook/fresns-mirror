@@ -18,16 +18,16 @@ Route::prefix('engine')
     ])
     ->group(function () {
 
-        Route::post('send-verify-code', [ApiController::class, 'sendVerifyCode'])->name('send.verifyCode')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
+        Route::post('send-verify-code', [ApiController::class, 'sendVerifyCode'])->name('send.verifyCode')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
         Route::get('download-link', [ApiController::class, 'downloadLink'])->name('file.download');
 
-        Route::post('register', [ApiController::class, 'accountRegister'])->name('register')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-        Route::post('login', [ApiController::class, 'accountLogin'])->name('login')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-        Route::post('reset-password', [ApiController::class, 'resetPassword'])->name('resetPassword')->withoutMiddleware(['AccountAuthorize', 'UserAuthorize']);
-        Route::delete('logout', [AccountController::class, 'logout'])->name('logout')->withoutMiddleware(['UserAuthorize']);
+        Route::post('register', [ApiController::class, 'accountRegister'])->name('register')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+        Route::post('login', [ApiController::class, 'accountLogin'])->name('login')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+        Route::post('reset-password', [ApiController::class, 'resetPassword'])->name('resetPassword')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+        Route::delete('logout', [AccountController::class, 'logout'])->name('logout')->withoutMiddleware([UserAuthorize::class]);
 
         Route::prefix('user')->name('user.')->group(function () {
-            Route::post('auth', [AccountController::class, 'userAuth'])->name('auth')->withoutMiddleware(['UserAuthorize']);
+            Route::post('auth', [AccountController::class, 'userAuth'])->name('auth')->withoutMiddleware([UserAuthorize::class]);
             Route::post('mark', [ApiController::class, 'userMark'])->name('mark');
             Route::put('mark-note', [ApiController::class, 'userMarkNote'])->name('mark.note');
         });
