@@ -23,10 +23,10 @@ class UserAuthorize
                 $langTag = current_lang_tag() ?? '';
                 $userLoginTip = ConfigUtility::getCodeMessage(31601, 'Fresns', $langTag);
 
-                return redirect()->route('fresns.account')->withErrors($userLoginTip); //FsLang
+                return redirect()->fs_route(route('fresns.account.index'))->withErrors($userLoginTip); //FsLang
             }
         } catch (\Exception $exception) {
-            return redirect()->route('fresns.account.login')->withErrors($exception->getMessage());
+            return redirect()->fs_route(route('fresns.account.login'))->withErrors($exception->getMessage());
         }
     }
 }

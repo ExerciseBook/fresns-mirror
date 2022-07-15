@@ -43,11 +43,11 @@ class AccountAuthorize
                             ];
                         }
 
-                        return redirect()->route('fresns.account')->withCookies($cookies);
+                        return redirect()->fs_route(route('fresns.account.index'))->withCookies($cookies);
                     }
 
                     if (Arr::get($result, 'message')) {
-                        return redirect()->route('fresns.account.login')->with([
+                        return redirect()->fs_route(route('fresns.account.login'))->with([
                             'failure' => $result['message'], 'code' => $result['code'],
                         ])->withInput();
                     }
@@ -70,7 +70,7 @@ class AccountAuthorize
         if (request()->ajax()) {
             return Response::json(compact('message', $code), 401);
         } else {
-            return redirect()->route('fresns.account.login')->withErrors($message);
+            return redirect()->fs_route(route('fresns.account.login'))->withErrors($message);
         }
     }
 }
