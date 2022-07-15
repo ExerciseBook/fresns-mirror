@@ -8,6 +8,7 @@
 
 use App\Fresns\Web\Http\Controllers\ApiController;
 use App\Fresns\Web\Http\Middleware\AccountAuthorize;
+use App\Fresns\Web\Http\Middleware\CheckSiteModel;
 use App\Fresns\Web\Http\Middleware\UserAuthorize;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,7 @@ Route::prefix('engine')
     ->middleware([
         AccountAuthorize::class,
         UserAuthorize::class,
+        CheckSiteModel::class,
     ])
     ->group(function () {
 
@@ -22,9 +24,9 @@ Route::prefix('engine')
         Route::get('download-link', [ApiController::class, 'downloadLink'])->name('file.download');
 
         Route::post('register', [ApiController::class, 'accountRegister'])->name('register')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
-        Route::post('login', [ApiController::class, 'accountLogin'])->name('login')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
-        Route::post('reset-password', [ApiController::class, 'resetPassword'])->name('resetPassword')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
-        Route::delete('logout', [AccountController::class, 'logout'])->name('logout')->withoutMiddleware([UserAuthorize::class]);
+        Route::post('login', [ApiController::class, 'accountLogin'])->name('login')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
+        Route::post('reset-password', [ApiController::class, 'resetPassword'])->name('resetPassword')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
+        Route::delete('logout', [AccountController::class, 'logout'])->name('logout')->withoutMiddleware([UserAuthorize::class, CheckSiteModel::class]);
 
         Route::prefix('user')->name('user.')->group(function () {
             Route::post('auth', [AccountController::class, 'userAuth'])->name('auth')->withoutMiddleware([UserAuthorize::class]);

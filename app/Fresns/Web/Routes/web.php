@@ -19,6 +19,7 @@ use App\Fresns\Web\Http\Controllers\ProfileController;
 use App\Fresns\Web\Http\Controllers\SearchController;
 use App\Fresns\Web\Http\Controllers\UserController;
 use App\Fresns\Web\Http\Middleware\AccountAuthorize;
+use App\Fresns\Web\Http\Middleware\CheckSiteModel;
 use App\Fresns\Web\Http\Middleware\UserAuthorize;
 use App\Fresns\Web\Http\Middleware\WebConfiguration;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,7 @@ Route::prefix(LaravelLocalization::setLocale())
         LaravelLocalizationRedirectFilter::class,
         AccountAuthorize::class,
         UserAuthorize::class,
+        CheckSiteModel::class,
     ])
     ->group(function () {
 

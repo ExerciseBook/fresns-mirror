@@ -67,10 +67,6 @@ class WebConfiguration
         $timezone = fs_user('detail.timezone') ?: ConfigHelper::fresnsConfigByItemKey('default_timezone');
         Cookie::queue('timezone', $timezone);
 
-        if (fs_api_config('site_mode') == 'private' && fs_user()->guest()) {
-            return view('private', 500);
-        }
-
         return $next($request);
     }
 
