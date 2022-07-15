@@ -62,7 +62,7 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof \Illuminate\Validation\ValidationException) {
             if (! $request->wantsJson()) {
-                return back()->withException($e);
+                return back()->with('failure', $e->validator->errors()->first());
             }
 
             throw new \RuntimeException($e->validator->errors()->first());

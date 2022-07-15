@@ -38,7 +38,13 @@ class RoleController extends Controller
 
     public function store(Role $role, UpdateRoleRequest $request)
     {
-        $role->fill($request->all());
+        $role->type = $request->type;
+        $role->rating = $request->rating;
+        // 用户没选的时候，默认隐藏，避免报错  
+        $role->is_display_icon = $request->is_display_icon ?? 0;
+        $role->is_display_name = $request->is_display_name ?? 0;
+        $role->nickname_color = $request->nickname_color;
+        $role->is_enable = $request->is_enable;
 
         $role->permissions = json_decode(config('FsConfig.role_default_permissions'), true);
         if ($request->no_color) {
@@ -99,16 +105,16 @@ class RoleController extends Controller
     {
         $role->type = $request->type;
         $role->rating = $request->rating;
-        $role->is_display_icon = $request->is_display_icon;
-        $role->is_display_icon = $request->is_display_icon;
-        $role->is_display_name = $request->is_display_name;
+        $role->is_display_icon = $request->is_display_icon ?? 0;
+        $role->is_display_name = $request->is_display_name ?? 0;
         $role->nickname_color = $request->nickname_color;
         $role->is_enable = $request->is_enable;
 
+        // xxx: 这个 permissions 在 store 里面有。是否需要保留？
+        $role->permissions = json_decode(config('FsConfig.role_default_permissions'), true);
         if ($request->no_color) {
             $role->nickname_color = null;
         }
-
         $role->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
 
         if ($request->file('icon_file')) {

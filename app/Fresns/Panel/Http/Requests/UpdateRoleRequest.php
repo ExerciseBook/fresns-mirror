@@ -21,8 +21,6 @@ class UpdateRoleRequest extends FormRequest
     {
         return [
             'type' => 'required|int',
-            'is_display_name' => 'required|int',
-            'is_display_icon' => 'required|int',
             'nickname_color' => 'string',
             'rating' => 'required|string',
         ];
