@@ -18,6 +18,8 @@ use App\Fresns\Web\Http\Controllers\PostController;
 use App\Fresns\Web\Http\Controllers\ProfileController;
 use App\Fresns\Web\Http\Controllers\SearchController;
 use App\Fresns\Web\Http\Controllers\UserController;
+use App\Fresns\Web\Http\Middleware\AccountAuthorize;
+use App\Fresns\Web\Http\Middleware\UserAuthorize;
 use App\Fresns\Web\Http\Middleware\WebConfiguration;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -29,8 +31,8 @@ Route::prefix(LaravelLocalization::setLocale())
         'web',
         WebConfiguration::class,
         LaravelLocalizationRedirectFilter::class,
-        // AccountAuthorize::class,
-        // UserAuthorize::class,
+        AccountAuthorize::class,
+        UserAuthorize::class,
     ])
     ->group(function () {
 
