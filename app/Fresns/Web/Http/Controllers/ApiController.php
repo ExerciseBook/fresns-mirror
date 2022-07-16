@@ -78,7 +78,9 @@ class ApiController extends Controller
         } 
         // 没有用户
         else {
-            // todo 没有用户的操作
+            return back()->with([
+                'failure' => '抱歉，您当前没有绑定用户信息',
+            ]);
         }
     }
 
