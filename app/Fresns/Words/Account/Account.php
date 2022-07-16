@@ -131,6 +131,13 @@ class Account
             $account = AccountModel::where('phone', $accountName)->first();
         }
 
+        if (empty($account)) {
+            return $this->failure(
+                31502,
+                ConfigUtility::getCodeMessage(31502, 'Fresns', $langTag),
+            );
+        }
+
         $loginErrorCount = ConfigUtility::getLoginErrorCount($account->id);
 
         if ($loginErrorCount >= 5) {
