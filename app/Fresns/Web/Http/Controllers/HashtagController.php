@@ -75,11 +75,26 @@ class HashtagController extends Controller
     // detail
     public function detail(Request $request, string $hid)
     {
-        $result = ApiHelper::make()->get("/api/v2/hashtag/{$hid}/detail");
+        $query = $request->all();
+        $query['hid'] = $hid;
 
-        $items = $result['data']['items'];
-        $hashtag = $result['data']['detail'];
+        $client = ApiHelper::make();
 
-        return view('hashtags.detail', compact('items', 'hashtag'));
+        $results = $client->unwrap([
+            'hashtag' => $client->getAsync("/api/v2/hashtag/{$hid}/detail"),
+            'posts'   => $client->getAsync('/api/v2/post/list', [
+                'query' => $query,
+            ]),
+        ]);
+
+        $items = $results['hashtag']['data']['items'];
+        $hashtag = $results['hashtag']['data']['detail'];
+
+        $posts = QueryHelper::convertApiDataToPaginate(
+            items: $results['posts']['data']['list'],
+            paginate: $results['posts']['data']['paginate'],
+        );
+
+        return view('hashtags.detail', compact('items', 'hashtag', 'posts'));
     }
 }
