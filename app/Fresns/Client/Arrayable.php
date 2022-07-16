@@ -16,7 +16,7 @@ trait Arrayable
 
     public static function makeAttribute(array $attributes = [])
     {
-        $instance = new class implements \ArrayAccess, \IteratorAggregate
+        $instance = new class implements \ArrayAccess, \IteratorAggregate, \Countable
         {
             use Arrayable;
         };
@@ -81,5 +81,10 @@ trait Arrayable
     public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->toArray());
+    }
+
+    public function count()
+    {
+        return count($this->toArray());
     }
 }
