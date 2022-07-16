@@ -9,6 +9,7 @@
 namespace App\Fresns\Web\Helpers;
 
 use App\Fresns\Client\Clientable;
+use App\Fresns\Web\Helpers\Exceptions\Handler;
 use App\Helpers\ConfigHelper;
 use App\Helpers\SignHelper;
 use App\Models\SessionKey;
@@ -18,7 +19,9 @@ use Psr\Http\Message\ResponseInterface;
 
 class ApiHelper implements \ArrayAccess, \IteratorAggregate
 {
-    use Clientable;
+    use Clientable {
+        __call as forwardCall;
+    }
 
     protected array $result = [];
 
@@ -137,5 +140,14 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate
         $headers['sign'] = SignHelper::makeSign($headers, $appSecret);
 
         return $headers;
+    }
+
+    public function __call(string $method, array $args)
+    {
+        try {
+            return $this->forwardCall($method, $args);
+        } catch (\Throwable $e) {
+            return app(Handler::class)->handle($e);
+        }
     }
 }
