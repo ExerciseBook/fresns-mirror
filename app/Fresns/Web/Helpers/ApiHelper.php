@@ -9,6 +9,7 @@
 namespace App\Fresns\Web\Helpers;
 
 use App\Fresns\Client\Clientable;
+use App\Fresns\Web\Exceptions\ApiException;
 use App\Fresns\Web\Exceptions\Handler;
 use App\Helpers\ConfigHelper;
 use App\Helpers\SignHelper;
@@ -147,7 +148,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         try {
             return $this->forwardCall($method, $args);
         } catch (\Throwable $e) {
-            return app(Handler::class)->handle($e);
+            throw new ApiException($e->getCode(), $e->getMessage());
         }
     }
 }
