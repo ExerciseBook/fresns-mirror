@@ -6,7 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
-namespace App\Fresns\Web\Helpers\Exceptions;
+namespace App\Fresns\Web\Exceptions;
 
 use App\Fresns\Api\Traits\ApiResponseTrait;
 use Illuminate\Http\Exceptions\HttpResponseException;

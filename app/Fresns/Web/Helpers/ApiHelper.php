@@ -9,7 +9,7 @@
 namespace App\Fresns\Web\Helpers;
 
 use App\Fresns\Client\Clientable;
-use App\Fresns\Web\Helpers\Exceptions\Handler;
+use App\Fresns\Web\Exceptions\Handler;
 use App\Helpers\ConfigHelper;
 use App\Helpers\SignHelper;
 use App\Models\SessionKey;
