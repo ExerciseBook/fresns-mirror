@@ -43,7 +43,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate
     {
         return [
             'base_uri' => $this->getBaseUri(),
-            'timeout' => 5, // Request 5s timeout
+            'timeout' => 30, // Request 5s timeout
             'http_errors' => false,
             'headers' => ApiHelper::getHeaders(),
         ];
