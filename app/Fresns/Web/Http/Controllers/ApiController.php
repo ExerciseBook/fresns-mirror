@@ -80,20 +80,20 @@ class ApiController extends Controller
                 Cookie::queue('uid', $user['uid']);
                 Cookie::queue('timezone', $user['timezone']);
 
-                return redirect()->intended();
+                return redirect()->intended(fs_route(route('fresns.account.index')));
             }
             // 用户有密码
             else {
                 // 用户有密码的操作，自动弹出输入密码
                 // 弹窗逻辑写在 header.blade.php
-                return redirect()->intended();
+                return redirect()->intended(fs_route(route('fresns.account.login')));
             }
         } 
         // 有 2 个以上用户
         else if($userCount > 1) {
             // 有 2 个以上用户的操作，自动弹出选择用户
             // 弹窗逻辑写在 header.blade.php
-            return redirect()->intended();
+            return redirect()->intended(fs_route(route('fresns.account.login')));
         } 
         // 没有用户
         else {
@@ -131,7 +131,7 @@ class ApiController extends Controller
         Cookie::queue('uid', $result['data.detail.uid']);
         Cookie::queue('timezone', $result['data.detail.timezone']);
 
-        return redirect()->intended();
+        return redirect()->intended(fs_route(route('fresns.account.index')));
     }
 
     // user mark

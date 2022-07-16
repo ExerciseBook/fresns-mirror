@@ -21,7 +21,17 @@ class AccountController extends Controller
     // login
     public function login(Request $request)
     {
+        // 用户已登录
+        if (fs_account()->check() && fs_user()->check()) {
+            return redirect()->intended(fs_route(route('fresns.account.index')));
+        }
+
         return view('account.login');
+    }
+
+    public function logout()
+    {
+        // todo: logout action
     }
 
     // reset password
