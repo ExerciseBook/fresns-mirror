@@ -20,24 +20,38 @@ class EditorController extends Controller
     }
 
     // post
-    public function post(Request $request, int $draftId)
+    public function post(Request $request, ?int $draftId = null)
     {
         $type = 'post';
 
-        $stickersResult = ApiHelper::make()->get('/api/v2/global/stickers');
-        $stickers = $stickersResult['data']->toArray();
+        $client = ApiHelper::make();
 
-        return view('editor.editor', compact('stickers', 'type', 'draftId'));
+        $results = $client->unwrap([
+            'config' => $client->getAsync('/api/v2/editor/post/config'),
+            'stickers' => $client->getAsync('/api/v2/global/stickers'),
+        ]);
+
+        $config = $results['config']['data'];
+        $stickers = $results['stickers']['data'];
+
+        return view('editor.editor', compact('type', 'config', 'draftId', 'stickers'));
     }
 
     // comment
-    public function comment(Request $request, int $draftId)
+    public function comment(Request $request, ?int $draftId = null)
     {
         $type = 'comment';
 
-        $result = ApiHelper::make()->get('/api/v2/global/stickers');
-        $stickers = $result['data']->toArray();
+        $client = ApiHelper::make();
 
-        return view('editor.editor', compact('stickers', 'type', 'draftId'));
+        $results = $client->unwrap([
+            'config' => $client->getAsync('/api/v2/editor/comment/config'),
+            'stickers' => $client->getAsync('/api/v2/global/stickers'),
+        ]);
+
+        $config = $results['config']['data'];
+        $stickers = $results['stickers']['data'];
+
+        return view('editor.editor', compact('type', 'config', 'draftId', 'stickers'));
     }
 }
