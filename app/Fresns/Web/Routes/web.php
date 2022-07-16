@@ -41,7 +41,7 @@ Route::prefix(LaravelLocalization::setLocale())
         // homepage
         try {
             $defaultHomepage = [sprintf('App\Fresns\Web\Http\Controllers\%sController', Str::ucfirst(fs_db_config('default_homepage'))), 'index'];
-            Route::get('/', $defaultHomepage)->name('home');
+            Route::get('/', $defaultHomepage)->name('home')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
         } catch (\Throwable $e) {
         }
 
