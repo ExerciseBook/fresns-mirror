@@ -10,6 +10,7 @@ namespace App\Fresns\Web\Http\Controllers;
 
 use App\Fresns\Web\Helpers\ApiHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class ApiController extends Controller
 {
@@ -42,7 +43,7 @@ class ApiController extends Controller
     // account login
     public function accountLogin(Request $request)
     {
-        return ApiHelper::make()->post('/api/v2/account/login', [
+        $result = ApiHelper::make()->post('/api/v2/account/login', [
             'json' => [
                 'type' => $request->type,
                 'account' => $request->{$request->type},
@@ -52,6 +53,33 @@ class ApiController extends Controller
                 'deviceToken' => $request->deviceToken ?? null,
             ],
         ]);
+
+        // api data
+        $data = $result['data'];
+
+        $users = $data['detail']['users'];
+        // 用户数量
+        $userCount = count($users);
+
+        // 只有一个用户，用户没有密码
+        if ($userCount == 1) {
+            // 用户没有密码
+            if (current($users)['hasPassword'] === false) {
+                // todo 用户没有密码的操作
+            }
+            // 用户有密码
+            else {
+                // todo 用户有密码的操作
+            }
+        } 
+        // 有 2 个以上用户
+        else if($userCount > 1) {
+            // todo 有 2 个以上用户
+        } 
+        // 没有用户
+        else {
+            // todo 没有用户的操作
+        }
     }
 
     // account reset password
