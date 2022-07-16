@@ -22,7 +22,8 @@ class AccountAuthorize
     {
         try {
             if (fs_account()->check()) {
-                $users = fs_account('users');
+                /** @var array $users */
+                $users = fs_account('detail.users')->toArray();
 
                 if (fs_user()->guest() && count($users) == 1 && Arr::get($users, '0.hasPassword') == false) {
                     $uid = Arr::get($users, '0.uid');

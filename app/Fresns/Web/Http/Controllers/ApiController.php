@@ -11,6 +11,7 @@ namespace App\Fresns\Web\Http\Controllers;
 use App\Fresns\Web\Helpers\ApiHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cookie;
 
 class ApiController extends Controller
 {
@@ -57,24 +58,42 @@ class ApiController extends Controller
         // api data
         $data = $result['data'];
 
-        $users = $data['detail']['users'];
+        $users = $data['detail']['users']->toArray();
         // 用户数量
         $userCount = count($users);
 
+        // 账号登录
+        Cookie::queue('aid', $data['detail']['aid']);
+        Cookie::queue('token', $data['sessionToken']['token']);
+
+
+        // 用户登录处理
+
+
         // 只有一个用户，用户没有密码
         if ($userCount == 1) {
+            $user = current($users);
+
             // 用户没有密码
-            if (current($users)['hasPassword'] === false) {
-                // todo 用户没有密码的操作
+            if ($user['hasPassword'] === false) {
+                // 自动完成用户登录
+                Cookie::queue('uid', $user['uid']);
+                Cookie::queue('timezone', $user['timezone']);
+
+                return redirect()->intended(fs_route(route('fresns.account.index')));
             }
             // 用户有密码
             else {
-                // todo 用户有密码的操作
+                // 用户有密码的操作，自动弹出输入密码
+                // 弹窗逻辑写在 header.blade.php
+                return redirect()->intended(fs_route(route('fresns.account.index')));
             }
         } 
         // 有 2 个以上用户
         else if($userCount > 1) {
-            // todo 有 2 个以上用户
+            // 有 2 个以上用户的操作，自动弹出选择用户
+            // 弹窗逻辑写在 header.blade.php
+            return redirect()->intended(fs_route(route('fresns.account.index')));
         } 
         // 没有用户
         else {
