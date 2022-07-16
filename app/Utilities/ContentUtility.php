@@ -146,7 +146,11 @@ class ContentUtility
     {
         $hashtagList = ContentUtility::extractHashtag($content);
 
-        $config = ConfigHelper::fresnsConfigByItemKeys(['site_url', 'hashtag_show']);
+        $config = ConfigHelper::fresnsConfigByItemKeys([
+            'hashtag_show',
+            'site_url',
+            'website_hashtag_detail_path',
+        ]);
 
         $replaceList = [];
         $linkList = [];
@@ -154,7 +158,7 @@ class ContentUtility
             if ($config['hashtag_show'] == 1) {
                 // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP</a>
                 $hashtag = "#{$hashtagName}";
-                $replaceList[] = "$hashtag ";
+                $replaceList[] = "$hashtag";
             } else {
                 // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP#</a>
                 $hashtag = "#{$hashtagName}#";
@@ -162,8 +166,9 @@ class ContentUtility
             }
 
             $link = sprintf(
-                '<a href="%s/hashtag/%s" class="fresns_hashtag" target="_blank">%s</a>',
+                '<a href="%s/%s/%s" class="fresns_hashtag" target="_blank">%s</a> ',
                 $config['site_url'],
+                $config['website_hashtag_detail_path'],
                 StrHelper::slug($hashtagName),
                 $hashtag
             );
@@ -192,7 +197,7 @@ class ContentUtility
             $title = $urlData->link_title ?? $url;
 
             $replaceList[] = "{$url} ";
-            $linkList[] = sprintf('<a href="%s" class="fresns_link" target="_blank">%s</a>', $url, $title);
+            $linkList[] = sprintf('<a href="%s" class="fresns_link" target="_blank">%s</a> ', $url, $title);
         }
 
         return str_replace($replaceList, $linkList, $content);
@@ -201,7 +206,12 @@ class ContentUtility
     // Replace mention
     public static function replaceMention(string $content, int $mentionType, int $mentionId): string
     {
-        $config = ConfigHelper::fresnsConfigByItemKeys(['site_url', 'user_identifier']);
+        $config = ConfigHelper::fresnsConfigByItemKeys([
+            'user_identifier',
+            'site_url',
+            'website_user_detail_path',
+        ]);
+
         $usernameList = ContentUtility::extractMention($content);
 
         $userData = User::whereIn('username', $usernameList)->get();
@@ -216,7 +226,7 @@ class ContentUtility
 
             if (is_null($mentionUser)) {
                 $replaceList[] = "@{$username} ";
-                $linkList[] = sprintf('<a href="%s/u/404" class="fresns_user" target="_blank">@%s</a>', $config['site_url'], $username);
+                $linkList[] = sprintf('<a href="%s/u/404" class="fresns_user" target="_blank">@%s</a> ', $config['site_url'], $username);
                 continue;
             }
 
@@ -230,7 +240,13 @@ class ContentUtility
 
             $replaceList[] = "@{$user->nickname} ";
 
-            $linkList[] = sprintf('<a href="%s/u/%s" class="fresns_user" target="_blank">@%s</a>', $config['site_url'], $urlName, $user->nickname);
+            $linkList[] = sprintf(
+                '<a href="%s/%s/%s" class="fresns_user" target="_blank">@%s</a> ',
+                $config['site_url'],
+                $config['website_user_detail_path'],
+                $urlName,
+                $user->nickname,
+            );
         }
 
         return str_replace($replaceList, $linkList, $content);

@@ -14,6 +14,7 @@ use App\Helpers\InteractiveHelper;
 use App\Helpers\PluginHelper;
 use App\Models\ArchiveUsage;
 use App\Models\ExtendUsage;
+use App\Models\Mention;
 use App\Models\OperationUsage;
 use App\Models\PluginUsage;
 use App\Models\Post;
@@ -184,6 +185,8 @@ class PostService
             $info['content'] = Str::limit($content, $briefLength);
             $info['isBrief'] = true;
         }
+
+        $info['content'] = ContentUtility::handleAndReplaceAll($info['content'], Mention::TYPE_POST, $authUserId);
 
         return $info;
     }
