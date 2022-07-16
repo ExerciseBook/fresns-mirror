@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('engine')
     ->middleware([
+        'web',
         AccountAuthorize::class,
         UserAuthorize::class,
         CheckSiteModel::class,
