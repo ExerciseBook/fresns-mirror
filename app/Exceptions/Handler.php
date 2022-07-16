@@ -8,9 +8,10 @@
 
 namespace App\Exceptions;
 
+use Throwable;
+use App\Fresns\Web\Exceptions\Handler as WebApiExceptionHandler;
 use App\Fresns\Web\Exceptions\ApiException as WebApiException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -57,8 +58,8 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        if ($e instanceof WebApiException) {
-            return app(Handler::class)->handle($e);
+        if ($e instanceof WebApiException || $e->getPrevious() instanceof WebApiException) {
+            return app(WebApiExceptionHandler::class)->handle($e);
         }
 
         if ($e instanceof \Fresns\DTO\Exceptions\DTOException) {

@@ -10,7 +10,6 @@ namespace App\Fresns\Web\Helpers;
 
 use App\Fresns\Client\Clientable;
 use App\Fresns\Web\Exceptions\ApiException;
-use App\Fresns\Web\Exceptions\Handler;
 use App\Helpers\ConfigHelper;
 use App\Helpers\SignHelper;
 use App\Models\SessionKey;
@@ -56,7 +55,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleEmptyResponse(?string $content = null, ?ResponseInterface $response = null)
     {
         info('empty response, ApiException: '.var_export($content, true));
-        throw new \Exception(sprintf('ApiException: %s', $response?->getReasonPhrase()), $response?->getStatusCode());
+        throw new ApiException($response?->getReasonPhrase(), $response?->getStatusCode());
     }
 
     public function isErrorResponse(array $data): bool
@@ -71,7 +70,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleErrorResponse(?string $content = null, array $data = [])
     {
         info('error response, ApiException: '.var_export($content, true));
-        throw new \Exception(sprintf('ApiException: %s', $data['message'] ?? $data['exception'] ?? 'Unknown api error'), $data['code'] ?? 0);
+        throw new ApiException($data['message'] ?? $data['exception'] ?? 'Unknown api error', $data['code'] ?? 0);
     }
 
     public function hasPaginate(): bool
@@ -145,10 +144,6 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
 
     public function __call(string $method, array $args)
     {
-        try {
-            return $this->forwardCall($method, $args);
-        } catch (\Throwable $e) {
-            throw new ApiException($e->getMessage(), $e->getCode());
-        }
+        return $this->forwardCall($method, $args);
     }
 }
