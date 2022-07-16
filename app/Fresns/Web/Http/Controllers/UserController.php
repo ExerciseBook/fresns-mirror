@@ -51,7 +51,7 @@ class UserController extends Controller
     // likes
     public function likes(Request $request)
     {
-        $uid = fs_user('uid');
+        $uid = fs_user('detail.uid');
 
         $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/like/users", [
             'query' => $request->all(),
@@ -68,7 +68,7 @@ class UserController extends Controller
     // dislikes
     public function dislikes(Request $request)
     {
-        $uid = fs_user('uid');
+        $uid = fs_user('detail.uid');
 
         $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/dislike/users", [
             'query' => $request->all(),
@@ -85,7 +85,7 @@ class UserController extends Controller
     // following
     public function following(Request $request)
     {
-        $uid = fs_user('uid');
+        $uid = fs_user('detail.uid');
 
         $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/follow/users", [
             'query' => $request->all(),
@@ -102,7 +102,7 @@ class UserController extends Controller
     // blocking
     public function blocking(Request $request)
     {
-        $uid = fs_user('uid');
+        $uid = fs_user('detail.uid');
 
         $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/block/users", [
             'query' => $request->all(),

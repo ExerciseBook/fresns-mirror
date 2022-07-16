@@ -125,7 +125,10 @@ class UserGuard implements Guard
         if ($uid) {
             try {
                 $result = ApiHelper::make()->get("/api/v2/user/{$uid}/detail");
-                $this->user = $result['data'];
+
+                if ($result instanceof \ArrayAccess) {
+                    $this->user = $result['data'];
+                }
             } catch (\Throwable $e) {
                 $this->logout();
                 throw $e;
