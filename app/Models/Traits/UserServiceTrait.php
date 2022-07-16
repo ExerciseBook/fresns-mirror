@@ -70,14 +70,14 @@ trait UserServiceTrait
 
     public static function getUserAvatar(int $userId)
     {
-        $user = User::where('id', $userId)->first(['avatar_file_id', 'avatar_file_url', 'deleted_at']);
+        $user = User::where('id', $userId)->first(['avatar_file_id', 'avatar_file_url', 'wait_delete']);
 
         $avatar = ConfigHelper::fresnsConfigByItemKeys([
             'default_avatar',
             'deactivate_avatar',
         ]);
 
-        if (empty($user->deleted_at)) {
+        if ($user->wait_delete == 0) {
             if (empty($user->avatar_file_url) && empty($user->avatar_file_id)) {
                 // default avatar
                 if (ConfigHelper::fresnsConfigFileValueTypeByItemKey('default_avatar') == 'URL') {
@@ -94,7 +94,7 @@ trait UserServiceTrait
             }
         } else {
             // user deactivate avatar
-            if (ConfigHelper::fresnsConfigFileValueTypeByItemKey('deactivate_avatar') === 'URL') {
+            if (ConfigHelper::fresnsConfigFileValueTypeByItemKey('deactivate_avatar') == 'URL') {
                 $userAvatar = $avatar['deactivate_avatar'];
             } else {
                 $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileUrlOfAntiLink([
