@@ -148,7 +148,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         try {
             return $this->forwardCall($method, $args);
         } catch (\Throwable $e) {
-            throw new ApiException($e->getCode(), $e->getMessage());
+            throw new ApiException($e->getMessage(), $e->getCode());
         }
     }
 }
