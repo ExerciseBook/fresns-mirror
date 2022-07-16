@@ -145,6 +145,7 @@ class AccountGuard implements Guard
         Cookie::queue(Cookie::forget('uid'));
         Cookie::queue(Cookie::forget('token'));
         Cookie::queue(Cookie::forget('timezone'));
+
         $this->account = null;
         $this->loggedOut = true;
     }
