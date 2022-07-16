@@ -54,7 +54,7 @@ trait ApiHeaderTrait
     // deviceInfo
     public function deviceInfo(): array
     {
-        return \request()->header('deviceInfo');
+        return json_decode(\request()->header('deviceInfo'), true) ?? [];
     }
 
     // auth account

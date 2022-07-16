@@ -27,13 +27,15 @@ class ApiController extends Controller
     public function accountRegister(Request $request)
     {
         return ApiHelper::make()->post('/api/v2/account/register', [
-            'type' => $request->type,
-            'account' => $request->account,
-            'countryCode' => $request->countryCode ?? null,
-            'verifyCode' => $request->verifyCode,
-            'password' => $request->password,
-            'nickname' => $request->nickname,
-            'deviceToken' => $request->deviceToken ?? null,
+            'json' => [
+                'type' => $request->type,
+                'account' => $request->account,
+                'countryCode' => $request->countryCode ?? null,
+                'verifyCode' => $request->verifyCode,
+                'password' => $request->password,
+                'nickname' => $request->nickname,
+                'deviceToken' => $request->deviceToken ?? null,
+            ],
         ]);
     }
 
@@ -41,12 +43,14 @@ class ApiController extends Controller
     public function accountLogin(Request $request)
     {
         return ApiHelper::make()->post('/api/v2/account/login', [
-            'type' => $request->type,
-            'account' => $request->account,
-            'countryCode' => $request->countryCode ?? null,
-            'password' => $request->password ?? null,
-            'verifyCode' => $request->verifyCode ?? null,
-            'deviceToken' => $request->deviceToken ?? null,
+            'json' => [
+                'type' => $request->type,
+                'account' => $request->{$request->type},
+                'countryCode' => $request->countryCode ?? null,
+                'password' => $request->password ?? null,
+                'verifyCode' => $request->verifyCode ?? null,
+                'deviceToken' => $request->deviceToken ?? null,
+            ],
         ]);
     }
 
@@ -67,9 +71,11 @@ class ApiController extends Controller
     public function userAuth(Request $request)
     {
         return ApiHelper::make()->post('/api/v2/user/auth', [
-            'uidOrUsername' => $request->uidOrUsername,
-            'password' => $request->password ?? null,
-            'deviceToken' => $request->deviceToken ?? null,
+            'json' => [
+                'uidOrUsername' => $request->uidOrUsername,
+                'password' => $request->password ?? null,
+                'deviceToken' => $request->deviceToken ?? null,
+            ],
         ]);
     }
 
