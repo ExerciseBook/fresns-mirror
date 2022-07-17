@@ -132,9 +132,9 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
             // 'aid' => 'fresns',
             // 'uid' => 123456,
             // 'token' => '2rPWjgayYqR5WHkrmaq2M78Q50D4WosX',
-            'aid' => Cookie::get('aid') ?? null,
-            'uid' => Cookie::get('uid') ?? null,
-            'token' => Cookie::get('token') ?? null,
+            'aid' => Cookie::get('fs_aid') ?? null,
+            'uid' => Cookie::get('fs_uid') ?? null,
+            'token' => Cookie::get('fs_token') ?? null,
             'deviceInfo' => json_encode(AppUtility::getDeviceInfo()),
         ];
         $headers['sign'] = SignHelper::makeSign($headers, $appSecret);

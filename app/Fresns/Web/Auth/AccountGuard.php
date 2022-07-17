@@ -120,8 +120,8 @@ class AccountGuard implements Guard
             return $key ? Arr::get($this->account, $key) : $this->account;
         }
 
-        $aid = Cookie::get('aid');
-        $token = Cookie::get('token');
+        $aid = Cookie::get('fs_aid');
+        $token = Cookie::get('fs_token');
 
         if ($aid && $token) {
             try {
@@ -141,9 +141,9 @@ class AccountGuard implements Guard
      */
     public function logout(): void
     {
-        Cookie::queue(Cookie::forget('aid'));
-        Cookie::queue(Cookie::forget('uid'));
-        Cookie::queue(Cookie::forget('token'));
+        Cookie::queue(Cookie::forget('fs_aid'));
+        Cookie::queue(Cookie::forget('fs_uid'));
+        Cookie::queue(Cookie::forget('fs_token'));
         Cookie::queue(Cookie::forget('timezone'));
 
         $this->account = null;
