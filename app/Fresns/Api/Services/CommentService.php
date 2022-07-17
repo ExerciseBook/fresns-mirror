@@ -167,7 +167,7 @@ class CommentService
             $commentInfo['isBrief'] = true;
         }
 
-        $commentInfo['content'] = ContentUtility::handleAndReplaceAll($commentInfo['content'], Mention::TYPE_COMMENT, $authUserId);
+        $commentInfo['content'] = ContentUtility::handleAndReplaceAll($commentInfo['content'], $comment->is_markdown, Mention::TYPE_COMMENT, $authUserId);
 
         return $commentInfo;
     }

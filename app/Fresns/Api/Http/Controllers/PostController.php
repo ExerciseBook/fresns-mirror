@@ -21,6 +21,7 @@ use App\Fresns\Api\Services\PostService;
 use App\Fresns\Api\Services\UserService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
+use App\Helpers\StrHelper;
 use App\Models\Post;
 use App\Models\PostLog;
 use App\Models\PostUser;
@@ -125,7 +126,8 @@ class PostController extends Controller
         }
 
         if ($dtoRequest->hid) {
-            $viewHashtag = PrimaryHelper::fresnsModelByFsid('hashtag', $dtoRequest->gid);
+            $hid = StrHelper::slug($dtoRequest->hid);
+            $viewHashtag = PrimaryHelper::fresnsModelByFsid('hashtag', $hid);
 
             if (empty($viewHashtag)) {
                 throw new ApiException(37200);

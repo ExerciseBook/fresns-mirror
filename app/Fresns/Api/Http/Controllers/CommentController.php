@@ -18,6 +18,7 @@ use App\Fresns\Api\Services\InteractiveService;
 use App\Fresns\Api\Services\UserService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\PrimaryHelper;
+use App\Helpers\StrHelper;
 use App\Models\Comment;
 use App\Models\CommentLog;
 use App\Models\Seo;
@@ -129,7 +130,8 @@ class CommentController extends Controller
         }
 
         if ($dtoRequest->hid) {
-            $viewHashtag = PrimaryHelper::fresnsModelByFsid('hashtag', $dtoRequest->hid);
+            $hid = StrHelper::slug($dtoRequest->hid);
+            $viewHashtag = PrimaryHelper::fresnsModelByFsid('hashtag', $hid);
 
             if (empty($viewHashtag)) {
                 throw new ApiException(37200);

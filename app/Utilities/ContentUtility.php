@@ -158,7 +158,7 @@ class ContentUtility
             if ($config['hashtag_show'] == 1) {
                 // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP</a>
                 $hashtag = "#{$hashtagName}";
-                $replaceList[] = "$hashtag";
+                $replaceList[] = "$hashtag ";
             } else {
                 // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP#</a>
                 $hashtag = "#{$hashtagName}#";
@@ -170,7 +170,7 @@ class ContentUtility
                 $config['site_url'],
                 $config['website_hashtag_detail_path'],
                 StrHelper::slug($hashtagName),
-                $hashtag
+                $hashtag,
             );
 
             $linkList[] = $link;
@@ -197,7 +197,11 @@ class ContentUtility
             $title = $urlData->link_title ?? $url;
 
             $replaceList[] = "{$url} ";
-            $linkList[] = sprintf('<a href="%s" class="fresns_link" target="_blank">%s</a> ', $url, $title);
+            $linkList[] = sprintf(
+                '<a href="%s" class="fresns_link" target="_blank">%s</a> ',
+                $url,
+                $title,
+            );
         }
 
         return str_replace($replaceList, $linkList, $content);
@@ -278,14 +282,16 @@ class ContentUtility
     }
 
     // Handle and replace all
-    public static function handleAndReplaceAll(string $content, ?int $mentionType = null, ?int $mentionId = null): string
+    public static function handleAndReplaceAll(string $content, int $isMarkdown, ?int $mentionType = null, ?int $mentionId = null): string
     {
-        // Replace hashtag
         // Replace link
+        // Replace hashtag
         // Replace mention
         // Replace sticker
+        if ($isMarkdown == 0) {
+            $content = static::replaceLink($content);
+        }
         $content = static::replaceHashtag($content);
-        $content = static::replaceLink($content);
         if ($mentionType && $mentionId) {
             $content = static::replaceMention($content, $mentionType, $mentionId);
         }
