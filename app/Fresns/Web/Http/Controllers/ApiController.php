@@ -63,8 +63,10 @@ class ApiController extends Controller
         $userCount = count($users);
 
         // 账号登录
-        Cookie::queue('aid', $data['detail']['aid']);
-        Cookie::queue('token', $data['sessionToken']['token']);
+        if ($data['detail']['aid'] && $data['sessionToken']['token']) {
+            Cookie::queue('aid', $data['detail']['aid']);
+            Cookie::queue('token', $data['sessionToken']['token']);
+        }
 
 
         // 用户登录处理
