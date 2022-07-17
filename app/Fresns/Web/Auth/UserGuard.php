@@ -120,7 +120,7 @@ class UserGuard implements Guard
             return $key ? Arr::get($this->user, $key) : $this->user;
         }
 
-        $uid = Cookie::get('uid');
+        $uid = Cookie::get('fs_uid');
 
         if ($uid) {
             try {

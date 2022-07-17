@@ -34,13 +34,13 @@ class AccountAuthorize
                         if (Arr::get($result, 'data.tokenExpiredTime')) {
                             $minutes = Carbon::parse(Arr::get($result, 'data.tokenExpiredTime'))->diffInMinutes(now());
                             $cookies = [
-                                Cookie::make('uid', $uid, $minutes),
-                                Cookie::make('token', $result['data']['token'], $minutes),
+                                Cookie::make('fs_uid', $uid, $minutes),
+                                Cookie::make('fs_token', $result['data']['token'], $minutes),
                             ];
                         } else {
                             $cookies = [
-                                Cookie::forever('uid', $uid),
-                                Cookie::forever('token', $result['data']['token']),
+                                Cookie::forever('fs_uid', $uid),
+                                Cookie::forever('fs_token', $result['data']['token']),
                             ];
                         }
 
