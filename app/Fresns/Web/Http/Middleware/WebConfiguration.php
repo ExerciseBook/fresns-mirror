@@ -27,16 +27,16 @@ class WebConfiguration
 
         if (! $path) {
             return Response::view('error', [
-                'errorMessage' => Browser::isMobile() ? '<p>'.__('FsWeb::tips.errorMobileTheme').'</p><p>'.__('FsWeb::tips.settingThemeTip').'</p>' : '<p>'.__('FsWeb::tips.errorPcTheme').'</p><p>'.__('FsWeb::tips.settingThemeTip').'</p>',
-                'errorCode' => 500,
+                'message' => Browser::isMobile() ? '<p>'.__('FsWeb::tips.errorMobileTheme').'</p><p>'.__('FsWeb::tips.settingThemeTip').'</p>' : '<p>'.__('FsWeb::tips.errorPcTheme').'</p><p>'.__('FsWeb::tips.settingThemeTip').'</p>',
+                'code' => 500,
             ], 500);
         }
 
         if (fs_db_config('engine_api_type') == 'local') {
             if (! fs_db_config('engine_key_id')) {
                 return Response::view('error', [
-                    'errorMessage' => '<p>'.__('FsWeb::tips.errorKey').'</p><p>'.__('FsWeb::tips.settingApiTip').'</p>',
-                    'errorCode' => 500,
+                    'message' => '<p>'.__('FsWeb::tips.errorKey').'</p><p>'.__('FsWeb::tips.settingApiTip').'</p>',
+                    'code' => 500,
                 ], 500);
             }
 
@@ -44,8 +44,8 @@ class WebConfiguration
 
             if (! $keyInfo) {
                 return Response::view('error', [
-                    'errorMessage' => '<p>'.__('FsWeb::tips.errorKey').'</p><p>'.__('FsWeb::tips.settingApiTip').'</p>',
-                    'errorCode' => 500,
+                    'message' => '<p>'.__('FsWeb::tips.errorKey').'</p><p>'.__('FsWeb::tips.settingApiTip').'</p>',
+                    'code' => 500,
                 ], 500);
             }
         }
@@ -53,8 +53,8 @@ class WebConfiguration
         if (fs_db_config('engine_api_type') == 'remote') {
             if (! fs_db_config('engine_api_host') || ! fs_db_config('engine_api_app_id') || ! fs_db_config('engine_api_app_secret')) {
                 return Response::view('error', [
-                    'errorMessage' => '<p>'.__('FsWeb::tips.errorApi').'</p><p>'.__('FsWeb::tips.settingApiTip').'</p>',
-                    'errorCode' => 500,
+                    'message' => '<p>'.__('FsWeb::tips.errorApi').'</p><p>'.__('FsWeb::tips.settingApiTip').'</p>',
+                    'code' => 500,
                 ], 500);
             }
         }
