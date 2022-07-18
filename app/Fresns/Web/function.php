@@ -12,6 +12,7 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
 use App\Models\Config;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Cache;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -39,7 +40,13 @@ if (! function_exists('fs_api_config')) {
                 ],
             ]);
 
-            return $result["data.list.{$itemKey}"];
+            $item = $result["data.list.{$itemKey}"];
+
+            if ($item instanceof Arrayable) {
+                return $item->toArray();
+            }
+
+            return $item;
         });
 
         if (! $apiConfig) {
