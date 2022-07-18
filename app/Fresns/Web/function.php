@@ -42,7 +42,7 @@ if (! function_exists('fs_api_config')) {
 
             $item = $result["data.list.{$itemKey}"];
 
-            if (in_array(Arrayable::class, class_implements($item))) {
+            if (method_exists($item, 'toArray')) {
                 return $item->toArray();
             }
 
