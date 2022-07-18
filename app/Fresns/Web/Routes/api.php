@@ -27,7 +27,6 @@ Route::prefix('engine')
         Route::post('register', [ApiController::class, 'accountRegister'])->name('register')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
         Route::post('login', [ApiController::class, 'accountLogin'])->name('login')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
         Route::post('reset-password', [ApiController::class, 'resetPassword'])->name('resetPassword')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
-        Route::delete('logout', [ApiController::class, 'logout'])->name('logout')->withoutMiddleware([UserAuthorize::class, CheckSiteModel::class]);
 
         Route::prefix('user')->name('user.')->group(function () {
             Route::post('auth', [ApiController::class, 'userAuth'])->name('auth')->withoutMiddleware([UserAuthorize::class]);
