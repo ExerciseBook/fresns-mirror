@@ -82,7 +82,7 @@ class PostController extends Controller
 
             if ($blockHashtagIds) {
                 $postQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
-                    $query->whereNotIn('hashtags.id', $blockHashtagIds);
+                    $query->whereNotIn('fs_hashtags.id', $blockHashtagIds);
                 });
             }
         }
@@ -139,7 +139,7 @@ class PostController extends Controller
             }
 
             $postQuery->when($viewHashtag->id, function ($query, $value) {
-                $query->whereRelation('hashtags', 'hashtags.id', $value);
+                $query->whereRelation('hashtags', 'fs_hashtags.id', $value);
             });
         }
 
