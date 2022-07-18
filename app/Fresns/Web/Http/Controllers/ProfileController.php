@@ -75,7 +75,7 @@ class ProfileController extends Controller
 
         $results = $client->unwrap([
             'user' => $client->getAsync("/api/v2/user/{$uidOrUsername}/detail"),
-            'likers'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/like", [
+            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/like", [
                 'query' => $query,
             ]),
         ]);
@@ -83,12 +83,12 @@ class ProfileController extends Controller
         $items = $results['user']['data']['items'];
         $user = $results['user']['data']['detail'];
 
-        $likers = QueryHelper::convertApiDataToPaginate(
-            items: $results['likers']['data']['list'],
-            paginate: $results['likers']['data']['paginate'],
+        $users = QueryHelper::convertApiDataToPaginate(
+            items: $results['users']['data']['list'],
+            paginate: $results['users']['data']['paginate'],
         );
 
-        return view('profile.likers', compact('items', 'user', 'likers'));
+        return view('profile.likers', compact('items', 'user', 'users'));
     }
 
     // dislikers
