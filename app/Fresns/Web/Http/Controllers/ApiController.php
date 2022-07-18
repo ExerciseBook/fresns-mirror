@@ -58,13 +58,15 @@ class ApiController extends Controller
         // api data
         $data = $result['data'];
 
-        // 账号登录
-        Cookie::queue('fs_aid', $data['detail']['aid']);
-        Cookie::queue('fs_token', $data['sessionToken']['token']);
-
         // 用户数量
         $users = $data['detail']['users']->toArray();
         $userCount = count($users);
+
+        // 账号登录
+        if ($userCount > 1) {
+            Cookie::queue('fs_aid', $data['detail']['aid']);
+            Cookie::queue('fs_token', $data['sessionToken']['token']);
+        }
 
         // 只有一个用户，用户没有密码
         if ($userCount == 1) {
@@ -78,9 +80,9 @@ class ApiController extends Controller
                 // 用户没有有密码
                 $userResult = ApiHelper::make()->post('/api/v2/user/auth', [
                     'json' => [
-                        'uidOrUsername' => $request->uidOrUsername,
-                        'password' => $request->password ?? null,
-                        'deviceToken' => $request->deviceToken ?? null,
+                        'uidOrUsername' => $user['uid'],
+                        'password' => null,
+                        'deviceToken' => null,
                     ],
                 ]);
 
