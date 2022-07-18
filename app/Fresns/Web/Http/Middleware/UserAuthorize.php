@@ -20,8 +20,7 @@ class UserAuthorize
             if (fs_user()->check()) {
                 return $next($request);
             } else {
-                $langTag = current_lang_tag() ?? '';
-                $userLoginTip = ConfigUtility::getCodeMessage(31601, 'Fresns', $langTag);
+                $userLoginTip = ConfigUtility::getCodeMessage(31601, 'Fresns', current_lang_tag());
 
                 return redirect()->fs_route(route('fresns.account.index'))->withErrors($userLoginTip); //FsLang
             }

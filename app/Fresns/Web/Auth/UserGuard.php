@@ -121,8 +121,9 @@ class UserGuard implements Guard
         }
 
         $uid = Cookie::get('fs_uid');
+        $token = Cookie::get('fs_uid_token');
 
-        if ($uid) {
+        if ($uid && $token) {
             try {
                 $result = ApiHelper::make()->get("/api/v2/user/{$uid}/detail");
 
