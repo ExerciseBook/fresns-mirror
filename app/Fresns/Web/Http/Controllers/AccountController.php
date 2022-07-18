@@ -8,6 +8,7 @@
 
 namespace App\Fresns\Web\Http\Controllers;
 
+use App\Fresns\Web\Helpers\ApiHelper;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -15,13 +16,16 @@ class AccountController extends Controller
     // register
     public function register(Request $request)
     {
+        if (fs_account()->check() || fs_user()->check()) {
+            return redirect()->intended(fs_route(route('fresns.account.index')));
+        }
+
         return view('account.register');
     }
 
     // login
     public function login(Request $request)
     {
-        // 用户已登录
         if (fs_account()->check() && fs_user()->check()) {
             return redirect()->intended(fs_route(route('fresns.account.index')));
         }
@@ -29,14 +33,23 @@ class AccountController extends Controller
         return view('account.login');
     }
 
+    // logout
     public function logout()
     {
-        // todo: logout action
+        fs_account()->logout();
+
+        ApiHelper::make()->delete('/api/v2/account/logout');
+
+        return redirect()->intended(fs_route(route('fresns.home')));
     }
 
     // reset password
     public function resetPassword(Request $request)
     {
+        if (fs_account()->check() || fs_user()->check()) {
+            return redirect()->intended(fs_route(route('fresns.account.index')));
+        }
+
         return view('account.reset-password');
     }
 

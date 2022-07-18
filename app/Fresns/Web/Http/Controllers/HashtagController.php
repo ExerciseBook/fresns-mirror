@@ -51,25 +51,69 @@ class HashtagController extends Controller
     // likes
     public function likes(Request $request)
     {
-        return view('hashtags.likes');
+        $uid = fs_user('detail.uid');
+
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/like/hashtags", [
+            'query' => $request->all(),
+        ]);
+
+        $hashtags = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('hashtags.likes', compact('hashtags'));
     }
 
     // dislikes
     public function dislikes(Request $request)
     {
-        return view('hashtags.dislikes');
+        $uid = fs_user('detail.uid');
+
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/dislike/hashtags", [
+            'query' => $request->all(),
+        ]);
+
+        $hashtags = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('hashtags.dislikes', compact('hashtags'));
     }
 
     // following
     public function following(Request $request)
     {
-        return view('hashtags.following');
+        $uid = fs_user('detail.uid');
+
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/follow/hashtags", [
+            'query' => $request->all(),
+        ]);
+
+        $hashtags = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('hashtags.following', compact('hashtags'));
     }
 
     // blocking
     public function blocking(Request $request)
     {
-        return view('hashtags.blocking');
+        $uid = fs_user('detail.uid');
+
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/block/hashtags", [
+            'query' => $request->all(),
+        ]);
+
+        $hashtags = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('hashtags.blocking', compact('hashtags'));
     }
 
     // detail

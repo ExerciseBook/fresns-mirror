@@ -62,25 +62,69 @@ class GroupController extends Controller
     // likes
     public function likes(Request $request)
     {
-        return view('groups.likes');
+        $uid = fs_user('detail.uid');
+
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/like/groups", [
+            'query' => $request->all(),
+        ]);
+
+        $groups = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('groups.likes', compact('groups'));
     }
 
     // dislikes
     public function dislikes(Request $request)
     {
-        return view('groups.dislikes');
+        $uid = fs_user('detail.uid');
+
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/dislike/groups", [
+            'query' => $request->all(),
+        ]);
+
+        $groups = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('groups.dislikes', compact('groups'));
     }
 
     // following
     public function following(Request $request)
     {
-        return view('groups.following');
+        $uid = fs_user('detail.uid');
+
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/follow/groups", [
+            'query' => $request->all(),
+        ]);
+
+        $groups = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('groups.following', compact('groups'));
     }
 
     // blocking
     public function blocking(Request $request)
     {
-        return view('groups.blocking');
+        $uid = fs_user('detail.uid');
+
+        $result = ApiHelper::make()->get("/api/v2/user/{$uid}/mark/block/groups", [
+            'query' => $request->all(),
+        ]);
+
+        $groups = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('groups.blocking', compact('groups'));
     }
 
     // detail
