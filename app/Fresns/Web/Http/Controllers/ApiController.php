@@ -82,7 +82,7 @@ class ApiController extends Controller
                     'json' => [
                         'uidOrUsername' => $user['uid'],
                         'password' => null,
-                        'deviceToken' => null,
+                        'deviceToken' => $request->deviceToken ?? null,
                     ],
                 ]);
 
