@@ -8,14 +8,15 @@
 
 namespace App\Fresns\Web\Helpers;
 
+use App\Models\SessionKey;
+use App\Helpers\SignHelper;
+use App\Helpers\ConfigHelper;
+use App\Utilities\AppUtility;
 use App\Fresns\Client\Clientable;
 use App\Fresns\Web\Exceptions\Handler;
-use App\Helpers\ConfigHelper;
-use App\Helpers\SignHelper;
-use App\Models\SessionKey;
-use App\Utilities\AppUtility;
 use Illuminate\Support\Facades\Cookie;
 use Psr\Http\Message\ResponseInterface;
+use App\Fresns\Web\Exceptions\WebApiException;
 
 class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
 {
@@ -31,7 +32,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
             $response = $this->forwardCall($method, $args);
 
             if ($response instanceof \Illuminate\Http\RedirectResponse) {
-                throw new \Exception(session('failure'), session('code'));
+                throw new WebApiException(session('failure'), session('code'));
             }
 
             return $response;
@@ -45,7 +46,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         $results = $this->unwrap($requests);
 
         if ($results instanceof \Illuminate\Http\RedirectResponse) {
-            throw new \Exception(session('failure'), session('code'));
+            throw new WebApiException(session('failure'), session('code'));
         }
 
         return $results;
@@ -81,7 +82,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleEmptyResponse(?string $content = null, ?ResponseInterface $response = null)
     {
         info('empty response, ApiException: '.var_export($content, true));
-        throw new \Exception(sprintf('ApiException: %s', $response?->getReasonPhrase()), $response?->getStatusCode());
+        throw new WebApiException(sprintf('ApiException: %s', $response?->getReasonPhrase()), $response?->getStatusCode());
     }
 
     public function isErrorResponse(array $data): bool
@@ -96,7 +97,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleErrorResponse(?string $content = null, array $data = [])
     {
         info('error response, ApiException: '.var_export($content, true));
-        throw new \Exception(sprintf('ApiException: %s', $data['message'] ?? $data['exception'] ?? 'Unknown api error'), $data['code'] ?? 0);
+        throw new WebApiException(sprintf('ApiException: %s', $data['message'] ?? $data['exception'] ?? 'Unknown api error'), $data['code'] ?? 0);
     }
 
     public function hasPaginate(): bool
