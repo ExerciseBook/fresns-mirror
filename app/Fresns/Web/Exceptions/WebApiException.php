@@ -19,8 +19,8 @@ class WebApiException extends \Exception
         // hashtag 不存在
         if (in_array($this->getCode(), [37200])) {
             return view('error', [
-                'code' => $this->getCode(),
-                'message' => $this->getMessage(),
+                'errorCode' => $this->getCode(),
+                'errorMessage' => $this->getMessage(),
             ]);
         }
 
