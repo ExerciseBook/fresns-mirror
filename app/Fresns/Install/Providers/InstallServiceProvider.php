@@ -60,7 +60,7 @@ class InstallServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->mergeConfigFrom(__DIR__.'/../Config/panel.php', 'install');
+        $this->mergeConfigFrom(__DIR__.'/../Config/config.php', 'install');
     }
 
     /**
