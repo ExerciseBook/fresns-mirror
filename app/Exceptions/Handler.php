@@ -9,7 +9,6 @@
 namespace App\Exceptions;
 
 use Throwable;
-use App\Fresns\Web\Exceptions\WebApiException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -57,21 +56,6 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        if ($e instanceof WebApiException || $e->getPrevious() instanceof WebApiException) {
-            if (in_array($e->getCode(), [37200])) {
-                return view('error', [
-                    'code' => $e->getCode(),
-                    'message' => $e->getMessage(),
-                ]);
-            }
-
-
-            return back()->with([
-                'code' => $e->getCode(),
-                'failure' => $e->getMessage(),
-            ]);
-        }
-
         if ($e instanceof \Fresns\DTO\Exceptions\DTOException) {
             throw new DTOException($e->getMessage());
         }

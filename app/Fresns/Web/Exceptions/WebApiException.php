@@ -13,4 +13,20 @@ use App\Fresns\Api\Traits\ApiResponseTrait;
 class WebApiException extends \Exception
 {
     use ApiResponseTrait;
+
+    public function render($request, Throwable $e)
+    {
+        // hashtag 不存在
+        if (in_array($this->getCode(), [37200])) {
+            return view('error', [
+                'code' => $this->getCode(),
+                'message' => $this->getMessage(),
+            ]);
+        }
+
+        return back()->with([
+            'code' => $this->getCode(),
+            'failure' => $this->getMessage(),
+        ]);
+    }
 }
