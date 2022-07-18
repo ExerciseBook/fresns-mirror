@@ -58,13 +58,13 @@ class ApiController extends Controller
         // api data
         $data = $result['data'];
 
-        // 账号登录
-        Cookie::queue('fs_aid', $data['detail']['aid']);
-        Cookie::queue('fs_token', $data['sessionToken']['token']);
-
         // 用户数量
         $users = $data['detail']['users']->toArray();
         $userCount = count($users);
+
+        // 账号登录
+        Cookie::queue('fs_aid', $data['detail']['aid']);
+        Cookie::queue('fs_aid_token', $data['sessionToken']['token']);
 
         // 只有一个用户，用户没有密码
         if ($userCount == 1) {
@@ -85,7 +85,7 @@ class ApiController extends Controller
                 ]);
 
                 Cookie::queue('fs_uid', $userResult['data.detail.uid']);
-                Cookie::queue('fs_token', $userResult['data.sessionToken.token']);
+                Cookie::queue('fs_uid_token', $userResult['data.sessionToken.token']);
                 Cookie::queue('timezone', $userResult['data.detail.timezone']);
 
                 return redirect()->intended(fs_route(route('fresns.account.index')));
