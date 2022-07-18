@@ -42,7 +42,7 @@ if (! function_exists('fs_api_config')) {
 
             $item = $result["data.list.{$itemKey}"];
 
-            if (method_exists($item, 'toArray')) {
+            if (is_object($item) && method_exists($item, 'toArray')) {
                 return $item->toArray();
             }
 
