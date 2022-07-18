@@ -46,7 +46,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         $results = $this->unwrap($requests);
 
         if ($results instanceof \Illuminate\Http\RedirectResponse) {
-            throw new WebApiException(session('failure'), session('code'));
+            throw new WebApiException(session('failure'), (int) session('code'));
         }
 
         return $results;
