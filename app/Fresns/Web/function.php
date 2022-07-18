@@ -42,7 +42,7 @@ if (! function_exists('fs_api_config')) {
 
             $item = $result["data.list.{$itemKey}"];
 
-            if (is_subclass_of($item, Arrayable::class)) {
+            if (in_array(Arrayable::class, class_implements($item))) {
                 return $item->toArray();
             }
 
