@@ -153,7 +153,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
             'appId' => $appId,
             'timestamp' => now()->unix(),
             'sign' => null,
-            'langTag' => \App::getLocale(),
+            'langTag' => current_lang_tag(),
             'timezone' => Cookie::get('timezone') ?: ConfigHelper::fresnsConfigByItemKey('default_timezone'),
             'aid' => Cookie::get('fs_aid') ?? null,
             'uid' => Cookie::get('fs_uid') ?? null,
