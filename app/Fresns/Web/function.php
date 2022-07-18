@@ -39,7 +39,7 @@ if (! function_exists('fs_api_config')) {
                 ],
             ]);
 
-            return $result['data']['list'][$itemKey];
+            return $result["data.list.{$itemKey}"];
         });
 
         if (! $apiConfig) {
