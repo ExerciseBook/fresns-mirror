@@ -22,38 +22,6 @@ class AccountAuthorize
     {
         try {
             if (fs_account()->check()) {
-                /** @var array $users */
-                $users = fs_account('detail.users')->toArray();
-
-                if (fs_user()->guest() && count($users) == 1 && Arr::get($users, '0.hasPassword') == false) {
-                    $uid = Arr::get($users, '0.uid');
-
-                    $result = fs_user()->auth->login($uid);
-
-                    if (Arr::get($result, 'code') == 0) {
-                        if (Arr::get($result, 'data.tokenExpiredTime')) {
-                            $minutes = Carbon::parse(Arr::get($result, 'data.tokenExpiredTime'))->diffInMinutes(now());
-                            $cookies = [
-                                Cookie::make('fs_uid', $uid, $minutes),
-                                Cookie::make('fs_token', $result['data']['token'], $minutes),
-                            ];
-                        } else {
-                            $cookies = [
-                                Cookie::forever('fs_uid', $uid),
-                                Cookie::forever('fs_token', $result['data']['token']),
-                            ];
-                        }
-
-                        return redirect(fs_route(route('fresns.account.index')))->withCookies($cookies);
-                    }
-
-                    if (Arr::get($result, 'message')) {
-                        return redirect(fs_route(route('fresns.account.login')))->with([
-                            'failure' => $result['message'], 'code' => $result['code'],
-                        ])->withInput();
-                    }
-                }
-
                 return $next($request);
             } else {
                 $langTag = current_lang_tag() ?? '';

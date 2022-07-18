@@ -140,7 +140,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
             'timezone' => Cookie::get('timezone') ?: ConfigHelper::fresnsConfigByItemKey('default_timezone'),
             'aid' => Cookie::get('fs_aid') ?? null,
             'uid' => Cookie::get('fs_uid') ?? null,
-            'token' => Cookie::get('fs_token') ?? null,
+            'token' => Cookie::get('fs_uid_token') ?? Cookie::get('fs_aid_token') ?? null,
             'deviceInfo' => json_encode(AppUtility::getDeviceInfo()),
         ];
         $headers['sign'] = SignHelper::makeSign($headers, $appSecret);

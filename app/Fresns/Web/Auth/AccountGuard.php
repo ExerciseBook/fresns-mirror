@@ -121,7 +121,7 @@ class AccountGuard implements Guard
         }
 
         $aid = Cookie::get('fs_aid');
-        $token = Cookie::get('fs_token');
+        $token = Cookie::get('fs_aid_token');
 
         if ($aid && $token) {
             try {
@@ -142,8 +142,9 @@ class AccountGuard implements Guard
     public function logout(): void
     {
         Cookie::queue(Cookie::forget('fs_aid'));
+        Cookie::queue(Cookie::forget('fs_aid_token'));
         Cookie::queue(Cookie::forget('fs_uid'));
-        Cookie::queue(Cookie::forget('fs_token'));
+        Cookie::queue(Cookie::forget('fs_uid_token'));
         Cookie::queue(Cookie::forget('timezone'));
 
         $this->account = null;
