@@ -9,7 +9,7 @@
 namespace App\Fresns\Web\Helpers;
 
 use App\Fresns\Client\Clientable;
-use App\Fresns\Web\Exceptions\ApiException;
+use App\Fresns\Web\Exceptions\Handler;
 use App\Helpers\ConfigHelper;
 use App\Helpers\SignHelper;
 use App\Models\SessionKey;
@@ -24,6 +24,15 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     }
 
     protected array $result = [];
+
+    public function __call(string $method, array $args)
+    {
+        try {
+            return $this->forwardCall($method, $args);
+        } catch (\Throwable $e) {
+            return app(Handler::class)->handle($e);
+        }
+    }
 
     public function getBaseUri(): ?string
     {
@@ -55,7 +64,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleEmptyResponse(?string $content = null, ?ResponseInterface $response = null)
     {
         info('empty response, ApiException: '.var_export($content, true));
-        throw new ApiException($response?->getReasonPhrase(), $response?->getStatusCode());
+        throw new \Exception(sprintf('ApiException: %s', $response?->getReasonPhrase()), $response?->getStatusCode());
     }
 
     public function isErrorResponse(array $data): bool
@@ -70,7 +79,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleErrorResponse(?string $content = null, array $data = [])
     {
         info('error response, ApiException: '.var_export($content, true));
-        throw new ApiException($data['message'] ?? $data['exception'] ?? 'Unknown api error', $data['code'] ?? 0);
+        throw new \Exception(sprintf('ApiException: %s', $data['message'] ?? $data['exception'] ?? 'Unknown api error'), $data['code'] ?? 0);
     }
 
     public function hasPaginate(): bool
@@ -129,9 +138,6 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
             'sign' => null,
             'langTag' => \App::getLocale(),
             'timezone' => Cookie::get('timezone') ?: ConfigHelper::fresnsConfigByItemKey('default_timezone'),
-            // 'aid' => 'fresns',
-            // 'uid' => 123456,
-            // 'token' => '2rPWjgayYqR5WHkrmaq2M78Q50D4WosX',
             'aid' => Cookie::get('fs_aid') ?? null,
             'uid' => Cookie::get('fs_uid') ?? null,
             'token' => Cookie::get('fs_token') ?? null,
@@ -140,10 +146,5 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         $headers['sign'] = SignHelper::makeSign($headers, $appSecret);
 
         return $headers;
-    }
-
-    public function __call(string $method, array $args)
-    {
-        return $this->forwardCall($method, $args);
     }
 }
