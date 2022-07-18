@@ -15,7 +15,7 @@ use App\Utilities\AppUtility;
 use App\Fresns\Client\Clientable;
 use Illuminate\Support\Facades\Cookie;
 use Psr\Http\Message\ResponseInterface;
-use App\Fresns\Web\Exceptions\WebApiException;
+use App\Fresns\Web\Exceptions\ErrorException;
 
 class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
 {
@@ -30,7 +30,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         $response = $this->forwardCall($method, $args);
 
         if ($response instanceof \Illuminate\Http\RedirectResponse) {
-            throw new WebApiException(session('failure'), session('code'));
+            throw new ErrorException(session('failure'), session('code'));
         }
 
         return $response;
@@ -41,7 +41,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         $results = $this->unwrap($requests);
 
         if ($results instanceof \Illuminate\Http\RedirectResponse) {
-            throw new WebApiException(session('failure'), (int) session('code'));
+            throw new ErrorException(session('failure'), (int) session('code'));
         }
 
         return $results;
@@ -77,7 +77,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleEmptyResponse(?string $content = null, ?ResponseInterface $response = null)
     {
         info('empty response, ApiException: '.var_export($content, true));
-        throw new WebApiException($response?->getReasonPhrase(), $response?->getStatusCode());
+        throw new ErrorException($response?->getReasonPhrase(), $response?->getStatusCode());
     }
 
     public function isErrorResponse(array $data): bool
@@ -92,7 +92,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleErrorResponse(?string $content = null, array $data = [])
     {
         info('error response, ApiException: '.var_export($content, true));
-        throw new WebApiException($data['message'] ?? $data['exception'] ?? 'Unknown api error', $data['code'] ?? 0);
+        throw new ErrorException($data['message'] ?? $data['exception'] ?? 'Unknown api error', $data['code'] ?? 0);
     }
 
     public function hasPaginate(): bool
