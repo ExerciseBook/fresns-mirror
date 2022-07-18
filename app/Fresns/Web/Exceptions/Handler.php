@@ -37,10 +37,6 @@ class Handler
             return $this->failure(3e4, $exception->getMessage());
         }
 
-        return back()
-            ->with([
-                'code' => $exception->getCode(),
-                'failure' => preg_replace('/ApiException: /', '', $exception->getMessage()),
-            ]);
+        throw new \Exception(preg_replace('/ApiException: /', '', $exception->getMessage()), $exception->getCode());
     }
 }

@@ -39,10 +39,6 @@ if (! function_exists('fs_api_config')) {
                 ],
             ]);
 
-            if (is_object($result['data']['list'][$itemKey])) {
-                return $result['data']['list'][$itemKey]->toArray();
-            }
-
             return $result['data']['list'][$itemKey];
         });
 
