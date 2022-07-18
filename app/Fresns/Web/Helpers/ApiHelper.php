@@ -28,7 +28,13 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function __call(string $method, array $args)
     {
         try {
-            return $this->forwardCall($method, $args);
+            $response = $this->forwardCall($method, $args);
+
+            if ($response instanceof \Illuminate\Http\RedirectResponse) {
+                throw new \Exception(session('failure'), session('code'));
+            }
+
+            return $response;
         } catch (\Throwable $e) {
             return app(Handler::class)->handle($e);
         }
