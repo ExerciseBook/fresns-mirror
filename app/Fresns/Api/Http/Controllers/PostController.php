@@ -117,7 +117,7 @@ class PostController extends Controller
                 throw new ApiException(37100);
             }
 
-            // 小组禁用状态
+            // group disable
             if ($viewGroup->is_enable == 0) {
                 throw new ApiException(37101);
             }
@@ -133,7 +133,7 @@ class PostController extends Controller
                 throw new ApiException(37200);
             }
 
-            // 话题禁用状态
+            // hashtag disable
             if ($viewHashtag->is_enable == 0) {
                 throw new ApiException(37201);
             }
