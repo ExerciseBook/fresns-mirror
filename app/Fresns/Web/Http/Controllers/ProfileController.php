@@ -83,12 +83,12 @@ class ProfileController extends Controller
         $items = $results['user']['data']['items'];
         $user = $results['user']['data']['detail'];
 
-        $users = QueryHelper::convertApiDataToPaginate(
-            items: $results['users']['data']['list'],
-            paginate: $results['users']['data']['paginate'],
+        $likers = QueryHelper::convertApiDataToPaginate(
+            items: $results['likers']['data']['list'],
+            paginate: $results['likers']['data']['paginate'],
         );
 
-        return view('profile.likers', compact('items', 'user', 'users'));
+        return view('profile.likers', compact('items', 'user', 'likers'));
     }
 
     // dislikers

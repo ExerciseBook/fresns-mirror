@@ -131,6 +131,14 @@ class HashtagController extends Controller
             ]),
         ]);
 
+
+        if ($results['hashtag']['code'] != 0) {
+            $code = $results['hashtag']['code'];
+            $message = $results['hashtag']['message'];
+
+            return view('error', compact('code', 'message'));
+        }
+
         $items = $results['hashtag']['data']['items'];
         $hashtag = $results['hashtag']['data']['detail'];
 
