@@ -16,6 +16,14 @@ use Illuminate\Support\Facades\Cookie;
 
 class ApiController extends Controller
 {
+    // url sign
+    public function urlSign()
+    {
+        $headers = Arr::except(ApiHelper::getHeaders(), ['Accept']);
+
+        return urlencode(base64_encode(json_encode($headers)));
+    }
+
     // send verify code
     public function sendVerifyCode(Request $request)
     {
