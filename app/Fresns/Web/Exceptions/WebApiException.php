@@ -17,12 +17,12 @@ class WebApiException extends \Exception
     public function render($request)
     {
         // hashtag 不存在
-        if (in_array($this->getCode(), [37200])) {
+        // if (in_array($this->getCode(), [37200])) {
             return view('error', [
                 'code' => $this->getCode(),
                 'message' => $this->getMessage(),
             ]);
-        }
+        // }
 
         return back()->with([
             'code' => $this->getCode(),

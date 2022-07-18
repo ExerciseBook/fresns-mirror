@@ -13,7 +13,6 @@ use App\Helpers\SignHelper;
 use App\Helpers\ConfigHelper;
 use App\Utilities\AppUtility;
 use App\Fresns\Client\Clientable;
-use App\Fresns\Web\Exceptions\Handler;
 use Illuminate\Support\Facades\Cookie;
 use Psr\Http\Message\ResponseInterface;
 use App\Fresns\Web\Exceptions\WebApiException;
@@ -28,17 +27,13 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
 
     public function __call(string $method, array $args)
     {
-        try {
-            $response = $this->forwardCall($method, $args);
+        $response = $this->forwardCall($method, $args);
 
-            if ($response instanceof \Illuminate\Http\RedirectResponse) {
-                throw new WebApiException(session('failure'), session('code'));
-            }
-
-            return $response;
-        } catch (\Throwable $e) {
-            return app(Handler::class)->handle($e);
+        if ($response instanceof \Illuminate\Http\RedirectResponse) {
+            throw new WebApiException(session('failure'), session('code'));
         }
+
+        return $response;
     }
 
     public function handleUnwrap(array $requests)
@@ -82,7 +77,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleEmptyResponse(?string $content = null, ?ResponseInterface $response = null)
     {
         info('empty response, ApiException: '.var_export($content, true));
-        throw new WebApiException(sprintf('ApiException: %s', $response?->getReasonPhrase()), $response?->getStatusCode());
+        throw new WebApiException($response?->getReasonPhrase(), $response?->getStatusCode());
     }
 
     public function isErrorResponse(array $data): bool
@@ -91,13 +86,13 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
             return true;
         }
 
-        return $data['code'] !== 0;
+        return false;
     }
 
     public function handleErrorResponse(?string $content = null, array $data = [])
     {
         info('error response, ApiException: '.var_export($content, true));
-        throw new WebApiException(sprintf('ApiException: %s', $data['message'] ?? $data['exception'] ?? 'Unknown api error'), $data['code'] ?? 0);
+        throw new WebApiException($data['message'] ?? $data['exception'] ?? 'Unknown api error', $data['code'] ?? 0);
     }
 
     public function hasPaginate(): bool
