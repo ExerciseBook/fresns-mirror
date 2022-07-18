@@ -58,62 +58,52 @@ class ApiController extends Controller
         // api data
         $data = $result['data'];
 
-        $users = $data['detail']['users']->toArray();
-        // 用户数量
-        $userCount = count($users);
-
         // 账号登录
         Cookie::queue('fs_aid', $data['detail']['aid']);
         Cookie::queue('fs_token', $data['sessionToken']['token']);
 
-
-        // 用户登录处理
-
+        // 用户数量
+        $users = $data['detail']['users']->toArray();
+        $userCount = count($users);
 
         // 只有一个用户，用户没有密码
         if ($userCount == 1) {
-            $user = current($users);
+            $user = $users[0];
 
-            // 用户没有密码
-            if ($user['hasPassword'] === false) {
-                // 自动完成用户登录
-                Cookie::queue('fs_uid', $user['uid']);
-                Cookie::queue('timezone', $user['timezone']);
-
-                return redirect()->intended(fs_route(route('fresns.account.index')));
-            }
-            // 用户有密码
-            else {
+            if ($user['hasPassword']) {
                 // 用户有密码的操作，自动弹出输入密码
                 // 弹窗逻辑写在 header.blade.php
                 return redirect()->intended(fs_route(route('fresns.account.login')));
+            } else {
+                // 用户没有有密码
+                $userResult = ApiHelper::make()->post('/api/v2/user/auth', [
+                    'json' => [
+                        'uidOrUsername' => $request->uidOrUsername,
+                        'password' => $request->password ?? null,
+                        'deviceToken' => $request->deviceToken ?? null,
+                    ],
+                ]);
+
+                Cookie::queue('fs_uid', $userResult['data.detail.uid']);
+                Cookie::queue('fs_token', $userResult['data.sessionToken.token']);
+                Cookie::queue('timezone', $userResult['data.detail.timezone']);
+
+                return redirect()->intended(fs_route(route('fresns.account.index')));
             }
-        } 
-        // 有 2 个以上用户
-        else if($userCount > 1) {
+        } elseif ($userCount > 1) {
             // 有 2 个以上用户的操作，自动弹出选择用户
             // 弹窗逻辑写在 header.blade.php
             return redirect()->intended(fs_route(route('fresns.account.login')));
-        } 
-        // 没有用户
-        else {
-            return back()->with([
-                'failure' => '抱歉，您当前没有绑定用户信息',
-            ]);
         }
+
+        return back()->with([
+            'failure' => '抱歉，您当前没有绑定用户信息',
+        ]);
     }
 
     // account reset password
     public function resetPassword(Request $request)
     {
-    }
-
-    // account logout
-    public function logout(Request $request)
-    {
-        fs_account()->logout();
-
-        return ApiHelper::make()->delete('/api/v2/account/logout');
     }
 
     // user auth
@@ -127,8 +117,8 @@ class ApiController extends Controller
             ],
         ]);
 
-        Cookie::queue('fs_token', $result['data.sessionToken.token']);
         Cookie::queue('fs_uid', $result['data.detail.uid']);
+        Cookie::queue('fs_token', $result['data.sessionToken.token']);
         Cookie::queue('timezone', $result['data.detail.timezone']);
 
         return redirect()->intended(fs_route(route('fresns.account.index')));
