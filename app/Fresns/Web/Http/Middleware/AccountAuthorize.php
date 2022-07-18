@@ -9,11 +9,8 @@
 namespace App\Fresns\Web\Http\Middleware;
 
 use App\Utilities\ConfigUtility;
-use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Response;
 
 class AccountAuthorize
@@ -24,8 +21,7 @@ class AccountAuthorize
             if (fs_account()->check()) {
                 return $next($request);
             } else {
-                $langTag = current_lang_tag() ?? '';
-                $accountLoginTip = ConfigUtility::getCodeMessage(31501, 'Fresns', $langTag);
+                $accountLoginTip = ConfigUtility::getCodeMessage(31501, 'Fresns', current_lang_tag());
 
                 return $this->shouldLoginRender($accountLoginTip);
             }

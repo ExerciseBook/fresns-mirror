@@ -9,6 +9,7 @@
 namespace App\Fresns\Web\Http\Controllers;
 
 use App\Fresns\Web\Helpers\ApiHelper;
+use App\Utilities\ConfigUtility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
@@ -58,13 +59,13 @@ class ApiController extends Controller
         // api data
         $data = $result['data'];
 
-        // 用户数量
-        $users = $data['detail']['users']->toArray();
-        $userCount = count($users);
-
         // 账号登录
         Cookie::queue('fs_aid', $data['detail']['aid']);
         Cookie::queue('fs_aid_token', $data['sessionToken']['token']);
+
+        // 用户数量
+        $users = $data['detail']['users']->toArray();
+        $userCount = count($users);
 
         // 只有一个用户，用户没有密码
         if ($userCount == 1) {
@@ -97,7 +98,7 @@ class ApiController extends Controller
         }
 
         return back()->with([
-            'failure' => '抱歉，您当前没有绑定用户信息',
+            'failure' => ConfigUtility::getCodeMessage(31602, 'Fresns', current_lang_tag()),
         ]);
     }
 
