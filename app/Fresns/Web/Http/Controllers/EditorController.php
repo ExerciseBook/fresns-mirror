@@ -26,7 +26,7 @@ class EditorController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->unwrap([
+        $results = $client->handleUnwrap([
             'config' => $client->getAsync('/api/v2/editor/post/config'),
             'stickers' => $client->getAsync('/api/v2/global/stickers'),
         ]);
@@ -44,7 +44,7 @@ class EditorController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->unwrap([
+        $results = $client->handleUnwrap([
             'config' => $client->getAsync('/api/v2/editor/comment/config'),
             'stickers' => $client->getAsync('/api/v2/global/stickers'),
         ]);

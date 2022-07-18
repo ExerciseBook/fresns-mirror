@@ -180,7 +180,7 @@ class PostController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->unwrap([
+        $results = $client->handleUnwrap([
             'post' => $client->getAsync("/api/v2/post/{$pid}/detail"),
             'comments'   => $client->getAsync('/api/v2/comment/list', [
                 'query' => $query,

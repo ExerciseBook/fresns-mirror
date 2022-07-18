@@ -135,7 +135,7 @@ class GroupController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->unwrap([
+        $results = $client->handleUnwrap([
             'group' => $client->getAsync("/api/v2/group/{$gid}/detail"),
             'posts'   => $client->getAsync('/api/v2/post/list', [
                 'query' => $query,

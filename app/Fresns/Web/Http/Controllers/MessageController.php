@@ -38,7 +38,7 @@ class MessageController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->unwrap([
+        $results = $client->handleUnwrap([
             'dialog' => $client->getAsync("/api/v2/dialog/{$dialogId}/detail"),
             'messages'   => $client->getAsync("/api/v2/dialog/{$dialogId}/messages", [
                 'query' => $query,

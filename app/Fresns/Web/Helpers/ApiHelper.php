@@ -34,6 +34,17 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         }
     }
 
+    public function handleUnwrap(array $requests)
+    {
+        $results = $this->unwrap($requests);
+
+        if ($results instanceof \Illuminate\Http\RedirectResponse) {
+            throw new \Exception(session('failure'), session('code'));
+        }
+
+        return $results;
+    }
+
     public function getBaseUri(): ?string
     {
         $engineApiType = ConfigHelper::fresnsConfigByItemKey('engine_api_type');

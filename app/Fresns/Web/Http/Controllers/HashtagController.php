@@ -124,13 +124,12 @@ class HashtagController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->unwrap([
+        $results = $client->handleUnwrap([
             'hashtag' => $client->getAsync("/api/v2/hashtag/{$hid}/detail"),
             'posts'   => $client->getAsync('/api/v2/post/list', [
                 'query' => $query,
             ]),
         ]);
-
 
         if ($results['hashtag']['code'] != 0) {
             $code = $results['hashtag']['code'];
