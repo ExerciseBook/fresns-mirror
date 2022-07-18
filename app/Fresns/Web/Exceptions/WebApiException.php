@@ -14,7 +14,7 @@ class WebApiException extends \Exception
 {
     use ApiResponseTrait;
 
-    public function render($request, Throwable $e)
+    public function render($request)
     {
         // hashtag 不存在
         if (in_array($this->getCode(), [37200])) {
