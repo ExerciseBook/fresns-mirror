@@ -177,6 +177,7 @@ class CommentService
     public static function contentHandle(Comment $comment, string $type, ?int $authUserId = null)
     {
         $postAppend = $comment->postAppend();
+
         $contentLength = Str::length($comment->content);
 
         $briefLength = ConfigHelper::fresnsConfigByItemKey('comment_editor_brief_length');
@@ -187,6 +188,8 @@ class CommentService
         } elseif ($type == 'list' && $contentLength > $briefLength) {
             $commentInfo['content'] = Str::limit($comment->content, $briefLength);
             $commentInfo['isBrief'] = true;
+        } else {
+            $commentInfo['content'] = $comment->content;
         }
 
         $commentInfo['content'] = ContentUtility::handleAndReplaceAll($commentInfo['content'], $comment->is_markdown, Mention::TYPE_COMMENT, $authUserId);

@@ -78,7 +78,8 @@ class PostController extends Controller
                         ->whereNotIn('id', $blockPostIds)
                         ->orWhereNotIn('user_id', $blockUserIds)
                         ->orWhereNotIn('group_id', $filterGroupIdsArr);
-                });
+                })
+                ->isEnable();
 
             if ($blockHashtagIds) {
                 $postQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
