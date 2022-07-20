@@ -40,20 +40,24 @@ class CommentController extends Controller
         $filterGroupIdsArr = PermissionUtility::getPostFilterByGroupIds($authUserId);
 
         if (empty($authUserId)) {
-            $commentQuery = Comment::with(['creator', 'post', 'hashtags'])->isEnable();
+            $commentQuery = Comment::with(['creator', 'hashtags'])->whereNotIn('group_id', $filterGroupIdsArr)->isEnable();
         } else {
             $blockCommentIds = UserBlock::type(UserBlock::TYPE_COMMENT)->where('user_id', $authUserId)->pluck('block_id')->toArray();
             $blockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
             $blockHashtagIds = UserBlock::type(UserBlock::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
-            $commentQuery = Comment::with(['creator', 'group', 'hashtags'])
-                ->where(function ($query) use ($blockCommentIds, $blockUserIds) {
-                    $query->whereNotIn('id', $blockCommentIds)->orWhereNotIn('user_id', $blockUserIds);
-                });
+            $commentQuery = Comment::with(['creator', 'hashtags'])
+                ->where(function ($query) use ($blockCommentIds, $blockUserIds, $filterGroupIdsArr) {
+                    $query
+                        ->whereNotIn('id', $blockCommentIds)
+                        ->orWhereNotIn('user_id', $blockUserIds)
+                        ->orWhereNotIn('group_id', $filterGroupIdsArr);
+                })
+                ->isEnable();
 
-            $commentQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
-                $query->whereNotIn('id', $blockHashtagIds);
-            });
+            // $commentQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
+            //     $query->whereNotIn('id', $blockHashtagIds);
+            // });
         }
 
         $commentQuery->whereHas('post', function ($query) use ($filterGroupIdsArr) {
@@ -122,11 +126,7 @@ class CommentController extends Controller
                 throw new ApiException(37101);
             }
 
-            $groupId = $viewGroup->id;
-
-            $commentQuery->whereHas('post', function ($query) use ($groupId) {
-                $query->where('group_id', $groupId);
-            });
+            $commentQuery->where('group_id', $viewGroup->id);
         }
 
         if ($dtoRequest->hid) {
