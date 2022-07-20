@@ -134,7 +134,7 @@ class PostService
         if ($isMe) {
             $editStatus['isMe'] = true;
             $editStatus['canDelete'] = (bool) $post->postAppend->can_delete;
-            $editStatus['canEdit'] = self::isCanEdit($post->created_at, $post->sticky_state, $post->digest_state);
+            $editStatus['canEdit'] = PermissionUtility::checkContentIsCanEdit('post', $post->created_at, $post->sticky_state, $post->digest_state, $langTag, $timezone);
             $editStatus['isPluginEditor'] = (bool) $post->postAppend->is_plugin_editor;
             $editStatus['editorUrl'] = ! empty($post->postAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($post->postAppend->editor_unikey) : null;
         }
@@ -189,22 +189,6 @@ class PostService
         $info['content'] = ContentUtility::handleAndReplaceAll($info['content'], $post->is_markdown, Mention::TYPE_POST, $authUserId);
 
         return $info;
-    }
-
-    public static function isCanEdit(string $createTime, int $stickyState, int $digestState): bool
-    {
-        $editConfig = ConfigHelper::fresnsConfigByItemKeys([
-            'post_edit',
-            'post_edit_time_limit',
-            'post_edit_sticky_limit',
-            'post_edit_digest_limit',
-        ]);
-
-        if (! $editConfig['post_edit']) {
-            return false;
-        }
-
-        return false;
     }
 
     // post Log

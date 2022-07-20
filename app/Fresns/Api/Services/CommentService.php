@@ -24,6 +24,7 @@ use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\LbsUtility;
+use App\Utilities\PermissionUtility;
 use Illuminate\Support\Str;
 
 class CommentService
@@ -137,7 +138,7 @@ class CommentService
         if ($isMe) {
             $editStatus['isMe'] = true;
             $editStatus['canDelete'] = (bool) $commentAppend->can_delete;
-            $editStatus['canEdit'] = self::isCanEdit($comment->created_at, $comment->is_sticky, $comment->digest_state);
+            $editStatus['canEdit'] = PermissionUtility::checkContentIsCanEdit('comment', $comment->created_at, $comment->sticky_state, $comment->digest_state, $langTag, $timezone);
             $editStatus['isPluginEditor'] = (bool) $commentAppend->is_plugin_editor;
             $editStatus['editorUrl'] = ! empty($commentAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($commentAppend->editor_unikey) : null;
         }
@@ -170,22 +171,6 @@ class CommentService
         $commentInfo['content'] = ContentUtility::handleAndReplaceAll($commentInfo['content'], $comment->is_markdown, Mention::TYPE_COMMENT, $authUserId);
 
         return $commentInfo;
-    }
-
-    public static function isCanEdit(string $createTime, int $isSticky, int $digestState): bool
-    {
-        $editConfig = ConfigHelper::fresnsConfigByItemKeys([
-            'comment_edit',
-            'comment_edit_time_limit',
-            'comment_edit_sticky_limit',
-            'comment_edit_digest_limit',
-        ]);
-
-        if (! $editConfig['comment_edit']) {
-            return false;
-        }
-
-        return false;
     }
 
     // comment Log
