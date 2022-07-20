@@ -28,7 +28,8 @@ class Handler extends ExceptionHandler
      * @var array<int, class-string<\Throwable>>
      */
     protected $dontReport = [
-        //
+        ApiException::class,
+        \App\Fresns\Web\Exceptions\ErrorException::class,
     ];
 
     /**
