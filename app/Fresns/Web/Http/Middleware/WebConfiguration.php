@@ -73,9 +73,7 @@ class WebConfiguration
     private function userPanel(): void
     {
         if (fs_user()->check()) {
-            $uid = fs_user('detail.uid');
-
-            $result = ApiHelper::make()->get("/api/v2/user/{$uid}/detail");
+            $result = ApiHelper::make()->get('/api/v2/user/panel');
 
             View::share('userPanel', $result['data']);
         }
