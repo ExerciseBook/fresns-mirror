@@ -131,17 +131,6 @@ class HashtagController extends Controller
             ]),
         ]);
 
-        if ($results['hashtag']['code'] != 0) {
-            $code = $results['hashtag']['code'];
-            $message = $results['hashtag']['message'];
-
-            // 使用这种方式来处理视图响应
-            throw new \App\Fresns\Web\Exceptions\ErrorException($message, $code);
-
-            // 这是直接返回视图，不会处理响应码
-            return view('error', compact('code', 'message'));
-        }
-
         $items = $results['hashtag']['data']['items'];
         $hashtag = $results['hashtag']['data']['detail'];
 
