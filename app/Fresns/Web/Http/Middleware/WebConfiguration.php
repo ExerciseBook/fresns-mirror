@@ -81,7 +81,7 @@ class WebConfiguration
 
     public function loadLanguages()
     {
-        $menus = fs_api_config('language_menus', fs_db_config('default_language'));
+        $menus = fs_api_config('language_menus');
 
         $supportedLocales = [];
         foreach ($menus as $menu) {
