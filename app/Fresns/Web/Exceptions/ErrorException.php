@@ -8,20 +8,17 @@
 
 namespace App\Fresns\Web\Exceptions;
 
-use App\Fresns\Api\Traits\ApiResponseTrait;
 use Illuminate\Support\Facades\Response;
 
 class ErrorException extends \Exception
 {
-    use ApiResponseTrait;
-
-    public function render($request)
+    public function render()
     {
         // 404 Not Found
         if (in_array($this->getCode(), [
             37100, 37200, 37300, 37302, 37400, 37402, 38100,
         ])) {
-            return Response::view('404', [
+            return Response::view('error', [
                 'code' => $this->getCode(),
                 'message' => $this->getMessage(),
             ], 404);
