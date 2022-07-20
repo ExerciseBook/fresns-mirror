@@ -888,9 +888,9 @@ class ContentUtility
         $post = PrimaryHelper::fresnsModelById('post', $commentLog->post_id);
         $parentComment = PrimaryHelper::fresnsModelById('comment', $commentLog->parent_id);
 
-        $topCommentId = null;
+        $topParentId = null;
         if (! $parentComment) {
-            $topCommentId = $parentComment?->top_comment_id ?? null;
+            $topParentId = $parentComment?->top_parent_id ?? null;
         }
 
         $comment = Comment::updateOrCreate([
@@ -900,7 +900,7 @@ class ContentUtility
             'user_id' => $commentLog->user_id,
             'post_id' => $commentLog->post_id,
             'group_id' => $post->group_id,
-            'top_comment_id' => $topCommentId,
+            'top_parent_id' => $topParentId,
             'parent_id' => $commentLog->parent_comment_id,
             'content' => $commentLog->content,
             'is_markdown' => $commentLog->is_markdown,
@@ -1145,7 +1145,7 @@ class ContentUtility
     // generate comment draft
     public static function generateCommentDraft(Comment $comment): CommentLog
     {
-        if (! empty($comment->top_comment_id) || $comment->top_comment_id == 0) {
+        if (! empty($comment->top_parent_id) || $comment->top_parent_id == 0) {
             return null;
         }
 

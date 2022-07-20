@@ -106,6 +106,27 @@ class CommentService
             $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
+        $item['commentPreviews'] = null;
+
+        $previewConfig = ConfigHelper::fresnsConfigByItemKey('comment_preview');
+        if ($type == 'list' && $previewConfig != 0) {
+            $comments = Comment::with('creator')
+                ->where('parent_id', $comment->id)
+                ->orderByDesc('like_count')
+                ->limit($previewConfig)
+                ->get();
+
+            $commentList = null;
+            $service = new CommentService();
+
+            /** @var Comment $comment */
+            foreach ($comments as $comment) {
+                $commentList[] = $service->commentList($comment, $langTag, $timezone, $authUserId);
+            }
+
+            $item['commentPreviews'] = $commentList;
+        }
+
         $isMe = $comment->user_id == $authUserId ? true : false;
 
         $commentBtn['status'] = false;

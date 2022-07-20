@@ -108,7 +108,7 @@ class CommentController extends Controller
                 throw new ApiException(37401);
             }
 
-            $commentQuery->where('top_comment_id', $viewComment->id);
+            $commentQuery->where('top_parent_id', $viewComment->id);
         }
 
         if ($dtoRequest->gid) {
@@ -233,15 +233,15 @@ class CommentController extends Controller
 
         $commentQuery->orderBy($orderType, $orderDirection);
 
-        $posts = $commentQuery->paginate($request->get('pageSize', 15));
+        $comments = $commentQuery->paginate($request->get('pageSize', 15));
 
-        $postList = [];
+        $commentList = [];
         $service = new CommentService();
-        foreach ($posts as $post) {
-            $postList[] = $service->commentDetail($post, 'list', $langTag, $timezone, $authUserId, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+        foreach ($comments as $comment) {
+            $commentList[] = $service->commentDetail($comment, 'list', $langTag, $timezone, $authUserId, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
-        return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
+        return $this->fresnsPaginate($commentList, $comments->total(), $comments->perPage());
     }
 
     // detail

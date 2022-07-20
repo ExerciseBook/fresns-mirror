@@ -13,6 +13,7 @@ use App\Helpers\FileHelper;
 use App\Helpers\InteractiveHelper;
 use App\Helpers\PluginHelper;
 use App\Models\ArchiveUsage;
+use App\Models\Comment;
 use App\Models\ExtendUsage;
 use App\Models\Mention;
 use App\Models\OperationUsage;
@@ -122,6 +123,20 @@ class PostService
             $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
+        $item['topComment'] = null;
+
+        $topCommentRequire = ConfigHelper::fresnsConfigByItemKey('top_comment_require');
+        if ($type == 'list' && $topCommentRequire != 0 && $topCommentRequire < $post->comment_like_count) {
+            $comment = Comment::with('creator')
+                ->where('post_id', $post->id)
+                ->whereNull('top_parent_id')
+                ->orderByDesc('like_count')
+                ->first();
+
+            $service = new CommentService();
+            $item['topComment'] = $service->commentList($comment, $langTag, $timezone, $authUserId);
+        }
+
         $item['manages'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, $post->group_id, PluginUsage::SCENE_POST, $authUserId, $langTag);
 
         $editStatus['isMe'] = false;
@@ -189,6 +204,12 @@ class PostService
         $info['content'] = ContentUtility::handleAndReplaceAll($info['content'], $post->is_markdown, Mention::TYPE_POST, $authUserId);
 
         return $info;
+    }
+
+    public static function getTopComment(int $postId)
+    {
+        $comment = Comment::with('creator')->where('post_id', $postId);
+
     }
 
     // post Log
