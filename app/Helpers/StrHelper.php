@@ -82,26 +82,6 @@ class StrHelper
     }
 
     /**
-     * @param  string  $string
-     */
-    public static function stringToUtf8(?string $string = null)
-    {
-        if (empty($string)) {
-            return $string;
-        }
-
-        $encoding_list = [
-            'ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5',
-        ];
-
-        $encode = mb_detect_encoding($string, $encoding_list);
-
-        $string = mb_convert_encoding($string, 'UTF-8', $encode);
-
-        return $string;
-    }
-
-    /**
      * @param  string  $uri
      * @param  string  $domain
      */
@@ -196,10 +176,8 @@ class StrHelper
         return $domain ?? 'Unknown Error';
     }
 
-    public static function slug(string $string)
+    public static function slug(string $text)
     {
-        $text = StrHelper::stringToUtf8($string);
-
         if (preg_match("/^[A-Za-z\s]+$/", $text)) {
             $slug = Str::slug($text, '-');
         } else {
