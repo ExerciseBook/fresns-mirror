@@ -130,7 +130,7 @@ class DateHelper
             return $datetime;
         }
 
-        $standard = Carbon::createFromFormat($dateTimeFormat, $datetime, $dbTimezone)->setTimezone($timezone)->format($dateTimeFormat);
+        $standard = Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $dbTimezone)->setTimezone($timezone)->format($dateTimeFormat);
 
         return $standard;
     }
