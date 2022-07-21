@@ -102,7 +102,7 @@ class CommentService
         if (! $comment->is_anonymous) {
             $creatorProfile = $comment->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $comment->creator->getUserMainRole($langTag, $timezone);
-            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $comment->creator->id, $langTag);
             $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
@@ -176,7 +176,7 @@ class CommentService
 
     public static function contentHandle(Comment $comment, string $type, ?int $authUserId = null)
     {
-        $postAppend = $comment->postAppend();
+        $postAppend = $comment->postAppend;
 
         $contentLength = Str::length($comment->content);
 
