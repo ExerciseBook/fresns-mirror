@@ -848,10 +848,6 @@ class ContentUtility
 
                 $groupCommentCount = Comment::where('post_id', $post->id)->count();
 
-                Comment::where('post_id', $post->id)->update([
-                    'group_id' => $postLog->group_id,
-                ]);
-
                 Group::where('id', $postLog->group_id)->increment('comment_count', $groupCommentCount);
                 Group::where('id', $oldPost->group_id)->decrement('comment_count', $groupCommentCount);
             }
@@ -885,7 +881,6 @@ class ContentUtility
     // release comment
     public static function releaseComment(CommentLog $commentLog): Comment
     {
-        $post = PrimaryHelper::fresnsModelById('post', $commentLog->post_id);
         $parentComment = PrimaryHelper::fresnsModelById('comment', $commentLog->parent_id);
 
         $topParentId = null;
@@ -899,7 +894,6 @@ class ContentUtility
         [
             'user_id' => $commentLog->user_id,
             'post_id' => $commentLog->post_id,
-            'group_id' => $post->group_id,
             'top_parent_id' => $topParentId,
             'parent_id' => $commentLog->parent_comment_id,
             'content' => $commentLog->content,
@@ -957,7 +951,7 @@ class ContentUtility
             ContentUtility::handleAndSaveAllInteractive($commentLog->content, Mention::TYPE_COMMENT, $comment->id, $commentLog->user_id);
             InteractiveUtility::editStats('comment', $comment->id, 'increment');
 
-            $post->update([
+            $comment->update([
                 'latest_edit_at' => now(),
             ]);
             $commentAppend->increment('edit_count');
