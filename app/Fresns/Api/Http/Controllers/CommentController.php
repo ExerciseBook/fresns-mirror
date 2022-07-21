@@ -40,29 +40,32 @@ class CommentController extends Controller
         $filterGroupIdsArr = PermissionUtility::getPostFilterByGroupIds($authUserId);
 
         if (empty($authUserId)) {
-            $commentQuery = Comment::with(['creator', 'hashtags'])->whereNotIn('group_id', $filterGroupIdsArr)->isEnable();
+            $commentQuery = Comment::with(['creator', 'post', 'hashtags'])->isEnable();
         } else {
             $blockCommentIds = UserBlock::type(UserBlock::TYPE_COMMENT)->where('user_id', $authUserId)->pluck('block_id')->toArray();
             $blockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
             $blockHashtagIds = UserBlock::type(UserBlock::TYPE_HASHTAG)->where('user_id', $authUserId)->pluck('block_id')->toArray();
 
-            $commentQuery = Comment::with(['creator', 'hashtags'])
-                ->where(function ($query) use ($blockCommentIds, $blockUserIds, $filterGroupIdsArr) {
+            $commentQuery = Comment::with(['creator', 'post', 'hashtags'])
+                ->where(function ($query) use ($blockCommentIds, $blockUserIds) {
                     $query
                         ->whereNotIn('id', $blockCommentIds)
-                        ->orWhereNotIn('user_id', $blockUserIds)
-                        ->orWhereNotIn('group_id', $filterGroupIdsArr);
+                        ->orWhereNotIn('user_id', $blockUserIds);
                 })
                 ->isEnable();
 
-            // $commentQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
-            //     $query->whereNotIn('id', $blockHashtagIds);
-            // });
-        }
+            if ($filterGroupIdsArr) {
+                $commentQuery->whereHas('post', function ($query) use ($filterGroupIdsArr) {
+                    $query->whereNotIn('group_id', $filterGroupIdsArr);
+                });
+            }
 
-        $commentQuery->whereHas('post', function ($query) use ($filterGroupIdsArr) {
-            $query->whereNotIn('group_id', $filterGroupIdsArr);
-        });
+            if ($blockHashtagIds) {
+                $commentQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
+                    $query->whereNotIn('hashtag_id', $blockHashtagIds);
+                });
+            }
+        }
 
         if ($dtoRequest->uidOrUsername) {
             $commentConfig = ConfigHelper::fresnsConfigByItemKey('it_comments');
@@ -126,7 +129,11 @@ class CommentController extends Controller
                 throw new ApiException(37101);
             }
 
-            $commentQuery->where('group_id', $viewGroup->id);
+            $commentQuery->when($viewGroup->id, function ($query, $value) {
+                $query->whereHas('post', function ($query) use ($value) {
+                    $query->where('group_id', $value);
+                });
+            });
         }
 
         if ($dtoRequest->hid) {
@@ -142,7 +149,9 @@ class CommentController extends Controller
             }
 
             $commentQuery->when($viewHashtag->id, function ($query, $value) {
-                $query->whereRelation('hashtags', 'id', $value);
+                $query->whereHas('hashtags', function ($query) use ($value) {
+                    $query->where('hashtag_id', $value);
+                });
             });
         }
 

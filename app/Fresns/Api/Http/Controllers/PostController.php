@@ -83,7 +83,7 @@ class PostController extends Controller
 
             if ($blockHashtagIds) {
                 $postQuery->whereHas('hashtags', function ($query) use ($blockHashtagIds) {
-                    $query->whereNotIn(\DB::raw('hashtags.id'), $blockHashtagIds);
+                    $query->whereNotIn('hashtag_id', $blockHashtagIds);
                 });
             }
         }
