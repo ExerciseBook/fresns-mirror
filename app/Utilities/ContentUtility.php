@@ -107,6 +107,11 @@ class ContentUtility
     // Extract hashtag
     public static function extractHashtag(string $content): array
     {
+        // 允许保留的 tag，例如 $allowTags = ['p', 'a'];
+        $allowTags = [];
+
+        $content = strip_tags($content, $allowTags);
+
         $hashData = ContentUtility::filterChars(
             ContentUtility::matchAll(ContentUtility::getRegexpByType('hash'), $content)
         );
@@ -129,12 +134,22 @@ class ContentUtility
     // Extract mention user
     public static function extractMention(string $content): array
     {
+        // 允许保留的 tag，例如 $allowTags = ['p', 'a'];
+        $allowTags = [];
+
+        $content = strip_tags($content, $allowTags);
+
         return ContentUtility::matchAll(ContentUtility::getRegexpByType('at'), $content);
     }
 
     // Extract sticker
     public static function extractSticker(string $content): array
     {
+        // 允许保留的 tag，例如 $allowTags = ['p', 'a'];
+        $allowTags = [];
+
+        $content = strip_tags($content, $allowTags);
+
         return ContentUtility::filterChars(
             ContentUtility::matchAll(ContentUtility::getRegexpByType('sticker'), $content),
             ' '
