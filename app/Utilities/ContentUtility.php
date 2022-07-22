@@ -236,22 +236,27 @@ class ContentUtility
 
             if (is_null($mentionUser)) {
                 $replaceList[] = "@{$username} ";
-                $linkList[] = sprintf('<a href="%s/u/404" class="fresns_user" target="_blank">@%s</a> ', $config['site_url'], $username);
+                $linkList[] = sprintf(
+                    '<a href="%s/%s/0" class="fresns_mention" target="_blank">@%s</a> ',
+                    $config['site_url'],
+                    $config['website_user_detail_path'],
+                    $username
+                );
                 continue;
             }
 
             if ($config['user_identifier'] == 'uid') {
-                // <a href="https://abc.com/u/{uid}" class="fresns_user" target="_blank">@nickname</a>
+                // <a href="https://abc.com/u/{uid}" class="fresns_mention" target="_blank">@nickname</a>
                 $urlName = $user->uid;
             } else {
-                // <a href="https://abc.com/u/{username}" class="fresns_user" target="_blank">@nickname</a>
+                // <a href="https://abc.com/u/{username}" class="fresns_mention" target="_blank">@nickname</a>
                 $urlName = $user->username;
             }
 
             $replaceList[] = "@{$user->nickname} ";
 
             $linkList[] = sprintf(
-                '<a href="%s/%s/%s" class="fresns_user" target="_blank">@%s</a> ',
+                '<a href="%s/%s/%s" class="fresns_mention" target="_blank">@%s</a> ',
                 $config['site_url'],
                 $config['website_user_detail_path'],
                 $urlName,
