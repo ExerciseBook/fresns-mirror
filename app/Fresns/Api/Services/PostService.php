@@ -61,7 +61,7 @@ class PostService
             $groupInteractiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
             $groupInteractiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_GROUP, $post->group->id, $authUserId);
 
-            $groupItem = $post->group?->getGroupInfo($langTag);
+            $groupItem = $post->group->getGroupInfo($langTag);
             $groupItem['interactive'] = array_merge($groupInteractiveConfig, $groupInteractiveStatus);
 
             $item['group'] = $groupItem;
@@ -82,6 +82,7 @@ class PostService
             $creatorProfile = $post->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $post->creator->getUserMainRole($langTag, $timezone);
             $creatorOperations['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+
             $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
@@ -146,12 +147,11 @@ class PostService
             }
         }
 
-        $newContentLength = Str::length($content);
         $briefLength = ConfigHelper::fresnsConfigByItemKey('post_editor_brief_length');
 
         $info['content'] = $content;
         $info['isBrief'] = false;
-        if ($type == 'list' && $newContentLength > $briefLength) {
+        if ($type == 'list') {
             $info['content'] = Str::limit($content, $briefLength);
             $info['isBrief'] = true;
         }
@@ -175,8 +175,9 @@ class PostService
         return $service->commentData($comment, 'list', $langTag, $timezone);
     }
 
-    // post Log
-    public function postLogList(PostLog $log, string $langTag, string $timezone)
+    // post log data
+    // $type = list or detail
+    public function postLogData(PostLog $log, string $type, string $langTag, string $timezone)
     {
         $post = $log?->post;
         $user = $log->user;
@@ -191,44 +192,14 @@ class PostService
         $info['title'] = $log->title;
         $info['content'] = $log->content;
         $info['contentLength'] = Str::length($log->content);
-        $info['isMarkdown'] = (bool) $log->is_markdown;
-        $info['isAnonymous'] = (bool) $log->is_anonymous;
-        $info['state'] = $log->state;
-        $info['reason'] = $log->reason;
+        $info['isBrief'] = false;
 
-        $info['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
-        if (! $log->is_anonymous) {
-            $creatorProfile = $log->creator->getUserProfile($langTag, $timezone);
-            $creatorMainRole = $log->creator->getUserMainRole($langTag, $timezone);
-            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
+        $briefLength = ConfigHelper::fresnsConfigByItemKey('post_editor_brief_length');
+        if ($type == 'list') {
+            $info['content'] = Str::limit($log->content, $briefLength);
+            $info['isBrief'] = true;
         }
 
-        if ($group) {
-            $groupItem[] = $group?->getGroupInfo($langTag);
-
-            $info['group'] = $groupItem;
-        }
-
-        return $info;
-    }
-
-    // post log detail
-    public function postLogDetail(PostLog $log, string $langTag, string $timezone)
-    {
-        $post = $log?->post;
-        $user = $log->user;
-        $group = $log?->group;
-
-        $info['id'] = $log->id;
-        $info['uid'] = $user->uid;
-        $info['pid'] = $post?->pid;
-        $info['isPluginEditor'] = (bool) $log->is_plugin_editor;
-        $info['editorUnikey'] = $log->editor_unikey;
-        $info['group'] = null;
-        $info['title'] = $log->title;
-        $info['content'] = $log->content;
-        $info['contentLength'] = Str::length($log->content);
         $info['isMarkdown'] = (bool) $log->is_markdown;
         $info['isAnonymous'] = (bool) $log->is_anonymous;
         $info['isComment'] = (bool) $log->is_comment;
@@ -244,7 +215,7 @@ class PostService
         if (! $log->is_anonymous) {
             $creatorProfile = $log->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $log->creator->getUserMainRole($langTag, $timezone);
-            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+            $creatorOperations['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $log->creator->id, $langTag);
             $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
         }
 
