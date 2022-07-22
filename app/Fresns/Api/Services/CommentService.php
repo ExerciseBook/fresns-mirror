@@ -29,42 +29,13 @@ use Illuminate\Support\Str;
 
 class CommentService
 {
-    public function commentList(?Comment $comment, string $langTag, string $timezone, ?int $authUserId = null)
+    // $type = list or detail
+    public function commentData(?Comment $comment, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $authUserMapId = null, ?string $authUserLng = null, ?string $authUserLat = null)
     {
         if (! $comment) {
             return null;
         }
 
-        $commentInfo = $comment->getCommentInfo($langTag, $timezone);
-        $contentHandle = self::contentHandle($comment, 'list', $authUserId);
-
-        $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_COMMENT, $comment->id, $langTag);
-
-        $item['hashtags'] = null;
-        if ($comment->hashtags->isNotEmpty()) {
-            $hashtagService = new HashtagService;
-
-            foreach ($comment->hashtags as $hashtag) {
-                $hashtagItem[] = $hashtagService->hashtagList($hashtag, $langTag, $authUserId);
-            }
-            $item['hashtags'] = $hashtagItem;
-        }
-
-        $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
-        if (! $comment->is_anonymous) {
-            $creatorProfile = $comment->creator->getUserProfile($langTag, $timezone);
-            $creatorMainRole = $comment->creator->getUserMainRole($langTag, $timezone);
-            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
-        }
-
-        $info = array_merge($commentInfo, $contentHandle, $item);
-
-        return $info;
-    }
-
-    public function commentDetail(Comment $comment, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $authUserLng = null, ?string $authUserLat = null)
-    {
         $commentInfo = $comment->getCommentInfo($langTag, $timezone);
         $commentAppend = $comment->commentAppend;
         $postAppend = $comment->postAppend;
@@ -93,7 +64,7 @@ class CommentService
             $hashtagService = new HashtagService;
 
             foreach ($comment->hashtags as $hashtag) {
-                $hashtagItem[] = $hashtagService->hashtagList($hashtag, $langTag, $authUserId);
+                $hashtagItem[] = $hashtagService->hashtagData($hashtag, $langTag, $authUserId);
             }
             $item['hashtags'] = $hashtagItem;
         }
@@ -110,21 +81,7 @@ class CommentService
 
         $previewConfig = ConfigHelper::fresnsConfigByItemKey('comment_preview');
         if ($type == 'list' && $previewConfig != 0) {
-            $comments = Comment::with('creator')
-                ->where('parent_id', $comment->id)
-                ->orderByDesc('like_count')
-                ->limit($previewConfig)
-                ->get();
-
-            $commentList = null;
-            $service = new CommentService();
-
-            /** @var Comment $comment */
-            foreach ($comments as $comment) {
-                $commentList[] = $service->commentList($comment, $langTag, $timezone, $authUserId);
-            }
-
-            $item['commentPreviews'] = $commentList;
+            $item['commentPreviews'] = self::getCommentPreviews($comment->id, $previewConfig, $langTag, $timezone);
         }
 
         $isMe = $comment->user_id == $authUserId ? true : false;
@@ -195,6 +152,26 @@ class CommentService
         $commentInfo['content'] = ContentUtility::handleAndReplaceAll($commentInfo['content'], $comment->is_markdown, Mention::TYPE_COMMENT, $authUserId);
 
         return $commentInfo;
+    }
+
+    // get comment previews
+    public static function getCommentPreviews(int $commentId, int $limit, string $langTag, string $timezone)
+    {
+        $comments = Comment::with('creator')
+            ->where('parent_id', $commentId)
+            ->orderByDesc('like_count')
+            ->limit($limit)
+            ->get();
+
+        $commentList = null;
+        $service = new CommentService();
+
+        /** @var Comment $comment */
+        foreach ($comments as $comment) {
+            $commentList[] = $service->commentData($comment, 'list', $langTag, $timezone);
+        }
+
+        return $commentList;
     }
 
     // comment Log

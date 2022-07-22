@@ -29,51 +29,13 @@ use Illuminate\Support\Str;
 
 class PostService
 {
-    public function postList(?Post $post, string $langTag, string $timezone, ?int $authUserId = null)
+    // $type = list or detail
+    public function postData(?Post $post, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $authUserMapId = null, ?string $authUserLng = null, ?string $authUserLat = null)
     {
         if (! $post) {
             return null;
         }
 
-        $postInfo = $post->getPostInfo($langTag, $timezone);
-        $contentHandle = self::contentHandle($post, 'list', $authUserId);
-
-        $item['group'] = null;
-        if ($post->group) {
-            $groupInteractiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
-            $groupInteractiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_GROUP, $post->group->id, $authUserId);
-
-            $groupItem[] = $post->group?->getGroupInfo($langTag);
-            $groupItem['interactive'] = array_merge($groupInteractiveConfig, $groupInteractiveStatus);
-
-            $item['group'] = $groupItem;
-        }
-
-        $item['hashtags'] = null;
-        if ($post->hashtags->isNotEmpty()) {
-            $hashtagService = new HashtagService;
-
-            foreach ($post->hashtags as $hashtag) {
-                $hashtagItem[] = $hashtagService->hashtagList($hashtag, $langTag, $authUserId);
-            }
-            $item['hashtags'] = $hashtagItem;
-        }
-
-        $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
-        if (! $post->is_anonymous) {
-            $creatorProfile = $post->creator->getUserProfile($langTag, $timezone);
-            $creatorMainRole = $post->creator->getUserMainRole($langTag, $timezone);
-            $creatorOperations = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
-        }
-
-        $info = array_merge($postInfo, $contentHandle, $item);
-
-        return $info;
-    }
-
-    public function postDetail(Post $post, string $type, string $langTag, string $timezone, ?int $authUserId = null, ?int $mapId = null, ?string $authUserLng = null, ?string $authUserLat = null)
-    {
         $postInfo = $post->getPostInfo($langTag, $timezone);
         $contentHandle = self::contentHandle($post, $type, $authUserId);
 
@@ -110,7 +72,7 @@ class PostService
             $hashtagService = new HashtagService;
 
             foreach ($post->hashtags as $hashtag) {
-                $hashtagItem[] = $hashtagService->hashtagList($hashtag, $langTag, $authUserId);
+                $hashtagItem[] = $hashtagService->hashtagData($hashtag, $langTag, $authUserId);
             }
             $item['hashtags'] = $hashtagItem;
         }
@@ -127,14 +89,7 @@ class PostService
 
         $topCommentRequire = ConfigHelper::fresnsConfigByItemKey('top_comment_require');
         if ($type == 'list' && $topCommentRequire != 0 && $topCommentRequire < $post->comment_like_count) {
-            $comment = Comment::with('creator')
-                ->where('post_id', $post->id)
-                ->whereNull('top_parent_id')
-                ->orderByDesc('like_count')
-                ->first();
-
-            $service = new CommentService();
-            $item['topComment'] = $service->commentList($comment, $langTag, $timezone, $authUserId);
+            $item['topComment'] = self::getTopComment($post->id, $langTag, $timezone);
         }
 
         $item['manages'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, $post->group_id, PluginUsage::SCENE_POST, $authUserId, $langTag);
@@ -206,10 +161,18 @@ class PostService
         return $info;
     }
 
-    public static function getTopComment(int $postId)
+    // get top comment
+    public static function getTopComment(int $postId, string $langTag, string $timezone)
     {
-        $comment = Comment::with('creator')->where('post_id', $postId);
+        $comment = Comment::with('creator')
+            ->where('post_id', $postId)
+            ->whereNull('top_parent_id')
+            ->orderByDesc('like_count')
+            ->first();
 
+        $service = new CommentService();
+
+        return $service->commentData($comment, 'list', $langTag, $timezone);
     }
 
     // post Log
