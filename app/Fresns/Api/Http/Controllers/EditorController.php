@@ -96,7 +96,7 @@ class EditorController extends Controller
 
                 $service = new PostService();
                 foreach ($drafts as $draft) {
-                    $draftList[] = $service->postLogData($draft, $langTag, $timezone);
+                    $draftList[] = $service->postLogData($draft, 'list', $langTag, $timezone);
                 }
             break;
 
@@ -228,7 +228,7 @@ class EditorController extends Controller
                 $service = new PostService();
 
                 $postLog = PostLog::where('id', $fresnsResp->getData('logId'))->first();
-                $data['detail'] = $service->postLogData($postLog, $langTag, $timezone);
+                $data['detail'] = $service->postLogData($postLog, 'detail', $langTag, $timezone);
             break;
 
             // comment
@@ -300,7 +300,7 @@ class EditorController extends Controller
                 $service = new PostService();
 
                 $postLog = PostLog::where('id', $fresnsResp->getData('logId'))->first();
-                $data['detail'] = $service->postLogData($postLog, $langTag, $timezone);
+                $data['detail'] = $service->postLogData($postLog, 'detail', $langTag, $timezone);
             break;
 
             // comment
@@ -355,7 +355,7 @@ class EditorController extends Controller
             // post
             case 'post':
                 $service = new PostService();
-                $data['detail'] = $service->postLogData($draft, $langTag, $timezone);
+                $data['detail'] = $service->postLogData($draft, 'detail', $langTag, $timezone);
 
                 if (! $draft->post_id) {
                     $post = PrimaryHelper::fresnsModelById('post', $draft->post_id);
