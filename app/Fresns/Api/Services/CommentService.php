@@ -82,10 +82,12 @@ class CommentService
             $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorItem);
         }
 
-        $item['replyToUser'] = self::getReplyToUser($comment?->parentComment, $langTag, $timezone);
+        $item['replyToUser'] = null;
+        if ($comment->top_parent_id != $comment->parent_id) {
+            $item['replyToUser'] = self::getReplyToUser($comment?->parentComment, $langTag, $timezone);
+        }
 
         $item['commentPreviews'] = null;
-
         $previewConfig = ConfigHelper::fresnsConfigByItemKey('comment_preview');
         if ($type == 'list' && $previewConfig != 0) {
             $item['commentPreviews'] = self::getCommentPreviews($comment->id, $previewConfig, $langTag, $timezone);
@@ -168,10 +170,6 @@ class CommentService
     public static function getReplyToUser(?Comment $comment, string $langTag, string $timezone)
     {
         if (! $comment) {
-            return null;
-        }
-
-        if ($comment->top_parent_id == $comment->parent_id) {
             return null;
         }
 
