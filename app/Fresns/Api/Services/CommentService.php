@@ -72,6 +72,7 @@ class CommentService
         }
 
         $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
+        $item['creator']['isPostCreator'] = false;
         if (! $comment->is_anonymous) {
             $creatorProfile = $comment->creator->getUserProfile($langTag, $timezone);
             $creatorMainRole = $comment->creator->getUserMainRole($langTag, $timezone);
@@ -167,6 +168,10 @@ class CommentService
     public static function getReplyToUser(?Comment $comment, string $langTag, string $timezone)
     {
         if (! $comment) {
+            return null;
+        }
+
+        if ($comment->top_parent_id == $comment->parent_id) {
             return null;
         }
 

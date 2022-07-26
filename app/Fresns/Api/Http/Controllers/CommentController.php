@@ -101,7 +101,7 @@ class CommentController extends Controller
                 throw new ApiException(37301);
             }
 
-            $commentQuery->where('post_id', $viewPost->id)->whereNull('top_parent_id');
+            $commentQuery->where('post_id', $viewPost->id);
         }
 
         if ($dtoRequest->cid) {
@@ -116,6 +116,8 @@ class CommentController extends Controller
             }
 
             $commentQuery->where('top_parent_id', $viewComment->id);
+        } else {
+            $commentQuery->whereNull('top_parent_id');
         }
 
         if ($dtoRequest->gid) {
