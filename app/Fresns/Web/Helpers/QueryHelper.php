@@ -29,7 +29,7 @@ class QueryHelper
         $queryState = ConfigHelper::fresnsConfigByItemKey("menu_{$type}_query_state");
         $queryConfig = ConfigHelper::fresnsConfigByItemKey("menu_{$type}_query_config");
 
-        // 转换为数组参数，封装
+        // Convert to array parameters
         $params = [];
         if (! empty($queryConfig)) {
             $urlInfo = parse_url($queryConfig);
@@ -39,15 +39,14 @@ class QueryHelper
             }
         }
 
-        // 默认不允许用户传递参数
         $clientQuery = [];
 
-        // 禁止客户端传递参数改变数据进行请求
+        // Disable client incoming parameters
         if ($queryState == 1) {
             $clientQuery = [];
         }
 
-        // 只允许用户传递翻页参数
+        // Allow page flip parameters only
         if ($queryState == 2) {
             $clientQuery = [
                 'pageSize' => $requestQuery['pageSize'] ?? 15,
@@ -55,12 +54,11 @@ class QueryHelper
             ];
         }
 
-        // 允许用户传递所有参数
+        // Allow all parameters
         if ($queryState == 3) {
             $clientQuery = $requestQuery;
         }
 
-        // 参数覆盖
         return array_merge($params, $clientQuery);
     }
 
