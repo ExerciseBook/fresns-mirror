@@ -22,11 +22,11 @@ class WebServiceProvider extends ServiceProvider
 
         config()->set('laravellocalization.hideDefaultLocaleInURL', true);
 
-        config()->set('laravellocalization.supportedLocales', Cache::get('supportedLocales') ?: [
-            fs_db_config('default_language') => ['name' => fs_db_config('default_language')],
-        ]);
-
         try {
+            config()->set('laravellocalization.supportedLocales', Cache::get('supportedLocales') ?: [
+                fs_db_config('default_language') => ['name' => fs_db_config('default_language')],
+            ]);
+
             config()->set('app.locale', fs_db_config('default_language'));
         } catch (\Throwable $e) {
         }
