@@ -26,7 +26,10 @@ class WebServiceProvider extends ServiceProvider
             fs_db_config('default_language') => ['name' => fs_db_config('default_language')],
         ]);
 
-        config()->set('app.locale', fs_db_config('default_language'));
+        try {
+            config()->set('app.locale', fs_db_config('default_language'));
+        } catch (\Throwable $e) {
+        }
 
         $this->app->register(RouteServiceProvider::class);
 
