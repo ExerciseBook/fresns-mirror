@@ -22,7 +22,7 @@ class WebServiceProvider extends ServiceProvider
 
         config()->set('laravellocalization.hideDefaultLocaleInURL', true);
 
-        // 无法从数据库查询数据时，保留默认的配置
+        // Keep the default configuration if you can't query data from the database
         try {
             config()->set('laravellocalization.supportedLocales', Cache::get('supportedLocales') ?: [
                 fs_db_config('default_language') => ['name' => fs_db_config('default_language')],

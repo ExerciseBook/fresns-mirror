@@ -20,7 +20,7 @@ class RouteServiceProvider extends ServiceProvider
 
     public function map()
     {
-        // 无法从数据库查询数据时，路由禁用
+        // Routing is disabled when data cannot be queried from the database
         try {
             if (! fs_db_config('FresnsEngine')) {
                 return;
