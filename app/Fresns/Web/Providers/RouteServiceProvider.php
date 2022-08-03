@@ -20,11 +20,14 @@ class RouteServiceProvider extends ServiceProvider
 
     public function map()
     {
+        // 无法从数据库查询数据时，路由禁用
         try {
             if (! fs_db_config('FresnsEngine')) {
                 return;
             }
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+            return;
+        }
 
         $this->mapApiRoutes();
         $this->mapWebRoutes();
