@@ -20,9 +20,11 @@ class RouteServiceProvider extends ServiceProvider
 
     public function map()
     {
-        if (! fs_db_config('FresnsEngine')) {
-            return;
-        }
+        try {
+            if (! fs_db_config('FresnsEngine')) {
+                return;
+            }
+        } catch (\Throwable $e) {}
 
         $this->mapApiRoutes();
         $this->mapWebRoutes();
