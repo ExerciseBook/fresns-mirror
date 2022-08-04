@@ -36,7 +36,7 @@ Route::prefix('engine')
         });
 
         Route::delete('post/{pid}', [ApiController::class, 'postDelete'])->name('post.delete');
-        Route::delete('comment/{pid}', [ApiController::class, 'commentDelete'])->name('comment.delete');
+        Route::delete('comment/{cid}', [ApiController::class, 'commentDelete'])->name('comment.delete');
 
         Route::prefix('editor')->name('editor.')->group(function () {
             Route::get('{type}/drafts', [ApiController::class, 'drafts'])->name('drafts');
