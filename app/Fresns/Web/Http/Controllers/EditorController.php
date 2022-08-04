@@ -41,7 +41,7 @@ class EditorController extends Controller
             paginate: $result['data']['paginate'],
         );
 
-        return view('editor.drafts', compact('drafts'));
+        return view('editor.drafts', compact('drafts', 'type'));
     }
 
     // post
