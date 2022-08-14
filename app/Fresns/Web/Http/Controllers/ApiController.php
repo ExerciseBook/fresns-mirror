@@ -103,6 +103,13 @@ class ApiController extends Controller
             ],
         ]);
 
+        if ($result['code'] != 0) {
+            return back()->with([
+                'code' => $result['code'],
+                'failure' => $result['message'],
+            ]);
+        }
+
         // api data
         $data = $result['data'];
 
@@ -143,10 +150,6 @@ class ApiController extends Controller
             // header.blade.php
             return redirect()->intended(fs_route(route('fresns.account.login')));
         }
-
-        return back()->with([
-            'failure' => ConfigUtility::getCodeMessage(31602, 'Fresns', current_lang_tag()),
-        ]);
     }
 
     // account reset password
