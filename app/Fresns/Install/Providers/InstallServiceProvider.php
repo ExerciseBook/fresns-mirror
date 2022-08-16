@@ -30,6 +30,11 @@ class InstallServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // 根据当前访问请求，设置应用访问协议
+        if (\request()->secure()) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         $this->registerConfig();
         $this->registerViews();
         $this->registerTranslations();
