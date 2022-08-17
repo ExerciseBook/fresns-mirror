@@ -30,7 +30,7 @@ class InstallServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // 根据当前访问请求，设置应用访问协议
+        // Set the application access protocol based on the current access request
         if (\request()->secure()) {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
