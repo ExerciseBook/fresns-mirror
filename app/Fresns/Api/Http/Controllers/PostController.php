@@ -66,7 +66,12 @@ class PostController extends Controller
         $filterGroupIdsArr = PermissionUtility::getPostFilterByGroupIds($authUserId);
 
         if (empty($authUserId)) {
-            $postQuery = Post::with(['creator', 'group', 'hashtags'])->whereNotIn('group_id', $filterGroupIdsArr)->isEnable();
+            $postQuery = Post::with(['creator', 'group', 'hashtags'])
+                ->where(function ($query) use ($filterGroupIdsArr) {
+                    $query->whereNull('group_id')
+                        ->orWhereNotIn('group_id', $filterGroupIdsArr);
+                })
+                ->isEnable();
         } else {
             $blockPostIds = UserBlock::type(UserBlock::TYPE_POST)->where('user_id', $authUserId)->pluck('block_id')->toArray();
             $blockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
