@@ -492,8 +492,10 @@ class PostController extends Controller
         $postList = [];
         $service = new PostService();
         foreach ($posts as $post) {
-            $postList[] = $service->postData($post, 'list', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
-            $postList['followType'] = $postFollowService->getFollowType($post->user_id, $post->group_id, $post->hashtags?->toArray(), $authUser->id);
+            $postListItem = $service->postData($post, 'list', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+            $postListItem['followType'] = $postFollowService->getFollowType($post->user_id, $post->group_id, $post->hashtags?->toArray(), $authUser->id);
+
+            $postList[] = $postListItem;
         }
 
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
