@@ -57,7 +57,7 @@ class EditorController extends Controller
         $stickers = $draftInfo['stickers'];
         $draft = $draftInfo['draft'];
 
-        return view('editor.editor', compact('type', 'draftId', 'plid', 'clid', 'config', 'stickers'));
+        return view('editor.editor', compact('type', 'draftId', 'plid', 'clid', 'config', 'stickers', 'draft'));
     }
 
     // comment
@@ -73,7 +73,7 @@ class EditorController extends Controller
         $stickers = $draftInfo['stickers'];
         $draft = $draftInfo['draft'];
 
-        return view('editor.editor', compact('type', 'draftId', 'plid', 'clid', 'config', 'stickers'));
+        return view('editor.editor', compact('type', 'draftId', 'plid', 'clid', 'config', 'stickers', 'draft'));
     }
 
     // get draft
