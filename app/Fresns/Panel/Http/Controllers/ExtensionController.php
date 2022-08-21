@@ -25,14 +25,14 @@ class ExtensionController extends Controller
             default => null,
         };
 
-        if ($isEnable) {
+        if (!is_null($isEnable)) {
             $plugins->isEnable($isEnable);
         }
 
         $plugins = $plugins->get();
 
         $enableCount = Plugin::type(1)->isEnable()->count();
-        $disableCount = Plugin::type(1)->where('is_enable', 0)->count();
+        $disableCount = Plugin::type(1)->isEnable(false)->count();
 
         return view('FsView::extensions.plugins', compact('plugins', 'enableCount', 'disableCount', 'isEnable'));
     }
