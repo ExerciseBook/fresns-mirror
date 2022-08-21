@@ -268,9 +268,9 @@ class ExtensionController extends Controller
     public function update(Request $request)
     {
         if ($request->get('is_enable') != 0) {
-            \Artisan::call('plugin:activate', ['plugin' => $request->plugin]);
+            \Artisan::call('market:activate', ['unikey' => $request->plugin]);
         } else {
-            \Artisan::call('plugin:deactivate', ['plugin' => $request->plugin]);
+            \Artisan::call('market:deactivate', ['unikey' => $request->plugin]);
         }
 
         return $this->updateSuccess();
