@@ -176,7 +176,12 @@ class ExtensionController extends Controller
 
         switch ($installMethod) {
             case 'inputDir':
-                $dir = realpath(base_path($request->get('plugin_dir')));
+                $inputDir = $request->get('plugin_dir');
+                if (str_starts_with($inputDir, '/')) {
+                    $dir = realpath($inputDir);
+                } else {
+                    $dir = realpath(base_path($request->get('plugin_dir')));
+                }
 
                 // php artisan market:require ...
                 \Artisan::call('market:require', [
