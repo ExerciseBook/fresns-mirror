@@ -39,8 +39,10 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 - 2、在「主程序根目录」终端执行 composer 命令；
     - 开发环境部署 `composer install`
     - 生产环境部署 `composer install --optimize-autoloader --no-dev`
-- 3、在「主程序根目录」终端执行 php artisan 指令，配置插件管理器；
+- 3、在「主程序根目录」终端执行 php artisan 指令，配置管理器；
     - `php artisan vendor:publish --provider="Fresns\PluginManager\Providers\PluginServiceProvider"`
+    - `php artisan vendor:publish --provider="Fresns\ThemeManager\Providers\ThemeServiceProvider"`
+    - `php artisan vendor:publish --provider="Fresns\MarketManager\Providers\MarketServiceProvider"`
 - 4、根据官网[安装教程](https://fresns.cn/guide/install.html)配置 Web 服务器；
 - 5、访问 `网址/install` 执行安装。
 

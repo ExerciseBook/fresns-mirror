@@ -189,7 +189,7 @@ class ExtensionController extends Controller
                     'type' => $installType,
                 ]);
 
-                return \response(\Artisan::output()."\n".__('FsLang::tips.installSuccess'));
+                return \response(\Artisan::output()."\n Done");
             break;
             case 'inputUrl':
             case 'inputUnikey':
