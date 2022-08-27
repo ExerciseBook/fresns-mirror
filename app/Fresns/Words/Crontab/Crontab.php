@@ -100,11 +100,12 @@ class Crontab
      */
     public function checkDeleteAccount()
     {
-        $deleteAccount = ConfigHelper::fresnsConfigByItemKey('delete_account_type');
-        $bufferDay = ConfigHelper::fresnsConfigByItemKey('delete_account_todo');
-        if ($deleteAccount == 2) {
-            $this->logicDelete($bufferDay);
-        } elseif ($deleteAccount == 3) {
+        $deleteType = ConfigHelper::fresnsConfigByItemKey('delete_account_type');
+
+        if ($deleteType == 2) {
+            $this->logicalDeletionAccount();
+        } elseif ($deleteType == 3) {
+            $this->logicalDeletionAccount();
         }
 
         return $this->success();
@@ -113,23 +114,14 @@ class Crontab
     /**
      * @param $bufferDay
      */
-    protected function logicDelete($bufferDay)
+    protected function logicalDeletionAccount()
     {
-        $endTime = Carbon::now()->subDay($bufferDay)->toDateString();
-        $startTime = Carbon::now()->subDay($bufferDay + 1)->toDateString();
-        $delList = Account::onlyTrashed()->where('deleted_at', '<', $endTime)->where('deleted_at', '>', $startTime)->get();
-        foreach ($delList as $k => $v) {
-            $account = $v->toArray();
-            if (strpos($account['phone'], 'deleted#') === false && strpos($account['email'], 'deleted#') === false) {
-                Account::onlyTrashed()->where('id', '=', $v['id'])->update(['phone' => 'deleted#'.date('YmdHis').'#'.$v['phone'], 'email' => 'deleted#'.date('YmdHis').'#'.$v['email']]);
-                AccountConnect::where('account_id', $v['id'])->delete();
-                $userList = User::where('account_id', '=', $v['id'])->get();
-                foreach ($userList as $user) {
-                    $user = $user->toArray();
-                    \FresnsCmdWord::plugin('Fresns')->deactivateUserDialog(['userId' => $user['id']]);
-                }
-                \FresnsCmdWord::plugin('Fresns')->logicalDeletionUser(['accountId' => $v['id']]);
-            }
+        $deleteList = Account::where('wait_delete', 1)->where('wait_delete_at', '<', now())->get();
+
+        foreach ($deleteList as $account) {
+            \FresnsCmdWord::plugin('Fresns')->logicalDeletionAccount([
+                'aid' => $account->aid,
+            ]);
         }
     }
 
