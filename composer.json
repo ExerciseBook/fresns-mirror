@@ -2,7 +2,13 @@
     "name": "fresns/fresns",
     "type": "project",
     "description": "Cross-platform general-purpose multiple content forms social network service software.",
-    "keywords": ["fresns", "sns", "bbs", "forum", "community"],
+    "keywords": [
+        "fresns",
+        "sns",
+        "bbs",
+        "forum",
+        "community"
+    ],
     "license": "Apache-2.0",
     "homepage": "https://fresns.org",
     "support": {
@@ -93,7 +99,7 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true,
+        "sort-packages": false,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "wikimedia/composer-merge-plugin": true
