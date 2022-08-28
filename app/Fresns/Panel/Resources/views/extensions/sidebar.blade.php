@@ -24,6 +24,7 @@
     </nav>
 </div>
 
+<script src="/static/js/ansi_up.js"></script>
 <!--install modal-->
 <div class="modal fade" id="installModal" tabindex="-1" aria-labelledby="install" aria-hidden="true">
     <div class="modal-dialog">
@@ -85,7 +86,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <textarea class="form-control" rows="10" id="install_artisan_output" readonly>{{ __('FsLang::tips.install_in_progress') }}</textarea>
+                <pre class="form-control" id="install_artisan_output">{{ __('FsLang::tips.install_in_progress') }}</pre>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="reloadPage()">{{ __('FsLang::panel.button_close') }}</button>
@@ -125,7 +126,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <textarea class="form-control" rows="6" id="uninstall_artisan_output" readonly>{{ __('FsLang::tips.uninstall_in_progress') }}</textarea>
+                <pre class="form-control" id="uninstall_artisan_output">{{ __('FsLang::tips.uninstall_in_progress') }}</pre>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="reloadPage()">{{ __('FsLang::panel.button_close') }}</button>

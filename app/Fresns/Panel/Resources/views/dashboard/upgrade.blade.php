@@ -389,7 +389,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <textarea class="form-control" rows="6" id="upgrade_artisan_output" readonly>{{ __('FsLang::tips.upgrade_in_progress') }}</textarea>
+                    <pre class="form-control" id="upgrade_artisan_output">{{ __('FsLang::tips.upgrade_in_progress') }}</pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('FsLang::panel.button_close') }}</button>
