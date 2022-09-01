@@ -219,7 +219,7 @@ class InstallController extends Controller
             [
                 'type' => 'composer_version',
                 'title' => __('Install::install.server_check_composer_version'),
-                'check_result' => $isComposerVersion2,
+                'check_result' => true,
                 'tips' => $isComposerVersion2 ? __('Install::install.server_status_success') : __('Install::install.server_status_failure'),
                 'class' => $isComposerVersion2 ? 'bg-success' : 'bg-danger',
                 'message' => '',
