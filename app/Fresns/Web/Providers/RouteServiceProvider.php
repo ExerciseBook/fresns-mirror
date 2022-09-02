@@ -33,9 +33,10 @@ class RouteServiceProvider extends ServiceProvider
         $host = str_replace(['http://', 'https://'], '', rtrim($url, '/'));
         $currentAccessHost = \request()->httpHost();
 
-        // 通过 php artisan serve 启动时，app.url 如果与访问访问域名不同，则不设置路由的 domain 限制。
-        // 解决的问题：插件直达域名首页。允许插件自定义域名首页。
-        // 原理：同一路由，后面的会覆盖前面的。通过 domain 限制，可以达到效果。
+        $host = parse_url($host, PHP_URL_HOST);
+        $currentAccessHost = parse_url($currentAccessHost, PHP_URL_HOST);
+
+        // Avoid home page conflicts when customizing domain names with plugins
         if ($host != $currentAccessHost) {
             $host = null;
         }
