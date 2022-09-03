@@ -14,6 +14,7 @@ use App\Utilities\ConfigUtility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Http\UploadedFile;
 
 class ApiController extends Controller
 {
@@ -53,6 +54,43 @@ class ApiController extends Controller
         $data['comments'] = $results['comments']['data']['list'];
 
         return $data;
+    }
+
+    public function uploadFile()
+    {
+        $multipart = [];
+
+        foreach (\request()->file() as $name => $file) {
+            if ($file instanceof UploadedFile) {
+                /** @var UploadedFile $file */
+                $multipart[] = [
+                    'name' => $name,
+                    'filename' => $file->getClientOriginalName(),
+                    'contents' => $file->getContent(),
+                    'headers' => ['Content-Type' => $file->getClientMimeType()],
+                ];
+            }
+        }
+
+        foreach (\request()->post() as $name => $contents) {
+            $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
+            $multipart[] = compact('name', 'contents', 'headers');
+        }
+
+        $response = ApiHelper::make()->post('/api/v2/common/upload-file', [
+            'multipart' => $multipart,
+        ]);
+
+        return \response()->json($response->toArray());
+    }
+
+    public function userEdit()
+    {
+        $response = ApiHelper::make()->put('/api/v2/account/edit', [
+            'json' => \request()->all(),
+        ]);
+
+        return \response()->json($response->toArray());
     }
 
     // url sign

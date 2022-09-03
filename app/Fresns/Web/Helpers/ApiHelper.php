@@ -68,7 +68,7 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return [
             'base_uri' => $this->getBaseUri(),
-            'timeout' => 30, // Request 5s timeout
+            'timeout' => 30000, // Request 5s timeout
             'http_errors' => false,
             'headers' => ApiHelper::getHeaders(),
         ];
