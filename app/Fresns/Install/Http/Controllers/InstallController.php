@@ -36,6 +36,10 @@ class InstallController extends Controller
                     continue;
                 }
 
+                if ($item['type'] === 'composer_version') {
+                    continue;
+                }
+
                 if ($item['check_result'] === false) {
                     $basicCheckPass = false;
                     break;
@@ -90,6 +94,10 @@ class InstallController extends Controller
                 $checkResult = false;
                 foreach ($basicCheckResult as $item) {
                     if ($item['type'] === 'https') {
+                        continue;
+                    }
+
+                    if ($item['type'] === 'composer_version') {
                         continue;
                     }
 
@@ -165,7 +173,7 @@ class InstallController extends Controller
 
         if ($step === 5) {
             try {
-                $this->generateAdmininfo($data);
+                $this->generateAdminInfo($data);
             } catch (\Throwable $exception) {
                 return \response()->json([
                     'step' => $step,
@@ -219,9 +227,9 @@ class InstallController extends Controller
             [
                 'type' => 'composer_version',
                 'title' => __('Install::install.server_check_composer_version'),
-                'check_result' => true,
-                'tips' => $isComposerVersion2 ? __('Install::install.server_status_success') : __('Install::install.server_status_failure'),
-                'class' => $isComposerVersion2 ? 'bg-success' : 'bg-danger',
+                'check_result' => $isComposerVersion2,
+                'tips' => $isComposerVersion2 ? __('Install::install.server_status_success') : __('Install::install.server_status_warning'),
+                'class' => $isComposerVersion2 ? 'bg-success' : 'bg-warning',
                 'message' => '',
             ],
             [
@@ -299,7 +307,6 @@ class InstallController extends Controller
         $extensions = [
             'fileinfo',
             'exif',
-            'redis',
         ];
 
         $extensionsCheckResult = [];
@@ -399,7 +406,7 @@ class InstallController extends Controller
         ];
     }
 
-    protected function generateAdmininfo(array $data)
+    protected function generateAdminInfo(array $data)
     {
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->addAccount([
             'type' => 1,

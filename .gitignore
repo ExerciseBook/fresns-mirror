@@ -20,4 +20,6 @@ composer.lock
 
 # R&D File
 /config/plugins.php
+/config/themes.php
+/config/markets.php
 fresns-dev.json
