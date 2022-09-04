@@ -25,6 +25,8 @@ Route::prefix('engine')
         Route::get('url-sign', [ApiController::class, 'urlSign'])->name('url.sign')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
 
         Route::post('send-verify-code', [ApiController::class, 'sendVerifyCode'])->name('send.verifyCode')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+        Route::post('verify-identity', [ApiController::class, 'verifyIdentity'])->name('verification')->withoutMiddleware([UserAuthorize::class]);
+
         Route::get('download-link', [ApiController::class, 'downloadLink'])->name('file.download');
         Route::post('upload-file', [ApiController::class, 'uploadFile'])->name('upload.file');
 

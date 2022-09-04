@@ -120,6 +120,16 @@ class ApiController extends Controller
         return \response()->json($response->toArray());
     }
 
+    // send verify code
+    public function verifyIdentity(Request $request)
+    {
+        $response = ApiHelper::make()->post('/api/v2/common/send-verify-code', [
+            'json' => \request()->all(),
+        ]);
+
+        return \response()->json($response->toArray());
+    }
+
     // download link
     public function downloadLink(Request $request)
     {
