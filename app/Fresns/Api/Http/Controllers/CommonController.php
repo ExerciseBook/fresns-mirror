@@ -188,13 +188,13 @@ class CommonController extends Controller
 
         if ($dtoRequest->type == 'email') {
             $account = Account::where('email', $dtoRequest->account)->first();
-            $accountConfig = $account->email;
+            $accountConfig = $account?->email;
 
             $checkSend = ValidationUtility::sendCode($dtoRequest->account);
         } else {
             $phone = $dtoRequest->countryCode.$dtoRequest->account;
             $account = Account::where('phone', $phone)->first();
-            $accountConfig = $account->phone;
+            $accountConfig = $account?->phone;
 
             $checkSend = ValidationUtility::sendCode($dtoRequest->countryCode.$dtoRequest->account);
         }
