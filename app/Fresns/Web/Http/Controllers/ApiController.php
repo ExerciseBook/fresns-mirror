@@ -123,7 +123,7 @@ class ApiController extends Controller
     // send verify code
     public function verifyIdentity(Request $request)
     {
-        $response = ApiHelper::make()->post('/api/v2/common/send-verify-code', [
+        $response = ApiHelper::make()->post('/api/v2/account/verify-identity', [
             'json' => \request()->all(),
         ]);
 
