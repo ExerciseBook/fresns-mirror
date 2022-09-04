@@ -104,7 +104,16 @@ class ApiController extends Controller
     // send verify code
     public function sendVerifyCode(Request $request)
     {
-        $response = ApiHelper::make()->put('/api/v2/common/send-verify-code', [
+        \request()->offsetSet('account', 'fresns_random_string:'.uniqid());
+        if (empty(\request('countryCode'))) {
+            \request()->offsetSet('countryCode', fs_account()->get('detail.countryCode'));
+        }
+
+        if (empty(\request('phone'))) {
+            \request()->offsetSet('phone', fs_account()->get('detail.phone'));
+        }
+
+        $response = ApiHelper::make()->post('/api/v2/common/send-verify-code', [
             'json' => \request()->all(),
         ]);
 
