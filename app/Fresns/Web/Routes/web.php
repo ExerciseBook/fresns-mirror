@@ -199,14 +199,4 @@ Route::prefix(LaravelLocalization::setLocale())
             Route::get('post/{draftId}', [EditorController::class, 'post'])->name('post');
             Route::get('comment/{draftId}', [EditorController::class, 'comment'])->name('comment');
         });
-
-        // FsLang
-        Route::get('js/{locale?}/translations', function ($locale) {
-            $languagePack = fs_api_config('language_pack_contents');
-
-            // get 请求, 返回翻译内容
-            return \response()->json([
-                'data' => $languagePack,
-            ]);
-        })->name('translations');
     });

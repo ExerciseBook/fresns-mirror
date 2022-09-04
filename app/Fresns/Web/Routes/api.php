@@ -55,4 +55,14 @@ Route::prefix('engine')
             Route::delete('{type}/{draftId}', [ApiController::class, 'delete'])->name('delete');
             Route::post('direct-publish', [ApiController::class, 'directPublish'])->name('direct.publish');
         });
+
+        // FsLang
+        Route::get('js/{locale?}/translations', function ($locale) {
+            $languagePack = fs_api_config('language_pack_contents');
+
+            // get 请求, 返回翻译内容
+            return \response()->json([
+                'data' => $languagePack,
+            ]);
+        })->name('translations');
     });

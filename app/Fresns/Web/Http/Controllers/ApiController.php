@@ -104,6 +104,11 @@ class ApiController extends Controller
     // send verify code
     public function sendVerifyCode(Request $request)
     {
+        $response = ApiHelper::make()->put('/api/v2/common/send-verify-code', [
+            'json' => \request()->all(),
+        ]);
+
+        return \response()->json($response->toArray());
     }
 
     // download link
@@ -114,7 +119,7 @@ class ApiController extends Controller
     // account register
     public function accountRegister(Request $request)
     {
-        return ApiHelper::make()->post('/api/v2/account/register', [
+        $response = ApiHelper::make()->post('/api/v2/account/register', [
             'json' => [
                 'type' => $request->type,
                 'account' => $request->account,
@@ -125,6 +130,8 @@ class ApiController extends Controller
                 'deviceToken' => $request->deviceToken ?? null,
             ],
         ]);
+
+        return \response()->json($response->toArray());
     }
 
     // account login
