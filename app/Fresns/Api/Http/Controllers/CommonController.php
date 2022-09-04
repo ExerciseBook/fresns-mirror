@@ -242,17 +242,14 @@ class CommonController extends Controller
         } elseif ($dtoRequest->useType == 4 && ! empty($authAccount?->aid)) {
             switch ($dtoRequest->type) {
                 case 'email':
-                    $wordBody = [
-                        'account' => $authAccount->email,
-                    ];
+                    $wordBody['account'] = $authAccount->email;
 
                     $checkSend = ValidationUtility::sendCode($authAccount->email);
                 break;
                 case 'sms':
-                    $wordBody = [
-                        'account' => $authAccount->pure_phone,
-                        'countryCode' => $authAccount->country_code,
-                    ];
+                    $wordBody['account'] = $authAccount->pure_phone;
+                    $wordBody['countryCode'] = $authAccount->country_code;
+
 
                     $checkSend = ValidationUtility::sendCode($authAccount->phone);
                 break;
