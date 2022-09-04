@@ -221,6 +221,15 @@ class ApiController extends Controller
     {
     }
 
+    public function accountEdit()
+    {
+        $response = ApiHelper::make()->put('/api/v2/account/edit', [
+            'json' => \request()->all(),
+        ]);
+
+        return \response()->json($response->toArray());
+    }
+
     // user auth
     public function userAuth(Request $request)
     {
