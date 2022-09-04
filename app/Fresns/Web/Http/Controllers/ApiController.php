@@ -104,7 +104,10 @@ class ApiController extends Controller
     // send verify code
     public function sendVerifyCode(Request $request)
     {
-        \request()->offsetSet('account', 'fresns_random_string:'.uniqid());
+        if (\request('useType') == 4) {
+            \request()->offsetSet('account', 'fresns_random_string:'.uniqid());
+        }
+
         if (empty(\request('countryCode'))) {
             \request()->offsetSet('countryCode', fs_account()->get('detail.countryCode'));
         }
