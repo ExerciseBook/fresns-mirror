@@ -79,7 +79,7 @@
 
 <!--install artisan output modal-->
 <div class="modal fade" id="installStepModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="installStepModal" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="bi bi-tools"></i> {{ __('FsLang::panel.install_application') }}</h5>
@@ -119,7 +119,7 @@
 
 <!--uninstall artisan output modal-->
 <div class="modal fade" id="uninstallStepModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="uninstallStepModal" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ __('FsLang::panel.button_uninstall') }}</h5>
