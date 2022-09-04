@@ -86,7 +86,7 @@ class ApiController extends Controller
 
     public function userEdit()
     {
-        $response = ApiHelper::make()->put('/api/v2/account/edit', [
+        $response = ApiHelper::make()->put('/api/v2/user/edit', [
             'json' => \request()->all(),
         ]);
 

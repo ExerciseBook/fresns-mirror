@@ -542,7 +542,7 @@ class UserController extends Controller
 
             $validateNickname = ValidationUtility::nickname($nickname);
 
-            if (! $validateNickname['formatString'] || ! $validateUsername['formatSpace']) {
+            if (! $validateNickname['formatString'] || ! $validateNickname['formatSpace']) {
                 throw new ApiException(35107);
             }
 
@@ -651,7 +651,7 @@ class UserController extends Controller
             }
 
             $authUser->update([
-                'gender' => $bio,
+                'bio' => $bio,
             ]);
         }
 
