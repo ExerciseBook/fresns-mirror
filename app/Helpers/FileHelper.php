@@ -122,7 +122,7 @@ class FileHelper
     public static function fresnsFileInfoById(string $fileIdOrFid)
     {
         /** @var File $file */
-        if (is_int($fileIdOrFid)) {
+        if (preg_match('/^\d*?$/', $fileIdOrFid)) {
             $file = File::whereId($fileIdOrFid)->first();
         } else {
             $file = File::whereFid($fileIdOrFid)->first();
