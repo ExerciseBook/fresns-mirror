@@ -104,6 +104,11 @@ class StrHelper
         return sprintf('%s/%s', rtrim($domain, '/'), ltrim($uri, '/'));
     }
 
+    public static function isPureInt(mixed $variable)
+    {
+        return preg_match('/^\d*?$/', $variable);
+    }
+
     /**
      * It takes a hostname as a string and returns the domain name as a string.
      *
