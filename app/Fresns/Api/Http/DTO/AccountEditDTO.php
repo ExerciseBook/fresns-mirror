@@ -18,7 +18,7 @@ class AccountEditDTO extends DTO
     public function rules(): array
     {
         return [
-            'codeType' => ['string', 'nullable', 'in:email,phone'],
+            'codeType' => ['string', 'nullable', 'in:email,sms'],
             'verifyCode' => ['string', 'nullable'],
             'newVerifyCode' => ['string', 'nullable', 'required_with:editEmail', 'required_with:editPhone'],
             'editEmail' => ['email', 'nullable'],
