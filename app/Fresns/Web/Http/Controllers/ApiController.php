@@ -226,6 +226,37 @@ class ApiController extends Controller
 
     public function accountEdit()
     {
+        if ($editType = \request('edit_type')) {
+            $editTypeMode = \request($editType.'_mode');
+
+            $codeType = match($editTypeMode) {
+                default => null,
+                'phone_to_editPassword' => 'sms',
+                'email_to_editPassword' => 'email',
+            };
+
+            $verifyCode = match($editTypeMode) {
+                default => null,
+                'phone_to_editPassword' => \request('phone_verifyCode'),
+                'email_to_editPassword' => \request('email_verifyCode'),
+            };
+
+            \request()->offsetSet('codeType', $codeType);
+            \request()->offsetSet('verifyCode', $verifyCode);
+        }
+
+        switch ($editType) {
+            case 'editPassword':
+                \request()->offsetSet('password', \request('now_editPassword'));
+                \request()->offsetSet('editPassword', \request('new_editPassword'));
+                \request()->offsetSet('editPasswordConfirm', \request('new_editPassword_confirmation'));
+                break;
+            case 'editWalletPassword':
+                \request()->offsetSet('editWalletPassword', \request('new_editWalletPassword'));
+                \request()->offsetSet('editWalletPasswordConfirm', \request('new_editWalletPassword_confirmation'));
+                break;
+        }
+        
         $response = ApiHelper::make()->put('/api/v2/account/edit', [
             'json' => \request()->all(),
         ]);
