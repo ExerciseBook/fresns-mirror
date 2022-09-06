@@ -49,7 +49,7 @@ class PostController extends Controller
 
         if ($dataPluginUnikey) {
             $wordBody = [
-                'header' => \request()->headers->all(),
+                'headers' => \request()->headers->all(),
                 'body' => $dtoRequest->toArray(),
             ];
 
@@ -277,7 +277,7 @@ class PostController extends Controller
 
         if ($dataPluginUnikey) {
             $wordBody = [
-                'header' => \request()->headers->all(),
+                'headers' => \request()->headers->all(),
                 'body' => $dtoRequest->toArray(),
             ];
 
@@ -450,7 +450,7 @@ class PostController extends Controller
 
         if ($dataPluginUnikey) {
             $wordBody = [
-                'header' => \request()->headers->all(),
+                'headers' => \request()->headers->all(),
                 'body' => $dtoRequest->toArray(),
             ];
 
@@ -515,7 +515,7 @@ class PostController extends Controller
 
         if ($dataPluginUnikey) {
             $wordBody = [
-                'header' => \request()->headers->all(),
+                'headers' => \request()->headers->all(),
                 'body' => $dtoRequest->toArray(),
             ];
 
