@@ -26,8 +26,10 @@ class AccountEditDTO extends DTO
             'editCountryCode' => ['integer', 'nullable', 'required_with:editPhone'],
             'password' => ['string', 'nullable'],
             'editPassword' => ['string', 'nullable'],
+            'editPasswordConfirm' => ['string', 'nullable', 'required_with:editPassword'],
             'walletPassword' => ['string', 'nullable'],
             'editWalletPassword' => ['string', 'nullable'],
+            'editWalletPasswordConfirm' => ['string', 'nullable', 'required_with:editWalletPassword'],
             'editLastLoginTime' => ['boolean', 'nullable'],
         ];
     }
