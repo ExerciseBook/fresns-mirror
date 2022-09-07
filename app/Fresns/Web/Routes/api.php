@@ -66,5 +66,5 @@ Route::prefix('engine')
             return \response()->json([
                 'data' => $languagePack,
             ]);
-        })->name('translations');
+        })->name('translations')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
     });
