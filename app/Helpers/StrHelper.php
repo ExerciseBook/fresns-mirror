@@ -104,6 +104,13 @@ class StrHelper
         return sprintf('%s/%s', rtrim($domain, '/'), ltrim($uri, '/'));
     }
 
+    /**
+     * It returns true if the variable is a pure integer, false otherwise
+     *
+     * @param mixed variable The variable to check.
+     *
+     * @return A boolean value.
+     */
     public static function isPureInt(mixed $variable)
     {
         return preg_match('/^\d*?$/', $variable);
