@@ -127,7 +127,7 @@ class ThemeFunctionController extends Controller
         }
         ConfigUtility::changeFresnsConfigItems($fresnsConfigItems);
 
-        return $this->createSuccess();
+        return $this->updateSuccess();
     }
 
     public function updateLanguage(Request $request)
@@ -164,6 +164,6 @@ class ThemeFunctionController extends Controller
 
         ConfigUtility::changeFresnsConfigItems([$fresnsConfigItem]);
 
-        return $this->createSuccess();
+        return $this->updateSuccess();
     }
 }
