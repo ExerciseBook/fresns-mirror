@@ -144,7 +144,7 @@ class ApiController extends Controller
         $response = ApiHelper::make()->post('/api/v2/account/register', [
             'json' => [
                 'type' => $request->type,
-                'account' => $request->account,
+                'account' => $request->{$request->type},
                 'countryCode' => $request->countryCode ?? null,
                 'verifyCode' => $request->verifyCode,
                 'password' => $request->password,
