@@ -200,7 +200,7 @@ class ApiController extends Controller
                 // User does not have a password
                 $userResult = ApiHelper::make()->post('/api/v2/user/auth', [
                     'json' => [
-                        'uidOrUsername' => $user['uid'],
+                        'uidOrUsername' => strval($user['uid']),
                         'password' => null,
                         'deviceToken' => $request->deviceToken ?? null,
                     ],

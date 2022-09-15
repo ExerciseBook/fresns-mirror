@@ -351,7 +351,7 @@ class UserController extends Controller
             'platformId' => $this->platformId(),
             'version' => $this->version(),
             'langTag' => $this->langTag(),
-            'aid' => $this->account()->aid,
+            'aid' => $this->account()?->aid,
             'uid' => $authUser->uid,
             'objectName' => route('api.user.auth'),
             'objectAction' => 'User Auth',
