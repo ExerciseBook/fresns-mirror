@@ -36,7 +36,7 @@ Fresns 是一款支持多语言和跨时区的免费开源软件，研发和生�
 **部署流程**
 
 - 1、下载本仓库[发行版代码包](https://gitee.com/fresns/fresns/releases)，上传到业务服务器解压；
-- 2、在「主程序根目录」终端执行 composer 命令；
+- 2、在「主程序根目录」终端执行 composer 命令，下载 vendor 引用库文件；
     - 开发环境部署 `composer install`
     - 生产环境部署 `composer install --optimize-autoloader --no-dev`
 - 3、在「主程序根目录」终端执行 php artisan 指令，配置管理器；
