@@ -222,8 +222,22 @@ class ApiController extends Controller
     // account reset password
     public function resetPassword(Request $request)
     {
+        if (\request('password') !== \request('password_confirmation')) {
+            return \response()->json([
+                'code' => 30000,
+                'message' => '请确认密码是否一致',
+                'data' => null,
+            ]);
+        }
+
         $response = ApiHelper::make()->put('/api/v2/account/reset-password', [
-            'json' => \request()->all(),
+            'json' => [
+                'type' => $request->type,
+                'account' => $request->{$request->type},
+                'countryCode' => $request->countryCode ?? null,
+                'verifyCode' => $request->verifyCode ?? null,
+                'newPassword' => $request->password ?? null,
+            ],
         ]);
 
         return \response()->json($response->toArray());
