@@ -198,6 +198,9 @@ class ApiController extends Controller
                 return redirect()->intended(fs_route(route('fresns.account.login')));
             } else {
                 // User does not have a password
+                \request()->offsetSet('fs_aid', $data['detail']['aid']);
+                \request()->offsetSet('fs_aid_token', $data['sessionToken']['token']);
+
                 $userResult = ApiHelper::make()->post('/api/v2/user/auth', [
                     'json' => [
                         'uidOrUsername' => strval($user['uid']),

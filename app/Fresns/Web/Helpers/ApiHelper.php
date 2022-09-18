@@ -82,7 +82,8 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
 
     public function isErrorResponse(array $data): bool
     {
-        if (! isset($data['code'])) {
+        if (isset($data['code']) && $data['code'] != 0) {
+            info('is error response', $data);
             return true;
         }
 
@@ -151,9 +152,9 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
             'sign' => null,
             'langTag' => current_lang_tag(),
             'timezone' => Cookie::get('timezone') ?: ConfigHelper::fresnsConfigByItemKey('default_timezone'),
-            'aid' => Cookie::get('fs_aid') ?? null,
-            'uid' => Cookie::get('fs_uid') ?? null,
-            'token' => Cookie::get('fs_uid_token') ?? Cookie::get('fs_aid_token') ?? null,
+            'aid' => Cookie::get('fs_aid', \request('fs_aid')),
+            'uid' => Cookie::get('fs_uid', \request('fs_uid')),
+            'token' => Cookie::get('fs_uid_token', \request('fs_uid_token')) ?? Cookie::get('fs_aid_token', \request('fs_aid_token')),
             'deviceInfo' => json_encode(AppUtility::getDeviceInfo()),
         ];
         $headers['sign'] = SignHelper::makeSign($headers, $appSecret);
