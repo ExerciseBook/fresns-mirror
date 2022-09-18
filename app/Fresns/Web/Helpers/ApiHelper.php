@@ -97,10 +97,10 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         if (empty($message)) {
             $message = 'Unknown api error';
         } else {
-            $message .= $data[0] ?? '';
+            $message = "{$message} " . $data['data'][0] ?? '';
         }
 
-        throw new ErrorException($data['message'] ?? $data['exception'] ?? 'Unknown api error', $data['code'] ?? 0);
+        throw new ErrorException($message, $data['code'] ?? 0);
     }
 
     public function hasPaginate(): bool
