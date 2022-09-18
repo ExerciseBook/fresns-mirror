@@ -93,6 +93,13 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
     public function handleErrorResponse(?string $content = null, array $data = [])
     {
         info('error response, ApiException: '.var_export($content, true));
+        $message = $data['message'] ?? $data['exception'] ?? '';
+        if (empty($message)) {
+            $message = 'Unknown api error';
+        } else {
+            $message .= $data[0] ?? '';
+        }
+
         throw new ErrorException($data['message'] ?? $data['exception'] ?? 'Unknown api error', $data['code'] ?? 0);
     }
 
