@@ -706,11 +706,20 @@ class InteractiveUtility
 
         // content
         $contentModel = match ($actionType) {
+            default => null,
             Notify::ACTION_TYPE_POST => PrimaryHelper::fresnsModelById('post', $actionId),
             Notify::ACTION_TYPE_COMMENT => PrimaryHelper::fresnsModelById('comment', $actionId),
         };
         $content = null;
         $isMarkdown = 0;
+
+        if (is_null($contentModel)) {
+            if (!in_array($actionType, [Notify::ACTION_TYPE_POST, Notify::ACTION_TYPE_COMMENT])) {
+                return;
+            }
+
+            throw new \RuntimeException("NotFound content");
+        }
 
         // mention notify
         if ($type == Notify::TYPE_MENTION) {
