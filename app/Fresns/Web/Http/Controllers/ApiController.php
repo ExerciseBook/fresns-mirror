@@ -307,6 +307,11 @@ class ApiController extends Controller
     // user mark
     public function userMark(Request $request)
     {
+        $response = ApiHelper::make()->post('/api/v2/user/mark', [
+            'json' => \request()->all(),
+        ]);
+
+        return \response()->json($response->toArray());
     }
 
     // user mark note
