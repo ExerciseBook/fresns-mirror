@@ -142,13 +142,13 @@ class InteractiveUtility
             ->where('like_id', $likeId)
             ->first();
 
-        if ($userLike->trashed() || empty($userLike)) {
-            if ($userLike->trashed() && $userLike->mark_type == UserLike::MARK_TYPE_LIKE) {
+        if ($userLike?->trashed() || empty($userLike)) {
+            if ($userLike?->trashed() && $userLike->mark_type == UserLike::MARK_TYPE_LIKE) {
                 // trashed data, mark type=like
                 $userLike->restore();
 
                 InteractiveUtility::markStats($userId, 'like', $likeType, $likeId, 'increment');
-            } elseif ($userLike->trashed() && $userLike->mark_type == UserLike::MARK_TYPE_DISLIKE) {
+            } elseif ($userLike?->trashed() && $userLike->mark_type == UserLike::MARK_TYPE_DISLIKE) {
                 // trashed data, mark type=dislike
                 $userLike->restore();
 
@@ -207,13 +207,13 @@ class InteractiveUtility
             ->where('like_id', $dislikeId)
             ->first();
 
-        if ($userDislike->trashed() || empty($userDislike)) {
-            if ($userDislike->trashed() && $userDislike->mark_type == UserLike::MARK_TYPE_DISLIKE) {
+        if ($userDislike?->trashed() || empty($userDislike)) {
+            if ($userDislike?->trashed() && $userDislike->mark_type == UserLike::MARK_TYPE_DISLIKE) {
                 // trashed data, mark type=dislike
                 $userDislike->restore();
 
                 InteractiveUtility::markStats($userId, 'dislike', $dislikeType, $dislikeId, 'increment');
-            } elseif ($userDislike->trashed() && $userDislike->mark_type == UserLike::MARK_TYPE_LIKE) {
+            } elseif ($userDislike?->trashed() && $userDislike->mark_type == UserLike::MARK_TYPE_LIKE) {
                 // trashed data, mark type=like
                 $userDislike->restore();
 
@@ -261,8 +261,8 @@ class InteractiveUtility
             ->where('follow_id', $followId)
             ->first();
 
-        if ($userFollow->trashed() || empty($userFollow)) {
-            if ($userFollow->trashed()) {
+        if ($userFollow?->trashed() || empty($userFollow)) {
+            if ($userFollow?->trashed()) {
                 // trashed data
                 $userFollow->restore();
 
@@ -316,7 +316,7 @@ class InteractiveUtility
             ->where('block_id', $blockId)
             ->first();
 
-        if ($userBlock->trashed() || empty($userBlock)) {
+        if ($userBlock?->trashed() || empty($userBlock)) {
             if ($userBlock->trashed()) {
                 // trashed data
                 $userBlock->restore();
