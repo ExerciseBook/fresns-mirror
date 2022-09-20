@@ -704,10 +704,6 @@ class InteractiveUtility
             }
         }
 
-        if (!in_array($actionType, [Notify::ACTION_TYPE_POST, Notify::ACTION_TYPE_COMMENT])){
-            return;
-        }
-
         // content
         $contentModel = match ($actionType) {
             Notify::ACTION_TYPE_POST => PrimaryHelper::fresnsModelById('post', $actionId),
