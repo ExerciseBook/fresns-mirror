@@ -484,7 +484,7 @@ class InteractiveUtility
 
                 $userMeStateCount = $userMeState?->{"{$interactiveType}_user_count"} ?? 0;
                 if ($userMeStateCount > 0) {
-                    $userMeState->decrement("{$interactiveType}_user_count");
+                    $userMeState->decrement("{$interactiveType}_me_count");
                 }
             break;
 
