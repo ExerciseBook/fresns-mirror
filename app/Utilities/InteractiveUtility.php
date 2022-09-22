@@ -23,7 +23,6 @@ use App\Models\UserFollow;
 use App\Models\UserLike;
 use App\Models\UserStat;
 use Illuminate\Support\Str;
-use PDO;
 
 class InteractiveUtility
 {
@@ -482,7 +481,7 @@ class InteractiveUtility
                     $userState->decrement("{$interactiveType}_user_count");
                 }
 
-                $userMeStateCount = $userMeState?->{"{$interactiveType}_user_count"} ?? 0;
+                $userMeStateCount = $userMeState?->{"{$interactiveType}_me_count"} ?? 0;
                 if ($userMeStateCount > 0) {
                     $userMeState->decrement("{$interactiveType}_me_count");
                 }
@@ -536,12 +535,12 @@ class InteractiveUtility
             case 'post':
                 $userState = UserStat::where('user_id', $userId)->first();
                 $post = Post::where('id', $markId)->first();
-                $userPostState = UserStat::where('user_id', $post?->user_id)->first();
+                $postCreatorState = UserStat::where('user_id', $post?->user_id)->first();
 
                 if ($actionType == 'increment') {
                     $userState?->increment("{$interactiveType}_post_count");
                     $post?->increment("{$interactiveType}_count");
-                    $userPostState?->increment("post_{$interactiveType}_count");
+                    $postCreatorState?->increment("post_{$interactiveType}_count");
                     return;
                 }
 
@@ -555,9 +554,9 @@ class InteractiveUtility
                     $post?->decrement("{$interactiveType}_count");
                 }
 
-                $userPostStateCount = $userPostState?->{"post_{$interactiveType}_count"} ?? 0;
-                if ($userPostStateCount > 0) {
-                    $userPostState?->decrement("post_{$interactiveType}_count");
+                $postCreatorStateCount = $postCreatorState?->{"post_{$interactiveType}_count"} ?? 0;
+                if ($postCreatorStateCount > 0) {
+                    $postCreatorState?->decrement("post_{$interactiveType}_count");
                 }
             break;
 
@@ -565,15 +564,16 @@ class InteractiveUtility
             case 'comment':
                 $userState = UserStat::where('user_id', $userId)->first();
                 $comment = Comment::where('id', $markId)->first();
-                $userCommentState = UserStat::where('user_id', $comment?->user_id)->first();
+                $commentCreatorState = UserStat::where('user_id', $comment?->user_id)->first();
                 $commentPost = Post::where('id', $comment?->post_id)->first();
 
                 if ($actionType == 'increment') {
                     $userState->increment("{$interactiveType}_comment_count");
                     $comment?->increment("{$interactiveType}_count");
-                    $userCommentState?->increment("comment_{$interactiveType}_count");
+                    $commentCreatorState?->increment("comment_{$interactiveType}_count");
                     $commentPost?->increment("comment_{$interactiveType}_count");
 
+                    // parent comment
                     if (! empty($comment?->parent_id) || $comment?->parent_id != 0) {
                         InteractiveUtility::parentCommentStats($comment->parent_id, 'increment', "comment_{$interactiveType}_count");
                     }
@@ -590,9 +590,9 @@ class InteractiveUtility
                     $comment?->decrement("{$interactiveType}_count");
                 }
 
-                $userCommentStateCount = $userCommentState?->{"comment_{$interactiveType}_count"} ?? 0;
-                if ($userCommentStateCount > 0) {
-                    $userCommentState?->decrement("comment_{$interactiveType}_count");
+                $commentCreatorStateCount = $commentCreatorState?->{"comment_{$interactiveType}_count"} ?? 0;
+                if ($commentCreatorStateCount > 0) {
+                    $commentCreatorState?->decrement("comment_{$interactiveType}_count");
                 }
 
                 $commentPostCount = $commentPost?->{"comment_{$interactiveType}_count"} ?? 0;
@@ -600,7 +600,7 @@ class InteractiveUtility
                     $commentPost?->decrement("comment_{$interactiveType}_count");
                 }
 
-
+                // parent comment
                 if (! empty($comment?->parent_id) || $comment?->parent_id != 0) {
                     InteractiveUtility::parentCommentStats($comment->parent_id, 'decrement', "comment_{$interactiveType}_count");
                 }
@@ -764,6 +764,7 @@ class InteractiveUtility
             }
         }
 
+        // parent comment
         if (! empty($comment->parent_id) || $comment->parent_id != 0) {
             InteractiveUtility::parentCommentStats($comment->parent_id, $actionType, $tableColumn);
         }
