@@ -164,6 +164,9 @@ trait UserServiceTrait
     public function getUserStats(?string $langTag = null)
     {
         $statsData = $this->stat;
+        info('aaa', [
+            'statsData' => $statsData?->toArray(),
+        ]);
 
         $extcredits = ConfigHelper::fresnsConfigByItemKeys([
             'extcredits1_status', 'extcredits1_name', 'extcredits1_unit',

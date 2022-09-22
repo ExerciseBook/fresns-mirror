@@ -297,8 +297,8 @@ class InteractiveUtility
                 $myFollow->update(['is_mutual' => 1]);
                 $itFollow->update(['is_mutual' => 1]);
             } else {
-                $myFollow->update(['is_mutual' => 0]);
-                $itFollow->update(['is_mutual' => 0]);
+                $myFollow?->update(['is_mutual' => 0]);
+                $itFollow?->update(['is_mutual' => 0]);
             }
         }
 
