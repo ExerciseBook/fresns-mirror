@@ -317,7 +317,7 @@ class InteractiveUtility
             ->first();
 
         if ($userBlock?->trashed() || empty($userBlock)) {
-            if ($userBlock->trashed()) {
+            if ($userBlock?->trashed()) {
                 // trashed data
                 $userBlock->restore();
 
