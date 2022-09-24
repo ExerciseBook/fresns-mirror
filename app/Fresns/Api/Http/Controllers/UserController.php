@@ -771,6 +771,12 @@ class UserController extends Controller
             break;
         }
 
+        if ($dtoRequest->markType == 'group') {
+            $cacheKey = "fresns_api_user_{$authUserId}_groups";
+
+            Cache::forget($cacheKey);
+        }
+
         return $this->success();
     }
 

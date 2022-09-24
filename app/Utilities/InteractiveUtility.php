@@ -496,14 +496,6 @@ class InteractiveUtility
                     $userState?->increment("{$interactiveType}_group_count");
                     $groupState?->increment("{$interactiveType}_count");
 
-                    if (empty($userId)) {
-                        $cacheKey = 'fresns_api_guest_groups';
-                    } else {
-                        $cacheKey = "fresns_api_user_{$userId}_groups";
-                    }
-
-                    cache()->forget($cacheKey);
-
                     return;
                 }
 
@@ -516,14 +508,6 @@ class InteractiveUtility
                 if ($groupStateCount > 0) {
                     $groupState->decrement("{$interactiveType}_count");
                 }
-
-                if (empty($userId)) {
-                    $cacheKey = 'fresns_api_guest_groups';
-                } else {
-                    $cacheKey = "fresns_api_user_{$userId}_groups";
-                }
-
-                cache()->forget($cacheKey);
             break;
 
             // hashtag
