@@ -56,43 +56,6 @@ class ApiController extends Controller
         return $data;
     }
 
-    public function uploadFile()
-    {
-        $multipart = [];
-
-        foreach (\request()->file() as $name => $file) {
-            if ($file instanceof UploadedFile) {
-                /** @var UploadedFile $file */
-                $multipart[] = [
-                    'name' => $name,
-                    'filename' => $file->getClientOriginalName(),
-                    'contents' => $file->getContent(),
-                    'headers' => ['Content-Type' => $file->getClientMimeType()],
-                ];
-            }
-        }
-
-        foreach (\request()->post() as $name => $contents) {
-            $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
-            $multipart[] = compact('name', 'contents', 'headers');
-        }
-
-        $response = ApiHelper::make()->post('/api/v2/common/upload-file', [
-            'multipart' => $multipart,
-        ]);
-
-        return \response()->json($response->toArray());
-    }
-
-    public function userEdit()
-    {
-        $response = ApiHelper::make()->put('/api/v2/user/edit', [
-            'json' => \request()->all(),
-        ]);
-
-        return \response()->json($response->toArray());
-    }
-
     // url sign
     public function urlSign()
     {
@@ -286,7 +249,7 @@ class ApiController extends Controller
                 \request()->offsetSet('editWalletPasswordConfirm', \request('new_editWalletPassword_confirmation'));
                 break;
         }
-        
+
         $response = ApiHelper::make()->put('/api/v2/account/edit', [
             'json' => \request()->all(),
         ]);
@@ -312,6 +275,43 @@ class ApiController extends Controller
         return redirect()->intended(fs_route(route('fresns.account.index')));
     }
 
+    public function userEdit()
+    {
+        $response = ApiHelper::make()->put('/api/v2/user/edit', [
+            'json' => \request()->all(),
+        ]);
+
+        return \response()->json($response->toArray());
+    }
+
+    public function uploadFile()
+    {
+        $multipart = [];
+
+        foreach (\request()->file() as $name => $file) {
+            if ($file instanceof UploadedFile) {
+                /** @var UploadedFile $file */
+                $multipart[] = [
+                    'name' => $name,
+                    'filename' => $file->getClientOriginalName(),
+                    'contents' => $file->getContent(),
+                    'headers' => ['Content-Type' => $file->getClientMimeType()],
+                ];
+            }
+        }
+
+        foreach (\request()->post() as $name => $contents) {
+            $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
+            $multipart[] = compact('name', 'contents', 'headers');
+        }
+
+        $response = ApiHelper::make()->post('/api/v2/common/upload-file', [
+            'multipart' => $multipart,
+        ]);
+
+        return \response()->json($response->toArray());
+    }
+
     // user mark
     public function userMark(Request $request)
     {
@@ -327,10 +327,20 @@ class ApiController extends Controller
     {
     }
 
+    // post edit
+    public function postEdit(string $pid)
+    {
+    }
+
     // post delete
     public function postDelete(string $pid)
     {
         return ApiHelper::make()->delete("/api/v2/post/{$pid}");
+    }
+
+    // comment edit
+    public function commentEdit(string $cid)
+    {
     }
 
     // comment delete
