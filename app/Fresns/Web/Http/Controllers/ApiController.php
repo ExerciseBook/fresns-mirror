@@ -98,7 +98,15 @@ class ApiController extends Controller
     {
         $headers = Arr::except(ApiHelper::getHeaders(), ['Accept']);
 
-        return urlencode(base64_encode(json_encode($headers)));
+        $sign = urlencode(base64_encode(json_encode($headers)));
+
+        return \response()->json([
+            'code' => 0,
+            'message' => 'ok',
+            'data' => [
+                'sign' => $sign,
+            ]
+        ]);
     }
 
     // send verify code
