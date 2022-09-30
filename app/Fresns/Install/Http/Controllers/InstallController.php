@@ -134,7 +134,7 @@ class InstallController extends Controller
                     config(['database' => $dbConfig]);
                     (new \Illuminate\Database\DatabaseServiceProvider(app()))->register();
 
-                    \DB::connection()->select('select 1 limit 1');
+                    app('db')->connection('mysql')->select('select 1 limit 1');
                 } catch (\Illuminate\Database\QueryException $exception) {
                     return \response()->json([
                         'step' => $step,
