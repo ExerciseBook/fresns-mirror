@@ -357,7 +357,7 @@ class EditorController extends Controller
                 $service = new PostService();
                 $data['detail'] = $service->postLogData($draft, 'detail', $langTag, $timezone);
 
-                if (! $draft->post_id) {
+                if ($draft->post_id) {
                     $post = PrimaryHelper::fresnsModelById('post', $draft->post_id);
 
                     $checkContentEditPerm = PermissionUtility::checkContentEditPerm($post->created_at, $editTimeConfig, $timezone, $langTag);
@@ -372,7 +372,7 @@ class EditorController extends Controller
                 $service = new CommentService();
                 $data['detail'] = $service->commentLogData($draft, 'detail', $langTag, $timezone);
 
-                if (! $draft->comment_id) {
+                if ($draft->comment_id) {
                     $comment = PrimaryHelper::fresnsModelById('comment', $draft->comment_id);
 
                     $checkContentEditPerm = PermissionUtility::checkContentEditPerm($comment->created_at, $editTimeConfig, $timezone, $langTag);

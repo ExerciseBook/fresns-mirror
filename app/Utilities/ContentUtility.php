@@ -407,8 +407,12 @@ class ContentUtility
     }
 
     // handle read allow json
-    public static function handleAllowJson(array $readAllowConfig, string $langTag, string $timezone): array
+    public static function handleAllowJson(?array $readAllowConfig, string $langTag, string $timezone): array
     {
+        if (!$readAllowConfig) {
+            return [];
+        }
+
         $permissions['users'] = null;
         if (empty($readAllowConfig['permissions']['users'])) {
             $users = User::whereIn('uid', $readAllowConfig['permissions']['users'])->first();
@@ -446,8 +450,12 @@ class ContentUtility
     }
 
     // handle user list json
-    public static function handleUserListJson(array $userListConfig, string $langTag): array
+    public static function handleUserListJson(?array $userListConfig, string $langTag): array
     {
+        if (!$userListConfig) {
+            return [];
+        }
+
         $item['isUserList'] = (bool) $userListConfig['isUserList'];
         $item['defaultLangUserListName'] = collect($userListConfig['userListName'])->where('langTag', $langTag)->first()['name'] ?? null;
         $item['userListName'] = $userListConfig['userListName'];
@@ -458,8 +466,12 @@ class ContentUtility
     }
 
     // handle comment btn json
-    public static function handleCommentBtnJson(array $commentBtnConfig, string $langTag): array
+    public static function handleCommentBtnJson(?array $commentBtnConfig, string $langTag): array
     {
+        if (!$commentBtnConfig) {
+            return [];
+        }
+
         $item['isCommentBtn'] = (bool) $commentBtnConfig['isCommentBtn'];
         $item['defaultLangBtnName'] = collect($commentBtnConfig['btnName'])->where('langTag', $langTag)->first()['name'] ?? null;
         $item['btnName'] = $commentBtnConfig['btnName'];

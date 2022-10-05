@@ -51,6 +51,18 @@ class EditorController extends Controller
         $plid = $draftId;
         $clid = null;
 
+        // 获取草稿列表
+        $data = ApiHelper::make()->get("/api/v2/editor/post/drafts");
+
+        // 草稿为空，新建草稿
+        if ($data['data']['list']->count() == 0) {
+            // $createData = ApiHelper::make()->post("/api/v2/editor/post/create", [
+            //     'form_params' => [
+            //         'createType' => 2,
+            //     ]
+            // ]);
+        }
+
         $draftInfo = self::getDraft('post', $draftId);
 
         $config = $draftInfo['config'];
