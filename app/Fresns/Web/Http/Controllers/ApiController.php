@@ -11,10 +11,13 @@ namespace App\Fresns\Web\Http\Controllers;
 use App\Fresns\Web\Helpers\ApiHelper;
 use App\Fresns\Web\Helpers\QueryHelper;
 use App\Utilities\ConfigUtility;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Response;
 
 class ApiController extends Controller
 {
@@ -54,6 +57,22 @@ class ApiController extends Controller
         $data['comments'] = $results['comments']['data']['list'];
 
         return $data;
+    }
+
+    /**
+     * @param  string  $gid
+     * @return JsonResponse
+     * @throws GuzzleException
+     */
+    public function groupList(string $gid):JsonResponse
+    {
+        $response = ApiHelper::make()->get('/api/v2/group/list', [
+            'query' => [
+                'gid' => $gid
+            ],
+        ]);
+
+        return Response::json(data_get($response->toArray(), 'data.list', []));
     }
 
     // url sign

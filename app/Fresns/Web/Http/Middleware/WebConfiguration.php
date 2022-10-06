@@ -9,6 +9,7 @@
 namespace App\Fresns\Web\Http\Middleware;
 
 use App\Fresns\Web\Helpers\ApiHelper;
+use App\Fresns\Web\Helpers\QueryHelper;
 use App\Helpers\ConfigHelper;
 use App\Models\SessionKey;
 use Browser;
@@ -63,6 +64,7 @@ class WebConfiguration
         $finder = app('view')->getFinder();
         $finder->prependLocation(base_path("extensions/themes/{$path}"));
         $this->userPanel();
+        $this->groupCategories();
 
         $timezone = fs_user('detail.timezone') ?: ConfigHelper::fresnsConfigByItemKey('default_timezone');
         Cookie::queue('timezone', $timezone);
@@ -77,6 +79,12 @@ class WebConfiguration
 
             View::share('userPanel', $result['data']);
         }
+    }
+
+    private function groupCategories():void
+    {
+        $result = ApiHelper::make()->get('/api/v2/group/categories');
+        View::share('groupCategories', data_get($result, 'data.list', []));
     }
 
     public function loadLanguages()

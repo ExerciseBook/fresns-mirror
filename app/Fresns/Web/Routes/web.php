@@ -196,7 +196,7 @@ Route::prefix(LaravelLocalization::setLocale())
         // editor
         Route::name('editor.')->prefix('editor')->group(function () {
             Route::get('drafts/{type}', [EditorController::class, 'drafts'])->name('drafts');
-            Route::get('post/{draftId}', [EditorController::class, 'post'])->name('post');
+            Route::get('post/{draftId?}', [EditorController::class, 'post'])->name('post');
             Route::get('comment/{draftId}', [EditorController::class, 'comment'])->name('comment');
         });
     });
