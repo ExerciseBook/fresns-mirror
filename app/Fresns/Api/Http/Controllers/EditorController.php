@@ -872,7 +872,7 @@ class EditorController extends Controller
         }
 
         $checkReview = ValidationUtility::contentReviewWords($draft->content);
-        if ($checkReview) {
+        if (! $checkReview) {
             // upload session log
             \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
