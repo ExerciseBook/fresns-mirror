@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
@@ -366,5 +367,18 @@ class ApiController extends Controller
     public function commentDelete(string $cid)
     {
         return ApiHelper::make()->delete("/api/v2/comment/{$cid}");
+    }
+
+    public function draftUpdate(Request $request, int $draftId)
+    {
+        $response = ApiHelper::make()->put("/api/v2/editor/{$request->post('type')}/{$draftId}", [
+            'json' => [
+                'postGid' => $request->post('postGid'),
+                'postTitle' => $request->post('postTitle'),
+                'content' => $request->post('content')
+            ]
+        ]);
+
+        return \response()->json($response->toArray());
     }
 }

@@ -18,6 +18,7 @@ use App\Fresns\Web\Http\Controllers\PostController;
 use App\Fresns\Web\Http\Controllers\ProfileController;
 use App\Fresns\Web\Http\Controllers\SearchController;
 use App\Fresns\Web\Http\Controllers\UserController;
+use App\Fresns\Web\Http\Controllers\DraftController;
 use App\Fresns\Web\Http\Middleware\AccountAuthorize;
 use App\Fresns\Web\Http\Middleware\CheckSiteModel;
 use App\Fresns\Web\Http\Middleware\UserAuthorize;
@@ -200,4 +201,6 @@ Route::prefix(LaravelLocalization::setLocale())
             Route::get('comment/{draftId}', [EditorController::class, 'comment'])->name('comment');
             Route::post('publish', [EditorController::class, 'publish'])->name('publish');
         });
+
+        Route::resource('drafts', DraftController::class);
     });

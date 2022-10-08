@@ -62,6 +62,8 @@ Route::prefix('engine')
             Route::post('direct-publish', [ApiController::class, 'directPublish'])->name('direct.publish');
         });
 
+        Route::post('/draft/{draftId}',[ApiController::class, 'draftUpdate'])->name('draft.update');
+
         // FsLang
         Route::get('js/{locale?}/translations', function ($locale) {
             $languagePack = fs_api_config('language_pack_contents');
