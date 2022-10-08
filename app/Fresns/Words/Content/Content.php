@@ -537,7 +537,7 @@ class Content
 
                 $checkReview = ValidationUtility::contentReviewWords($content);
 
-                if ($checkGroupPublishPerm['reviewComment'] || $checkReview) {
+                if ($checkGroupPublishPerm['reviewComment'] || ! $checkReview) {
                     $reviewResp = \FresnsCmdWord::plugin('Fresns')->createDraft($wordBody);
 
                     if ($reviewResp->isErrorResponse()) {

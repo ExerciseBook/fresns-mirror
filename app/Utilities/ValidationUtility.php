@@ -298,7 +298,7 @@ class ValidationUtility
             return array_map('strtolower', $banWords);
         });
 
-        return Str::contains(Str::lower($content), $lowerBanWords);
+        return ! Str::contains(Str::lower($content), $lowerBanWords);
     }
 
     // Validate content is review
@@ -312,7 +312,7 @@ class ValidationUtility
             return array_map('strtolower', $reviewWords);
         });
 
-        return Str::contains(Str::lower($content), $lowerReviewWords);
+        return ! Str::contains(Str::lower($content), $lowerReviewWords);
     }
 
     // Validate message ban words
@@ -326,6 +326,6 @@ class ValidationUtility
             return array_map('strtolower', $banWords);
         });
 
-        return Str::contains(Str::lower($message), $lowerBanWords);
+        return ! Str::contains(Str::lower($message), $lowerBanWords);
     }
 }
