@@ -198,5 +198,6 @@ Route::prefix(LaravelLocalization::setLocale())
             Route::get('drafts/{type}', [EditorController::class, 'drafts'])->name('drafts');
             Route::get('post/{draftId?}', [EditorController::class, 'post'])->name('post');
             Route::get('comment/{draftId}', [EditorController::class, 'comment'])->name('comment');
+            Route::post('publish', [EditorController::class, 'publish'])->name('publish');
         });
     });
