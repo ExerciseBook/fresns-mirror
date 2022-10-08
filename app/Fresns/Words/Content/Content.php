@@ -402,6 +402,9 @@ class Content
     // contentDirectPublish
     public function contentDirectPublish($wordBody)
     {
+        $wordBody['createType'] = 1;
+        $wordBody['editorUnikey'] = null;
+
         $dtoWordBody = new CreateDraftDTO($wordBody);
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
