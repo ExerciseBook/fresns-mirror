@@ -283,13 +283,14 @@ class PermissionUtility
         $perm['reviewComment'] = $permissions['publish_comment_review'];
         $perms = $perm;
 
+        info('bbb', [func_get_args(), $perms]);
         if (empty($userId)) {
             return $perms;
         }
 
         if ($permissions['publish_post'] == 1 && $permissions['publish_comment'] == 1) {
-            $perm['allowPost'] = true;
-            $perm['allowComment'] = true;
+            $perms['allowPost'] = true;
+            $perms['allowComment'] = true;
 
             return $perms;
         }
@@ -321,8 +322,8 @@ class PermissionUtility
             default => false,
         };
 
-        $perm['allowPost'] = $allowPost;
-        $perm['allowComment'] = $allowComment;
+        $perms['allowPost'] = $allowPost;
+        $perms['allowComment'] = $allowComment;
 
         return $perms;
     }
