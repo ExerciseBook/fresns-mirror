@@ -504,7 +504,7 @@ class Content
             // comment
             case 'comment':
                 $post = PrimaryHelper::fresnsModelByFsid('post', $dtoWordBody->commentPid);
-                $group = PrimaryHelper::fresnsModelByFsid('group', $post->group_id);
+                $group = PrimaryHelper::fresnsModelById('group', $post->group_id);
                 $parentComment = PrimaryHelper::fresnsModelByFsid('comment', $dtoWordBody->commentCid);
 
                 $topParentId = null;
