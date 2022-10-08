@@ -132,9 +132,8 @@ class InstallController extends Controller
                     $dbConfig['connections']['mysql'] = array_merge($dbConfig['connections']['mysql'], $mysqlDB);
 
                     config(['database' => $dbConfig]);
-                    (new \Illuminate\Database\DatabaseServiceProvider(app()))->register();
-
-                    app('db')->connection('mysql')->select('select 1 limit 1');
+                    \DB::purge();
+                    \DB::select('select 1 limit 1');
                 } catch (\Illuminate\Database\QueryException $exception) {
                     return \response()->json([
                         'step' => $step,
