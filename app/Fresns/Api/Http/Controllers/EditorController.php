@@ -1014,8 +1014,6 @@ class EditorController extends Controller
         $wordBody = [
             'uid' => $authUser->uid,
             'type' => $wordType,
-            'createType' => $dtoRequest->createType,
-            'editorUnikey' => $dtoRequest->editorUnikey,
             'postGid' => $dtoRequest->postGid,
             'postTitle' => $dtoRequest->postTitle,
             'postIsComment' => $dtoRequest->postIsComment,

@@ -8,6 +8,7 @@
 
 namespace App\Fresns\Words\Content;
 
+use App\Fresns\Words\Content\DTO\ContentDirectPublishDTO;
 use App\Fresns\Words\Content\DTO\ContentPublishByDraftDTO;
 use App\Fresns\Words\Content\DTO\CreateDraftDTO;
 use App\Fresns\Words\Content\DTO\GenerateDraftDTO;
@@ -402,7 +403,7 @@ class Content
     // contentDirectPublish
     public function contentDirectPublish($wordBody)
     {
-        $dtoWordBody = new CreateDraftDTO($wordBody);
+        $dtoWordBody = new ContentDirectPublishDTO($wordBody);
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $authUser = PrimaryHelper::fresnsModelByFsid('user', $dtoWordBody->uid);
