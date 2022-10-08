@@ -1106,10 +1106,10 @@ class EditorController extends Controller
         // upload session log
         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
-        if (! $fsid) {
-            return $fresnsResp->getOrigin();
-        } else {
+        if ($fsid) {
             return $this->success();
+        } else {
+            throw new ApiException(38200);
         }
     }
 }
