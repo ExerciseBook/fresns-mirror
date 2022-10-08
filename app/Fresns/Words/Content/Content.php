@@ -82,7 +82,7 @@ class Content
         switch ($dtoWordBody->type) {
             // post
             case 1:
-                $groupId = PrimaryHelper::fresnsGroupIdByGid($dtoWordBody->gid);
+                $groupId = PrimaryHelper::fresnsGroupIdByGid($dtoWordBody->postGid);
 
                 $title = null;
                 if ($dtoWordBody->postTitle) {
