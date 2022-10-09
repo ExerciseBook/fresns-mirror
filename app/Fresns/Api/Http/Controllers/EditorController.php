@@ -191,7 +191,7 @@ class EditorController extends Controller
             'mapJson' => $dtoRequest->mapJson,
             'eid' => $dtoRequest->eid,
         ];
-        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->generateDraft($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->createDraft($wordBody);
 
         if ($fresnsResp->isErrorResponse()) {
             return $fresnsResp->errorResponse();
