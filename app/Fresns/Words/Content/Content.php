@@ -611,7 +611,6 @@ class Content
                 $comment = Comment::create([
                     'user_id' => $authUser->id,
                     'post_id' => $post->id,
-                    'group_id' => $post->group_id,
                     'top_parent_id' => $topParentId,
                     'parent_id' => $parentComment?->id ?? null,
                     'content' => $content,
