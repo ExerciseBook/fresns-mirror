@@ -191,7 +191,7 @@ class EditorController extends Controller
             'mapJson' => $dtoRequest->mapJson,
             'eid' => $dtoRequest->eid,
         ];
-        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->generateDraft($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->createDraft($wordBody);
 
         if ($fresnsResp->isErrorResponse()) {
             return $fresnsResp->errorResponse();
@@ -753,7 +753,7 @@ class EditorController extends Controller
             'langTag' => $this->langTag(),
             'aid' => $this->account()->aid,
             'uid' => $authUser->uid,
-            'objectName' => route('api.editor.publish'),
+            'objectName' => route('api.editor.direct.publish'),
             'objectAction' => 'Editor Publish',
             'objectResult' => SessionLog::STATE_UNKNOWN,
             'objectOrderId' => $draft->id,
@@ -778,14 +778,16 @@ class EditorController extends Controller
                 if (! $draft->post_id) {
                     $post = PrimaryHelper::fresnsModelById('post', $draft->post_id);
 
-                    $checkContentEditPerm = PermissionUtility::checkContentEditPerm($post->created_at, $$editorConfig['post_edit_time_limit'], $timezone, $langTag);
+                    if ($post?->created_at) {
+                        $checkContentEditPerm = PermissionUtility::checkContentEditPerm($post->created_at, $editorConfig['post_edit_time_limit'], $timezone, $langTag);
 
-                    if (! $checkContentEditPerm['editableStatus']) {
-                        throw new ApiException(36309);
+                        if (! $checkContentEditPerm['editableStatus']) {
+                            throw new ApiException(36309);
+                        }
                     }
                 }
 
-                if (! $draft->group_id) {
+                if ($draft->group_id) {
                     $group = PrimaryHelper::fresnsModelById('group', $draft->group_id);
 
                     if (! $group) {
@@ -893,7 +895,7 @@ class EditorController extends Controller
             'submit_at' => now(),
         ]);
 
-        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->releaseContent($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->contentPublishByDraft($wordBody);
 
         if ($fresnsResp->isErrorResponse()) {
             return $fresnsResp->errorResponse();

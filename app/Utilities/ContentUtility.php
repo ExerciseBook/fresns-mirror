@@ -328,16 +328,15 @@ class ContentUtility
         // add hashtag use
         $hashtagIdArr = Hashtag::whereIn('name', $hashtagArr)->pluck('id')->toArray();
 
-        $hashtagUseData = [];
         foreach ($hashtagIdArr as $hashtagId) {
-            $hashtagUseData[] = [
+            $hashtagUseDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $useId,
                 'hashtag_id' => $hashtagId,
             ];
-        }
 
-        HashtagUsage::createMany($hashtagUseData);
+            HashtagUsage::create($hashtagUseDataItem);
+        }
     }
 
     // Save link
@@ -365,15 +364,16 @@ class ContentUtility
 
         // add domain link use
         $urlIdArr = DomainLink::whereIn('link_url', $urlArr)->pluck('id')->toArray();
-        $urlUseData = [];
+
         foreach ($urlIdArr as $urlId) {
-            $urlUseData[] = [
+            $urlUseDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $useId,
                 'link_id' => $urlId,
             ];
+
+            DomainLinkUsage::create($urlUseDataItem);
         }
-        DomainLinkUsage::createMany($urlUseData);
     }
 
     // Save mention user
@@ -382,17 +382,16 @@ class ContentUtility
         $usernameArr = ContentUtility::extractMention($content);
         $userIdArr = User::whereIn('username', $usernameArr)->pluck('id')->toArray();
 
-        $mentionData = [];
         foreach ($userIdArr as $userId) {
-            $mentionData[] = [
+            $mentionDataItem = [
                 'user_id' => $authUserId,
                 'mention_type' => $mentionType,
                 'mention_id' => $mentionId,
                 'mention_user_id' => $userId,
             ];
-        }
 
-        Mention::createMany($mentionData);
+            Mention::create($mentionDataItem);
+        }
     }
 
     // Handle and save all(interactive content)
@@ -592,6 +591,10 @@ class ContentUtility
     // release allow users and roles
     public static function releaseAllowUsersAndRoles(int $postId, array $permArr)
     {
+        if (empty($permArr)) {
+            return;
+        }
+
         PostAllow::where('post_id', $postId)->where('type', PostAllow::TYPE_USER)->where('is_initial', 1)->delete();
 
         foreach ($permArr['users'] as $userId) {
@@ -638,10 +641,9 @@ class ContentUtility
 
         $fileUsages = FileUsage::where('table_name', $logTableName)->where('table_column', 'id')->where('table_id', $logId)->get();
 
-        $fileData = [];
         $typeText = [];
         foreach ($fileUsages as $file) {
-            $fileData[] = [
+            $fileDataItem = [
                 'file_id' => $file->id,
                 'file_type' => $file->file_type,
                 'usage_type' => $file->usage_type,
@@ -655,11 +657,9 @@ class ContentUtility
                 'remark' => $file->remark,
             ];
 
-            $typeText[] = File::TYPE_MAP[$file->file_type];
-        }
+            FileUsage::create($fileDataItem);
 
-        if ($fileData) {
-            FileUsage::createMany($fileData);
+            $typeText[] = File::TYPE_MAP[$file->file_type];
         }
 
         return $typeText;
@@ -682,18 +682,15 @@ class ContentUtility
 
         $operationUsages = OperationUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
 
-        $operationData = [];
         foreach ($operationUsages as $operation) {
-            $operationData[] = [
+            $operationDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $primaryId,
                 'operation_id' => $operation->operation_id,
                 'plugin_unikey' => $operation->plugin_unikey,
             ];
-        }
 
-        if ($operationData) {
-            OperationUsage::createMany($operationData);
+            OperationUsage::create($operationDataItem);
         }
     }
 
@@ -714,9 +711,8 @@ class ContentUtility
 
         $archiveUsages = ArchiveUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
 
-        $archiveData = [];
         foreach ($archiveUsages as $archive) {
-            $archiveData[] = [
+            $archiveDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $primaryId,
                 'archive_id' => $archive->archive_id,
@@ -724,15 +720,13 @@ class ContentUtility
                 'is_private' => $archive->is_private,
                 'plugin_unikey' => $archive->plugin_unikey,
             ];
-        }
 
-        if ($archiveData) {
-            ArchiveUsage::createMany($archiveData);
+            ArchiveUsage::create($archiveDataItem);
         }
     }
 
     // release extend usages
-    public static function releaseExtendUsages(int $type, int $logId, int $primaryId): array
+    public static function releaseExtendUsages(string $type, int $logId, int $primaryId): array
     {
         $logUsageType = match ($type) {
             'post' => ExtendUsage::TYPE_POST_LOG,
@@ -748,10 +742,9 @@ class ContentUtility
 
         $extendUsages = ExtendUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
 
-        $extendData = [];
         $typeText = [];
         foreach ($extendUsages as $extend) {
-            $extendData[] = [
+            $extendDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $primaryId,
                 'extend_id' => $extend->extend_id,
@@ -760,11 +753,9 @@ class ContentUtility
                 'plugin_unikey' => $extend->plugin_unikey,
             ];
 
-            $typeText[] = $extend->plugin_unikey;
-        }
+            ExtendUsage::create($extendDataItem);
 
-        if ($extendData) {
-            ExtendUsage::createMany($extendData);
+            $typeText[] = $extend->plugin_unikey;
         }
 
         return $typeText;
@@ -814,21 +805,21 @@ class ContentUtility
         }
 
         $postAppend = PostAppend::updateOrCreate([
-            'post_id' => $postLog->post_id,
+            'post_id' => $post->id,
         ],
         [
             'is_plugin_editor' => $postLog->is_plugin_editor,
             'editor_unikey' => $postLog->editor_unikey,
-            'is_allow' => $postLog->allow_json['isAllow'] ?? null,
+            'is_allow' => $postLog->allow_json['isAllow'] ?? false,
             'allow_proportion' => $postLog->allow_json['proportion'] ?? null,
             'allow_btn_name' => $allowBtnName,
             'allow_plugin_unikey' => $postLog->allow_json['pluginUnikey'] ?? null,
-            'is_user_list' => $postLog->user_list_json['isUserList'] ?? null,
+            'is_user_list' => $postLog->user_list_json['isUserList'] ?? false,
             'user_list_name' => $userListName,
             'user_list_plugin_unikey' => $postLog->user_list_json['pluginUnikey'] ?? null,
-            'is_comment' => $postLog->is_comment,
-            'is_comment_public' => $postLog->is_comment_public,
-            'is_comment_btn' => $postLog->comment_btn_json['isCommentBtn'] ?? null,
+            'is_comment' => $postLog->is_comment ?? true,
+            'is_comment_public' => $postLog->is_comment_public ?? true,
+            'is_comment_btn' => $postLog->comment_btn_json['isCommentBtn'] ?? false,
             'comment_btn_name' => $commentBtnName,
             'comment_btn_style' => $postLog->comment_btn_json['btnStyle'] ?? null,
             'comment_btn_plugin_unikey' => $postLog->comment_btn_json['pluginUnikey'] ?? null,
@@ -844,7 +835,7 @@ class ContentUtility
             'map_poi_id' => $postLog->map_json['poiId'] ?? null,
         ]);
 
-        ContentUtility::releaseAllowUsersAndRoles($post->id, $postLog->allow_json['permissions']);
+        ContentUtility::releaseAllowUsersAndRoles($post->id, $postLog->allow_json['permissions'] ?? []);
         ContentUtility::releaseArchiveUsages('post', $postLog->id, $post->id);
         ContentUtility::releaseOperationUsages('post', $postLog->id, $post->id);
         $fileTypeText = ContentUtility::releaseFileUsages('post', $postLog->id, $post->id);
@@ -928,7 +919,7 @@ class ContentUtility
         ]);
 
         $commentAppend = CommentAppend::updateOrCreate([
-            'comment_id' => $commentLog->comment_id,
+            'comment_id' => $comment->id,
         ],
         [
             'is_plugin_editor' => $commentLog->is_plugin_editor,
@@ -1016,9 +1007,8 @@ class ContentUtility
 
         // files
         $fileUsages = FileUsage::where('table_name', $tableName)->where('table_column', 'id')->where('table_id', $primaryId)->get();
-        $fileData = [];
         foreach ($fileUsages as $file) {
-            $fileData[] = [
+            $fileDataItem = [
                 'file_id' => $file->id,
                 'file_type' => $file->file_type,
                 'usage_type' => $file->usage_type,
@@ -1031,27 +1021,29 @@ class ContentUtility
                 'user_id' => $file->user_id,
                 'remark' => $file->remark,
             ];
+
+            FileUsage::create($fileDataItem);
         }
-        FileUsage::createMany($fileData);
 
         // operations
         $operationUsages = OperationUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
-        $operationData = [];
+
         foreach ($operationUsages as $operation) {
-            $operationData[] = [
+            $operationDataItem = [
                 'usage_type' => $logUsageType,
                 'usage_id' => $logId,
                 'operation_id' => $operation->operation_id,
                 'plugin_unikey' => $operation->plugin_unikey,
             ];
+
+            OperationUsage::create($operationDataItem);
         }
-        OperationUsage::createMany($operationData);
 
         // archives
         $archiveUsages = ArchiveUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
-        $archiveData = [];
+
         foreach ($archiveUsages as $archive) {
-            $archiveData[] = [
+            $archiveDataItem = [
                 'usage_type' => $logUsageType,
                 'usage_id' => $logId,
                 'archive_id' => $archive->archive_id,
@@ -1059,14 +1051,15 @@ class ContentUtility
                 'is_private' => $archive->is_private,
                 'plugin_unikey' => $archive->plugin_unikey,
             ];
+
+            ArchiveUsage::create($archiveDataItem);
         }
-        ArchiveUsage::createMany($archiveData);
 
         // extends
         $extendUsages = ExtendUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
-        $extendData = [];
+
         foreach ($extendUsages as $extend) {
-            $extendData[] = [
+            $extendDataItem = [
                 'usage_type' => $logUsageType,
                 'usage_id' => $logId,
                 'extend_id' => $extend->extend_id,
@@ -1074,8 +1067,9 @@ class ContentUtility
                 'rating' => $extend->rating,
                 'plugin_unikey' => $extend->plugin_unikey,
             ];
+
+            ExtendUsage::create($extendDataItem);
         }
-        ExtendUsage::createMany($extendData);
     }
 
     // generate post draft
@@ -1152,7 +1146,7 @@ class ContentUtility
             'comment_btn_json' => $commentBtnJson,
         ];
 
-        $postLog = PostLog::createMany($logData);
+        $postLog = PostLog::create($logData);
 
         ContentUtility::batchCopyContentExtends('post', $post->id, $postLog->id);
 
@@ -1186,7 +1180,7 @@ class ContentUtility
             'map_json' => $comment->commentAppend->map_json,
         ];
 
-        $commentLog = CommentLog::createMany($logData);
+        $commentLog = CommentLog::create($logData);
 
         ContentUtility::batchCopyContentExtends('comment', $comment->id, $commentLog->id);
 
