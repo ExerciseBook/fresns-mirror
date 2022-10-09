@@ -495,7 +495,7 @@ class ContentUtility
                 'table_id' => $tableId,
             ],
             [
-                'file_type' => $$fileModel->type,
+                'file_type' => $fileModel->type,
                 'usage_type' => $usageType,
                 'platform_id' => $platformId,
                 'rating' => $file['rating'],
