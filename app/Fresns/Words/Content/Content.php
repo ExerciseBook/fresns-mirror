@@ -188,7 +188,7 @@ class Content
             case 1:
                 $post = PrimaryHelper::fresnsModelByFsid('post', $dtoWordBody->fsid);
 
-                $creator = PrimaryHelper::fresnsModelById('user', $post?->user_id);
+                $creator = PrimaryHelper::fresnsModelById('user', $post->user_id);
                 if (! $creator) {
                     return $this->failure(
                         35201,
