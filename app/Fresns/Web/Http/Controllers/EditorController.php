@@ -52,8 +52,8 @@ class EditorController extends Controller
             [
                 'type' => 'required',
                 'content' => 'required',
-                'postGid' => fs_db_config('post_editor_group_required') ? 'required' : 'nullable',
-                'postTitle' => fs_db_config('post_editor_title_required') ? 'required' : 'nullable',
+                'postGid' => ($request->post('type') === 'post' && fs_db_config('post_editor_group_required')) ? 'required' : 'nullable',
+                'postTitle' => ($request->post('type') === 'post' && fs_db_config('post_editor_title_required')) ? 'required' : 'nullable',
             ]
         );
 
@@ -106,19 +106,16 @@ class EditorController extends Controller
                 'headers' => ['Content-Type' => $request->file('file')->getClientMimeType()],
             ];
         }
-        try {
-            $result = ApiHelper::make()->post("/api/v2/editor/direct-publish", [
-                'multipart' => $multipart
-            ]);
 
-            if ($result['code'] != 0) {
-                throw new ErrorException($result['message'], $result['code']);
-            }
 
-            return back()->with('success', $result['message']);
+        $result = ApiHelper::make()->post("/api/v2/editor/direct-publish", [
+            'multipart' => $multipart
+        ]);
 
-        } catch (\Exception $exception) {
-            return back()->withErrors($exception->getMessage());
+        if ($result['code'] !== 0) {
+            throw new ErrorException($result['message'], $result['code']);
         }
+
+        return back()->with('success', $result['message']);
     }
 }

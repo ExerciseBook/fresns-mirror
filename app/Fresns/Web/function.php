@@ -6,6 +6,7 @@
  * Released under the Apache-2.0 License.
  */
 
+use App\Fresns\Web\Auth\UserGuard;
 use App\Fresns\Web\Helpers\ApiHelper;
 use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
@@ -150,5 +151,20 @@ if (! function_exists('fs_user')) {
         }
 
         return app('fresns.user');
+    }
+}
+
+if (! function_exists('accept_images')) {
+    /**
+     * @return string
+     */
+    function accept_images(): string
+    {
+        $imagesExt = fs_db_config('images_ext');
+        $exts = array_map(function ($ext) {
+            return '.'.$ext;
+        }, explode(',', $imagesExt));
+
+        return implode(',', $exts);
     }
 }
