@@ -107,9 +107,8 @@ class EditorController extends Controller
             ];
         }
 
-
         $result = ApiHelper::make()->post("/api/v2/editor/direct-publish", [
-            'multipart' => $multipart
+            'multipart' => array_filter($multipart, fn($val) => isset($val['contents']))
         ]);
 
         if ($result['code'] !== 0) {
