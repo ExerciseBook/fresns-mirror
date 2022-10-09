@@ -109,11 +109,13 @@ class DraftController extends Controller
     {
         $response = ApiHelper::make()->put("/api/v2/editor/{$request->post('type')}/{$draftId}", [
             'json' => [
-                'postGid' => $request->post('postGid'),
+                'postGid' => $request->post('gid'),
                 'postTitle' => $request->post('postTitle'),
-                'content' => $request->post('content')
+                'content' => $request->post('content'),
+                'isAnonymous' => $request->post('anonymous')
             ]
         ]);
+
         if ($response['code'] !== 0) {
             throw new ErrorException($response['message'], $response['code']);
         }
@@ -124,6 +126,6 @@ class DraftController extends Controller
             throw new ErrorException($response['message'], $response['code']);
         }
 
-        return back()->with('success', $response['message']);
+        return redirect()->route('fresns.post.list')->with('success', $response['message']);
     }
 }
