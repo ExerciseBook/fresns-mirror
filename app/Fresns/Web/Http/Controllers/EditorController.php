@@ -113,7 +113,7 @@ class EditorController extends Controller
         ]);
 
         if ($result['code'] !== 0) {
-            throw new ErrorException($result['message'], $result['code']);
+            throw new ErrorException($result['message']);
         }
 
         return back()->with('success', $result['message']);
