@@ -592,6 +592,10 @@ class ContentUtility
     // release allow users and roles
     public static function releaseAllowUsersAndRoles(int $postId, array $permArr)
     {
+        if (empty($permArr)) {
+            return;
+        }
+
         PostAllow::where('post_id', $postId)->where('type', PostAllow::TYPE_USER)->where('is_initial', 1)->delete();
 
         foreach ($permArr['users'] as $userId) {
@@ -819,16 +823,16 @@ class ContentUtility
         [
             'is_plugin_editor' => $postLog->is_plugin_editor,
             'editor_unikey' => $postLog->editor_unikey,
-            'is_allow' => $postLog->allow_json['isAllow'] ?? null,
+            'is_allow' => $postLog->allow_json['isAllow'] ?? false,
             'allow_proportion' => $postLog->allow_json['proportion'] ?? null,
             'allow_btn_name' => $allowBtnName,
             'allow_plugin_unikey' => $postLog->allow_json['pluginUnikey'] ?? null,
-            'is_user_list' => $postLog->user_list_json['isUserList'] ?? null,
+            'is_user_list' => $postLog->user_list_json['isUserList'] ?? false,
             'user_list_name' => $userListName,
             'user_list_plugin_unikey' => $postLog->user_list_json['pluginUnikey'] ?? null,
-            'is_comment' => $postLog->is_comment,
-            'is_comment_public' => $postLog->is_comment_public,
-            'is_comment_btn' => $postLog->comment_btn_json['isCommentBtn'] ?? null,
+            'is_comment' => $postLog->is_comment ?? true,
+            'is_comment_public' => $postLog->is_comment_public ?? true,
+            'is_comment_btn' => $postLog->comment_btn_json['isCommentBtn'] ?? false,
             'comment_btn_name' => $commentBtnName,
             'comment_btn_style' => $postLog->comment_btn_json['btnStyle'] ?? null,
             'comment_btn_plugin_unikey' => $postLog->comment_btn_json['pluginUnikey'] ?? null,
@@ -844,7 +848,7 @@ class ContentUtility
             'map_poi_id' => $postLog->map_json['poiId'] ?? null,
         ]);
 
-        ContentUtility::releaseAllowUsersAndRoles($post->id, $postLog->allow_json['permissions']);
+        ContentUtility::releaseAllowUsersAndRoles($post->id, $postLog->allow_json['permissions'] ?? []);
         ContentUtility::releaseArchiveUsages('post', $postLog->id, $post->id);
         ContentUtility::releaseOperationUsages('post', $postLog->id, $post->id);
         $fileTypeText = ContentUtility::releaseFileUsages('post', $postLog->id, $post->id);
