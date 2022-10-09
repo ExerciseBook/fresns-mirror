@@ -622,6 +622,7 @@ class Content
                 ]);
 
                 CommentAppend::create([
+                    'comment_id' => $comment->id,
                     'map_json' => $dtoWordBody->mapJson ?? null,
                     'map_scale' => $dtoWordBody->mapJson['scale'] ?? null,
                     'map_continent_code' => $dtoWordBody->mapJson['continentCode'] ?? null,
