@@ -143,13 +143,13 @@ Route::prefix('v2')->middleware([
 
     // editor
     Route::prefix('editor')->name('editor.')->group(function () {
+        Route::post('direct-publish', [EditorController::class, 'directPublish'])->name('direct.publish');
         Route::get('{type}/config', [EditorController::class, 'config'])->name('config');
         Route::get('{type}/drafts', [EditorController::class, 'drafts'])->name('drafts');
         Route::post('{type}/create', [EditorController::class, 'create'])->name('create');
         Route::post('{type}/generate/{fsid}', [EditorController::class, 'generate'])->name('generate');
         Route::get('{type}/{draftId}', [EditorController::class, 'detail'])->name('detail');
         Route::put('{type}/{draftId}', [EditorController::class, 'update'])->name('update');
-        Route::post('direct-publish', [EditorController::class, 'directPublish'])->name('direct.publish');
         Route::post('{type}/{draftId}', [EditorController::class, 'publish'])->name('publish');
         Route::patch('{type}/{draftId}', [EditorController::class, 'revoke'])->name('revoke');
         Route::delete('{type}/{draftId}', [EditorController::class, 'delete'])->name('delete');
