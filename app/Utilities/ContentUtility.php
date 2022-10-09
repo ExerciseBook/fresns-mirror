@@ -328,17 +328,14 @@ class ContentUtility
         // add hashtag use
         $hashtagIdArr = Hashtag::whereIn('name', $hashtagArr)->pluck('id')->toArray();
 
-        $hashtagUseData = [];
         foreach ($hashtagIdArr as $hashtagId) {
-            $hashtagUseData[] = [
+            $hashtagUseDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $useId,
                 'hashtag_id' => $hashtagId,
             ];
-        }
 
-        if ($hashtagUseData) {
-            HashtagUsage::createMany($hashtagUseData);
+            HashtagUsage::create($hashtagUseDataItem);
         }
     }
 
@@ -367,17 +364,15 @@ class ContentUtility
 
         // add domain link use
         $urlIdArr = DomainLink::whereIn('link_url', $urlArr)->pluck('id')->toArray();
-        $urlUseData = [];
+
         foreach ($urlIdArr as $urlId) {
-            $urlUseData[] = [
+            $urlUseDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $useId,
                 'link_id' => $urlId,
             ];
-        }
 
-        if ($urlUseData) {
-            DomainLinkUsage::createMany($urlUseData);
+            DomainLinkUsage::create($urlUseDataItem);
         }
     }
 
@@ -387,18 +382,15 @@ class ContentUtility
         $usernameArr = ContentUtility::extractMention($content);
         $userIdArr = User::whereIn('username', $usernameArr)->pluck('id')->toArray();
 
-        $mentionData = [];
         foreach ($userIdArr as $userId) {
-            $mentionData[] = [
+            $mentionDataItem = [
                 'user_id' => $authUserId,
                 'mention_type' => $mentionType,
                 'mention_id' => $mentionId,
                 'mention_user_id' => $userId,
             ];
-        }
 
-        if ($mentionData) {
-            Mention::createMany($mentionData);
+            Mention::create($mentionDataItem);
         }
     }
 
@@ -649,10 +641,9 @@ class ContentUtility
 
         $fileUsages = FileUsage::where('table_name', $logTableName)->where('table_column', 'id')->where('table_id', $logId)->get();
 
-        $fileData = [];
         $typeText = [];
         foreach ($fileUsages as $file) {
-            $fileData[] = [
+            $fileDataItem = [
                 'file_id' => $file->id,
                 'file_type' => $file->file_type,
                 'usage_type' => $file->usage_type,
@@ -666,11 +657,9 @@ class ContentUtility
                 'remark' => $file->remark,
             ];
 
-            $typeText[] = File::TYPE_MAP[$file->file_type];
-        }
+            FileUsage::create($fileDataItem);
 
-        if ($fileData) {
-            FileUsage::createMany($fileData);
+            $typeText[] = File::TYPE_MAP[$file->file_type];
         }
 
         return $typeText;
@@ -693,18 +682,15 @@ class ContentUtility
 
         $operationUsages = OperationUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
 
-        $operationData = [];
         foreach ($operationUsages as $operation) {
-            $operationData[] = [
+            $operationDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $primaryId,
                 'operation_id' => $operation->operation_id,
                 'plugin_unikey' => $operation->plugin_unikey,
             ];
-        }
 
-        if ($operationData) {
-            OperationUsage::createMany($operationData);
+            OperationUsage::create($operationDataItem);
         }
     }
 
@@ -725,9 +711,8 @@ class ContentUtility
 
         $archiveUsages = ArchiveUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
 
-        $archiveData = [];
         foreach ($archiveUsages as $archive) {
-            $archiveData[] = [
+            $archiveDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $primaryId,
                 'archive_id' => $archive->archive_id,
@@ -735,10 +720,8 @@ class ContentUtility
                 'is_private' => $archive->is_private,
                 'plugin_unikey' => $archive->plugin_unikey,
             ];
-        }
 
-        if ($archiveData) {
-            ArchiveUsage::createMany($archiveData);
+            ArchiveUsage::create($archiveDataItem);
         }
     }
 
@@ -759,10 +742,9 @@ class ContentUtility
 
         $extendUsages = ExtendUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
 
-        $extendData = [];
         $typeText = [];
         foreach ($extendUsages as $extend) {
-            $extendData[] = [
+            $extendDataItem = [
                 'usage_type' => $usageType,
                 'usage_id' => $primaryId,
                 'extend_id' => $extend->extend_id,
@@ -771,11 +753,9 @@ class ContentUtility
                 'plugin_unikey' => $extend->plugin_unikey,
             ];
 
-            $typeText[] = $extend->plugin_unikey;
-        }
+            ExtendUsage::create($extendDataItem);
 
-        if ($extendData) {
-            ExtendUsage::createMany($extendData);
+            $typeText[] = $extend->plugin_unikey;
         }
 
         return $typeText;
@@ -1027,9 +1007,8 @@ class ContentUtility
 
         // files
         $fileUsages = FileUsage::where('table_name', $tableName)->where('table_column', 'id')->where('table_id', $primaryId)->get();
-        $fileData = [];
         foreach ($fileUsages as $file) {
-            $fileData[] = [
+            $fileDataItem = [
                 'file_id' => $file->id,
                 'file_type' => $file->file_type,
                 'usage_type' => $file->usage_type,
@@ -1042,33 +1021,29 @@ class ContentUtility
                 'user_id' => $file->user_id,
                 'remark' => $file->remark,
             ];
-        }
 
-        if ($fileData) {
-            FileUsage::createMany($fileData);
+            FileUsage::create($fileDataItem);
         }
 
         // operations
         $operationUsages = OperationUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
-        $operationData = [];
+
         foreach ($operationUsages as $operation) {
-            $operationData[] = [
+            $operationDataItem = [
                 'usage_type' => $logUsageType,
                 'usage_id' => $logId,
                 'operation_id' => $operation->operation_id,
                 'plugin_unikey' => $operation->plugin_unikey,
             ];
-        }
-        
-        if ($operationData) {
-            OperationUsage::createMany($operationData);
+
+            OperationUsage::create($operationDataItem);
         }
 
         // archives
         $archiveUsages = ArchiveUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
-        $archiveData = [];
+
         foreach ($archiveUsages as $archive) {
-            $archiveData[] = [
+            $archiveDataItem = [
                 'usage_type' => $logUsageType,
                 'usage_id' => $logId,
                 'archive_id' => $archive->archive_id,
@@ -1076,17 +1051,15 @@ class ContentUtility
                 'is_private' => $archive->is_private,
                 'plugin_unikey' => $archive->plugin_unikey,
             ];
-        }
 
-        if ($archiveData) {
-            ArchiveUsage::createMany($archiveData);
+            ArchiveUsage::create($archiveDataItem);
         }
 
         // extends
         $extendUsages = ExtendUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
-        $extendData = [];
+
         foreach ($extendUsages as $extend) {
-            $extendData[] = [
+            $extendDataItem = [
                 'usage_type' => $logUsageType,
                 'usage_id' => $logId,
                 'extend_id' => $extend->extend_id,
@@ -1094,10 +1067,8 @@ class ContentUtility
                 'rating' => $extend->rating,
                 'plugin_unikey' => $extend->plugin_unikey,
             ];
-        }
 
-        if ($extendData) {
-            ExtendUsage::createMany($extendData);
+            ExtendUsage::create($extendDataItem);
         }
     }
 

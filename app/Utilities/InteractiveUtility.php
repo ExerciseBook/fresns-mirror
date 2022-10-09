@@ -638,7 +638,7 @@ class InteractiveUtility
                 $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
                 Domain::whereIn('id', $domainIds)->$actionType('post_count');
 
-                $hashtagIds = array_column($post->hashtags, 'id');
+                $hashtagIds = $post->hashtags->pluck('id');
                 Hashtag::whereIn('id', $hashtagIds)->$actionType('post_count');
             break;
 
@@ -654,7 +654,7 @@ class InteractiveUtility
                 $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
                 Domain::whereIn('id', $domainIds)->$actionType('comment_count');
 
-                $hashtagIds = array_column($comment->hashtags, 'id');
+                $hashtagIds = $comment->hashtags->pluck('id');
                 Hashtag::whereIn('id', $hashtagIds)->$actionType('comment_count');
 
                 if (! empty($comment?->parent_id) || $comment?->parent_id != 0) {
