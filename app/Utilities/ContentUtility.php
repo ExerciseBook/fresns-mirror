@@ -337,7 +337,9 @@ class ContentUtility
             ];
         }
 
-        HashtagUsage::createMany($hashtagUseData);
+        if ($hashtagUseData) {
+            HashtagUsage::createMany($hashtagUseData);
+        }
     }
 
     // Save link
@@ -373,7 +375,10 @@ class ContentUtility
                 'link_id' => $urlId,
             ];
         }
-        DomainLinkUsage::createMany($urlUseData);
+
+        if ($urlUseData) {
+            DomainLinkUsage::createMany($urlUseData);
+        }
     }
 
     // Save mention user
@@ -392,7 +397,9 @@ class ContentUtility
             ];
         }
 
-        Mention::createMany($mentionData);
+        if ($mentionData) {
+            Mention::createMany($mentionData);
+        }
     }
 
     // Handle and save all(interactive content)
@@ -736,7 +743,7 @@ class ContentUtility
     }
 
     // release extend usages
-    public static function releaseExtendUsages(int $type, int $logId, int $primaryId): array
+    public static function releaseExtendUsages(string $type, int $logId, int $primaryId): array
     {
         $logUsageType = match ($type) {
             'post' => ExtendUsage::TYPE_POST_LOG,
@@ -1036,7 +1043,10 @@ class ContentUtility
                 'remark' => $file->remark,
             ];
         }
-        FileUsage::createMany($fileData);
+
+        if ($fileData) {
+            FileUsage::createMany($fileData);
+        }
 
         // operations
         $operationUsages = OperationUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
@@ -1049,7 +1059,10 @@ class ContentUtility
                 'plugin_unikey' => $operation->plugin_unikey,
             ];
         }
-        OperationUsage::createMany($operationData);
+        
+        if ($operationData) {
+            OperationUsage::createMany($operationData);
+        }
 
         // archives
         $archiveUsages = ArchiveUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
@@ -1064,7 +1077,10 @@ class ContentUtility
                 'plugin_unikey' => $archive->plugin_unikey,
             ];
         }
-        ArchiveUsage::createMany($archiveData);
+
+        if ($archiveData) {
+            ArchiveUsage::createMany($archiveData);
+        }
 
         // extends
         $extendUsages = ExtendUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->get();
@@ -1079,7 +1095,10 @@ class ContentUtility
                 'plugin_unikey' => $extend->plugin_unikey,
             ];
         }
-        ExtendUsage::createMany($extendData);
+
+        if ($extendData) {
+            ExtendUsage::createMany($extendData);
+        }
     }
 
     // generate post draft
@@ -1156,7 +1175,7 @@ class ContentUtility
             'comment_btn_json' => $commentBtnJson,
         ];
 
-        $postLog = PostLog::createMany($logData);
+        $postLog = PostLog::create($logData);
 
         ContentUtility::batchCopyContentExtends('post', $post->id, $postLog->id);
 
@@ -1190,7 +1209,7 @@ class ContentUtility
             'map_json' => $comment->commentAppend->map_json,
         ];
 
-        $commentLog = CommentLog::createMany($logData);
+        $commentLog = CommentLog::create($logData);
 
         ContentUtility::batchCopyContentExtends('comment', $comment->id, $commentLog->id);
 
