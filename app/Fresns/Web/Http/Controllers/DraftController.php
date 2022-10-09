@@ -17,6 +17,18 @@ class DraftController extends Controller
         $drafts = Arr::get(ApiHelper::make()->get("/api/v2/editor/{$type}/drafts")->toArray(), 'data.list');
 
         if (count($drafts) === 0) {
+            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
+                'json' => [
+                    'createType' => 2,
+                ]
+            ])->toArray();
+
+            if (data_get($response, 'code') !== 0) {
+                throw new ErrorException($response['message']);
+            }
+
+            return redirect()->route('fresns.drafts.edit', $response['data']['detail']['id']);
+
         }
 
         $draftInfo = self::getDraft($type);
@@ -44,6 +56,24 @@ class DraftController extends Controller
         return view('drafts.edit', compact('draft','type', 'clid', 'plid', 'config', 'stickers'));
     }
 
+    public function store()
+    {
+        $type = request('type', 'post');
+
+        $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
+            'json' => [
+                'createType' => 2,
+            ]
+        ])->toArray();
+
+        if (data_get($response, 'code') !== 0) {
+            throw new ErrorException($response['message']);
+        }
+
+        return redirect()->route('fresns.drafts.edit', $response['data']['detail']['id']);
+
+    }
+
     public static function getDraft(string $type, ?int $draftId = null)
     {
         $client = ApiHelper::make();
@@ -62,7 +92,7 @@ class DraftController extends Controller
                 'draft' => $client->getAsync("/api/v2/editor/post/{$draftId}"),
             ]);
 
-            if ($results['draft']['code'] != 0) {
+            if ($results['draft']['code'] !== 0) {
                 throw new ErrorException($results['draft']['message'], $results['draft']['code']);
             }
 

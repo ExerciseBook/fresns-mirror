@@ -64,6 +64,7 @@ Route::prefix('engine')
 
         Route::post('/draft/{draftId}',[ApiController::class, 'draftUpdate'])->name('draft.update');
 
+        Route::get('/input_tips', [ApiController::class, 'getInputTips'])->name('getInputTips');
         // FsLang
         Route::get('js/{locale?}/translations', function ($locale) {
             $languagePack = fs_api_config('language_pack_contents');

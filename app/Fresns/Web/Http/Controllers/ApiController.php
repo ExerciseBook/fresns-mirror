@@ -8,9 +8,9 @@
 
 namespace App\Fresns\Web\Http\Controllers;
 
+use App\Fresns\Web\Exceptions\ErrorException;
 use App\Fresns\Web\Helpers\ApiHelper;
 use App\Fresns\Web\Helpers\QueryHelper;
-use App\Utilities\ConfigUtility;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -380,5 +380,24 @@ class ApiController extends Controller
         ]);
 
         return \response()->json($response->toArray());
+    }
+
+    public function getInputTips(Request $request): JsonResponse
+    {
+        if ($request->get('type') &&  $request->get('key')) {
+            $result = ApiHelper::make()->get("/api/v2/common/input-tips", [
+                'query' => [
+                    'type' => $request->get('type'),
+                    'key' => $request->get('key'),
+                ]
+            ]);
+
+            if (data_get($result, 'code') !== 0) {
+                throw new ErrorException($result['message'], $result['code']);
+            }
+
+            return Response::json(data_get($result->toArray(), 'data'));
+        }
+        return Response::json();
     }
 }
