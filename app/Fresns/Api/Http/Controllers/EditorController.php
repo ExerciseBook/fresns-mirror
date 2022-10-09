@@ -753,7 +753,7 @@ class EditorController extends Controller
             'langTag' => $this->langTag(),
             'aid' => $this->account()->aid,
             'uid' => $authUser->uid,
-            'objectName' => route('api.editor.publish'),
+            'objectName' => route('api.editor.direct.publish'),
             'objectAction' => 'Editor Publish',
             'objectResult' => SessionLog::STATE_UNKNOWN,
             'objectOrderId' => $draft->id,
@@ -778,10 +778,12 @@ class EditorController extends Controller
                 if (! $draft->post_id) {
                     $post = PrimaryHelper::fresnsModelById('post', $draft->post_id);
 
-                    $checkContentEditPerm = PermissionUtility::checkContentEditPerm($post->created_at, $$editorConfig['post_edit_time_limit'], $timezone, $langTag);
+                    if ($post?->created_at) {
+                        $checkContentEditPerm = PermissionUtility::checkContentEditPerm($post->created_at, $editorConfig['post_edit_time_limit'], $timezone, $langTag);
 
-                    if (! $checkContentEditPerm['editableStatus']) {
-                        throw new ApiException(36309);
+                        if (! $checkContentEditPerm['editableStatus']) {
+                            throw new ApiException(36309);
+                        }
                     }
                 }
 
