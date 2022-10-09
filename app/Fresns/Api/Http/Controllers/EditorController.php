@@ -895,7 +895,7 @@ class EditorController extends Controller
             'submit_at' => now(),
         ]);
 
-        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->releaseContent($wordBody);
+        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->contentPublishByDraft($wordBody);
 
         if ($fresnsResp->isErrorResponse()) {
             return $fresnsResp->errorResponse();
