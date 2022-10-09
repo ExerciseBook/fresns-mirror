@@ -1003,7 +1003,7 @@ class EditorController extends Controller
                 throw new ApiException(32104);
             }
 
-            if ($fileConfig['service']) {
+            if (! $fileConfig['service']) {
                 throw new ApiException(32104);
             }
         }
