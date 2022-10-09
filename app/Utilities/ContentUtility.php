@@ -814,7 +814,7 @@ class ContentUtility
         }
 
         $postAppend = PostAppend::updateOrCreate([
-            'post_id' => $postLog->post_id,
+            'post_id' => $post->id,
         ],
         [
             'is_plugin_editor' => $postLog->is_plugin_editor,
@@ -928,7 +928,7 @@ class ContentUtility
         ]);
 
         $commentAppend = CommentAppend::updateOrCreate([
-            'comment_id' => $commentLog->comment_id,
+            'comment_id' => $comment->id,
         ],
         [
             'is_plugin_editor' => $commentLog->is_plugin_editor,
