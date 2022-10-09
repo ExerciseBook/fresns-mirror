@@ -787,7 +787,7 @@ class EditorController extends Controller
                     }
                 }
 
-                if (! $draft->group_id) {
+                if ($draft->group_id) {
                     $group = PrimaryHelper::fresnsModelById('group', $draft->group_id);
 
                     if (! $group) {
