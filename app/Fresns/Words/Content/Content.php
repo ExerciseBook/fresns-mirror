@@ -622,16 +622,16 @@ class Content
                 ]);
 
                 CommentAppend::create([
-                    'map_json' => $$dtoWordBody->mapJson ?? null,
-                    'map_scale' => $$dtoWordBody->mapJson['scale'] ?? null,
-                    'map_continent_code' => $$dtoWordBody->mapJson['continentCode'] ?? null,
-                    'map_country_code' => $$dtoWordBody->mapJson['countryCode'] ?? null,
-                    'map_region_code' => $$dtoWordBody->mapJson['regionCode'] ?? null,
-                    'map_city_code' => $$dtoWordBody->mapJson['cityCode'] ?? null,
-                    'map_city' => $$dtoWordBody->mapJson['city'] ?? null,
-                    'map_zip' => $$dtoWordBody->mapJson['zip'] ?? null,
-                    'map_poi' => $$dtoWordBody->mapJson['poi'] ?? null,
-                    'map_poi_id' => $$dtoWordBody->mapJson['poiId'] ?? null,
+                    'map_json' => $dtoWordBody->mapJson ?? null,
+                    'map_scale' => $dtoWordBody->mapJson['scale'] ?? null,
+                    'map_continent_code' => $dtoWordBody->mapJson['continentCode'] ?? null,
+                    'map_country_code' => $dtoWordBody->mapJson['countryCode'] ?? null,
+                    'map_region_code' => $dtoWordBody->mapJson['regionCode'] ?? null,
+                    'map_city_code' => $dtoWordBody->mapJson['cityCode'] ?? null,
+                    'map_city' => $dtoWordBody->mapJson['city'] ?? null,
+                    'map_zip' => $dtoWordBody->mapJson['zip'] ?? null,
+                    'map_poi' => $dtoWordBody->mapJson['poi'] ?? null,
+                    'map_poi_id' => $dtoWordBody->mapJson['poiId'] ?? null,
                 ]);
 
                 $primaryId = $comment->id;
