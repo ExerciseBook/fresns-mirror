@@ -447,13 +447,13 @@ class ApiController extends Controller
 
         $result = ApiHelper::make()->post("/api/v2/common/upload-file", [
             'multipart' => array_filter($multipart, fn($val) => isset($val['contents']))
-        ]);
+        ])->toArray();
 
         if (data_get($result, 'code') !== 0) {
             throw new ErrorException($result['message'], $result['code']);
         }
 
-        return Response::json(data_get($result->toArray(), 'data'));
+        return Response::json(data_get($result, 'data'));
 
     }
 }
