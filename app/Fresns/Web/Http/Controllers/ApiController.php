@@ -375,7 +375,8 @@ class ApiController extends Controller
             'json' => [
                 'postGid' => $request->post('postGid'),
                 'postTitle' => $request->post('postTitle'),
-                'content' => $request->post('content')
+                'content' => $request->post('content'),
+                'deleteFile' => $request->post('deleteFile')
             ]
         ]);
 
