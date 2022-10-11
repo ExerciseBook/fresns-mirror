@@ -52,8 +52,8 @@ class EditorController extends Controller
             [
                 'type' => 'required',
                 'content' => 'required',
-                'postGid' => ($request->post('type') === 'post' && fs_db_config('post_editor_group_required')) ? 'required' : 'nullable',
-                'postTitle' => ($request->post('type') === 'post' && fs_db_config('post_editor_title_required')) ? 'required' : 'nullable',
+                'postGid' => ($request->post('type') === 'post' && fs_api_config('post_editor_group_required')) ? 'required' : 'nullable',
+                'postTitle' => ($request->post('type') === 'post' && fs_api_config('post_editor_title_required')) ? 'required' : 'nullable',
             ]
         );
 

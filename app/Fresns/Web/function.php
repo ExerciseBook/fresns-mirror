@@ -160,7 +160,7 @@ if (! function_exists('accept_images')) {
      */
     function accept_images(): string
     {
-        $imagesExt = fs_db_config('images_ext');
+        $imagesExt = fs_api_config('images_ext');
         $exts = array_map(function ($ext) {
             return '.'.$ext;
         }, explode(',', $imagesExt));
