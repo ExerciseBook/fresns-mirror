@@ -371,13 +371,14 @@ class ApiController extends Controller
 
     public function draftUpdate(Request $request, int $draftId)
     {
+        $params = [
+            'postGid' => $request->post('postGid'),
+            'postTitle' => $request->post('postTitle'),
+            'content' => $request->post('content'),
+            'deleteFile' => $request->post('deleteFile')
+        ];
         $response = ApiHelper::make()->put("/api/v2/editor/{$request->post('type')}/{$draftId}", [
-            'json' => [
-                'postGid' => $request->post('postGid'),
-                'postTitle' => $request->post('postTitle'),
-                'content' => $request->post('content'),
-                'deleteFile' => $request->post('deleteFile')
-            ]
+            'json' => array_filter($params, fn($val) => isset($val))
         ]);
 
         return \response()->json($response->toArray());

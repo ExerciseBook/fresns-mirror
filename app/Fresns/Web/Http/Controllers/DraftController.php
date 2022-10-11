@@ -59,12 +59,17 @@ class DraftController extends Controller
     public function store()
     {
         $type = request('type', 'post');
+        $fsid = request('fsid');
 
-        $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
-            'json' => [
-                'createType' => 2,
-            ]
-        ])->toArray();
+        if ($fsid) {
+            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/generate/{$fsid}")->toArray();
+        } else {
+            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
+                'json' => [
+                    'createType' => 2,
+                ]
+            ])->toArray();
+        }
 
         if (data_get($response, 'code') !== 0) {
             throw new ErrorException($response['message']);
@@ -127,5 +132,16 @@ class DraftController extends Controller
         }
 
         return redirect()->route('fresns.post.list')->with('success', $response['message']);
+    }
+
+    public function destroy(Request $request, string $draftId)
+    {
+        $response = ApiHelper::make()->delete("/api/v2/{$request->get('type')}/{$draftId}");
+
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        return back()->with('success', $response['message']);
     }
 }
