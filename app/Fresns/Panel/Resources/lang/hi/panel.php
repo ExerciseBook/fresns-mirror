@@ -1012,5 +1012,5 @@ return [
     'install_mode' => 'मोड स्थापित करें',
     'install_mode_input' => 'इनपुट Fresns कुंजी',
     'install_mode_upload' => 'ज़िप पैकेज अपलोड करें',
-    'install_mode_directory' => 'इनपुट निर्देशिका',
+    'install_mode_directory' => 'इनपुट निर्देशिका पथ',
 ];

@@ -1012,5 +1012,5 @@ return [
     'install_mode' => 'Режим установки',
     'install_mode_input' => 'Ввод ключа Fresns',
     'install_mode_upload' => 'Загрузить Zip-пакет',
-    'install_mode_directory' => 'Ввод справочника',
+    'install_mode_directory' => 'Путь к входному каталогу',
 ];

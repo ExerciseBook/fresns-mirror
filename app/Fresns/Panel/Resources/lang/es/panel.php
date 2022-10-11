@@ -1012,5 +1012,5 @@ return [
     'install_mode' => 'Modo de instalación',
     'install_mode_input' => 'Introducir la clave de Fresns',
     'install_mode_upload' => 'Subir el paquete Zip',
-    'install_mode_directory' => 'Introduzca el directorio',
+    'install_mode_directory' => 'Ruta del directorio de entrada',
 ];
