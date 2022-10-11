@@ -74,4 +74,6 @@ Route::prefix('engine')
                 'data' => $languagePack,
             ]);
         })->name('translations')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+
+        Route::post('/upload', [ApiController::class, 'upload'])->name('upload');
     });

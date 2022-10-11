@@ -400,4 +400,60 @@ class ApiController extends Controller
         }
         return Response::json();
     }
+
+    public function upload(Request $request)
+    {
+        $multipart = [
+            [
+                'name' => 'type',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('type'),
+            ],
+            [
+                'name' => 'usageType',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('usageType'),
+            ],
+            [
+                'name' => 'tableId',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('tableId'),
+            ],
+            [
+                'name' => 'uploadMode',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('uploadMode'),
+            ],
+            [
+                'name' => 'tableName',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('tableName'),
+            ],
+            [
+                'name' => 'tableColumn',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('tableColumn', 'id'),
+            ],
+        ];
+
+        if ($request->file('formFile')) {
+            $multipart[] = [
+                'name' => 'file',
+                'filename' => $request->file('formFile')->getClientOriginalName(),
+                'contents' => $request->file('formFile')->getContent(),
+                'headers' => ['Content-Type' => $request->file('formFile')->getClientMimeType()],
+            ];
+        }
+
+        $result = ApiHelper::make()->post("/api/v2/common/upload-file", [
+            'multipart' => array_filter($multipart, fn($val) => isset($val['contents']))
+        ]);
+
+        if (data_get($result, 'code') !== 0) {
+            throw new ErrorException($result['message'], $result['code']);
+        }
+
+        return Response::json(data_get($result->toArray(), 'data'));
+
+    }
 }
