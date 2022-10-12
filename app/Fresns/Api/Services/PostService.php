@@ -161,7 +161,7 @@ class PostService
             $info['isBrief'] = true;
         }
 
-        $info['content'] = ContentUtility::handleAndReplaceAll($info['content'], $post->is_markdown, Mention::TYPE_POST, $authUserId);
+        $info['content'] = ContentUtility::handleAndReplaceAll($info['content'], $post->is_markdown, Mention::TYPE_POST, $post->id);
 
         return $info;
     }
