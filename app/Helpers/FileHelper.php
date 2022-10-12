@@ -175,7 +175,7 @@ class FileHelper
 
         $fileUsages = $fileUsageQuery->get();
 
-        $fileList = $fileUsages->map(fn ($fileUsage) => $fileUsage->file->getFileInfo())->groupBy('type');
+        $fileList = $fileUsages->map(fn ($fileUsage) => $fileUsage->file?->getFileInfo())->groupBy('type');
 
         $files['images'] = $fileList->get(File::TYPE_IMAGE)?->all() ?? null;
         $files['videos'] = $fileList->get(File::TYPE_VIDEO)?->all() ?? null;
