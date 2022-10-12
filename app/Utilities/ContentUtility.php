@@ -270,7 +270,7 @@ class ContentUtility
     // Replace sticker
     public static function replaceSticker(string $content): string
     {
-        $stickerCodeList = ContentUtility::extractMention($content);
+        $stickerCodeList = ContentUtility::extractSticker($content);
         $stickerDataList = Sticker::whereIn('code', $stickerCodeList)->get();
 
         $replaceList = [];
@@ -282,7 +282,7 @@ class ContentUtility
             if (is_null($currentSticker)) {
                 $linkList[] = "[$sticker]";
             } else {
-                $stickerUrl = FileHelper::fresnsFileUrlByTableColumn($sticker->image_file_id, $sticker->image_file_url);
+                $stickerUrl = FileHelper::fresnsFileUrlByTableColumn($currentSticker->image_file_id, $currentSticker->image_file_url);
 
                 // <img src="$stickerUrl" class="fresns_sticker" alt="$sticker->code">
                 $linkList[] = sprintf('<img src="%s" class="fresns_sticker" alt="%s" />', $stickerUrl, $currentSticker->code);
