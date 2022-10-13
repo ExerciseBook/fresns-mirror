@@ -261,7 +261,7 @@ class EditorController extends Controller
 
         $wordBody = [
             'type' => $wordType,
-            'createType' => $fsid,
+            'fsid' => $fsid,
         ];
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->generateDraft($wordBody);
 

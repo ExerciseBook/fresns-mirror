@@ -413,7 +413,7 @@ class ContentUtility
         }
 
         $permissions['users'] = null;
-        if (empty($readAllowConfig['permissions']['users'])) {
+        if (!empty($readAllowConfig['permissions']['users'])) {
             $users = User::whereIn('uid', $readAllowConfig['permissions']['users'])->first();
             foreach ($users as $user) {
                 $userList = $user->getUserProfile($langTag, $timezone);
@@ -422,7 +422,7 @@ class ContentUtility
         }
 
         $permissions['roles'] = null;
-        if (empty($readAllowConfig['permissions']['roles'])) {
+        if (!empty($readAllowConfig['permissions']['roles'])) {
             $roles = Role::whereIn('id', $readAllowConfig['permissions']['roles'])->first();
             foreach ($roles as $role) {
                 $roleItem['rid'] = $role->id;
@@ -474,7 +474,7 @@ class ContentUtility
         $item['isCommentBtn'] = (bool) $commentBtnConfig['isCommentBtn'];
         $item['defaultLangBtnName'] = collect($commentBtnConfig['btnName'])->where('langTag', $langTag)->first()['name'] ?? null;
         $item['btnName'] = $commentBtnConfig['btnName'];
-        $item['btnStyle'] = $commentBtnConfig['btnStyle'];
+        $item['btnStyle'] = $commentBtnConfig['btnStyle'] ?? null;
         $item['pluginUrl'] = PluginHelper::fresnsPluginUrlByUnikey($commentBtnConfig['pluginUnikey']);
         $item['pluginUnikey'] = $commentBtnConfig['pluginUnikey'];
 
@@ -1091,8 +1091,8 @@ class ContentUtility
 
         $allowUserArr = PostAllow::where('post_id', $post->id)->where('is_initial', 1)->get()->groupBy('type');
 
-        $allowPermissions['users'] = $allowUserArr->get(PostAllow::TYPE_USER)->pluck('object_id')->all();
-        $allowPermissions['roles'] = $allowUserArr->get(PostAllow::TYPE_ROLE)->pluck('object_id')->all();
+        $allowPermissions['users'] = $allowUserArr->get(PostAllow::TYPE_USER)?->pluck('object_id')->all();
+        $allowPermissions['roles'] = $allowUserArr->get(PostAllow::TYPE_ROLE)?->pluck('object_id')->all();
 
         $allowJson['isAllow'] = $post->postAppend->is_allow;
         $allowJson['btnName'] = $allowBtnName;
