@@ -595,32 +595,36 @@ class ContentUtility
             return;
         }
 
-        PostAllow::where('post_id', $postId)->where('type', PostAllow::TYPE_USER)->where('is_initial', 1)->delete();
+        if (!empty($permArr['users'])) {
+            PostAllow::where('post_id', $postId)->where('type', PostAllow::TYPE_USER)->where('is_initial', 1)->delete();
 
-        foreach ($permArr['users'] as $userId) {
-            PostAllow::withTrashed()->updateOrCreate([
-                'post_id' => $postId,
-                'type' => PostAllow::TYPE_USER,
-                'object_id' => $userId,
-            ],
-            [
-                'is_initial' => 1,
-                'deleted_at' => null,
-            ]);
+            foreach ($permArr['users'] as $userId) {
+                PostAllow::withTrashed()->updateOrCreate([
+                    'post_id' => $postId,
+                    'type' => PostAllow::TYPE_USER,
+                    'object_id' => $userId,
+                ],
+                [
+                    'is_initial' => 1,
+                    'deleted_at' => null,
+                ]);
+            }
         }
 
-        PostAllow::where('post_id', $postId)->where('type', PostAllow::TYPE_ROLE)->where('is_initial', 1)->delete();
+        if (!empty($permArr['roles'])) {
+            PostAllow::where('post_id', $postId)->where('type', PostAllow::TYPE_ROLE)->where('is_initial', 1)->delete();
 
-        foreach ($permArr['roles'] as $roleId) {
-            PostAllow::withTrashed()->updateOrCreate([
-                'post_id' => $postId,
-                'type' => PostAllow::TYPE_ROLE,
-                'object_id' => $roleId,
-            ],
-            [
-                'is_initial' => 1,
-                'deleted_at' => null,
-            ]);
+            foreach ($permArr['roles'] as $roleId) {
+                PostAllow::withTrashed()->updateOrCreate([
+                    'post_id' => $postId,
+                    'type' => PostAllow::TYPE_ROLE,
+                    'object_id' => $roleId,
+                ],
+                [
+                    'is_initial' => 1,
+                    'deleted_at' => null,
+                ]);
+            }
         }
     }
 

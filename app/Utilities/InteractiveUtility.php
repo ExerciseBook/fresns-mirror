@@ -696,7 +696,7 @@ class InteractiveUtility
         $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
         Domain::whereIn('id', $domainIds)->$actionType("{$type}_count");
 
-        $hashtagIds = array_column($content->hashtags, 'id');
+        $hashtagIds = $content->hashtags->pluck('id');
         Hashtag::whereIn('id', $hashtagIds)->$actionType("{$type}_count");
     }
 
