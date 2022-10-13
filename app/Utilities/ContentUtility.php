@@ -565,7 +565,7 @@ class ContentUtility
     }
 
     // release lang name
-    public static function releaseLangName(string $tableName, string $tableColumn, int $tableId, array $langContentArr): string
+    public static function releaseLangName(string $tableName, string $tableColumn, int $tableId, array $langContentArr): ?string
     {
         $defaultLangTag = ConfigHelper::fresnsConfigDefaultLangTag();
 
