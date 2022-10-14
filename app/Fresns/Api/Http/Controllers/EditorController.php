@@ -921,8 +921,8 @@ class EditorController extends Controller
         return $this->success();
     }
 
-    // revoke
-    public function revoke($type, $draftId)
+    // recall
+    public function recall($type, $draftId)
     {
         $authUser = $this->user();
 

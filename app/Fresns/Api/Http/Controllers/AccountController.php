@@ -785,8 +785,8 @@ class AccountController extends Controller
         ]);
     }
 
-    // revokeDelete
-    public function revokeDelete()
+    // recallDelete
+    public function recallDelete()
     {
         $authAccount = $this->account();
 
