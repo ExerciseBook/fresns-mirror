@@ -11,6 +11,8 @@ namespace App\Fresns\Api\Traits;
 use App\Helpers\AppHelper;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpFoundation\Response;
+use App\Helpers\ConfigHelper;
+use App\Utilities\ConfigUtility;
 
 trait ApiResponseTrait
 {
@@ -29,6 +31,10 @@ trait ApiResponseTrait
             extract($data);
         }
 
+        if ($code !== 0) {
+            $message = ConfigUtility::getCodeMessage($code, null, \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag()));
+        }
+
         $data = $data ?: null;
         $fresnsResponse = compact('code', 'message', 'data') + array_filter(compact('paginate'));
 
@@ -44,8 +50,12 @@ trait ApiResponseTrait
         );
     }
 
-    public function failure($code = 3e4, $message = 'unknown error', $data = null, $headers = [])
+    public function failure($code = 30000, $message = 'unknown error', $data = null, $headers = [])
     {
+        if ($code !== 30000) {
+            $message = ConfigUtility::getCodeMessage($code, null, \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag()));
+        }
+
         if (! \request()->wantsJson()) {
             $message = \json_encode(compact('code', 'message', 'data'), \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT);
             if (! array_key_exists($code, Response::$statusTexts)) {
