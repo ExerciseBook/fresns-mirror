@@ -312,6 +312,7 @@ class EditorController extends Controller
             break;
         }
 
+        $edit['isEdit'] = true;
         $edit['editableStatus'] = $fresnsResp->getData('editableStatus');
         $edit['editableTime'] = $fresnsResp->getData('editableTime');
         $edit['deadlineTime'] = $fresnsResp->getData('deadlineTime');
@@ -345,6 +346,7 @@ class EditorController extends Controller
             throw new ApiException(38102);
         }
 
+        $isEdit = false;
         $editableStatus = true;
         $editableTime = null;
         $deadlineTime = null;
@@ -358,6 +360,8 @@ class EditorController extends Controller
                 $data['detail'] = $service->postLogData($draft, 'detail', $langTag, $timezone);
 
                 if ($draft->post_id) {
+                    $isEdit = true;
+
                     $post = PrimaryHelper::fresnsModelById('post', $draft->post_id);
 
                     $checkContentEditPerm = PermissionUtility::checkContentEditPerm($post->created_at, $editTimeConfig, $timezone, $langTag);
@@ -373,6 +377,8 @@ class EditorController extends Controller
                 $data['detail'] = $service->commentLogData($draft, 'detail', $langTag, $timezone);
 
                 if ($draft->comment_id) {
+                    $isEdit = true;
+
                     $comment = PrimaryHelper::fresnsModelById('comment', $draft->comment_id);
 
                     $checkContentEditPerm = PermissionUtility::checkContentEditPerm($comment->created_at, $editTimeConfig, $timezone, $langTag);
@@ -383,6 +389,7 @@ class EditorController extends Controller
             break;
         }
 
+        $edit['isEdit'] = $isEdit;
         $edit['editableStatus'] = $editableStatus;
         $edit['editableTime'] = $editableTime;
         $edit['deadlineTime'] = $deadlineTime;
