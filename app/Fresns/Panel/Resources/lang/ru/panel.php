@@ -515,6 +515,7 @@ return [
     'storage_url_status_desc' => 'Если плагин не поддерживает функцию Anti-Tainft цепи, не открывайте, в противном случае ресурс не будет доступен',
     'storage_url_key' => 'Ключ против кражи',
     'storage_url_expire' => 'Период подписи цепи',
+    'storage_image_handle_position' => 'Положение рукоятки изображения',
     'storage_image_thumb_config' => 'Карта конфигурации',
     'storage_image_thumb_avatar' => 'Аватар',
     'storage_image_thumb_ratio' => 'Изометрические миниатюры',

@@ -515,6 +515,7 @@ return [
     'storage_url_status_desc' => 'Si le plugin ne prend pas en charge la fonction de chaîne antivol, ne s\'ouvre pas, sinon la ressource ne sera pas accessible',
     'storage_url_key' => 'Touche de chaîne anti-vol',
     'storage_url_expire' => 'Période de validité de la signature de la chaîne anti-vol',
+    'storage_image_handle_position' => 'Position de la poignée d\'image',
     'storage_image_thumb_config' => 'Carte de configuration',
     'storage_image_thumb_avatar' => 'Avatar',
     'storage_image_thumb_ratio' => 'Thumbnail isométrique',

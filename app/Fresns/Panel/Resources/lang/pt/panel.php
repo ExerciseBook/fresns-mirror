@@ -515,6 +515,7 @@ return [
     'storage_url_status_desc' => 'Se o plugin não suportar a função de corrente anti-roubo, não abra, caso contrário, o recurso não será acessível',
     'storage_url_key' => 'Chave da cadeia anti-roubo',
     'storage_url_expire' => 'Período de validade de assinatura de cadeia anti-roubo',
+    'storage_image_handle_position' => 'Posição do cabo da imagem',
     'storage_image_thumb_config' => 'Mapa de configuração',
     'storage_image_thumb_avatar' => 'Avatar',
     'storage_image_thumb_ratio' => 'Miniatura isométrica',

@@ -515,6 +515,7 @@ return [
     'storage_url_status_desc' => 'Jika plugin tidak mendukung fungsi rantai anti-pencurian, jangan terbuka, jika tidak sumber daya tidak akan dapat diakses',
     'storage_url_key' => 'Kunci rantai anti-pencurian',
     'storage_url_expire' => 'Periode Validitas Tanda Tangan Anti-Pencurian',
+    'storage_image_handle_position' => 'Posisi Pegangan Gambar',
     'storage_image_thumb_config' => 'Konfigurasi Peta',
     'storage_image_thumb_avatar' => 'Avatar',
     'storage_image_thumb_ratio' => 'Thumbnail isometrik',

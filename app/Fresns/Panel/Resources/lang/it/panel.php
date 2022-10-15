@@ -515,6 +515,7 @@ return [
     'storage_url_status_desc' => 'Se il plugin non supporta la funzione della catena antifurto, non aprire, altrimenti la risorsa non sarà accessibile',
     'storage_url_key' => 'Chiave a catena antifurto',
     'storage_url_expire' => 'Periodo di validità della firma della catena antifurto',
+    'storage_image_handle_position' => 'Posizione della maniglia dell\'immagine',
     'storage_image_thumb_config' => 'Mappa della configurazione',
     'storage_image_thumb_avatar' => 'Avatar',
     'storage_image_thumb_ratio' => 'Miniatura isometrica',
