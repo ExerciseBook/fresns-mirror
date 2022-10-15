@@ -1192,7 +1192,7 @@ class ContentUtility
     }
 
     // Replace block words
-    public static function replaceBlockWords(string $type, ?string $content = null): string
+    public static function replaceBlockWords(string $type, ?string $content = null): ?string
     {
         if (empty($content)) {
             return null;
