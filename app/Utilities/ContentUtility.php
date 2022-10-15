@@ -1203,9 +1203,9 @@ class ContentUtility
 
         $blockWords = Cache::remember($cacheKey, $cacheTime, function () use ($type) {
             $blockWords = match ($type) {
-                'content' => BlockWord::where('content_mode', 2)->get('word', 'replace_word'),
-                'user' => BlockWord::where('user_mode', 2)->get('word', 'replace_word'),
-                'dialog' => BlockWord::where('dialog_mode', 2)->get('word', 'replace_word'),
+                'content' => BlockWord::where('content_mode', '!=', 1)->get('word', 'replace_word'),
+                'user' => BlockWord::where('user_mode', '!=', 1)->get('word', 'replace_word'),
+                'dialog' => BlockWord::where('dialog_mode', '!=', 1)->get('word', 'replace_word'),
             };
 
             return $blockWords;
