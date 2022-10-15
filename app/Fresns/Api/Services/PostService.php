@@ -155,8 +155,8 @@ class PostService
         $briefLength = ConfigHelper::fresnsConfigByItemKey('post_editor_brief_length');
 
         $info['content'] = $content;
-        $info['isBrief'] = false;
-        if ($type == 'list') {
+
+        if ($type == 'list' && $contentLength > $briefLength) {
             $info['content'] = Str::limit($content, $briefLength);
             $info['isBrief'] = true;
         }
@@ -199,7 +199,7 @@ class PostService
         $info['isBrief'] = false;
 
         $briefLength = ConfigHelper::fresnsConfigByItemKey('post_editor_brief_length');
-        if ($type == 'list') {
+        if ($type == 'list' && $info['contentLength'] > $briefLength) {
             $info['content'] = Str::limit($log->content, $briefLength);
             $info['isBrief'] = true;
         }

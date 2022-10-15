@@ -152,6 +152,7 @@ class CommentService
         $briefLength = ConfigHelper::fresnsConfigByItemKey('comment_editor_brief_length');
 
         $item['contentPublic'] = (bool) $postAppend->is_comment_public;
+
         if (! $item['contentPublic']) {
             $commentInfo['content'] = null;
         } elseif ($type == 'list' && $contentLength > $briefLength) {
@@ -237,7 +238,7 @@ class CommentService
         $info['isBrief'] = false;
 
         $briefLength = ConfigHelper::fresnsConfigByItemKey('comment_editor_brief_length');
-        if ($type == 'list') {
+        if ($type == 'list' && $info['contentLength'] > $briefLength) {
             $info['content'] = Str::limit($log->content, $briefLength);
             $info['isBrief'] = true;
         }
