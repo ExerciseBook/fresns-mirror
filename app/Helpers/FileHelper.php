@@ -80,10 +80,10 @@ class FileHelper
             4 => ConfigHelper::fresnsConfigByItemKey('document_extension_names'),
         };
 
-        $accept = str_replace(',', ',.', $fileExt);
+        $accept = str_replace(',', ',', $fileExt);
         $fileAccept = '';
         if ($accept) {
-            $fileAccept = Str::start($accept, '.');
+            $fileAccept = Str::start($accept, '');
         }
 
         return $fileAccept;
