@@ -458,6 +458,21 @@ class ApiController extends Controller
             default => 'post',
         };
 
+        $response = ApiHelper::make()->delete("/api/v2/{$type}/{$draftId}");
+
+        return \response()->json($response->toArray());
+    }
+
+    public function draftDelete(string $type, string $draftId)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
         $response = ApiHelper::make()->delete("/api/v2/editor/{$type}/{$draftId}");
 
         return \response()->json($response->toArray());

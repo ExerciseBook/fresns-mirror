@@ -51,12 +51,13 @@ Route::prefix('engine')
 
         Route::prefix('editor')->name('editor.')->group(function () {
             Route::post('upload-file', [ApiController::class, 'editorUploadFile'])->name('upload.file');
-            Route::patch('{type}/{draftId}', [ApiController::class, 'editorDelete'])->name('recall');
-            Route::delete('{type}/{draftId}', [ApiController::class, 'editorRecall'])->name('delete');
+            Route::delete('{type}/{draftId}', [ApiController::class, 'editorDelete'])->name('delete');
+            Route::patch('{type}/{draftId}', [ApiController::class, 'editorRecall'])->name('recall');
             Route::post('direct-publish', [ApiController::class, 'directPublish'])->name('direct.publish');
         });
 
         Route::post('/draft/{draftId}',[ApiController::class, 'draftUpdate'])->name('draft.update');
+        Route::delete('/draft/{type}/{draftId}',[ApiController::class, 'draftDelete'])->name('draft.delete');
 
         // FsLang
         Route::get('js/{locale?}/translations', function ($locale) {
