@@ -84,6 +84,7 @@ class WebConfiguration
     private function groupCategories():void
     {
         $result = ApiHelper::make()->get('/api/v2/group/categories');
+
         View::share('groupCategories', data_get($result, 'data.list', []));
     }
 

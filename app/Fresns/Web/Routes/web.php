@@ -18,7 +18,6 @@ use App\Fresns\Web\Http\Controllers\PostController;
 use App\Fresns\Web\Http\Controllers\ProfileController;
 use App\Fresns\Web\Http\Controllers\SearchController;
 use App\Fresns\Web\Http\Controllers\UserController;
-use App\Fresns\Web\Http\Controllers\DraftController;
 use App\Fresns\Web\Http\Middleware\AccountAuthorize;
 use App\Fresns\Web\Http\Middleware\CheckSiteModel;
 use App\Fresns\Web\Http\Middleware\UserAuthorize;
@@ -197,11 +196,7 @@ Route::prefix(LaravelLocalization::setLocale())
         // editor
         Route::name('editor.')->prefix('editor')->group(function () {
             Route::get('drafts/{type}', [EditorController::class, 'drafts'])->name('drafts');
-            Route::post('drafts/{type}', [EditorController::class, 'storeDraft'])->name('draft.store');
-            Route::post('publish', [EditorController::class, 'publish'])->name('publish');
-            Route::delete('draft/{type}/{draftId}', [EditorController::class, 'destroyDraft'])->name('draft.destroy');
-            Route::get('{type}/{draftId}', [EditorController::class, 'editDraft'])->name('draft.edit');
-            Route::put('{type}/{draftId}', [EditorController::class, 'updateDraft'])->name('draft.update');
-            Route::delete('{type}/{draftId}', [EditorController::class, 'destroy'])->name('destroy');
+            Route::get('{type}', [EditorController::class, 'index'])->name('index');
+            Route::get('{type}/{draftId}', [EditorController::class, 'edit'])->name('edit');
         });
     });

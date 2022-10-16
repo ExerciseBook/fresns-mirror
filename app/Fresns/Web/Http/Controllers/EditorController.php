@@ -10,14 +10,42 @@ namespace App\Fresns\Web\Http\Controllers;
 
 use App\Fresns\Web\Exceptions\ErrorException;
 use App\Fresns\Web\Helpers\ApiHelper;
+use App\Fresns\Web\Helpers\QueryHelper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
 
 class EditorController extends Controller
 {
     // drafts
-    public function drafts(string $type)
+    public function drafts(Request $request, string $type)
+    {
+        $draftType = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $query = $request->all();
+
+        $result = ApiHelper::make()->get("/api/v2/editor/{$draftType}/drafts", [
+            'query' => $query,
+        ]);
+
+        if ($result['code'] != 0) {
+            throw new ErrorException($result['message'], $result['code']);
+        }
+
+        $drafts = QueryHelper::convertApiDataToPaginate(
+            items: $result['data']['list'],
+            paginate: $result['data']['paginate'],
+        );
+
+        return view('editor.drafts', compact('drafts', 'type'));
+    }
+
+    // index
+    public function index(string $type, ?string $postGid = null, ?string $commentPid = null, ?string $commentCid = null)
     {
         $type = match ($type) {
             'posts' => 'post',
@@ -27,15 +55,23 @@ class EditorController extends Controller
             default => 'post',
         };
 
-        $clid = null;
+        $client = ApiHelper::make();
 
-        // 获取草稿列表
-        $drafts = Arr::get(ApiHelper::make()->get("/api/v2/editor/{$type}/drafts")->toArray(), 'data.list');
+        $results = $client->handleUnwrap([
+            'config' => $client->getAsync("/api/v2/editor/{$type}/config"),
+            'drafts' => $client->getAsync("/api/v2/editor/{$type}/drafts"),
+        ]);
+
+        $config = $results['config']['data'];
+        $drafts = $results['drafts']['data']['list'];
 
         if (count($drafts) === 0) {
             $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
                 'json' => [
                     'createType' => 2,
+                    'postGid' => $postGid,
+                    'commentPid' => $commentPid,
+                    'commentCid' => $commentCid,
                 ]
             ])->toArray();
 
@@ -43,95 +79,14 @@ class EditorController extends Controller
                 throw new ErrorException($response['message']);
             }
 
-            return redirect()->route('fresns.editor.draft.edit', [$type, $response['data']['detail']['id']]);
-
+            return redirect()->route('fresns.editor.edit', [$type, $response['data']['detail']['id']]);
         }
 
-        $draftInfo = self::getDraft($type);
-
-        $config = $draftInfo['config'];
-        $stickers = $draftInfo['stickers'];
-        $group = data_get($draftInfo, 'group.detail');
-
-        return view('editor.drafts', compact('drafts','type', 'clid', 'config', 'stickers', 'group'));
-
+        return view('editor.index', compact('type', 'config', 'drafts'));
     }
 
-
-    public function publish(Request $request)
-    {
-        $validator = Validator::make($request->post(),
-            [
-                'type' => 'required',
-                'content' => 'required',
-                'postGid' => ($request->post('type') === 'post' && fs_api_config('post_editor_group_required')) ? 'required' : 'nullable',
-                'postTitle' => ($request->post('type') === 'post' && fs_api_config('post_editor_title_required')) ? 'required' : 'nullable',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator);
-        }
-
-        $multipart = [
-            [
-                'name' => 'type',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('type'),
-            ],
-            [
-                'name' => 'postTitle',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('postTitle'),
-            ],
-            [
-                'name' => 'content',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('content'),
-            ],
-            [
-                'name' => 'isAnonymous',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => (bool) $request->post('anonymous', false),
-            ],
-            [
-                'name' => 'postGid',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('gid'),
-            ],
-            [
-                'name' => 'commentPid',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('commentPid'),
-            ],
-            [
-                'name' => 'commentCid',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('commentCid'),
-            ],
-        ];
-        if ($request->file('file')) {
-            $multipart[] = [
-                'name' => 'file',
-                'filename' => $request->file('file')->getClientOriginalName(),
-                'contents' => $request->file('file')->getContent(),
-                'headers' => ['Content-Type' => $request->file('file')->getClientMimeType()],
-            ];
-        }
-
-        $result = ApiHelper::make()->post("/api/v2/editor/direct-publish", [
-            'multipart' => array_filter($multipart, fn($val) => isset($val['contents']))
-        ]);
-
-        if ($result['code'] !== 0) {
-            throw new ErrorException($result['message']);
-        }
-
-        return back()->with('success', $result['message']);
-    }
-
-
-    public function storeDraft(string $type, Request $request)
+    // edit
+    public function edit(Request $request, string $type, int $draftId)
     {
         $type = match ($type) {
             'posts' => 'post',
@@ -140,39 +95,6 @@ class EditorController extends Controller
             'comment' => 'comment',
             default => 'post',
         };
-        $fsid = $request->input('fsid');
-
-        if ($fsid) {
-            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/generate/{$fsid}")->toArray();
-        } else {
-            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
-                'json' => [
-                    'createType' => 2,
-                ]
-            ])->toArray();
-        }
-
-        if (data_get($response, 'code') !== 0) {
-            throw new ErrorException($response['message']);
-        }
-
-        return redirect()->route('fresns.editor.draft.edit', [$type, $response['data']['detail']['id']]);
-
-    }
-
-    public function editDraft(Request $request, string $type, int $draftId)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $clid = null;
-
-        $plid = $draftId;
 
         $draftInfo = self::getDraft($type, $draftId);
 
@@ -181,80 +103,18 @@ class EditorController extends Controller
         $draft = $draftInfo['draft'];
         $group = data_get($draftInfo, 'group.detail') ?? data_get($draft,'detail.group.0');
 
-        return view('editor.editor', compact('draft','type', 'clid', 'plid', 'config', 'stickers', 'group'));
-    }
-
-    public function updateDraft(Request $request, string $type, int $draftId)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $response = ApiHelper::make()->put("/api/v2/editor/{$type}/{$draftId}", [
-            'json' => [
-                'postGid' => $request->post('gid'),
-                'postTitle' => $request->post('postTitle'),
-                'content' => $request->post('content'),
-                'isAnonymous' => $request->post('anonymous')
-            ]
-        ]);
-
-        if ($response['code'] !== 0) {
-            throw new ErrorException($response['message'], $response['code']);
+        $plid = null; // post log id
+        $clid = null; // comment log id
+        if ($type == 'post') {
+            $plid = $draftId;
+        } else {
+            $clid = $draftId;
         }
 
-        $response = ApiHelper::make()->post("/api/v2/editor/{$type}/{$draftId}");
-
-        if ($response['code'] !== 0) {
-            throw new ErrorException($response['message'], $response['code']);
-        }
-
-        return redirect()->route('fresns.post.list')->with('success', $response['message']);
+        return view('editor.edit', compact('type', 'plid', 'clid', 'config', 'stickers', 'draft', 'group'));
     }
 
-    public function destroyDraft(Request $request, string $type, string $draftId)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $response = ApiHelper::make()->delete("/api/v2/editor/$type/{$draftId}");
-
-        if ($response['code'] !== 0) {
-            throw new ErrorException($response['message'], $response['code']);
-        }
-
-        return back()->with('success', $response['message']);
-    }
-
-    public function destroy(Request $request, string $type, string $draftId)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $response = ApiHelper::make()->delete("/api/v2/$type/{$draftId}");
-
-        if ($response['code'] !== 0) {
-            throw new ErrorException($response['message'], $response['code']);
-        }
-
-        return back()->with('success', $response['message']);
-    }
-
-
+    // get draft
     public static function getDraft(string $type, ?int $draftId = null)
     {
         $client = ApiHelper::make();
@@ -265,7 +125,7 @@ class EditorController extends Controller
         ];
 
         if ($draftId) {
-            $params['draft'] = $client->getAsync("/api/v2/editor/post/{$draftId}");
+            $params['draft'] = $client->getAsync("/api/v2/editor/{$type}/{$draftId}");
         }
 
         if ($gid = request('gid')) {
@@ -281,5 +141,4 @@ class EditorController extends Controller
 
         return $draftInfo;
     }
-
 }

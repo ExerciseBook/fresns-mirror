@@ -24,16 +24,14 @@ Route::prefix('engine')
 
         Route::get('url-sign', [ApiController::class, 'urlSign'])->name('url.sign')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
 
+        Route::get('input-tips', [ApiController::class, 'getInputTips'])->name('getInputTips')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
         Route::post('send-verify-code', [ApiController::class, 'sendVerifyCode'])->name('send.verifyCode')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
-        Route::post('verify-identity', [ApiController::class, 'verifyIdentity'])->name('verification')->withoutMiddleware([UserAuthorize::class]);
-
-        Route::get('download-link', [ApiController::class, 'downloadLink'])->name('file.download');
-        Route::post('upload-file', [ApiController::class, 'uploadFile'])->name('upload.file');
 
         Route::prefix('account')->name('account.')->group(function () {
             Route::post('register', [ApiController::class, 'accountRegister'])->name('register')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
             Route::post('login', [ApiController::class, 'accountLogin'])->name('login')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
-            Route::post('reset-password', [ApiController::class, 'resetPassword'])->name('resetPassword')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
+            Route::post('reset-password', [ApiController::class, 'accountResetPassword'])->name('reset.password')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
+            Route::post('verify-identity', [ApiController::class, 'accountVerifyIdentity'])->name('verify.identity')->withoutMiddleware([UserAuthorize::class]);
             Route::post('edit', [ApiController::class, 'accountEdit'])->name('edit')->withoutMiddleware([UserAuthorize::class]);
         });
 
@@ -44,36 +42,32 @@ Route::prefix('engine')
             Route::put('mark-note', [ApiController::class, 'userMarkNote'])->name('mark.note');
         });
 
+        Route::get('download-link', [ApiController::class, 'downloadLink'])->name('file.download');
+        Route::post('upload-file', [ApiController::class, 'uploadFile'])->name('upload.file');
+
         Route::delete('post/{pid}', [ApiController::class, 'postDelete'])->name('post.delete');
         Route::delete('comment/{cid}', [ApiController::class, 'commentDelete'])->name('comment.delete');
-
 
         Route::prefix('group')->name('group.')->group(function () {
             Route::get('list/{gid}', [ApiController::class, 'groupList'])->name('list');
         });
+
         Route::prefix('editor')->name('editor.')->group(function () {
-            Route::get('{type}/drafts', [ApiController::class, 'drafts'])->name('drafts');
-            Route::post('{type}/create', [ApiController::class, 'create'])->name('create');
-            Route::get('{type}/{draftId}', [ApiController::class, 'detail'])->name('detail');
-            Route::put('{type}/{draftId}', [ApiController::class, 'update'])->name('update');
-            Route::post('{type}/{draftId}', [ApiController::class, 'publish'])->name('publish');
-            Route::patch('{type}/{draftId}', [ApiController::class, 'revoke'])->name('revoke');
-            Route::delete('{type}/{draftId}', [ApiController::class, 'delete'])->name('delete');
-            Route::post('direct-publish', [ApiController::class, 'directPublish'])->name('direct.publish');
+            Route::post('direct-publish', [EditorController::class, 'editorDirectPublish'])->name('direct.publish');
+            Route::post('store/{type}', [EditorController::class, 'editorStore'])->name('store');
+            Route::put('{type}/{draftId}', [EditorController::class, 'editorUpdate'])->name('update');
+            Route::post('upload-file', [ApiController::class, 'editorUploadFile'])->name('upload.file');
+            Route::patch('{type}/{draftId}', [EditorController::class, 'editorDelete'])->name('delete');
+            Route::delete('{type}/{draftId}', [EditorController::class, 'editorRecall'])->name('recall');
         });
 
-        Route::post('/draft/{draftId}',[ApiController::class, 'draftUpdate'])->name('draft.update');
-
-        Route::get('/input_tips', [ApiController::class, 'getInputTips'])->name('getInputTips');
         // FsLang
         Route::get('js/{locale?}/translations', function ($locale) {
             $languagePack = fs_api_config('language_pack_contents');
 
-            // get 请求, 返回翻译内容
+            // get request, return translation content
             return \response()->json([
                 'data' => $languagePack,
             ]);
         })->name('translations')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
-
-        Route::post('/upload', [ApiController::class, 'upload'])->name('upload');
     });

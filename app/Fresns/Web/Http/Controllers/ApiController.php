@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
@@ -59,22 +60,6 @@ class ApiController extends Controller
         return $data;
     }
 
-    /**
-     * @param  string  $gid
-     * @return JsonResponse
-     * @throws GuzzleException
-     */
-    public function groupList(string $gid):JsonResponse
-    {
-        $response = ApiHelper::make()->get('/api/v2/group/list', [
-            'query' => [
-                'gid' => $gid
-            ],
-        ]);
-
-        return Response::json(data_get($response->toArray(), 'data.list', []));
-    }
-
     // url sign
     public function urlSign()
     {
@@ -89,6 +74,27 @@ class ApiController extends Controller
                 'sign' => $sign,
             ]
         ]);
+    }
+
+    // get input tips
+    public function getInputTips(Request $request): JsonResponse
+    {
+        if ($request->get('type') &&  $request->get('key')) {
+            $result = ApiHelper::make()->get("/api/v2/common/input-tips", [
+                'query' => [
+                    'type' => $request->get('type'),
+                    'key' => $request->get('key'),
+                ]
+            ]);
+
+            if (data_get($result, 'code') !== 0) {
+                throw new ErrorException($result['message'], $result['code']);
+            }
+
+            return Response::json(data_get($result->toArray(), 'data'));
+        }
+
+        return Response::json();
     }
 
     // send verify code
@@ -111,21 +117,6 @@ class ApiController extends Controller
         ]);
 
         return \response()->json($response->toArray());
-    }
-
-    // send verify code
-    public function verifyIdentity(Request $request)
-    {
-        $response = ApiHelper::make()->post('/api/v2/account/verify-identity', [
-            'json' => \request()->all(),
-        ]);
-
-        return \response()->json($response->toArray());
-    }
-
-    // download link
-    public function downloadLink(Request $request)
-    {
     }
 
     // account register
@@ -213,12 +204,12 @@ class ApiController extends Controller
     }
 
     // account reset password
-    public function resetPassword(Request $request)
+    public function accountResetPassword(Request $request)
     {
         if (\request('password') !== \request('password_confirmation')) {
             return \response()->json([
                 'code' => 30000,
-                'message' => '请确认密码是否一致',
+                'message' => fs_api_config('passwordAgainError'),
                 'data' => null,
             ]);
         }
@@ -236,6 +227,17 @@ class ApiController extends Controller
         return \response()->json($response->toArray());
     }
 
+    // account verify identity
+    public function accountVerifyIdentity(Request $request)
+    {
+        $response = ApiHelper::make()->post('/api/v2/account/verify-identity', [
+            'json' => \request()->all(),
+        ]);
+
+        return \response()->json($response->toArray());
+    }
+
+    // account edit
     public function accountEdit()
     {
         if ($editType = \request('edit_type')) {
@@ -294,6 +296,7 @@ class ApiController extends Controller
         return redirect()->intended(fs_route(route('fresns.account.index')));
     }
 
+    // user edit
     public function userEdit()
     {
         $response = ApiHelper::make()->put('/api/v2/user/edit', [
@@ -303,6 +306,22 @@ class ApiController extends Controller
         return \response()->json($response->toArray());
     }
 
+    // user mark
+    public function userMark(Request $request)
+    {
+        $response = ApiHelper::make()->post('/api/v2/user/mark', [
+            'json' => \request()->all(),
+        ]);
+
+        return \response()->json($response->toArray());
+    }
+
+    // user mark note
+    public function userMarkNote(Request $request)
+    {
+    }
+
+    // upload file
     public function uploadFile()
     {
         $multipart = [];
@@ -331,78 +350,165 @@ class ApiController extends Controller
         return \response()->json($response->toArray());
     }
 
-    // user mark
-    public function userMark(Request $request)
-    {
-        $response = ApiHelper::make()->post('/api/v2/user/mark', [
-            'json' => \request()->all(),
-        ]);
-
-        return \response()->json($response->toArray());
-    }
-
-    // user mark note
-    public function userMarkNote(Request $request)
-    {
-    }
-
-    // post edit
-    public function postEdit(string $pid)
+    // download link
+    public function downloadLink(Request $request)
     {
     }
 
     // post delete
     public function postDelete(string $pid)
     {
-        return ApiHelper::make()->delete("/api/v2/post/{$pid}");
-    }
+        $response = ApiHelper::make()->delete("/api/v2/post/{$pid}");
 
-    // comment edit
-    public function commentEdit(string $cid)
-    {
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        return back()->with('success', $response['message']);
     }
 
     // comment delete
     public function commentDelete(string $cid)
     {
-        return ApiHelper::make()->delete("/api/v2/comment/{$cid}");
+        $response = ApiHelper::make()->delete("/api/v2/comment/{$cid}");
+
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        return back()->with('success', $response['message']);
     }
 
-    public function draftUpdate(Request $request, int $draftId)
+    /**
+     * @param  string  $gid
+     * @return JsonResponse
+     * @throws GuzzleException
+     */
+    public function groupList(string $gid):JsonResponse
     {
-        $params = [
-            'postGid' => $request->post('postGid'),
-            'postTitle' => $request->post('postTitle'),
-            'content' => $request->post('content'),
-            'deleteFile' => $request->post('deleteFile')
-        ];
-        $response = ApiHelper::make()->put("/api/v2/editor/{$request->post('type')}/{$draftId}", [
-            'json' => array_filter($params, fn($val) => isset($val))
+        $response = ApiHelper::make()->get('/api/v2/group/list', [
+            'query' => [
+                'gid' => $gid
+            ],
         ]);
 
-        return \response()->json($response->toArray());
+        return Response::json(data_get($response->toArray(), 'data.list', []));
     }
 
-    public function getInputTips(Request $request): JsonResponse
+    // editor direct publish
+    public function editorDirectPublish(Request $request)
     {
-        if ($request->get('type') &&  $request->get('key')) {
-            $result = ApiHelper::make()->get("/api/v2/common/input-tips", [
-                'query' => [
-                    'type' => $request->get('type'),
-                    'key' => $request->get('key'),
-                ]
-            ]);
+        $validator = Validator::make($request->post(),
+            [
+                'type' => 'required',
+                'content' => 'required',
+                'postGid' => ($request->post('type') === 'post' && fs_api_config('post_editor_group_required')) ? 'required' : 'nullable',
+                'postTitle' => ($request->post('type') === 'post' && fs_api_config('post_editor_title_required')) ? 'required' : 'nullable',
+            ]
+        );
 
-            if (data_get($result, 'code') !== 0) {
-                throw new ErrorException($result['message'], $result['code']);
-            }
-
-            return Response::json(data_get($result->toArray(), 'data'));
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
         }
-        return Response::json();
+
+        $multipart = [
+            [
+                'name' => 'type',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('type'),
+            ],
+            [
+                'name' => 'postTitle',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('postTitle'),
+            ],
+            [
+                'name' => 'content',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('content'),
+            ],
+            [
+                'name' => 'isAnonymous',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => (bool) $request->post('anonymous', false),
+            ],
+            [
+                'name' => 'postGid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('gid'),
+            ],
+            [
+                'name' => 'commentPid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('commentPid'),
+            ],
+            [
+                'name' => 'commentCid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('commentCid'),
+            ],
+        ];
+        if ($request->file('file')) {
+            $multipart[] = [
+                'name' => 'file',
+                'filename' => $request->file('file')->getClientOriginalName(),
+                'contents' => $request->file('file')->getContent(),
+                'headers' => ['Content-Type' => $request->file('file')->getClientMimeType()],
+            ];
+        }
+
+        $result = ApiHelper::make()->post("/api/v2/editor/direct-publish", [
+            'multipart' => array_filter($multipart, fn($val) => isset($val['contents']))
+        ]);
+
+        if ($result['code'] !== 0) {
+            throw new ErrorException($result['message']);
+        }
+
+        return back()->with('success', $result['message']);
     }
 
-    public function upload(Request $request)
+    // editor create or edit
+    public function editorStore(Request $request, string $type)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+        $fsid = $request->input('fsid');
+
+        if ($fsid) {
+            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/generate/{$fsid}")->toArray();
+        } else {
+            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
+                'json' => [
+                    'createType' => 2,
+                    'editorUnikey' => $request->input('editorUnikey'),
+                    'postGid' => $request->input('postGid'),
+                    'postTitle' => $request->input('postTitle'),
+                    'postIsComment' => $request->input('postIsComment'),
+                    'postIsCommentPublic' => $request->input('postIsCommentPublic'),
+                    'content' => $request->input('content'),
+                    'isMarkdown' => $request->input('isMarkdown'),
+                    'isAnonymous' => $request->input('anonymous'),
+                    'mapJson' => $request->input('mapJson'),
+                    'eid' => $request->input('eid'),
+                ]
+            ])->toArray();
+        }
+
+        if (data_get($response, 'code') !== 0) {
+            throw new ErrorException($response['message']);
+        }
+
+        return redirect()->route('fresns.editor.edit', [$type, $response['data']['detail']['id']]);
+    }
+
+    // editor upload file
+    public function editorUploadFile(Request $request)
     {
         $multipart = [
             [
@@ -459,5 +565,85 @@ class ApiController extends Controller
         $results = ApiHelper::make()->handleUnwrap($postAsyncs)->toArray();
 
         return Response::json(array_filter(array_map(fn($arr) => data_get($arr, 'data'), $results), fn($arr) => data_get($arr, 'code') !== 0));
+    }
+
+    // editor update
+    public function editorUpdate(Request $request, string $type, int $draftId)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $response = ApiHelper::make()->put("/api/v2/editor/{$type}/{$draftId}", [
+            'json' => [
+                'postGid' => $request->post('gid'),
+                'postTitle' => $request->post('postTitle'),
+                'postIsComment' => $request->post('postIsComment'),
+                'postIsCommentPublic' => $request->post('postIsCommentPublic'),
+                'content' => $request->post('content'),
+                'isMarkdown' => $request->post('isMarkdown'),
+                'isAnonymous' => $request->post('anonymous'),
+                'mapJson' => $request->post('mapJson'),
+                'deleteMap' => $request->post('deleteMap'),
+                'deleteFile' => $request->post('deleteFile'),
+                'deleteExtend' => $request->post('deleteExtend'),
+            ]
+        ]);
+
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        $response = ApiHelper::make()->post("/api/v2/editor/{$type}/{$draftId}");
+
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        return redirect()->route('fresns.post.list')->with('success', $response['message']);
+    }
+
+    // editor recall
+    public function editorRecall(string $type, string $draftId)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $response = ApiHelper::make()->patch("/api/v2/editor/{$type}/{$draftId}");
+
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        return back()->with('success', $response['message']);
+    }
+
+    // editor delete
+    public function editorDelete(string $type, string $draftId)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $response = ApiHelper::make()->delete("/api/v2/editor/{$type}/{$draftId}");
+
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        return back()->with('success', $response['message']);
     }
 }
