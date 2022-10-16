@@ -418,6 +418,11 @@ class ApiController extends Controller
                 'contents' => $request->post('type'),
             ],
             [
+                'name' => 'postGid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('postGid'),
+            ],
+            [
                 'name' => 'postTitle',
                 'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
                 'contents' => $request->post('postTitle'),
@@ -431,11 +436,6 @@ class ApiController extends Controller
                 'name' => 'isAnonymous',
                 'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
                 'contents' => (bool) $request->post('anonymous', false),
-            ],
-            [
-                'name' => 'postGid',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('gid'),
             ],
             [
                 'name' => 'commentPid',
@@ -580,7 +580,7 @@ class ApiController extends Controller
 
         $response = ApiHelper::make()->put("/api/v2/editor/{$type}/{$draftId}", [
             'json' => [
-                'postGid' => $request->post('gid'),
+                'postGid' => $request->post('postGid'),
                 'postTitle' => $request->post('postTitle'),
                 'postIsComment' => $request->post('postIsComment'),
                 'postIsCommentPublic' => $request->post('postIsCommentPublic'),
@@ -599,6 +599,10 @@ class ApiController extends Controller
         }
 
         $response = ApiHelper::make()->post("/api/v2/editor/{$type}/{$draftId}");
+
+        if ($response['code'] == 38200) {
+            return redirect()->route('fresns.post.list')->with('success', $response['message']);
+        }
 
         if ($response['code'] !== 0) {
             throw new ErrorException($response['message'], $response['code']);

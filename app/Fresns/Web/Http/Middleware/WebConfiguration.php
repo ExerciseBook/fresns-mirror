@@ -9,7 +9,6 @@
 namespace App\Fresns\Web\Http\Middleware;
 
 use App\Fresns\Web\Helpers\ApiHelper;
-use App\Fresns\Web\Helpers\QueryHelper;
 use App\Helpers\ConfigHelper;
 use App\Models\SessionKey;
 use Browser;
