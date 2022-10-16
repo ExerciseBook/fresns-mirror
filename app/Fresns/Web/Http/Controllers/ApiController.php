@@ -18,7 +18,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
@@ -438,24 +437,27 @@ class ApiController extends Controller
             ],
         ];
 
-        if ($request->file('formFile')) {
-            $multipart[] = [
+
+        if (! $request->file('files')) {
+            return Response::json([]);
+        }
+
+        $postAsyncs = [];
+        foreach ($request->file('files') as $key => $file) {
+            $params = $multipart;
+            $params[] = [
                 'name' => 'file',
-                'filename' => $request->file('formFile')->getClientOriginalName(),
-                'contents' => $request->file('formFile')->getContent(),
-                'headers' => ['Content-Type' => $request->file('formFile')->getClientMimeType()],
+                'filename' => $file->getClientOriginalName(),
+                'contents' => $file->getContent(),
+                'headers' => ['Content-Type' => $file->getClientMimeType()],
             ];
+            $postAsyncs[] = ApiHelper::make()->postAsync('/api/v2/common/upload-file', [
+                'multipart' => array_filter($params, fn($val) => isset($val['contents']))
+            ]);
         }
 
-        $result = ApiHelper::make()->post("/api/v2/common/upload-file", [
-            'multipart' => array_filter($multipart, fn($val) => isset($val['contents']))
-        ])->toArray();
+        $results = ApiHelper::make()->handleUnwrap($postAsyncs)->toArray();
 
-        if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message'], $result['code']);
-        }
-
-        return Response::json(data_get($result, 'data'));
-
+        return Response::json(array_filter(array_map(fn($arr) => data_get($arr, 'data'), $results), fn($arr) => data_get($arr, 'code') !== 0));
     }
 }
