@@ -197,10 +197,11 @@ Route::prefix(LaravelLocalization::setLocale())
         // editor
         Route::name('editor.')->prefix('editor')->group(function () {
             Route::get('drafts/{type}', [EditorController::class, 'drafts'])->name('drafts');
-            Route::get('post/{draftId?}', [EditorController::class, 'post'])->name('post');
-            Route::get('comment/{draftId}', [EditorController::class, 'comment'])->name('comment');
+            Route::post('drafts/{type}', [EditorController::class, 'storeDraft'])->name('draft.store');
             Route::post('publish', [EditorController::class, 'publish'])->name('publish');
+            Route::delete('draft/{type}/{draftId}', [EditorController::class, 'destroyDraft'])->name('draft.destroy');
+            Route::get('{type}/{draftId}', [EditorController::class, 'editDraft'])->name('draft.edit');
+            Route::put('{type}/{draftId}', [EditorController::class, 'updateDraft'])->name('draft.update');
+            Route::delete('{type}/{draftId}', [EditorController::class, 'destroy'])->name('destroy');
         });
-
-        Route::resource('drafts', DraftController::class);
     });
