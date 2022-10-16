@@ -80,10 +80,50 @@ class FileHelper
             4 => ConfigHelper::fresnsConfigByItemKey('document_extension_names'),
         };
 
-        $accept = str_replace(',', ',', $fileExt);
-        $fileAccept = '';
-        if ($accept) {
-            $fileAccept = Str::start($accept, '');
+        $fileExt = Str::lower($fileExt);
+
+        // $accept = str_replace(',', ',.', $fileExt);
+        // $fileAccept = '';
+        // if ($accept) {
+        //     $fileAccept = Str::start($accept, '.');
+        // }
+
+        switch ($type) {
+            // image
+            case 1:
+                $accept = str_replace(',', ',image/', $fileExt);
+                $fileAccept = '';
+                if ($accept) {
+                    $fileAccept = Str::start($accept, 'image/');
+                }
+            break;
+
+            // video
+            case 2:
+                $accept = str_replace(',', ',video/', $fileExt);
+                $fileAccept = '';
+                if ($accept) {
+                    $fileAccept = Str::start($accept, 'video/');
+                }
+            break;
+
+            // audio
+            case 3:
+                $accept = str_replace(',', ',audio/', $fileExt);
+                $fileAccept = '';
+                if ($accept) {
+                    $fileAccept = Str::start($accept, 'audio/');
+                }
+            break;
+
+            // document
+            case 4:
+                $accept = str_replace(',', ',.', $fileExt);
+                $fileAccept = '';
+                if ($accept) {
+                    $fileAccept = Str::start($accept, '.');
+                }
+            break;
         }
 
         return $fileAccept;
