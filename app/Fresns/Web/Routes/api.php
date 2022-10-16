@@ -53,6 +53,7 @@ Route::prefix('engine')
             Route::post('upload-file', [ApiController::class, 'editorUploadFile'])->name('upload.file');
             Route::patch('{type}/{draftId}', [ApiController::class, 'editorDelete'])->name('recall');
             Route::delete('{type}/{draftId}', [ApiController::class, 'editorRecall'])->name('delete');
+            Route::post('direct-publish', [ApiController::class, 'directPublish'])->name('direct.publish');
         });
 
         Route::post('/draft/{draftId}',[ApiController::class, 'draftUpdate'])->name('draft.update');
