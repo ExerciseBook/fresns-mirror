@@ -354,22 +354,6 @@ class ApiController extends Controller
     {
     }
 
-    // post delete
-    public function postDelete(string $pid)
-    {
-        $response = ApiHelper::make()->delete("/api/v2/post/{$pid}");
-
-        return \response()->json($response->toArray());
-    }
-
-    // comment delete
-    public function commentDelete(string $cid)
-    {
-        $response = ApiHelper::make()->delete("/api/v2/comment/{$cid}");
-
-        return \response()->json($response->toArray());
-    }
-
     /**
      * @param  string  $gid
      * @return JsonResponse
@@ -474,6 +458,21 @@ class ApiController extends Controller
         };
 
         $response = ApiHelper::make()->delete("/api/v2/editor/{$type}/{$draftId}");
+
+        return \response()->json($response->toArray());
+    }
+
+    public function draftUpdate(Request $request, int $draftId)
+    {
+        $params = [
+            'postGid' => $request->post('postGid'),
+            'postTitle' => $request->post('postTitle'),
+            'content' => $request->post('content'),
+            'deleteFile' => $request->post('deleteFile')
+        ];
+        $response = ApiHelper::make()->put("/api/v2/editor/{$request->post('type')}/{$draftId}", [
+            'json' => array_filter($params, fn($val) => isset($val))
+        ]);
 
         return \response()->json($response->toArray());
     }
