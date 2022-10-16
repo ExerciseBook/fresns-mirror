@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
@@ -354,22 +355,6 @@ class ApiController extends Controller
     {
     }
 
-    // post delete
-    public function postDelete(string $pid)
-    {
-        $response = ApiHelper::make()->delete("/api/v2/post/{$pid}");
-
-        return \response()->json($response->toArray());
-    }
-
-    // comment delete
-    public function commentDelete(string $cid)
-    {
-        $response = ApiHelper::make()->delete("/api/v2/comment/{$cid}");
-
-        return \response()->json($response->toArray());
-    }
-
     /**
      * @param  string  $gid
      * @return JsonResponse
@@ -477,4 +462,90 @@ class ApiController extends Controller
 
         return \response()->json($response->toArray());
     }
+
+    public function draftUpdate(Request $request, int $draftId)
+    {
+        $params = [
+            'postGid' => $request->post('postGid'),
+            'postTitle' => $request->post('postTitle'),
+            'content' => $request->post('content'),
+            'deleteFile' => $request->post('deleteFile')
+        ];
+        $response = ApiHelper::make()->put("/api/v2/editor/{$request->post('type')}/{$draftId}", [
+            'json' => array_filter($params, fn($val) => isset($val))
+        ]);
+
+        return \response()->json($response->toArray());
+    }
+
+    // direct publish
+    public function directPublish(Request $request)
+    {
+        $validator = Validator::make($request->post(),
+            [
+                'type' => 'required',
+                'content' => 'required',
+                'postGid' => ($request->post('type') === 'post' && fs_api_config('post_editor_group_required')) ? 'required' : 'nullable',
+                'postTitle' => ($request->post('type') === 'post' && fs_api_config('post_editor_title_required')) ? 'required' : 'nullable',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return Response::json(['message' => $validator->errors()->all()[0], 'code' => 400]);
+        }
+
+        $multipart = [
+            [
+                'name' => 'type',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('type'),
+            ],
+            [
+                'name' => 'postGid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('postGid'),
+            ],
+            [
+                'name' => 'postTitle',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('postTitle'),
+            ],
+            [
+                'name' => 'content',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('content'),
+            ],
+            [
+                'name' => 'isAnonymous',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => (bool) $request->post('anonymous', false),
+            ],
+            [
+                'name' => 'commentPid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('commentPid'),
+            ],
+            [
+                'name' => 'commentCid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('commentCid'),
+            ],
+        ];
+        if ($request->file('file')) {
+            $multipart[] = [
+                'name' => 'file',
+                'filename' => $request->file('file')->getClientOriginalName(),
+                'contents' => $request->file('file')->getContent(),
+                'headers' => ['Content-Type' => $request->file('file')->getClientMimeType()],
+            ];
+        }
+
+        $result = ApiHelper::make()->post("/api/v2/editor/direct-publish", [
+            'multipart' => array_filter($multipart, fn($val) => isset($val['contents']))
+        ])->toArray();
+
+        return Response::json($result);
+    }
+
+
 }
