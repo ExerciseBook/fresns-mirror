@@ -81,7 +81,10 @@ class FileHelper
         };
 
         $accept = str_replace(',', ',.', $fileExt);
-        $fileAccept = Str::start($accept, '.');
+        $fileAccept = '';
+        if ($accept) {
+            $fileAccept = Str::start($accept, '.');
+        }
 
         return $fileAccept;
     }
