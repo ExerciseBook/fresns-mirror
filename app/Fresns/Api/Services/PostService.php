@@ -37,6 +37,7 @@ class PostService
         }
 
         $postInfo = $post->getPostInfo($langTag, $timezone);
+        $postInfo['title'] = ContentUtility::replaceBlockWords('content', $postInfo['title']);
         $contentHandle = self::contentHandle($post, $type, $authUserId);
 
         if (! empty($post->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {
