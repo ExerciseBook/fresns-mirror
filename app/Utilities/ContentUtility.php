@@ -406,10 +406,10 @@ class ContentUtility
     }
 
     // handle read allow json
-    public static function handleAllowJson(?array $readAllowConfig, string $langTag, string $timezone): array
+    public static function handleAllowJson(?array $readAllowConfig, string $langTag, string $timezone)
     {
-        if (!$readAllowConfig) {
-            return [];
+        if (! $readAllowConfig) {
+            return null;
         }
 
         $permissions['users'] = null;
@@ -449,10 +449,10 @@ class ContentUtility
     }
 
     // handle user list json
-    public static function handleUserListJson(?array $userListConfig, string $langTag): array
+    public static function handleUserListJson(?array $userListConfig, string $langTag)
     {
-        if (!$userListConfig) {
-            return [];
+        if (! $userListConfig) {
+            return null;
         }
 
         $item['isUserList'] = (bool) $userListConfig['isUserList'];
@@ -465,10 +465,10 @@ class ContentUtility
     }
 
     // handle comment btn json
-    public static function handleCommentBtnJson(?array $commentBtnConfig, string $langTag): array
+    public static function handleCommentBtnJson(?array $commentBtnConfig, string $langTag)
     {
-        if (!$commentBtnConfig) {
-            return [];
+        if (! $commentBtnConfig) {
+            return null;
         }
 
         $item['isCommentBtn'] = (bool) $commentBtnConfig['isCommentBtn'];
