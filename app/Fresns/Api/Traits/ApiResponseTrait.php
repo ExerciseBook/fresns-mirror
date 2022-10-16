@@ -55,7 +55,7 @@ trait ApiResponseTrait
         if (! \request()->wantsJson()) {
             $message = \json_encode(compact('code', 'message', 'data'), \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT);
             if (! array_key_exists($code, Response::$statusTexts)) {
-                $code = 0;
+                $code = 200;
             }
 
             return \response(
