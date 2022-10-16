@@ -51,8 +51,9 @@ class EditorController extends Controller
 
         $config = $draftInfo['config'];
         $stickers = $draftInfo['stickers'];
+        $group = data_get($draftInfo, 'group.detail');
 
-        return view('editor.drafts', compact('drafts','type', 'clid', 'config', 'stickers'));
+        return view('editor.drafts', compact('drafts','type', 'clid', 'config', 'stickers', 'group'));
 
     }
 
@@ -178,8 +179,9 @@ class EditorController extends Controller
         $config = $draftInfo['config'];
         $stickers = $draftInfo['stickers'];
         $draft = $draftInfo['draft'];
+        $group = data_get($draftInfo, 'group.detail') ?? data_get($draft,'detail.group.0');
 
-        return view('editor.editor', compact('draft','type', 'clid', 'plid', 'config', 'stickers'));
+        return view('editor.editor', compact('draft','type', 'clid', 'plid', 'config', 'stickers', 'group'));
     }
 
     public function updateDraft(Request $request, string $type, int $draftId)
@@ -257,29 +259,25 @@ class EditorController extends Controller
     {
         $client = ApiHelper::make();
 
-        if (empty($draftId)) {
-            $results = $client->handleUnwrap([
-                'config' => $client->getAsync("/api/v2/editor/{$type}/config"),
-                'stickers' => $client->getAsync('/api/v2/global/stickers'),
-            ]);
+        $params = [
+            'config' => $client->getAsync("/api/v2/editor/{$type}/config"),
+            'stickers' => $client->getAsync('/api/v2/global/stickers'),
+        ];
 
-            $draftInfo['draft'] = null;
-        } else {
-            $results = $client->handleUnwrap([
-                'config' => $client->getAsync("/api/v2/editor/{$type}/config"),
-                'stickers' => $client->getAsync('/api/v2/global/stickers'),
-                'draft' => $client->getAsync("/api/v2/editor/post/{$draftId}"),
-            ]);
-
-            if ($results['draft']['code'] !== 0) {
-                throw new ErrorException($results['draft']['message'], $results['draft']['code']);
-            }
-
-            $draftInfo['draft'] = $results['draft']['data'];
+        if ($draftId) {
+            $params['draft'] = $client->getAsync("/api/v2/editor/post/{$draftId}");
         }
 
-        $draftInfo['config'] = $results['config']['data'];
-        $draftInfo['stickers'] = $results['stickers']['data'];
+        if ($gid = request('gid')) {
+            $params['group'] = $client->getAsync("/api/v2/group/{$gid}/detail");
+        }
+
+        $results = $client->handleUnwrap($params);
+
+        $draftInfo['config'] = data_get($results, 'config.data');
+        $draftInfo['stickers'] = data_get($results, 'stickers.data');
+        $draftInfo['draft'] = data_get($results, 'draft.data');
+        $draftInfo['group'] = data_get($results, 'group.data');
 
         return $draftInfo;
     }
