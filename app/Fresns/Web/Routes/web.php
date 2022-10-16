@@ -90,7 +90,7 @@ Route::prefix(LaravelLocalization::setLocale())
             Route::get('blocking', [PostController::class, 'blocking'])->name('blocking');
         });
 
-        // comment
+        // comments
         Route::name('comment.')->prefix(fs_db_config('website_comment_path'))->group(function () {
             Route::get('/', [CommentController::class, 'index'])->name('index')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
             Route::get('list', [CommentController::class, 'list'])->name('list')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
@@ -121,7 +121,7 @@ Route::prefix(LaravelLocalization::setLocale())
 
             Route::get('posts', [ProfileController::class, 'posts'])->name('posts');
             Route::get('comments', [ProfileController::class, 'comments'])->name('comments');
-            // mark
+            // mark records
             Route::get('likers', [ProfileController::class, 'likers'])->name('likers');
             Route::get('dislikers', [ProfileController::class, 'dislikers'])->name('dislikers');
             Route::get('followers', [ProfileController::class, 'followers'])->name('followers');
@@ -196,7 +196,9 @@ Route::prefix(LaravelLocalization::setLocale())
         // editor
         Route::name('editor.')->prefix('editor')->group(function () {
             Route::get('drafts/{type}', [EditorController::class, 'drafts'])->name('drafts');
+            Route::post('store/{type}', [EditorController::class, 'store'])->name('store');
             Route::get('{type}', [EditorController::class, 'index'])->name('index');
             Route::get('{type}/{draftId}', [EditorController::class, 'edit'])->name('edit');
+
         });
     });

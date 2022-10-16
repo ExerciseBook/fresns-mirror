@@ -44,6 +44,45 @@ class EditorController extends Controller
         return view('editor.drafts', compact('drafts', 'type'));
     }
 
+    // create or edit
+    public function store(Request $request, string $type)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+        $fsid = $request->input('fsid');
+
+        if ($fsid) {
+            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/generate/{$fsid}")->toArray();
+        } else {
+            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
+                'json' => [
+                    'createType' => 2,
+                    'editorUnikey' => $request->input('editorUnikey'),
+                    'postGid' => $request->input('postGid'),
+                    'postTitle' => $request->input('postTitle'),
+                    'postIsComment' => $request->input('postIsComment'),
+                    'postIsCommentPublic' => $request->input('postIsCommentPublic'),
+                    'content' => $request->input('content'),
+                    'isMarkdown' => $request->input('isMarkdown'),
+                    'isAnonymous' => $request->input('anonymous'),
+                    'mapJson' => $request->input('mapJson'),
+                    'eid' => $request->input('eid'),
+                ]
+            ])->toArray();
+        }
+
+        if (data_get($response, 'code') !== 0) {
+            throw new ErrorException($response['message']);
+        }
+
+        return redirect()->route('fresns.editor.edit', [$type, $response['data']['detail']['id']]);
+    }
+
     // index
     public function index(string $type, ?string $postGid = null, ?string $commentPid = null, ?string $commentCid = null)
     {

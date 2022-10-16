@@ -360,11 +360,7 @@ class ApiController extends Controller
     {
         $response = ApiHelper::make()->delete("/api/v2/post/{$pid}");
 
-        if ($response['code'] !== 0) {
-            throw new ErrorException($response['message'], $response['code']);
-        }
-
-        return back()->with('success', $response['message']);
+        return \response()->json($response->toArray());
     }
 
     // comment delete
@@ -372,11 +368,7 @@ class ApiController extends Controller
     {
         $response = ApiHelper::make()->delete("/api/v2/comment/{$cid}");
 
-        if ($response['code'] !== 0) {
-            throw new ErrorException($response['message'], $response['code']);
-        }
-
-        return back()->with('success', $response['message']);
+        return \response()->json($response->toArray());
     }
 
     /**
@@ -466,45 +458,6 @@ class ApiController extends Controller
         }
 
         return back()->with('success', $result['message']);
-    }
-
-    // editor create or edit
-    public function editorStore(Request $request, string $type)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-        $fsid = $request->input('fsid');
-
-        if ($fsid) {
-            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/generate/{$fsid}")->toArray();
-        } else {
-            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
-                'json' => [
-                    'createType' => 2,
-                    'editorUnikey' => $request->input('editorUnikey'),
-                    'postGid' => $request->input('postGid'),
-                    'postTitle' => $request->input('postTitle'),
-                    'postIsComment' => $request->input('postIsComment'),
-                    'postIsCommentPublic' => $request->input('postIsCommentPublic'),
-                    'content' => $request->input('content'),
-                    'isMarkdown' => $request->input('isMarkdown'),
-                    'isAnonymous' => $request->input('anonymous'),
-                    'mapJson' => $request->input('mapJson'),
-                    'eid' => $request->input('eid'),
-                ]
-            ])->toArray();
-        }
-
-        if (data_get($response, 'code') !== 0) {
-            throw new ErrorException($response['message']);
-        }
-
-        return redirect()->route('fresns.editor.edit', [$type, $response['data']['detail']['id']]);
     }
 
     // editor upload file
@@ -624,11 +577,7 @@ class ApiController extends Controller
 
         $response = ApiHelper::make()->patch("/api/v2/editor/{$type}/{$draftId}");
 
-        if ($response['code'] !== 0) {
-            throw new ErrorException($response['message'], $response['code']);
-        }
-
-        return back()->with('success', $response['message']);
+        return \response()->json($response->toArray());
     }
 
     // editor delete
@@ -644,10 +593,6 @@ class ApiController extends Controller
 
         $response = ApiHelper::make()->delete("/api/v2/editor/{$type}/{$draftId}");
 
-        if ($response['code'] !== 0) {
-            throw new ErrorException($response['message'], $response['code']);
-        }
-
-        return back()->with('success', $response['message']);
+        return \response()->json($response->toArray());
     }
 }
