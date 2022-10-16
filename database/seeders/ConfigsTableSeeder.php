@@ -1766,8 +1766,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             134 => [
                 'id' => 135,
-                'item_key' => 'image_thumb_config',
-                'item_value' => null,
+                'item_key' => 'image_handle_position',
+                'item_value' => 'end',
                 'item_type' => 'string',
                 'item_tag' => 'storageImages',
                 'is_multilingual' => 0,
@@ -1779,7 +1779,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             135 => [
                 'id' => 136,
-                'item_key' => 'image_thumb_avatar',
+                'item_key' => 'image_thumb_config',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageImages',
@@ -1792,7 +1792,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             136 => [
                 'id' => 137,
-                'item_key' => 'image_thumb_ratio',
+                'item_key' => 'image_thumb_avatar',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageImages',
@@ -1805,7 +1805,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             137 => [
                 'id' => 138,
-                'item_key' => 'image_thumb_square',
+                'item_key' => 'image_thumb_ratio',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageImages',
@@ -1818,7 +1818,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             138 => [
                 'id' => 139,
-                'item_key' => 'image_thumb_big',
+                'item_key' => 'image_thumb_square',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageImages',
@@ -1831,6 +1831,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             139 => [
                 'id' => 140,
+                'item_key' => 'image_thumb_big',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'storageImages',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 0,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            140 => [
+                'id' => 141,
                 'item_key' => 'video_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
@@ -1842,22 +1855,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            140 => [
-                'id' => 141,
-                'item_key' => 'video_secret_id',
-                'item_value' => null,
-                'item_type' => 'string',
-                'item_tag' => 'storageVideos',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 0,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             141 => [
                 'id' => 142,
-                'item_key' => 'video_secret_key',
+                'item_key' => 'video_secret_id',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageVideos',
@@ -1870,7 +1870,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             142 => [
                 'id' => 143,
-                'item_key' => 'video_bucket_name',
+                'item_key' => 'video_secret_key',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageVideos',
@@ -1883,7 +1883,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             143 => [
                 'id' => 144,
-                'item_key' => 'video_bucket_area',
+                'item_key' => 'video_bucket_name',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageVideos',
@@ -1896,7 +1896,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             144 => [
                 'id' => 145,
-                'item_key' => 'video_bucket_domain',
+                'item_key' => 'video_bucket_area',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageVideos',
@@ -1909,8 +1909,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             145 => [
                 'id' => 146,
-                'item_key' => 'video_filesystem_disk',
-                'item_value' => 'remote',
+                'item_key' => 'video_bucket_domain',
+                'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageVideos',
                 'is_multilingual' => 0,
@@ -1922,6 +1922,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             146 => [
                 'id' => 147,
+                'item_key' => 'video_filesystem_disk',
+                'item_value' => 'remote',
+                'item_type' => 'string',
+                'item_tag' => 'storageVideos',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 0,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            147 => [
+                'id' => 148,
                 'item_key' => 'video_extension_names',
                 'item_value' => 'wmv,rm,mov,mpeg,mp4,3gp,flv,avi,rmvb',
                 'item_type' => 'string',
@@ -1933,8 +1946,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            147 => [
-                'id' => 148,
+            148 => [
+                'id' => 149,
                 'item_key' => 'video_max_size',
                 'item_value' => '50',
                 'item_type' => 'number',
@@ -1946,8 +1959,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            148 => [
-                'id' => 149,
+            149 => [
+                'id' => 150,
                 'item_key' => 'video_max_time',
                 'item_value' => '30',
                 'item_type' => 'number',
@@ -1959,8 +1972,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            149 => [
-                'id' => 150,
+            150 => [
+                'id' => 151,
                 'item_key' => 'video_url_status',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -1972,8 +1985,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            150 => [
-                'id' => 151,
+            151 => [
+                'id' => 152,
                 'item_key' => 'video_url_key',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -1985,8 +1998,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            151 => [
-                'id' => 152,
+            152 => [
+                'id' => 153,
                 'item_key' => 'video_url_expire',
                 'item_value' => '10',
                 'item_type' => 'number',
@@ -1998,22 +2011,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            152 => [
-                'id' => 153,
-                'item_key' => 'video_transcode',
-                'item_value' => null,
-                'item_type' => 'string',
-                'item_tag' => 'storageVideos',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 0,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             153 => [
                 'id' => 154,
-                'item_key' => 'video_watermark',
+                'item_key' => 'video_transcode',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageVideos',
@@ -2026,7 +2026,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             154 => [
                 'id' => 155,
-                'item_key' => 'video_screenshot',
+                'item_key' => 'video_watermark',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageVideos',
@@ -2039,7 +2039,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             155 => [
                 'id' => 156,
-                'item_key' => 'video_gift',
+                'item_key' => 'video_screenshot',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageVideos',
@@ -2052,6 +2052,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             156 => [
                 'id' => 157,
+                'item_key' => 'video_gift',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'storageVideos',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 0,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            157 => [
+                'id' => 158,
                 'item_key' => 'audio_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
@@ -2063,22 +2076,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            157 => [
-                'id' => 158,
-                'item_key' => 'audio_secret_id',
-                'item_value' => null,
-                'item_type' => 'string',
-                'item_tag' => 'storageAudios',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 0,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             158 => [
                 'id' => 159,
-                'item_key' => 'audio_secret_key',
+                'item_key' => 'audio_secret_id',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageAudios',
@@ -2091,7 +2091,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             159 => [
                 'id' => 160,
-                'item_key' => 'audio_bucket_name',
+                'item_key' => 'audio_secret_key',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageAudios',
@@ -2104,7 +2104,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             160 => [
                 'id' => 161,
-                'item_key' => 'audio_bucket_area',
+                'item_key' => 'audio_bucket_name',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageAudios',
@@ -2117,7 +2117,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             161 => [
                 'id' => 162,
-                'item_key' => 'audio_bucket_domain',
+                'item_key' => 'audio_bucket_area',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageAudios',
@@ -2130,8 +2130,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             162 => [
                 'id' => 163,
-                'item_key' => 'audio_filesystem_disk',
-                'item_value' => 'remote',
+                'item_key' => 'audio_bucket_domain',
+                'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageAudios',
                 'is_multilingual' => 0,
@@ -2143,6 +2143,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             163 => [
                 'id' => 164,
+                'item_key' => 'audio_filesystem_disk',
+                'item_value' => 'remote',
+                'item_type' => 'string',
+                'item_tag' => 'storageAudios',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 0,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            164 => [
+                'id' => 165,
                 'item_key' => 'audio_extension_names',
                 'item_value' => 'mp3,wav,m4a',
                 'item_type' => 'string',
@@ -2154,8 +2167,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            164 => [
-                'id' => 165,
+            165 => [
+                'id' => 166,
                 'item_key' => 'audio_max_size',
                 'item_value' => '50',
                 'item_type' => 'number',
@@ -2167,8 +2180,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            165 => [
-                'id' => 166,
+            166 => [
+                'id' => 167,
                 'item_key' => 'audio_max_time',
                 'item_value' => '60',
                 'item_type' => 'number',
@@ -2180,8 +2193,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            166 => [
-                'id' => 167,
+            167 => [
+                'id' => 168,
                 'item_key' => 'audio_url_status',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -2193,8 +2206,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            167 => [
-                'id' => 168,
+            168 => [
+                'id' => 169,
                 'item_key' => 'audio_url_key',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -2206,8 +2219,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            168 => [
-                'id' => 169,
+            169 => [
+                'id' => 170,
                 'item_key' => 'audio_url_expire',
                 'item_value' => '10',
                 'item_type' => 'number',
@@ -2219,8 +2232,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            169 => [
-                'id' => 170,
+            170 => [
+                'id' => 171,
                 'item_key' => 'audio_transcode',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -2232,8 +2245,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            170 => [
-                'id' => 171,
+            171 => [
+                'id' => 172,
                 'item_key' => 'document_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
@@ -2245,22 +2258,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            171 => [
-                'id' => 172,
-                'item_key' => 'document_secret_id',
-                'item_value' => null,
-                'item_type' => 'string',
-                'item_tag' => 'storageDocuments',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 0,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             172 => [
                 'id' => 173,
-                'item_key' => 'document_secret_key',
+                'item_key' => 'document_secret_id',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageDocuments',
@@ -2273,7 +2273,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             173 => [
                 'id' => 174,
-                'item_key' => 'document_bucket_name',
+                'item_key' => 'document_secret_key',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageDocuments',
@@ -2286,7 +2286,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             174 => [
                 'id' => 175,
-                'item_key' => 'document_bucket_area',
+                'item_key' => 'document_bucket_name',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageDocuments',
@@ -2299,7 +2299,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             175 => [
                 'id' => 176,
-                'item_key' => 'document_bucket_domain',
+                'item_key' => 'document_bucket_area',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageDocuments',
@@ -2312,8 +2312,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             176 => [
                 'id' => 177,
-                'item_key' => 'document_filesystem_disk',
-                'item_value' => 'remote',
+                'item_key' => 'document_bucket_domain',
+                'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'storageDocuments',
                 'is_multilingual' => 0,
@@ -2325,6 +2325,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             177 => [
                 'id' => 178,
+                'item_key' => 'document_filesystem_disk',
+                'item_value' => 'remote',
+                'item_type' => 'string',
+                'item_tag' => 'storageDocuments',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 0,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            178 => [
+                'id' => 179,
                 'item_key' => 'document_extension_names',
                 'item_value' => 'doc,docx,xls,xlsx,csv,ppt,pptx,pps,ppts,pdf,txt,md,markdown,rar,zip,7z,epub,mobi',
                 'item_type' => 'string',
@@ -2336,8 +2349,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            178 => [
-                'id' => 179,
+            179 => [
+                'id' => 180,
                 'item_key' => 'document_max_size',
                 'item_value' => '10',
                 'item_type' => 'number',
@@ -2349,8 +2362,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            179 => [
-                'id' => 180,
+            180 => [
+                'id' => 181,
                 'item_key' => 'document_url_status',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -2362,8 +2375,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            180 => [
-                'id' => 181,
+            181 => [
+                'id' => 182,
                 'item_key' => 'document_url_key',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -2375,8 +2388,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            181 => [
-                'id' => 182,
+            182 => [
+                'id' => 183,
                 'item_key' => 'document_url_expire',
                 'item_value' => '10',
                 'item_type' => 'number',
@@ -2388,8 +2401,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            182 => [
-                'id' => 183,
+            183 => [
+                'id' => 184,
                 'item_key' => 'document_online_preview',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -2401,8 +2414,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            183 => [
-                'id' => 184,
+            184 => [
+                'id' => 185,
                 'item_key' => 'document_preview_extension_names',
                 'item_value' => 'doc,docx,xls,xlsx,csv,ppt,pptx,pps,ppts,pdf',
                 'item_type' => 'string',
@@ -2414,8 +2427,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            184 => [
-                'id' => 185,
+            185 => [
+                'id' => 186,
                 'item_key' => 'image_substitution',
                 'item_value' => 'https://cdn.fresns.cn/images/substitution-image.jpg',
                 'item_type' => 'file',
@@ -2427,8 +2440,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            185 => [
-                'id' => 186,
+            186 => [
+                'id' => 187,
                 'item_key' => 'video_substitution',
                 'item_value' => 'https://cdn.fresns.cn/images/substitution-video.jpg',
                 'item_type' => 'file',
@@ -2440,8 +2453,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            186 => [
-                'id' => 187,
+            187 => [
+                'id' => 188,
                 'item_key' => 'audio_substitution',
                 'item_value' => 'https://cdn.fresns.cn/images/substitution-audio.jpg',
                 'item_type' => 'file',
@@ -2453,8 +2466,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            187 => [
-                'id' => 188,
+            188 => [
+                'id' => 189,
                 'item_key' => 'document_substitution',
                 'item_value' => 'https://cdn.fresns.cn/images/substitution-document.jpg',
                 'item_type' => 'file',
@@ -2466,8 +2479,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            188 => [
-                'id' => 189,
+            189 => [
+                'id' => 190,
                 'item_key' => 'user_name',
                 'item_value' => 'User',
                 'item_type' => 'string',
@@ -2479,8 +2492,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            189 => [
-                'id' => 190,
+            190 => [
+                'id' => 191,
                 'item_key' => 'user_uid_name',
                 'item_value' => 'UID',
                 'item_type' => 'string',
@@ -2492,8 +2505,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            190 => [
-                'id' => 191,
+            191 => [
+                'id' => 192,
                 'item_key' => 'user_username_name',
                 'item_value' => 'Username',
                 'item_type' => 'string',
@@ -2505,8 +2518,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            191 => [
-                'id' => 192,
+            192 => [
+                'id' => 193,
                 'item_key' => 'user_nickname_name',
                 'item_value' => 'Nickname',
                 'item_type' => 'string',
@@ -2518,8 +2531,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            192 => [
-                'id' => 193,
+            193 => [
+                'id' => 194,
                 'item_key' => 'user_role_name',
                 'item_value' => 'Role',
                 'item_type' => 'string',
@@ -2531,8 +2544,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            193 => [
-                'id' => 194,
+            194 => [
+                'id' => 195,
                 'item_key' => 'user_bio_name',
                 'item_value' => 'Bio',
                 'item_type' => 'string',
@@ -2544,8 +2557,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            194 => [
-                'id' => 195,
+            195 => [
+                'id' => 196,
                 'item_key' => 'group_name',
                 'item_value' => 'Group',
                 'item_type' => 'string',
@@ -2557,8 +2570,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            195 => [
-                'id' => 196,
+            196 => [
+                'id' => 197,
                 'item_key' => 'hashtag_name',
                 'item_value' => 'Hashtag',
                 'item_type' => 'string',
@@ -2570,8 +2583,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            196 => [
-                'id' => 197,
+            197 => [
+                'id' => 198,
                 'item_key' => 'post_name',
                 'item_value' => 'Post',
                 'item_type' => 'string',
@@ -2583,8 +2596,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            197 => [
-                'id' => 198,
+            198 => [
+                'id' => 199,
                 'item_key' => 'comment_name',
                 'item_value' => 'Comment',
                 'item_type' => 'string',
@@ -2596,8 +2609,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            198 => [
-                'id' => 199,
+            199 => [
+                'id' => 200,
                 'item_key' => 'publish_post_name',
                 'item_value' => 'Create Post',
                 'item_type' => 'string',
@@ -2609,8 +2622,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            199 => [
-                'id' => 200,
+            200 => [
+                'id' => 201,
                 'item_key' => 'publish_comment_name',
                 'item_value' => 'Write a comment',
                 'item_type' => 'string',
@@ -2622,22 +2635,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            200 => [
-                'id' => 201,
-                'item_key' => 'like_user_name',
-                'item_value' => 'Like',
-                'item_type' => 'string',
-                'item_tag' => 'renames',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             201 => [
                 'id' => 202,
-                'item_key' => 'like_group_name',
+                'item_key' => 'like_user_name',
                 'item_value' => 'Like',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2650,7 +2650,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             202 => [
                 'id' => 203,
-                'item_key' => 'like_hashtag_name',
+                'item_key' => 'like_group_name',
                 'item_value' => 'Like',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2663,7 +2663,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             203 => [
                 'id' => 204,
-                'item_key' => 'like_post_name',
+                'item_key' => 'like_hashtag_name',
                 'item_value' => 'Like',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2676,7 +2676,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             204 => [
                 'id' => 205,
-                'item_key' => 'like_comment_name',
+                'item_key' => 'like_post_name',
                 'item_value' => 'Like',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2689,8 +2689,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             205 => [
                 'id' => 206,
-                'item_key' => 'dislike_user_name',
-                'item_value' => 'Dislike',
+                'item_key' => 'like_comment_name',
+                'item_value' => 'Like',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
                 'is_multilingual' => 1,
@@ -2702,7 +2702,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             206 => [
                 'id' => 207,
-                'item_key' => 'dislike_group_name',
+                'item_key' => 'dislike_user_name',
                 'item_value' => 'Dislike',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2715,7 +2715,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             207 => [
                 'id' => 208,
-                'item_key' => 'dislike_hashtag_name',
+                'item_key' => 'dislike_group_name',
                 'item_value' => 'Dislike',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2728,7 +2728,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             208 => [
                 'id' => 209,
-                'item_key' => 'dislike_post_name',
+                'item_key' => 'dislike_hashtag_name',
                 'item_value' => 'Dislike',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2741,7 +2741,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             209 => [
                 'id' => 210,
-                'item_key' => 'dislike_comment_name',
+                'item_key' => 'dislike_post_name',
                 'item_value' => 'Dislike',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2754,8 +2754,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             210 => [
                 'id' => 211,
-                'item_key' => 'follow_user_name',
-                'item_value' => 'Follow',
+                'item_key' => 'dislike_comment_name',
+                'item_value' => 'Dislike',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
                 'is_multilingual' => 1,
@@ -2767,8 +2767,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             211 => [
                 'id' => 212,
-                'item_key' => 'follow_group_name',
-                'item_value' => 'Join',
+                'item_key' => 'follow_user_name',
+                'item_value' => 'Follow',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
                 'is_multilingual' => 1,
@@ -2780,8 +2780,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             212 => [
                 'id' => 213,
-                'item_key' => 'follow_hashtag_name',
-                'item_value' => 'Watching',
+                'item_key' => 'follow_group_name',
+                'item_value' => 'Join',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
                 'is_multilingual' => 1,
@@ -2793,8 +2793,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             213 => [
                 'id' => 214,
-                'item_key' => 'follow_post_name',
-                'item_value' => 'Save post',
+                'item_key' => 'follow_hashtag_name',
+                'item_value' => 'Watching',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
                 'is_multilingual' => 1,
@@ -2806,8 +2806,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             214 => [
                 'id' => 215,
-                'item_key' => 'follow_comment_name',
-                'item_value' => 'Save comment',
+                'item_key' => 'follow_post_name',
+                'item_value' => 'Save post',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
                 'is_multilingual' => 1,
@@ -2819,8 +2819,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             215 => [
                 'id' => 216,
-                'item_key' => 'block_user_name',
-                'item_value' => 'Block',
+                'item_key' => 'follow_comment_name',
+                'item_value' => 'Save comment',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
                 'is_multilingual' => 1,
@@ -2832,7 +2832,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             216 => [
                 'id' => 217,
-                'item_key' => 'block_group_name',
+                'item_key' => 'block_user_name',
                 'item_value' => 'Block',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2845,7 +2845,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             217 => [
                 'id' => 218,
-                'item_key' => 'block_hashtag_name',
+                'item_key' => 'block_group_name',
                 'item_value' => 'Block',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
@@ -2858,8 +2858,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             218 => [
                 'id' => 219,
-                'item_key' => 'block_post_name',
-                'item_value' => 'Hide post',
+                'item_key' => 'block_hashtag_name',
+                'item_value' => 'Block',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
                 'is_multilingual' => 1,
@@ -2871,8 +2871,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             219 => [
                 'id' => 220,
-                'item_key' => 'block_comment_name',
-                'item_value' => 'Hide comment',
+                'item_key' => 'block_post_name',
+                'item_value' => 'Hide post',
                 'item_type' => 'string',
                 'item_tag' => 'renames',
                 'is_multilingual' => 1,
@@ -2884,6 +2884,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             220 => [
                 'id' => 221,
+                'item_key' => 'block_comment_name',
+                'item_value' => 'Hide comment',
+                'item_type' => 'string',
+                'item_tag' => 'renames',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            221 => [
+                'id' => 222,
                 'item_key' => 'hashtag_show',
                 'item_value' => '1',
                 'item_type' => 'number',
@@ -2895,8 +2908,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            221 => [
-                'id' => 222,
+            222 => [
+                'id' => 223,
                 'item_key' => 'top_comment_require',
                 'item_value' => '50',
                 'item_type' => 'number',
@@ -2908,22 +2921,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            222 => [
-                'id' => 223,
-                'item_key' => 'comment_visibility_rule',
-                'item_value' => '0',
-                'item_type' => 'number',
-                'item_tag' => 'interactives',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             223 => [
                 'id' => 224,
-                'item_key' => 'comment_preview',
+                'item_key' => 'comment_visibility_rule',
                 'item_value' => '0',
                 'item_type' => 'number',
                 'item_tag' => 'interactives',
@@ -2936,8 +2936,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             224 => [
                 'id' => 225,
-                'item_key' => 'nearby_length_km',
-                'item_value' => '50',
+                'item_key' => 'comment_preview',
+                'item_value' => '0',
                 'item_type' => 'number',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -2949,8 +2949,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             225 => [
                 'id' => 226,
-                'item_key' => 'nearby_length_mi',
-                'item_value' => '30',
+                'item_key' => 'nearby_length_km',
+                'item_value' => '50',
                 'item_type' => 'number',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -2962,6 +2962,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             226 => [
                 'id' => 227,
+                'item_key' => 'nearby_length_mi',
+                'item_value' => '30',
+                'item_type' => 'number',
+                'item_tag' => 'interactives',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            227 => [
+                'id' => 228,
                 'item_key' => 'dialog_status',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -2973,8 +2986,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            227 => [
-                'id' => 228,
+            228 => [
+                'id' => 229,
                 'item_key' => 'dialog_files',
                 'item_value' => '["image"]',
                 'item_type' => 'array',
@@ -2986,8 +2999,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            228 => [
-                'id' => 229,
+            229 => [
+                'id' => 230,
                 'item_key' => 'view_posts_by_follow_object',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -2999,22 +3012,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            229 => [
-                'id' => 230,
-                'item_key' => 'view_comments_by_follow_object',
-                'item_value' => 'false',
-                'item_type' => 'boolean',
-                'item_tag' => 'interactives',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             230 => [
                 'id' => 231,
-                'item_key' => 'like_user_setting',
+                'item_key' => 'view_comments_by_follow_object',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3027,7 +3027,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             231 => [
                 'id' => 232,
-                'item_key' => 'like_group_setting',
+                'item_key' => 'like_user_setting',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3040,7 +3040,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             232 => [
                 'id' => 233,
-                'item_key' => 'like_hashtag_setting',
+                'item_key' => 'like_group_setting',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3053,8 +3053,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             233 => [
                 'id' => 234,
-                'item_key' => 'like_post_setting',
-                'item_value' => 'true',
+                'item_key' => 'like_hashtag_setting',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3066,7 +3066,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             234 => [
                 'id' => 235,
-                'item_key' => 'like_comment_setting',
+                'item_key' => 'like_post_setting',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3079,8 +3079,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             235 => [
                 'id' => 236,
-                'item_key' => 'dislike_user_setting',
-                'item_value' => 'false',
+                'item_key' => 'like_comment_setting',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3092,7 +3092,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             236 => [
                 'id' => 237,
-                'item_key' => 'dislike_group_setting',
+                'item_key' => 'dislike_user_setting',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3105,7 +3105,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             237 => [
                 'id' => 238,
-                'item_key' => 'dislike_hashtag_setting',
+                'item_key' => 'dislike_group_setting',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3118,8 +3118,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             238 => [
                 'id' => 239,
-                'item_key' => 'dislike_post_setting',
-                'item_value' => 'true',
+                'item_key' => 'dislike_hashtag_setting',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3131,7 +3131,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             239 => [
                 'id' => 240,
-                'item_key' => 'dislike_comment_setting',
+                'item_key' => 'dislike_post_setting',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3144,7 +3144,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             240 => [
                 'id' => 241,
-                'item_key' => 'follow_user_setting',
+                'item_key' => 'dislike_comment_setting',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3157,7 +3157,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             241 => [
                 'id' => 242,
-                'item_key' => 'follow_group_setting',
+                'item_key' => 'follow_user_setting',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3170,8 +3170,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             242 => [
                 'id' => 243,
-                'item_key' => 'follow_hashtag_setting',
-                'item_value' => 'false',
+                'item_key' => 'follow_group_setting',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3183,8 +3183,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             243 => [
                 'id' => 244,
-                'item_key' => 'follow_post_setting',
-                'item_value' => 'true',
+                'item_key' => 'follow_hashtag_setting',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3196,7 +3196,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             244 => [
                 'id' => 245,
-                'item_key' => 'follow_comment_setting',
+                'item_key' => 'follow_post_setting',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3209,8 +3209,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             245 => [
                 'id' => 246,
-                'item_key' => 'block_user_setting',
-                'item_value' => 'false',
+                'item_key' => 'follow_comment_setting',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3222,7 +3222,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             246 => [
                 'id' => 247,
-                'item_key' => 'block_group_setting',
+                'item_key' => 'block_user_setting',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3235,7 +3235,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             247 => [
                 'id' => 248,
-                'item_key' => 'block_hashtag_setting',
+                'item_key' => 'block_group_setting',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3248,7 +3248,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             248 => [
                 'id' => 249,
-                'item_key' => 'block_post_setting',
+                'item_key' => 'block_hashtag_setting',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3261,7 +3261,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             249 => [
                 'id' => 250,
-                'item_key' => 'block_comment_setting',
+                'item_key' => 'block_post_setting',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3274,8 +3274,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             250 => [
                 'id' => 251,
-                'item_key' => 'it_posts',
-                'item_value' => 'true',
+                'item_key' => 'block_comment_setting',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3287,8 +3287,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             251 => [
                 'id' => 252,
-                'item_key' => 'it_comments',
-                'item_value' => 'false',
+                'item_key' => 'it_posts',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3300,7 +3300,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             252 => [
                 'id' => 253,
-                'item_key' => 'it_like_users',
+                'item_key' => 'it_comments',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3313,7 +3313,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             253 => [
                 'id' => 254,
-                'item_key' => 'it_like_groups',
+                'item_key' => 'it_like_users',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3326,7 +3326,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             254 => [
                 'id' => 255,
-                'item_key' => 'it_like_hashtags',
+                'item_key' => 'it_like_groups',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3339,8 +3339,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             255 => [
                 'id' => 256,
-                'item_key' => 'it_like_posts',
-                'item_value' => 'true',
+                'item_key' => 'it_like_hashtags',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3352,8 +3352,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             256 => [
                 'id' => 257,
-                'item_key' => 'it_like_comments',
-                'item_value' => 'false',
+                'item_key' => 'it_like_posts',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3365,7 +3365,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             257 => [
                 'id' => 258,
-                'item_key' => 'it_dislike_users',
+                'item_key' => 'it_like_comments',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3378,7 +3378,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             258 => [
                 'id' => 259,
-                'item_key' => 'it_dislike_groups',
+                'item_key' => 'it_dislike_users',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3391,7 +3391,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             259 => [
                 'id' => 260,
-                'item_key' => 'it_dislike_hashtags',
+                'item_key' => 'it_dislike_groups',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3404,7 +3404,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             260 => [
                 'id' => 261,
-                'item_key' => 'it_dislike_posts',
+                'item_key' => 'it_dislike_hashtags',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3417,7 +3417,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             261 => [
                 'id' => 262,
-                'item_key' => 'it_dislike_comments',
+                'item_key' => 'it_dislike_posts',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3430,8 +3430,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             262 => [
                 'id' => 263,
-                'item_key' => 'it_follow_users',
-                'item_value' => 'true',
+                'item_key' => 'it_dislike_comments',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3443,7 +3443,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             263 => [
                 'id' => 264,
-                'item_key' => 'it_follow_groups',
+                'item_key' => 'it_follow_users',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3456,8 +3456,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             264 => [
                 'id' => 265,
-                'item_key' => 'it_follow_hashtags',
-                'item_value' => 'false',
+                'item_key' => 'it_follow_groups',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3469,7 +3469,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             265 => [
                 'id' => 266,
-                'item_key' => 'it_follow_posts',
+                'item_key' => 'it_follow_hashtags',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3482,7 +3482,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             266 => [
                 'id' => 267,
-                'item_key' => 'it_follow_comments',
+                'item_key' => 'it_follow_posts',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3495,7 +3495,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             267 => [
                 'id' => 268,
-                'item_key' => 'it_block_users',
+                'item_key' => 'it_follow_comments',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3508,7 +3508,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             268 => [
                 'id' => 269,
-                'item_key' => 'it_block_groups',
+                'item_key' => 'it_block_users',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3521,7 +3521,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             269 => [
                 'id' => 270,
-                'item_key' => 'it_block_hashtags',
+                'item_key' => 'it_block_groups',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3534,7 +3534,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             270 => [
                 'id' => 271,
-                'item_key' => 'it_block_posts',
+                'item_key' => 'it_block_hashtags',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3547,7 +3547,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             271 => [
                 'id' => 272,
-                'item_key' => 'it_block_comments',
+                'item_key' => 'it_block_posts',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3560,6 +3560,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             272 => [
                 'id' => 273,
+                'item_key' => 'it_block_comments',
+                'item_value' => 'false',
+                'item_type' => 'boolean',
+                'item_tag' => 'interactives',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            273 => [
+                'id' => 274,
                 'item_key' => 'it_home_list',
                 'item_value' => 'it_posts',
                 'item_type' => 'string',
@@ -3571,22 +3584,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            273 => [
-                'id' => 274,
-                'item_key' => 'my_likers',
-                'item_value' => 'false',
-                'item_type' => 'boolean',
-                'item_tag' => 'interactives',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             274 => [
                 'id' => 275,
-                'item_key' => 'my_dislikers',
+                'item_key' => 'my_likers',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3599,8 +3599,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             275 => [
                 'id' => 276,
-                'item_key' => 'my_followers',
-                'item_value' => 'true',
+                'item_key' => 'my_dislikers',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3612,8 +3612,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             276 => [
                 'id' => 277,
-                'item_key' => 'my_blockers',
-                'item_value' => 'false',
+                'item_key' => 'my_followers',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3625,8 +3625,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             277 => [
                 'id' => 278,
-                'item_key' => 'user_likers',
-                'item_value' => 'true',
+                'item_key' => 'my_blockers',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3638,8 +3638,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             278 => [
                 'id' => 279,
-                'item_key' => 'user_dislikers',
-                'item_value' => 'false',
+                'item_key' => 'user_likers',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3651,8 +3651,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             279 => [
                 'id' => 280,
-                'item_key' => 'user_followers',
-                'item_value' => 'true',
+                'item_key' => 'user_dislikers',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3664,8 +3664,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             280 => [
                 'id' => 281,
-                'item_key' => 'user_blockers',
-                'item_value' => 'false',
+                'item_key' => 'user_followers',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3677,8 +3677,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             281 => [
                 'id' => 282,
-                'item_key' => 'group_likers',
-                'item_value' => 'true',
+                'item_key' => 'user_blockers',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3690,8 +3690,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             282 => [
                 'id' => 283,
-                'item_key' => 'group_dislikers',
-                'item_value' => 'false',
+                'item_key' => 'group_likers',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3703,8 +3703,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             283 => [
                 'id' => 284,
-                'item_key' => 'group_followers',
-                'item_value' => 'true',
+                'item_key' => 'group_dislikers',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3716,8 +3716,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             284 => [
                 'id' => 285,
-                'item_key' => 'group_blockers',
-                'item_value' => 'false',
+                'item_key' => 'group_followers',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3729,8 +3729,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             285 => [
                 'id' => 286,
-                'item_key' => 'hashtag_likers',
-                'item_value' => 'true',
+                'item_key' => 'group_blockers',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3742,8 +3742,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             286 => [
                 'id' => 287,
-                'item_key' => 'hashtag_dislikers',
-                'item_value' => 'false',
+                'item_key' => 'hashtag_likers',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3755,7 +3755,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             287 => [
                 'id' => 288,
-                'item_key' => 'hashtag_followers',
+                'item_key' => 'hashtag_dislikers',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3768,7 +3768,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             288 => [
                 'id' => 289,
-                'item_key' => 'hashtag_blockers',
+                'item_key' => 'hashtag_followers',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3781,8 +3781,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             289 => [
                 'id' => 290,
-                'item_key' => 'post_likers',
-                'item_value' => 'true',
+                'item_key' => 'hashtag_blockers',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3794,8 +3794,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             290 => [
                 'id' => 291,
-                'item_key' => 'post_dislikers',
-                'item_value' => 'false',
+                'item_key' => 'post_likers',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3807,7 +3807,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             291 => [
                 'id' => 292,
-                'item_key' => 'post_followers',
+                'item_key' => 'post_dislikers',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3820,7 +3820,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             292 => [
                 'id' => 293,
-                'item_key' => 'post_blockers',
+                'item_key' => 'post_followers',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3833,8 +3833,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             293 => [
                 'id' => 294,
-                'item_key' => 'comment_likers',
-                'item_value' => 'true',
+                'item_key' => 'post_blockers',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3846,8 +3846,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             294 => [
                 'id' => 295,
-                'item_key' => 'comment_dislikers',
-                'item_value' => 'false',
+                'item_key' => 'comment_likers',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
                 'is_multilingual' => 0,
@@ -3859,7 +3859,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             295 => [
                 'id' => 296,
-                'item_key' => 'comment_followers',
+                'item_key' => 'comment_dislikers',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3872,7 +3872,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             296 => [
                 'id' => 297,
-                'item_key' => 'comment_blockers',
+                'item_key' => 'comment_followers',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'interactives',
@@ -3885,10 +3885,10 @@ class ConfigsTableSeeder extends Seeder
             ],
             297 => [
                 'id' => 298,
-                'item_key' => 'post_email_verify',
+                'item_key' => 'comment_blockers',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
-                'item_tag' => 'postEditor',
+                'item_tag' => 'interactives',
                 'is_multilingual' => 0,
                 'is_custom' => 0,
                 'is_api' => 1,
@@ -3898,7 +3898,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             298 => [
                 'id' => 299,
-                'item_key' => 'post_phone_verify',
+                'item_key' => 'post_email_verify',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -3911,7 +3911,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             299 => [
                 'id' => 300,
-                'item_key' => 'post_real_name_verify',
+                'item_key' => 'post_phone_verify',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -3924,7 +3924,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             300 => [
                 'id' => 301,
-                'item_key' => 'post_limit_status',
+                'item_key' => 'post_real_name_verify',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -3937,6 +3937,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             301 => [
                 'id' => 302,
+                'item_key' => 'post_limit_status',
+                'item_value' => 'false',
+                'item_type' => 'boolean',
+                'item_tag' => 'postEditor',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            302 => [
+                'id' => 303,
                 'item_key' => 'post_limit_type',
                 'item_value' => '1',
                 'item_type' => 'number',
@@ -3948,22 +3961,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            302 => [
-                'id' => 303,
-                'item_key' => 'post_limit_period_start',
-                'item_value' => null,
-                'item_type' => 'string',
-                'item_tag' => 'postEditor',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             303 => [
                 'id' => 304,
-                'item_key' => 'post_limit_period_end',
+                'item_key' => 'post_limit_period_start',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'postEditor',
@@ -3976,7 +3976,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             304 => [
                 'id' => 305,
-                'item_key' => 'post_limit_cycle_start',
+                'item_key' => 'post_limit_period_end',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'postEditor',
@@ -3989,7 +3989,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             305 => [
                 'id' => 306,
-                'item_key' => 'post_limit_cycle_end',
+                'item_key' => 'post_limit_cycle_start',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'postEditor',
@@ -4002,6 +4002,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             306 => [
                 'id' => 307,
+                'item_key' => 'post_limit_cycle_end',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'postEditor',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            307 => [
+                'id' => 308,
                 'item_key' => 'post_limit_rule',
                 'item_value' => '1',
                 'item_type' => 'number',
@@ -4013,8 +4026,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            307 => [
-                'id' => 308,
+            308 => [
+                'id' => 309,
                 'item_key' => 'post_limit_tip',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -4026,8 +4039,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            308 => [
-                'id' => 309,
+            309 => [
+                'id' => 310,
                 'item_key' => 'post_limit_whitelist',
                 'item_value' => '["1"]',
                 'item_type' => 'array',
@@ -4039,8 +4052,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            309 => [
-                'id' => 310,
+            310 => [
+                'id' => 311,
                 'item_key' => 'post_edit',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -4052,8 +4065,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            310 => [
-                'id' => 311,
+            311 => [
+                'id' => 312,
                 'item_key' => 'post_edit_time_limit',
                 'item_value' => '30',
                 'item_type' => 'number',
@@ -4065,22 +4078,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            311 => [
-                'id' => 312,
-                'item_key' => 'post_edit_sticky_limit',
-                'item_value' => 'false',
-                'item_type' => 'boolean',
-                'item_tag' => 'postEditor',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             312 => [
                 'id' => 313,
-                'item_key' => 'post_edit_digest_limit',
+                'item_key' => 'post_edit_sticky_limit',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -4093,6 +4093,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             313 => [
                 'id' => 314,
+                'item_key' => 'post_edit_digest_limit',
+                'item_value' => 'false',
+                'item_type' => 'boolean',
+                'item_tag' => 'postEditor',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            314 => [
+                'id' => 315,
                 'item_key' => 'post_editor_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
@@ -4104,8 +4117,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            314 => [
-                'id' => 315,
+            315 => [
+                'id' => 316,
                 'item_key' => 'post_editor_group',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -4117,22 +4130,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            315 => [
-                'id' => 316,
-                'item_key' => 'post_editor_title',
-                'item_value' => 'true',
-                'item_type' => 'boolean',
-                'item_tag' => 'postEditor',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             316 => [
                 'id' => 317,
-                'item_key' => 'post_editor_sticker',
+                'item_key' => 'post_editor_title',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -4145,8 +4145,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             317 => [
                 'id' => 318,
-                'item_key' => 'post_editor_image',
-                'item_value' => 'false',
+                'item_key' => 'post_editor_sticker',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
                 'is_multilingual' => 0,
@@ -4158,7 +4158,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             318 => [
                 'id' => 319,
-                'item_key' => 'post_editor_video',
+                'item_key' => 'post_editor_image',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -4171,7 +4171,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             319 => [
                 'id' => 320,
-                'item_key' => 'post_editor_audio',
+                'item_key' => 'post_editor_video',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -4184,7 +4184,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             320 => [
                 'id' => 321,
-                'item_key' => 'post_editor_document',
+                'item_key' => 'post_editor_audio',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -4197,8 +4197,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             321 => [
                 'id' => 322,
-                'item_key' => 'post_editor_mention',
-                'item_value' => 'true',
+                'item_key' => 'post_editor_document',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
                 'is_multilingual' => 0,
@@ -4210,7 +4210,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             322 => [
                 'id' => 323,
-                'item_key' => 'post_editor_hashtag',
+                'item_key' => 'post_editor_mention',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -4223,7 +4223,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             323 => [
                 'id' => 324,
-                'item_key' => 'post_editor_extend',
+                'item_key' => 'post_editor_hashtag',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -4236,8 +4236,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             324 => [
                 'id' => 325,
-                'item_key' => 'post_editor_location',
-                'item_value' => 'false',
+                'item_key' => 'post_editor_extend',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
                 'is_multilingual' => 0,
@@ -4249,7 +4249,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             325 => [
                 'id' => 326,
-                'item_key' => 'post_editor_anonymous',
+                'item_key' => 'post_editor_location',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'postEditor',
@@ -4262,6 +4262,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             326 => [
                 'id' => 327,
+                'item_key' => 'post_editor_anonymous',
+                'item_value' => 'false',
+                'item_type' => 'boolean',
+                'item_tag' => 'postEditor',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            327 => [
+                'id' => 328,
                 'item_key' => 'post_editor_image_upload_number',
                 'item_value' => '9',
                 'item_type' => 'number',
@@ -4273,22 +4286,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            327 => [
-                'id' => 328,
-                'item_key' => 'post_editor_video_upload_number',
-                'item_value' => '1',
-                'item_type' => 'number',
-                'item_tag' => 'postEditor',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             328 => [
                 'id' => 329,
-                'item_key' => 'post_editor_audio_upload_number',
+                'item_key' => 'post_editor_video_upload_number',
                 'item_value' => '1',
                 'item_type' => 'number',
                 'item_tag' => 'postEditor',
@@ -4301,8 +4301,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             329 => [
                 'id' => 330,
-                'item_key' => 'post_editor_document_upload_number',
-                'item_value' => '10',
+                'item_key' => 'post_editor_audio_upload_number',
+                'item_value' => '1',
                 'item_type' => 'number',
                 'item_tag' => 'postEditor',
                 'is_multilingual' => 0,
@@ -4314,6 +4314,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             330 => [
                 'id' => 331,
+                'item_key' => 'post_editor_document_upload_number',
+                'item_value' => '10',
+                'item_type' => 'number',
+                'item_tag' => 'postEditor',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            331 => [
+                'id' => 332,
                 'item_key' => 'post_editor_group_required',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -4325,8 +4338,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            331 => [
-                'id' => 332,
+            332 => [
+                'id' => 333,
                 'item_key' => 'post_editor_title_view',
                 'item_value' => '1',
                 'item_type' => 'number',
@@ -4338,8 +4351,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            332 => [
-                'id' => 333,
+            333 => [
+                'id' => 334,
                 'item_key' => 'post_editor_title_required',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -4351,8 +4364,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            333 => [
-                'id' => 334,
+            334 => [
+                'id' => 335,
                 'item_key' => 'post_editor_title_length',
                 'item_value' => '80',
                 'item_type' => 'number',
@@ -4364,8 +4377,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            334 => [
-                'id' => 335,
+            335 => [
+                'id' => 336,
                 'item_key' => 'post_editor_content_length',
                 'item_value' => '20000',
                 'item_type' => 'number',
@@ -4377,8 +4390,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            335 => [
-                'id' => 336,
+            336 => [
+                'id' => 337,
                 'item_key' => 'post_editor_brief_length',
                 'item_value' => '280',
                 'item_type' => 'number',
@@ -4390,22 +4403,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            336 => [
-                'id' => 337,
-                'item_key' => 'comment_email_verify',
-                'item_value' => 'false',
-                'item_type' => 'boolean',
-                'item_tag' => 'commentEditor',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             337 => [
                 'id' => 338,
-                'item_key' => 'comment_phone_verify',
+                'item_key' => 'comment_email_verify',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4418,7 +4418,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             338 => [
                 'id' => 339,
-                'item_key' => 'comment_real_name_verify',
+                'item_key' => 'comment_phone_verify',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4431,7 +4431,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             339 => [
                 'id' => 340,
-                'item_key' => 'comment_limit_status',
+                'item_key' => 'comment_real_name_verify',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4444,6 +4444,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             340 => [
                 'id' => 341,
+                'item_key' => 'comment_limit_status',
+                'item_value' => 'false',
+                'item_type' => 'boolean',
+                'item_tag' => 'commentEditor',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            341 => [
+                'id' => 342,
                 'item_key' => 'comment_limit_type',
                 'item_value' => '1',
                 'item_type' => 'number',
@@ -4455,22 +4468,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            341 => [
-                'id' => 342,
-                'item_key' => 'comment_limit_period_start',
-                'item_value' => null,
-                'item_type' => 'string',
-                'item_tag' => 'commentEditor',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             342 => [
                 'id' => 343,
-                'item_key' => 'comment_limit_period_end',
+                'item_key' => 'comment_limit_period_start',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'commentEditor',
@@ -4483,7 +4483,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             343 => [
                 'id' => 344,
-                'item_key' => 'comment_limit_cycle_start',
+                'item_key' => 'comment_limit_period_end',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'commentEditor',
@@ -4496,7 +4496,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             344 => [
                 'id' => 345,
-                'item_key' => 'comment_limit_cycle_end',
+                'item_key' => 'comment_limit_cycle_start',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'commentEditor',
@@ -4509,6 +4509,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             345 => [
                 'id' => 346,
+                'item_key' => 'comment_limit_cycle_end',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'commentEditor',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            346 => [
+                'id' => 347,
                 'item_key' => 'comment_limit_rule',
                 'item_value' => '1',
                 'item_type' => 'number',
@@ -4520,8 +4533,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            346 => [
-                'id' => 347,
+            347 => [
+                'id' => 348,
                 'item_key' => 'comment_limit_tip',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -4533,8 +4546,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            347 => [
-                'id' => 348,
+            348 => [
+                'id' => 349,
                 'item_key' => 'comment_limit_whitelist',
                 'item_value' => '["1"]',
                 'item_type' => 'array',
@@ -4546,8 +4559,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            348 => [
-                'id' => 349,
+            349 => [
+                'id' => 350,
                 'item_key' => 'comment_edit',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -4559,8 +4572,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            349 => [
-                'id' => 350,
+            350 => [
+                'id' => 351,
                 'item_key' => 'comment_edit_time_limit',
                 'item_value' => '30',
                 'item_type' => 'number',
@@ -4572,22 +4585,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            350 => [
-                'id' => 351,
-                'item_key' => 'comment_edit_sticky_limit',
-                'item_value' => 'false',
-                'item_type' => 'boolean',
-                'item_tag' => 'commentEditor',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             351 => [
                 'id' => 352,
-                'item_key' => 'comment_edit_digest_limit',
+                'item_key' => 'comment_edit_sticky_limit',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4600,6 +4600,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             352 => [
                 'id' => 353,
+                'item_key' => 'comment_edit_digest_limit',
+                'item_value' => 'false',
+                'item_type' => 'boolean',
+                'item_tag' => 'commentEditor',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            353 => [
+                'id' => 354,
                 'item_key' => 'comment_editor_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
@@ -4611,8 +4624,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            353 => [
-                'id' => 354,
+            354 => [
+                'id' => 355,
                 'item_key' => 'comment_editor_sticker',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -4624,22 +4637,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            354 => [
-                'id' => 355,
-                'item_key' => 'comment_editor_image',
-                'item_value' => 'false',
-                'item_type' => 'boolean',
-                'item_tag' => 'commentEditor',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             355 => [
                 'id' => 356,
-                'item_key' => 'comment_editor_video',
+                'item_key' => 'comment_editor_image',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4652,7 +4652,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             356 => [
                 'id' => 357,
-                'item_key' => 'comment_editor_audio',
+                'item_key' => 'comment_editor_video',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4665,7 +4665,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             357 => [
                 'id' => 358,
-                'item_key' => 'comment_editor_document',
+                'item_key' => 'comment_editor_audio',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4678,8 +4678,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             358 => [
                 'id' => 359,
-                'item_key' => 'comment_editor_mention',
-                'item_value' => 'true',
+                'item_key' => 'comment_editor_document',
+                'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
                 'is_multilingual' => 0,
@@ -4691,7 +4691,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             359 => [
                 'id' => 360,
-                'item_key' => 'comment_editor_hashtag',
+                'item_key' => 'comment_editor_mention',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4704,8 +4704,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             360 => [
                 'id' => 361,
-                'item_key' => 'comment_editor_extend',
-                'item_value' => 'false',
+                'item_key' => 'comment_editor_hashtag',
+                'item_value' => 'true',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
                 'is_multilingual' => 0,
@@ -4717,7 +4717,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             361 => [
                 'id' => 362,
-                'item_key' => 'comment_editor_location',
+                'item_key' => 'comment_editor_extend',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4730,7 +4730,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             362 => [
                 'id' => 363,
-                'item_key' => 'comment_editor_anonymous',
+                'item_key' => 'comment_editor_location',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
                 'item_tag' => 'commentEditor',
@@ -4743,6 +4743,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             363 => [
                 'id' => 364,
+                'item_key' => 'comment_editor_anonymous',
+                'item_value' => 'false',
+                'item_type' => 'boolean',
+                'item_tag' => 'commentEditor',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            364 => [
+                'id' => 365,
                 'item_key' => 'comment_editor_image_upload_number',
                 'item_value' => '1',
                 'item_type' => 'number',
@@ -4754,22 +4767,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            364 => [
-                'id' => 365,
-                'item_key' => 'comment_editor_video_upload_number',
-                'item_value' => '0',
-                'item_type' => 'number',
-                'item_tag' => 'commentEditor',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             365 => [
                 'id' => 366,
-                'item_key' => 'comment_editor_audio_upload_number',
+                'item_key' => 'comment_editor_video_upload_number',
                 'item_value' => '0',
                 'item_type' => 'number',
                 'item_tag' => 'commentEditor',
@@ -4782,7 +4782,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             366 => [
                 'id' => 367,
-                'item_key' => 'comment_editor_document_upload_number',
+                'item_key' => 'comment_editor_audio_upload_number',
                 'item_value' => '0',
                 'item_type' => 'number',
                 'item_tag' => 'commentEditor',
@@ -4795,8 +4795,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             367 => [
                 'id' => 368,
-                'item_key' => 'comment_editor_content_length',
-                'item_value' => '10000',
+                'item_key' => 'comment_editor_document_upload_number',
+                'item_value' => '0',
                 'item_type' => 'number',
                 'item_tag' => 'commentEditor',
                 'is_multilingual' => 0,
@@ -4808,8 +4808,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             368 => [
                 'id' => 369,
-                'item_key' => 'comment_editor_brief_length',
-                'item_value' => '280',
+                'item_key' => 'comment_editor_content_length',
+                'item_value' => '10000',
                 'item_type' => 'number',
                 'item_tag' => 'commentEditor',
                 'is_multilingual' => 0,
@@ -4821,20 +4821,20 @@ class ConfigsTableSeeder extends Seeder
             ],
             369 => [
                 'id' => 370,
-                'item_key' => 'ip_service',
-                'item_value' => null,
-                'item_type' => 'plugin',
-                'item_tag' => 'extends',
+                'item_key' => 'comment_editor_brief_length',
+                'item_value' => '280',
+                'item_type' => 'number',
+                'item_tag' => 'commentEditor',
                 'is_multilingual' => 0,
                 'is_custom' => 0,
-                'is_api' => 0,
+                'is_api' => 1,
                 'created_at' => '2022-07-18 17:00:00',
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
             370 => [
                 'id' => 371,
-                'item_key' => 'content_review_service',
+                'item_key' => 'ip_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4847,7 +4847,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             371 => [
                 'id' => 372,
-                'item_key' => 'post_list_service',
+                'item_key' => 'content_review_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4860,7 +4860,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             372 => [
                 'id' => 373,
-                'item_key' => 'post_follow_service',
+                'item_key' => 'post_list_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4873,7 +4873,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             373 => [
                 'id' => 374,
-                'item_key' => 'post_nearby_service',
+                'item_key' => 'post_follow_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4886,7 +4886,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             374 => [
                 'id' => 375,
-                'item_key' => 'post_detail_service',
+                'item_key' => 'post_nearby_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4899,7 +4899,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             375 => [
                 'id' => 376,
-                'item_key' => 'search_users_service',
+                'item_key' => 'post_detail_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4912,7 +4912,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             376 => [
                 'id' => 377,
-                'item_key' => 'search_groups_service',
+                'item_key' => 'search_users_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4925,7 +4925,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             377 => [
                 'id' => 378,
-                'item_key' => 'search_hashtags_service',
+                'item_key' => 'search_groups_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4938,7 +4938,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             378 => [
                 'id' => 379,
-                'item_key' => 'search_posts_service',
+                'item_key' => 'search_hashtags_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4951,7 +4951,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             379 => [
                 'id' => 380,
-                'item_key' => 'search_comments_service',
+                'item_key' => 'search_posts_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'extends',
@@ -4964,6 +4964,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             380 => [
                 'id' => 381,
+                'item_key' => 'search_comments_service',
+                'item_value' => null,
+                'item_type' => 'plugin',
+                'item_tag' => 'extends',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 0,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            381 => [
+                'id' => 382,
                 'item_key' => 'default_homepage',
                 'item_value' => 'group',
                 'item_type' => 'string',
@@ -4975,22 +4988,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            381 => [
-                'id' => 382,
-                'item_key' => 'menu_portal_name',
-                'item_value' => 'Portal',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             382 => [
                 'id' => 383,
-                'item_key' => 'menu_portal_title',
+                'item_key' => 'menu_portal_name',
                 'item_value' => 'Portal',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5003,8 +5003,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             383 => [
                 'id' => 384,
-                'item_key' => 'menu_portal_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_portal_title',
+                'item_value' => 'Portal',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5016,7 +5016,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             384 => [
                 'id' => 385,
-                'item_key' => 'menu_portal_description',
+                'item_key' => 'menu_portal_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5029,6 +5029,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             385 => [
                 'id' => 386,
+                'item_key' => 'menu_portal_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            386 => [
+                'id' => 387,
                 'item_key' => 'menu_portal_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5040,22 +5053,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            386 => [
-                'id' => 387,
-                'item_key' => 'menu_user_name',
-                'item_value' => 'User',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             387 => [
                 'id' => 388,
-                'item_key' => 'menu_user_title',
+                'item_key' => 'menu_user_name',
                 'item_value' => 'User',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5068,8 +5068,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             388 => [
                 'id' => 389,
-                'item_key' => 'menu_user_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_user_title',
+                'item_value' => 'User',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5081,7 +5081,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             389 => [
                 'id' => 390,
-                'item_key' => 'menu_user_description',
+                'item_key' => 'menu_user_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5094,6 +5094,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             390 => [
                 'id' => 391,
+                'item_key' => 'menu_user_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            391 => [
+                'id' => 392,
                 'item_key' => 'menu_user_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5105,8 +5118,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            391 => [
-                'id' => 392,
+            392 => [
+                'id' => 393,
                 'item_key' => 'menu_user_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5118,8 +5131,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            392 => [
-                'id' => 393,
+            393 => [
+                'id' => 394,
                 'item_key' => 'menu_user_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5131,22 +5144,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            393 => [
-                'id' => 394,
-                'item_key' => 'menu_group_name',
-                'item_value' => 'Group',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             394 => [
                 'id' => 395,
-                'item_key' => 'menu_group_title',
+                'item_key' => 'menu_group_name',
                 'item_value' => 'Group',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5159,8 +5159,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             395 => [
                 'id' => 396,
-                'item_key' => 'menu_group_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_group_title',
+                'item_value' => 'Group',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5172,7 +5172,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             396 => [
                 'id' => 397,
-                'item_key' => 'menu_group_description',
+                'item_key' => 'menu_group_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5185,6 +5185,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             397 => [
                 'id' => 398,
+                'item_key' => 'menu_group_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            398 => [
+                'id' => 399,
                 'item_key' => 'menu_group_type',
                 'item_value' => 'tree',
                 'item_type' => 'string',
@@ -5196,8 +5209,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            398 => [
-                'id' => 399,
+            399 => [
+                'id' => 400,
                 'item_key' => 'menu_group_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5209,8 +5222,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            399 => [
-                'id' => 400,
+            400 => [
+                'id' => 401,
                 'item_key' => 'menu_group_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5222,8 +5235,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            400 => [
-                'id' => 401,
+            401 => [
+                'id' => 402,
                 'item_key' => 'menu_group_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5235,22 +5248,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            401 => [
-                'id' => 402,
-                'item_key' => 'menu_hashtag_name',
-                'item_value' => 'Hashtag',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             402 => [
                 'id' => 403,
-                'item_key' => 'menu_hashtag_title',
+                'item_key' => 'menu_hashtag_name',
                 'item_value' => 'Hashtag',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5263,8 +5263,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             403 => [
                 'id' => 404,
-                'item_key' => 'menu_hashtag_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_hashtag_title',
+                'item_value' => 'Hashtag',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5276,7 +5276,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             404 => [
                 'id' => 405,
-                'item_key' => 'menu_hashtag_description',
+                'item_key' => 'menu_hashtag_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5289,6 +5289,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             405 => [
                 'id' => 406,
+                'item_key' => 'menu_hashtag_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            406 => [
+                'id' => 407,
                 'item_key' => 'menu_hashtag_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5300,8 +5313,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            406 => [
-                'id' => 407,
+            407 => [
+                'id' => 408,
                 'item_key' => 'menu_hashtag_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5313,8 +5326,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            407 => [
-                'id' => 408,
+            408 => [
+                'id' => 409,
                 'item_key' => 'menu_hashtag_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5326,22 +5339,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            408 => [
-                'id' => 409,
-                'item_key' => 'menu_post_name',
-                'item_value' => 'Post',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             409 => [
                 'id' => 410,
-                'item_key' => 'menu_post_title',
+                'item_key' => 'menu_post_name',
                 'item_value' => 'Post',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5354,8 +5354,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             410 => [
                 'id' => 411,
-                'item_key' => 'menu_post_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_post_title',
+                'item_value' => 'Post',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5367,7 +5367,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             411 => [
                 'id' => 412,
-                'item_key' => 'menu_post_description',
+                'item_key' => 'menu_post_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5380,6 +5380,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             412 => [
                 'id' => 413,
+                'item_key' => 'menu_post_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            413 => [
+                'id' => 414,
                 'item_key' => 'menu_post_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5391,8 +5404,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            413 => [
-                'id' => 414,
+            414 => [
+                'id' => 415,
                 'item_key' => 'menu_post_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5404,8 +5417,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            414 => [
-                'id' => 415,
+            415 => [
+                'id' => 416,
                 'item_key' => 'menu_post_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5417,22 +5430,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            415 => [
-                'id' => 416,
-                'item_key' => 'menu_comment_name',
-                'item_value' => 'Comment',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             416 => [
                 'id' => 417,
-                'item_key' => 'menu_comment_title',
+                'item_key' => 'menu_comment_name',
                 'item_value' => 'Comment',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5445,8 +5445,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             417 => [
                 'id' => 418,
-                'item_key' => 'menu_comment_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_comment_title',
+                'item_value' => 'Comment',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5458,7 +5458,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             418 => [
                 'id' => 419,
-                'item_key' => 'menu_comment_description',
+                'item_key' => 'menu_comment_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5471,6 +5471,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             419 => [
                 'id' => 420,
+                'item_key' => 'menu_comment_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            420 => [
+                'id' => 421,
                 'item_key' => 'menu_comment_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5482,8 +5495,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            420 => [
-                'id' => 421,
+            421 => [
+                'id' => 422,
                 'item_key' => 'menu_comment_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5495,8 +5508,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            421 => [
-                'id' => 422,
+            422 => [
+                'id' => 423,
                 'item_key' => 'menu_comment_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5508,22 +5521,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            422 => [
-                'id' => 423,
-                'item_key' => 'menu_user_list_name',
-                'item_value' => 'User List',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             423 => [
                 'id' => 424,
-                'item_key' => 'menu_user_list_title',
+                'item_key' => 'menu_user_list_name',
                 'item_value' => 'User List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5536,8 +5536,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             424 => [
                 'id' => 425,
-                'item_key' => 'menu_user_list_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_user_list_title',
+                'item_value' => 'User List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5549,7 +5549,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             425 => [
                 'id' => 426,
-                'item_key' => 'menu_user_list_description',
+                'item_key' => 'menu_user_list_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5562,6 +5562,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             426 => [
                 'id' => 427,
+                'item_key' => 'menu_user_list_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            427 => [
+                'id' => 428,
                 'item_key' => 'menu_user_list_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5573,8 +5586,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            427 => [
-                'id' => 428,
+            428 => [
+                'id' => 429,
                 'item_key' => 'menu_user_list_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5586,8 +5599,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            428 => [
-                'id' => 429,
+            429 => [
+                'id' => 430,
                 'item_key' => 'menu_user_list_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5599,22 +5612,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            429 => [
-                'id' => 430,
-                'item_key' => 'menu_group_list_name',
-                'item_value' => 'Group List',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             430 => [
                 'id' => 431,
-                'item_key' => 'menu_group_list_title',
+                'item_key' => 'menu_group_list_name',
                 'item_value' => 'Group List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5627,8 +5627,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             431 => [
                 'id' => 432,
-                'item_key' => 'menu_group_list_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_group_list_title',
+                'item_value' => 'Group List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5640,7 +5640,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             432 => [
                 'id' => 433,
-                'item_key' => 'menu_group_list_description',
+                'item_key' => 'menu_group_list_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5653,6 +5653,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             433 => [
                 'id' => 434,
+                'item_key' => 'menu_group_list_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            434 => [
+                'id' => 435,
                 'item_key' => 'menu_group_list_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5664,8 +5677,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            434 => [
-                'id' => 435,
+            435 => [
+                'id' => 436,
                 'item_key' => 'menu_group_list_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5677,8 +5690,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            435 => [
-                'id' => 436,
+            436 => [
+                'id' => 437,
                 'item_key' => 'menu_group_list_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5690,22 +5703,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            436 => [
-                'id' => 437,
-                'item_key' => 'menu_hashtag_list_name',
-                'item_value' => 'Hashtag List',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             437 => [
                 'id' => 438,
-                'item_key' => 'menu_hashtag_list_title',
+                'item_key' => 'menu_hashtag_list_name',
                 'item_value' => 'Hashtag List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5718,8 +5718,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             438 => [
                 'id' => 439,
-                'item_key' => 'menu_hashtag_list_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_hashtag_list_title',
+                'item_value' => 'Hashtag List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5731,7 +5731,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             439 => [
                 'id' => 440,
-                'item_key' => 'menu_hashtag_list_description',
+                'item_key' => 'menu_hashtag_list_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5744,6 +5744,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             440 => [
                 'id' => 441,
+                'item_key' => 'menu_hashtag_list_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            441 => [
+                'id' => 442,
                 'item_key' => 'menu_hashtag_list_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5755,8 +5768,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            441 => [
-                'id' => 442,
+            442 => [
+                'id' => 443,
                 'item_key' => 'menu_hashtag_list_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5768,8 +5781,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            442 => [
-                'id' => 443,
+            443 => [
+                'id' => 444,
                 'item_key' => 'menu_hashtag_list_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5781,22 +5794,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            443 => [
-                'id' => 444,
-                'item_key' => 'menu_post_list_name',
-                'item_value' => 'Post List',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             444 => [
                 'id' => 445,
-                'item_key' => 'menu_post_list_title',
+                'item_key' => 'menu_post_list_name',
                 'item_value' => 'Post List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5809,8 +5809,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             445 => [
                 'id' => 446,
-                'item_key' => 'menu_post_list_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_post_list_title',
+                'item_value' => 'Post List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5822,7 +5822,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             446 => [
                 'id' => 447,
-                'item_key' => 'menu_post_list_description',
+                'item_key' => 'menu_post_list_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5835,6 +5835,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             447 => [
                 'id' => 448,
+                'item_key' => 'menu_post_list_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            448 => [
+                'id' => 449,
                 'item_key' => 'menu_post_list_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5846,8 +5859,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            448 => [
-                'id' => 449,
+            449 => [
+                'id' => 450,
                 'item_key' => 'menu_post_list_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5859,8 +5872,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            449 => [
-                'id' => 450,
+            450 => [
+                'id' => 451,
                 'item_key' => 'menu_post_list_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5872,22 +5885,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            450 => [
-                'id' => 451,
-                'item_key' => 'menu_comment_list_name',
-                'item_value' => 'Comment List',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             451 => [
                 'id' => 452,
-                'item_key' => 'menu_comment_list_title',
+                'item_key' => 'menu_comment_list_name',
                 'item_value' => 'Comment List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5900,8 +5900,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             452 => [
                 'id' => 453,
-                'item_key' => 'menu_comment_list_keywords',
-                'item_value' => null,
+                'item_key' => 'menu_comment_list_title',
+                'item_value' => 'Comment List',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -5913,7 +5913,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             453 => [
                 'id' => 454,
-                'item_key' => 'menu_comment_list_description',
+                'item_key' => 'menu_comment_list_keywords',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -5926,6 +5926,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             454 => [
                 'id' => 455,
+                'item_key' => 'menu_comment_list_description',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            455 => [
+                'id' => 456,
                 'item_key' => 'menu_comment_list_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -5937,8 +5950,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            455 => [
-                'id' => 456,
+            456 => [
+                'id' => 457,
                 'item_key' => 'menu_comment_list_query_state',
                 'item_value' => '2',
                 'item_type' => 'number',
@@ -5950,8 +5963,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            456 => [
-                'id' => 457,
+            457 => [
+                'id' => 458,
                 'item_key' => 'menu_comment_list_query_config',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -5963,8 +5976,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            457 => [
-                'id' => 458,
+            458 => [
+                'id' => 459,
                 'item_key' => 'menu_like_users',
                 'item_value' => 'My Like',
                 'item_type' => 'string',
@@ -5976,8 +5989,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            458 => [
-                'id' => 459,
+            459 => [
+                'id' => 460,
                 'item_key' => 'menu_dislike_users',
                 'item_value' => 'My Dislike',
                 'item_type' => 'string',
@@ -5989,8 +6002,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            459 => [
-                'id' => 460,
+            460 => [
+                'id' => 461,
                 'item_key' => 'menu_follow_users',
                 'item_value' => 'My Follow',
                 'item_type' => 'string',
@@ -6002,8 +6015,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            460 => [
-                'id' => 461,
+            461 => [
+                'id' => 462,
                 'item_key' => 'menu_block_users',
                 'item_value' => 'Blacklist',
                 'item_type' => 'string',
@@ -6015,8 +6028,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            461 => [
-                'id' => 462,
+            462 => [
+                'id' => 463,
                 'item_key' => 'menu_like_groups',
                 'item_value' => 'My Like',
                 'item_type' => 'string',
@@ -6028,8 +6041,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            462 => [
-                'id' => 463,
+            463 => [
+                'id' => 464,
                 'item_key' => 'menu_dislike_groups',
                 'item_value' => 'My Dislike',
                 'item_type' => 'string',
@@ -6041,8 +6054,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            463 => [
-                'id' => 464,
+            464 => [
+                'id' => 465,
                 'item_key' => 'menu_follow_groups',
                 'item_value' => 'My Join',
                 'item_type' => 'string',
@@ -6054,8 +6067,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            464 => [
-                'id' => 465,
+            465 => [
+                'id' => 466,
                 'item_key' => 'menu_block_groups',
                 'item_value' => 'Blacklist',
                 'item_type' => 'string',
@@ -6067,8 +6080,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            465 => [
-                'id' => 466,
+            466 => [
+                'id' => 467,
                 'item_key' => 'menu_like_hashtags',
                 'item_value' => 'My Like',
                 'item_type' => 'string',
@@ -6080,8 +6093,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            466 => [
-                'id' => 467,
+            467 => [
+                'id' => 468,
                 'item_key' => 'menu_dislike_hashtags',
                 'item_value' => 'My Dislike',
                 'item_type' => 'string',
@@ -6093,8 +6106,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            467 => [
-                'id' => 468,
+            468 => [
+                'id' => 469,
                 'item_key' => 'menu_follow_hashtags',
                 'item_value' => 'My Watching',
                 'item_type' => 'string',
@@ -6106,8 +6119,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            468 => [
-                'id' => 469,
+            469 => [
+                'id' => 470,
                 'item_key' => 'menu_block_hashtags',
                 'item_value' => 'Blacklist',
                 'item_type' => 'string',
@@ -6119,8 +6132,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            469 => [
-                'id' => 470,
+            470 => [
+                'id' => 471,
                 'item_key' => 'menu_nearby_posts',
                 'item_value' => 'Nearby',
                 'item_type' => 'string',
@@ -6132,8 +6145,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            470 => [
-                'id' => 471,
+            471 => [
+                'id' => 472,
                 'item_key' => 'menu_location_posts',
                 'item_value' => 'Location',
                 'item_type' => 'string',
@@ -6145,8 +6158,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            471 => [
-                'id' => 472,
+            472 => [
+                'id' => 473,
                 'item_key' => 'menu_like_posts',
                 'item_value' => 'My Like',
                 'item_type' => 'string',
@@ -6158,8 +6171,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            472 => [
-                'id' => 473,
+            473 => [
+                'id' => 474,
                 'item_key' => 'menu_dislike_posts',
                 'item_value' => 'My Dislike',
                 'item_type' => 'string',
@@ -6171,8 +6184,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            473 => [
-                'id' => 474,
+            474 => [
+                'id' => 475,
                 'item_key' => 'menu_follow_posts',
                 'item_value' => 'Favorites',
                 'item_type' => 'string',
@@ -6184,8 +6197,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            474 => [
-                'id' => 475,
+            475 => [
+                'id' => 476,
                 'item_key' => 'menu_block_posts',
                 'item_value' => 'Blacklist',
                 'item_type' => 'string',
@@ -6197,8 +6210,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            475 => [
-                'id' => 476,
+            476 => [
+                'id' => 477,
                 'item_key' => 'menu_nearby_comments',
                 'item_value' => 'Nearby',
                 'item_type' => 'string',
@@ -6210,8 +6223,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            476 => [
-                'id' => 477,
+            477 => [
+                'id' => 478,
                 'item_key' => 'menu_location_comments',
                 'item_value' => 'Location',
                 'item_type' => 'string',
@@ -6223,8 +6236,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            477 => [
-                'id' => 478,
+            478 => [
+                'id' => 479,
                 'item_key' => 'menu_like_comments',
                 'item_value' => 'My Like',
                 'item_type' => 'string',
@@ -6236,8 +6249,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            478 => [
-                'id' => 479,
+            479 => [
+                'id' => 480,
                 'item_key' => 'menu_dislike_comments',
                 'item_value' => 'My Dislike',
                 'item_type' => 'string',
@@ -6249,8 +6262,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            479 => [
-                'id' => 480,
+            480 => [
+                'id' => 481,
                 'item_key' => 'menu_follow_comments',
                 'item_value' => 'Favorites',
                 'item_type' => 'string',
@@ -6262,8 +6275,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            480 => [
-                'id' => 481,
+            481 => [
+                'id' => 482,
                 'item_key' => 'menu_block_comments',
                 'item_value' => 'Blacklist',
                 'item_type' => 'string',
@@ -6275,8 +6288,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            481 => [
-                'id' => 482,
+            482 => [
+                'id' => 483,
                 'item_key' => 'menu_follow_all_posts',
                 'item_value' => 'My Follows',
                 'item_type' => 'string',
@@ -6288,8 +6301,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            482 => [
-                'id' => 483,
+            483 => [
+                'id' => 484,
                 'item_key' => 'menu_follow_user_posts',
                 'item_value' => 'Follow User Posts',
                 'item_type' => 'string',
@@ -6301,8 +6314,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            483 => [
-                'id' => 484,
+            484 => [
+                'id' => 485,
                 'item_key' => 'menu_follow_group_posts',
                 'item_value' => 'Follow Group Posts',
                 'item_type' => 'string',
@@ -6314,8 +6327,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            484 => [
-                'id' => 485,
+            485 => [
+                'id' => 486,
                 'item_key' => 'menu_follow_hashtag_posts',
                 'item_value' => 'Follow Hashtag Posts',
                 'item_type' => 'string',
@@ -6327,8 +6340,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            485 => [
-                'id' => 486,
+            486 => [
+                'id' => 487,
                 'item_key' => 'menu_follow_all_comments',
                 'item_value' => 'My Follows',
                 'item_type' => 'string',
@@ -6340,8 +6353,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            486 => [
-                'id' => 487,
+            487 => [
+                'id' => 488,
                 'item_key' => 'menu_follow_user_comments',
                 'item_value' => 'Follow User Comments',
                 'item_type' => 'string',
@@ -6353,8 +6366,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            487 => [
-                'id' => 488,
+            488 => [
+                'id' => 489,
                 'item_key' => 'menu_follow_group_comments',
                 'item_value' => 'Follow Group Comments',
                 'item_type' => 'string',
@@ -6366,8 +6379,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            488 => [
-                'id' => 489,
+            489 => [
+                'id' => 490,
                 'item_key' => 'menu_follow_hashtag_comments',
                 'item_value' => 'Follow Hashtag Comments',
                 'item_type' => 'string',
@@ -6379,8 +6392,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            489 => [
-                'id' => 490,
+            490 => [
+                'id' => 491,
                 'item_key' => 'menu_account',
                 'item_value' => 'Account',
                 'item_type' => 'string',
@@ -6392,8 +6405,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            490 => [
-                'id' => 491,
+            491 => [
+                'id' => 492,
                 'item_key' => 'menu_account_register',
                 'item_value' => 'Register',
                 'item_type' => 'string',
@@ -6405,8 +6418,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            491 => [
-                'id' => 492,
+            492 => [
+                'id' => 493,
                 'item_key' => 'menu_account_login',
                 'item_value' => 'Login',
                 'item_type' => 'string',
@@ -6418,8 +6431,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            492 => [
-                'id' => 493,
+            493 => [
+                'id' => 494,
                 'item_key' => 'menu_account_reset_password',
                 'item_value' => 'Forgot Password',
                 'item_type' => 'string',
@@ -6431,8 +6444,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            493 => [
-                'id' => 494,
+            494 => [
+                'id' => 495,
                 'item_key' => 'menu_account_users',
                 'item_value' => 'Users',
                 'item_type' => 'string',
@@ -6444,8 +6457,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            494 => [
-                'id' => 495,
+            495 => [
+                'id' => 496,
                 'item_key' => 'menu_account_wallet',
                 'item_value' => 'Wallet',
                 'item_type' => 'string',
@@ -6457,8 +6470,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            495 => [
-                'id' => 496,
+            496 => [
+                'id' => 497,
                 'item_key' => 'menu_account_settings',
                 'item_value' => 'Settings',
                 'item_type' => 'string',
@@ -6470,8 +6483,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            496 => [
-                'id' => 497,
+            497 => [
+                'id' => 498,
                 'item_key' => 'menu_dialogs',
                 'item_value' => 'Dialogs',
                 'item_type' => 'string',
@@ -6483,8 +6496,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            497 => [
-                'id' => 498,
+            498 => [
+                'id' => 499,
                 'item_key' => 'menu_messages',
                 'item_value' => 'Messages',
                 'item_type' => 'string',
@@ -6496,23 +6509,10 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            498 => [
-                'id' => 499,
-                'item_key' => 'menu_notifies',
-                'item_value' => 'Notification',
-                'item_type' => 'string',
-                'item_tag' => 'menus',
-                'is_multilingual' => 1,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             499 => [
                 'id' => 500,
-                'item_key' => 'menu_notify_bulletins',
-                'item_value' => 'Systems',
+                'item_key' => 'menu_notifies',
+                'item_value' => 'Notification',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6526,7 +6526,7 @@ class ConfigsTableSeeder extends Seeder
         \DB::table('configs')->insert([
             0 => [
                 'id' => 501,
-                'item_key' => 'menu_notify_systems',
+                'item_key' => 'menu_notify_bulletins',
                 'item_value' => 'Systems',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
@@ -6539,8 +6539,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             1 => [
                 'id' => 502,
-                'item_key' => 'menu_notify_recommends',
-                'item_value' => 'Recommends',
+                'item_key' => 'menu_notify_systems',
+                'item_value' => 'Systems',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6552,8 +6552,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             2 => [
                 'id' => 503,
-                'item_key' => 'menu_notify_follows',
-                'item_value' => 'Follows',
+                'item_key' => 'menu_notify_recommends',
+                'item_value' => 'Recommends',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6565,8 +6565,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             3 => [
                 'id' => 504,
-                'item_key' => 'menu_notify_likes',
-                'item_value' => 'Likes',
+                'item_key' => 'menu_notify_follows',
+                'item_value' => 'Follows',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6578,8 +6578,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             4 => [
                 'id' => 505,
-                'item_key' => 'menu_notify_mentions',
-                'item_value' => 'Mentions',
+                'item_key' => 'menu_notify_likes',
+                'item_value' => 'Likes',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6591,8 +6591,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             5 => [
                 'id' => 506,
-                'item_key' => 'menu_notify_comments',
-                'item_value' => 'Comments',
+                'item_key' => 'menu_notify_mentions',
+                'item_value' => 'Mentions',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6604,8 +6604,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             6 => [
                 'id' => 507,
-                'item_key' => 'menu_search',
-                'item_value' => 'Search',
+                'item_key' => 'menu_notify_comments',
+                'item_value' => 'Comments',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6617,8 +6617,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             7 => [
                 'id' => 508,
-                'item_key' => 'menu_editor_functions',
-                'item_value' => 'Editor',
+                'item_key' => 'menu_search',
+                'item_value' => 'Search',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6630,8 +6630,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             8 => [
                 'id' => 509,
-                'item_key' => 'menu_editor_drafts',
-                'item_value' => 'Drafts',
+                'item_key' => 'menu_editor_functions',
+                'item_value' => 'Editor',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6643,8 +6643,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             9 => [
                 'id' => 510,
-                'item_key' => 'menu_profile_likes',
-                'item_value' => 'Likes',
+                'item_key' => 'menu_editor_drafts',
+                'item_value' => 'Drafts',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6656,8 +6656,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             10 => [
                 'id' => 511,
-                'item_key' => 'menu_profile_dislikes',
-                'item_value' => 'Dislikes',
+                'item_key' => 'menu_profile_likes',
+                'item_value' => 'Likes',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6669,8 +6669,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             11 => [
                 'id' => 512,
-                'item_key' => 'menu_profile_followers',
-                'item_value' => 'Followers',
+                'item_key' => 'menu_profile_dislikes',
+                'item_value' => 'Dislikes',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6682,8 +6682,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             12 => [
                 'id' => 513,
-                'item_key' => 'menu_profile_blockers',
-                'item_value' => 'Blockers',
+                'item_key' => 'menu_profile_followers',
+                'item_value' => 'Followers',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6695,8 +6695,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             13 => [
                 'id' => 514,
-                'item_key' => 'menu_profile_like_users',
-                'item_value' => 'It like users',
+                'item_key' => 'menu_profile_blockers',
+                'item_value' => 'Blockers',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6708,8 +6708,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             14 => [
                 'id' => 515,
-                'item_key' => 'menu_profile_like_groups',
-                'item_value' => 'It like groups',
+                'item_key' => 'menu_profile_like_users',
+                'item_value' => 'It like users',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6721,8 +6721,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             15 => [
                 'id' => 516,
-                'item_key' => 'menu_profile_like_hashtags',
-                'item_value' => 'It like hashtags',
+                'item_key' => 'menu_profile_like_groups',
+                'item_value' => 'It like groups',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6734,8 +6734,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             16 => [
                 'id' => 517,
-                'item_key' => 'menu_profile_like_posts',
-                'item_value' => 'It like posts',
+                'item_key' => 'menu_profile_like_hashtags',
+                'item_value' => 'It like hashtags',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6747,8 +6747,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             17 => [
                 'id' => 518,
-                'item_key' => 'menu_profile_like_comments',
-                'item_value' => 'It like comments',
+                'item_key' => 'menu_profile_like_posts',
+                'item_value' => 'It like posts',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6760,8 +6760,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             18 => [
                 'id' => 519,
-                'item_key' => 'menu_profile_dislike_users',
-                'item_value' => 'It dislike users',
+                'item_key' => 'menu_profile_like_comments',
+                'item_value' => 'It like comments',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6773,8 +6773,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             19 => [
                 'id' => 520,
-                'item_key' => 'menu_profile_dislike_groups',
-                'item_value' => 'It dislike groups',
+                'item_key' => 'menu_profile_dislike_users',
+                'item_value' => 'It dislike users',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6786,8 +6786,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             20 => [
                 'id' => 521,
-                'item_key' => 'menu_profile_dislike_hashtags',
-                'item_value' => 'It dislike hashtags',
+                'item_key' => 'menu_profile_dislike_groups',
+                'item_value' => 'It dislike groups',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6799,8 +6799,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             21 => [
                 'id' => 522,
-                'item_key' => 'menu_profile_dislike_posts',
-                'item_value' => 'It dislike posts',
+                'item_key' => 'menu_profile_dislike_hashtags',
+                'item_value' => 'It dislike hashtags',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6812,8 +6812,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             22 => [
                 'id' => 523,
-                'item_key' => 'menu_profile_dislike_comments',
-                'item_value' => 'It dislike comments',
+                'item_key' => 'menu_profile_dislike_posts',
+                'item_value' => 'It dislike posts',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6825,8 +6825,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             23 => [
                 'id' => 524,
-                'item_key' => 'menu_profile_follow_users',
-                'item_value' => 'It follow users',
+                'item_key' => 'menu_profile_dislike_comments',
+                'item_value' => 'It dislike comments',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6838,8 +6838,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             24 => [
                 'id' => 525,
-                'item_key' => 'menu_profile_follow_groups',
-                'item_value' => 'It follow groups',
+                'item_key' => 'menu_profile_follow_users',
+                'item_value' => 'It follow users',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6851,8 +6851,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             25 => [
                 'id' => 526,
-                'item_key' => 'menu_profile_follow_hashtags',
-                'item_value' => 'It follow hashtags',
+                'item_key' => 'menu_profile_follow_groups',
+                'item_value' => 'It follow groups',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6864,8 +6864,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             26 => [
                 'id' => 527,
-                'item_key' => 'menu_profile_follow_posts',
-                'item_value' => 'It follow posts',
+                'item_key' => 'menu_profile_follow_hashtags',
+                'item_value' => 'It follow hashtags',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6877,8 +6877,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             27 => [
                 'id' => 528,
-                'item_key' => 'menu_profile_follow_comments',
-                'item_value' => 'It follow comments',
+                'item_key' => 'menu_profile_follow_posts',
+                'item_value' => 'It follow posts',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6890,8 +6890,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             28 => [
                 'id' => 529,
-                'item_key' => 'menu_profile_block_users',
-                'item_value' => 'It block users',
+                'item_key' => 'menu_profile_follow_comments',
+                'item_value' => 'It follow comments',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6903,8 +6903,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             29 => [
                 'id' => 530,
-                'item_key' => 'menu_profile_block_groups',
-                'item_value' => 'It block groups',
+                'item_key' => 'menu_profile_block_users',
+                'item_value' => 'It block users',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6916,8 +6916,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             30 => [
                 'id' => 531,
-                'item_key' => 'menu_profile_block_hashtags',
-                'item_value' => 'It block hashtags',
+                'item_key' => 'menu_profile_block_groups',
+                'item_value' => 'It block groups',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6929,8 +6929,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             31 => [
                 'id' => 532,
-                'item_key' => 'menu_profile_block_posts',
-                'item_value' => 'It block posts',
+                'item_key' => 'menu_profile_block_hashtags',
+                'item_value' => 'It block hashtags',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6942,8 +6942,8 @@ class ConfigsTableSeeder extends Seeder
             ],
             32 => [
                 'id' => 533,
-                'item_key' => 'menu_profile_block_comments',
-                'item_value' => 'It block comments',
+                'item_key' => 'menu_profile_block_posts',
+                'item_value' => 'It block posts',
                 'item_type' => 'string',
                 'item_tag' => 'menus',
                 'is_multilingual' => 1,
@@ -6955,6 +6955,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             33 => [
                 'id' => 534,
+                'item_key' => 'menu_profile_block_comments',
+                'item_value' => 'It block comments',
+                'item_type' => 'string',
+                'item_tag' => 'menus',
+                'is_multilingual' => 1,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            34 => [
+                'id' => 535,
                 'item_key' => 'website_portal_path',
                 'item_value' => 'portal',
                 'item_type' => 'string',
@@ -6966,8 +6979,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            34 => [
-                'id' => 535,
+            35 => [
+                'id' => 536,
                 'item_key' => 'website_user_path',
                 'item_value' => 'users',
                 'item_type' => 'string',
@@ -6979,8 +6992,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            35 => [
-                'id' => 536,
+            36 => [
+                'id' => 537,
                 'item_key' => 'website_group_path',
                 'item_value' => 'groups',
                 'item_type' => 'string',
@@ -6992,8 +7005,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            36 => [
-                'id' => 537,
+            37 => [
+                'id' => 538,
                 'item_key' => 'website_hashtag_path',
                 'item_value' => 'hashtags',
                 'item_type' => 'string',
@@ -7005,8 +7018,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            37 => [
-                'id' => 538,
+            38 => [
+                'id' => 539,
                 'item_key' => 'website_post_path',
                 'item_value' => 'posts',
                 'item_type' => 'string',
@@ -7018,8 +7031,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            38 => [
-                'id' => 539,
+            39 => [
+                'id' => 540,
                 'item_key' => 'website_comment_path',
                 'item_value' => 'comments',
                 'item_type' => 'string',
@@ -7031,8 +7044,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            39 => [
-                'id' => 540,
+            40 => [
+                'id' => 541,
                 'item_key' => 'website_user_detail_path',
                 'item_value' => 'u',
                 'item_type' => 'string',
@@ -7044,8 +7057,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            40 => [
-                'id' => 541,
+            41 => [
+                'id' => 542,
                 'item_key' => 'website_group_detail_path',
                 'item_value' => 'group',
                 'item_type' => 'string',
@@ -7057,8 +7070,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            41 => [
-                'id' => 542,
+            42 => [
+                'id' => 543,
                 'item_key' => 'website_hashtag_detail_path',
                 'item_value' => 'hashtag',
                 'item_type' => 'string',
@@ -7070,8 +7083,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            42 => [
-                'id' => 543,
+            43 => [
+                'id' => 544,
                 'item_key' => 'website_post_detail_path',
                 'item_value' => 'post',
                 'item_type' => 'string',
@@ -7083,8 +7096,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            43 => [
-                'id' => 544,
+            44 => [
+                'id' => 545,
                 'item_key' => 'website_comment_detail_path',
                 'item_value' => 'comment',
                 'item_type' => 'string',
@@ -7096,8 +7109,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            44 => [
-                'id' => 545,
+            45 => [
+                'id' => 546,
                 'item_key' => 'engine_service',
                 'item_value' => 'FresnsEngine',
                 'item_type' => 'plugin',
@@ -7109,8 +7122,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            45 => [
-                'id' => 546,
+            46 => [
+                'id' => 547,
                 'item_key' => 'engine_api_type',
                 'item_value' => 'local',
                 'item_type' => 'string',
@@ -7122,8 +7135,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            46 => [
-                'id' => 547,
+            47 => [
+                'id' => 548,
                 'item_key' => 'engine_key_id',
                 'item_value' => null,
                 'item_type' => 'number',
@@ -7135,22 +7148,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            47 => [
-                'id' => 548,
-                'item_key' => 'engine_api_host',
-                'item_value' => null,
-                'item_type' => 'string',
-                'item_tag' => 'websites',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 0,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             48 => [
                 'id' => 549,
-                'item_key' => 'engine_api_app_id',
+                'item_key' => 'engine_api_host',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'websites',
@@ -7163,7 +7163,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             49 => [
                 'id' => 550,
-                'item_key' => 'engine_api_app_secret',
+                'item_key' => 'engine_api_app_id',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'websites',
@@ -7176,6 +7176,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             50 => [
                 'id' => 551,
+                'item_key' => 'engine_api_app_secret',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'websites',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 0,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            51 => [
+                'id' => 552,
                 'item_key' => 'website_stat_code',
                 'item_value' => null,
                 'item_type' => 'string',
@@ -7187,8 +7200,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            51 => [
-                'id' => 552,
+            52 => [
+                'id' => 553,
                 'item_key' => 'website_stat_position',
                 'item_value' => 'body',
                 'item_type' => 'string',
@@ -7200,8 +7213,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            52 => [
-                'id' => 553,
+            53 => [
+                'id' => 554,
                 'item_key' => 'website_status',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -7213,8 +7226,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            53 => [
-                'id' => 554,
+            54 => [
+                'id' => 555,
                 'item_key' => 'website_number',
                 'item_value' => '5',
                 'item_type' => 'number',
@@ -7226,8 +7239,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            54 => [
-                'id' => 555,
+            55 => [
+                'id' => 556,
                 'item_key' => 'website_proportion',
                 'item_value' => '30',
                 'item_type' => 'number',
@@ -7239,8 +7252,8 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            55 => [
-                'id' => 556,
+            56 => [
+                'id' => 557,
                 'item_key' => 'site_china_mode',
                 'item_value' => 'false',
                 'item_type' => 'boolean',
@@ -7252,22 +7265,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            56 => [
-                'id' => 557,
-                'item_key' => 'china_icp_beian',
-                'item_value' => null,
-                'item_type' => 'string',
-                'item_tag' => 'websites',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 1,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             57 => [
                 'id' => 558,
-                'item_key' => 'china_icp_license',
+                'item_key' => 'china_icp_beian',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'websites',
@@ -7280,7 +7280,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             58 => [
                 'id' => 559,
-                'item_key' => 'china_gongan_beian',
+                'item_key' => 'china_icp_license',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'websites',
@@ -7293,7 +7293,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             59 => [
                 'id' => 560,
-                'item_key' => 'china_broadcasting_license',
+                'item_key' => 'china_gongan_beian',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'websites',
@@ -7306,6 +7306,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             60 => [
                 'id' => 561,
+                'item_key' => 'china_broadcasting_license',
+                'item_value' => null,
+                'item_type' => 'string',
+                'item_tag' => 'websites',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 1,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            61 => [
+                'id' => 562,
                 'item_key' => 'FresnsEngine',
                 'item_value' => 'true',
                 'item_type' => 'boolean',
@@ -7317,22 +7330,9 @@ class ConfigsTableSeeder extends Seeder
                 'updated_at' => null,
                 'deleted_at' => null,
             ],
-            61 => [
-                'id' => 562,
-                'item_key' => 'FresnsEngine_Pc',
-                'item_value' => null,
-                'item_type' => 'string',
-                'item_tag' => 'themes',
-                'is_multilingual' => 0,
-                'is_custom' => 0,
-                'is_api' => 0,
-                'created_at' => '2022-07-18 17:00:00',
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
             62 => [
                 'id' => 563,
-                'item_key' => 'FresnsEngine_Mobile',
+                'item_key' => 'FresnsEngine_Pc',
                 'item_value' => null,
                 'item_type' => 'string',
                 'item_tag' => 'themes',
@@ -7345,10 +7345,10 @@ class ConfigsTableSeeder extends Seeder
             ],
             63 => [
                 'id' => 564,
-                'item_key' => 'ios_notify_service',
+                'item_key' => 'FresnsEngine_Mobile',
                 'item_value' => null,
-                'item_type' => 'plugin',
-                'item_tag' => 'apps',
+                'item_type' => 'string',
+                'item_tag' => 'themes',
                 'is_multilingual' => 0,
                 'is_custom' => 0,
                 'is_api' => 0,
@@ -7358,7 +7358,7 @@ class ConfigsTableSeeder extends Seeder
             ],
             64 => [
                 'id' => 565,
-                'item_key' => 'android_notify_service',
+                'item_key' => 'ios_notify_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
                 'item_tag' => 'apps',
@@ -7371,6 +7371,19 @@ class ConfigsTableSeeder extends Seeder
             ],
             65 => [
                 'id' => 566,
+                'item_key' => 'android_notify_service',
+                'item_value' => null,
+                'item_type' => 'plugin',
+                'item_tag' => 'apps',
+                'is_multilingual' => 0,
+                'is_custom' => 0,
+                'is_api' => 0,
+                'created_at' => '2022-07-18 17:00:00',
+                'updated_at' => null,
+                'deleted_at' => null,
+            ],
+            66 => [
+                'id' => 567,
                 'item_key' => 'wechat_notify_service',
                 'item_value' => null,
                 'item_type' => 'plugin',
