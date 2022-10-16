@@ -45,21 +45,17 @@ Route::prefix('engine')
         Route::get('download-link', [ApiController::class, 'downloadLink'])->name('file.download');
         Route::post('upload-file', [ApiController::class, 'uploadFile'])->name('upload.file');
 
-        Route::delete('post/{pid}', [ApiController::class, 'postDelete'])->name('post.delete');
-        Route::delete('comment/{cid}', [ApiController::class, 'commentDelete'])->name('comment.delete');
-
         Route::prefix('group')->name('group.')->group(function () {
             Route::get('list/{gid}', [ApiController::class, 'groupList'])->name('list');
         });
 
         Route::prefix('editor')->name('editor.')->group(function () {
-            Route::post('direct-publish', [EditorController::class, 'editorDirectPublish'])->name('direct.publish');
-            Route::post('store/{type}', [EditorController::class, 'editorStore'])->name('store');
-            Route::put('{type}/{draftId}', [EditorController::class, 'editorUpdate'])->name('update');
             Route::post('upload-file', [ApiController::class, 'editorUploadFile'])->name('upload.file');
-            Route::patch('{type}/{draftId}', [EditorController::class, 'editorDelete'])->name('delete');
-            Route::delete('{type}/{draftId}', [EditorController::class, 'editorRecall'])->name('recall');
+            Route::patch('{type}/{draftId}', [ApiController::class, 'editorDelete'])->name('recall');
+            Route::delete('{type}/{draftId}', [ApiController::class, 'editorRecall'])->name('delete');
         });
+
+        Route::post('/draft/{draftId}',[ApiController::class, 'draftUpdate'])->name('draft.update');
 
         // FsLang
         Route::get('js/{locale?}/translations', function ($locale) {
