@@ -227,6 +227,50 @@ class EditorController extends Controller
         return view('editor.edit', compact('type', 'plid', 'clid', 'config', 'stickers', 'draft', 'group'));
     }
 
+    // update
+    public function update(Request $request, string $type, int $draftId)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $response = ApiHelper::make()->put("/api/v2/editor/{$type}/{$draftId}", [
+            'json' => [
+                'postGid' => $request->post('postGid'),
+                'postTitle' => $request->post('postTitle'),
+                'postIsComment' => $request->post('postIsComment'),
+                'postIsCommentPublic' => $request->post('postIsCommentPublic'),
+                'content' => $request->post('content'),
+                'isMarkdown' => $request->post('isMarkdown'),
+                'isAnonymous' => $request->post('anonymous'),
+                'mapJson' => $request->post('mapJson'),
+                'deleteMap' => $request->post('deleteMap'),
+                'deleteFile' => $request->post('deleteFile'),
+                'deleteExtend' => $request->post('deleteExtend'),
+            ]
+        ]);
+
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        $response = ApiHelper::make()->post("/api/v2/editor/{$type}/{$draftId}");
+
+        if ($response['code'] == 38200) {
+            return redirect()->route('fresns.post.list')->with('success', $response['message']);
+        }
+
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        return redirect()->route('fresns.post.list')->with('success', $response['message']);
+    }
+
     // get draft
     public static function getDraft(string $type, ?int $draftId = null)
     {

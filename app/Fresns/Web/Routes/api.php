@@ -53,7 +53,6 @@ Route::prefix('engine')
         });
 
         Route::prefix('editor')->name('editor.')->group(function () {
-            Route::put('{type}/{draftId}', [EditorController::class, 'editorUpdate'])->name('update');
             Route::post('upload-file', [ApiController::class, 'editorUploadFile'])->name('upload.file');
             Route::patch('{type}/{draftId}', [EditorController::class, 'editorDelete'])->name('delete');
             Route::delete('{type}/{draftId}', [EditorController::class, 'editorRecall'])->name('recall');
