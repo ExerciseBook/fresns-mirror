@@ -12,6 +12,7 @@ use App\Fresns\Web\Exceptions\ErrorException;
 use App\Fresns\Web\Helpers\ApiHelper;
 use App\Fresns\Web\Helpers\QueryHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EditorController extends Controller
 {
@@ -42,6 +43,79 @@ class EditorController extends Controller
         );
 
         return view('editor.drafts', compact('drafts', 'type'));
+    }
+
+    // direct publish
+    public function directPublish(Request $request)
+    {
+        $validator = Validator::make($request->post(),
+            [
+                'type' => 'required',
+                'content' => 'required',
+                'postGid' => ($request->post('type') === 'post' && fs_api_config('post_editor_group_required')) ? 'required' : 'nullable',
+                'postTitle' => ($request->post('type') === 'post' && fs_api_config('post_editor_title_required')) ? 'required' : 'nullable',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $multipart = [
+            [
+                'name' => 'type',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('type'),
+            ],
+            [
+                'name' => 'postGid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('postGid'),
+            ],
+            [
+                'name' => 'postTitle',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('postTitle'),
+            ],
+            [
+                'name' => 'content',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('content'),
+            ],
+            [
+                'name' => 'isAnonymous',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => (bool) $request->post('anonymous', false),
+            ],
+            [
+                'name' => 'commentPid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('commentPid'),
+            ],
+            [
+                'name' => 'commentCid',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('commentCid'),
+            ],
+        ];
+        if ($request->file('file')) {
+            $multipart[] = [
+                'name' => 'file',
+                'filename' => $request->file('file')->getClientOriginalName(),
+                'contents' => $request->file('file')->getContent(),
+                'headers' => ['Content-Type' => $request->file('file')->getClientMimeType()],
+            ];
+        }
+
+        $result = ApiHelper::make()->post("/api/v2/editor/direct-publish", [
+            'multipart' => array_filter($multipart, fn($val) => isset($val['contents']))
+        ]);
+
+        if ($result['code'] !== 0) {
+            throw new ErrorException($result['message']);
+        }
+
+        return back()->with('success', $result['message']);
     }
 
     // create or edit

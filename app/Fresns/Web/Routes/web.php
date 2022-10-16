@@ -196,6 +196,7 @@ Route::prefix(LaravelLocalization::setLocale())
         // editor
         Route::name('editor.')->prefix('editor')->group(function () {
             Route::get('drafts/{type}', [EditorController::class, 'drafts'])->name('drafts');
+            Route::post('direct-publish', [EditorController::class, 'directPublish'])->name('direct.publish');
             Route::post('store/{type}', [EditorController::class, 'store'])->name('store');
             Route::get('{type}', [EditorController::class, 'index'])->name('index');
             Route::get('{type}/{draftId}', [EditorController::class, 'edit'])->name('edit');
