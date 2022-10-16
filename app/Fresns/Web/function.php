@@ -153,18 +153,3 @@ if (! function_exists('fs_user')) {
         return app('fresns.user');
     }
 }
-
-if (! function_exists('accept_images')) {
-    /**
-     * @return string
-     */
-    function accept_images(): string
-    {
-        $imagesExt = fs_api_config('images_ext');
-        $exts = array_map(function ($ext) {
-            return '.'.$ext;
-        }, explode(',', $imagesExt));
-
-        return implode(',', $exts);
-    }
-}
