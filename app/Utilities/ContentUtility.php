@@ -1011,19 +1011,19 @@ class ContentUtility
 
         // files
         $fileUsages = FileUsage::where('table_name', $tableName)->where('table_column', 'id')->where('table_id', $primaryId)->get();
-        foreach ($fileUsages as $file) {
+        foreach ($fileUsages as $fileUsage) {
             $fileDataItem = [
-                'file_id' => $file->id,
-                'file_type' => $file->file_type,
-                'usage_type' => $file->usage_type,
-                'platform_id' => $file->platform_id,
+                'file_id' => $fileUsage->file_id,
+                'file_type' => $fileUsage->file_type,
+                'usage_type' => $fileUsage->usage_type,
+                'platform_id' => $fileUsage->platform_id,
                 'table_name' => $logTableName,
                 'table_column' => 'id',
                 'table_id' => $logId,
-                'rating' => $file->rating,
-                'account_id' => $file->account_id,
-                'user_id' => $file->user_id,
-                'remark' => $file->remark,
+                'rating' => $fileUsage->rating,
+                'account_id' => $fileUsage->account_id,
+                'user_id' => $fileUsage->user_id,
+                'remark' => $fileUsage->remark,
             ];
 
             FileUsage::create($fileDataItem);
