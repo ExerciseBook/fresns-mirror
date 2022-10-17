@@ -450,6 +450,60 @@ class EditorController extends Controller
             }
         }
 
+        // is post
+        if ($dtoRequest->type == 'post') {
+            // postGid
+            if ($dtoRequest->postGid) {
+                $group = PrimaryHelper::fresnsModelByFsid('group', $dtoRequest->postGid);
+
+                if (empty($group)) {
+                    throw new ApiException(37100);
+                }
+
+                if ($group->is_enable == 0) {
+                    throw new ApiException(37101);
+                }
+
+                $checkPerm = PermissionUtility::checkUserGroupPublishPerm($group->id, $group->permissions, $authUser->id);
+
+                if (! $checkPerm['allowPost']) {
+                    throw new ApiException(36311);
+                }
+
+                $draft->update([
+                    'group_id' => $group->id,
+                ]);
+            }
+
+            // postTitle
+            if ($dtoRequest->postTitle) {
+                $postTitle = Str::of($dtoRequest->postTitle)->trim();
+                $checkBanWords = ValidationUtility::contentBanWords($postTitle);
+
+                if (! $checkBanWords) {
+                    throw new ApiException(38206);
+                }
+
+                $draft->update([
+                    'title' => $postTitle,
+                ]);
+            }
+
+            // postIsComment
+            if ($dtoRequest->postIsComment) {
+                $draft->update([
+                    'is_comment' => $dtoRequest->postIsComment,
+                ]);
+            }
+
+            // postIsCommentPublic
+            if ($dtoRequest->postIsCommentPublic) {
+                $draft->update([
+                    'is_comment_public' => $dtoRequest->postIsCommentPublic,
+                ]);
+            }
+        }
+
         // content
         if ($dtoRequest->content) {
             $content = Str::of($dtoRequest->content)->trim();
@@ -492,141 +546,53 @@ class EditorController extends Controller
             ]);
         }
 
-        switch ($dtoRequest->type) {
-            // post
-            case 'post':
-                // postGid
-                if ($dtoRequest->postGid) {
-                    $group = PrimaryHelper::fresnsModelByFsid('group', $dtoRequest->postGid);
+        // deleteFile
+        if ($dtoRequest->deleteFile) {
+            $file = File::where('fid', $dtoRequest->deleteFile)->first();
 
-                    if (empty($group)) {
-                        throw new ApiException(37100);
-                    }
+            if (empty($file)) {
+                throw new ApiException(36400);
+            }
 
-                    if ($group->is_enable == 0) {
-                        throw new ApiException(37101);
-                    }
+            $tableName = match ($type) {
+                'post' => 'post_logs',
+                'comment' => 'comment_logs',
+            };
 
-                    $checkPerm = PermissionUtility::checkUserGroupPublishPerm($group->id, $group->permissions, $authUser->id);
+            FileUsage::where('file_id', $file->id)
+                ->where('tableName', $tableName)
+                ->where('tableColumn', 'id')
+                ->where('tableId', $draft->id)
+                ->delete();
+        }
 
-                    if (! $checkPerm['allowPost']) {
-                        throw new ApiException(36311);
-                    }
+        // deleteExtend
+        if ($dtoRequest->deleteExtend) {
+            $extend = Extend::where('eid', $dtoRequest->deleteExtend)->first();
 
-                    $draft->update([
-                        'group_id' => $group->id,
-                    ]);
-                }
+            if (empty($extend)) {
+                throw new ApiException(36400);
+            }
 
-                // postTitle
-                if ($dtoRequest->postTitle) {
-                    $postTitle = Str::of($dtoRequest->postTitle)->trim();
-                    $checkBanWords = ValidationUtility::contentBanWords($postTitle);
+            $usageType = match ($type) {
+                'post' => ExtendUsage::TYPE_POST_LOG,
+                'comment' => ExtendUsage::TYPE_COMMENT_LOG,
+            };
 
-                    if (! $checkBanWords) {
-                        throw new ApiException(38206);
-                    }
+            $extendUsage = ExtendUsage::where('usage_type', $usageType)
+                ->where('usage_id', $draft->id)
+                ->where('extend_id', $extend->id)
+                ->first();
 
-                    $draft->update([
-                        'title' => $postTitle,
-                    ]);
-                }
+            if (empty($extendUsage)) {
+                throw new ApiException(36400);
+            }
 
-                // postIsComment
-                if ($dtoRequest->postIsComment) {
-                    $draft->update([
-                        'is_comment' => $dtoRequest->postIsComment,
-                    ]);
-                }
+            if ($extendUsage->can_delete == 0) {
+                throw new ApiException(36401);
+            }
 
-                // postIsCommentPublic
-                if ($dtoRequest->postIsCommentPublic) {
-                    $draft->update([
-                        'is_comment_public' => $dtoRequest->postIsCommentPublic,
-                    ]);
-                }
-
-                // deleteFile
-                if ($dtoRequest->deleteFile) {
-                    $file = File::where('fid', $dtoRequest->deleteFile)->first();
-
-                    if (empty($file)) {
-                        throw new ApiException(36400);
-                    }
-
-                    FileUsage::where('file_id', $file->id)
-                        ->where('tableName', 'post_logs')
-                        ->where('tableColumn', 'id')
-                        ->where('tableId', $draft->id)
-                        ->delete();
-                }
-
-                // deleteExtend
-                if ($dtoRequest->deleteExtend) {
-                    $extend = Extend::where('eid', $dtoRequest->deleteExtend)->first();
-
-                    if (empty($extend)) {
-                        throw new ApiException(36400);
-                    }
-
-                    $extendUsage = ExtendUsage::where('usage_type', ExtendUsage::TYPE_POST_LOG)
-                        ->where('usage_id', $draft->id)
-                        ->where('extend_id', $extend->id)
-                        ->first();
-
-                    if (empty($extendUsage)) {
-                        throw new ApiException(36400);
-                    }
-
-                    if ($extendUsage->can_delete == 0) {
-                        throw new ApiException(36401);
-                    }
-
-                    $extendUsage->delete();
-                }
-            break;
-
-            // comment
-            case 'comment':
-                // deleteFile
-                if ($dtoRequest->deleteFile) {
-                    $file = File::where('fid', $dtoRequest->deleteFile)->first();
-
-                    if (empty($file)) {
-                        throw new ApiException(36400);
-                    }
-
-                    FileUsage::where('file_id', $file->id)
-                        ->where('tableName', 'comment_logs')
-                        ->where('tableColumn', 'id')
-                        ->where('tableId', $draft->id)
-                        ->delete();
-                }
-
-                // deleteExtend
-                if ($dtoRequest->deleteExtend) {
-                    $extend = Extend::where('eid', $dtoRequest->deleteExtend)->first();
-
-                    if (empty($extend)) {
-                        throw new ApiException(36400);
-                    }
-
-                    $extendUsage = ExtendUsage::where('usage_type', ExtendUsage::TYPE_POST_LOG)
-                        ->where('usage_id', $draft->id)
-                        ->where('extend_id', $extend->id)
-                        ->first();
-
-                    if (empty($extendUsage)) {
-                        throw new ApiException(36400);
-                    }
-
-                    if ($extendUsage->can_delete == 0) {
-                        throw new ApiException(36401);
-                    }
-
-                    $extendUsage->delete();
-                }
-            break;
+            $extendUsage->delete();
         }
 
         return $this->success();
