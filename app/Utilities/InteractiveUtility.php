@@ -733,16 +733,27 @@ class InteractiveUtility
             break;
         }
 
-        Group::where('id', $content?->group_id)->$actionType("{$type}_count");
-
+        $group = Group::where('id', $content?->group_id)->first();
         $linkIds = DomainLinkUsage::type($typeNumber)->where('usage_id', $content?->id)->pluck('link_id')->toArray();
-        DomainLink::whereIn('id', $linkIds)->$actionType("{$type}_count");
-
         $domainIds = DomainLink::whereIn('id', $linkIds)->pluck('domain_id')->toArray();
-        Domain::whereIn('id', $domainIds)->$actionType("{$type}_count");
-
         $hashtagIds = $content->hashtags->pluck('id');
-        Hashtag::whereIn('id', $hashtagIds)->$actionType("{$type}_count");
+        
+        if ($actionType == 'increment') {
+            $group->increment("{$type}_count");
+            
+            DomainLink::whereIn('id', $linkIds)->increment("{$type}_count");
+            Domain::whereIn('id', $domainIds)->increment("{$type}_count");
+            Hashtag::whereIn('id', $hashtagIds)->increment("{$type}_count");
+        } else {
+            $groupTypeCount = $group->{"{$type}_count"} ?? 0;
+            if ($groupTypeCount > 0) {
+                $group->decrement("{$type}_count");
+            }
+
+            DomainLink::whereIn('id', $linkIds)->where("{$type}_count", '>', 0)->increment("{$type}_count");
+            Domain::whereIn('id', $domainIds)->where("{$type}_count", '>', 0)->increment("{$type}_count");
+            Hashtag::whereIn('id', $hashtagIds)->where("{$type}_count", '>', 0)->increment("{$type}_count");
+        }
     }
 
     /**
