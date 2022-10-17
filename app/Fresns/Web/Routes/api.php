@@ -44,8 +44,8 @@ Route::prefix('engine')
 
         Route::delete('{type}/{fsid}', [ApiController::class, 'contentDelete'])->name('delete');
 
-        Route::get('download-link', [ApiController::class, 'downloadLink'])->name('file.download');
         Route::post('upload-file', [ApiController::class, 'uploadFile'])->name('upload.file');
+        Route::get('download/{fid}', [ApiController::class, 'downloadLink'])->name('file.download');
 
         Route::prefix('group')->name('group.')->group(function () {
             Route::get('list/{gid}', [ApiController::class, 'groupList'])->name('list');

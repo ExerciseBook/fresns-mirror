@@ -367,8 +367,16 @@ class ApiController extends Controller
     }
 
     // download link
-    public function downloadLink(Request $request)
+    public function downloadLink(Request $request, $fid)
     {
+        $response = ApiHelper::make()->get("/api/v2/common/file/{$fid}/download-link", [
+            'query' => [
+                'type' => $request->get('type'),
+                'fsid' => $request->get('fsid'),
+            ]
+        ]);
+
+        return \response()->json($response->toArray());
     }
 
     /**

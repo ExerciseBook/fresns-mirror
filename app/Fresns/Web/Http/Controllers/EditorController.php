@@ -45,7 +45,77 @@ class EditorController extends Controller
         return view('editor.drafts', compact('drafts', 'type'));
     }
 
-    // direct publish
+    // index
+    public function index(string $type, ?string $postGid = null, ?string $commentPid = null, ?string $commentCid = null)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $client = ApiHelper::make();
+
+        $results = $client->handleUnwrap([
+            'config' => $client->getAsync("/api/v2/editor/{$type}/config"),
+            'drafts' => $client->getAsync("/api/v2/editor/{$type}/drafts"),
+        ]);
+
+        $config = $results['config']['data'];
+        $drafts = $results['drafts']['data']['list'];
+
+        if (count($drafts) === 0) {
+            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
+                'json' => [
+                    'createType' => 2,
+                    'postGid' => $postGid,
+                    'commentPid' => $commentPid,
+                    'commentCid' => $commentCid,
+                ]
+            ])->toArray();
+
+            if (data_get($response, 'code') !== 0) {
+                throw new ErrorException($response['message']);
+            }
+
+            return redirect()->to(fs_route(route('fresns.editor.edit', [$type, $response['data']['detail']['id']])));
+        }
+
+        return view('editor.index', compact('type', 'config', 'drafts'));
+    }
+
+    // edit
+    public function edit(Request $request, string $type, int $draftId)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $draftInfo = self::getDraft($type, $draftId);
+
+        $config = $draftInfo['config'];
+        $stickers = $draftInfo['stickers'];
+        $draft = $draftInfo['draft'];
+        $group = data_get($draftInfo, 'group.detail') ?? data_get($draft,'detail.group.0');
+
+        $plid = null; // post log id
+        $clid = null; // comment log id
+        if ($type == 'post') {
+            $plid = $draftId;
+        } else {
+            $clid = $draftId;
+        }
+
+        return view('editor.edit', compact('type', 'plid', 'clid', 'config', 'stickers', 'draft', 'group'));
+    }
+
+    // request: direct publish
     public function directPublish(Request $request)
     {
         $validator = Validator::make($request->post(),
@@ -118,7 +188,7 @@ class EditorController extends Controller
         return back()->with('success', $result['message']);
     }
 
-    // create or edit
+    // request: create or edit
     public function store(Request $request, string $type)
     {
         $type = match ($type) {
@@ -158,77 +228,7 @@ class EditorController extends Controller
         return redirect()->to(fs_route(route('fresns.editor.edit', [$type, $response['data']['detail']['id']])));
     }
 
-    // index
-    public function index(string $type, ?string $postGid = null, ?string $commentPid = null, ?string $commentCid = null)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $client = ApiHelper::make();
-
-        $results = $client->handleUnwrap([
-            'config' => $client->getAsync("/api/v2/editor/{$type}/config"),
-            'drafts' => $client->getAsync("/api/v2/editor/{$type}/drafts"),
-        ]);
-
-        $config = $results['config']['data'];
-        $drafts = $results['drafts']['data']['list'];
-
-        if (count($drafts) === 0) {
-            $response = ApiHelper::make()->post("/api/v2/editor/{$type}/create", [
-                'json' => [
-                    'createType' => 2,
-                    'postGid' => $postGid,
-                    'commentPid' => $commentPid,
-                    'commentCid' => $commentCid,
-                ]
-            ])->toArray();
-
-            if (data_get($response, 'code') !== 0) {
-                throw new ErrorException($response['message']);
-            }
-
-            return redirect()->to(fs_route(route('fresns.editor.edit', [$type, $response['data']['detail']['id']])));
-        }
-
-        return view('editor.index', compact('type', 'config', 'drafts'));
-    }
-
-    // edit
-    public function edit(Request $request, string $type, int $draftId)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $draftInfo = self::getDraft($type, $draftId);
-
-        $config = $draftInfo['config'];
-        $stickers = $draftInfo['stickers'];
-        $draft = $draftInfo['draft'];
-        $group = data_get($draftInfo, 'group.detail') ?? data_get($draft,'detail.group.0');
-
-        $plid = null; // post log id
-        $clid = null; // comment log id
-        if ($type == 'post') {
-            $plid = $draftId;
-        } else {
-            $clid = $draftId;
-        }
-
-        return view('editor.edit', compact('type', 'plid', 'clid', 'config', 'stickers', 'draft', 'group'));
-    }
-
-    // publish
+    // request: publish
     public function publish(Request $request, string $type, int $draftId)
     {
         $type = match ($type) {
@@ -298,30 +298,5 @@ class EditorController extends Controller
         $draftInfo['group'] = data_get($results, 'group.data');
 
         return $draftInfo;
-    }
-
-    public function delete(Request $request, string $type, string $draftId)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $response = ApiHelper::make()->delete("/api/v2/$type/{$draftId}");
-
-        if ($response['code'] !== 0) {
-            throw new ErrorException($response['message'], $response['code']);
-        }
-
-        if ($type === 'post') {
-            return redirect()->to(fs_route(route('fresns.post.list')))->with('success', $response['message']);
-        }
-
-        if ($type === 'comment') {
-            return redirect()->to(fs_route(route('fresns.comment.list')))->with('success', $response['message']);
-        }
     }
 }
