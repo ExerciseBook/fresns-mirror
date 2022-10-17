@@ -204,7 +204,7 @@ Route::prefix(LaravelLocalization::setLocale())
 
             // editor request
             Route::post('direct-publish', [EditorController::class, 'directPublish'])->name('direct.publish');
-            Route::post('store/{type}/{fsid}', [EditorController::class, 'store'])->name('store');
+            Route::post('store/{type}', [EditorController::class, 'store'])->name('store');
             Route::post('publish/{type}/{draftId}', [EditorController::class, 'publish'])->name('publish');
         });
     });

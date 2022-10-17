@@ -119,7 +119,7 @@ class EditorController extends Controller
     }
 
     // create or edit
-    public function store(Request $request, string $type, ?string $fsid = null)
+    public function store(Request $request, string $type)
     {
         $type = match ($type) {
             'posts' => 'post',
@@ -128,6 +128,8 @@ class EditorController extends Controller
             'comment' => 'comment',
             default => 'post',
         };
+
+        $fsid = $request->input('fsid');
 
         if ($fsid) {
             $response = ApiHelper::make()->post("/api/v2/editor/{$type}/generate/{$fsid}")->toArray();
