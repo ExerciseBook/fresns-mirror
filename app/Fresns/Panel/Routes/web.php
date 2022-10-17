@@ -341,7 +341,7 @@ Route::get('js/{locale?}/translations', function ($locale) {
         })->toJson();
     });
 
-    // get 请求, 返回翻译内容
+    // get request, return translation content
     return \response()->json([
         'data' => json_decode($strings, true),
     ]);
