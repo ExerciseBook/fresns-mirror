@@ -283,7 +283,6 @@ class PermissionUtility
         $perm['reviewComment'] = $permissions['publish_comment_review'];
         $perms = $perm;
 
-        info('bbb', [func_get_args(), $perms]);
         if (empty($userId)) {
             return $perms;
         }
