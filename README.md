@@ -58,12 +58,9 @@ Fresns 的开源社区正在急速增长中，如果你认可我们的开源软�
 - 项目发起人：[唐杰](https://tangjie.me/)
 - 电子邮箱：[support@fresns.org](mailto:support@fresns.org)
 - QQ 群：[5980111](https://qm.qq.com/cgi-bin/qm/qr?k=R2pfcPUd4Nyc87AKdkuHP9yJ0MhddUaz&jump_from=webapi)
-- Telegram 群：[https://t.me/fresns_zh](https://t.me/fresns_zh)
-- 微信群：*扫描下方二维码*
+- 微信群：*扫描下方二维码加唐杰微信，告之你要加「使用交流群」或「开发者群」，稍后唐杰会拉你进群。*
 
-| 运营使用群 | 开发者群 |
-| :-: | :-: |
-| <img src="https://fresns.cn/assets/wechat/operating.png" width="200"> | <img src="https://fresns.cn/assets/wechat/developer.png" width="200"> |
+<img src="https://cdn.fresns.cn/wiki/images/wechat.jpg" width="200">
 
 ## 许可协议
 

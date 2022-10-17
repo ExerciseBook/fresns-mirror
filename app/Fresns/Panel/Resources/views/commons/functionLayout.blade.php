@@ -55,7 +55,7 @@
                         if (response.data) {
                             window.translations = response.data
                         } else {
-                            console.error('获取翻译失败')
+                            console.error('Failed to get translation')
                         }
                     }
                 })
