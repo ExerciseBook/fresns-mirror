@@ -253,7 +253,7 @@ class ContentUtility
                 $urlName = $user->username;
             }
 
-            $replaceList[] = "@{$user->nickname} ";
+            $replaceList[] = "@{$username} ";
 
             $linkList[] = sprintf(
                 '<a href="%s/%s/%s" class="fresns_mention" target="_blank">@%s</a> ',
