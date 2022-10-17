@@ -200,4 +200,17 @@ class StrHelper
 
         return $slug;
     }
+
+    public static function infoTypeString(int $infoType)
+    {
+        $infoTypeString = match ($infoType) {
+            1 => 'basic',
+            2 => 'big',
+            3 => 'portrait',
+            4 => 'landscape',
+            default => 'basic',
+        };
+
+        return $infoTypeString;
+    }
 }
