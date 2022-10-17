@@ -202,7 +202,7 @@ class ContentUtility
             // <a href="https://fresns.org" class="fresns_link" target="_blank">https://fresns.org</a>
             $title = $urlData->link_title ?? $url;
 
-            $replaceList[] = "{$url} ";
+            $replaceList[] = "{$url}";
             $linkList[] = sprintf(
                 '<a href="%s" class="fresns_link" target="_blank">%s</a> ',
                 $url,
