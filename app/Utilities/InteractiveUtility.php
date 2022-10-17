@@ -649,22 +649,21 @@ class InteractiveUtility
                     DomainLink::whereIn('id', $linkIds)->increment('post_count');
                     Domain::whereIn('id', $domainIds)->increment('post_count');
                     Hashtag::whereIn('id', $hashtagIds)->increment('post_count');
-                    return;
+                } else {
+                    $userStateCount = $userState?->{"post_publish_count"} ?? 0;
+                    if ($userStateCount > 0) {
+                        $userState?->decrement("post_publish_count");
+                    }
+    
+                    $groupPostCount = $group?->post_count ?? 0;
+                    if ($groupPostCount > 0) {
+                        $group?->decrement('post_count');
+                    }
+    
+                    DomainLink::whereIn('id', $linkIds)->where('post_count', '>', 0)->decrement('post_count');
+                    Domain::whereIn('id', $domainIds)->where('post_count', '>', 0)->decrement('post_count');
+                    Hashtag::whereIn('id', $hashtagIds)->where('post_count', '>', 0)->decrement('post_count');
                 }
-
-                $userStateCount = $userState?->{"post_publish_count"} ?? 0;
-                if ($userStateCount > 0) {
-                    $userState?->decrement("post_publish_count");
-                }
-
-                $groupPostCount = $group?->post_count ?? 0;
-                if ($groupPostCount > 0) {
-                    $group?->decrement('post_count');
-                }
-
-                DomainLink::whereIn('id', $linkIds)->where('post_count', '>', 0)->decrement('post_count');
-                Domain::whereIn('id', $domainIds)->where('post_count', '>', 0)->decrement('post_count');
-                Hashtag::whereIn('id', $hashtagIds)->where('post_count', '>', 0)->decrement('post_count');
             break;
 
             // comment
@@ -687,29 +686,24 @@ class InteractiveUtility
                     DomainLink::whereIn('id', $linkIds)->increment('comment_count');
                     Domain::whereIn('id', $domainIds)->increment('comment_count');
                     Hashtag::whereIn('id', $hashtagIds)->increment('comment_count');
-
-                    if (! empty($comment?->parent_id)) {
-                        InteractiveUtility::parentCommentStats($comment->parent_id, 'increment', 'comment_count');
+                } else {
+                    $userStateCount = $userState?->{"comment_publish_count"} ?? 0;
+                    if ($userStateCount > 0) {
+                        $userState?->decrement("comment_publish_count");
                     }
-                    return;
-                }
 
-                $userStateCount = $userState?->{"comment_publish_count"} ?? 0;
-                if ($userStateCount > 0) {
-                    $userState?->decrement("comment_publish_count");
-                }
+                    $groupCommentCount = $group?->comment_count ?? 0;
+                    if ($groupCommentCount > 0) {
+                        $group?->decrement('comment_count');
+                    }
 
-                $groupCommentCount = $group?->comment_count ?? 0;
-                if ($groupCommentCount > 0) {
-                    $group?->decrement('comment_count');
+                    DomainLink::whereIn('id', $linkIds)->where('comment_count', '>', 0)->decrement('comment_count');
+                    Domain::whereIn('id', $domainIds)->where('comment_count', '>', 0)->decrement('comment_count');
+                    Hashtag::whereIn('id', $hashtagIds)->where('comment_count', '>', 0)->decrement('comment_count');
                 }
-
-                DomainLink::whereIn('id', $linkIds)->where('comment_count', '>', 0)->decrement('comment_count');
-                Domain::whereIn('id', $domainIds)->where('comment_count', '>', 0)->decrement('comment_count');
-                Hashtag::whereIn('id', $hashtagIds)->where('comment_count', '>', 0)->decrement('comment_count');
 
                 if (! empty($comment?->parent_id)) {
-                    InteractiveUtility::parentCommentStats($comment->parent_id, 'decrement', 'comment_count');
+                    InteractiveUtility::parentCommentStats($comment->parent_id, $actionType, 'comment_count');
                 }
             break;
         }
@@ -803,21 +797,18 @@ class InteractiveUtility
         }
 
         $comment = Comment::where('id', $parentId)->first();
-        if (empty($comment)) {
-            return;
-        }
 
         if ($actionType == 'increment') {
-            $comment->increment($tableColumn);
+            $comment?->increment($tableColumn);
         } else {
             $commentColumnCount = $comment?->$tableColumn ?? 0;
             if ($commentColumnCount > 0) {
-                $comment->decrement($tableColumn);
+                $comment?->decrement($tableColumn);
             }
         }
 
         // parent comment
-        if (! empty($comment->parent_id) || $comment->parent_id != 0) {
+        if (! empty($comment?->parent_id)) {
             InteractiveUtility::parentCommentStats($comment->parent_id, $actionType, $tableColumn);
         }
     }
