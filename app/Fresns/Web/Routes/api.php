@@ -42,6 +42,8 @@ Route::prefix('engine')
             Route::put('mark-note', [ApiController::class, 'userMarkNote'])->name('mark.note');
         });
 
+        Route::delete('{type}/{fsid}', [ApiController::class, 'contentDelete'])->name('delete');
+
         Route::get('download-link', [ApiController::class, 'downloadLink'])->name('file.download');
         Route::post('upload-file', [ApiController::class, 'uploadFile'])->name('upload.file');
 
@@ -51,13 +53,12 @@ Route::prefix('engine')
 
         Route::prefix('editor')->name('editor.')->group(function () {
             Route::post('upload-file', [ApiController::class, 'editorUploadFile'])->name('upload.file');
-            Route::delete('{type}/{draftId}', [ApiController::class, 'editorDelete'])->name('delete');
             Route::patch('{type}/{draftId}', [ApiController::class, 'editorRecall'])->name('recall');
             Route::post('direct-publish', [ApiController::class, 'directPublish'])->name('direct.publish');
+            Route::delete('draft/{type}/{draftId}',[ApiController::class, 'editorDelete'])->name('delete');
         });
 
         Route::post('/draft/{draftId}',[ApiController::class, 'draftUpdate'])->name('draft.update');
-        Route::delete('/draft/{type}/{draftId}',[ApiController::class, 'draftDelete'])->name('draft.delete');
 
         // FsLang
         Route::get('js/{locale?}/translations', function ($locale) {

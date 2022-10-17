@@ -321,6 +321,22 @@ class ApiController extends Controller
     {
     }
 
+    // content delete
+    public function contentDelete(string $type, string $fsid)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $response = ApiHelper::make()->delete("/api/v2/{$type}/{$fsid}");
+
+        return \response()->json($response->toArray());
+    }
+
     // upload file
     public function uploadFile()
     {
@@ -369,128 +385,6 @@ class ApiController extends Controller
         ]);
 
         return Response::json(data_get($response->toArray(), 'data.list', []));
-    }
-
-    // editor upload file
-    public function editorUploadFile(Request $request)
-    {
-        $multipart = [
-            [
-                'name' => 'type',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('type'),
-            ],
-            [
-                'name' => 'usageType',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('usageType'),
-            ],
-            [
-                'name' => 'tableId',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('tableId'),
-            ],
-            [
-                'name' => 'uploadMode',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('uploadMode'),
-            ],
-            [
-                'name' => 'tableName',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('tableName'),
-            ],
-            [
-                'name' => 'tableColumn',
-                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'contents' => $request->post('tableColumn', 'id'),
-            ],
-        ];
-
-
-        if (! $request->file('files')) {
-            return Response::json([]);
-        }
-
-        $postAsyncs = [];
-        foreach ($request->file('files') as $key => $file) {
-            $params = $multipart;
-            $params[] = [
-                'name' => 'file',
-                'filename' => $file->getClientOriginalName(),
-                'contents' => $file->getContent(),
-                'headers' => ['Content-Type' => $file->getClientMimeType()],
-            ];
-            $postAsyncs[] = ApiHelper::make()->postAsync('/api/v2/common/upload-file', [
-                'multipart' => array_filter($params, fn($val) => isset($val['contents']))
-            ]);
-        }
-
-        $results = ApiHelper::make()->handleUnwrap($postAsyncs)->toArray();
-
-        return Response::json(array_filter(array_map(fn($arr) => data_get($arr, 'data'), $results), fn($arr) => data_get($arr, 'code') !== 0));
-    }
-
-    // editor recall
-    public function editorRecall(string $type, string $draftId)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $response = ApiHelper::make()->patch("/api/v2/editor/{$type}/{$draftId}");
-
-        return \response()->json($response->toArray());
-    }
-
-    // editor delete
-    public function editorDelete(string $type, string $draftId)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $response = ApiHelper::make()->delete("/api/v2/{$type}/{$draftId}");
-
-        return \response()->json($response->toArray());
-    }
-
-    public function draftDelete(string $type, string $draftId)
-    {
-        $type = match ($type) {
-            'posts' => 'post',
-            'comments' => 'comment',
-            'post' => 'post',
-            'comment' => 'comment',
-            default => 'post',
-        };
-
-        $response = ApiHelper::make()->delete("/api/v2/editor/{$type}/{$draftId}");
-
-        return \response()->json($response->toArray());
-    }
-
-    public function draftUpdate(Request $request, int $draftId)
-    {
-        $params = [
-            'postGid' => $request->post('postGid'),
-            'postTitle' => $request->post('postTitle'),
-            'content' => $request->post('content'),
-            'deleteFile' => $request->post('deleteFile')
-        ];
-        $response = ApiHelper::make()->put("/api/v2/editor/{$request->post('type')}/{$draftId}", [
-            'json' => array_filter($params, fn($val) => isset($val))
-        ]);
-
-        return \response()->json($response->toArray());
     }
 
     // direct publish
@@ -562,5 +456,111 @@ class ApiController extends Controller
         return Response::json($result);
     }
 
+    // editor upload file
+    public function editorUploadFile(Request $request)
+    {
+        $multipart = [
+            [
+                'name' => 'type',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('type'),
+            ],
+            [
+                'name' => 'usageType',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('usageType'),
+            ],
+            [
+                'name' => 'tableId',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('tableId'),
+            ],
+            [
+                'name' => 'uploadMode',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('uploadMode'),
+            ],
+            [
+                'name' => 'tableName',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('tableName'),
+            ],
+            [
+                'name' => 'tableColumn',
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                'contents' => $request->post('tableColumn', 'id'),
+            ],
+        ];
 
+
+        if (! $request->file('files')) {
+            return Response::json([]);
+        }
+
+        $postAsyncs = [];
+        foreach ($request->file('files') as $key => $file) {
+            $params = $multipart;
+            $params[] = [
+                'name' => 'file',
+                'filename' => $file->getClientOriginalName(),
+                'contents' => $file->getContent(),
+                'headers' => ['Content-Type' => $file->getClientMimeType()],
+            ];
+            $postAsyncs[] = ApiHelper::make()->postAsync('/api/v2/common/upload-file', [
+                'multipart' => array_filter($params, fn($val) => isset($val['contents']))
+            ]);
+        }
+
+        $results = ApiHelper::make()->handleUnwrap($postAsyncs)->toArray();
+
+        return Response::json(array_filter(array_map(fn($arr) => data_get($arr, 'data'), $results), fn($arr) => data_get($arr, 'code') !== 0));
+    }
+
+    // editor update
+    public function draftUpdate(Request $request, int $draftId)
+    {
+        $params = [
+            'postGid' => $request->post('postGid'),
+            'postTitle' => $request->post('postTitle'),
+            'content' => $request->post('content'),
+            'deleteFile' => $request->post('deleteFile')
+        ];
+        $response = ApiHelper::make()->put("/api/v2/editor/{$request->post('type')}/{$draftId}", [
+            'json' => array_filter($params, fn($val) => isset($val))
+        ]);
+
+        return \response()->json($response->toArray());
+    }
+
+    // editor recall
+    public function editorRecall(string $type, string $draftId)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $response = ApiHelper::make()->patch("/api/v2/editor/{$type}/{$draftId}");
+
+        return \response()->json($response->toArray());
+    }
+
+    // editor delete
+    public function editorDelete(string $type, string $draftId)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $response = ApiHelper::make()->delete("/api/v2/editor/{$type}/{$draftId}");
+
+        return \response()->json($response->toArray());
+    }
 }

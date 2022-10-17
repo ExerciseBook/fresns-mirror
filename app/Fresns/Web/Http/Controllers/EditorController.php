@@ -154,7 +154,7 @@ class EditorController extends Controller
             throw new ErrorException($response['message']);
         }
 
-        return redirect()->route('fresns.editor.edit', [$type, $response['data']['detail']['id']]);
+        return redirect()->fs_route(route('fresns.editor.edit', [$type, $response['data']['detail']['id']]));
     }
 
     // index
@@ -192,7 +192,7 @@ class EditorController extends Controller
                 throw new ErrorException($response['message']);
             }
 
-            return redirect()->route('fresns.editor.edit', [$type, $response['data']['detail']['id']]);
+            return redirect()->fs_route(route('fresns.editor.edit', [$type, $response['data']['detail']['id']]));
         }
 
         return view('editor.index', compact('type', 'config', 'drafts'));
@@ -261,14 +261,14 @@ class EditorController extends Controller
         $response = ApiHelper::make()->post("/api/v2/editor/{$type}/{$draftId}");
 
         if ($response['code'] == 38200) {
-            return redirect()->route('fresns.post.list')->with('success', $response['message']);
+            return redirect()->fs_route(route('fresns.post.list'))->with('success', $response['message']);
         }
 
         if ($response['code'] !== 0) {
             throw new ErrorException($response['message'], $response['code']);
         }
 
-        return redirect()->route('fresns.post.list')->with('success', $response['message']);
+        return redirect()->fs_route(route('fresns.post.list'))->with('success', $response['message']);
     }
 
     // get draft
@@ -316,11 +316,11 @@ class EditorController extends Controller
         }
 
         if ($type === 'post') {
-            return redirect()->route('fresns.post.list')->with('success', $response['message']);
+            return redirect()->fs_route(route('fresns.post.list'))->with('success', $response['message']);
         }
 
         if ($type === 'comment') {
-            return redirect()->route('fresns.comment.list')->with('success', $response['message']);
+            return redirect()->fs_route(route('fresns.comment.list'))->with('success', $response['message']);
         }
     }
 }
