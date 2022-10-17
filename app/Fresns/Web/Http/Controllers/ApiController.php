@@ -517,15 +517,22 @@ class ApiController extends Controller
     }
 
     // editor update
-    public function draftUpdate(Request $request, int $draftId)
+    public function editorUpdate(Request $request, string $type, int $draftId)
     {
         $params = [
             'postGid' => $request->post('postGid'),
             'postTitle' => $request->post('postTitle'),
+            'postIsComment' => $request->post('postIsComment'),
+            'postIsCommentPublic' => $request->post('postIsCommentPublic'),
             'content' => $request->post('content'),
-            'deleteFile' => $request->post('deleteFile')
+            'isMarkdown' => $request->post('isMarkdown'),
+            'isAnonymous' => $request->post('isAnonymous'),
+            'mapJson' => $request->post('mapJson'),
+            'deleteMap' => $request->post('deleteMap'),
+            'deleteFile' => $request->post('deleteFile'),
+            'deleteExtend' => $request->post('deleteExtend'),
         ];
-        $response = ApiHelper::make()->put("/api/v2/editor/{$request->post('type')}/{$draftId}", [
+        $response = ApiHelper::make()->put("/api/v2/editor/{$type}/{$draftId}", [
             'json' => array_filter($params, fn($val) => isset($val))
         ]);
 

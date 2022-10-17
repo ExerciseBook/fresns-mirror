@@ -198,14 +198,12 @@ Route::prefix(LaravelLocalization::setLocale())
             // draft box
             Route::get('drafts/{type}', [EditorController::class, 'drafts'])->name('drafts');
 
-            // editor request
-            Route::post('direct-publish', [EditorController::class, 'directPublish'])->name('direct.publish');
-            Route::post('store/{type}', [EditorController::class, 'store'])->name('store');
-
             // editor
-            Route::get('/select/{type}', [EditorController::class, 'index'])->name('index');
+            Route::get('{type}', [EditorController::class, 'index'])->name('index');
             Route::get('{type}/{draftId}', [EditorController::class, 'edit'])->name('edit');
-            Route::put('{type}/{draftId}', [EditorController::class, 'update'])->name('update');
-            Route::delete('{type}/{draftId}', [EditorController::class, 'delete'])->name('delete');
+
+            // editor request
+            Route::post('store/{type}', [EditorController::class, 'store'])->name('store');
+            Route::post('publish/{type}/{draftId}', [EditorController::class, 'publish'])->name('publish');
         });
     });

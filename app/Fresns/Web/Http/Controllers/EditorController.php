@@ -227,8 +227,8 @@ class EditorController extends Controller
         return view('editor.edit', compact('type', 'plid', 'clid', 'config', 'stickers', 'draft', 'group'));
     }
 
-    // update
-    public function update(Request $request, string $type, int $draftId)
+    // publish
+    public function publish(Request $request, string $type, int $draftId)
     {
         $type = match ($type) {
             'posts' => 'post',
