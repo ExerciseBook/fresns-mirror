@@ -777,24 +777,60 @@ class InteractiveUtility
             // post
             case 'post':
                 $post = Post::with('hashtags')->where('id', $id)->first();
-                UserStat::where('user_id', $post?->user_id)->$actionType('post_digest_count');
-                Group::where('id', $post?->group_id)->$actionType('post_digest_count');
+                $userState = UserStat::where('user_id', $post?->user_id)->first();
+                $group = Group::where('id', $post?->group_id)->first();
+                $hashtagIds = $post?->hashtags->pluck('id')->toArray() ?? [];
 
-                $hashtagIds = array_column($post?->hashtags, 'id');
-                Hashtag::whereIn('id', $hashtagIds)->$actionType('post_digest_count');
+                if ($actionType == 'increment') {
+                    $userState->increment('post_digest_count');
+                    $group->increment('post_digest_count');
+
+                    Hashtag::whereIn('id', $hashtagIds)->increment('post_digest_count');
+                } else {
+                    $userStateCount = $userState->{'post_digest_count'} ?? 0;
+                    if ($userStateCount > 0) {
+                        $userState->decrement('post_digest_count');
+                    }
+
+                    $groupPostDigestCount = $group->{'post_digest_count'} ?? 0;
+                    if ($groupPostDigestCount > 0) {
+                        $group->decrement('post_digest_count');
+                    }
+
+                    Hashtag::whereIn('id', $hashtagIds)->where('post_digest_count', '>', 0)->decrement('post_digest_count');
+                }
             break;
 
             // comment
             case 'comment':
                 $comment = Comment::with('hashtags')->where('id', $id)->first();
-                UserStat::where('user_id', $comment?->user_id)->$actionType('comment_digest_count');
-                Post::where('id', $comment?->post_id)->$actionType('comment_digest_count');
-                Group::where('id', $comment?->group_id)->$actionType('comment_digest_count');
+                $userState = UserStat::where('user_id', $comment?->user_id)->first();
+                $post = Post::where('id', $comment?->post_id)->first();
+                $group = Group::where('id', $comment?->group_id)->first();
+                $hashtagIds = $comment?->hashtags->pluck('id')->toArray() ?? [];
 
-                $hashtagIds = array_column($comment?->hashtags, 'id');
-                Hashtag::whereIn('id', $hashtagIds)->$actionType('comment_digest_count');
+                if ($actionType == 'increment') {
+                    $userState->increment('comment_digest_count');
+                    $post->increment('comment_digest_count');
+                    $group->increment('comment_digest_count');
 
-                if (! empty($comment?->parent_id) || $comment?->parent_id != 0) {
+                    Hashtag::whereIn('id', $hashtagIds)->increment('comment_digest_count');
+                } else {
+                    $userStateCount = $userState->{'comment_digest_count'} ?? 0;
+                    if ($userStateCount > 0) {
+                        $userState->decrement('comment_digest_count');
+                    }
+
+                    $groupCommentDigestCount = $group->{'comment_digest_count'} ?? 0;
+                    if ($groupCommentDigestCount > 0) {
+                        $group->decrement('comment_digest_count');
+                    }
+
+                    Hashtag::whereIn('id', $hashtagIds)->where('comment_digest_count', '>', 0)->decrement('comment_digest_count');
+                }
+
+
+                if (! empty($comment?->parent_id)) {
                     InteractiveUtility::parentCommentStats($comment->parent_id, $actionType, 'comment_digest_count');
                 }
             break;
