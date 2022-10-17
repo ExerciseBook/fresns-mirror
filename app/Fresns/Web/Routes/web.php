@@ -206,5 +206,6 @@ Route::prefix(LaravelLocalization::setLocale())
             Route::get('/select/{type}', [EditorController::class, 'index'])->name('index');
             Route::get('{type}/{draftId}', [EditorController::class, 'edit'])->name('edit');
             Route::put('{type}/{draftId}', [EditorController::class, 'update'])->name('update');
+            Route::delete('{type}/{draftId}', [EditorController::class, 'delete'])->name('delete');
         });
     });

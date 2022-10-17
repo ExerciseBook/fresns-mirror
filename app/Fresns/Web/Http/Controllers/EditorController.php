@@ -298,4 +298,29 @@ class EditorController extends Controller
 
         return $draftInfo;
     }
+
+    public function delete(Request $request, string $type, string $draftId)
+    {
+        $type = match ($type) {
+            'posts' => 'post',
+            'comments' => 'comment',
+            'post' => 'post',
+            'comment' => 'comment',
+            default => 'post',
+        };
+
+        $response = ApiHelper::make()->delete("/api/v2/$type/{$draftId}");
+
+        if ($response['code'] !== 0) {
+            throw new ErrorException($response['message'], $response['code']);
+        }
+
+        if ($type === 'post') {
+            return redirect()->route('fresns.post.list')->with('success', $response['message']);
+        }
+
+        if ($type === 'comment') {
+            return redirect()->route('fresns.comment.list')->with('success', $response['message']);
+        }
+    }
 }
