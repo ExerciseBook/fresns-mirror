@@ -678,10 +678,10 @@ class InteractiveUtility
                 $hashtagIds = $comment->hashtags->pluck('id');
 
                 if ($actionType == 'increment') {
-                    $userState->increment('comment_publish_count');
+                    $userState?->increment('comment_publish_count');
 
-                    $post->increment('comment_count');
-                    $group->increment('comment_count');
+                    $post?->increment('comment_count');
+                    $group?->increment('comment_count');
 
                     DomainLink::whereIn('id', $linkIds)->increment('comment_count');
                     Domain::whereIn('id', $domainIds)->increment('comment_count');
@@ -739,15 +739,15 @@ class InteractiveUtility
         $hashtagIds = $content->hashtags->pluck('id');
         
         if ($actionType == 'increment') {
-            $group->increment("{$type}_count");
+            $group?->increment("{$type}_count");
             
             DomainLink::whereIn('id', $linkIds)->increment("{$type}_count");
             Domain::whereIn('id', $domainIds)->increment("{$type}_count");
             Hashtag::whereIn('id', $hashtagIds)->increment("{$type}_count");
         } else {
-            $groupTypeCount = $group->{"{$type}_count"} ?? 0;
+            $groupTypeCount = $group?->{"{$type}_count"} ?? 0;
             if ($groupTypeCount > 0) {
-                $group->decrement("{$type}_count");
+                $group?->decrement("{$type}_count");
             }
 
             DomainLink::whereIn('id', $linkIds)->where("{$type}_count", '>', 0)->increment("{$type}_count");
@@ -782,19 +782,19 @@ class InteractiveUtility
                 $hashtagIds = $post?->hashtags->pluck('id')->toArray() ?? [];
 
                 if ($actionType == 'increment') {
-                    $userState->increment('post_digest_count');
-                    $group->increment('post_digest_count');
+                    $userState?->increment('post_digest_count');
+                    $group?->increment('post_digest_count');
 
                     Hashtag::whereIn('id', $hashtagIds)->increment('post_digest_count');
                 } else {
-                    $userStateCount = $userState->{'post_digest_count'} ?? 0;
+                    $userStateCount = $userState?->{'post_digest_count'} ?? 0;
                     if ($userStateCount > 0) {
-                        $userState->decrement('post_digest_count');
+                        $userState?->decrement('post_digest_count');
                     }
 
-                    $groupPostDigestCount = $group->{'post_digest_count'} ?? 0;
+                    $groupPostDigestCount = $group?->{'post_digest_count'} ?? 0;
                     if ($groupPostDigestCount > 0) {
-                        $group->decrement('post_digest_count');
+                        $group?->decrement('post_digest_count');
                     }
 
                     Hashtag::whereIn('id', $hashtagIds)->where('post_digest_count', '>', 0)->decrement('post_digest_count');
@@ -810,20 +810,20 @@ class InteractiveUtility
                 $hashtagIds = $comment?->hashtags->pluck('id')->toArray() ?? [];
 
                 if ($actionType == 'increment') {
-                    $userState->increment('comment_digest_count');
-                    $post->increment('comment_digest_count');
-                    $group->increment('comment_digest_count');
+                    $userState?->increment('comment_digest_count');
+                    $post?->increment('comment_digest_count');
+                    $group?->increment('comment_digest_count');
 
                     Hashtag::whereIn('id', $hashtagIds)->increment('comment_digest_count');
                 } else {
-                    $userStateCount = $userState->{'comment_digest_count'} ?? 0;
+                    $userStateCount = $userState?->{'comment_digest_count'} ?? 0;
                     if ($userStateCount > 0) {
-                        $userState->decrement('comment_digest_count');
+                        $userState?->decrement('comment_digest_count');
                     }
 
-                    $groupCommentDigestCount = $group->{'comment_digest_count'} ?? 0;
+                    $groupCommentDigestCount = $group?->{'comment_digest_count'} ?? 0;
                     if ($groupCommentDigestCount > 0) {
-                        $group->decrement('comment_digest_count');
+                        $group?->decrement('comment_digest_count');
                     }
 
                     Hashtag::whereIn('id', $hashtagIds)->where('comment_digest_count', '>', 0)->decrement('comment_digest_count');
