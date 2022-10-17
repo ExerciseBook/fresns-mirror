@@ -560,9 +560,9 @@ class EditorController extends Controller
             };
 
             FileUsage::where('file_id', $file->id)
-                ->where('tableName', $tableName)
-                ->where('tableColumn', 'id')
-                ->where('tableId', $draft->id)
+                ->where('table_name', $tableName)
+                ->where('table_column', 'id')
+                ->where('table_id', $draft->id)
                 ->delete();
         }
 
