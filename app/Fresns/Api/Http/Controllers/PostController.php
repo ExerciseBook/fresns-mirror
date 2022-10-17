@@ -429,6 +429,7 @@ class PostController extends Controller
             throw new ApiException(36401);
         }
 
+        PostLog::where('post_id', $post->id)->delete();
         $post->delete();
 
         return $this->success();
