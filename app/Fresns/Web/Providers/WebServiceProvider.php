@@ -33,9 +33,8 @@ class WebServiceProvider extends ServiceProvider
                 ];
             }
 
-            // 数据库无法查询到语言配置信息
-            if (empty ($defaultLanguage)) {
-                info('数据库无法查询到语言配置信息: configs.default_language');
+            // The database cannot query the language configuration information
+            if (empty($defaultLanguage)) {
                 $defaultLanguage = config('app.locale');
             }
         } catch (\Throwable $e) {
