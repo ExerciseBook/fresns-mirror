@@ -32,6 +32,12 @@ class WebServiceProvider extends ServiceProvider
                     $defaultLanguage => ['name' => $defaultLanguage],
                 ];
             }
+
+            // 数据库无法查询到语言配置信息
+            if (empty ($defaultLanguage)) {
+                info('数据库无法查询到语言配置信息: configs.default_language');
+                $defaultLanguage = config('app.locale');
+            }
         } catch (\Throwable $e) {
             $defaultLanguage = config('app.locale');
 
