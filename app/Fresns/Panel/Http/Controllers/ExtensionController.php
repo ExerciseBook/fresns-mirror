@@ -195,7 +195,7 @@ class ExtensionController extends Controller
 
                         // plugin-manager
                         \Artisan::call('plugin:install', [
-                            'directory' => $pluginDirectory,
+                            'path' => $pluginDirectory,
                         ]);
                         $output = \Artisan::output();
                     break;
@@ -239,7 +239,7 @@ class ExtensionController extends Controller
 
                         // theme-manager
                         \Artisan::call('theme:install', [
-                            'directory' => $pluginDirectory,
+                            'path' => $pluginDirectory,
                         ]);
                         $output = \Artisan::output();
                     break;
