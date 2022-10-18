@@ -190,7 +190,7 @@ class ExtensionController extends Controller
                     return back()->with('failure', __('FsLang::tips.install_not_entered_dir'));
                 }
 
-                // plugin-manager
+                // plugin-manager or theme-manager
                 \Artisan::call("{$installType}:install", [
                     'path' => $pluginDirectory,
                 ]);
@@ -203,7 +203,7 @@ class ExtensionController extends Controller
                     return back()->with('failure', __('FsLang::tips.install_not_upload_zip'));
                 }
 
-                // plugin-manager
+                // plugin-manager or theme-manager
                 \Artisan::call("{$installType}:install", [
                     'path' => $pluginZipball,
                 ]);
