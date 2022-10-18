@@ -170,6 +170,10 @@ class ExtensionController extends Controller
 
         $pluginDirectory = $request->plugin_directory;
         if ($installMethod == 'inputDirectory') {
+            if (strpos($pluginDirectory, '/') == false) {
+                $pluginDirectory = "extensions/{$installType}s/{$pluginDirectory}";
+            }
+
             if (str_starts_with($pluginDirectory, '/')) {
                 $pluginDirectory = realpath($pluginDirectory);
             } else {
