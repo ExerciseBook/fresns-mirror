@@ -166,36 +166,11 @@ class ExtensionController extends Controller
         $installType = $request->install_type;
         $installMethod = $request->install_method;
 
-        $pluginUnikey = $request->plugin_unikey;
-
-        $pluginDirectory = $request->plugin_directory;
-        if ($installMethod == 'inputDirectory') {
-            if (strpos($pluginDirectory, '/') == false) {
-                $pluginDirectory = "extensions/{$installType}s/{$pluginDirectory}";
-            }
-
-            if (str_starts_with($pluginDirectory, '/')) {
-                $pluginDirectory = realpath($pluginDirectory);
-            } else {
-                $pluginDirectory = realpath(base_path($pluginDirectory));
-            }
-        }
-
-        $pluginZipball = null;
-        if ($installMethod == 'inputZipball') {
-            $file = $request->file('plugin_zipball');
-            if ($file && $file->isValid()) {
-                $dir = storage_path('extensions');
-                $filename = $file->hashName();
-                $file->move($dir, $filename);
-
-                $pluginZipball = "$dir/$filename";
-            }
-        }
-
         switch ($installMethod) {
             // unikey
             case 'inputUnikey':
+                $pluginUnikey = $request->plugin_unikey;
+
                 if (empty($pluginUnikey)) {
                     return back()->with('failure', __('FsLang::tips.install_not_entered_key'));
                 }
@@ -209,8 +184,20 @@ class ExtensionController extends Controller
 
             // directory
             case 'inputDirectory':
+                $pluginDirectory = $request->plugin_directory;
+
                 if (empty($pluginDirectory)) {
                     return back()->with('failure', __('FsLang::tips.install_not_entered_dir'));
+                }
+
+                if (strpos($pluginDirectory, '/') == false) {
+                    $pluginDirectory = "extensions/{$installType}s/{$pluginDirectory}";
+                }
+
+                if (str_starts_with($pluginDirectory, '/')) {
+                    $pluginDirectory = realpath($pluginDirectory);
+                } else {
+                    $pluginDirectory = realpath(base_path($pluginDirectory));
                 }
 
                 // plugin-manager or theme-manager
@@ -222,6 +209,16 @@ class ExtensionController extends Controller
 
             // zipball
             case 'inputZipball':
+                $pluginZipball = null;
+                $file = $request->file('plugin_zipball');
+                if ($file && $file->isValid()) {
+                    $dir = storage_path('extensions');
+                    $filename = $file->hashName();
+                    $file->move($dir, $filename);
+
+                    $pluginZipball = "$dir/$filename";
+                }
+
                 if (empty($pluginZipball)) {
                     return back()->with('failure', __('FsLang::tips.install_not_upload_zip'));
                 }
