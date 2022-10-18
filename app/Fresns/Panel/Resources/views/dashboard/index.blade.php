@@ -14,6 +14,12 @@
                 <a href="{{ route('panel.upgrades') }}" class="badge rounded-pill bg-danger ms-2 text-decoration-none">{{ __('FsLang::panel.new_version') }}</a>
             @endif
         </p>
+
+        <div class="alert alert-danger" role="alert">
+            <p>当前为 Alpha 版（内部测试版），可以持续升级到正式版，但不支持自动升级，需手动物理升级。</p>
+            <p>测试版是框架主题（界面），清清爽爽方便调试，因此风格样式不在测试范围内。</p>
+            <p>如遇问题，请在<a href="https://gitee.com/fresns/fresns/issues" target="_blank">开发仓库</a>提交反馈。</p>
+        </div>
     </div>
 
     <!--Dashboard data-->
