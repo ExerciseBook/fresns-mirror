@@ -167,8 +167,27 @@ class ExtensionController extends Controller
         $installMethod = $request->install_method;
 
         $pluginUnikey = $request->plugin_unikey;
+
         $pluginDirectory = $request->plugin_directory;
-        $pluginZipball = $request->plugin_zipball;
+        if ($installMethod == 'inputDirectory') {
+            if (str_starts_with($pluginDirectory, '/')) {
+                $pluginDirectory = realpath($pluginDirectory);
+            } else {
+                $pluginDirectory = realpath(base_path($pluginDirectory));
+            }
+        }
+
+        $pluginZipball = null;
+        if ($installMethod == 'inputZipball') {
+            $file = $request->file('plugin_zipball');
+            if ($file && $file->isValid()) {
+                $dir = storage_path('extensions');
+                $filename = $file->hashName();
+                $file->move($dir, $filename);
+
+                $pluginZipball = "$dir/$filename";
+            }
+        }
 
         switch ($installMethod) {
             // unikey
