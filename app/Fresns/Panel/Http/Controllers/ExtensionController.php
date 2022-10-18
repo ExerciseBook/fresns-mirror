@@ -170,93 +170,44 @@ class ExtensionController extends Controller
         $pluginDirectory = $request->plugin_directory;
         $pluginZipball = $request->plugin_zipball;
 
-        switch ($installType) {
-            // plugin
-            case 'plugin':
-                switch ($installMethod) {
-                    // unikey
-                    case 'inputUnikey':
-                        if (empty($pluginUnikey)) {
-                            return back()->with('failure', __('FsLang::tips.install_not_entered_key'));
-                        }
-
-                        // market-manager
-                        \Artisan::call('market:require', [
-                            'unikey' => $pluginUnikey,
-                        ]);
-                        $output = \Artisan::output();
-                    break;
-
-                    // directory
-                    case 'inputDirectory':
-                        if (empty($pluginDirectory)) {
-                            return back()->with('failure', __('FsLang::tips.install_not_entered_dir'));
-                        }
-
-                        // plugin-manager
-                        \Artisan::call('plugin:install', [
-                            'path' => $pluginDirectory,
-                        ]);
-                        $output = \Artisan::output();
-                    break;
-
-                    // zipball
-                    case 'inputZipball':
-                        if (empty($pluginZipball)) {
-                            return back()->with('failure', __('FsLang::tips.install_not_upload_zip'));
-                        }
-
-                        // plugin-manager
-                        \Artisan::call('plugin:install', [
-                            'path' => $pluginZipball,
-                        ]);
-                        $output = \Artisan::output();
-                    break;
+        switch ($installMethod) {
+            // unikey
+            case 'inputUnikey':
+                if (empty($pluginUnikey)) {
+                    return back()->with('failure', __('FsLang::tips.install_not_entered_key'));
                 }
+
+                // market-manager
+                \Artisan::call('market:require', [
+                    'unikey' => $pluginUnikey,
+                ]);
+                $output = \Artisan::output();
             break;
 
-            // theme
-            case 'theme':
-                switch ($installMethod) {
-                    // unikey
-                    case 'inputUnikey':
-                        if (empty($pluginUnikey)) {
-                            return back()->with('failure', __('FsLang::tips.install_not_entered_key'));
-                        }
-
-                        // market-manager
-                        \Artisan::call('market:require', [
-                            'unikey' => $pluginUnikey,
-                        ]);
-                        $output = \Artisan::output();
-                    break;
-
-                    // directory
-                    case 'inputDirectory':
-                        if (empty($pluginDirectory)) {
-                            return back()->with('failure', __('FsLang::tips.install_not_entered_dir'));
-                        }
-
-                        // theme-manager
-                        \Artisan::call('theme:install', [
-                            'path' => $pluginDirectory,
-                        ]);
-                        $output = \Artisan::output();
-                    break;
-
-                    // zipball
-                    case 'inputZipball':
-                        if (empty($pluginZipball)) {
-                            return back()->with('failure', __('FsLang::tips.install_not_upload_zip'));
-                        }
-
-                        // theme-manager
-                        \Artisan::call('theme:install', [
-                            'path' => $pluginZipball,
-                        ]);
-                        $output = \Artisan::output();
-                    break;
+            // directory
+            case 'inputDirectory':
+                if (empty($pluginDirectory)) {
+                    return back()->with('failure', __('FsLang::tips.install_not_entered_dir'));
                 }
+
+                // plugin-manager
+                \Artisan::call("{$installType}:install", [
+                    'path' => $pluginDirectory,
+                ]);
+                $output = \Artisan::output();
+            break;
+
+            // zipball
+            case 'inputZipball':
+                if (empty($pluginZipball)) {
+                    return back()->with('failure', __('FsLang::tips.install_not_upload_zip'));
+                }
+
+                // plugin-manager
+                \Artisan::call("{$installType}:install", [
+                    'path' => $pluginZipball,
+                ]);
+                $output = \Artisan::output();
             break;
         }
 
