@@ -174,9 +174,10 @@ class StrHelper
         $domain = match ($count) {
             1 => implode('.', array_reverse([$reverseDomainData[0], $reverseDomainData[1]])),
             2 => implode('.', array_reverse([$reverseDomainData[0], $reverseDomainData[1], $reverseDomainData[2]])),
+            default => $host,
         };
 
-        return $domain ?? $host;
+        return $domain ?? 'Unknown Error';
     }
 
     public static function extractDomainByUrl(string $url)
