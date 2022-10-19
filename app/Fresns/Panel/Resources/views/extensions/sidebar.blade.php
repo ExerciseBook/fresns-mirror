@@ -26,7 +26,7 @@
 
 <script src="/static/js/ansi_up.js"></script>
 <!--install modal-->
-<div class="modal fade" id="installModal" tabindex="-1" aria-labelledby="install" aria-hidden="true">
+<div class="modal fresns-modal fade" id="installModal" tabindex="-1" aria-labelledby="install" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary"  id="installSubmit">{{ __('FsLang::panel.button_confirm_install') }}</button>
+                    <button type="submit" class="btn btn-primary ajax-progress-submit"  id="installSubmit">{{ __('FsLang::panel.button_confirm_install') }}</button>
                 </div>
             </form>
         </div>

@@ -76,8 +76,42 @@ function reloadPage()
     location.reload();
 }
 
+function progressDown() {
+    progress.done();
+    $(".fresns-modal .btn-close").trigger('click');
+}
+
+function progressExit() {
+    progress.exit();
+}
+
 // set
 $(document).ready(function () {
+    $(".fresns-modal").on('show.bs.modal', function() {
+        $(this).find('.ajax-upload').show().removeAttr("disabled");
+        $(this).find(".ajax-progress").addClass('d-none').empty();
+    })
+
+    $(".ajax-progress-submit").on('click', function(event) {
+        event.preventDefault();
+        let obj = $(this)
+            // actionMethod = ($this).data('action-method')
+
+        if (obj.is(":disabled")) {
+            return;
+        }
+
+        obj.attr('disabled', true);
+        obj.hide();
+
+        // set progress
+        progress.init().setParentElement(obj.next('.progress').removeClass('d-none')).work();
+
+        // if (actionMethod) {
+        //     actionMethod(obj)
+        // }
+    })
+
     // upgrade
     $('#upgradeButton').click(function () {
         if ($(this).data('upgrading')) {
