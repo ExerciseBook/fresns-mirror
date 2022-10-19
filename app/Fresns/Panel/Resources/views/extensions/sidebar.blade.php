@@ -87,6 +87,11 @@
             </div>
             <div class="modal-body">
                 <pre class="form-control" id="install_artisan_output">{{ __('FsLang::tips.install_in_progress') }}</pre>
+
+                <!--progress bar-->
+                <div class="mt-2">
+                    <div class="progress w-100 d-none" id="install-progress"></div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="reloadPage()">{{ __('FsLang::panel.button_close') }}</button>
