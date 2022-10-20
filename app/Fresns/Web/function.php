@@ -30,7 +30,7 @@ if (! function_exists('fs_api_config')) {
     {
         $langTag = current_lang_tag();
 
-        $cacheKey = 'fresns_web_api_config_all'.$langTag;
+        $cacheKey = 'fresns_web_api_config_all_'.$langTag;
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
         $apiConfig = Cache::remember($cacheKey, $cacheTime, function () use ($itemKey) {
@@ -41,14 +41,6 @@ if (! function_exists('fs_api_config')) {
             ]);
 
             return $result->toArray();
-
-            // $item = $result["data.list.{$itemKey}"];
-
-            // if (is_object($item) && method_exists($item, 'toArray')) {
-            //     return $item->toArray();
-            // }
-
-            // return $item;
         });
 
         if (! $apiConfig) {
@@ -56,8 +48,6 @@ if (! function_exists('fs_api_config')) {
         }
 
         return data_get($apiConfig, "data.list.{$itemKey}");
-
-        return $apiConfig;
     }
 }
 
