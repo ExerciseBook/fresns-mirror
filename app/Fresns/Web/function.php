@@ -40,13 +40,7 @@ if (! function_exists('fs_api_config')) {
                 ],
             ]);
 
-            $item = $result["data.list.{$itemKey}"];
-
-            if (is_object($item) && method_exists($item, 'toArray')) {
-                return $item->toArray();
-            }
-
-            return $item;
+            return data_get($result->toArray(), "data.list.{$itemKey}", null);
         });
 
         if (! $apiConfig) {
