@@ -83,28 +83,26 @@ class WebConfiguration
 
     private function groupCategories(): void
     {
-        if (fs_api_config('site_mode') == 'private') {
-            return [];
+        if (fs_api_config('site_mode') == 'private' && fs_user()->check()) {
+            $langTag = current_lang_tag();
+
+            $cacheKey = 'fresns_web_group_categories_'.$langTag;
+            $cacheTime = CacheHelper::fresnsCacheTimeByFileType(1);
+
+            $groupCategories = Cache::remember($cacheKey, $cacheTime, function () {
+                $result = ApiHelper::make()->get('/api/v2/group/categories');
+
+                return data_get($result, 'data.list', null);
+            });
+
+            if (is_null($groupCategories)) {
+                Cache::forget($cacheKey);
+
+                $groupCategories = [];
+            }
+
+            View::share('groupCategories', $groupCategories);
         }
-
-        $langTag = current_lang_tag();
-
-        $cacheKey = 'fresns_web_group_categories_'.$langTag;
-        $cacheTime = CacheHelper::fresnsCacheTimeByFileType(1);
-
-        $groupCategories = Cache::remember($cacheKey, $cacheTime, function () {
-            $result = ApiHelper::make()->get('/api/v2/group/categories');
-
-            return data_get($result, 'data.list', null);
-        });
-
-        if (is_null($groupCategories)) {
-            Cache::forget($cacheKey);
-
-            $groupCategories = [];
-        }
-
-        View::share('groupCategories', $groupCategories);
     }
 
     public function loadLanguages()
