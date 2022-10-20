@@ -235,7 +235,7 @@ class ExtensionController extends Controller
             return \response($output."\n ".__('FsLang::tips.installSuccess'));
         } else {
             if ($output == '') {
-                $output = '请查看日志';
+                $output = __('FsLang::tips.viewLog')."\n ".' /storage/logs';
             }
 
             return \response($output."\n ".__('FsLang::tips.installFailure'));
