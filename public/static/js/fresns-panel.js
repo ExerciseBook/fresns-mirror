@@ -149,6 +149,7 @@ function progressExit() {
 $(document).ready(function () {
     $(".fresns-modal").on('show.bs.modal', function() {
         $('.ajax-progress-submit').show().removeAttr("disabled");
+        $('.ajax-progress-btn').show().removeAttr("disabled");
         $(".ajax-progress").empty();
     })
 
@@ -161,8 +162,11 @@ $(document).ready(function () {
             return;
         }
 
+        $('.ajax-progress-btn').attr('disabled', true);
+
         obj.attr('disabled', true);
         obj.hide();
+
 
         // set progress
         progress.init().setProgressElement($('.ajax-progress').removeClass('d-none')).work();
@@ -1026,10 +1030,15 @@ $(document).ready(function () {
                 _method: 'delete'
             },
             success: function (response) {
+                processDown()
                 var ansi_up = new AnsiUp;
                 var html = ansi_up.ansi_to_html(response);
                 window.uninstallMessage = html;
                 $('#uninstallStepModal').find('#uninstall_artisan_output').html(html);
+            },
+            error: function (response) {
+                progressExit()
+                window.tips(response.responseJSON.message);
             },
         });
     });
