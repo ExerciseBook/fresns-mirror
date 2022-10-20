@@ -102,6 +102,8 @@ class WebConfiguration
             }
 
             View::share('groupCategories', $groupCategories);
+        } else {
+            View::share('groupCategories', []);
         }
     }
 
