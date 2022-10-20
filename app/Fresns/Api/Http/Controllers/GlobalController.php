@@ -53,7 +53,11 @@ class GlobalController extends Controller
             $configQuery->whereIn('item_tag', $itemTag);
         }
 
-        $configs = $configQuery->paginate($request->get('pageSize', 50));
+        if ($request->get('is_all')) {
+            $configs = $configQuery->get();
+        } else {
+            $configs = $configQuery->paginate($request->get('pageSize', 50));
+        }
 
         $item = null;
         foreach ($configs as $config) {

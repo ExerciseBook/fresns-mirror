@@ -22,6 +22,7 @@ class GlobalConfigsDTO extends DTO
             'tags' => ['string', 'nullable'],
             'pageSize' => ['integer', 'nullable', 'between:1,100'],
             'page' => ['integer', 'nullable'],
+            'is_all' => ['boolean', 'nullable'],
         ];
     }
 }

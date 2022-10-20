@@ -37,6 +37,7 @@ if (! function_exists('fs_api_config')) {
             $result = ApiHelper::make()->get('/api/v2/global/configs', [
                 'query' => [
                     'keys' => $itemKey,
+                    'is_all' => true,
                 ],
             ]);
 
