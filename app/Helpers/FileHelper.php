@@ -180,7 +180,7 @@ class FileHelper
         if ($storageConfig['antiLinkConfigStatus']) {
             $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileInfo([
                 'type' => $file->type,
-                'fileIdOrFid' => $file->id,
+                'fileIdOrFid' => strval($file->id),
             ]);
 
             return $fresnsResponse->getData() ?? null;
@@ -252,7 +252,7 @@ class FileHelper
         if ($antiLinkConfigStatus) {
             $fresnsResponse = \FresnsCmdWord::plugin()->getAntiLinkFileInfo([
                 'type' => $file->type,
-                'fileIdOrFid' => $file->id,
+                'fileIdOrFid' => strval($file->id),
             ]);
 
             return $fresnsResponse->getData($urlType) ?? null;
@@ -299,7 +299,7 @@ class FileHelper
         if ($storageConfig['antiLinkConfigStatus']) {
             $fresnsResponse = \FresnsCmdWord::plugin($storageConfig['service'])->getAntiLinkFileOriginalUrl([
                 'type' => $file->type,
-                'fileIdOrFid' => $file->id,
+                'fileIdOrFid' => strval($file->id),
             ]);
 
             return $fresnsResponse->getData('originalUrl') ?? null;
