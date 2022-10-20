@@ -30,23 +30,32 @@ if (! function_exists('fs_api_config')) {
     {
         $langTag = current_lang_tag();
 
-        $cacheKey = 'fresns_web_api_config_'.$itemKey.'_'.$langTag;
+        $cacheKey = 'fresns_web_api_config_all'.$langTag;
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
         $apiConfig = Cache::remember($cacheKey, $cacheTime, function () use ($itemKey) {
             $result = ApiHelper::make()->get('/api/v2/global/configs', [
                 'query' => [
-                    'keys' => $itemKey,
                     'isAll' => true,
                 ],
             ]);
 
-            return data_get($result->toArray(), "data.list.{$itemKey}", null);
+            return $result->toArray();
+
+            // $item = $result["data.list.{$itemKey}"];
+
+            // if (is_object($item) && method_exists($item, 'toArray')) {
+            //     return $item->toArray();
+            // }
+
+            // return $item;
         });
 
         if (! $apiConfig) {
             Cache::forget($cacheKey);
         }
+
+        return data_get($apiConfig, "data.list.{$itemKey}");
 
         return $apiConfig;
     }

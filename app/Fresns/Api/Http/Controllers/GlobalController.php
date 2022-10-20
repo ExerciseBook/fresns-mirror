@@ -53,10 +53,15 @@ class GlobalController extends Controller
             $configQuery->whereIn('item_tag', $itemTag);
         }
 
-        if ($$dtoRequest->isAll) {
+        if ($dtoRequest->isAll) {
             $configs = $configQuery->get();
+            $total = $configs->count();
+            $perPage = $total;
         } else {
             $configs = $configQuery->paginate($request->get('pageSize', 50));
+
+            $total = $configs->total();
+            $perPage = $configs->perPage();
         }
 
         $item = null;
@@ -81,7 +86,7 @@ class GlobalController extends Controller
             }
         }
 
-        return $this->fresnsPaginate($item, $configs->total(), $configs->perPage());
+        return $this->fresnsPaginate($item, $total, $perPage);
     }
 
     // archives
