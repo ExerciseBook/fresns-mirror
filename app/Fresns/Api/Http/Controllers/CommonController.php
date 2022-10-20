@@ -25,6 +25,7 @@ use App\Models\File;
 use App\Models\FileDownload;
 use App\Models\Hashtag;
 use App\Models\Language;
+use App\Models\Plugin;
 use App\Models\Post;
 use App\Models\User;
 use App\Utilities\ValidationUtility;
@@ -311,6 +312,12 @@ class CommonController extends Controller
 
         if (! $storageConfig['storageConfigStatus']) {
             throw new ApiException(32100);
+        }
+
+        $servicePlugin = Plugin::where('unikey', $storageConfig['service'])->isEnable()->first();
+
+        if (! $servicePlugin) {
+            throw new ApiException(32102);
         }
 
         switch ($dtoRequest->uploadMode) {
