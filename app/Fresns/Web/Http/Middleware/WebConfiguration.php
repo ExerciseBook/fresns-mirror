@@ -92,7 +92,7 @@ class WebConfiguration
             $groupCategories = Cache::remember($cacheKey, $cacheTime, function () {
                 $result = ApiHelper::make()->get('/api/v2/group/categories');
 
-                return data_get($result, 'data.list', null);
+                return data_get($result->toArray(), 'data.list', null);
             });
 
             if (is_null($groupCategories)) {
