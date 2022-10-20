@@ -234,6 +234,10 @@ class ExtensionController extends Controller
         if ($exitCode == 0) {
             return \response($output."\n ".__('FsLang::tips.installSuccess'));
         } else {
+            if ($output == '') {
+                $output = '请查看日志';
+            }
+
             return \response($output."\n ".__('FsLang::tips.installFailure'));
         }
     }
