@@ -556,7 +556,15 @@ class ApiController extends Controller
 
         $results = ApiHelper::make()->handleUnwrap($postAsyncs)->toArray();
 
-        return Response::json(array_filter(array_map(fn ($arr) => data_get($arr, 'data'), $results), fn ($arr) => data_get($arr, 'code') !== 0));
+        $data = [];
+        foreach ($results as $result) {
+            if (data_get($result, 'code') !== 0) {
+                return Response::json($result);
+            }
+            $data[] = data_get($result, 'data');
+        }
+
+        return Response::json(['data' => $data, 'code' => 0]);
     }
 
     // editor update
