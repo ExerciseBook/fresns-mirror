@@ -120,7 +120,6 @@ window.progress = {
     }
 };
 
-
 // copy url
 function copyToClipboard(element) {
     var $temp = $('<input>');
@@ -145,8 +144,9 @@ function progressExit() {
     progress.exit();
 }
 
-// set
+// settings
 $(document).ready(function () {
+    // progress bar
     $(".fresns-modal").on('show.bs.modal', function() {
         $('.ajax-progress-submit').show().removeAttr("disabled");
         $('.ajax-progress-btn').show().removeAttr("disabled");
@@ -166,7 +166,6 @@ $(document).ready(function () {
 
         obj.attr('disabled', true);
         obj.hide();
-
 
         // set progress
         progress.init().setProgressElement($('.ajax-progress').removeClass('d-none')).work();
