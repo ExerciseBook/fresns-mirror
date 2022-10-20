@@ -83,7 +83,7 @@ class WebConfiguration
 
     private function groupCategories(): void
     {
-        if (fs_api_config('site_mode') == 'private' && fs_user()->check()) {
+        if (fs_user()->check()) {
             $langTag = current_lang_tag();
 
             $cacheKey = 'fresns_web_group_categories_'.$langTag;
