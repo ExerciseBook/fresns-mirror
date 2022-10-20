@@ -90,7 +90,7 @@
 
                 <!--progress bar-->
                 <div class="mt-2">
-                    <div class="ajax-progress progress w-100 d-none" id="install-progress"></div>
+                    <div class="ajax-progress progress d-none" id="install-progress"></div>
                 </div>
             </div>
             <div class="modal-footer">

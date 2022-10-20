@@ -60,6 +60,13 @@ window.tips = function (message, code = 200) {
     setTimeoutToastHide();
 };
 
+const sleep = (delay = 500) => {
+    let t = Date.now();
+    while (Date.now() - t <= delay) {
+        continue;
+    }
+};
+
 // progress
 window.progress = {
     total: 100,
@@ -71,6 +78,7 @@ window.progress = {
         return `<div class="progress-bar" role="progressbar" style="width: ${progress.valuenow}%" aria-valuenow="${progress.valuenow}" aria-valuemin="0" aria-valuemax="100">${progress.valuenow}</div>`
     },
     setProgressElement: function (pe){
+        console.log(pe,111)
         this.progressElement = pe;
         return this;
     },
@@ -141,7 +149,7 @@ function progressExit() {
 $(document).ready(function () {
     $(".fresns-modal").on('show.bs.modal', function() {
         $('.ajax-progress-submit').show().removeAttr("disabled");
-        $(".ajax-progress").addClass('d-none').empty();
+        $(".ajax-progress").empty();
     })
 
     $(".ajax-progress-submit").on('click', function(event) {
@@ -158,10 +166,6 @@ $(document).ready(function () {
 
         // set progress
         progress.init().setProgressElement($('.ajax-progress').removeClass('d-none')).work();
-
-        // if (actionMethod) {
-        //     actionMethod(obj)
-        // }
     })
 
     // upgrade
@@ -1052,7 +1056,6 @@ $(document).ready(function () {
         if (plugin_unikey || plugin_zipball || plugin_directory) {
             $(this).submit()
             $('#installStepModal').modal('toggle')
-            progressDown()
             return;
         }
 
@@ -2138,6 +2141,7 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
+                progressDown()
                 var ansi_up = new AnsiUp;
                 var html = ansi_up.ansi_to_html(response);
 
@@ -2145,6 +2149,7 @@ $(document).ready(function () {
                 $('#install_artisan_output').html(html || trans('tips.installSuccess')) //FsLang
             },
             error: function (response) {
+                progressExit()
                 window.tips(response.responseJSON.message);
             },
         });
