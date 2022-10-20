@@ -60,6 +60,59 @@ window.tips = function (message, code = 200) {
     setTimeoutToastHide();
 };
 
+// progress
+window.progress = {
+    total: 100,
+    valuenow: 0,
+    speed: 1000,
+    progressElement: null,
+    stop: false,
+    html: function (){
+        return `<div class="progress-bar" role="progressbar" style="width: ${progress.valuenow}%" aria-valuenow="${progress.valuenow}" aria-valuemin="0" aria-valuemax="100">${progress.valuenow}</div>`
+    },
+    setProgressElement: function (pe){
+        this.progressElement = pe;
+        return this;
+    },
+    init: function () {
+        this.total = 100;
+        this.valuenow = 0;
+        this.progressElement = null;
+        this.stop = false
+        return this;
+    },
+    work: function () {
+        this.add(progress);
+    },
+    add: function (obj) {
+        if (obj.stop !== true && obj.valuenow < obj.total) {
+            let num = parseFloat(obj.total) - parseFloat(obj.valuenow);
+            obj.valuenow = (parseFloat(obj.valuenow) + parseFloat(num / 100)).toFixed(2);
+            obj.progressElement.empty().append(obj.html())
+        } else {
+            obj.progressElement.empty().append(obj.html())
+            return;
+        }
+        setTimeout(function(){
+            obj.add(obj)
+        }, obj.speed)
+    },
+    exit: function () {
+        this.stop = true;
+        sleep(1000)
+        return this;
+    },
+    done: function () {
+        this.valuenow = this.total;
+        sleep(1000)
+        return this;
+    },
+    clearHtml: function () {
+        this.progressElement?.empty();
+    }
+};
+
+
 // copy url
 function copyToClipboard(element) {
     var $temp = $('<input>');
@@ -78,7 +131,6 @@ function reloadPage()
 
 function progressDown() {
     progress.done();
-    $(".fresns-modal .btn-close").trigger('click');
 }
 
 function progressExit() {
@@ -88,8 +140,8 @@ function progressExit() {
 // set
 $(document).ready(function () {
     $(".fresns-modal").on('show.bs.modal', function() {
-        $(this).find('.ajax-upload').show().removeAttr("disabled");
-        $(this).find(".ajax-progress").addClass('d-none').empty();
+        $('.ajax-progress-submit').show().removeAttr("disabled");
+        $(".ajax-progress").addClass('d-none').empty();
     })
 
     $(".ajax-progress-submit").on('click', function(event) {
@@ -105,7 +157,7 @@ $(document).ready(function () {
         obj.hide();
 
         // set progress
-        progress.init().setParentElement(obj.next('.progress').removeClass('d-none')).work();
+        progress.init().setProgressElement($('.ajax-progress').removeClass('d-none')).work();
 
         // if (actionMethod) {
         //     actionMethod(obj)
@@ -1000,6 +1052,7 @@ $(document).ready(function () {
         if (plugin_unikey || plugin_zipball || plugin_directory) {
             $(this).submit()
             $('#installStepModal').modal('toggle')
+            progressDown()
             return;
         }
 

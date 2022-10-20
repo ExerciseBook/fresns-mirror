@@ -26,7 +26,7 @@
 
 <script src="/static/js/ansi_up.js"></script>
 <!--install modal-->
-<div class="modal fresns-modal fade" id="installModal" tabindex="-1" aria-labelledby="install" aria-hidden="true">
+<div class="modal fade" id="installModal" tabindex="-1" aria-labelledby="install" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -78,7 +78,7 @@
 </div>
 
 <!--install artisan output modal-->
-<div class="modal fade" id="installStepModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="installStepModal" aria-hidden="true">
+<div class="modal fade fresns-modal" id="installStepModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="installStepModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -90,7 +90,7 @@
 
                 <!--progress bar-->
                 <div class="mt-2">
-                    <div class="progress w-100 d-none" id="install-progress"></div>
+                    <div class="ajax-progress progress w-100 d-none" id="install-progress"></div>
                 </div>
             </div>
             <div class="modal-footer">
