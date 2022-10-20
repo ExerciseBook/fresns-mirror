@@ -90,7 +90,12 @@ class WebConfiguration
             $cacheTime = CacheHelper::fresnsCacheTimeByFileType(1);
 
             $groupCategories = Cache::remember($cacheKey, $cacheTime, function () {
-                $result = ApiHelper::make()->get('/api/v2/group/categories');
+                $result = ApiHelper::make()->get('/api/v2/group/categories', [
+                    'query' => [
+                        'pageSize' => 100,
+                        'page' => 1,
+                    ],
+                ]);
 
                 return data_get($result->toArray(), 'data.list', null);
             });

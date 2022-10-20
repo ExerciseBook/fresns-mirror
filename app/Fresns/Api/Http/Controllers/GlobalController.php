@@ -53,7 +53,7 @@ class GlobalController extends Controller
             $configQuery->whereIn('item_tag', $itemTag);
         }
 
-        if ($request->get('isAll')) {
+        if ($$dtoRequest->isAll) {
             $configs = $configQuery->get();
         } else {
             $configs = $configQuery->paginate($request->get('pageSize', 50));
