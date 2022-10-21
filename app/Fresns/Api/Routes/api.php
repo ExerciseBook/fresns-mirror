@@ -41,7 +41,7 @@ Route::prefix('v2')->middleware([
     // common
     Route::prefix('common')->name('common.')->group(function () {
         Route::get('input-tips', [CommonController::class, 'inputTips'])->name('input.tips');
-        Route::get('callbacks', [CommonController::class, 'callbacks'])->name('callbacks');
+        Route::get('callback', [CommonController::class, 'callback'])->name('callback');
         Route::post('send-verify-code', [CommonController::class, 'sendVerifyCode'])->name('send.verifyCode');
         Route::post('upload-log', [CommonController::class, 'uploadLog'])->name('upload.log');
         Route::post('upload-file', [CommonController::class, 'uploadFile'])->name('upload.file');

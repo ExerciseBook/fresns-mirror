@@ -9,6 +9,7 @@
 namespace App\Fresns\Api\Http\Controllers;
 
 use App\Exceptions\ApiException;
+use App\Fresns\Api\Http\DTO\CommonCallbacksDTO;
 use App\Fresns\Api\Http\DTO\CommonDownloadFileDTO;
 use App\Fresns\Api\Http\DTO\CommonInputTipsDTO;
 use App\Fresns\Api\Http\DTO\CommonSendVerifyCodeDTO;
@@ -26,6 +27,7 @@ use App\Models\FileDownload;
 use App\Models\Hashtag;
 use App\Models\Language;
 use App\Models\Plugin;
+use App\Models\PluginCallback;
 use App\Models\Post;
 use App\Models\User;
 use App\Utilities\ValidationUtility;
@@ -165,6 +167,46 @@ class CommonController extends Controller
                 }
             break;
         }
+
+        return $this->success($data);
+    }
+
+    // callback
+    public function callback(Request $request)
+    {
+        $dtoRequest = new CommonCallbacksDTO($request->all());
+
+        $plugin = Plugin::whereUnikey($dtoRequest->unikey)->first();
+
+        if (empty($plugin)) {
+            throw new ApiException(32101);
+        }
+
+        if ($plugin->is_enable == 0) {
+            throw new ApiException(32102);
+        }
+
+        $callback = PluginCallback::whereUuid($dtoRequest->uuid)->first();
+
+        if (empty($callback)) {
+            throw new ApiException(32303);
+        }
+
+        if ($callback->is_use == 1) {
+            throw new ApiException(32204);
+        }
+
+        $timeDifference = time() - strtotime($callback->created_at);
+        // 30 minutes
+        if ($timeDifference > 1800) {
+            throw new ApiException(32203);
+        }
+
+        $data = $callback->content;
+
+        $callback->is_use = 1;
+        $callback->use_plugin_unikey = $dtoRequest->unikey;
+        $callback->save();
 
         return $this->success($data);
     }
