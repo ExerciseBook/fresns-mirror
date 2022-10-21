@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\Controllers;
 
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\CommonCallbacksDTO;
-use App\Fresns\Api\Http\DTO\CommonDownloadFileDTO;
+use App\Fresns\Api\Http\DTO\CommonFileLinkDTO;
 use App\Fresns\Api\Http\DTO\CommonInputTipsDTO;
 use App\Fresns\Api\Http\DTO\CommonSendVerifyCodeDTO;
 use App\Fresns\Api\Http\DTO\CommonUploadFileDTO;
@@ -406,10 +406,10 @@ class CommonController extends Controller
         return $fresnsResp->getOrigin();
     }
 
-    // download file
-    public function downloadFile(string $fid, Request $request)
+    // file download link
+    public function fileLink(string $fid, Request $request)
     {
-        $dtoRequest = new CommonDownloadFileDTO($request->all());
+        $dtoRequest = new CommonFileLinkDTO($request->all());
         $authUserId = $this->user()->id;
 
         $roleDownloadCount = PermissionUtility::getUserMainRolePerm($authUserId)['download_file_count'] ?? 0;
@@ -461,7 +461,7 @@ class CommonController extends Controller
     }
 
     // file download users
-    public function downloadUsers(string $fid, Request $request)
+    public function fileUsers(string $fid, Request $request)
     {
         $dtoRequest = new PaginationDTO($request->all());
         $langTag = $this->langTag();

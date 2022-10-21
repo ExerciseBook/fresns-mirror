@@ -45,8 +45,8 @@ Route::prefix('v2')->middleware([
         Route::post('send-verify-code', [CommonController::class, 'sendVerifyCode'])->name('send.verifyCode');
         Route::post('upload-log', [CommonController::class, 'uploadLog'])->name('upload.log');
         Route::post('upload-file', [CommonController::class, 'uploadFile'])->name('upload.file');
-        Route::get('file/{fid}/download-link', [CommonController::class, 'downloadFile'])->name('download.file');
-        Route::get('file/{fid}/users', [CommonController::class, 'downloadUsers'])->name('download.users');
+        Route::get('file/{fid}/link', [CommonController::class, 'fileLink'])->name('file.link');
+        Route::get('file/{fid}/users', [CommonController::class, 'fileUsers'])->name('file.users');
     });
 
     // search
