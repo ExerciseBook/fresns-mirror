@@ -413,7 +413,7 @@ class CommonController extends Controller
         $authUserId = $this->user()->id;
 
         $roleDownloadCount = PermissionUtility::getUserMainRolePerm($authUserId)['download_file_count'] ?? 0;
-        $userDownloadCount = FileDownload::where('user_id', $authUserId)->whereDate(now())->count();
+        $userDownloadCount = FileDownload::where('user_id', $authUserId)->whereDate('created_at', now())->count();
         if ($roleDownloadCount < $userDownloadCount) {
             throw new ApiException(36115);
         }
