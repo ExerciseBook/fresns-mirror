@@ -38,6 +38,9 @@ class CacheHelper
         Cache::flush();
         \Artisan::call('view:cache');
         \Artisan::call('config:cache');
+        \Artisan::call('event:cache');
+        \Artisan::call('queue:cache');
+        \Artisan::call('route:cache');
     }
 
     /**
