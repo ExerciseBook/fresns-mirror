@@ -20,16 +20,20 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
+use App\Helpers\PrimaryHelper;
 use App\Models\Account;
+use App\Models\Comment;
 use App\Models\Extend;
 use App\Models\File;
 use App\Models\FileDownload;
+use App\Models\FileUsage;
 use App\Models\Hashtag;
 use App\Models\Language;
 use App\Models\Plugin;
 use App\Models\PluginCallback;
 use App\Models\Post;
 use App\Models\User;
+use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
 
@@ -406,6 +410,13 @@ class CommonController extends Controller
     public function downloadFile(string $fid, Request $request)
     {
         $dtoRequest = new CommonDownloadFileDTO($request->all());
+        $authUserId = $this->user()->id;
+
+        $roleDownloadCount = PermissionUtility::getUserMainRolePerm($authUserId)['download_file_count'] ?? 0;
+        $userDownloadCount = FileDownload::where('user_id', $authUserId)->whereDate(now())->count();
+        if ($roleDownloadCount < $userDownloadCount) {
+            throw new ApiException(36115);
+        }
 
         $file = File::whereFid($fid)->first();
         if (empty($file)) {
@@ -416,22 +427,35 @@ class CommonController extends Controller
             throw new ApiException(37501);
         }
 
-        switch ($dtoRequest->type) {
-            // post
-            case 'post':
-                $data = null;
-            break;
+        $model = PrimaryHelper::fresnsModelByFsid($dtoRequest->type, $dtoRequest->fsid);
 
-            // comment
-            case 'comment':
-                $data = null;
-            break;
-
-            // extend
-            case 'extend':
-                $data = null;
-            break;
+        if (empty($model)) {
+            throw new ApiException(32201);
         }
+
+        if ($model->deleted_at) {
+            throw new ApiException(32304);
+        }
+
+        $fileUsage = FileUsage::where('file_id', $file->id)
+            ->where('table_name', "{$dtoRequest->type}s")
+            ->where('table_column', 'id')
+            ->where('table_id', $model->id)
+            ->first();
+
+        if (empty($fileUsage)) {
+            throw new ApiException(32304);
+        }
+
+        if ($dtoRequest->type == 'post' && $model->postAppend->is_allow == 1) {
+            $checkPostAllow = PermissionUtility::checkPostAllow($model->id, $authUserId);
+
+            if (! $checkPostAllow) {
+                throw new ApiException(35301);
+            }
+        }
+
+        $data['originalUrl'] = FileHelper::fresnsFileOriginalUrlById($file->id);
 
         return $this->success($data);
     }
@@ -456,6 +480,10 @@ class CommonController extends Controller
 
         $item = null;
         foreach ($downUsers as $down) {
+            if (empty($down->user)) {
+                continue;
+            }
+
             $item['downloadTime'] = DateHelper::fresnsFormatDateTime($down->created_at, $timezone, $langTag);
             $item['downloadTimeFormat'] = DateHelper::fresnsFormatTime($down->created_at, $langTag);
             $item['downloadUser'] = $down->user->getUserProfile();
