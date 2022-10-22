@@ -48,6 +48,18 @@ class EditorController extends Controller
     // index
     public function index(string $type, ?string $postGid = null, ?string $commentPid = null, ?string $commentCid = null)
     {
+        $editorPlugin = match ($type) {
+            'posts' => fs_api_config('post_editor_service'),
+            'comments' => fs_api_config('comment_editor_service'),
+            'post' => fs_api_config('post_editor_service'),
+            'comment' => fs_api_config('comment_editor_service'),
+            default => null,
+        };
+
+        if ($editorPlugin) {
+            return redirect()->to($editorPlugin."/{$type}");
+        }
+
         $type = match ($type) {
             'posts' => 'post',
             'comments' => 'comment',
@@ -89,6 +101,18 @@ class EditorController extends Controller
     // edit
     public function edit(Request $request, string $type, int $draftId)
     {
+        $editorPlugin = match ($type) {
+            'posts' => fs_api_config('post_editor_service'),
+            'comments' => fs_api_config('comment_editor_service'),
+            'post' => fs_api_config('post_editor_service'),
+            'comment' => fs_api_config('comment_editor_service'),
+            default => null,
+        };
+
+        if ($editorPlugin) {
+            return redirect()->to($editorPlugin."/{$type}/{$draftId}");
+        }
+
         $type = match ($type) {
             'posts' => 'post',
             'comments' => 'comment',
@@ -191,6 +215,20 @@ class EditorController extends Controller
     // request: create or edit
     public function store(Request $request, string $type)
     {
+        $fsid = $request->input('fsid');
+
+        $editorPlugin = match ($type) {
+            'posts' => fs_api_config('post_editor_service'),
+            'comments' => fs_api_config('comment_editor_service'),
+            'post' => fs_api_config('post_editor_service'),
+            'comment' => fs_api_config('comment_editor_service'),
+            default => null,
+        };
+
+        if ($editorPlugin) {
+            return redirect()->to($editorPlugin."/{$type}?fsid={$fsid}");
+        }
+
         $type = match ($type) {
             'posts' => 'post',
             'comments' => 'comment',
@@ -198,8 +236,6 @@ class EditorController extends Controller
             'comment' => 'comment',
             default => 'post',
         };
-
-        $fsid = $request->input('fsid');
 
         if ($fsid) {
             $response = ApiHelper::make()->post("/api/v2/editor/{$type}/generate/{$fsid}")->toArray();
