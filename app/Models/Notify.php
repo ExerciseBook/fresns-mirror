@@ -13,8 +13,8 @@ class Notify extends Model
     const TYPE_SYSTEM_TO_FULL = 1;
     const TYPE_SYSTEM_TO_USER = 2;
     const TYPE_RECOMMEND = 3;
-    const TYPE_LIKE = 4;
-    const TYPE_FOLLOW = 5;
+    const TYPE_FOLLOW = 4;
+    const TYPE_LIKE = 5;
     const TYPE_MENTION = 6;
     const TYPE_COMMENT = 7;
 
