@@ -249,6 +249,10 @@ class CommentController extends Controller
         $commentList = [];
         $service = new CommentService();
         foreach ($comments as $comment) {
+            if (empty($comment->post) || empty($comment->postAppend)) {
+                continue;
+            }
+
             $commentList[] = $service->commentData($comment, 'list', $langTag, $timezone, $authUserId, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
         }
 
