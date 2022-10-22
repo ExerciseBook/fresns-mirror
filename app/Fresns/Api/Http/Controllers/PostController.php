@@ -88,7 +88,13 @@ class PostController extends Controller
                 ->isEnable();
 
             if ($blockHashtagIds) {
-                $postQuery->orWhereHas('hashtags', function ($query) use ($blockHashtagIds) {
+                if ($dtoRequest->hid) {
+                    $whereHasMethod = 'andWhereHas';
+                } else {
+                    $whereHasMethod = 'orWhereHas';
+                }
+                
+                $postQuery->{$whereHasMethod}('hashtags', function ($query) use ($blockHashtagIds) {
                     $query->whereNotIn('hashtag_id', $blockHashtagIds);
                 });
             }
