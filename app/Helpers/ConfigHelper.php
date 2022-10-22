@@ -18,7 +18,7 @@ class ConfigHelper
     public static function fresnsConfigDefaultLangTag(): string
     {
         $defaultLangTag = Cache::remember('fresns_default_langTag', now()->addDays(), function () {
-            return Config::where('item_key', 'default_language')->value('item_value');
+            return Config::where('item_key', 'default_language')->first()?->item_value;
         });
 
         if (is_null($defaultLangTag)) {
@@ -34,7 +34,7 @@ class ConfigHelper
     public static function fresnsConfigDefaultTimezone(): string
     {
         $defaultLangTag = Cache::remember('fresns_default_timezone', now()->addDays(), function () {
-            return Config::where('item_key', 'default_timezone')->value('item_value');
+            return Config::where('item_key', 'default_timezone')->first()?->item_value;
         });
 
         if (is_null($defaultLangTag)) {
@@ -48,9 +48,13 @@ class ConfigHelper
     public static function fresnsConfigLangTags()
     {
         $langTagArr = Cache::remember('fresns_lang_tags', now()->addDays(), function () {
-            $langArr = Config::where('item_key', 'language_menus')->value('item_value');
+            $langArr = Config::where('item_key', 'language_menus')->first()?->item_value;
 
-            return collect($langArr)->pluck('langTag');
+            if (!$langArr) {
+                return null;
+            }
+
+            return collect($langArr->item_value)->pluck('langTag')->all();
         });
 
         if (is_null($langTagArr)) {
@@ -166,7 +170,7 @@ class ConfigHelper
     {
         $file = ConfigHelper::fresnsConfigByItemKey($itemKey);
 
-        if (is_int($file)) {
+        if (StrHelper::isPureInt($file)) {
             return 'ID';
         }
 
