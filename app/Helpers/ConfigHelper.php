@@ -69,7 +69,7 @@ class ConfigHelper
      *
      * @param  string  $itemKey
      * @param  string  $langTag
-     * @return mixed
+     * @return string|null
      */
     public static function fresnsConfigByItemKey(string $itemKey, ?string $langTag = null)
     {

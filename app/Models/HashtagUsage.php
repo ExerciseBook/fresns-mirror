@@ -28,26 +28,26 @@ class HashtagUsage extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'usage_id', 'id')->wherePivot('usage_type', HashtagUsage::TYPE_USER);
+        return $this->belongsTo(User::class, 'usage_id', 'id')->where('usage_type', HashtagUsage::TYPE_USER);
     }
 
     public function group()
     {
-        return $this->belongsTo(Group::class, 'usage_id', 'id')->wherePivot('usage_type', HashtagUsage::TYPE_GROUP);
+        return $this->belongsTo(Group::class, 'usage_id', 'id')->where('usage_type', HashtagUsage::TYPE_GROUP);
     }
 
     public function hashtag()
     {
-        return $this->belongsTo(Hashtag::class, 'usage_id', 'id')->wherePivot('usage_type', HashtagUsage::TYPE_HASHTAG);
+        return $this->belongsTo(Hashtag::class, 'usage_id', 'id')->where('usage_type', HashtagUsage::TYPE_HASHTAG);
     }
 
     public function post()
     {
-        return $this->belongsTo(Post::class, 'usage_id', 'id')->wherePivot('usage_type', HashtagUsage::TYPE_POST);
+        return $this->belongsTo(Post::class, 'usage_id', 'id')->where('usage_type', HashtagUsage::TYPE_POST);
     }
 
     public function comment()
     {
-        return $this->belongsTo(Comment::class, 'usage_id', 'id')->wherePivot('usage_type', HashtagUsage::TYPE_COMMENT);
+        return $this->belongsTo(Comment::class, 'usage_id', 'id')->where('usage_type', HashtagUsage::TYPE_COMMENT);
     }
 }
