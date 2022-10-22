@@ -54,7 +54,7 @@ class ConfigHelper
                 return null;
             }
 
-            return collect($langArr->item_value)->pluck('langTag')->all();
+            return collect($langArr)->pluck('langTag')->all();
         });
 
         if (is_null($langTagArr)) {
