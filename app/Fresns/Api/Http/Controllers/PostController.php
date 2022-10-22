@@ -89,7 +89,7 @@ class PostController extends Controller
 
             if ($blockHashtagIds) {
                 if ($dtoRequest->hid) {
-                    $whereHasMethod = 'andWhereHas';
+                    $whereHasMethod = 'whereHas';
                 } else {
                     $whereHasMethod = 'orWhereHas';
                 }
