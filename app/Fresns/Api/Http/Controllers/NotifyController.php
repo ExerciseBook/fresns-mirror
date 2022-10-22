@@ -31,13 +31,16 @@ class NotifyController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()->id;
 
-        $readStatus = $dtoRequest->status ?: 0;
         $typeArr = array_filter(explode(',', $dtoRequest->types));
 
-        $notifyQuery = Notify::with('actionUser')->whereIn('user_id', [$authUserId, 0])->where('is_read', $readStatus);
+        $notifyQuery = Notify::with('actionUser')->whereIn('user_id', [$authUserId, 0]);
 
         if ($typeArr) {
             $notifyQuery->whereIn('type', $typeArr);
+        }
+
+        if ($dtoRequest->status) {
+            $notifyQuery->whereIn('is_read', $dtoRequest->status);
         }
 
         $notifies = $notifyQuery->latest()->paginate($request->get('pageSize', 15));
@@ -59,8 +62,8 @@ class NotifyController extends Controller
             $item['actionUser'] = null;
             $item['actionType'] = $notify->action_type;
             $item['actionInfo'] = null;
-            $info['notifyTime'] = DateHelper::fresnsDateTimeByTimezone($notify->created_at, $timezone, $langTag);
-            $info['notifyTimeFormat'] = DateHelper::fresnsFormatDateTime($notify->created_at, $timezone, $langTag);
+            $item['notifyTime'] = DateHelper::fresnsDateTimeByTimezone($notify->created_at, $timezone, $langTag);
+            $item['notifyTimeFormat'] = DateHelper::fresnsFormatDateTime($notify->created_at, $timezone, $langTag);
             $item['readStatus'] = (bool) $notify->is_read;
 
             if ($notify->is_access_plugin) {
@@ -68,10 +71,7 @@ class NotifyController extends Controller
             }
 
             if ($notify->action_user_id) {
-                $userProfile = $notify->actionUser?->getUserProfile($langTag, $timezone);
-                $userMainRole = $notify->actionUser?->getUserMainRole($langTag, $timezone);
-
-                $item['actionUser'] = array_merge($userProfile, $userMainRole);
+                $item['actionUser'] = $userService->userData($notify?->actionUser, $langTag, $timezone, $authUserId);
             }
 
             if ($notify->action_type && $notify->action_id) {
