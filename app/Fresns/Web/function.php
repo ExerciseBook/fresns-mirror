@@ -12,6 +12,7 @@ use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
+use App\Helpers\StrHelper;
 use App\Models\Config;
 use Illuminate\Support\Facades\Cache;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -33,7 +34,7 @@ if (! function_exists('fs_api_config')) {
         $cacheKey = 'fresns_web_api_config_all_'.$langTag;
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $apiConfig = Cache::remember($cacheKey, $cacheTime, function () use ($itemKey) {
+        $apiConfig = Cache::remember($cacheKey, $cacheTime, function () {
             $result = ApiHelper::make()->get('/api/v2/global/configs', [
                 'query' => [
                     'isAll' => true,
@@ -71,7 +72,7 @@ if (! function_exists('fs_db_config')) {
 
             if ($config->is_multilingual == 1) {
                 $itemValue = LanguageHelper::fresnsLanguageByTableKey($config->item_key, $config->item_type, $langTag);
-            } elseif ($config->item_type == 'file' && is_int($config->item_value)) {
+            } elseif ($config->item_type == 'file' && StrHelper::isPureInt($config->item_value)) {
                 $itemValue = ConfigHelper::fresnsConfigFileUrlByItemKey($config->item_value);
             } elseif ($config->item_type == 'plugin') {
                 $itemValue = PluginHelper::fresnsPluginUrlByUnikey($config->item_value);

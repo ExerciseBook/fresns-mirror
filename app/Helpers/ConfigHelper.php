@@ -194,19 +194,17 @@ class ConfigHelper
         if (ConfigHelper::fresnsConfigFileValueTypeByItemKey($itemKey) == 'URL') {
             $fileUrl = $configValue;
         } else {
-            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileUrlOfAntiLink([
-                'fileId' => $configValue,
-            ]);
+            $fileInfo = FileHelper::fresnsFileInfoById($configValue);
 
-            $key = match ($fresnsResp->getData('type')) {
-                default => throw new \RuntimeException(),
+            $key = match ($fileInfo['type']) {
                 File::TYPE_IMAGE => 'imageConfig',
-                File::TYPE_IMAGE => 'video',
-                File::TYPE_IMAGE => 'audio',
-                File::TYPE_IMAGE => 'document',
+                File::TYPE_VIDEO => 'video',
+                File::TYPE_AUDIO => 'audio',
+                File::TYPE_DOCUMENT => 'document',
+                default => 'imageConfig',
             };
 
-            $fileUrl = $fresnsResp->getData("{$key}Url");
+            $fileUrl = $fileInfo["{$key}Url"];
         }
 
         return $fileUrl;

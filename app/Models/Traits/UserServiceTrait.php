@@ -83,10 +83,8 @@ trait UserServiceTrait
                 if (ConfigHelper::fresnsConfigFileValueTypeByItemKey('default_avatar') == 'URL') {
                     $userAvatar = $avatar['default_avatar'];
                 } else {
-                    $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileUrlOfAntiLink([
-                        'fileId' => $avatar['default_avatar'],
-                    ]);
-                    $userAvatar = $fresnsResp->getData('imageAvatarUrl');
+                    $fileInfo = FileHelper::fresnsFileInfoById($avatar['default_avatar']);
+                    $userAvatar = $fileInfo['imageAvatarUrl'];
                 }
             } else {
                 // user avatar
@@ -97,10 +95,8 @@ trait UserServiceTrait
             if (ConfigHelper::fresnsConfigFileValueTypeByItemKey('deactivate_avatar') == 'URL') {
                 $userAvatar = $avatar['deactivate_avatar'];
             } else {
-                $fresnsResp = \FresnsCmdWord::plugin('Fresns')->getFileUrlOfAntiLink([
-                    'fileId' => $avatar['deactivate_avatar'],
-                ]);
-                $userAvatar = $fresnsResp->getData('imageAvatarUrl');
+                $fileInfo = FileHelper::fresnsFileInfoById($avatar['deactivate_avatar']);
+                $userAvatar = $fileInfo['imageAvatarUrl'];
             }
         }
 

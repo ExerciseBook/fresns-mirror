@@ -38,6 +38,9 @@ class CacheHelper
         Cache::flush();
         \Artisan::call('view:cache');
         \Artisan::call('config:cache');
+        \Artisan::call('event:cache');
+        \Artisan::call('queue:cache');
+        \Artisan::call('route:cache');
     }
 
     /**
@@ -45,6 +48,8 @@ class CacheHelper
      */
     public static function forgetFresnsConfig()
     {
+        Cache::forget('fresns_database_timezone');
+        Cache::forget('fresns_database_datetime');
         Cache::forget('fresns_crontab_items');
         Cache::forget('fresns_default_langTag');
         Cache::forget('fresns_default_timezone');

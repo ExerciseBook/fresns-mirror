@@ -19,6 +19,7 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
+use App\Helpers\StrHelper;
 use App\Models\Archive;
 use App\Models\BlockWord;
 use App\Models\Config;
@@ -68,7 +69,7 @@ class GlobalController extends Controller
         foreach ($configs as $config) {
             if ($config->is_multilingual == 1) {
                 $item[$config->item_key] = LanguageHelper::fresnsLanguageByTableKey($config->item_key, $config->item_type, $langTag);
-            } elseif ($config->item_type == 'file' && is_int($config->item_value)) {
+            } elseif ($config->item_type == 'file' && StrHelper::isPureInt($config->item_value)) {
                 $item[$config->item_key] = ConfigHelper::fresnsConfigFileUrlByItemKey($config->item_value);
             } elseif ($config->item_type == 'plugin') {
                 $item[$config->item_key] = PluginHelper::fresnsPluginUrlByUnikey($config->item_value);
