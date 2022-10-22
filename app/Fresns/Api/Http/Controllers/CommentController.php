@@ -61,7 +61,13 @@ class CommentController extends Controller
             }
 
             if ($blockHashtagIds) {
-                $commentQuery->orWhereHas('hashtags', function ($query) use ($blockHashtagIds) {
+                if ($dtoRequest->hid) {
+                    $whereHasMethod = 'whereHas';
+                } else {
+                    $whereHasMethod = 'orWhereHas';
+                }
+
+                $commentQuery->{$whereHasMethod}('hashtags', function ($query) use ($blockHashtagIds) {
                     $query->whereNotIn('hashtag_id', $blockHashtagIds);
                 });
             }
