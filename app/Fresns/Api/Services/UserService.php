@@ -18,6 +18,7 @@ use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\PermissionUtility;
+use Illuminate\Support\Arr;
 
 class UserService
 {
@@ -38,6 +39,12 @@ class UserService
         $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $user->id, $langTag);
         $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_USER, $user->id, $langTag);
         $item['roles'] = $user->getUserRoles($langTag, $timezone);
+
+        $decorate = Arr::pull($item['operations']['diversifyImages'], 'code', 'decorate');
+        $verifiedIcon = Arr::pull($item['operations']['diversifyImages'], 'code', 'verified');
+
+        $userProfile['decorate'] = $decorate['imageUrl'] ?? null;
+        $userProfile['verifiedIcon'] = $verifiedIcon['imageUrl'] ?? null;
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
         $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
