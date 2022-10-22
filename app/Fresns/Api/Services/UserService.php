@@ -40,11 +40,13 @@ class UserService
         $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_USER, $user->id, $langTag);
         $item['roles'] = $user->getUserRoles($langTag, $timezone);
 
-        $decorate = Arr::pull($item['operations']['diversifyImages'], 'code', 'decorate');
-        $verifiedIcon = Arr::pull($item['operations']['diversifyImages'], 'code', 'verified');
+        if ($item['operations']['diversifyImages']) {
+            $decorate = Arr::pull($item['operations']['diversifyImages'], 'code', 'decorate');
+            $verifiedIcon = Arr::pull($item['operations']['diversifyImages'], 'code', 'verified');
 
-        $userProfile['decorate'] = $decorate['imageUrl'] ?? null;
-        $userProfile['verifiedIcon'] = $verifiedIcon['imageUrl'] ?? null;
+            $userProfile['decorate'] = $decorate['imageUrl'] ?? null;
+            $userProfile['verifiedIcon'] = $verifiedIcon['imageUrl'] ?? null;
+        }
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
         $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
