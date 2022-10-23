@@ -22,7 +22,6 @@ use App\Helpers\FileHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\Account;
-use App\Models\Comment;
 use App\Models\Extend;
 use App\Models\File;
 use App\Models\FileDownload;
@@ -410,6 +409,7 @@ class CommonController extends Controller
     public function fileLink(string $fid, Request $request)
     {
         $dtoRequest = new CommonFileLinkDTO($request->all());
+        $authAccountId = $this->account()->id;
         $authUserId = $this->user()->id;
 
         $roleDownloadCount = PermissionUtility::getUserMainRolePerm($authUserId)['download_file_count'] ?? 0;
@@ -456,6 +456,21 @@ class CommonController extends Controller
         }
 
         $data['originalUrl'] = FileHelper::fresnsFileOriginalUrlById($file->id);
+
+        $objectType = match ($dtoRequest->type) {
+            'post' => 4,
+            'comment' => 5,
+            'extend' => 6,
+        };
+        $downloader = [
+            'file_id' => $file->id,
+            'file_type' => $file->type,
+            'account_id' => $authAccountId,
+            'user_id' => $authUserId,
+            'object_type' => $objectType,
+            'object_id' => $model->id,
+        ];
+        FileDownload::create($downloader);
 
         return $this->success($data);
     }
