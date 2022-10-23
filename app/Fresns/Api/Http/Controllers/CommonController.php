@@ -493,7 +493,7 @@ class CommonController extends Controller
 
         $downUsers = FileDownload::with('user')->latest()->paginate($request->get('pageSize', 15));
 
-        $item = null;
+        $items = null;
         foreach ($downUsers as $down) {
             if (empty($down->user)) {
                 continue;
@@ -502,9 +502,9 @@ class CommonController extends Controller
             $item['downloadTime'] = DateHelper::fresnsFormatDateTime($down->created_at, $timezone, $langTag);
             $item['downloadTimeFormat'] = DateHelper::fresnsFormatTime($down->created_at, $langTag);
             $item['downloadUser'] = $down->user->getUserProfile();
-            $item[] = $item;
+            $items[] = $item;
         }
 
-        return $this->fresnsPaginate($item, $downUsers->total(), $downUsers->perPage());
+        return $this->fresnsPaginate($items, $downUsers->total(), $downUsers->perPage());
     }
 }

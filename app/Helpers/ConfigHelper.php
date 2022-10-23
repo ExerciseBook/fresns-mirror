@@ -218,17 +218,17 @@ class ConfigHelper
      */
     public static function fresnsConfigLengthUnit(string $langTag)
     {
-        $language_menus = ConfigHelper::fresnsConfigByItemKey('language_menus');
+        $languageMenus = ConfigHelper::fresnsConfigByItemKey('language_menus');
 
-        if (empty($language_menus)) {
-            return null;
+        if (empty($languageMenus)) {
+            return 'km';
         }
 
         $lengthUnit = 'mi';
 
-        foreach ($language_menus as $menus) {
-            if ($menus['langTag'] == $langTag) {
-                $lengthUnit = $menus['lengthUnit'];
+        foreach ($languageMenus as $menu) {
+            if ($menu['langTag'] == $langTag) {
+                $lengthUnit = $menu['lengthUnit'];
             }
         }
 
@@ -243,17 +243,17 @@ class ConfigHelper
      */
     public static function fresnsConfigDateFormat(string $langTag)
     {
-        $language_menus = ConfigHelper::fresnsConfigByItemKey('language_menus');
+        $languageMenus = ConfigHelper::fresnsConfigByItemKey('language_menus');
 
-        if (empty($language_menus)) {
-            return null;
+        if (empty($languageMenus)) {
+            return 'mm/dd/yyyy';
         }
 
         $dateFormat = 'mm/dd/yyyy';
 
-        foreach ($language_menus as $menus) {
-            if ($menus['langTag'] == $langTag) {
-                $dateFormat = $menus['dateFormat'];
+        foreach ($languageMenus as $menu) {
+            if ($menu['langTag'] == $langTag) {
+                $dateFormat = $menu['dateFormat'];
             }
         }
 
