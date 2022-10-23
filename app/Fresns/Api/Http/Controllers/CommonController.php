@@ -491,7 +491,7 @@ class CommonController extends Controller
             throw new ApiException(37501);
         }
 
-        $downUsers = FileDownload::with('user')->latest()->paginate($request->get('pageSize', 15));
+        $downUsers = FileDownload::with('user')->where('file_id', $file->id)->latest()->paginate($request->get('pageSize', 15));
 
         $items = null;
         foreach ($downUsers as $down) {
@@ -501,7 +501,7 @@ class CommonController extends Controller
 
             $item['downloadTime'] = DateHelper::fresnsFormatDateTime($down->created_at, $timezone, $langTag);
             $item['downloadTimeFormat'] = DateHelper::fresnsFormatTime($down->created_at, $langTag);
-            $item['downloadUser'] = $down->user->getUserProfile();
+            $item['downloadUser'] = $down->user->getUserProfile($langTag, $timezone);
             $items[] = $item;
         }
 
