@@ -22,6 +22,7 @@ use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\PrimaryHelper;
+use App\Helpers\StrHelper;
 use App\Models\ArchiveUsage;
 use App\Models\BlockWord;
 use App\Models\CommentLog;
@@ -218,7 +219,7 @@ class UserController extends Controller
     // detail
     public function detail(string $uidOrUsername)
     {
-        if (preg_match('/^\d*?$/', $uidOrUsername)) {
+        if (StrHelper::isPureInt($uidOrUsername)) {
             $viewUser = User::where('uid', $uidOrUsername)->first();
         } else {
             $viewUser = User::where('username', $uidOrUsername)->first();
@@ -257,7 +258,7 @@ class UserController extends Controller
     // interactive
     public function interactive(string $uidOrUsername, string $type, Request $request)
     {
-        if (preg_match('/^\d*?$/', $uidOrUsername)) {
+        if (StrHelper::isPureInt($uidOrUsername)) {
             $viewUser = User::where('uid', $uidOrUsername)->first();
         } else {
             $viewUser = User::where('username', $uidOrUsername)->first();
@@ -292,7 +293,7 @@ class UserController extends Controller
     // markList
     public function markList(string $uidOrUsername, string $markType, string $listType, Request $request)
     {
-        if (preg_match('/^\d*?$/', $uidOrUsername)) {
+        if (StrHelper::isPureInt($uidOrUsername)) {
             $viewUser = User::where('uid', $uidOrUsername)->first();
         } else {
             $viewUser = User::where('username', $uidOrUsername)->first();
@@ -329,7 +330,7 @@ class UserController extends Controller
     {
         $dtoRequest = new UserAuthDTO($request->all());
 
-        if (preg_match('/^\d*?$/', $dtoRequest->uidOrUsername)) {
+        if (StrHelper::isPureInt($dtoRequest->uidOrUsername)) {
             $authUser = User::where('uid', $dtoRequest->uidOrUsername)->first();
         } else {
             $authUser = User::where('username', $dtoRequest->uidOrUsername)->first();
