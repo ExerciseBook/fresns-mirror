@@ -491,7 +491,22 @@ class CommonController extends Controller
             throw new ApiException(37501);
         }
 
-        $downUsers = FileDownload::with('user')->where('file_id', $file->id)->latest()->paginate($request->get('pageSize', 15));
+        $downUsers = FileDownload::with('user')
+            ->select([
+                \DB::raw("any_value(id) as id"),
+                \DB::raw("any_value(file_id) as file_id"),
+                \DB::raw("any_value(file_type) as file_type"),
+                \DB::raw("any_value(account_id) as account_id"),
+                \DB::raw("any_value(user_id) as user_id"),
+                \DB::raw("any_value(plugin_unikey) as plugin_unikey"),
+                \DB::raw("any_value(object_type) as object_type"),
+                \DB::raw("any_value(object_id) as object_id"),
+                \DB::raw("any_value(created_at) as created_at"),
+            ])
+            ->where('file_id', $file->id)
+            ->latest()
+            ->groupBy('user_id')
+            ->paginate($request->get('pageSize', 15));
 
         $items = null;
         foreach ($downUsers as $down) {
