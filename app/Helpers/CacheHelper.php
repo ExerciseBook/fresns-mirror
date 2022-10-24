@@ -144,6 +144,8 @@ class CacheHelper
     /**
      * forget fresns api info.
      *
+     * fresns_plugin_{$unikey}_url
+     * fresns_plugin_{$unikey}_{parameterKey}_url
      * fresns_api_guest_expire_info
      * fresns_api_guest_groups
      * fresns_api_user_{$uid}_expire_info
