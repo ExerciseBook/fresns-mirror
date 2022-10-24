@@ -106,7 +106,8 @@ class ConfigHelper
      */
     public static function fresnsConfigByItemKeys(array $itemKeys, ?string $langTag = null): array
     {
-        $key = reset($itemKeys);
+        $key = reset($itemKeys).'_'.end($itemKeys).'_'.count($itemKeys);
+
         $configCacheKey = 'fresns_config_keys_'.$key.'_'.$langTag;
 
         $keysData = Cache::remember($configCacheKey, now()->addDays(), function () use ($itemKeys, $langTag) {
