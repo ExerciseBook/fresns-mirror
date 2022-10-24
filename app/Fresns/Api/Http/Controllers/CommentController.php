@@ -61,15 +61,20 @@ class CommentController extends Controller
             }
 
             if ($blockHashtagIds) {
-                if ($dtoRequest->hid) {
-                    $whereHasMethod = 'whereHas';
-                } else {
-                    $whereHasMethod = 'orWhereHas';
-                }
+                $commentBlockQuery = \App\Models\HashtagUsage::select('usage_id')
+                    ->where('type', \App\Models\HashtagUsage::TYPE_POST)
+                    ->whereIn('hashtag_id', $blockCommentIds);
 
-                $commentQuery->{$whereHasMethod}('hashtags', function ($query) use ($blockHashtagIds) {
-                    $query->whereNotIn('hashtag_id', $blockHashtagIds);
-                });
+                $commentQuery->whereNotIn('id', $commentBlockQuery);
+
+                // if ($dtoRequest->hid) {
+                //     $whereHasMethod = 'whereHas';
+                // } else {
+                //     $whereHasMethod = 'orWhereHas';
+                // }
+                // $commentQuery->{$whereHasMethod}('hashtags', function ($query) use ($blockHashtagIds) {
+                //     $query->whereNotIn('hashtag_id', $blockHashtagIds);
+                // });
             }
         }
 
