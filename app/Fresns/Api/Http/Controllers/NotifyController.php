@@ -79,7 +79,7 @@ class NotifyController extends Controller
                     default => null,
                     Notify::ACTION_TYPE_USER => $userService->userData($notify?->user, $langTag, $timezone, $authUserId),
                     Notify::ACTION_TYPE_GROUP => $groupService->groupData($notify?->group, $langTag, $timezone, $authUserId),
-                    Notify::ACTION_TYPE_HASHTAG => $hashtagService->hashtagData($notify?->hashtag, $langTag, $authUserId),
+                    Notify::ACTION_TYPE_HASHTAG => $hashtagService->hashtagData($notify?->hashtag, $langTag, $timezone, $authUserId),
                     Notify::ACTION_TYPE_POST => $postService->postData($notify?->post, 'list', $langTag, $timezone, $authUserId),
                     Notify::ACTION_TYPE_COMMENT => $commentService->commentData($notify?->comment, 'list', $langTag, $timezone, $authUserId),
                 };

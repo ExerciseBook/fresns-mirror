@@ -66,7 +66,7 @@ class CommentService
             $hashtagService = new HashtagService;
 
             foreach ($comment->hashtags as $hashtag) {
-                $hashtagItem[] = $hashtagService->hashtagData($hashtag, $langTag, $authUserId);
+                $hashtagItem[] = $hashtagService->hashtagData($hashtag, $langTag, $timezone, $authUserId);
             }
             $item['hashtags'] = $hashtagItem;
         }

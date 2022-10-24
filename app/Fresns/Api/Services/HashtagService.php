@@ -18,7 +18,7 @@ use App\Utilities\InteractiveUtility;
 
 class HashtagService
 {
-    public function hashtagData(?Hashtag $hashtag, string $langTag, ?int $authUserId = null)
+    public function hashtagData(?Hashtag $hashtag, string $langTag, string $timezone, ?int $authUserId = null)
     {
         if (! $hashtag) {
             return null;
