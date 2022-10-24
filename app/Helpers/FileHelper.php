@@ -165,7 +165,7 @@ class FileHelper
     public static function fresnsFileInfoById(string $fileIdOrFid)
     {
         /** @var File $file */
-        if (preg_match('/^\d*?$/', $fileIdOrFid)) {
+        if (StrHelper::isPureInt($fileIdOrFid)) {
             $file = File::whereId($fileIdOrFid)->first();
         } else {
             $file = File::whereFid($fileIdOrFid)->first();
