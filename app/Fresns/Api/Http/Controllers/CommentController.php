@@ -62,7 +62,7 @@ class CommentController extends Controller
 
             if ($blockHashtagIds) {
                 $commentBlockQuery = \App\Models\HashtagUsage::select('usage_id')
-                    ->where('type', \App\Models\HashtagUsage::TYPE_POST)
+                    ->where('usage_type', \App\Models\HashtagUsage::TYPE_POST)
                     ->whereIn('hashtag_id', $blockCommentIds);
 
                 $commentQuery->whereNotIn('id', $commentBlockQuery);
