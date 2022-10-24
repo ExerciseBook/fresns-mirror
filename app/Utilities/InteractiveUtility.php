@@ -91,7 +91,7 @@ class InteractiveUtility
         return (bool) $checkBlock;
     }
 
-    public static function checkInteractiveStatus(int $markType, int $markId, ?int $userId = null): array
+    public static function getInteractiveStatus(int $markType, int $markId, ?int $userId = null): array
     {
         if (empty($userId)) {
             $status['likeStatus'] = false;

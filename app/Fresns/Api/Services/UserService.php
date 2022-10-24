@@ -49,7 +49,7 @@ class UserService
         }
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
-        $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
+        $interactiveStatus = InteractiveUtility::getInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
         $followMeStatus['followMeStatus'] = InteractiveUtility::checkUserFollowMe($user->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $followMeStatus);
 

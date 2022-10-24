@@ -31,7 +31,7 @@ class HashtagService
         $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_HASHTAG, $hashtag->id, $langTag);
 
         $interactiveConfig = InteractiveHelper::fresnsHashtagInteractive($langTag);
-        $interactiveStatus = InteractiveUtility::checkInteractiveStatus(InteractiveUtility::TYPE_HASHTAG, $hashtag->id, $authUserId);
+        $interactiveStatus = InteractiveUtility::getInteractiveStatus(InteractiveUtility::TYPE_HASHTAG, $hashtag->id, $authUserId);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus);
 
         $data = array_merge($hashtagInfo, $item);
