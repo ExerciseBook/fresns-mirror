@@ -58,7 +58,7 @@ class PluginHelper
      */
     public static function fresnsPluginUsageUrl(string $unikey, ?string $parameter = null)
     {
-        $parameterKey = StrHelper::slug($parameter);
+        $parameterKey = ! empty($parameter) ? StrHelper::slug($parameter) : 'usage';
         $cacheKey = 'fresns_plugin_'.$unikey.'_'.$parameterKey.'_url';
 
         $pluginUrl = Cache::remember($cacheKey, now()->addDays(7), function () use ($unikey, $parameter) {
