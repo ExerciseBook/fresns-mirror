@@ -136,7 +136,56 @@ class EditorController extends Controller
             $clid = $draftId;
         }
 
-        return view('editor.edit', compact('type', 'plid', 'clid', 'config', 'stickers', 'draft', 'group'));
+        $usageType = match ($type) {
+            'posts' => 7,
+            'comments' => 8,
+            'post' => 7,
+            'comment' => 8,
+        };
+
+        $tableName = match ($type) {
+            'posts' => 'post_logs',
+            'comments' => 'comment_logs',
+            'post' => 'post_logs',
+            'comment' => 'comment_logs',
+        };
+
+        $uploadInfo = [
+            'image' => [
+                'usageType' => $usageType,
+                'tableName' => $tableName,
+                'tableColumn' => 'id',
+                'tableId' => $draftId,
+                'tableKey' => null,
+                'type' => 'image',
+            ],
+            'video' => [
+                'usageType' => $usageType,
+                'tableName' => $tableName,
+                'tableColumn' => 'id',
+                'tableId' => $draftId,
+                'tableKey' => null,
+                'type' => 'video',
+            ],
+            'audio' => [
+                'usageType' => $usageType,
+                'tableName' => $tableName,
+                'tableColumn' => 'id',
+                'tableId' => $draftId,
+                'tableKey' => null,
+                'type' => 'audio',
+            ],
+            'document' => [
+                'usageType' => $usageType,
+                'tableName' => $tableName,
+                'tableColumn' => 'id',
+                'tableId' => $draftId,
+                'tableKey' => null,
+                'type' => 'document',
+            ],
+        ];
+
+        return view('editor.edit', compact('type', 'plid', 'clid', 'config', 'stickers', 'draft', 'group', 'uploadInfo'));
     }
 
     // request: direct publish
