@@ -95,7 +95,9 @@ class EditorController extends Controller
             return redirect()->to(fs_route(route('fresns.editor.edit', [$type, $response['data']['detail']['id']])));
         }
 
-        return view('editor.index', compact('type', 'config', 'drafts'));
+        $uploadInfo = ApiHelper::getUploadInfo();
+
+        return view('editor.index', compact('type', 'config', 'drafts', 'uploadInfo'));
     }
 
     // edit
@@ -150,40 +152,7 @@ class EditorController extends Controller
             'comment' => 'comment_logs',
         };
 
-        $uploadInfo = [
-            'image' => [
-                'usageType' => $usageType,
-                'tableName' => $tableName,
-                'tableColumn' => 'id',
-                'tableId' => $draftId,
-                'tableKey' => null,
-                'type' => 'image',
-            ],
-            'video' => [
-                'usageType' => $usageType,
-                'tableName' => $tableName,
-                'tableColumn' => 'id',
-                'tableId' => $draftId,
-                'tableKey' => null,
-                'type' => 'video',
-            ],
-            'audio' => [
-                'usageType' => $usageType,
-                'tableName' => $tableName,
-                'tableColumn' => 'id',
-                'tableId' => $draftId,
-                'tableKey' => null,
-                'type' => 'audio',
-            ],
-            'document' => [
-                'usageType' => $usageType,
-                'tableName' => $tableName,
-                'tableColumn' => 'id',
-                'tableId' => $draftId,
-                'tableKey' => null,
-                'type' => 'document',
-            ],
-        ];
+        $uploadInfo = ApiHelper::getUploadInfo($usageType, $tableName, 'id', $draftId, null);
 
         return view('editor.edit', compact('type', 'plid', 'clid', 'config', 'stickers', 'draft', 'group', 'uploadInfo'));
     }
