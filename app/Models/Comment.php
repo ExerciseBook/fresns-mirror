@@ -58,4 +58,14 @@ class Comment extends Model
     {
         return $this->belongsToMany(Hashtag::class, 'hashtag_usages', 'hashtag_id', 'usage_id')->wherePivot('usage_type', HashtagUsage::TYPE_COMMENT);
     }
+
+    public function fileUsages()
+    {
+        return $this->hasMany(FileUsage::class, 'table_id', 'id')->where('table_name', 'comments')->where('table_column', 'id');
+    }
+
+    public function extendUsages()
+    {
+        return $this->hasMany(ExtendUsage::class, 'usage_id', 'id')->where('usage_type', ExtendUsage::TYPE_COMMENT);
+    }
 }
