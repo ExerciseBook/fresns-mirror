@@ -22,6 +22,7 @@ use App\Models\UserBlock;
 use App\Models\UserFollow;
 use App\Models\UserLike;
 use App\Models\UserStat;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class InteractiveUtility
@@ -304,7 +305,9 @@ class InteractiveUtility
 
         $userBlock = UserBlock::where('user_id', $userId)->type($followType)->where('block_id', $followId)->first();
         if (! empty($userBlock)) {
-            InteractiveUtility::markUserBlock($userId, $followType, $followId);
+            $userBlock->delete();
+
+            InteractiveUtility::markStats($userId, 'block', $followType, $followId, 'decrement');
         }
     }
 
@@ -340,7 +343,9 @@ class InteractiveUtility
 
         $userFollow = UserFollow::where('user_id', $userId)->type($blockType)->where('follow_id', $blockId)->first();
         if (! empty($userFollow)) {
-            InteractiveUtility::markUserFollow($userId, $blockType, $blockId);
+            $userFollow->delete();
+
+            InteractiveUtility::markStats($userId, 'follow', $blockType, $blockId, 'decrement');
         }
 
         if ($blockType == UserBlock::TYPE_GROUP) {
@@ -940,5 +945,18 @@ class InteractiveUtility
         ];
 
         Notify::create($notifyData);
+    }
+
+    // get block user ids
+    public static function getBlockUserIds(int $authUserId)
+    {
+        $myBlockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
+        $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $authUserId)->pluck('user_id')->toArray();
+
+        $newUserIds = array_unique(Arr::prepend($myBlockUserIds, $blockMeUserIds));
+
+        $allUserIds = array_values($newUserIds);
+
+        return $allUserIds;
     }
 }
