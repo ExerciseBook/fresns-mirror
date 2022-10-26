@@ -56,7 +56,7 @@ class Comment extends Model
 
     public function hashtags()
     {
-        return $this->belongsToMany(Hashtag::class, 'hashtag_usages', 'hashtag_id', 'usage_id')->wherePivot('usage_type', HashtagUsage::TYPE_COMMENT);
+        return $this->belongsToMany(Hashtag::class, 'hashtag_usages', 'usage_id', 'hashtag_id')->wherePivot('usage_type', HashtagUsage::TYPE_COMMENT)->wherePivot('deleted_at', null);
     }
 
     public function fileUsages()
