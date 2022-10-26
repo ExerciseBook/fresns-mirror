@@ -18,14 +18,14 @@ class PostFollowService
     // get post list by follow all
     public function getPostListByFollowAll(int $authUserId, ?string $contentType = null, ?string $dateLimit = null)
     {
-        $followUserIds = InteractiveUtility::getFollowIds(InteractiveUtility::TYPE_USER, $authUserId);
-        $followGroupIds = InteractiveUtility::getFollowIds(InteractiveUtility::TYPE_GROUP, $authUserId);
-        $followHashtagIds = InteractiveUtility::getFollowIds(InteractiveUtility::TYPE_HASHTAG, $authUserId);
+        $followUserIds = InteractiveUtility::getFollowIdArr(InteractiveUtility::TYPE_USER, $authUserId);
+        $followGroupIds = InteractiveUtility::getFollowIdArr(InteractiveUtility::TYPE_GROUP, $authUserId);
+        $followHashtagIds = InteractiveUtility::getFollowIdArr(InteractiveUtility::TYPE_HASHTAG, $authUserId);
 
-        $blockPostIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_POST, $authUserId);
-        $blockUserIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_USER, $authUserId);
-        $blockGroupIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_GROUP, $authUserId);
-        $blockHashtagIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_HASHTAG, $authUserId);
+        $blockPostIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_POST, $authUserId);
+        $blockUserIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_USER, $authUserId);
+        $blockGroupIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_GROUP, $authUserId);
+        $blockHashtagIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_HASHTAG, $authUserId);
 
         // follow user post
         $userPostQuery = Post::with(['creator', 'group', 'hashtags'])->whereIn('user_id', $followUserIds)->where('is_anonymous', 0)->isEnable()->latest();
@@ -129,11 +129,11 @@ class PostFollowService
     // get post list by follow users
     public function getPostListByFollowUsers(int $authUserId, ?string $contentType = null, ?string $dateLimit = null)
     {
-        $followUserIds = InteractiveUtility::getFollowIds(InteractiveUtility::TYPE_USER, $authUserId);
+        $followUserIds = InteractiveUtility::getFollowIdArr(InteractiveUtility::TYPE_USER, $authUserId);
 
-        $blockPostIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_POST, $authUserId);
-        $blockGroupIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_GROUP, $authUserId);
-        $blockHashtagIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_HASHTAG, $authUserId);
+        $blockPostIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_POST, $authUserId);
+        $blockGroupIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_GROUP, $authUserId);
+        $blockHashtagIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_HASHTAG, $authUserId);
 
         $postQuery = Post::with(['creator', 'group', 'hashtags'])->whereIn('user_id', $followUserIds)->where('is_anonymous', 0)->isEnable()->latest();
 
@@ -181,11 +181,11 @@ class PostFollowService
     // get post list by follow groups
     public function getPostListByFollowGroups(int $authUserId, ?string $contentType = null, ?string $dateLimit = null)
     {
-        $followGroupIds = InteractiveUtility::getFollowIds(InteractiveUtility::TYPE_GROUP, $authUserId);
+        $followGroupIds = InteractiveUtility::getFollowIdArr(InteractiveUtility::TYPE_GROUP, $authUserId);
 
-        $blockPostIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_POST, $authUserId);
-        $blockUserIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_USER, $authUserId);
-        $blockHashtagIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_HASHTAG, $authUserId);
+        $blockPostIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_POST, $authUserId);
+        $blockUserIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_USER, $authUserId);
+        $blockHashtagIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_HASHTAG, $authUserId);
 
         $postQuery = Post::with(['creator', 'group', 'hashtags'])->whereIn('group_id', $followGroupIds)->isEnable()->latest();
 
@@ -233,11 +233,11 @@ class PostFollowService
     // get post list by follow hashtags
     public function getPostListByFollowHashtags(int $authUserId, ?string $contentType = null, ?string $dateLimit = null)
     {
-        $followHashtagIds = InteractiveUtility::getFollowIds(InteractiveUtility::TYPE_HASHTAG, $authUserId);
+        $followHashtagIds = InteractiveUtility::getFollowIdArr(InteractiveUtility::TYPE_HASHTAG, $authUserId);
 
-        $blockPostIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_POST, $authUserId);
-        $blockUserIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_USER, $authUserId);
-        $blockGroupIds = InteractiveUtility::getBlockIds(InteractiveUtility::TYPE_GROUP, $authUserId);
+        $blockPostIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_POST, $authUserId);
+        $blockUserIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_USER, $authUserId);
+        $blockGroupIds = InteractiveUtility::getBlockIdArr(InteractiveUtility::TYPE_GROUP, $authUserId);
 
         $postQuery = Post::with(['creator', 'group', 'hashtags'])->isEnable()->latest();
 

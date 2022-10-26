@@ -50,8 +50,8 @@ class UserService
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
         $interactiveStatus = InteractiveUtility::getInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
-        $followMeStatus['followMeStatus'] = InteractiveUtility::checkUserFollowMe($user->id, $authUserId);
-        $blockMeStatus['blockMeStatus'] = InteractiveUtility::checkUserFollowMe($authUserId, $user->id);
+        $followMeStatus['followMeStatus'] = InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_USER, $authUserId, $user->id);
+        $blockMeStatus['blockMeStatus'] = InteractiveUtility::checkUserBlock(InteractiveUtility::TYPE_USER, $authUserId, $user->id);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $followMeStatus, $blockMeStatus);
 
         $item['dialog'] = PermissionUtility::checkUserDialogPerm($user->id, $authUserId, $langTag);

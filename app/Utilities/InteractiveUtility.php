@@ -22,7 +22,6 @@ use App\Models\UserBlock;
 use App\Models\UserFollow;
 use App\Models\UserLike;
 use App\Models\UserStat;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 
@@ -65,9 +64,9 @@ class InteractiveUtility
         return (bool) $checkDislike;
     }
 
-    public static function checkUserFollow(int $followType, int $followId, ?int $userId = null): bool
+    public static function checkUserFollow(int $followType, ?int $followId = null, ?int $userId = null): bool
     {
-        if (empty($userId)) {
+        if (empty($followId) || empty($userId)) {
             return false;
         }
 
@@ -79,9 +78,9 @@ class InteractiveUtility
         return (bool) $checkFollow;
     }
 
-    public static function checkUserBlock(int $blockType, int $blockId, ?int $userId = null): bool
+    public static function checkUserBlock(int $blockType, ?int $blockId = null, ?int $userId = null): bool
     {
-        if (empty($userId)) {
+        if (empty($blockId) || empty($userId)) {
             return false;
         }
 
@@ -114,25 +113,6 @@ class InteractiveUtility
         $status['blockNote'] = UserBlock::where('user_id', $userId)->type($markType)->where('block_id', $markId)->value('user_note');
 
         return $status;
-    }
-
-    // check follow me
-    public static function checkUserFollowMe(int $userId, ?int $myUserId = null): bool
-    {
-        if (empty($userId)) {
-            return false;
-        }
-
-        if ($userId == $myUserId) {
-            return false;
-        }
-
-        $checkFollowMe = UserFollow::where('user_id', $userId)
-            ->type(UserFollow::TYPE_USER)
-            ->where('follow_id', $myUserId)
-            ->first();
-
-        return (bool) $checkFollowMe;
     }
 
     // mark interactive
@@ -956,26 +936,26 @@ class InteractiveUtility
         Notify::create($notifyData);
     }
 
-    // get follow ids
-    public static function getFollowIds(int $type, int $authUserId)
+    // get follow id array
+    public static function getFollowIdArr(int $type, int $userId)
     {
-        $cacheKey = "fresns_user_follow_{$type}_{$authUserId}";
+        $cacheKey = "fresns_user_follow_{$type}_{$userId}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
         if ($type == UserFollow::TYPE_USER) {
-            $followIds = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId) {
-                $followUserIds = UserFollow::type(UserFollow::TYPE_USER)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
-                $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $authUserId)->pluck('user_id')->toArray();
+            $followIds = Cache::remember($cacheKey, $cacheTime, function () use ($userId) {
+                $followUserIds = UserFollow::type(UserFollow::TYPE_USER)->where('user_id', $userId)->pluck('follow_id')->toArray();
+                $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $userId)->pluck('user_id')->toArray();
 
                 $filterIds = array_values(array_diff($followUserIds, $blockMeUserIds));
 
-                $allUserIds = Arr::prepend($filterIds, $authUserId);
+                $allUserIds = array_merge($filterIds, $userId);
 
                 return array_values($allUserIds);
             });
         } else {
-            $followIds = Cache::remember($cacheKey, $cacheTime, function () use ($type, $authUserId) {
-                $followIds = UserFollow::type($type)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
+            $followIds = Cache::remember($cacheKey, $cacheTime, function () use ($type, $userId) {
+                $followIds = UserFollow::type($type)->where('user_id', $userId)->pluck('follow_id')->toArray();
 
                 return array_values($followIds);
             });
@@ -988,34 +968,28 @@ class InteractiveUtility
         return $followIds;
     }
 
-    // get block ids
-    public static function getBlockIds(int $type, int $authUserId)
+    // get block id array
+    public static function getBlockIdArr(int $type, int $userId)
     {
-        $cacheKey = "fresns_user_block_{$type}_{$authUserId}";
+        $cacheKey = "fresns_user_block_{$type}_{$userId}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
         if ($type == UserBlock::TYPE_USER) {
-            $blockIds = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId) {
-                $myBlockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
-                $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $authUserId)->pluck('user_id')->toArray();
+            $blockIds = Cache::remember($cacheKey, $cacheTime, function () use ($userId) {
+                $myBlockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $userId)->pluck('block_id')->toArray();
+                $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $userId)->pluck('user_id')->toArray();
 
-                if ($myBlockUserIds && $blockMeUserIds) {
-                    $allUserIds = array_unique(Arr::prepend($myBlockUserIds, $blockMeUserIds));
-
-                    return array_values($allUserIds);
-                }
-
-                $allUserIds = Arr::prepend($myBlockUserIds, $blockMeUserIds);
+                $allUserIds = array_unique(array_merge($myBlockUserIds, $blockMeUserIds));
 
                 return array_values($allUserIds);
             });
         } elseif ($type == UserBlock::TYPE_GROUP) {
-            $blockIds = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId) {
-                return PermissionUtility::getPostFilterByGroupIds($authUserId);
+            $blockIds = Cache::remember($cacheKey, $cacheTime, function () use ($userId) {
+                return PermissionUtility::getPostFilterByGroupIds($userId);
             });
         } else {
-            $blockIds = Cache::remember($cacheKey, $cacheTime, function () use ($type, $authUserId) {
-                $blockIds = UserBlock::type($type)->where('user_id', $authUserId)->pluck('block_id')->toArray();
+            $blockIds = Cache::remember($cacheKey, $cacheTime, function () use ($type, $userId) {
+                $blockIds = UserBlock::type($type)->where('user_id', $userId)->pluck('block_id')->toArray();
 
                 return array_values($blockIds);
             });
@@ -1028,19 +1002,19 @@ class InteractiveUtility
         return $blockIds;
     }
 
-    // get private group ids
-    public static function getPrivateGroupIds()
+    // get private group id array
+    public static function getPrivateGroupIdArr()
     {
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $privateGroupIds = Cache::remember('fresns_api_private_groups', $cacheTime, function () {
+        $groupIdArr = Cache::remember('fresns_api_private_groups', $cacheTime, function () {
             return Group::where('type_mode', Group::MODE_PRIVATE)->pluck('id')->toArray();
         });
 
-        if (is_null($privateGroupIds) || empty($privateGroupIds)) {
+        if (is_null($groupIdArr) || empty($groupIdArr)) {
             Cache::forget('fresns_api_private_groups');
         }
 
-        return $privateGroupIds;
+        return $groupIdArr;
     }
 }
