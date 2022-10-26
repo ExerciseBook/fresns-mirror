@@ -146,6 +146,7 @@ class CacheHelper
      *
      * fresns_plugin_{$unikey}_url
      * fresns_plugin_{$unikey}_{$parameterKey}_url
+     * fresns_user_follow_{$type}_{$authUserId}
      * fresns_user_block_{$type}_{$authUserId}
      * fresns_api_guest_expire_info
      * fresns_api_guest_groups

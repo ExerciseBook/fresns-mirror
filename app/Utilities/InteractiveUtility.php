@@ -304,16 +304,16 @@ class InteractiveUtility
             }
         }
 
-        if ($followType == UserFollow::TYPE_GROUP) {
-            CacheHelper::forgetFresnsApiInfo("fresns_user_block_{$followType}_{$userId}");
-        }
-
         $userBlock = UserBlock::where('user_id', $userId)->type($followType)->where('block_id', $followId)->first();
         if (! empty($userBlock)) {
             $userBlock->delete();
 
             InteractiveUtility::markStats($userId, 'block', $followType, $followId, 'decrement');
         }
+
+        CacheHelper::forgetFresnsApiInfo("fresns_user_follow_{$followType}_{$userId}");
+        CacheHelper::forgetFresnsApiInfo("fresns_user_block_{$followType}_{$userId}");
+        CacheHelper::forgetFresnsApiInfo("fresns_user_block_{$followType}_{$followId}");
     }
 
     public static function markUserBlock(int $userId, int $blockType, int $blockId)
@@ -357,6 +357,7 @@ class InteractiveUtility
             CacheHelper::forgetFresnsApiInfo("fresns_api_user_{$userId}_groups");
         }
 
+        CacheHelper::forgetFresnsApiInfo("fresns_user_follow_{$blockType}_{$userId}");
         CacheHelper::forgetFresnsApiInfo("fresns_user_block_{$blockType}_{$userId}");
         CacheHelper::forgetFresnsApiInfo("fresns_user_block_{$blockType}_{$blockId}");
     }
@@ -953,6 +954,38 @@ class InteractiveUtility
         ];
 
         Notify::create($notifyData);
+    }
+
+    // get follow ids
+    public static function getFollowIds(int $type, int $authUserId)
+    {
+        $cacheKey = "fresns_user_follow_{$type}_{$authUserId}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        if ($type == UserFollow::TYPE_USER) {
+            $followIds = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId) {
+                $followUserIds = UserFollow::type(UserFollow::TYPE_USER)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
+                $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $authUserId)->pluck('user_id')->toArray();
+
+                $filterIds = array_values(array_diff($followUserIds, $blockMeUserIds));
+
+                $allUserIds = Arr::prepend($filterIds, $authUserId);
+
+                return array_values($allUserIds);
+            });
+        } else {
+            $followIds = Cache::remember($cacheKey, $cacheTime, function () use ($type, $authUserId) {
+                $followIds = UserFollow::type($type)->where('user_id', $authUserId)->pluck('follow_id')->toArray();
+
+                return array_values($followIds);
+            });
+        }
+
+        if (is_null($followIds) || empty($followIds)) {
+            Cache::forget($cacheKey);
+        }
+
+        return $followIds;
     }
 
     // get block ids
