@@ -973,12 +973,8 @@ class InteractiveUtility
     }
 
     // get block id array
-    public static function getBlockIdArr(int $type, ?int $userId = null)
+    public static function getBlockIdArr(int $type, int $userId)
     {
-        if ($type == UserBlock::TYPE_GROUP && empty($userId)) {
-            return InteractiveUtility::getPrivateGroupIdArr();
-        }
-
         $cacheKey = "fresns_user_block_{$type}_{$userId}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
