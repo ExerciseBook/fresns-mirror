@@ -999,7 +999,13 @@ class InteractiveUtility
                 $myBlockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
                 $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $authUserId)->pluck('user_id')->toArray();
 
-                $allUserIds = array_unique(Arr::prepend($myBlockUserIds, $blockMeUserIds));
+                if ($myBlockUserIds && $blockMeUserIds) {
+                    $allUserIds = array_unique(Arr::prepend($myBlockUserIds, $blockMeUserIds));
+
+                    return array_values($allUserIds);
+                }
+
+                $allUserIds = Arr::prepend($myBlockUserIds, $blockMeUserIds);
 
                 return array_values($allUserIds);
             });
