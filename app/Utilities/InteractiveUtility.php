@@ -24,6 +24,7 @@ use App\Models\UserLike;
 use App\Models\UserStat;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class InteractiveUtility
 {
@@ -303,6 +304,10 @@ class InteractiveUtility
             }
         }
 
+        if ($followType == UserFollow::TYPE_GROUP) {
+            CacheHelper::forgetFresnsApiInfo("fresns_user_block_{$followType}_{$userId}");
+        }
+
         $userBlock = UserBlock::where('user_id', $userId)->type($followType)->where('block_id', $followId)->first();
         if (! empty($userBlock)) {
             $userBlock->delete();
@@ -351,6 +356,9 @@ class InteractiveUtility
         if ($blockType == UserBlock::TYPE_GROUP) {
             CacheHelper::forgetFresnsApiInfo("fresns_api_user_{$userId}_groups");
         }
+
+        CacheHelper::forgetFresnsApiInfo("fresns_user_block_{$blockType}_{$userId}");
+        CacheHelper::forgetFresnsApiInfo("fresns_user_block_{$blockType}_{$blockId}");
     }
 
     // mark content sticky
@@ -947,16 +955,53 @@ class InteractiveUtility
         Notify::create($notifyData);
     }
 
-    // get block user ids
-    public static function getBlockUserIds(int $authUserId)
+    // get block ids
+    public static function getBlockIds(int $type, int $authUserId)
     {
-        $myBlockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
-        $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $authUserId)->pluck('user_id')->toArray();
+        $cacheKey = "fresns_user_block_{$type}_{$authUserId}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $newUserIds = array_unique(Arr::prepend($myBlockUserIds, $blockMeUserIds));
+        if ($type == UserBlock::TYPE_USER) {
+            $blockIds = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId) {
+                $myBlockUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('user_id', $authUserId)->pluck('block_id')->toArray();
+                $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $authUserId)->pluck('user_id')->toArray();
 
-        $allUserIds = array_values($newUserIds);
+                $allUserIds = array_unique(Arr::prepend($myBlockUserIds, $blockMeUserIds));
 
-        return $allUserIds;
+                return array_values($allUserIds);
+            });
+        } elseif ($type == UserBlock::TYPE_GROUP) {
+            $blockIds = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId) {
+                return PermissionUtility::getPostFilterByGroupIds($authUserId);
+            });
+        } else {
+            $blockIds = Cache::remember($cacheKey, $cacheTime, function () use ($type, $authUserId) {
+                $blockIds = UserBlock::type($type)->where('user_id', $authUserId)->pluck('block_id')->toArray();
+
+                return array_values($blockIds);
+            });
+        }
+
+        if (is_null($blockIds) || empty($blockIds)) {
+            Cache::forget($cacheKey);
+        }
+
+        return $blockIds;
+    }
+
+    // get private group ids
+    public static function getPrivateGroupIds()
+    {
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $privateGroupIds = Cache::remember('fresns_api_private_groups', $cacheTime, function () {
+            return Group::where('type_mode', Group::MODE_PRIVATE)->pluck('id')->toArray();
+        });
+
+        if (is_null($privateGroupIds) || empty($privateGroupIds)) {
+            Cache::forget('fresns_api_private_groups');
+        }
+
+        return $privateGroupIds;
     }
 }
