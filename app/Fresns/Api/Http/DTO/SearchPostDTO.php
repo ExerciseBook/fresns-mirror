@@ -27,7 +27,7 @@ class SearchPostDTO extends DTO
             'hid' => ['string', 'nullable'], // hashtag_usages->hashtag_id
             'digestState' => ['integer', 'nullable', 'in:1,2,3'], // posts->digest_state
             'stickyState' => ['integer', 'nullable', 'in:1,2,3'], // posts->sticky_state
-            'contentType' => ['string', 'nullable'], // posts->types
+            'contentType' => ['string', 'nullable'],
             'createDateGt' => ['date_format:Y-m-d', 'nullable', 'before:createDateLt'], // posts->created_at
             'createDateLt' => ['date_format:Y-m-d', 'nullable', 'after:createDateGt'],
             'likeCountGt' => ['integer', 'nullable', 'lt:likeCountLt'], // posts->like_count
