@@ -22,6 +22,7 @@ use App\Models\UserBlock;
 use App\Models\UserFollow;
 use App\Models\UserLike;
 use App\Models\UserStat;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 
@@ -947,9 +948,12 @@ class InteractiveUtility
                 $followUserIds = UserFollow::type(UserFollow::TYPE_USER)->where('user_id', $userId)->pluck('follow_id')->toArray();
                 $blockMeUserIds = UserBlock::type(UserBlock::TYPE_USER)->where('block_id', $userId)->pluck('user_id')->toArray();
 
-                $filterIds = array_values(array_diff($followUserIds, $blockMeUserIds));
+                $filterIds = array_diff($followUserIds, $blockMeUserIds);
 
-                $allUserIds = array_merge($filterIds, $userId);
+                $allUserIds = $filterIds;
+                if ($filterIds) {
+                    $allUserIds = Arr::prepend($filterIds, $userId);
+                }
 
                 return array_values($allUserIds);
             });
