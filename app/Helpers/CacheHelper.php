@@ -16,13 +16,17 @@ class CacheHelper
     public static function fresnsCacheTimeByFileType(?int $fileType = null)
     {
         if (empty($fileType)) {
-            return now()->addHours();
+            $digital = rand(6, 72);
+
+            return now()->addHours($digital);
         }
 
         $fileConfig = FileHelper::fresnsFileStorageConfigByType($fileType);
 
         if (! $fileConfig['antiLinkStatus']) {
-            return now()->addHours();
+            $digital = rand(72, 168);
+
+            return now()->addHours($digital);
         }
 
         $cacheTime = now()->addMinutes($fileConfig['antiLinkExpire'] - 1);
