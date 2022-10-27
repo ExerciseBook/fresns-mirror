@@ -10,10 +10,9 @@ namespace App\Fresns\Api\Services;
 
 use App\Helpers\FileHelper;
 use App\Models\Post;
-use App\Models\UserFollow;
 use App\Utilities\InteractiveUtility;
 
-class PostFollowService
+class FollowService
 {
     // get post list by follow all
     public function getPostListByFollowAll(int $authUserId, ?string $contentType = null, ?string $dateLimit = null)
@@ -280,48 +279,5 @@ class PostFollowService
         $posts = $postQuery->paginate(\request()->get('pageSize', 15));
 
         return $posts;
-    }
-
-    // get follow type
-    public function getFollowType(int $creatorId, ?int $groupId = null, ?array $hashtags = null, ?int $authUserId = null): string
-    {
-        if (empty($authUserId)) {
-            return null;
-        }
-
-        $checkFollowUser = UserFollow::where('user_id', $authUserId)
-            ->type(UserFollow::TYPE_USER)
-            ->where('follow_id', $creatorId)
-            ->first();
-
-        if ($checkFollowUser) {
-            return 'user';
-        }
-
-        if (! empty($groupId)) {
-            $checkFollowGroup = UserFollow::where('user_id', $authUserId)
-                ->type(UserFollow::TYPE_GROUP)
-                ->where('follow_id', $groupId)
-                ->first();
-
-            if ($checkFollowGroup) {
-                return 'group';
-            }
-        }
-
-        if (! empty($hashtags)) {
-            $hashtagIds = array_column($hashtags, 'id');
-
-            $checkFollowHashtag = UserFollow::where('user_id', $authUserId)
-                ->type(UserFollow::TYPE_HASHTAG)
-                ->whereIn('follow_id', $hashtagIds)
-                ->first();
-
-            if ($checkFollowHashtag) {
-                return 'hashtag';
-            }
-        }
-
-        return 'digest';
     }
 }

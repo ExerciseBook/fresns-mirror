@@ -1021,4 +1021,44 @@ class InteractiveUtility
 
         return $groupIdArr;
     }
+
+    // get follow type
+    public static function getFollowType(int $creatorId, ?int $authUserId = null, ?int $groupId = null, ?array $hashtags = null)
+    {
+        if (empty($authUserId)) {
+            return null;
+        }
+
+        $checkFollowUser = InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_USER, $creatorId, $authUserId);
+        if ($checkFollowUser) {
+            return 'user';
+        }
+
+        if (empty($groupId) && empty($hashtags)) {
+            return 'digest';
+        }
+
+        if ($groupId) {
+            $checkFollowGroup = InteractiveUtility::checkUserFollow(InteractiveUtility::TYPE_USER, $groupId, $authUserId);
+
+            if ($checkFollowGroup) {
+                return 'group';
+            }
+        }
+
+        if ($hashtags) {
+            $hashtagIds = array_column($hashtags, 'id');
+
+            $checkFollowHashtag = UserFollow::where('user_id', $authUserId)
+                ->type(UserFollow::TYPE_HASHTAG)
+                ->whereIn('follow_id', $hashtagIds)
+                ->first();
+
+            if ($checkFollowHashtag) {
+                return 'hashtag';
+            }
+        }
+
+        return null;
+    }
 }

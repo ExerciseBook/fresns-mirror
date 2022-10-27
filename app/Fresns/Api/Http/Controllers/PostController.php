@@ -15,8 +15,8 @@ use App\Fresns\Api\Http\DTO\PostDetailDTO;
 use App\Fresns\Api\Http\DTO\PostFollowDTO;
 use App\Fresns\Api\Http\DTO\PostListDTO;
 use App\Fresns\Api\Http\DTO\PostNearbyDTO;
+use App\Fresns\Api\Services\FollowService;
 use App\Fresns\Api\Services\InteractiveService;
-use App\Fresns\Api\Services\PostFollowService;
 use App\Fresns\Api\Services\PostService;
 use App\Fresns\Api\Services\UserService;
 use App\Helpers\ConfigHelper;
@@ -477,27 +477,27 @@ class PostController extends Controller
         $authUser = $this->user();
         $userContentViewPerm = $this->userContentViewPerm();
 
-        $postFollowService = new PostFollowService();
+        $followService = new FollowService();
 
         switch ($dtoRequest->type) {
             // all
             case 'all':
-                $posts = $postFollowService->getPostListByFollowAll($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $posts = $followService->getPostListByFollowAll($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
             break;
 
             // user
             case 'user':
-                $posts = $postFollowService->getPostListByFollowUsers($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $posts = $followService->getPostListByFollowUsers($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
             break;
 
             // group
             case 'group':
-                $posts = $postFollowService->getPostListByFollowGroups($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $posts = $followService->getPostListByFollowGroups($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
             break;
 
             // hashtag
             case 'hashtag':
-                $posts = $postFollowService->getPostListByFollowHashtags($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $posts = $followService->getPostListByFollowHashtags($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
             break;
         }
 
@@ -505,7 +505,7 @@ class PostController extends Controller
         $service = new PostService();
         foreach ($posts as $post) {
             $postListItem = $service->postData($post, 'list', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
-            $postListItem['followType'] = $postFollowService->getFollowType($post->user_id, $post->group_id, $post->hashtags?->toArray(), $authUser->id);
+            $postListItem['followType'] = InteractiveUtility::getFollowType($post->user_id, $authUser?->id, $post?->group_id, $post?->hashtags?->toArray());
 
             $postList[] = $postListItem;
         }
