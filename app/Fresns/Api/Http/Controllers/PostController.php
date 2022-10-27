@@ -9,12 +9,12 @@
 namespace App\Fresns\Api\Http\Controllers;
 
 use App\Exceptions\ApiException;
+use App\Fresns\Api\Http\DTO\FollowDTO;
 use App\Fresns\Api\Http\DTO\InteractiveDTO;
 use App\Fresns\Api\Http\DTO\PaginationDTO;
 use App\Fresns\Api\Http\DTO\PostDetailDTO;
-use App\Fresns\Api\Http\DTO\PostFollowDTO;
 use App\Fresns\Api\Http\DTO\PostListDTO;
-use App\Fresns\Api\Http\DTO\PostNearbyDTO;
+use App\Fresns\Api\Http\DTO\NearbyDTO;
 use App\Fresns\Api\Services\FollowService;
 use App\Fresns\Api\Services\InteractiveService;
 use App\Fresns\Api\Services\PostService;
@@ -41,7 +41,7 @@ class PostController extends Controller
         $dtoRequest = new PostListDTO($request->all());
 
         // Plugin provides data
-        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_list_service');
+        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('content_list_service');
 
         if ($dtoRequest->contentType && ! $dataPluginUnikey) {
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByAll');
@@ -451,10 +451,10 @@ class PostController extends Controller
     {
         $requestData = $request->all();
         $requestData['type'] = $type;
-        $dtoRequest = new PostFollowDTO($requestData);
+        $dtoRequest = new FollowDTO($requestData);
 
         // Plugin provides data
-        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_follow_service');
+        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('content_follow_service');
 
         if ($dtoRequest->contentType && ! $dataPluginUnikey) {
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByFollow');
@@ -504,10 +504,10 @@ class PostController extends Controller
         $postList = [];
         $service = new PostService();
         foreach ($posts as $post) {
-            $postListItem = $service->postData($post, 'list', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
-            $postListItem['followType'] = InteractiveUtility::getFollowType($post->user_id, $authUser?->id, $post?->group_id, $post?->hashtags?->toArray());
+            $listItem = $service->postData($post, 'list', $langTag, $timezone, $authUser->id, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat);
+            $listItem['followType'] = InteractiveUtility::getFollowType($post->user_id, $authUser?->id, $post?->group_id, $post?->hashtags?->toArray());
 
-            $postList[] = $postListItem;
+            $postList[] = $listItem;
         }
 
         return $this->fresnsPaginate($postList, $posts->total(), $posts->perPage());
@@ -516,10 +516,10 @@ class PostController extends Controller
     // nearby
     public function nearby(Request $request)
     {
-        $dtoRequest = new PostNearbyDTO($request->all());
+        $dtoRequest = new NearbyDTO($request->all());
 
         // Plugin provides data
-        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_nearby_service');
+        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('content_nearby_service');
 
         if ($dtoRequest->contentType && ! $dataPluginUnikey) {
             $dataPluginUnikey = ExtendUtility::getDataExtend($dtoRequest->contentType, 'postByNearby');

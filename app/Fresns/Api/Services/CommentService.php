@@ -136,6 +136,7 @@ class CommentService
         $interactiveCreatorLike['postCreatorLikeStatus'] = InteractiveUtility::checkUserLike(InteractiveUtility::TYPE_COMMENT, $comment->id, $post->user_id);
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus, $interactiveCreatorLike);
 
+        $item['followType'] = null;
         $item['post'] = self::getPost($post, $langTag, $timezone);
 
         $detail = array_merge($commentInfo, $contentHandle, $item);
