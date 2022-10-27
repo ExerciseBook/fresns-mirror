@@ -11,11 +11,13 @@ namespace App\Utilities;
 class ArrUtility
 {
     // get key value
-    public static function get(?array $arrays = [], string $key, array $values)
+    public static function get(?array $arrays = [], string $key, string|array $values)
     {
         if (empty($arrays)) {
             return [];
         }
+
+        $values = (array) $values;
 
         [$findData, $otherData] = collect($arrays)->partition(function ($item) use ($key, $values) {
             return in_array($item[$key], $values);
@@ -41,11 +43,13 @@ class ArrUtility
     }
 
     // remove key value
-    public static function forget(?array &$arrays = [], string $key, array $values)
+    public static function forget(?array &$arrays = [], string $key, string|array $values)
     {
         if (empty($arrays)) {
             return false;
         }
+
+        $values = (array) $values;
 
         [$findData, $otherData] = collect($arrays)->partition(function ($item) use ($key, $values) {
             return in_array($item[$key], $values);
@@ -60,11 +64,13 @@ class ArrUtility
     }
 
     // remove key value
-    public static function pull(?array &$arrays = [], string $key, array $values)
+    public static function pull(?array &$arrays = [], string $key, string|array $values)
     {
         if (empty($arrays)) {
             return [];
         }
+
+        $values = (array) $values;
 
         [$findData, $otherData] = collect($arrays)->partition(function ($item) use ($key, $values) {
             return in_array($item[$key], $values);
