@@ -96,7 +96,7 @@ class Content
                     'create_type' => $dtoWordBody->createType,
                     'is_plugin_editor' => $isPluginEditor,
                     'editor_unikey' => $editorUnikey,
-                    'group_id' => $groupId,
+                    'group_id' => $groupId ?? 0,
                     'title' => $title,
                     'content' => $content,
                     'is_markdown' => $isMarkdown,
@@ -552,7 +552,7 @@ class Content
 
                 $post = Post::create([
                     'user_id' => $authUser->id,
-                    'group_id' => $group?->id ?? null,
+                    'group_id' => $group?->id ?? 0,
                     'title' => $title,
                     'content' => $content,
                     'is_markdown' => $dtoWordBody->isMarkdown ?? 0,
