@@ -23,7 +23,7 @@ class ArrUtility
             return in_array($item[$key], $values);
         });
 
-        return $findData->toArray();
+        return $findData->values()->toArray();
         // $arrays
         // [
         //     {
@@ -55,7 +55,7 @@ class ArrUtility
             return in_array($item[$key], $values);
         });
 
-        $arrays = $otherData->toArray();
+        $arrays = $otherData->values()->toArray();
 
         return true;
 
@@ -76,9 +76,9 @@ class ArrUtility
             return in_array($item[$key], $values);
         });
 
-        $arrays = $otherData->toArray();
+        $arrays = $otherData->values()->toArray();
 
-        return $findData->toArray();
+        return $findData->values()->toArray();
 
         // $key = 'code'
         // $values = ['decorate', 'verifiedIcon']
