@@ -63,7 +63,7 @@ class ArrUtility
     public static function pull(?array &$arrays = [], string $key, array $values)
     {
         if (empty($arrays)) {
-            return false;
+            return [];
         }
 
         [$findData, $otherData] = collect($arrays)->partition(function ($item) use ($key, $values) {
