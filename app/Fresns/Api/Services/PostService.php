@@ -80,11 +80,9 @@ class PostService
 
         $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
         if (! $post->is_anonymous) {
-            $creatorProfile = $post->creator->getUserProfile($langTag, $timezone);
-            $creatorMainRole = $post->creator->getUserMainRole($langTag, $timezone);
-            $creatorOperations['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $post->creator->id, $langTag);
+            $userService = new UserService;
 
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
+            $item['creator'] = $userService->userData($post->creator, $langTag, $timezone, $authUserId);
         }
 
         $item['topComment'] = null;
@@ -219,10 +217,9 @@ class PostService
 
         $info['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
         if (! $log->is_anonymous) {
-            $creatorProfile = $log->creator->getUserProfile($langTag, $timezone);
-            $creatorMainRole = $log->creator->getUserMainRole($langTag, $timezone);
-            $creatorOperations['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $log->creator->id, $langTag);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
+            $userService = new UserService;
+
+            $item['creator'] = $userService->userData($log->creator, $langTag, $timezone);
         }
 
         if ($group) {

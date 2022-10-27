@@ -18,13 +18,12 @@ class AccountService
     public function accountDetail(Account $account, string $langTag, string $timezone)
     {
         $userArr = $account->users;
+
+        $userService = new UserService;
+
         $userList = [];
         foreach ($userArr as $user) {
-            $userProfile = $user->getUserProfile($langTag, $timezone);
-            $userMainRole = $user->getUserMainRole($langTag, $timezone);
-            $userStats['stats'] = $user->getUserStats($langTag);
-
-            $userList[] = array_merge($userProfile, $userMainRole, $userStats);
+            $userList[] = $userService->userData($user, $langTag, $timezone);
         }
 
         $accountInfo = $account->getAccountInfo($langTag, $timezone);

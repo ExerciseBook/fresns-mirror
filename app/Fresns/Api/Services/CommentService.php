@@ -71,20 +71,23 @@ class CommentService
             $item['hashtags'] = $hashtagItem;
         }
 
+        $userService = new UserService;
+
         $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
         $item['creator']['isPostCreator'] = false;
         if (! $comment->is_anonymous) {
-            $creatorProfile = $comment->creator->getUserProfile($langTag, $timezone);
-            $creatorMainRole = $comment->creator->getUserMainRole($langTag, $timezone);
-            $creatorItem['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $comment->creator->id, $langTag);
-            $creatorItem['isPostCreator'] = $comment->user_id == $post->user_id ? true : false;
+            $item['creator'] = $userService->userData($comment->creator, $langTag, $timezone, $authUserId);
 
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorItem);
+            $item['creator']['isPostCreator'] = $comment->user_id == $post->user_id ? true : false;
         }
 
         $item['replyToUser'] = null;
-        if ($comment->top_parent_id != $comment->parent_id) {
-            $item['replyToUser'] = self::getReplyToUser($comment?->parentComment, $langTag, $timezone);
+        if ($comment->top_parent_id != $comment->parent_id && ! $comment?->parentComment) {
+            if ($comment->parentComment->is_anonymous) {
+                $item['replyToUser'] = InteractiveHelper::fresnsUserAnonymousProfile();
+            }
+
+            $item['replyToUser'] = $userService->userData($comment->parentComment->creator, $langTag, $timezone, $authUserId);
         }
 
         $item['commentPreviews'] = null;
@@ -169,20 +172,6 @@ class CommentService
         return $commentInfo;
     }
 
-    // get reply to user
-    public static function getReplyToUser(?Comment $comment, string $langTag, string $timezone)
-    {
-        if (! $comment) {
-            return null;
-        }
-
-        if (! $comment->is_anonymous) {
-            return $comment->creator->getUserProfile($langTag, $timezone);
-        }
-
-        return InteractiveHelper::fresnsUserAnonymousProfile();
-    }
-
     // get comment previews
     public static function getCommentPreviews(int $commentId, int $limit, string $langTag, string $timezone)
     {
@@ -216,7 +205,9 @@ class CommentService
 
         $item['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
         if (! $post->is_anonymous) {
-            $item['creator'] = $post->creator->getUserProfile($langTag, $timezone);
+            $userService = new UserService;
+
+            $item['creator'] = $userService->userData($post->creator, $langTag, $timezone);
         }
 
         $data = array_merge($postInfo, $contentHandle, $item);
@@ -253,10 +244,9 @@ class CommentService
 
         $info['creator'] = InteractiveHelper::fresnsUserAnonymousProfile();
         if (! $log->is_anonymous) {
-            $creatorProfile = $log->creator->getUserProfile($langTag, $timezone);
-            $creatorMainRole = $log->creator->getUserMainRole($langTag, $timezone);
-            $creatorOperations['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $log->creator->id, $langTag);
-            $item['creator'] = array_merge($creatorProfile, $creatorMainRole, $creatorOperations);
+            $userService = new UserService;
+
+            $item['creator'] = $userService->userData($log->creator, $langTag, $timezone);
         }
 
         $info['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST_LOG, $log->id, $langTag);
