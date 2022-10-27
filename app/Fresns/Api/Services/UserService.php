@@ -14,11 +14,11 @@ use App\Models\ArchiveUsage;
 use App\Models\ExtendUsage;
 use App\Models\OperationUsage;
 use App\Models\User;
+use App\Utilities\ArrUtility;
 use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\PermissionUtility;
-use Illuminate\Support\Arr;
 
 class UserService
 {
@@ -41,8 +41,8 @@ class UserService
         $item['roles'] = $user->getUserRoles($langTag, $timezone);
 
         if ($item['operations']['diversifyImages']) {
-            $decorate = Arr::pull($item['operations']['diversifyImages'], 'code', 'decorate');
-            $verifiedIcon = Arr::pull($item['operations']['diversifyImages'], 'code', 'verified');
+            $decorate = ArrUtility::pull($item['operations']['diversifyImages'], 'code', 'decorate');
+            $verifiedIcon = ArrUtility::pull($item['operations']['diversifyImages'], 'code', 'verified');
 
             $userProfile['decorate'] = $decorate['imageUrl'] ?? null;
             $userProfile['verifiedIcon'] = $verifiedIcon['imageUrl'] ?? null;
