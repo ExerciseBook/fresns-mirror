@@ -53,29 +53,29 @@
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.extend_content_list') }}:</label>
             <div class="col-lg-6">
                 <div class="input-group mb-3">
-                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_post_list') }}</label>
-                    <select class="form-select" name="post_list_service">
-                        <option value="" {{ !$params['post_list_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_list_by_all') }}</label>
+                    <select class="form-select" name="content_list_service">
+                        <option value="" {{ !$params['content_list_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
-                            <option value="{{ $plugin->unikey }}" {{ $params['post_list_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
+                            <option value="{{ $plugin->unikey }}" {{ $params['content_list_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="input-group mb-3">
-                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_post_follow') }}</label>
-                    <select class="form-select" name="post_follow_service">
-                        <option value="" {{ !$params['post_follow_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_list_by_follow') }}</label>
+                    <select class="form-select" name="content_follow_service">
+                        <option value="" {{ !$params['content_follow_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
-                            <option value="{{ $plugin->unikey }}" {{ $params['post_follow_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
+                            <option value="{{ $plugin->unikey }}" {{ $params['content_follow_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="input-group mb-3">
-                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_post_nearby') }}</label>
-                    <select class="form-select" name="post_nearby_service">
-                        <option value="" {{ !$params['post_nearby_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_list_by_nearby') }}</label>
+                    <select class="form-select" name="content_nearby_service">
+                        <option value="" {{ !$params['content_nearby_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
-                            <option value="{{ $plugin->unikey }}" {{ $params['post_nearby_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
+                            <option value="{{ $plugin->unikey }}" {{ $params['content_nearby_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -88,7 +88,7 @@
             <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.extend_content_detail') }}:</label>
             <div class="col-lg-6">
                 <div class="input-group mb-3">
-                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_post_detail') }}</label>
+                    <label class="input-group-text">{{ __('FsLang::panel.extend_content_by_detail') }}</label>
                     <select class="form-select" name="post_detail_service">
                         <option value="" {{ !$params['search_users_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
