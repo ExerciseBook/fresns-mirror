@@ -89,10 +89,10 @@
             <div class="col-lg-6">
                 <div class="input-group mb-3">
                     <label class="input-group-text">{{ __('FsLang::panel.extend_content_by_detail') }}</label>
-                    <select class="form-select" name="post_detail_service">
+                    <select class="form-select" name="content_detail_service">
                         <option value="" {{ !$params['search_users_service'] ? 'selected' : '' }}>{{ __('FsLang::panel.option_default') }}</option>
                         @foreach ($pluginParams['extendData'] as $plugin)
-                            <option value="{{ $plugin->unikey }}" {{ $params['post_detail_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
+                            <option value="{{ $plugin->unikey }}" {{ $params['content_detail_service'] == $plugin->unikey ? 'selected' : '' }}>{{ $plugin->name }}</option>
                         @endforeach
                     </select>
                 </div>

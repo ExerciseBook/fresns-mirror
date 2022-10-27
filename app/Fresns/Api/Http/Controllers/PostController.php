@@ -284,7 +284,7 @@ class PostController extends Controller
         UserService::checkUserContentViewPerm($post->created_at, $authUserId);
 
         // Plugin provides data
-        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('post_detail_service');
+        $dataPluginUnikey = ConfigHelper::fresnsConfigByItemKey('content_detail_service');
 
         if ($dataPluginUnikey) {
             $wordBody = [
