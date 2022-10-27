@@ -24,7 +24,6 @@ use App\Models\Domain;
 use App\Models\DomainLink;
 use App\Models\DomainLinkUsage;
 use App\Models\ExtendUsage;
-use App\Models\File;
 use App\Models\FileUsage;
 use App\Models\Group;
 use App\Models\Hashtag;
@@ -39,9 +38,7 @@ use App\Models\PostLog;
 use App\Models\Role;
 use App\Models\Sticker;
 use App\Models\User;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
 class ContentUtility
 {
@@ -700,7 +697,7 @@ class ContentUtility
         ],
         [
             'user_id' => $postLog->user_id,
-            'group_id' => $postLog->group_id,
+            'group_id' => $postLog->group_id ?? 0,
             'title' => $postLog->title,
             'content' => $postLog->content,
             'is_markdown' => $postLog->is_markdown,
@@ -811,9 +808,9 @@ class ContentUtility
     {
         $parentComment = PrimaryHelper::fresnsModelById('comment', $commentLog->parent_id);
 
-        $topParentId = null;
+        $topParentId = 0;
         if (! $parentComment) {
-            $topParentId = $parentComment?->top_parent_id ?? null;
+            $topParentId = $parentComment?->top_parent_id ?? 0;
         }
 
         $comment = Comment::updateOrCreate([
@@ -823,7 +820,7 @@ class ContentUtility
             'user_id' => $commentLog->user_id,
             'post_id' => $commentLog->post_id,
             'top_parent_id' => $topParentId,
-            'parent_id' => $commentLog->parent_comment_id,
+            'parent_id' => $commentLog->parent_comment_id ?? 0,
             'content' => $commentLog->content,
             'is_markdown' => $commentLog->is_markdown,
             'is_anonymous' => $commentLog->is_anonymous,
@@ -1057,7 +1054,7 @@ class ContentUtility
     // generate comment draft
     public static function generateCommentDraft(Comment $comment): CommentLog
     {
-        if (! empty($comment->top_parent_id) || $comment->top_parent_id == 0) {
+        if ($comment->top_parent_id != 0) {
             return null;
         }
 

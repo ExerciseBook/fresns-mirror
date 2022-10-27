@@ -573,7 +573,7 @@ class InteractiveUtility
                     $commentPost?->increment("comment_{$interactiveType}_count");
 
                     // parent comment
-                    if (! empty($comment?->parent_id) || $comment?->parent_id != 0) {
+                    if (! empty($comment?->parent_id) && $comment?->parent_id != 0) {
                         InteractiveUtility::parentCommentStats($comment->parent_id, 'increment', "comment_{$interactiveType}_count");
                     }
 
@@ -601,7 +601,7 @@ class InteractiveUtility
                 }
 
                 // parent comment
-                if (! empty($comment?->parent_id) || $comment?->parent_id != 0) {
+                if (! empty($comment?->parent_id) && $comment?->parent_id != 0) {
                     InteractiveUtility::parentCommentStats($comment->parent_id, 'decrement', "comment_{$interactiveType}_count");
                 }
             break;
@@ -697,7 +697,7 @@ class InteractiveUtility
                     Hashtag::whereIn('id', $hashtagIds)->where('comment_count', '>', 0)->decrement('comment_count');
                 }
 
-                if (! empty($comment?->parent_id)) {
+                if (! empty($comment?->parent_id) && $comment?->parent_id != 0) {
                     InteractiveUtility::parentCommentStats($comment->parent_id, $actionType, 'comment_count');
                 }
             break;
@@ -824,7 +824,7 @@ class InteractiveUtility
                     Hashtag::whereIn('id', $hashtagIds)->where('comment_digest_count', '>', 0)->decrement('comment_digest_count');
                 }
 
-                if (! empty($comment?->parent_id)) {
+                if (! empty($comment?->parent_id) && $comment?->parent_id != 0) {
                     InteractiveUtility::parentCommentStats($comment->parent_id, $actionType, 'comment_digest_count');
                 }
             break;
@@ -849,7 +849,7 @@ class InteractiveUtility
         }
 
         // parent comment
-        if (! empty($comment?->parent_id)) {
+        if (! empty($comment?->parent_id) && $comment?->parent_id != 0) {
             InteractiveUtility::parentCommentStats($comment->parent_id, $actionType, $tableColumn);
         }
     }

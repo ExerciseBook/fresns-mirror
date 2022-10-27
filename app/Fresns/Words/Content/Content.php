@@ -263,7 +263,7 @@ class Content
                     );
                 }
 
-                if (! empty($comment->top_parent_id) || $comment->top_parent_id == 0) {
+                if ($comment->top_parent_id != 0) {
                     return $this->failure(
                         36313,
                         ConfigUtility::getCodeMessage(36313, 'Fresns', $langTag)
@@ -505,9 +505,9 @@ class Content
                 $group = PrimaryHelper::fresnsModelById('group', $post->group_id);
                 $parentComment = PrimaryHelper::fresnsModelByFsid('comment', $dtoWordBody->commentCid);
 
-                $topParentId = null;
+                $topParentId = 0;
                 if (! $parentComment) {
-                    $topParentId = $parentComment?->top_parent_id ?? null;
+                    $topParentId = $parentComment?->top_parent_id ?? 0;
                 }
             break;
         }
@@ -612,7 +612,7 @@ class Content
                     'user_id' => $authUser->id,
                     'post_id' => $post->id,
                     'top_parent_id' => $topParentId,
-                    'parent_id' => $parentComment?->id ?? null,
+                    'parent_id' => $parentComment?->id ?? 0,
                     'content' => $content,
                     'is_markdown' => $dtoWordBody->isMarkdown ?? 0,
                     'is_anonymous' => $dtoWordBody->isAnonymous ?? 0,

@@ -169,11 +169,7 @@ class PostService
     // get top comment
     public static function getTopComment(int $postId, string $langTag, string $timezone)
     {
-        $comment = Comment::with('creator')
-            ->where('post_id', $postId)
-            ->whereNull('top_parent_id')
-            ->orderByDesc('like_count')
-            ->first();
+        $comment = Comment::with('creator')->where('post_id', $postId)->where('top_parent_id', 0)->orderByDesc('like_count')->first();
 
         $service = new CommentService();
 
