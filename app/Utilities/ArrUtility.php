@@ -11,7 +11,7 @@ namespace App\Utilities;
 class ArrUtility
 {
     // get key value
-    public static function getKeyValue(?array &$arrays = [], string $key, array $values)
+    public static function get(?array $arrays = [], string $key, array $values)
     {
         if (empty($arrays)) {
             return [];
@@ -21,10 +21,7 @@ class ArrUtility
             return in_array($item[$key], $values);
         });
 
-        $arrays = $otherData->toArray();
-
         return $findData->toArray();
-
         // $arrays
         // [
         //     {
@@ -44,10 +41,29 @@ class ArrUtility
     }
 
     // remove key value
-    public static function removeKeyValue(?array $arrays = [], string $key, array $values)
+    public static function forget(?array &$arrays = [], string $key, array $values)
     {
         if (empty($arrays)) {
-            return [];
+            return false;
+        }
+
+        [$findData, $otherData] = collect($arrays)->partition(function ($item) use ($key, $values) {
+            return in_array($item[$key], $values);
+        });
+
+        $arrays = $otherData->toArray();
+
+        return true;
+
+        // $key = 'code'
+        // $values = ['decorate', 'verifiedIcon']
+    }
+
+    // remove key value
+    public static function pull(?array &$arrays = [], string $key, array $values)
+    {
+        if (empty($arrays)) {
+            return false;
         }
 
         [$findData, $otherData] = collect($arrays)->partition(function ($item) use ($key, $values) {
