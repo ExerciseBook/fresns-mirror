@@ -102,6 +102,7 @@ class CacheHelper
     /**
      * forget fresns api multilingual info.
      *
+     * fresns_api_user_{$uid}_{$langTag}
      * fresns_api_auth_account_{$aid}_{$langTag}
      * fresns_api_auth_user_{$uid}_{$langTag}
      * fresns_api_archives_{$type}_{$unikey}_{$langTag}
@@ -152,6 +153,7 @@ class CacheHelper
      * fresns_plugin_{$unikey}_{$parameterKey}_url
      * fresns_user_follow_{$type}_{$authUserId}
      * fresns_user_block_{$type}_{$authUserId}
+     * fresns_api_key_{$appId}
      * fresns_api_guest_expire_info
      * fresns_api_guest_groups
      * fresns_api_private_groups

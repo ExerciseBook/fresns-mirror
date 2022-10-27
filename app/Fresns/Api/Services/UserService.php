@@ -9,9 +9,11 @@
 namespace App\Fresns\Api\Services;
 
 use App\Exceptions\ApiException;
+use App\Helpers\CacheHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\ArchiveUsage;
 use App\Models\ExtendUsage;
+use App\Models\File;
 use App\Models\OperationUsage;
 use App\Models\User;
 use App\Utilities\ArrUtility;
@@ -19,6 +21,7 @@ use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\PermissionUtility;
+use Illuminate\Support\Facades\Cache;
 
 class UserService
 {
@@ -28,25 +31,32 @@ class UserService
             return null;
         }
 
-        $userProfile = $user->getUserProfile($langTag, $timezone);
-        $userMainRole = $user->getUserMainRole($langTag, $timezone);
+        $cacheKey = "fresns_auth_user_{$user->id}_{$langTag}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
-        $userProfile['nickname'] = ContentUtility::replaceBlockWords('user', $userProfile['nickname']);
-        $userProfile['bio'] = ContentUtility::replaceBlockWords('user', $userProfile['bio']);
+        $userProfile = Cache::remember($cacheKey, $cacheTime, function () use ($user, $langTag, $timezone) {
+            $userProfile = $user->getUserProfile($langTag, $timezone);
+            $userMainRole = $user->getUserMainRole($langTag, $timezone);
 
-        $item['stats'] = $user->getUserStats($langTag);
-        $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST, $user->id, $langTag);
-        $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $user->id, $langTag);
-        $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_USER, $user->id, $langTag);
-        $item['roles'] = $user->getUserRoles($langTag, $timezone);
+            $userProfile['nickname'] = ContentUtility::replaceBlockWords('user', $userProfile['nickname']);
+            $userProfile['bio'] = ContentUtility::replaceBlockWords('user', $userProfile['bio']);
 
-        if ($item['operations']['diversifyImages']) {
-            $decorate = ArrUtility::pull($item['operations']['diversifyImages'], 'code', 'decorate');
-            $verifiedIcon = ArrUtility::pull($item['operations']['diversifyImages'], 'code', 'verified');
+            $item['stats'] = $user->getUserStats($langTag);
+            $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST, $user->id, $langTag);
+            $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_USER, $user->id, $langTag);
+            $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_USER, $user->id, $langTag);
+            $item['roles'] = $user->getUserRoles($langTag, $timezone);
 
-            $userProfile['decorate'] = $decorate['imageUrl'] ?? null;
-            $userProfile['verifiedIcon'] = $verifiedIcon['imageUrl'] ?? null;
-        }
+            if ($item['operations']['diversifyImages']) {
+                $decorate = ArrUtility::pull($item['operations']['diversifyImages'], 'code', 'decorate');
+                $verifiedIcon = ArrUtility::pull($item['operations']['diversifyImages'], 'code', 'verified');
+
+                $userProfile['decorate'] = $decorate['imageUrl'] ?? null;
+                $userProfile['verifiedIcon'] = $verifiedIcon['imageUrl'] ?? null;
+            }
+
+            return array_merge($userProfile, $userMainRole, $item);
+        });
 
         $interactiveConfig = InteractiveHelper::fresnsUserInteractive($langTag);
         $interactiveStatus = InteractiveUtility::getInteractiveStatus(InteractiveUtility::TYPE_USER, $user->id, $authUserId);
@@ -56,7 +66,7 @@ class UserService
 
         $item['dialog'] = PermissionUtility::checkUserDialogPerm($user->id, $authUserId, $langTag);
 
-        $data = array_merge($userProfile, $userMainRole, $item);
+        $data = array_merge($userProfile, $item);
 
         return $data;
     }
