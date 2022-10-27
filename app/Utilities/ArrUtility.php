@@ -30,22 +30,6 @@ class ArrUtility
         }
 
         return $data;
-        // $arrays
-        // [
-        //     {
-        //         "code": "decorate",
-        //         "style": "operations->style",
-        //         "name": "operations->name",
-        //         "description": "operations->description",
-        //         "imageUrl": "operations->image_file_id or image_file_url",
-        //         "imageActiveUrl": "operations->image_active_file_id or image_active_file_url",
-        //         "displayType": "operations->display_type",
-        //         "pluginUrl": "operations->plugin_unikey",
-        //     }
-        // ]
-
-        // $key = 'code'
-        // $values = ['decorate', 'verifiedIcon']
     }
 
     // remove key value
@@ -64,12 +48,9 @@ class ArrUtility
         $arrays = $otherData->values()->toArray();
 
         return true;
-
-        // $key = 'code'
-        // $values = ['decorate', 'verifiedIcon']
     }
 
-    // remove key value
+    // pull key value
     public static function pull(?array &$arrays = [], string $key, string|array $values)
     {
         if (empty($arrays)) {
@@ -91,8 +72,5 @@ class ArrUtility
         }
 
         return $data;
-
-        // $key = 'code'
-        // $values = ['decorate', 'verifiedIcon']
     }
 }
