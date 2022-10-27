@@ -11,11 +11,19 @@ namespace App\Utilities;
 class ArrUtility
 {
     // get key value
-    public static function getKeyValue(?array $arrays = [], string $key, array $values)
+    public static function getKeyValue(?array &$arrays = [], string $key, array $values)
     {
         if (empty($arrays)) {
             return [];
         }
+
+        [$findData, $otherData] = collect($arrays)->partition(function ($item) use ($key, $values) {
+            return in_array($item[$key], $values);
+        });
+
+        $arrays = $otherData->toArray();
+
+        return $findData->toArray();
 
         // $arrays
         // [
@@ -41,6 +49,14 @@ class ArrUtility
         if (empty($arrays)) {
             return [];
         }
+
+        [$findData, $otherData] = collect($arrays)->partition(function ($item) use ($key, $values) {
+            return in_array($item[$key], $values);
+        });
+
+        $arrays = $otherData->toArray();
+
+        return $findData->toArray();
 
         // $key = 'code'
         // $values = ['decorate', 'verifiedIcon']
