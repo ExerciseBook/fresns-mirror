@@ -154,12 +154,14 @@ class CacheHelper
      * fresns_user_follow_{$type}_{$authUserId}
      * fresns_user_block_{$type}_{$authUserId}
      * fresns_api_key_{$appId}
+     * fresns_api_token_{$platformId}_{$aid}_{$uid}
      * fresns_api_guest_expire_info
      * fresns_api_guest_groups
      * fresns_api_private_groups
      * fresns_api_user_{$uid}_expire_info
      * fresns_api_user_{$uid}_content_view_perm
      * fresns_api_user_{$authUserId}_groups
+     * fresns_web_key_{$keyId}
      */
     public static function forgetFresnsApiInfo(string $cacheKey)
     {

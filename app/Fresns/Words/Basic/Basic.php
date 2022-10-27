@@ -48,10 +48,6 @@ class Basic
             return SessionKey::where('app_id', $appId)->isEnable()->first();
         });
 
-        if (is_null($keyInfo)) {
-            Cache::forget($cacheKey);
-        }
-
         if (empty($keyInfo)) {
             return $this->failure(
                 31301,
