@@ -23,7 +23,13 @@ class ArrUtility
             return in_array($item[$key], $values);
         });
 
-        return $findData->values()->toArray();
+        $data = $findData->values()->toArray();
+
+        if (count($data) == 1) {
+            return $data[0];
+        }
+
+        return $data;
         // $arrays
         // [
         //     {
@@ -78,7 +84,13 @@ class ArrUtility
 
         $arrays = $otherData->values()->toArray();
 
-        return $findData->values()->toArray();
+        $data = $findData->values()->toArray();
+
+        if (count($data) == 1) {
+            return $data[0];
+        }
+
+        return $data;
 
         // $key = 'code'
         // $values = ['decorate', 'verifiedIcon']
