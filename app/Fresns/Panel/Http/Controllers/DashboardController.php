@@ -27,7 +27,7 @@ class DashboardController extends Controller
     {
         $overview = InteractiveHelper::fresnsOverview();
 
-        $news = Cache::remember('news', 86400, function () {
+        $news = Cache::remember('fresns_news', now()->addHours(3), function () {
             try {
                 $newUrl = AppUtility::getApiHost().'/news.json';
                 $client = new \GuzzleHttp\Client(['verify' => false]);

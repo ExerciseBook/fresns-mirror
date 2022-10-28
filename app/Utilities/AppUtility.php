@@ -18,7 +18,7 @@ class AppUtility
 {
     public static function currentVersion()
     {
-        return Cache::remember('currentVersion', 3600, function () {
+        return Cache::remember('fresns_current_version', now()->addDays(), function () {
             $fresnsJson = file_get_contents(
                 base_path('fresns.json')
             );
@@ -31,7 +31,7 @@ class AppUtility
 
     public static function newVersion()
     {
-        return Cache::remember('newVersion', 3600, function () {
+        return Cache::remember('fresns_new_version', now()->addHours(6), function () {
             try {
                 $versionInfoUrl = AppUtility::getApiHost().'/version.json';
                 $client = new \GuzzleHttp\Client();
