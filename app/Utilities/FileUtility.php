@@ -18,6 +18,28 @@ use Illuminate\Support\Str;
 
 class FileUtility
 {
+    /**
+     * Get the mime-type of a given file.
+     *
+     * @param  string  $path
+     * @return string|false
+     */
+    public static function mimeTypeFromPath($path)
+    {
+        return finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
+    }
+
+    /**
+     * Get the mime-type of a given content.
+     *
+     * @param  string  $path
+     * @return string|false
+     */
+    public static function mimeTypeFromContent($content)
+    {
+        return finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $content);
+    }
+
     // uploadFile
     public static function uploadFile(array $bodyInfo, UploadedFile $file)
     {
