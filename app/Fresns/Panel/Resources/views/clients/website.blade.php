@@ -225,16 +225,16 @@
                         <div class="card-body">
                             <!--Config-->
                             <div class="input-group mb-3">
-                                <label class="input-group-text" for="china_icp_beian">{{ __('FsLang::panel.china_icp_beian') }}</label>
-                                <input type="text" class="form-control" id="china_icp_beian" name="china_icp_beian" value="{{ $params['china_icp_beian'] }}">
+                                <label class="input-group-text" for="china_icp_filing">{{ __('FsLang::panel.china_icp_filing') }}</label>
+                                <input type="text" class="form-control" id="china_icp_filing" name="china_icp_filing" value="{{ $params['china_icp_filing'] }}">
                             </div>
                             <div class="input-group mb-3">
                                 <label class="input-group-text" for="china_icp_license">{{ __('FsLang::panel.china_icp_license') }}</label>
                                 <input type="text" class="form-control" id="china_icp_license" name="china_icp_license" value="{{ $params['china_icp_license'] }}">
                             </div>
                             <div class="input-group mb-3">
-                                <label class="input-group-text" for="china_gongan_beian">{{ __('FsLang::panel.china_gongan_beian') }}</label>
-                                <input type="text" class="form-control" id="china_gongan_beian" name="china_gongan_beian" value="{{ $params['china_gongan_beian'] }}">
+                                <label class="input-group-text" for="china_psb_filing">{{ __('FsLang::panel.china_psb_filing') }}</label>
+                                <input type="text" class="form-control" id="china_psb_filing" name="china_psb_filing" value="{{ $params['china_psb_filing'] }}">
                             </div>
                             <div class="input-group mb-1">
                                 <label class="input-group-text" for="china_broadcasting_license">{{ __('FsLang::panel.china_broadcasting_license') }}</label>

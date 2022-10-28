@@ -73,6 +73,7 @@ class ColumnController extends Controller
             'menu_profile_dislikes',
             'menu_profile_followers',
             'menu_profile_blockers',
+            'menu_profile_followers_you_follow',
             'menu_profile_like_users',
             'menu_profile_like_groups',
             'menu_profile_like_hashtags',
