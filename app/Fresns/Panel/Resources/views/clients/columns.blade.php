@@ -597,6 +597,16 @@
                     data-bs-target="#configLangModal">{{ $defaultLangParams['menu_profile_blockers'] ?? '' }}
                 </button>
             </div>
+            <!--Followers You Follow-->
+            <div class="input-group mb-3">
+                <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_it_followers_you_follow') }}</label>
+                <button class="btn btn-outline-secondary text-start rename-btn" type="button" data-bs-toggle="modal"
+                    data-action="{{ route('panel.languages.batch.update', ['itemKey' => 'menu_profile_followers_you_follow']) }}"
+                    data-languages="{{ optional($configs['menu_profile_followers_you_follow'])->languages->toJson() }}"
+                    data-item_key="menu_profile_followers_you_follow"
+                    data-bs-target="#configLangModal">{{ $defaultLangParams['menu_profile_followers_you_follow'] ?? '' }}
+                </button>
+            </div>
             <!--It Like-->
             <div class="input-group mb-3">
                 <label class="input-group-text rename-label">{{ __('FsLang::panel.interactive_it_like_users') }}</label>
