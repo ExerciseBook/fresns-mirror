@@ -992,9 +992,9 @@ return [
     'china_mode' => '中国大陆模式',
     'china_mode_desc' => '站点服务器部署在中国大陆境内时需要填写的信息。',
     'china_mode_config' => '中国大陆服务器配置（非必填项）',
-    'china_icp_beian' => 'ICP 备案号',
+    'china_icp_filing' => 'ICP 备案号',
     'china_icp_license' => 'ICP 许可证号',
-    'china_gongan_beian' => '公安备案号',
+    'china_psb_filing' => '公安备案号',
     'china_broadcasting_license' => '广播电视节目制作经营许可证',
     // Client-App
     'app_common_config' => 'App 通用配置',

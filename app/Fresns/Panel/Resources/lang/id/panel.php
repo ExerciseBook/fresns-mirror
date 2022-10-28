@@ -992,9 +992,9 @@ return [
     'china_mode' => 'China Mode',
     'china_mode_desc' => 'Informasi yang diperlukan apabila server situs digunakan di Tiongkok.',
     'china_mode_config' => 'Konfigurasi server daratan Tiongkok (bidang yang tidak diperlukan)',
-    'china_icp_beian' => 'ICP Beian Info',
-    'china_icp_license' => 'Lisensi ICP',
-    'china_gongan_beian' => 'Gongan Beian Info',
+    'china_icp_filing' => 'Pengajuan Penyedia Konten Internet',
+    'china_icp_license' => 'Lisensi Penyedia Konten Internet',
+    'china_psb_filing' => 'Pengajuan Biro Keamanan Publik',
     'china_broadcasting_license' => 'Lisensi Penyiaran',
     // Client-App
     'app_common_config' => 'Konfigurasi Umum Aplikasi',

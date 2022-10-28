@@ -992,9 +992,9 @@ return [
     'china_mode' => 'Режим Китая',
     'china_mode_desc' => 'Необходимая информация, если сервер сайта развернут в Китае.',
     'china_mode_config' => 'Конфигурация сервера материкового Китая (необязательное поле)',
-    'china_icp_beian' => 'ICP Beian Info',
-    'china_icp_license' => 'Лицензия ICP',
-    'china_gongan_beian' => 'Gongan Beian Info',
+    'china_icp_filing' => 'Подача заявки поставщиком интернет-контента',
+    'china_icp_license' => 'Лицензия провайдера интернет-контента',
+    'china_psb_filing' => 'Бюро общественной безопасности',
     'china_broadcasting_license' => 'Лицензия на вещание',
     // Client-App
     'app_common_config' => 'App Common Config',

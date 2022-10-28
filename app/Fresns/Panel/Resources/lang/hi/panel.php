@@ -992,9 +992,9 @@ return [
     'china_mode' => 'चीन मोड',
     'china_mode_desc' => 'चीन में साइट सर्वर तैनात होने पर आवश्यक जानकारी।',
     'china_mode_config' => 'चीन मुख्य भूमि सर्वर कॉन्फ़िगरेशन (गैर-आवश्यक फ़ील्ड)',
-    'china_icp_beian' => 'ICP Beian जानकारी',
-    'china_icp_license' => 'आईसीपी लाइसेंस',
-    'china_gongan_beian' => 'Gongan Beian जानकारी',
+    'china_icp_filing' => 'इंटरनेट सामग्री प्रदाता फाइलिंग',
+    'china_icp_license' => 'इंटरनेट सामग्री प्रदाता लाइसेंस',
+    'china_psb_filing' => 'सार्वजनिक सुरक्षा ब्यूरो फाइलिंग',
     'china_broadcasting_license' => 'प्रसारण लाइसेंस',
     // Client-App
     'app_common_config' => 'ऐप कॉमन कॉन्फिग',

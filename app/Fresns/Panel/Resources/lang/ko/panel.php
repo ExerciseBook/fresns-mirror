@@ -992,9 +992,9 @@ return [
     'china_mode' => '차이나 모드',
     'china_mode_desc' => '사이트 서버를 중국에 배포할 때 필요한 정보입니다.',
     'china_mode_config' => '중국 본토 서버 구성(필수 필드 없음)',
-    'china_icp_beian' => 'ICP Beian 정보',
-    'china_icp_license' => 'ICP 라이선스',
-    'china_gongan_beian' => 'Gongan Beian 정보',
+    'china_icp_filing' => '인터넷 콘텐츠 제공자 제출',
+    'china_icp_license' => '인터넷 콘텐츠 제공자 라이선스',
+    'china_psb_filing' => '공안국 제출',
     'china_broadcasting_license' => '방송 라이센스',
     // Client-App
     'app_common_config' => '앱 공통 구성',

@@ -992,9 +992,9 @@ return [
     'china_mode' => 'China Mode',
     'china_mode_desc' => 'Required information when the site server is deployed in China.',
     'china_mode_config' => 'China Server Configuration (not required)',
-    'china_icp_beian' => 'ICP Beian Info',
-    'china_icp_license' => 'ICP License',
-    'china_gongan_beian' => 'Gongan Beian Info',
+    'china_icp_filing' => 'Internet Content Provider Filing',
+    'china_icp_license' => 'Internet Content Provider License',
+    'china_psb_filing' => 'Public Security Bureau Filing',
     'china_broadcasting_license' => 'Broadcasting License',
     // Client-App
     'app_common_config' => 'App Common Config',
