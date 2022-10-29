@@ -40,9 +40,12 @@ class DashboardController extends Controller
             return $news;
         });
 
-        $newsData = collect($news)->where('langTag', \App::getLocale())->first();
-        $defaultNewsData = collect($news)->where('langTag', config('app.locale'))->first();
-        $newsList = $newsData['news'] ?? $defaultNewsData['news'] ?? [];
+        $newsList = [];
+        if ($news) {
+            $newsData = collect($news)->where('langTag', \App::getLocale())->first();
+            $defaultNewsData = collect($news)->where('langTag', config('app.locale'))->first();
+            $newsList = $newsData['news'] ?? $defaultNewsData['news'] ?? [];
+        }
 
         $currentVersion = AppUtility::currentVersion();
         $newVersion = AppUtility::newVersion();
