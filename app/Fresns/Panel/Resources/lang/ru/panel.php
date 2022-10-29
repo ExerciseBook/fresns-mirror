@@ -872,6 +872,7 @@ return [
     'extend_content_detail' => 'Детали контента',
     'extend_content_search' => 'Поиск содержимого',
     'extend_content_list_desc' => 'Эта конфигурация имеет более высокий приоритет, чем конфигурация типа содержимого, и когда она настроена, источник данных, указанный типом содержимого, будет заменен.',
+    'extend_content_notify_service' => 'Уведомить службу',
     'extend_content_ip' => 'Служба IP',
     'extend_content_review' => 'Служба отзывов',
     'extend_content_list_by_all' => 'Все сообщения или комментарии',

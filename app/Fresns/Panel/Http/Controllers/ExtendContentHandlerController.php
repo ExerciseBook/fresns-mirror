@@ -19,6 +19,7 @@ class ExtendContentHandlerController extends Controller
         // config keys
         $configKeys = [
             'ip_service',
+            'notify_service',
             'content_review_service',
             'content_list_service',
             'content_follow_service',
@@ -58,6 +59,7 @@ class ExtendContentHandlerController extends Controller
         // config keys
         $configKeys = [
             'ip_service',
+            'notify_service',
             'content_review_service',
             'content_list_service',
             'content_follow_service',

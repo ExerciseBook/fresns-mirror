@@ -872,6 +872,7 @@ return [
     'extend_content_detail' => '内容详情',
     'extend_content_search' => '内容搜索',
     'extend_content_list_desc' => '该配置的优先级大于内容类型配置，当配置后，内容类型指定的数据来源将被取代。',
+    'extend_content_notify_service' => '通知服务',
     'extend_content_ip' => 'IP 服务',
     'extend_content_review' => '审核服务',
     'extend_content_list_by_all' => '全部帖子或评论',

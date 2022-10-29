@@ -872,6 +872,7 @@ return [
     'extend_content_detail' => 'Detail Konten',
     'extend_content_search' => 'Pencarian Konten',
     'extend_content_list_desc' => 'Konfigurasi ini memiliki prioritas yang lebih tinggi daripada konfigurasi jenis konten, dan apabila dikonfigurasi, sumber data yang ditentukan oleh jenis konten akan diganti.',
+    'extend_content_notify_service' => 'Memberitahukan Layanan',
     'extend_content_ip' => 'Layanan IP',
     'extend_content_review' => 'Layanan Ulasan',
     'extend_content_list_by_all' => 'Semua Postingan atau Komentar',

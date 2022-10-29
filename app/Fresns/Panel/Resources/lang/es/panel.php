@@ -872,6 +872,7 @@ return [
     'extend_content_detail' => 'Detalles del contenido',
     'extend_content_search' => 'Búsqueda de contenido',
     'extend_content_list_desc' => 'Esta configuración tiene mayor prioridad que la configuración del tipo de contenido, y cuando se configura, se sustituye la fuente de datos especificada por el tipo de contenido.',
+    'extend_content_notify_service' => 'Notificar al Servicio',
     'extend_content_ip' => 'Servicio IP',
     'extend_content_review' => 'Servicio de revisión',
     'extend_content_list_by_all' => 'Todas las entradas o comentarios',

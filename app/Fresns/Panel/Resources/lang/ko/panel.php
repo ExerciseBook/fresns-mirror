@@ -872,6 +872,7 @@ return [
     'extend_content_detail' => '콘텐츠 세부 정보',
     'extend_content_search' => '콘텐츠 검색',
     'extend_content_list_desc' => '이 구성은 컨텐츠 유형 구성보다 우선 순위가 높으며 구성되면 컨텐츠 유형으로 지정된 데이터 소스가 대체됩니다.',
+    'extend_content_notify_service' => '알림 서비스',
     'extend_content_ip' => 'IP 서비스',
     'extend_content_review' => '리뷰 서비스',
     'extend_content_list_by_all' => '모든 게시물 또는 댓글',

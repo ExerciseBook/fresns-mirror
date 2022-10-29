@@ -872,6 +872,7 @@ return [
     'extend_content_detail' => 'コンテンツ詳細',
     'extend_content_search' => 'コンテンツ検索',
     'extend_content_list_desc' => 'この設定はコンテンツタイプの設定よりも優先度が高く、設定するとコンテンツタイプで指定されたデータソースに置き換わります。',
+    'extend_content_notify_service' => '通知サービス',
     'extend_content_ip' => 'IPサービス',
     'extend_content_review' => 'レビューサービス',
     'extend_content_list_by_all' => 'すべての投稿またはコメント',
