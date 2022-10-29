@@ -61,6 +61,7 @@ class NotifyController extends Controller
             $item['pluginUrl'] = null;
             $item['actionUser'] = null;
             $item['actionType'] = $notify->action_type;
+            $item['actionObject'] = $notify->action_object;
             $item['actionInfo'] = null;
             $item['notifyTime'] = DateHelper::fresnsDateTimeByTimezone($notify->created_at, $timezone, $langTag);
             $item['notifyTimeFormat'] = DateHelper::fresnsFormatDateTime($notify->created_at, $timezone, $langTag);
@@ -74,14 +75,17 @@ class NotifyController extends Controller
                 $item['actionUser'] = $userService->userData($notify?->actionUser, $langTag, $timezone, $authUserId);
             }
 
-            if ($notify->action_type && $notify->action_id) {
-                $actionInfo = match ($notify->action_type) {
+            if ($notify->action_object && $notify->action_id) {
+                $actionInfo = match ($notify->action_object) {
                     default => null,
-                    Notify::ACTION_TYPE_USER => $userService->userData($notify?->user, $langTag, $timezone, $authUserId),
-                    Notify::ACTION_TYPE_GROUP => $groupService->groupData($notify?->group, $langTag, $timezone, $authUserId),
-                    Notify::ACTION_TYPE_HASHTAG => $hashtagService->hashtagData($notify?->hashtag, $langTag, $timezone, $authUserId),
-                    Notify::ACTION_TYPE_POST => $postService->postData($notify?->post, 'list', $langTag, $timezone, $authUserId),
-                    Notify::ACTION_TYPE_COMMENT => $commentService->commentData($notify?->comment, 'list', $langTag, $timezone, $authUserId),
+                    Notify::ACTION_OBJECT_USER => $userService->userData($notify?->user, $langTag, $timezone, $authUserId),
+                    Notify::ACTION_OBJECT_GROUP => $groupService->groupData($notify?->group, $langTag, $timezone, $authUserId),
+                    Notify::ACTION_OBJECT_HASHTAG => $hashtagService->hashtagData($notify?->hashtag, $langTag, $timezone, $authUserId),
+                    Notify::ACTION_OBJECT_POST => $postService->postData($notify?->post, 'list', $langTag, $timezone, $authUserId),
+                    Notify::ACTION_OBJECT_COMMENT => $commentService->commentData($notify?->comment, 'list', $langTag, $timezone, $authUserId),
+                    Notify::ACTION_OBJECT_POST_LOG => $postService->postLogData($notify?->postLog, 'list', $langTag, $timezone),
+                    Notify::ACTION_OBJECT_COMMENT_LOG => $commentService->commentLogData($notify?->commentLog, 'list', $langTag, $timezone),
+                    Notify::ACTION_OBJECT_EXTEND => $notify?->extend->getExtendInfo($langTag),
                 };
 
                 $item['actionInfo'] = $actionInfo;
