@@ -29,7 +29,7 @@ class DashboardController extends Controller
 
         $news = Cache::remember('fresns_news', now()->addHours(3), function () {
             try {
-                $newUrl = AppUtility::getApiHost().'/news.json';
+                $newUrl = AppUtility::getAppHost().'/news.json';
                 $client = new \GuzzleHttp\Client(['verify' => false]);
                 $response = $client->request('GET', $newUrl);
                 $news = json_decode($response->getBody(), true);
