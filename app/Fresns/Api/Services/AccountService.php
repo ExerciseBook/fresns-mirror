@@ -8,28 +8,36 @@
 
 namespace App\Fresns\Api\Services;
 
+use App\Helpers\CacheHelper;
 use App\Helpers\InteractiveHelper;
 use App\Models\Account;
 use App\Models\PluginUsage;
 use App\Utilities\ExtendUtility;
+use Illuminate\Support\Facades\Cache;
 
 class AccountService
 {
     public function accountDetail(Account $account, string $langTag, string $timezone)
     {
-        $userArr = $account->users;
+        $cacheKey = "fresns_api_account_{$account->id}_{$langTag}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $accountInfo = Cache::remember($cacheKey, $cacheTime, function () use ($account, $langTag, $timezone) {
+            $accountInfo = $account->getAccountInfo($langTag, $timezone);
+
+            $item['connects'] = $account->getAccountConnects();
+            $item['wallet'] = $account->getAccountWallet($langTag);
+
+            return array_merge($accountInfo, $item);
+        });
 
         $userService = new UserService;
 
         $userList = [];
-        foreach ($userArr as $user) {
+        foreach ($account->users as $user) {
             $userList[] = $userService->userData($user, $langTag, $timezone);
         }
 
-        $accountInfo = $account->getAccountInfo($langTag, $timezone);
-
-        $item['connects'] = $account->getAccountConnects();
-        $item['wallet'] = $account->getAccountWallet($langTag);
         $item['users'] = $userList;
         $item['interactive'] = InteractiveHelper::fresnsUserInteractive($langTag);
 
