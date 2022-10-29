@@ -308,14 +308,16 @@ class UserController extends Controller
         $requestData['listType'] = $listType;
         $dtoRequest = new UserMarkListDTO($requestData);
 
-        $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->markType}_{$dtoRequest->listType}");
-        if (! $markSet) {
-            throw new ApiException(36201);
-        }
-
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
+
+        if ($viewUser != $authUserId) {
+            $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->markType}_{$dtoRequest->listType}");
+            if (! $markSet) {
+                throw new ApiException(36201);
+            }
+        }
 
         $orderDirection = $dtoRequest->orderDirection ?: 'desc';
 
