@@ -42,7 +42,7 @@ class CommentController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $commentQuery = Comment::with(['creator', 'post', 'hashtags'])->isEnable();
+        $commentQuery = Comment::with(['commentAppend', 'post', 'creator', 'hashtags'])->isEnable();
 
         $blockGroupIds = InteractiveUtility::getPrivateGroupIdArr();
 
@@ -313,7 +313,7 @@ class CommentController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $comment = Comment::with(['creator', 'hashtags'])->where('cid', $cid)->first();
+        $comment = Comment::with(['commentAppend', 'post', 'creator', 'hashtags'])->where('cid', $cid)->first();
 
         if (empty($comment)) {
             throw new ApiException(37400);

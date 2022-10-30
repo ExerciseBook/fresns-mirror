@@ -175,7 +175,7 @@ class CommentService
     // get comment previews
     public static function getCommentPreviews(int $commentId, int $limit, string $langTag, string $timezone)
     {
-        $comments = Comment::with('creator')
+        $comments = Comment::with(['commentAppend', 'post', 'creator', 'hashtags'])
             ->where('parent_id', $commentId)
             ->orderByDesc('like_count')
             ->limit($limit)

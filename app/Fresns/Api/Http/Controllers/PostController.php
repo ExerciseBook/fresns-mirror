@@ -63,7 +63,7 @@ class PostController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $postQuery = Post::with(['creator', 'group', 'hashtags'])->isEnable();
+        $postQuery = Post::with(['postAppend', 'creator', 'group', 'hashtags'])->isEnable();
 
         $blockGroupIds = InteractiveUtility::getPrivateGroupIdArr();
 
@@ -271,7 +271,7 @@ class PostController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $post = Post::with(['creator', 'group', 'hashtags'])->where('pid', $pid)->first();
+        $post = Post::with(['postAppend', 'creator', 'group', 'hashtags'])->where('pid', $pid)->first();
 
         if (empty($post)) {
             throw new ApiException(37300);
