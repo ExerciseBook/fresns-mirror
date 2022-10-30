@@ -912,6 +912,12 @@ class InteractiveUtility
             Notify::ACTION_OBJECT_POST => $actionModel->pid,
             Notify::ACTION_OBJECT_COMMENT => $actionModel->cid,
         };
+        $actionType = match ($notifyType) {
+            Notify::TYPE_LIKE => Notify::ACTION_TYPE_LIKE,
+            Notify::TYPE_DISLIKE => Notify::ACTION_TYPE_DISLIKE,
+            Notify::TYPE_FOLLOW => Notify::ACTION_TYPE_FOLLOW,
+            Notify::TYPE_BLOCK => Notify::ACTION_TYPE_BLOCK,
+        };
 
         $notifyWordBody = [
             'uid' => $uid,
@@ -922,7 +928,7 @@ class InteractiveUtility
             'isAccessPlugin' => null,
             'pluginUnikey' => null,
             'actionUid' => $user->uid,
-            'actionType' => Notify::ACTION_TYPE_LIKE,
+            'actionType' => $actionType,
             'actionObject' => $markType,
             'actionFsid' => $actionFsid,
             'actionCid' => null,
@@ -943,7 +949,7 @@ class InteractiveUtility
             return;
         }
 
-        $actionUser = PrimaryHelper::fresnsModelById($type, $actionModel->user_id);
+        $actionUser = PrimaryHelper::fresnsModelById('user', $actionModel->user_id);
         $actionObject = match ($type) {
             'post' => Notify::ACTION_OBJECT_POST,
             'comment' => Notify::ACTION_OBJECT_COMMENT,
@@ -972,12 +978,12 @@ class InteractiveUtility
                     'uid' => $mentionUser->uid,
                     'type' => Notify::TYPE_MENTION,
                     'content' => Str::limit($actionModel->content),
-                    'isMarkdown' => null,
-                    'isMultilingual' => null,
+                    'isMarkdown' => 0,
+                    'isMultilingual' => 0,
                     'isAccessPlugin' => null,
                     'pluginUnikey' => null,
                     'actionUid' => $actionUser->uid,
-                    'actionType' => Notify::ACTION_TYPE_LIKE,
+                    'actionType' => Notify::ACTION_TYPE_PUBLISH,
                     'actionObject' => $actionObject,
                     'actionFsid' => $actionFsid,
                     'actionCid' => null,
@@ -998,12 +1004,12 @@ class InteractiveUtility
                 'uid' => $user->uid,
                 'type' => Notify::TYPE_COMMENT,
                 'content' => Str::limit($actionModel->content),
-                'isMarkdown' => null,
-                'isMultilingual' => null,
+                'isMarkdown' => 0,
+                'isMultilingual' => 0,
                 'isAccessPlugin' => null,
                 'pluginUnikey' => null,
                 'actionUid' => $actionUser->uid,
-                'actionType' => Notify::ACTION_TYPE_LIKE,
+                'actionType' => Notify::ACTION_TYPE_PUBLISH,
                 'actionObject' => $actionModel->top_parent_id ? Notify::ACTION_OBJECT_COMMENT : Notify::ACTION_OBJECT_POST,
                 'actionFsid' => $actionModel->top_parent_id ? $comment->cid : $post->pid,
                 'actionCid' => $actionFsid,

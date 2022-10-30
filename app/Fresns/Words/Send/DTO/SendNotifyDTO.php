@@ -22,12 +22,12 @@ class SendNotifyDTO extends DTO
     {
         return [
             'uid' => ['integer', 'required'],
-            'type' => ['integer', 'required', 'between:1,7'],
-            'content' => ['integer', 'nullable'],
+            'type' => ['integer', 'required', 'between:1,8'],
+            'content' => ['string', 'nullable'],
             'isMarkdown' => ['Boolean', 'nullable'],
             'isMultilingual' => ['Boolean', 'nullable', 'required_with:content'],
             'isAccessPlugin' => ['Boolean', 'nullable'],
-            'pluginUnikey' => ['integer', 'nullable', 'required_with:isAccessPlugin'],
+            'pluginUnikey' => ['integer', 'nullable'],
             'actionUid' => ['integer', 'nullable'],
             'actionType' => ['integer', 'nullable', 'between:1,10', 'required_with:actionObject', 'required_with:actionFsid'],
             'actionObject' => ['integer', 'nullable', 'between:1,8', 'required_with:actionFsid'],

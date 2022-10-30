@@ -242,5 +242,7 @@ class Send
                 Language::updateOrCreate($langItems);
             }
         }
+
+        return 0;
     }
 }
