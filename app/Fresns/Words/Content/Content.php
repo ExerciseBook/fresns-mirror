@@ -660,6 +660,9 @@ class Content
             }
         }
 
+        // send notify
+        InteractiveUtility::sendPublishNotify($type, $primaryId);
+
         return $this->success([
             'type' => $dtoWordBody->type,
             'id' => $primaryId,

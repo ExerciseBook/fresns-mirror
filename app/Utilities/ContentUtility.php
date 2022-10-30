@@ -800,6 +800,9 @@ class ContentUtility
             'state' => 3,
         ]);
 
+        // send notify
+        InteractiveUtility::sendPublishNotify('post', $post->id);
+
         return $post;
     }
 
@@ -876,6 +879,9 @@ class ContentUtility
             'comment_id' => $comment->id,
             'state' => 3,
         ]);
+
+        // send notify
+        InteractiveUtility::sendPublishNotify('comment', $comment->id);
 
         return $comment;
     }
