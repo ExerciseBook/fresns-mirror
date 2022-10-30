@@ -10,13 +10,14 @@ namespace App\Models;
 
 class Notify extends Model
 {
-    const TYPE_SYSTEM_TO_FULL = 1;
-    const TYPE_SYSTEM_TO_USER = 2;
-    const TYPE_RECOMMEND = 3;
-    const TYPE_LIKE = 4;
+    const TYPE_SYSTEM = 1;
+    const TYPE_RECOMMEND = 2;
+    const TYPE_LIKE = 3;
+    const TYPE_DISLIKE = 4;
     const TYPE_FOLLOW = 5;
-    const TYPE_MENTION = 6;
-    const TYPE_COMMENT = 7;
+    const TYPE_BLOCK = 6;
+    const TYPE_MENTION = 7;
+    const TYPE_COMMENT = 8;
 
     const ACTION_TYPE_LIKE = 1;
     const ACTION_TYPE_DISLIKE = 2;
