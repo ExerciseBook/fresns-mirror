@@ -66,8 +66,10 @@ class FileUtility
     public static function uploadFileInfo(array $bodyInfo)
     {
         // $bodyInfoExample = [
-        //     'usageType' => 'file_usages->usage_type',
         //     'platformId' => 'file_usages->platform_id',
+        //     'aid' => 'file_usages->account_id',
+        //     'uid' => 'file_usages->user_id',
+        //     'usageType' => 'file_usages->usage_type',
         //     'tableName' => 'file_usages->table_name',
         //     'tableColumn' => 'file_usages->table_column',
         //     'tableId' => 'file_usages->table_id',
@@ -95,6 +97,7 @@ class FileUtility
         //             ],
         //             'originalPath' => 'files->original_path',
         //             'rating' => 'file_usages->rating',
+        //             'remark' => 'file_usages->remark',
         //         ]
         //     ]
         // ];
@@ -106,7 +109,7 @@ class FileUtility
         $fileIdArr = [];
         foreach ($bodyInfo['fileInfo'] as $fileInfo) {
             $imageIsLong = 0;
-            if ($fileInfo['type'] == 1 && ! empty($fileInfo['imageWidth']) >= 700) {
+            if ($bodyInfo['type'] == 1 && ! empty($fileInfo['imageWidth']) >= 700) {
                 if ($fileInfo['imageHeight'] >= $fileInfo['imageWidth'] * 3) {
                     $imageIsLong = 1;
                 }
@@ -134,8 +137,6 @@ class FileUtility
             ];
             $fileId = File::create($fileInput)->id;
 
-            $fileIdArr[] = $fileId;
-
             $accountId = PrimaryHelper::fresnsAccountIdByAid($bodyInfo['aid']);
             $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($bodyInfo['uid']);
 
@@ -153,12 +154,15 @@ class FileUtility
                 'table_column' => $bodyInfo['tableColumn'],
                 'table_id' => $tableId,
                 'table_key' => $bodyInfo['tableKey'] ?? null,
-                'rating' => $bodyInfo['rating'] ?? 9,
+                'rating' => $fileInfo['rating'] ?? 9,
+                'remark' => $fileInfo['remark'] ?? null,
                 'account_id' => $accountId,
                 'user_id' => $userId,
             ];
 
             FileUsage::create($useInput);
+
+            $fileIdArr[] = $fileId;
         }
 
         $fileTypeName = match ($bodyInfo['type']) {
