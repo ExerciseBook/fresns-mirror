@@ -343,6 +343,8 @@ class FileHelper
             ]);
 
             $files['images'] = $fresnsResponse->getData();
+        } else {
+            $files['images'] = array_map(fn ($item) => $item->getFileInfo(), $files['images']);
         }
 
         // video
@@ -355,6 +357,8 @@ class FileHelper
             ]);
 
             $files['videos'] = $fresnsResponse->getData();
+        } else {
+            $files['videos'] = array_map(fn ($item) => $item->getFileInfo(), $files['videos']);
         }
 
         // audio
@@ -367,6 +371,8 @@ class FileHelper
             ]);
 
             $files['audios'] = $fresnsResponse->getData();
+        } else {
+            $files['audios'] = array_map(fn ($item) => $item->getFileInfo(), $files['audios']);
         }
 
         // document
@@ -379,6 +385,8 @@ class FileHelper
             ]);
 
             $files['documents'] = $fresnsResponse->getData();
+        } else {
+            $files['documents'] = array_map(fn ($item) => $item->getFileInfo(), $files['documents']);
         }
 
         return $files;
