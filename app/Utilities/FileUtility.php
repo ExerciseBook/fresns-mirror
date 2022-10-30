@@ -65,6 +65,40 @@ class FileUtility
     // uploadFileInfo
     public static function uploadFileInfo(array $bodyInfo)
     {
+        // $bodyInfoExample = [
+        //     'usageType' => 'file_usages->usage_type',
+        //     'platformId' => 'file_usages->platform_id',
+        //     'tableName' => 'file_usages->table_name',
+        //     'tableColumn' => 'file_usages->table_column',
+        //     'tableId' => 'file_usages->table_id',
+        //     'tableKey' => 'file_usages->table_key',
+        //     'type' => 'files->type and file_usages->file_type',
+        //     'fileInfo' => [
+        //         [
+        //             'name' => 'files->name',
+        //             'mime' => 'files->mime',
+        //             'extension' => 'files->extension',
+        //             'size' => 'files->size', // Unit: Byte
+        //             'md5' => 'files->md5',
+        //             'sha' => 'files->sha',
+        //             'shaType' => 'files->sha_type',
+        //             'path' => 'files->path',
+        //             'imageWidth' => 'Image Only: files->image_width',
+        //             'imageHeight' => 'Image Only: files->image_height',
+        //             'videoTime' => 'Video Only: files->video_time',
+        //             'videoCoverPath' => 'Video Only: files->video_cover_path',
+        //             'videoGifPath' => 'Video Only: files->video_gif_path',
+        //             'audioTime' => 'Audio Only: files->audio_time',
+        //             'transcodingState' => 'Audio and Video Only: files->transcoding_state',
+        //             'moreJson' => [
+        //                 // files->more_json
+        //             ],
+        //             'originalPath' => 'files->original_path',
+        //             'rating' => 'file_usages->rating',
+        //         ]
+        //     ]
+        // ];
+
         if (! Str::isJson($bodyInfo['fileInfo'])) {
             return null;
         }
