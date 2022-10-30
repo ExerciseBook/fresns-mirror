@@ -57,7 +57,7 @@ class NotifyController extends Controller
         foreach ($notifies as $notify) {
             $item['notifyId'] = $notify->id;
             $item['type'] = $notify->type;
-            $item['content'] = $notify->is_multilingual ? LanguageHelper::fresnsLanguageByTableId('notifies', 'id', $notify->id, $langTag) : $notify->content;
+            $item['content'] = $notify->is_multilingual ? LanguageHelper::fresnsLanguageByTableId('notifies', 'content', $notify->id, $langTag) : $notify->content;
             $item['isMarkdown'] = (bool) $notify->is_markdown;
             $item['isAccessPlugin'] = (bool) $notify->is_access_plugin;
             $item['pluginUrl'] = ! empty($notify->plugin_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($notify->plugin_unikey) : null;
