@@ -28,7 +28,7 @@ class SendNotifyDTO extends DTO
             'isMultilingual' => ['Boolean', 'nullable', 'required_with:content'],
             'isAccessPlugin' => ['Boolean', 'nullable'],
             'pluginUnikey' => ['integer', 'nullable', 'required_with:isAccessPlugin'],
-            'actionUid' => ['integer', 'nullable', 'required_with:actionObject'],
+            'actionUid' => ['integer', 'nullable'],
             'actionType' => ['integer', 'nullable', 'between:1,10', 'required_with:actionObject', 'required_with:actionFsid'],
             'actionObject' => ['integer', 'nullable', 'between:1,8', 'required_with:actionFsid'],
             'actionFsid' => ['string', 'nullable', 'required_with:actionObject'],

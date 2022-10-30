@@ -826,6 +826,36 @@ class InteractiveUtility
                 }
             break;
         }
+
+        $uid = match ($type) {
+            'post' => PrimaryHelper::fresnsModelById('user', $post->user_id)->uid,
+            'comment' => PrimaryHelper::fresnsModelById('user', $comment->user_id)->uid,
+        };
+        $actionObject = match ($type) {
+            'post' => Notify::ACTION_OBJECT_POST,
+            'comment' => Notify::ACTION_OBJECT_COMMENT,
+        };
+        $actionFsid = match ($type) {
+            'post' => $post->pid,
+            'comment' => $comment->cid,
+        };
+
+        $wordBody = [
+            'uid' => $uid,
+            'type' => Notify::TYPE_SYSTEM,
+            'content' => null,
+            'isMarkdown' => null,
+            'isMultilingual' => null,
+            'isAccessPlugin' => null,
+            'pluginUnikey' => null,
+            'actionUid' => null,
+            'actionType' => Notify::ACTION_TYPE_DIGEST,
+            'actionObject' => $actionObject,
+            'actionFsid' => $actionFsid,
+            'actionCid' => null,
+        ];
+
+        \FresnsCmdWord::plugin('Fresns')->sendNotify($wordBody);
     }
 
     protected static function parentCommentStats(int $parentId, string $actionType, string $tableColumn)
