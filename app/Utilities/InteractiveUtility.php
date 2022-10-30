@@ -901,7 +901,7 @@ class InteractiveUtility
     }
 
     // send publish notify
-    public static function sendPublishNotify(int $type, int $contentId)
+    public static function sendPublishNotify(string $type, int $contentId)
     {
         $actionModel = match ($type) {
             'post' => PrimaryHelper::fresnsModelById('post', $contentId),
