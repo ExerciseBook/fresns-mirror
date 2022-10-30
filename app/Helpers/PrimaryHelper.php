@@ -94,7 +94,7 @@ class PrimaryHelper
     // get model by id
     public static function fresnsModelById(string $modelName, ?string $id = null)
     {
-        if (empty($id)) {
+        if (empty($id) || $id == 0) {
             return null;
         }
 
