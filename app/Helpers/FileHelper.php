@@ -194,7 +194,6 @@ class FileHelper
     {
         $files = File::whereIn('id', $fileIdsOrFids)
             ->orWhereIn('fid', $fileIdsOrFids)
-            ->orderBy('rating')
             ->get()
             ->groupBy('type');
 
