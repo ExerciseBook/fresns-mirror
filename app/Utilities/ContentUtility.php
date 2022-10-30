@@ -585,6 +585,73 @@ class ContentUtility
         return $defaultLangName ?? null;
     }
 
+    // release file usages
+    public static function releaseFileUsages(string $type, int $logId, int $primaryId)
+    {
+        $logTableName = match ($type) {
+            'post' => 'post_logs',
+            'comment' => 'comment_logs',
+        };
+
+        $tableName = match ($type) {
+            'post' => 'posts',
+            'comment' => 'comments',
+        };
+
+        FileUsage::where('table_name', $tableName)->where('table_column', 'id')->where('table_id', $primaryId)->delete();
+
+        $fileUsages = FileUsage::where('table_name', $logTableName)->where('table_column', 'id')->where('table_id', $logId)->get();
+
+        foreach ($fileUsages as $fileUsage) {
+            $fileDataItem = [
+                'file_id' => $fileUsage->file_id,
+                'file_type' => $fileUsage->file_type,
+                'usage_type' => $fileUsage->usage_type,
+                'platform_id' => $fileUsage->platform_id,
+                'table_name' => $tableName,
+                'table_column' => 'id',
+                'table_id' => $primaryId,
+                'rating' => $fileUsage->rating,
+                'account_id' => $fileUsage->account_id,
+                'user_id' => $fileUsage->user_id,
+                'remark' => $fileUsage->remark,
+            ];
+
+            FileUsage::create($fileDataItem);
+        }
+    }
+
+    // release extend usages
+    public static function releaseExtendUsages(string $type, int $logId, int $primaryId)
+    {
+        $logUsageType = match ($type) {
+            'post' => ExtendUsage::TYPE_POST_LOG,
+            'comment' => ExtendUsage::TYPE_COMMENT_LOG,
+        };
+
+        $usageType = match ($type) {
+            'post' => ExtendUsage::TYPE_POST,
+            'comment' => ExtendUsage::TYPE_COMMENT,
+        };
+
+        ExtendUsage::where('usage_type', $usageType)->where('usage_id', $primaryId)->delete();
+
+        $extendUsages = ExtendUsage::where('usage_type', $logUsageType)->where('usage_id', $logId)->get();
+
+        foreach ($extendUsages as $extend) {
+            $extendDataItem = [
+                'usage_type' => $usageType,
+                'usage_id' => $primaryId,
+                'extend_id' => $extend->extend_id,
+                'can_delete' => $extend->can_delete,
+                'rating' => $extend->rating,
+                'plugin_unikey' => $extend->plugin_unikey,
+            ];
+
+            ExtendUsage::create($extendDataItem);
+        }
+    }
+
     // release allow users and roles
     public static function releaseAllowUsersAndRoles(int $postId, array $permArr)
     {
@@ -759,6 +826,8 @@ class ContentUtility
             'map_poi_id' => $postLog->map_json['poiId'] ?? null,
         ]);
 
+        ContentUtility::releaseFileUsages('post', $postLog->id, $post->id);
+        ContentUtility::releaseExtendUsages('post', $postLog->id, $post->id);
         ContentUtility::releaseAllowUsersAndRoles($post->id, $postLog->allow_json['permissions'] ?? []);
         ContentUtility::releaseArchiveUsages('post', $postLog->id, $post->id);
         ContentUtility::releaseOperationUsages('post', $postLog->id, $post->id);
@@ -850,6 +919,8 @@ class ContentUtility
             'map_poi_id' => $commentLog->map_json['poiId'] ?? null,
         ]);
 
+        ContentUtility::releaseFileUsages('comment', $commentLog->id, $comment->id);
+        ContentUtility::releaseExtendUsages('comment', $commentLog->id, $comment->id);
         ContentUtility::releaseArchiveUsages('comment', $commentLog->id, $comment->id);
         ContentUtility::releaseOperationUsages('comment', $commentLog->id, $comment->id);
 
