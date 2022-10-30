@@ -102,9 +102,9 @@ class FileUtility
         //     ]
         // ];
 
-        if (! Str::isJson($bodyInfo['fileInfo'])) {
-            return null;
-        }
+        // if (! Str::isJson($bodyInfo['fileInfo'])) {
+        //     return null;
+        // }
 
         $fileIdArr = [];
         foreach ($bodyInfo['fileInfo'] as $fileInfo) {
@@ -165,7 +165,8 @@ class FileUtility
             $fileIdArr[] = $fileId;
         }
 
-        $fileTypeName = match ($bodyInfo['type']) {
+        $fileTypeName = match (intval($bodyInfo['type'])) {
+            defalut => throw new \RuntimeException("未知文件类型 ".$bodyInfo['type']),
             1 => 'images',
             2 => 'videos',
             3 => 'audios',
