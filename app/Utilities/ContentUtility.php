@@ -478,31 +478,6 @@ class ContentUtility
         return $item;
     }
 
-    // save file usages
-    // $files = [{"fid": "fid", "rating": 9, "remark": "remark"}]
-    public static function saveFileUsages(int $usageType, string $tableName, string $tableColumn, int $tableId, array $files, int $platformId, int $accountId, int $userId)
-    {
-        foreach ($files as $file) {
-            $fileModel = PrimaryHelper::fresnsModelByFsid('file', $file['fid']);
-
-            FileUsage::updateOrCreate([
-                'file_id' => $fileModel->id,
-                'table_name' => $tableName,
-                'table_column' => $tableColumn,
-                'table_id' => $tableId,
-            ],
-            [
-                'file_type' => $fileModel->type,
-                'usage_type' => $usageType,
-                'platform_id' => $platformId,
-                'rating' => $file['rating'],
-                'account_id' => $accountId,
-                'user_id' => $userId,
-                'remark' => $file['remark'],
-            ]);
-        }
-    }
-
     // save operation usages
     // $operations = [{"id": "id", "pluginUnikey": null}]
     public static function saveOperationUsages(string $usageType, int $usageId, array $operations)
