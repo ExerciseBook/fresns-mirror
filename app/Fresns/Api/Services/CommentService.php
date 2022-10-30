@@ -53,7 +53,7 @@ class CommentService
         $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_COMMENT, $comment->id, $langTag);
         $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_COMMENT, $comment->id, $langTag);
         $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_COMMENT, $comment->id, $langTag);
-        $item['files'] = FileHelper::fresnsAntiLinkFileInfoListByTableColumn('comments', 'id', $comment->id);
+        $item['files'] = FileHelper::fresnsFileInfoListByTableColumn('comments', 'id', $comment->id);
 
         $fileCount['images'] = collect($item['files']['images'])->count();
         $fileCount['videos'] = collect($item['files']['videos'])->count();
@@ -252,7 +252,7 @@ class CommentService
         $info['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST_LOG, $log->id, $langTag);
         $info['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_POST_LOG, $log->id, $langTag);
         $info['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_POST_LOG, $log->id, $langTag);
-        $info['files'] = FileHelper::fresnsAntiLinkFileInfoListByTableColumn('post_logs', 'id', $log->id);
+        $info['files'] = FileHelper::fresnsFileInfoListByTableColumn('post_logs', 'id', $log->id);
 
         $fileCount['images'] = collect($info['files']['images'])->count();
         $fileCount['videos'] = collect($info['files']['videos'])->count();

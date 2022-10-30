@@ -173,7 +173,7 @@ class FileUtility
             4 => 'documents',
         };
 
-        $fileInfo = FileHelper::fresnsAntiLinkFileInfoListByIds($fileIdArr)[$fileTypeName];
+        $fileInfo = FileHelper::fresnsFileInfoListByIds($fileIdArr)[$fileTypeName];
 
         return $fileInfo;
     }
