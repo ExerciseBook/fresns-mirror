@@ -76,6 +76,7 @@ Route::prefix('v2')->middleware([
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('list', [UserController::class, 'list'])->name('list');
         Route::get('{uidOrUsername}/detail', [UserController::class, 'detail'])->name('detail');
+        Route::get('{uidOrUsername}/followers-you-follow', [UserController::class, 'followersYouFollow'])->name('followers.you.follow');
         Route::get('{uidOrUsername}/interactive/{type}', [UserController::class, 'interactive'])->name('interactive');
         Route::get('{uidOrUsername}/mark/{markType}/{listType}', [UserController::class, 'markList'])->name('mark.list');
         Route::post('auth', [UserController::class, 'auth'])->name('auth');

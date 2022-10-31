@@ -255,6 +255,71 @@ class UserController extends Controller
         return $this->success($data);
     }
 
+    // followers you follow
+    public function followersYouFollow(Request $request, string $uidOrUsername)
+    {
+        if (StrHelper::isPureInt($uidOrUsername)) {
+            $viewUser = User::where('uid', $uidOrUsername)->first();
+        } else {
+            $viewUser = User::where('username', $uidOrUsername)->first();
+        }
+
+        if (empty($viewUser)) {
+            throw new ApiException(31602);
+        }
+
+        if ($viewUser->is_enable == 0) {
+            throw new ApiException(35202);
+        }
+
+        if ($viewUser->wait_delete == 1) {
+            throw new ApiException(35203);
+        }
+
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
+        $authUser = $this->user();
+
+        if ($authUser->id != $viewUser->id) {
+            $viewUserFollowers = UserFollow::type(UserFollow::TYPE_USER)->where('follow_id', $viewUser->id)->latest()->pluck('user_id')->toArray();
+            $authUserFollowing = UserFollow::type(UserFollow::TYPE_USER)->where('user_id', $authUser->id)->latest()->pluck('follow_id')->toArray();
+
+            if (empty($viewUserFollowers) && empty($authUserFollowing)) {
+                return $this->fresnsPaginate([], 0, $request->get('pageSize', 15));
+            }
+
+            $userIdArr = array_merge($viewUserFollowers, $authUserFollowing);
+            $uniqueArr = array_unique ($userIdArr);
+
+            $youKnowArr = array_diff_assoc($userIdArr, $uniqueArr);
+        } else {
+            $youKnowArr = UserFollow::type(UserFollow::TYPE_USER)
+                ->where('user_id', $authUser->id)
+                ->where('is_mutual', 1)
+                ->latest()
+                ->pluck('follow_id')
+                ->toArray();
+        }
+
+        if (empty($youKnowArr)) {
+            return $this->fresnsPaginate([], 0, $request->get('pageSize', 15));
+        }
+
+        $userQuery = User::whereIn('id', $youKnowArr)
+            ->where('is_enable', 1)
+            ->where('wait_delete', 0)
+            ->paginate($request->get('pageSize', 15));
+
+        $service = new UserService();
+
+        $userList = [];
+        foreach ($userQuery as $user) {
+            $userList[] = $service->userData($user, $langTag, $timezone, $authUser->id);
+        }
+
+        return $this->fresnsPaginate($userList, $userQuery->total(), $userQuery->perPage());
+    }
+
     // interactive
     public function interactive(string $uidOrUsername, string $type, Request $request)
     {
@@ -312,7 +377,7 @@ class UserController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        if ($viewUser != $authUserId) {
+        if ($viewUser->id != $authUserId) {
             $markSet = ConfigHelper::fresnsConfigByItemKey("it_{$dtoRequest->markType}_{$dtoRequest->listType}");
             if (! $markSet) {
                 throw new ApiException(36201);
