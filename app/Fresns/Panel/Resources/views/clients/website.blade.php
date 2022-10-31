@@ -184,7 +184,7 @@
                 </div>
                 <!--Web Status Config-->
                 <div class="collapse {{ !$params['website_status'] ? 'show' : '' }}" id="website_status_setting">
-                    <div class="card mt-2">
+                    <div class="card mt-1">
                         <div class="card-header text-success">{{ __('FsLang::panel.website_status_config') }}</div>
                         <div class="card-body">
                             <div class="input-group mb-3">
@@ -207,8 +207,8 @@
         </div>
 
         <!--site_china_mode-->
-        <div class="row mb-4">
-            <label for="site_copyright" class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.china_mode') }}:</label>
+        <div class="row">
+            <label class="col-lg-2 col-form-label text-lg-end">{{ __('FsLang::panel.china_mode') }}:</label>
             <div class="col-lg-5 pt-2">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="site_china_mode" id="china_server_false" value=false data-bs-toggle="collapse" data-bs-target="#china_server_setting.show" aria-expanded="false" aria-controls="china_server_setting" {{ !$params['site_china_mode'] ? 'checked' : '' }}>
@@ -218,9 +218,15 @@
                     <input class="form-check-input" type="radio" name="site_china_mode" id="china_server_true" value=true data-bs-toggle="collapse" data-bs-target="#china_server_setting:not(.show)" aria-expanded="false" aria-controls="china_server_setting"{{ $params['site_china_mode'] ? 'checked' : '' }}>
                     <label class="form-check-label" for="china_server_true">{{ __('FsLang::panel.option_yes') }}</label>
                 </div>
-                <!--China Mode Config-->
+            </div>
+            <div class="col-lg-5 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.china_mode_desc') }}</div>
+        </div>
+        <!--China Mode Config-->
+        <div class="row mb-4">
+            <label class="col-lg-2 col-form-label text-lg-end"></label>
+            <div class="col-lg-10">
                 <div class="collapse {{ $params['site_china_mode'] ? 'show' : '' }}" id="china_server_setting">
-                    <div class="card mt-2">
+                    <div class="card mt-1">
                         <div class="card-header">{{ __('FsLang::panel.china_mode_config') }}</div>
                         <div class="card-body">
                             <!--Config-->
@@ -244,9 +250,7 @@
                         </div>
                     </div>
                 </div>
-                <!--China Mode Config end-->
             </div>
-            <div class="col-lg-5 form-text pt-1"><i class="bi bi-info-circle"></i> {{ __('FsLang::panel.china_mode_desc') }}</div>
         </div>
 
         <!--button_save-->
