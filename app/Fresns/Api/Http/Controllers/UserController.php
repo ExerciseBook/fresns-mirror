@@ -428,8 +428,8 @@ class UserController extends Controller
         $dialogACount = Dialog::where('a_user_id', $authUserId)->where('a_is_read', 0)->where('a_is_display', 1)->count();
         $dialogBCount = Dialog::where('b_user_id', $authUserId)->where('b_is_read', 0)->where('b_is_display', 1)->count();
         $dialogMessageCount = DialogMessage::where('receive_user_id', $authUserId)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
-        $dialogUnread['dialog'] = $dialogACount + $dialogBCount;
-        $dialogUnread['message'] = $dialogMessageCount;
+        $dialogUnread['dialogs'] = $dialogACount + $dialogBCount;
+        $dialogUnread['messages'] = $dialogMessageCount;
         $data['dialogUnread'] = $dialogUnread;
 
         $notifyUnread['system'] = Notify::where('type', 1)->where('user_id', $authUserId)->where('is_read', 0)->count();
