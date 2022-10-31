@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => 'bersihkan cache',
     // Page table
     'table_order' => 'Memesan',
+    'table_position' => 'Posisi',
     'table_number' => 'Nomor',
     'table_lang_tag' => 'Lang Tag',
     'table_lang_name' => 'Lang nama',
@@ -861,6 +862,8 @@ return [
     'group_target' => 'Kelompok sasaran',
     'group_target_desc' => 'Setelah merger, grup lama akan dihapus, dan isi grup lama akan dimigrasikan ke nama tim target yang dipilih',
     // Extends
+    'extend_editor_menus' => 'Menu',
+    'extend_editor_toolbar' => 'Bilah Alat',
     'extend_editor_number_of_uses_desc' => 'Contoh plugin "voting", jumlahnya adalah 2, mewakili satu posting, 2 suara dapat dimasukkan',
     'extend_content_type_option_post_all' => 'Daftar total posting',
     'extend_content_type_option_post_follow' => 'Fokus pada posting objek',

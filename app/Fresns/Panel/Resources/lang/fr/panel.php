@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => 'effacer le cache',
     // Page table
     'table_order' => 'Commande',
+    'table_position' => 'Position',
     'table_number' => 'Nombre',
     'table_lang_tag' => 'Tag Lang',
     'table_lang_name' => 'Nom de Lang',
@@ -861,6 +862,8 @@ return [
     'group_target' => 'Groupe ciblé',
     'group_target_desc' => 'Après la fusion, l\'ancien groupe sera supprimé et le contenu de l\'ancien groupe sera migré vers le nom de l\'équipe cible sélectionnée',
     // Extends
+    'extend_editor_menus' => 'Menus',
+    'extend_editor_toolbar' => 'Barre d\'outils',
     'extend_editor_number_of_uses_desc' => 'Exemples de plugins "votants", le nombre est 2, représentant un seul poste, 2 votes peuvent être inclus',
     'extend_content_type_option_post_all' => 'Total Liste des messages',
     'extend_content_type_option_post_follow' => 'Focus sur l\'objet de l\'objet',

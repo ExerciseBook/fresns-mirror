@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => 'borrar el caché',
     // Page table
     'table_order' => 'Pedido',
+    'table_position' => 'Posición',
     'table_number' => 'Número',
     'table_lang_tag' => 'Etiqueta lang',
     'table_lang_name' => 'Nombre de lang',
@@ -861,6 +862,8 @@ return [
     'group_target' => 'Grupo objetivo',
     'group_target_desc' => 'Después de la fusión, se eliminará el grupo anterior, y los contenidos del grupo anterior se migrarán al nombre del equipo de destino seleccionado',
     // Extends
+    'extend_editor_menus' => 'Menús',
+    'extend_editor_toolbar' => 'Barra de herramientas',
     'extend_editor_number_of_uses_desc' => 'Ejemplos de complementos de "votación", el número es 2, que representa una sola publicación, se pueden incluir 2 votos',
     'extend_content_type_option_post_all' => 'Lista total de publicaciones',
     'extend_content_type_option_post_follow' => 'Centrarse en la publicación del objeto',

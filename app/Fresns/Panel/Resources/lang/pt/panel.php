@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => 'cache claro',
     // Page table
     'table_order' => 'Ordem',
+    'table_position' => 'Posição',
     'table_number' => 'Número',
     'table_lang_tag' => 'Lang Tag',
     'table_lang_name' => 'Nome da LANG',
@@ -861,6 +862,8 @@ return [
     'group_target' => 'Grupo alvo',
     'group_target_desc' => 'Após a fusão, o grupo antigo será excluído, e o conteúdo do grupo antigo será migrado para o nome da equipe de destino selecionado',
     // Extends
+    'extend_editor_menus' => 'Menus',
+    'extend_editor_toolbar' => 'Barra de ferramentas',
     'extend_editor_number_of_uses_desc' => 'Exemplos de plugins "votantes", o número é 2, representando um único post, 2 votos podem ser incluídos',
     'extend_content_type_option_post_all' => 'Lista total de posts',
     'extend_content_type_option_post_follow' => 'Concentre-se no post do objeto',

@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => '清空缓存',
     // Page table
     'table_order' => '显示顺序',
+    'table_position' => '显示位置',
     'table_number' => '编号',
     'table_lang_tag' => '语言标签',
     'table_lang_name' => '语言名称',
@@ -861,6 +862,8 @@ return [
     'group_target' => '目标小组',
     'group_target_desc' => '合并后旧小组将被删除，旧小组名下内容将迁移到所选目标小组名下。',
     // Extends
+    'extend_editor_menus' => '显示在扩展菜单',
+    'extend_editor_toolbar' => '显示在工具栏',
     'extend_editor_number_of_uses_desc' => '以“投票”插件举例，数量为 2 则代表单个帖子可以附带 2 个投票',
     'extend_content_type_option_post_all' => '帖子总列表',
     'extend_content_type_option_post_follow' => '关注对象的帖子',

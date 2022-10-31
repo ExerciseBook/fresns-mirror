@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => 'Clear Cache',
     // Page table
     'table_order' => 'Order',
+    'table_position' => 'Position',
     'table_number' => 'Number',
     'table_lang_tag' => 'Lang Tag',
     'table_lang_name' => 'Lang Name',
@@ -861,6 +862,8 @@ return [
     'group_target' => 'Target Group',
     'group_target_desc' => 'After the merger the old group will be deleted and the content belonging to the old group will be migrated to the selected target group',
     // Extends
+    'extend_editor_menus' => 'Menus',
+    'extend_editor_toolbar' => 'Toolbar',
     'extend_editor_number_of_uses_desc' => 'Take the "Voting" plugin for example, the number of 2 means that a post can be accompanied by 2 voting',
     'extend_content_type_option_post_all' => 'Posts list',
     'extend_content_type_option_post_follow' => 'Posts of follow',

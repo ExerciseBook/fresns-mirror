@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => 'очистить кэш',
     // Page table
     'table_order' => 'Заказ',
+    'table_position' => 'Позиция',
     'table_number' => 'Количество',
     'table_lang_tag' => 'Lang Tag',
     'table_lang_name' => 'Название Лэнг',
@@ -861,6 +862,8 @@ return [
     'group_target' => 'Целевая группа',
     'group_target_desc' => 'После слияния старая группа будет удалена, и содержимое старой группы будет мигрировано на выбранное имя команды цели',
     // Extends
+    'extend_editor_menus' => 'Меню',
+    'extend_editor_toolbar' => 'Панель инструментов',
     'extend_editor_number_of_uses_desc' => 'Примеры «голосования» плагинов, число 2, представляющее собой один пост, 2 голоса могут быть включены',
     'extend_content_type_option_post_all' => 'Общий список сообщений',
     'extend_content_type_option_post_follow' => 'Сосредоточиться на посте объекта',

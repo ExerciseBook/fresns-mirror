@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => '캐시 지우기',
     // Page table
     'table_order' => '주문하다',
+    'table_position' => '위치',
     'table_number' => '숫자',
     'table_lang_tag' => 'Lang 태그',
     'table_lang_name' => 'Lang Name',
@@ -861,6 +862,8 @@ return [
     'group_target' => '대상 그룹',
     'group_target_desc' => '합병 후 이전 그룹이 삭제되고 이전 그룹의 내용이 선택한 대상 팀 이름으로 마이그레이션됩니다',
     // Extends
+    'extend_editor_menus' => '메뉴',
+    'extend_editor_toolbar' => '도구 모음',
     'extend_editor_number_of_uses_desc' => '"투표"플러그인의 예로는 단일 게시물을 나타내는 2 개의 숫자가 2로 표시됩니다',
     'extend_content_type_option_post_all' => '총 게시물 목록',
     'extend_content_type_option_post_follow' => '개체의 게시물에 초점을 맞 춥니 다',

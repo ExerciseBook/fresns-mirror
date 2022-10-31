@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => 'Cache löschen',
     // Page table
     'table_order' => 'Befehl',
+    'table_position' => 'Standort',
     'table_number' => 'Anzahl',
     'table_lang_tag' => 'Lang Tag',
     'table_lang_name' => 'Lang Name',
@@ -861,6 +862,8 @@ return [
     'group_target' => 'Zielgruppe',
     'group_target_desc' => 'Nach der Fusion wird die alte Gruppe gelöscht, und der Inhalt der alten Gruppe wird zum ausgewählten Target-Teamnamen migriert',
     // Extends
+    'extend_editor_menus' => 'Menüs',
+    'extend_editor_toolbar' => 'Symbolleiste',
     'extend_editor_number_of_uses_desc' => 'Beispiele für "Abstimmungs-Plugins, die Nummer ist 2, was einen einzelnen Beitrag darstellt, 2 Stimmen können enthalten sein',
     'extend_content_type_option_post_all' => 'Gesamtliste der Beiträge',
     'extend_content_type_option_post_follow' => 'Fokus auf den Beitrag des Objekts',

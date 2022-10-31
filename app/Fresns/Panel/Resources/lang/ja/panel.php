@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => 'クリアキャッシュ',
     // Page table
     'table_order' => '注文',
+    'table_position' => 'ポジション',
     'table_number' => '番号',
     'table_lang_tag' => 'Lang Tag',
     'table_lang_name' => 'Lang Name',
@@ -861,6 +862,8 @@ return [
     'group_target' => 'ターゲットグループ',
     'group_target_desc' => '合併後、古いグループは削除され、古いグループの内容は選択したターゲットチーム名に移行されます。',
     // Extends
+    'extend_editor_menus' => 'メニュー',
+    'extend_editor_toolbar' => 'ツールバー',
     'extend_editor_number_of_uses_desc' => '「投票」プラグインの例、数字は2ですが、単一の投稿を表し、2票を含めることができます',
     'extend_content_type_option_post_all' => '投稿の合計リスト',
     'extend_content_type_option_post_follow' => 'オブジェクトの投稿に焦点を当てる',

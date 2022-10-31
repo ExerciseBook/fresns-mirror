@@ -191,6 +191,7 @@ return [
     'button_clear_cache' => 'कैश को साफ़ करें',
     // Page table
     'table_order' => 'आदेश',
+    'table_position' => 'स्थान',
     'table_number' => 'संख्या',
     'table_lang_tag' => 'लैंग टैग',
     'table_lang_name' => 'लैंग का नाम',
@@ -861,6 +862,8 @@ return [
     'group_target' => 'लक्ष्य समूह',
     'group_target_desc' => 'विलय के बाद, पुराना समूह हटा दिया जाएगा, और पुराने समूह की सामग्री चयनित लक्ष्य टीम के नाम पर माइग्रेट की जाएगी।',
     // Extends
+    'extend_editor_menus' => 'मेनू',
+    'extend_editor_toolbar' => 'उपकरण पट्टी',
     'extend_editor_number_of_uses_desc' => '"वोटिंग" प्लगइन के उदाहरण, संख्या 2 है, एक पोस्ट का प्रतिनिधित्व करते हुए, 2 वोट शामिल किए जा सकते हैं',
     'extend_content_type_option_post_all' => 'पदों की कुल सूची',
     'extend_content_type_option_post_follow' => 'ऑब्जेक्ट की पोस्ट पर फ़ोकस करें',
