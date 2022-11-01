@@ -162,35 +162,6 @@ class ProfileController extends Controller
         return view('profile.followers', compact('items', 'profile', 'users'));
     }
 
-    // blockers
-    public function blockers(Request $request, string $uidOrUsername)
-    {
-        $query = $request->all();
-
-        $client = ApiHelper::make();
-
-        $results = $client->handleUnwrap([
-            'profile' => $client->getAsync("/api/v2/user/{$uidOrUsername}/detail"),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/block", [
-                'query' => $query,
-            ]),
-        ]);
-
-        if ($results['profile']['code'] != 0) {
-            throw new ErrorException($results['profile']['message'], $results['profile']['code']);
-        }
-
-        $items = $results['profile']['data']['items'];
-        $profile = $results['profile']['data']['detail'];
-
-        $users = QueryHelper::convertApiDataToPaginate(
-            items: $results['users']['data']['list'],
-            paginate: $results['users']['data']['paginate'],
-        );
-
-        return view('profile.blockers', compact('items', 'profile', 'users'));
-    }
-
     // followers you follow
     public function followersYouFollow(Request $request, string $uidOrUsername)
     {
@@ -218,6 +189,35 @@ class ProfileController extends Controller
         );
 
         return view('profile.followers-you-follow', compact('items', 'profile', 'users'));
+    }
+
+    // blockers
+    public function blockers(Request $request, string $uidOrUsername)
+    {
+        $query = $request->all();
+
+        $client = ApiHelper::make();
+
+        $results = $client->handleUnwrap([
+            'profile' => $client->getAsync("/api/v2/user/{$uidOrUsername}/detail"),
+            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/block", [
+                'query' => $query,
+            ]),
+        ]);
+
+        if ($results['profile']['code'] != 0) {
+            throw new ErrorException($results['profile']['message'], $results['profile']['code']);
+        }
+
+        $items = $results['profile']['data']['items'];
+        $profile = $results['profile']['data']['detail'];
+
+        $users = QueryHelper::convertApiDataToPaginate(
+            items: $results['users']['data']['list'],
+            paginate: $results['users']['data']['paginate'],
+        );
+
+        return view('profile.blockers', compact('items', 'profile', 'users'));
     }
 
     /**

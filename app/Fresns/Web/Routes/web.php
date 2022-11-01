@@ -125,8 +125,8 @@ Route::prefix(LaravelLocalization::setLocale())
             Route::get('likers', [ProfileController::class, 'likers'])->name('likers');
             Route::get('dislikers', [ProfileController::class, 'dislikers'])->name('dislikers');
             Route::get('followers', [ProfileController::class, 'followers'])->name('followers');
-            Route::get('blockers', [ProfileController::class, 'blockers'])->name('blockers');
             Route::get('followers-you-follow', [ProfileController::class, 'followersYouFollow'])->name('followers.you.follow');
+            Route::get('blockers', [ProfileController::class, 'blockers'])->name('blockers');
             // likers
             Route::get('likes/users', [ProfileController::class, 'likeUsers'])->name('likes.users');
             Route::get('likes/groups', [ProfileController::class, 'likeGroups'])->name('likes.groups');
