@@ -19,20 +19,22 @@ use App\Fresns\Api\Http\Controllers\PostController;
 use App\Fresns\Api\Http\Controllers\SearchController;
 use App\Fresns\Api\Http\Controllers\UserController;
 use App\Fresns\Api\Http\Middleware\CheckHeader;
+use App\Fresns\Api\Http\Middleware\CheckSiteModel;
 use App\Fresns\Subscribe\Middleware\UserActivate;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v2')->middleware([
     CheckHeader::class,
+    CheckSiteModel::class,
     UserActivate::class,
 ])->group(function () {
     // global
     Route::prefix('global')->name('global.')->group(function () {
-        Route::get('configs', [GlobalController::class, 'configs'])->name('configs');
-        Route::get('{type}/archives', [GlobalController::class, 'archives'])->name('archives');
+        Route::get('configs', [GlobalController::class, 'configs'])->name('configs')->withoutMiddleware([CheckSiteModel::class]);
+        Route::get('{type}/archives', [GlobalController::class, 'archives'])->name('archives')->withoutMiddleware([CheckSiteModel::class]);
         Route::get('upload-token', [GlobalController::class, 'uploadToken'])->name('upload.token');
-        Route::get('roles', [GlobalController::class, 'roles'])->name('roles');
-        Route::get('maps', [GlobalController::class, 'maps'])->name('maps');
+        Route::get('roles', [GlobalController::class, 'roles'])->name('roles')->withoutMiddleware([CheckSiteModel::class]);
+        Route::get('maps', [GlobalController::class, 'maps'])->name('maps')->withoutMiddleware([CheckSiteModel::class]);
         Route::get('{type}/content-type', [GlobalController::class, 'contentType'])->name('content.type');
         Route::get('stickers', [GlobalController::class, 'stickers'])->name('stickers');
         Route::get('block-words', [GlobalController::class, 'blockWords'])->name('block.words');
@@ -40,10 +42,10 @@ Route::prefix('v2')->middleware([
 
     // common
     Route::prefix('common')->name('common.')->group(function () {
-        Route::get('input-tips', [CommonController::class, 'inputTips'])->name('input.tips');
-        Route::get('callback', [CommonController::class, 'callback'])->name('callback');
-        Route::post('send-verify-code', [CommonController::class, 'sendVerifyCode'])->name('send.verifyCode');
-        Route::post('upload-log', [CommonController::class, 'uploadLog'])->name('upload.log');
+        Route::get('input-tips', [CommonController::class, 'inputTips'])->name('input.tips')->withoutMiddleware([CheckSiteModel::class]);
+        Route::get('callback', [CommonController::class, 'callback'])->name('callback')->withoutMiddleware([CheckSiteModel::class]);
+        Route::post('send-verify-code', [CommonController::class, 'sendVerifyCode'])->name('send.verifyCode')->withoutMiddleware([CheckSiteModel::class]);
+        Route::post('upload-log', [CommonController::class, 'uploadLog'])->name('upload.log')->withoutMiddleware([CheckSiteModel::class]);
         Route::post('upload-file', [CommonController::class, 'uploadFile'])->name('upload.file');
         Route::get('file/{fid}/link', [CommonController::class, 'fileLink'])->name('file.link');
         Route::get('file/{fid}/users', [CommonController::class, 'fileUsers'])->name('file.users');
@@ -59,7 +61,7 @@ Route::prefix('v2')->middleware([
     });
 
     // account
-    Route::prefix('account')->name('account.')->group(function () {
+    Route::prefix('account')->name('account.')->withoutMiddleware([CheckSiteModel::class])->group(function () {
         Route::post('register', [AccountController::class, 'register'])->name('register');
         Route::post('login', [AccountController::class, 'login'])->name('login');
         Route::put('reset-password', [AccountController::class, 'resetPassword'])->name('reset.password');
@@ -75,12 +77,12 @@ Route::prefix('v2')->middleware([
     // user
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('list', [UserController::class, 'list'])->name('list');
-        Route::get('{uidOrUsername}/detail', [UserController::class, 'detail'])->name('detail');
+        Route::get('{uidOrUsername}/detail', [UserController::class, 'detail'])->name('detail')->withoutMiddleware([CheckSiteModel::class]);
         Route::get('{uidOrUsername}/followers-you-follow', [UserController::class, 'followersYouFollow'])->name('followers.you.follow');
         Route::get('{uidOrUsername}/interactive/{type}', [UserController::class, 'interactive'])->name('interactive');
-        Route::get('{uidOrUsername}/mark/{markType}/{listType}', [UserController::class, 'markList'])->name('mark.list');
-        Route::post('auth', [UserController::class, 'auth'])->name('auth');
-        Route::get('panel', [UserController::class, 'panel'])->name('panel');
+        Route::get('{uidOrUsername}/mark/{markType}/{listType}', [UserController::class, 'markList'])->name('mark.list')->withoutMiddleware([CheckSiteModel::class]);
+        Route::post('auth', [UserController::class, 'auth'])->name('auth')->withoutMiddleware([CheckSiteModel::class]);
+        Route::get('panel', [UserController::class, 'panel'])->name('panel')->withoutMiddleware([CheckSiteModel::class]);
         Route::put('edit', [UserController::class, 'edit'])->name('edit');
         Route::post('mark', [UserController::class, 'mark'])->name('mark');
         Route::put('mark-note', [UserController::class, 'markNote'])->name('mark.note');

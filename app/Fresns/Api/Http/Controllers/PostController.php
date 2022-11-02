@@ -226,7 +226,7 @@ class PostController extends Controller
             }
         }
 
-        $dateLimit = $this->userContentViewPerm()['dateLimit'];
+        $dateLimit = UserService::getContentDateLimit($authUserId);
         $postQuery->when($dateLimit, function ($query, $value) {
             $query->where('created_at', '<=', $value);
         });
@@ -475,29 +475,29 @@ class PostController extends Controller
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUser = $this->user();
-        $userContentViewPerm = $this->userContentViewPerm();
+        $dateLimit = UserService::getContentDateLimit($authUser->id);
 
         $followService = new FollowService();
 
         switch ($dtoRequest->type) {
             // all
             case 'all':
-                $posts = $followService->getPostListByFollowAll($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $posts = $followService->getPostListByFollowAll($authUser->id, $dtoRequest->contentType, $dateLimit);
             break;
 
             // user
             case 'user':
-                $posts = $followService->getPostListByFollowUsers($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $posts = $followService->getPostListByFollowUsers($authUser->id, $dtoRequest->contentType, $dateLimit);
             break;
 
             // group
             case 'group':
-                $posts = $followService->getPostListByFollowGroups($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $posts = $followService->getPostListByFollowGroups($authUser->id, $dtoRequest->contentType, $dateLimit);
             break;
 
             // hashtag
             case 'hashtag':
-                $posts = $followService->getPostListByFollowHashtags($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $posts = $followService->getPostListByFollowHashtags($authUser->id, $dtoRequest->contentType, $dateLimit);
             break;
         }
 
@@ -540,11 +540,6 @@ class PostController extends Controller
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUser = $this->user();
-        $userContentViewPerm = $this->userContentViewPerm();
-
-        if ($userContentViewPerm['type'] == 2) {
-            throw new ApiException(35303);
-        }
 
         $nearbyConfig = ConfigHelper::fresnsConfigByItemKeys([
             'nearby_length_km',

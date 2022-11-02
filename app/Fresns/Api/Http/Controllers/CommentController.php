@@ -267,7 +267,7 @@ class CommentController extends Controller
             }
         }
 
-        $dateLimit = $this->userContentViewPerm()['dateLimit'];
+        $dateLimit = UserService::getContentDateLimit($authUserId);
         $commentQuery->when($dateLimit, function ($query, $value) {
             $query->where('created_at', '<=', $value);
         });
@@ -475,29 +475,29 @@ class CommentController extends Controller
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUser = $this->user();
-        $userContentViewPerm = $this->userContentViewPerm();
+        $dateLimit = UserService::getContentDateLimit($authUser->id);
 
         $followService = new FollowService();
 
         switch ($dtoRequest->type) {
             // all
             case 'all':
-                $comments = $followService->getCommentListByFollowAll($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $comments = $followService->getCommentListByFollowAll($authUser->id, $dtoRequest->contentType, $dateLimit);
             break;
 
             // user
             case 'user':
-                $comments = $followService->getCommentListByFollowUsers($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $comments = $followService->getCommentListByFollowUsers($authUser->id, $dtoRequest->contentType, $dateLimit);
             break;
 
             // group
             case 'group':
-                $comments = $followService->getCommentListByFollowGroups($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $comments = $followService->getCommentListByFollowGroups($authUser->id, $dtoRequest->contentType, $dateLimit);
             break;
 
             // hashtag
             case 'hashtag':
-                $comments = $followService->getCommentListByFollowHashtags($authUser->id, $dtoRequest->contentType, $userContentViewPerm['dateLimit']);
+                $comments = $followService->getCommentListByFollowHashtags($authUser->id, $dtoRequest->contentType, $dateLimit);
             break;
         }
 
@@ -540,11 +540,6 @@ class CommentController extends Controller
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUser = $this->user();
-        $userContentViewPerm = $this->userContentViewPerm();
-
-        if ($userContentViewPerm['type'] == 2) {
-            throw new ApiException(35303);
-        }
 
         $nearbyConfig = ConfigHelper::fresnsConfigByItemKeys([
             'nearby_length_km',

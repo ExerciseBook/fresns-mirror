@@ -12,6 +12,7 @@ use App\Exceptions\ApiException;
 use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\InteractiveHelper;
+use App\Helpers\PrimaryHelper;
 use App\Models\ArchiveUsage;
 use App\Models\ExtendUsage;
 use App\Models\File;
@@ -171,15 +172,49 @@ class UserService
     // check content view perm permission
     public static function checkUserContentViewPerm(string $dateTime, ?int $authUserId = null)
     {
-        $userContentViewPerm = PermissionUtility::getUserContentViewPerm($authUserId);
+        $modeConfig = ConfigHelper::fresnsConfigByItemKeys([
+            'site_mode',
+            'site_private_end_after',
+        ]);
 
-        if ($userContentViewPerm['type'] == 2) {
-            $dateLimit = strtotime($userContentViewPerm['dateLimit']);
-            $contentCreateTime = strtotime($dateTime);
-
-            if ($dateLimit < $contentCreateTime) {
-                throw new ApiException(35304);
-            }
+        if ($modeConfig['site_mode'] == 'public') {
+            return null;
         }
+
+        $authUser = PrimaryHelper::fresnsModelById('user', $authUserId);
+
+        if (empty($authUser?->expired_at)) {
+            throw new ApiException(35306);
+        }
+
+        $contentCreateTime = strtotime($dateTime);
+        $dateLimit = strtotime($authUser->expired_at);
+
+        if ($contentCreateTime > $dateLimit) {
+            throw new ApiException(35304);
+        }
+
+        return date('Y-m-d H:i:s', $dateLimit);
+    }
+
+    // get content date limit
+    public static function getContentDateLimit(?int $authUserId = null)
+    {
+        $modeConfig = ConfigHelper::fresnsConfigByItemKeys([
+            'site_mode',
+            'site_private_end_after',
+        ]);
+
+        if ($modeConfig['site_mode'] == 'public') {
+            return null;
+        }
+
+        $authUser = PrimaryHelper::fresnsModelById('user', $authUserId);
+
+        if (empty($authUser?->expired_at)) {
+            return null;
+        }
+
+        return $authUser->expired_at;
     }
 }
