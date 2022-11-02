@@ -38,7 +38,7 @@ Route::prefix('engine')
         });
 
         Route::prefix('user')->name('user.')->group(function () {
-            Route::post('auth', [ApiController::class, 'userAuth'])->name('auth')->withoutMiddleware([UserAuthorize::class]);
+            Route::post('auth', [ApiController::class, 'userAuth'])->name('auth')->withoutMiddleware([UserAuthorize::class, CheckSiteModel::class]);
             Route::post('edit', [ApiController::class, 'userEdit'])->name('edit');
             Route::post('mark', [ApiController::class, 'userMark'])->name('mark');
             Route::put('mark-note', [ApiController::class, 'userMarkNote'])->name('mark.note');
@@ -77,5 +77,5 @@ Route::prefix('engine')
             return \response()->json([
                 'data' => $languagePack,
             ]);
-        })->name('translations')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class]);
+        })->name('translations')->withoutMiddleware([AccountAuthorize::class, UserAuthorize::class, CheckSiteModel::class]);
     });

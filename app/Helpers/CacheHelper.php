@@ -160,11 +160,9 @@ class CacheHelper
      * fresns_user_block_{$type}_{$authUserId}
      * fresns_api_key_{$appId}
      * fresns_api_token_{$platformId}_{$aid}_{$uid}
-     * fresns_api_guest_expire_info
      * fresns_api_guest_groups
      * fresns_api_private_groups
      * fresns_api_user_{$uid}_expire_info
-     * fresns_api_user_{$uid}_content_view_perm
      * fresns_api_user_{$authUserId}_groups
      * fresns_web_key_{$keyId}
      */
@@ -178,7 +176,6 @@ class CacheHelper
     {
         CacheHelper::forgetFresnsApiMultilingualInfo("fresns_api_account_{$aid}");
         CacheHelper::forgetFresnsApiMultilingualInfo("fresns_api_auth_account_{$aid}");
-
     }
 
     // forget fresns api user
@@ -186,6 +183,5 @@ class CacheHelper
     {
         CacheHelper::forgetFresnsApiMultilingualInfo("fresns_api_user_{$uid}");
         CacheHelper::forgetFresnsApiMultilingualInfo("fresns_api_auth_user_{$uid}");
-
     }
 }
