@@ -29,12 +29,12 @@ Route::prefix('v2')->middleware([
     UserActivate::class,
 ])->group(function () {
     // global
-    Route::prefix('global')->name('global.')->group(function () {
-        Route::get('configs', [GlobalController::class, 'configs'])->name('configs')->withoutMiddleware([CheckSiteModel::class]);
-        Route::get('{type}/archives', [GlobalController::class, 'archives'])->name('archives')->withoutMiddleware([CheckSiteModel::class]);
+    Route::prefix('global')->name('global.')->withoutMiddleware([CheckSiteModel::class])->group(function () {
+        Route::get('configs', [GlobalController::class, 'configs'])->name('configs');
+        Route::get('{type}/archives', [GlobalController::class, 'archives'])->name('archives');
         Route::get('upload-token', [GlobalController::class, 'uploadToken'])->name('upload.token');
-        Route::get('roles', [GlobalController::class, 'roles'])->name('roles')->withoutMiddleware([CheckSiteModel::class]);
-        Route::get('maps', [GlobalController::class, 'maps'])->name('maps')->withoutMiddleware([CheckSiteModel::class]);
+        Route::get('roles', [GlobalController::class, 'roles'])->name('roles');
+        Route::get('maps', [GlobalController::class, 'maps'])->name('maps');
         Route::get('{type}/content-type', [GlobalController::class, 'contentType'])->name('content.type');
         Route::get('stickers', [GlobalController::class, 'stickers'])->name('stickers');
         Route::get('block-words', [GlobalController::class, 'blockWords'])->name('block.words');
@@ -42,9 +42,9 @@ Route::prefix('v2')->middleware([
 
     // common
     Route::prefix('common')->name('common.')->group(function () {
-        Route::get('input-tips', [CommonController::class, 'inputTips'])->name('input.tips')->withoutMiddleware([CheckSiteModel::class]);
+        Route::get('input-tips', [CommonController::class, 'inputTips'])->name('input.tips');
         Route::get('callback', [CommonController::class, 'callback'])->name('callback')->withoutMiddleware([CheckSiteModel::class]);
-        Route::post('send-verify-code', [CommonController::class, 'sendVerifyCode'])->name('send.verifyCode')->withoutMiddleware([CheckSiteModel::class]);
+        Route::post('send-verify-code', [CommonController::class, 'sendVerifyCode'])->name('send.verifyCode');
         Route::post('upload-log', [CommonController::class, 'uploadLog'])->name('upload.log')->withoutMiddleware([CheckSiteModel::class]);
         Route::post('upload-file', [CommonController::class, 'uploadFile'])->name('upload.file');
         Route::get('file/{fid}/link', [CommonController::class, 'fileLink'])->name('file.link');
@@ -80,7 +80,7 @@ Route::prefix('v2')->middleware([
         Route::get('{uidOrUsername}/detail', [UserController::class, 'detail'])->name('detail')->withoutMiddleware([CheckSiteModel::class]);
         Route::get('{uidOrUsername}/followers-you-follow', [UserController::class, 'followersYouFollow'])->name('followers.you.follow');
         Route::get('{uidOrUsername}/interactive/{type}', [UserController::class, 'interactive'])->name('interactive');
-        Route::get('{uidOrUsername}/mark/{markType}/{listType}', [UserController::class, 'markList'])->name('mark.list')->withoutMiddleware([CheckSiteModel::class]);
+        Route::get('{uidOrUsername}/mark/{markType}/{listType}', [UserController::class, 'markList'])->name('mark.list');
         Route::post('auth', [UserController::class, 'auth'])->name('auth')->withoutMiddleware([CheckSiteModel::class]);
         Route::get('panel', [UserController::class, 'panel'])->name('panel')->withoutMiddleware([CheckSiteModel::class]);
         Route::put('edit', [UserController::class, 'edit'])->name('edit');
@@ -108,7 +108,7 @@ Route::prefix('v2')->middleware([
     // group
     Route::prefix('group')->name('group.')->group(function () {
         Route::get('tree', [GroupController::class, 'tree'])->name('tree');
-        Route::get('categories', [GroupController::class, 'categories'])->name('categories');
+        Route::get('categories', [GroupController::class, 'categories'])->name('categories')->withoutMiddleware([CheckSiteModel::class]);
         Route::get('list', [GroupController::class, 'list'])->name('list');
         Route::get('{gid}/detail', [GroupController::class, 'detail'])->name('detail');
         Route::get('{gid}/interactive/{type}', [GroupController::class, 'interactive'])->name('interactive');
@@ -142,6 +142,8 @@ Route::prefix('v2')->middleware([
         Route::get('{cid}/logs', [CommentController::class, 'commentLogs'])->name('logs');
         Route::get('{cid}/log/{logId}', [CommentController::class, 'logDetail'])->name('log.detail');
         Route::delete('{cid}', [CommentController::class, 'delete'])->name('delete');
+        Route::get('follow/{type}', [CommentController::class, 'follow'])->name('follow');
+        Route::get('nearby', [CommentController::class, 'nearby'])->name('nearby');
     });
 
     // editor

@@ -75,7 +75,7 @@ class UserService
         return $data;
     }
 
-    // check content view perm permission
+    // get user stats
     public static function getUserStats(User $user, string $langTag, ?int $authUserId = null)
     {
         $stats = $user->getUserStats($langTag);
@@ -169,23 +169,19 @@ class UserService
         return $stats;
     }
 
-    // check content view perm permission
+    // check content view permission
     public static function checkUserContentViewPerm(string $dateTime, ?int $authUserId = null)
     {
-        $modeConfig = ConfigHelper::fresnsConfigByItemKeys([
-            'site_mode',
-            'site_private_end_after',
-        ]);
+        if (empty($authUserId)) {
+            return;
+        }
 
-        if ($modeConfig['site_mode'] == 'public') {
-            return null;
+        $modeConfig = ConfigHelper::fresnsConfigByItemKey('site_mode');
+        if ($modeConfig == 'public') {
+            return;
         }
 
         $authUser = PrimaryHelper::fresnsModelById('user', $authUserId);
-
-        if (empty($authUser?->expired_at)) {
-            throw new ApiException(35306);
-        }
 
         $contentCreateTime = strtotime($dateTime);
         $dateLimit = strtotime($authUser->expired_at);
@@ -200,21 +196,18 @@ class UserService
     // get content date limit
     public static function getContentDateLimit(?int $authUserId = null)
     {
-        $modeConfig = ConfigHelper::fresnsConfigByItemKeys([
-            'site_mode',
-            'site_private_end_after',
-        ]);
+        if (empty($authUserId)) {
+            return null;
+        }
 
-        if ($modeConfig['site_mode'] == 'public') {
+        $modeConfig = ConfigHelper::fresnsConfigByItemKey('site_mode');
+
+        if ($modeConfig == 'public') {
             return null;
         }
 
         $authUser = PrimaryHelper::fresnsModelById('user', $authUserId);
 
-        if (empty($authUser?->expired_at)) {
-            return null;
-        }
-
-        return $authUser->expired_at;
+        return $authUser?->expired_at;
     }
 }

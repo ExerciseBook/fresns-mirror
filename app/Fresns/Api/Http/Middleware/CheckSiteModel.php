@@ -46,6 +46,14 @@ class CheckSiteModel
             throw new ApiException(35303);
         }
 
+        $currentRouteName = \request()->route()->getName();
+        $blacklist = config('FsApiWhitelist.privateRoute');
+
+        // check blacklist
+        if (in_array($currentRouteName, $blacklist)) {
+            throw new ApiException(35302);
+        }
+
         return $next($request);
     }
 }

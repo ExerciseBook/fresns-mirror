@@ -8,14 +8,19 @@
 
 namespace App\Fresns\Api\Services;
 
+use App\Exceptions\ApiException;
+use App\Helpers\CacheHelper;
 use App\Helpers\InteractiveHelper;
+use App\Helpers\PrimaryHelper;
 use App\Models\ArchiveUsage;
 use App\Models\ExtendUsage;
 use App\Models\Group;
 use App\Models\OperationUsage;
+use App\Models\UserFollow;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use App\Utilities\PermissionUtility;
+use Illuminate\Support\Facades\Cache;
 
 class GroupService
 {
@@ -53,5 +58,86 @@ class GroupService
         $data = array_merge($groupInfo, $item);
 
         return $data;
+    }
+
+    // get group content date limit
+    public static function getGroupContentDateLimit(int $groupId, ?int $authUserId = null)
+    {
+        $group = PrimaryHelper::fresnsModelById('group', $groupId);
+
+        if ($group->type_mode == 1) {
+            return null;
+        }
+
+        if (empty($authUserId)) {
+            throw new ApiException(31601);
+        }
+
+        $cacheKey = "fresns_user_follow_group_model_{$authUserId}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $follow = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId, $group) {
+            return UserFollow::where('user_id', $authUserId)->where('follow_type', UserFollow::TYPE_GROUP)->where('follow_id', $group->id)->first();
+        });
+
+        if (empty($follow)) {
+            throw new ApiException(37103);
+        }
+
+        if ($group->type_mode_end_after == 1) {
+            return null;
+        }
+
+        if (empty($follow?->expired_at) || $group->type_mode_end_after == 2) {
+            throw new ApiException(37105);
+        }
+
+        return $follow->expired_at;
+    }
+
+    // check content view permission
+    public static function checkGroupContentViewPerm(string $dateTime, ?int $groupId = null, ?int $authUserId = null)
+    {
+        if (empty($groupId)) {
+            return;
+        }
+
+        $group = PrimaryHelper::fresnsModelById('group', $groupId);
+
+        if ($group->type_mode == 1) {
+            return;
+        }
+
+        if (empty($authUserId)) {
+            throw new ApiException(31601);
+        }
+
+        $cacheKey = "fresns_user_follow_group_model_{$authUserId}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+
+        $follow = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId, $group) {
+            return UserFollow::where('user_id', $authUserId)->where('follow_type', UserFollow::TYPE_GROUP)->where('follow_id', $group->id)->first();
+        });
+
+        if (empty($follow)) {
+            throw new ApiException(37103);
+        }
+
+        if ($group->type_mode_end_after == 1) {
+            return;
+        }
+
+        if ($group->type_mode_end_after == 2) {
+            throw new ApiException(37105);
+        }
+
+        $contentCreateTime = strtotime($dateTime);
+        $dateLimit = strtotime($follow->expired_at);
+
+        if ($contentCreateTime > $dateLimit) {
+            throw new ApiException(37106);
+        }
+
+        return;
     }
 }

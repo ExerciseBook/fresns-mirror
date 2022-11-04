@@ -39,7 +39,7 @@ class GroupController extends Controller
         if (empty($authUser)) {
             $cacheKey = 'fresns_api_guest_groups';
         } else {
-            $cacheKey = "fresns_api_user_{$authUser?->uid}_groups";
+            $cacheKey = "fresns_user_groups_{$authUser?->uid}";
         }
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
