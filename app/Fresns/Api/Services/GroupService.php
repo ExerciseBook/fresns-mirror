@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Services;
 
 use App\Exceptions\ApiException;
 use App\Helpers\CacheHelper;
+use App\Helpers\DateHelper;
 use App\Helpers\InteractiveHelper;
 use App\Helpers\PrimaryHelper;
 use App\Models\ArchiveUsage;
@@ -53,6 +54,23 @@ class GroupService
 
         $interactiveConfig = InteractiveHelper::fresnsGroupInteractive($langTag);
         $interactiveStatus = InteractiveUtility::getInteractiveStatus(InteractiveUtility::TYPE_GROUP, $group->id, $authUserId);
+        $interactiveStatus['followIsExpiry'] = false;
+        $interactiveStatus['followExpiryDateTime'] = null;
+
+        $cacheKey = "fresns_user_follow_group_model_{$authUserId}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
+        $follow = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId, $group) {
+            return UserFollow::where('user_id', $authUserId)->where('follow_type', UserFollow::TYPE_GROUP)->where('follow_id', $group->id)->first();
+        });
+
+        if ($group->type_mode == 2 && $group->type_mode_end_after != 1 && $follow) {
+            $now = time();
+            $expireTime = strtotime($follow?->expired_at);
+
+            $interactiveStatus['followIsExpiry'] = ($expireTime < $now) ? true : false;
+            $interactiveStatus['followExpiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($follow?->expired_at, $timezone, $langTag);
+        }
+
         $item['interactive'] = array_merge($interactiveConfig, $interactiveStatus);
 
         $data = array_merge($groupInfo, $item);
