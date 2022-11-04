@@ -45,6 +45,7 @@ use App\Utilities\ConfigUtility;
 use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
+use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -797,8 +798,7 @@ class UserController extends Controller
             throw new ApiException(32201);
         }
 
-        $authUser = $this->user();
-        $authUserId = $authUser->id;
+        $authUserId = $this->user()->id;
 
         $markType = match ($dtoRequest->markType) {
             'user' => 1,
@@ -826,6 +826,15 @@ class UserController extends Controller
                     throw new ApiException(36202);
                 }
 
+                if ($markType == UserFollow::TYPE_USER) {
+                    $rolePerm = PermissionUtility::getUserMainRolePerm($authUserId)['follow_user_max_count'] ?? 0;
+                    $followCount = UserFollow::where('user_id', $authUserId)->where('follow_type', $markType)->count();
+
+                    if ($rolePerm <= $followCount) {
+                        throw new ApiException(36116);
+                    }
+                }
+
                 InteractiveUtility::markUserFollow($authUserId, $markType, $primaryId);
             break;
 
@@ -836,11 +845,20 @@ class UserController extends Controller
                     throw new ApiException(36202);
                 }
 
+                if ($markType == UserBlock::TYPE_USER) {
+                    $rolePerm = PermissionUtility::getUserMainRolePerm($authUserId)['block_user_max_count'] ?? 0;
+                    $blockCount = UserBlock::where('user_id', $authUserId)->where('block_type', $markType)->count();
+
+                    if ($rolePerm <= $blockCount) {
+                        throw new ApiException(36116);
+                    }
+                }
+
                 InteractiveUtility::markUserBlock($authUserId, $markType, $primaryId);
             break;
         }
 
-        CacheHelper::forgetFresnsInteractive($markType, $authUser->id);
+        CacheHelper::forgetFresnsInteractive($markType, $authUserId);
         CacheHelper::forgetFresnsInteractive($markType, $primaryId);
 
         return $this->success();
