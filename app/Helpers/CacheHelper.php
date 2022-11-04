@@ -73,6 +73,20 @@ class CacheHelper
     }
 
     /**
+     * forget fresns multilingual info.
+     */
+    public static function forgetFresnsMultilingual(string $cacheName)
+    {
+        $langTagArr = ConfigHelper::fresnsConfigLangTags();
+
+        foreach ($langTagArr as $langTag) {
+            $cacheKey = "{$cacheName}_{$langTag}";
+
+            Cache::forget($cacheKey);
+        }
+    }
+
+    /**
      * forget fresns model.
      *
      * fresns_model_account_{$aid}
@@ -84,11 +98,41 @@ class CacheHelper
      * fresns_model_file_{$fid}
      * fresns_model_extend_{$eid}
      */
-    public static function forgetFresnsModel(string $modelName, string $fsid)
+    public static function forgetFresnsModel(string $modelName, string|int $fsid)
     {
-        $cacheKey = "fresns_model_{$modelName}_{$fsid}";
+        if (StrHelper::isPureInt($fsid)) {
+            $model = PrimaryHelper::fresnsModelById($modelName, $fsid);
 
-        Cache::forget($cacheKey);
+            $modelFsid = match ($modelName) {
+                'config' => $model?->item_key,
+                'account' => $model?->aid,
+                'user' => $model?->uid,
+                'group' => $model?->aid,
+                'hashtag' => $model?->slug,
+                'post' => $model?->pid,
+                'comment' => $model?->cid,
+                'file' => $model?->fid,
+                'extend' => $model?->eid,
+
+                default => null,
+            };
+
+            $fsidCacheKey = "fresns_model_{$modelName}_{$modelFsid}";
+            $idCacheKey = "fresns_model_{$modelName}_{$fsid}";
+        } else {
+            $model = PrimaryHelper::fresnsModelByFsid($modelName, $fsid);
+
+            $fsidCacheKey = "fresns_model_{$modelName}_{$fsid}";
+            $idCacheKey = "fresns_model_{$modelName}_{$model?->id}";
+        }
+
+        if ($modelName == 'user') {
+            Cache::forget("fresns_model_user_{$model?->uid}");
+            Cache::forget("fresns_model_user_{$model?->username}");
+        }
+
+        Cache::forget($fsidCacheKey);
+        Cache::forget($idCacheKey);
     }
 
     /**
@@ -96,20 +140,17 @@ class CacheHelper
      *
      * fresns_{$tableName}_{$tableColumn}_{$tableId}_{$langTag}
      */
-    public static function forgetFresnsTableColumnLangContent(string $tableName, string $tableColumn, int $tableId, ?string $langTag = null)
+    public static function forgetFresnsTableColumnLangContent(string $tableName, string $tableColumn, int $tableId)
     {
-        $cacheKey = "fresns_{$tableName}_{$tableColumn}_{$tableId}_{$langTag}";
+        $cacheKey = "fresns_{$tableName}_{$tableColumn}_{$tableId}";
 
-        Cache::forget($cacheKey);
+        CacheHelper::forgetFresnsMultilingual($cacheKey);
     }
 
     /**
      * forget fresns api multilingual info.
      *
-     * fresns_api_account_{$uid}_{$langTag}
-     * fresns_api_user_{$uid}_{$langTag}
      * fresns_api_auth_account_{$aid}_{$langTag}
-     * fresns_api_auth_user_{$uid}_{$langTag}
      * fresns_api_archives_{$type}_{$unikey}_{$langTag}
      * fresns_api_stickers_{$langTag}
      */
@@ -162,9 +203,6 @@ class CacheHelper
      * fresns_api_token_{$platformId}_{$aid}_{$uid}
      * fresns_api_guest_groups
      * fresns_api_private_groups
-     * fresns_api_user_{$uid}_expire_info
-     * fresns_api_user_{$authUserId}_groups
-     * fresns_web_key_{$keyId}
      */
     public static function forgetFresnsApiInfo(string $cacheKey)
     {
@@ -174,14 +212,36 @@ class CacheHelper
     // forget fresns api account
     public static function forgetApiAccount(?string $aid = null)
     {
-        CacheHelper::forgetFresnsApiMultilingualInfo("fresns_api_account_{$aid}");
-        CacheHelper::forgetFresnsApiMultilingualInfo("fresns_api_auth_account_{$aid}");
+        CacheHelper::forgetFresnsMultilingual("fresns_api_account_{$aid}");
+        CacheHelper::forgetFresnsModel('account', $aid);
     }
 
     // forget fresns api user
     public static function forgetApiUser(?int $uid = null)
     {
-        CacheHelper::forgetFresnsApiMultilingualInfo("fresns_api_user_{$uid}");
-        CacheHelper::forgetFresnsApiMultilingualInfo("fresns_api_auth_user_{$uid}");
+        CacheHelper::forgetFresnsMultilingual("fresns_api_user_{$uid}");
+        CacheHelper::forgetFresnsModel('user', $uid);
+        Cache::forget("fresns_api_user_{$uid}_groups");
+    }
+
+    /**
+     * forget fresns web.
+     *
+     * fresns_web_api_host
+     * fresns_web_api_key
+     * fresns_web_key_model
+     * fresns_web_api_config_all_{$langTag}
+     * fresns_web_db_config_{$itemKey}_{$langTag}
+     * fresns_web_group_categories_{$langTag}
+     * fresns_web_api_top_list_{$langTag}
+     */
+    public static function forgetFresnsWeb()
+    {
+        Cache::forget('fresns_web_api_host');
+        Cache::forget('fresns_web_api_key');
+        Cache::forget('fresns_web_key_model');
+        CacheHelper::forgetFresnsMultilingual("fresns_web_api_config_all");
+        CacheHelper::forgetFresnsMultilingual("fresns_web_group_categories");
+        CacheHelper::forgetFresnsMultilingual("fresns_web_api_top_list");
     }
 }

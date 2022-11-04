@@ -8,12 +8,10 @@
 
 namespace App\Fresns\Api\Traits;
 
-use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
+use App\Helpers\PrimaryHelper;
 use App\Models\Account;
-use App\Models\File;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 
 trait ApiHeaderTrait
 {
@@ -66,20 +64,7 @@ trait ApiHeaderTrait
             return null;
         }
 
-        $langTag = $this->langTag();
-
-        $cacheKey = 'fresns_api_auth_account_'.$aid.'_'.$langTag;
-        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
-
-        $authAccount = Cache::remember($cacheKey, $cacheTime, function () use ($aid) {
-            return Account::withTrashed()->with(['users', 'connects'])->where('aid', $aid)->first();
-        });
-
-        if (is_null($authAccount)) {
-            Cache::forget($cacheKey);
-        }
-
-        return $authAccount;
+        return PrimaryHelper::fresnsModelByFsid('account', $aid);
     }
 
     // auth user
@@ -91,19 +76,6 @@ trait ApiHeaderTrait
             return null;
         }
 
-        $langTag = $this->langTag();
-
-        $cacheKey = 'fresns_api_auth_user_'.$uid.'_'.$langTag;
-        $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
-
-        $authUser = Cache::remember($cacheKey, $cacheTime, function () use ($uid) {
-            return User::withTrashed()->where('uid', $uid)->first();
-        });
-
-        if (is_null($authUser)) {
-            Cache::forget($cacheKey);
-        }
-
-        return $authUser;
+        return PrimaryHelper::fresnsModelByFsid('user', $uid);
     }
 }

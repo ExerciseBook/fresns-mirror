@@ -797,7 +797,8 @@ class UserController extends Controller
             throw new ApiException(32201);
         }
 
-        $authUserId = $this->user()->id;
+        $authUser = $this->user();
+        $authUserId = $authUser->id;
 
         $markType = match ($dtoRequest->markType) {
             'user' => 1,
@@ -840,7 +841,7 @@ class UserController extends Controller
         }
 
         if ($dtoRequest->markType == 'group') {
-            $cacheKey = "fresns_api_user_{$authUserId}_groups";
+            $cacheKey = "fresns_api_user_{$authUser->uid}_groups";
 
             Cache::forget($cacheKey);
         }

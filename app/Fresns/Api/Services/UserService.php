@@ -33,7 +33,7 @@ class UserService
             return null;
         }
 
-        $cacheKey = "fresns_api_user_{$user->id}_{$langTag}";
+        $cacheKey = "fresns_api_user_{$user?->uid}_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
         $userProfile = Cache::remember($cacheKey, $cacheTime, function () use ($user, $langTag, $timezone) {
@@ -194,7 +194,7 @@ class UserService
             throw new ApiException(35304);
         }
 
-        return date('Y-m-d H:i:s', $dateLimit);
+        return;
     }
 
     // get content date limit

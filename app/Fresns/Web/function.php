@@ -31,7 +31,7 @@ if (! function_exists('fs_api_config')) {
     {
         $langTag = current_lang_tag();
 
-        $cacheKey = 'fresns_web_api_config_all_'.$langTag;
+        $cacheKey = "fresns_web_api_config_all_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
         $apiConfig = Cache::remember($cacheKey, $cacheTime, function () {
@@ -58,7 +58,7 @@ if (! function_exists('fs_db_config')) {
     {
         $langTag = current_lang_tag();
 
-        $cacheKey = 'fresns_web_db_config_'.$itemKey.'_'.$langTag;
+        $cacheKey = "fresns_web_db_config_{$itemKey}_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
         $dbConfig = Cache::remember($cacheKey, $cacheTime, function () use ($itemKey, $langTag) {
