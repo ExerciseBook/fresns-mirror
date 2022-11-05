@@ -185,7 +185,7 @@ class CommentController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->handleUnwrap([
+        $results = $client->unwrapRequests([
             'comment' => $client->getAsync("/api/v2/comment/{$cid}/detail"),
             'comments'   => $client->getAsync('/api/v2/comment/list', [
                 'query' => $query,

@@ -21,7 +21,7 @@ class SearchController extends Controller
         $query = $request->all();
         $client = ApiHelper::make();
 
-        $results = $client->handleUnwrap([
+        $results = $client->unwrapRequests([
             'users' => $client->getAsync('/api/v2/search/users', [
                 'query' => $query,
             ]),

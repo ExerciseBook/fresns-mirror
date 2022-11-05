@@ -70,7 +70,7 @@ class EditorController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->handleUnwrap([
+        $results = $client->unwrapRequests([
             'config' => $client->getAsync("/api/v2/editor/{$type}/config"),
             'drafts' => $client->getAsync("/api/v2/editor/{$type}/drafts"),
         ]);
@@ -363,7 +363,7 @@ class EditorController extends Controller
             $params['group'] = $client->getAsync("/api/v2/group/{$gid}/detail");
         }
 
-        $results = $client->handleUnwrap($params);
+        $results = $client->unwrapRequests($params);
 
         $draftInfo['config'] = data_get($results, 'config.data');
         $draftInfo['stickers'] = data_get($results, 'stickers.data');

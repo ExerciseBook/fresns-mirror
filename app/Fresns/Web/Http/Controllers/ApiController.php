@@ -42,7 +42,7 @@ class ApiController extends Controller
 
             $client = ApiHelper::make();
 
-            $results = $client->handleUnwrap([
+            $results = $client->unwrapRequests([
                 'users' => $client->getAsync('/api/v2/user/list', [
                     'query' => $userQuery,
                 ]),
@@ -581,7 +581,7 @@ class ApiController extends Controller
             ]);
         }
 
-        $results = ApiHelper::make()->handleUnwrap($postAsyncs)->toArray();
+        $results = ApiHelper::make()->unwrapRequests($postAsyncs)->toArray();
 
         $data = [];
         foreach ($results as $result) {

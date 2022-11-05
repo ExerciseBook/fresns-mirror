@@ -16,31 +16,24 @@ use App\Models\SessionKey;
 use App\Utilities\AppUtility;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
-use Psr\Http\Message\ResponseInterface;
 
-class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
+class ApiHelper
 {
-    use Clientable {
-        __call as forwardCall;
-    }
+    use Clientable;
 
     protected array $result = [];
 
-    public function __call(string $method, array $args)
+    public function caseForwardCallResult($result)
     {
-        $response = $this->forwardCall($method, $args);
-
-        if ($response instanceof \Illuminate\Http\RedirectResponse) {
+        if ($result instanceof \Illuminate\Http\RedirectResponse) {
             throw new ErrorException(session('failure'), session('code'));
         }
 
-        return $response;
+        return $result;
     }
 
-    public function handleUnwrap(array $requests)
+    public function caseUnwrapRequests(array $results)
     {
-        $results = $this->unwrap($requests);
-
         if ($results instanceof \Illuminate\Http\RedirectResponse) {
             throw new ErrorException(session('failure'), (int) session('code'));
         }
@@ -79,12 +72,6 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         ];
     }
 
-    public function handleEmptyResponse(?string $content = null, ?ResponseInterface $response = null)
-    {
-        info('empty response, ApiException: '.var_export($content, true));
-        throw new ErrorException($response?->getReasonPhrase(), $response?->getStatusCode());
-    }
-
     public function isErrorResponse(array $data): bool
     {
         if (isset($data['code']) && $data['code'] != 0) {
@@ -109,36 +96,6 @@ class ApiHelper implements \ArrayAccess, \IteratorAggregate, \Countable
         }
 
         throw new ErrorException($message, $data['code'] ?? 0);
-    }
-
-    public function hasPaginate(): bool
-    {
-        return (bool) $this['data.paginate'];
-    }
-
-    public function getTotal(): ?int
-    {
-        return $this['data.paginate.total'];
-    }
-
-    public function getPageSize(): ?int
-    {
-        return $this['data.paginate.pageSize'];
-    }
-
-    public function getCurrentPage(): ?int
-    {
-        return $this['data.paginate.currentPage'];
-    }
-
-    public function getLastPage(): ?int
-    {
-        return $this['data.paginate.lastPage'];
-    }
-
-    public function getDataList(): static|array|null
-    {
-        return $this['data.list']->toArray();
     }
 
     public static function getHeaders()
