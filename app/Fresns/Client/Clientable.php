@@ -1,12 +1,6 @@
 <?php
 
-/*
- * Fresns (https://fresns.org)
- * Copyright (C) 2021-Present Jarvis Tang
- * Released under the Apache-2.0 License.
- */
-
-namespace App\Fresns\Client;
+namespace ZhenMu\Support\Traits;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise\Promise;
@@ -114,7 +108,7 @@ trait Clientable
             throw new \RuntimeException(sprintf("unknown method %s::%s", get_class($this), $method));
         }
 
-        // return api data
+        // api data
         return $this->data;
     }
 }
