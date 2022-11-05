@@ -229,6 +229,17 @@ class ApiController extends Controller
             if ($user['hasPassword']) {
                 // User has password
                 // header.blade.php
+
+                if ($request->wantsJson()) {
+                    return \response()->json([
+                        'code' => 0,
+                        'message' => 'success',
+                        'data' => [
+                            'prev_url' => fs_route(route('fresns.account.login')),
+                        ],
+                    ]);
+                }
+
                 return redirect()->intended(fs_route(route('fresns.account.login')));
             } else {
                 // User does not have a password
@@ -247,11 +258,32 @@ class ApiController extends Controller
                 Cookie::queue('fs_uid_token', data_get($userResult, 'data.sessionToken.token'));
                 Cookie::queue('timezone', data_get($userResult, 'data.detail.timezone'));
 
+                if ($request->wantsJson()) {
+                    return \response()->json([
+                        'code' => 0,
+                        'message' => 'success',
+                        'data' => [
+                            'prev_url' => fs_route(route('fresns.account.index')),
+                        ],
+                    ]);
+                }
+
                 return redirect()->intended(fs_route(route('fresns.account.index')));
             }
         } elseif ($userCount > 1) {
             // There are more than one user
             // header.blade.php
+
+            if ($request->wantsJson()) {
+                return \response()->json([
+                    'code' => 0,
+                    'message' => 'success',
+                    'data' => [
+                        'prev_url' => fs_route(route('fresns.account.login')),
+                    ],
+                ]);
+            }
+
             return redirect()->intended(fs_route(route('fresns.account.login')));
         }
     }
@@ -349,6 +381,16 @@ class ApiController extends Controller
         Cookie::queue('fs_uid', $result['data']['detail']['uid']);
         Cookie::queue('fs_uid_token', $result['data']['sessionToken']['token']);
         Cookie::queue('timezone', $result['data']['detail']['timezone']);
+
+        if ($request->wantsJson()) {
+            return \response()->json([
+                'code' => 0,
+                'message' => 'success',
+                'data' => [
+                    'prev_url' => fs_route(route('fresns.account.index')),
+                ],
+            ]);
+        }
 
         return redirect()->intended(fs_route(route('fresns.account.index')));
     }
