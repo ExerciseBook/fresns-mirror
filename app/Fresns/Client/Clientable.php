@@ -136,8 +136,6 @@ trait Clientable
         // Synchronization Request
         if (method_exists($this->getHttpClient(), $method)) {
             $this->response = $this->getHttpClient()->$method(...$args);
-
-            return $this->response;
         }
 
         // Response results processing
