@@ -13,7 +13,6 @@ use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Fresns\Web\Exceptions\ErrorException;
 
 trait Clientable
 {
