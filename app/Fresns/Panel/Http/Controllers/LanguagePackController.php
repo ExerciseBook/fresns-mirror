@@ -69,7 +69,7 @@ class LanguagePackController extends Controller
             $languageContent->lang_tag = $langTag;
         }
 
-        foreach ($request->keys as $key => $langKey) {
+        foreach ($keys as $key => $langKey) {
             if (! $defaultKeyNames->contains($langKey)) {
                 $defaultKeys->push([
                     'name' => $langKey,
