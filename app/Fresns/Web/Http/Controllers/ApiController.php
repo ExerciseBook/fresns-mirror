@@ -243,9 +243,9 @@ class ApiController extends Controller
                     ],
                 ]);
 
-                Cookie::queue('fs_uid', $userResult['data.detail.uid']);
-                Cookie::queue('fs_uid_token', $userResult['data.sessionToken.token']);
-                Cookie::queue('timezone', $userResult['data.detail.timezone']);
+                Cookie::queue('fs_uid', data_get($userResult, 'data.detail.uid'));
+                Cookie::queue('fs_uid_token', data_get($userResult, 'data.sessionToken.token'));
+                Cookie::queue('timezone', data_get($userResult, 'data.detail.timezone'));
 
                 return redirect()->intended(fs_route(route('fresns.account.index')));
             }
