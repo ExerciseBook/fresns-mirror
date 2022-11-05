@@ -134,7 +134,11 @@ class AccountGuard implements Guard
             }
         }
 
-        return $key ? $this->account?->$key : $this->account;
+        if ($key) {
+            return data_get($this->account, $key);
+        }
+
+        return $this->account;
     }
 
     /**

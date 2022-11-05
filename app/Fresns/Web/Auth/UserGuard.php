@@ -133,7 +133,11 @@ class UserGuard implements Guard
             }
         }
 
-        return $key ? $this->user?->$key : $this->user;
+        if ($key) {
+            return data_get($this->user, $key);
+        }
+
+        return $this->user;
     }
 
     public function logout(): void
