@@ -72,30 +72,31 @@ class ApiHelper
         ];
     }
 
-    public function isErrorResponse(array $data): bool
+    public function castResponse($response)
     {
-        if (isset($data['code']) && $data['code'] != 0) {
-            info('is error response', $data);
+        $content = $response->getBody()->getContents();
 
-            return true;
+        $data = json_decode($content, true) ?? [];
+
+        if (empty($data)) {
+            info('empty response, ApiException: ' . var_export($content, true));
+            throw new ErrorException($response?->getReasonPhrase(), $response?->getStatusCode());
         }
 
-        return false;
-    }
+        if (array_key_exists('code', $data) && $data['code'] != 0) {
+            info('error response, ApiException: ' . var_export($content, true));
 
-    public function handleErrorResponse(?string $content = null, array $data = [])
-    {
-        info('error response, ApiException: '.var_export($content, true));
-        $message = $data['message'] ?? $data['exception'] ?? '';
-        if (empty($message)) {
-            $message = 'Unknown api error';
-        } else {
-            if ($data['data'] ?? null) {
-                $message = "{$message} ".head($data['data']) ?? '';
+            $message = $data['message'] ?? $data['exception'] ?? '';
+            if (empty($message)) {
+                $message = 'Unknown api error';
+            } else if ($data['data'] ?? null) {
+                $message = "{$message} " . head($data['data']) ?? '';
             }
+
+            throw new ErrorException($message, $data['code']);
         }
 
-        throw new ErrorException($message, $data['code'] ?? 0);
+        return $data;
     }
 
     public static function getHeaders()

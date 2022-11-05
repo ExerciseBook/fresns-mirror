@@ -51,25 +51,9 @@ trait Clientable
 
     public function castResponse($response)
     {
-        $data = json_decode($content = $response->getBody()->getContents(), true) ?? [];
+        $content = $response->getBody()->getContents();
 
-        if (empty($data)) {
-            info('empty response, ApiException: ' . var_export($content, true));
-            throw new ErrorException($response?->getReasonPhrase(), $response?->getStatusCode());
-        }
-
-        if (isset($data['code']) && $data['code'] != 0) {
-            info('error response, ApiException: ' . var_export($content, true));
-
-            $message = $data['message'] ?? $data['exception'] ?? '';
-            if (empty($message)) {
-                $message = 'Unknown api error';
-            } else if ($data['data'] ?? null) {
-                $message = "{$message} " . head($data['data']) ?? '';
-            }
-
-            throw new ErrorException($message, $data['code'] ?? 0);
-        }
+        $data = json_decode($content, true) ?? [];
 
         return $data;
     }
