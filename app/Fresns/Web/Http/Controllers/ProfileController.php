@@ -318,7 +318,7 @@ class ProfileController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->unwrapRequeststststs([
+        $results = $client->unwrapRequests([
             'profile' => $client->getAsync("/api/v2/user/{$uidOrUsername}/detail"),
             'posts'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/posts", [
                 'query' => $query,

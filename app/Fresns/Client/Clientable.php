@@ -132,20 +132,21 @@ trait Clientable
 
             return $this->data;
         }
-
         // Synchronization Request
-        if (method_exists($this->getHttpClient(), $method)) {
+        else if (method_exists($this->getHttpClient(), $method)) {
             $this->response = $this->getHttpClient()->$method(...$args);
-        }
 
-        // return Promise response
-        if ($this->response instanceof Promise) {
-            return $this->response;
-        }
-
-        // Response results processing
-        if ($this->response instanceof Response) {
-            $this->data = $this->castResponse($this->response);
+            // return Promise response
+            if ($this->response instanceof Promise) {
+                return $this->response;
+            }
+    
+            // Response results processing
+            if ($this->response instanceof Response) {
+                $this->data = $this->castResponse($this->response);
+            }
+        } else {
+            throw new \RuntimeException(sprintf("unknown method %s::%s", get_class($this), $method));
         }
 
         // return api data
