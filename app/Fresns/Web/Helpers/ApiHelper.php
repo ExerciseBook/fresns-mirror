@@ -16,6 +16,7 @@ use App\Models\SessionKey;
 use App\Utilities\AppUtility;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApiHelper
 {
@@ -39,6 +40,26 @@ class ApiHelper
         }
 
         return $results;
+    }
+
+    public function paginate()
+    {
+        if (!data_get($this->result, 'data.paginate', false)) {
+            return null;
+        }
+
+        $paginate = new LengthAwarePaginator(
+            items: data_get($this->result, 'data.list'),
+            total: data_get($this->result, 'data.paginate.total'),
+            perPage: data_get($this->result, 'data.paginate.pageSize'),
+            currentPage: data_get($this->result, 'data.paginate.currentPage'),
+        );
+
+        $paginate
+            ->withPath('/' . \request()->path())
+            ->withQueryString();
+
+        return $paginate;
     }
 
     public function getBaseUri(): ?string

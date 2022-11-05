@@ -12,7 +12,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 trait Clientable
 {
@@ -55,26 +54,6 @@ trait Clientable
         $data = json_decode($content, true) ?? [];
 
         return $data;
-    }
-
-    public function paginate()
-    {
-        if (!data_get($this->result, 'data.paginate', false)) {
-            return null;
-        }
-
-        $paginate = new LengthAwarePaginator(
-            items: data_get($this->result, 'data.list'),
-            total: data_get($this->result, 'data.paginate.total'),
-            perPage: data_get($this->result, 'data.paginate.pageSize'),
-            currentPage: data_get($this->result, 'data.paginate.currentPage'),
-        );
-
-        $paginate
-            ->withPath('/' . \request()->path())
-            ->withQueryString();
-
-        return $paginate;
     }
 
     public function unwrapRequests(array $requests)
