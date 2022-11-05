@@ -43,7 +43,7 @@ class LanguagePackController extends Controller
         $languagePack = Config::tag('languages')->where('item_key', 'language_pack')->first();
         $defaultKeys = $languagePack->item_value;
 
-        $keys = $request->contents;
+        $keys = $request->keys;
         $contents = $request->contents;
 
         // delete keys
