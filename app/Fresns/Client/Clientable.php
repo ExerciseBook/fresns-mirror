@@ -138,11 +138,17 @@ trait Clientable
             $this->response = $this->getHttpClient()->$method(...$args);
         }
 
+        // return Promise response
+        if ($this->response instanceof Promise) {
+            return $this->response;
+        }
+
         // Response results processing
         if ($this->response instanceof Response) {
             $this->data = $this->castResponse($this->response);
         }
 
+        // return api data
         return $this->data;
     }
 }
