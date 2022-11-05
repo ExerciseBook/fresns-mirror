@@ -1,6 +1,12 @@
 <?php
 
-namespace ZhenMu\Support\Traits;
+/*
+ * Fresns (https://fresns.org)
+ * Copyright (C) 2021-Present Jarvis Tang
+ * Released under the Apache-2.0 License.
+ */
+
+namespace App\Fresns\Client;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise\Promise;
