@@ -53,7 +53,7 @@ class ProfileController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->unwrapRequeststststststststststststststststststststststststs([
+        $results = $client->unwrapRequests([
             'profile' => $client->getAsync("/api/v2/user/{$uidOrUsername}/detail"),
             'comments'   => $client->getAsync('/api/v2/comment/list', [
                 'query' => $query,
@@ -82,7 +82,7 @@ class ProfileController extends Controller
 
         $client = ApiHelper::make();
 
-        $results = $client->unwrapRequeststststststststststststststststststststststststststststststststststststststststststs([
+        $results = $client->unwrapRequests([
             'profile' => $client->getAsync("/api/v2/user/{$uidOrUsername}/detail"),
             'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/like", [
                 'query' => $query,
