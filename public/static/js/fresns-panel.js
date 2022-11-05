@@ -1029,7 +1029,7 @@ $(document).ready(function () {
                 _method: 'delete'
             },
             success: function (response) {
-                processDown()
+                progressDown && progressDown()
                 var ansi_up = new AnsiUp;
                 var html = ansi_up.ansi_to_html(response);
                 window.uninstallMessage = html;
