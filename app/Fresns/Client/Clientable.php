@@ -27,7 +27,10 @@ trait Clientable
         return new static();
     }
 
-    abstract public function getBaseUri(): ?string;
+    public function getBaseUri(): ?string
+    {
+        return null;
+    }
 
     public function getOptions()
     {
