@@ -25,7 +25,7 @@ class MessageController extends Controller
         ]);
 
         if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message']);
+            throw new ErrorException($result['message'], $result['code']);
         }
 
         $dialogs = QueryHelper::convertApiDataToPaginate(
@@ -75,7 +75,7 @@ class MessageController extends Controller
         ]);
 
         if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message']);
+            throw new ErrorException($result['message'], $result['code']);
         }
 
         $notifies = QueryHelper::convertApiDataToPaginate(

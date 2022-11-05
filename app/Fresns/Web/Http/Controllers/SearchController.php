@@ -58,7 +58,7 @@ class SearchController extends Controller
         ]);
 
         if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message']);
+            throw new ErrorException($result['message'], $result['code']);
         }
 
         $users = QueryHelper::convertApiDataToPaginate(
@@ -79,7 +79,7 @@ class SearchController extends Controller
         ]);
 
         if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message']);
+            throw new ErrorException($result['message'], $result['code']);
         }
 
         $groups = QueryHelper::convertApiDataToPaginate(
@@ -100,7 +100,7 @@ class SearchController extends Controller
         ]);
 
         if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message']);
+            throw new ErrorException($result['message'], $result['code']);
         }
 
         $hashtags = QueryHelper::convertApiDataToPaginate(
@@ -121,7 +121,7 @@ class SearchController extends Controller
         ]);
 
         if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message']);
+            throw new ErrorException($result['message'], $result['code']);
         }
 
         $posts = QueryHelper::convertApiDataToPaginate(
@@ -142,7 +142,7 @@ class SearchController extends Controller
         ]);
 
         if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message']);
+            throw new ErrorException($result['message'], $result['code']);
         }
 
         $comments = QueryHelper::convertApiDataToPaginate(

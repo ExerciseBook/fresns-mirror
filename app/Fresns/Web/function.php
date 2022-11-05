@@ -41,7 +41,7 @@ if (! function_exists('fs_api_config')) {
                 ],
             ]);
 
-            return $result->toArray();
+            return $result;
         });
 
         if (! $apiConfig) {
