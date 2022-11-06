@@ -30,6 +30,7 @@ return [
         'api.account.reset.password',
         'api.user.list',
         'api.user.detail',
+        'api.user.followers.you.follow',
         'api.user.interactive',
         'api.user.mark.list',
         'api.group.tree',
@@ -62,6 +63,7 @@ return [
         'api.common.upload.log',
         'api.account.login',
         'api.account.reset.password',
+        'api.user.followers.you.follow',
     ],
 
     // No login for public mode user
@@ -94,6 +96,7 @@ return [
         'api.account.revoke.delete',
         'api.user.list',
         'api.user.detail',
+        'api.user.followers.you.follow',
         'api.user.mark.list',
         'api.user.auth',
         'api.group.tree',
@@ -134,12 +137,14 @@ return [
         'api.account.apply.delete',
         'api.account.revoke.delete',
         'api.user.auth',
+        'api.user.followers.you.follow',
     ],
 
     // Private mode inaccessible routes
     'privateRoutes' => [
         'api.common.upload.file',
         'api.common.file.link',
+        'api.user.followers.you.follow',
         'api.user.edit',
         'api.user.mark',
         'api.user.mark.note',
