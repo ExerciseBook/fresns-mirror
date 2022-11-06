@@ -42,6 +42,8 @@ class PostController extends Controller
             paginate: $results['posts']['data']['paginate'],
         );
 
+        $sticky = data_get($results, 'sticky.data.list', []);
+
         return view('posts.index', compact('posts', 'sticky'));
     }
 
@@ -71,6 +73,8 @@ class PostController extends Controller
             items: $results['posts']['data']['list'],
             paginate: $results['posts']['data']['paginate'],
         );
+
+        $sticky = data_get($results, 'sticky.data.list', []);
 
         return view('posts.list', compact('posts', 'sticky'));
     }
@@ -248,6 +252,8 @@ class PostController extends Controller
             items: $results['comments']['data']['list'],
             paginate: $results['comments']['data']['paginate'],
         );
+
+        $sticky = data_get($results, 'sticky.data.list', []);
 
         return view('posts.detail', compact('items', 'post', 'comments', 'sticky'));
     }

@@ -190,6 +190,8 @@ class GroupController extends Controller
             paginate: $results['posts']['data']['paginate'],
         );
 
+        $sticky = data_get($results, 'sticky.data.list', []);
+
         return view('groups.detail', compact('items', 'group', 'posts', 'sticky'));
     }
 }
