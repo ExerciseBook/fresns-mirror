@@ -82,10 +82,15 @@ class PostController extends Controller
     // nearby
     public function nearby(Request $request)
     {
+        $query = $request->all();
+        $query['mapId'] = $request->mapId ?? 1;
+        $query['mapLng'] = $request->mapLng ?? null;
+        $query['mapLat'] = $request->mapLat ?? null;
+        $query['unit'] = $request->unit ?? null;
+        $query['length'] = $request->length ?? null;
+
         if (empty($request->mapLng) || empty($request->mapLat)) {
             $result = [
-                'code' => 0,
-                'message' => 'success',
                 'data' => [
                     'paginate' => [
                         'total' => 0,
@@ -96,25 +101,11 @@ class PostController extends Controller
                     'list' => [],
                 ]
             ];
-
-            $posts = QueryHelper::convertApiDataToPaginate(
-                items: $result['data']['list'],
-                paginate: $result['data']['paginate'],
-            );
-
-            return view('posts.nearby', compact('posts'));
+        } else {
+            $result = ApiHelper::make()->get('/api/v2/post/nearby', [
+                'query' => $query,
+            ]);
         }
-
-        $query = $request->all();
-        $query['mapId'] = $request->mapId;
-        $query['mapLng'] = $request->mapLng;
-        $query['mapLat'] = $request->mapLat;
-        $query['unit'] = $request->unit ?? null;
-        $query['length'] = $request->length ?? null;
-
-        $result = ApiHelper::make()->get('/api/v2/post/nearby', [
-            'query' => $query,
-        ]);
 
         $posts = QueryHelper::convertApiDataToPaginate(
             items: $result['data']['list'],

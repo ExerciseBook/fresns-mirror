@@ -56,22 +56,30 @@ class CommentController extends Controller
     // nearby
     public function nearby(Request $request)
     {
-        if (empty($request->mapLng) || empty($request->mapLat)) {
-            return back()->with([
-                'failure' => fs_lang('location').': '.fs_lang('errorEmpty'),
-            ]);
-        }
-
         $query = $request->all();
-        $query['mapId'] = $request->mapId;
-        $query['mapLng'] = $request->mapLng;
-        $query['mapLat'] = $request->mapLat;
+        $query['mapId'] = $request->mapId ?? 1;
+        $query['mapLng'] = $request->mapLng ?? null;
+        $query['mapLat'] = $request->mapLat ?? null;
         $query['unit'] = $request->unit ?? null;
         $query['length'] = $request->length ?? null;
 
-        $result = ApiHelper::make()->get('/api/v2/comment/nearby', [
-            'query' => $query,
-        ]);
+        if (empty($request->mapLng) || empty($request->mapLat)) {
+            $result = [
+                'data' => [
+                    'paginate' => [
+                        'total' => 0,
+                        'pageSize' => 15,
+                        'currentPage' => 1,
+                        'lastPage' => 1,
+                    ],
+                    'list' => [],
+                ]
+            ];
+        } else {
+            $result = ApiHelper::make()->get('/api/v2/comment/nearby', [
+                'query' => $query,
+            ]);
+        }
 
         $comments = QueryHelper::convertApiDataToPaginate(
             items: $result['data']['list'],
