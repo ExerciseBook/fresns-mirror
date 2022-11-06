@@ -39,7 +39,7 @@ class LaravelLocalizationRedirectFilter extends LaravelLocalizationRedirectFilte
             $locale = $params[0];
 
             if (app('laravellocalization')->checkLocaleInSupportedLocales($locale)) {
-                Cookie::queue(Cookie::forever('lang', $locale));
+                Cookie::queue(Cookie::forever('langTag', $locale));
 
                 if (app('laravellocalization')->isHiddenDefault($locale)) {
                     $redirection = app('laravellocalization')->getNonLocalizedURL();

@@ -21,7 +21,9 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 if (! function_exists('current_lang_tag')) {
     function current_lang_tag()
     {
-        return \App::getLocale() ?? ConfigHelper::fresnsConfigByItemKey('default_language');
+        $defaultLanguage = \request()->header('langTag') ?? \request()->cookie('langTag') ?? ConfigHelper::fresnsConfigDefaultLangTag();
+
+        return $defaultLanguage;
     }
 }
 
