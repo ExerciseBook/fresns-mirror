@@ -417,7 +417,7 @@ class PermissionUtility
             return true;
         }
 
-        if ($model->created_at > now()->addMinutes($interval)) {
+        if ($model->created_at < now()->subMinutes($interval)) {
             return true;
         }
 
