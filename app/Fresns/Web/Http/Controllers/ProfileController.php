@@ -31,7 +31,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'posts'   => $client->getAsync('/api/v2/post/list', [
+            'posts' => $client->getAsync('/api/v2/post/list', [
                 'query' => $query,
             ]),
         ]);
@@ -68,7 +68,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'comments'   => $client->getAsync('/api/v2/comment/list', [
+            'comments' => $client->getAsync('/api/v2/comment/list', [
                 'query' => $query,
             ]),
         ]);
@@ -104,7 +104,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/like", [
+            'users' => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/like", [
                 'query' => $query,
             ]),
         ]);
@@ -140,7 +140,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/dislike", [
+            'users' => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/dislike", [
                 'query' => $query,
             ]),
         ]);
@@ -176,7 +176,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/follow", [
+            'users' => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/follow", [
                 'query' => $query,
             ]),
         ]);
@@ -212,7 +212,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/followers-you-follow", [
+            'users' => $client->getAsync("/api/v2/user/{$uidOrUsername}/followers-you-follow", [
                 'query' => $query,
             ]),
         ]);
@@ -248,7 +248,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/block", [
+            'users' => $client->getAsync("/api/v2/user/{$uidOrUsername}/interactive/block", [
                 'query' => $query,
             ]),
         ]);
@@ -288,7 +288,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/users", [
+            'users' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/users", [
                 'query' => $query,
             ]),
         ]);
@@ -324,7 +324,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'groups'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/groups", [
+            'groups' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/groups", [
                 'query' => $query,
             ]),
         ]);
@@ -360,7 +360,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'hashtags'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/hashtags", [
+            'hashtags' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/hashtags", [
                 'query' => $query,
             ]),
         ]);
@@ -396,7 +396,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'posts'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/posts", [
+            'posts' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/posts", [
                 'query' => $query,
             ]),
         ]);
@@ -432,7 +432,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'comments'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/comments", [
+            'comments' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/like/comments", [
                 'query' => $query,
             ]),
         ]);
@@ -472,7 +472,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/users", [
+            'users' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/users", [
                 'query' => $query,
             ]),
         ]);
@@ -508,7 +508,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'groups'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/groups", [
+            'groups' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/groups", [
                 'query' => $query,
             ]),
         ]);
@@ -544,7 +544,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'hashtags'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/hashtags", [
+            'hashtags' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/hashtags", [
                 'query' => $query,
             ]),
         ]);
@@ -580,7 +580,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'posts'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/posts", [
+            'posts' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/posts", [
                 'query' => $query,
             ]),
         ]);
@@ -616,7 +616,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'comments'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/comments", [
+            'comments' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/dislike/comments", [
                 'query' => $query,
             ]),
         ]);
@@ -656,7 +656,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/users", [
+            'users' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/users", [
                 'query' => $query,
             ]),
         ]);
@@ -692,7 +692,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'groups'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/groups", [
+            'groups' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/groups", [
                 'query' => $query,
             ]),
         ]);
@@ -728,7 +728,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'hashtags'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/hashtags", [
+            'hashtags' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/hashtags", [
                 'query' => $query,
             ]),
         ]);
@@ -764,7 +764,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'posts'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/posts", [
+            'posts' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/posts", [
                 'query' => $query,
             ]),
         ]);
@@ -800,7 +800,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'comments'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/comments", [
+            'comments' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/follow/comments", [
                 'query' => $query,
             ]),
         ]);
@@ -840,7 +840,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'users'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/users", [
+            'users' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/users", [
                 'query' => $query,
             ]),
         ]);
@@ -876,7 +876,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'groups'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/groups", [
+            'groups' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/groups", [
                 'query' => $query,
             ]),
         ]);
@@ -912,7 +912,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'hashtags'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/hashtags", [
+            'hashtags' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/hashtags", [
                 'query' => $query,
             ]),
         ]);
@@ -948,7 +948,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'posts'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/posts", [
+            'posts' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/posts", [
                 'query' => $query,
             ]),
         ]);
@@ -984,7 +984,7 @@ class ProfileController extends Controller
                     'page' => 1,
                 ],
             ]),
-            'comments'   => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/comments", [
+            'comments' => $client->getAsync("/api/v2/user/{$uidOrUsername}/mark/block/comments", [
                 'query' => $query,
             ]),
         ]);

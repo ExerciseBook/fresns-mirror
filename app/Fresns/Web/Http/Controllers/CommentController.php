@@ -187,7 +187,7 @@ class CommentController extends Controller
 
         $results = $client->unwrapRequests([
             'comment' => $client->getAsync("/api/v2/comment/{$cid}/detail"),
-            'comments'   => $client->getAsync('/api/v2/comment/list', [
+            'comments' => $client->getAsync('/api/v2/comment/list', [
                 'query' => $query,
             ]),
         ]);

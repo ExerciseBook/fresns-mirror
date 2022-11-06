@@ -167,7 +167,7 @@ class GroupController extends Controller
 
         $results = $client->unwrapRequests([
             'group' => $client->getAsync("/api/v2/group/{$gid}/detail"),
-            'posts'   => $client->getAsync('/api/v2/post/list', [
+            'posts' => $client->getAsync('/api/v2/post/list', [
                 'query' => $query,
             ]),
         ]);
