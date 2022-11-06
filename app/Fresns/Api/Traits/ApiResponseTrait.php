@@ -31,8 +31,7 @@ trait ApiResponseTrait
             extract($data);
         }
 
-        $langTag = \request()->header('langTag') ?? \request()->cookie('langTag') ?? ConfigHelper::fresnsConfigDefaultLangTag();
-        $message = ConfigUtility::getCodeMessage($code, null, $langTag);
+        $message = ConfigUtility::getCodeMessage($code, null, \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag()));
 
         $data = $data ?: null;
         $fresnsResponse = compact('code', 'message', 'data') + array_filter(compact('paginate'));
@@ -68,8 +67,7 @@ trait ApiResponseTrait
 
     public function failure($code = 30000, $message = 'unknown error', $data = null, $headers = [])
     {
-        $langTag = \request()->header('langTag') ?? \request()->cookie('langTag') ?? ConfigHelper::fresnsConfigDefaultLangTag();
-        $message = ConfigUtility::getCodeMessage($code, null, $langTag);
+        $message = ConfigUtility::getCodeMessage($code, null, \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag()));
 
         if (! \request()->wantsJson()) {
             $message = \json_encode(compact('code', 'message', 'data'), \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT);
