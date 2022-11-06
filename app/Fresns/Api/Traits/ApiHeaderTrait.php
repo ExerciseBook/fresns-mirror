@@ -36,9 +36,9 @@ trait ApiHeaderTrait
     // langTag
     public function langTag(): string
     {
-        $defaultLanguage = \request()->header('langTag') ?? \request()->cookie('langTag') ?? ConfigHelper::fresnsConfigDefaultLangTag();
+        $defaultLanguage = ConfigHelper::fresnsConfigDefaultLangTag();
 
-        return $defaultLanguage;
+        return \request()->header('langTag', $defaultLanguage);
     }
 
     // timezone
