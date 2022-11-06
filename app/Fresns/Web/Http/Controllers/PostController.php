@@ -20,20 +20,29 @@ class PostController extends Controller
     {
         $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_POST, $request->all());
 
-        $result = ApiHelper::make()->get('/api/v2/post/list', [
-            'query' => $query,
+        $client = ApiHelper::make();
+
+        $results = $client->unwrapRequests([
+            'posts' => $client->getAsync('/api/v2/post/list', [
+                'query' => $query,
+            ]),
+            'sticky' => $client->getAsync('/api/v2/post/list', [
+                'query' => [
+                    'stickyState' => 3,
+                ],
+            ]),
         ]);
 
-        if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message'], $result['code']);
+        if (data_get($results, 'posts.code') !== 0) {
+            throw new ErrorException($results['posts']['message'], $results['posts']['code']);
         }
 
         $posts = QueryHelper::convertApiDataToPaginate(
-            items: $result['data']['list'],
-            paginate: $result['data']['paginate'],
+            items: $results['posts']['data']['list'],
+            paginate: $results['posts']['data']['paginate'],
         );
 
-        return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts', 'sticky'));
     }
 
     // list
@@ -41,25 +50,55 @@ class PostController extends Controller
     {
         $query = QueryHelper::convertOptionToRequestParam(QueryHelper::TYPE_POST_LIST, $request->all());
 
-        $result = ApiHelper::make()->get('/api/v2/post/list', [
-            'query' => $query,
+        $client = ApiHelper::make();
+
+        $results = $client->unwrapRequests([
+            'posts' => $client->getAsync('/api/v2/post/list', [
+                'query' => $query,
+            ]),
+            'sticky' => $client->getAsync('/api/v2/post/list', [
+                'query' => [
+                    'stickyState' => 3,
+                ],
+            ]),
         ]);
 
+        if (data_get($results, 'posts.code') !== 0) {
+            throw new ErrorException($results['posts']['message'], $results['posts']['code']);
+        }
+
         $posts = QueryHelper::convertApiDataToPaginate(
-            items: $result['data']['list'],
-            paginate: $result['data']['paginate'],
+            items: $results['posts']['data']['list'],
+            paginate: $results['posts']['data']['paginate'],
         );
 
-        return view('posts.list', compact('posts'));
+        return view('posts.list', compact('posts', 'sticky'));
     }
 
     // nearby
     public function nearby(Request $request)
     {
         if (empty($request->mapLng) || empty($request->mapLat)) {
-            return back()->with([
-                'failure' => fs_lang('location').': '.fs_lang('errorEmpty'),
-            ]);
+            $result = [
+                'code' => 0,
+                'message' => 'success',
+                'data' => [
+                    'paginate' => [
+                        'total' => 0,
+                        'pageSize' => 15,
+                        'currentPage' => 1,
+                        'lastPage' => 1,
+                    ],
+                    'list' => [],
+                ]
+            ];
+
+            $posts = QueryHelper::convertApiDataToPaginate(
+                items: $result['data']['list'],
+                paginate: $result['data']['paginate'],
+            );
+
+            return view('posts.nearby', compact('posts'));
         }
 
         $query = $request->all();
@@ -190,6 +229,12 @@ class PostController extends Controller
             'comments' => $client->getAsync('/api/v2/comment/list', [
                 'query' => $query,
             ]),
+            'sticky' => $client->getAsync('/api/v2/comment/list', [
+                'query' => [
+                    'pid' => $pid,
+                    'sticky' => true,
+                ],
+            ]),
         ]);
 
         if ($results['post']['code'] != 0) {
@@ -204,6 +249,6 @@ class PostController extends Controller
             paginate: $results['comments']['data']['paginate'],
         );
 
-        return view('posts.detail', compact('items', 'post', 'comments'));
+        return view('posts.detail', compact('items', 'post', 'comments', 'sticky'));
     }
 }
