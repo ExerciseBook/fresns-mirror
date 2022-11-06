@@ -53,7 +53,7 @@ trait ApiResponseTrait
         $data = [
             'paginate' => [
                 'total' => 0,
-                'pageSize' => 0,
+                'pageSize' => 15,
                 'currentPage' => 1,
                 'lastPage' => 1,
             ],
