@@ -30,7 +30,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::prefix(LaravelLocalization::setLocale())
     ->middleware([
         'web',
-        LaravelLocalizationRedirectFilter::class,
+        \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
         WebConfiguration::class,
         AccountAuthorize::class,
         UserAuthorize::class,
