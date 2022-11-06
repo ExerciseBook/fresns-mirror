@@ -23,7 +23,6 @@ class EncryptCookies extends Middleware
         'fs_aid_token',
         'fs_uid',
         'fs_uid_token',
-        'lang', // 管理后台使用
-        'langTag', // 引擎 url 多语言使用
+        'lang',
     ];
 }
