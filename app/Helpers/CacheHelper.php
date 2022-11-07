@@ -102,6 +102,16 @@ class CacheHelper
     }
 
     /**
+     * forget fresns keys.
+     */
+    public static function forgetFresnsKeys(array $keys)
+    {
+        foreach ($keys as $key) {
+            Cache::forget($key);
+        }
+    }
+
+    /**
      * forget fresns multilingual info.
      */
     public static function forgetFresnsMultilingual(string $cacheName)
