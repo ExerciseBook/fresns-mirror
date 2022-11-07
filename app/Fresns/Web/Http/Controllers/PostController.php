@@ -138,10 +138,10 @@ class PostController extends Controller
 
         $archive = $post['data']['detail'];
 
-        $isLbs = $post['detail']['location']['isLbs'] ?? false;
-        $mapId = $post['detail']['location']['mapId'] ?? 1;
-        $latitude = $post['detail']['location']['latitude'] ?? null;
-        $longitude = $post['detail']['location']['longitude'] ?? null;
+        $isLbs = $$archive['location']['isLbs'] ?? false;
+        $mapId = $$archive['location']['mapId'] ?? 1;
+        $latitude = $$archive['location']['latitude'] ?? null;
+        $longitude = $$archive['location']['longitude'] ?? null;
 
         if (! $isLbs || empty($latitude) || empty($longitude)) {
             return back()->with([

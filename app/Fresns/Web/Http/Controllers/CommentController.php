@@ -112,10 +112,10 @@ class CommentController extends Controller
 
         $archive = $comment['data']['detail'];
 
-        $isLbs = $comment['detail']['location']['isLbs'] ?? false;
-        $mapId = $comment['detail']['location']['mapId'] ?? 1;
-        $latitude = $comment['detail']['location']['latitude'] ?? null;
-        $longitude = $comment['detail']['location']['longitude'] ?? null;
+        $isLbs = $archive['location']['isLbs'] ?? false;
+        $mapId = $archive['location']['mapId'] ?? 1;
+        $latitude = $archive['location']['latitude'] ?? null;
+        $longitude = $archive['location']['longitude'] ?? null;
 
         if (! $isLbs || empty($latitude) || empty($longitude)) {
             return back()->with([
