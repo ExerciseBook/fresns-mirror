@@ -26,7 +26,7 @@ class PostController extends Controller
             'posts' => $client->getAsync('/api/v2/post/list', [
                 'query' => $query,
             ]),
-            'sticky' => $client->getAsync('/api/v2/post/list', [
+            'stickies' => $client->getAsync('/api/v2/post/list', [
                 'query' => [
                     'stickyState' => 3,
                 ],
@@ -42,9 +42,9 @@ class PostController extends Controller
             paginate: $results['posts']['data']['paginate'],
         );
 
-        $sticky = data_get($results, 'sticky.data.list', []);
+        $stickies = data_get($results, 'stickies.data.list', []);
 
-        return view('posts.index', compact('posts', 'sticky'));
+        return view('posts.index', compact('posts', 'stickies'));
     }
 
     // list
@@ -58,7 +58,7 @@ class PostController extends Controller
             'posts' => $client->getAsync('/api/v2/post/list', [
                 'query' => $query,
             ]),
-            'sticky' => $client->getAsync('/api/v2/post/list', [
+            'stickies' => $client->getAsync('/api/v2/post/list', [
                 'query' => [
                     'stickyState' => 3,
                 ],
@@ -74,9 +74,9 @@ class PostController extends Controller
             paginate: $results['posts']['data']['paginate'],
         );
 
-        $sticky = data_get($results, 'sticky.data.list', []);
+        $stickies = data_get($results, 'stickies.data.list', []);
 
-        return view('posts.list', compact('posts', 'sticky'));
+        return view('posts.list', compact('posts', 'stickies'));
     }
 
     // nearby
@@ -224,7 +224,7 @@ class PostController extends Controller
             'comments' => $client->getAsync('/api/v2/comment/list', [
                 'query' => $query,
             ]),
-            'sticky' => $client->getAsync('/api/v2/comment/list', [
+            'stickies' => $client->getAsync('/api/v2/comment/list', [
                 'query' => [
                     'pid' => $pid,
                     'sticky' => true,
@@ -244,8 +244,8 @@ class PostController extends Controller
             paginate: $results['comments']['data']['paginate'],
         );
 
-        $sticky = data_get($results, 'sticky.data.list', []);
+        $stickies = data_get($results, 'stickies.data.list', []);
 
-        return view('posts.detail', compact('items', 'post', 'comments', 'sticky'));
+        return view('posts.detail', compact('items', 'post', 'comments', 'stickies'));
     }
 }

@@ -170,7 +170,7 @@ class GroupController extends Controller
             'posts' => $client->getAsync('/api/v2/post/list', [
                 'query' => $query,
             ]),
-            'sticky' => $client->getAsync('/api/v2/post/list', [
+            'stickies' => $client->getAsync('/api/v2/post/list', [
                 'query' => [
                     'gid' => $gid,
                     'stickyState' => 2,
@@ -190,8 +190,8 @@ class GroupController extends Controller
             paginate: $results['posts']['data']['paginate'],
         );
 
-        $sticky = data_get($results, 'sticky.data.list', []);
+        $stickies = data_get($results, 'stickies.data.list', []);
 
-        return view('groups.detail', compact('items', 'group', 'posts', 'sticky'));
+        return view('groups.detail', compact('items', 'group', 'posts', 'stickies'));
     }
 }
