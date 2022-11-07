@@ -11,7 +11,10 @@ namespace App\Fresns\Web\Http\Controllers;
 use App\Fresns\Web\Exceptions\ErrorException;
 use App\Fresns\Web\Helpers\ApiHelper;
 use App\Fresns\Web\Helpers\QueryHelper;
+use App\Helpers\CacheHelper;
+use App\Models\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PostController extends Controller
 {
@@ -116,31 +119,73 @@ class PostController extends Controller
     }
 
     // location
-    public function location(Request $request)
+    public function location(Request $request, string $pid, ?string $type = null)
     {
-        if (empty($request->mapLng) || empty($request->mapLat)) {
+        $langTag = current_lang_tag();
+
+        $cacheKey = "fresns_web_post_{$pid}_{$langTag}";
+        $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_ALL);
+
+        $post = Cache::remember($cacheKey, $cacheTime, function () use ($pid) {
+            return ApiHelper::make()->get("/api/v2/post/{$pid}/detail");
+        });
+
+        if ($post['code'] != 0) {
+            Cache::forget($cacheKey);
+
+            throw new ErrorException($post['message'], $post['code']);
+        }
+
+        $archive = $post['data']['detail'];
+
+        $isLbs = $post['detail']['location']['isLbs'] ?? false;
+        $mapId = $post['detail']['location']['mapId'] ?? 1;
+        $latitude = $post['detail']['location']['latitude'] ?? null;
+        $longitude = $post['detail']['location']['longitude'] ?? null;
+
+        if (! $isLbs || empty($latitude) || empty($longitude)) {
             return back()->with([
                 'failure' => fs_lang('location').': '.fs_lang('errorEmpty'),
             ]);
         }
 
+        $type = match ($type) {
+            'posts' => 'posts',
+            'comments' => 'comments',
+            default => 'posts',
+        };
+
         $query = $request->all();
-        $query['mapId'] = $request->mapId;
-        $query['mapLng'] = $request->mapLng;
-        $query['mapLat'] = $request->mapLat;
-        $query['unit'] = $request->unit ?? null;
-        $query['length'] = $request->length ?? null;
+        $query['mapId'] = $mapId;
+        $query['mapLng'] = $longitude;
+        $query['mapLat'] = $latitude;
+        $query['unit'] = $post['detail']['location']['unit'] ?? null;
 
-        $result = ApiHelper::make()->get('/api/v2/post/nearby', [
-            'query' => $query,
-        ]);
+        if ($type == 'posts') {
+            $result = ApiHelper::make()->get('/api/v2/post/nearby', [
+                'query' => $query,
+            ]);
 
-        $posts = QueryHelper::convertApiDataToPaginate(
-            items: $result['data']['list'],
-            paginate: $result['data']['paginate'],
-        );
+            $posts = QueryHelper::convertApiDataToPaginate(
+                items: $result['data']['list'],
+                paginate: $result['data']['paginate'],
+            );
 
-        return view('posts.location', compact('posts'));
+            $comments = [];
+        } else {
+            $result = ApiHelper::make()->get('/api/v2/comment/nearby', [
+                'query' => $query,
+            ]);
+
+            $comments = QueryHelper::convertApiDataToPaginate(
+                items: $result['data']['list'],
+                paginate: $result['data']['paginate'],
+            );
+
+            $posts = [];
+        }
+
+        return view('posts.location', compact('archive', 'type', 'posts', 'comments'));
     }
 
     // likes
