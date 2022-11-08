@@ -166,7 +166,7 @@ class WebsiteController extends Controller
             'website_comment_detail_path',
         ];
 
-        // system reservation
+        // system reserved
         $pathKeys = [
             'fresns',
             'location',
@@ -183,9 +183,8 @@ class WebsiteController extends Controller
             $messages["$key.required"] = __('FsLang::tips.website_path_empty_error');
             $messages["$key.regex"] = __('FsLang::tips.website_path_format_error');
 
-            // 系统路径冲突
             if (in_array($request->{$key}, $pathKeys)) {
-                return back()->with('failure', sprintf("系统路径冲突: ", $key));
+                return back()->with('failure', sprintf(__('FsLang::tips.website_path_reserved_error').' -> ', $key));
             }
         }
 

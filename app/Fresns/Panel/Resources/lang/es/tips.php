@@ -24,6 +24,9 @@ return [
     'uninstallFailure' => 'Fallo de desinstalación',
     'copySuccess' => 'Copiar el éxito',
     'viewLog' => 'Hubo un problema con la implementación, por favor vea el registro del sistema Fresns para más detalles',
+    // auth empty
+    'auth_empty_title' => 'Por favor, utilice el portal correcto para acceder a la consola',
+    'auth_empty_description' => 'Ha cerrado la sesión y no puede acceder a la página de la consola, por favor, acceda al portal de acceso para iniciar la sesión.',
     // request
     'request_in_progress' => 'solicitud en curso...',
     'requestSuccess' => 'Solicitud de éxito',
@@ -62,6 +65,7 @@ return [
     // website
     'website_path_empty_error' => 'Fallo al guardar, el parámetro de la ruta no puede estar vacío',
     'website_path_format_error' => 'no se ha podido guardar, los parámetros de la ruta sólo se admiten en letras inglesas simples',
+    'website_path_reserved_error' => 'Guardar falló, el parámetro de la ruta contiene el nombre del parámetro reservado del sistema',
     'website_path_unique_error' => 'fallo al guardar, parámetros de ruta duplicados, los nombres de los parámetros de ruta no pueden repetirse',
     // theme
     'theme_error' => 'El tema es incorrecto o no existe',

@@ -24,6 +24,9 @@ return [
     'uninstallFailure' => 'Falha na desinstalação',
     'copySuccess' => 'Copie o sucesso',
     'viewLog' => 'Houve um problema com a implementação, por favor consulte o registo do sistema Fresns para mais detalhes',
+    // auth empty
+    'auth_empty_title' => 'Por favor utilize o portal correcto para iniciar sessão na consola',
+    'auth_empty_description' => 'Está desconectado e não pode aceder à página da consola, por favor aceda ao portal de acesso para iniciar sessão.',
     // request
     'request_in_progress' => 'pedido em curso...',
     'requestSuccess' => 'Pedir sucesso',
@@ -62,6 +65,7 @@ return [
     // website
     'website_path_empty_error' => 'Falha no salvamento, o parâmetro do caminho não pode estar vazio',
     'website_path_format_error' => 'não conseguiu salvar, os parâmetros do caminho só são suportados em letras simples em inglês',
+    'website_path_reserved_error' => 'Salvar falha, o parâmetro do caminho contém o nome do parâmetro reservado do sistema',
     'website_path_unique_error' => 'não salvou, parâmetros de caminho duplicados, não é permitido que os nomes dos parâmetros de caminho se repitam um ao outro',
     // theme
     'theme_error' => 'O tema é incorrecto ou não existe',
