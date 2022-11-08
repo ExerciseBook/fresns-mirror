@@ -46,12 +46,12 @@ class DialogController extends Controller
 
         $userService = new UserService;
 
-        $item = null;
+        $list = null;
         foreach ($dialogs as $dialog) {
             if ($dialog->a_user_id == $authUser->id) {
-                $dialogUser = $userService->userData($dialog->aUser, $langTag, $timezone, $authUser->id);
-            } else {
                 $dialogUser = $userService->userData($dialog->bUser, $langTag, $timezone, $authUser->id);
+            } else {
+                $dialogUser = $userService->userData($dialog->aUser, $langTag, $timezone, $authUser->id);
             }
 
             $latestMessage['messageId'] = $dialog->latest_message_id;
@@ -63,10 +63,10 @@ class DialogController extends Controller
             $item['dialogUser'] = $dialogUser;
             $item['latestMessage'] = $latestMessage;
             $item['unreadCount'] = DialogMessage::where('dialog_id', $dialog->id)->where('receive_user_id', $authUser->id)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
-            $item[] = $item;
+            $list[] = $item;
         }
 
-        return $this->fresnsPaginate($item, $dialogs->total(), $dialogs->perPage());
+        return $this->fresnsPaginate($list, $dialogs->total(), $dialogs->perPage());
     }
 
     // detail
@@ -83,7 +83,7 @@ class DialogController extends Controller
         $dialog = Dialog::where('id', $dialogId)->first();
 
         if (empty($dialog)) {
-            throw new ApiException(36600);
+            throw new ApiException(36601);
         }
 
         if ($dialog->a_user_id != $authUser->id && $dialog->b_user_id != $authUser->id) {
@@ -117,7 +117,7 @@ class DialogController extends Controller
         $dialog = Dialog::where('id', $dialogId)->first();
 
         if (empty($dialog)) {
-            throw new ApiException(36600);
+            throw new ApiException(36601);
         }
 
         if ($dialog->a_user_id != $authUser->id && $dialog->b_user_id != $authUser->id) {
@@ -148,7 +148,7 @@ class DialogController extends Controller
             $item['sendTimeFormat'] = DateHelper::fresnsFormatDateTime($message->created_at, $timezone, $langTag);
             $item['type'] = $message->message_type;
             $item['content'] = ContentUtility::replaceBlockWords('dialog', $message->message_text);
-            $item['file'] = FileHelper::fresnsFileInfoById($message->message_file_id);
+            $item['file'] = $message->message_file_id ? FileHelper::fresnsFileInfoById($message->message_file_id) : null;
             $item['readStatus'] = (bool) $message->receive_read_at;
             $messageList[] = $item;
         }
