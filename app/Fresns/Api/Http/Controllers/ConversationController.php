@@ -70,7 +70,7 @@ class ConversationController extends Controller
     }
 
     // detail
-    public function detail($uidOrUsername)
+    public function detail(string $uidOrUsername)
     {
         $langTag = $this->langTag();
         $timezone = $this->timezone();
@@ -103,7 +103,7 @@ class ConversationController extends Controller
     }
 
     // messages
-    public function messages($uidOrUsername, Request $request)
+    public function messages(Request $request, string $uidOrUsername)
     {
         $dtoRequest = new PaginationDTO($request->all());
         $langTag = $this->langTag();

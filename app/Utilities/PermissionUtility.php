@@ -164,7 +164,9 @@ class PermissionUtility
         }
 
         $authUserRolePerm = PermissionUtility::getUserMainRolePerm($receiveUser->id);
-        if (! $authUserRolePerm['conversation']) {
+        $conversationConfig = $authUserRolePerm['conversation'] ?? false;
+
+        if (! $conversationConfig) {
             $info['status'] = false;
             $info['code'] = 36114;
             $info['message'] = ConfigUtility::getCodeMessage(36114, 'Fresns', $langTag);
