@@ -25,8 +25,8 @@ return [
     'copySuccess' => 'Erfolg kopieren',
     'viewLog' => 'Bei der Implementierung ist ein Problem aufgetreten; Einzelheiten finden Sie im Fresns-Systemprotokoll',
     // auth empty
-    'auth_empty_title' => 'Bitte verwenden Sie das richtige Portal, um sich an der Konsole anzumelden',
-    'auth_empty_description' => 'Sie sind abgemeldet und können nicht auf die Konsolenseite zugreifen. Bitte melden Sie sich über das Zugangsportal an.',
+    'auth_empty_title' => 'Bitte verwenden Sie das richtige Portal, um sich am Panel anzumelden',
+    'auth_empty_description' => 'Sie haben sich abgemeldet oder Ihr Login hat sich verzögert. Bitte besuchen Sie das Login-Portal, um sich erneut anzumelden.',
     // request
     'request_in_progress' => 'Anfrage in Bearbeitung...',
     'requestSuccess' => 'Erfolg anfordern',

@@ -25,8 +25,8 @@ return [
     'copySuccess' => '複製成功',
     'viewLog' => '執行遇到了問題，詳細信息請查看 Fresns 系統日誌',
     // auth empty
-    'auth_empty_title' => '請使用正確的入口登錄控制台',
-    'auth_empty_description' => '您已退出登錄，無法訪問控制台頁面，請訪問訪問入口頁登錄。',
+    'auth_empty_title' => '請使用正確的入口登錄面板',
+    'auth_empty_description' => '您已退出登錄或者登錄超時，請訪問登錄入口重新登錄。',
     // request
     'request_in_progress' => '正在請求中...',
     'requestSuccess' => '請求成功',

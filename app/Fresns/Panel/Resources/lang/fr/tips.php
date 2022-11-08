@@ -25,8 +25,8 @@ return [
     'copySuccess' => 'Copier le succès',
     'viewLog' => 'Il y a eu un problème avec l\'implémentation, veuillez consulter le journal système de Fresns pour plus de détails.',
     // auth empty
-    'auth_empty_title' => 'Veuillez utiliser le portail correct pour vous connecter à la console.',
-    'auth_empty_description' => 'Vous êtes déconnecté et ne pouvez pas accéder à la page de la console, veuillez accéder au portail d\'accès pour vous connecter.',
+    'auth_empty_title' => 'Veuillez utiliser le bon portail pour vous connecter au panneau.',
+    'auth_empty_description' => 'Vous vous êtes déconnecté ou votre connexion a expiré, veuillez visiter le portail de connexion pour vous reconnecter.',
     // request
     'request_in_progress' => 'demande en cours...',
     'requestSuccess' => 'Demande de succès',

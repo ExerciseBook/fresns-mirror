@@ -25,8 +25,8 @@ return [
     'copySuccess' => 'Salin kesuksesan',
     'viewLog' => 'Ada masalah dengan implementasi, silakan lihat log sistem Fresns untuk detailnya',
     // auth empty
-    'auth_empty_title' => 'Harap gunakan portal yang benar untuk masuk ke konsol',
-    'auth_empty_description' => 'Anda log keluar dan tidak dapat mengakses halaman konsol, silakan akses portal akses untuk masuk.',
+    'auth_empty_title' => 'Harap gunakan portal yang benar untuk masuk ke panel',
+    'auth_empty_description' => 'Anda telah keluar atau waktu login Anda telah habis, silakan kunjungi portal login untuk masuk kembali.',
     // request
     'request_in_progress' => 'permintaan sedang diproses...',
     'requestSuccess' => 'Permintaan Sukses',

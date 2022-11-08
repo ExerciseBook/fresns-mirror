@@ -25,8 +25,8 @@ return [
     'copySuccess' => '成功をコピーする',
     'viewLog' => '実装に問題がありました。詳細はFresnsのシステムログをご覧ください。',
     // auth empty
-    'auth_empty_title' => '正しいポータルでコンソールにログインしてください。',
-    'auth_empty_description' => 'ログアウトしているため、コンソールページにアクセスできません。アクセスポータルにアクセスしてログインしてください。',
+    'auth_empty_title' => 'パネルにログインする際は、正しいポータルをご利用ください。',
+    'auth_empty_description' => 'ログアウトした、またはログインがタイムアウトした場合は、ログインポータルで再ログインしてください。',
     // request
     'request_in_progress' => 'リクエスト中...',
     'requestSuccess' => 'リクエストサクセス',

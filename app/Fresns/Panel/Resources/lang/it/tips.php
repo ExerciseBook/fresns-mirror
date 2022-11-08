@@ -25,8 +25,8 @@ return [
     'copySuccess' => 'Copia il successo',
     'viewLog' => 'Si è verificato un problema con l\'implementazione; per maggiori dettagli, consultare il log di sistema di Fresns.',
     // auth empty
-    'auth_empty_title' => 'Utilizzare il portale corretto per accedere alla console',
-    'auth_empty_description' => 'Si è disconnessi e non si può accedere alla pagina della console, si prega di accedere al portale di accesso per effettuare il login.',
+    'auth_empty_title' => 'Si prega di utilizzare il portale corretto per accedere al pannello',
+    'auth_empty_description' => 'L\'accesso è stato interrotto o il login è scaduto, si prega di visitare il portale di login per accedere nuovamente.',
     // request
     'request_in_progress' => 'richiesta in corso...',
     'requestSuccess' => 'Richiesta di successo',

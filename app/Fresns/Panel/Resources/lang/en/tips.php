@@ -25,8 +25,8 @@ return [
     'copySuccess' => 'Copy Success',
     'viewLog' => 'There was a problem with the implementation, please see the Fresns system log for details',
     // auth empty
-    'auth_empty_title' => 'Please use the correct portal to login to the console',
-    'auth_empty_description' => 'You are logged out and cannot access the console page, please visit the login portal to login.',
+    'auth_empty_title' => 'Please use the correct portal to login to the panel',
+    'auth_empty_description' => 'You have logged out or your login has timed out, please visit the login portal to log in again.',
     // request
     'request_in_progress' => 'Request in progress...',
     'requestSuccess' => 'Request Success',

@@ -25,8 +25,8 @@ return [
     'copySuccess' => 'Copiar el éxito',
     'viewLog' => 'Hubo un problema con la implementación, por favor vea el registro del sistema Fresns para más detalles',
     // auth empty
-    'auth_empty_title' => 'Por favor, utilice el portal correcto para acceder a la consola',
-    'auth_empty_description' => 'Ha cerrado la sesión y no puede acceder a la página de la consola, por favor, acceda al portal de acceso para iniciar la sesión.',
+    'auth_empty_title' => 'Por favor, utilice el portal correcto para acceder al panel',
+    'auth_empty_description' => 'Se ha cerrado la sesión o se ha agotado el tiempo de acceso, por favor visite el portal de acceso para volver a entrar.',
     // request
     'request_in_progress' => 'solicitud en curso...',
     'requestSuccess' => 'Solicitud de éxito',

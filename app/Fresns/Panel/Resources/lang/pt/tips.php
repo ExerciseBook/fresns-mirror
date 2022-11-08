@@ -25,8 +25,8 @@ return [
     'copySuccess' => 'Copie o sucesso',
     'viewLog' => 'Houve um problema com a implementação, por favor consulte o registo do sistema Fresns para mais detalhes',
     // auth empty
-    'auth_empty_title' => 'Por favor utilize o portal correcto para iniciar sessão na consola',
-    'auth_empty_description' => 'Está desconectado e não pode aceder à página da consola, por favor aceda ao portal de acesso para iniciar sessão.',
+    'auth_empty_title' => 'Favor utilizar o portal correcto para entrar no painel',
+    'auth_empty_description' => 'Terminou a sessão ou o seu login está desactivado, por favor visite o portal de login para iniciar novamente a sessão.',
     // request
     'request_in_progress' => 'pedido em curso...',
     'requestSuccess' => 'Pedir sucesso',

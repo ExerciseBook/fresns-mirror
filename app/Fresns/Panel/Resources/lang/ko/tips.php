@@ -25,8 +25,8 @@ return [
     'copySuccess' => '성공을 복사하십시오',
     'viewLog' => '실행에 문제가 발생했습니다. 자세한 내용은 Fresns 시스템 로그를 확인하십시오.',
     // auth empty
-    'auth_empty_title' => '올바른 항목을 사용하여 콘솔에 로그인하십시오.',
-    'auth_empty_description' => '로그아웃되어 콘솔 페이지에 액세스할 수 없습니다. 액세스 포털 페이지를 방문하여 로그인하십시오.',
+    'auth_empty_title' => '올바른 항목을 사용하여 패널에 로그인하십시오.',
+    'auth_empty_description' => '로그아웃했거나 로그인 시간이 초과되었습니다. 로그인 포털을 방문하여 다시 로그인하십시오.',
     // request
     'request_in_progress' => '요청 진행 중...',
     'requestSuccess' => '요청 성공',
