@@ -60,7 +60,7 @@ trait UserServiceTrait
         $profile['birthday'] = DateHelper::fresnsDateTimeByTimezone($userData->birthday, $timezone, $langTag);
         $profile['bio'] = $userData->bio;
         $profile['location'] = $userData->location;
-        $profile['dialogLimit'] = $userData->dialog_limit;
+        $profile['conversationLimit'] = $userData->conversation_limit;
         $profile['commentLimit'] = $userData->comment_limit;
         $profile['timezone'] = $userData->timezone ?? ConfigHelper::fresnsConfigByItemKey('default_timezone');
         $profile['verifiedStatus'] = (bool) $userData->verified_status;
