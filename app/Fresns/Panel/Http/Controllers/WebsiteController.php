@@ -166,6 +166,16 @@ class WebsiteController extends Controller
             'website_comment_detail_path',
         ];
 
+        // system reservation
+        $pathKeys = [
+            'fresns',
+            'location',
+            'notifications',
+            'conversations',
+            'messages',
+            'drafts',
+        ];
+
         $rules = [];
         $messages = [];
         foreach ($configKeys as $key) {
