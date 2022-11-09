@@ -50,7 +50,11 @@ class ConversationController extends Controller
             })
             ->where('b_is_display', 1);
 
-        $allConversations = $aConversations->union($bConversations)->latest('latest_message_at')->paginate($request->get('pageSize', 15));
+        if ($dtoRequest->isPin) {
+            $allConversations = $aConversations->union($bConversations)->latest('latest_message_at')->get();
+        } else {
+            $allConversations = $aConversations->union($bConversations)->latest('latest_message_at')->paginate($request->get('pageSize', 15));
+        }
 
         $userService = new UserService;
 
