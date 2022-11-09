@@ -56,6 +56,7 @@ class GlobalController extends Controller
 
         if ($dtoRequest->isAll) {
             $configs = $configQuery->get();
+
             $total = $configs->count();
             $perPage = $total;
         } else {
