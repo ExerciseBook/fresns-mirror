@@ -495,8 +495,8 @@ class UserController extends Controller
         $data['features'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_FEATURE, null, null, $authUserId, $langTag);
         $data['profiles'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_PROFILE, null, null, $authUserId, $langTag);
 
-        $aConversations = Conversation::where('a_user_id', $authUserId)->where('a_is_display', 1)->isEnable();
-        $bConversations = Conversation::where('b_user_id', $authUserId)->where('b_is_display', 1)->isEnable();
+        $aConversations = Conversation::where('a_user_id', $authUserId)->where('a_is_display', 1);
+        $bConversations = Conversation::where('b_user_id', $authUserId)->where('b_is_display', 1);
         $conversationCount = $aConversations->union($bConversations)->count();
         $conversationMessageCount = ConversationMessage::where('receive_user_id', $authUserId)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
         $conversations['conversationCount'] = $conversationCount;
