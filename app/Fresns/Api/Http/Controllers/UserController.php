@@ -495,10 +495,11 @@ class UserController extends Controller
         $data['features'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_FEATURE, null, null, $authUserId, $langTag);
         $data['profiles'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_PROFILE, null, null, $authUserId, $langTag);
 
-        $conversationACount = Conversation::where('a_user_id', $authUserId)->where('a_is_display', 1)->isEnable()->count();
-        $conversationBCount = Conversation::where('b_user_id', $authUserId)->where('b_is_display', 1)->isEnable()->count();
+        $aConversations = Conversation::where('a_user_id', $authUserId)->where('a_is_display', 1)->isEnable();
+        $bConversations = Conversation::where('b_user_id', $authUserId)->where('b_is_display', 1)->isEnable();
+        $conversationCount = $aConversations->union($bConversations)->count();
         $conversationMessageCount = ConversationMessage::where('receive_user_id', $authUserId)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
-        $conversations['conversationCount'] = $conversationACount + $conversationBCount;
+        $conversations['conversationCount'] = $conversationCount;
         $conversations['unreadMessages'] = $conversationMessageCount;
         $data['conversations'] = $conversations;
 
