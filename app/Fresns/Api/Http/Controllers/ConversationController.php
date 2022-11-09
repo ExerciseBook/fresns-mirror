@@ -285,13 +285,12 @@ class ConversationController extends Controller
                 throw new ApiException(36602);
             }
 
-            $aConversation->update([
-                'a_is_read' => 1,
-            ]);
-
-            $bConversation->update([
-                'b_is_read' => 1,
-            ]);
+            ConversationMessage::where('conversation_id', $dtoRequest->conversationId)
+                ->where('receive_user_id', $authUser->id)
+                ->whereNull('receive_read_at')
+                ->update([
+                    'receive_read_at' => now(),
+                ]);
         } else {
             $idArr = array_filter(explode(',', $dtoRequest->messageIds));
 
