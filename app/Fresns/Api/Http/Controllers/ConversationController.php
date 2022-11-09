@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Http\Controllers;
 
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\ConversationDTO;
+use App\Fresns\Api\Http\DTO\ConversationListDTO;
 use App\Fresns\Api\Http\DTO\ConversationSendMessageDTO;
 use App\Fresns\Api\Http\DTO\PaginationDTO;
 use App\Fresns\Api\Services\UserService;
@@ -31,13 +32,23 @@ class ConversationController extends Controller
     // list
     public function list(Request $request)
     {
-        $dtoRequest = new PaginationDTO($request->all());
+        $dtoRequest = new ConversationListDTO($request->all());
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUser = $this->user();
 
-        $aConversations = Conversation::with(['aUser', 'latestMessage'])->where('a_user_id', $authUser->id)->where('a_is_display', 1);
-        $bConversations = Conversation::with(['bUser', 'latestMessage'])->where('b_user_id', $authUser->id)->where('b_is_display', 1);
+        $aConversations = Conversation::with(['aUser', 'latestMessage'])
+            ->where('a_user_id', $authUser->id)
+            ->when($dtoRequest->isPin, function ($query, $value) {
+                $query->where('a_is_pin', $value);
+            })
+            ->where('a_is_display', 1);
+        $bConversations = Conversation::with(['bUser', 'latestMessage'])
+            ->where('b_user_id', $authUser->id)
+            ->when($dtoRequest->isPin, function ($query, $value) {
+                $query->where('b_is_pin', $value);
+            })
+            ->where('b_is_display', 1);
 
         $allConversations = $aConversations->union($bConversations)->latest('latest_message_at')->paginate($request->get('pageSize', 15));
 
@@ -53,7 +64,7 @@ class ConversationController extends Controller
 
             $userIsDeactivate = $conversationUser ? false : true;
             if ($conversationUser) {
-                $userIsDeactivate = (bool) $conversationUser->deleted_at;
+                $userIsDeactivate = $conversationUser['deactivate'];
             }
 
             $latestMessageModel = $conversation?->latestMessage;
@@ -118,13 +129,13 @@ class ConversationController extends Controller
 
         $userIsDeactivate = $conversationUser ? false : true;
         if ($conversationUser) {
-            $userIsDeactivate = (bool) $conversationUser->deleted_at;
+            $userIsDeactivate = $conversationUser['deactivate'];
         }
 
         // return
         $detail['id'] = $conversation->id;
         $detail['userIsDeactivate'] = $userIsDeactivate;
-        $detail['user'] = $userService->userData($conversationUser, $langTag, $timezone, $authUser->id);
+        $detail['user'] = $conversationUser;
         $detail['unreadCount'] = $unreadCount;
 
         return $this->success($detail);

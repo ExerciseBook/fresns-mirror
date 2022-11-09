@@ -25,8 +25,8 @@ class CreateConversationsTable extends Migration
             $table->unsignedBigInteger('b_user_id');
             $table->unsignedTinyInteger('a_is_display')->default(1);
             $table->unsignedTinyInteger('b_is_display')->default(1);
-            $table->unsignedTinyInteger('a_is_sticky')->default(0);
-            $table->unsignedTinyInteger('b_is_sticky')->default(0);
+            $table->unsignedTinyInteger('a_is_pin')->default(0);
+            $table->unsignedTinyInteger('b_is_pin')->default(0);
             $table->timestamp('latest_message_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
