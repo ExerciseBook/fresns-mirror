@@ -10,6 +10,7 @@ namespace App\Fresns\Api\Http\Controllers;
 
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\ConversationDTO;
+use App\Fresns\Api\Http\DTO\ConversationListDTO;
 use App\Fresns\Api\Http\DTO\ConversationSendMessageDTO;
 use App\Fresns\Api\Http\DTO\PaginationDTO;
 use App\Fresns\Api\Services\UserService;
@@ -17,12 +18,9 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\PrimaryHelper;
-use App\Helpers\StrHelper;
 use App\Models\Conversation;
 use App\Models\ConversationMessage;
 use App\Models\File;
-use App\Models\FileUsage;
-use App\Models\User;
 use App\Utilities\ContentUtility;
 use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
@@ -34,32 +32,60 @@ class ConversationController extends Controller
     // list
     public function list(Request $request)
     {
-        $dtoRequest = new PaginationDTO($request->all());
+        $dtoRequest = new ConversationListDTO($request->all());
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUser = $this->user();
 
-        $aConversations = Conversation::where('a_user_id', $authUser->id)->where('a_is_display', 1);
-        $bConversations = Conversation::where('b_user_id', $authUser->id)->where('b_is_display', 1);
+        $aConversations = Conversation::with(['aUser', 'latestMessage'])
+            ->where('a_user_id', $authUser->id)
+            ->when($dtoRequest->isPin, function ($query, $value) {
+                $query->where('a_is_pin', $value);
+            })
+            ->where('a_is_display', 1);
+        $bConversations = Conversation::with(['bUser', 'latestMessage'])
+            ->where('b_user_id', $authUser->id)
+            ->when($dtoRequest->isPin, function ($query, $value) {
+                $query->where('b_is_pin', $value);
+            })
+            ->where('b_is_display', 1);
 
-        $allConversations = $aConversations->union($bConversations)->latest('updated_at')->paginate($request->get('pageSize', 15));
+        if ($dtoRequest->isPin) {
+            $allConversations = $aConversations->union($bConversations)->latest('latest_message_at')->get();
+        } else {
+            $allConversations = $aConversations->union($bConversations)->latest('latest_message_at')->paginate($request->get('pageSize', 15));
+        }
 
         $userService = new UserService;
 
         $list = null;
         foreach ($allConversations as $conversation) {
             if ($conversation->a_user_id == $authUser->id) {
-                $conversationUser = $userService->userData($conversation->bUser, $langTag, $timezone, $authUser->id);
+                $conversationUser = $userService->userData($conversation?->bUser, $langTag, $timezone, $authUser->id);
             } else {
-                $conversationUser = $userService->userData($conversation->aUser, $langTag, $timezone, $authUser->id);
+                $conversationUser = $userService->userData($conversation?->aUser, $langTag, $timezone, $authUser->id);
             }
 
-            $latestMessage['messageId'] = $conversation->latest_message_id;
-            $latestMessage['time'] = DateHelper::fresnsDateTimeByTimezone($conversation->created_at, $timezone, $langTag);
-            $latestMessage['timeFormat'] = DateHelper::fresnsFormatDateTime($conversation->created_at, $timezone, $langTag);
-            $latestMessage['message'] = ContentUtility::replaceBlockWords('conversation', $conversation->latest_message_text);
+            $userIsDeactivate = $conversationUser ? false : true;
+            if ($conversationUser) {
+                $userIsDeactivate = $conversationUser['deactivate'];
+            }
+
+            $latestMessageModel = $conversation?->latestMessage;
+
+            if ($latestMessageModel?->message_type == 2) {
+                $message = File::TYPE_MAP[$latestMessageModel->file->type];
+            } else {
+                $message = ContentUtility::replaceBlockWords('conversation', $latestMessageModel?->message_text);
+            };
+
+            $latestMessage['id'] = $latestMessageModel?->id;
+            $latestMessage['message'] = $message;
+            $latestMessage['datetime'] = DateHelper::fresnsDateTimeByTimezone($latestMessageModel?->created_at, $timezone, $langTag);
+            $latestMessage['datetimeFormat'] = DateHelper::fresnsFormatDateTime($latestMessageModel?->created_at, $timezone, $langTag);
 
             $item['id'] = $conversation->id;
+            $item['userIsDeactivate'] = $userIsDeactivate;
             $item['user'] = $conversationUser;
             $item['latestMessage'] = $latestMessage;
             $item['unreadCount'] = conversationMessage::where('conversation_id', $conversation->id)->where('receive_user_id', $authUser->id)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
@@ -70,17 +96,13 @@ class ConversationController extends Controller
     }
 
     // detail
-    public function detail(string $uidOrUsername)
+    public function detail(int $conversationId)
     {
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUser = $this->user();
 
-        if (empty($conversationId) || ! StrHelper::isPureInt($conversationId)) {
-            throw new ApiException(30000);
-        }
-
-        $conversation = Conversation::where('id', $conversationId)->first();
+        $conversation = PrimaryHelper::fresnsModelById('conversation', $conversationId);
 
         if (empty($conversation)) {
             throw new ApiException(36601);
@@ -90,31 +112,48 @@ class ConversationController extends Controller
             throw new ApiException(36602);
         }
 
-        if ($conversation->a_user_id != $authUser->id) {
-            $conversationUser = User::withTrashed()->where('id', $conversation->a_user_id)->first();
-        } else {
-            $conversationUser = User::withTrashed()->where('id', $conversation->b_user_id)->first();
+        if ($conversation->a_user_id == $authUser->id && $conversation->b_user_id == $authUser->id) {
+            throw new ApiException(36603);
         }
 
+        $unreadCount = conversationMessage::where('conversation_id', $conversation->id)
+            ->where('receive_user_id', $authUser->id)
+            ->whereNull('receive_read_at')
+            ->whereNull('receive_deleted_at')
+            ->isEnable()
+            ->count();
+
         $userService = new UserService();
-        $detail['user'] = $userService->userData($conversationUser, $langTag, $timezone, $authUser->id);
+
+        if ($conversation->a_user_id == $authUser->id) {
+            $conversationUser = $userService->userData($conversation?->bUser, $langTag, $timezone, $authUser->id);
+        } else {
+            $conversationUser = $userService->userData($conversation?->aUser, $langTag, $timezone, $authUser->id);
+        }
+
+        $userIsDeactivate = $conversationUser ? false : true;
+        if ($conversationUser) {
+            $userIsDeactivate = $conversationUser['deactivate'];
+        }
+
+        // return
+        $detail['id'] = $conversation->id;
+        $detail['userIsDeactivate'] = $userIsDeactivate;
+        $detail['user'] = $conversationUser;
+        $detail['unreadCount'] = $unreadCount;
 
         return $this->success($detail);
     }
 
     // messages
-    public function messages(Request $request, string $uidOrUsername)
+    public function messages(Request $request, int $conversationId)
     {
         $dtoRequest = new PaginationDTO($request->all());
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUser = $this->user();
 
-        if (empty($conversationId) || ! StrHelper::isPureInt($conversationId)) {
-            throw new ApiException(30000);
-        }
-
-        $conversation = Conversation::where('id', $conversationId)->first();
+        $conversation = PrimaryHelper::fresnsModelById('conversation', $conversationId);
 
         if (empty($conversation)) {
             throw new ApiException(36601);
@@ -124,31 +163,39 @@ class ConversationController extends Controller
             throw new ApiException(36602);
         }
 
-        $messages = ConversationMessage::where('conversation_id', $conversation->id)->isEnable()->latest()->paginate($request->get('pageSize', 15));
+        if ($conversation->a_user_id == $authUser->id && $conversation->b_user_id == $authUser->id) {
+            throw new ApiException(36603);
+        }
 
+        // messages
+        $sendMessages = ConversationMessage::with(['sendUser', 'file'])
+            ->where('conversation_id', $conversation->id)
+            ->where('send_user_id', $authUser->id)
+            ->whereNull('send_deleted_at')
+            ->isEnable()
+            ->latest();
+        $receiveMessages = ConversationMessage::with(['sendUser', 'file'])
+            ->where('conversation_id', $conversation->id)
+            ->where('receive_user_id', $authUser->id)
+            ->whereNull('receive_deleted_at')
+            ->isEnable()
+            ->latest();
+
+        $messages = $sendMessages->union($receiveMessages)->latest()->paginate($request->get('pageSize', 15));
+
+        // list
         $userService = new UserService;
 
         $messageList = [];
         foreach ($messages as $message) {
-            $sendUserIsMe = false;
-            if ($message->send_user_id == $authUser->id) {
-                $sendUserIsMe = true;
-            }
-
-            if ($sendUserIsMe && ! is_null($message->send_deleted_at)) {
-                continue;
-            } elseif (! $sendUserIsMe && ! is_null($message->receive_deleted_at)) {
-                continue;
-            }
-
-            $item['messageId'] = $message->id;
-            $item['sendUser'] = $userService->userData($message->sendUser, $langTag, $timezone, $authUser->id);
-            $item['sendUserIsMe'] = $sendUserIsMe;
-            $item['sendTime'] = DateHelper::fresnsDateTimeByTimezone($message->created_at, $timezone, $langTag);
-            $item['sendTimeFormat'] = DateHelper::fresnsFormatDateTime($message->created_at, $timezone, $langTag);
+            $item['id'] = $message->id;
+            $item['user'] = $userService->userData($message->sendUser, $langTag, $timezone, $authUser->id);
+            $item['isMe'] = ($message->send_user_id == $authUser->id) ? true : false;
             $item['type'] = $message->message_type;
             $item['content'] = ContentUtility::replaceBlockWords('conversation', $message->message_text);
             $item['file'] = $message->message_file_id ? FileHelper::fresnsFileInfoById($message->message_file_id) : null;
+            $item['datetime'] = DateHelper::fresnsDateTimeByTimezone($message->created_at, $timezone, $langTag);
+            $item['datetimeFormat'] = DateHelper::fresnsFormatDateTime($message->created_at, $timezone, $langTag);
             $item['readStatus'] = (bool) $message->receive_read_at;
             $messageList[] = $item;
         }
@@ -167,17 +214,13 @@ class ConversationController extends Controller
             throw new ApiException(36600);
         }
 
-        if (StrHelper::isPureInt($dtoRequest->uidOrUsername)) {
-            $receiveUser = User::withTrashed()->where('uid', $dtoRequest->uidOrUsername)->first();
-        } else {
-            $receiveUser = User::withTrashed()->where('username', $dtoRequest->uidOrUsername)->first();
-        }
+        $receiveUser = PrimaryHelper::fresnsModelByFsid('user', $dtoRequest->uidOrUsername);
 
         $langTag = $this->langTag();
         $timezone = $this->timezone();
         $authUser = $this->user();
 
-        if (empty($receiveUser) || empty($authUser->id)) {
+        if (empty($receiveUser) || empty($authUser?->id)) {
             throw new ApiException(31602);
         }
 
@@ -186,7 +229,7 @@ class ConversationController extends Controller
         if (! $checkSend['status']) {
             return $this->failure(
                 $checkSend['code'],
-                $checkSend['message']
+                $checkSend['message'],
             );
         }
 
@@ -209,19 +252,7 @@ class ConversationController extends Controller
         }
 
         // conversation
-        $aConversation = Conversation::where('a_user_id', $authUser->id)->where('b_user_id', $receiveUser->id)->first();
-        $bConversation = Conversation::where('b_user_id', $receiveUser->id)->where('a_user_id', $authUser->id)->first();
-
-        if (empty($aConversation) && empty($bConversation)) {
-            $conversationColumn['a_user_id'] = $authUser->id;
-            $conversationColumn['b_user_id'] = $receiveUser->id;
-
-            $conversation = Conversation::create($conversationColumn)->first();
-        } elseif (empty($aConversation)) {
-            $conversation = $bConversation;
-        } else {
-            $conversation = $aConversation;
-        }
+        $conversation = PrimaryHelper::fresnsModelConversation($authUser->id, $receiveUser->id);
 
         // conversation message
         $messageInput = [
@@ -233,41 +264,23 @@ class ConversationController extends Controller
             'receive_user_id' => $receiveUser->id,
         ];
 
-        $conversationMessage = ConversationMessage::create($messageInput)->first();
-
-        if ($messageFileId) {
-            $fileType = FileUsage::where('file_id', $messageFileId)->latest()->first()?->update([
-                'table_name' => 'conversation_messages',
-                'table_column' => 'message_file_id',
-                'table_id' => $conversationMessage->id,
-            ])?->value('file_type');
-
-            $messageText = match ($fileType) {
-                File::TYPE_IMAGE => '[Image]',
-                File::TYPE_VIDEO => '[Video]',
-                File::TYPE_AUDIO => '[Audio]',
-                File::TYPE_DOCUMENT => '[Document]',
-                default => null,
-            };
-        }
+        $conversationMessage = ConversationMessage::create($messageInput);
 
         $conversation->update([
-            'latest_message_id' => $conversationMessage->id,
-            'latest_message_time' => now(),
-            'latest_message_text' => Str::limit($messageText, 140),
+            'latest_message_at' => now(),
         ]);
 
         $userService = new UserService;
 
         // return
-        $data['messageId'] = $conversationMessage->id;
-        $data['sendUser'] = $userService->userData($conversationMessage->sendUser, $langTag, $timezone, $authUser->id);
-        $data['sendTime'] = DateHelper::fresnsDateTimeByTimezone($conversationMessage->created_at, $timezone, $langTag);
-        $data['sendTimeFormat'] = DateHelper::fresnsFormatDateTime($conversationMessage->created_at, $timezone, $langTag);
-        $data['sendUserIsMe'] = true;
+        $data['id'] = $conversationMessage->id;
+        $data['user'] = $userService->userData($conversationMessage->sendUser, $langTag, $timezone, $authUser->id);
+        $data['isMe'] = true;
         $data['type'] = $conversationMessage->message_type;
         $data['content'] = $conversationMessage->message_text;
         $data['file'] = FileHelper::fresnsFileInfoById($conversationMessage->message_file_id);
+        $data['datetime'] = DateHelper::fresnsDateTimeByTimezone($conversationMessage->created_at, $timezone, $langTag);
+        $data['datetimeFormat'] = DateHelper::fresnsFormatDateTime($conversationMessage->created_at, $timezone, $langTag);
         $data['readStatus'] = (bool) $conversationMessage->receive_read_at;
 
         return $this->success($data);
@@ -287,13 +300,12 @@ class ConversationController extends Controller
                 throw new ApiException(36602);
             }
 
-            $aConversation->update([
-                'a_is_read' => 1,
-            ]);
-
-            $bConversation->update([
-                'b_is_read' => 1,
-            ]);
+            ConversationMessage::where('conversation_id', $dtoRequest->conversationId)
+                ->where('receive_user_id', $authUser->id)
+                ->whereNull('receive_read_at')
+                ->update([
+                    'receive_read_at' => now(),
+                ]);
         } else {
             $idArr = array_filter(explode(',', $dtoRequest->messageIds));
 

@@ -20,32 +20,45 @@ class MessageController extends Controller
     {
         $query = $request->all();
 
-        $result = ApiHelper::make()->get('/api/v2/conversation/list', [
-            'query' => $query,
+        $client = ApiHelper::make();
+
+        $results = $client->unwrapRequests([
+            'conversations' => $client->getAsync('/api/v2/conversation/list', [
+                'query' => [
+                    'isPin' => false,
+                ],
+            ]),
+            'pinConversations' => $client->getAsync('/api/v2/conversation/list', [
+                'query' => [
+                    'isPin' => true,
+                ],
+            ]),
         ]);
 
-        if (data_get($result, 'code') !== 0) {
-            throw new ErrorException($result['message'], $result['code']);
+        if (data_get($results, 'conversations.code') !== 0) {
+            throw new ErrorException($results['conversations']['message'], $results['conversations']['code']);
         }
 
         $conversations = QueryHelper::convertApiDataToPaginate(
-            items: $result['data']['list'],
-            paginate: $result['data']['paginate'],
+            items: $results['conversations']['data']['list'],
+            paginate: $results['conversations']['data']['paginate'],
         );
 
-        return view('messages.index', compact('conversations'));
+        $pinConversations = $results['pinConversations']['data']['list'];
+
+        return view('messages.index', compact('conversations', 'pinConversations'));
     }
 
     // conversation
-    public function conversation(Request $request, string $uidOrUsername)
+    public function conversation(Request $request, int $conversationId)
     {
         $query = $request->all();
 
         $client = ApiHelper::make();
 
         $results = $client->unwrapRequests([
-            'conversation' => $client->getAsync("/api/v2/conversation/{$uidOrUsername}/detail"),
-            'messages' => $client->getAsync("/api/v2/conversation/{$uidOrUsername}/messages", [
+            'conversation' => $client->getAsync("/api/v2/conversation/{$conversationId}/detail"),
+            'messages' => $client->getAsync("/api/v2/conversation/{$conversationId}/messages", [
                 'query' => $query,
             ]),
         ]);
