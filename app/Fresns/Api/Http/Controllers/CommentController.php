@@ -30,6 +30,7 @@ use App\Models\Seo;
 use App\Utilities\ExtendUtility;
 use App\Utilities\InteractiveUtility;
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class CommentController extends Controller
 {
