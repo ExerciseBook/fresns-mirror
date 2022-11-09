@@ -52,8 +52,14 @@ class ConversationController extends Controller
 
         if ($dtoRequest->isPin) {
             $allConversations = $aConversations->union($bConversations)->latest('latest_message_at')->get();
+            
+            $total = $allConversations->count();
+            $perPage = $total;
         } else {
             $allConversations = $aConversations->union($bConversations)->latest('latest_message_at')->paginate($request->get('pageSize', 15));
+
+            $total = $allConversations->total();
+            $perPage = $allConversations->perPage();
         }
 
         $userService = new UserService;
@@ -92,7 +98,7 @@ class ConversationController extends Controller
             $list[] = $item;
         }
 
-        return $this->fresnsPaginate($list, $allConversations->total(), $allConversations->perPage());
+        return $this->fresnsPaginate($list, $total, $perPage);
     }
 
     // detail
