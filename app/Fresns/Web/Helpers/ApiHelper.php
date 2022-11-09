@@ -122,6 +122,16 @@ class ApiHelper
                 $message = "{$message} ".head($data['data']) ?? '';
             }
 
+            if (!empty($data['trace'])) {
+                $message = json_encode([
+                    'file' => $data['file'] ?? null,
+                    'line' => $data['line'] ?? null,
+                    'message' => $message
+                ], \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT);
+                
+                $message = str_replace(base_path().'/', '', $message);
+            }
+
             throw new ErrorException($message, $data['code']);
         }
 
