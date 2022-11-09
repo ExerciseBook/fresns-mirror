@@ -37,15 +37,15 @@ class MessageController extends Controller
     }
 
     // conversation
-    public function conversation(Request $request, string $uidOrUsername)
+    public function conversation(Request $request, int $conversationId)
     {
         $query = $request->all();
 
         $client = ApiHelper::make();
 
         $results = $client->unwrapRequests([
-            'conversation' => $client->getAsync("/api/v2/conversation/{$uidOrUsername}/detail"),
-            'messages' => $client->getAsync("/api/v2/conversation/{$uidOrUsername}/messages", [
+            'conversation' => $client->getAsync("/api/v2/conversation/{$conversationId}/detail"),
+            'messages' => $client->getAsync("/api/v2/conversation/{$conversationId}/messages", [
                 'query' => $query,
             ]),
         ]);
