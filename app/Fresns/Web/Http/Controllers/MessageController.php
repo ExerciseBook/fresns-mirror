@@ -61,6 +61,12 @@ class MessageController extends Controller
             'messages' => $client->getAsync("/api/v2/conversation/{$conversationId}/messages", [
                 'query' => $query,
             ]),
+            'markAllAsRead' => $client->putAsync('/api/v2/conversation/mark-as-read', [
+                'json' => [
+                    'type' => 'conversation',
+                    'conversationId' => $conversationId,
+                ],
+            ]),
         ]);
 
         if ($results['conversation']['code'] != 0) {
