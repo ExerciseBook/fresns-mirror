@@ -100,7 +100,7 @@ class GlobalController extends Controller
         $langTag = $this->langTag();
 
         $codeArr = array_filter(explode(',', $dtoRequest->codes));
-        $unikey = $dtoRequest->codes ?? 'Fresns';
+        $unikey = $dtoRequest->unikey ?? 'Fresns';
 
         $codeMessages = CodeMessage::whereIn('code', $codeArr)->where('lang_tag', $langTag)->where('plugin_unikey', $unikey)->get();
 
