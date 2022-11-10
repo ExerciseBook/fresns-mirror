@@ -103,6 +103,7 @@ Route::prefix('v2')->middleware([
         Route::get('{uidOrUsername}/messages', [ConversationController::class, 'messages'])->name('messages');
         Route::post('send-message', [ConversationController::class, 'sendMessage'])->name('send.message');
         Route::put('mark-as-read', [ConversationController::class, 'markAsRead'])->name('read');
+        Route::put('pin', [ConversationController::class, 'pin'])->name('pin');
         Route::delete('delete', [ConversationController::class, 'delete'])->name('delete');
     });
 

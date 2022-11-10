@@ -18,6 +18,7 @@ use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\PrimaryHelper;
+use App\Helpers\StrHelper;
 use App\Models\Conversation;
 use App\Models\ConversationMessage;
 use App\Models\File;
@@ -69,8 +70,10 @@ class ConversationController extends Controller
         foreach ($allConversations as $conversation) {
             if ($conversation->a_user_id == $authUser->id) {
                 $conversationUser = $userService->userData($conversation?->bUser, $langTag, $timezone, $authUser->id);
+                $isPin = $conversation->a_is_pin;
             } else {
                 $conversationUser = $userService->userData($conversation?->aUser, $langTag, $timezone, $authUser->id);
+                $isPin = $conversation->b_is_pin;
             }
 
             $userIsDeactivate = $conversationUser ? false : true;
@@ -106,6 +109,7 @@ class ConversationController extends Controller
             $item['userIsDeactivate'] = $userIsDeactivate;
             $item['user'] = $conversationUser;
             $item['latestMessage'] = $latestMessage;
+            $item['isPin'] = $isPin;
             $item['messageCount'] = $messageCount;
             $item['unreadCount'] = conversationMessage::where('conversation_id', $conversation->id)->where('receive_user_id', $authUser->id)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
             $list[] = $item;
@@ -293,10 +297,11 @@ class ConversationController extends Controller
             'message_file_id' => $messageFileId,
             'receive_user_id' => $receiveUser->id,
         ];
-
         $conversationMessage = ConversationMessage::create($messageInput);
 
         $conversation->update([
+            'a_is_display' => 1,
+            'b_is_display' => 1,
             'latest_message_at' => now(),
         ]);
 
@@ -354,6 +359,65 @@ class ConversationController extends Controller
             ConversationMessage::where('receive_user_id', $authUser->id)->whereIn('id', $idArr)->whereNull('receive_read_at')->update([
                 'receive_read_at' => now(),
             ]);
+        }
+
+        return $this->success();
+    }
+
+    // pin
+    public function pin(Request $request)
+    {
+        $conversationId = $request->conversationId;
+
+        if (! StrHelper::isPureInt($conversationId)) {
+            throw new ApiException(30002);
+        }
+
+        $conversation = PrimaryHelper::fresnsModelById('conversation', $conversationId);
+
+        if (! $conversation) {
+            throw new ApiException(36601);
+        }
+
+        $authUser = $this->user();
+
+        $authUserType = null;
+        if ($conversation->a_user_id == $authUser->id) {
+            $authUserType = 'a';
+        }
+
+        if ($conversation->b_user_id == $authUser->id) {
+            $authUserType = 'b';
+        }
+
+        switch ($authUserType) {
+            case 'a':
+                if ($conversation->a_is_pin == 0) {
+                    $conversation->update([
+                        'a_is_pin' => 1,
+                    ]);
+                } else {
+                    $conversation->update([
+                        'a_is_pin' => 0,
+                    ]);
+                }
+            break;
+
+            case 'b':
+                if ($conversation->b_is_pin == 0) {
+                    $conversation->update([
+                        'b_is_pin' => 1,
+                    ]);
+                } else {
+                    $conversation->update([
+                        'b_is_pin' => 0,
+                    ]);
+                }
+            break;
+
+            default:
+                throw new ApiException(36602);
+            break;
         }
 
         return $this->success();
