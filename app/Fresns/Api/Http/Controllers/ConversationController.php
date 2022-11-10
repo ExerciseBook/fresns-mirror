@@ -306,7 +306,7 @@ class ConversationController extends Controller
         $data['isMe'] = true;
         $data['type'] = $conversationMessage->message_type;
         $data['content'] = $conversationMessage->message_text;
-        $data['file'] = FileHelper::fresnsFileInfoById($conversationMessage->message_file_id);
+        $data['file'] = $conversationMessage->message_file_id ? FileHelper::fresnsFileInfoById($conversationMessage->message_file_id) : null;
         $data['datetime'] = DateHelper::fresnsDateTimeByTimezone($conversationMessage->created_at, $timezone, $langTag);
         $data['datetimeFormat'] = DateHelper::fresnsFormatDateTime($conversationMessage->created_at, $timezone, $langTag);
         $data['readStatus'] = (bool) $conversationMessage->receive_read_at;
