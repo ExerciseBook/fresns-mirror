@@ -52,7 +52,7 @@ class ConversationController extends Controller
 
         if ($dtoRequest->isPin) {
             $allConversations = $aConversations->union($bConversations)->latest('latest_message_at')->get();
-            
+
             $total = $allConversations->count();
             $perPage = $total;
         } else {
@@ -90,10 +90,21 @@ class ConversationController extends Controller
             $latestMessage['datetime'] = DateHelper::fresnsDateTimeByTimezone($latestMessageModel?->created_at, $timezone, $langTag);
             $latestMessage['datetimeFormat'] = DateHelper::fresnsFormatDateTime($latestMessageModel?->created_at, $timezone, $langTag);
 
+            $aMessages = conversationMessage::where('conversation_id', $conversation->id)
+                ->where('send_user_id', $authUser->id)
+                ->whereNull('send_deleted_at')
+                ->isEnable();
+            $bMessages = conversationMessage::where('conversation_id', $conversation->id)
+                ->where('receive_user_id', $authUser->id)
+                ->whereNull('receive_deleted_at')
+                ->isEnable();
+            $messageCount = $aMessages->union($bMessages)->count();
+
             $item['id'] = $conversation->id;
             $item['userIsDeactivate'] = $userIsDeactivate;
             $item['user'] = $conversationUser;
             $item['latestMessage'] = $latestMessage;
+            $item['messageCount'] = $messageCount;
             $item['unreadCount'] = conversationMessage::where('conversation_id', $conversation->id)->where('receive_user_id', $authUser->id)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
             $list[] = $item;
         }
@@ -142,10 +153,21 @@ class ConversationController extends Controller
             $userIsDeactivate = $conversationUser['deactivate'];
         }
 
+        $aMessages = conversationMessage::where('conversation_id', $conversation->id)
+            ->where('send_user_id', $authUser->id)
+            ->whereNull('send_deleted_at')
+            ->isEnable();
+        $bMessages = conversationMessage::where('conversation_id', $conversation->id)
+            ->where('receive_user_id', $authUser->id)
+            ->whereNull('receive_deleted_at')
+            ->isEnable();
+        $messageCount = $aMessages->union($bMessages)->count();
+
         // return
         $detail['id'] = $conversation->id;
         $detail['userIsDeactivate'] = $userIsDeactivate;
         $detail['user'] = $conversationUser;
+        $detail['messageCount'] = $messageCount;
         $detail['unreadCount'] = $unreadCount;
 
         return $this->success($detail);
