@@ -21,6 +21,7 @@ use App\Helpers\PrimaryHelper;
 use App\Models\Conversation;
 use App\Models\ConversationMessage;
 use App\Models\File;
+use App\Models\FileUsage;
 use App\Utilities\ContentUtility;
 use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
@@ -297,6 +298,18 @@ class ConversationController extends Controller
         $conversation->update([
             'latest_message_at' => now(),
         ]);
+
+        if ($messageType == 2) {
+            $fileUsage = FileUsage::where('file_id', $messageFileId)
+                ->where('table_name', 'conversation_messages')
+                ->where('table_column', 'message_file_id')
+                ->whereNull('table_id')
+                ->first();
+
+            $fileUsage->update([
+                'table_id' => $conversationMessage->id,
+            ]);
+        }
 
         $userService = new UserService;
 
