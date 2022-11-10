@@ -14,6 +14,7 @@ use App\Fresns\Api\Http\DTO\ConversationListDTO;
 use App\Fresns\Api\Http\DTO\ConversationSendMessageDTO;
 use App\Fresns\Api\Http\DTO\PaginationDTO;
 use App\Fresns\Api\Services\UserService;
+use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
@@ -419,6 +420,9 @@ class ConversationController extends Controller
                 throw new ApiException(36602);
             break;
         }
+
+        $cacheKey = "fresns_model_conversation_{$conversationId}";
+        CacheHelper::forgetFresnsKeys([$cacheKey]);
 
         return $this->success();
     }
