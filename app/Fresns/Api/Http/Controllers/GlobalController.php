@@ -99,10 +99,17 @@ class GlobalController extends Controller
         $dtoRequest = new GlobalCodeMessagesDTO($request->all());
         $langTag = $this->langTag();
 
+        $isAll = $dtoRequest->isAll ?? false;
         $codeArr = array_filter(explode(',', $dtoRequest->codes));
         $unikey = $dtoRequest->unikey ?? 'Fresns';
 
-        $codeMessages = CodeMessage::whereIn('code', $codeArr)->where('lang_tag', $langTag)->where('plugin_unikey', $unikey)->get();
+        $messagesQuery = CodeMessage::where('lang_tag', $langTag)->where('plugin_unikey', $unikey);
+
+        if ($isAll) {
+            $codeMessages = $messagesQuery->get();
+        } else {
+            $codeMessages = $messagesQuery->whereIn('code', $codeArr)->get();
+        }
 
         $item = null;
         foreach ($codeMessages as $message) {
