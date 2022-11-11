@@ -110,7 +110,7 @@ class ConversationController extends Controller
             $item['userIsDeactivate'] = $userIsDeactivate;
             $item['user'] = $conversationUser;
             $item['latestMessage'] = $latestMessage;
-            $item['isPin'] = $isPin;
+            $item['isPin'] = (bool) $isPin;
             $item['messageCount'] = $messageCount;
             $item['unreadCount'] = conversationMessage::where('conversation_id', $conversation->id)->where('receive_user_id', $authUser->id)->whereNull('receive_read_at')->whereNull('receive_deleted_at')->isEnable()->count();
             $list[] = $item;
@@ -269,7 +269,11 @@ class ConversationController extends Controller
         }
 
         // message content
-        if ($dtoRequest->message) {
+        if ($dtoRequest->fid) {
+            $messageType = 2;
+            $messageText = null;
+            $messageFileId = PrimaryHelper::fresnsFileIdByFid($dtoRequest->fid);
+        } else {
             $message = Str::of($dtoRequest->message)->trim();
             $validateMessage = ValidationUtility::messageBanWords($message);
 
@@ -280,10 +284,6 @@ class ConversationController extends Controller
             $messageType = 1;
             $messageText = $message;
             $messageFileId = null;
-        } else {
-            $messageType = 2;
-            $messageText = null;
-            $messageFileId = PrimaryHelper::fresnsFileIdByFid($dtoRequest->fid);
         }
 
         // conversation
@@ -315,6 +315,7 @@ class ConversationController extends Controller
 
             $fileUsage->update([
                 'table_id' => $conversationMessage->id,
+                'table_key' => $conversation->id,
             ]);
         }
 

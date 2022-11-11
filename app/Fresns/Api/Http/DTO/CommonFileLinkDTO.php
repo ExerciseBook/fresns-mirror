@@ -18,7 +18,7 @@ class CommonFileLinkDTO extends DTO
     public function rules(): array
     {
         return [
-            'type' => ['string', 'required', 'in:post,comment,extend'],
+            'type' => ['string', 'required', 'in:post,comment,extend,conversation'],
             'fsid' => ['string', 'required'],
         ];
     }
