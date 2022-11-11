@@ -515,7 +515,7 @@ class ApiController extends Controller
     }
 
     // quick publish
-    public function quickPublish(Request $request, string $type)
+    public function editorQuickPublish(Request $request, string $type)
     {
         $validator = Validator::make($request->post(),
             [
