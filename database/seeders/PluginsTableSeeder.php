@@ -28,7 +28,7 @@ class PluginsTableSeeder extends Seeder
                 'type' => 4,
                 'name' => 'Fresns 主题框架',
                 'description' => 'Fresns 官方开发的主题框架，展示网站端功能和交互流程。',
-                'version' => '2.0.0-alpha.6',
+                'version' => '2.0.0-alpha.7',
                 'author' => 'Fresns',
                 'author_link' => 'https://fresns.cn',
                 'scene' => null,
