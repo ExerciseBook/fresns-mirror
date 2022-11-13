@@ -149,23 +149,11 @@ $(document).ready(function () {
     // progress bar
     $(".fresns-modal").on('show.bs.modal', function() {
         $('.ajax-progress-submit').show().removeAttr("disabled");
-        $('.ajax-progress-btn').show().removeAttr("disabled");
         $(".ajax-progress").empty();
     })
 
     $(".ajax-progress-submit").on('click', function(event) {
         event.preventDefault();
-        let obj = $(this)
-            // actionMethod = ($this).data('action-method')
-
-        if (obj.is(":disabled")) {
-            return;
-        }
-
-        $('.ajax-progress-btn').attr('disabled', true);
-
-        obj.attr('disabled', true);
-        obj.hide();
 
         // set progress
         progress.init().setProgressElement($('.ajax-progress').removeClass('d-none')).work();
