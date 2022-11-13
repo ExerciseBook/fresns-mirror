@@ -1075,7 +1075,7 @@ $(document).ready(function () {
 
         if (install_method == 'inputDirectory' && !plugin_zipball) {
             $('input[name=plugin_directory]').addClass('is-invalid')
-            $('#inputUnikeyOrInputFile').text(trans('tips.install_not_entered_dir')).show() // FsLang
+            $('#inputUnikeyOrInputFile').text(trans('tips.install_not_entered_directory')).show() // FsLang
             return;
         }
 
