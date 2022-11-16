@@ -128,9 +128,9 @@ class AppUtility
             'httpSsl' => $isHttps ? 1 : 0,
             'httpHost' => \request()->getHttpHost(),
             'siteUrl' => $appConfig['site_url'],
-            'siteName' => $appConfig['site_name'],
-            'siteDesc' => $appConfig['site_desc'],
-            'siteCopyright' => $appConfig['site_copyright'],
+            'siteName' => urlencode(base64_encode($appConfig['site_name'])),
+            'siteDesc' => urlencode(base64_encode($appConfig['site_desc'])),
+            'siteCopyright' => urlencode(base64_encode($appConfig['site_copyright'])),
             'siteTimezone' => $appConfig['default_timezone'],
             'siteLanguage' => $appConfig['default_language'],
         ];
