@@ -98,6 +98,22 @@ class FileHelper
         // foreach ($mapping['extensions'] as $mime => $exts) {
         // }
 
+        $mimes = new \Mimey\MimeTypes;
+
+        $fileExts = explode(',', $fileExt);
+
+        $result = [];
+        foreach ($fileExts as $ext) {
+            $fileExtMimes = $mimes->getAllMimeTypes($ext);
+            foreach ($fileExtMimes as $fileExtMime) {
+                $result[] = $fileExtMime;
+            }
+        }
+
+        $fileAccept = implode(',', $result);
+        return $fileAccept;
+
+        // todo: 下面的代码应该是用不着了
         switch ($type) {
             // image
             case 1:
