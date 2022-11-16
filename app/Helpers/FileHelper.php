@@ -91,6 +91,12 @@ class FileHelper
         // todo: 处理文件后缀
         // $builder = \Mimey\MimeMappingBuilder::create();
         // $mapping = $builder->getMapping();
+        // $mapping['mimes'];
+        // $mapping['extensions'];
+        // foreach ($mapping['mimes'] as $ext => $mimes) {
+        // }
+        // foreach ($mapping['extensions'] as $mime => $exts) {
+        // }
 
         switch ($type) {
             // image
