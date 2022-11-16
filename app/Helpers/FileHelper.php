@@ -88,6 +88,10 @@ class FileHelper
         //     $fileAccept = Str::start($accept, '.');
         // }
 
+        // todo: 处理文件后缀
+        // $builder = \Mimey\MimeMappingBuilder::create();
+        // $mapping = $builder->getMapping();
+
         switch ($type) {
             // image
             case 1:
