@@ -112,6 +112,7 @@ class AppUtility
         $appConfig = ConfigHelper::fresnsConfigByItemKeys([
             'install_datetime',
             'build_type',
+            'site_url',
             'site_name',
             'site_desc',
             'site_copyright',
@@ -128,9 +129,9 @@ class AppUtility
             'httpSsl' => $isHttps ? 1 : 0,
             'httpHost' => \request()->getHttpHost(),
             'siteUrl' => $appConfig['site_url'],
-            'siteName' => urlencode(base64_encode($appConfig['site_name'])),
-            'siteDesc' => urlencode(base64_encode($appConfig['site_desc'])),
-            'siteCopyright' => urlencode(base64_encode($appConfig['site_copyright'])),
+            'siteName' => base64_encode($appConfig['site_name']),
+            'siteDesc' => base64_encode($appConfig['site_desc']),
+            'siteCopyright' => base64_encode($appConfig['site_copyright']),
             'siteTimezone' => $appConfig['default_timezone'],
             'siteLanguage' => $appConfig['default_language'],
         ];
