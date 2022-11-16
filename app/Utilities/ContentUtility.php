@@ -40,7 +40,6 @@ use App\Models\Sticker;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
-use Mews\Purifier\Facades\Purifier;
 
 class ContentUtility
 {
@@ -400,8 +399,6 @@ class ContentUtility
     // Handle and save all(interactive content)
     public static function handleAndSaveAllInteractive(string $content, int $type, int $id, ?int $authUserId = null)
     {
-        $content = Purifier::clean($content);
-
         static::saveHashtag($content, $type, $id);
         static::saveLink($content, $type, $id);
 
