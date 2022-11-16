@@ -88,7 +88,6 @@ class FileHelper
         //     $fileAccept = Str::start($accept, '.');
         // }
 
-        // todo: 处理文件后缀
         // $builder = \Mimey\MimeMappingBuilder::create();
         // $mapping = $builder->getMapping();
         // $mapping['mimes'];
@@ -111,46 +110,6 @@ class FileHelper
         }
 
         $fileAccept = implode(',', $result);
-        return $fileAccept;
-
-        // todo: 下面的代码应该是用不着了
-        switch ($type) {
-            // image
-            case 1:
-                $accept = str_replace(',', ',image/', $fileExt);
-                $fileAccept = '';
-                if ($accept) {
-                    $fileAccept = Str::start($accept, 'image/');
-                }
-            break;
-
-            // video
-            case 2:
-                $accept = str_replace(',', ',video/', $fileExt);
-                $fileAccept = '';
-                if ($accept) {
-                    $fileAccept = Str::start($accept, 'video/');
-                }
-            break;
-
-            // audio
-            case 3:
-                $accept = str_replace(',', ',audio/', $fileExt);
-                $fileAccept = '';
-                if ($accept) {
-                    $fileAccept = Str::start($accept, 'audio/');
-                }
-            break;
-
-            // document
-            case 4:
-                $accept = str_replace(',', ',.', $fileExt);
-                $fileAccept = '';
-                if ($accept) {
-                    $fileAccept = Str::start($accept, '.');
-                }
-            break;
-        }
 
         return $fileAccept;
     }
