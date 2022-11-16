@@ -40,8 +40,7 @@
         "hisorange/browser-detect": "^4.5",
         "maatwebsite/excel": "^3.1",
         "nelexa/zip": "^4.0",
-        "xantios/mimey": "^2.2",
-        "mews/purifier": "dev-master"
+        "xantios/mimey": "^2.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -110,10 +109,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": {
-        "purifier": {
-            "type": "vcs",
-            "url": "https://github.com/mouyong/Purifier"
-        },
         "packagist": {
             "type": "composer",
             "url": "https://mirrors.tencent.com/composer/"
