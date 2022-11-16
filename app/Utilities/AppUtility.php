@@ -127,11 +127,12 @@ class AppUtility
             'versionInt' => self::currentVersion()['versionInt'],
             'httpSsl' => $isHttps ? 1 : 0,
             'httpHost' => \request()->getHttpHost(),
+            'siteUrl' => $appConfig['site_url'],
             'siteName' => $appConfig['site_name'],
             'siteDesc' => $appConfig['site_desc'],
             'siteCopyright' => $appConfig['site_copyright'],
-            'timezone' => $appConfig['default_timezone'],
-            'language' => $appConfig['default_language'],
+            'siteTimezone' => $appConfig['default_timezone'],
+            'siteLanguage' => $appConfig['default_language'],
         ];
 
         return $header;
