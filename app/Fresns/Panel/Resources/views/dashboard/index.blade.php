@@ -92,7 +92,7 @@
             <h3 class="h6">{{ __('FsLang::panel.support') }}</h3>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <a class="fresns-link" href="https://fresns.org" target="_blank">{{ __('FsLang::panel.support_website') }}</a>
+                    <a class="fresns-link" href="https://fresns.cn" target="_blank">{{ __('FsLang::panel.support_website') }}</a>
                 </li>
                 <li class="list-group-item">
                     <a class="fresns-link" href="https://fresns.cn/community/teams.html" target="_blank">{{ __('FsLang::panel.support_teams') }}</a>
@@ -107,7 +107,7 @@
                     <a class="fresns-link" href="https://discuss.fresns.cn" target="_blank">{{ __('FsLang::panel.support_community') }}</a>
                 </li>
                 <li class="list-group-item">
-                    <a class="fresns-link" href="https://marketplace.fresns.com/open-source" target="_blank">{{ __('FsLang::panel.support_market') }}</a>
+                    <a class="fresns-link" href="https://marketplace.fresns.cn/open-source" target="_blank">{{ __('FsLang::panel.support_market') }}</a>
                 </li>
             </ul>
         </div>
