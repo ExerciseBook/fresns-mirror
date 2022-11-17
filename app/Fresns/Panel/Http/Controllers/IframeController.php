@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class IframeController extends Controller
 {
-    public function settings(Request $request)
+    public function setting(Request $request)
     {
         $url = $request->url;
 
