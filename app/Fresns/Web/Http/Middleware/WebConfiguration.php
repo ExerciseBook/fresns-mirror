@@ -93,12 +93,10 @@ class WebConfiguration
             $cacheKey = "fresns_web_user_panel_{$uid}_{$langTag}";
 
             $userPanel = Cache::remember($cacheKey, now()->addMinutes(), function () {
-                $result = ApiHelper::make()->get('/api/v2/user/panel');
-
-                return data_get($result, 'data.list', null);
+                return ApiHelper::make()->get('/api/v2/user/panel');
             });
 
-            View::share('userPanel', $userPanel);
+            View::share('userPanel', data_get($userPanel, 'data', null));
         }
     }
 
