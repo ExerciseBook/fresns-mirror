@@ -298,10 +298,11 @@ class ContentUtility
         // Replace mention
         // Replace sticker
         if ($isMarkdown == 0) {
-            $content = Str::swap([
-                '<' => '&lt;',
-                '>' => '&gt;',
-            ], $content);
+            $content = htmlentities($content);
+            // $content = Str::swap([
+            //     '<' => '&lt;',
+            //     '>' => '&gt;',
+            // ], $content);
             $content = static::replaceLink($content);
         }
         $content = static::replaceHashtag($content);
