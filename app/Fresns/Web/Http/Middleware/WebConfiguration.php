@@ -87,9 +87,18 @@ class WebConfiguration
     private function userPanel(): void
     {
         if (fs_user()->check()) {
-            $result = ApiHelper::make()->get('/api/v2/user/panel');
+            $langTag = current_lang_tag();
+            $uid = fs_user('detail.uid');
 
-            View::share('userPanel', $result['data']);
+            $cacheKey = "fresns_web_user_panel_{$uid}_{$langTag}";
+
+            $userPanel = Cache::remember($cacheKey, now()->addMinutes(), function () {
+                $result = ApiHelper::make()->get('/api/v2/user/panel');
+
+                return data_get($result, 'data.list', null);
+            });
+
+            View::share('userPanel', $userPanel);
         }
     }
 
@@ -108,7 +117,7 @@ class WebConfiguration
                 ],
             ]);
 
-            return $result['data']['list'] ?? [];
+            return data_get($result, 'data.list', []);
         });
 
         if (is_null($groupCategories)) {
