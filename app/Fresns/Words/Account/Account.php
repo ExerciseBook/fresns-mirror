@@ -198,7 +198,7 @@ class Account
         $dtoWordBody = new CreateSessionTokenDTO($wordBody);
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
-        $userId = PrimaryHelper::fresnsAccountIdByUidOrUsername($dtoWordBody->uid);
+        $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
 
         $condition = [
             'platform_id' => $dtoWordBody->platformId,
