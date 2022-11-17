@@ -116,7 +116,11 @@ class Basic
                 'uid' => $dtoWordBody->uid ?? null,
                 'token' => $dtoWordBody->token,
             ]);
-            \FresnsCmdWord::plugin()->verifySessionToken($verifySessionTokenArr);
+            $verifySessionToken = \FresnsCmdWord::plugin()->verifySessionToken($verifySessionTokenArr);
+
+            if ($verifySessionToken->isErrorResponse()) {
+                return $verifySessionToken->errorResponse();
+            }
         }
 
         return $this->success();
