@@ -304,8 +304,8 @@ Route::middleware(['panelAuth'])->group(function () {
     });
 
     // iframe
-    Route::get('setting', [IframeController::class, 'setting'])->name('iframe.setting');
-    Route::get('market', [IframeController::class, 'market'])->name('iframe.market');
+    Route::get('settings', [IframeController::class, 'settings'])->name('iframe.settings');
+    Route::get('marketplace', [IframeController::class, 'marketplace'])->name('iframe.marketplace');
 
     // plugin manage
     Route::prefix('plugin')->group(function () {

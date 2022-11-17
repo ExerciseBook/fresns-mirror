@@ -12,14 +12,14 @@ use Illuminate\Http\Request;
 
 class IframeController extends Controller
 {
-    public function setting(Request $request)
+    public function settings(Request $request)
     {
         $url = $request->url;
 
         return view('FsView::extensions.iframe', compact('url'));
     }
 
-    public function market(Request $request)
+    public function marketplace(Request $request)
     {
         $url = $request->url;
 

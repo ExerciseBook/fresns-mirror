@@ -50,7 +50,7 @@
                         @endforeach
                     </select>
                     @if ($engineSettingsPath)
-                        <a class="btn btn-outline-secondary" href="{{ route('panel.iframe.setting', ['url' => $engineSettingsPath]) }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
+                        <a class="btn btn-outline-secondary" href="{{ route('panel.iframe.settings', ['url' => $engineSettingsPath]) }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
                     @endif
                 </div>
                 <!--engine_api_type-->
