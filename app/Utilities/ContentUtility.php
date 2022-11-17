@@ -38,8 +38,8 @@ use App\Models\PostLog;
 use App\Models\Role;
 use App\Models\Sticker;
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class ContentUtility
 {
@@ -299,12 +299,19 @@ class ContentUtility
         // Replace sticker
         if ($isMarkdown == 0) {
             $content = htmlentities($content);
-            // $content = Str::swap([
-            //     '<' => '&lt;',
-            //     '>' => '&gt;',
-            // ], $content);
+
             $content = static::replaceLink($content);
+        } else {
+            $content = Str::swap([
+                '<script>' => '&lt;script&gt;',
+                '</script>' => '&lt;/script&gt;',
+                '<iframe>' => '&lt;iframe&gt;',
+                '</iframe>' => '&lt;/iframe&gt;',
+                '"javascript' => '&#34;javascript',
+                "'javascript" => '&#39;javascript',
+            ], $content);
         }
+
         $content = static::replaceHashtag($content);
         if ($mentionType && $mentionId) {
             $content = static::replaceMention($content, $mentionType, $mentionId);
