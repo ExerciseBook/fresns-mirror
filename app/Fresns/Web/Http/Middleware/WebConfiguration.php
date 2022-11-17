@@ -9,6 +9,7 @@
 namespace App\Fresns\Web\Http\Middleware;
 
 use App\Fresns\Web\Helpers\ApiHelper;
+use App\Fresns\Web\Helpers\DataHelper;
 use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Models\File;
@@ -71,8 +72,11 @@ class WebConfiguration
         $finder = app('view')->getFinder();
         $finder->prependLocation(base_path("extensions/themes/{$path}"));
         $this->webLangTag();
+
         $this->userPanel();
         $this->groupCategories();
+
+        View::share('topList', DataHelper::getTopList());
 
         $timezone = fs_user('detail.timezone') ?: ConfigHelper::fresnsConfigByItemKey('default_timezone');
         Cookie::queue('timezone', $timezone);
