@@ -102,7 +102,7 @@ class Basic
 
         $checkSign = SignHelper::checkSign($withoutEmptyCheckArr, $keyInfo->app_secret);
 
-        if ($checkSign !== true) {
+        if (! $checkSign) {
             return $this->failure(
                 31302,
                 ConfigUtility::getCodeMessage(31302, 'Fresns', $langTag),
