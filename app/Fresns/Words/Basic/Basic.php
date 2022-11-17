@@ -109,7 +109,7 @@ class Basic
             );
         }
 
-        if (isset($dtoWordBody->aid)) {
+        if ($dtoWordBody->aid) {
             $verifySessionTokenArr = array_filter([
                 'platformId' => $dtoWordBody->platformId,
                 'aid' => $dtoWordBody->aid,
