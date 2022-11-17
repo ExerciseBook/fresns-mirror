@@ -245,28 +245,56 @@ class Account
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $platformId = $dtoWordBody->platformId;
-        $aid = $dtoWordBody->aid;
-        $uid = $dtoWordBody->uid ?? null;
+        $account = PrimaryHelper::fresnsModelByFsid('account', $dtoWordBody->aid);
+        $user = PrimaryHelper::fresnsModelByFsid('user', $dtoWordBody->uid);
+        $accountId = $account?->id;
+        $userId = $user?->id;
+        $token = $dtoWordBody->token;
 
-        $cacheKey = "fresns_api_token_{$platformId}_{$aid}_{$uid}";
+        $cacheKey = "fresns_api_token_{$platformId}_{$accountId}_{$userId}_{$token}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $session = Cache::remember($cacheKey, $cacheTime, function () use ($platformId, $aid, $uid) {
-            $condition = [
-                'platform_id' => $platformId,
-                'account_id' => $aid,
-                'user_id' => $uid ?? null,
-            ];
-            $session = SessionToken::where($condition)->first();
-
-            return $session;
+        $session = Cache::remember($cacheKey, $cacheTime, function () use ($accountId, $token) {
+            return SessionToken::where('account_id', $accountId)->where('token', $token)->first();
         });
 
-        if ($session?->token != $dtoWordBody->token) {
+        if (is_null($session)) {
+            Cache::forget($cacheKey);
+
+            if (empty($userId)) {
+                return $this->failure(
+                    31505,
+                    ConfigUtility::getCodeMessage(31505, 'Fresns', $langTag)
+                );
+            }
+
             return $this->failure(
-                31505,
-                ConfigUtility::getCodeMessage(31505, 'Fresns', $langTag)
+                31603,
+                ConfigUtility::getCodeMessage(31603, 'Fresns', $langTag)
             );
+        }
+
+        if ($session->platform_id != $platformId) {
+            return $this->failure(
+                31102,
+                ConfigUtility::getCodeMessage(31102, 'Fresns', $langTag)
+            );
+        }
+
+        if ($userId) {
+            if ($session->user_id != $userId) {
+                return $this->failure(
+                    31603,
+                    ConfigUtility::getCodeMessage(31603, 'Fresns', $langTag)
+                );
+            }
+
+            if ($user->account_id != $accountId) {
+                return $this->failure(
+                    35201,
+                    ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
+                );
+            }
         }
 
         if ($session->expired_at < date('Y-m-d H:i:s', time())) {
@@ -274,19 +302,6 @@ class Account
                 31303,
                 ConfigUtility::getCodeMessage(31303, 'Fresns', $langTag)
             );
-        }
-
-        $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
-        $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
-
-        if (! empty($dtoWordBody->uid)) {
-            $userAffiliation = PermissionUtility::checkUserAffiliation($userId, $accountId);
-            if (! $userAffiliation) {
-                return $this->failure(
-                    35201,
-                    ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
-                );
-            }
         }
 
         return $this->success();
