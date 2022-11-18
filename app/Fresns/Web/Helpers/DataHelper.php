@@ -88,6 +88,11 @@ class DataHelper
                 'comments' => $client->getAsync('/api/v2/comment/list', [
                     'query' => $commentQuery,
                 ]),
+                'stickies' => $client->getAsync('/api/v2/post/list', [
+                    'query' => [
+                        'stickyState' => 3,
+                    ],
+                ]),
                 'groupTree' => $client->getAsync('/api/v2/group/tree'),
             ]);
 
@@ -96,6 +101,7 @@ class DataHelper
             $data['hashtags'] = data_get($results, 'hashtags.data.list', []);
             $data['posts'] = data_get($results, 'posts.data.list', []);
             $data['comments'] = data_get($results, 'comments.data.list', []);
+            $data['stickies'] = data_get($results, 'stickies.data.list', []);
             $data['groupTree'] = data_get($results, 'groupTree.data', []);
 
             return $data;
