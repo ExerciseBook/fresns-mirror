@@ -208,12 +208,12 @@ class Account
 
         $tokenInfo = SessionToken::where($condition)->first();
         if (! empty($tokenInfo)) {
-            SessionToken::where($condition)->delete();
+            $tokenInfo->forceDelete();
         }
 
         $token = \Str::random(32);
         $expiredAt = null;
-        if (isset($dtoWordBody->expiredTime)) {
+        if ($dtoWordBody->expiredTime) {
             $now = time();
             $time = $dtoWordBody->expiredTime * 3600;
             $expiredTime = $now + $time;
