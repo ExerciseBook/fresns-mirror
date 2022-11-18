@@ -184,7 +184,7 @@ class ApiController extends Controller
 
             if ($user['hasPassword']) {
                 // User has password
-                // header.blade.php
+                // user-auth.blade.php
 
                 if ($request->wantsJson()) {
                     return \response()->json([
@@ -228,7 +228,7 @@ class ApiController extends Controller
             }
         } elseif ($userCount > 1) {
             // There are more than one user
-            // header.blade.php
+            // user-auth.blade.php
 
             if ($request->wantsJson()) {
                 return \response()->json([
