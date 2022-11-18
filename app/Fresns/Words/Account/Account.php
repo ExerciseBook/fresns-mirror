@@ -297,10 +297,10 @@ class Account
             }
         }
 
-        if ($session->expired_at < date('Y-m-d H:i:s', time())) {
+        if ($session->expired_at && $session->expired_at < now()) {
             return $this->failure(
-                31303,
-                ConfigUtility::getCodeMessage(31303, 'Fresns', $langTag)
+                31504,
+                ConfigUtility::getCodeMessage(31504, 'Fresns', $langTag)
             );
         }
 
