@@ -1,14 +1,11 @@
 @extends('FsView::commons.sidebarLayout')
 
-@push('js')
-<script src="/static/js/ansi_up.js"></script>
-@endpush
-
 @section('sidebar')
     @include('FsView::dashboard.sidebar')
 @endsection
 
 @section('content')
+    <script src="/static/js/ansi_up.js"></script>
     <div class="row mb-4 border-bottom">
         <div class="col-lg-5">
             <h3>{{ __('FsLang::panel.sidebar_upgrades') }}</h3>
