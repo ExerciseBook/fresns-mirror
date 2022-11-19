@@ -1,5 +1,9 @@
 @extends('FsView::commons.sidebarLayout')
 
+@push('js')
+<script src="/static/js/ansi_up.js"></script>
+@endpush
+
 @section('sidebar')
     @include('FsView::dashboard.sidebar')
 @endsection
