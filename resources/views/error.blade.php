@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="/static/css/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/fresns-panel.css">
     <script src="/static/js/js.cookie.min.js"></script>
-
     <script>
         function deleteAllCookies() {
             Object.keys(Cookies.get()).forEach(function(cookieName) {
