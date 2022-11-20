@@ -23,7 +23,11 @@
                 Cookies.remove(cookieName, neededAttributes);
             });
 
-            window.location.reload()
+            setTimeout(function () {
+                console.log('all cookie remove successful')
+
+                window.location.reload()
+            }, 1000)
         }
     </script>
 </head>
@@ -45,7 +49,7 @@
                 <h3 class="card-title">Fresns {{ $code }}</h3>
                 <div class="mt-4">{!! $message !!}</div>
 
-                <button type="button" class="btn btn-light" onclick="deleteAllCookies">Light</button>
+                <button type="button" class="btn btn-light" onclick="deleteAllCookies()">清空缓存</button>
             </div>
         </div>
     </main>
