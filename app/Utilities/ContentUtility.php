@@ -203,7 +203,7 @@ class ContentUtility
                 // <a href="https://fresns.org" class="fresns_link" target="_blank">Fresns Website</a>
                 // or
                 // <a href="https://fresns.org" class="fresns_link" target="_blank">https://fresns.org</a>
-                $title = $urlData->link_title ?? $url;
+                $title = $urlData?->link_title ?? $url;
 
                 $replaceList[] = "{$url}";
                 $linkList[] = sprintf(
@@ -219,11 +219,11 @@ class ContentUtility
                     break;
 
                     case 3:
-                        if (! $urlData->domain->is_enable || ! $urlData->is_enable) {
+                        if (! $urlData?->domain?->is_enable || ! $urlData?->is_enable) {
                             continue;
                         }
 
-                        $title = $urlData->link_title ?? $url;
+                        $title = $urlData?->link_title ?? $url;
 
                         $replaceList[] = "{$url}";
                         $linkList[] = sprintf(
