@@ -74,9 +74,11 @@ class WebConfiguration
         $this->webLangTag();
 
         $this->userPanel();
-        $this->groupCategories();
 
-        View::share('topList', DataHelper::getTopList());
+        View::share('fresnsGroups', DataHelper::getFresnsGroups());
+        View::share('fresnsIndexList', DataHelper::getFresnsIndexList());
+        View::share('fresnsList', DataHelper::getFresnsList());
+        View::share('FresnsStickies', DataHelper::getFresnsStickies());
 
         $timezone = fs_user('detail.timezone') ?: ConfigHelper::fresnsConfigByItemKey('default_timezone');
         Cookie::queue('timezone', $timezone);
@@ -98,33 +100,6 @@ class WebConfiguration
 
             View::share('userPanel', data_get($userPanel, 'data', null));
         }
-    }
-
-    private function groupCategories(): void
-    {
-        $langTag = current_lang_tag();
-
-        $cacheKey = "fresns_web_group_categories_{$langTag}";
-        $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
-
-        $groupCategories = Cache::remember($cacheKey, $cacheTime, function () {
-            $result = ApiHelper::make()->get('/api/v2/group/categories', [
-                'query' => [
-                    'pageSize' => 100,
-                    'page' => 1,
-                ],
-            ]);
-
-            return data_get($result, 'data.list', []);
-        });
-
-        if (is_null($groupCategories)) {
-            Cache::forget($cacheKey);
-
-            $groupCategories = [];
-        }
-
-        View::share('groupCategories', $groupCategories);
     }
 
     public function loadLanguages()

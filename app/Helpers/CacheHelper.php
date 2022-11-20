@@ -272,7 +272,12 @@ class CacheHelper
         // CacheHelper::forgetFresnsMultilingual("fresns_web_post_{$pid}");
         // CacheHelper::forgetFresnsMultilingual("fresns_web_comment_{$cid}");
         CacheHelper::forgetFresnsMultilingual('fresns_web_api_config_all');
-        CacheHelper::forgetFresnsMultilingual('fresns_web_group_categories');
-        CacheHelper::forgetFresnsMultilingual('fresns_web_api_top_list');
+        // CacheHelper::forgetFresnsMultilingual("fresns_web_{$uid}_groups");
+        CacheHelper::forgetFresnsMultilingual('fresns_web_guest_groups');
+        // CacheHelper::forgetFresnsMultilingual("fresns_web_{$uid}_index_list");
+        // CacheHelper::forgetFresnsMultilingual("fresns_web_{$uid}_list");
+        CacheHelper::forgetFresnsMultilingual('fresns_web_guest_index_list');
+        CacheHelper::forgetFresnsMultilingual('fresns_web_guest_list');
+        CacheHelper::forgetFresnsMultilingual('fresns_web_stickies');
     }
 }
