@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <!--role_perm_conversation-->
-                <div class="input-group">
+                <div class="input-group mb-3">
                     <label class="input-group-text">{{ __('FsLang::panel.role_perm_conversation') }}</label>
                     <div class="form-control bg-white">
                         <div class="form-check form-check-inline">
