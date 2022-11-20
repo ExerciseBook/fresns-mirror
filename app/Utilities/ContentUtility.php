@@ -215,7 +215,7 @@ class ContentUtility
                 switch ($contentLinkHandle) {
                     case 1:
                         $replaceList[] = "{$url}";
-                        $linkList[] = Str::replace($urlData->domain->host, '******', $url);
+                        $linkList[] = Str::replace($urlData?->domain?->host, '******', $url);
                     break;
 
                     case 3:
