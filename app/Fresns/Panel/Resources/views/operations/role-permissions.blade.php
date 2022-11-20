@@ -51,6 +51,24 @@
                         </div>
                     </div>
                 </div>
+                <!--role_perm_content_link_handle-->
+                <div class="input-group">
+                    <label class="input-group-text">{{ __('FsLang::panel.role_perm_content_link_handle') }}</label>
+                    <div class="form-control bg-white">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" {{ $permissions['content_link_handle']['permValue'] ?? '' ? 'checked' : '' }} name="permissions[content_link_handle]" id="content_link_handle.1" value="1">
+                            <label class="form-check-label" for="content_link_handle.1">{{ __('FsLang::panel.role_perm_content_link_handle_1') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" {{ !($permissions['content_link_handle']['permValue'] ?? '') ? 'checked' : '' }} name="permissions[content_link_handle]" id="content_link_handle.2" value="2">
+                            <label class="form-check-label" for="content_link_handle.2">{{ __('FsLang::panel.role_perm_content_link_handle_2') }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" {{ !($permissions['content_link_handle']['permValue'] ?? '') ? 'checked' : '' }} name="permissions[content_link_handle]" id="content_link_handle.3" value="3">
+                            <label class="form-check-label" for="content_link_handle.3">{{ __('FsLang::panel.role_perm_content_link_handle_3') }}</label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!--role_perm_post_config-->
