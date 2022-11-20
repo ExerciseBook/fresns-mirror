@@ -11,6 +11,21 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/fresns-panel.css">
+    <script src="/static/js/js.cookie.min.js"></script>
+
+    <script>
+        function deleteAllCookies() {
+            Object.keys(Cookies.get()).forEach(function(cookieName) {
+                var neededAttributes = {
+                    // Here you pass the same attributes that were used when the cookie was created
+                    // and are required when removing the cookie
+                };
+                Cookies.remove(cookieName, neededAttributes);
+            });
+
+            window.location.reload()
+        }
+    </script>
 </head>
 
 <body>
@@ -29,6 +44,8 @@
             <div class="card-body p-5">
                 <h3 class="card-title">Fresns {{ $code }}</h3>
                 <div class="mt-4">{!! $message !!}</div>
+
+                <button type="button" class="btn btn-light" onclick="deleteAllCookies">Light</button>
             </div>
         </div>
     </main>
