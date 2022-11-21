@@ -8,6 +8,7 @@
 
 namespace App\Fresns\Panel\Http\Controllers;
 
+use App\Helpers\AppHelper;
 use App\Models\Config;
 use App\Models\Plugin;
 use App\Utilities\AppUtility;
@@ -313,13 +314,7 @@ class ExtensionController extends Controller
                 abort(404);
             }
 
-            $themeJsonFile = resource_path('themes/'.$theme.'/theme.json');
-
-            if (! \File::exists($themeJsonFile)) {
-                return back()->with('failure', __('FsLang::tips.theme_json_file_error'));
-            }
-
-            $themeConfig = json_decode(\File::get($themeJsonFile), true);
+            $themeConfig = AppHelper::getThemeConfig($theme);
             $functionKeys = $themeConfig['functionKeys'] ?? [];
 
             $configItemKeys = Config::whereIn('item_key', collect($functionKeys)
