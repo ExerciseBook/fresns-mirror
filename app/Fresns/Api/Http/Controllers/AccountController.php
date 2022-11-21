@@ -703,7 +703,7 @@ class AccountController extends Controller
             'account_id' => $authAccount->id,
             'user_id' => $authUser?->id,
         ];
-        SessionToken::where($condition)->forceDelete();
+        SessionToken::where($condition)->delete();
 
         CacheHelper::forgetApiAccount($authAccount->aid);
         CacheHelper::forgetApiUser($authUser?->uid);

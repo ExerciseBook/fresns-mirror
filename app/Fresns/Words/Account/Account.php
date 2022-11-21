@@ -208,7 +208,7 @@ class Account
 
         $tokenInfo = SessionToken::where($condition)->first();
         if (! empty($tokenInfo)) {
-            $tokenInfo->forceDelete();
+            SessionToken::where($condition)->delete();
         }
 
         $token = \Str::random(32);
