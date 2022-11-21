@@ -104,7 +104,28 @@ class DataHelper
         return $uploadInfo;
     }
 
-    // get fresns index list
+    // get fresns user panel
+    public static function getFresnsUserPanel(?string $key = null)
+    {
+        if (fs_user()->guest()) {
+            return null;
+        }
+
+        $langTag = current_lang_tag();
+        $uid = fs_user('detail.uid');
+
+        $cacheKey = "fresns_web_user_panel_{$uid}_{$langTag}";
+
+        $userPanel = Cache::remember($cacheKey, now()->addMinutes(), function () {
+            $result = ApiHelper::make()->get('/api/v2/user/panel');
+
+            return data_get($result, 'data', null);
+        });
+
+        return data_get($userPanel, $key, null);
+    }
+
+    // get fresns groups
     public static function getFresnsGroups(?string $listKey = null): array
     {
         $langTag = current_lang_tag();
