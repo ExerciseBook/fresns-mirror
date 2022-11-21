@@ -426,6 +426,8 @@ class InstallController extends Controller
             'type' => 1,
         ]);
 
+        AppHelper::setInitialConfiguration();
+
         info('update type', [$result, $aid]);
     }
 
