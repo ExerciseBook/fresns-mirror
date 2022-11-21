@@ -66,7 +66,7 @@ class ExtensionController extends Controller
 
         $configKeys = [];
         $engines->each(function ($engine) use (&$configKeys) {
-            $configKeys[] = $engine->unikey.'_Pc';
+            $configKeys[] = $engine->unikey.'_Desktop';
             $configKeys[] = $engine->unikey.'_Mobile';
         });
 
@@ -79,10 +79,10 @@ class ExtensionController extends Controller
         $themes = Plugin::type(4)->get();
 
         $FresnsEngine = Config::where('item_key', 'FresnsEngine')->first()?->item_value;
-        $themeUnikey['pc'] = Config::where('item_key', 'FresnsEngine_Pc')->value('item_value');
+        $themeUnikey['desktop'] = Config::where('item_key', 'FresnsEngine_Desktop')->value('item_value');
         $themeUnikey['mobile'] = Config::where('item_key', 'FresnsEngine_Mobile')->value('item_value');
 
-        $themeName['pc'] = Plugin::where('unikey', $themeUnikey['pc'])->value('name');
+        $themeName['desktop'] = Plugin::where('unikey', $themeUnikey['desktop'])->value('name');
         $themeName['mobile'] = Plugin::where('unikey', $themeUnikey['mobile'])->value('name');
 
         return view('FsView::extensions.engines', compact(
@@ -107,23 +107,23 @@ class ExtensionController extends Controller
 
     public function updateEngineTheme(string $unikey, Request $request)
     {
-        $pcKey = $unikey.'_Pc';
+        $desktopKey = $unikey.'_Desktop';
         $mobileKey = $unikey.'_Mobile';
 
-        $pcConfig = Config::where('item_key', $pcKey)->first();
-        if ($request->has($pcKey)) {
-            if (! $pcConfig) {
-                $pcConfig = new Config();
-                $pcConfig->item_key = $pcKey;
-                $pcConfig->item_type = 'string';
-                $pcConfig->item_tag = 'themes';
+        $desktopConfig = Config::where('item_key', $desktopKey)->first();
+        if ($request->has($desktopKey)) {
+            if (! $desktopConfig) {
+                $desktopConfig = new Config();
+                $desktopConfig->item_key = $desktopKey;
+                $desktopConfig->item_type = 'string';
+                $desktopConfig->item_tag = 'themes';
             }
-            $pcConfig->item_value = $request->$pcKey;
-            $pcConfig->save();
+            $desktopConfig->item_value = $request->$desktopKey;
+            $desktopConfig->save();
         } else {
-            if ($pcConfig) {
-                $pcConfig->item_value = $request->$pcKey;
-                $pcConfig->save();
+            if ($desktopConfig) {
+                $desktopConfig->item_value = $request->$desktopKey;
+                $desktopConfig->save();
             }
         }
 
@@ -140,7 +140,7 @@ class ExtensionController extends Controller
             $mobileConfig->save();
         } else {
             if ($mobileConfig) {
-                $mobileConfig->item_value = $request->$pcKey;
+                $mobileConfig->item_value = $request->$desktopKey;
                 $mobileConfig->save();
             }
         }
