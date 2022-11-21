@@ -229,8 +229,13 @@ class Account
             $expiredAt = date('Y-m-d H:i:s', $expiredTime);
         }
 
-        $condition['token'] = $token;
-        $condition['expired_at'] = $expiredAt;
+        $condition = [
+            'platform_id' => $platformId,
+            'account_id' => $accountId,
+            'user_id' => $userId,
+            'token' => $token,
+            'expired_at' => $expiredAt,
+        ];
 
         SessionToken::create($condition);
 
