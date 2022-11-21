@@ -11,24 +11,6 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/fresns-panel.css">
-    <script src="/static/js/js.cookie.min.js"></script>
-    <script>
-        function deleteAllCookies() {
-            Object.keys(Cookies.get()).forEach(function(cookieName) {
-                var neededAttributes = {
-                    // Here you pass the same attributes that were used when the cookie was created
-                    // and are required when removing the cookie
-                };
-                Cookies.remove(cookieName, neededAttributes);
-            });
-
-            setTimeout(function () {
-                console.log('all cookie remove successful')
-
-                window.location.reload()
-            }, 1000)
-        }
-    </script>
 </head>
 
 <body>
@@ -48,7 +30,7 @@
                 <h3 class="card-title">Fresns {{ $code }}</h3>
                 <div class="mt-4">{!! $message !!}</div>
 
-                <button type="button" class="btn btn-light" onclick="deleteAllCookies()">清空缓存</button>
+                <a class="btn btn-outline-success btn-sm mt-4 clear-cookie" href="#" data-method="DELETE" data-action="{{ route('panel.clear.web.cookie') }}">Clear Cache</a>
             </div>
         </div>
     </main>
@@ -58,6 +40,39 @@
             <p class="my-5 text-muted">Powered by Fresns</p>
         </div>
     </footer>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script>
+        /* Fresns Token */
+        $.ajaxSetup({
+            headers: {
+                Accept: 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+        });
+
+        $(document).ready(function () {
+            $(document).on('click', '.clear-cookie', function (e) {
+                e.preventDefault();
+                $(this).prop('disabled', true);
+                $(this).prepend(
+                    '<span class="spinner-border spinner-border-sm mg-r-5" role="status" aria-hidden="true"></span> '
+                );
+
+                const url = $(this).data('action'),
+                    type = $(this).data('method') || 'POST',
+                    btn = $(this);
+
+                $.ajax({
+                    url,
+                    type,
+                    complete: function (e) {
+                        location.reload();
+                    },
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

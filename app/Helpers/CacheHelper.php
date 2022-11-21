@@ -76,7 +76,7 @@ class CacheHelper
         \Artisan::call('event:cache');
         \Artisan::call('optimize:clear');
         \Artisan::call('queue:clear');
-        \Artisan::call('route:clear'); // 路由存在闭包函数，不能用 route:cache
+        \Artisan::call('route:clear');
         \Artisan::call('route:trans:clear');
         \Artisan::call('schedule:clear-cache');
         \Artisan::call('view:cache');

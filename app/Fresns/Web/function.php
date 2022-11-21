@@ -140,3 +140,63 @@ if (! function_exists('fs_user')) {
         return app('fresns.user');
     }
 }
+
+// fs_user_panel
+if (! function_exists('fs_user_panel')) {
+    /**
+     * @param  string|null  $key
+     * @return array
+     */
+    function fs_user_panel(?string $key = null)
+    {
+        return DataHelper::getFresnsUserPanel($key);
+    }
+}
+
+// fs_groups
+if (! function_exists('fs_groups')) {
+    /**
+     * @param  string|null  $listKey
+     * @return array
+     */
+    function fs_groups(?string $listKey = null)
+    {
+        return DataHelper::getFresnsGroups($listKey);
+    }
+}
+
+// fs_index_list
+if (! function_exists('fs_index_list')) {
+    /**
+     * @param  string|null  $listKey
+     * @return array
+     */
+    function fs_index_list(?string $listKey = null)
+    {
+        return DataHelper::getFresnsIndexList($listKey);
+    }
+}
+
+// fs_list
+if (! function_exists('fs_list')) {
+    /**
+     * @param  string|null  $listKey
+     * @return array
+     */
+    function fs_list(?string $listKey = null)
+    {
+        return DataHelper::getFresnsList($listKey);
+    }
+}
+
+// fs_stickies
+if (! function_exists('fs_stickies')) {
+    /**
+     * @param  string|null  $listKey
+     * @return array
+     */
+    function fs_stickies()
+    {
+        return DataHelper::getFresnsStickies();
+    }
+}

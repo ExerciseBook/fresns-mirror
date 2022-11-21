@@ -8,11 +8,8 @@
 
 namespace App\Fresns\Web\Http\Middleware;
 
-use App\Fresns\Web\Helpers\ApiHelper;
-use App\Fresns\Web\Helpers\DataHelper;
 use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
-use App\Models\File;
 use App\Models\SessionKey;
 use Browser;
 use Closure;
@@ -20,7 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
 
 class WebConfiguration
 {
@@ -73,33 +69,10 @@ class WebConfiguration
         $finder->prependLocation(base_path("extensions/themes/{$path}"));
         $this->webLangTag();
 
-        $this->userPanel();
-
-        View::share('fresnsGroups', DataHelper::getFresnsGroups());
-        View::share('fresnsIndexList', DataHelper::getFresnsIndexList());
-        View::share('fresnsList', DataHelper::getFresnsList());
-        View::share('FresnsStickies', DataHelper::getFresnsStickies());
-
         $timezone = fs_user('detail.timezone') ?: ConfigHelper::fresnsConfigByItemKey('default_timezone');
         Cookie::queue('timezone', $timezone);
 
         return $next($request);
-    }
-
-    private function userPanel(): void
-    {
-        if (fs_user()->check()) {
-            $langTag = current_lang_tag();
-            $uid = fs_user('detail.uid');
-
-            $cacheKey = "fresns_web_user_panel_{$uid}_{$langTag}";
-
-            $userPanel = Cache::remember($cacheKey, now()->addMinutes(), function () {
-                return ApiHelper::make()->get('/api/v2/user/panel');
-            });
-
-            View::share('userPanel', data_get($userPanel, 'data', null));
-        }
     }
 
     public function loadLanguages()
