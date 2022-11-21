@@ -151,7 +151,5 @@ class LoginController extends Controller
         Cookie::queue(Cookie::forget('fs_aid_token'));
         Cookie::queue(Cookie::forget('fs_uid'));
         Cookie::queue(Cookie::forget('fs_uid_token'));
-
-        return back();
     }
 }
