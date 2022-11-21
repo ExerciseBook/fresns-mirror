@@ -30,7 +30,7 @@
             </thead>
             <tbody>
                 <!--default engine-->
-                <tr>
+                {{-- <tr>
                     <th scope="row" class="py-3">{{ __('FsLang::panel.website_engine_default') }}</th>
                     <td><a href="https://fresns.org" target="_blank" class="link-info fresns-link fs-7">Fresns</a></td>
                     <td>
@@ -62,7 +62,7 @@
                             <button type="button" class="btn btn-outline-success btn-sm plugin-manage" data-action="{{ route('panel.defaultEngine.theme.update') }}" data-enable="1">{{ __('FsLang::panel.button_activate') }}</button>
                         @endif
                     </td>
-                </tr>
+                </tr> --}}
 
                 <!--engine list-->
                 @foreach ($engines as $engine)
