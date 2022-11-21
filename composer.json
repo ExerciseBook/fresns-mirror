@@ -60,10 +60,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        },
-        "files": [
-            "app/Fresns/Web/function.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
