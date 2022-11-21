@@ -68,7 +68,9 @@
                 <!--engine list-->
                 @foreach ($engines as $engine)
                     <tr>
-                        <th scope="row" class="py-3">{{ $engine->name }} <span class="badge bg-secondary plugin-version">{{ $engine->version }}</span>
+                        <th scope="row" class="py-3">
+                            <img src="/assets/plugins/{{ $engine->unikey }}/fresns.png" class="me-2" width="44" height="44">
+                            {{ $engine->name }} <span class="badge bg-secondary plugin-version">{{ $engine->version }}</span>
                             @if ($engine->is_upgrade)
                                 <a href="{{ route('panel.upgrades') }}"><span class="badge rounded-pill bg-danger plugin-version">{{ __('FsLang::panel.new_version') }}</span></a>
                             @endif
