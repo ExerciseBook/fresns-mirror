@@ -30,7 +30,7 @@
                 <h3 class="card-title">Fresns {{ $code }}</h3>
                 <div class="mt-4">{!! $message !!}</div>
 
-                <a class="btn btn-outline-success btn-sm mt-4 clear-cookie" href="#" data-method="DELETE" data-action="{{ route('panel.clear.web.cookie') }}">Clear Cache</a>
+                <a class="btn btn-outline-success btn-sm mt-4 clear-cookie" href="#" data-method="DELETE" data-action="{{ route('panel.clear.web.cookie') }}">Clear Cookie</a>
             </div>
         </div>
     </main>
