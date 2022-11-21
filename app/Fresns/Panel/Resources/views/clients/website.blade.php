@@ -49,6 +49,7 @@
                             </option>
                         @endforeach
                     </select>
+                    <a class="btn btn-outline-secondary" href="{{ route('panel.engines.index') }}" role="button">{{ __('FsLang::panel.button_view') }}</a>
                     @if ($engineSettingsPath)
                         <a class="btn btn-outline-secondary" href="{{ route('panel.iframe.setting', ['url' => $engineSettingsPath]) }}" role="button">{{ __('FsLang::panel.button_setting') }}</a>
                     @endif
