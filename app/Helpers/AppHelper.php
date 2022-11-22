@@ -130,7 +130,7 @@ class AppHelper
     // get plugin config
     public static function getPluginConfig(string $plugin)
     {
-        $pluginJsonFile = base_path(config('plugins.paths.plugins').'/'.$plugin.'/plugin.json');
+        $pluginJsonFile = config('plugins.paths.plugins').'/'.$plugin.'/plugin.json';
         if (! $pluginJsonFile) {
             return null;
         }
@@ -143,7 +143,7 @@ class AppHelper
     // get theme config
     public static function getThemeConfig(string $theme)
     {
-        $themeJsonFile = base_path(config('themes.paths.themes').'/'.$theme.'/theme.json');
+        $themeJsonFile = config('themes.paths.themes').'/'.$theme.'/theme.json';
         if (! $themeJsonFile) {
             return null;
         }
