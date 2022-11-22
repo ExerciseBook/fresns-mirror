@@ -160,12 +160,12 @@
                                 <span class="badge rounded-pill bg-secondary ms-2 fs-9">{{ $databaseInfo['envTimezoneToUtc'] }}</span>
                             </span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                        {{-- <li class="list-group-item d-flex justify-content-between align-items-start">
                             {{ __('FsLang::panel.system_info_database_collation') }}: <span>{{ $databaseInfo['collation'] }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             {{ __('FsLang::panel.system_info_database_size') }}: <span>{{ $databaseInfo['sizeMb'].' MB' }}</span>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </div>
