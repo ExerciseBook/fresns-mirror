@@ -189,8 +189,9 @@ class ContentUtility
         $urlList = ContentUtility::extractLink($content);
 
         $urlDataList = DomainLink::with('domain')->whereIn('link_url', $urlList)->get();
+        $siteUrl = ConfigHelper::fresnsConfigByItemKey('site_url');
 
-        $siteDomain = StrHelper::extractDomainByUrl(ConfigHelper::fresnsConfigByItemKey('site_url'));
+        $siteDomain = $siteUrl ? StrHelper::extractDomainByUrl($siteUrl) : null;
         $userMainRole = $userId ? PermissionUtility::getUserMainRolePerm($userId) : null;
         $contentLinkHandle = $userMainRole['content_link_handle'] ?? 1;
 
