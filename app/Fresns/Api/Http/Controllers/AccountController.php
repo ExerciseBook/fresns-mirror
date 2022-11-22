@@ -195,7 +195,9 @@ class AccountController extends Controller
 
         // get account token
         $token['token'] = $fresnsTokenResponse->getData('token');
-        $token['expiredTime'] = $fresnsTokenResponse->getData('expiredTime');
+        $token['expiredHours'] = $fresnsTokenResponse->getData('expiredHours');
+        $token['expiredDays'] = $fresnsTokenResponse->getData('expiredDays');
+        $token['expiredDateTime'] = $fresnsTokenResponse->getData('expiredDateTime');
         $sessionToken['sessionToken'] = $token;
 
         // get account data
@@ -284,7 +286,9 @@ class AccountController extends Controller
 
         // get account token
         $token['token'] = $fresnsTokenResponse->getData('token');
-        $token['expiredTime'] = $fresnsTokenResponse->getData('expiredTime');
+        $token['expiredHours'] = $fresnsTokenResponse->getData('expiredHours');
+        $token['expiredDays'] = $fresnsTokenResponse->getData('expiredDays');
+        $token['expiredDateTime'] = $fresnsTokenResponse->getData('expiredDateTime');
         $sessionToken['sessionToken'] = $token;
 
         // get account data

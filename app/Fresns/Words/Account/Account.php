@@ -21,6 +21,7 @@ use App\Models\AccountConnect;
 use App\Models\AccountWallet;
 use App\Models\SessionToken;
 use App\Utilities\ConfigUtility;
+use Carbon\Carbon;
 use Fresns\CmdWordManager\Exceptions\Constants\ExceptionConstant;
 use Fresns\CmdWordManager\Traits\CmdWordResponseTrait;
 use Illuminate\Support\Facades\Cache;
@@ -221,12 +222,19 @@ class Account
         }
 
         $token = \Str::random(32);
-        $expiredAt = null;
+        $expiredHours = null;
+        $expiredDays = null;
+        $expiredDateTime = null;
         if ($dtoWordBody->expiredTime) {
             $now = time();
             $time = $dtoWordBody->expiredTime * 3600;
             $expiredTime = $now + $time;
-            $expiredAt = date('Y-m-d H:i:s', $expiredTime);
+
+            $dt = Carbon::parse($expiredTime);
+
+            $expiredHours = $dtoWordBody->expiredTime;
+            $expiredDays = $dt->diffInDays(Carbon::now());
+            $expiredDateTime = date('Y-m-d H:i:s', $expiredTime);
         }
 
         $condition = [
@@ -234,7 +242,7 @@ class Account
             'account_id' => $accountId,
             'user_id' => $userId,
             'token' => $token,
-            'expired_at' => $expiredAt,
+            'expired_at' => $expiredDateTime,
         ];
 
         SessionToken::create($condition);
@@ -243,7 +251,9 @@ class Account
             'aid' => $dtoWordBody->aid,
             'uid' => $dtoWordBody->uid,
             'token' => $token,
-            'expiredTime' => $expiredAt,
+            'expiredHours' => $expiredHours,
+            'expiredDays' => $expiredDays,
+            'expiredDateTime' => $expiredDateTime,
         ]);
     }
 
