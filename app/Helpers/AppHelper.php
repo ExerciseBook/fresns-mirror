@@ -163,15 +163,12 @@ class AppHelper
             return;
         }
 
-        $keyInfo = [
-            'platform_id' => 4,
-            'name' => 'Fresns Official Engine',
-            'type' => 1,
-            'app_id' => Str::random(8),
-            'app_secret' => Str::random(32),
-        ];
-
-        $appKey = SessionKey::create($keyInfo);
+        $appKey = new SessionKey;
+        $appKey->platform_id = 4;
+        $appKey->name = 'Fresns Official Engine';
+        $appKey->app_id = Str::random(8);
+        $appKey->app_secret = Str::random(32);
+        $appKey->save();
 
         $configKeys = [
             'engine_service',
@@ -192,7 +189,7 @@ class AppHelper
         foreach ($configKeys as $configKey) {
             $config = $configs->where('item_key', $configKey)->first();
 
-            $config->item_value = $configValues['$configKey'];
+            $config->item_value = $configValues[$configKey];
             $config->save();
         }
 
