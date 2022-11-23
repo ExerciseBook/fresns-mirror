@@ -262,13 +262,7 @@ $(document).ready(function () {
             method: 'get',
             url: action,
             success: function (response) {
-                let upgradeStep = response.upgrade_step;
-
-                if (!upgradeStep || upgradeStep == 6) {
-                    $('#upgradeStepModal').data('upgradeSuccess', 1);
-                    clearInterval(upgradeTimer);
-                    return;
-                }
+                let upgradeStep = response.upgrade_step || 6;
 
                 let step = $('#upgrade').find('#upgrade' + upgradeStep);
                 step.find('i').remove();
@@ -278,6 +272,18 @@ $(document).ready(function () {
                     $(completeStep).find('i').remove();
                     $(completeStep).prepend('<i class="bi bi-check-lg text-success me-2"></i>');
                 });
+
+                if (!upgradeStep || upgradeStep == 6) {
+                    step.find('i').remove();
+                    step.prepend('<i class="bi bi-check-lg text-success me-2"></i>');
+
+                    $('#upgradeButton').addClass('btn-light').removeClass('btn-info').text(trans('tips.upgradeSuccess')); //FsLang
+                    $('#upgradeButton').data('upgrading', true);
+
+                    $('#upgradeStepModal').data('upgradeSuccess', 1);
+                    clearInterval(upgradeTimer);
+                    return;
+                }
             },
         });
     }
