@@ -383,6 +383,7 @@ return [
     'site_mode_public_register_service' => '注册功能配置',
     'site_mode_public_register_type' => '注册账号支持',
     'site_mode_public_register_type_email' => '邮箱注册',
+    'site_mode_public_register_type_phone' => '手机注册',
     'site_mode_public_login_or_register' => '验证码登录时，无账号则自动注册',
     'site_mode_public_register_type' => '注册账号支持',
     'site_mode_private_join_status' => '是否对外开放加入',
