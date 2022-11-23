@@ -18,7 +18,7 @@ class ApiException extends \Exception
 
     protected $data;
 
-    public function __construct(int $code, ?string $unikey = '', ?mixed $data = null)
+    public function __construct(int $code, ?string $unikey = '', mixed $data = null)
     {
         $message = $this->getCodeMessage($code, $unikey);
         $this->data = $data;
