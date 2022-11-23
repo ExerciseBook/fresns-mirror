@@ -8,7 +8,6 @@
 
 namespace App\Fresns\Panel\Http\Controllers;
 
-use App\Helpers\ConfigHelper;
 use App\Models\Config;
 use App\Models\Plugin;
 use App\Models\SessionKey;
@@ -124,6 +123,7 @@ class WebsiteController extends Controller
     {
         // config keys
         $configKeys = [
+            'site_url',
             'website_portal_path',
             'website_user_path',
             'website_group_path',
@@ -142,7 +142,7 @@ class WebsiteController extends Controller
             $params[$config->item_key] = $config->item_value;
         }
 
-        $siteUrl = ConfigHelper::fresnsConfigByItemKey('site_url');
+        $siteUrl = $params['site_url'];
         $siteUrl = rtrim($siteUrl, '/');
 
         return view('FsView::clients.paths', compact('params', 'siteUrl'));
