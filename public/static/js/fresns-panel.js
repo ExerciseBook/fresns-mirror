@@ -210,7 +210,7 @@ $(document).ready(function () {
 
         if (!physicalUpgradeTimer) {
             getPhysicalUpgradeOutput(action);
-            physicalUpgradeTimer = setInterval(getPhysicalUpgradeOutput, 5000, action);
+            physicalUpgradeTimer = setInterval(getPhysicalUpgradeOutput, 1000, action);
         }
     });
 
@@ -288,7 +288,7 @@ $(document).ready(function () {
 
         if (!upgradeTimer) {
             checkUpgradeStep(action);
-            upgradeTimer = setInterval(checkUpgradeStep, 5000, action);
+            upgradeTimer = setInterval(checkUpgradeStep, 1000, action);
         }
     });
 
