@@ -309,14 +309,12 @@ class ConfigUtility
             $perm['draft'] = false;
         }
 
-        $publishTip = null;
+        $publishTip = $perm['publish'] ? null : ConfigUtility::getCodeMessage(36104, 'Fresns', $langTag);
         $emailTip = null;
         $phoneTip = null;
         $realNameTip = null;
 
         if ($perm['publish']) {
-            $publishTip = ConfigUtility::getCodeMessage(36104, 'Fresns', $langTag);
-
             if ($perm['emailRequired'] && empty($account->email)) {
                 $perm['publish'] = false;
                 $emailTip = ConfigUtility::getCodeMessage(36301, 'Fresns', $langTag);
