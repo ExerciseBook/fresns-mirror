@@ -15,7 +15,7 @@ use App\Fresns\Api\Http\DTO\EditorQuickPublishDTO;
 use App\Fresns\Api\Http\DTO\EditorUpdateDTO;
 use App\Fresns\Api\Services\CommentService;
 use App\Fresns\Api\Services\PostService;
-use App\Fresns\Api\Services\PublishService;
+use App\Fresns\Api\Services\UserService;
 use App\Helpers\ConfigHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\PrimaryHelper;
@@ -629,8 +629,8 @@ class EditorController extends Controller
         };
 
         // check publish prem
-        $publishService = new PublishService;
-        $publishService->checkPublishPerm($type, $mainId);
+        $publishService = new UserService;
+        $publishService->checkPublishPerm($type, $authUser->id, $mainId, $langTag, $timezone);
 
         if ($type == 'comment') {
             $checkCommentPerm = PermissionUtility::checkPostCommentPerm($draft->post_id, $authUser->id);
@@ -930,6 +930,8 @@ class EditorController extends Controller
         $requestData['type'] = $type;
         $dtoRequest = new EditorQuickPublishDTO($requestData);
 
+        $langTag = $this->langTag();
+        $timezone = $this->timezone();
         $authUser = $this->user();
 
         if ($dtoRequest->type == 'comment') {
@@ -941,8 +943,8 @@ class EditorController extends Controller
         }
 
         // check publish prem
-        $publishService = new PublishService;
-        $publishService->checkPublishPerm($dtoRequest->type);
+        $publishService = new UserService;
+        $publishService->checkPublishPerm($dtoRequest->type, $authUser->id, null, $langTag, $timezone);
 
         if ($dtoRequest->file) {
             $fileConfig = FileHelper::fresnsFileStorageConfigByType(File::TYPE_IMAGE);
