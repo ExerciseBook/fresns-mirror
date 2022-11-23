@@ -209,18 +209,6 @@ class Account
             );
         }
 
-        $tokenInfo = SessionToken::where('platform_id', $platformId)
-            ->where('account_id', $accountId)
-            ->where('user_id', $userId)
-            ->first();
-
-        if (! empty($tokenInfo)) {
-            SessionToken::where('platform_id', $platformId)
-                ->where('account_id', $accountId)
-                ->where('user_id', $userId)
-                ->delete();
-        }
-
         $token = \Str::random(32);
         $expiredHours = null;
         $expiredDays = null;
@@ -245,11 +233,12 @@ class Account
             'expired_at' => $expiredDateTime,
         ];
 
-        SessionToken::create($condition);
+        $tokenModel = SessionToken::create($condition);
 
         return $this->success([
             'aid' => $dtoWordBody->aid,
             'uid' => $dtoWordBody->uid,
+            'tokenId' => $tokenModel->id,
             'token' => $token,
             'expiredHours' => $expiredHours,
             'expiredDays' => $expiredDays,
