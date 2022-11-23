@@ -10,7 +10,6 @@ namespace App\Fresns\Api\Services;
 
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Traits\ApiHeaderTrait;
-use App\Fresns\Api\Traits\ApiResponseTrait;
 use App\Helpers\DateHelper;
 use App\Utilities\ConfigUtility;
 use App\Utilities\PermissionUtility;
@@ -19,7 +18,6 @@ use Carbon\Carbon;
 class PublishService
 {
     use ApiHeaderTrait;
-    use ApiResponseTrait;
 
     // check publish perm
     // $type = post / comment
@@ -39,11 +37,7 @@ class PublishService
 
         // Check publication requirements
         if (! $publishConfig['perm']['publish']) {
-            return $this->failure(
-                36104,
-                ConfigUtility::getCodeMessage(36104, 'Fresns', $langTag),
-                $publishConfig['perm']['tips'],
-            );
+            throw new ApiException(36104, 'Fresns', $publishConfig['perm']['tips']);
         }
 
         // Check additional requirements
