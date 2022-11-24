@@ -80,7 +80,7 @@ class AppUtility
         return true;
     }
 
-    public static function checkPluginStatus(int $type)
+    public static function checkPluginsStatus(int $type)
     {
         $fresnsJsonFile = file_get_contents(config('plugins.manager.default.file'));
 
