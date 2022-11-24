@@ -993,6 +993,7 @@ return [
     'website_engine_config' => 'इंजन विन्यास',
     'website_engine_service' => 'इंजन सेवा प्रदाता',
     'website_engine_default' => 'Fresns डिफ़ॉल्ट इंजन',
+    'website_engine_cookie_prefix' => 'इंजन कुकी उपसर्ग',
     'website_engine_api_type' => 'इंजन एपीआई प्रकार',
     'website_engine_key_id' => 'एप्लिकेशन कुंजी का चयन करें',
     'website_theme_config' => 'थीम कॉन्फिग',

@@ -993,6 +993,7 @@ return [
     'website_engine_config' => '엔진 구성',
     'website_engine_service' => '엔진 서비스 제공업체',
     'website_engine_default' => '기본 엔진',
+    'website_engine_cookie_prefix' => '엔진 쿠키 접두사',
     'website_engine_api_type' => '엔진 API 유형',
     'website_engine_key_id' => '애플리케이션 키 선택',
     'website_theme_config' => '테마 구성',

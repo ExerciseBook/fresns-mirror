@@ -993,6 +993,7 @@ return [
     'website_engine_config' => 'Configuração do motor',
     'website_engine_service' => 'Prestador de serviços de motores',
     'website_engine_default' => 'Fresns Default Engine',
+    'website_engine_cookie_prefix' => 'Prefixo do cozinheiro do motor',
     'website_engine_api_type' => 'Tipo de motor API',
     'website_engine_key_id' => 'Seleccionar chave de aplicação',
     'website_theme_config' => 'Tema Config',

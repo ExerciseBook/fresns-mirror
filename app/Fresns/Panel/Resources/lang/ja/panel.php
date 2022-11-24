@@ -993,6 +993,7 @@ return [
     'website_engine_config' => 'エンジン構成',
     'website_engine_service' => 'エンジンサービスプロバイダー',
     'website_engine_default' => 'フレズンズデフォルトエンジン',
+    'website_engine_cookie_prefix' => 'エンジンクッキーのプレフィックス',
     'website_engine_api_type' => 'エンジンAPIタイプ',
     'website_engine_key_id' => 'アプリケーションキーの選択',
     'website_theme_config' => 'テーマ設定',

@@ -993,6 +993,7 @@ return [
     'website_engine_config' => 'Engine Config',
     'website_engine_service' => 'Engine Service Provider',
     'website_engine_default' => 'Fresns Default Engine',
+    'website_engine_cookie_prefix' => 'Engine Cookie Prefix',
     'website_engine_api_type' => 'Engine API Type',
     'website_engine_key_id' => 'Select App Key',
     'website_theme_config' => 'Theme Config',

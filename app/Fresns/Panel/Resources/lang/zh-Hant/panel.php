@@ -994,6 +994,7 @@ return [
     'website_engine_config' => '網站引擎配置',
     'website_engine_service' => '引擎服務商',
     'website_engine_default' => 'Fresns 默認引擎',
+    'website_engine_cookie_prefix' => '引擎 Cookie 前置詞',
     'website_engine_api_type' => '引擎 API 類型',
     'website_engine_key_id' => '關聯應用密鑰',
     'website_theme_config' => '主題模板配置',

@@ -993,6 +993,7 @@ return [
     'website_engine_config' => 'Configurazione del motore',
     'website_engine_service' => 'Fornitore di servizi del motore',
     'website_engine_default' => 'Motore predefinito Fresns',
+    'website_engine_cookie_prefix' => 'Prefisso del cookie del motore',
     'website_engine_api_type' => 'Tipo di API del motore',
     'website_engine_key_id' => 'Seleziona la chiave dell\'applicazione',
     'website_theme_config' => 'Configurazione del tema',

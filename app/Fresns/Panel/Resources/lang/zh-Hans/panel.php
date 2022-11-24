@@ -994,6 +994,7 @@ return [
     'website_engine_config' => '网站引擎配置',
     'website_engine_service' => '引擎服务商',
     'website_engine_default' => 'Fresns 默认引擎',
+    'website_engine_cookie_prefix' => '引擎 Cookie 前缀',
     'website_engine_api_type' => '引擎 API 类型',
     'website_engine_key_id' => '关联应用密钥',
     'website_theme_config' => '主题模板配置',

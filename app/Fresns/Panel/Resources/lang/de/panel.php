@@ -993,6 +993,7 @@ return [
     'website_engine_config' => 'Motor-Konfiguration',
     'website_engine_service' => 'Engine-Dienstanbieter',
     'website_engine_default' => 'Fresns Standard-Engine',
+    'website_engine_cookie_prefix' => 'Motor-Cookie-Präfix',
     'website_engine_api_type' => 'Motor-API-Typ',
     'website_engine_key_id' => 'Anwendungsschlüssel auswählen',
     'website_theme_config' => 'Thema-Konfiguration',

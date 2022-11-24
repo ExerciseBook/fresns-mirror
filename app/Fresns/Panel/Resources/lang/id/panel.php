@@ -993,6 +993,7 @@ return [
     'website_engine_config' => 'Konfigurasi Mesin',
     'website_engine_service' => 'Penyedia Layanan Mesin',
     'website_engine_default' => 'Mesin Default Fresns',
+    'website_engine_cookie_prefix' => 'Awalan Cookie Mesin',
     'website_engine_api_type' => 'Jenis API Mesin',
     'website_engine_key_id' => 'Pilih Kunci Aplikasi',
     'website_theme_config' => 'Konfigurasi Tema',
