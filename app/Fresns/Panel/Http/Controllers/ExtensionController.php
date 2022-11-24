@@ -19,6 +19,7 @@ class ExtensionController extends Controller
 {
     public function pluginIndex(Request $request)
     {
+        AppUtility::checkPluginStatus(1);
         $plugins = Plugin::type(1);
 
         $isEnable = match ($request->status) {
@@ -41,6 +42,7 @@ class ExtensionController extends Controller
 
     public function panelIndex(Request $request)
     {
+        AppUtility::checkPluginStatus(2);
         $panels = Plugin::type(2);
 
         $isEnable = match ($request->status) {
@@ -63,6 +65,7 @@ class ExtensionController extends Controller
 
     public function engineIndex()
     {
+        AppUtility::checkPluginStatus(3);
         $engines = Plugin::type(3)->get();
 
         $configKeys = [];
