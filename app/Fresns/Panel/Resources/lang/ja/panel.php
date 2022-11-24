@@ -870,6 +870,7 @@ return [
     'group_option_publish_all' => '全員',
     'group_option_publish_follow' => 'ユーザーのグループだけを支払うだけです',
     'group_option_publish_role' => '指定された役割ユーザーのみ',
+    'group_option_publish_admin' => 'グループ管理者のみ',
     'group_current' => '現在のグループ',
     'group_target' => 'ターゲットグループ',
     'group_target_desc' => '合併後、古いグループは削除され、古いグループの内容は選択したターゲットチーム名に移行されます。',

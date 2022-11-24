@@ -871,6 +871,7 @@ return [
     'group_option_publish_all' => '所有人',
     'group_option_publish_follow' => '仅关注了小组的用户',
     'group_option_publish_role' => '仅指定的角色用户',
+    'group_option_publish_admin' => '仅限小组管理员',
     'group_current' => '当前小组',
     'group_target' => '目标小组',
     'group_target_desc' => '合并后旧小组将被删除，旧小组名下内容将迁移到所选目标小组名下。',

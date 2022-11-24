@@ -870,6 +870,7 @@ return [
     'group_option_publish_all' => 'Toutes les personnes',
     'group_option_publish_follow' => 'Ne payant que le groupe d\'utilisateurs',
     'group_option_publish_role' => 'Utilisateurs de rôle spécifiés uniquement',
+    'group_option_publish_admin' => 'Administrateurs de groupe uniquement',
     'group_current' => 'Groupe actuel',
     'group_target' => 'Groupe ciblé',
     'group_target_desc' => 'Après la fusion, l\'ancien groupe sera supprimé et le contenu de l\'ancien groupe sera migré vers le nom de l\'équipe cible sélectionnée',

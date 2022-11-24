@@ -870,6 +870,7 @@ return [
     'group_option_publish_all' => 'Everyone',
     'group_option_publish_follow' => 'Only the users of the group were followed',
     'group_option_publish_role' => 'Assigned role users only',
+    'group_option_publish_admin' => 'Group administrators only',
     'group_current' => 'Current Group',
     'group_target' => 'Target Group',
     'group_target_desc' => 'After the merger the old group will be deleted and the content belonging to the old group will be migrated to the selected target group',

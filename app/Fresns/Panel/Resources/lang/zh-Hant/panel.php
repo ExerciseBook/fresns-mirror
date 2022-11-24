@@ -871,6 +871,7 @@ return [
     'group_option_publish_all' => '所有人',
     'group_option_publish_follow' => '僅跟隨了社團的用戶',
     'group_option_publish_role' => '僅指定的角色用戶',
+    'group_option_publish_admin' => '僅限社團管理員',
     'group_current' => '當前社團',
     'group_target' => '目標社團',
     'group_target_desc' => '合併後舊社團將被刪除，舊社團名下內容將遷移到所選目標社團名下。',

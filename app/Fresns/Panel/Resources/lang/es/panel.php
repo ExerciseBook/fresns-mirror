@@ -870,6 +870,7 @@ return [
     'group_option_publish_all' => 'Todo el mundo',
     'group_option_publish_follow' => 'Solo pagando solo al grupo de usuarios',
     'group_option_publish_role' => 'Solo usuarios de roles especificados',
+    'group_option_publish_admin' => 'Sólo administradores de grupos',
     'group_current' => 'Grupo actual',
     'group_target' => 'Grupo objetivo',
     'group_target_desc' => 'Después de la fusión, se eliminará el grupo anterior, y los contenidos del grupo anterior se migrarán al nombre del equipo de destino seleccionado',

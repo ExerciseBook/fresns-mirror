@@ -870,6 +870,7 @@ return [
     'group_option_publish_all' => '모든 사람',
     'group_option_publish_follow' => '사용자 그룹 만 지불합니다',
     'group_option_publish_role' => '지정된 역할 사용자 전용',
+    'group_option_publish_admin' => '팀 관리자만',
     'group_current' => '현재 그룹',
     'group_target' => '대상 그룹',
     'group_target_desc' => '합병 후 이전 그룹이 삭제되고 이전 그룹의 내용이 선택한 대상 팀 이름으로 마이그레이션됩니다',

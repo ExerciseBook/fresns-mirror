@@ -870,6 +870,7 @@ return [
     'group_option_publish_all' => 'Jeder',
     'group_option_publish_follow' => 'Nur die Gruppe der Benutzer zahlen',
     'group_option_publish_role' => 'Nur angegebene Rollenbenutzer',
+    'group_option_publish_admin' => 'Nur Gruppenadministratoren',
     'group_current' => 'Aktuelle Gruppe',
     'group_target' => 'Zielgruppe',
     'group_target_desc' => 'Nach der Fusion wird die alte Gruppe gelöscht, und der Inhalt der alten Gruppe wird zum ausgewählten Target-Teamnamen migriert',

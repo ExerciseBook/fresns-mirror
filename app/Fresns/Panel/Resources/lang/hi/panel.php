@@ -870,6 +870,7 @@ return [
     'group_option_publish_all' => 'सब लोग',
     'group_option_publish_follow' => 'केवल उपयोगकर्ताओं के समूह का भुगतान करना',
     'group_option_publish_role' => 'केवल भूमिका उपयोगकर्ता',
+    'group_option_publish_admin' => 'टीम व्यवस्थापक केवल',
     'group_current' => 'वर्तमान समूह',
     'group_target' => 'लक्ष्य समूह',
     'group_target_desc' => 'विलय के बाद, पुराना समूह हटा दिया जाएगा, और पुराने समूह की सामग्री चयनित लक्ष्य टीम के नाम पर माइग्रेट की जाएगी।',
