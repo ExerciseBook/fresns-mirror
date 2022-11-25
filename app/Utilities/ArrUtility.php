@@ -102,7 +102,7 @@ class ArrUtility
                 continue;
             }
 
-            if ($arrayItem[$arrayKey] == $value) {
+            if ($arrayItem[$key] == $value) {
                 $array[$arrayKey][$key] = $newValue;
             }
         }
