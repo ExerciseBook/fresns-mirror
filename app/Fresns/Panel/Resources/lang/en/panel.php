@@ -395,7 +395,7 @@ return [
     // System-Policy
     'policy_terms' => 'Terms',
     'policy_privacy' => 'Privacy',
-    'policy_cookie' => 'Cookie',
+    'policy_cookies' => 'Cookies',
     'policy_ip_location' => 'IP Location',
     'policy_delete_account' => 'Delete Account',
     'policy_delete_options' => 'Delete Options',

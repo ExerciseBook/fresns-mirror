@@ -395,7 +395,7 @@ return [
     // System-Policy
     'policy_terms' => 'Termini di servizio',
     'policy_privacy' => 'politica sulla riservatezza',
-    'policy_cookie' => 'Gestione dei Cookie',
+    'policy_cookies' => 'Gestione dei Cookies',
     'policy_ip_location' => 'Posizione IP',
     'policy_delete_account' => 'Istruzioni di disconnessione',
     'policy_delete_options' => 'Funzione di disconnessione',

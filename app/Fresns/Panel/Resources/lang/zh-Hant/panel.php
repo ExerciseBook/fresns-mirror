@@ -396,7 +396,7 @@ return [
     // System-Policy
     'policy_terms' => '服務條款',
     'policy_privacy' => '隱私權政策',
-    'policy_cookie' => 'Cookie 政策',
+    'policy_cookies' => 'Cookies 政策',
     'policy_ip_location' => 'IP 屬地',
     'policy_delete_account' => '註銷說明',
     'policy_delete_options' => '註銷功能',

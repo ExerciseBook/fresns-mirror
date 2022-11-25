@@ -395,7 +395,7 @@ return [
     // System-Policy
     'policy_terms' => '서비스 약관',
     'policy_privacy' => '개인 정보 정책',
-    'policy_cookie' => '쿠키 정책',
+    'policy_cookies' => '쿠키 정책',
     'policy_ip_location' => 'IP 위치',
     'policy_delete_account' => '로그 아웃 지침',
     'policy_delete_options' => '로그 아웃 기능',

@@ -395,7 +395,7 @@ return [
     // System-Policy
     'policy_terms' => 'Ketentuan Layanan',
     'policy_privacy' => 'Kebijakan pribadi',
-    'policy_cookie' => 'Kebijakan Cookie',
+    'policy_cookies' => 'Kebijakan Cookies',
     'policy_ip_location' => 'Lokasi IP',
     'policy_delete_account' => 'Petunjuk Logout',
     'policy_delete_options' => 'Fungsi Logout',

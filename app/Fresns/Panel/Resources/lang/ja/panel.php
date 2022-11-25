@@ -395,7 +395,7 @@ return [
     // System-Policy
     'policy_terms' => '利用規約',
     'policy_privacy' => 'プライバシーポリシー',
-    'policy_cookie' => 'クッキーポリシー',
+    'policy_cookies' => 'クッキーポリシー',
     'policy_ip_location' => 'IPロケーション',
     'policy_delete_account' => 'ログアウトの指示',
     'policy_delete_options' => 'ログアウト機能',

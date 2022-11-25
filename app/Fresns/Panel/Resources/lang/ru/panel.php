@@ -395,7 +395,7 @@ return [
     // System-Policy
     'policy_terms' => 'Условия использования',
     'policy_privacy' => 'политика конфиденциальности',
-    'policy_cookie' => 'Политика cookie',
+    'policy_cookies' => 'Политика cookies',
     'policy_ip_location' => 'Местоположение IP-адреса',
     'policy_delete_account' => 'Инструкции из системы',
     'policy_delete_options' => 'Функция выхода из системы',
