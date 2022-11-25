@@ -73,4 +73,44 @@ class ArrUtility
 
         return $data;
     }
+
+    // edit value
+    public static function editValue(?array $array = [], string $key, string $value, string $newValue)
+    {
+        if (empty($array)) {
+            return [];
+        }
+
+        // $array format
+        // [
+        //     {
+        //         "name":"language",
+        //         "canDelete":false
+        //     }
+        // ]
+
+        // $key = name
+        // $value = language
+        // $newValue = lang
+
+        return;
+    }
+
+    // edit key name
+    public static function editKey(?object $object = null, string $key, string $newKey)
+    {
+        if (empty($object)) {
+            return null;
+        }
+
+        // $object format
+        // {
+        //     "language": "Language"
+        // }
+
+        // $key = language
+        // $newKey = lang
+
+        return;
+    }
 }
