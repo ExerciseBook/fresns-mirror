@@ -421,6 +421,7 @@ return [
     'send_code_template_5' => '重設登錄密碼',
     'send_code_template_6' => '重設支付密碼',
     'send_code_template_7' => '使用驗證碼登錄',
+    'send_code_template_8' => '使用驗證碼註銷賬號',
     'send_code_template_table_email_desc' => '支持 HTML 格式',
     'send_code_template_table_sms_sign' => '短信簽名名稱',
     'send_code_template_table_sms_code' => '模板參數',

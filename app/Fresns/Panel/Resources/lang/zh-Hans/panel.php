@@ -421,6 +421,7 @@ return [
     'send_code_template_5' => '重置登录密码',
     'send_code_template_6' => '重置支付密码',
     'send_code_template_7' => '使用验证码登录',
+    'send_code_template_8' => '使用验证码注销账号',
     'send_code_template_table_email_desc' => '支持 HTML 格式',
     'send_code_template_table_sms_sign' => '短信签名名称',
     'send_code_template_table_sms_code' => '模板参数',

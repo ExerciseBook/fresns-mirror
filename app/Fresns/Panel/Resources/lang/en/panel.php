@@ -420,6 +420,7 @@ return [
     'send_code_template_5' => 'Reset login password',
     'send_code_template_6' => 'Reset payment password',
     'send_code_template_7' => 'Login with verify code',
+    'send_code_template_8' => 'Delete account using verify code',
     'send_code_template_table_email_desc' => 'HTML format support',
     'send_code_template_table_sms_sign' => 'Sign Name',
     'send_code_template_table_sms_code' => 'Code Info',

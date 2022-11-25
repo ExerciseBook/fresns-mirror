@@ -420,6 +420,7 @@ return [
     'send_code_template_5' => 'Ripristina la password di accesso',
     'send_code_template_6' => 'Ripristina la password di pagamento',
     'send_code_template_7' => 'Accedi con un codice di verifica',
+    'send_code_template_8' => 'Eliminare l\'account utilizzando il codice di verifica',
     'send_code_template_table_email_desc' => 'Supporta il formato HTML',
     'send_code_template_table_sms_sign' => 'Nome della firma SMS',
     'send_code_template_table_sms_code' => 'parametri del modello',

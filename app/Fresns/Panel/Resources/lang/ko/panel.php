@@ -420,6 +420,7 @@ return [
     'send_code_template_5' => '로그인 암호 재설정',
     'send_code_template_6' => '지불 암호 재설정',
     'send_code_template_7' => '확인 코드로 로그인하십시오',
+    'send_code_template_8' => '인증 코드를 사용하여 계정 삭제',
     'send_code_template_table_email_desc' => 'HTML 형식 지원',
     'send_code_template_table_sms_sign' => 'SMS 서명 이름',
     'send_code_template_table_sms_code' => '템플릿 매개 변수',

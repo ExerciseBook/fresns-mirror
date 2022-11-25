@@ -420,6 +420,7 @@ return [
     'send_code_template_5' => 'Login-Passwort zurücksetzen',
     'send_code_template_6' => 'Zahlungskennwort zurücksetzen',
     'send_code_template_7' => 'Melden Sie sich mit einem Bestätigungscode an',
+    'send_code_template_8' => 'Konto mit Verifizierungscode löschen',
     'send_code_template_table_email_desc' => 'HTML-Format unterstützen',
     'send_code_template_table_sms_sign' => 'Name des SMS',
     'send_code_template_table_sms_code' => 'Vorlagenparameter',

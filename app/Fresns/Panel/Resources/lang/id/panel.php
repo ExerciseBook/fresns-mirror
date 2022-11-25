@@ -420,6 +420,7 @@ return [
     'send_code_template_5' => 'Atur ulang kata sandi login',
     'send_code_template_6' => 'Atur ulang kata sandi pembayaran',
     'send_code_template_7' => 'Masuk dengan kode verifikasi',
+    'send_code_template_8' => 'Hapus akun menggunakan kode verifikasi',
     'send_code_template_table_email_desc' => 'Mendukung format HTML',
     'send_code_template_table_sms_sign' => 'Nama Signature SMS',
     'send_code_template_table_sms_code' => 'Parameter template',

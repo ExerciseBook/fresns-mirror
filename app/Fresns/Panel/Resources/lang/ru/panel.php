@@ -420,6 +420,7 @@ return [
     'send_code_template_5' => 'Сбросить пароль входа',
     'send_code_template_6' => 'Сбросить пароль оплаты',
     'send_code_template_7' => 'Войдите в систему с подтверждением',
+    'send_code_template_8' => 'Удаление аккаунта с помощью кода проверки',
     'send_code_template_table_email_desc' => 'Поддержка HTML формат',
     'send_code_template_table_sms_sign' => 'SMS Signature Имя',
     'send_code_template_table_sms_code' => 'Параметры шаблона',
