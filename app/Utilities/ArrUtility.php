@@ -93,7 +93,21 @@ class ArrUtility
         // $value = language
         // $newValue = lang
 
-        return;
+        foreach ($array as $arrayKey => $arrayItem) {
+            if (!is_array($arrayItem)) {
+                continue;
+            }
+
+            if (!array_key_exists($key, $arrayItem)) {
+                continue;
+            }
+
+            if ($arrayItem[$arrayKey] == $value) {
+                $array[$arrayKey][$key] = $newValue;
+            }
+        }
+
+        return $array;
     }
 
     // edit key name
@@ -111,6 +125,11 @@ class ArrUtility
         // $key = language
         // $newKey = lang
 
-        return;
+        if (property_exists($object, $key)) {
+            $object->$newKey = $object->$key;
+            unset($object->$key);
+        }
+
+        return $object;
     }
 }
