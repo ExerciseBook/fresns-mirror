@@ -75,7 +75,7 @@ class ArrUtility
     }
 
     // edit value
-    public static function editValue(?array $array = [], string $key, string $value, string $newValue)
+    public static function editValue(?array $array, string $key, string $value, string $newValue)
     {
         if (empty($array)) {
             return [];
@@ -102,7 +102,7 @@ class ArrUtility
                 continue;
             }
 
-            if ($arrayItem[$key] == $value) {
+            if ($arrayItem[$arrayKey] == $value) {
                 $array[$arrayKey][$key] = $newValue;
             }
         }
@@ -111,7 +111,7 @@ class ArrUtility
     }
 
     // edit key name
-    public static function editKey(?object $object = null, string $key, string $newKey)
+    public static function editKey(?object $object, string $key, string $newKey)
     {
         if (empty($object)) {
             return null;
