@@ -85,25 +85,69 @@ class Upgrade3Command extends Command
             }
         }
 
-        // modify cookies lang pack key
+        // modify lang pack key
         $languagePack = Config::where('item_key', 'language_pack')->first();
         if ($languagePack) {
             $packData = $languagePack->item_value;
 
             $newPackData = ArrUtility::editValue($packData, 'name', 'accountPoliciesCookie', 'accountPoliciesCookies');
+            $newPackData = ArrUtility::editValue($newPackData, 'name', 'accountRestore', 'accountRecallDelete');
 
-            $languagePack->item_value = $newPackData;
+            $addPackKeys = [
+                [
+                    "name" => "executionDate",
+                    "canDelete" => false
+                ],
+                [
+                    "name" => "accountApplyDelete",
+                    "canDelete" => false
+                ],
+                [
+                    "name" => "accountWaitDelete",
+                    "canDelete" => false
+                ],
+            ];
+
+            $newData = array_merge($newPackData, $addPackKeys);
+
+            $languagePack->item_value = json_encode($newData);
             $languagePack->save();
         }
 
-        // modify cookies lang key
+        // modify lang key
         $langPackContents = Language::where('table_name', 'configs')->where('table_column', 'item_value')->where('table_key', 'language_pack_contents')->get();
         foreach ($langPackContents as $packContent) {
-            $content = $packContent->lang_content;
+            $content = (object) json_decode($packContent->lang_content, true);
 
             $newContent = ArrUtility::editKey($content, 'accountPoliciesCookie', 'accountPoliciesCookies');
+            $newContent = ArrUtility::editKey($newContent, 'accountRestore', 'accountRecallDelete');
 
-            $packContent->lang_content = json_encode($newContent);
+            $langAddContent = match ($packContent->lang_tag) {
+                'en' => [
+                    'executionDate' => 'Execution Date',
+                    'accountApplyDelete' => 'Apply Delete Account',
+                    'accountWaitDelete' => 'Delete account wait execution',
+                    'accountRecallDelete' => 'Recall Delete Account',
+                ],
+                'zh-Hans' => [
+                    'executionDate' => '执行日期',
+                    'accountDelete' => '注销账号',
+                    'accountApplyDelete' => '申请注销',
+                    'accountWaitDelete' => '账号注销等待执行中',
+                    'accountRecallDelete' => '撤销注销',
+                ],
+                'zh-Hant' => [
+                    'executionDate' => '執行日期',
+                    'accountDelete' => '註銷賬號',
+                    'accountApplyDelete' => '申請註銷',
+                    'accountWaitDelete' => '賬號註銷等待執行中',
+                    'accountRecallDelete' => '撤銷註銷',
+                ],
+            };
+
+            $langNewContent = (object) array_merge((array) $newContent, (array) $langAddContent);
+
+            $packContent->lang_content = json_encode($langNewContent);
             $packContent->save();
         }
 
