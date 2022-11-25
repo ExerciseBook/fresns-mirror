@@ -94,15 +94,15 @@ class ArrUtility
         // $newValue = lang
 
         foreach ($array as $arrayKey => $arrayItem) {
-            if (!is_array($arrayItem)) {
+            if (! is_array($arrayItem)) {
                 continue;
             }
 
-            if (!array_key_exists($key, $arrayItem)) {
+            if (! array_key_exists($key, $arrayItem)) {
                 continue;
             }
 
-            if ($arrayItem[$arrayKey] == $value) {
+            if ($arrayItem[$key] == $value) {
                 $array[$arrayKey][$key] = $newValue;
             }
         }
