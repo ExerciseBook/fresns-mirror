@@ -38,7 +38,6 @@ use App\Models\User;
 use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class CommonController extends Controller
 {
