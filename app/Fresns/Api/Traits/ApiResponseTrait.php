@@ -66,7 +66,7 @@ trait ApiResponseTrait
         return $this->success($data, $newMessage);
     }
 
-    public function failure(int $code = 30000, ?string $message, mixed $data = null, array $headers = [])
+    public function failure(int $code = 30000, ?string $message = null, mixed $data = null, array $headers = [])
     {
         if (! \request()->wantsJson()) {
             $message = \json_encode(compact('code', 'message', 'data'), \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT);
