@@ -60,7 +60,7 @@ trait ApiResponseTrait
             'list' => [],
         ];
 
-        $message = ConfigUtility::getCodeMessage($code, null, \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag())) ?? 'unknown warning';
+        $message = ConfigUtility::getCodeMessage($code, 'Fresns', \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag())) ?? 'Unknown Warning';
         $newMessage = '('.$code.') '.$message;
 
         return $this->success($data, $newMessage);
