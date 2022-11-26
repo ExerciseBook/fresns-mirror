@@ -306,7 +306,7 @@
     </div>
 
     <!-- Fresns Upgrade Modal: physical upgrade artisan output -->
-    <div class="modal fade" id="physicalUpgradeOutputModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" data-action="{{ route('panel.physical.upgrade.info') }}" aria-labelledby="physicalUpgradeOutputModal" aria-hidden="true">
+    <div class="modal fade" id="physicalUpgradeOutputModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" data-action="{{ route('panel.upgrade.info') }}" aria-labelledby="physicalUpgradeOutputModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

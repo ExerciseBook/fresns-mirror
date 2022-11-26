@@ -64,14 +64,7 @@ class UpgradeController extends Controller
         return back()->with('failure', $fresnsResp->getMessage());
     }
 
-    public function upgradeInfo()
-    {
-        return response()->json([
-            'upgrade_step' => cache('upgradeStep'),
-        ]);
-    }
-
-    public function upgrade()
+    public function autoUpgrade()
     {
         $phpPath = (new PhpExecutableFinder)->find();
         if (! $phpPath) {
@@ -79,11 +72,11 @@ class UpgradeController extends Controller
         }
 
         // If the upgrade is already in progress, the upgrade button is not displayed
-        if (cache('upgradeStep')) {
+        if (cache('autoUpgradeStep')) {
             return $this->successResponse('upgrade');
         }
 
-        \Cache::put('upgradeStep', 1);
+        \Cache::put('autoUpgradeStep', 1);
 
         passthru($phpPath.' '.base_path('artisan').' fresns:upgrade > /dev/null &');
 
@@ -98,21 +91,21 @@ class UpgradeController extends Controller
         }
 
         // If the upgrade is already in progress, the upgrade button is not displayed
-        if (cache('physicalUpgrading')) {
+        if (cache('physicalUpgradeStep')) {
             return $this->successResponse('upgrade');
         }
-        \Cache::put('physicalUpgrading', 1);
+        \Cache::put('physicalUpgradeStep', 1);
 
         passthru($phpPath.' '.base_path('artisan').' fresns:physical-upgrade > /dev/null &');
 
         return $this->successResponse('upgrade');
     }
 
-    public function physicalUpgradeInfo()
+    public function upgradeInfo()
     {
         return response()->json([
-            'upgradeContent' => cache('physicalUpgradeOutput'),
-            'physicalUpgrading' => cache('physicalUpgrading'),
+            'autoUpgradeStep' => cache('autoUpgradeStep') ?? 0,
+            'physicalUpgradeStep' => cache('physicalUpgradeStep') ?? 0,
         ]);
     }
 }

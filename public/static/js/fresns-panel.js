@@ -182,7 +182,7 @@ $(document).ready(function () {
                 if (response.upgradeContent) {
                     $('#physicalUpgradeOutput').val(response.upgradeContent)
                 }
-                if (!response.physicalUpgrading) {
+                if (!response.physicalUpgradeStep) {
                     console.log('physical upgrade');
                     $('#physicalUpgradeOutputModal').data('upgradeSuccess', 1);
                     clearInterval(physicalUpgradeTimer);
@@ -263,7 +263,7 @@ $(document).ready(function () {
             method: 'get',
             url: action,
             success: function (response) {
-                let upgradeStep = response.upgrade_step || 6;
+                let upgradeStep = response.autoUpgradeStep || 6;
 
                 let step = $('#autoUpgradeOutputModal').find('#autoUpgradeOutputModal' + upgradeStep);
                 step.find('i').remove();

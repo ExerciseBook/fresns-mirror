@@ -53,7 +53,7 @@ class UpgradeFresns extends Command
             $this->info('No new version, Already the latest version of Fresns.');
             $this->info('Step --: Upgrade end');
 
-            Cache::put('upgradeStep', self::STEP_DONE);
+            Cache::put('autoUpgradeStep', self::STEP_DONE);
 
             return Command::SUCCESS;
         }
@@ -63,7 +63,7 @@ class UpgradeFresns extends Command
             if (! $this->extractFile()) {
                 $this->error('Failed to download upgrade package.');
 
-                Cache::put('upgradeStep', self::STEP_FAILURE);
+                Cache::put('autoUpgradeStep', self::STEP_FAILURE);
 
                 return Command::FAILURE;
             };
@@ -102,7 +102,7 @@ class UpgradeFresns extends Command
         }
 
         // upgrade step
-        return Cache::put('upgradeStep', $step);
+        return Cache::put('autoUpgradeStep', $step);
     }
 
     // step 2: download upgrade pack(zip)
