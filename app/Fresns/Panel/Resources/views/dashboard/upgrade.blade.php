@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-    <script src="/static/js/ansi_up.js"></script>
     <div class="row mb-4 border-bottom">
         <div class="col-lg-5">
             <h3>{{ __('FsLang::panel.sidebar_upgrades') }}</h3>
@@ -219,6 +218,9 @@
         </div>
     </div>
 
+    {{-- JS --}}
+    <script src="/static/js/ansi_up.js"></script>
+
     <!-- Fresns Upgrade Modal: upgrade confirm -->
     <div class="modal fade" id="upgradeConfirm" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
         <div class="modal-dialog">
@@ -314,7 +316,12 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                    <textarea class="form-control" rows="10" id="physicalUpgradeOutput" readonly>{{ __('FsLang::tips.upgrade_in_progress') }}</textarea>
+                    <pre class="form-control" id="physicalUpgradeOutput">{{ __('FsLang::tips.upgrade_in_progress') }}</pre>
+
+                    <!--progress bar-->
+                    <div class="mt-2">
+                        <div class="ajax-progress progress d-none" id="physical-upgrade-progress"></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="reloadPage()">{{ __('FsLang::panel.button_close') }}</button>
