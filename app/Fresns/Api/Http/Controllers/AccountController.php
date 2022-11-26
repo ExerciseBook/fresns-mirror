@@ -11,7 +11,9 @@ namespace App\Fresns\Api\Http\Controllers;
 use App\Exceptions\ApiException;
 use App\Fresns\Api\Http\DTO\AccountApplyDeleteDTO;
 use App\Fresns\Api\Http\DTO\AccountEditDTO;
+use App\Fresns\Api\Http\DTO\AccountEmailDTO;
 use App\Fresns\Api\Http\DTO\AccountLoginDTO;
+use App\Fresns\Api\Http\DTO\AccountPhoneDTO;
 use App\Fresns\Api\Http\DTO\AccountRegisterDTO;
 use App\Fresns\Api\Http\DTO\AccountResetPasswordDTO;
 use App\Fresns\Api\Http\DTO\AccountVerifyIdentityDTO;
@@ -54,14 +56,20 @@ class AccountController extends Controller
                 throw new ApiException(34202);
             }
 
+            new AccountEmailDTO($request->all());
+
             $checkEmail = ValidationUtility::disposableEmail($dtoRequest->account);
             if (! $checkEmail) {
                 throw new ApiException(34110);
             }
         }
 
-        if ($dtoRequest->type == 'phone' && ! $configs['site_register_phone']) {
-            throw new ApiException(34203);
+        if ($dtoRequest->type == 'phone') {
+            new AccountPhoneDTO($request->all());
+
+            if (! $configs['site_register_phone']) {
+                throw new ApiException(34203);
+            }
         }
 
         $accountType = match ($dtoRequest->type) {
@@ -212,6 +220,12 @@ class AccountController extends Controller
     public function login(Request $request)
     {
         $dtoRequest = new AccountLoginDTO($request->all());
+
+        if ($dtoRequest->type == 'email') {
+            new AccountEmailDTO($request->all());
+        } else {
+            new AccountPhoneDTO($request->all());
+        }
 
         $accountType = match ($dtoRequest->type) {
             'email' => 1,
