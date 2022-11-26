@@ -9,6 +9,7 @@
 namespace App\Console\Commands;
 
 use App\Helpers\AppHelper;
+use App\Helpers\CacheHelper;
 use App\Models\Plugin;
 use App\Utilities\AppUtility;
 use Illuminate\Console\Command;
@@ -20,6 +21,15 @@ class PhysicalUpgradeFresns extends Command
 
     protected $description = 'physical upgrade fresns';
 
+    const STEP_FAILURE = 0;
+    const STEP_START = 1;
+    const STEP_UPDATE_DATA = 2;
+    const STEP_COMPOSER_UPDATE_EXTENSIONS = 3;
+    const STEP_PUBLISH_AND_ACTIVATE_EXTENSIONS = 4;
+    const STEP_UPDATE_VERSION = 5;
+    const STEP_CLEAR = 6;
+    const STEP_DONE = 7;
+
     public function __construct()
     {
         parent::__construct();
@@ -28,128 +38,131 @@ class PhysicalUpgradeFresns extends Command
     // execute the console command
     public function handle()
     {
-        Cache::put('physicalUpgrading', 1);
-        Cache::put('physicalUpgradeOutput', '');
+        $this->updateStep(self::STEP_START);
 
         // Check if an upgrade is needed
         $checkVersion = AppUtility::checkVersion();
         if (! $checkVersion) {
-            Cache::forget('physicalUpgrading');
-
             $this->info('No new version, Already the latest version of Fresns.');
-            return -1;
+            $this->info('Step --: Upgrade end');
+
+            Cache::put('physicalUpgradeStep', self::STEP_DONE);
+
+            return Command::SUCCESS;
         }
 
         try {
-            $this->updateOutput('Step 1/5: update data'."\n");
-            if (!AppUtility::executeUpgradeCommand()) {
-                $this->updateOutput("\n".'没有新版本或不存在更新命令，更新失败'."\n");
-                return -1;
+            if (! $this->updateData()) {
+                $this->updateStep(self::STEP_FAILURE);
+
+                return Command::FAILURE;
             }
 
-            $this->updateOutput("\n".'Step 2/5: install plugins composer'."\n");
-            if (!$this->pluginComposerInstall()) {
-                return -1;
+            if (! $this->pluginComposerInstall()) {
+                $this->updateStep(self::STEP_FAILURE);
+
+                return Command::FAILURE;
             }
 
-            $this->updateOutput("\n".'Step 3/5: publish and activate plugins or themes'."\n");
-            if (!$this->pluginPublishAndActivate()) {
-                return -1;
-            }
-
-            $this->updateOutput("\n".'Step 4/5: update version'."\n");
+            $this->pluginPublishAndActivate();
             $this->upgradeFinish();
-
-            $this->updateOutput("\n".'Step 5/5: clear cache'."\n");
-            $this->clear();
         } catch (\Exception $e) {
             logger($e->getMessage());
             $this->info($e->getMessage());
         }
 
+        $this->clear();
+        $this->updateStep(self::STEP_DONE);
+
         return Command::SUCCESS;
     }
 
-    // output artisan info
-    public function updateOutput($content = '')
+    // output update step info
+    public function updateStep(int $step)
     {
-        $this->info($content);
-        $output = cache('physicalUpgradeOutput');
-        $output = $content;
+        $stepInfo = match ($step) {
+            self::STEP_FAILURE => 'Step --: Upgrade failure',
+            self::STEP_START => 'Step 1/7: Initialization verification',
+            self::STEP_UPDATE_DATA => 'Step 2/7: Update fresns data',
+            self::STEP_COMPOSER_UPDATE_EXTENSIONS => 'Step 3/7: Composer update all plugin dependency packages',
+            self::STEP_PUBLISH_AND_ACTIVATE_EXTENSIONS => 'Step 4/7: Publish and activate plugins',
+            self::STEP_UPDATE_VERSION => 'Step 5/7: Update fresns version',
+            self::STEP_CLEAR => 'Step 6/7: Clear cache',
+            self::STEP_DONE => 'Step 7/7: Done',
+            default => 'Step --: Upgrade end',
+        };
 
-        return Cache::put('physicalUpgradeOutput', $output);
+        if ($step == self::STEP_FAILURE) {
+            $this->error($stepInfo);
+        } else {
+            $this->info($stepInfo);
+        }
+
+        // upgrade step
+        return Cache::put('physicalUpgradeStep', $step);
     }
 
-    // step 1: execute the version command
-    // try AppUtility executeUpgradeCommand()
+    // step 2: Update fresns data
+    public function updateData()
+    {
+        $this->updateStep(self::STEP_UPDATE_DATA);
 
-    // step 2: composer all plugins
+        return AppUtility::executeUpgradeCommand();
+    }
+
+    // step 3: composer all plugins
     public function pluginComposerInstall()
     {
+        $this->updateStep(self::STEP_COMPOSER_UPDATE_EXTENSIONS);
+
         try {
             $exitCode = \Artisan::call('plugin:composer-update');
-            $this->updateOutput(\Artisan::output());
+
             if ($exitCode) {
                 return false;
             }
         } catch (\Exception $e) {
             logger($e->getMessage());
-            $this->info($e->getMessage());
+            $this->error($e->getMessage());
+
             return false;
         }
 
         return true;
     }
 
-    // step 3: publish and activate plugins or themes
+    // step 4: publish and activate plugins or themes
     public function pluginPublishAndActivate()
     {
+        $this->updateStep(self::STEP_PUBLISH_AND_ACTIVATE_EXTENSIONS);
+
         $plugins = Plugin::all();
 
         foreach ($plugins as $plugin) {
             try {
                 if ($plugin->type == 4) {
-                    $exitCode = \Artisan::call('theme:publish', ['plugin' => $plugin->unikey]);
-                    $this->updateOutput(\Artisan::output());
-                    if ($exitCode) {
-                        return false;
-                    }
-
-                    if ($plugin->is_enable) {
-                        $exitCode = \Artisan::call('theme:activate', ['plugin' => $plugin->unikey]);
-                        $this->updateOutput(\Artisan::output());
-                        if ($exitCode) {
-                            return false;
-                        }
-                    }
+                    \Artisan::call('theme:publish', ['plugin' => $plugin->unikey]);
                 } else {
-                    $exitCode = \Artisan::call('plugin:publish', ['plugin' => $plugin->unikey]);
-                    $this->updateOutput(\Artisan::output());
-                    if ($exitCode) {
-                        return false;
-                    }
+                    \Artisan::call('plugin:publish', ['plugin' => $plugin->unikey]);
 
                     if ($plugin->is_enable) {
-                        $exitCode = \Artisan::call('plugin:activate', ['plugin' => $plugin->unikey]);
-                        $this->updateOutput(\Artisan::output());
-                        if ($exitCode) {
-                            return false;
-                        }
+                        \Artisan::call('plugin:activate', ['plugin' => $plugin->unikey]);
                     }
                 }
             } catch (\Exception $e) {
                 logger($e->getMessage());
-                $this->info($e->getMessage());
-                return false;
+                $this->error($e->getMessage());
             }
         }
 
         return true;
     }
 
-    // step 4: edit fresns version info
+    // step 5: edit fresns version info
     public function upgradeFinish(): bool
     {
+        $this->updateStep(self::STEP_UPDATE_VERSION);
+
         $newVersion = AppHelper::VERSION;
         $newVersionInt = AppHelper::VERSION_INT;
 
@@ -158,19 +171,13 @@ class PhysicalUpgradeFresns extends Command
         return true;
     }
 
-    // step 5: clear cache
+    // step 6: clear cache
     public function clear()
     {
-        logger('upgrade:clear');
+        $this->updateStep(self::STEP_CLEAR);
 
-        \Artisan::call('config:clear');
-        $this->updateOutput(\Artisan::output());
+        CacheHelper::clearAllCache();
 
-        $output = cache('physicalUpgradeOutput');
-        \Artisan::call('cache:clear');
-
-        $this->updateOutput($output.\Artisan::output());
-
-        $this->updateOutput("\n".__('FsLang::tips.upgradeSuccess'));
+        return true;
     }
 }

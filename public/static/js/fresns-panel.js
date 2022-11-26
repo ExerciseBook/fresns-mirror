@@ -162,9 +162,9 @@ $(document).ready(function () {
     // upgrade
     $('#upgradeButton').click(function () {
         if ($(this).data('upgrading')) {
-            $('#upgrade').modal('show');
+            $('#autoUpgradeOutputModal').modal('show');
         } else {
-            $('#upgradeConfirm').modal('show');
+            $('#autoUpgradeModal').modal('show');
         }
     });
 
@@ -232,8 +232,8 @@ $(document).ready(function () {
         return false;
     });
 
-    $('#upgradeForm').submit(function () {
-        $('#upgradeConfirm').modal('hide');
+    $('#autoUpgradeForm').submit(function () {
+        $('#autoUpgradeModal').modal('hide');
         $.ajax({
             method: 'POST',
             dataType: 'json',
@@ -243,7 +243,7 @@ $(document).ready(function () {
 
                 $('#upgradeButton').data('upgrading', true);
 
-                $('#upgrade').modal('show');
+                $('#autoUpgradeOutputModal').modal('show');
             },
             error: function (response) {
                 window.tips(response.responseJSON.message);
@@ -265,7 +265,7 @@ $(document).ready(function () {
             success: function (response) {
                 let upgradeStep = response.upgrade_step || 6;
 
-                let step = $('#upgrade').find('#upgrade' + upgradeStep);
+                let step = $('#autoUpgradeOutputModal').find('#autoUpgradeOutputModal' + upgradeStep);
                 step.find('i').remove();
                 step.prepend('<i class="upgrade-step spinner-border spinner-border-sm me-2" role="status"></i>');
 
@@ -289,7 +289,7 @@ $(document).ready(function () {
         });
     }
 
-    $('#upgrade').on('show.bs.modal', function (e) {
+    $('#autoUpgradeOutputModal').on('show.bs.modal', function (e) {
         let button = $('#upgradeButton');
         let action = button.data('action');
 

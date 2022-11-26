@@ -29,6 +29,7 @@ class UpgradeFresns extends Command
 
     protected $extractPath;
 
+    const STEP_FAILURE = 0;
     const STEP_START = 1;
     const STEP_DOWNLOAD = 2;
     const STEP_EXTRACT = 3;
@@ -51,7 +52,9 @@ class UpgradeFresns extends Command
         if (! $checkVersion) {
             $this->info('No new version, Already the latest version of Fresns.');
             $this->info('Step --: Upgrade end');
+
             Cache::put('upgradeStep', self::STEP_DONE);
+
             return Command::SUCCESS;
         }
 
@@ -59,13 +62,17 @@ class UpgradeFresns extends Command
             $this->download();
             if (! $this->extractFile()) {
                 $this->error('Failed to download upgrade package.');
+
+                Cache::put('upgradeStep', self::STEP_FAILURE);
+
                 return Command::FAILURE;
             };
             $this->upgradeCommand();
             $this->upgradeFinish();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
-            return -1;
+
+            return Command::FAILURE;
         }
 
         $this->clear();
@@ -75,9 +82,10 @@ class UpgradeFresns extends Command
     }
 
     // output update step info
-    public function updateStep(int $step): bool
+    public function updateStep(int $step)
     {
         $stepInfo = match ($step) {
+            self::STEP_FAILURE => 'Step --: Upgrade failure',
             self::STEP_START => 'Step 1/6: Initialization verification',
             self::STEP_DOWNLOAD => 'Step 2/6: Download upgrade package',
             self::STEP_EXTRACT => 'Step 3/6: Unzip the upgrade package',
@@ -87,7 +95,11 @@ class UpgradeFresns extends Command
             default => 'Step --: Upgrade end',
         };
 
-        $this->info($stepInfo);
+        if ($step == self::STEP_FAILURE) {
+            $this->error($stepInfo);
+        } else {
+            $this->info($stepInfo);
+        }
 
         // upgrade step
         return Cache::put('upgradeStep', $step);
@@ -96,7 +108,6 @@ class UpgradeFresns extends Command
     // step 2: download upgrade pack(zip)
     public function download(): bool
     {
-        logger('upgrade:download');
         $this->updateStep(self::STEP_DOWNLOAD);
 
         $client = new \GuzzleHttp\Client();
@@ -149,7 +160,6 @@ class UpgradeFresns extends Command
     // step 4-1: execute the version command
     public function upgradeCommand()
     {
-        logger('upgrade:install');
         $this->updateStep(self::STEP_INSTALL);
 
         AppUtility::executeUpgradeCommand();
@@ -169,7 +179,6 @@ class UpgradeFresns extends Command
     // step 5: clear cache
     public function clear()
     {
-        logger('upgrade:clear');
         $this->updateStep(self::STEP_CLEAR);
 
         CacheHelper::clearAllCache();
