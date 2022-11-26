@@ -35,7 +35,7 @@ class Upgrade3Command extends Command
     }
 
     // update data
-    public function updateData()
+    public function updateData(): bool
     {
         // modify cookie prefix
         $cookiePrefix = Config::where('item_key', 'engine_cookie_prefix')->first();

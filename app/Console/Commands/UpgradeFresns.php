@@ -9,10 +9,13 @@
 namespace App\Console\Commands;
 
 use App\Helpers\AppHelper;
+use App\Helpers\CacheHelper;
 use App\Utilities\AppUtility;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class UpgradeFresns extends Command
 {
@@ -47,32 +50,45 @@ class UpgradeFresns extends Command
         $checkVersion = AppUtility::checkVersion();
         if (! $checkVersion) {
             $this->info('No new version, Already the latest version of Fresns.');
-            return -1;
+            $this->info('Step --: Upgrade end');
+            Cache::put('upgradeStep', self::STEP_DONE);
+            return Command::SUCCESS;
         }
 
         try {
             $this->download();
-            if (!$this->extractFile()) {
-                $this->info('下载新版主程序失败.');
-                return -1;
-            }
+            if (! $this->extractFile()) {
+                $this->error('Failed to download upgrade package.');
+                return Command::FAILURE;
+            };
             $this->upgradeCommand();
             $this->upgradeFinish();
         } catch (\Exception $e) {
-            $this->info($e->getMessage());
+            $this->error($e->getMessage());
             return -1;
         }
 
         $this->clear();
-
         $this->updateStep(self::STEP_DONE);
 
         return Command::SUCCESS;
     }
 
     // output update step info
-    public function updateStep(string $step): bool
+    public function updateStep(int $step): bool
     {
+        $stepInfo = match ($step) {
+            self::STEP_START => 'Step 1/6: Initialization verification',
+            self::STEP_DOWNLOAD => 'Step 2/6: Download upgrade package',
+            self::STEP_EXTRACT => 'Step 3/6: Unzip the upgrade package',
+            self::STEP_INSTALL => 'Step 4/6: Run the upgrade package to install the new version',
+            self::STEP_CLEAR => 'Step 5/6: Clear cache',
+            self::STEP_DONE => 'Step 6/6: Done',
+            default => 'Step --: Upgrade end',
+        };
+
+        $this->info($stepInfo);
+
         // upgrade step
         return Cache::put('upgradeStep', $step);
     }
@@ -89,9 +105,9 @@ class UpgradeFresns extends Command
 
         $filename = basename($downloadUrl);
 
-        $path = \Storage::path($this->path);
+        $path = Storage::path($this->path);
         if (! file_exists($path)) {
-            \File::makeDirectory($path, 0775, true);
+            File::makeDirectory($path, 0775, true);
         }
 
         $file = $path.'/'.$filename;
@@ -120,12 +136,12 @@ class UpgradeFresns extends Command
 
         $zipFile = new \PhpZip\ZipFile();
 
-        if (! file_exists(\Storage::path($extractPath))) {
-            \File::makeDirectory(\Storage::path($extractPath), 0775, true);
+        if (! file_exists(Storage::path($extractPath))) {
+            File::makeDirectory(Storage::path($extractPath), 0775, true);
         }
-        $zipFile->openFile($this->file)->extractTo(\Storage::path($extractPath));
+        $zipFile->openFile($this->file)->extractTo(Storage::path($extractPath));
 
-        $this->copyMerge(\Storage::path($extractPath.'/fresns'), base_path());
+        $this->copyMerge(Storage::path($extractPath.'/fresns'), base_path());
 
         return true;
     }
@@ -156,8 +172,7 @@ class UpgradeFresns extends Command
         logger('upgrade:clear');
         $this->updateStep(self::STEP_CLEAR);
 
-        $this->call('cache:clear');
-        $this->call('config:clear');
+        CacheHelper::clearAllCache();
 
         if ($this->path) {
             $file = new Filesystem;
