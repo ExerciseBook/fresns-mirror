@@ -3,7 +3,27 @@
 All notable changes to this project will be documented in this file.
 
 
-## v2.0.0-beta.2 (2022-11-23)
+## 2.0.0-beta.3 (2022-11-24)
+
+### Added
+- Panel: 引擎 cookie 前缀可选
+- Panel: 自动检验并修正插件启用状态
+- Panel: 小组发表权限配置，增加选项仅限管理员
+
+### Fixes
+- Panel: 中文缺失语言 site_mode_public_register_type_phone
+- Panel: 避免小组自定义配置被覆盖
+- Panel: 适配新的物理升级功能
+
+### Changed
+- API: 修改小组权限检测的文案 code
+- Data: 配置键名 account_cookie_status 修改为 account_cookies_status
+- Data: 配置键名 account_cookie 修改为 account_cookies
+- Data: 语言包标识名 accountPoliciesCookie 修改为 accountPoliciesCookies
+- Panel: 移除控制面板的 ConfigHelper 使用，避免缓存
+
+
+## 2.0.0-beta.2 (2022-11-23)
 
 ### Added
 - Api: 重构 token 逻辑，有效期增加小时和天数参数
@@ -22,6 +42,6 @@ All notable changes to this project will be documented in this file.
 - 主题: ThemeFrame 升级到 v2.0.0-beta.2
 
 
-## v2.0.0-beta.1 (2022-11-22)
+## 2.0.0-beta.1 (2022-11-22)
 
 - 2.x 首个公测版
