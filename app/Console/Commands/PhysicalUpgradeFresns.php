@@ -67,7 +67,7 @@ class PhysicalUpgradeFresns extends Command
     {
         $this->info($content);
         $output = cache('physicalUpgradeOutput');
-        $output .= $content;
+        $output = $content;
 
         return Cache::put('physicalUpgradeOutput', $output);
     }

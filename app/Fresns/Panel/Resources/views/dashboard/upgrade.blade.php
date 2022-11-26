@@ -309,7 +309,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{{ __('FsLang::panel.button_physical_upgrade') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <textarea class="form-control" rows="10" id="physicalUpgradeOutput" readonly>{{ __('FsLang::tips.upgrade_in_progress') }}</textarea>
@@ -396,9 +398,14 @@
                 </div>
                 <div class="modal-body">
                     <pre class="form-control" id="upgrade_artisan_output">{{ __('FsLang::tips.upgrade_in_progress') }}</pre>
+
+                    <!--progress bar-->
+                    <div class="mt-2">
+                        <div class="ajax-progress progress d-none" id="upgrade-extension-progress"></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('FsLang::panel.button_close') }}</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="reloadPage()">{{ __('FsLang::panel.button_close') }}</button>
                 </div>
             </div>
         </div>

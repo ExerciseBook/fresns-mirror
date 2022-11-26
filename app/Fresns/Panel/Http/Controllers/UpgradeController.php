@@ -52,8 +52,8 @@ class UpgradeController extends Controller
 
     public function checkFresnsVersion()
     {
-        Cache::forget('currentVersion');
-        Cache::forget('newVersion');
+        Cache::forget('fresns_current_version');
+        Cache::forget('fresns_new_version');
 
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkExtensionsVersion();
 

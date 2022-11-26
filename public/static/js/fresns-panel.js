@@ -174,6 +174,7 @@ $(document).ready(function () {
         if (!action) {
             return;
         }
+
         $.ajax({
             method: 'get',
             url: action,
@@ -2208,6 +2209,9 @@ $(document).ready(function () {
     $('#upgradeExtensions form').submit(function (event) {
         event.preventDefault();
 
+        // set progress
+        progress.init().setProgressElement($('.ajax-progress').removeClass('d-none')).work();
+
         $.ajax({
             method: $(this).attr('method'),
             url: $(this).attr('action'),
@@ -2216,12 +2220,14 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
+                progressDown && progressDown()
                 console.log('upgrade response', response)
                 var ansi_up = new AnsiUp;
                 var html = ansi_up.ansi_to_html(response.data.output);
                 $('#upgrade_artisan_output').html(html || trans('tips.upgradeSuccess')) //FsLang
             },
             error: function (response) {
+                progressExit && progressExit()
                 window.tips(response.responseJSON.message);
             },
         });
