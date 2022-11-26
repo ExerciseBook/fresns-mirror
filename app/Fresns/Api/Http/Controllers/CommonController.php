@@ -334,9 +334,10 @@ class CommonController extends Controller
         $wordBody = [
             'type' => $dtoRequest->type,
             'pluginUnikey' => $dtoRequest->pluginUnikey,
-            'platformId' => $request->header('platformId'),
-            'version' => $request->header('version'),
-            'langTag' => $request->header('langTag'),
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'appId' => $this->appId(),
+            'langTag' => $this->langTag(),
             'aid' => $request->header('aid'),
             'uid' => $request->header('uid'),
             'objectName' => $dtoRequest->objectName,
