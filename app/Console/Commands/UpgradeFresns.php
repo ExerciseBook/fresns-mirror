@@ -46,16 +46,21 @@ class UpgradeFresns extends Command
         // Check if an upgrade is needed
         $checkVersion = AppUtility::checkVersion();
         if (! $checkVersion) {
-            return $this->info('No new version, Already the latest version of Fresns.');
+            $this->info('No new version, Already the latest version of Fresns.');
+            return -1;
         }
 
         try {
             $this->download();
-            $this->extractFile();
+            if (!$this->extractFile()) {
+                $this->info('下载新版主程序失败.');
+                return -1;
+            }
             $this->upgradeCommand();
             $this->upgradeFinish();
         } catch (\Exception $e) {
             $this->info($e->getMessage());
+            return -1;
         }
 
         $this->clear();
