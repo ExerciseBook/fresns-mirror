@@ -256,10 +256,28 @@ class AccountController extends Controller
             $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
             \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
-            $loginOrRegister = ConfigHelper::fresnsConfigByItemKey('site_login_or_register');
+            $siteConfigs = ConfigHelper::fresnsConfigByItemKeys(['site_login_or_register', 'site_register_email']);
 
-            if (! $loginOrRegister || empty($password) || $fresnsResponse->getCode() == 33203) {
+            if (! $siteConfigs['site_login_or_register'] || empty($dtoRequest->verifyCode)) {
                 return $fresnsResponse->errorResponse();
+            }
+
+            if ($dtoRequest->type == 'email') {
+                if (! $siteConfigs['site_register_email']) {
+                    return $fresnsResponse->errorResponse();
+                }
+
+                $checkEmail = ValidationUtility::disposableEmail($dtoRequest->account);
+                if (! $checkEmail) {
+                    throw new ApiException(34110);
+                }
+            }
+
+            // check code
+            $fresnsCheckCodeResp = \FresnsCmdWord::plugin('Fresns')->checkCode($wordBody);
+
+            if ($fresnsCheckCodeResp->isErrorResponse()) {
+                return $fresnsCheckCodeResp->errorResponse();
             }
 
             // add user
