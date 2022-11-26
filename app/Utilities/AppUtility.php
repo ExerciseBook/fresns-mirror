@@ -70,6 +70,9 @@ class AppUtility
         );
 
         $currentVersion = json_decode($fresnsJson, true);
+        if (!$currentVersion) {
+            throw new \RuntimeException('更新版本信息失败');
+        }
 
         $currentVersion['version'] = $version;
         $currentVersion['versionInt'] = $versionInt;
@@ -225,7 +228,10 @@ class AppUtility
             $versionInt++;
             $command = 'fresns:upgrade-'.$versionInt;
             if (\Artisan::has($command)) {
-                \Artisan::call($command);
+                $exitCode = \Artisan::call($command);
+                if ($exitCode) {
+                    return false;
+                }
             }
         }
 

@@ -36,18 +36,26 @@ class PhysicalUpgradeFresns extends Command
         if (! $checkVersion) {
             Cache::forget('physicalUpgrading');
 
-            return $this->info('No new version, Already the latest version of Fresns.');
+            $this->info('No new version, Already the latest version of Fresns.');
+            return -1;
         }
 
         try {
             $this->updateOutput('Step 1/5: update data'."\n");
-            AppUtility::executeUpgradeCommand();
+            if (!AppUtility::executeUpgradeCommand()) {
+                $this->updateOutput("\n".'没有新版本或不存在更新命令，更新失败'."\n");
+                return -1;
+            }
 
             $this->updateOutput("\n".'Step 2/5: install plugins composer'."\n");
-            $this->pluginComposerInstall();
+            if (!$this->pluginComposerInstall()) {
+                return -1;
+            }
 
             $this->updateOutput("\n".'Step 3/5: publish and activate plugins or themes'."\n");
-            $this->pluginPublishAndActivate();
+            if (!$this->pluginPublishAndActivate()) {
+                return -1;
+            }
 
             $this->updateOutput("\n".'Step 4/5: update version'."\n");
             $this->upgradeFinish();
@@ -79,11 +87,15 @@ class PhysicalUpgradeFresns extends Command
     public function pluginComposerInstall()
     {
         try {
-            \Artisan::call('plugin:composer-update');
+            $exitCode = \Artisan::call('plugin:composer-update');
             $this->updateOutput(\Artisan::output());
+            if ($exitCode) {
+                return false;
+            }
         } catch (\Exception $e) {
             logger($e->getMessage());
             $this->info($e->getMessage());
+            return false;
         }
 
         return true;
@@ -94,30 +106,43 @@ class PhysicalUpgradeFresns extends Command
     {
         $plugins = Plugin::all();
 
-        $plugins->map(function ($plugin) {
+        foreach ($plugins as $plugin) {
             try {
                 if ($plugin->type == 4) {
-                    \Artisan::call('theme:publish', ['plugin' => $plugin->unikey]);
+                    $exitCode = \Artisan::call('theme:publish', ['plugin' => $plugin->unikey]);
                     $this->updateOutput(\Artisan::output());
+                    if ($exitCode) {
+                        return false;
+                    }
 
                     if ($plugin->is_enable) {
-                        \Artisan::call('theme:activate', ['plugin' => $plugin->unikey]);
+                        $exitCode = \Artisan::call('theme:activate', ['plugin' => $plugin->unikey]);
                         $this->updateOutput(\Artisan::output());
+                        if ($exitCode) {
+                            return false;
+                        }
                     }
                 } else {
-                    \Artisan::call('plugin:publish', ['plugin' => $plugin->unikey]);
+                    $exitCode = \Artisan::call('plugin:publish', ['plugin' => $plugin->unikey]);
                     $this->updateOutput(\Artisan::output());
+                    if ($exitCode) {
+                        return false;
+                    }
 
                     if ($plugin->is_enable) {
-                        \Artisan::call('plugin:activate', ['plugin' => $plugin->unikey]);
+                        $exitCode = \Artisan::call('plugin:activate', ['plugin' => $plugin->unikey]);
                         $this->updateOutput(\Artisan::output());
+                        if ($exitCode) {
+                            return false;
+                        }
                     }
                 }
             } catch (\Exception $e) {
                 logger($e->getMessage());
                 $this->info($e->getMessage());
+                return false;
             }
-        });
+        }
 
         return true;
     }
