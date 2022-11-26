@@ -116,7 +116,7 @@ class PhysicalUpgradeFresns extends Command
         $this->updateStep(self::STEP_COMPOSER_UPDATE_EXTENSIONS);
 
         try {
-            $exitCode = \Artisan::call('plugin:composer-update');
+            $exitCode = $this->call('plugin:composer-update');
 
             if ($exitCode) {
                 return false;
@@ -141,12 +141,12 @@ class PhysicalUpgradeFresns extends Command
         foreach ($plugins as $plugin) {
             try {
                 if ($plugin->type == 4) {
-                    \Artisan::call('theme:publish', ['plugin' => $plugin->unikey]);
+                    $this->call('theme:publish', ['plugin' => $plugin->unikey]);
                 } else {
-                    \Artisan::call('plugin:publish', ['plugin' => $plugin->unikey]);
+                    $this->call('plugin:publish', ['plugin' => $plugin->unikey]);
 
                     if ($plugin->is_enable) {
-                        \Artisan::call('plugin:activate', ['plugin' => $plugin->unikey]);
+                        $this->call('plugin:activate', ['plugin' => $plugin->unikey]);
                     }
                 }
             } catch (\Exception $e) {
