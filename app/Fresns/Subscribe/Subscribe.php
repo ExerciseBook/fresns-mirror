@@ -100,6 +100,7 @@ class Subscribe
             'comments',
             'files',
             'conversation_messages',
+            'file_usages',
         ];
 
         return in_array($this->getSubTableName(), $tableNames);
