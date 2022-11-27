@@ -24,9 +24,7 @@ class AppUtility
                 base_path('fresns.json')
             );
 
-            $currentVersion = json_decode($fresnsJson, true);
-
-            return $currentVersion;
+            return json_decode($fresnsJson, true);
         });
     }
 
@@ -70,8 +68,8 @@ class AppUtility
         );
 
         $currentVersion = json_decode($fresnsJson, true);
-        if (!$currentVersion) {
-            throw new \RuntimeException('更新版本信息失败');
+        if (! $currentVersion) {
+            throw new \RuntimeException('Failed to update version information');
         }
 
         $currentVersion['version'] = $version;

@@ -156,12 +156,12 @@ class PhysicalUpgradeFresns extends Command
         foreach ($plugins as $plugin) {
             try {
                 if ($plugin->type == 4) {
-                    $this->call('theme:publish', ['plugin' => $plugin->unikey]);
+                    $this->call('theme:publish', ['name' => $plugin->unikey]);
                 } else {
-                    $this->call('plugin:publish', ['plugin' => $plugin->unikey]);
+                    $this->call('plugin:publish', ['name' => $plugin->unikey]);
 
                     if ($plugin->is_enable) {
-                        $this->call('plugin:activate', ['plugin' => $plugin->unikey]);
+                        $this->call('plugin:activate', ['name' => $plugin->unikey]);
                     }
                 }
             } catch (\Exception $e) {

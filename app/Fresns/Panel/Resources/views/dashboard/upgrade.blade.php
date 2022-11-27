@@ -47,7 +47,7 @@
                         </button>
                     @else
                         <button type="button" class="btn btn-info" id="physicalUpgradeButton" data-action="{{ route('panel.upgrade.info') }}" data-upgrading="{{ $physicalUpgradeStepInt }}">
-                            {{ __('FsLang::panel.upgrade_in_progress') }}
+                            {{ __('FsLang::tips.upgrade_in_progress') }}
                         </button>
                     @endif
                 @else
