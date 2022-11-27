@@ -19,12 +19,11 @@ class CreateSessionLogsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasColumn('session_logs', 'app_id')) {
+        if (! Schema::hasColumn('session_logs', 'app_id')) {
             Schema::table('session_logs', function (Blueprint $table) {
                 $table->char('app_id', 8)->after('version')->nullable();
             });
         }
-
     }
 
     /**
