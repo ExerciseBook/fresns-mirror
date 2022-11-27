@@ -45,6 +45,7 @@ class UpgradeFresns extends Command
     // execute the console command
     public function handle()
     {
+        Cache::forget('autoUpgradeTip');
         $this->updateStep(self::STEP_START);
 
         // Check if an upgrade is needed
@@ -114,7 +115,7 @@ class UpgradeFresns extends Command
             $this->info($content);
         }
 
-        $output = cache('autoUpgradeTip');
+        $output = cache('autoUpgradeTip')."\n";
         $output .= $content;
 
         Cache::put('autoUpgradeStep', $step);

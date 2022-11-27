@@ -38,6 +38,7 @@ class PhysicalUpgradeFresns extends Command
     // execute the console command
     public function handle()
     {
+        Cache::forget('physicalUpgradeTip');
         $this->updateStep(self::STEP_START);
 
         // Check if an upgrade is needed
@@ -109,7 +110,7 @@ class PhysicalUpgradeFresns extends Command
             $this->info($content);
         }
 
-        $output = cache('physicalUpgradeTip');
+        $output = cache('physicalUpgradeTip')."\n";
         $output .= $content;
 
         Cache::put('physicalUpgradeStep', $step);
