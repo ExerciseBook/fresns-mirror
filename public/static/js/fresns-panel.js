@@ -282,7 +282,7 @@ $(document).ready(function () {
             method: 'get',
             url: action,
             success: function (response) {
-                let physicalUpgradeStep = response.physicalUpgradeStep || 6,
+                let physicalUpgradeStep = response.physicalUpgradeStep || 7,
                     physicalUpgradeTip = response.physicalUpgradeTip;
 
                 let step = $('#physicalUpgradeStepModal').find('#physical-upgrade-' + physicalUpgradeStep);
@@ -307,7 +307,7 @@ $(document).ready(function () {
                     return;
                 }
 
-                if (!physicalUpgradeStep || physicalUpgradeStep == 6) {
+                if (!physicalUpgradeStep || physicalUpgradeStep == 7) {
                     step.find('i').remove();
                     step.prepend('<i class="bi bi-check-lg text-success me-2"></i>');
 

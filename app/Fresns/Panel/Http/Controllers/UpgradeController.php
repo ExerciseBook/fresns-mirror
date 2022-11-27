@@ -9,10 +9,10 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Helpers\CacheHelper;
 use App\Models\Config;
 use App\Models\Plugin;
 use App\Utilities\AppUtility;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Process\PhpExecutableFinder;
 
 class UpgradeController extends Controller
@@ -54,6 +54,11 @@ class UpgradeController extends Controller
         $autoUpgradeStepInt = cache('autoUpgradeStep');
         $physicalUpgradeStepInt = cache('physicalUpgradeStep');
 
+        if ($autoUpgradeStepInt == 6 || $physicalUpgradeStepInt == 6) {
+            $autoUpgradeStepInt = null;
+            $physicalUpgradeStepInt = null;
+        }
+
         return view('FsView::dashboard.upgrade', compact(
             'currentVersion',
             'newVersion',
@@ -75,8 +80,12 @@ class UpgradeController extends Controller
     // check fresns and extensions version
     public function checkFresnsVersion()
     {
-        Cache::forget('fresns_current_version');
-        Cache::forget('fresns_new_version');
+        CacheHelper::forgetFresnsKeys([
+            'fresns_current_version',
+            'fresns_new_version',
+            'autoUpgradeStep',
+            'physicalUpgradeStep',
+        ]);
 
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkExtensionsVersion();
 
@@ -129,11 +138,13 @@ class UpgradeController extends Controller
     // get upgrade step info
     public function upgradeInfo()
     {
-        return response()->json([
+        $upgradeInfo = [
             'autoUpgradeStep' => cache('autoUpgradeStep'),
             'autoUpgradeTip' => cache('autoUpgradeTip') ?? '',
             'physicalUpgradeStep' => cache('physicalUpgradeStep'),
             'physicalUpgradeTip' => cache('physicalUpgradeTip') ?? '',
-        ]);
+        ];
+
+        return response()->json($upgradeInfo);
     }
 }
