@@ -148,7 +148,7 @@ class Upgrade3Command extends Command
 
             $langNewContent = (object) array_merge((array) $newContent, (array) $langAddContent);
 
-            $packContent->lang_content = json_encode($langNewContent);
+            $packContent->lang_content = json_encode($langNewContent, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
             $packContent->save();
         }
 
