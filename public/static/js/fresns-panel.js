@@ -160,9 +160,9 @@ $(document).ready(function () {
     })
 
     // upgrade
-    $('#upgradeButton').click(function () {
+    $('#autoUpgradeButton').click(function () {
         if ($(this).data('upgrading')) {
-            $('#autoUpgradeOutputModal').modal('show');
+            $('#autoUpgradeStepModal').modal('show');
         } else {
             $('#autoUpgradeModal').modal('show');
         }
@@ -239,11 +239,11 @@ $(document).ready(function () {
             dataType: 'json',
             url: $(this).attr('action'),
             success: function (response) {
-                $('#upgradeButton').removeClass('btn-primary').addClass('btn-info').text(trans('tips.upgrade_in_progress')); //FsLang
+                $('#autoUpgradeButton').removeClass('btn-primary').addClass('btn-info').text(trans('tips.upgrade_in_progress')); //FsLang
 
-                $('#upgradeButton').data('upgrading', true);
+                $('#autoUpgradeButton').data('upgrading', true);
 
-                $('#autoUpgradeOutputModal').modal('show');
+                $('#autoUpgradeStepModal').modal('show');
             },
             error: function (response) {
                 window.tips(response.responseJSON.message);
@@ -265,7 +265,7 @@ $(document).ready(function () {
             success: function (response) {
                 let upgradeStep = response.autoUpgradeStep || 6;
 
-                let step = $('#autoUpgradeOutputModal').find('#autoUpgradeOutputModal' + upgradeStep);
+                let step = $('#autoUpgradeStepModal').find('#autoUpgradeStepModal' + upgradeStep);
                 step.find('i').remove();
                 step.prepend('<i class="upgrade-step spinner-border spinner-border-sm me-2" role="status"></i>');
 
@@ -278,8 +278,8 @@ $(document).ready(function () {
                     step.find('i').remove();
                     step.prepend('<i class="bi bi-check-lg text-success me-2"></i>');
 
-                    $('#upgradeButton').addClass('btn-light').removeClass('btn-info').text(trans('tips.upgradeSuccess')); //FsLang
-                    $('#upgradeButton').data('upgrading', true);
+                    $('#autoUpgradeButton').addClass('btn-light').removeClass('btn-info').text(trans('tips.upgradeSuccess')); //FsLang
+                    $('#autoUpgradeButton').data('upgrading', true);
 
                     $('#upgradeStepModal').data('upgradeSuccess', 1);
                     clearInterval(upgradeTimer);
@@ -289,8 +289,8 @@ $(document).ready(function () {
         });
     }
 
-    $('#autoUpgradeOutputModal').on('show.bs.modal', function (e) {
-        let button = $('#upgradeButton');
+    $('#autoUpgradeStepModal').on('show.bs.modal', function (e) {
+        let button = $('#autoUpgradeButton');
         let action = button.data('action');
 
         if (!upgradeTimer) {

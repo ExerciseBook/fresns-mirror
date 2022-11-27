@@ -43,10 +43,13 @@ class PhysicalUpgradeFresns extends Command
         // Check if an upgrade is needed
         $checkVersion = AppUtility::checkVersion();
         if (! $checkVersion) {
-            $this->info('No new version, Already the latest version of Fresns.');
+            $checkVersionTip = 'No new version, Already the latest version of Fresns.';
+
+            $this->info($checkVersionTip);
             $this->info('Step --: Upgrade end');
 
             Cache::put('physicalUpgradeStep', self::STEP_DONE);
+            Cache::put('physicalUpgradeTip', $checkVersionTip);
 
             return Command::SUCCESS;
         }

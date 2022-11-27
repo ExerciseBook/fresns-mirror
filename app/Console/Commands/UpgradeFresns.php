@@ -50,10 +50,13 @@ class UpgradeFresns extends Command
         // Check if an upgrade is needed
         $checkVersion = AppUtility::checkVersion();
         if (! $checkVersion) {
-            $this->info('No new version, Already the latest version of Fresns.');
+            $checkVersionTip = 'No new version, Already the latest version of Fresns.';
+
+            $this->info($checkVersionTip);
             $this->info('Step --: Upgrade end');
 
             Cache::put('autoUpgradeStep', self::STEP_DONE);
+            Cache::put('autoUpgradeTip', $checkVersionTip);
 
             return Command::SUCCESS;
         }
@@ -61,9 +64,12 @@ class UpgradeFresns extends Command
         try {
             $this->download();
             if (! $this->extractFile()) {
-                $this->error('Failed to download upgrade package.');
+                $extractFileTip = 'Failed to download upgrade package.';
+
+                $this->error($extractFileTip);
 
                 Cache::put('autoUpgradeStep', self::STEP_FAILURE);
+                Cache::put('autoUpgradeTip', $extractFileTip);
 
                 return Command::FAILURE;
             };
@@ -102,7 +108,10 @@ class UpgradeFresns extends Command
         }
 
         // upgrade step
-        return Cache::put('autoUpgradeStep', $step);
+        Cache::put('autoUpgradeStep', $step);
+        Cache::put('autoUpgradeTip', $stepInfo);
+
+        return;
     }
 
     // step 2: download upgrade pack(zip)
