@@ -54,7 +54,7 @@ class UpgradeController extends Controller
         $autoUpgradeStepInt = cache('autoUpgradeStep');
         $physicalUpgradeStepInt = cache('physicalUpgradeStep');
 
-        if ($autoUpgradeStepInt == 6 || $physicalUpgradeStepInt == 6) {
+        if ($autoUpgradeStepInt == 6 || $physicalUpgradeStepInt == 7) {
             $autoUpgradeStepInt = null;
             $physicalUpgradeStepInt = null;
         }
