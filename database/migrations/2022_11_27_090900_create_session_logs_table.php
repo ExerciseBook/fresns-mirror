@@ -19,9 +19,12 @@ class CreateSessionLogsTable extends Migration
      */
     public function up()
     {
-        Schema::table('session_logs', function (Blueprint $table) {
-            $table->char('app_id', 8)->after('version')->nullable();
-        });
+        if (!Schema::hasColumn('session_logs', 'app_id')) {
+            Schema::table('session_logs', function (Blueprint $table) {
+                $table->char('app_id', 8)->after('version')->nullable();
+            });
+        }
+
     }
 
     /**
@@ -31,8 +34,10 @@ class CreateSessionLogsTable extends Migration
      */
     public function down()
     {
-        Schema::table('session_logs', function (Blueprint $table) {
-            $table->dropColumn('app_id');
-        });
+        if (Schema::hasColumn('session_logs', 'app_id')) {
+            Schema::table('session_logs', function (Blueprint $table) {
+                $table->dropColumn('app_id');
+            });
+        }
     }
 }
