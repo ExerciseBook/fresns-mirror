@@ -54,10 +54,6 @@ class UpgradeController extends Controller
         $autoUpgradeStepInt = cache('autoUpgradeStep');
         $physicalUpgradeStepInt = cache('physicalUpgradeStep');
 
-        if ($autoUpgradeStepInt && cache('fresns_current_version')) {
-            $currentVersion = cache('fresns_current_version');
-        }
-
         return view('FsView::dashboard.upgrade', compact(
             'currentVersion',
             'newVersion',
@@ -69,9 +65,10 @@ class UpgradeController extends Controller
             'enginesData',
             'themesData',
             'pluginUpgradeCount',
-            'upgradeStep',
-            'steps',
-            'physicalUpgrading',
+            'autoUpgradeSteps',
+            'autoUpgradeStepInt',
+            'physicalUpgradeSteps',
+            'physicalUpgradeStepInt',
         ));
     }
 
