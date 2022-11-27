@@ -160,7 +160,7 @@ $(document).ready(function () {
     })
 
     // upgrade
-    $('#upgradeButton').click(function () {
+    $('#autoUpgradeButton').click(function () {
         if ($(this).data('upgrading')) {
             $('#autoUpgradeStepModal').modal('show');
         } else {
