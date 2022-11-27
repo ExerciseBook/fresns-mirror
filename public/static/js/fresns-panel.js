@@ -160,11 +160,11 @@ $(document).ready(function () {
     })
 
     // upgrade
-    $('#autoUpgradeButton').click(function () {
+    $('#upgradeButton').click(function () {
         if ($(this).data('upgrading')) {
-            $('#autoUpgradeStepModal').modal('show');
+            $('#upgrade').modal('show');
         } else {
-            $('#autoUpgradeModal').modal('show');
+            $('#upgradeConfirm').modal('show');
         }
     });
 
@@ -232,18 +232,18 @@ $(document).ready(function () {
         return false;
     });
 
-    $('#autoUpgradeForm').submit(function () {
-        $('#autoUpgradeModal').modal('hide');
+    $('#upgradeForm').submit(function () {
+        $('#upgradeConfirm').modal('hide');
         $.ajax({
             method: 'POST',
             dataType: 'json',
             url: $(this).attr('action'),
             success: function (response) {
-                $('#autoUpgradeButton').removeClass('btn-primary').addClass('btn-info').text(trans('tips.upgrade_in_progress')); //FsLang
+                $('#upgradeButton').removeClass('btn-primary').addClass('btn-info').text(trans('tips.upgrade_in_progress')); //FsLang
 
-                $('#autoUpgradeButton').data('upgrading', true);
+                $('#upgradeButton').data('upgrading', true);
 
-                $('#autoUpgradeStepModal').modal('show');
+                $('#upgrade').modal('show');
             },
             error: function (response) {
                 window.tips(response.responseJSON.message);
@@ -265,7 +265,7 @@ $(document).ready(function () {
             success: function (response) {
                 let upgradeStep = response.autoUpgradeStep || 6;
 
-                let step = $('#autoUpgradeStepModal').find('#autoUpgradeStepModal' + upgradeStep);
+                let step = $('#upgrade').find('#upgrade' + upgradeStep);
                 step.find('i').remove();
                 step.prepend('<i class="upgrade-step spinner-border spinner-border-sm me-2" role="status"></i>');
 
@@ -289,7 +289,7 @@ $(document).ready(function () {
         });
     }
 
-    $('#autoUpgradeStepModal').on('show.bs.modal', function (e) {
+    $('#upgrade').on('show.bs.modal', function (e) {
         let button = $('#autoUpgradeButton');
         let action = button.data('action');
 
