@@ -72,6 +72,8 @@ class PhysicalUpgradeFresns extends Command
         } catch (\Exception $e) {
             logger($e->getMessage());
             $this->info($e->getMessage());
+            $this->updateStep(self::STEP_FAILURE);
+            return Command::FAILURE;
         }
 
         $this->clear();
@@ -95,14 +97,23 @@ class PhysicalUpgradeFresns extends Command
             default => 'Step --: Upgrade end',
         };
 
+        // upgrade step
+        return $this->updateOutput($stepInfo, $step);
+    }
+
+    public function updateOutput($content, $step)
+    {
         if ($step == self::STEP_FAILURE) {
-            $this->error($stepInfo);
+            $this->error($content);
         } else {
-            $this->info($stepInfo);
+            $this->info($content);
         }
 
-        // upgrade step
-        return Cache::put('physicalUpgradeStep', $step);
+        $output = cache('physicalUpgradeTip');
+        $output .= $content;
+
+        Cache::put('physicalUpgradeStep', $step);
+        return Cache::put('physicalUpgradeTip', $output);
     }
 
     // step 2: Update fresns data
