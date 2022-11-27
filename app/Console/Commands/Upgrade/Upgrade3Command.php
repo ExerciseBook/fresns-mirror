@@ -29,6 +29,7 @@ class Upgrade3Command extends Command
     public function handle()
     {
         $this->updateData();
+        $this->call('migrate', ['--force' => true]);
         $this->composerInstall();
 
         return Command::SUCCESS;
