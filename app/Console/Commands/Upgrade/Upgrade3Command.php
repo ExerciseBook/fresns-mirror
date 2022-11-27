@@ -111,7 +111,7 @@ class Upgrade3Command extends Command
 
             $newData = array_merge($newPackData, $addPackKeys);
 
-            $languagePack->item_value = json_encode($newData);
+            $languagePack->item_value = $newData;
             $languagePack->save();
         }
 
