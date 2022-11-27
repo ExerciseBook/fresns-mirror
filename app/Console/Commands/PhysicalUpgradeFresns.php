@@ -71,7 +71,7 @@ class PhysicalUpgradeFresns extends Command
             $this->upgradeFinish();
         } catch (\Exception $e) {
             logger($e->getMessage());
-            $this->info($e->getMessage());
+            $this->error($e->getMessage());
             $this->updateStep(self::STEP_FAILURE);
             return Command::FAILURE;
         }
