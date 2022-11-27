@@ -40,7 +40,7 @@
                     @endif
                 </div>
 
-                @if ($autoUpgradeStepInt && $physicalUpgradeStepInt)
+                @if ($autoUpgradeStepInt || $physicalUpgradeStepInt)
                     @if ($autoUpgradeStepInt)
                         <button type="button" class="btn btn-info" id="autoUpgradeButton" data-action="{{ route('panel.upgrade.info') }}" data-upgrading="{{ $autoUpgradeStepInt }}">
                             {{ __('FsLang::tips.upgrade_in_progress') }}
@@ -59,7 +59,7 @@
                     <button type="button" class="btn btn-outline-primary" id="physicalUpgradeButton" data-action="{{ route('panel.upgrade.info') }}">
                         {{ __('FsLang::panel.button_physical_upgrade') }}
                     </button>
-                    <a class="link-success ms-2" href="https://fresns.cn/guide/upgrade.html#手动物理升级" target="_blank">{{ __('FsLang::tips.physical_upgrade_guide') }}</a>
+                    <a class="link-success ms-2" href="https://fresns.cn/guide/upgrade.html#手动物理升级" target="_blank" id="physicalUpgradeGuide">{{ __('FsLang::tips.physical_upgrade_guide') }}</a>
                 @endif
             @else
                 <div class="p-5 text-center">
@@ -230,7 +230,7 @@
     <!-- Fresns Upgrade Modal: auto upgrade confirm -->
     <div class="modal fade" id="autoUpgradeModal" tabindex="-1" aria-labelledby="upgrade" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="post" action="{{ route('panel.upgrade') }}" id="autoUpgradeForm">
+            <form method="post" action="{{ route('panel.upgrade.auto') }}" id="autoUpgradeForm">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
@@ -263,7 +263,7 @@
                 </div>
                 <div class="modal-body ps-5">
                     @foreach($autoUpgradeSteps as $step => $description)
-                        <p id="upgrade{{$step}}">
+                        <p id="auto-upgrade-{{$step}}">
                             @if ($autoUpgradeStepInt < $step)
                                 <i class="bi bi-hourglass text-secondary me-2"></i>
                             @elseif($autoUpgradeStepInt == $step)
@@ -287,7 +287,7 @@
     <!-- Fresns Upgrade Modal: physical upgrade confirm -->
     <div class="modal fade" id="physicalUpgradeModal" tabindex="-1" aria-labelledby="physicalUpgradeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="post" action="{{ route('panel.physical.upgrade') }}" id="physicalUpgradeForm">
+            <form method="post" action="{{ route('panel.upgrade.physical') }}" id="physicalUpgradeForm">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
@@ -328,7 +328,7 @@
                 </div>
                 <div class="modal-body ps-5">
                     @foreach($physicalUpgradeSteps as $step => $description)
-                        <p id="upgrade{{$step}}">
+                        <p id="physical-upgrade-{{$step}}">
                             @if ($physicalUpgradeStepInt < $step)
                                 <i class="bi bi-hourglass text-secondary me-2"></i>
                             @elseif($physicalUpgradeStepInt == $step)
