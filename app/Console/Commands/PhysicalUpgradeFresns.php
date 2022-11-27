@@ -113,7 +113,8 @@ class PhysicalUpgradeFresns extends Command
         $output .= $content;
 
         Cache::put('physicalUpgradeStep', $step);
-        return Cache::put('physicalUpgradeTip', $output);
+        Cache::put('physicalUpgradeTip', $output);
+        return;
     }
 
     // step 2: Update fresns data

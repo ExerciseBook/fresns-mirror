@@ -101,16 +101,23 @@ class UpgradeFresns extends Command
             default => 'Step --: Upgrade end',
         };
 
+        // upgrade step
+        return $this->updateOutput($stepInfo, $step);
+    }
+
+    public function updateOutput($content, $step)
+    {
         if ($step == self::STEP_FAILURE) {
-            $this->error($stepInfo);
+            $this->error($content);
         } else {
-            $this->info($stepInfo);
+            $this->info($content);
         }
 
-        // upgrade step
-        Cache::put('autoUpgradeStep', $step);
-        Cache::put('autoUpgradeTip', $stepInfo);
+        $output = cache('autoUpgradeTip');
+        $output .= $content;
 
+        Cache::put('autoUpgradeStep', $step);
+        Cache::put('autoUpgradeTip', $content);
         return;
     }
 
