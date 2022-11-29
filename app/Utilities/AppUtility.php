@@ -19,7 +19,7 @@ class AppUtility
 {
     public static function currentVersion()
     {
-        return Cache::remember('fresns_current_version', now()->addDays(), function () {
+        return Cache::tags(['fresnsSystems'])->remember('fresns_current_version', now()->addDays(), function () {
             $fresnsJson = file_get_contents(
                 base_path('fresns.json')
             );
@@ -30,7 +30,7 @@ class AppUtility
 
     public static function newVersion()
     {
-        return Cache::remember('fresns_new_version', now()->addHours(6), function () {
+        return Cache::tags(['fresnsSystems'])->remember('fresns_new_version', now()->addHours(6), function () {
             try {
                 $versionInfoUrl = AppUtility::getAppHost().'/version.json';
                 $client = new \GuzzleHttp\Client();

@@ -44,7 +44,7 @@ class PostService
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_ALL);
 
         // post data cache
-        $postData = Cache::remember($cacheKey, $cacheTime, function () use ($post, $langTag) {
+        $postData = Cache::tags(['fresnsApiData'])->remember($cacheKey, $cacheTime, function () use ($post, $langTag) {
             $postInfo = $post->getPostInfo($langTag);
             $postInfo['title'] = ContentUtility::replaceBlockWords('content', $postInfo['title']);
 
@@ -151,7 +151,7 @@ class PostService
             $manageCacheKey = "fresns_api_guest_post_manages_{$langTag}";
         }
         $manageCacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
-        $postData['manages'] = Cache::remember($manageCacheKey, $manageCacheTime, function () use ($authUserId, $langTag) {
+        $postData['manages'] = Cache::tags(['fresnsApiExtensions'])->remember($manageCacheKey, $manageCacheTime, function () use ($authUserId, $langTag) {
             return ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_POST, $authUserId, $langTag);
         });
 

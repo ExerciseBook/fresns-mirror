@@ -40,7 +40,7 @@ class UserService
         $cacheKey = "fresns_api_user_{$user->uid}_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
-        $userData = Cache::remember($cacheKey, $cacheTime, function () use ($user, $langTag) {
+        $userData = Cache::tags(['fresnsApiData'])->remember($cacheKey, $cacheTime, function () use ($user, $langTag) {
             $userProfile = $user->getUserProfile();
             $userMainRole = $user->getUserMainRole($langTag);
 

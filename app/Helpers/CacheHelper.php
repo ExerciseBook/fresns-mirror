@@ -67,11 +67,20 @@ class CacheHelper
     /**
      * clear all cache.
      */
-    public static function clearAllCache()
+    public static function clearAllCache(?array $tags = [])
     {
-        Cache::flush();
+        if ($tags) {
+            /**
+             * Cache tags are not supported when using the file, dynamodb, or database cache drivers.
+             *
+             * ['fresnsSystems', 'fresnsConfigs', 'fresnsLanguages', 'fresnsModels', 'fresnsUserInteraction', 'fresnsApiData', 'fresnsWebData']
+             */
+            Cache::tags($tags)->flush();
+        } else {
+            Cache::flush();
+        }
+
         \Artisan::call('clear-compiled');
-        \Artisan::call('cache:clear');
         \Artisan::call('config:cache');
         \Artisan::call('event:cache');
         \Artisan::call('optimize:clear');

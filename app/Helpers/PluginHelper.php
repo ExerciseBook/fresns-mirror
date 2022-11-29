@@ -27,7 +27,7 @@ class PluginHelper
 
         $cacheKey = "fresns_plugin_url_{$unikey}";
 
-        $pluginUrl = Cache::remember($cacheKey, now()->addDays(7), function () use ($unikey) {
+        $pluginUrl = Cache::tags(['fresnsConfigs'])->remember($cacheKey, now()->addDays(7), function () use ($unikey) {
             $plugin = Plugin::where('unikey', $unikey)->first(['plugin_host', 'access_path']);
             if (empty($plugin)) {
                 return null;
