@@ -78,7 +78,7 @@ class ConfigHelper
     {
         $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
-        $configCacheKey = 'fresns_config_'.$itemKey.'_'.$langTag;
+        $configCacheKey = "fresns_config_{$itemKey}_{$langTag}";
 
         // Cache::tags(['fresnsConfigs'])
         $itemValue = Cache::remember($configCacheKey, now()->addDays(), function () use ($itemKey, $langTag) {
@@ -108,7 +108,7 @@ class ConfigHelper
     {
         $key = reset($itemKeys).'_'.end($itemKeys).'_'.count($itemKeys);
 
-        $configCacheKey = 'fresns_config_keys_'.$key.'_'.$langTag;
+        $configCacheKey = "fresns_config_keys_{$key}_{$langTag}";
 
         // Cache::tags(['fresnsConfigs'])
         $keysData = Cache::remember($configCacheKey, now()->addDays(), function () use ($itemKeys, $langTag) {
@@ -134,7 +134,7 @@ class ConfigHelper
     {
         $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
-        $configCacheKey = 'fresns_config_tag_'.$itemTag.'_'.$langTag;
+        $configCacheKey = "fresns_config_tag_{$itemTag}_{$langTag}";
 
         // Cache::tags(['fresnsConfigs'])
         $tagData = Cache::remember($configCacheKey, now()->addDays(), function () use ($itemTag, $langTag) {
