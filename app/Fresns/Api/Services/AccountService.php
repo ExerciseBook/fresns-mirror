@@ -9,7 +9,7 @@
 namespace App\Fresns\Api\Services;
 
 use App\Helpers\CacheHelper;
-use App\Helpers\InteractiveHelper;
+use App\Helpers\InteractionHelper;
 use App\Models\Account;
 use App\Models\File;
 use App\Models\PluginUsage;
@@ -45,7 +45,7 @@ class AccountService
         }
 
         $item['users'] = $userList;
-        $item['interactive'] = InteractiveHelper::fresnsUserInteractive($langTag);
+        $item['interaction'] = InteractionHelper::fresnsUserInteraction($langTag);
 
         $data = array_merge($accountInfo, $item);
 
