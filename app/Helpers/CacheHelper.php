@@ -380,6 +380,7 @@ class CacheHelper
     // fresns_seo_post_{$id}
     // fresns_seo_comment_{$id}
 
+    // fresns_code_messages_{$unikey}_{$langTag}
     // fresns_api_key_{$appId}
     // fresns_api_token_{$platformId}_{$aid}_{$uid}
     // fresns_api_stickers_{$langTag}
