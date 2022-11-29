@@ -35,7 +35,8 @@ class GroupService
         $cacheKey = "fresns_api_group_{$group->gid}_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
-        $groupInfo = Cache::tags(['fresnsApiData'])->remember($cacheKey, $cacheTime, function () use ($group, $langTag) {
+        // Cache::tags(['fresnsApiData'])
+        $groupInfo = Cache::remember($cacheKey, $cacheTime, function () use ($group, $langTag) {
             $groupInfo = $group->getGroupInfo($langTag);
 
             $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_GROUP, $group->id, $langTag);
@@ -108,7 +109,8 @@ class GroupService
         $cacheKey = "fresns_user_follow_group_model_{$authUserId}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $follow = Cache::tags(['fresnsModels'])->remember($cacheKey, $cacheTime, function () use ($authUserId, $group) {
+        // Cache::tags(['fresnsModels'])
+        $follow = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId, $group) {
             return UserFollow::where('user_id', $authUserId)->where('follow_type', UserFollow::TYPE_GROUP)->where('follow_id', $group->id)->first();
         });
 
@@ -147,7 +149,8 @@ class GroupService
         $cacheKey = "fresns_user_follow_group_model_{$authUserId}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $follow = Cache::tags(['fresnsModels'])->remember($cacheKey, $cacheTime, function () use ($authUserId, $group) {
+        // Cache::tags(['fresnsModels'])
+        $follow = Cache::remember($cacheKey, $cacheTime, function () use ($authUserId, $group) {
             return UserFollow::where('user_id', $authUserId)->where('follow_type', UserFollow::TYPE_GROUP)->where('follow_id', $group->id)->first();
         });
 

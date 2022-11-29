@@ -41,7 +41,8 @@ class GroupController extends Controller
         }
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
-        $groups = Cache::tags(['fresnsApiData'])->remember($cacheKey, $cacheTime, function () use ($authUser) {
+        // Cache::tags(['fresnsApiData'])
+        $groups = Cache::remember($cacheKey, $cacheTime, function () use ($authUser) {
             $groupFilterIds = PermissionUtility::getGroupFilterIds($authUser?->id);
 
             return Group::with(['category', 'admins'])

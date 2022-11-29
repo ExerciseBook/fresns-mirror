@@ -28,7 +28,8 @@ class LanguageHelper
         $cacheKey = "fresns_{$tableName}_{$tableColumn}_{$tableId}_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $langContentCache = Cache::tags(['fresnsLanguages'])->remember($cacheKey, $cacheTime, function () use ($tableName, $tableColumn, $tableId, $langTag) {
+        // Cache::tags(['fresnsLanguages'])
+        $langContentCache = Cache::remember($cacheKey, $cacheTime, function () use ($tableName, $tableColumn, $tableId, $langTag) {
             if (empty($langTag)) {
                 $languageArr = Language::where([
                     'table_name' => $tableName,
@@ -117,7 +118,8 @@ class LanguageHelper
         $cacheKey = "fresns_seo_{$type}_{$id}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $seoData = Cache::tags(['fresnsConfigs'])->remember($cacheKey, $cacheTime, function () use ($usageType, $id) {
+        // Cache::tags(['fresnsConfigs'])
+        $seoData = Cache::remember($cacheKey, $cacheTime, function () use ($usageType, $id) {
             return Seo::where('usage_type', $usageType)->where('usage_id', $id)->get();
         });
 

@@ -140,7 +140,8 @@ class GlobalController extends Controller
         $cacheKey = "fresns_api_archives_{$dtoRequest->type}_{$unikey}_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        $archives = Cache::tags(['fresnsApiData'])->remember($cacheKey, $cacheTime, function () use ($usageType, $unikey) {
+        // Cache::tags(['fresnsApiData'])
+        $archives = Cache::remember($cacheKey, $cacheTime, function () use ($usageType, $unikey) {
             $archiveData = Archive::type($usageType)
                 ->when($unikey, function ($query, $value) {
                     $query->where('plugin_unikey', $value);
@@ -304,7 +305,8 @@ class GlobalController extends Controller
         $cacheKey = "fresns_api_stickers_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
-        $stickerTree = Cache::tags(['fresnsConfigs'])->remember($cacheKey, $cacheTime, function () use ($langTag) {
+        // Cache::tags(['fresnsConfigs'])
+        $stickerTree = Cache::remember($cacheKey, $cacheTime, function () use ($langTag) {
             $stickers = Sticker::isEnable()->orderBy('rating')->get();
 
             $stickerData = [];

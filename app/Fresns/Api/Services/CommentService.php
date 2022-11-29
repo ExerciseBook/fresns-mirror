@@ -48,8 +48,8 @@ class CommentService
         $post = $comment->post;
         $postAppend = $comment->postAppend;
 
-        // comment data cache
-        $commentData = Cache::tags(['fresnsApiData'])->remember($cacheKey, $cacheTime, function () use ($comment, $langTag, $post) {
+        // Cache::tags(['fresnsApiData'])
+        $commentData = Cache::remember($cacheKey, $cacheTime, function () use ($comment, $langTag, $post) {
             $commentInfo = $comment->getCommentInfo($langTag);
 
             $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_COMMENT, $comment->id, $langTag);
@@ -167,7 +167,8 @@ class CommentService
             $manageCacheKey = "fresns_api_guest_comment_manages_{$langTag}";
         }
         $manageCacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
-        $commentData['manages'] = Cache::tags(['fresnsApiExtensions'])->remember($manageCacheKey, $manageCacheTime, function () use ($authUserId, $langTag) {
+        // Cache::tags(['fresnsApiExtensions'])
+        $commentData['manages'] = Cache::remember($manageCacheKey, $manageCacheTime, function () use ($authUserId, $langTag) {
             return ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_COMMENT, $authUserId, $langTag);
         });
 

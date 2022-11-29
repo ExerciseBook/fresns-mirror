@@ -32,7 +32,8 @@ class HashtagService
         $cacheKey = "fresns_api_hashtag_{$hashtag->slug}_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
-        $data = Cache::tags(['fresnsApiData'])->remember($cacheKey, $cacheTime, function () use ($hashtag, $langTag) {
+        // Cache::tags(['fresnsApiData'])
+        $data = Cache::remember($cacheKey, $cacheTime, function () use ($hashtag, $langTag) {
             $hashtagInfo = $hashtag->getHashtagInfo($langTag);
 
             $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_HASHTAG, $hashtag->id, $langTag);
