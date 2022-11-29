@@ -213,7 +213,7 @@ class GroupController extends Controller
     // detail
     public function detail(string $gid)
     {
-        $group = PrimaryHelper::fresnsModelByFsid('group', $gid);
+        $group = Group::where('gid', $gid)->first();
 
         if (empty($group)) {
             throw new ApiException(37100);

@@ -220,7 +220,11 @@ class UserController extends Controller
     // detail
     public function detail(string $uidOrUsername)
     {
-        $viewUser = PrimaryHelper::fresnsModelByFsid('user', $uidOrUsername);
+        if (StrHelper::isPureInt($uidOrUsername)) {
+            $viewUser = User::where('uid', $uidOrUsername)->first();
+        } else {
+            $viewUser = User::where('username', $uidOrUsername)->first();
+        }
 
         if (empty($viewUser)) {
             throw new ApiException(31602);

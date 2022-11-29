@@ -84,13 +84,14 @@ class PostService
 
             $item['topComment'] = null;
             $item['manages'] = [];
-            $item['editStatus'] = [
-                'isMe' => false,
-                'canDelete' => false,
-                'canEdit' => false,
-                'isPluginEditor' => false,
-                'editorUrl' => null,
-            ];
+
+            $editStatus['isMe'] = true;
+            $editStatus['canDelete'] = (bool) $post->postAppend->can_delete;
+            $editStatus['canEdit'] = PermissionUtility::checkContentIsCanEdit('post', $post->created_at, $post->sticky_state, $post->digest_state, $langTag, $timezone);
+            $editStatus['isPluginEditor'] = (bool) $post->postAppend->is_plugin_editor;
+            $editStatus['editorUrl'] = ! empty($post->postAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($post->postAppend->editor_unikey) : null;
+            $item['editStatus'] = $editStatus;
+
             $item['commentHidden'] = false;
             $item['followType'] = null;
 
@@ -109,7 +110,7 @@ class PostService
 
         // group
         if ($post->group_id) {
-            $groupDateLimit = GroupService::getGroupContentDateLimit($post->group->id, $authUserId);
+            $groupDateLimit = GroupService::getGroupContentDateLimit($post->group_id, $authUserId);
             if ($groupDateLimit) {
                 $postTime = strtotime($post->created_at);
                 $dateLimit = strtotime($groupDateLimit);
@@ -142,13 +143,15 @@ class PostService
 
         // auth user is creator
         if ($post->user_id == $authUserId) {
-            $editStatus['isMe'] = true;
-            $editStatus['canDelete'] = (bool) $post->postAppend->can_delete;
-            $editStatus['canEdit'] = PermissionUtility::checkContentIsCanEdit('post', $post->created_at, $post->sticky_state, $post->digest_state, $langTag, $timezone);
-            $editStatus['isPluginEditor'] = (bool) $post->postAppend->is_plugin_editor;
-            $editStatus['editorUrl'] = ! empty($post->postAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($post->postAppend->editor_unikey) : null;
-
-            $postData['editStatus'] = $editStatus;
+            $postData['editStatus']['canEdit'] = PermissionUtility::checkContentIsCanEdit('post', $post->created_at, $post->sticky_state, $post->digest_state, $langTag, $timezone);
+        } else {
+            $postData['editStatus'] = [
+                'isMe' => false,
+                'canDelete' => false,
+                'canEdit' => false,
+                'isPluginEditor' => false,
+                'editorUrl' => null,
+            ];
         }
 
         // manages

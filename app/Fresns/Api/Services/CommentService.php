@@ -41,13 +41,11 @@ class CommentService
             return null;
         }
 
-        $isMe = $comment->user_id == $authUserId ? true : false;
-
         $cacheKey = "fresns_api_comment_{$comment->cid}_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_ALL);
 
         // Cache::tags(['fresnsApiData'])
-        $commentData = Cache::remember($cacheKey, $cacheTime, function () use ($comment, $isMe, $langTag) {
+        $commentData = Cache::remember($cacheKey, $cacheTime, function () use ($comment, $langTag) {
             $commentAppend = $comment->commentAppend;
             $post = $comment->post;
             $postAppend = $comment->postAppend;
@@ -79,14 +77,14 @@ class CommentService
                     $hashtagItem[] = $hashtagService->hashtagData($hashtag, $langTag, $timezone);
                 }
 
-                $commentData['hashtags'] = $hashtagItem;
+                $item['hashtags'] = $hashtagItem;
             }
 
             // creator
             $item['creator'] = InteractionHelper::fresnsUserAnonymousProfile();
             $item['creator']['isPostCreator'] = false;
             if (! $comment->is_anonymous) {
-                $commentData['creator']['isPostCreator'] = $comment->user_id == $post->user_id ? true : false;
+                $item['creator']['isPostCreator'] = $comment->user_id == $post->user_id ? true : false;
             }
 
             // reply to user
@@ -98,18 +96,18 @@ class CommentService
 
                 $userService = new UserService;
 
-                $commentData['replyToUser'] = $userService->userData($comment->parentComment->creator, $langTag, $timezone);
+                $item['replyToUser'] = $userService->userData($comment->parentComment->creator, $langTag, $timezone);
             }
 
             $item['subComments'] = [];
 
             $item['commentBtn'] = [
-                'status' => false,
+                'status' => true,
                 'name' => null,
-                'url' => null,
                 'style' => null,
+                'url' => null,
             ];
-            if ($isMe && $commentAppend->is_close_btn) {
+            if ($commentAppend->is_close_btn) {
                 $commentBtn['status'] = true;
                 if ($commentAppend->is_change_btn) {
                     $commentBtn['name'] = LanguageHelper::fresnsLanguageByTableId('posts', 'comment_btn_name', $postAppend->post_id, $langTag);
@@ -124,23 +122,13 @@ class CommentService
             }
 
             $item['manages'] = [];
-
             $item['editStatus'] = [
-                'isMe' => false,
-                'canDelete' => false,
+                'isMe' => true,
+                'canDelete' => (bool) $commentAppend->can_delete,
                 'canEdit' => false,
-                'isPluginEditor' => false,
-                'editorUrl' => null,
+                'isPluginEditor' => (bool) $commentAppend->is_plugin_editor,
+                'editorUrl' => ! empty($commentAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($commentAppend->editor_unikey) : null,
             ];
-            if ($isMe) {
-                $editStatus['isMe'] = true;
-                $editStatus['canDelete'] = (bool) $commentAppend->can_delete;
-                $editStatus['canEdit'] = false;
-                $editStatus['isPluginEditor'] = (bool) $commentAppend->is_plugin_editor;
-                $editStatus['editorUrl'] = ! empty($commentAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($commentAppend->editor_unikey) : null;
-
-                $item['editStatus'] = $editStatus;
-            }
             $item['interaction']['postCreatorLikeStatus'] = $post->user_id;
             $item['followType'] = null;
             $item['post'] = self::getPost($post, $langTag);
@@ -160,9 +148,12 @@ class CommentService
 
         // creator
         if (! $comment->is_anonymous) {
-            $userService = new UserService;
+            $isPostCreator = $commentData['creator']['isPostCreator'];
 
+            $userService = new UserService;
             $commentData['creator'] = $userService->userData($comment->creator, $langTag, $timezone, $authUserId);
+
+            $commentData['creator']['isPostCreator'] = $isPostCreator;
         }
 
         // whether to output sub-level comments
@@ -172,8 +163,23 @@ class CommentService
         }
 
         // auth user is creator
+        $isMe = $comment->user_id == $authUserId ? true : false;
         if ($isMe) {
             $commentData['editStatus']['canEdit'] = PermissionUtility::checkContentIsCanEdit('comment', $comment->created_at, $comment->is_sticky, $comment->digest_state, $langTag, $timezone);
+        } else {
+            $commentData['commentBtn'] = [
+                'status' => false,
+                'name' => null,
+                'style' => null,
+                'url' => null,
+            ];
+            $commentData['editStatus'] = [
+                'isMe' => false,
+                'canDelete' => false,
+                'canEdit' => false,
+                'isPluginEditor' => false,
+                'editorUrl' => null,
+            ];
         }
 
         // manages
