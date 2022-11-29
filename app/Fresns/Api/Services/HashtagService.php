@@ -43,22 +43,40 @@ class HashtagService
             return array_merge($hashtagInfo, $item);
         });
 
+        $interactionConfig = InteractionHelper::fresnsHashtagInteraction($langTag);
+        $interactionStatus = InteractionUtility::getInteractionStatus(InteractionUtility::TYPE_HASHTAG, $hashtag->id, $authUserId);
+        $data['interaction'] = array_merge($interactionConfig, $interactionStatus);
+
+        $hashtagData = self::handleHashtagCount($hashtag, $data);
+        $hashtagData = self::handleHashtagDate($hashtagData, $timezone, $langTag);
+
+        return $hashtagData;
+    }
+
+    // handle hashtag data count
+    public static function handleHashtagCount(?Hashtag $hashtag, ?array $hashtagData)
+    {
+        if (empty($hashtag) || empty($hashtagData)) {
+            return $hashtagData;
+        }
+
         $configKeys = ConfigHelper::fresnsConfigByItemKeys([
             'hashtag_liker_count',
             'hashtag_disliker_count',
             'hashtag_follower_count',
             'hashtag_blocker_count',
         ]);
-        $data['likeCount'] = $configKeys['hashtag_liker_count'] ? $hashtag->like_count : null;
-        $data['dislikeCount'] = $configKeys['hashtag_disliker_count'] ? $hashtag->dislike_count : null;
-        $data['followCount'] = $configKeys['hashtag_follower_count'] ? $hashtag->follow_count : null;
-        $data['blockCount'] = $configKeys['hashtag_blocker_count'] ? $hashtag->block_count : null;
 
-        $interactionConfig = InteractionHelper::fresnsHashtagInteraction($langTag);
-        $interactionStatus = InteractionUtility::getInteractionStatus(InteractionUtility::TYPE_HASHTAG, $hashtag->id, $authUserId);
-        $data['interaction'] = array_merge($interactionConfig, $interactionStatus);
+        $hashtagData['likeCount'] = $configKeys['hashtag_liker_count'] ? $hashtag->like_count : null;
+        $hashtagData['dislikeCount'] = $configKeys['hashtag_disliker_count'] ? $hashtag->dislike_count : null;
+        $hashtagData['followCount'] = $configKeys['hashtag_follower_count'] ? $hashtag->follow_count : null;
+        $hashtagData['blockCount'] = $configKeys['hashtag_blocker_count'] ? $hashtag->block_count : null;
+        $hashtagData['postCount'] = $hashtag->post_count;
+        $hashtagData['postDigestCount'] = $hashtag->post_digest_count;
+        $hashtagData['commentCount'] = $hashtag->comment_count;
+        $hashtagData['commentDigestCount'] = $hashtag->comment_digest_count;
 
-        return HashtagService::handleHashtagDate($data, $timezone, $langTag);
+        return $hashtagData;
     }
 
     // handle hashtag data date

@@ -48,9 +48,12 @@ class PostService
             $postInfo = $post->getPostInfo($langTag);
             $postInfo['title'] = ContentUtility::replaceBlockWords('content', $postInfo['title']);
 
+            // extend list
             $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST, $post->id, $langTag);
             $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_POST, $post->id, $langTag);
             $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_POST, $post->id, $langTag);
+
+            // file
             $item['files'] = FileHelper::fresnsFileInfoListByTableColumn('posts', 'id', $post->id);
 
             $fileCount['images'] = collect($item['files']['images'])->count();
@@ -59,9 +62,26 @@ class PostService
             $fileCount['documents'] = collect($item['files']['documents'])->count();
             $item['fileCount'] = $fileCount;
 
-            $item['group'] = null;
+            $timezone = ConfigHelper::fresnsConfigDefaultTimezone();
+
+            // group
+            $groupService = new GroupService;
+            $item['group'] = $groupService->groupData($post->group, $langTag, $timezone);
+
+            // hashtags
             $item['hashtags'] = [];
+            if ($post->hashtags->isNotEmpty()) {
+                $hashtagService = new HashtagService;
+
+                foreach ($post->hashtags as $hashtag) {
+                    $hashtagItem[] = $hashtagService->hashtagData($hashtag, $langTag, $timezone);
+                }
+                $item['hashtags'] = $hashtagItem;
+            }
+
+            // creator
             $item['creator'] = InteractionHelper::fresnsUserAnonymousProfile();
+
             $item['topComment'] = null;
             $item['manages'] = [];
             $item['editStatus'] = [
@@ -88,10 +108,7 @@ class PostService
         }
 
         // group
-        if ($post->group_id != 0) {
-            $groupService = new GroupService;
-            $postData['group'] = $groupService->groupData($post->group, $langTag, $timezone);
-
+        if ($post->group_id) {
             $groupDateLimit = GroupService::getGroupContentDateLimit($post->group->id, $authUserId);
             if ($groupDateLimit) {
                 $postTime = strtotime($post->created_at);
@@ -110,21 +127,17 @@ class PostService
             }
         }
 
-        // hashtags
-        if ($post->hashtags->isNotEmpty()) {
-            $hashtagService = new HashtagService;
-
-            foreach ($post->hashtags as $hashtag) {
-                $hashtagItem[] = $hashtagService->hashtagData($hashtag, $langTag, $timezone, $authUserId);
-            }
-            $postData['hashtags'] = $hashtagItem;
-        }
-
         // creator
         if (! $post->is_anonymous) {
             $userService = new UserService;
 
             $postData['creator'] = $userService->userData($post->creator, $langTag, $timezone, $authUserId);
+        }
+
+        // get top comments
+        $topCommentRequire = ConfigHelper::fresnsConfigByItemKey('top_comment_require');
+        if ($type == 'list' && $topCommentRequire != 0 && $topCommentRequire < $post->comment_like_count) {
+            $postData['topComment'] = self::getTopComment($post->id, $langTag);
         }
 
         // auth user is creator
@@ -136,12 +149,6 @@ class PostService
             $editStatus['editorUrl'] = ! empty($post->postAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($post->postAppend->editor_unikey) : null;
 
             $postData['editStatus'] = $editStatus;
-        }
-
-        // get top comments
-        $topCommentRequire = ConfigHelper::fresnsConfigByItemKey('top_comment_require');
-        if ($type == 'list' && $topCommentRequire != 0 && $topCommentRequire < $post->comment_like_count) {
-            $postData['topComment'] = self::getTopComment($post->id, $langTag, $timezone);
         }
 
         // manages
@@ -171,7 +178,10 @@ class PostService
 
         $data = array_merge($postData, $contentHandle);
 
-        return self::handlePostDate($data, $timezone, $langTag);
+        $postData = self::handlePostCount($post, $data);
+        $postData = self::handlePostDate($postData, $timezone, $langTag);
+
+        return $postData;
     }
 
     // handle post content
@@ -212,6 +222,38 @@ class PostService
         return $info;
     }
 
+    // handle post data count
+    public static function handlePostCount(?Post $post, ?array $postData)
+    {
+        if (empty($post) || empty($postData)) {
+            return $postData;
+        }
+
+        $configKeys = ConfigHelper::fresnsConfigByItemKeys([
+            'post_liker_count',
+            'post_disliker_count',
+            'post_follower_count',
+            'post_blocker_count',
+            'comment_liker_count',
+            'comment_disliker_count',
+            'comment_follower_count',
+            'comment_blocker_count',
+        ]);
+
+        $postData['likeCount'] = $configKeys['post_liker_count'] ? $post->like_count : null;
+        $postData['dislikeCount'] = $configKeys['post_disliker_count'] ? $post->dislike_count : null;
+        $postData['followCount'] = $configKeys['post_follower_count'] ? $post->follow_count : null;
+        $postData['blockCount'] = $configKeys['post_blocker_count'] ? $post->block_count : null;
+        $postData['commentCount'] = $post->comment_count;
+        $postData['commentDigestCount'] = $post->comment_digest_count;
+        $postData['commentLikeCount'] = $configKeys['comment_liker_count'] ? $post->comment_like_count : null;
+        $postData['commentDislikeCount'] = $configKeys['comment_disliker_count'] ? $post->comment_dislike_count : null;
+        $postData['commentFollowCount'] = $configKeys['comment_follower_count'] ? $post->comment_follow_count : null;
+        $postData['commentBlockCount'] = $configKeys['comment_blocker_count'] ? $post->comment_block_count : null;
+
+        return $postData;
+    }
+
     // handle post data date
     public static function handlePostDate(?array $postData, string $timezone, string $langTag)
     {
@@ -242,13 +284,20 @@ class PostService
     }
 
     // get top comment
-    public static function getTopComment(int $postId, string $langTag, string $timezone)
+    public static function getTopComment(int $postId, string $langTag)
     {
-        $comment = Comment::with(['commentAppend', 'post', 'creator', 'hashtags'])->where('post_id', $postId)->where('top_parent_id', 0)->orderByDesc('like_count')->first();
+        $cacheKey = "fresns_api_post_{$postId}_top_comment_{$langTag}";
 
-        $service = new CommentService();
+        $comment = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($postId, $langTag) {
+            $comment = Comment::with(['creator'])->where('post_id', $postId)->where('top_parent_id', 0)->orderByDesc('like_count')->first();
+            $service = new CommentService();
 
-        return $service->commentData($comment, 'list', $langTag, $timezone);
+            $timezone = ConfigHelper::fresnsConfigDefaultTimezone();
+
+            return $service->commentData($comment, 'list', $langTag, $timezone);
+        });
+
+        return $comment;
     }
 
     // post log data

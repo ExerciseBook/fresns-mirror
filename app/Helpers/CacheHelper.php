@@ -314,6 +314,7 @@ class CacheHelper
 
                 Cache::forget("fresns_seo_post_{$postId}");
                 self::forgetFresnsMultilingual("fresns_api_post_{$fsid}");
+                self::forgetFresnsMultilingual("fresns_api_post_{$postId}_top_comment");
                 self::forgetFresnsModel('post', $fsid);
             break;
 
@@ -323,6 +324,7 @@ class CacheHelper
 
                 Cache::forget("fresns_seo_comment_{$commentId}");
                 self::forgetFresnsMultilingual("fresns_api_comment_{$fsid}");
+                self::forgetFresnsMultilingual("fresns_api_comment_{$commentId}_sub_comment");
                 self::forgetFresnsModel('comment', $fsid);
             break;
 
