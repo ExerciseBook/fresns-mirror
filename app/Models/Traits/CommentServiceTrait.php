@@ -9,7 +9,6 @@
 namespace App\Models\Traits;
 
 use App\Helpers\ConfigHelper;
-use App\Helpers\DateHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
 use Illuminate\Support\Str;
@@ -52,10 +51,10 @@ trait CommentServiceTrait
         $info['commentDislikeCount'] = $configKeys['comment_disliker_count'] ? $commentData->comment_dislike_count : null;
         $info['commentFollowCount'] = $configKeys['comment_follower_count'] ? $commentData->comment_follow_count : null;
         $info['commentBlockCount'] = $configKeys['comment_blocker_count'] ? $commentData->comment_block_count : null;
-        $info['createTime'] = DateHelper::fresnsFormatDateTime($commentData->created_at, $timezone, $langTag);
-        $info['createTimeFormat'] = DateHelper::fresnsFormatTime($commentData->created_at, $langTag);
-        $info['editTime'] = DateHelper::fresnsFormatDateTime($commentData->latest_edit_at, $timezone, $langTag);
-        $info['editTimeFormat'] = DateHelper::fresnsFormatTime($commentData->latest_edit_at, $langTag);
+        $info['createTime'] = $commentData->created_at;
+        $info['createTimeFormat'] = $commentData->created_at;
+        $info['editTime'] = $commentData->latest_edit_at;
+        $info['editTimeFormat'] = $commentData->latest_edit_at;
         $info['editCount'] = $appendData->edit_count;
         $info['rankState'] = $commentData->rank_state;
         $info['status'] = (bool) $commentData->is_enable;
