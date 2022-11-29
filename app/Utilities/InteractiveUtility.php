@@ -122,7 +122,7 @@ class InteractiveUtility
             $status['likeStatus'] = self::checkUserLike($markType, $markId, $userId);
             $status['dislikeStatus'] = self::checkUserDislike($markType, $markId, $userId);
             $status['followStatus'] = self::checkUserFollow($markType, $markId, $userId);
-            $status['followNote'] = $userFollow->user_note;
+            $status['followNote'] = $userFollow?->user_note;
             $status['followIsExpiry'] = ($expireTime < $now) ? true : false;
             $status['followExpiryDateTime'] = $userFollow?->expired_at;
             $status['blockStatus'] = self::checkUserBlock($markType, $markId, $userId);
@@ -1031,8 +1031,12 @@ class InteractiveUtility
     }
 
     // get follow id array
-    public static function getFollowIdArr(int $type, int $userId)
+    public static function getFollowIdArr(int $type, ?int $userId = null)
     {
+        if (empty($userId)) {
+            return [];
+        }
+
         $cacheKey = "fresns_user_follow_array_{$type}_{$userId}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
@@ -1066,8 +1070,12 @@ class InteractiveUtility
     }
 
     // get block id array
-    public static function getBlockIdArr(int $type, int $userId)
+    public static function getBlockIdArr(int $type, ?int $userId = null)
     {
+        if (empty($userId)) {
+            return [];
+        }
+
         $cacheKey = "fresns_user_block_array_{$type}_{$userId}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
