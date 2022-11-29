@@ -164,7 +164,7 @@ class CommentService
         if ($authUserId) {
             $manageCacheKey = "fresns_api_comment_manages_{$authUserId}_{$langTag}";
         } else {
-            $manageCacheKey = "fresns_api_comment_manages_guest_{$langTag}";
+            $manageCacheKey = "fresns_api_guest_comment_manages_{$langTag}";
         }
         $manageCacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
         $commentData['manages'] = Cache::remember($manageCacheKey, $manageCacheTime, function () use ($authUserId, $langTag) {

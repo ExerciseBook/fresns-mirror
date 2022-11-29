@@ -148,7 +148,7 @@ class PostService
         if ($authUserId) {
             $manageCacheKey = "fresns_api_post_manages_{$authUserId}_{$langTag}";
         } else {
-            $manageCacheKey = "fresns_api_post_manages_guest_{$langTag}";
+            $manageCacheKey = "fresns_api_guest_post_manages_{$langTag}";
         }
         $manageCacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
         $postData['manages'] = Cache::remember($manageCacheKey, $manageCacheTime, function () use ($authUserId, $langTag) {

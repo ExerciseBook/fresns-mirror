@@ -242,7 +242,7 @@ class UserController extends Controller
         if ($authUserId) {
             $manageCacheKey = "fresns_api_user_manages_{$authUserId}_{$langTag}";
         } else {
-            $manageCacheKey = "fresns_api_user_manages_guest_{$langTag}";
+            $manageCacheKey = "fresns_api_guest_user_manages_{$langTag}";
         }
         $manageCacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
         $userManages = Cache::remember($manageCacheKey, $manageCacheTime, function () use ($authUserId, $langTag) {
@@ -505,7 +505,7 @@ class UserController extends Controller
 
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
-        $pluginsCacheKey = "fresns_api_user_panel_plugins_{$authUid}_{$langTag}";
+        $pluginsCacheKey = "fresns_api_user_panel_extends_{$authUid}_{$langTag}";
         $extends = Cache::remember($pluginsCacheKey, $cacheTime, function () use ($authUserId, $langTag) {
             $extend['features'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_FEATURE, null, null, $authUserId, $langTag);
             $extend['profiles'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_PROFILE, null, null, $authUserId, $langTag);
@@ -825,7 +825,7 @@ class UserController extends Controller
         // upload session log
         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
-        CacheHelper::forgetApiUser($authUser->uid);
+        CacheHelper::forgetFresnsUser($authUser->uid);
 
         return $this->success();
     }

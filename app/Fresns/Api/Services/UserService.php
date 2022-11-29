@@ -81,6 +81,8 @@ class UserService
             return array_merge($userProfile, $userMainRole, $item);
         });
 
+        $userData['stats'] = UserService::getUserStats($user, $langTag);
+
         $interactionConfig = InteractionHelper::fresnsUserInteraction($langTag);
         $interactionStatus = InteractionUtility::getInteractionStatus(InteractionUtility::TYPE_USER, $user->id, $authUserId);
         $followMeStatus['followMeStatus'] = InteractionUtility::checkUserFollow(InteractionUtility::TYPE_USER, $authUserId, $user->id);
