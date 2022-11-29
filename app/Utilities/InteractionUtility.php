@@ -191,8 +191,6 @@ class InteractionUtility
                 InteractionUtility::markStats($userId, 'dislike', $likeType, $likeId, 'decrement');
             }
         }
-
-        CacheHelper::forgetFresnsInteraction($likeType, $likeId, $userId);
     }
 
     public static function markUserDislike(int $userId, int $dislikeType, int $dislikeId)
@@ -250,8 +248,6 @@ class InteractionUtility
                 InteractionUtility::markStats($userId, 'like', $dislikeType, $dislikeId, 'decrement');
             }
         }
-
-        CacheHelper::forgetFresnsInteraction($dislikeType, $dislikeId, $userId);
     }
 
     public static function markUserFollow(int $userId, int $followType, int $followId)
@@ -307,8 +303,6 @@ class InteractionUtility
 
             InteractionUtility::markStats($userId, 'block', $followType, $followId, 'decrement');
         }
-
-        CacheHelper::forgetFresnsInteraction($followType, $followId, $userId);
     }
 
     public static function markUserBlock(int $userId, int $blockType, int $blockId)
@@ -350,8 +344,6 @@ class InteractionUtility
 
             InteractionUtility::markStats($userId, 'follow', $blockType, $blockId, 'decrement');
         }
-
-        CacheHelper::forgetFresnsInteraction($blockType, $blockId, $userId);
     }
 
     // mark content sticky
