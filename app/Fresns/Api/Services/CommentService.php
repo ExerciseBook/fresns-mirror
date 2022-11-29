@@ -141,9 +141,9 @@ class CommentService
 
                 $item['editStatus'] = $editStatus;
             }
-
-            $item['post'] = self::getPost($post, $langTag);
+            $item['interaction']['postCreatorLikeStatus'] = $post->user_id;
             $item['followType'] = null;
+            $item['post'] = self::getPost($post, $langTag);
 
             return array_merge($commentInfo, $item);
         });
@@ -191,7 +191,7 @@ class CommentService
         // interaction
         $interactionConfig = InteractionHelper::fresnsCommentInteraction($langTag);
         $interactionStatus = InteractionUtility::getInteractionStatus(InteractionUtility::TYPE_COMMENT, $comment->id, $authUserId);
-        $interactionCreatorLike['postCreatorLikeStatus'] = InteractionUtility::checkUserLike(InteractionUtility::TYPE_COMMENT, $comment->id, $post->user_id);
+        $interactionCreatorLike['postCreatorLikeStatus'] = InteractionUtility::checkUserLike(InteractionUtility::TYPE_COMMENT, $comment->id, $commentData['interaction']['postCreatorLikeStatus']);
         $item['interaction'] = array_merge($interactionConfig, $interactionStatus, $interactionCreatorLike);
 
         $data = array_merge($commentData, $contentHandle, $item);
