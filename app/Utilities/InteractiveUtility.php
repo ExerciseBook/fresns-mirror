@@ -126,7 +126,7 @@ class InteractiveUtility
             $status['followIsExpiry'] = ($expireTime < $now) ? true : false;
             $status['followExpiryDateTime'] = $userFollow?->expired_at;
             $status['blockStatus'] = self::checkUserBlock($markType, $markId, $userId);
-            $status['blockNote'] = $userBlock->user_note;
+            $status['blockNote'] = $userBlock?->user_note;
 
             return $status;
         });
