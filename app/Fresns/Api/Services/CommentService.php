@@ -22,7 +22,6 @@ use App\Models\ExtendUsage;
 use App\Models\File;
 use App\Models\Mention;
 use App\Models\OperationUsage;
-use App\Models\PluginUsage;
 use App\Models\Post;
 use App\Utilities\ContentUtility;
 use App\Utilities\ExtendUtility;
@@ -134,7 +133,11 @@ class CommentService
             return array_merge($commentInfo, $item);
         });
 
-        $contentHandle = CommentService::handleCommentContent($comment, $type, $authUserId);
+        // Cache::tags(['fresnsApiData'])
+        $contentCacheKey = "fresns_api_post_{$comment->cid}_{$authUserId}_{$langTag}";
+        $contentHandle = Cache::remember($contentCacheKey, $cacheTime, function () use ($comment, $type, $authUserId) {
+            return self::handleCommentContent($comment, $type, $authUserId);
+        });
 
         // location
         if (! empty($comment->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {

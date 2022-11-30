@@ -20,7 +20,6 @@ use App\Models\ExtendUsage;
 use App\Models\File;
 use App\Models\Mention;
 use App\Models\OperationUsage;
-use App\Models\PluginUsage;
 use App\Models\Post;
 use App\Models\PostLog;
 use App\Utilities\ContentUtility;
@@ -99,7 +98,11 @@ class PostService
             return array_merge($postInfo, $item);
         });
 
-        $contentHandle = self::handlePostContent($post, $type, $authUserId);
+        // Cache::tags(['fresnsApiData'])
+        $contentCacheKey = "fresns_api_post_{$post->pid}_{$authUserId}_{$langTag}";
+        $contentHandle = Cache::remember($contentCacheKey, $cacheTime, function () use ($post, $type, $authUserId) {
+            return self::handlePostContent($post, $type, $authUserId);
+        });
 
         // location
         if (! empty($post->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {

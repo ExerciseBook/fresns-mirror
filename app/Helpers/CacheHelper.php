@@ -395,7 +395,9 @@ class CacheHelper
     // fresns_api_group_{$gid}_{$langTag}
     // fresns_api_hashtag_{$hid}_{$langTag}
     // fresns_api_post_{$pid}_{$langTag}
+    // fresns_api_post_{$pid}_{$userId}_{$langTag}
     // fresns_api_comment_{$cid}_{$langTag}
+    // fresns_api_comment_{$cid}_{$userId}_{$langTag}
 
     // fresns_seo_user_{$id}
     // fresns_seo_group_{$id}
