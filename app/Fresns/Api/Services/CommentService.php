@@ -185,8 +185,7 @@ class CommentService
         // interaction
         $interactionConfig = InteractionHelper::fresnsCommentInteraction($langTag);
         $interactionStatus = InteractionUtility::getInteractionStatus(InteractionUtility::TYPE_COMMENT, $comment->id, $authUserId);
-        $interactionCreatorLike = $commentData['interaction']['postCreatorLikeStatus'];
-        $item['interaction'] = array_merge($interactionConfig, $interactionStatus, $interactionCreatorLike);
+        $item['interaction'] = array_merge($interactionConfig, $interactionStatus, $commentData['interaction']);
 
         $data = array_merge($commentData, $contentHandle, $item);
 
