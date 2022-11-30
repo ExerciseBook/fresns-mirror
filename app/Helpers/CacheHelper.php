@@ -257,7 +257,7 @@ class CacheHelper
 
         foreach ($langCacheKeyArr as $langCacheKey) {
             foreach ($utcArr as $utc) {
-                $cacheKey = "{$langCacheKey}_{$utc}";
+                $cacheKey = "{$langCacheKey}_{$utc['value']}";
 
                 Cache::forget($cacheKey);
             }
