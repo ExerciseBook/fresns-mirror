@@ -81,11 +81,9 @@ class CommentService
             }
 
             // creator
-            $item['creator'] = InteractionHelper::fresnsUserAnonymousProfile();
-            $item['creator']['isPostCreator'] = false;
-            if (! $comment->is_anonymous) {
-                $item['creator']['isPostCreator'] = $comment->user_id == $post->user_id ? true : false;
-            }
+            $userService = new UserService;
+            $item['creator'] = $userService->userData($comment->creator, $langTag, $timezone);
+            $item['creator']['isPostCreator'] = $comment->user_id == $post->user_id ? true : false;
 
             // reply to user
             $item['replyToUser'] = null;
@@ -147,13 +145,9 @@ class CommentService
         }
 
         // creator
-        if (! $comment->is_anonymous) {
-            $isPostCreator = $commentData['creator']['isPostCreator'];
-
-            $userService = new UserService;
-            $commentData['creator'] = $userService->userData($comment->creator, $langTag, $timezone, $authUserId);
-
-            $commentData['creator']['isPostCreator'] = $isPostCreator;
+        if ($comment->is_anonymous) {
+            $commentData['creator'] = InteractionHelper::fresnsUserAnonymousProfile();
+            $commentData['creator']['isPostCreator'] = false;
         }
 
         // whether to output sub-level comments
@@ -183,16 +177,7 @@ class CommentService
         }
 
         // manages
-        if ($authUserId) {
-            $manageCacheKey = "fresns_api_comment_manages_{$authUserId}_{$langTag}";
-        } else {
-            $manageCacheKey = "fresns_api_guest_comment_manages_{$langTag}";
-        }
-        $manageCacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
-        // Cache::tags(['fresnsApiExtensions'])
-        $commentData['manages'] = Cache::remember($manageCacheKey, $manageCacheTime, function () use ($authUserId, $langTag) {
-            return ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_COMMENT, $authUserId, $langTag);
-        });
+        $commentData['manages'] = InteractionService::getManageExtends('comment', $langTag, $authUserId);
 
         // interaction
         $interactionConfig = InteractionHelper::fresnsCommentInteraction($langTag);
@@ -274,6 +259,22 @@ class CommentService
         $commentData['editTime'] = DateHelper::fresnsFormatDateTime($commentData['editTime'], $timezone, $langTag);
         $commentData['editTimeFormat'] = DateHelper::fresnsFormatTime($commentData['editTimeFormat'], $langTag);
 
+        $hashtagList = [];
+        foreach ($commentData['hashtags'] as $hashtag) {
+            $hashtagList[] = HashtagService::handleHashtagDate($hashtag, $timezone, $langTag);
+        }
+        $commentData['hashtags'] = $hashtagList;
+
+        $commentData['creator'] = UserService::handleUserDate($commentData['creator'], $timezone, $langTag);
+
+        if ($commentData['subComments']) {
+            $subCommentList = [];
+            foreach ($commentData['subComments'] as $subComment) {
+                $subCommentList[] = CommentService::handleCommentDate($subComment, $timezone, $langTag);
+            }
+            $commentData['subComments'] = $subCommentList;
+        }
+
         $commentData['interaction']['followExpiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($commentData['interaction']['followExpiryDateTime'], $timezone, $langTag);
 
         return $commentData;
@@ -283,9 +284,15 @@ class CommentService
     public static function getSubComments(int $commentId, int $limit, string $langTag)
     {
         $cacheKey = "fresns_api_comment_{$commentId}_sub_comments_{$langTag}";
+        $nullCacheKey = CacheHelper::getNullCacheKey($cacheKey);
+
+        // null cache count
+        if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
+            return null;
+        }
 
         $commentList = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($commentId, $limit, $langTag) {
-            $comments = Comment::with(['creator'])->where('parent_id', $commentId)->orderByDesc('like_count')->limit($limit)->get();
+            $comments = Comment::where('parent_id', $commentId)->orderByDesc('like_count')->limit($limit)->get();
 
             $commentList = [];
             $service = new CommentService();
@@ -298,6 +305,11 @@ class CommentService
 
             return $commentList;
         });
+
+        // null cache count
+        if (empty($commentList)) {
+            CacheHelper::nullCacheCount($cacheKey, $nullCacheKey, 10);
+        }
 
         return $commentList;
     }

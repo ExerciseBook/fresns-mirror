@@ -310,7 +310,7 @@ class CommentController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $comment = Comment::with(['creator'])->where('cid', $cid)->first();
+        $comment = Comment::where('cid', $cid)->first();
 
         if (empty($comment)) {
             throw new ApiException(37400);

@@ -74,13 +74,15 @@ class CacheHelper
     }
 
     // null cache count
-    public static function nullCacheCount(string $cacheKey, string $nullCacheKey)
+    public static function nullCacheCount(string $cacheKey, string $nullCacheKey, ?int $cacheMinutes = null)
     {
         Cache::pull($cacheKey);
 
         $currentCacheKeyNullNum = (int) Cache::get($nullCacheKey);
 
-        Cache::put($nullCacheKey, ++$currentCacheKeyNullNum, CacheHelper::fresnsCacheTimeByFileType());
+        $now = $cacheMinutes ? now()->addMinutes($cacheMinutes) : CacheHelper::fresnsCacheTimeByFileType();
+
+        Cache::put($nullCacheKey, ++$currentCacheKeyNullNum, $now);
     }
 
     /**

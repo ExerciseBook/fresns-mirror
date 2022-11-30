@@ -242,25 +242,12 @@ class UserController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        // manages
-        if ($authUserId) {
-            $manageCacheKey = "fresns_api_user_manages_{$authUserId}_{$langTag}";
-        } else {
-            $manageCacheKey = "fresns_api_guest_user_manages_{$langTag}";
-        }
-        $manageCacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
-
-        // Cache::tags(['fresnsApiData'])
-        $userManages = Cache::remember($manageCacheKey, $manageCacheTime, function () use ($authUserId, $langTag) {
-            return ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, null, PluginUsage::SCENE_USER, $authUserId, $langTag);
-        });
-
         $seoData = LanguageHelper::fresnsLanguageSeoDataById('user', $viewUser->id, $langTag);
 
         $item['title'] = $seoData?->title;
         $item['keywords'] = $seoData?->keywords;
         $item['description'] = $seoData?->description;
-        $item['manages'] = $userManages;
+        $item['manages'] = InteractionService::getManageExtends('user', $langTag, $authUserId);
         $data['items'] = $item;
 
         $service = new UserService();
