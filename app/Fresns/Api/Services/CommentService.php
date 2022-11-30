@@ -282,7 +282,7 @@ class CommentService
 
         // null cache count
         if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
-            return null;
+            return [];
         }
 
         $commentList = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($commentId, $limit, $langTag) {

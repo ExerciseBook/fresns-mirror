@@ -241,7 +241,7 @@ class InteractionService
 
         // null cache count
         if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
-            return null;
+            return [];
         }
 
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);

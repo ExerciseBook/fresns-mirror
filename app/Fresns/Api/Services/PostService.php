@@ -276,7 +276,7 @@ class PostService
 
         // null cache count
         if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
-            return null;
+            return [];
         }
 
         $comment = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($postId, $langTag) {
