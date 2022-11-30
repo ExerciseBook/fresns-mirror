@@ -81,6 +81,7 @@ class ConfigHelper
         $configCacheKey = "fresns_config_{$itemKey}_{$langTag}";
         $nullCacheKey = CacheHelper::getNullCacheKey($configCacheKey);
 
+        // null cache count
         if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
             return null;
         }
@@ -121,6 +122,7 @@ class ConfigHelper
         $configCacheKey = "fresns_config_keys_{$key}_{$langTag}";
         $nullCacheKey = CacheHelper::getNullCacheKey($configCacheKey);
 
+        // null cache count
         if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
             return null;
         }
@@ -157,6 +159,7 @@ class ConfigHelper
         $configCacheKey = "fresns_config_tag_{$itemTag}_{$langTag}";
         $nullCacheKey = CacheHelper::getNullCacheKey($configCacheKey);
 
+        // null cache count
         if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
             return null;
         }

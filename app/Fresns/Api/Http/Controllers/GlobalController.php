@@ -305,6 +305,7 @@ class GlobalController extends Controller
         $cacheKey = "fresns_api_stickers_{$langTag}";
         $nullCacheKey = CacheHelper::getNullCacheKey($cacheKey);
 
+        // null cache count
         if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
             return $this->success([]);
         }

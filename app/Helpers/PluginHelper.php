@@ -28,6 +28,7 @@ class PluginHelper
         $cacheKey = "fresns_plugin_url_{$unikey}";
         $nullCacheKey = CacheHelper::getNullCacheKey($cacheKey);
 
+        // null cache count
         if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
             return null;
         }

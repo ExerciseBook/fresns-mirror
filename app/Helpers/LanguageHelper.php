@@ -28,6 +28,7 @@ class LanguageHelper
         $cacheKey = "fresns_{$tableName}_{$tableColumn}_{$tableId}_{$langTag}";
         $nullCacheKey = CacheHelper::getNullCacheKey($cacheKey);
 
+        // null cache count
         if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
             return null;
         }
