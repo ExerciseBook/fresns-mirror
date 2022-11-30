@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Cache;
 
 class CacheHelper
 {
-    const NULL_KEY_CACHE_PREFIX = 'null_key_';
-    const NULL_KEY_COUNT = 3;
+    const NULL_CACHE_KEY_PREFIX = 'null_key_';
+    const NULL_CACHE_COUNT = 3;
 
     // cache time
     public static function fresnsCacheTimeByFileType(?int $fileType = null)
@@ -70,7 +70,7 @@ class CacheHelper
     // get null cache key
     public static function getNullCacheKey(string $cacheKey)
     {
-        return CacheHelper::NULL_KEY_CACHE_PREFIX.$cacheKey;
+        return CacheHelper::NULL_CACHE_KEY_PREFIX.$cacheKey;
     }
 
     // null cache count
