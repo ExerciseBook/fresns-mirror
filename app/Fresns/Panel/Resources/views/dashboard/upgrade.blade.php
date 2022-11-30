@@ -296,7 +296,7 @@
                     </div>
                     <div class="modal-body">
                         <p>
-                            {{ __('FsLang::tips.upgrade_fresns_tip') }} v{{ $appVersion ?? ''}}
+                            {{ __('FsLang::tips.upgrade_fresns_tip') }} <a href="{{ $newVersion['changeIntro'] }}" target="_blank">v{{ $appVersion ?? ''}}</a>
                             @if($appVersion != $newVersion['version'])
                                 <span class="spinner-grow text-warning spinner-grow-sm" role="status">
                                     <span class="visually-hidden">Loading...</span>
