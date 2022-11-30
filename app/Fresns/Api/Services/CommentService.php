@@ -259,14 +259,6 @@ class CommentService
         $commentData['editTime'] = DateHelper::fresnsFormatDateTime($commentData['editTime'], $timezone, $langTag);
         $commentData['editTimeFormat'] = DateHelper::fresnsFormatTime($commentData['editTimeFormat'], $langTag);
 
-        $hashtagList = [];
-        foreach ($commentData['hashtags'] as $hashtag) {
-            $hashtagList[] = HashtagService::handleHashtagDate($hashtag, $timezone, $langTag);
-        }
-        $commentData['hashtags'] = $hashtagList;
-
-        $commentData['creator'] = UserService::handleUserDate($commentData['creator'], $timezone, $langTag);
-
         if ($commentData['subComments']) {
             $subCommentList = [];
             foreach ($commentData['subComments'] as $subComment) {

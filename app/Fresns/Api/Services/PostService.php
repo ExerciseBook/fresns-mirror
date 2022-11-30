@@ -258,16 +258,6 @@ class PostService
         $postData['editTime'] = DateHelper::fresnsFormatDateTime($postData['editTime'], $timezone, $langTag);
         $postData['editTimeFormat'] = DateHelper::fresnsFormatTime($postData['editTimeFormat'], $langTag);
 
-        $postData['group'] = GroupService::handleGroupDate($postData['group'], $timezone, $langTag);
-
-        $hashtagList = [];
-        foreach ($postData['hashtags'] as $hashtag) {
-            $hashtagList[] = HashtagService::handleHashtagDate($hashtag, $timezone, $langTag);
-        }
-        $postData['hashtags'] = $hashtagList;
-
-        $postData['creator'] = UserService::handleUserDate($postData['creator'], $timezone, $langTag);
-
         $postData['topComment'] = CommentService::handleCommentDate($postData['topComment'], $timezone, $langTag);
 
         $postData['interaction']['followExpiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($postData['interaction']['followExpiryDateTime'], $timezone, $langTag);
