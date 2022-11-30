@@ -44,7 +44,7 @@ class CommentController extends Controller
         $timezone = $this->timezone();
         $authUserId = $this->user()?->id;
 
-        $commentQuery = Comment::with(['hashtags'])->isEnable();
+        $commentQuery = Comment::with(['post', 'hashtags'])->isEnable();
 
         $blockGroupIds = InteractionUtility::getPrivateGroupIdArr();
 

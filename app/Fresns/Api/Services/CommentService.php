@@ -126,7 +126,7 @@ class CommentService
                 'isPluginEditor' => (bool) $commentAppend->is_plugin_editor,
                 'editorUrl' => ! empty($commentAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($commentAppend->editor_unikey) : null,
             ];
-            $item['interaction']['postCreatorLikeStatus'] = $post->user_id;
+            $item['interaction']['postCreatorLikeStatus'] = InteractionUtility::checkUserLike(InteractionUtility::TYPE_COMMENT, $comment->id, $post->user_id);
             $item['followType'] = null;
             $item['post'] = self::getPost($post, $langTag);
 
@@ -185,7 +185,7 @@ class CommentService
         // interaction
         $interactionConfig = InteractionHelper::fresnsCommentInteraction($langTag);
         $interactionStatus = InteractionUtility::getInteractionStatus(InteractionUtility::TYPE_COMMENT, $comment->id, $authUserId);
-        $interactionCreatorLike['postCreatorLikeStatus'] = InteractionUtility::checkUserLike(InteractionUtility::TYPE_COMMENT, $comment->id, $commentData['interaction']['postCreatorLikeStatus']);
+        $interactionCreatorLike = $commentData['interaction']['postCreatorLikeStatus'];
         $item['interaction'] = array_merge($interactionConfig, $interactionStatus, $interactionCreatorLike);
 
         $data = array_merge($commentData, $contentHandle, $item);

@@ -858,6 +858,14 @@ class UserController extends Controller
             // like
             case 'like':
                 InteractionUtility::markUserLike($authUserId, $markType, $primaryId);
+
+                if ($dtoRequest->markType == 'comment') {
+                    $commentModel = PrimaryHelper::fresnsModelById('comment', $primaryId);
+
+                    if ($commentModel->post->user_id == $authUserId) {
+                        CacheHelper::forgetFresnsMultilingual("fresns_api_comment_{$commentModel->cid}");
+                    }
+                }
             break;
 
             // dislike
