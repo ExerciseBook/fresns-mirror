@@ -80,6 +80,12 @@ class ConfigHelper
 
         $configCacheKey = "fresns_config_{$itemKey}_{$langTag}";
 
+        $nullCacheKey = CacheHelper::getNullCacheKey($configCacheKey);
+
+        if (Cache::get($nullCacheKey) > CacheHelper::NULL_KEY_COUNT) {
+            return null;
+        }
+
         // Cache::tags(['fresnsConfigs'])
         $itemValue = Cache::remember($configCacheKey, now()->addDays(), function () use ($itemKey, $langTag) {
             $itemData = Config::where('item_key', $itemKey)->first();
@@ -93,6 +99,11 @@ class ConfigHelper
 
             return $itemData->item_value ?? null;
         });
+
+        // null cache count
+        if (empty($itemValue)) {
+            CacheHelper::nullCacheCount($configCacheKey, $nullCacheKey);
+        }
 
         return $itemValue;
     }
