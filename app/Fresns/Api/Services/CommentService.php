@@ -261,14 +261,6 @@ class CommentService
         $commentData['editTime'] = DateHelper::fresnsFormatDateTime($commentData['editTime'], $timezone, $langTag);
         $commentData['editTimeFormat'] = DateHelper::fresnsFormatTime($commentData['editTimeFormat'], $langTag);
 
-        if ($commentData['subComments']) {
-            $subCommentList = [];
-            foreach ($commentData['subComments'] as $subComment) {
-                $subCommentList[] = CommentService::handleCommentDate($subComment, $timezone, $langTag);
-            }
-            $commentData['subComments'] = $subCommentList;
-        }
-
         $commentData['interaction']['followExpiryDateTime'] = DateHelper::fresnsDateTimeByTimezone($commentData['interaction']['followExpiryDateTime'], $timezone, $langTag);
 
         return $commentData;
@@ -288,11 +280,10 @@ class CommentService
         $commentList = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($commentId, $limit, $langTag) {
             $comments = Comment::where('parent_id', $commentId)->orderByDesc('like_count')->limit($limit)->get();
 
-            $commentList = [];
             $service = new CommentService();
             $timezone = ConfigHelper::fresnsConfigDefaultTimezone();
 
-            /** @var Comment $comment */
+            $commentList = [];
             foreach ($comments as $comment) {
                 $commentList[] = $service->commentData($comment, 'list', $langTag, $timezone);
             }
