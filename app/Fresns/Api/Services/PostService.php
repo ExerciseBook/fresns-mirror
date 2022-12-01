@@ -105,7 +105,7 @@ class PostService
         });
 
         // location
-        if (! empty($post->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {
+        if ($post->map_id && $authUserLng && $authUserLat) {
             $postLng = $post->map_longitude;
             $postLat = $post->map_latitude;
 

@@ -140,7 +140,7 @@ class CommentService
         });
 
         // location
-        if (! empty($comment->map_id) && ! empty($authUserLng) && ! empty($authUserLat)) {
+        if ($comment->map_id && $authUserLng && $authUserLat) {
             $postLng = $comment->map_longitude;
             $postLat = $comment->map_latitude;
 
