@@ -77,13 +77,21 @@ class Upgrade4Command extends Command
 
             $newContent = ArrUtility::editKey($content, 'notificationEmpty', 'listEmpty');
 
-            $newContent['listEmpty'] = match ($packContent->lang_tag) {
-                'en' => 'The list is empty, no content at the moment.',
-                'zh-Hans' => '列表为空，暂无内容',
-                'zh-Hant' => '列表為空，暫無內容',
+            $langAddContent = match ($packContent->lang_tag) {
+                'en' => [
+                    'listEmpty' => 'The list is empty, no content at the moment.',
+                ],
+                'zh-Hans' => [
+                    'listEmpty' => '列表为空，暂无内容',
+                ],
+                'zh-Hant' => [
+                    'listEmpty' => '列表為空，暫無內容',
+                ],
             };
 
-            $packContent->lang_content = json_encode($newContent, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+            $langNewContent = (object) array_merge((array) $newContent, (array) $langAddContent);
+
+            $packContent->lang_content = json_encode($langNewContent, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
             $packContent->save();
         }
 
