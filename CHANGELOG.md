@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.0.0-beta.4 (2022-12-01)
+
+### Added
+- API: 新增缓存，提升访问速度
+- Panel: 保存 `URL` 和 `Path` 时，过滤左右空格和结尾 `/` 符号
+- Model: 文件信息增加 `middle` 选项，从文件名开头拼接图片参数
+- Data: 数据表 `user_follows` 增加 `is_enable` 字段
+- 主程序内置资源增加 Font Awesome Free 6.2.1
+
+### Fixes
+- Panel: 扩展安装失败时提示文案不匹配
+
+### Changed
+- `interactive` 修改为 `interaction`
+- API: 验证码移至参数格式判断之后，避免格式错误导致验证码提前失效
+- API: 签名的 `App Secret` 拼接由 `&key=` 修改为 `&appSecret=`
+- Panel: 配置保存时 `foreach` 循环中模型为空时 `continue` 跳过
+- 框架: laravel/framework 升级到 v9.42.2
+
+
 ## 2.0.0-beta.3 (2022-11-28)
 
 ### Added
