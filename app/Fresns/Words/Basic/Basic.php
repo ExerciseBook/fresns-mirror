@@ -169,8 +169,7 @@ class Basic
     {
         $dtoWordBody = new UploadSessionLogDTO($wordBody);
 
-        $deviceInfo = json_decode($dtoWordBody->deviceInfo, true);
-        new DeviceInfoDTO($deviceInfo);
+        new DeviceInfoDTO($dtoWordBody->deviceInfo);
 
         $accountId = null;
         if (isset($dtoWordBody->aid)) {

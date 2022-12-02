@@ -10,7 +10,7 @@ namespace App\Fresns\Api\Http\DTO;
 
 use Fresns\DTO\DTO;
 
-class CheckHeaderDTO extends DTO
+class HeadersDTO extends DTO
 {
     /**
      * @return array

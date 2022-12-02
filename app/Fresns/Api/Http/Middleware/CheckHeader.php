@@ -9,7 +9,7 @@
 namespace App\Fresns\Api\Http\Middleware;
 
 use App\Exceptions\ApiException;
-use App\Fresns\Api\Http\DTO\CheckHeaderDTO;
+use App\Fresns\Api\Http\DTO\HeadersDTO;
 use App\Helpers\ConfigHelper;
 use Closure;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class CheckHeader
         ];
 
         // check header
-        new CheckHeaderDTO($headers);
+        new HeadersDTO($headers);
 
         // check sign
         $fresnsResp = \FresnsCmdWord::plugin('Fresns')->verifySign($headers);
