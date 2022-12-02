@@ -9,6 +9,7 @@
 namespace App\Fresns\Words\Basic;
 
 use App\Fresns\Words\Basic\DTO\CheckCodeDTO;
+use App\Fresns\Words\Basic\DTO\DeviceInfoDTO;
 use App\Fresns\Words\Basic\DTO\IpInfoDTO;
 use App\Fresns\Words\Basic\DTO\SendCodeDTO;
 use App\Fresns\Words\Basic\DTO\UploadSessionLogDTO;
@@ -167,6 +168,9 @@ class Basic
     public function uploadSessionLog($wordBody)
     {
         $dtoWordBody = new UploadSessionLogDTO($wordBody);
+
+        $deviceInfo = json_decode($dtoWordBody->deviceInfo, true);
+        new DeviceInfoDTO($deviceInfo);
 
         $accountId = null;
         if (isset($dtoWordBody->aid)) {
