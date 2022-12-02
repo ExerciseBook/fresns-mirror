@@ -138,6 +138,7 @@ class CacheHelper
         Cache::forget('fresns_default_langTag');
         Cache::forget('fresns_default_timezone');
         Cache::forget('fresns_lang_tags');
+        Cache::forget('fresns_config_file_url_expire');
         // Cache::forget("fresns_config_*");
         // Cache::forget("fresns_config_keys_*");
         // Cache::forget("fresns_config_tag_*");
