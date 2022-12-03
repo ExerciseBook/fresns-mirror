@@ -109,7 +109,7 @@ class CommentService
                     'url' => PluginHelper::fresnsPluginUrlByUnikey($postAppend->comment_btn_plugin_unikey),
                 ],
                 'active' => [
-                    'name' => ConfigHelper::fresnsConfigByItemKey($commentAppend->btn_name_key, $langTag),
+                    'name' => $commentAppend->btn_name_key ? ConfigHelper::fresnsConfigByItemKey($commentAppend->btn_name_key, $langTag) : null,
                     'style' => $commentAppend->btn_style,
                     'url' => PluginHelper::fresnsPluginUrlByUnikey($postAppend->comment_btn_plugin_unikey),
                 ],
