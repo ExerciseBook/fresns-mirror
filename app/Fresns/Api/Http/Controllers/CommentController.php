@@ -438,7 +438,10 @@ class CommentController extends Controller
             throw new ApiException(36401);
         }
 
+        InteractionUtility::publishStats('comment', $comment->id, 'decrement');
+
         CommentLog::where('comment_id', $comment->id)->delete();
+
         $comment->delete();
 
         return $this->success();
