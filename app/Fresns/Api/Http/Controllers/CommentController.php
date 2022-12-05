@@ -296,7 +296,7 @@ class CommentController extends Controller
                 continue;
             }
 
-            $commentList[] = $service->commentData($fresnsCommentModel, 'list', $langTag, $timezone, $authUserId, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat, $outputSubComments);
+            $commentList[] = $service->commentData($comment, 'list', $langTag, $timezone, $authUserId, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat, $outputSubComments);
         }
 
         return $this->fresnsPaginate($commentList, $comments->total(), $comments->perPage());
