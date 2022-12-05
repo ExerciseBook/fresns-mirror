@@ -19,7 +19,7 @@ class CacheHelper
     const NULL_CACHE_COUNT = 3;
 
     // cache time
-    public static function fresnsCacheTimeByFileType(?int $fileType = null)
+    public static function fresnsCacheTimeByFileType(?int $fileType = null, ?int $minutes = null)
     {
         if (empty($fileType)) {
             $digital = rand(6, 72);
@@ -31,6 +31,10 @@ class CacheHelper
             $fileConfig = FileHelper::fresnsFileStorageConfigByType($fileType);
 
             if (! $fileConfig['antiLinkStatus']) {
+                if ($minutes) {
+                    return now()->addMinutes($minutes);
+                }
+
                 $digital = rand(72, 168);
 
                 return now()->addHours($digital);
@@ -56,6 +60,10 @@ class CacheHelper
         $newAntiLinkExpire = array_filter($antiLinkExpire);
 
         if (empty($newAntiLinkExpire)) {
+            if ($minutes) {
+                return now()->addMinutes($minutes);
+            }
+
             $digital = rand(6, 72);
 
             return now()->addHours($digital);
