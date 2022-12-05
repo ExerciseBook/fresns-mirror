@@ -15,6 +15,7 @@ use App\Helpers\FileHelper;
 use App\Helpers\InteractionHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\PluginHelper;
+use App\Helpers\PrimaryHelper;
 use App\Models\ArchiveUsage;
 use App\Models\Comment;
 use App\Models\CommentLog;
@@ -88,14 +89,16 @@ class CommentService
 
             // reply to user
             $item['replyToUser'] = null;
-            if ($comment->top_parent_id != $comment->parent_id && ! $comment?->parentComment) {
-                if ($comment->parentComment->is_anonymous) {
+            if ($comment->top_parent_id != $comment->parent_id) {
+                $parentComment = $comment->parentComment;
+
+                if ($parentComment->is_anonymous) {
                     $item['replyToUser'] = InteractionHelper::fresnsUserAnonymousProfile();
+                } else {
+                    $parentCommentUser = PrimaryHelper::fresnsModelById('user', $parentComment->user_id);
+                    $userService = new UserService;
+                    $item['replyToUser'] = $userService->userData($parentCommentUser, $langTag, $timezone);
                 }
-
-                $userService = new UserService;
-
-                $item['replyToUser'] = $userService->userData($comment->parentComment->creator, $langTag, $timezone);
             }
 
             $item['subComments'] = [];
