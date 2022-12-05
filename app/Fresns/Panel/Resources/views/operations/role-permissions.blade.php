@@ -187,7 +187,7 @@
                 <!--post_second_interval-->
                 <div class="input-group mb-3">
                     <label class="input-group-text">{{ __('FsLang::panel.role_perm_post_time_interval') }}</label>
-                    <input type="number" class="form-control input-number" value="{{ $permissions['post_second_interval']['permValue'] ?? '' }}" name="permissions[post_second_interval]" placeholder="10">
+                    <input type="number" class="form-control input-number" value="{{ $permissions['post_second_interval']['permValue'] ?? '' }}" name="permissions[post_second_interval]" placeholder="60">
                     <span class="input-group-text">{{ __('FsLang::panel.unit_second') }}</span>
                 </div>
                 <!--post_draft_count-->
@@ -315,7 +315,7 @@
                 <!--role_perm_comment_time_interval-->
                 <div class="input-group mb-3">
                     <label class="input-group-text">{{ __('FsLang::panel.role_perm_comment_time_interval') }}</label>
-                    <input type="number" class="form-control input-number" value="{{ $permissions['comment_second_interval']['permValue'] ?? '' }}" name="permissions[comment_second_interval]" placeholder="10">
+                    <input type="number" class="form-control input-number" value="{{ $permissions['comment_second_interval']['permValue'] ?? '' }}" name="permissions[comment_second_interval]" placeholder="60">
                     <span class="input-group-text">{{ __('FsLang::panel.unit_second') }}</span>
                 </div>
                 <!--role_perm_comment_draft_count-->
