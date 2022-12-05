@@ -296,6 +296,10 @@ class CommentController extends Controller
                 continue;
             }
 
+            if ($fresnsCommentModel->post->deleted_at) {
+                continue;
+            }
+
             $commentList[] = $service->commentData($comment, 'list', $langTag, $timezone, $authUserId, $dtoRequest->mapId, $dtoRequest->mapLng, $dtoRequest->mapLat, $outputSubComments);
         }
 
