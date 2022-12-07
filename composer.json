@@ -40,6 +40,7 @@
         "fresns/plugin-manager": "^2.2",
         "fresns/theme-manager": "^2.0",
         "fresns/market-manager": "^2.1",
+        "doctrine/dbal": "^3.5",
         "mcamara/laravel-localization": "^1.7",
         "hisorange/browser-detect": "^4.5",
         "maatwebsite/excel": "^3.1",

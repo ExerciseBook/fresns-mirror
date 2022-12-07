@@ -19,20 +19,22 @@ class ChangeSessionTokensTable extends Migration
      */
     public function up()
     {
-        if (! Schema::hasColumn('session_tokens', 'user_token')) {
+        if (Schema::hasColumn('session_tokens', 'token')) {
             Schema::table('session_tokens', function (Blueprint $table) {
                 $table->dropUnique('account_token');
 
+                $table->renameColumn('token', 'account_token')->after('account_id');
+            });
+        }
+
+        if (! Schema::hasColumn('session_tokens', 'user_token')) {
+            Schema::table('session_tokens', function (Blueprint $table) {
                 $table->string('version', 16)->nullable()->after('platform_id');
                 $table->char('app_id', 8)->nullable()->after('platform_id');
                 $table->char('user_token', 32)->nullable()->after('user_id');
 
-                $table->renameColumn('token', 'account_token');
-            });
-
-            Schema::table('session_tokens', function (Blueprint $table) {
-                $table->unique(['account_id', 'account_token'], 'account_token');
-                $table->unique(['user_id', 'user_token'], 'user_token');
+                $table->unique(['account_id', 'account_token'], 'account_id_token');
+                $table->unique(['user_id', 'user_token'], 'user_id_token');
             });
         }
     }
@@ -46,16 +48,16 @@ class ChangeSessionTokensTable extends Migration
     {
         if (Schema::hasColumn('session_tokens', 'user_token')) {
             Schema::table('session_tokens', function (Blueprint $table) {
-                $table->dropUnique('account_token');
-                $table->dropUnique('user_token');
-            });
+                $table->dropUnique('account_id_token');
+                $table->dropUnique('user_id_token');
 
-            Schema::table('session_tokens', function (Blueprint $table) {
                 $table->dropColumn('version');
                 $table->dropColumn('app_id');
                 $table->dropColumn('user_token');
 
                 $table->renameColumn('account_token', 'token');
+
+                $table->unique(['account_id', 'token'], 'account_token');
             });
         }
     }
