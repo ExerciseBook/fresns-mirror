@@ -186,6 +186,7 @@ class CacheHelper
     /**
      * forget fresns model.
      *
+     * fresns_model_key_{$appId}
      * fresns_model_account_{$aid}
      * fresns_model_user_{$uidOrUsername}
      * fresns_model_group_{$gid}
@@ -429,8 +430,8 @@ class CacheHelper
     // fresns_seo_comment_{$id}
 
     // fresns_code_messages_{$unikey}_{$langTag}
-    // fresns_api_key_{$appId}
-    // fresns_api_token_{$platformId}_{$aid}_{$uid}
+    // fresns_token_account_{$accountId}_{$token}
+    // fresns_token_user_{$userId}_{$token}
     // fresns_api_stickers_{$langTag}
     // fresns_plugin_url_{$unikey}
 }
