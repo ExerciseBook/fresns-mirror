@@ -26,7 +26,7 @@ class VerifyUserTokenDTO extends DTO
             'appId' => ['string', 'required'],
             'aid' => ['string', 'required'],
             'aidToken' => ['string', 'required'],
-            'uid' => ['string', 'required'],
+            'uid' => ['integer', 'required'],
             'uidToken' => ['string', 'required'],
         ];
     }
