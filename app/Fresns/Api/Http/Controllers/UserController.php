@@ -438,6 +438,9 @@ class UserController extends Controller
 
         // login
         $wordBody = [
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'appId' => $this->appId(),
             'aid' => $request->header('aid'),
             'aidToken' => $request->header('aidToken'),
             'uid' => $authUser->uid,
@@ -456,9 +459,9 @@ class UserController extends Controller
 
         // create token
         $createTokenWordBody = [
-            'platformId' => $request->header('platformId'),
-            'version' => $request->header('version'),
-            'appId' => $request->header('appId'),
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'appId' => $this->appId(),
             'aid' => $fresnsResponse->getData('aid'),
             'aidToken' => $fresnsResponse->getData('aidToken'),
             'uid' => $fresnsResponse->getData('uid'),
