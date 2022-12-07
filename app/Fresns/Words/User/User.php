@@ -223,7 +223,7 @@ class User
         $condition = [
             'platform_id' => $dtoWordBody->platformId,
             'version' => $dtoWordBody->version,
-            'appId' => $dtoWordBody->appId,
+            'app_id' => $dtoWordBody->appId,
             'account_id' => $accountId,
             'account_token' => $dtoWordBody->aidToken,
             'user_id' => $userId,

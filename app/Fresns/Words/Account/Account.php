@@ -229,7 +229,7 @@ class Account
         $condition = [
             'platform_id' => $dtoWordBody->platformId,
             'version' => $dtoWordBody->version,
-            'appId' => $dtoWordBody->appId,
+            'app_id' => $dtoWordBody->appId,
             'account_id' => $accountId,
             'account_token' => $token,
             'expired_at' => $expiredDateTime,
