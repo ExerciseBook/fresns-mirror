@@ -171,11 +171,12 @@ class AccountController extends Controller
         // create token
         $createTokenWordBody = [
             'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'appId' => $this->appId(),
             'aid' => $response['account']['data']['aid'],
-            'uid' => $response['user']['data']['uid'],
             'expiredTime' => null,
         ];
-        $fresnsTokenResponse = \FresnsCmdWord::plugin('Fresns')->createSessionToken($createTokenWordBody);
+        $fresnsTokenResponse = \FresnsCmdWord::plugin('Fresns')->createAccountToken($createTokenWordBody);
 
         if ($fresnsTokenResponse->isErrorResponse()) {
             return $fresnsTokenResponse->errorResponse();
@@ -194,7 +195,7 @@ class AccountController extends Controller
             'objectName' => \request()->path(),
             'objectAction' => 'Login after account registration',
             'objectResult' => SessionLog::STATE_SUCCESS,
-            'objectOrderId' => $fresnsTokenResponse->getData('tokenId'),
+            'objectOrderId' => $fresnsTokenResponse->getData('aidTokenId'),
             'deviceInfo' => $this->deviceInfo(),
             'deviceToken' => $dtoRequest->deviceToken,
             'moreJson' => null,
@@ -329,16 +330,17 @@ class AccountController extends Controller
         // create token
         $createTokenWordBody = [
             'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'appId' => $this->appId(),
             'aid' => $aid,
-            'uid' => null,
             'expiredTime' => null,
         ];
-        $fresnsTokenResponse = \FresnsCmdWord::plugin('Fresns')->createSessionToken($createTokenWordBody);
+        $fresnsTokenResponse = \FresnsCmdWord::plugin('Fresns')->createAccountToken($createTokenWordBody);
 
         if ($fresnsTokenResponse->isErrorResponse()) {
             // upload session log
             $sessionLog['aid'] = $aid;
-            $sessionLog['objectAction'] = 'createSessionToken';
+            $sessionLog['objectAction'] = 'createAccountToken';
             $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
             \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
@@ -347,7 +349,7 @@ class AccountController extends Controller
 
         // upload session log
         $sessionLog['aid'] = $aid;
-        $sessionLog['objectOrderId'] = $fresnsResponse->getData('tokenId');
+        $sessionLog['objectOrderId'] = $fresnsResponse->getData('aidTokenId');
         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         // get account token

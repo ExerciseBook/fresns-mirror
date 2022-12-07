@@ -439,6 +439,7 @@ class UserController extends Controller
         // login
         $wordBody = [
             'aid' => $request->header('aid'),
+            'aidToken' => $request->header('aidToken'),
             'uid' => $authUser->uid,
             'password' => $password,
         ];
@@ -456,15 +457,18 @@ class UserController extends Controller
         // create token
         $createTokenWordBody = [
             'platformId' => $request->header('platformId'),
+            'version' => $request->header('version'),
+            'appId' => $request->header('appId'),
             'aid' => $fresnsResponse->getData('aid'),
+            'aidToken' => $fresnsResponse->getData('aidToken'),
             'uid' => $fresnsResponse->getData('uid'),
             'expiredTime' => null,
         ];
-        $fresnsTokenResponse = \FresnsCmdWord::plugin('Fresns')->createSessionToken($createTokenWordBody);
+        $fresnsTokenResponse = \FresnsCmdWord::plugin('Fresns')->createUserToken($createTokenWordBody);
 
         if ($fresnsTokenResponse->isErrorResponse()) {
             // upload session log
-            $sessionLog['objectAction'] = 'createSessionToken';
+            $sessionLog['objectAction'] = 'createUserToken';
             $sessionLog['objectResult'] = SessionLog::STATE_FAILURE;
             \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
@@ -483,6 +487,7 @@ class UserController extends Controller
         $data['detail'] = $service->userData($authUser, $langTag, $timezone);
 
         // upload session log
+        $sessionLog['objectOrderId'] = $fresnsResponse->getData('uidTokenId');
         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         return $this->success($data);

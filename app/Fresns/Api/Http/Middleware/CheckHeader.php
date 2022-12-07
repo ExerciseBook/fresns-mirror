@@ -27,8 +27,9 @@ class CheckHeader
             'langTag' => \request()->header('langTag'),
             'timezone' => \request()->header('timezone'),
             'aid' => \request()->header('aid'),
+            'aidToken' => \request()->header('aidToken'),
             'uid' => \request()->header('uid'),
-            'token' => \request()->header('token'),
+            'uidToken' => \request()->header('uidToken'),
             'deviceInfo' => json_decode(\request()->header('deviceInfo'), true),
         ];
 

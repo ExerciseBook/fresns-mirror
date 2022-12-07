@@ -26,8 +26,9 @@ class HeadersDTO extends DTO
             'langTag' => ['string', 'nullable'],
             'timezone' => ['string', 'nullable'],
             'aid' => ['string', 'nullable'],
+            'aidToken' => ['string', 'nullable', 'required_with:aid'],
             'uid' => ['integer', 'nullable'],
-            'token' => ['string', 'nullable', 'required_with:aid'],
+            'uidToken' => ['string', 'nullable', 'required_with:uid'],
             'deviceInfo' => ['array', 'required'],
         ];
     }
