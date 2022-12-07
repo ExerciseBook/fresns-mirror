@@ -27,9 +27,9 @@ class Upgrade5Command extends Command
     // execute the console command
     public function handle()
     {
-        $this->updateData();
-        $this->call('migrate', ['--force' => true]);
         $this->composerInstall();
+        $this->call('migrate', ['--force' => true]);
+        $this->updateData();
 
         return Command::SUCCESS;
     }
