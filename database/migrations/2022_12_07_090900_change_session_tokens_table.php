@@ -27,7 +27,7 @@ class ChangeSessionTokensTable extends Migration
                 $table->char('app_id', 8)->nullable()->after('platform_id');
                 $table->char('user_token', 32)->nullable()->after('user_id');
 
-                Schema::rename('token', 'account_token');
+                Schema::renameColumn('token', 'account_token');
 
                 $table->unique(['account_id', 'account_token'], 'account_token');
                 $table->unique(['user_id', 'user_token'], 'user_token');
@@ -48,7 +48,7 @@ class ChangeSessionTokensTable extends Migration
                 $table->dropColumn('app_id');
                 $table->dropColumn('account_token');
 
-                Schema::rename('account_token', 'token');
+                Schema::renameColumn('account_token', 'token');
 
                 $table->dropUnique('account_token');
                 $table->dropUnique('user_token');
