@@ -479,7 +479,7 @@ class UserController extends Controller
         }
 
         // get user token
-        $token['token'] = $fresnsTokenResponse->getData('token');
+        $token['token'] = $fresnsTokenResponse->getData('uidToken');
         $token['expiredHours'] = $fresnsTokenResponse->getData('expiredHours');
         $token['expiredDays'] = $fresnsTokenResponse->getData('expiredDays');
         $token['expiredDateTime'] = $fresnsTokenResponse->getData('expiredDateTime');

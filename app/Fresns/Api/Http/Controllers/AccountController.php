@@ -207,7 +207,7 @@ class AccountController extends Controller
         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($tokenSessionLog);
 
         // get account token
-        $token['token'] = $fresnsTokenResponse->getData('token');
+        $token['token'] = $fresnsTokenResponse->getData('aidToken');
         $token['expiredHours'] = $fresnsTokenResponse->getData('expiredHours');
         $token['expiredDays'] = $fresnsTokenResponse->getData('expiredDays');
         $token['expiredDateTime'] = $fresnsTokenResponse->getData('expiredDateTime');
@@ -263,6 +263,9 @@ class AccountController extends Controller
 
         // login
         $wordBody = [
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'appId' => $this->appId(),
             'type' => $accountType,
             'account' => $dtoRequest->account,
             'countryCode' => $dtoRequest->countryCode,
@@ -361,7 +364,7 @@ class AccountController extends Controller
         \FresnsCmdWord::plugin('Fresns')->uploadSessionLog($sessionLog);
 
         // get account token
-        $token['token'] = $fresnsTokenResponse->getData('token');
+        $token['token'] = $fresnsTokenResponse->getData('aidToken');
         $token['expiredHours'] = $fresnsTokenResponse->getData('expiredHours');
         $token['expiredDays'] = $fresnsTokenResponse->getData('expiredDays');
         $token['expiredDateTime'] = $fresnsTokenResponse->getData('expiredDateTime');
