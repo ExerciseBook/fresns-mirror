@@ -28,7 +28,9 @@ class ChangeSessionTokensTable extends Migration
                 $table->char('user_token', 32)->nullable()->after('user_id');
 
                 $table->renameColumn('token', 'account_token');
+            });
 
+            Schema::table('session_tokens', function (Blueprint $table) {
                 $table->unique(['account_id', 'account_token'], 'account_token');
                 $table->unique(['user_id', 'user_token'], 'user_token');
             });
@@ -44,14 +46,16 @@ class ChangeSessionTokensTable extends Migration
     {
         if (Schema::hasColumn('session_tokens', 'user_token')) {
             Schema::table('session_tokens', function (Blueprint $table) {
-                $table->dropColumn('version');
-                $table->dropColumn('app_id');
-                $table->dropColumn('account_token');
-
-                $table->renameColumn('account_token', 'token');
-
                 $table->dropUnique('account_token');
                 $table->dropUnique('user_token');
+            });
+
+            Schema::table('session_tokens', function (Blueprint $table) {
+                $table->dropColumn('version');
+                $table->dropColumn('app_id');
+                $table->dropColumn('user_token');
+
+                $table->renameColumn('account_token', 'token');
             });
         }
     }
