@@ -26,6 +26,7 @@ class Account extends Authenticatable
 
     protected $dates = [
         'last_login_at',
+        'verify_at',
         'wait_delete_at',
     ];
 
