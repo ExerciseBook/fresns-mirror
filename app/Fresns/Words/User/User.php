@@ -43,10 +43,12 @@ class User
     {
         $dtoWordBody = new AddUserDTO($wordBody);
 
-        $verifyAccountToken = \FresnsCmdWord::plugin()->verifyAccountToken($wordBody);
+        if ($dtoWordBody->aidToken) {
+            $verifyAccountToken = \FresnsCmdWord::plugin()->verifyAccountToken($wordBody);
 
-        if ($verifyAccountToken->isErrorResponse()) {
-            return $verifyAccountToken->errorResponse();
+            if ($verifyAccountToken->isErrorResponse()) {
+                return $verifyAccountToken->errorResponse();
+            }
         }
 
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());

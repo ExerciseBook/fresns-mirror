@@ -146,7 +146,11 @@ class AccountController extends Controller
 
         // add user
         $addUserWordBody = [
+            'platformId' => $this->platformId(),
+            'version' => $this->version(),
+            'appId' => $this->appId(),
             'aid' => null,
+            'aidToken' => null,
             'nickname' => $dtoRequest->nickname,
             'username' => null,
             'password' => null,
@@ -302,7 +306,11 @@ class AccountController extends Controller
 
             // add user
             $addUserWordBody = [
+                'platformId' => $this->platformId(),
+                'version' => $this->version(),
+                'appId' => $this->appId(),
                 'aid' => null,
+                'aidToken' => null,
                 'nickname' => \Str::random(8),
                 'username' => null,
                 'password' => null,
