@@ -274,7 +274,7 @@ class Account
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
         // Cache::tags(['fresnsSystems'])
-        $accountToken = Cache::remember($cacheKey, $cacheTime, function () use ($accountId, $aidToken, $appId) {
+        $accountToken = Cache::remember($cacheKey, $cacheTime, function () use ($appId, $accountId, $aidToken) {
             return SessionToken::where('app_id', $appId)
                 ->where('account_id', $accountId)
                 ->where('account_token', $aidToken)

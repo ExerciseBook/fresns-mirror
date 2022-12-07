@@ -35,7 +35,6 @@ class CreateSessionTokensTable extends Migration
             $table->timestamp('updated_at')->nullable();
             $table->softDeletes();
 
-            $table->unique(['account_id', 'account_token'], 'account_id_token');
             $table->unique(['user_id', 'user_token'], 'user_id_token');
         });
     }

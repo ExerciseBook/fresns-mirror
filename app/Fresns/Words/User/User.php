@@ -263,17 +263,18 @@ class User
 
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
+        $appId = $dtoWordBody->appId;
         $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
         $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($dtoWordBody->uid);
         $uidToken = $dtoWordBody->uidToken;
-        $appId = $dtoWordBody->appId;
 
         $cacheKey = "fresns_token_user_{$userId}_{$uidToken}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
         // Cache::tags(['fresnsSystems'])
-        $userToken = Cache::remember($cacheKey, $cacheTime, function () use ($userId, $uidToken, $appId) {
+        $userToken = Cache::remember($cacheKey, $cacheTime, function () use ($appId, $accountId, $userId, $uidToken) {
             return SessionToken::where('app_id', $appId)
+                ->where('account_id', $accountId)
                 ->where('user_id', $userId)
                 ->where('user_token', $uidToken)
                 ->first();
