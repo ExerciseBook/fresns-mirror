@@ -18,7 +18,11 @@ class AddUserDTO extends DTO
     public function rules(): array
     {
         return [
-            'aid' => ['string', 'required', 'exists:App\Models\Account,aid'],
+            'platformId' => ['integer', 'required', 'between:1,13'],
+            'version' => ['string', 'required'],
+            'appId' => ['string', 'required'],
+            'aid' => ['string', 'required'],
+            'aidToken' => ['string', 'required'],
             'nickname' => ['string', 'required'],
             'username' => ['string', 'nullable', 'alpha_dash', 'unique:App\Models\User,username'],
             'password' => ['string', 'nullable'],

@@ -42,6 +42,13 @@ class User
     public function addUser($wordBody)
     {
         $dtoWordBody = new AddUserDTO($wordBody);
+
+        $verifyAccountToken = \FresnsCmdWord::plugin()->verifyAccountToken($wordBody);
+
+        if ($verifyAccountToken->isErrorResponse()) {
+            return $verifyAccountToken->errorResponse();
+        }
+
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $account = Account::where('aid', $dtoWordBody->aid)->first();
@@ -79,6 +86,7 @@ class User
 
         return $this->success([
             'aid' => $account->aid,
+            'aidToken' => $dtoWordBody->aidToken,
             'uid' => $userModel->uid,
             'username' => $userModel->username,
             'nickname' => $userModel->nickname,
@@ -94,12 +102,19 @@ class User
     public function verifyUser($wordBody)
     {
         $dtoWordBody = new VerifyUserDTO($wordBody);
+
+        $verifyAccountToken = \FresnsCmdWord::plugin()->verifyAccountToken($wordBody);
+
+        if ($verifyAccountToken->isErrorResponse()) {
+            return $verifyAccountToken->errorResponse();
+        }
+
         $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
 
+        $accountId = PrimaryHelper::fresnsAccountIdByAid($dtoWordBody->aid);
         $user = UserModel::where('uid', $dtoWordBody->uid)->first();
-        $aid = $user->account->aid;
 
-        if (empty($user) || $dtoWordBody->aid != $aid) {
+        if (empty($user) || $user?->account_id != $accountId) {
             return $this->failure(
                 35201,
                 ConfigUtility::getCodeMessage(35201, 'Fresns', $langTag)
@@ -131,7 +146,8 @@ class User
             }
         }
 
-        $data['aid'] = $user->account->aid;
+        $data['aid'] = $dtoWordBody->aid;
+        $data['aidToken'] = $dtoWordBody->aidToken;
         $data['uid'] = $user->uid;
 
         return $this->success($data);

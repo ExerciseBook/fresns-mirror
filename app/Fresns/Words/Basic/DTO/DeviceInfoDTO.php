@@ -21,6 +21,7 @@ class DeviceInfoDTO extends DTO
     public function rules(): array
     {
         return [
+            'agent' => ['string', 'nullable'],
             'type' => ['string', 'nullable'],
             'mac' => ['mac_address', 'nullable'],
             'brand' => ['string', 'nullable'],
