@@ -788,17 +788,17 @@ class AccountController extends Controller
     {
         $authAccount = $this->account();
         $authUser = $this->user();
-        $token = \request()->header('token');
+        $aidToken = \request()->header('aidToken');
 
         if (empty($authAccount)) {
             throw new ApiException(31502);
         }
 
-        if (empty($token)) {
+        if (empty($aidToken)) {
             throw new ApiException(31505);
         }
 
-        SessionToken::where('account_id', $authAccount->id)->where('token', $token)->delete();
+        SessionToken::where('account_id', $authAccount->id)->where('account_token', $aidToken)->delete();
 
         CacheHelper::forgetFresnsAccount($authAccount->aid);
         CacheHelper::forgetFresnsUser($authUser?->uid);
