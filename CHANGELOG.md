@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.0.0-beta.5 (2022-12-08)
+
+### Added
+- API: 验证 headers deviceInfo 是否格式匹配
+- API: 评论列表，当所属帖子已删除，则不跳过
+
+### Fixes
+- API: 帖子和评论详情页内容缓存错误
+- API: 回复评论时层级错误
+- API: 删除帖子和评论时，计数没有回滚
+
+### Changed
+- API: 角色发表时间间隔限制单位，由`分钟`修改为`秒`
+- API: headers 参数中 `token` 拆分成 `aidToken` 和 `uidToken`
+- 框架: laravel/framework 升级到 v9.43.0
+
+
 ## 2.0.0-beta.4 (2022-12-01)
 
 ### Added
