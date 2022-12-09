@@ -563,7 +563,7 @@ class AccountController extends Controller
             'code' => $dtoRequest->verifyCode,
             'is_enable' => 1,
         ];
-        $verifyInfo = VerifyCode::where($term)->where('expired_at', '>', date('Y-m-d H:i:s'))->first();
+        $verifyInfo = VerifyCode::where($term)->where('expired_at', '>', now())->first();
 
         if (! $verifyInfo) {
             throw new ApiException(33203);
@@ -645,7 +645,7 @@ class AccountController extends Controller
                 'account' => $dtoRequest->editEmail,
                 'countryCode' => null,
                 'verifyCode' => $dtoRequest->newVerifyCode,
-                'templateId' => VerifyCode::TEMPLATE_EDIT,
+                'templateId' => VerifyCode::TEMPLATE_CHANGE,
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
 
@@ -669,7 +669,7 @@ class AccountController extends Controller
                 'account' => $dtoRequest->editPhone,
                 'countryCode' => $dtoRequest->editCountryCode,
                 'verifyCode' => $dtoRequest->newVerifyCode,
-                'templateId' => VerifyCode::TEMPLATE_EDIT,
+                'templateId' => VerifyCode::TEMPLATE_CHANGE,
             ];
             $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
 
