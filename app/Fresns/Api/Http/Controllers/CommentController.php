@@ -188,12 +188,16 @@ class CommentController extends Controller
             });
         }
 
+        if ($dtoRequest->allDigest) {
+            $commentQuery->whereIn('digest_state', [2, 3]);
+        } else {
+            $commentQuery->when($dtoRequest->digestState, function ($query, $value) {
+                $query->where('digest_state', $value);
+            });
+        }
+
         $commentQuery->when($dtoRequest->sticky, function ($query, $value) {
             $query->where('is_sticky', $value);
-        });
-
-        $commentQuery->when($dtoRequest->digestState, function ($query, $value) {
-            $query->where('digest_state', $value);
         });
 
         $commentQuery->when($dtoRequest->createDateGt, function ($query, $value) {

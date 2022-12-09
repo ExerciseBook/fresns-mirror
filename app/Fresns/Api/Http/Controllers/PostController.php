@@ -157,9 +157,13 @@ class PostController extends Controller
             });
         }
 
-        $postQuery->when($dtoRequest->digestState, function ($query, $value) {
-            $query->where('digest_state', $value);
-        });
+        if ($dtoRequest->allDigest) {
+            $postQuery->whereIn('digest_state', [2, 3]);
+        } else {
+            $postQuery->when($dtoRequest->digestState, function ($query, $value) {
+                $query->where('digest_state', $value);
+            });
+        }
 
         $postQuery->when($dtoRequest->stickyState, function ($query, $value) {
             $query->where('sticky_state', $value);
