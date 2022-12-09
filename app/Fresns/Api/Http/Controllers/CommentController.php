@@ -244,12 +244,12 @@ class CommentController extends Controller
             $query->where('comment_count', '<=', $value);
         });
 
-        if ($dtoRequest->contentType && $dtoRequest->contentType != 'all') {
+        if ($dtoRequest->contentType && $dtoRequest->contentType != 'All') {
             $contentType = $dtoRequest->contentType;
 
             $fileTypeNumber = FileHelper::fresnsFileTypeNumber($contentType);
 
-            if ($contentType == 'text') {
+            if ($contentType == 'Text') {
                 $commentQuery->doesntHave('fileUsages')->doesntHave('extendUsages');
             } elseif ($fileTypeNumber) {
                 $commentQuery->whereHas('fileUsages', function ($query) use ($fileTypeNumber) {

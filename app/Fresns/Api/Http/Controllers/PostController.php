@@ -213,12 +213,12 @@ class PostController extends Controller
             $query->where('comment_count', '<=', $value);
         });
 
-        if ($dtoRequest->contentType && $dtoRequest->contentType != 'all') {
+        if ($dtoRequest->contentType && $dtoRequest->contentType != 'All') {
             $contentType = $dtoRequest->contentType;
 
             $fileTypeNumber = FileHelper::fresnsFileTypeNumber($contentType);
 
-            if ($contentType == 'text') {
+            if ($contentType == 'Text') {
                 $postQuery->doesntHave('fileUsages')->doesntHave('extendUsages');
             } elseif ($fileTypeNumber) {
                 $postQuery->whereHas('fileUsages', function ($query) use ($fileTypeNumber) {
