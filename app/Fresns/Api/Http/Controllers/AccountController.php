@@ -579,31 +579,23 @@ class AccountController extends Controller
         $authAccount = $this->account();
 
         // check code
-        if ($dtoRequest->verifyCode) {
-            if ($dtoRequest->codeType == 'email') {
-                $codeWordBody = [
-                    'type' => 1,
-                    'account' => $authAccount->email,
-                    'countryCode' => null,
-                    'verifyCode' => $dtoRequest->verifyCode,
-                    'templateId' => VerifyCode::TEMPLATE_EDIT,
-                ];
-            } else {
-                $codeWordBody = [
-                    'type' => 2,
-                    'account' => $authAccount->pure_phone,
-                    'countryCode' => $authAccount->country_code,
-                    'verifyCode' => $dtoRequest->verifyCode,
-                    'templateId' => VerifyCode::TEMPLATE_EDIT,
-                ];
-            }
-
-            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
-
-            if ($fresnsResp->isErrorResponse()) {
-                return $fresnsResp->getOrigin();
-            }
-        }
+        $codeWordBody = match ($dtoRequest->codeType) {
+            'email' => [
+                'type' => 1,
+                'account' => $authAccount->email,
+                'countryCode' => null,
+                'verifyCode' => $dtoRequest->verifyCode,
+                'templateId' => VerifyCode::TEMPLATE_CHANGE,
+            ],
+            'sms' => [
+                'type' => 2,
+                'account' => $authAccount->pure_phone,
+                'countryCode' => $authAccount->country_code,
+                'verifyCode' => $dtoRequest->verifyCode,
+                'templateId' => VerifyCode::TEMPLATE_CHANGE,
+            ],
+            default => null,
+        };
 
         // session log
         $sessionLog = [
@@ -640,14 +632,22 @@ class AccountController extends Controller
                 throw new ApiException(34205);
             }
 
-            $codeWordBody = [
+            if ($dtoRequest->verifyCode) {
+                $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+
+                if ($fresnsResp->isErrorResponse()) {
+                    return $fresnsResp->getOrigin();
+                }
+            }
+
+            $newCodeWordBody = [
                 'type' => 1,
                 'account' => $dtoRequest->editEmail,
                 'countryCode' => null,
                 'verifyCode' => $dtoRequest->newVerifyCode,
-                'templateId' => VerifyCode::TEMPLATE_CHANGE,
+                'templateId' => $authAccount->email ? VerifyCode::TEMPLATE_EDIT : VerifyCode::TEMPLATE_CHANGE,
             ];
-            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($newCodeWordBody);
 
             if ($fresnsResp->isErrorResponse()) {
                 return $fresnsResp->getOrigin();
@@ -664,14 +664,22 @@ class AccountController extends Controller
                 throw new ApiException(33202);
             }
 
-            $codeWordBody = [
+            if ($dtoRequest->verifyCode) {
+                $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+
+                if ($fresnsResp->isErrorResponse()) {
+                    return $fresnsResp->getOrigin();
+                }
+            }
+
+            $newCodeWordBody = [
                 'type' => 2,
                 'account' => $dtoRequest->editPhone,
                 'countryCode' => $dtoRequest->editCountryCode,
                 'verifyCode' => $dtoRequest->newVerifyCode,
-                'templateId' => VerifyCode::TEMPLATE_CHANGE,
+                'templateId' => $authAccount->phone ? VerifyCode::TEMPLATE_EDIT : VerifyCode::TEMPLATE_CHANGE,
             ];
-            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+            $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($newCodeWordBody);
 
             if ($fresnsResp->isErrorResponse()) {
                 return $fresnsResp->getOrigin();
@@ -698,6 +706,16 @@ class AccountController extends Controller
 
             if ($dtoRequest->editPassword != $dtoRequest->editPasswordConfirm) {
                 throw new ApiException(34104);
+            }
+
+            if ($dtoRequest->verifyCode) {
+                $codeWordBody['templateId'] = VerifyCode::TEMPLATE_RESET_LOGIN_PASSWORD;
+
+                $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+
+                if ($fresnsResp->isErrorResponse()) {
+                    return $fresnsResp->getOrigin();
+                }
             }
 
             if ($dtoRequest->password) {
@@ -738,6 +756,16 @@ class AccountController extends Controller
             $wallet = AccountWallet::where('account_id', $authAccount->id)->first();
             if (empty($wallet)) {
                 throw new ApiException(34501);
+            }
+
+            if ($dtoRequest->verifyCode) {
+                $codeWordBody['templateId'] = VerifyCode::TEMPLATE_RESET_WALLET_PASSWORD;
+
+                $fresnsResp = \FresnsCmdWord::plugin('Fresns')->checkCode($codeWordBody);
+
+                if ($fresnsResp->isErrorResponse()) {
+                    return $fresnsResp->getOrigin();
+                }
             }
 
             if ($dtoRequest->walletPassword) {
