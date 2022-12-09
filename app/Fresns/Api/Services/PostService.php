@@ -264,6 +264,8 @@ class PostService
         $postData['createTimeFormat'] = DateHelper::fresnsFormatTime($postData['createTimeFormat'], $langTag);
         $postData['editTime'] = DateHelper::fresnsFormatDateTime($postData['editTime'], $timezone, $langTag);
         $postData['editTimeFormat'] = DateHelper::fresnsFormatTime($postData['editTimeFormat'], $langTag);
+        $postData['lastCommentTime'] = DateHelper::fresnsFormatDateTime($postData['lastCommentTime'], $timezone, $langTag);
+        $postData['lastCommentTimeFormat'] = DateHelper::fresnsFormatTime($postData['lastCommentTimeFormat'], $langTag);
 
         $postData['topComment'] = CommentService::handleCommentDate($postData['topComment'], $timezone, $langTag);
 
