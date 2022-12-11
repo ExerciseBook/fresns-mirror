@@ -13,7 +13,7 @@ use App\Models\Language;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
-class Upgrade5Command extends Command
+class Upgrade6Command extends Command
 {
     protected $signature = 'fresns:upgrade-6';
 
