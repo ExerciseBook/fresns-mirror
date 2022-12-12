@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.0.0-beta.6 (2022-12-12)
+
+### Added
+- API: 发表评论后，更新帖子最后评论时间
+- API: 帖子和评论列表接口，新增 `allDigest` 和 `following` 参数
+- Helper: 根据文件名获取文件类型编号，不区分大小写
+
+### Fixes
+- API: 退出登录错误
+- API: 验证码模板 ID 不匹配问题
+- API: 内容类型筛选大小写匹配
+- Panel: 检测版本为空时报错
+
+### Changed
+- API: 内容类型命名采用复数 `/api/v2/global/{type}/content-types`
+- 框架: fresns/plugin-manager 升级到 v2.3.0
+
+
 ## 2.0.0-beta.5 (2022-12-08)
 
 ### Added
