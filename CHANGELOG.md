@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.0.0-beta.7 (2022-12-13)
+
+### Added
+- API: 评论信息增加 `latestCommentTime` 子级评论时间参数
+
+### Fixes
+- API: 评论发表成功后，帖子 `latest_comment_at` 时间字段错误
+- Data: cookies 语言标签未更改成功
+- Panel: 站点网址保存失败
+
+### Changed
+- API: 账号和用户凭证验证时忽略 App ID
+- Data: 重置初始语言包
+
+
 ## 2.0.0-beta.6 (2022-12-12)
 
 ### Added
