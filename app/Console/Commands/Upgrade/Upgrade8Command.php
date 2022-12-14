@@ -12,7 +12,7 @@ use App\Models\PostAppend;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
-class Upgrade6Command extends Command
+class Upgrade8Command extends Command
 {
     protected $signature = 'fresns:upgrade-8';
 
