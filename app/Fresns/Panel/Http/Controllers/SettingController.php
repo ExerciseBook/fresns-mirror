@@ -73,7 +73,9 @@ class SettingController extends Controller
     // caches page
     public function caches()
     {
-        return view('FsView::dashboard.caches');
+        $pluginUpgradeCount = Plugin::where('is_upgrade', 1)->count();
+
+        return view('FsView::dashboard.caches', compact('pluginUpgradeCount'));
     }
 
     // cacheAllClear
