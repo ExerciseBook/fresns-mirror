@@ -52,6 +52,7 @@ class ExtendGroupController extends Controller
         $pluginUsage->usage_type = PluginUsage::TYPE_GROUP;
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
+        $pluginUsage->is_group_admin = $request->is_group_admin;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rating = $request->rating;
@@ -118,6 +119,7 @@ class ExtendGroupController extends Controller
         }
         $pluginUsage->name = $request->names[$this->defaultLanguage] ?? (current(array_filter($request->names)) ?: '');
         $pluginUsage->plugin_unikey = $request->plugin_unikey;
+        $pluginUsage->is_group_admin = $request->is_group_admin;
         $pluginUsage->parameter = $request->parameter;
         $pluginUsage->is_enable = $request->is_enable;
         $pluginUsage->rating = $request->rating;
