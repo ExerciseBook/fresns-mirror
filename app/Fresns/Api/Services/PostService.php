@@ -170,7 +170,7 @@ class PostService
         $data = array_merge($postData, $contentHandle);
 
         $postData = self::handlePostCount($post, $data);
-        $postData = self::handlePostDate($postData, $timezone, $langTag);
+        $postData = self::handlePostDate($post, $postData, $timezone, $langTag);
 
         return $postData;
     }
@@ -251,7 +251,7 @@ class PostService
     }
 
     // handle post data date
-    public static function handlePostDate(?array $postData, string $timezone, string $langTag)
+    public static function handlePostDate(?Post $post, ?array $postData, string $timezone, string $langTag)
     {
         if (empty($postData)) {
             return $postData;
@@ -261,8 +261,8 @@ class PostService
         $postData['createTimeFormat'] = DateHelper::fresnsFormatTime($postData['createTimeFormat'], $langTag);
         $postData['editTime'] = DateHelper::fresnsFormatDateTime($postData['editTime'], $timezone, $langTag);
         $postData['editTimeFormat'] = DateHelper::fresnsFormatTime($postData['editTimeFormat'], $langTag);
-        $postData['latestCommentTime'] = DateHelper::fresnsFormatDateTime($postData['latestCommentTime'], $timezone, $langTag);
-        $postData['latestCommentTimeFormat'] = DateHelper::fresnsFormatTime($postData['latestCommentTimeFormat'], $langTag);
+        $postData['latestCommentTime'] = DateHelper::fresnsFormatDateTime($post->latest_comment_at, $timezone, $langTag);
+        $postData['latestCommentTimeFormat'] = DateHelper::fresnsFormatTime($post->latest_comment_at, $langTag);
 
         $postData['topComment'] = CommentService::handleCommentDate($postData['topComment'], $timezone, $langTag);
 
