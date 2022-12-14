@@ -203,17 +203,17 @@ class PostService
             return $postData;
         }
 
+        $postData['isAllow'] = true;
+
         $checkPostAllow = PermissionUtility::checkPostAllow($post->id, $authUserId);
 
         if (empty($authUserId) || ! $checkPostAllow) {
-            $allowProportion = intval($postData['allowProportion'] / 100);
+            $allowProportion = $postData['allowProportion'] / 100;
             $allowLength = intval($postData['contentLength'] * $allowProportion);
 
             $postData['isAllow'] = false;
             $postData['content'] = Str::limit($postData['content'], $allowLength);
         }
-
-        $postData['isAllow'] = true;
 
         return $postData;
     }
