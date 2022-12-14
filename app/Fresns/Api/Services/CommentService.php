@@ -223,7 +223,7 @@ class CommentService
             return $commentData;
         });
 
-        $authUid = PrimaryHelper::fresnsModelById('user', $authUserId)->uid;
+        $authUid = PrimaryHelper::fresnsModelById('user', $authUserId)?->uid;
 
         if (! $commentData['isCommentPublic'] && $commentData['post']['creator']['uid'] != $authUid) {
             return $commentData['content'] = null;
