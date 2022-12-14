@@ -21,7 +21,7 @@ class ChangePostAppendsTable extends Migration
     {
         if (Schema::hasColumn('post_appends', 'is_allow')) {
             Schema::table('post_appends', function (Blueprint $table) {
-                $table->unsignedTinyInteger('is_allow')->default(1)->change();
+                $table->unsignedSmallInteger('is_allow')->default(1)->change();
             });
         }
     }
@@ -35,7 +35,7 @@ class ChangePostAppendsTable extends Migration
     {
         if (Schema::hasColumn('post_appends', 'is_allow')) {
             Schema::table('post_appends', function (Blueprint $table) {
-                $table->unsignedTinyInteger('is_allow')->default(0)->change();
+                $table->unsignedSmallInteger('is_allow')->default(0)->change();
             });
         }
     }
