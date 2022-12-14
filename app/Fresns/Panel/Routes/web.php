@@ -95,9 +95,12 @@ Route::middleware(['panelAuth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'show'])->name('dashboard');
     Route::get('composer/diagnose', [DashboardController::class, 'composerDiagnose'])->name('composer.diagnose');
     Route::get('composer/config', [DashboardController::class, 'composerConfigInfo'])->name('composer.config');
-    Route::any('cache/clear', [DashboardController::class, 'cacheClear'])->name('cache.clear');
     // dashboard-events
     Route::get('events', [DashboardController::class, 'eventList'])->name('events.index');
+    // dashboard-caches
+    Route::get('caches', [SettingController::class, 'caches'])->name('caches.index');
+    Route::any('cache/all/clear', [SettingController::class, 'cacheAllClear'])->name('cache.all.clear');
+    Route::post('cache/select/clear', [SettingController::class, 'cacheSelectClear'])->name('cache.select.clear');
     // dashboard-upgrades
     Route::get('upgrades', [UpgradeController::class, 'show'])->name('upgrades');
     Route::patch('upgrade/check', [UpgradeController::class, 'checkFresnsVersion'])->name('upgrade.check');

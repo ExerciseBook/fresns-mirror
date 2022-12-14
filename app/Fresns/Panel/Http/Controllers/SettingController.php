@@ -9,9 +9,11 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Fresns\Panel\Http\Requests\UpdateConfigRequest;
+use App\Helpers\CacheHelper;
 use App\Models\Config;
 use App\Models\Plugin;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
@@ -64,6 +66,27 @@ class SettingController extends Controller
             $pathConfig->item_value = $path;
             $pathConfig->save();
         }
+
+        return $this->updateSuccess();
+    }
+
+    // caches page
+    public function caches()
+    {
+        return view('FsView::dashboard.caches');
+    }
+
+    // cacheAllClear
+    public function cacheAllClear()
+    {
+        CacheHelper::clearAllCache();
+
+        return $this->updateSuccess();
+    }
+
+    // cacheSelectClear
+    public function cacheSelectClear(Request $request)
+    {
 
         return $this->updateSuccess();
     }

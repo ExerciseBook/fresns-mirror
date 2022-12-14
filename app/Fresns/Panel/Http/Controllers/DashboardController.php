@@ -9,7 +9,6 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Helpers\AppHelper;
-use App\Helpers\CacheHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\InteractionHelper;
 use App\Models\Account;
@@ -18,7 +17,6 @@ use App\Models\Plugin;
 use App\Models\SessionKey;
 use App\Utilities\AppUtility;
 use App\Utilities\CommandUtility;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
@@ -78,16 +76,7 @@ class DashboardController extends Controller
         return $configInfo;
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function cacheClear(): RedirectResponse
-    {
-        CacheHelper::clearAllCache();
-
-        return back()->with('success', 'ok');
-    }
-
+    // events
     public function eventList()
     {
         $pluginUpgradeCount = Plugin::where('is_upgrade', 1)->count();

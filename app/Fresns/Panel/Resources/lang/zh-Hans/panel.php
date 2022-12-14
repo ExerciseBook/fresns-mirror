@@ -40,6 +40,7 @@ return [
     'sidebar_events' => '事件',
     'sidebar_events_tab_subscribe' => '订阅事件',
     'sidebar_events_tab_crontab' => '定时任务',
+    'sidebar_caches' => '缓存',
     'sidebar_upgrades' => '更新',
     'sidebar_settings' => '设置',
     'sidebar_languages' => '语言设置',
@@ -100,6 +101,7 @@ return [
     // Sidebar intro
     'sidebar_admins_intro' => '有权登录控制面板的用户',
     'sidebar_events_intro' => '查看系统中定时任务和订阅事件',
+    'sidebar_caches_intro' => '更新缓存的时候，可能让服务器负载升高，请尽量避开访问高峰时间',
     'sidebar_upgrades_intro' => '最后检查于',
     'sidebar_settings_intro' => '配置完成后请清空缓存，或者等待 10 分钟后新缓存生效。',
     'sidebar_languages_intro' => '多语言需要先在这里配置语言选项，然后才能在对应配置项时录入多语言内容。',
@@ -189,7 +191,8 @@ return [
     'button_add_key' => '新增密钥',
     'button_reset_secret' => '重置 Secret',
     'button_use_theme' => '关联主题',
-    'button_clear_cache' => '清空缓存',
+    'button_clear_cache' => '清理缓存',
+    'button_clear_all_cache' => '清空全部缓存',
     // Page table
     'table_order' => '显示顺序',
     'table_position' => '显示位置',
