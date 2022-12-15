@@ -252,7 +252,7 @@ class InteractionService
             'user' => PluginUsage::SCENE_USER,
         };
 
-        // Cache::tags(['fresnsApiExtensions'])
+        // Cache::tags(['fresnsManages'])
         $manages = Cache::remember($cacheKey, $cacheTime, function () use ($scene, $authUserId, $langTag) {
             return ExtendUtility::getPluginUsages(PluginUsage::TYPE_MANAGE, null, $scene, $authUserId, $langTag);
         });

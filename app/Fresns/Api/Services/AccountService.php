@@ -56,13 +56,13 @@ class AccountService
 
     public function accountData(Account $account, string $langTag, string $timezone)
     {
-        $cacheKey = "fresns_api_account_wallet_extends_{$account->aid}_{$langTag}";
+        $cacheKey = "fresns_wallet_extends_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
-        // Cache::tags(['fresnsApiData'])
-        $items = Cache::remember($cacheKey, $cacheTime, function () use ($account, $langTag) {
-            $item['walletRecharges'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_WALLET_RECHARGE, null, null, $account->id, $langTag);
-            $item['walletWithdraws'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_WALLET_WITHDRAW, null, null, $account->id, $langTag);
+        // Cache::tags(['fresnsConfigs'])
+        $items = Cache::remember($cacheKey, $cacheTime, function () use ($langTag) {
+            $item['walletRecharges'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_WALLET_RECHARGE, null, null, null, $langTag);
+            $item['walletWithdraws'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_WALLET_WITHDRAW, null, null, null, $langTag);
 
             return $item;
         });

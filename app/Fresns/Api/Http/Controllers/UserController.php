@@ -507,7 +507,7 @@ class UserController extends Controller
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_IMAGE);
 
         $pluginsCacheKey = "fresns_api_user_panel_extends_{$authUid}_{$langTag}";
-        // Cache::tags(['fresnsApiData'])
+        // Cache::tags(['fresnsExtensions'])
         $extends = Cache::remember($pluginsCacheKey, $cacheTime, function () use ($authUserId, $langTag) {
             $extend['features'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_FEATURE, null, null, $authUserId, $langTag);
             $extend['profiles'] = ExtendUtility::getPluginUsages(PluginUsage::TYPE_PROFILE, null, null, $authUserId, $langTag);
@@ -516,7 +516,7 @@ class UserController extends Controller
         });
 
         $conversationsCacheKey = "fresns_api_user_panel_conversations_{$authUid}";
-        // Cache::tags(['fresnsApiData'])
+        // Cache::tags(['fresnsUserInteraction'])
         $conversations = Cache::remember($conversationsCacheKey, $cacheTime, function () use ($authUserId) {
             $aConversations = Conversation::where('a_user_id', $authUserId)->where('a_is_display', 1);
             $bConversations = Conversation::where('b_user_id', $authUserId)->where('b_is_display', 1);
@@ -531,7 +531,7 @@ class UserController extends Controller
         });
 
         $notificationsCacheKey = "fresns_api_user_panel_notifications_{$authUid}";
-        // Cache::tags(['fresnsApiData'])
+        // Cache::tags(['fresnsUserInteraction'])
         $notifications = Cache::remember($notificationsCacheKey, $cacheTime, function () use ($authUserId) {
             $unreadNotifications['systems'] = Notification::where('type', 1)->where('user_id', $authUserId)->where('is_read', 0)->count();
             $unreadNotifications['recommends'] = Notification::where('type', 2)->where('user_id', $authUserId)->where('is_read', 0)->count();
@@ -546,7 +546,7 @@ class UserController extends Controller
         });
 
         $draftsCacheKey = "fresns_api_user_panel_drafts_{$authUid}";
-        // Cache::tags(['fresnsApiData'])
+        // Cache::tags(['fresnsUserInteraction'])
         $drafts = Cache::remember($draftsCacheKey, $cacheTime, function () use ($authUserId) {
             $draftCount['posts'] = PostLog::where('user_id', $authUserId)->whereIn('state', [1, 4])->count();
             $draftCount['comments'] = CommentLog::where('user_id', $authUserId)->whereIn('state', [1, 4])->count();
@@ -554,17 +554,11 @@ class UserController extends Controller
             return $draftCount;
         });
 
-        $publishCacheKey = "fresns_api_user_panel_publish_{$authUid}_{$langTag}_{$timezone}";
-        // Cache::tags(['fresnsApiData'])
-        $publishConfig = Cache::remember($publishCacheKey, $cacheTime, function () use ($authUserId, $langTag, $timezone) {
-            $publish['post'] = ConfigUtility::getPublishConfigByType($authUserId, 'post', $langTag, $timezone);
-            $publish['comment'] = ConfigUtility::getPublishConfigByType($authUserId, 'comment', $langTag, $timezone);
+        $publishConfig['post'] = ConfigUtility::getPublishConfigByType($authUserId, 'post', $langTag, $timezone);
+        $publishConfig['comment'] = ConfigUtility::getPublishConfigByType($authUserId, 'comment', $langTag, $timezone);
 
-            return $publish;
-        });
-
-        $fileAcceptCacheKey = 'fresns_api_user_panel_file_accept';
-        // Cache::tags(['fresnsApiData'])
+        $fileAcceptCacheKey = 'fresns_file_accept';
+        // Cache::tags(['fresnsConfigs'])
         $fileAcceptConfig = Cache::remember($fileAcceptCacheKey, $cacheTime, function () {
             $fileAccept['images'] = FileHelper::fresnsFileAcceptByType(File::TYPE_IMAGE);
             $fileAccept['videos'] = FileHelper::fresnsFileAcceptByType(File::TYPE_VIDEO);

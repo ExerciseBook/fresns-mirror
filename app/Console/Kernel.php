@@ -24,10 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Cache::tags(['fresnsSystems'])
-        $cronArr = Cache::remember('fresns_crontab_items', now()->addDays(), function () {
-            return ConfigHelper::fresnsConfigByItemKey('crontab_items');
-        });
+        $cronArr = ConfigHelper::fresnsConfigByItemKey('crontab_items') ?? [];
 
         foreach ($cronArr as $cron) {
             $pluginStatus = Plugin::where('unikey', $cron['unikey'])->isEnable()->first();

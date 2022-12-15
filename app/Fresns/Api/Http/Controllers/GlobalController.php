@@ -144,7 +144,7 @@ class GlobalController extends Controller
         $cacheKey = "fresns_api_archives_{$dtoRequest->type}_{$unikey}_{$langTag}";
         $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        // Cache::tags(['fresnsApiData'])
+        // Cache::tags(['fresnsExtensions'])
         $archives = Cache::remember($cacheKey, $cacheTime, function () use ($usageType, $unikey) {
             $archiveData = Archive::type($usageType)
                 ->when($unikey, function ($query, $value) {
