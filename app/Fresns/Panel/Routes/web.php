@@ -63,7 +63,7 @@ try {
 
         $loginPath = $loginConfig->item_value ?? 'admin';
 
-        CacheHelper::put($loginPath, 'fresns_panel_login_path', 'fresnsSystems', now()->addMinutes(10));
+        CacheHelper::put($loginPath, 'fresns_panel_login_path', 'fresnsSystems', 10, now()->addMinutes(10));
     }
 } catch (\Exception $e) {
     $loginPath = 'admin';

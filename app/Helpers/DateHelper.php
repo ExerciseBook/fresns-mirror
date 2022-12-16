@@ -82,7 +82,7 @@ class DateHelper
         if (empty($databaseDateTime)) {
             $databaseDateTime = DB::selectOne('select now() as now')->now;
 
-            CacheHelper::put($databaseDateTime, 'fresns_database_datetime', 'fresnsSystems', now()->addMinutes(3));
+            CacheHelper::put($databaseDateTime, 'fresns_database_datetime', 'fresnsSystems', 1, now()->addMinutes(3));
         }
 
         return $databaseDateTime;

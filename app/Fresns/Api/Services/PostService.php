@@ -14,6 +14,7 @@ use App\Helpers\DateHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\InteractionHelper;
 use App\Helpers\PluginHelper;
+use App\Helpers\PrimaryHelper;
 use App\Models\ArchiveUsage;
 use App\Models\Comment;
 use App\Models\ExtendUsage;
@@ -40,17 +41,17 @@ class PostService
         }
 
         $cacheKey = "fresns_api_post_{$post->pid}_{$langTag}";
-        $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_ALL);
 
-        // Cache::tags(['fresnsApiData'])
-        $postData = Cache::remember($cacheKey, $cacheTime, function () use ($post, $langTag) {
+        $postData = Cache::get($cacheKey);
+
+        if (empty($postData)) {
             $postInfo = $post->getPostInfo($langTag);
             $postInfo['title'] = ContentUtility::replaceBlockWords('content', $postInfo['title']);
 
             // extend list
             $item['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST, $post->id, $langTag);
             $item['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_POST, $post->id, $langTag);
-            $item['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_POST, $post->id, $langTag);
+            $item['extends'] = ExtendUtility::getContentExtends(ExtendUsage::TYPE_POST, $post->id, $langTag);
 
             // file
             $item['files'] = FileHelper::fresnsFileInfoListByTableColumn('posts', 'id', $post->id);
@@ -95,8 +96,11 @@ class PostService
             $item['commentHidden'] = false;
             $item['followType'] = null;
 
-            return array_merge($postInfo, $item);
-        });
+            $postData = array_merge($postInfo, $item);
+
+            $cacheTime = CacheHelper::fresnsCacheTimeByFileType(File::TYPE_ALL);
+            CacheHelper::put($postData, $cacheKey, ['fresnsPosts', 'fresnsPostData'], null, $cacheTime);
+        }
 
         $contentHandle = self::handlePostContent($post, $postData, $type, $authUserId);
 
@@ -153,7 +157,8 @@ class PostService
         }
 
         // manages
-        $postData['manages'] = InteractionService::getManageExtends('post', $langTag, $authUserId);
+        $groupId = PrimaryHelper::fresnsGroupIdByGid($postData['group']['gid']);
+        $postData['manages'] = InteractionService::getManageExtends('post', $langTag, $authUserId, $groupId);
 
         // interaction
         $interactionConfig = InteractionHelper::fresnsPostInteraction($langTag);
@@ -179,10 +184,10 @@ class PostService
     public static function handlePostContent(Post $post, array $postData, string $type, ?int $authUserId = null)
     {
         $cacheKey = "fresns_api_post_{$postData['pid']}_{$type}_content";
-        $cacheTime = CacheHelper::fresnsCacheTimeByFileType();
 
-        // Cache::tags(['fresnsApiData'])
-        $postData = Cache::remember($cacheKey, $cacheTime, function () use ($post, $postData, $type) {
+        $postData = Cache::get($cacheKey);
+
+        if (empty($postData)) {
             $postContent = ContentUtility::replaceBlockWords('content', $postData['content']);
 
             $briefLength = ConfigHelper::fresnsConfigByItemKey('post_editor_brief_length');
@@ -196,8 +201,9 @@ class PostService
 
             $postData['content'] = $postContent;
 
-            return $postData;
-        });
+            $postData = $postData;
+            CacheHelper::put($postData, $cacheKey, ['fresnsPosts', 'fresnsPostData']);
+        }
 
         if ($postData['isAllow']) {
             return $postData;
@@ -274,29 +280,29 @@ class PostService
     // get top comment
     public static function getTopComment(int $postId, string $langTag)
     {
-        $cacheKey = "fresns_api_post_{$postId}_top_comment_{$langTag}";
-        $nullCacheKey = CacheHelper::getNullCacheKey($cacheKey);
+        $cacheKey = "fresns_api_post_{$postId}_top_comments_{$langTag}";
 
-        // null cache count
-        if (Cache::get($nullCacheKey) > CacheHelper::NULL_CACHE_COUNT) {
+        // is known to be empty
+        $isKnownEmpty = CacheHelper::isKnownEmpty($cacheKey);
+        if ($isKnownEmpty) {
             return [];
         }
 
-        $comment = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($postId, $langTag) {
-            $comment = Comment::where('post_id', $postId)->where('top_parent_id', 0)->orderByDesc('like_count')->first();
+        // get cache
+        $commentList = Cache::get($cacheKey);
+
+        if (empty($commentList)) {
+            $commentModel = Comment::where('post_id', $postId)->where('top_parent_id', 0)->orderByDesc('like_count')->first();
             $service = new CommentService();
 
             $timezone = ConfigHelper::fresnsConfigDefaultTimezone();
 
-            return $service->commentData($comment, 'list', $langTag, $timezone);
-        });
+            $commentList = $service->commentData($commentModel, 'list', $langTag, $timezone, false);
 
-        // null cache count
-        if (empty($comment)) {
-            CacheHelper::nullCacheCount($cacheKey, $nullCacheKey, 10);
+            CacheHelper::put($commentList, $cacheKey, ['fresnsPosts', 'fresnsPostData', 'fresnsComments', 'fresnsCommentData'], 10, now()->addMinutes(10));
         }
 
-        return $comment;
+        return $commentList;
     }
 
     // post log data
@@ -349,7 +355,7 @@ class PostService
 
         $info['archives'] = ExtendUtility::getArchives(ArchiveUsage::TYPE_POST_LOG, $log->id, $langTag);
         $info['operations'] = ExtendUtility::getOperations(OperationUsage::TYPE_POST_LOG, $log->id, $langTag);
-        $info['extends'] = ExtendUtility::getExtends(ExtendUsage::TYPE_POST_LOG, $log->id, $langTag);
+        $info['extends'] = ExtendUtility::getContentExtends(ExtendUsage::TYPE_POST_LOG, $log->id, $langTag);
         $info['files'] = FileHelper::fresnsFileInfoListByTableColumn('post_logs', 'id', $log->id);
 
         $fileCount['images'] = collect($info['files']['images'])->count();

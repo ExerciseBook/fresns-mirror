@@ -271,6 +271,15 @@ class Account
 
         $cacheKey = "fresns_token_account_{$accountId}_{$aidToken}";
 
+        // is known to be empty
+        $isKnownEmpty = CacheHelper::isKnownEmpty($cacheKey);
+        if ($isKnownEmpty) {
+            return $this->failure(
+                31505,
+                ConfigUtility::getCodeMessage(31505, 'Fresns', $langTag)
+            );
+        }
+
         $accountToken = Cache::get($cacheKey);
 
         if (empty($accountToken)) {
@@ -286,7 +295,7 @@ class Account
                 );
             }
 
-            CacheHelper::put($accountToken, $cacheKey, 'fresnsUserConfigs');
+            CacheHelper::put($accountToken, $cacheKey, ['fresnsAccounts', 'fresnsAccountTokens']);
         }
 
         if ($accountToken->platform_id != $dtoWordBody->platformId) {

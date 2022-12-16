@@ -30,7 +30,7 @@ class AppUtility
 
             $currentVersion = json_decode($fresnsJson, true);
 
-            CacheHelper::put($currentVersion, 'fresns_current_version', 'fresnsSystems', now()->addDays());
+            CacheHelper::put($currentVersion, 'fresns_current_version', 'fresnsSystems', 1, now()->addDays());
         }
 
         return $currentVersion;
@@ -57,7 +57,7 @@ class AppUtility
                 $newVersion = AppHelper::getAppVersion();
             }
 
-            CacheHelper::put($newVersion, 'fresns_new_version', 'fresnsSystems', now()->addHours(6));
+            CacheHelper::put($newVersion, 'fresns_new_version', 'fresnsSystems', 10, now()->addHours(6));
         }
 
         return $newVersion;
