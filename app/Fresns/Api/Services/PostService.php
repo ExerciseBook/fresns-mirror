@@ -157,7 +157,7 @@ class PostService
         }
 
         // manages
-        $groupId = PrimaryHelper::fresnsGroupIdByGid($postData['group']['gid']);
+        $groupId = PrimaryHelper::fresnsGroupIdByGid($postData['group']['gid'] ?? null);
         $postData['manages'] = InteractionService::getManageExtends('post', $langTag, $authUserId, $groupId);
 
         // interaction

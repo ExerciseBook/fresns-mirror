@@ -187,7 +187,7 @@ class CommentService
         }
 
         // manages
-        $groupId = PrimaryHelper::fresnsGroupIdByGid($commentData['post']['group']['gid']);
+        $groupId = PrimaryHelper::fresnsGroupIdByGid($commentData['post']['group']['gid'] ?? null);
         $commentData['manages'] = InteractionService::getManageExtends('comment', $langTag, $authUserId, $groupId);
 
         // interaction
