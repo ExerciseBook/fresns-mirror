@@ -331,6 +331,17 @@ class CacheHelper
     }
 
     /**
+     * no tag.
+     */
+    // fresns_cache_is_support_tags
+    // fresns_crontab_items
+    // install_{$step}
+    // autoUpgradeStep
+    // autoUpgradeTip
+    // physicalUpgradeStep
+    // physicalUpgradeTip
+
+    /**
      * tag: fresnsSystems.
      */
     // fresns_current_version
@@ -341,7 +352,6 @@ class CacheHelper
     // fresns_panel_login_path
     // fresns_panel_translation_{$locale}
     // fresns_model_key_{$appId}
-    // fresns_crontab_items
 
     /**
      * tag: fresnsConfigs.
@@ -382,9 +392,9 @@ class CacheHelper
     /**
      * tag: fresnsAccounts.
      */
-    // fresns_token_account_{$accountId}_{$token}                   // +tag: fresnsAccountTokens
-    // fresns_model_account_{$aid}                                  // +tag: fresnsAccountModels
-    // fresns_api_account_{$aid}_{$langTag}                         // +tag: fresnsAccountData
+    // fresns_token_account_{$accountId}_{$token}   // +tag: fresnsAccountTokens
+    // fresns_model_account_{$aid}                  // +tag: fresnsAccountModels
+    // fresns_api_account_{$aid}_{$langTag}         // +tag: fresnsAccountData
 
     /**
      * tag: fresnsUsers.
@@ -418,17 +428,17 @@ class CacheHelper
     // fresns_seo_group_{$groupId}                                  // +tag: fresnsGroupData
     // fresns_guest_all_groups                                      // +tag: fresnsGroupData
     // fresns_user_{$userId}_all_groups                             // +tag: fresnsGroupData, fresnsUsers, fresnsUserData
-    // fresns_follow_{$type}_model_{$id}_by_{$authUserId}           // +tag: fresnsGroupData, fresnsUsers, fresnsUserInteractions, fresnsFollowData
+    // fresns_follow_group_model_{$id}_by_{$userId}                 // +tag: fresnsGroupData, fresnsUsers, fresnsUserInteractions, fresnsFollowData
     // fresns_api_group_{$gid}_{$langTag}                           // +tag: fresnsGroupData
     // fresns_api_group_{$gid}_extensions_{$userId}_{$langTag}      // +tag: fresnsGroupExtensions
 
     /**
      * tag: fresnsHashtags.
      */
-    // fresns_model_hashtag_{$hid}                  // +tag: fresnsHashtagModels
-    // fresns_model_hashtag_{$hashtagId}            // +tag: fresnsHashtagModels
-    // fresns_seo_hashtag_{$id}                     // +tag: fresnsHashtagData
-    // fresns_api_hashtag_{$hid}_{$langTag}         // +tag: fresnsHashtagData
+    // fresns_model_hashtag_{$hid}              // +tag: fresnsHashtagModels
+    // fresns_model_hashtag_{$hashtagId}        // +tag: fresnsHashtagModels
+    // fresns_seo_hashtag_{$id}                 // +tag: fresnsHashtagData
+    // fresns_api_hashtag_{$hid}_{$langTag}     // +tag: fresnsHashtagData
 
     /**
      * tag: fresnsPosts.
@@ -445,13 +455,13 @@ class CacheHelper
     /**
      * tag: fresnsComments.
      */
-    // fresns_model_comment_{$cid}                                  // +tag: fresnsCommentModels
-    // fresns_model_comment_{$commentId}                            // +tag: fresnsCommentModels
-    // fresns_seo_comment_{$id}                                     // +tag: fresnsCommentData
-    // fresns_api_comment_{$cid}_{$langTag}                         // +tag: fresnsCommentData
-    // fresns_api_comment_{$cid}_list_content                       // +tag: fresnsCommentData
-    // fresns_api_comment_{$cid}_detail_content                     // +tag: fresnsCommentData
-    // fresns_api_comment_{$commentId}_sub_comments_{$langTag}      // +tag: fresnsCommentData
+    // fresns_model_comment_{$cid}                              // +tag: fresnsCommentModels
+    // fresns_model_comment_{$commentId}                        // +tag: fresnsCommentModels
+    // fresns_seo_comment_{$id}                                 // +tag: fresnsCommentData
+    // fresns_api_comment_{$cid}_{$langTag}                     // +tag: fresnsCommentData
+    // fresns_api_comment_{$cid}_list_content                   // +tag: fresnsCommentData
+    // fresns_api_comment_{$cid}_detail_content                 // +tag: fresnsCommentData
+    // fresns_api_comment_{$commentId}_sub_comments_{$langTag}  // +tag: fresnsCommentData
 
     /**
      * tag: fresnsModels.
