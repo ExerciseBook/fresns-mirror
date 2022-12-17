@@ -162,12 +162,22 @@ class CacheHelper
     public static function addCacheItems(string $cacheKey, string|array $cacheTags)
     {
         $cacheTags = (array) $cacheTags;
+        $tags = [
+            'fresnsSystems',
+            'fresnsConfigs',
+            'fresnsExtensions',
+            'fresnsPluginUsageLanguages',
+            'fresnsRoleLanguages',
+            'fresnsStickerLanguages',
+        ];
 
         foreach ($cacheTags as $tag) {
-            if ($tag == 'fresnsSystems' || $tag == 'fresnsConfigs' || $tag == 'fresnsLanguages') {
+            if (in_array($tag, $tags)) {
                 $cacheItems = Cache::get($tag) ?? [];
 
-                $newCacheItems = Arr::add($cacheItems, $cacheKey, $tag);
+                $datetime = date('Y-m-d H:i:s');
+
+                $newCacheItems = Arr::add($cacheItems, $cacheKey, $datetime);
 
                 Cache::forever($tag, $newCacheItems);
             }
@@ -365,9 +375,9 @@ class CacheHelper
     // fresns_config_file_accept
     // fresns_config_file_url_expire
     // fresns_plugin_url_{$unikey}
-    // fresns_content_block_words // fresns_{$type}_block_words
-    // fresns_user_block_words // fresns_{$type}_block_words
-    // fresns_conversation_block_words // fresns_{$type}_block_words
+    // fresns_content_block_words       // fresns_{$type}_block_words
+    // fresns_user_block_words          // fresns_{$type}_block_words
+    // fresns_conversation_block_words  // fresns_{$type}_block_words
     // fresns_content_ban_words
     // fresns_content_review_words
     // fresns_user_ban_words
