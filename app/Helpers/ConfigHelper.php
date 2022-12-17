@@ -36,7 +36,7 @@ class ConfigHelper
         $defaultTimezone = Cache::get('fresns_default_timezone');
 
         if (empty($defaultTimezone)) {
-            $defaultConfig = Config::where('item_key', 'default_language')->first();
+            $defaultConfig = Config::where('item_key', 'default_timezone')->first();
 
             $defaultTimezone = $defaultConfig?->item_value;
 
