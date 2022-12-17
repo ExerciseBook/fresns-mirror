@@ -8,6 +8,7 @@
 
 namespace App\Console\Commands\Upgrade;
 
+use App\Models\Config;
 use App\Models\PostAppend;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
@@ -73,6 +74,76 @@ class Upgrade8Command extends Command
     // update data
     public function updateData(): bool
     {
+        // modify
+        $topCommentRequire = Config::where('item_key', 'top_comment_require')->first();
+        if ($topCommentRequire) {
+            $topCommentRequire->update([
+                'item_key' => 'preview_post_comment_require',
+                'item_value' => 10,
+                'is_api' => 0,
+            ]);
+        }
+        $commentPreview = Config::where('item_key', 'comment_preview')->first();
+        if ($commentPreview) {
+            $commentPreview->update([
+                'item_key' => 'preview_sub_comments',
+                'is_api' => 0,
+            ]);
+        }
+
+        // add new
+        $previewPostLikeUsers = Config::where('item_key', 'preview_post_like_users')->first();
+        if (empty($previewPostLikeUsers)) {
+            $newConfig = new Config;
+            $newConfig->item_key = 'preview_post_like_users';
+            $newConfig->item_value = '0';
+            $newConfig->item_type = 'number';
+            $newConfig->item_tag = 'interactions';
+            $newConfig->is_multilingual = 0;
+            $newConfig->is_custom = 0;
+            $newConfig->is_api = 0;
+            $newConfig->save();
+        }
+
+        $previewPostComments = Config::where('item_key', 'preview_post_comments')->first();
+        if (empty($previewPostComments)) {
+            $newConfig = new Config;
+            $newConfig->item_key = 'preview_post_comments';
+            $newConfig->item_value = '0';
+            $newConfig->item_type = 'number';
+            $newConfig->item_tag = 'interactions';
+            $newConfig->is_multilingual = 0;
+            $newConfig->is_custom = 0;
+            $newConfig->is_api = 0;
+            $newConfig->save();
+        }
+
+        $previewPostCommentSort = Config::where('item_key', 'preview_post_comment_sort')->first();
+        if (empty($previewPostCommentSort)) {
+            $newConfig = new Config;
+            $newConfig->item_key = 'preview_post_comment_sort';
+            $newConfig->item_value = 'like';
+            $newConfig->item_type = 'string';
+            $newConfig->item_tag = 'interactions';
+            $newConfig->is_multilingual = 0;
+            $newConfig->is_custom = 0;
+            $newConfig->is_api = 0;
+            $newConfig->save();
+        }
+
+        $previewSubCommentSort = Config::where('item_key', 'preview_sub_comment_sort')->first();
+        if (empty($previewSubCommentSort)) {
+            $newConfig = new Config;
+            $newConfig->item_key = 'preview_sub_comment_sort';
+            $newConfig->item_value = 'timeAsc';
+            $newConfig->item_type = 'string';
+            $newConfig->item_tag = 'interactions';
+            $newConfig->is_multilingual = 0;
+            $newConfig->is_custom = 0;
+            $newConfig->is_api = 0;
+            $newConfig->save();
+        }
+
         $postAppends = PostAppend::get();
         foreach ($postAppends as $append) {
             $isAllow = $append->is_allow ? 0 : 1;
