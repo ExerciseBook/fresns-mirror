@@ -86,14 +86,11 @@ class ConfigHelper
         $itemValue = Cache::get($cacheKey);
 
         if (empty($itemValue)) {
+            $itemValue = null;
+
             $itemData = Config::where('item_key', $itemKey)->first();
-
             if ($itemData) {
-                $itemValue = $itemData->item_value;
-            }
-
-            if ($itemData->is_multilingual == 1) {
-                $itemValue = LanguageHelper::fresnsLanguageByTableKey($itemData->item_key, $itemData->item_type, $langTag);
+                $itemValue = $itemData->is_multilingual ? LanguageHelper::fresnsLanguageByTableKey($itemData->item_key, $itemData->item_type, $langTag) : $itemData->item_value;
             }
 
             CacheHelper::put($itemValue, $cacheKey, 'fresnsConfigs');
