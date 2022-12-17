@@ -5,53 +5,127 @@
 @endsection
 
 @section('content')
-    <div class="row mb-4 border-bottom">
+    <!--header-->
+    <div class="row mb-4">
         <div class="col-lg-7">
             <h3>{{ __('FsLang::panel.sidebar_caches') }}</h3>
             <p class="text-secondary">{{ __('FsLang::panel.sidebar_caches_intro') }}</p>
         </div>
         <div class="col-lg-5">
             <div class="input-group mt-2 mb-4 justify-content-lg-end">
-                <a class="btn btn-outline-danger" href="{{ route('panel.cache.all.clear') }}"><i class="bi bi-trash3"></i> {{ __('FsLang::panel.button_clear_cache') }}</a>
+                <a class="btn btn-outline-danger" href="{{ route('panel.cache.all.clear') }}"><i class="bi bi-trash3"></i> {{ __('FsLang::panel.button_clear_all_cache') }}</a>
                 <a class="btn btn-outline-secondary" href="#" role="button">{{ __('FsLang::panel.button_support') }}</a>
             </div>
         </div>
+        <!--tab-list-->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button" role="tab" aria-controls="config" aria-selected="true">{{ __('FsLang::panel.sidebar_caches_tab_config') }}</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="false">{{ __('FsLang::panel.sidebar_caches_tab_data') }}</button>
+            </li>
+        </ul>
     </div>
-    <!--form-->
-    <form action="{{ route('panel.cache.select.clear') }}" method="post">
-        @csrf
 
-        <div class="mx-4 ps-lg-5">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="fresnsSystems" name="fresnsSystems" checked>
-                <label class="form-check-label" for="fresnsSystems">系统信息</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="fresnsConfigs" name="fresnsConfigs" checked>
-                <label class="form-check-label" for="fresnsConfigs">站点配置</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="fresnsLanguages" name="fresnsLanguages">
-                <label class="form-check-label" for="fresnsLanguages">多语言内容</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="fresnsModels" name="fresnsModels" disabled>
-                <label class="form-check-label" for="fresnsModels">数据模型</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="fresnsUserInteraction" name="fresnsUserInteraction" disabled>
-                <label class="form-check-label" for="fresnsUserInteraction">用户互动信息</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="fresnsApiData" name="fresnsApiData" disabled>
-                <label class="form-check-label" for="fresnsApiData">API 数据内容（用户、小组、话题、帖子、评论）</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="fresnsApiExtensions" name="fresnsApiExtensions" disabled>
-                <label class="form-check-label" for="fresnsApiExtensions">API 扩展内容</label>
-            </div>
+    <!--tab content-->
+    <div class="tab-content" id="cacheTabContent">
+        <!--config-->
+        <div class="tab-pane fade row show active" id="config" role="tabpanel" aria-labelledby="config-tab">
+            <form class="col-md-6" action="{{ route('panel.cache.select.clear') }}" method="post">
+                @csrf
+                <input type="hidden" name="type" value="config" />
 
-            <button type="submit" class="btn btn-primary">{{ __('FsLang::panel.button_clear_cache') }}</button>
+                <div class="ms-lg-5">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="fresnsSystems" name="fresnsSystems" checked>
+                        <label class="form-check-label" for="fresnsSystems">{{ __('FsLang::panel.cache_fresns_system') }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="fresnsConfigs" name="fresnsConfigs" checked>
+                        <label class="form-check-label" for="fresnsConfigs">{{ __('FsLang::panel.cache_fresns_config') }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="fresnsExtend" name="fresnsExtend">
+                        <label class="form-check-label" for="fresnsExtend">{{ __('FsLang::panel.cache_fresns_extend') }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="laravelView" name="laravelView">
+                        <label class="form-check-label" for="laravelView">{{ __('FsLang::panel.cache_laravel_view') }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="laravelRoute" name="laravelRoute">
+                        <label class="form-check-label" for="laravelRoute">{{ __('FsLang::panel.cache_laravel_route') }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="laraveEvent" name="laraveEvent">
+                        <label class="form-check-label" for="laraveEvent">{{ __('FsLang::panel.cache_laravel_event') }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="laraveSchedule" name="laraveSchedule">
+                        <label class="form-check-label" for="laraveSchedule">{{ __('FsLang::panel.cache_laravel_schedule') }}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="laravelConfig" name="laravelConfig">
+                        <label class="form-check-label" for="laravelConfig">{{ __('FsLang::panel.cache_laravel_config') }}</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-success mt-4">{{ __('FsLang::panel.button_clear_cache') }}</button>
+                </div>
+            </form>
         </div>
-    </form>
+
+        <!--data-->
+        <div class="tab-pane fade row" id="data" role="tabpanel" aria-labelledby="data-tab">
+            <form class="col-md-6" action="{{ route('panel.cache.select.clear') }}" method="post">
+                @csrf
+                <input type="hidden" name="type" value="data" />
+
+                <div class="ms-lg-5">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">{{ __('FsLang::panel.table_type') }}</span>
+                        <select class="form-select" id="cacheType" name="cacheType">
+                            <option value="user">{{ __('FsLang::panel.user') }}</option>
+                            <option value="group">{{ __('FsLang::panel.group') }}</option>
+                            <option value="hashtag">{{ __('FsLang::panel.hashtag') }}</option>
+                            <option value="post">{{ __('FsLang::panel.post') }}</option>
+                            <option value="comment">{{ __('FsLang::panel.comment') }}</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">ID/Fsid</span>
+                        <input type="text" class="form-control" id="cacheFsid" name="cacheFsid" required placeholder="id or fsid">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">{{ __('FsLang::panel.cache') }}</span>
+                        <div class="form-control">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="fresnsModel" name="fresnsModel" checked>
+                                <label class="form-check-label" for="fresnsModel">{{ __('FsLang::panel.cache_fresns_model') }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="fresnsInteraction" name="fresnsInteraction" checked>
+                                <label class="form-check-label" for="fresnsInteraction">{{ __('FsLang::panel.cache_fresns_interaction') }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="fresnsApiData" name="fresnsApiData" checked>
+                                <label class="form-check-label" for="fresnsApiData">{{ __('FsLang::panel.cache_fresns_api_data') }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="fresnsSeo" name="fresnsSeo">
+                                <label class="form-check-label" for="fresnsSeo">{{ __('FsLang::panel.cache_fresns_seo') }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="fresnsExtension" name="fresnsExtension">
+                                <label class="form-check-label" for="fresnsExtension">{{ __('FsLang::panel.cache_fresns_extension') }}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success mt-4">{{ __('FsLang::panel.button_clear_cache') }}</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
 @endsection

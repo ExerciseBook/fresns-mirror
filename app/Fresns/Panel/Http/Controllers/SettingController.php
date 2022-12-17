@@ -89,7 +89,27 @@ class SettingController extends Controller
     // cacheSelectClear
     public function cacheSelectClear(Request $request)
     {
+        switch ($request->type) {
+            case 'config':
+            break;
 
-        return $this->updateSuccess();
+            case 'model':
+            break;
+
+            case 'interaction':
+            break;
+
+            case 'manage':
+            break;
+
+            case 'apiData':
+            break;
+
+            default:
+                return back()->with('failure', __('FsLang::tips.requestFailure'));
+            break;
+        }
+
+        return $this->requestSuccess();
     }
 }
