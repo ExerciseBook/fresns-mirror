@@ -9,6 +9,7 @@
 namespace App\Fresns\Panel\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Helpers\CacheHelper;
 use App\Helpers\DateHelper;
 use App\Helpers\InteractionHelper;
 use App\Models\Account;
@@ -25,8 +26,9 @@ class DashboardController extends Controller
     {
         $overview = InteractionHelper::fresnsOverview();
 
-        // Cache::tags(['fresnsSystems'])
-        $news = Cache::remember('fresns_news', now()->addHours(3), function () {
+        $news = Cache::get('fresns_news');
+
+        if (empty($news)) {
             try {
                 $newUrl = AppUtility::getAppHost().'/news.json';
                 $client = new \GuzzleHttp\Client(['verify' => false]);
@@ -36,8 +38,8 @@ class DashboardController extends Controller
                 $news = [];
             }
 
-            return $news;
-        });
+            CacheHelper::put($news, 'fresns_news', 'fresnsSystems', 5, now()->addHours(3));
+        }
 
         $newsList = [];
         if ($news) {
