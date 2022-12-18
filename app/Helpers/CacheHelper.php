@@ -167,6 +167,7 @@ class CacheHelper
             'fresnsConfigs',
             'fresnsCodeMessages',
             'fresnsExtensions',
+            'fresnsConfigLanguages',
             'fresnsPluginUsageLanguages',
             'fresnsRoleLanguages',
             'fresnsStickerLanguages',
@@ -393,6 +394,7 @@ class CacheHelper
     /**
      * tag: fresnsLanguages
      * tag: fresnsUnknownLanguages
+     * tag: fresnsConfigLanguages
      * tag: fresnsPluginUsageLanguages
      * tag: fresnsRoleLanguages
      * tag: fresnsStickerLanguages
