@@ -326,6 +326,11 @@ class PostService
             CacheHelper::put($userList, $cacheKey, ['fresnsPosts', 'fresnsPostData', 'fresnsUsers', 'fresnsUserData'], 10, now()->addMinutes(10));
         }
 
+        $userCount = count($userList);
+        if ($userCount > 0 && $userCount < $post->like_count) {
+            CacheHelper::forgetFresnsMultilingual("fresns_api_post_{$post->id}_preview_like_users");
+        }
+
         return $userList;
     }
 
