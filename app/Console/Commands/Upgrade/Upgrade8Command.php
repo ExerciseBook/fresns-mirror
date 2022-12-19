@@ -146,10 +146,8 @@ class Upgrade8Command extends Command
 
         $postAppends = PostAppend::get();
         foreach ($postAppends as $append) {
-            $isAllow = $append->is_allow ? 0 : 1;
-
             $append->update([
-                'is_allow' => $isAllow,
+                'is_allow' => 1,
             ]);
         }
 
