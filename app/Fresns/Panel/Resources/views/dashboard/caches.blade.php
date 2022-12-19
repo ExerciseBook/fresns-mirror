@@ -90,7 +90,8 @@
                             <option value="hashtag">{{ __('FsLang::panel.hashtag') }}</option>
                             <option value="post">{{ __('FsLang::panel.post') }}</option>
                             <option value="comment">{{ __('FsLang::panel.comment') }}</option>
-                            <option value="file">{{ __('FsLang::panel.comment') }}</option>
+                            <option value="file">{{ __('FsLang::panel.file') }}</option>
+                            <option value="extend">{{ __('FsLang::panel.extend') }}</option>
                         </select>
                     </div>
                     <div class="input-group mb-3">
