@@ -3054,7 +3054,7 @@ class ConfigsTableSeeder extends Seeder
             233 => [
                 'id' => 234,
                 'item_key' => 'preview_sub_comment_sort',
-                'item_value' => 'timeAsc',
+                'item_value' => 'oldest',
                 'item_type' => 'string',
                 'item_tag' => 'interactions',
                 'is_multilingual' => 0,
