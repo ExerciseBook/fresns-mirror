@@ -38,36 +38,36 @@
 
                 <div class="ms-lg-5">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="fresnsSystems" name="fresnsSystems" checked>
-                        <label class="form-check-label" for="fresnsSystems">{{ __('FsLang::panel.cache_fresns_system') }}</label>
+                        <input class="form-check-input" type="checkbox" value="1" id="fresnsSystem" name="fresnsSystem" checked>
+                        <label class="form-check-label" for="fresnsSystem">{{ __('FsLang::panel.cache_fresns_system') }}</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="fresnsConfigs" name="fresnsConfigs" checked>
-                        <label class="form-check-label" for="fresnsConfigs">{{ __('FsLang::panel.cache_fresns_config') }}</label>
+                        <input class="form-check-input" type="checkbox" value="1" id="fresnsConfig" name="fresnsConfig" checked>
+                        <label class="form-check-label" for="fresnsConfig">{{ __('FsLang::panel.cache_fresns_config') }}</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="1" id="fresnsExtend" name="fresnsExtend">
                         <label class="form-check-label" for="fresnsExtend">{{ __('FsLang::panel.cache_fresns_extend') }}</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="laravelView" name="laravelView">
-                        <label class="form-check-label" for="laravelView">{{ __('FsLang::panel.cache_laravel_view') }}</label>
+                        <input class="form-check-input" type="checkbox" value="1" id="fresnsView" name="fresnsView">
+                        <label class="form-check-label" for="fresnsView">{{ __('FsLang::panel.cache_fresns_view') }}</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="laravelRoute" name="laravelRoute">
-                        <label class="form-check-label" for="laravelRoute">{{ __('FsLang::panel.cache_laravel_route') }}</label>
+                        <input class="form-check-input" type="checkbox" value="1" id="fresnsRoute" name="fresnsRoute">
+                        <label class="form-check-label" for="fresnsRoute">{{ __('FsLang::panel.cache_fresns_route') }}</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="laraveEvent" name="laraveEvent">
-                        <label class="form-check-label" for="laraveEvent">{{ __('FsLang::panel.cache_laravel_event') }}</label>
+                        <input class="form-check-input" type="checkbox" value="1" id="fresnsEvent" name="fresnsEvent">
+                        <label class="form-check-label" for="fresnsEvent">{{ __('FsLang::panel.cache_fresns_event') }}</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="laraveSchedule" name="laraveSchedule">
-                        <label class="form-check-label" for="laraveSchedule">{{ __('FsLang::panel.cache_laravel_schedule') }}</label>
+                        <input class="form-check-input" type="checkbox" value="1" id="fresnsSchedule" name="fresnsSchedule">
+                        <label class="form-check-label" for="fresnsSchedule">{{ __('FsLang::panel.cache_fresns_schedule') }}</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="laravelConfig" name="laravelConfig">
-                        <label class="form-check-label" for="laravelConfig">{{ __('FsLang::panel.cache_laravel_config') }}</label>
+                        <input class="form-check-input" type="checkbox" value="1" id="frameworkConfig" name="frameworkConfig">
+                        <label class="form-check-label" for="frameworkConfig">{{ __('FsLang::panel.cache_framework_config') }}</label>
                     </div>
 
                     <button type="submit" class="btn btn-success mt-4">{{ __('FsLang::panel.button_clear_cache') }}</button>
@@ -90,11 +90,12 @@
                             <option value="hashtag">{{ __('FsLang::panel.hashtag') }}</option>
                             <option value="post">{{ __('FsLang::panel.post') }}</option>
                             <option value="comment">{{ __('FsLang::panel.comment') }}</option>
+                            <option value="file">{{ __('FsLang::panel.comment') }}</option>
                         </select>
                     </div>
                     <div class="input-group mb-3">
-                        <span class="input-group-text">ID/Fsid</span>
-                        <input type="text" class="form-control" id="cacheFsid" name="cacheFsid" required placeholder="id or fsid">
+                        <span class="input-group-text">FsID</span>
+                        <input type="text" class="form-control" id="cacheFsid" name="cacheFsid" required placeholder="FsID">
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">{{ __('FsLang::panel.cache') }}</span>
