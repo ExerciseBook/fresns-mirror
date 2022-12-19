@@ -226,7 +226,7 @@ class CacheHelper
     {
         // system
         if ($cacheType == 'fresnsSystem') {
-            $keyArr = Cache::get('fresnsSystems');
+            $keyArr = Cache::get('fresnsSystems') ?? [];
             foreach ($keyArr as $key => $datetime) {
                 Cache::forget($key);
             }
@@ -236,37 +236,37 @@ class CacheHelper
 
         // config
         if ($cacheType == 'fresnsConfig') {
-            $configKeyArr = Cache::get('fresnsConfigs');
+            $configKeyArr = Cache::get('fresnsConfigs') ?? [];
             foreach ($configKeyArr as $key => $datetime) {
                 Cache::forget($key);
             }
             Cache::forget('fresnsConfigs');
 
-            $codeKeyArr = Cache::get('fresnsCodeMessages');
+            $codeKeyArr = Cache::get('fresnsCodeMessages') ?? [];
             foreach ($codeKeyArr as $key => $datetime) {
                 Cache::forget($key);
             }
             Cache::forget('fresnsCodeMessages');
 
-            $archiveKeyArr = Cache::get('fresnsArchives');
+            $archiveKeyArr = Cache::get('fresnsArchives') ?? [];
             foreach ($archiveKeyArr as $key => $datetime) {
                 Cache::forget($key);
             }
             Cache::forget('fresnsArchives');
 
-            $langKeyArr = Cache::get('fresnsConfigLanguages');
+            $langKeyArr = Cache::get('fresnsConfigLanguages') ?? [];
             foreach ($langKeyArr as $key => $datetime) {
                 Cache::forget($key);
             }
             Cache::forget('fresnsConfigLanguages');
 
-            $roleLangKeyArr = Cache::get('fresnsRoleLanguages');
+            $roleLangKeyArr = Cache::get('fresnsRoleLanguages') ?? [];
             foreach ($roleLangKeyArr as $key => $datetime) {
                 Cache::forget($key);
             }
             Cache::forget('fresnsRoleLanguages');
 
-            $stickerLangKeyArr = Cache::get('fresnsStickerLanguages');
+            $stickerLangKeyArr = Cache::get('fresnsStickerLanguages') ?? [];
             foreach ($stickerLangKeyArr as $key => $datetime) {
                 Cache::forget($key);
             }
@@ -287,7 +287,7 @@ class CacheHelper
 
         // extend
         if ($cacheType == 'fresnsExtend') {
-            $keyArr = Cache::get('fresnsExtensions');
+            $keyArr = Cache::get('fresnsExtensions') ?? [];
             foreach ($keyArr as $key => $datetime) {
                 Cache::forget($key);
             }
