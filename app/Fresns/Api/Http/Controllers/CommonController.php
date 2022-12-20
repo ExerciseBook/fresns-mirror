@@ -36,6 +36,7 @@ use App\Models\Plugin;
 use App\Models\PluginCallback;
 use App\Models\Post;
 use App\Models\User;
+use App\Utilities\ConfigUtility;
 use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
 use Illuminate\Http\Request;
@@ -375,6 +376,35 @@ class CommonController extends Controller
 
         if (! $servicePlugin) {
             throw new ApiException(32102);
+        }
+
+        // check publish file count
+        if ($dtoRequest->usageType == 7 || $dtoRequest->usageType == 8) {
+            $authUserId = $this->user()->id;
+            $publishType = match ($dtoRequest->usageType) {
+                7 => 'post',
+                8 => 'comment',
+            };
+
+            $editorConfig = ConfigUtility::getEditorConfigByType($authUserId, $publishType);
+
+            $uploadNumber = match ($dtoRequest->type) {
+                'image' => $editorConfig['image']['uploadNumber'],
+                'video' => $editorConfig['video']['uploadNumber'],
+                'audio' => $editorConfig['audio']['uploadNumber'],
+                'document' => $editorConfig['document']['uploadNumber'],
+            };
+
+            $fileCount = FileUsage::where('file_type', $fileType)
+                ->where('usage_type', $dtoRequest->usageType)
+                ->where('table_name', $dtoRequest->tableName)
+                ->where('table_column', $dtoRequest->tableColumn)
+                ->where('table_id', $dtoRequest->tableId)
+                ->count();
+
+            if ($fileCount >= $uploadNumber) {
+                throw new ApiException(36113);
+            }
         }
 
         switch ($dtoRequest->uploadMode) {
