@@ -223,7 +223,13 @@ class PostService
             CacheHelper::put($contentData, $cacheKey, ['fresnsPosts', 'fresnsPostData']);
         }
 
+        $contentFormat = \request()->header('contentFormat');
+
         if ($contentData['isAllow']) {
+            if ($contentFormat == 'html') {
+                $contentData['content'] = $post->is_markdown ? Str::markdown($contentData['content']) : nl2br($contentData['content']);
+            }
+
             return $contentData;
         }
 
@@ -238,7 +244,6 @@ class PostService
             $contentData['content'] = Str::limit($contentData['content'], $allowLength);
         }
 
-        $contentFormat = \request()->header('contentFormat');
         if ($contentFormat == 'html') {
             $contentData['content'] = $post->is_markdown ? Str::markdown($contentData['content']) : nl2br($contentData['content']);
         }
