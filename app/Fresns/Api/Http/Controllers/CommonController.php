@@ -379,20 +379,22 @@ class CommonController extends Controller
         }
 
         // check publish file count
-        if ($dtoRequest->usageType == 7 || $dtoRequest->usageType == 8) {
+        $publishType = match ((int) $dtoRequest->usageType) {
+            7 => 'post',
+            8 => 'comment',
+            default => null,
+        };
+
+        if ($publishType) {
             $authUserId = $this->user()->id;
-            $publishType = match ($dtoRequest->usageType) {
-                7 => 'post',
-                8 => 'comment',
-            };
 
             $editorConfig = ConfigUtility::getEditorConfigByType($authUserId, $publishType);
 
             $uploadNumber = match ($dtoRequest->type) {
-                'image' => $editorConfig['image']['uploadNumber'],
-                'video' => $editorConfig['video']['uploadNumber'],
-                'audio' => $editorConfig['audio']['uploadNumber'],
-                'document' => $editorConfig['document']['uploadNumber'],
+                'image' => $editorConfig['toolbar']['image']['uploadNumber'],
+                'video' => $editorConfig['toolbar']['video']['uploadNumber'],
+                'audio' => $editorConfig['toolbar']['audio']['uploadNumber'],
+                'document' => $editorConfig['toolbar']['document']['uploadNumber'],
             };
 
             $fileCount = FileUsage::where('file_type', $fileType)

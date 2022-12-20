@@ -145,6 +145,8 @@ class ConfigUtility
     // get editor config by type(post or comment)
     public static function getEditorConfigByType(int $userId, string $type, ?string $langTag = null): array
     {
+        $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
+
         $rolePerm = PermissionUtility::getUserMainRole($userId)['permissions'];
         $editorConfig = ConfigHelper::fresnsConfigByItemKeys([
             "{$type}_editor_image",
