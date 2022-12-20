@@ -245,6 +245,11 @@ class CommentService
             return $contentData['content'] = null;
         }
 
+        $contentFormat = \request()->header('contentFormat');
+        if ($contentFormat == 'html') {
+            $contentData['content'] = $comment->is_markdown ? Str::markdown($contentData['content']) : nl2br($contentData['content']);
+        }
+
         return $contentData;
     }
 
