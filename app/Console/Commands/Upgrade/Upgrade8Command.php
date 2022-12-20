@@ -8,6 +8,7 @@
 
 namespace App\Console\Commands\Upgrade;
 
+use App\Models\CodeMessage;
 use App\Models\Config;
 use App\Models\PostAppend;
 use Illuminate\Console\Command;
@@ -148,6 +149,20 @@ class Upgrade8Command extends Command
         foreach ($postAppends as $append) {
             $append->update([
                 'is_allow' => 1,
+            ]);
+        }
+
+        // code messages
+        $codeMessages = CodeMessage::where('plugin_unikey', 'Fresns')->where('code', 36113)->get();
+        foreach ($codeMessages as $code) {
+            $langContent = match ($code->lang_tag) {
+                'en' => 'File size or number of uploads that exceed the set limit.',
+                'zh-Hans' => '文件大小或者上传数量，超出设置的限制。',
+                'zh-Hant' => '文件大小或者上傳數量，超出設置的限制。',
+            };
+
+            $code->update([
+                'message' => $langContent,
             ]);
         }
 
