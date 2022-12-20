@@ -113,11 +113,11 @@ class ConfigUtility
         if (empty($codeMessages)) {
             $codeMessages = CodeMessage::where('plugin_unikey', $unikey)->where('lang_tag', $langTag)->get();
 
-            CacheHelper::put($codeMessages, $cacheKey, 'fresnsCodeMessages');
-
             if (empty($codeMessages)) {
-                return 'Unknown Error';
+                $codeMessages = CodeMessage::where('plugin_unikey', $unikey)->where('lang_tag', 'en')->get();
             }
+
+            CacheHelper::put($codeMessages, $cacheKey, 'fresnsCodeMessages');
         }
 
         $message = $codeMessages->where('code', $code)?->value('message');
