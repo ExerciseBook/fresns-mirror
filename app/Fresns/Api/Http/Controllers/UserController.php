@@ -870,7 +870,7 @@ class UserController extends Controller
                     $followCount = UserFollow::where('user_id', $authUserId)->where('follow_type', $markType)->count();
 
                     if ($rolePerm <= $followCount) {
-                        throw new ApiException(36116);
+                        throw new ApiException(36118);
                     }
                 }
 
@@ -890,7 +890,7 @@ class UserController extends Controller
                     $blockCount = UserBlock::where('user_id', $authUserId)->where('block_type', $markType)->count();
 
                     if ($rolePerm <= $blockCount) {
-                        throw new ApiException(36116);
+                        throw new ApiException(36118);
                     }
                 }
 

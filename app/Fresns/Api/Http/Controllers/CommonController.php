@@ -403,7 +403,7 @@ class CommonController extends Controller
                 ->count();
 
             if ($fileCount >= $uploadNumber) {
-                throw new ApiException(36113);
+                throw new ApiException(36115);
             }
         }
 
@@ -460,7 +460,7 @@ class CommonController extends Controller
         $roleDownloadCount = $mainRolePerms['download_file_count'] ?? 0;
         $userDownloadCount = FileDownload::where('user_id', $authUserId)->whereDate('created_at', now())->count();
         if ($roleDownloadCount < $userDownloadCount) {
-            throw new ApiException(36115);
+            throw new ApiException(36117);
         }
 
         // check file
