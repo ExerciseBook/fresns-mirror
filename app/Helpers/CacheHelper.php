@@ -226,7 +226,6 @@ class CacheHelper
 
         \Artisan::call('config:cache');
         \Artisan::call('view:cache');
-        \Artisan::call('route:cache');
         \Artisan::call('event:cache');
     }
 
