@@ -319,7 +319,6 @@ class CacheHelper
         // route
         if ($cacheType == 'fresnsRoute') {
             \Artisan::call('route:clear');
-            \Artisan::call('route:cache');
         }
 
         // event
