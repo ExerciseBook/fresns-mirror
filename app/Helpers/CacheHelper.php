@@ -158,6 +158,15 @@ class CacheHelper
 
             CacheHelper::addCacheItems($cacheKey, $cacheTags);
         }
+
+        $cacheTagList = Cache::get('fresns_cache_tags') ?? [];
+        foreach ($cacheTags as $tag) {
+            $datetime = date('Y-m-d H:i:s');
+
+            $newTagList = Arr::add($cacheTagList, $tag, $datetime);
+
+            Cache::forever('fresns_cache_tags', $newTagList);
+        }
     }
 
     // add cache items
@@ -217,6 +226,7 @@ class CacheHelper
 
         \Artisan::call('config:cache');
         \Artisan::call('view:cache');
+        \Artisan::call('route:cache');
         \Artisan::call('event:cache');
     }
 
@@ -310,6 +320,7 @@ class CacheHelper
         // route
         if ($cacheType == 'fresnsRoute') {
             \Artisan::call('route:clear');
+            \Artisan::call('route:cache');
         }
 
         // event
@@ -590,6 +601,7 @@ class CacheHelper
      * no tag.
      */
     // fresns_cache_is_support_tags
+    // fresns_cache_tags
     // fresns_crontab_items
     // install_{$step}
     // autoUpgradeStep
