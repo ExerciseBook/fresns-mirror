@@ -92,7 +92,7 @@ class PostService
             $editStatus['canDelete'] = (bool) $post->postAppend->can_delete;
             $editStatus['canEdit'] = PermissionUtility::checkContentIsCanEdit('post', $post->created_at, $post->sticky_state, $post->digest_state, $langTag, $timezone);
             $editStatus['isPluginEditor'] = (bool) $post->postAppend->is_plugin_editor;
-            $editStatus['editorUrl'] = ! empty($post->postAppend->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($post->postAppend->editor_unikey) : null;
+            $editStatus['editorUrl'] = PluginHelper::fresnsPluginUrlByUnikey($post->postAppend->editor_unikey);
             $item['editStatus'] = $editStatus;
 
             $item['commentHidden'] = false;
@@ -413,7 +413,7 @@ class PostService
         $info['pid'] = $post?->pid;
         $info['isPluginEditor'] = (bool) $log->is_plugin_editor;
         $info['editorUnikey'] = $log->editor_unikey;
-        $info['editorUrl'] = ! empty($log->editor_unikey) ? PluginHelper::fresnsPluginUrlByUnikey($log->editor_unikey) : null;
+        $info['editorUrl'] = PluginHelper::fresnsPluginUrlByUnikey($log->editor_unikey);
         $info['group'] = null;
         $info['title'] = $log->title;
         $info['content'] = $log->content;

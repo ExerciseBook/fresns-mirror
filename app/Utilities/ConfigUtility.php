@@ -191,10 +191,10 @@ class ConfigUtility
             'document_service',
         ]);
 
-        $imageUploadUrl = PluginHelper::fresnsPluginUrlByUnikey($editorConfig['image_service']) ?? null;
-        $videoUploadUrl = PluginHelper::fresnsPluginUrlByUnikey($editorConfig['video_service']) ?? null;
-        $audioUploadUrl = PluginHelper::fresnsPluginUrlByUnikey($editorConfig['audio_service']) ?? null;
-        $documentUploadUrl = PluginHelper::fresnsPluginUrlByUnikey($editorConfig['document_service']) ?? null;
+        $imageUploadUrl = PluginHelper::fresnsPluginUrlByUnikey($editorConfig['image_service']);
+        $videoUploadUrl = PluginHelper::fresnsPluginUrlByUnikey($editorConfig['video_service']);
+        $audioUploadUrl = PluginHelper::fresnsPluginUrlByUnikey($editorConfig['audio_service']);
+        $documentUploadUrl = PluginHelper::fresnsPluginUrlByUnikey($editorConfig['document_service']);
 
         // images
         $image['status'] = $editorConfig["{$type}_editor_image"] ? $rolePerm["{$type}_editor_image"] : false;
