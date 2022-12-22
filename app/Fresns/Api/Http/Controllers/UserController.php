@@ -513,7 +513,7 @@ class UserController extends Controller
             'multi_user_roles',
         ]);
 
-        $multiUserStatus = false;
+        $multiUserStatus = $multiUserConfigs['multi_user_status'];
         if ($multiUserConfigs['multi_user_status'] && $multiUserConfigs['multi_user_roles']) {
             $authUserRoles = PermissionUtility::getUserRoles($authUserId, $langTag);
             $authUserRoleIdArr = array_column($authUserRoles, 'rid');
