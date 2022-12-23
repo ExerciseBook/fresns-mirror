@@ -211,7 +211,7 @@ class UserController extends Controller
         $userList = [];
         $service = new UserService();
         foreach ($userData as $user) {
-            $userList[] = $service->userData($user->user, $langTag, $timezone, $authUserId);
+            $userList[] = $service->userData($user->profile, $langTag, $timezone, $authUserId);
         }
 
         return $this->fresnsPaginate($userList, $userData->total(), $userData->perPage());
