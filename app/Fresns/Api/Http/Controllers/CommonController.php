@@ -39,8 +39,8 @@ use App\Models\User;
 use App\Utilities\ConfigUtility;
 use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CommonController extends Controller
 {
@@ -381,8 +381,8 @@ class CommonController extends Controller
 
         // check publish file count
         $publishType = match ((int) $dtoRequest->usageType) {
-            7 => 'post',
-            8 => 'comment',
+            FileUsage::TYPE_POST => 'post',
+            FileUsage::TYPE_COMMENT => 'comment',
             default => null,
         };
 
