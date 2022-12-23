@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.0.0-beta.8 (2022-12-24)
+
+### Added
+- API: 请求标头 `contentFormat` 参数，允许获取指定格式的内容
+- API: 帖子信息可以预览多条评论
+- API: 帖子信息可以预览多条点赞用户
+- Panel: 互动配置新增评论预览设置
+- Panel: 互动配置新增点赞用户预览设置
+- Panel: 引擎远程 API Host 保存时自动处理 `/` 结尾
+- Panel: 新增缓存管理页面
+
+### Fixes
+- API: 修复帖子编辑后缓存未自动清理问题
+- API: 编辑器上传文件时，未判断数量限制
+- Panel: 地图设置字段错误
+
+### Changed
+- API: 优化缓存机制
+- Data: `post_appends->is_allow` 字段默认值改为 `1`
+- 框架: composer 升级到 v2.5.1
+- 框架: laravel/framework 升级到 v9.45.1
+- 框架: fresns/plugin-manager 升级到 v2.3.2
+
+
 ## 2.0.0-beta.7 (2022-12-13)
 
 ### Added
