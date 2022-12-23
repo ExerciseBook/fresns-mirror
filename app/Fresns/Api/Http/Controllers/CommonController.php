@@ -39,6 +39,7 @@ use App\Models\User;
 use App\Utilities\ConfigUtility;
 use App\Utilities\PermissionUtility;
 use App\Utilities\ValidationUtility;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -502,7 +503,7 @@ class CommonController extends Controller
         }
 
         // check permission
-        if ($dtoRequest->type == 'post' && $model?->postAppend?->is_allow === 0) {
+        if ($dtoRequest->type == 'post' && $model?->postAppend?->is_allow == 0) {
             $checkPostAllow = PermissionUtility::checkPostAllow($model->id, $authUserId);
 
             if (! $checkPostAllow) {
@@ -560,15 +561,15 @@ class CommonController extends Controller
 
         $downUsers = FileDownload::with('user')
             ->select([
-                \DB::raw('any_value(id) as id'),
-                \DB::raw('any_value(file_id) as file_id'),
-                \DB::raw('any_value(file_type) as file_type'),
-                \DB::raw('any_value(account_id) as account_id'),
-                \DB::raw('any_value(user_id) as user_id'),
-                \DB::raw('any_value(plugin_unikey) as plugin_unikey'),
-                \DB::raw('any_value(object_type) as object_type'),
-                \DB::raw('any_value(object_id) as object_id'),
-                \DB::raw('any_value(created_at) as created_at'),
+                DB::raw('any_value(id) as id'),
+                DB::raw('any_value(file_id) as file_id'),
+                DB::raw('any_value(file_type) as file_type'),
+                DB::raw('any_value(account_id) as account_id'),
+                DB::raw('any_value(user_id) as user_id'),
+                DB::raw('any_value(plugin_unikey) as plugin_unikey'),
+                DB::raw('any_value(object_type) as object_type'),
+                DB::raw('any_value(object_id) as object_id'),
+                DB::raw('any_value(created_at) as created_at'),
             ])
             ->where('file_id', $file->id)
             ->latest()
