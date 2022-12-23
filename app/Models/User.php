@@ -83,9 +83,8 @@ class User extends Model
     {
         return $this->roles()
             ->wherePivot('is_main', true)
-            ->wherePivotNotNull('expired_at')
-            ->wherePivot('expired_at', '>=', now())
-            ->orWherePivot('expired_at', null)
+            ->wherePivot('expired_at', null)
+            ->orWherePivot('expired_at', '>=', now())
             ->first();
     }
 }
