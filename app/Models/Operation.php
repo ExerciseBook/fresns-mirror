@@ -19,4 +19,6 @@ class Operation extends Model
     const USE_TYPE_FUNCTION = 2;
 
     use Traits\IsEnableTrait;
+    use Traits\LangTitleTrait;
+    use Traits\LangDescriptionTrait;
 }
