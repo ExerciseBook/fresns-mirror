@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.0.0 (2023-01-09)
+
+### Added
+- Panel: 支持仅清空文件缓存
+
+### Fixes
+- API: 评论自己时也会产生通知消息
+- API: 变更用户资料后，未清理发表权限缓存
+- API: 删除评论时，帖子的评论计数未减少
+- API: 验证码登录时自动注册，发送验证码未处理兼容
+
+### Changed
+- API: 帖子和评论的创作者信息独立缓存，修改用户资料后，同步变化资料
+- Helper: 优化文件查找模型
+- 框架: laravel/framework 升级到 v9.46.0
+
+
 ## 2.0.0-beta.8 (2022-12-24)
 
 ### Added
