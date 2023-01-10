@@ -264,6 +264,7 @@ class CacheHelper
             }
 
             Cache::forget('fresnsSystems');
+            Cache::forget('fresns_cache_is_support_tags');
         }
 
         // config
