@@ -203,6 +203,7 @@ class CacheHelper
             'fresnsSystems',
             'fresnsConfigs',
             'fresnsCodeMessages',
+            'fresnsRoles',
             'fresnsArchives',
             'fresnsExtensions',
             'fresnsConfigLanguages',
@@ -269,6 +270,7 @@ class CacheHelper
         if ($cacheType == 'fresnsConfig') {
             CacheHelper::forgetFresnsTag('fresnsConfigs');
             CacheHelper::forgetFresnsTag('fresnsCodeMessages');
+            CacheHelper::forgetFresnsTag('fresnsRoles');
             CacheHelper::forgetFresnsTag('fresnsArchives');
             CacheHelper::forgetFresnsTag('fresnsConfigLanguages');
             CacheHelper::forgetFresnsTag('fresnsRoleLanguages');
@@ -492,6 +494,7 @@ class CacheHelper
             'fresnsSystems',
             'fresnsConfigs',
             'fresnsCodeMessages',
+            'fresnsRoles',
             'fresnsArchives',
             'fresnsExtensions',
             'fresnsConfigLanguages',

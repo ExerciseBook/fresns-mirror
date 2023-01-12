@@ -114,7 +114,7 @@ class PermissionUtility
 
             unset($role['permissions']);
 
-            $roleListArr[] = $item;
+            $roleListArr[] = $role;
         }
 
         $mainRole = PermissionUtility::getUserMainRole($userId, $langTag);
