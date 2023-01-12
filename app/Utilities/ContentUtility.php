@@ -161,12 +161,12 @@ class ContentUtility
             if ($config['hashtag_show'] == 1) {
                 // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP</a>
                 $hashtag = "#{$hashtagName}";
-                $replaceList[] = "$hashtag ";
             } else {
                 // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP#</a>
                 $hashtag = "#{$hashtagName}#";
-                $replaceList[] = "$hashtag";
             }
+
+            $replaceList[] = $hashtag;
 
             $link = sprintf(
                 '<a href="%s/%s/%s" class="fresns_hashtag" target="_blank">%s</a> ',
