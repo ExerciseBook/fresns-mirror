@@ -158,13 +158,7 @@ class ContentUtility
         $replaceList = [];
         $linkList = [];
         foreach ($hashtagList as $hashtagName) {
-            if ($config['hashtag_show'] == 1) {
-                // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP</a>
-                $hashtag = "#{$hashtagName}";
-            } else {
-                // <a href="https://abc.com/hashtag/PHP" class="fresns_hashtag" target="_blank">#PHP#</a>
-                $hashtag = "#{$hashtagName}#";
-            }
+            $hashtag = ($config['hashtag_show'] == 1) ? "#{$hashtagName}" : "#{$hashtagName}#";
 
             $replaceList[] = $hashtag;
 
