@@ -747,6 +747,11 @@ class CacheHelper
     // fresns_code_messages_{$unikey}_{$langTag}
 
     /**
+     * tag: fresnsRoles.
+     */
+    // fresns_role_{$id}_{$langTag}
+
+    /**
      * tag: fresnsAccounts.
      */
     // fresns_token_account_{$accountId}_{$token}   // +tag: fresnsAccountTokens
