@@ -39,11 +39,11 @@ class InteractionHelper
     }
 
     /**
-     * @param  int      $roleId
-     * @param  string   $langTag
+     * @param  int  $roleId
+     * @param  string  $langTag
      * @return array
      */
-    public static function fresnsRoleInteraction(int $roleId, ?string $langTag = null)
+    public static function fresnsRoleInfo(int $roleId, ?string $langTag = null)
     {
         $langTag = $langTag ?: ConfigHelper::fresnsConfigDefaultLangTag();
 
