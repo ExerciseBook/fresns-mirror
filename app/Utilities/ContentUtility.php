@@ -163,7 +163,7 @@ class ContentUtility
             $replaceList[] = $hashtag;
 
             $link = sprintf(
-                '<a href="%s/%s/%s" class="fresns_hashtag" target="_blank">%s</a> ',
+                '<a href="%s/%s/%s" class="fresns_hashtag" target="_blank">%s</a>',
                 $config['site_url'],
                 $config['website_hashtag_detail_path'],
                 StrHelper::slug($hashtagName),
