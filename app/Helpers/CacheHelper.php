@@ -345,9 +345,7 @@ class CacheHelper
                     CacheHelper::forgetFresnsMultilingual("fresns_publish_comment_config_{$id}");
 
                     $account = PrimaryHelper::fresnsModelById('account', $model->account_id);
-
-                    CacheHelper::forgetFresnsMultilingual("fresns_api_account_{$account->aid}");
-                    CacheHelper::forgetFresnsModel('account', $account->aid);
+                    CacheHelper::forgetFresnsAccount($account->aid);
                 }
 
                 if ($dataType == 'fresnsInteraction') {
