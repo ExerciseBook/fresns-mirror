@@ -21,7 +21,7 @@ class CollectionUtility
     public static function toTree(?array $data = [], $primary = 'id', $parent = 'parent_id', $children = 'children')
     {
         // data is empty
-        if (count($data) === 0) {
+        if (empty($data) || count($data) === 0) {
             return [];
         }
 
