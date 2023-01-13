@@ -46,6 +46,7 @@ class UserService
 
             $userProfile['nickname'] = ContentUtility::replaceBlockWords('user', $userProfile['nickname']);
             $userProfile['bio'] = ContentUtility::replaceBlockWords('user', $userProfile['bio']);
+            $userProfile['birthday'] = DateHelper::fresnsFormatConversion($userProfile['birthday'], $langTag);
 
             $bioConfig = ConfigHelper::fresnsConfigByItemKeys([
                 'bio_support_mention',
@@ -199,8 +200,6 @@ class UserService
         if (empty($userData)) {
             return $userData;
         }
-
-        $userData['birthday'] = DateHelper::fresnsFormatConversion($userData['birthday'], $langTag);
 
         $userData['verifiedDateTime'] = DateHelper::fresnsDateTimeByTimezone($userData['verifiedDateTime'], $timezone, $langTag);
 
