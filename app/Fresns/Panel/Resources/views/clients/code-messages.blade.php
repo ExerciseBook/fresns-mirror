@@ -83,7 +83,8 @@
             </tbody>
         </table>
     </div>
-    {{ $codeMessages->links() }}
+
+    {{ $codeMessages->appends(request()->all())->links() }}
 
     <!-- Edit Modal -->
     <div class="modal fade" id="editMessages" tabindex="-1" aria-labelledby="editMessagesModalLabel" aria-hidden="true">
