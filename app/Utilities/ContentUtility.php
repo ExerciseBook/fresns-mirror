@@ -48,7 +48,7 @@ class ContentUtility
         return match ($type) {
             'hash' => '/#(.*?)#/',
             'space' => "/#(.*?)\s/",
-            'url' => "/(https?:\/\/.+?)\s/i",
+            'url' => "/(https?:\/\/[^\s\n]+)/i",
             'at' => "/@(.*?)\s/",
             'sticker' => "/\[(.*?)\]/",
         };
