@@ -176,7 +176,7 @@ class ContentUtility
             $linkList[] = $link;
         }
 
-        return str_replace($replaceList, $linkList, $content . ' ');
+        return str_replace($replaceList, $linkList, $content);
     }
 
     // Replace link
@@ -209,24 +209,24 @@ class ContentUtility
 
             switch ($contentLinkHandle) {
                 case 1:
-                    return Str::replace($urlData?->domain?->host, '******', $url).' ';
+                    return Str::replace($urlData?->domain?->host, '******', $url);
                 break;
 
                 case 3:
                     return sprintf(
-                        '<a href="%s" class="fresns_link" target="_blank">%s</a> ',
+                        '<a href="%s" class="fresns_link" target="_blank">%s</a>',
                         $url,
                         $title,
                     );
                 break;
 
                 default:
-                    return $url.' ';
+                    return $url;
                 break;
             }
         }, $content);
 
-        return $newContent . ' ';
+        return $newContent;
     }
 
     // Replace mention
@@ -280,7 +280,7 @@ class ContentUtility
             );
         }
 
-        return str_replace($replaceList, $linkList, $content . ' ');
+        return str_replace($replaceList, $linkList, $content);
     }
 
     // Replace sticker
@@ -305,7 +305,7 @@ class ContentUtility
             }
         }
 
-        return str_replace($replaceList, $linkList, $content . ' ');
+        return str_replace($replaceList, $linkList, $content);
     }
 
     // Handle and replace all
