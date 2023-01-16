@@ -47,8 +47,8 @@ class ContentUtility
     public static function getRegexpByType($type)
     {
         return match ($type) {
-            'hash' => '/#[\p{L}\p{N}\p{M}]+#/u',
-            'space' => '/#[\p{L}\p{N}\p{M}]+\s/u',
+            'hash' => '/#[\p{L}\p{N}\p{M}]+[^\n\p{P}]#/u',
+            'space' => '/#[\p{L}\p{N}\p{M}]+[^\n\p{P}\s]/u',
             'url' => '/(https?:\/\/[^\s\n]+)/i',
             'at' => '/@(.*?)\s/',
             'sticker' => '/\[(.*?)\]/',
@@ -85,14 +85,16 @@ class ContentUtility
     // Extract all hashtag
     public static function extractAllHashtag(string $content): array
     {
-        $content = strip_tags($content);
+        $newContent = preg_replace_callback(ContentUtility::getRegexpByType('url'), function ($matches) {
+            return '';
+        }, $content);
 
         $hashData = ContentUtility::strHashtag(
-            ContentUtility::matchAll(ContentUtility::getRegexpByType('hash'), $content, 0)
+            ContentUtility::matchAll(ContentUtility::getRegexpByType('hash'), $newContent, 0)
         );
 
         $spaceData = ContentUtility::strHashtag(
-            ContentUtility::matchAll(ContentUtility::getRegexpByType('space'), $content, 0)
+            ContentUtility::matchAll(ContentUtility::getRegexpByType('space'), $newContent, 0)
         );
 
         // De-duplication of the extracted hashtag
@@ -104,13 +106,15 @@ class ContentUtility
     // Extract config hashtag
     public static function extractConfigHashtag(string $content): array
     {
+        $newContent = preg_replace_callback(ContentUtility::getRegexpByType('url'), function ($matches) {
+            return '';
+        }, $content);
+
         $config = ConfigHelper::fresnsConfigByItemKey('hashtag_show');
         $regexp = ($config == 1) ? ContentUtility::getRegexpByType('space') : ContentUtility::getRegexpByType('hash');
 
-        $content = strip_tags($content);
-
         return ContentUtility::strHashtag(
-            ContentUtility::matchAll($regexp, $content, 0)
+            ContentUtility::matchAll($regexp, $newContent, 0)
         );
     }
 
@@ -123,8 +127,6 @@ class ContentUtility
     // Extract mention user
     public static function extractMention(string $content): array
     {
-        $content = strip_tags($content);
-
         return ContentUtility::matchAll(ContentUtility::getRegexpByType('at'), $content);
     }
 
@@ -167,7 +169,7 @@ class ContentUtility
         $linkList = [];
         foreach ($hashtagList as $hashtagName) {
             $hashtagData = $hashtagDataList->where('name', $hashtagName)->first();
-            if (empty($hashtagData)) {
+            if (empty($hashtagData) || ! $hashtagData->is_enable) {
                 continue;
             }
 
@@ -238,16 +240,16 @@ class ContentUtility
                     return Str::replace($urlData?->domain?->host, '******', $url);
                 break;
 
-                case 3:
+                case 2:
+                    return $url;
+                break;
+
+                default:
                     return sprintf(
                         '<a href="%s" class="fresns_link" target="_blank">%s</a>',
                         $url,
                         $title,
                     );
-                break;
-
-                default:
-                    return $url;
                 break;
             }
         }, $content);
@@ -276,7 +278,7 @@ class ContentUtility
             $user = $userArr->where('username', $username)->first();
             $mentionUser = $mentionArr->where('mention_user_id', $user?->id)->first();
 
-            if (is_null($mentionUser)) {
+            if (empty($mentionUser)) {
                 $replaceList[] = "@{$username}";
                 $linkList[] = sprintf(
                     '<a href="%s/%s/0" class="fresns_mention" target="_blank">@%s</a>',
