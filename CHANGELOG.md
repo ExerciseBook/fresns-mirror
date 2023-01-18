@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.1.0 (2023-01-18)
+
+### Added
+- Helper: 新增按标签清空缓存 `CacheHelper::forgetFresnsTag();`
+- Subscribe: 支持订阅账号和用户的登录通知
+- 框架: 自定义 404 页面
+
+### Fixes
+- API: 修复角色配置的缓存
+- API: 评论无法查询到帖子时报错
+- API: 内容最后部分的话题解析失效问题
+- API: 修复用户主角色为空时报错
+- API: 无时区时，日期时间格式问题
+- Panel: 命令行安装插件报错问题
+
+### Changed
+- API: 子级评论列表支持嵌套显示
+- API: 树结构数据为空时输出为 `[]` 空数组格式
+- API: 优化内容话题的提取和替换
+- 框架: laravel/framework 升级到 v9.48.0
+- 框架: laravel/ui 升级到 v4.2.0
+- 框架: fresns/plugin-manager 升级到 v2.3.3
+- 框架: fresns/theme-manager 升级到 v2.0.8
+- 框架: fresns/market-manager 升级到 v2.1.1
+
+
 ## 2.0.1 (2023-01-11)
 
 ### Changed
