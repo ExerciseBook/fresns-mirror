@@ -8,15 +8,10 @@
 
 namespace App\Exceptions;
 
-use App\Helpers\ConfigHelper;
-use App\Models\Plugin;
-use Browser;
 use Fresns\DTO\Exceptions\DTOException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -74,31 +69,6 @@ class Handler extends ExceptionHandler
             }
 
             throw new RuntimeException($e->validator->errors()->first());
-        }
-
-        if ($e instanceof NotFoundHttpException) {
-            $engine = Plugin::type(Plugin::TYPE_ENGINE)->isEnable()->first();
-
-            if (! $engine) {
-                return parent::render($request, $e);
-            }
-
-            $mobileTheme = ConfigHelper::fresnsConfigByItemKey("{$engine->unikey}_Mobile");
-            $desktopTheme = ConfigHelper::fresnsConfigByItemKey("{$engine->unikey}_Desktop");
-
-            $theme = Browser::isMobile() ? $mobileTheme : $desktopTheme;
-
-            if (! $theme) {
-                return parent::render($request, $e);
-            }
-
-            $finder = app('view')->getFinder();
-            $finder->prependLocation(base_path("extensions/themes/{$theme}"));
-
-            return Response::view(404, [
-                'engineUnikey' => $engine->unikey,
-                'themeUnikey' => $theme,
-            ], 404);
         }
 
         return parent::render($request, $e);
