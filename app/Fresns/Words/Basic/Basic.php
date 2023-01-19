@@ -37,7 +37,7 @@ class Basic
     public function verifySign($wordBody)
     {
         $dtoWordBody = new VerifySignDTO($wordBody);
-        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
+        $langTag = \request()->header('X-Fresns-Client-Lang-Tag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $keyInfo = PrimaryHelper::fresnsModelByFsid('key', $dtoWordBody->appId);
         $keyType = $dtoWordBody->verifyType ?? SessionKey::TYPE_CORE;
@@ -140,7 +140,7 @@ class Basic
     public function verifyUrlSign($wordBody)
     {
         $dtoWordBody = new VerifyUrlSignDTO($wordBody);
-        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
+        $langTag = \request()->header('X-Fresns-Client-Lang-Tag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         $urlSignData = urldecode(base64_decode($dtoWordBody->urlSign));
         $urlSignJson = json_decode($urlSignData, true) ?? [];
@@ -221,7 +221,7 @@ class Basic
             $pluginUniKey = ConfigHelper::fresnsConfigByItemKey('send_sms_service');
         }
 
-        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
+        $langTag = \request()->header('X-Fresns-Client-Lang-Tag', ConfigHelper::fresnsConfigDefaultLangTag());
         if (empty($pluginUniKey)) {
             return $this->failure(
                 32100,
@@ -243,7 +243,7 @@ class Basic
     public function checkCode($wordBody)
     {
         $dtoWordBody = new CheckCodeDTO($wordBody);
-        $langTag = \request()->header('langTag', ConfigHelper::fresnsConfigDefaultLangTag());
+        $langTag = \request()->header('X-Fresns-Client-Lang-Tag', ConfigHelper::fresnsConfigDefaultLangTag());
 
         if ($dtoWordBody->type == 1) {
             $account = $dtoWordBody->account;
