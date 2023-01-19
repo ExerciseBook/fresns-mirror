@@ -8,10 +8,7 @@
 
 namespace App\Exceptions;
 
-use Fresns\DTO\Exceptions\DTOException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Validation\ValidationException;
-use RuntimeException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -59,16 +56,16 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        if ($e instanceof DTOException) {
+        if ($e instanceof \Fresns\DTO\Exceptions\DTOException) {
             throw new DTOException($e->getMessage());
         }
 
-        if ($e instanceof ValidationException) {
+        if ($e instanceof \Illuminate\Validation\ValidationException) {
             if (! $request->wantsJson()) {
                 return back()->with('failure', $e->validator->errors()->first());
             }
 
-            throw new RuntimeException($e->validator->errors()->first());
+            throw new \RuntimeException($e->validator->errors()->first());
         }
 
         return parent::render($request, $e);
