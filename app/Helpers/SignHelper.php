@@ -11,21 +11,21 @@ namespace App\Helpers;
 class SignHelper
 {
     const SIGN_PARAM_ARR = [
-        'platformId',
-        'version',
-        'appId',
-        'timestamp',
-        'aid',
-        'aidToken',
-        'uid',
-        'uidToken',
+        'X-Fresns-App-Id',
+        'X-Fresns-Client-Platform-Id',
+        'X-Fresns-Client-Version',
+        'X-Fresns-Aid',
+        'X-Fresns-Aid-Token',
+        'X-Fresns-Uid',
+        'X-Fresns-Uid-Token',
+        'X-Fresns-Signature-Timestamp',
     ];
 
     // Check Sign
     public static function checkSign(array $signMap, string $appSecret): bool
     {
-        $inputSign = $signMap['sign'];
-        unset($signMap['sign']);
+        $inputSign = $signMap['X-Fresns-Signature'];
+        unset($signMap['X-Fresns-Signature']);
 
         $makeSign = SignHelper::makeSign($signMap, $appSecret);
 
@@ -45,7 +45,7 @@ class SignHelper
 
         $params = http_build_query($signParams);
 
-        $signData = $params."&appSecret={$appSecret}";
+        $signData = $params."&AppSecret={$appSecret}";
 
         // Generate sign
         $sign = md5($signData);
