@@ -442,8 +442,8 @@ class UserController extends Controller
             'platformId' => $this->platformId(),
             'version' => $this->version(),
             'appId' => $this->appId(),
-            'aid' => $request->header('aid'),
-            'aidToken' => $request->header('aidToken'),
+            'aid' => \request()->header('X-Fresns-Aid'),
+            'aidToken' => \request()->header('X-Fresns-Aid-Token'),
             'uid' => $authUser->uid,
             'password' => $password,
         ];
