@@ -90,15 +90,15 @@ class Basic
         }
 
         $includeEmptyCheckArr = [
+            'appId' => $dtoWordBody->appId,
             'platformId' => $dtoWordBody->platformId,
             'version' => $dtoWordBody->version,
-            'appId' => $dtoWordBody->appId,
-            'timestamp' => $dtoWordBody->timestamp,
-            'sign' => $dtoWordBody->sign,
             'aid' => $dtoWordBody->aid ?? null,
             'aidToken' => $dtoWordBody->aidToken ?? null,
             'uid' => $dtoWordBody->uid ?? null,
             'uidToken' => $dtoWordBody->uidToken ?? null,
+            'signature' => $dtoWordBody->signature,
+            'timestamp' => $dtoWordBody->timestamp,
         ];
 
         $withoutEmptyCheckArr = array_filter($includeEmptyCheckArr);
@@ -152,7 +152,19 @@ class Basic
             );
         }
 
-        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->verifySign($urlSignJson);
+        $headers = [
+            'appId' => $urlSignJson['X-Fresns-App-Id'] ?? null,
+            'platformId' => $urlSignJson['X-Fresns-Client-Platform-Id'] ?? null,
+            'version' => $urlSignJson['X-Fresns-Client-Version'] ?? null,
+            'aid' => $urlSignJson['X-Fresns-Aid'] ?? null,
+            'aidToken' => $urlSignJson['X-Fresns-Aid-Token'] ?? null,
+            'uid' => $urlSignJson['X-Fresns-Uid'] ?? null,
+            'uidToken' => $urlSignJson['X-Fresns-Uid-Token'] ?? null,
+            'signature' => $urlSignJson['X-Fresns-Signature'] ?? null,
+            'timestamp' => $urlSignJson['X-Fresns-Signature-Timestamp'] ?? null,
+        ];
+
+        $fresnsResp = \FresnsCmdWord::plugin('Fresns')->verifySign($headers);
 
         if ($fresnsResp->isErrorResponse()) {
             return $fresnsResp->getOrigin();
