@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 
 ## 2.2.0 (2023-01-20)
 
+### Added
+- Data: 文件表 `files` 新增 `disk` 字段
+- Helper: 文件信息增加“文件磁盘”判断
+- Command: 升级命令增加 `storage:link` 指令
+
 ### Fixes
 - API: 登录错误日志计数判断错误
 - Subscribe: 兼容订阅项为空
