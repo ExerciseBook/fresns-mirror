@@ -98,6 +98,8 @@ class UpgradeFresns extends Command
         $this->clear();
         $this->updateStep(self::STEP_DONE);
 
+        logger('upgrade: done');
+
         return Command::SUCCESS;
     }
 
