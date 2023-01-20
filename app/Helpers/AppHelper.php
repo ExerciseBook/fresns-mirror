@@ -12,6 +12,7 @@ use App\Models\Config;
 use App\Models\SessionKey;
 use App\Utilities\CommandUtility;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -199,6 +200,6 @@ class AppHelper
         }
 
         // activate web engine
-        \Artisan::call('market:activate', ['unikey' => 'FresnsEngine']);
+        Artisan::call('market:activate', ['unikey' => 'FresnsEngine']);
     }
 }
