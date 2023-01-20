@@ -13,7 +13,6 @@ use App\Helpers\CacheHelper;
 use App\Helpers\ConfigHelper;
 use App\Models\Plugin;
 use Browser;
-use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
@@ -258,14 +257,19 @@ class AppUtility
         while ($versionInt <= $newVersionInt) {
             $versionInt++;
 
-            $command = 'fresns:upgrade-'.$versionInt;
+            try {
+                $command = 'fresns:upgrade-'.$versionInt;
+                logger("-- upgrade command: {$command}");
 
-            logger("-- upgrade command: {$command}");
+                logger("-- execute command: {$command}");
 
-            logger("-- -- execute command: {$command}");
-            $exitCode = Artisan::call($command);
+                $exitCode = Artisan::call($command);
+                logger('-- -- '.$command.' exitCode = '.$exitCode);
+            } catch (\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
+                logger('-- -- fresns:upgrade-'.$versionInt.' does not exist');
 
-            logger('-- -- '.$command.' exitCode = '.$exitCode);
+                continue;
+            }
         }
 
         return true;
