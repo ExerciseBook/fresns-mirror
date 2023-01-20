@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.2.0 (2023-01-20)
+
+### Fixes
+- API: 登录错误日志计数判断错误
+- Subscribe: 兼容订阅项为空
+
+### Changed
+- Words: 重构验证路径凭证命令字
+- 框架: 由引擎接管 404 页面
+- 框架: fresns/cmd-word-manager 升级到 v1.3.0
+- 框架: fresns/plugin-manager 升级到 v2.3.4
+
+### BREAKING CHANGES
+- API: 重构 headers 参数命名，采用 `X-` 前缀和大驼峰命名
+
+
 ## 2.1.0 (2023-01-18)
 
 ### Added
