@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.3.1 (2023-01-21)
+
+### Fixes
+- Console: 修复升级命令加载问题
+
+### Changed
+- Console: 重构升级功能的数据更新
+
+
 ## 2.3.0 (2023-01-21)
 
 ### Added

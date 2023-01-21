@@ -770,14 +770,14 @@ class UpgradeUtility
         return true;
     }
 
-    // fresns v2.4.0
+    // fresns v2.3.1
     public static function upgradeTo14(): bool
     {
         $exitCode = Artisan::call('migrate', ['--force' => true]);
 
-        logger('-- -- upgrade to 14 (fresns v2.4.0) Artisan exitCode = '.$exitCode);
+        logger('-- -- upgrade to 14 (fresns v2.3.1) Artisan exitCode = '.$exitCode);
 
-        logger('-- -- upgrade to 14 (fresns v2.4.0) done');
+        logger('-- -- upgrade to 14 (fresns v2.3.1) done');
 
         return true;
     }
