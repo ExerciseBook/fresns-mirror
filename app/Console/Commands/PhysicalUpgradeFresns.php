@@ -149,7 +149,7 @@ class PhysicalUpgradeFresns extends Command
         }
 
         // 2-2 execute the version command
-        return AppUtility::executeUpgradeCommand();
+        return AppUtility::executeUpgradeUtility();
     }
 
     // step 3: composer all plugins

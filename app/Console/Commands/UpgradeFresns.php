@@ -222,7 +222,7 @@ class UpgradeFresns extends Command
         }
 
         // the version command
-        return AppUtility::executeUpgradeCommand();
+        return AppUtility::executeUpgradeUtility();
     }
 
     // step 4-2: edit fresns version info
