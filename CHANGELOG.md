@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.3.0 (2023-01-21)
+
+### Added
+- Helper: 获取插件主机地址 `PluginHelper::fresnsPluginHostByUnikey($unikey);`
+
+### Fixes
+- Console: 编号升级指令无法被执行
+- Console: 主程序定时任务未执行问题
+
+### Changed
+- Console: 优化命令字 schedule
+- Helper: 修改 artisan facades
+- Helper: 调整扩展缓存 tag
+
+
 ## 2.2.0 (2023-01-20)
 
 ### Added
