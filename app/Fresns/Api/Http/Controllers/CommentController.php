@@ -126,7 +126,7 @@ class CommentController extends Controller
                 throw new ApiException(37300);
             }
 
-            if ($viewPost->is_enable == 0) {
+            if ($viewPost->is_enable == 0 && $viewPost->user_id != $authUserId) {
                 throw new ApiException(37301);
             }
 
