@@ -56,17 +56,6 @@ return [
         'api.comment.log.detail',
     ],
 
-    // No login for private mode account
-    'privateAccount' => [
-        'api.global.configs',
-        'api.global.code.messages',
-        'api.common.callback',
-        'api.common.send.verifyCode',
-        'api.common.upload.log',
-        'api.account.login',
-        'api.account.reset.password',
-    ],
-
     // No login for public mode user
     'publicUser' => [
         'api.global.configs',
@@ -121,6 +110,17 @@ return [
         'api.comment.interaction',
         'api.comment.logs',
         'api.comment.log.detail',
+    ],
+
+    // No login for private mode account
+    'privateAccount' => [
+        'api.global.configs',
+        'api.global.code.messages',
+        'api.common.callback',
+        'api.common.send.verifyCode',
+        'api.common.upload.log',
+        'api.account.login',
+        'api.account.reset.password',
     ],
 
     // No login for private mode user
