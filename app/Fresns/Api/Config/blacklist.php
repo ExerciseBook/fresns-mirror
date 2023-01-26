@@ -258,4 +258,26 @@ return [
         'api.search.posts',
         'api.search.comments',
     ],
+
+    // Disable after user expiry
+    'disableRoutes' => [
+        'api.common.upload.file',
+        'api.common.file.link',
+        'api.user.edit',
+        'api.user.mark',
+        'api.user.mark.note',
+        'api.notification.delete',
+        'api.conversation.send.message',
+        'api.conversation.delete',
+        'api.post.delete',
+        'api.comment.delete',
+        'api.editor.quick.publish',
+        'api.editor.create',
+        'api.editor.generate',
+        'api.editor.detail',
+        'api.editor.update',
+        'api.editor.publish',
+        'api.editor.recall',
+        'api.editor.delete',
+    ],
 ];
