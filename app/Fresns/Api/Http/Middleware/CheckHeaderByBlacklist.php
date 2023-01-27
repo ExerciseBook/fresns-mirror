@@ -14,7 +14,7 @@ use App\Helpers\ConfigHelper;
 use Closure;
 use Illuminate\Http\Request;
 
-class CheckHeader
+class CheckHeaderByBlacklist
 {
     public function handle(Request $request, Closure $next)
     {
