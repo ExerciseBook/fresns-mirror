@@ -380,8 +380,17 @@ class CommonController extends Controller
             throw new ApiException(32102);
         }
 
+        $usageType = match ($dtoRequest->tableName) {
+            'users' => FileUsage::TYPE_USER,
+            'posts' => FileUsage::TYPE_POST,
+            'comments' => FileUsage::TYPE_COMMENT,
+            'conversation_messages' => FileUsage::TYPE_CONVERSATION,
+            'post_logs' => FileUsage::TYPE_POST,
+            'comment_logs' => FileUsage::TYPE_COMMENT,
+        };
+
         // check publish file count
-        $publishType = match ((int) $dtoRequest->usageType) {
+        $publishType = match ($usageType) {
             FileUsage::TYPE_POST => 'post',
             FileUsage::TYPE_COMMENT => 'comment',
             default => null,
@@ -414,7 +423,7 @@ class CommonController extends Controller
         switch ($dtoRequest->uploadMode) {
             case 'file':
                 $wordBody = [
-                    'usageType' => $dtoRequest->usageType,
+                    'usageType' => $usageType,
                     'platformId' => \request()->header('X-Fresns-Client-Platform-Id'),
                     'tableName' => $dtoRequest->tableName,
                     'tableColumn' => $dtoRequest->tableColumn,
@@ -432,7 +441,7 @@ class CommonController extends Controller
 
             case 'fileInfo':
                 $wordBody = [
-                    'usageType' => $dtoRequest->usageType,
+                    'usageType' => $usageType,
                     'platformId' => \request()->header('X-Fresns-Client-Platform-Id'),
                     'tableName' => $dtoRequest->tableName,
                     'tableColumn' => $dtoRequest->tableColumn,
