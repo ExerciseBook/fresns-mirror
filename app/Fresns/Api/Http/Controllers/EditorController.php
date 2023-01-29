@@ -1079,7 +1079,7 @@ class EditorController extends Controller
 
         CacheHelper::forgetFresnsKey("fresns_api_user_panel_drafts_{$authUser->uid}");
 
-        $data =  [
+        $data = [
             'type' => $dtoRequest->type,
             'isDraft' => false,
             'draftId' => $fresnsResp->getData('logId') ?? null,
@@ -1092,6 +1092,6 @@ class EditorController extends Controller
             throw new ApiException(38200, 'Fresns', $data);
         }
 
-        return $this->success();
+        return $this->success($data);
     }
 }
