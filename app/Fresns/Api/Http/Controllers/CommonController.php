@@ -387,6 +387,7 @@ class CommonController extends Controller
             'conversation_messages' => FileUsage::TYPE_CONVERSATION,
             'post_logs' => FileUsage::TYPE_POST,
             'comment_logs' => FileUsage::TYPE_COMMENT,
+            default => null,
         };
 
         // check publish file count
@@ -409,7 +410,7 @@ class CommonController extends Controller
             };
 
             $fileCount = FileUsage::where('file_type', $fileType)
-                ->where('usage_type', $dtoRequest->usageType)
+                ->where('usage_type', $usageType)
                 ->where('table_name', $dtoRequest->tableName)
                 ->where('table_column', $dtoRequest->tableColumn)
                 ->where('table_id', $dtoRequest->tableId)
