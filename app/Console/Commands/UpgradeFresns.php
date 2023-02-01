@@ -219,10 +219,20 @@ class UpgradeFresns extends Command
             } else { // $process::ERR === $type
                 $this->info("\nRead from stderr: ".$data);
             }
+
+            logger('-- composer command: '.$data);
         }
 
-        // the version command
-        return AppUtility::executeUpgradeUtility();
+        logger('-- migrate command');
+
+        $exitCode = $this->call('migrate', ['--force' => true]);
+        if ($exitCode) {
+            logger('-- migrate command: exitCode = '.$exitCode);
+
+            return false;
+        }
+
+        return true;
     }
 
     // step 4-2: edit fresns version info
