@@ -11,6 +11,7 @@ namespace App\Utilities;
 use App\Models\CodeMessage;
 use App\Models\Config;
 use App\Models\Language;
+use Illuminate\Support\Facades\DB;
 
 class UpgradeUtility
 {
