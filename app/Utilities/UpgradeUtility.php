@@ -175,8 +175,6 @@ class UpgradeUtility
     // fresns v2.0.0-beta.4
     public static function upgradeTo4(): bool
     {
-        logger('-- -- upgrade to 3 (fresns v2.0.0-beta.3) Artisan exitCode = '.$exitCode);
-
         // add config key
         $cacheDatetime = Config::where('item_key', 'cache_datetime')->first();
         if (! $cacheDatetime) {
