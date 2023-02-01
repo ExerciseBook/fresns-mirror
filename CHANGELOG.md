@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.4.0 (2023-02-01)
+
+### Added
+- API: 当帖子或评论被禁用时，仅作者自己可见
+- API: 增加白名单和黑名单 CheckHeader 中间件
+- API: 快速发表请求返回草稿 ID 或 fsid
+- Panel: 登录后台，可被动触发版本检测
+
+### Fixes
+- API: 关注列表的筛选条件必须为数组格式
+- API: 内容中没有艾特记录，但也解析了 @ 符号
+- API: 回复权配置后，自己无法回复自己帖子
+- API: 刚发表的内容，人性化时间为负数
+
+### Changed
+- Data: 回调返参查询键由 UUID 改为 ULID
+- API: 话题以 slug 为唯一值
+- API: headers 登录检测使用黑名单机制
+- API: 优化上传文件接口
+- Panel: 插件管理，名称链接到应用市场
+- 框架: laravel/framework 升级到 v9.49.0
+- 框架: fresns/plugin-manager 升级到 v2.4.0
+
+
 ## 2.3.1 (2023-01-21)
 
 ### Fixes
