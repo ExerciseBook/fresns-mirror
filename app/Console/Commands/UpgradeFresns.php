@@ -202,13 +202,23 @@ class UpgradeFresns extends Command
 
         logger('upgrade: fresns upgrade command');
 
-        // composer install
+        // migrate command
+        logger('-- migrate command');
+        $exitCode = $this->call('migrate', ['--force' => true]);
+        if ($exitCode) {
+            logger('-- -- migrate info: exitCode = '.$exitCode);
+
+            return false;
+        }
+
+        // composer command
         $composerPath = 'composer';
 
         if (! $this->commandExists($composerPath)) {
             $composerPath = '/usr/bin/composer';
         }
 
+        logger('-- composer command');
         $process = new Process([$composerPath, 'update'], base_path());
         $process->setTimeout(0);
         $process->start();
@@ -220,16 +230,7 @@ class UpgradeFresns extends Command
                 $this->info("\nRead from stderr: ".$data);
             }
 
-            logger('-- composer command: '.$data);
-        }
-
-        logger('-- migrate command');
-
-        $exitCode = $this->call('migrate', ['--force' => true]);
-        if ($exitCode) {
-            logger('-- migrate command: exitCode = '.$exitCode);
-
-            return false;
+            logger('-- -- composer info: '.$data);
         }
 
         return true;

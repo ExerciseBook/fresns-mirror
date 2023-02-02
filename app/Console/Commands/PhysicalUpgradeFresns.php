@@ -132,7 +132,7 @@ class PhysicalUpgradeFresns extends Command
 
         $exitCode = $this->call('migrate', ['--force' => true]);
         if ($exitCode) {
-            logger('-- command: migrate exitCode = '.$exitCode);
+            logger('-- -- migrate info: exitCode = '.$exitCode);
 
             return false;
         }
@@ -149,12 +149,12 @@ class PhysicalUpgradeFresns extends Command
             $exitCode = $this->call('plugin:composer-update');
 
             if ($exitCode) {
-                logger('-- command: composer-update exitCode = '.$exitCode);
+                logger('-- -- composer info: plugin composer-update exitCode = '.$exitCode);
 
                 return false;
             }
         } catch (\Exception $e) {
-            logger('-- command: exception >> '.$e->getMessage());
+            logger('-- -- composer info: plugin composer exception >> '.$e->getMessage());
 
             $this->error($e->getMessage());
 
