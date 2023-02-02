@@ -209,7 +209,7 @@ class UpgradeFresns extends Command
             $composerPath = '/usr/bin/composer';
         }
 
-        $process = new Process([$composerPath, 'install'], base_path());
+        $process = new Process([$composerPath, 'update'], base_path());
         $process->setTimeout(0);
         $process->start();
 
