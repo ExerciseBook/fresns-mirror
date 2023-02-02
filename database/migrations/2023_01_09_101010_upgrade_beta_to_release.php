@@ -9,10 +9,8 @@
 use App\Utilities\AppUtility;
 use App\Utilities\UpgradeUtility;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class UpgradeTo2x extends Migration
+class UpgradeBetaToRelease extends Migration
 {
     /**
      * Run the migrations.
