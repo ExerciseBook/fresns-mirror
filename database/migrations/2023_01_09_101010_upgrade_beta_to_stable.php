@@ -10,7 +10,7 @@ use App\Utilities\AppUtility;
 use App\Utilities\UpgradeUtility;
 use Illuminate\Database\Migrations\Migration;
 
-class UpgradeBetaToRelease extends Migration
+class UpgradeBetaToStable extends Migration
 {
     /**
      * Run the migrations.
