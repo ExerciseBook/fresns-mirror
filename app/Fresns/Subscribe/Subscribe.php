@@ -137,7 +137,7 @@ class Subscribe
 
     public function getCurrentSubscribes()
     {
-        return ConfigHelper::fresnsConfigByItemKey('subscribe_items');
+        return ConfigHelper::fresnsConfigByItemKey('subscribe_items') ?? [];
     }
 
     public function getTableDataChangeSubscribes()
