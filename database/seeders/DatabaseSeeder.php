@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CodeMessagesTableSeeder::class);
         $this->call(ConfigsTableSeeder::class);
         $this->call(DomainsTableSeeder::class);
-        $this->call(StickersTableSeeder::class);
         $this->call(LanguagesTableSeeder::class);
         $this->call(RolesTableSeeder::class);
         $this->call(PluginUsagesTableSeeder::class);
