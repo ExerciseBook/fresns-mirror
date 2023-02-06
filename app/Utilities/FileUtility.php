@@ -61,10 +61,6 @@ class FileUtility
         //     'moreJson' => 'files->more_json',
         // ];
 
-        if (! Str::isJson($bodyInfo['moreJson'])) {
-            return null;
-        }
-
         // $diskConfig >> /config/filesystems.php
         // local, ftp, sftp
         $fresnsStorage = Storage::build($diskConfig);
