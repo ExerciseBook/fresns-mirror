@@ -57,6 +57,7 @@ class FileUtility
         //     'sha' => 'files->sha',
         //     'shaType' => 'files->shaType',
         //     'disk' => 'files->disk',
+        //     'imageHandlePosition' => 'files->image_handle_position',
         //     'moreJson' => 'files->more_json',
         // ];
 
@@ -220,6 +221,7 @@ class FileUtility
             'sha_type' =>  $bodyInfo['shaType'] ?? null,
             'disk' =>  $bodyInfo['disk'] ?? 'remote',
             'path' => $diskPath,
+            'image_handle_position' => $bodyInfo['image_handle_position'] ?? null,
             'image_width' => $imageWidth,
             'image_height' => $imageHeight,
             'image_is_long' => $imageIsLong,
