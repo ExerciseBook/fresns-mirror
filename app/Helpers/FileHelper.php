@@ -329,9 +329,9 @@ class FileHelper
         return $fileTypeNumber;
     }
 
-    // get file config path
+    // get file path for image
     // position start && end
-    public static function fresnsFileConfigPath(string $position, ?string $filePath = null)
+    public static function fresnsFilePathForImage(string $position, ?string $filePath = null)
     {
         $position = match ($position) {
             default => null,

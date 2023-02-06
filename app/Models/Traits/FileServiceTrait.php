@@ -145,7 +145,7 @@ trait FileServiceTrait
 
         // imageHandlePosition = name-start && name-end
         if ($imageHandlePosition == 'name-start' || $imageHandlePosition == 'name-end') {
-            $handlePath = FileHelper::fresnsFileConfigPath($imageHandlePosition, $filePath);
+            $handlePath = FileHelper::fresnsFilePathForImage($imageHandlePosition, $filePath);
 
             $imageConfigPath = $handlePath['configPath'];
             $imageAvatarPath = $handlePath['avatarPath'];
