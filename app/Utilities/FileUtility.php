@@ -15,7 +15,6 @@ use App\Models\File;
 use App\Models\FileUsage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class FileUtility
 {
@@ -228,17 +227,6 @@ class FileUtility
         ];
 
         $fileId = File::create($fileInput)->id;
-
-        $checkUsageType = [
-            FileUsage::TYPE_OTHER,
-            FileUsage::TYPE_SYSTEM,
-            FileUsage::TYPE_OPERATION,
-            FileUsage::TYPE_STICKER,
-        ];
-
-        if (in_array($bodyInfo['usageType'], $checkUsageType)) {
-            return FileHelper::fresnsFileInfoById($fileId);
-        }
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($bodyInfo['aid']);
         $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($bodyInfo['uid']);
