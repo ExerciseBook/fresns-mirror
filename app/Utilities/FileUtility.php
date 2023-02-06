@@ -44,6 +44,23 @@ class FileUtility
     // uploadFile
     public static function uploadFile(array $bodyInfo, array $diskConfig, UploadedFile $file)
     {
+        // $bodyInfoExample = [
+        //     'platformId' => 'file_usages->platform_id',
+        //     'usageType' => 'file_usages->usage_type',
+        //     'tableName' => 'file_usages->table_name',
+        //     'tableColumn' => 'file_usages->table_column',
+        //     'tableId' => 'file_usages->table_id',
+        //     'tableKey' => 'file_usages->table_key',
+        //     'aid' => 'file_usages->account_id',
+        //     'uid' => 'file_usages->user_id',
+        //     'type' => 'files->type and file_usages->file_type',
+        //     'md5' => 'files->md5',
+        //     'sha' => 'files->sha',
+        //     'shaType' => 'files->shaType',
+        //     'disk' => 'files->disk',
+        //     'moreJson' => 'files->more_json',
+        // ];
+
         if (! Str::isJson($bodyInfo['moreJson'])) {
             return null;
         }
@@ -215,6 +232,17 @@ class FileUtility
         ];
 
         $fileId = File::create($fileInput)->id;
+
+        $checkUsageType = [
+            FileUsage::TYPE_OTHER,
+            FileUsage::TYPE_SYSTEM,
+            FileUsage::TYPE_OPERATION,
+            FileUsage::TYPE_STICKER,
+        ];
+
+        if (in_array($bodyInfo['usageType'], $checkUsageType)) {
+            return FileHelper::fresnsFileInfoById($fileId);
+        }
 
         $accountId = PrimaryHelper::fresnsAccountIdByAid($bodyInfo['aid']);
         $userId = PrimaryHelper::fresnsUserIdByUidOrUsername($bodyInfo['uid']);
