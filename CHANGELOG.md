@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 
 
+## 2.5.0 (2023-02-09)
+
+### Added
+- API: 通知消息支持标注已读全部类型的消息
+- API: 同一个评论产生的回复，如果旧通知已读则再次通知
+
+### Fixes
+- API: 删除通知和会话消息，未处理用户面板缓存
+- API: 通知消息列表 `status` 布尔参数 0 未被接受
+- API: 帖子删除后，还能发表评论
+- API: 编辑器配置参数的数字值问题
+- Helper: 文件使用的缓存清理
+- Panel: 插件卸载失败
+- Utilities: 修复文件逻辑删除的封装功能
+
+### Changed
+- Utilities: 优化文件上传功能
+- 框架: laravel/framework 升级到 v9.51.0
+- 框架: fresns/cmd-word-manager 升级到 v1.3.1
+- 框架: fresns/plugin-manager 升级到 v2.4.2
+- 框架: fresns/theme-manager 升级到 v2.1.1
+- 框架: 使用迁移作为数据变更的升级方案
+
+### BREAKING CHANGES
+- Data: Fresns 项目不再使用远程资源，局域网也可以使用。
+- Data: 配置图和表情图不再使用 Fresns 远程链接，请各位尽快替换。
+
+
 ## 2.4.0 (2023-02-01)
 
 ### Added
