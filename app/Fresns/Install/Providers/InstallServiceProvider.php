@@ -30,11 +30,6 @@ class InstallServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Set the application access protocol based on the current access request
-        if (\request()->secure()) {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
-        }
-
         $this->registerConfig();
         $this->registerViews();
         $this->registerTranslations();
